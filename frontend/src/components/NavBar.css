@@ -1,0 +1,127 @@
+.*{
+            margin: 0;
+            padding:0;
+            box-sizing: border-box;
+        }
+        .Rectangle_100{
+           top: 0px;
+left: 0px;
+width: 100%;
+height: 60px;
+background: #ffffff 0% 0% no-repeat padding-box;
+opacity: 1;
+        }
+        .Rectangle_101{
+            position: relative;
+            top:-60px;
+left: 840px;
+width: 688px;
+height: 60px;
+background: transparent linear-gradient(246deg, #0093E9 0%, #36C2CF 100%) 0% 0% no-repeat padding-box;
+border-radius: 0px 0px 0px 100px;
+opacity: 1;
+            z-index: 1;
+        }
+
+        #heading
+        {
+            position: relative;
+            top: -100px;
+left: 31px;
+width: 298px;
+height: 36px;
+text-align: center;
+font: Bold 28px/17px Trueno;
+letter-spacing: 1px;
+opacity: 1;
+        }
+        .search-container {
+  position: relative;
+            top: -140px;
+            z-index: 999;
+left: 690px;
+width: 340px;
+height: 30px;
+background: #FFFFFF 0% 0% no-repeat padding-box;
+box-shadow: 0px 1px 3px #00000065;
+border-radius: 8px;
+opacity: 1;
+}
+
+ input[type=text] {position: relative;
+     top:0px;
+     left:0px;
+ width:310px;
+     border-radius: 8px;
+     height:30px;
+     border: hidden;
+}
+
+ .search-container button {
+     position:relative;
+     border: hidden;
+ top: 0px;
+left: 0px;
+width: 17px;
+height: 27px;
+background: 0% 0% no-repeat padding-box;
+opacity: 1;
+     color:#0093E9;
+}
+
+ .search-container button:hover {
+}
+        .notifications{
+            position: relative;
+
+            top:-160px;
+left: 1260px;
+  z-index: 1000;
+width: 30px;
+height: 27px;
+opacity: 1;
+        }
+        .Rectangle_102{
+            position: relative;
+            width:1.2px;
+            height:48px;
+            z-index: 999;
+            left:1300px;
+            top:-200px
+        }
+        #username{
+            position: relative;
+            top: -235px;
+            z-index: 999;
+left: 1320px;
+width: 85px;
+height: 24px;
+text-align: left;
+font: Regular 20px/13px Roboto;
+letter-spacing: 0;
+color: #ffffff;
+opacity: 1;
+        }
+        #userpic img{
+            position:absolute;
+            width:40px;
+            height:40px;
+            border-radius: 50%;
+            left:1400px;
+            top:18px;
+            z-index: 999;
+        }
+        i1 {
+            position: absolute;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+            z-index: 999;
+        left:1460px;
+            top:35px;
+}
+        .down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
