@@ -11,9 +11,14 @@ import OPV from '../assets/Sent.svg'
 import MMR from '../assets/Received.svg'
 import updown from '../assets/up-and-down-1.svg'
 import down from '../assets/up-and-down.svg'
+import InventoryAnalytic from './inventoryAnalytic'
 const Inventory = () => {
     return (
         <div>
+            <div className="row">
+            <InventoryAnalytic />
+
+            </div>
             <div className="row dark-bg">
                 <div id="options" className="col-md-2 text-center icon">
                    <img width="18px" src={brand} /> Product Type <img width="9px" id="updown" src={updown} />

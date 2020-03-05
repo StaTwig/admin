@@ -6,6 +6,7 @@ import 'typeface-roboto';
 import './inventoryAnalytic.css';
 import ButtonGroup from './button';
 
+
 const InventoryAnalytic = () => {
   return (
    <div className="containerInventory">
@@ -23,7 +24,7 @@ const InventoryAnalytic = () => {
              <div id="buttonGroup"><ButtonGroup/></div>
              <div id="numeric1">14,532</div>
        </div>
-       <div className="box2">
+       <div className="box2 col-md-2">
        <div id="circle3"><img id="car2" src={require('../assets/Total Vaccine near Expiration.svg')}/>  </div>
             <div id="inventoryData3">Total Vaccine near Expiration</div>
             <div id="buttonGroup"><ButtonGroup/></div>

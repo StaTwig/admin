@@ -2,7 +2,7 @@ import React from "react";
 import './table.css'
 import 'typeface-roboto'
 import dp from '../assets/image.jpg'
-const Shipments = () => {
+const ShipmentsSummary = () => {
     return (
         <div>
             <div className="row main">
@@ -156,4 +156,4 @@ const Shipments = () => {
 
 }
 
-export default Shipments;
+export default ShipmentsSummary;
