@@ -1,0 +1,4 @@
+backend/vaccine-ledger_log_service/node_modules
+backend/vaccine-ledger_publish_service/node_modules
+backend/vaccine-ledger_query_service/node_modules
+backend/vaccine-ledger_user_service/node_modules
