@@ -11,13 +11,13 @@ Below are the instructions to install the dependencies and run the demo
 
 # First Time Users
 
-Install NodeJS 
-git clone https://gitlab.com/statwig-public/theledger.git
-npm install
-npm start
+> Install NodeJS <br>
+> git clone https://gitlab.com/statwig-public/theledger.git <br>
+> npm install<br>
+> npm start<br>
 
-# Pulling the updates
+# Pulling remote changes 
 
-git pull
-npm install 
-npm start
+> git pull <br>
+> npm install <br>
+> npm start
