@@ -8,7 +8,7 @@
 }
 
 .inventoryCard #head{
-  position:relative; top:15px;left:15px;
+  position:relative; top:15px;left:-10px;
   font: Bold 24px/13px Roboto;
   letter-spacing: 0;
   color: #4D4F5C;
@@ -24,7 +24,7 @@ background: transparent linear-gradient(109deg, #0093E9 0%, #36C2CF 100%) 0% 0% 
 box-shadow: 0px 3px 6px #00000029;
 border-radius: 10px;
 opacity: 1;
-position:relative; top:-20px;left:320px;
+position:relative; top:-20px;left:300px;
 }
 .inventoryCard #submitBottom{
   position:relative; top:380px;left:-90px;
@@ -38,7 +38,7 @@ position:relative; top:-20px;left:320px;
   border: 1px solid #0093E9;
   border-radius: 15px;
   opacity: 1;
-  position:relative; top:380px;left:15px;
+  position:relative; top:380px;left:-10px;
 }
 .inventoryCard #chartjs-render-monitor{
   width:500px;

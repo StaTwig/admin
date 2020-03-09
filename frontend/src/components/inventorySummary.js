@@ -5,7 +5,6 @@ import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer, MDBBtn, MDBCard, MDBCardBody } from 'mdbreact';
 import 'typeface-roboto';
 import './inventorySummary.css';
-
 import ChartsPage from './doughnut'
 
 const InventorySummary = () => {
