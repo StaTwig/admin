@@ -4,15 +4,15 @@
     display:flex;
     flex-direction: row;
     flex-flow: wrap;
-    width:280px;
+    width:254px;
     height:30px;
     }
     
 .year {
     height:30px;
-    width:70px;
+    width:62px;
     border:none;
-    font:normal 9px/30px Roboto;
+    font:normal 8.2px/30px Roboto;
     color: #707070;
     text-transform: uppercase;
     opacity:1;
