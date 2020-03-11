@@ -12,8 +12,7 @@ const { constants } = require("../helpers/constants");
 /**
  * User registration.
  *
- * @param {string}      firstName
- * @param {string}      lastName
+ * @param {string}      Name
  * @param {string}      email
  * @param {string}      password
  *
@@ -21,10 +20,8 @@ const { constants } = require("../helpers/constants");
  */
 exports.register = [
 	// Validate fields.
-	body("firstName").isLength({ min: 1 }).trim().withMessage("First name must be specified.")
-		.isAlphanumeric().withMessage("First name has non-alphanumeric characters."),
-	body("lastName").isLength({ min: 1 }).trim().withMessage("Last name must be specified.")
-		.isAlphanumeric().withMessage("Last name has non-alphanumeric characters."),
+	body("Name").isLength({ min: 1 }).trim().withMessage("name must be specified.")
+		.isAlphanumeric().withMessage("name has non-alphanumeric characters."),
 	body("email").isLength({ min: 1 }).trim().withMessage("Email must be specified.")
 		.isEmail().withMessage("Email must be a valid email address.").custom((value) => {
 			return UserModel.findOne({email : value}).then((user) => {
@@ -35,8 +32,7 @@ exports.register = [
 		}),
 	body("password").isLength({ min: 6 }).trim().withMessage("Password must be 6 characters or greater."),
 	// Sanitize fields.
-	sanitizeBody("firstName").escape(),
-	sanitizeBody("lastName").escape(),
+	sanitizeBody("Name").escape(),
 	sanitizeBody("email").escape(),
 	sanitizeBody("password").escape(),
 	// Process request after validation and sanitization.
@@ -55,8 +51,7 @@ exports.register = [
 					// Create User object with escaped and trimmed data
 					var user = new UserModel(
 						{
-							firstName: req.body.firstName,
-							lastName: req.body.lastName,
+							Name: req.body.Name,
 							email: req.body.email,
 							password: hash,
 							confirmOTP: otp
@@ -76,8 +71,7 @@ exports.register = [
 							if (err) { return apiResponse.ErrorResponse(res, err); }
 							let userData = {
 								_id: user._id,
-								firstName: user.firstName,
-								lastName: user.lastName,
+								Name: user.Name,
 								email: user.email
 							};
 							return apiResponse.successResponseWithData(res,"Registration Success.", userData);
@@ -125,8 +119,7 @@ exports.login = [
 									if(user.status) {
 										let userData = {
 											_id: user._id,
-											firstName: user.firstName,
-											lastName: user.lastName,
+											Name: user.Name,
 											email: user.email,
 										};
 										//Prepare JWT token for authentication
@@ -262,3 +255,102 @@ exports.resendConfirmOtp = [
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}];
+
+/**
+ * User forgotPassword.
+ *
+ 
+ * @param {string}      email
+   
+ 
+ *
+ * @returns {Object}
+ */
+exports.forgotPassword = [
+	//validate fields
+	body("email").isLength({ min: 1 }).trim().withMessage("Email must be specified.")
+		.isEmail().withMessage("Email must be a valid email address."),
+		//sanitize fields
+	sanitizeBody("email").escape(),
+	(req, res) => {
+		try {
+			// Extract the validation errors from a request.
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			 // Display sanitized values/errors messages.
+			return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
+		}else {
+
+			return UserModel.findOne({email : req.body.email}).then((user) => {
+				if (user) {
+					let html = "<p>your password is XXXXX.</p>";
+				// Send confirmation email
+				mailer.send(
+					constants.confirmEmails.from, 
+					req.body.email,
+					"ForgotPassword",
+					html
+				);
+				return res.send("Password has been sent successfully to RegisteredEmail");
+				}
+			});
+				
+		}
+		} catch (err) {
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}];
+
+
+	/**
+ * User resetPassword.
+ *
+ 
+ * @param {string}      password
+   @param {string}      newPassword
+ 
+ *
+ * @returns {Object}
+ */
+exports.resetPassword = [
+	//validate fields
+	body("password").isLength({ min: 6 }).trim().withMessage("Password must be 6 characters or greater."),
+	body("newPassword").isLength({ min: 6 }).trim().withMessage("Password must be 6 characters or greater."),
+	  //sanitize the fields
+		 sanitizeBody("password").escape(),
+		 sanitizeBody("newPassword").escape(),
+	(req, res) => {
+		try {
+			// Extract the validation errors from a request.
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			 // Display sanitized values/errors messages.
+			return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
+		}else {
+
+			res.json("password has been reset successfully")
+				
+		}
+		} catch (err) {
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}];
+	
+	exports.userInfo = [
+				 
+		(req, res) => {
+			try {
+		
+				res.json("User profile details")
+					
+			
+			} catch (err) {
+				return apiResponse.ErrorResponse(res, err);
+			}
+		}];
+		
+		
+
+	
+	
+
