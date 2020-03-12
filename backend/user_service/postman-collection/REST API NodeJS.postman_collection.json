@@ -25,13 +25,8 @@
 							"mode": "urlencoded",
 							"urlencoded": [
 								{
-									"key": "firstName",
+									"key": "Name",
 									"value": "test",
-									"type": "text"
-								},
-								{
-									"key": "lastName",
-									"value": "testing",
 									"type": "text"
 								},
 								{
