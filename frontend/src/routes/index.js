@@ -5,22 +5,30 @@ import Hello from '../components/Hello'
 import NoMatch from '../components/NoMatch'
 import FormPage from '../components/signUp'
 import ForgotPasswordPage from '../components/forgotPassword'
-import ResetPasswordPage from '../components/resetPassword'
+import resetPasswordPage from '../components/resetPassword'
 
-import FormLogin from '../components/login'
+import FormLoginPage from '../components/login'
+import ShipmentAnalytic from '../components/shipments'
+import InventoryAnalytic from '../components/inventoryAnalytic'
+import OverViewAnalytic from '../components/overViewAnalytic'
 import ShipmentsPage from '../components/shipmentsPage'
 import InventoryPage from '../components/inventoryPage'
+import InventorySummary from '../components/inventorySummary'
 const routes = (
   <div>
     <Switch>
       <Route exact path="/" component={Home} />
       <Route path="/page1" component={Hello} />
-      <Route path="/login" component={FormLogin} />
+      <Route path="/login" component={FormLoginPage} />
       <Route path="/signup" component={FormPage} />
       <Route path="/forgotPassword" component={ForgotPasswordPage} />
-      <Route path="/resetPassword" component={ResetPasswordPage} />
+      <Route path="/resetPassword" component={resetPasswordPage} />
+      <Route path="/shipments" component={ShipmentAnalytic} />
+      <Route path="/inventoryAnalytic" component={InventoryAnalytic} />
+      <Route path="/overViewAnalytic" component={OverViewAnalytic} />
+      <Route path="/shipmentsPage" component={ShipmentsPage} />
       <Route path="/inventory" component={InventoryPage} />
-      <Route path="/shipments" component={ShipmentsPage} />
+      <Route path="/inventorySummary" component={InventorySummary} />
  
 
 
@@ -30,3 +38,5 @@ const routes = (
 )
 
 export default routes
+/* <Route path="/inventory" component={InventoryPage} />
+      <Route path="/shipments" component={ShipmentsPage} />*/

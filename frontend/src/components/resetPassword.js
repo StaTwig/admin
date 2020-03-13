@@ -8,28 +8,29 @@ import 'typeface-roboto';
 import './resetPassword.css';
 import Key from "../assets/key.png";
 import hide from "../assets/hide.png";
+import logo from "../assets/VaccineLedgerlogo.svg";
 const resetPasswordPage = () => {
   return (
-    <div className="admin-login">
+    <div className="admin-login4">
     <MDBContainer>
 
-      <MDBRow><MDBCol md="6" className="h1"> 
-      <img id ="img" src={require('../assets/Vaccine Ledger logo.svg')}/>
+      <MDBRow><MDBCol md="6" className="h4"> 
+      <img id ="img4" src={logo}/>
 
-      <div id="Welcome">Welcome</div>
+      <div id="Welcome4">Welcome</div>
 
         </MDBCol>
-        <MDBCol md="6" className="signin">
-          <MDBCard className="card">
+        <MDBCol md="6" className="signin4">
+          <MDBCard className="card4">
             <MDBCardBody>
               <form>
-              <p className="heading">Reset Password</p>
-                <div className="input">
+              <p className="heading4">Reset Password</p>
+                <div className="input4">
               
                   <MDBRow>
                 <MDBCol md="2">
-                <img  className="icon" width = "25px" src={Key} id="key"/><img  className="icon" id="eye"width = "25px" src={hide} /></MDBCol>
-                <MDBCol md="10"id="col1">
+                <img  className="icon" width = "25px" src={Key} id="key4"/><img  className="icon" id="eye4"width = "25px" src={hide} /></MDBCol>
+                <MDBCol md="10"id="col4">
                   <MDBInput
                     label="Password"
                     group
@@ -38,8 +39,8 @@ const resetPasswordPage = () => {
                   /></MDBCol></MDBRow>
                   <MDBRow>
                 <MDBCol md="2">
-                <img  className="icon" width = "25px" src={Key} id="key"/><img  className="icon" id="eye"width = "25px" src={hide} /></MDBCol>
-                <MDBCol md="10"id="col1">
+                <img  className="icon" width = "25px" src={Key} id="key4"/><img  className="icon" id="eye4"width = "25px" src={hide} /></MDBCol>
+                <MDBCol md="10"id="col4">
                   <MDBInput
                     label="Confirm Password"
                     group
@@ -49,7 +50,7 @@ const resetPasswordPage = () => {
 
                 </div>
                 <div className="text-center py-4 mt-3">
-                  <MDBBtn id="submit" color="cyan" type="submit">
+                  <MDBBtn id="submit4" color="cyan" type="submit">
                     SUBMIT
                   </MDBBtn>
                 </div>

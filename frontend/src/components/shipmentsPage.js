@@ -1,7 +1,8 @@
 import React from 'react';
-import './Home.css';
+//import './Home.css';
 import ShipmentAnalytic from './shipments';
 import Shipments from './shipmentTable';
+import NavBar from './Navbar';
 
 function ShipmentsPage() {
   return (
@@ -9,28 +10,7 @@ function ShipmentsPage() {
       <div className="sticky-menu">
         <div className="d-flex flex-column">
           <div className="logo-left logo-style text-right mb-5 mt-5">VACCINE</div>
-          <ul className="list-unstyled text-center">
-            <li className="d-flex flex-column mb-3">
-              <i className="fa fa-home"></i>
-              <span>Home</span>
-            </li>
-            <li className="d-flex flex-column mb-3">
-              <i className="fa fa-home"></i>
-              <span>Home</span>
-            </li>
-            <li className="d-flex flex-column mb-3">
-              <i className="fa fa-home"></i>
-              <span>Home</span>
-            </li>
-            <li className="d-flex flex-column mb-3">
-              <i className="fa fa-home"></i>
-              <span>Home</span>
-            </li>
-            <li className="d-flex flex-column mb-3">
-              <i className="fa fa-home"></i>
-              <span>Home</span>
-            </li>
-          </ul>
+        <NavBar/>
         </div>
       </div>
       <div className="content">

@@ -1,6 +1,6 @@
 import React from 'react';
 import './Home.css';
-import EnhancedTable from './table'
+//import EnhancedTable from './table'
 function App() {
   return (
     <div className="wrapper d-flex">
