@@ -8,30 +8,31 @@ import 'typeface-roboto';
 import './forgotPassword.css';
 
 import Mail from "../assets/mail.png";
+import logo from "../assets/VaccineLedgerlogo.svg";
 
 const ForgotPasswordPage = () => {
   return (
-    <div className="admin-login">
+    <div className="admin-login3">
     <MDBContainer>
 
-      <MDBRow><MDBCol md="6" className="h1"> 
-      <img id ="img" src={require('../assets/Vaccine Ledger logo.svg')}/>
+      <MDBRow><MDBCol md="6" className="h3"> 
+      <img id ="img3" src={logo}/>
 
-      <div id="Welcome">Welcome </div>
+      <div id="Welcome3">Welcome </div>
       
 
         </MDBCol>
-        <MDBCol md="6" className="signin">
+        <MDBCol md="6" className="signin3">
           <MDBCard className="cardForgot">
             <MDBCardBody>
               <form>
-              <p className="heading">Forgot Password</p>
-                <div className="input">
+              <p className="heading3">Forgot Password</p>
+                <div className="input3">
              
                   <MDBRow>
                 <MDBCol md="2">
                 <img  className="icon" width = "25px" src={Mail} /></MDBCol>
-                <MDBCol md="10" id="col1">
+                <MDBCol md="10" id="col3">
                   <MDBInput
                     label="Email"
                     group
@@ -44,7 +45,7 @@ const ForgotPasswordPage = () => {
 
                 </div>
                 <div className="text-center py-4 mt-3">
-                  <MDBBtn id="submit" color="cyan" type="submit">
+                  <MDBBtn id="submit3" color="cyan" type="submit">
                     SUBMIT
                   </MDBBtn>
                 </div>

@@ -23,12 +23,7 @@ body {
     color: #000000;
 }
 
-.sticky-menu {
-    background-image: linear-gradient(to bottom, #0699E6, #27B5D7);
-    height: 100vh;
-    color: #ffffff;
-    flex-basis: 150px;
-}
+
 
 .list-unstyled i {
     font-size: 25px;

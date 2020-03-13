@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from 'react';
 import { Doughnut } from "react-chartjs-2";
 import { MDBContainer } from "mdbreact";
 
-class ChartsPage extends React.Component {
-state = {
-  dataDoughnut: {
+const ChartsPage = () => {
+
+  const [dataDoughnut] = useState({
     labels: ["bOPV", "Hep B", "MMR"],
     datasets: [
       {
@@ -24,16 +24,14 @@ state = {
         ]
       }
     ]
-  }
-}
-
-render() {
-    return (
+  });
+  
+  return (
     <MDBContainer>
-      <Doughnut data={this.state.dataDoughnut} options={{ responsive: true }} />
-    </MDBContainer>
-    );
-  }
-}
+    <Doughnut data={dataDoughnut} options={{ responsive: true }} />
+  </MDBContainer>
+  );
+};
+
 
 export default ChartsPage;

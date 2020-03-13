@@ -2,6 +2,7 @@ import React from 'react';
 import './Home.css';
 import Inventory from './inventoryTable';
 import InventoryAnalytic from './inventoryAnalytic';
+import NavBar from './Navbar';
 
 function InventoryPage() {
   return (
@@ -9,28 +10,7 @@ function InventoryPage() {
       <div className="sticky-menu">
         <div className="d-flex flex-column">
           <div className="logo-left logo-style text-right mb-5 mt-5">VACCINE</div>
-          <ul className="list-unstyled text-center">
-            <li className="d-flex flex-column mb-3">
-              <i className="fa fa-home"></i>
-              <span>Home</span>
-            </li>
-            <li className="d-flex flex-column mb-3">
-              <i className="fa fa-home"></i>
-              <span>Home</span>
-            </li>
-            <li className="d-flex flex-column mb-3">
-              <i className="fa fa-home"></i>
-              <span>Home</span>
-            </li>
-            <li className="d-flex flex-column mb-3">
-              <i className="fa fa-home"></i>
-              <span>Home</span>
-            </li>
-            <li className="d-flex flex-column mb-3">
-              <i className="fa fa-home"></i>
-              <span>Home</span>
-            </li>
-          </ul>
+        <NavBar/>
         </div>
       </div>
       <div className="content">
@@ -56,7 +36,7 @@ function InventoryPage() {
           </div>
         </header>
         <div className="container-fluid p-5 pt-2">
-          <h2>Shipments</h2>
+          <h2>Inventory</h2>
           <div className="row mt-3 mb-3">
             <div className="col-md-2">
               <p>Total Shipment</p>
@@ -75,11 +55,11 @@ function InventoryPage() {
             </div>
           </div>
           <div className="row">
-                <InventoryAnalytic/>
+            <InventoryAnalytic/>
             </div>
             <div className="row" >
-            
             <Inventory/>
+            
           </div>
         </div>
       </div>
@@ -88,3 +68,7 @@ function InventoryPage() {
 }
 
 export default InventoryPage;
+
+       
+            
+       
