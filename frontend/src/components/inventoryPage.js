@@ -1,11 +1,12 @@
 import React from 'react';
-import './Home.css';
+import './Home.scss';
 import Inventory from './inventoryTable';
 import InventoryAnalytic from './inventoryAnalytic';
 import NavBar from './Navbar';
 
 function InventoryPage() {
   return (
+    <div claassName="homepage">
     <div className="wrapper d-flex">
       <div className="sticky-menu">
         <div className="d-flex flex-column">
@@ -63,6 +64,7 @@ function InventoryPage() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

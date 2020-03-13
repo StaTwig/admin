@@ -1,10 +1,10 @@
 import React from "react";
-import './table.css'
+import './table.scss'
 import 'typeface-roboto'
 import dp from '../assets/image.jpg'
 const ShipmentsSummary = () => {
     return (
-        <div>
+        <div className="shipmentSummmary">
             <div className="row main">
             <div id="image" className="col-sm-1">
                    

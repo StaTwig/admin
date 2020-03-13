@@ -1,11 +1,12 @@
 import React from 'react';
-//import './Home.css';
+import './Home.scss';
 import ShipmentAnalytic from './shipments';
 import Shipments from './shipmentTable';
 import NavBar from './Navbar';
 
 function ShipmentsPage() {
   return (
+    <div className="homepage">
     <div className="wrapper d-flex">
       <div className="sticky-menu">
         <div className="d-flex flex-column">
@@ -63,6 +64,7 @@ function ShipmentsPage() {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 }

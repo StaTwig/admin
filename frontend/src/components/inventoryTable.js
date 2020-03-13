@@ -1,5 +1,5 @@
 import React from "react";
-import './inventoryTable.css'
+import './inventoryTable.scss'
 import 'typeface-roboto'
 import brand from '../assets/brand.png'
 import shipdate from '../assets/ship_date.png'
@@ -14,7 +14,7 @@ import down from '../assets/up-and-down.svg'
 import InventoryAnalytic from './inventoryAnalytic'
 const Inventory = () => {
     return (
-        <div>
+        <div className="inventoryTable">
             <div className="row">
             <InventoryAnalytic />
 
@@ -52,8 +52,8 @@ const Inventory = () => {
                 </div>
 
             </div>
-            <div className="row">
-                <div className="col-md-8">
+            <div className="row main-table">
+                <div className="col-md-9">
                 <table>
                     <thead>
                     <tr className="headings">
@@ -234,16 +234,16 @@ const Inventory = () => {
                    
                 </table>
                 </div>
-                <div className="col-sm-2">
+                <div className="col-md-1">
                 <div className="row">
-                   <div className="card">                       
+                   <div className="card-small">                       
                         <img id="OPV" height="35px" src={OPV} />                       
                        <span id="card-text">OPV</span>
                        <span id="text-bold">2930</span>
                    </div>
                    </div>
                    <div className="row">
-                   <div className="card">
+                   <div className="card-small">
                        
                            <img id="MMR" height="35px" src={MMR} />
                        
@@ -252,7 +252,7 @@ const Inventory = () => {
                    </div>
                    </div>
                    <div className="row">
-                   <div className="card">
+                   <div className="card-small">
                        
                            <img id="OPV" height="35px" src={OPV} />
                        
@@ -261,9 +261,9 @@ const Inventory = () => {
                    </div>
                    </div>
                 </div>
-                <div className="col-sm-2">
+                <div className="col-md-1">
                 <div className="row">
-                <div className="card">
+                <div className="card-small-right">
                        
                            <img id="MMR" height="35px" src={MMR} />
                        
@@ -272,7 +272,7 @@ const Inventory = () => {
                    </div>
                    </div>
                    <div className="row">
-                   <div className="card">
+                   <div className="card-small-right">
                        
                            <img id="OPV" height="35px" src={OPV} />
                        
@@ -281,7 +281,7 @@ const Inventory = () => {
                    </div>
                    </div>
                    <div className="row">
-                   <div className="card">
+                   <div className="card-small-right">
                        
                            <img id="MMR" height="35px" src={MMR} />
                        

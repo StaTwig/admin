@@ -4,7 +4,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
 import 'typeface-roboto';
-import './shipments.css';
+import './shipments.scss';
 import ButtonGroup from './button';
 import truckthree from "../assets/truckthree.svg";
 import Sent from "../assets/Sent.svg";
@@ -18,9 +18,7 @@ const ShipmentAnalytic = () => {
                    <div id="circle1"><img id="car2" src={truckthree}/>  </div>
                      <div id="inventoryData1">Total Shipments</div>
                      <div id="buttonGroup"><ButtonGroup/></div>
-                     <div id="numeric">532</div>
-         
-                
+                     <div id="numeric">532</div>      
                </div>
                <div className="box2">
                <div id="circle2"><img id="car2" src={Sent}/> </div>

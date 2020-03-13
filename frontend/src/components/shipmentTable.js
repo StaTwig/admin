@@ -1,5 +1,5 @@
 import React from "react";
-import './shipmentTable.css'
+import './shipmentTable.scss'
 import 'typeface-roboto'
 import brand from '../assets/brand.png'
 import shipdate from '../assets/ship_date.png'
@@ -9,11 +9,11 @@ import Export from '../assets/Export.png'
 import Status from '../assets/Status.png'
 import user from '../assets/image.jpg'
 import bell from '../assets/bell.svg'
-import updown from '../assets/up-and-down-1.svg'
+import updown from '../assets/up-and-down-1.svg' 
 import down from '../assets/up-and-down.svg'
 const Shipments = () => {
     return (
-        <div>
+        <div className="shipmentTable">
             <div className="row dark-bg">
                 <div id="options" className="col-md-2 text-center icon">
                    <img width="18px" src={brand} /> Client <img width="9px" id="updown" src={updown} />
@@ -47,7 +47,7 @@ const Shipments = () => {
                 </div>
 
             </div>
-            <div className="row">
+            <div className="row main-table">
                 <table>
                     <thead>
                     <tr className="headings">
