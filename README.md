@@ -13,6 +13,7 @@ Below are the instructions to install the dependencies and run the demo
 
 > Install NodeJS <br>
 > git clone https://gitlab.com/statwig-public/theledger.git <br>
+> cd frontend/backend <br>
 > npm install<br>
 > npm start<br>
 
