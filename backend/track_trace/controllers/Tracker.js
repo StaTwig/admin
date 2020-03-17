@@ -14,6 +14,7 @@ const apiResponse = require("../helpers/apiResponse");
 exports.trackStats = [
   (req, res) => {
     try {
+		
       return apiResponse.successResponseWithData(res, "Data sent", dataObject);
     } catch (err) {
       //throw error in json response with status 500.
