@@ -5,7 +5,7 @@ import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBCard, MDBCardBody } from 'mdbreact';
 import 'typeface-roboto';
-import './forgotPassword.css';
+import './forgotPassword.scss';
 
 import Mail from "../assets/mail.png";
 import logo from "../assets/VaccineLedgerlogo.svg";

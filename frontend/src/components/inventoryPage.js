@@ -1,35 +1,17 @@
 import React from 'react';
 import './Home.scss';
-import EnhancedTable from './table'
-function App() {
+import Inventory from './inventoryTable';
+import InventoryAnalytic from './inventoryAnalytic';
+import NavBar from './Navbar';
+
+function InventoryPage() {
   return (
-    <div className= "homepage">
+    <div claassName="homepage">
     <div className="wrapper d-flex">
       <div className="sticky-menu">
         <div className="d-flex flex-column">
           <div className="logo-left logo-style text-right mb-5 mt-5">VACCINE</div>
-          <ul className="list-unstyled text-center">
-            <li className="d-flex flex-column mb-3">
-              <i className="fa fa-home"></i>
-              <span>Home</span>
-            </li>
-            <li className="d-flex flex-column mb-3">
-              <i className="fa fa-home"></i>
-              <span>Home</span>
-            </li>
-            <li className="d-flex flex-column mb-3">
-              <i className="fa fa-home"></i>
-              <span>Home</span>
-            </li>
-            <li className="d-flex flex-column mb-3">
-              <i className="fa fa-home"></i>
-              <span>Home</span>
-            </li>
-            <li className="d-flex flex-column mb-3">
-              <i className="fa fa-home"></i>
-              <span>Home</span>
-            </li>
-          </ul>
+        <NavBar/>
         </div>
       </div>
       <div className="content">
@@ -55,7 +37,7 @@ function App() {
           </div>
         </header>
         <div className="container-fluid p-5 pt-2">
-          <h2>OVERVIEW</h2>
+          <h2>Inventory</h2>
           <div className="row mt-3 mb-3">
             <div className="col-md-2">
               <p>Total Shipment</p>
@@ -74,24 +56,11 @@ function App() {
             </div>
           </div>
           <div className="row">
-            <div className="col-md-4">
-              <div className="panel">
-                <h4></h4>
-              </div>
-              <div class="card">
-                <div class="card-body">
-                  Inventory summary
-                </div>
-              </div>
+            <InventoryAnalytic/>
             </div>
-            <div className="col-md-8">
-              <div class="card">
-                <div class="card-body">
-                  Shipment summary
-                  <EnhancedTable/>
-                </div>
-              </div>
-            </div>
+            <div className="row" >
+            <Inventory/>
+            
           </div>
         </div>
       </div>
@@ -100,4 +69,8 @@ function App() {
   );
 }
 
-export default App;
+export default InventoryPage;
+
+       
+            
+       
