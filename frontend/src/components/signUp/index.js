@@ -5,12 +5,12 @@ import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBCard, MDBCardBody } from 'mdbreact';
 import 'typeface-roboto';
-import './signUp.css';
-import Key from "../assets/key.png";
-import User from "../assets/user.png";
-import Mail from "../assets/mail.png";
-import hide from "../assets/hide.png";
-import logo from "../assets/VaccineLedgerlogo.svg";
+import './style.scss';
+import Key from "../../assets/icons/key.png";
+import User from "../../assets/icons/user.png";
+import Mail from "../../assets/icons/mail.png";
+import hide from "../../assets/icons/hide.png";
+import logo from "../../assets/brands/VaccineLedgerlogo.svg";
 const FormPage = () => {
   return (
     <div className="admin-login1">

@@ -1,0 +1,54 @@
+@import '../../../assets/styles/global.scss';
+.sidebar {
+  background: transparent linear-gradient(180deg, $primaryBlue 0%, $skyBlue 100%) 0% 0% no-repeat padding-box;
+  box-shadow: 5px 0px 10px #00000029;
+  border-radius: 0px 50px 0px 0px;
+  height: calc(100vh - 130px);
+  color: $white;
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+
+  ul {
+    margin: 0 0 0 0;
+    padding: 0 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    li {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem 0;
+      color: $lightBlue;
+      cursor: pointer;
+
+      &.active {
+        font-weight: bold;
+        color: $white;
+        cursor: default;
+        position: relative;
+
+        &:after {
+          content: "";
+          width: 15px;
+          height: 80%;
+          background-color: #FFFFFF;
+          position: absolute;
+          right: -32px;
+          border-radius: 10px 0 0 10px;
+        }
+      }
+      span {
+        font-size: 12px;
+      }
+
+      img {
+        width: 30px;
+      }
+    }
+  }
+}

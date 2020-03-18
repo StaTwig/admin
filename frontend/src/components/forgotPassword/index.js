@@ -5,12 +5,13 @@ import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBCard, MDBCardBody } from 'mdbreact';
 import 'typeface-roboto';
-import './forgotPassword.css';
+import './style.scss';
 
-import Mail from "../assets/mail.png";
-import logo from "../assets/VaccineLedgerlogo.svg";
+import Mail from "../../assets/icons/mail.png";
+import logo from "../../assets/brands/VaccineLedgerlogo.svg";
 
-const ForgotPasswordPage = () => {
+
+const ForgotPassword = () => {
   return (
     <div className="admin-login3">
     <MDBContainer>
@@ -60,5 +61,5 @@ const ForgotPasswordPage = () => {
   );
 };
 
-export default ForgotPasswordPage;
+export default ForgotPassword;
 

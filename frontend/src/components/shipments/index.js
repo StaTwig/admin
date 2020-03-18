@@ -4,12 +4,12 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
 import 'typeface-roboto';
-import './shipments.css';
-import ButtonGroup from './button';
-import truckthree from "../assets/truckthree.svg";
-import Sent from "../assets/Sent.svg";
-import Received from "../assets/Received.svg";
-import CurrentShipmentInTransit2 from "../assets/Current Shipment InTransit 2.svg";
+import './style.scss';
+import ButtonGroup from '../button';
+import truckthree from "../../assets/icons/truckthree.svg";
+import Sent from "../../assets/icons/Sent.svg";
+import Received from "../../assets/icons/Received.svg";
+import CurrentShipmentInTransit2 from "../../assets/icons/Current Shipment InTransit 2.svg";
 
 const ShipmentAnalytic = () => {
       return (

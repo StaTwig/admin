@@ -1,0 +1,30 @@
+@import 'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css';
+@import './colors.scss';
+@import './fonts.scss';
+
+body {
+  background-color: $softGrey;
+  font-size: $roboto;
+}
+
+.spacer20 {
+  padding: 3rem 5rem;
+}
+
+.card {
+  box-shadow: 0px 3px 10px #00000029;
+  border-radius: 10px;
+}
+
+.btn-primary {
+  background: transparent linear-gradient(109deg, $primaryBlue 0%, $skyBlue 100%) 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #00000029;
+  border-radius: 10px;
+  border-width: 0;
+  border-color: transparent;
+}
+
+.btn-outline-primary {
+  color: $primaryBlue;
+  border-color: $primaryBlue;
+}

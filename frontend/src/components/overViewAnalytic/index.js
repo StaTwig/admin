@@ -6,12 +6,12 @@ import 'mdbreact/dist/css/mdb.css';
 //import { MDBContainer, MDBBtn, MDBCard, MDBCardBody } from 'mdbreact';
 
 import 'typeface-roboto';
-import './overViewAnalytic.css';
-import totalshipments from "../assets/Total Shipments Completed.svg";
-import totalinventory from "../assets/Total Inventory Added.svg";
-import currentshipment from "../assets/Current Shipment InTransit.svg";
-import Totalshipments from "../assets/Total Shipments.svg";
-import shipmentsdelayed from "../assets/Total Shipments Delayed.svg";
+import './style.scss';
+import totalshipments from "../../assets/icons/Total Shipments Completed.svg";
+import totalinventory from "../../assets/icons/Total Inventory Added.svg";
+import currentshipment from "../../assets/icons/Current Shipment InTransit.svg";
+import Totalshipments from "../../assets/icons/Total Shipments.svg";
+import shipmentsdelayed from "../../assets/icons/Total Shipments Delayed.svg";
 
 
 
