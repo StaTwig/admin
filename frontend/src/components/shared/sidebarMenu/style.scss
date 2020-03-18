@@ -1,4 +1,5 @@
 @import '../../../assets/styles/global.scss';
+
 .sidebar {
   background: transparent linear-gradient(180deg, $primaryBlue 0%, $skyBlue 100%) 0% 0% no-repeat padding-box;
   box-shadow: 5px 0px 10px #00000029;
@@ -8,14 +9,14 @@
   position: fixed;
   bottom: 0;
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
+  text-align: center;
+  flex-direction: column;
 
   ul {
-    margin: 0 0 0 0;
-    padding: 0 2rem;
+    padding: 3rem 2rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
 
     li {
       display: flex;
@@ -25,6 +26,7 @@
       padding: 1rem 0;
       color: $lightBlue;
       cursor: pointer;
+      padding-top: 3rem;
 
       &.active {
         font-weight: bold;
@@ -42,6 +44,7 @@
           border-radius: 10px 0 0 10px;
         }
       }
+
       span {
         font-size: 12px;
       }

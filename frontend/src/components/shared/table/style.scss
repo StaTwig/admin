@@ -1,0 +1,47 @@
+@import '../../../assets/styles/global.scss';
+
+.table {
+  .overflow {
+    overflow: auto;
+    height: 280px;
+  }
+
+  .rTable {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    .rTableHeading {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+    }
+
+    .rTableBody {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .rTableRow {
+      display: flex;
+      background: #fff;
+      justify-content: space-between;
+      margin-bottom: .5rem;
+      padding: .3rem;
+      border-radius: 10px;
+    }
+
+    .rTableFoot {
+      display: table-footer-group;
+      font-weight: bold;
+      background-color: #ddd;
+    }
+
+    .rTableCell,
+    .rTableHead {
+      flex: 1;
+      padding: 3px 10px;
+      align-self: center;
+    }
+  }
+}

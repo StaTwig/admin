@@ -1,0 +1,35 @@
+@import '../../../assets/styles/global.scss';
+
+.tabs {
+  border-bottom: 3px solid #D6D6D6;
+  margin-left: -5rem;
+  padding-left: 5rem;
+
+  ul {
+    li {
+      a {
+        &.nav-link {
+          color: #707070;
+          font: Bold 18px Helvetica Neue;
+          padding-bottom: 1rem;
+        }
+
+        &.nav-link.active {
+          color: #0093E9;
+          background-color: transparent;
+          position: relative;
+
+          &:after {
+            border-bottom: 10px solid #0093E9;
+            border-radius: 10px;
+            content: "";
+            position: absolute;
+            bottom: -7px;
+            width: 100%;
+            left: 0;
+          }
+        }
+      }
+    }
+  }
+}

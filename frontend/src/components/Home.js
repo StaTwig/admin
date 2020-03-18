@@ -46,10 +46,10 @@ function App() {
             <div className="notification">B</div>
             <div className="user-info">
               <span>John Doe</span>
-              ​<picture>
-              <source srcset="..." type="image/svg+xml" />
-              <img src="..." class="img-fluid img-thumbnail" alt="..." />
-            </picture>
+              <picture>
+                <source srcset="..." type="image/svg+xml" />
+                <img src="..." className="img-fluid img-thumbnail" alt="..." />
+              </picture>
             </div>
           </div>
         </header>
@@ -77,17 +77,17 @@ function App() {
               <div className="panel">
                 <h4></h4>
               </div>
-              <div class="card">
-                <div class="card-body">
+              <div className="card">
+                <div className="card-body">
                   Inventory summary
                 </div>
               </div>
             </div>
             <div className="col-md-8">
-              <div class="card">
-                <div class="card-body">
+              <div className="card">
+                <div className="card-body">
                   Shipment summary
-                  <EnhancedTable/>
+                  <EnhancedTable />
                 </div>
               </div>
             </div>

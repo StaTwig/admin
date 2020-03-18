@@ -1,150 +1,84 @@
-.containerInventory{
-    position: absolute;top:150px;
-    background-color: #F8F8F8;
-    width:1170px;
-    height:220px;
-    display:flex;
-    flex-direction: row;
-    flex-flow: wrap;
-    justify-content: space-between;
-    
-    }
-    
-    .containerInventory .box2 {
-        position:relative;top:10px;
-        width:280px;
-        height:170px;
-        background: #ffffff 0% 0% no-repeat padding-box;
-        box-shadow: 0px 3px 6px #00000029;
-       box-sizing: border-box;
-       border-radius: 15px;
-       opacity: 1;
-       margin:1px;
-       }
-    .box2 #buttonGroup{
-        
-        position:relative;top:20px;left:32px;
-      }
-    
-      .box2 #car2{
-    
-        height:28px;
-        width:28px;
-        position:relative;top:12px;left:12px;
-        opacity: 1;
-    
-    }
-    .box2 #circle1{
-        height:50px;
-        width:50px;
-        position:relative;top:25px;left:20px;
-        background: #E1F4F6 0% 0% no-repeat padding-box;
-        box-shadow: 0px 3px 6px #00000029;
-        opacity: 1;
-        border-radius: 50%;
-    }
-    
-    .box2 #circle2{
-        height:50px;
-        width:50px;
-        position:relative;top:25px;left:20px;
-        background: #D9F0FA 0% 0% no-repeat padding-box;
-        box-shadow: 0px 3px 6px #00000029;
-        opacity: 1;
-        border-radius: 50%;
-    }
-    
-    .box2 #circle3{
-        height:50px;
-        width:50px;
-        position:relative;top:25px;left:20px;
-        background: #FFF3DF 0% 0% no-repeat padding-box;
-        box-shadow: 0px 3px 6px #00000029;
-        opacity: 1;
-        border-radius: 50%;
-    }
-    
-    .box2 #circle4{
-        height:50px;
-        width:50px;
-        position:relative;top:25px;left:20px;
-        background: #D9F0FA 0% 0% no-repeat padding-box;
-        box-shadow: 0px 3px 6px #00000029;
-        opacity: 1;
-        border-radius: 50%;
-    }
-    .box2  #inventoryData1
-    {
-       font: Bold 15px/13px Roboto;
-       letter-spacing: 0;
-      color: #2BA3AE;
-      opacity: 1;
-      position:relative;top:-5px;left:85px;
-   }
-    .box2  #inventoryData2{
-            font: Bold 15px/13px Roboto;
-            letter-spacing: 0;
-           color: #0093E9;
-           opacity: 1;
-           position:relative;top:-5px;left:85px;
-           }
-    
-    .box2  #inventoryData3{
-            font: Bold 15px/13px Roboto;
-            letter-spacing: 0;
-             color: #FA7923;
-            opacity: 1;
-            position:relative;top:-5px;left:80px;
-           }
-    
-           .box2  #inventoryData4{
-            font: Bold 15px/13px Roboto;
-           letter-spacing: 0;
-           color: #0159EA;
-            opacity: 1;
-            position:relative;top:-5px;left:80px;
-        }
-         
-        .box2 #numeric{
-            position:relative;top:50px;left:40px;
-            font: Bold 35px/13px Roboto;
-            letter-spacing: 0;
-            color: #2BA3AE;
-            opacity: 1;
-        }
-        .box2 #numeric1{
-            position:relative;top:50px;left:40px;
-            font: Bold 35px/13px Roboto;
-            letter-spacing: 0;
-            color: #0093E9;
-            opacity: 1;
-        }
-        .box2 #numeric2{
-            position:relative;top:50px;left:40px;
-            font: Bold 35px/13px Roboto;
-            letter-spacing: 0;
-            color: #FA7923;
-            opacity: 1;
-        }
-        .box2 #numeric4{
-            position:relative;top:80px;left:40px;
-            font: Bold 35px/13px Roboto;
-            letter-spacing: 0;
-            color: #0159EA;
-            opacity: 1;
-        }
-    
-    
-    
-    
-       @media screen and (max-width:1200px){
-        .box1{
-            width:40%;
+@import '../../assets/styles/global.scss';
+
+.shipment {
+    padding-right: 3rem;
+    padding-left: 3rem;
+
+    .fix-wrap {
+        flex-wrap: wrap;
+
+        @media (min-width: 1600px) {
+            flex-wrap: nowrap;
         }
     }
-    @media screen and (max-width:600px){
-        .box1{
-            width:90%;
+
+    .panel {
+        box-shadow: 0px 3px 6px $grey;
+        border-radius: 15px;
+        background-color: $white;
+        flex-basis: 30%;
+        margin-top: 2rem;
+        margin-right: 1rem;
+        padding: 30px;
+
+        &:last-child {
+            margin-right: 0;
+        }
+
+        .picture {
+            width: 60px;
+            height: 60px;
+            box-shadow: 0px 3px 6px #00000029;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-right: 2rem;
+
+            img {
+                width: 35px;
+                height: 26px;
+            }
+
+            &.truck-bg {
+                background: $deepGreen;
+            }
+
+            &.sent-bg {
+                background: $lightBlue;
+            }
+
+            &.recived-bg {
+                background: $darkYellow;
+            }
+
+            &.transit-bg {
+                background: $deepBlue;
+            }
+        }
+
+        .fontSize25 {
+            font-size: 23px;
+        }
+
+        .fontSize30 {
+            font-size: 30px;
+        }
+
+        .truck-text {
+            color: $deepGreen;
+        }
+
+        .sent-text {
+            color: $lightBlue;
+        }
+
+        .recived-text {
+            color: $darkYellow;
+        }
+
+        .transit-text {
+            color: $deepBlue;
         }
     }
-    
+}
