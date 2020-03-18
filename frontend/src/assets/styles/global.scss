@@ -7,8 +7,17 @@ body {
   font-size: $roboto;
 }
 
-.spacer20 {
-  padding: 3rem 5rem;
+.breadcrumb {
+  background: transparent;
+  border-bottom: 3px solid $lightBlue;
+  padding: 0;
+  border-radius: 0;
+  display: inline-block;
+  text-transform: uppercase;
+  margin-bottom: 2.5rem;
+  border-bottom: 3px solid $lightBlue;
+  font-size: 35px;
+  color: $darkGrey;
 }
 
 .card {
@@ -22,6 +31,28 @@ body {
   border-radius: 10px;
   border-width: 0;
   border-color: transparent;
+}
+
+.btn-orange {
+  background-color: #FA7923;
+  color: $white;
+  box-shadow: 0px 3px 6px #00000029;
+  border-radius: 10px;
+  border-width: 0;
+  text-transform: capitalize;
+}
+
+.btn-yellow {
+  background-color: #FFAB1D;
+  color: $white;
+  box-shadow: 0px 3px 6px #00000029;
+  border-radius: 10px;
+  border-width: 0;
+  text-transform: capitalize;
+}
+
+.fontSize20 {
+  font-size: 20px;
 }
 
 .btn-outline-primary {
