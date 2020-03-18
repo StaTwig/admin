@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-import './NavBar.scss';
+import './NavBar.css';
 import nav1 from '../assets/home@2x.png'
 import nav2 from '../assets/truck@2x.png'
 import nav3 from '../assets/package@2x.png'
@@ -9,7 +9,7 @@ import nav4 from '../assets/searching@2x.png'
 
 const NavBar = () => {
   return (
-   <div className="NavBar">
+   <div>
     <svg class="Rectangle_101">
 		<rect id="Rectangle_101" rx="5" ry="5" x="0" y="0">
        

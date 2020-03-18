@@ -3,7 +3,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
 import 'typeface-roboto';
-import './inventoryAnalytic.scss';
+import './inventoryAnalytic.css';
 import ButtonGroup from './button';
 import inventorycopy from "../assets/Total Inventory Added copy.svg";
 import pic2 from "../assets/Current Inventory.svg";

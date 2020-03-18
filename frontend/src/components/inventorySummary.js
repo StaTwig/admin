@@ -4,12 +4,12 @@ import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer, MDBBtn, MDBCard, MDBCardBody } from 'mdbreact';
 import 'typeface-roboto';
-import './inventorySummary.scss';
+import './inventorySummary.css';
 import ChartsPage from './doughnut'
 
 const InventorySummary = () => {
   return (
-    <div className="inventorysummarymain">
+    <div>
     <MDBContainer>
 
           <MDBCard className="inventoryCard">

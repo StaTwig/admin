@@ -5,7 +5,7 @@ import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
 import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBCard, MDBCardBody } from 'mdbreact';
 import 'typeface-roboto';
-import './signUp.scss';
+import './signUp.css';
 import Key from "../assets/key.png";
 import User from "../assets/user.png";
 import Mail from "../assets/mail.png";

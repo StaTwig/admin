@@ -22,14 +22,6 @@ module.exports = {
         loader: 'babel-loader?babelrc=false&extends=' + path.resolve(__dirname, '.babelrc')
       },
       {
-        test: /\.s[ac]ss$/i,
-        use: [
-          "style-loader",
-          "css-loader",
-          "sass-loader"
-        ]
-      },
-      {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader'],
       },
