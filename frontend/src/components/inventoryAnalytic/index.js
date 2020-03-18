@@ -3,12 +3,12 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap-css-only/css/bootstrap.min.css';
 import 'mdbreact/dist/css/mdb.css';
 import 'typeface-roboto';
-import './inventoryAnalytic.css';
-import ButtonGroup from './button';
-import inventorycopy from "../assets/Total Inventory Added copy.svg";
-import pic2 from "../assets/Current Inventory.svg";
-import pic3 from "../assets/Total Vaccine near Expiration.svg";
-import pic4 from "../assets/Total Vaccine Expired.svg";
+import './style.scss';
+import ButtonGroup from '../button';
+import inventorycopy from "../../assets/icons/Total Inventory Added copy.svg";
+import pic2 from "../../assets/icons/Current Inventory.svg";
+import pic3 from "../../assets/icons/Total Vaccine near Expiration.svg";
+import pic4 from "../../assets/icons/Total Vaccine Expired.svg";
 
 const InventoryAnalytic = () => {
   return (
@@ -51,4 +51,4 @@ const InventoryAnalytic = () => {
 
 export default InventoryAnalytic;
 
-//<div className="icon"><i><img src={require('../assets/user.png')}/></i></div>
+//<div className="icon"><i><img src={require('../../assets/icons/user.png')}/></i></div>

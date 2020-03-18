@@ -1,0 +1,100 @@
+@import '../../../assets/styles/global.scss';
+
+.header {
+  height: 130px;
+  background-color: $white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+    width: 100%;
+    z-index: 99;
+
+  .branding {
+    display: flex;
+    padding-left: 3rem;
+    flex-basis: 70%;
+    h1 {
+      font-size: 32px;
+      letter-spacing: 3px;
+      font-weight: bold;
+      margin: 0;
+
+      &:first-child {
+        color: $primaryBlue;
+      }
+
+      &:nth-child {
+        color: $primaryBlue;
+      }
+    }
+  }
+
+  .actions {
+    flex-basis: 30%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    background: transparent linear-gradient(246deg, $primaryBlue 0%, $skyBlue 100%) 0% 0% no-repeat padding-box;
+    border-radius: 0px 0px 0px 100px;
+      flex: 1;
+      height: 130px;
+
+    .search-form {
+      width: 75%;
+      position: absolute;
+      left: -15rem;
+      img {
+        position: absolute;
+        right: 6px;
+        top: 8px;
+        width: 35px;
+      }
+      .search-field {
+        height: 50px;
+        background: #FFFFFF 0% 0% no-repeat padding-box;
+        box-shadow: 0px 1px 3px #00000065;
+        border-radius: 8px;
+      }
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      flex: 1;
+      justify-content: flex-end;
+      padding-right: 3rem;
+      color: $white;
+      img {
+        max-width: 100%;
+      }
+      .notifications {
+        margin-right: 1.5rem;
+        img {
+          width: 30px;
+        }
+      }
+      .divider {
+        margin-right: 1.5rem;
+        border: 1px solid #fff;
+        height: 50px;
+      }
+      .userName {
+        margin-right: 1rem;
+      }
+
+      .userPic {
+        margin-right: 1.5rem;
+        img {
+          width: 70px;
+        }
+      }
+      .userActions {
+        img {
+          width: 20px;
+        }
+      }
+    }
+  }
+}

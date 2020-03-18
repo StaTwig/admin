@@ -2,10 +2,10 @@
 import React from 'react';
 
 import './NavBar.css';
-import nav1 from '../assets/home@2x.png'
-import nav2 from '../assets/truck@2x.png'
-import nav3 from '../assets/package@2x.png'
-import nav4 from '../assets/searching@2x.png'
+import nav1 from '../../assets/home@2x.png'
+import nav2 from '../../assets/truck@2x.png'
+import nav3 from '../../assets/package@2x.png'
+import nav4 from '../../assets/searching@2x.png'
 
 const NavBar = () => {
   return (
