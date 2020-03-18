@@ -6,7 +6,7 @@ import 'mdbreact/dist/css/mdb.css';
 //import { MDBContainer, MDBBtn, MDBCard, MDBCardBody } from 'mdbreact';
 
 import 'typeface-roboto';
-import './overViewAnalytic.scss';
+import './overViewAnalytic.css';
 import totalshipments from "../assets/Total Shipments Completed.svg";
 import totalinventory from "../assets/Total Inventory Added.svg";
 import currentshipment from "../assets/Current Shipment InTransit.svg";

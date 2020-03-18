@@ -1,9 +1,8 @@
 import React from 'react';
-import './Home.scss';
-import EnhancedTable from './table'
+import './Home.css';
+//import EnhancedTable from './table'
 function App() {
   return (
-    <div className= "homepage">
     <div className="wrapper d-flex">
       <div className="sticky-menu">
         <div className="d-flex flex-column">
@@ -95,7 +94,6 @@ function App() {
           </div>
         </div>
       </div>
-    </div>
     </div>
   );
 }
