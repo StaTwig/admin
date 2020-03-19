@@ -13,7 +13,7 @@ import Add from '../../assets/icons/add.svg';
 
 const Inventory = () => {
       return (
-            <div className="shipment">
+            <div className="inventory">
                   <div className="d-flex justify-content-between">
                         <h1 className="breadcrumb">INVENTORY</h1>
                         <div className="d-flex">
