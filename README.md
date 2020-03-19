@@ -26,3 +26,6 @@ Step 2: go to apigateway
     * traefik --configFile=traefik.yml
 Step 3: in browser open 
     * localhost:3000
+OR
+Step 4: without frontend / i.e. with postman or insomania or script
+    * localhost:9001
