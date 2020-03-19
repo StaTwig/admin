@@ -98,7 +98,7 @@ const Overview = () => {
                     <td>29/03/2014</td>
                     <td>New York</td>
                     <td>8°C</td>
-                    <td>Cancelled</td>
+                    <td><span class="badge badge-pill badge-success p-2">Received</span></td>
                   </tr>
                   <tr>
                     <th scope="row"><img className="image" src={dp} width="25px" /></th>
@@ -107,7 +107,7 @@ const Overview = () => {
                     <td>01/08/1997</td>
                     <td>Sydney</td>
                     <td>6°C</td>
-                    <td>Cancelled</td>
+                    <td><span class="badge badge-pill badge-warning p-2">In Transit</span></td>
                   </tr>
                   <tr>
                     <th scope="row"><img className="image" src={dp} width="25px" /></th>
@@ -116,7 +116,7 @@ const Overview = () => {
                     <td>01/08/1997</td>
                     <td>Mumbai</td>
                     <td>6°C</td>
-                    <td>In Transit</td>
+                    <td><span class="badge badge-pill badge-light p-2">On  Hold</span></td>
                   </tr>
                   <tr>
                     <th scope="row"><img className="image" src={dp} width="25px" /></th>
@@ -125,7 +125,7 @@ const Overview = () => {
                     <td>01/08/1997</td>
                     <td>Brimingaham</td>
                     <td>6°C</td>
-                    <td>Recieved</td>
+                    <td><span class="badge badge-pill badge-danger p-2">Cancelled</span></td>
                   </tr>
                   <tr>
                     <th scope="row"><img className="image" src={dp} width="25px" /></th>
@@ -134,7 +134,7 @@ const Overview = () => {
                     <td>01/08/1997</td>
                     <td>Cape Town</td>
                     <td>6°C</td>
-                    <td>Recieved</td>
+                    <td><span class="badge badge-pill badge-success p-2 ">Received</span></td>
                   </tr>
                   <tr>
                     <th scope="row"><img className="image" src={dp} width="25px" /></th>
@@ -143,7 +143,7 @@ const Overview = () => {
                     <td>01/08/1997</td>
                     <td>Wellington</td>
                     <td>6°C</td>
-                    <td >In Transit</td>
+                    <td ><span class="badge badge-pill badge-success p-2">Received</span></td>
                   </tr>
                 </tbody>
               </table>
