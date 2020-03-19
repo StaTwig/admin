@@ -14,8 +14,8 @@ import resetPasswordPage from '../components/resetPassword'
 
 import FormLoginPage from '../components/login'
 import ShipmentAnalytic from '../components/shipments'
-import InventoryAnalytic from '../components/inventoryAnalytic'
-import OverViewAnalytic from '../components/overViewAnalytic'
+import Inventory from '../components/inventory'
+import trackAndTrace from '../components/trackAndTrace'
 import InventorySummary from '../components/inventorySummary'
 
 import './style.scss';
@@ -33,8 +33,8 @@ const routes = (
           <Route path="/forgotPassword" component={ForgotPassword} />
           <Route path="/resetPassword" component={resetPasswordPage} />
           <Route path="/shipments" component={ShipmentAnalytic} />
-          <Route path="/inventoryAnalytic" component={InventoryAnalytic} />
-          <Route path="/overViewAnalytic" component={OverViewAnalytic} />
+          <Route path="/inventory" component={Inventory} />
+          <Route path="/trackAndTrace" component={trackAndTrace} />
           <Route path="/inventorySummary" component={InventorySummary} />
           <Route component={NoMatch} />
         </Switch>
