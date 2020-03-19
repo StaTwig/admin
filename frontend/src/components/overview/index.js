@@ -56,7 +56,7 @@ const Overview = () => {
         </div>
       </div>
 
-      <div className="row spacer20">
+      <div className="row mt-5">
         <div className="col-sm-4">
           <div className="card">
             <div className="card-body">
@@ -64,9 +64,9 @@ const Overview = () => {
                 <h5 className="card-title">Inventory Summary</h5>
                 <button className="btn-primary btn"> Add Inventory</button>
               </div>
-              <div id="chartjs-render-monitor" ><ChartsPage/></div>
+              <div id="chartjs-render-monitor" ><ChartsPage /></div>
               <div id="total">Total Current Inventory</div>
-                <div id="value">1200</div>
+              <div id="value">1200</div>
               <a href="#" className="card-link btn btn-outline-primary">View More</a>
             </div>
           </div>

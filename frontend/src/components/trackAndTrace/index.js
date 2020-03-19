@@ -6,29 +6,28 @@ import totalinventory from "../../assets/icons/Total Inventory Added.svg";
 import currentshipment from "../../assets/icons/Current Shipment InTransit.svg";
 import Totalshipments from "../../assets/icons/Total Shipments.svg";
 import shipmentsdelayed from "../../assets/icons/Total Shipments Delayed.svg";
-import Add from '../../assets/icons/add.svg';
-import searchingIcon from "../../assets/icons/searching@2x.png";
+import Filter from '../../assets/icons/Filter.svg';
+import downarrow from "../../assets/icons/drop-down.svg";
 import Table from '../shared/table';
 import './style.scss';
 
 
 const trackAndTrace = () => {
   return (
-    <div className="overview">
-                  <div className="d-flex justify-content-between">
-                        <h1 className="breadcrumb">Track & Trace</h1>
-                        <div className="d-flex">
-                              
-                              <button className="btn btn-primary fontSize20 font-bold">
-                                    <img src={Add} width='20' height='20' className="mr-2" />
-                                    <span>All Filter</span>
-                              </button>
-                              <div className="search-form">
-                                   <input type="text" className="form-control search-field" />
-                                <img src={searchingIcon} alt="searching" />
-                            </div>
-                        </div>
-                  </div>
+    <div className="trackTrace">
+      <div className="d-flex justify-content-between">
+        <h1 className="breadcrumb">Track & Trace</h1>
+        <div className="search-form">
+          <input type="text" className="form-control search-field" />
+          <button className="btn btn-main-blue fontSize20 font-bold floated">
+            <div>
+              <img src={Filter} width='16' height='16' className="mr-2" />
+              <span>All Filter</span>
+            </div>
+            <img src={downarrow} width='14' height='14' />
+          </button>
+        </div>
+      </div>
       <div className="d-flex bg-grey row m-0">
         <div className="panel col">
           <img id="car1" src={totalshipments} className="rounded rounded-circle" />
@@ -71,9 +70,9 @@ const trackAndTrace = () => {
         </div>
       </div>
       <div className="mt-5">
-      <h1 className="breadcrumb">Latest Transactions</h1>       
-                        <Table />
-                  </div>
+        <h1>Latest Transactions</h1>
+        <Table />
+      </div>
     </div >
   );
 };
