@@ -6,7 +6,9 @@ import totalinventory from "../../assets/icons/Total Inventory Added.svg";
 import currentshipment from "../../assets/icons/Current Shipment InTransit.svg";
 import Totalshipments from "../../assets/icons/Total Shipments.svg";
 import shipmentsdelayed from "../../assets/icons/Total Shipments Delayed.svg";
+import dp from "../../assets/icons/harsha.jpg";
 import './style.scss';
+import ChartsPage from '../doughnut'
 
 const Overview = () => {
   return (
@@ -54,7 +56,7 @@ const Overview = () => {
         </div>
       </div>
 
-      <div className="row pt-5">
+      <div className="row spacer20">
         <div className="col-sm-4">
           <div className="card">
             <div className="card-body">
@@ -62,8 +64,9 @@ const Overview = () => {
                 <h5 className="card-title">Inventory Summary</h5>
                 <button className="btn-primary btn"> Add Inventory</button>
               </div>
-
-              <p className="card-text">Some quick example text to build on the card title and make up the bulk of the cards content.</p>
+              <div id="chartjs-render-monitor" ><ChartsPage/></div>
+              <div id="total">Total Current Inventory</div>
+                <div id="value">1200</div>
               <a href="#" className="card-link btn btn-outline-primary">View More</a>
             </div>
           </div>
@@ -78,29 +81,69 @@ const Overview = () => {
               <table className="table table-borderless">
                 <thead>
                   <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
+                    <th scope="col"></th>
+                    <th scope="col">Client</th>
+                    <th scope="col">Shipment ID</th>
+                    <th scope="col">Shipping Date</th>
+                    <th scope="col">Current Location</th>
+                    <th scope="col">Temperature</th>
+                    <th scope="col">Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
+                    <th scope="row"><img className="image" src={dp} width="25px" /></th>
+                    <td>Andrew Mctyre</td>
+                    <td>3987</td>
+                    <td>29/03/2014</td>
+                    <td>New York</td>
+                    <td>8°C</td>
+                    <td>Cancelled</td>
                   </tr>
                   <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
+                    <th scope="row"><img className="image" src={dp} width="25px" /></th>
+                    <td>Jacob Smith</td>
+                    <td>4128</td>
+                    <td>01/08/1997</td>
+                    <td>Sydney</td>
+                    <td>6°C</td>
+                    <td>Cancelled</td>
                   </tr>
                   <tr>
-                    <th scope="row">3</th>
-                    <td colspan="2">Larry the Bird</td>
-                    <td>@twitter</td>
+                    <th scope="row"><img className="image" src={dp} width="25px" /></th>
+                    <td>Larry Bird</td>
+                    <td>4128</td>
+                    <td>01/08/1997</td>
+                    <td>Mumbai</td>
+                    <td>6°C</td>
+                    <td>In Transit</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><img className="image" src={dp} width="25px" /></th>
+                    <td >Vince McMohan</td>
+                    <td>4128</td>
+                    <td>01/08/1997</td>
+                    <td>Brimingaham</td>
+                    <td>6°C</td>
+                    <td>Recieved</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><img className="image" src={dp} width="25px" /></th>
+                    <td >Larry Bird</td>
+                    <td>4128</td>
+                    <td>01/08/1997</td>
+                    <td>Cape Town</td>
+                    <td>6°C</td>
+                    <td>Recieved</td>
+                  </tr>
+                  <tr>
+                    <th scope="row"><img className="image" src={dp} width="25px" /></th>
+                    <td >Peter Skye</td>
+                    <td>4128</td>
+                    <td>01/08/1997</td>
+                    <td>Wellington</td>
+                    <td>6°C</td>
+                    <td >In Transit</td>
                   </tr>
                 </tbody>
               </table>
