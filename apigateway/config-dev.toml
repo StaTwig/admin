@@ -84,7 +84,7 @@
     # Define how to reach an existing service on our infrastructure
     [http.services.whoami.loadBalancer]
       [[http.services.whoami.loadBalancer.servers]]
-        url = "http://127.0.0.1:3000/"
+        url = "http://127.0.0.1:2999/"
     #Define how to reach user management service on our infrastructure
     [http.services.user-management.loadBalancer]
       [[http.services.user-management.loadBalancer.servers]]

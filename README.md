@@ -16,3 +16,13 @@ New Vaccine Ledger 1.0
 /notificationmanagement/ : 3006
 /inventorymanagement/ : 3007
 /blockchainmanagement/ : 3008
+
+
+#How To run for development :
+Step 1: [Recursive] go to each directory and run 
+    * npm install
+    * npm start
+Step 2: go to apigateway
+    * traefik --configFile=traefik.yml
+Step 3: in browser open 
+    * localhost:3000
