@@ -4,7 +4,7 @@ import './style.scss';
 
 const Table = () => {
   return (
-    <div className="table mt-4">
+    <div className="table">
       <div className="rTable">
         <div className="rTableHeading">
           <div className="rTableHead"><strong>Name</strong></div>

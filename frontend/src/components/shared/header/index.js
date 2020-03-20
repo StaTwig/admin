@@ -6,7 +6,7 @@ import userIcon from "../../../assets/brands/user-image/Image 73@2x.png";
 import dropdownIcon from "../../../assets/icons/drop-down.png";
 import './style.scss'
 
-const Header = () => {
+const Header = props => {
   return (
     <div className="header">
       <div className="branding">

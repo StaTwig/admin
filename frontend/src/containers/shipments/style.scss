@@ -1,6 +1,6 @@
 @import '../../assets/styles/global.scss';
 
-.inventory {
+.shipment {
     padding-right: 3rem;
     padding-left: 3rem;
 
@@ -9,18 +9,6 @@
 
         @media (min-width: 1600px) {
             flex-wrap: nowrap;
-        }
-    }
-
-    .list-container {
-
-        h4 {
-            color: $OBBlue;
-        }
-
-        .overflow {
-            overflow: auto;
-            height: 400px;
         }
     }
 

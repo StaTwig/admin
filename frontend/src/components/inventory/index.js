@@ -4,6 +4,7 @@ import './style.scss';
 import ButtonGroup from '../button';
 import Table from '../shared/table';
 import Tabs from '../shared/tabs';
+import TableFilter from '../shared/advanceTableFilter';
 import TotalInventoryAdded from "../../assets/icons/Total Inventory Added copy.svg";
 import currentinventory from "../../assets/icons/current inventory.svg";
 import Expiration from "../../assets/icons/Total Vaccine near Expiration.svg";
@@ -17,7 +18,6 @@ const Inventory = () => {
                   <div className="d-flex justify-content-between">
                         <h1 className="breadcrumb">INVENTORY</h1>
                         <div className="d-flex">
-                              
                               <button className="btn btn-yellow fontSize20 font-bold">
                                     <img src={Add} width='20' height='20' className="mr-2" />
                                     <span>Add Inventory</span>
@@ -72,8 +72,71 @@ const Inventory = () => {
                         </div>
                   </div>
                   <div className="mt-5">
-                        <Tabs />
-                        <Table />
+                        <TableFilter />
+                        <div className="row no-gutter mt-5">
+                              <div className="col-sm-12 col-lg-9 col-md-6">
+                                    <Table />
+                              </div>
+                              <div className="col-sm-12 col-lg-3 col-md-6">
+                                    <div className="list-container">
+                                          <div className="d-flex justify-content-between align-items-center">
+                                                <h4>Product List</h4>
+                                                <button className="btn btn-link">View all</button>
+                                          </div>
+                                          <div className="row overflow">
+                                                <div className="col-sm-6">
+                                                      <div className="d-flex card flex-column align-items-center">
+                                                            <p>OPV</p>
+                                                            <h3>2930</h3>
+                                                      </div>
+                                                </div>
+                                                <div className="col-sm-6">
+                                                      <div className="d-flex card flex-column align-items-center">
+                                                            <p>OPV</p>
+                                                            <h3>2930</h3>
+                                                      </div>
+                                                </div>
+                                                <div className="col-sm-6 mt-4">
+                                                      <div className="d-flex card flex-column align-items-center">
+                                                            <p>OPV</p>
+                                                            <h3>2930</h3>
+                                                      </div>
+                                                </div>
+                                                <div className="col-sm-6 mt-4">
+                                                      <div className="d-flex card flex-column align-items-center">
+                                                            <p>OPV</p>
+                                                            <h3>2930</h3>
+                                                      </div>
+                                                </div>
+                                                <div className="col-sm-6 mt-4">
+                                                      <div className="d-flex card flex-column align-items-center">
+                                                            <p>OPV</p>
+                                                            <h3>2930</h3>
+                                                      </div>
+                                                </div>
+                                                <div className="col-sm-6 mt-4">
+                                                      <div className="d-flex card flex-column align-items-center">
+                                                            <p>OPV</p>
+                                                            <h3>2930</h3>
+                                                      </div>
+                                                </div>
+                                                <div className="col-sm-6 mt-4">
+                                                      <div className="d-flex card flex-column align-items-center">
+                                                            <p>OPV</p>
+                                                            <h3>2930</h3>
+                                                      </div>
+                                                </div>
+                                                <div className="col-sm-6 mt-4">
+                                                      <div className="d-flex card flex-column align-items-center">
+                                                            <p>OPV</p>
+                                                            <h3>2930</h3>
+                                                      </div>
+                                                </div>
+                                          </div>
+                                    </div>
+                              </div>
+                        </div>
+
                   </div>
             </div>
       );
