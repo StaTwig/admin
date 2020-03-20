@@ -1,11 +1,11 @@
 import React from "react";
 
 import 'typeface-roboto';
-import totalshipments from "../../assets/icons/Total Shipments Completed.svg";
-import totalinventory from "../../assets/icons/Total Inventory Added.svg";
-import currentshipment from "../../assets/icons/Current Shipment InTransit.svg";
-import Totalshipments from "../../assets/icons/Total Shipments.svg";
-import shipmentsdelayed from "../../assets/icons/Total Shipments Delayed.svg";
+import totalshipments from "../../assets/icons/TotalShipmentsCompleted.svg";
+import totalinventory from "../../assets/icons/TotalInventoryAdded.svg";
+import currentshipment from "../../assets/icons/CurrentShipmentInTransit.svg";
+import Totalshipments from "../../assets/icons/TotalShipments.svg";
+import shipmentsdelayed from "../../assets/icons/TotalShipmentsDelayed.svg";
 import dp from "../../assets/icons/harsha.jpg";
 import './style.scss';
 import ChartsPage from '../doughnut'

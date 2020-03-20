@@ -5,10 +5,10 @@ import ButtonGroup from '../button';
 import Table from '../shared/table';
 import Tabs from '../shared/tabs';
 import TableFilter from '../shared/advanceTableFilter';
-import TotalInventoryAdded from "../../assets/icons/Total Inventory Added copy.svg";
-import currentinventory from "../../assets/icons/current inventory.svg";
-import Expiration from "../../assets/icons/Total Vaccine near Expiration.svg";
-import TotalVaccineExpired from "../../assets/icons/Total Vaccine Expired.svg";
+import TotalInventoryAdded from "../../assets/icons/TotalInventoryAddedcopy.svg";
+import currentinventory from "../../assets/icons/currentinventory.svg";
+import Expiration from "../../assets/icons/TotalVaccinenearExpiration.svg";
+import TotalVaccineExpired from "../../assets/icons/TotalVaccineExpired.svg";
 import Add from '../../assets/icons/add.svg';
 
 
