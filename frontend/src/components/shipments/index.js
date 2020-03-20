@@ -7,9 +7,10 @@ import Tabs from '../shared/tabs';
 import truckthree from "../../assets/icons/truckthree.svg";
 import Sent from "../../assets/icons/Sent.svg";
 import Received from "../../assets/icons/Received.svg";
-import CurrentShipmentInTransit2 from "../../assets/icons/Current Shipment InTransit 2.svg";
+import CurrentShipmentInTransit2 from "../../assets/icons/CurrentShipmentInTransit2.svg";
 import Add from '../../assets/icons/add.svg';
 import Order from '../../assets/icons/order.svg';
+import TableFilter from '../shared/advanceTableFilter';
 
 const ShipmentAnalytic = () => {
       return (
@@ -75,7 +76,11 @@ const ShipmentAnalytic = () => {
                         </div>
                   </div>
                   <div className="mt-5">
-                        <Tabs />
+                  <Tabs />
+                  <div className="mt-5">
+                        <TableFilter />
+                        </div>
+                        
                         <Table />
                   </div>
             </div>

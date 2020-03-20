@@ -1,10 +1,10 @@
 import React from 'react'
 
 import Footer from '../footer';
-import HomeIcon from '../../../assets/icons/Overview selected.png';
+import HomeIcon from '../../../assets/icons/Overviewselected.png';
 import shipIcon from '../../../assets/icons/Shippment.png';
 import InventoryIcon from '../../../assets/icons/Inventory.png';
-import trackIcon from '../../../assets/icons/Track _ Trace.png';
+import trackIcon from '../../../assets/icons/Track_Trace.png';
 import NetworkIcon from '../../../assets/icons/Inventory.png';
 import './style.scss'
 const SideBar = () => {
