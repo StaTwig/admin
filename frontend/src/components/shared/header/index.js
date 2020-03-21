@@ -2,11 +2,11 @@ import React from 'react'
 
 import searchingIcon from "../../../assets/icons/searching@2x.png";
 import bellIcon from "../../../assets/icons/bellwhite.png";
-import userIcon from "../../../assets/brands/user-image/Image 73@2x.png";
+import userIcon from "../../../assets/brands/user-image/Image73@2x.png";
 import dropdownIcon from "../../../assets/icons/drop-down.png";
 import './style.scss'
 
-const Header = () => {
+const Header = props => {
   return (
     <div className="header">
       <div className="branding">

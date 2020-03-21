@@ -7,24 +7,92 @@ body {
   font-size: $roboto;
 }
 
-.spacer20 {
-  padding: 3rem 5rem;
+.breadcrumb {
+  background: transparent;
+  border-bottom: 3px solid $lightBlue;
+  padding: 0;
+  border-radius: 0;
+  display: inline-block;
+  text-transform: uppercase;
+  margin-bottom: 2.5rem;
+  border-bottom: 3px solid $lightBlue;
+  font-size: 35px;
+  color: $darkGrey;
 }
 
 .card {
-  box-shadow: 0px 3px 10px #00000029;
+  box-shadow: 0px 3px 10px $grey;
   border-radius: 10px;
+}
+
+.btn {
+  padding: .2rem 2.14rem;
 }
 
 .btn-primary {
   background: transparent linear-gradient(109deg, $primaryBlue 0%, $skyBlue 100%) 0% 0% no-repeat padding-box;
-  box-shadow: 0px 3px 6px #00000029;
+  box-shadow: 0px 3px 6px $grey;
   border-radius: 10px;
   border-width: 0;
   border-color: transparent;
 }
 
+
+.btn-main-blue {
+  background: $primaryBlue;
+  border-radius: 10px;
+  border-width: 0;
+  border-color: transparent;
+  color: $white;
+
+  &:hover {
+    color: $white;
+  }
+}
+
+
+.btn-blue {
+  background: $skyBlue;
+  border-radius: 10px;
+  border-width: 0;
+  border-color: transparent;
+}
+
+.btn-orange {
+  background-color: #FA7923;
+  color: $white;
+  box-shadow: 0px 3px 6px $grey;
+  border-radius: 10px;
+  border-width: 0;
+  text-transform: capitalize;
+}
+
+.btn-yellow {
+  background-color: #FFAB1D;
+  color: $white;
+  box-shadow: 0px 3px 6px $grey;
+  border-radius: 10px;
+  border-width: 0;
+  text-transform: capitalize;
+}
+
+.fontSize20 {
+  font-size: 20px;
+}
+
 .btn-outline-primary {
   color: $primaryBlue;
   border-color: $primaryBlue;
+}
+
+.card {
+  box-shadow: 0px 3px 6px $grey;
+  border-radius: 15px;
+  background-color: $white;
+  margin-right: 1rem;
+  padding: 1rem;
+
+  &:last-child {
+    margin-right: 0;
+  }
 }

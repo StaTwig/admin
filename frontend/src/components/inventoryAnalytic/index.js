@@ -5,10 +5,10 @@ import 'mdbreact/dist/css/mdb.css';
 import 'typeface-roboto';
 import './style.scss';
 import ButtonGroup from '../button';
-import inventorycopy from "../../assets/icons/Total Inventory Added copy.svg";
-import pic2 from "../../assets/icons/Current Inventory.svg";
-import pic3 from "../../assets/icons/Total Vaccine near Expiration.svg";
-import pic4 from "../../assets/icons/Total Vaccine Expired.svg";
+import inventorycopy from "../../assets/icons/TotalInventoryAddedcopy.svg";
+import pic2 from "../../assets/icons/CurrentInventory.svg";
+import pic3 from "../../assets/icons/TotalVaccinenearExpiration.svg";
+import pic4 from "../../assets/icons/TotalVaccineExpired.svg";
 
 const InventoryAnalytic = () => {
   return (
