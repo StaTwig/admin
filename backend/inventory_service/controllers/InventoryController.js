@@ -5,9 +5,9 @@ const apiResponse = require("../helpers/apiResponse");
 const utility = require("../helpers/utility");
 const jwt = require("jsonwebtoken");
 const { constants } = require("../helpers/constants");
-
+const auth = require("../middlewares/jwt");
 exports.getTotalCount = [
-
+        auth,
         (req, res) => {
                 try {
                         res.json("Total Inventory count")
@@ -19,7 +19,7 @@ exports.getTotalCount = [
         }];
 		
 exports.getTotalCountOnHold = [
-
+        auth,
         (req, res) => {
                 try {
                         res.json("Total Inventory count on Hold")
@@ -31,7 +31,7 @@ exports.getTotalCountOnHold = [
         }];
 		
 exports.getExpiringInventory = [
-
+        auth,
         (req, res) => {
                 try {
                         res.json("Expiring Inventory")
@@ -43,7 +43,7 @@ exports.getExpiringInventory = [
         }];
 
 exports.getInventoryforProduct = [
-
+        auth,
         (req, res) => {
                 try {
                         res.json("Inventory for the specific Product")
@@ -55,7 +55,7 @@ exports.getInventoryforProduct = [
         }];
 		
 exports.getInventoryDetailsForProduct = [
-
+        auth,
         (req, res) => {
                 try {
                         res.json("Inventory details for the specific Product")
@@ -67,7 +67,7 @@ exports.getInventoryDetailsForProduct = [
         }];
 		
 exports.getAllInventoryDetails = [
-
+        auth,
         (req, res) => {
                 try {
                         res.json("Inventory details for the all Products")
@@ -80,7 +80,7 @@ exports.getAllInventoryDetails = [
 		
 		
 exports.addNewInventory = [
-
+        auth,
         (req, res) => {
                 try {
                         res.json("Added new Inventroy")

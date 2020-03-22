@@ -5,8 +5,9 @@ const apiResponse = require("../helpers/apiResponse");
 const utility = require("../helpers/utility");
 const jwt = require("jsonwebtoken");
 const { constants } = require("../helpers/constants");
-
+const auth = require("../middlewares/jwt");
 exports.getTotalTxns = [
+        auth,
 
         (req, res) => {
                 try {
