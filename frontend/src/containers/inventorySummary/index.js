@@ -3,12 +3,12 @@ import Summary from '../../components/inventorySummary';
 import Header from '../../components/shared/header';
 import Sidebar from '../../components/shared/sidebarMenu';
 
-const SummaryContainer = () => {
+const SummaryContainer = props => {
   return (
     <div className="container-fluid p-0">
       <Header />
       <div className="d-flex">
-        <Sidebar />
+        <Sidebar {...props} />
         <div className="content">
           <Summary />
         </div>
