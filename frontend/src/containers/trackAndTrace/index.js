@@ -3,12 +3,12 @@ import TrackandTrace from '../../components/trackAndTrace';
 import Header from '../../components/shared/header';
 import Sidebar from '../../components/shared/sidebarMenu';
 
-const TrackandTraceContainer = () => {
+const TrackandTraceContainer = props => {
   return (
     <div className="container-fluid p-0">
       <Header />
       <div className="d-flex">
-        <Sidebar />
+        <Sidebar {...props} />
         <div className="content">
           <TrackandTrace />
         </div>

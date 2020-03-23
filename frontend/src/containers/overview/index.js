@@ -3,12 +3,12 @@ import OverView from '../../components/overview';
 import Header from '../../components/shared/header';
 import Sidebar from '../../components/shared/sidebarMenu';
 
-const OverviewContainer = () => {
+const OverviewContainer = props => {
   return (
     <div className="container-fluid p-0">
       <Header />
       <div className="d-flex">
-        <Sidebar />
+        <Sidebar {...props} />
         <div className="content">
           <OverView />
         </div>
