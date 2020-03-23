@@ -8,9 +8,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const mailer = require("../helpers/mailer");
 const { constants } = require("../helpers/constants");
-
+const auth = require("../middlewares/jwt");
 	exports.shipmentStatistics = [
-				 
+		auth,				 
 		(req, res) => {
 			try {
 		
@@ -24,7 +24,7 @@ const { constants } = require("../helpers/constants");
 		
 		
 		exports.fetchShipments = [
-				 
+			auth,				 
 			(req, res) => {
 				try {
 			
@@ -38,7 +38,7 @@ const { constants } = require("../helpers/constants");
 			
 	
 			exports.createShipment = [
-				 
+				 auth,
 				(req, res) => {
 					try {
 				
@@ -52,7 +52,7 @@ const { constants } = require("../helpers/constants");
 				
 
 				exports.reviewShipment = [
-				 
+					auth,
 					(req, res) => {
 						try {
 					
@@ -65,7 +65,7 @@ const { constants } = require("../helpers/constants");
 					}];
 					
 					exports.verifyShipment = [
-				 
+						auth,
 						(req, res) => {
 							try {
 						
@@ -79,7 +79,7 @@ const { constants } = require("../helpers/constants");
 						
 
 						exports.modifyShipment = [
-				 
+							auth,
 							(req, res) => {
 								try {
 							
