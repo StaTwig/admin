@@ -6,7 +6,7 @@ import Table from '../shared/table';
 import Tabs from '../shared/tabs';
 import TableFilter from '../shared/advanceTableFilter';
 import TotalInventoryAdded from "../../assets/icons/TotalInventoryAddedcopy.svg";
-import currentinventory from "../../assets/icons/currentinventory.svg";
+import currentinventory from "../../assets/icons/CurrentInventory.svg";
 import Expiration from "../../assets/icons/TotalVaccinenearExpiration.svg";
 import TotalVaccineExpired from "../../assets/icons/TotalVaccineExpired.svg";
 import Add from '../../assets/icons/add.svg';
