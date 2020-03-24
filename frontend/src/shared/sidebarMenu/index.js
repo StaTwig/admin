@@ -4,16 +4,16 @@ import {
   Link
 } from "react-router-dom";
 import Footer from '../footer';
-import HomeIcon from '../../../assets/icons/Overview.png';
-import HomeSelectedIcon from '../../../assets/icons/Overviewselected.png';
-import shipIcon from '../../../assets/icons/Shippment.png';
-import InventoryIcon from '../../../assets/icons/Inventory.png';
-import trackIcon from '../../../assets/icons/Track_Trace.png';
-import NetworkIcon from '../../../assets/icons/Inventory.png';
-import shipSelectedIcon from '../../../assets/icons/Shippmentselected.png';
-import InventorySelectedIcon from '../../../assets/icons/Inventoryselected.png';
-import trackSelectedIcon from '../../../assets/icons/Track_Traceselected.png';
-import NetworkSelectedIcon from '../../../assets/icons/Inventoryselected.png';
+import HomeIcon from '../../assets/icons/Overview.png';
+import HomeSelectedIcon from '../../assets/icons/Overviewselected.png';
+import shipIcon from '../../assets/icons/Shippment.png';
+import InventoryIcon from '../../assets/icons/Inventory.png';
+import trackIcon from '../../assets/icons/Track_Trace.png';
+import NetworkIcon from '../../assets/icons/Inventory.png';
+import shipSelectedIcon from '../../assets/icons/Shippmentselected.png';
+import InventorySelectedIcon from '../../assets/icons/Inventoryselected.png';
+import trackSelectedIcon from '../../assets/icons/Track_Traceselected.png';
+import NetworkSelectedIcon from '../../assets/icons/Inventoryselected.png';
 import './style.scss'
 const SideBar = ({
   match,
@@ -31,7 +31,7 @@ const SideBar = ({
         </li>
         <li className={(url === '/shipments' || url === '/newshipment') ? 'active' : ''}>
           <Link to="/shipments">
-            <img src={(url === '/shipments') ? shipSelectedIcon : shipIcon} alt="Shippment" />
+            <img src={(url === '/shipments' || url === '/newshipment')  ? shipSelectedIcon : shipIcon} alt="Shippment" />
             <span>Shippment</span>
           </Link>
         </li>

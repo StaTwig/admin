@@ -1,8 +1,8 @@
 import React from "react";
 import DropdownButton from '../dropdownButtonGroup';
-import calenderBlue from "../../../assets/icons/calendar-blue.svg";
-import upDownArrow from "../../../assets/icons/up-and-down-blue.svg";
-import downArrow from "../../../assets/icons/up-and-down-dark.svg";
+import calenderBlue from "../../assets/icons/calendar-blue.svg";
+import upDownArrow from "../../assets/icons/up-and-down-blue.svg";
+import downArrow from "../../assets/icons/up-and-down-dark.svg";
 
 import './style.scss';
 

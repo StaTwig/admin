@@ -28,6 +28,7 @@
   "dependencies": {
     "@material-ui/core": "^4.9.4",
     "@material-ui/icons": "^4.9.1",
+    "bootstrap": "^4.4.1",
     "connected-react-router": "^6.0.0",
     "font-awesome": "^4.7.0",
     "font-awesome-webpack": "0.0.5-beta.2",

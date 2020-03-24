@@ -2,9 +2,9 @@ import React from "react";
 
 import './style.scss';
 import ButtonGroup from '../button';
-import Table from '../shared/table';
-import Tabs from '../shared/tabs';
-import TableFilter from '../shared/advanceTableFilter';
+import Table from '../../shared/table';
+import Tabs from '../../shared/tabs';
+import TableFilter from '../../shared/advanceTableFilter';
 import TotalInventoryAdded from "../../assets/icons/TotalInventoryAddedcopy.svg";
 import currentinventory from "../../assets/icons/CurrentInventory.svg";
 import Expiration from "../../assets/icons/TotalVaccinenearExpiration.svg";

@@ -1,7 +1,7 @@
 import React from "react";
 import OverView from '../../components/overview';
-import Header from '../../components/shared/header';
-import Sidebar from '../../components/shared/sidebarMenu';
+import Header from '../../shared/header';
+import Sidebar from '../../shared/sidebarMenu';
 
 const OverviewContainer = props => {
   return (

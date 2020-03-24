@@ -1,5 +1,5 @@
 import React from "react";
-import EditTable from '../shared/table/editTabel';
+import EditTable from '../../shared/table/editTabel';
 import updownArrow from "../../assets/icons/up-and-down-dark.svg";
 import calenderDark from "../../assets/icons/calendar-grey.svg";
 import Add from '../../assets/icons/add.svg';
