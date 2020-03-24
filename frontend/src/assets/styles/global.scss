@@ -25,8 +25,13 @@ body {
   border-radius: 10px;
 }
 
-.btn {
-  padding: .2rem 2.14rem;
+.shadow-radius {
+  border-radius: 10px;
+  box-shadow: 0px 3px 6px $grey;
+}
+
+.btn-white {
+  color: $primaryBlue;
 }
 
 .btn-primary {

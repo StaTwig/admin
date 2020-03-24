@@ -1,8 +1,7 @@
 import React from 'react'
 
 import {
-  Link,
-  IndexLink
+  Link
 } from "react-router-dom";
 import Footer from '../footer';
 import HomeIcon from '../../../assets/icons/Overview.png';
@@ -30,7 +29,7 @@ const SideBar = ({
             <span>Overview</span>
           </Link>
         </li>
-        <li className={(url === '/shipments') ? 'active' : ''}>
+        <li className={(url === '/shipments' || url === '/newshipment') ? 'active' : ''}>
           <Link to="/shipments">
             <img src={(url === '/shipments') ? shipSelectedIcon : shipIcon} alt="Shippment" />
             <span>Shippment</span>
@@ -48,9 +47,9 @@ const SideBar = ({
             <span>Track & Trace</span>
           </Link>
         </li>
-        <li className={(url === '/') ? 'active' : ''}>
-          <Link to="/">
-            <img src={(url === '/overview') ? NetworkSelectedIcon : NetworkIcon} alt="Network" />
+        <li className={(url === '/network') ? 'active' : ''}>
+          <Link to="/network">
+            <img src={(url === '/network') ? NetworkSelectedIcon : NetworkIcon} alt="Network" />
             <span>Network</span>
           </Link>
         </li>

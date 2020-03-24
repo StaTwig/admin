@@ -5,9 +5,11 @@ import { Route, Switch } from 'react-router'
 import Login from '../containers/login';
 import OverView from '../containers/overview';
 import Shipment from '../containers/shipments'
+import NewShipment from '../containers/newshipment';
 import Inventory from '../containers/inventory'
 import trackAndTrace from '../containers/trackAndTrace'
 import InventorySummary from '../containers/inventorySummary'
+import Network from '../containers/network';
 
 import Signup from '../containers/signUp'
 import ForgotPassword from '../containers/forgotPassword'
@@ -24,9 +26,11 @@ const routes = (
     <Route path="/forgotPassword" component={ForgotPassword} />
     <Route path="/resetPassword" component={resetPasswordPage} />
     <Route path="/shipments" component={Shipment} />
+    <Route path="/newshipment" component={NewShipment} />
     <Route path="/inventory" component={Inventory} />
     <Route path="/trackAndTrace" component={trackAndTrace} />
     <Route path="/inventorySummary" component={InventorySummary} />
+    <Route path="/network" component={Network} />
     <Route component={NoMatch} />
   </Switch>
 )
