@@ -1,5 +1,7 @@
 import React from "react";
-
+import {
+      Link
+} from "react-router-dom";
 import './style.scss';
 import ButtonGroup from '../button';
 import Table from '../shared/table';
@@ -23,8 +25,10 @@ const ShipmentAnalytic = () => {
                                     <span>Create Purchase Order</span>
                               </button>
                               <button className="btn btn-yellow fontSize20 font-bold">
-                                    <img src={Add} width='20' height='20' className="mr-2" />
-                                    <span>Create Shippment</span>
+                                    <Link to="/newshipment">
+                                          <img src={Add} width='20' height='20' className="mr-2" />
+                                          <span>Create Shippment</span>
+                                    </Link>
                               </button>
                         </div>
                   </div>
@@ -76,11 +80,11 @@ const ShipmentAnalytic = () => {
                         </div>
                   </div>
                   <div className="mt-5">
-                  <Tabs />
-                  <div className="mt-5">
-                        <TableFilter />
+                        <Tabs />
+                        <div className="mt-5">
+                              <TableFilter />
                         </div>
-                        
+
                         <Table />
                   </div>
             </div>

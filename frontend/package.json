@@ -32,6 +32,7 @@
     "font-awesome": "^4.7.0",
     "font-awesome-webpack": "0.0.5-beta.2",
     "history": "^4.7.2",
+    "html-react-parser": "^0.10.2",
     "mdbreact": "^4.25.2",
     "node-sass": "^4.13.1",
     "prop-types": "^15.6.2",
