@@ -2,9 +2,9 @@ const { body, validationResult } = require("express-validator");
 const { sanitizeBody } = require("express-validator");
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
-const jwt = require("jsonwebtoken");
-
+const auth = require("../middlewares/jwt");
 exports.trackStats = [
+  auth,
   (req, res) => {
     try {
       overviewObject = {
@@ -12,7 +12,8 @@ exports.trackStats = [
         TotalShipments: 132,
         TotalBlocks: 132,
         TotalUsers: 132,
-        TotalUnitsShipped: 132
+        TotalUnitsShipped: 132,
+        user: req.user.email
       };
       return apiResponse.successResponseWithData(
         res,
@@ -35,14 +36,16 @@ exports.fetchTransactions = [
           from: "7g34983nf89f3ufh938",
           to: "7sbdvbiwuvigjwb823rii",
           Date: "29/03/2014",
-          vaccine: "Polio"
+          vaccine: "Polio",
+          user: req.user.email
         },
         {
           txnID: "d8g93mf7g93h7f9",
           from: "7g34983nf89f3ufh938f",
           to: "7sbdvbiwuvigjwb823rii",
           Date: "01/08/1997",
-          vaccine: "MMR"
+          vaccine: "MMR",
+          user: req.user.email
         }
       ];
       return apiResponse.successResponseWithData(
@@ -63,7 +66,8 @@ exports.fetchShipmentDetails = [
         TransactionID: "Jhsivugfw73y39r2y7y37y29d297g",
         ShipmentID: "SN324876DFHJ32",
         ClientName: "UNICEF",
-        TotalQuantity: "60,000"
+        TotalQuantity: "60,000",
+        user: req.user.email
       };
 
       return apiResponse.successResponseWithData(
@@ -82,7 +86,8 @@ exports.fetchLocation = [
     try {
       locationObject = {
         Name: "Hyderabad",
-        GPS: "17.54537,67.37463298"
+        GPS: "17.54537,67.37463298",
+        user: req.user.email
       };
 
       return apiResponse.successResponseWithData(
@@ -106,7 +111,8 @@ exports.fetchTemperature = [
           "0300": "1",
           "0400": "2",
           "0500": "2",
-          "0600": "3"
+          "0600": "3",
+          user: req.user.email
         }
       ];
       return apiResponse.successResponseWithData(
@@ -129,7 +135,8 @@ exports.fetchGoodsByID = [
           Quantity: "20000",
           Manafacturer: "ABC Pharma Ltd",
           MfDate: "29/06/2019",
-          ExpDate: "04/01/2023"
+          ExpDate: "04/01/2023",
+          user: req.user.email
         },
         {
           Product: "Hib",
@@ -157,7 +164,8 @@ exports.fetchTracking = [
   (req, res) => {
     try {
       trackingObject = [
-        {
+        { 
+          user: req.user.email,
           Location: "Hyderabad, India",
           Date: "01/02/2020",
           Info: "Added to inventory by the manufacturer",

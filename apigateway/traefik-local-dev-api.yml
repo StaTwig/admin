@@ -12,5 +12,5 @@ entryPoints:
 providers:
     # Enable the file provider to define routers / middlewares / services in file
     file:
-        filename: ./config-dev-cloud.toml
+        filename: ./config-dev-local-api.toml
   
