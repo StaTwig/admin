@@ -1,7 +1,7 @@
 import React from "react";
 import TrackandTrace from '../../components/trackAndTrace';
-import Header from '../../components/shared/header';
-import Sidebar from '../../components/shared/sidebarMenu';
+import Header from '../../shared/header';
+import Sidebar from '../../shared/sidebarMenu';
 
 const TrackandTraceContainer = props => {
   return (

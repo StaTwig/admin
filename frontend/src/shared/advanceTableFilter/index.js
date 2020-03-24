@@ -1,13 +1,13 @@
 import React from 'react'
 
-import user from '../../../assets/icons/brand.svg';
-import Package from '../../../assets/icons/package.svg';
-import calender from '../../../assets/icons/calendar.svg';
-import Status from '../../../assets/icons/Status.svg';
-import updownarrow from '../../../assets/icons/up-and-down-1.svg';
-import FilterIcon from '../../../assets/icons/Filter.svg';
-import ExportIcon from '../../../assets/icons/Export.svg';
-import dropdownIcon from '../../../assets/icons/drop-down.svg';
+import user from '../../assets/icons/brand.svg';
+import Package from '../../assets/icons/package.svg';
+import calender from '../../assets/icons/calendar.svg';
+import Status from '../../assets/icons/Status.svg';
+import updownarrow from '../../assets/icons/up-and-down-1.svg';
+import FilterIcon from '../../assets/icons/Filter.svg';
+import ExportIcon from '../../assets/icons/Export.svg';
+import dropdownIcon from '../../assets/icons/drop-down.svg';
 
 import './style.scss'
 

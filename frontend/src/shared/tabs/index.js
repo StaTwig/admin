@@ -2,7 +2,7 @@ import React from "react";
 
 import './style.scss';
 
-const Tabs = () => {
+const Tabs = props => {
   return (
     <div className="tabs">
       <ul className="nav nav-pills">

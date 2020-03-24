@@ -8,7 +8,7 @@ import Totalshipments from "../../assets/icons/TotalShipments.svg";
 import shipmentsdelayed from "../../assets/icons/TotalShipmentsDelayed.svg";
 import Filter from '../../assets/icons/Filter.svg';
 import downarrow from "../../assets/icons/drop-down.svg";
-import Table from '../shared/table';
+import Table from '../../shared/table';
 import './style.scss';
 
 
