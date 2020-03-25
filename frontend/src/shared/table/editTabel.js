@@ -11,14 +11,14 @@ const EditTable = () => {
     <div className="table editTable">
       <div className="rTable">
         <div className="rTableHeading">
-          <div className="rTableHead">Name</div>
-          <div className="rTableHead"><span>Telephone</span></div>
-          <div className="rTableHead">Name</div>
-          <div className="rTableHead"><span>Telephone</span></div>
-          <div className="rTableHead">Name</div>
-          <div className="rTableHead"><span>Telephone</span></div>
-          <div className="rTableHead">Name</div>
-          <div className="rTableHead"><span>Telephone</span></div>
+          <div className="rTableHead"> Product Name</div>
+          <div className="rTableHead"><span>Manufacturer</span></div>
+          <div className="rTableHead">Quqntity</div>
+          <div className="rTableHead"><span>Mfg Date</span></div>
+          <div className="rTableHead">Exp date</div>
+          <div className="rTableHead"><span>Storage Conditions</span></div>
+          <div className="rTableHead">Batch Number</div>
+          <div className="rTableHead"><span>Serial Numbers</span></div>
         </div>
         <div className="overflow">
           <div className="rTableRow">
@@ -37,7 +37,7 @@ const EditTable = () => {
             </div>
             <div className="rTableCell">
               <div className="form-group">
-                <input type="text" className="form-field" placeholder="Select Product" />
+                <input type="text" className="form-field" placeholder="Enter Qunatity" />
               </div>
             </div>
             <div className="rTableCell">
@@ -58,17 +58,17 @@ const EditTable = () => {
             </div>
             <div className="rTableCell">
               <div className="form-group">
-                <input type="text" className="form-field" placeholder="Select Product" />
+                <input type="text" className="form-field" placeholder="Enter Storage Conditions" />
               </div>
             </div>
             <div className="rTableCell">
               <div className="form-group">
-                <input type="text" className="form-field" placeholder="Select Product" />
+                <input type="text" className="form-field" placeholder="Enter Batch Number" />
               </div>
             </div>
             <div className="rTableCell">
               <div className="input-group">
-                <input type="text" className="form-field" placeholder="Select Product" />
+                <input type="text" className="form-field" placeholder="Enter Serial Numbers" />
                 <div className="input-group-append">
                   <img src={downArrow} alt="downarrow" width="16" height="16" />
                 </div>

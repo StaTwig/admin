@@ -21,7 +21,7 @@ const AdvanceTableFilter = () => {
               <div className="icon mr-2">
                 <img src={Package} width="16" height="16" />
               </div>
-              <div className="filterTitle">Package</div>
+              <div className="filterTitle">Product Type</div>
             </div>
 
             <div className="filterAction">

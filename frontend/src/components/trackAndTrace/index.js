@@ -22,7 +22,7 @@ const trackAndTrace = () => {
           <button className="btn btn-main-blue fontSize20 font-bold floated">
             <div>
               <img src={Filter} width='16' height='16' className="mr-2" />
-              <span>All Filter</span>
+              <span>Filter</span>
             </div>
             <img src={downarrow} width='14' height='14' />
           </button>

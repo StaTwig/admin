@@ -8,7 +8,7 @@ import './style.scss';
 const NewShipment = () => {
   return (
     <div className="NewShipment">
-      <h1 className="breadcrumb">CREATE NEW SHIPMENT</h1>
+      <h1 className="breadcrumb">CREATE SHIPMENTS</h1>
       <div className="row">
         <div className="col mr-3">
           <div className="form-group">
@@ -22,36 +22,46 @@ const NewShipment = () => {
         </div>
         <div className="col mr-3">
           <div className="form-group">
-            <label htmlFor="shipmentId">Email address</label>
-            <input type="text" className="form-control" name="shipmentId" placeholder="Enter Shipment ID" />
+            <label htmlFor="shipmentId">Supplier</label>
+            <input type="text" className="form-control" name="shipmentId" placeholder="John Doe" />
           </div>
           <div className="input-group">
             <label htmlFor="shipmentId">Supplier Location</label>
-            <input type="text" className="form-control" placeholder="Recipient's username" />
+            <input type="text" className="form-control" placeholder="Select Location" />
             <div className="input-group-append">
               <img src={updownArrow} alt="downarrow" width="16" height="16" />
             </div>
           </div>
           <div className="input-group">
-            <label htmlFor="shipmentId">Supplier Date</label>
-            <input type="text" className="form-control" placeholder="Recipient's username" />
+            <label htmlFor="shipmentId">Shipment Date</label>
+            <input type="text" className="form-control" placeholder="Select Shipment Date" />
             <div className="input-group-append">
               <img src={calenderDark} alt="downarrow" width="16" height="16" />
             </div>
           </div>
         </div>
         <div className="col">
-          <div className="form-group">
-            <label htmlFor="shipmentId">Email address</label>
-            <input type="text" className="form-control" name="shipmentId" placeholder="Enter Shipment ID" />
+        <div className="input-group">
+            <label htmlFor="shipmentId">Delivery To</label>
+            <input type="text" className="form-control" placeholder="Select" />
+            <div className="input-group-append">
+              <img src={updownArrow} alt="downarrow" width="16" height="16" />
+            </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="client">Email address</label>
-            <input type="text" className="form-control" name="client" placeholder="Enter Client" />
+          <div className="input-group">
+            <label htmlFor="shipmentId">Delivery Location</label>
+            <input type="text" className="form-control" placeholder="Select Delivery Location" />
+            <div className="input-group-append">
+              <img src={updownArrow} alt="downarrow" width="16" height="16" />
+            </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="client">Email address</label>
-            <input type="text" className="form-control" name="client" placeholder="Enter Client" />
+         
+          <div className="input-group">
+            <label htmlFor="shipmentId"> Estimate Delivery Date</label>
+            <input type="text" className="form-control" placeholder="Deivery Date" />
+            <div className="input-group-append">
+              <img src={calenderDark} alt="downarrow" width="16" height="16" />
+            </div>
           </div>
         </div>
       </div>
@@ -60,7 +70,10 @@ const NewShipment = () => {
       <button className="btn btn-white shadow-radius font-bold">
         +<span> Add Another Product</span>
       </button>
+      <button className="btn-primary btn">Assign Shipmnet Order</button>
+      <button className="btn-primary btn">Proceed To Review</button>
     </div>
+   
   );
 };
 
