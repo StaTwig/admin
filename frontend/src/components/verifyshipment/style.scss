@@ -1,0 +1,20 @@
+@import '../../assets/styles/global.scss';
+
+
+.verifyshipment {
+  padding-left: 3rem;
+  padding-right: 3rem;
+  .total{
+    color: $OBBlue;
+    font:  25px/13px $roboto;
+   
+  }
+  .value{
+    color: $black;
+    font:  25px/13px $roboto;
+  }
+
+  hr {
+    border-width: 2px;
+  }
+}
