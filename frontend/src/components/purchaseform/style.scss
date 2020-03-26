@@ -14,7 +14,7 @@
     label {
       color: #707070;
       text-align: left;
-      font: 20px/24px Helvetica Neue;
+      font: 17px Helvetica Neue;
     }
 
     .form-control {
@@ -32,6 +32,7 @@
   .input-group {
     position: relative;
     margin-bottom: 1rem;
+    flex-basis: 45%;
 
     .input-group-append {
       position: absolute;
@@ -46,6 +47,11 @@
 }
 
 .productTable {
+
+    .overflow {
+      height: auto;
+      max-height: 400px;
+    }
   
   .square-box {
     width: 40px;

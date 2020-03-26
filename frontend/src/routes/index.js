@@ -1,7 +1,6 @@
 import React from 'react'
 import { Route, Switch } from 'react-router'
 
-
 import Login from '../containers/login';
 import LandingPage from '../containers/landingpage';
 import OverView from '../containers/overview';
@@ -12,12 +11,9 @@ import Inventory from '../containers/inventory';
 import NewInventory from '../containers/newinventory';
 import trackAndTrace from '../containers/trackAndTrace';
 import Tracing from '../containers/tracing';
-import InventorySummary from '../containers/inventorySummary';
 import Network from '../containers/network';
 import ProfilePage from '../containers/profilepage';
 import AdminProfilePage from '../containers/adminprofilepage';
-
-
 
 import Signup from '../containers/signUp'
 import ForgotPassword from '../containers/forgotPassword'
@@ -46,7 +42,6 @@ const routes = (
     <Route path="/newinventory" component={NewInventory} />
     <Route path="/trackAndTrace" component={trackAndTrace} />
     <Route path="/tracing" component={Tracing} />
-    <Route path="/inventorySummary" component={InventorySummary} />
     <Route path="/network" component={Network} />
     <Route component={NoMatch} />
   </Switch>

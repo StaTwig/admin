@@ -13,15 +13,16 @@ const Modal = props => {
             <div className="modal-header">
               <h5 className="modal-title">{props.title}</h5>
               <button type="button" className="close" onClick={() => props.close()}>
-                <img src={CloseIcon} alt="Close" with="40" height="40"/>
+                <img src={CloseIcon} alt="Close" with="40" height="40" />
               </button>
             </div>
             <div className="modal-body">
               {props.children}
             </div>
-            <div className="modal-footer">
-              
-            </div>
+            {props.buttonName && <div className="modal-footer">
+            <button type="button" className={`btn btn-lg fontSize20 font-weight-bold ${props.buttonClass}`}>{props.buttonName}</button>
+          </div>}
+            
           </div>
         </div>
       </div>

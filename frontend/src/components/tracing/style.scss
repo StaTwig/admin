@@ -14,13 +14,16 @@
     width: 50%;
     position: relative;
     
-    img {
-        position: absolute;
-        right: 6px;
-        top: 8px;
-        width: 35px;
-      }
+    .search-icon {
+      position: absolute;
+      right: 6px;
+      top: 8px;
+      width: 35px;
+    }
 
+    .flex-basis-80 {
+      flex-basis: 85%;
+    }
 
     .search-field {
       height: 50px;
@@ -38,7 +41,7 @@
       margin: 0;
       height: 50px;
       bottom: 0;
-      width: 26%;
+      width: 20%;
       display: flex;
       align-items: center;
       font-size: 18px;
@@ -51,7 +54,6 @@
     border-radius: 15px;
     background-color: $white;
     flex-basis: 30%;
-    margin-top: 2rem;
     margin-right: 1rem;
     padding: 30px;
 
