@@ -14,7 +14,7 @@
     label {
       color: #707070;
       text-align: left;
-      font: 20px/24px Helvetica Neue;
+      font: 16px Helvetica Neue;
     }
 
     .form-control {
@@ -51,5 +51,12 @@
 
   hr {
     border-width: 2px;
+  }
+
+  .table {
+    .overflow {
+      height: auto;
+      max-height: 400px;
+    }
   }
 }

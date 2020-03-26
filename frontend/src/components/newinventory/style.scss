@@ -52,4 +52,11 @@
   hr {
     border-width: 2px;
   }
+
+  .table {
+    .overflow {
+      height: auto;
+      max-height: 400px;
+    }
+  }
 }

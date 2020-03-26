@@ -18,8 +18,11 @@ const NewInventory = () => {
       </button>
       <hr />
       <div className="d-flex justify-content-between">
+      <div className="d-flex w-25 justify-content-between">
         <div className="total">Grand Total</div>
-        <div className="value">0</div>
+        <span className="value">0</span>
+      </div>
+        
         <button className="btn-primary btn" onClick={() => setOpenCreatedInventory(true)}> Add Inventory</button>
       </div>
       {
