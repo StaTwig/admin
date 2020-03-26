@@ -27,14 +27,29 @@
     &:first-child {
       justify-content: flex-end;
     }
+    .picture {
+      width: 60px;
+      height: 60px;
+      box-shadow: 0px 3px 6px #00000029;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-right: 2rem;
 
-    img {
-      width: 65px;
-      box-shadow: 0px 3px 6px $grey;
-      background: #fff;
-      padding: 1rem;
-      margin-right: .8rem;
-    }
+      img {
+          width: 35px;
+          height: 26px;
+          
+      }
+
+      &.truck-bg {
+          background: $white ;
+          opacity:1;
+      }
+  }
+
+    
 
     .title {
       font-size: 12px;

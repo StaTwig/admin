@@ -19,7 +19,9 @@ const Overview = () => {
       <h1 className="breadcrumb">OVERVIEW</h1>
       <div className="d-flex bg-grey row m-0">
         <div className="panel col">
-          <img id="car1" src={totalshipments} className="rounded rounded-circle" />
+        <div className="picture truck-bg">
+          <img src={totalshipments} alt="truck" />
+          </div>
           <div className="d-flex flex-column">
             <div className="title">Total Shipments Completed</div>
             <div className="count">1.3 M <small className="dayStatus">This Year</small></div>
@@ -27,7 +29,10 @@ const Overview = () => {
         </div>
         <span className="divider" />
         <div className="panel col">
-          <img id="car3" src={totalinventory} className="rounded rounded-circle" />
+                               <div className="picture truck-bg">
+                                          <img src={totalinventory} alt="truck" />
+                                    </div>
+        
           <div className="d-flex flex-column">
             <div className="title">Total Inventory Added</div>
             <div className="count" >5.4 M <small className="dayStatus">This Year</small></div>
@@ -35,7 +40,9 @@ const Overview = () => {
         </div>
         <span className="divider" />
         <div className="panel col">
-          <img id="car1" src={currentshipment} className="rounded rounded-circle" />
+        <div className="picture truck-bg">
+          <img src={currentshipment} alt="truck" />
+          </div>
           <div className="d-flex flex-column">
             <div className="title">Current Shipment in transit</div>
             <div className="count">53 <small className="dayStatus">Today</small></div>
@@ -43,7 +50,9 @@ const Overview = () => {
         </div>
         <span className="divider" />
         <div className="panel col">
-          <img id="car1" src={Totalshipments} className="rounded rounded-circle" />
+        <div className="picture truck-bg">
+          <img src={Totalshipments} alt="truck" />
+          </div>
           <div className="d-flex flex-column">
             <div className="title">Total Shipments</div>
             <div className="count">42 <small className="dayStatus">Today</small></div>
@@ -51,7 +60,9 @@ const Overview = () => {
         </div>
         <span className="divider" />
         <div className="panel col">
-          <img id="car1" src={shipmentsdelayed} className="rounded rounded-circle" />
+        <div className="picture truck-bg">
+        <img  src={shipmentsdelayed} alt="truck" />
+        </div>
           <div className="d-flex flex-column">
             <div className="title">Total Shipments Delayed</div>
             <div className="count">32 <small className="dayStatus">This Month</small></div>
