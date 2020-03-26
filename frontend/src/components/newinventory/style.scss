@@ -1,7 +1,7 @@
 @import '../../assets/styles/global.scss';
 
 
-.Purchase{
+.Newinventory {
   padding-left: 3rem;
   padding-right: 3rem;
 
@@ -38,6 +38,15 @@
       right: 0;
       cursor: pointer;
     }
+  }
+  .total{
+    color: $OBBlue;
+    font:  25px/13px $roboto;
+   
+  }
+  .value{
+    color: $black;
+    font:  25px/13px $roboto;
   }
 
   hr {

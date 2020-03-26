@@ -1,13 +1,15 @@
 import React from "react";
-import EditTable from '../../shared/table/editTabel';
+import ProductsTable from './products';
 import updownArrow from "../../assets/icons/up-and-down-dark.svg";
-import calenderDark from "../../assets/icons/calendar-grey.svg";
-import Add from '../../assets/icons/add.svg';
 import './style.scss';
 
-const PurchaseOrder = () => {
+const productTableData = {
+  tableHeader: ['Name One', 'name Two', 'Name Three']
+}
+
+const PurchaseForm = () => {
   return (
-    <div className="Purchase">
+    <div className="purchaseform">
       <div className="row">
         <div className="col mr-3">
         <div className="input-group">
@@ -42,7 +44,7 @@ const PurchaseOrder = () => {
          
       </div>
       <hr />
-      <EditTable />
+      <ProductsTable {...productTableData}/>
       <button className="btn btn-white shadow-radius font-bold">
         +<span> Add Another Product</span>
       </button>
@@ -54,5 +56,5 @@ const PurchaseOrder = () => {
   );
 };
 
-export default PurchaseOrder;
+export default PurchaseForm;
 

@@ -2,7 +2,6 @@ import React from "react";
 import EditTable from '../../shared/table/editTabel';
 import updownArrow from "../../assets/icons/up-and-down-dark.svg";
 import calenderDark from "../../assets/icons/calendar-grey.svg";
-import Add from '../../assets/icons/add.svg';
 import './style.scss';
 
 const NewShipment = () => {
@@ -70,8 +69,16 @@ const NewShipment = () => {
       <button className="btn btn-white shadow-radius font-bold">
         +<span> Add Another Product</span>
       </button>
+      <hr />
+      
+      <div className="d-flex justify-content-between">
+      <div className="total">Grand Total</div>
+      <div className="value">0</div>
+      <div className="d-flex ">
       <button className="btn-primary btn">Assign Shipmnet Order</button>
       <button className="btn-primary btn">Proceed To Review</button>
+      </div>
+      </div>
     </div>
    
   );

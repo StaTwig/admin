@@ -39,6 +39,15 @@
       cursor: pointer;
     }
   }
+  .total{
+    color: $OBBlue;
+    font:  25px/13px $roboto;
+   
+  }
+  .value{
+    color: $black;
+    font:  25px/13px $roboto;
+  }
 
   hr {
     border-width: 2px;

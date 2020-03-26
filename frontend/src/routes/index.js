@@ -7,7 +7,7 @@ import OverView from '../containers/overview';
 import Shipment from '../containers/shipments'
 import NewShipment from '../containers/newshipment';
 import Inventory from '../containers/inventory'
-import AddInventory from '../containers/addInventory';
+import NewInventory from '../containers/newinventory';
 import trackAndTrace from '../containers/trackAndTrace'
 import InventorySummary from '../containers/inventorySummary'
 import Network from '../containers/network';
@@ -29,7 +29,7 @@ const routes = (
     <Route path="/shipments" component={Shipment} />
     <Route path="/newshipment" component={NewShipment} />
     <Route path="/inventory" component={Inventory} />
-    <Route path="/addInventory" component={AddInventory} />
+    <Route path="/newinventory" component={NewInventory} />
     <Route path="/trackAndTrace" component={trackAndTrace} />
     <Route path="/inventorySummary" component={InventorySummary} />
     <Route path="/network" component={Network} />

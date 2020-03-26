@@ -14,7 +14,7 @@ import Add from '../../assets/icons/add.svg';
 import Order from '../../assets/icons/order.svg';
 import TableFilter from '../../shared/advanceTableFilter';
 import Modal from '../../shared/modal';
-import CreatePurchaseModal from '../../components/createPurchaseModal';
+import PurchaseForm from '../../components/purchaseform';
 
 const ShipmentAnalytic = () => {
       const [openPurchaseOrder, setOpenPurchaseOrder] = useState(false);
@@ -98,7 +98,7 @@ const ShipmentAnalytic = () => {
                               title="Create Purchase Order"
                               size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
                         >
-                             <CreatePurchaseModal/>
+                             <PurchaseForm/>
                         </Modal>
                   }
 

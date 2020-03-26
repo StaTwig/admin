@@ -65,7 +65,7 @@ const Overview = () => {
             <div className="card-body">
               <div className="d-flex justify-content-between">
                 <h5 className="card-title">Inventory Summary</h5>
-                <Link to="/addInventory">
+                <Link to="/newinventory">
                <button className="btn-primary btn"> Add Inventory</button>
                </Link>
               </div>

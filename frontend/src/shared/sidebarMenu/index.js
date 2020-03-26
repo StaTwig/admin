@@ -35,9 +35,9 @@ const SideBar = ({
             <span>Shipment</span>
           </Link>
         </li>
-        <li className={(url === '/inventory') ? 'active' : ''}>
+        <li className={(url === '/inventory'|| url === '/newinventory') ? 'active' : ''}>
           <Link to="/inventory">
-            <img src={(url === '/inventory') ? InventorySelectedIcon : InventoryIcon} alt="Inventory" />
+            <img src={(url === '/inventory' || url === '/newinventory') ? InventorySelectedIcon : InventoryIcon} alt="Inventory" />
             <span>Inventory</span>
           </Link>
         </li>
