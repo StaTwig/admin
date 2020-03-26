@@ -38,10 +38,12 @@
             img {
                 width: 35px;
                 height: 26px;
+                opacity: 1;
             }
 
             &.truck-bg {
-                background: $deepGreen;
+                background: #35BFCC96 ;
+                opacity:0.3;
             }
 
             &.sent-bg {
