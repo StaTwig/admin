@@ -1,21 +1,21 @@
 import React from "react";
-import ProfilePage from '../../components/profilepage';
+import Profile from '../../components/profile';
 import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
 
-const ProfilePageContainer = props => {
+const ProfileContainer = props => {
   return (
     <div className="container-fluid p-0">
       <Header />
       <div className="d-flex">
         <Sidebar {...props} />
         <div className="content">
-          <ProfilePage />
+          <Profile />
         </div>
       </div>
     </div>
   );
 };
 
-export default ProfilePageContainer;
+export default ProfileContainer;
 

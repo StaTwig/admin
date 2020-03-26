@@ -1,9 +1,9 @@
 import React from "react";
 import './style.scss';
 
-const AdminProfilePage = () => {
+const AdminProfile = () => {
   return (
-    <div className="adminprofilepage">
+    <div className="adminprofile">
       <h1 className="breadcrumb">Admin Profile</h1>
       
     </div>
@@ -11,5 +11,5 @@ const AdminProfilePage = () => {
   );
 };
 
-export default AdminProfilePage;
+export default AdminProfile;
 

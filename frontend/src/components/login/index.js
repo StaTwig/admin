@@ -60,6 +60,8 @@ const FormLoginPage = () => {
                     Login
                   </MDBBtn>
                 </div>
+                <div id="notify">Forgot Password?</div>
+                <div id="alert">Remember me</div>
                 <div id="text-center2">Don't have an account? Signup</div>
               </form>
             </MDBCardBody>

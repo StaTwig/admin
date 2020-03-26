@@ -14,8 +14,8 @@ import trackAndTrace from '../containers/trackAndTrace';
 import Tracing from '../containers/tracing';
 import InventorySummary from '../containers/inventorySummary';
 import Network from '../containers/network';
-import ProfilePage from '../containers/profilepage';
-import AdminProfilePage from '../containers/adminprofilepage';
+import Profile from '../containers/profile';
+import AdminProfile from '../containers/adminprofile';
 
 
 
@@ -37,8 +37,8 @@ const routes = (
     <Route path="/forgotPassword" component={ForgotPassword} />
     <Route path="/resetPassword" component={resetPasswordPage} />
     <Route path="/landingpage" component={LandingPage} />
-    <Route path="/profilepage" component={ProfilePage} />
-    <Route path="/adminprofilepage" component={AdminProfilePage} />
+    <Route path="/profile" component={Profile} />
+    <Route path="/adminprofile" component={AdminProfile} />
     <Route path="/shipments" component={Shipment} />
     <Route path="/newshipment" component={NewShipment} />
     <Route path="/verifyshipment" component={VerifyShipment} />
