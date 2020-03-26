@@ -16,12 +16,15 @@ import Signup from '../containers/signUp'
 import ForgotPassword from '../containers/forgotPassword'
 import resetPasswordPage from '../containers/resetPassword'
 
+import Home from '../containers/home';
+
 import NoMatch from '../components/NoMatch'
 
 import './style.scss';
 const routes = (
   <Switch>
-    <Route exact path="/" component={OverView} />
+    <Route exact path="/" component={Home} />
+    <Route path="/overview" component={OverView} />
     <Route path="/login" component={Login} />
     <Route path="/signup" component={Signup} />
     <Route path="/forgotPassword" component={ForgotPassword} />

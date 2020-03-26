@@ -23,9 +23,9 @@ const SideBar = ({
   return (
     <div className="sidebar">
       <ul>
-        <li className={(url === '/') ? 'active' : ''}>
+        <li className={(url === '/overview') ? 'active' : ''}>
           <Link to="/">
-            <img src={(url === '/') ? HomeSelectedIcon : HomeIcon} alt="Overview" />
+            <img src={(url === '/overview') ? HomeSelectedIcon : HomeIcon} alt="Overview" />
             <span>Overview</span>
           </Link>
         </li>
