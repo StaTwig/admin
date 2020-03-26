@@ -22,7 +22,7 @@ const Header = props => {
             <img src={bellIcon} alt="notification" />
           </div>
           <div className="divider" />
-          <div className="userName">Jhon Name</div>
+          <div className="userName">John Wilson</div>
           <div className="userPic">
             <img src={userIcon} alt="Jhon Name" className="rounded rounded-circle" />
           </div>

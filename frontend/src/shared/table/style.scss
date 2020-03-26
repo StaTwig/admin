@@ -1,9 +1,9 @@
 @import '../../assets/styles/global.scss';
 
 .table {
-  .overflow {
+  .overview{
+    min-height: 400px;
     overflow: auto;
-    height: 400px;
   }
 
   .rTable {

@@ -14,6 +14,7 @@ import Add from '../../assets/icons/add.svg';
 import Order from '../../assets/icons/order.svg';
 import TableFilter from '../../shared/advanceTableFilter';
 import Modal from '../../shared/modal';
+import PurchaseForm from '../../components/purchaseform';
 
 const ShipmentAnalytic = () => {
       const [openPurchaseOrder, setOpenPurchaseOrder] = useState(false);
@@ -23,7 +24,7 @@ const ShipmentAnalytic = () => {
       return (
             <div className="shipment">
                   <div className="d-flex justify-content-between">
-                        <h1 className="breadcrumb">SHIPPMENT</h1>
+                        <h1 className="breadcrumb">SHIPMENT</h1>
                         <div className="d-flex">
                               <button className="btn btn-orange fontSize20 font-bold" onClick={() => setOpenPurchaseOrder(true)}>
                                     <img src={Order} width='20' height='20' className="mr-2" />
@@ -97,36 +98,7 @@ const ShipmentAnalytic = () => {
                               title="Create Purchase Order"
                               size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
                         >
-                              <form>
-                                    <div className="form-group">
-                                          <label for="exampleFormControlInput1">Email address</label>
-                                          <input type="email" className="form-control" placeholder="name@example.com" />
-                                    </div>
-                                    <div className="form-group">
-                                          <label for="exampleFormControlSelect1">Example select</label>
-                                          <select className="form-control" id="exampleFormControlSelect1">
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                                <option>4</option>
-                                                <option>5</option>
-                                          </select>
-                                    </div>
-                                    <div className="form-group">
-                                          <label for="exampleFormControlSelect2">Example multiple select</label>
-                                          <select multiple className="form-control" id="exampleFormControlSelect2">
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                                <option>4</option>
-                                                <option>5</option>
-                                          </select>
-                                    </div>
-                                    <div className="form-group">
-                                          <label for="exampleFormControlTextarea1">Example textarea</label>
-                                          <textarea className="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                                    </div>
-                              </form>
+                             <PurchaseForm/>
                         </Modal>
                   }
 

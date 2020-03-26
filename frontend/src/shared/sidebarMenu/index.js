@@ -32,12 +32,12 @@ const SideBar = ({
         <li className={(url === '/shipments' || url === '/newshipment') ? 'active' : ''}>
           <Link to="/shipments">
             <img src={(url === '/shipments' || url === '/newshipment')  ? shipSelectedIcon : shipIcon} alt="Shippment" />
-            <span>Shippment</span>
+            <span>Shipment</span>
           </Link>
         </li>
-        <li className={(url === '/inventory') ? 'active' : ''}>
+        <li className={(url === '/inventory'|| url === '/newinventory') ? 'active' : ''}>
           <Link to="/inventory">
-            <img src={(url === '/inventory') ? InventorySelectedIcon : InventoryIcon} alt="Inventory" />
+            <img src={(url === '/inventory' || url === '/newinventory') ? InventorySelectedIcon : InventoryIcon} alt="Inventory" />
             <span>Inventory</span>
           </Link>
         </li>

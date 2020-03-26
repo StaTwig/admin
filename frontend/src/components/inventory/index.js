@@ -1,9 +1,11 @@
 import React from "react";
+import {
+      Link
+} from "react-router-dom";
 
 import './style.scss';
 import ButtonGroup from '../button';
 import Table from '../../shared/table';
-import Tabs from '../../shared/tabs';
 import TableFilter from '../../shared/advanceTableFilter';
 import TotalInventoryAdded from "../../assets/icons/TotalInventoryAddedcopy.svg";
 import currentinventory from "../../assets/icons/CurrentInventory.svg";
@@ -18,9 +20,11 @@ const Inventory = () => {
                   <div className="d-flex justify-content-between">
                         <h1 className="breadcrumb">INVENTORY</h1>
                         <div className="d-flex">
-                              <button className="btn btn-yellow fontSize20 font-bold">
+                               <button className="btn btn-yellow fontSize20 font-bold">
+                                  <Link to="/newinventory">
                                     <img src={Add} width='20' height='20' className="mr-2" />
                                     <span>Add Inventory</span>
+                                    </Link>
                               </button>
                         </div>
                   </div>
