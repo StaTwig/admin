@@ -22,8 +22,8 @@ import logo from '../../assets/brands/VaccineLedgerlogo.svg';
 
 import './style.scss';
 
-const FormLoginPage = (props) => {
-  const { password, email, onEmailChange, onPasswordChange, errorMessage, onLogin } = props;
+const FormVerifyPage = (props) => {
+  const { email, onEmailChange, otp, onOtpChange, onVerifyOtp, errorMessage } = props;
   return (
     <div className="admin-login2">
       <MDBContainer>
@@ -32,13 +32,13 @@ const FormLoginPage = (props) => {
             <img id="img2" src={logo} />
 
             <div id="Welcome2">Welcome Back ,</div>
-            <div id="Sign2">Login to continue</div>
+            <div id="Sign2">Verify to continue</div>
           </MDBCol>
           <MDBCol md="6" className="signin2">
             <MDBCard className="card2">
               <MDBCardBody>
                 <form>
-                  <p className="heading2">Login</p>
+                  <p className="heading2">Verify</p>
                   <div className="input2">
                     <MDBRow>
                       <MDBCol md="2">
@@ -69,24 +69,22 @@ const FormLoginPage = (props) => {
                       </MDBCol>
                       <MDBCol md="10" id="col2">
                         <MDBInput
-                          label="Password"
+                          label="OTP"
                           group
                           type="password"
                           validate
-                          value={password}
-                          onChange={onPasswordChange}
+                          value={otp}
+                          onChange={onOtpChange}
                         />
                       </MDBCol>
                     </MDBRow>
                   </div>
+                  <label className="text-danger">{errorMessage}</label>
                   <div className="text-center py-4 mt-3">
-                    <MDBBtn id="submit2" color="cyan" onClick={onLogin}>
-                      Login
+                    <MDBBtn id="submit2" color="cyan" onClick={onVerifyOtp}>
+                      Verify
                     </MDBBtn>
                   </div>
-                  <label className="text-danger">{errorMessage}</label>
-                  <div id="notify">Forgot Password?</div>
-                  <div id="alert">Remember me</div>
                   <div id="text-center2"><Link to="/signup">
                     <div>Don't have an account? Signup</div>
                   </Link></div>
@@ -100,4 +98,4 @@ const FormLoginPage = (props) => {
   );
 };
 
-export default FormLoginPage;
+export default FormVerifyPage;
