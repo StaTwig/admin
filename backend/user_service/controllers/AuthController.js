@@ -20,7 +20,7 @@ const { constants } = require("../helpers/constants");
  */
 exports.register = [
 	// Validate fields.
-	body("Name").isLength({ min: 1 }).trim().withMessage("name must be specified.")
+	body("name").isLength({ min: 1 }).trim().withMessage("name must be specified.")
 		.isAlphanumeric().withMessage("name has non-alphanumeric characters."),
 	body("email").isLength({ min: 1 }).trim().withMessage("Email must be specified.")
 		.isEmail().withMessage("Email must be a valid email address.").custom((value) => {
@@ -32,11 +32,11 @@ exports.register = [
 		}),
 	body("password").isLength({ min: 6 }).trim().withMessage("Password must be 6 characters or greater."),
 	// Sanitize fields.
-	sanitizeBody("Name").escape(),
+	sanitizeBody("name").escape(),
 	sanitizeBody("email").escape(),
 	sanitizeBody("password").escape(),
 	// Process request after validation and sanitization.
-	(req, res) => {
+	async (req, res) => {
 		try {
 			// Extract the validation errors from a request.
 			const errors = validationResult(req);
@@ -51,14 +51,14 @@ exports.register = [
 					// Create User object with escaped and trimmed data
 					var user = new UserModel(
 						{
-							Name: req.body.Name,
+							name: req.body.name,
 							email: req.body.email,
 							password: hash,
 							confirmOTP: otp
 						}
 					);
 					// Html email body
-					let html = "<p>Please Confirm your Account.</p><p>OTP: "+otp+"</p>";
+					let html = `<p>Please Confirm your Account.</p><p>OTP: ${otp}. Verify Link http://localhost:3000/verify </p>`;
 					// Send confirmation email
 					mailer.send(
 						constants.confirmEmails.from, 

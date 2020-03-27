@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from 'react-router-dom';
 
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import 'bootstrap-css-only/css/bootstrap.min.css';
@@ -11,7 +12,7 @@ import User from "../../assets/icons/user.png";
 import Mail from "../../assets/icons/mail.png";
 import hide from "../../assets/icons/hide.png";
 import logo from "../../assets/brands/VaccineLedgerlogo.svg";
-const FormPage = () => {
+const FormPage = (props) => {
   return (
     <div className="admin-login1">
     <MDBContainer>
@@ -40,6 +41,8 @@ const FormPage = () => {
                     validate
                     error="wrong"
                     success="right"
+                    value={props.name}
+                    onChange={props.onNameChange}
                   /></MDBCol></MDBRow>
                   <MDBRow>
                 <MDBCol md="2">
@@ -52,6 +55,8 @@ const FormPage = () => {
                     validate
                     error="wrong"
                     success="right"
+                    value={props.email}
+                    onChange={props.onEmailChange}
                   /></MDBCol></MDBRow>
                   <MDBRow>
                 <MDBCol md="2">
@@ -62,15 +67,20 @@ const FormPage = () => {
                     group
                     type="password"
                     validate
+                    value={props.password}
+                    onChange={props.onPasswordChange}
                   /></MDBCol></MDBRow>
 
                 </div>
+                <label className="text-danger">{props.errorMessage}</label>
                 <div className="text-center py-4 mt-3">
-                  <MDBBtn id="submit1" color="cyan" type="submit">
+                  <MDBBtn id="submit1" color="cyan" onClick={props.onSignup}>
                     SIGNUP
                   </MDBBtn>
                 </div>
-                <div id="text-center1">Already have an Account? Login</div>
+                <div id="text-center1"><Link to="/login">
+                  <div>Already have an Account? Login</div>
+                </Link></div>
               </form>
             </MDBCardBody>
           </MDBCard>
