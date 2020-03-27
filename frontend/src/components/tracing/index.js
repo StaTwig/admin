@@ -3,14 +3,13 @@ import 'typeface-roboto';
 import searchingIcon from "../../assets/icons/searching@2x.png";
 import Filter from '../../assets/icons/Filter.svg';
 import updownarrow from "../../assets/icons/up-and-down-white.svg";
-//import Chart from '../temperaturegraph'
 import OPV from "../../assets/icons/OPV.svg";
 import MMR from "../../assets/icons/MMR.svg";
 import HiB from "../../assets/icons/HiB.svg";
 import HepB from "../../assets/icons/HepB.svg";
 import CurrentTemperature from "../../assets/icons/CurrentTemperature.png";
-import { LineChart } from 'react-chartkick';
-import 'chart.js';
+import Chart from "./temperature";
+
 import './style.scss';
 
 
@@ -140,9 +139,8 @@ const Tracing = () => {
               </div>
               
               </div>
-              < LineChart ymin="-10" ymax="10" min={-5} max={10}  colors={["#FA7923", "#666"]} 
-          data={{"1:00": 2, "2:00": 5,  "3:00": 3 , "4:00": 4, "5:00": 3, "6:00": 5, "7:00": 3, "8:00": 4, "9:00": 3}} />
-    </div>
+              <Chart />
+         </div>
             </div>
             <h3>Geographical Tracking/ Chain of Custody</h3>
             <div className="panel "></div>
