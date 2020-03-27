@@ -49,6 +49,13 @@
       justify-content: space-around;
     }
   }
+  .divider {
+    width:420px;
+    border: 0.7px solid $d6Grey;
+    display: flex;
+    align-self: center;
+    margin:20px;
+  }
   .panel {
     box-shadow: 0px 3px 6px $grey;
     border-radius: 15px;
