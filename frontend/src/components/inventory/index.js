@@ -12,6 +12,14 @@ import currentinventory from "../../assets/icons/CurrentInventory.svg";
 import Expiration from "../../assets/icons/TotalVaccinenearExpiration.svg";
 import TotalVaccineExpired from "../../assets/icons/TotalVaccineExpired.svg";
 import Add from '../../assets/icons/add.svg';
+import OPV from "../../assets/icons/OPV.svg";
+import MMR from "../../assets/icons/MMR.svg";
+import HiB from "../../assets/icons/HiB.svg";
+import HepB from "../../assets/icons/HepB.svg";
+import IPV from "../../assets/icons/IPV.svg";
+import PVC from "../../assets/icons/PVC.svg";
+import BVG from "../../assets/icons/BCG.svg";
+import RV from "../../assets/icons/RV.svg";
 
 
 const Inventory = () => {
@@ -90,49 +98,57 @@ const Inventory = () => {
                                           <div className="row overflow">
                                                 <div className="col-sm-6">
                                                       <div className="d-flex card flex-column align-items-center">
+                                                      <img src={OPV} width='40' height='40' className="my-2" />
                                                             <p>OPV</p>
                                                             <h3>2930</h3>
                                                       </div>
                                                 </div>
                                                 <div className="col-sm-6">
                                                       <div className="d-flex card flex-column align-items-center">
-                                                            <p>OPV</p>
+                                                      <img src={MMR} width='40' height='40' className="my-2" />
+                                                            <p>MMR</p>
                                                             <h3>2930</h3>
                                                       </div>
                                                 </div>
                                                 <div className="col-sm-6 mt-4">
                                                       <div className="d-flex card flex-column align-items-center">
-                                                            <p>OPV</p>
+                                                      <img src={HiB} width='40' height='40' className="my-2" />
+                                                            <p>HiB</p>
                                                             <h3>2930</h3>
                                                       </div>
                                                 </div>
                                                 <div className="col-sm-6 mt-4">
                                                       <div className="d-flex card flex-column align-items-center">
-                                                            <p>OPV</p>
+                                                      <img src={HepB} width='40' height='40' className="my-2" />
+                                                            <p>Hep B</p>
                                                             <h3>2930</h3>
                                                       </div>
                                                 </div>
                                                 <div className="col-sm-6 mt-4">
                                                       <div className="d-flex card flex-column align-items-center">
-                                                            <p>OPV</p>
+                                                      <img src={IPV} width='40' height='40' className="my-2" />
+                                                            <p>IPV</p>
                                                             <h3>2930</h3>
                                                       </div>
                                                 </div>
                                                 <div className="col-sm-6 mt-4">
                                                       <div className="d-flex card flex-column align-items-center">
-                                                            <p>OPV</p>
+                                                      <img src={PVC} width='40' height='40' className="my-2" />
+                                                            <p>PVC</p>
                                                             <h3>2930</h3>
                                                       </div>
                                                 </div>
                                                 <div className="col-sm-6 mt-4">
                                                       <div className="d-flex card flex-column align-items-center">
-                                                            <p>OPV</p>
+                                                      <img src={BVG} width='40' height='40' className="my-2" />
+                                                            <p>BVG</p>
                                                             <h3>2930</h3>
                                                       </div>
                                                 </div>
                                                 <div className="col-sm-6 mt-4">
                                                       <div className="d-flex card flex-column align-items-center">
-                                                            <p>OPV</p>
+                                                      <img src={RV} width='40' height='40' className="my-2" />
+                                                            <p>RV</p>
                                                             <h3>2930</h3>
                                                       </div>
                                                 </div>
