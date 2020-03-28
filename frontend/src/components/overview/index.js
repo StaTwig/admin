@@ -19,8 +19,8 @@ const Overview = () => {
       <h1 className="breadcrumb">OVERVIEW</h1>
       <div className="d-flex bg-grey row m-0">
         <div className="panel col">
-        <div className="picture truck-bg">
-          <img src={totalshipments} alt="truck" />
+          <div className="picture truck-bg">
+            <img src={totalshipments} alt="truck" />
           </div>
           <div className="d-flex flex-column">
             <div className="title">Total Shipments Completed</div>
@@ -29,10 +29,10 @@ const Overview = () => {
         </div>
         <span className="divider" />
         <div className="panel col">
-                               <div className="picture truck-bg">
-                                          <img src={totalinventory} alt="truck" />
-                                    </div>
-        
+          <div className="picture truck-bg">
+            <img src={totalinventory} alt="truck" />
+          </div>
+
           <div className="d-flex flex-column">
             <div className="title">Total Inventory Added</div>
             <div className="count" >5.4 M <small className="dayStatus">This Year</small></div>
@@ -40,8 +40,8 @@ const Overview = () => {
         </div>
         <span className="divider" />
         <div className="panel col">
-        <div className="picture truck-bg">
-          <img src={currentshipment} alt="truck" />
+          <div className="picture truck-bg">
+            <img src={currentshipment} alt="truck" />
           </div>
           <div className="d-flex flex-column">
             <div className="title">Current Shipment in transit</div>
@@ -50,8 +50,8 @@ const Overview = () => {
         </div>
         <span className="divider" />
         <div className="panel col">
-        <div className="picture truck-bg">
-          <img src={Totalshipments} alt="truck" />
+          <div className="picture truck-bg">
+            <img src={Totalshipments} alt="truck" />
           </div>
           <div className="d-flex flex-column">
             <div className="title">Total Shipments</div>
@@ -60,9 +60,9 @@ const Overview = () => {
         </div>
         <span className="divider" />
         <div className="panel col">
-        <div className="picture truck-bg">
-        <img  src={shipmentsdelayed} alt="truck" />
-        </div>
+          <div className="picture truck-bg">
+            <img src={shipmentsdelayed} alt="truck" />
+          </div>
           <div className="d-flex flex-column">
             <div className="title">Total Shipments Delayed</div>
             <div className="count">32 <small className="dayStatus">This Month</small></div>
@@ -71,31 +71,31 @@ const Overview = () => {
       </div>
 
       <div className="row mt-5">
-        <div className="col-sm-4">
+        <div className="col-sm-12 col-xl-4">
           <div className="card">
             <div className="card-body">
               <div className="d-flex justify-content-between">
                 <h5 className="card-title">Inventory Summary</h5>
                 <Link to="/newinventory">
-               <button className="btn-primary btn"> Add Inventory</button>
-               </Link>
+                  <button className="btn-primary btn"> Add Inventory</button>
+                </Link>
               </div>
               <div id="chartjs-render-monitor" ><ChartsPage /></div>
               <div id="total">Total Current Inventory</div>
               <div id="value">1200</div>
               <Link to="/inventory">
-              <a href="#" className="card-link btn btn-outline-primary">View More</a>
+                <a href="#" className="card-link btn btn-outline-primary">View More</a>
               </Link>
             </div>
           </div>
         </div>
-        <div className="col-sm-8">
+        <div className="col-sm-12 col-xl-8 mt-4 mt-xl-0">
           <div className="card">
             <div className="card-body">
               <div className="d-flex justify-content-between">
                 <h5 className="card-title">Shipment Summary</h5>
                 <Link to="/newshipment">
-                <button className="btn-primary btn"> Create Shipment</button>
+                  <button className="btn-primary btn"> Create Shipment</button>
                 </Link>
               </div>
               <table className="table table-borderless">
@@ -168,7 +168,7 @@ const Overview = () => {
                 </tbody>
               </table>
               <Link to="/shipments">
-              <a href="#" className="card-link btn btn-outline-primary">View More</a>
+                <a href="#" className="card-link btn btn-outline-primary">View More</a>
               </Link>
             </div>
           </div>

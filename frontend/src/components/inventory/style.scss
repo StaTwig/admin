@@ -6,9 +6,10 @@
 
     .fix-wrap {
         flex-wrap: wrap;
-
+        justify-content: space-between;
         @media (min-width: 1600px) {
             flex-wrap: nowrap;
+            justify-content: space-between;
         }
     }
 
@@ -28,10 +29,19 @@
         box-shadow: 0px 3px 6px $grey;
         border-radius: 15px;
         background-color: $white;
-        flex-basis: 30%;
+        flex-basis: 48%;
         margin-top: 2rem;
         margin-right: 1rem;
         padding: 30px;
+        @media (min-width: $xl) {
+            flex-basis: 30%;
+        }
+
+        @media (max-width: $xl) {
+            &:nth-child(2) {
+                margin-right: 0;
+            }
+        }
 
         &:last-child {
             margin-right: 0;

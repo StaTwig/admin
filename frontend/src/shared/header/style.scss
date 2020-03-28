@@ -13,7 +13,10 @@
   .branding {
     display: flex;
     padding-left: 3rem;
-    flex-basis: 70%;
+    flex-basis: 50%;
+    @media (min-width: $xl){
+      flex-basis: 70%;
+    }
     h1 {
       font-size: 32px;
       letter-spacing: 3px;
@@ -44,7 +47,11 @@
     .search-form {
       width: 75%;
       position: absolute;
-      left: -15rem;
+      left: -17rem;
+      display: none;
+      @media (min-width: $xl){
+        display: block;
+      }
       img {
         position: absolute;
         right: 6px;
