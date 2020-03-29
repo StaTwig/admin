@@ -86,10 +86,10 @@ const Inventory = () => {
                   <div className="mt-5">
                         <TableFilter />
                         <div className="row no-gutter mt-5">
-                              <div className="col-sm-12 col-lg-9 col-md-6">
+                              <div className="col-sm-12 col-xl-9">
                                     <Table />
                               </div>
-                              <div className="col-sm-12 col-lg-3 col-md-6">
+                              <div className="col-sm-12 col-xl-3">
                                     <div className="list-container">
                                           <div className="d-flex justify-content-between align-items-center">
                                                 <h4>Product List</h4>
