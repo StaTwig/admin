@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export const verifyOtp = async (data) => {
   try  {
-    const result = await  axios.post(`${SERVER_URL}/usermanagement/auth/verify-otp`, data);
+    const result = await  axios.post(`${SERVER_URL}/usermanagement/api/auth/verify-otp`, data);
     return result;
   }catch(e) {
     return e.response;
@@ -13,7 +13,7 @@ export const verifyOtp = async (data) => {
 
 export const authenticateUser = async data => {
   try {
-    const result = await axios.post(`${SERVER_URL}/usermanagement/auth/register`, data );
+    const result = await axios.post(`${SERVER_URL}/usermanagement/api/auth/register`, data );
     return result;
   } catch (e) {
     return e.response;
@@ -22,7 +22,7 @@ export const authenticateUser = async data => {
 
 export const loginUser = async data => {
   try {
-    const result = await axios.post(`${SERVER_URL}/usermanagement/auth/login`, data );
+    const result = await axios.post(`${SERVER_URL}/usermanagement/api/auth/login`, data );
     return result;
   } catch (e) {
     return e.response;
