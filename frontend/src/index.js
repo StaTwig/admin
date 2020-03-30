@@ -6,7 +6,7 @@ import jwt_decode from 'jwt-decode';
 
 import App from './App'
 import configureStore, { history } from './configureStore'
-import {setCurrentUser} from "./actions/userActions";
+import {setCurrentUser, logoutUser} from "./actions/userActions";
 import  setAuthToken  from './utils/setAuthToken';
 
 const store = configureStore()
