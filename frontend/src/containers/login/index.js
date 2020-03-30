@@ -25,6 +25,9 @@ const LoginContainer = props => {
       localStorage.setItem('theLedgerToken', token);
       dispatch(setCurrentUser(decoded));
       props.history.push('/overview');
+    }if(result.status === 401) {
+      const err = result.data.message;
+      setErrorMessage(err);
     } else {
       const err = result.data.data[0];
       setErrorMessage(err.msg);
