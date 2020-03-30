@@ -9,6 +9,7 @@
     "lint": "eslint --fix --config .eslintrc.json \"**/*.js\""
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "bcrypt": "^3.0.6",
     "codacy-coverage": "^3.4.0",
     "cookie-parser": "~1.4.3",
