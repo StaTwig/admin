@@ -7,13 +7,18 @@ import DropdownButton from '../dropdownButton';
 import searchingIcon from "../../assets/icons/searching@2x.png";
 import bellIcon from "../../assets/icons/bellwhite.png";
 import userIcon from "../../assets/brands/user-image/Image73@2x.png";
-//import { logoutUser} from '../../actions/userActions';
-//import {useDispatch } from 'react-redux';
+import { logoutUser} from '../../actions/userActions';
+import {useDispatch } from 'react-redux';
 
 
 import './style.scss'
 
 const Header = props => {
+  const dispatch = useDispatch();
+  const handleLogout = () => { 
+    console.log('logout clicked');
+    dispatch(logoutUser());
+    }  
  
   return (
     <div className="header">

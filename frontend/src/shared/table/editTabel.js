@@ -12,7 +12,7 @@ const EditTable = () => {
         <div className="rTableHeading">
           <div className="rTableHead"> Product Name</div>
           <div className="rTableHead"><span>Manufacturer</span></div>
-          <div className="rTableHead">Quqntity</div>
+          <div className="rTableHead">Quantity</div>
           <div className="rTableHead"><span>Mfg Date</span></div>
           <div className="rTableHead">Exp date</div>
           <div className="rTableHead"><span>Storage Conditions</span></div>
@@ -36,7 +36,7 @@ const EditTable = () => {
             </div>
             <div className="rTableCell">
               <div className="form-group">
-                <input type="text" className="form-field" placeholder="Enter Qunatity" />
+                <input type="text" className="form-field" placeholder="Enter Quantity" />
               </div>
             </div>
             <div className="rTableCell">
