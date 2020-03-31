@@ -1,0 +1,40 @@
+@import '../../assets/styles/global.scss';
+
+
+.custom-dropdown {
+  flex-basis: 100%;
+  display: flex;
+  outline: none;
+  position: relative;
+
+  small {
+    color: $a8Grey;
+  }
+  .btn-custom-dropdown {
+    border:  none;
+    display: flex;
+    justify-content: space-between;
+    color: $a8Grey;
+    flex-basis: 100%;
+    outline: none;
+
+    &.active {
+      color: $primaryBlue;
+    }
+  }
+  
+  .dropdown-menu {
+    box-shadow: 0px 3px 10px $grey;
+    border-radius: 8px;
+    border: none;
+    padding: 1rem;
+  }
+  .transform-group {
+    position: absolute;
+    transform: translate3d(0px, 38px, 0px);
+    top: 35px;
+    left: -100px;
+    right: -15px;
+    will-change: transform;
+  }
+}
