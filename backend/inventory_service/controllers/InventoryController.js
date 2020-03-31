@@ -8,7 +8,9 @@ const { constants } = require("../helpers/constants");
 const auth = require("../middlewares/jwt");
 const checkToken = require('../middlewares/middleware').checkToken;
 const axios = require('axios');
-const base_url = 'API GATEWAY FOR BLOCKCHAIN SERVICES';
+const dotenv = require('dotenv').config();
+
+const blockchain_service_url = process.env.URL;
 
 exports.getTotalCount = [
         auth,
@@ -103,9 +105,18 @@ exports.getInventoryDetailsForProduct = [
         auth,
         (req, res) => {
                 try {
-                        res.json("Inventory details for the specific Product")
-
-
+			const {authorization} = req.headers;
+                        checkToken(req, res, async result => {
+                                if (result.success) {
+					const {stream, key} = req.query;
+                                        const response = await axios.get(`${blockchain_service_url}/queryDataByKey?stream=${stream}&key=${key}`);
+                                        const items = response.data.items;
+					console.log("items",items)
+                                        res.json({data:items});
+                                } else {
+                                        res.status(403).json(result);
+                                }
+                        });
                 } catch (err) {
                         return apiResponse.ErrorResponse(res, err);
                 }
@@ -133,7 +144,6 @@ exports.getAllInventoryDetails = [
         }
 ];
 
-
 exports.addNewInventory = [
         auth,
         async (req, res) => {
@@ -141,12 +151,15 @@ exports.addNewInventory = [
                         const {authorization} = req.headers;
                         checkToken(req, res, async result => {
                                 if (result.success) {
-                                        const {data} = result.data;
-                                        //API to add new inventory record
-                                        //const response = await axios.get(`${url}/apiendpoint?stream=vl_inventory_stream&data=$data`);
-                                        //const items = response.data.items;
-                                        //res.json(JSON.parse(items));
-                                        res.json("Inventory created");
+					const { key, data,stream,address } = req.body;
+					const userData = {
+    						stream: stream,
+					        key: key,
+						address: address,
+					        data: data,
+					  };
+                                        const response = await axios.post(`${blockchain_service_url}/publish`,userData);
+                                        res.json({response: response.data.transactionId});
                                 } else {
                                         res.status(403).json(result);
                                 }

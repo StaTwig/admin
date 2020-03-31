@@ -19,50 +19,19 @@ function hex_to_ascii(str) {
     return str;
 }
 
-/*exports.writeData1 = function (req, res) {
-    if (process.env.MC_VERSION == 1.0) {
-        var response = writeDatav1(req, res)
-    } else {
-        var response = writeDatav2(req, res)
-    }
-    console.log("Response" + response)
-    res.json(response);
-}*/
-
 //To publish data to Multichain 1
-var txnHash = ""
 //async function writeDatav1(req, res) {
 exports.writeData = async function (req, res) {
-     const data = Buffer.from(JSON.stringify(req.body.data), 'utf8').toString('hex');
-    //const data = new Buffer(req.body.data).toString("hex")
-    //const data = new Buffer(JSON.stringify(req.body.data)).toString("hex");
-    const multichain = init.getMultichain();
-    console.log("data",data)
-        var key = req.body.data.actor + "-" + req.body.data.userID
-	var key_1 = req.body.key
-        var user_stream = "userstream"
-        var new_address = new Promise(function (resolve, reject) {
-        multichain.listStreamKeyItems({stream: user_stream, key: key, verbose: false}, (err, tx) => {
-            resolve(tx)
-        })
-    })
-
-    await new_address.then(function (value) {
-        actor_address = hex_to_ascii(value[0].data);
+        const data = Buffer.from(JSON.stringify(req.body.data), 'utf8').toString('hex');
+        const multichain = init.getMultichain();
+	var key = req.body.key
+        var address = req.body.address
         var dataStream = req.body.stream
-        //shell.exec("multichain-cli chain1 grant " + actor_address + " " + dataStream + ".write")
-        //shell.exec("multichain-cli chain1 grant " + actor_address + " send");
-        //const tx = shell.exec("multichain-cli chain1 publishfrom " + actor_address + " " + dataStream + " " + key + " " + data);
-        //txnHash = tx;
-        //})
-        //res.json({transactionId: txnHash});
-	    console.log(actor_address,dataStream,key_1,data)
-	 multichain.publishFrom({from:actor_address, stream:dataStream, key:key_1 , data:data }, (err, tx) => {
-         uilogger.info("Publishing data to",dataStream,"by actor",key,"publisher address",actor_address,data);   
+	 
+	 multichain.publishFrom({from:address, stream:dataStream, key:key , data:data }, (err, tx) => {
          res.json({transactionId: tx});
-        })
-    })
-}
+      })
+    }
 
 //To publish data to Multichain 2
 function writeDatav2(req, res) {
