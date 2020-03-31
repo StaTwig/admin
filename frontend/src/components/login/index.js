@@ -84,11 +84,11 @@ const FormLoginPage = (props) => {
                       Login
                     </MDBBtn>
                   </div>
-                  <label className="text-danger">{errorMessage}</label>
+                  <label id="danger">{errorMessage}</label>
                   <div id="notify">Forgot Password?</div>
                   <div id="alert">Remember me</div>
                   <div id="text-center2"><Link to="/signup">
-                    <div>Don't have an account? Signup</div>
+                    <div id ="noaccount">Don't have an account? Signup</div>
                   </Link></div>
                 </form>
               </MDBCardBody>

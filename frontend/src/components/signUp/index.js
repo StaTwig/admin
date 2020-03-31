@@ -79,7 +79,7 @@ const FormPage = (props) => {
                   </MDBBtn>
                 </div>
                 <div id="text-center1"><Link to="/login">
-                  <div>Already have an Account? Login</div>
+                  <div id="noaccount">Already have an Account? Login</div>
                 </Link></div>
               </form>
             </MDBCardBody>

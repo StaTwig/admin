@@ -1,12 +1,20 @@
-import React from 'react'
+import React from 'react';
+import {
+  Link
+} from "react-router-dom";
 
+import DropdownButton from '../dropdownButton';
 import searchingIcon from "../../assets/icons/searching@2x.png";
 import bellIcon from "../../assets/icons/bellwhite.png";
 import userIcon from "../../assets/brands/user-image/Image73@2x.png";
-import dropdownIcon from "../../assets/icons/drop-down.png";
+//import { logoutUser} from '../../actions/userActions';
+//import {useDispatch } from 'react-redux';
+
+
 import './style.scss'
 
 const Header = props => {
+ 
   return (
     <div className="header">
       <div className="branding">
@@ -23,11 +31,17 @@ const Header = props => {
           </div>
           <div className="divider" />
           <div className="userName">John Wilson</div>
-          <div className="userPic">
+          <Link to="/profile">
+            <div className="userPic">
             <img src={userIcon} alt="Jhon Name" className="rounded rounded-circle" />
           </div>
+          </Link>
           <div className="userActions">
-            <img src={dropdownIcon} alt="actions" />
+          <DropdownButton
+                groups={['<button onClick={handleLogout}> LOG OUT</button>']}
+              />
+        
+           
           </div>
         </div>
       </div>
@@ -37,3 +51,17 @@ const Header = props => {
 }
 
 export default Header;
+
+
+//<img src={dropdownIcon} alt="actions" />  */
+
+
+/*<button onClick={handleLogout}> LOG OUT</button>
+
+const dispatch = useDispatch();
+  //dispatch(logoutUser());
+
+  const handleLogout = () => { 
+    console.log('logout clicked');
+    dispatch(logoutUser());
+    }  */

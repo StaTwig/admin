@@ -5,4 +5,28 @@
   padding-left: 3rem;
   padding-right: 3rem;
 
+  .divider {
+    border: 1px solid $d6Grey;
+    display: flex;
+    align-self: center;
+  }
+
+  ul {
+    padding: 0.8rem 0.8rem;
+    display: flex;
+    flex-direction: column;
+
+    li {
+      padding: 0.3rem 0.3rem;
+      margin:0.4rem;
+      list-style: none;
+    }
+}
+
+  .userPic {
+    img {
+      width:160px;
+    }
+  }
+
 }

@@ -87,13 +87,31 @@
   letter-spacing: 0;
   color: #707070;
     
+  } 
+  
+  .signin2 #danger{
+    position:relative;top:-50px;left:-60px;
+  letter-spacing: 0;
+   color: hsl(0, 77%, 38%);
+  
+    
   }
+
+
   .signin2 #alert{
     position:relative;top:-50px;left:50px;
     
   font: Regular 15px/33px Roboto;
   letter-spacing: 0;
   color: #707070;
+    
+  }
+
+  .signin2 #noaccount{
+    position:relative;top:-30px;left:-10px;
+    
+  font: Regular 15px/33px Roboto;
+  letter-spacing: 0;
     
   }
   .signin2  #eye2{
