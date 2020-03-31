@@ -4,7 +4,7 @@ import updownArrow from "../../assets/icons/up-and-down-dark.svg";
 import './style.scss';
 
 const productTableData = {
-  tableHeader: ['Name One', 'name Two', 'Name Three']
+  tableHeader: ['Product Name', 'Manufacturer', 'Quantity']
 }
 
 const PurchaseForm = () => {

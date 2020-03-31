@@ -33,7 +33,7 @@ const ShipmentAnalytic = () => {
                               <button className="btn btn-yellow fontSize20 font-bold">
                                     <Link to="/newshipment">
                                           <img src={Add} width='20' height='20' className="mr-2" />
-                                          <span>Create Shippment</span>
+                                          <span>Create Shipment</span>
                                     </Link>
                               </button>
                         </div>

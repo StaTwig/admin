@@ -1,12 +1,20 @@
 import React, { useState } from "react";
 import parse from 'html-react-parser';
 import upDownArrow from "../../assets/icons/drop-down.png";
+import { logoutUser} from '../../actions/userActions';
+import {useDispatch } from 'react-redux';
 import './style.scss';
 
 const DropdownButton = ({
     groups
 }) => {
   const [menu, setMenu] = useState(false);
+  const dispatch = useDispatch();
+  const handleLogout = () => { 
+    console.log('logout clicked');
+    dispatch(logoutUser());
+    }  
+ 
   return (
     <div className="custom-dropdown">
       <button
@@ -16,22 +24,7 @@ const DropdownButton = ({
       >
         <img src={upDownArrow} alt="downarrow" width="16" height="16" />
       </button>
-      {
-        menu && <div className="dropdown-menu show transform-group">
-          {
-            groups && groups.map((item,index) => {
-              return (
-                <React.Fragment key={item}>
-                  <span className="dropdown-item" >{ parse(item) }</span>
-                  {
-                    (index + 1 < groups.length) && <hr />
-                  }
-                </React.Fragment>
-              )
-            })
-          }
-        </div>
-      }
+      <button onClick={handleLogout}> LOG OUT</button>
     </div>
   );
 };

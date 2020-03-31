@@ -14,7 +14,7 @@ const Profile = () => {
               <div className="userPic mb-4 mr-2">
             <img src={ProfilePic} alt="Jhon Name" className="rounded rounded-circle" />
           </div>
-          <button className="btn-primary btn">Change Photo</button>
+          <button type="button" className="btn btn-outline-info">Change Photo</button>
           </div>
           <div className="col-8 mt-5">
           <h3>John Doe</h3>
