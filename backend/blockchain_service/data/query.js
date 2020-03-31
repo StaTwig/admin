@@ -18,7 +18,9 @@ exports.fetchDataByKey = function (req, res) {
     multichain.listStreamKeyItems({
         stream,
         key,
-        verbose: true
+        verbose: true,
+	count : 1,
+	start: -1,
     }, (err, data) => {
         //res.setHeader('Access-Control-Allow-Origin', '*');
         data.forEach(item => {
