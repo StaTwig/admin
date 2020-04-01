@@ -9,7 +9,7 @@ const Profile = () => {
       <h1 className="breadcrumb">Profile</h1>
       <div className="card">
             <div className="card-body">
-              <div className="d-flex flex-row">
+              <div className="d-flex flex-row justify-content-between">
               <div className="col-2">
               <div className="userPic mb-4 mr-2">
             <img src={ProfilePic} alt="Jhon Name" className="rounded rounded-circle" />
@@ -38,24 +38,15 @@ const Profile = () => {
            <li>Active</li>
            </ul>
           </div>
-          
-          </div>
-              
+         </div>
               <div className="col">
-
-                 <button className="btn-primary btn"><img src={Pen} width='15' height='15' className="mr-3" />
-                                   
-                      <span>EDIT</span>
-                                    
-                                    
-                  </button>
+         <button className="btn-primary btn"><img src={Pen} width='15' height='15' className="mr-3" />
+                                   <span>EDIT</span>
+                 </button>
                </div>
               </div>
-
-               
                 </div>
                 </div>
-               
       
     </div>
    
