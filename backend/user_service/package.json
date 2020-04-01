@@ -9,6 +9,7 @@
     "lint": "eslint --fix --config .eslintrc.json \"**/*.js\""
   },
   "dependencies": {
+    "base64-img": "^1.0.4",
     "bcrypt": "^3.0.6",
     "codacy-coverage": "^3.4.0",
     "cookie-parser": "~1.4.3",
@@ -23,6 +24,7 @@
     "moment": "^2.24.0",
     "mongoose": "^5.7.6",
     "morgan": "~1.9.0",
+    "multer": "^1.4.2",
     "nodemailer": "^6.3.1"
   },
   "devDependencies": {

@@ -8,7 +8,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const mailer = require("../helpers/mailer");
 const { constants } = require("../helpers/constants");
-
+var base64Img = require('base64-img');
+const auth = require("../middlewares/jwt")
 /**
  * User registration.
  *
@@ -120,7 +121,7 @@ exports.login = [
 										let userData = {
 											_id: user._id,
 											Name: user.Name,
-											email: user.email,
+											email: user.email
 										};
 										//Prepare JWT token for authentication
 										const jwtPayload = userData;
@@ -342,6 +343,60 @@ exports.resetPassword = [
 			try {
 		
 				res.json("User profile details")
+					
+			
+			} catch (err) {
+				return apiResponse.ErrorResponse(res, err);
+			}
+		}];
+		
+	exports.updateImage = [
+		auth,		 
+		(req, res) => {
+			try {
+		
+				UserModel.findOne({email : req.user.email}).then((user) => {
+					if (user) {
+						console.log(req.file);
+						base64Img.base64('uploads/'+req.file.filename, function(err, data) {
+						user.profile_picture = data;
+						user.image_location = req.file.filename;
+								// Save user.
+								user.save(function (err) {
+									if (err) { return apiResponse.ErrorResponse(res, err); }
+									
+								});
+								
+						})
+					}
+					console.log("Updated")
+					return apiResponse.successResponse(res,"Updated image");
+				});
+					
+			
+			} catch (err) {
+				return apiResponse.ErrorResponse(res, err);
+			}
+		}];
+
+		exports.fetchImage = [
+		auth,		 
+		(req, res) => {
+			try {
+				console.log(req.body.email);
+				UserModel.findOne({email : req.user.email}).then((user) => {
+					if (user) {
+						console.log(user);
+						let user_data = {
+							profile_picture : user.profile_picture
+						}
+						return apiResponse.successResponseWithData(res,"Updated image",user_data);
+					}
+					else {
+					console.log("Updated")
+					return apiResponse.ErrorResponse(res);
+					}
+				});
 					
 			
 			} catch (err) {
