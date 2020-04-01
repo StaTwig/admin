@@ -10,8 +10,9 @@
       a {
         &.nav-link {
           color: #707070;
-          font: Bold 18px Helvetica Neue;
+          font-size: 18px;
           padding-bottom: 1rem;
+          font-weight: bold;
         }
 
         &.nav-link.active {

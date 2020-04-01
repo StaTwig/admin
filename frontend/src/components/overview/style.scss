@@ -2,15 +2,39 @@
 
 
 .overview {
-  padding-left: 3rem;
-  
   @media (min-width: $xl){
     padding-right: 3rem;
   }
 
+  .card {
+    min-height: 580px;
+
+    .card-body {
+      display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .card-link {
+      align-self: center;
+      box-shadow: none;
+      border-radius: 15px;
+      border-width: 1px !important;
+    }
+
+    .total {
+      .value {
+        font-size: 30px;
+    font-weight: bold;
+      }
+    }
+    }
+  }
+
   .bg-grey {
     background-color: $eeGrey;
-    margin-left: -3.556689rem !important;
+    @media (min-width: $xl){
+      margin-left: -3.556689rem !important;
+    }
   }
 
   .divider {
