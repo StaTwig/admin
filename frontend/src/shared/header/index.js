@@ -68,17 +68,3 @@ const Header = props => {
 }
 
 export default Header;
-
-
-//<img src={dropdownIcon} alt="actions" />  */
-
-
-/*<button onClick={handleLogout}> LOG OUT</button>
-
-const dispatch = useDispatch();
-  //dispatch(logoutUser());
-
-  const handleLogout = () => {
-    console.log('logout clicked');
-    dispatch(logoutUser());
-    }  */
