@@ -1,5 +1,7 @@
 var express = require("express");
 const AuthController = require("../controllers/AuthController");
+var multer = require("multer");
+var upload = multer({ dest: "uploads/" });
 
 var router = express.Router();
 
@@ -10,5 +12,7 @@ router.post("/resend-verify-otp", AuthController.resendConfirmOtp);
 router.post("/forgotPassword", AuthController.forgotPassword);
 router.post("/resetPassword", AuthController.resetPassword);
 router.get("/userInfo", AuthController.userInfo);
+router.get("/image", AuthController.fetchImage);
+router.post("/upload", upload.single("profile"), AuthController.updateImage);
 
 module.exports = router;
