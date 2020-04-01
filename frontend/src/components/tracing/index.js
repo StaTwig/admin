@@ -61,7 +61,7 @@ const Tracing = () => {
               <div class="col">Exp Date : 01/2023</div>
             </div>
 
-            <span className="divider" />
+            <hr />
             <div className="d-flex justify-content-between">
               <h4><img src={MMR} width='30' height='30' className="mr-2" />MMR</h4> <div>Quantity:20,000</div>
             </div>
@@ -73,7 +73,7 @@ const Tracing = () => {
               <div class="col">Exp Date : 01/2023</div>
             </div>
 
-            <span className="divider" />
+            <hr />
             <div className="d-flex justify-content-between">
               <h4><img src={HiB} width='30' height='30' className="mr-2" />HiB</h4> <div>Quantity:20,000</div>
             </div>
@@ -85,7 +85,7 @@ const Tracing = () => {
               <div class="col">Exp Date : 01/2023</div>
             </div>
 
-            <span className="divider" />
+            <hr />
             <div className="d-flex justify-content-between">
               <h4><img src={HepB} width='30' height='30' className="mr-2" />Hep B</h4> <div>Quantity:20,000</div>
             </div>
@@ -97,7 +97,7 @@ const Tracing = () => {
               <div class="col">Exp Date : 01/2023</div>
             </div>
 
-            <span className="divider" />
+            <hr />
             <div className="d-flex justify-content-between">
               <h4><img src={OPV} width='30' height='30' className="mr-2" />OPV</h4> <div>Quantity:20,000</div>
             </div>
