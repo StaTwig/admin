@@ -3,13 +3,10 @@ import {
   Link
 } from "react-router-dom";
 
-import DropdownButton from '../dropdownButton';
+import DropdownButton from '../dropdownbutton';
 import searchingIcon from "../../assets/icons/searching@2x.png";
 import bellIcon from "../../assets/icons/bellwhite.png";
 import userIcon from "../../assets/brands/user-image/Image73@2x.png";
-
-
-
 import './style.scss'
 
 const Header = props => {
@@ -37,9 +34,7 @@ const Header = props => {
           </Link>
           <div className="userActions">
          
-          <DropdownButton
-                
-              />
+          <DropdownButton/>
         
            
           </div>
