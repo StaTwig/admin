@@ -98,7 +98,7 @@ const ShipmentAnalytic = () => {
                               title="Create Purchase Order"
                               size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
                               buttonName="REVIEW"
-                              buttonClass="btn-orange"
+                              buttonclassName="btn-orange"
                         >
                               <PurchaseForm />
                         </Modal>

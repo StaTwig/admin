@@ -10,26 +10,26 @@ const ChartsPage = () => {
       {
         data: [200, 200, 800],
         backgroundColor: [
-        
-        "#A6CEE3",
-        "#B2DF8A",
-        "#1F78B4 "],
-        hoverBackgroundColor: [
-        
           "#A6CEE3",
           "#B2DF8A",
           "#1F78B4 "
-          
-          
+        ],
+        hoverBackgroundColor: [
+          "#A6CEE3",
+          "#B2DF8A",
+          "#1F78B4 "
         ]
       }
-    ]
+    ],
+    legend: {
+      position: "right",
+    }
   });
-  
+
   return (
     <MDBContainer>
-    <Doughnut data={dataDoughnut} options={{ responsive: true }} />
-  </MDBContainer>
+      <Doughnut data={dataDoughnut} options={{responsive: true }} />
+    </MDBContainer>
   );
 };
 

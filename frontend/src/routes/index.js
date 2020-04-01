@@ -29,7 +29,7 @@ import NoMatch from '../components/NoMatch'
 import './style.scss';
 const routes = (
   <Switch>
-    <Route exact path="/" component={requireAuth(OverView)} />
+    <Route exact path="/" component={Home} />
     <Route path="/overview" component={requireAuth(OverView)} />
     <Route path="/login" component={Login} />
     <Route path="/verify" component={Verify} />
@@ -42,7 +42,7 @@ const routes = (
     <Route path="/shipments" component={requireAuth(Shipment)} />
     <Route path="/newshipment" component={requireAuth(NewShipment)} />
     <Route path="/verifyshipment" component={requireAuth(VerifyShipment)} />
-    <Route path="/inventory" component={Inventory} />
+    <Route path="/inventory" component={requireAuth(Inventory)} />
     <Route path="/newinventory" component={requireAuth(NewInventory)} />
     <Route path="/trackAndTrace" component={requireAuth(trackAndTrace)} />
     <Route path="/tracing" component={requireAuth(Tracing)} />

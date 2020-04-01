@@ -81,10 +81,13 @@ const Overview = () => {
                 </Link>
               </div>
               <div id="chartjs-render-monitor" ><ChartsPage /></div>
-              <div id="total">Total Current Inventory</div>
-              <div id="value">1200</div>
-              <Link to="/inventory">
-                <a href="#" className="card-link btn btn-outline-primary">View More</a>
+              <div className="total">
+                Total Current Inventory
+                <div className="value">1200</div>
+              </div>
+              
+              <Link to="/inventory" className="card-link btn btn-outline-primary">
+                View More
               </Link>
             </div>
           </div>
@@ -118,7 +121,7 @@ const Overview = () => {
                     <td>29/03/2014</td>
                     <td>New York</td>
                     <td>8°C</td>
-                    <td><span class="badge badge-pill badge-success p-2">Received</span></td>
+                    <td><span className="badge badge-pill badge-success p-2">Received</span></td>
                   </tr>
                   <tr>
                     <th scope="row"><img className="image" src={dp} width="25px" /></th>
@@ -127,7 +130,7 @@ const Overview = () => {
                     <td>01/08/1997</td>
                     <td>Sydney</td>
                     <td>6°C</td>
-                    <td><span class="badge badge-pill badge-warning p-2">In Transit</span></td>
+                    <td><span className="badge badge-pill badge-warning p-2">In Transit</span></td>
                   </tr>
                   <tr>
                     <th scope="row"><img className="image" src={dp} width="25px" /></th>
@@ -136,7 +139,7 @@ const Overview = () => {
                     <td>01/08/1997</td>
                     <td>Mumbai</td>
                     <td>6°C</td>
-                    <td><span class="badge badge-pill badge-light p-2">On  Hold</span></td>
+                    <td><span className="badge badge-pill badge-light p-2">On  Hold</span></td>
                   </tr>
                   <tr>
                     <th scope="row"><img className="image" src={dp} width="25px" /></th>
@@ -145,7 +148,7 @@ const Overview = () => {
                     <td>01/08/1997</td>
                     <td>Brimingaham</td>
                     <td>6°C</td>
-                    <td><span class="badge badge-pill badge-danger p-2">Cancelled</span></td>
+                    <td><span className="badge badge-pill badge-danger p-2">Cancelled</span></td>
                   </tr>
                   <tr>
                     <th scope="row"><img className="image" src={dp} width="25px" /></th>
@@ -154,7 +157,7 @@ const Overview = () => {
                     <td>01/08/1997</td>
                     <td>Cape Town</td>
                     <td>6°C</td>
-                    <td><span class="badge badge-pill badge-success p-2 ">Received</span></td>
+                    <td><span className="badge badge-pill badge-success p-2 ">Received</span></td>
                   </tr>
                   <tr>
                     <th scope="row"><img className="image" src={dp} width="25px" /></th>
@@ -163,12 +166,12 @@ const Overview = () => {
                     <td>01/08/1997</td>
                     <td>Wellington</td>
                     <td>6°C</td>
-                    <td ><span class="badge badge-pill badge-success p-2">Received</span></td>
+                    <td ><span className="badge badge-pill badge-success p-2">Received</span></td>
                   </tr>
                 </tbody>
               </table>
-              <Link to="/shipments">
-                <a href="#" className="card-link btn btn-outline-primary">View More</a>
+              <Link to="/shipments" className="card-link btn btn-outline-primary">
+                View More
               </Link>
             </div>
           </div>

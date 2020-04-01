@@ -98,58 +98,58 @@ const Inventory = () => {
                                           <div className="row overflow">
                                                 <div className="col-sm-6">
                                                       <div className="d-flex card flex-column align-items-center">
-                                                      <img src={OPV} width='40' height='40' className="my-2" />
-                                                            <p>OPV</p>
-                                                            <h3>2930</h3>
+                                                      <div className="round-sign ellipseFour">OPV</div>
+                                                            <p>Hepatitis B Vaccine</p>
+                                                            <h3>Qty: 74,000</h3>
                                                       </div>
                                                 </div>
                                                 <div className="col-sm-6">
                                                       <div className="d-flex card flex-column align-items-center">
-                                                      <img src={MMR} width='40' height='40' className="my-2" />
-                                                            <p>MMR</p>
-                                                            <h3>2930</h3>
+                                                      <div className="round-sign ellipseThree">OPV</div>
+                                                            <p>Hepatitis B Vaccine</p>
+                                                            <h3>Qty: 74,000</h3>
                                                       </div>
                                                 </div>
                                                 <div className="col-sm-6 mt-4">
                                                       <div className="d-flex card flex-column align-items-center">
-                                                      <img src={HiB} width='40' height='40' className="my-2" />
-                                                            <p>HiB</p>
-                                                            <h3>2930</h3>
+                                                      <div className="round-sign ellipseTwo">MMP</div>
+                                                            <p>Hepatitis B Vaccine</p>
+                                                            <h3>Qty: 74,000</h3>
                                                       </div>
                                                 </div>
                                                 <div className="col-sm-6 mt-4">
                                                       <div className="d-flex card flex-column align-items-center">
-                                                      <img src={HepB} width='40' height='40' className="my-2" />
-                                                            <p>Hep B</p>
-                                                            <h3>2930</h3>
+                                                      <div className="round-sign ellipseOne">RV</div>
+                                                            <p>Mumps, Measles & Rubella Vaccine</p>
+                                                            <h3>Qty: 74,000</h3>
                                                       </div>
                                                 </div>
                                                 <div className="col-sm-6 mt-4">
                                                       <div className="d-flex card flex-column align-items-center">
-                                                      <img src={IPV} width='40' height='40' className="my-2" />
-                                                            <p>IPV</p>
-                                                            <h3>2930</h3>
+                                                      <div className="round-sign ellipseFour">PVC</div>
+                                                            <p>Pneumococcal conjugate Vaccine</p>
+                                                            <h3>Qty: 74,000</h3>
                                                       </div>
                                                 </div>
                                                 <div className="col-sm-6 mt-4">
                                                       <div className="d-flex card flex-column align-items-center">
-                                                      <img src={PVC} width='40' height='40' className="my-2" />
-                                                            <p>PVC</p>
-                                                            <h3>2930</h3>
+                                                      <div className="round-sign ellipseThree">BVG</div>
+                                                            <p>Hepatitis B Vaccine</p>
+                                                            <h3>Qty: 74,000</h3>
                                                       </div>
                                                 </div>
                                                 <div className="col-sm-6 mt-4">
                                                       <div className="d-flex card flex-column align-items-center">
-                                                      <img src={BVG} width='40' height='40' className="my-2" />
-                                                            <p>BVG</p>
-                                                            <h3>2930</h3>
+                                                      <div className="round-sign ellipseTwo">TTR</div>
+                                                            <p>Hepatitis B Vaccine</p>
+                                                            <h3>Qty: 74,000</h3>
                                                       </div>
                                                 </div>
                                                 <div className="col-sm-6 mt-4">
                                                       <div className="d-flex card flex-column align-items-center">
-                                                      <img src={RV} width='40' height='40' className="my-2" />
-                                                            <p>RV</p>
-                                                            <h3>2930</h3>
+                                                      <div className="round-sign ellipseOne">OPV</div>
+                                                            <p>Hepatitis B Vaccine</p>
+                                                            <h3>Qty: 74,000</h3>
                                                       </div>
                                                 </div>
                                           </div>

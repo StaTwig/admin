@@ -53,60 +53,60 @@ const Tracing = () => {
             <div className="d-flex justify-content-between">
               <h4><img src={OPV} width='30' height='30' className="mr-2" />OPV</h4> <div>Quantity:20,000</div>
             </div>
-            <div class="row">
-              <div class="col">Manufacturer : ABC Pharma Ltd .</div>
+            <div className="row">
+              <div className="col">Manufacturer : ABC Pharma Ltd .</div>
             </div>
-            <div class="row">
-              <div class="col">Mfg Date : 06/2019</div>
-              <div class="col">Exp Date : 01/2023</div>
+            <div className="row">
+              <div className="col">Mfg Date : 06/2019</div>
+              <div className="col">Exp Date : 01/2023</div>
             </div>
 
             <hr />
             <div className="d-flex justify-content-between">
               <h4><img src={MMR} width='30' height='30' className="mr-2" />MMR</h4> <div>Quantity:20,000</div>
             </div>
-            <div class="row">
-              <div class="col">Manufacturer : ABC Pharma Ltd .</div>
+            <div className="row">
+              <div className="col">Manufacturer : ABC Pharma Ltd .</div>
             </div>
-            <div class="row">
-              <div class="col">Mfg Date : 06/2019</div>
-              <div class="col">Exp Date : 01/2023</div>
+            <div className="row">
+              <div className="col">Mfg Date : 06/2019</div>
+              <div className="col">Exp Date : 01/2023</div>
             </div>
 
             <hr />
             <div className="d-flex justify-content-between">
               <h4><img src={HiB} width='30' height='30' className="mr-2" />HiB</h4> <div>Quantity:20,000</div>
             </div>
-            <div class="row">
-              <div class="col">Manufacturer : ABC Pharma Ltd .</div>
+            <div className="row">
+              <div className="col">Manufacturer : ABC Pharma Ltd .</div>
             </div>
-            <div class="row">
-              <div class="col">Mfg Date : 06/2019</div>
-              <div class="col">Exp Date : 01/2023</div>
+            <div className="row">
+              <div className="col">Mfg Date : 06/2019</div>
+              <div className="col">Exp Date : 01/2023</div>
             </div>
 
             <hr />
             <div className="d-flex justify-content-between">
               <h4><img src={HepB} width='30' height='30' className="mr-2" />Hep B</h4> <div>Quantity:20,000</div>
             </div>
-            <div class="row">
-              <div class="col">Manufacturer : ABC Pharma Ltd .</div>
+            <div className="row">
+              <div className="col">Manufacturer : ABC Pharma Ltd .</div>
             </div>
-            <div class="row">
-              <div class="col">Mfg Date : 06/2019</div>
-              <div class="col">Exp Date : 01/2023</div>
+            <div className="row">
+              <div className="col">Mfg Date : 06/2019</div>
+              <div className="col">Exp Date : 01/2023</div>
             </div>
 
             <hr />
             <div className="d-flex justify-content-between">
               <h4><img src={OPV} width='30' height='30' className="mr-2" />OPV</h4> <div>Quantity:20,000</div>
             </div>
-            <div class="row">
-              <div class="col">Manufacturer : ABC Pharma Ltd .</div>
+            <div className="row">
+              <div className="col">Manufacturer : ABC Pharma Ltd .</div>
             </div>
-            <div class="row">
-              <div class="col">Mfg Date : 06/2019</div>
-              <div class="col">Exp Date : 01/2023</div>
+            <div className="row">
+              <div className="col">Mfg Date : 06/2019</div>
+              <div className="col">Exp Date : 01/2023</div>
             </div>
 
 
