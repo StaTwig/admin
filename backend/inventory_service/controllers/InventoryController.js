@@ -11,6 +11,7 @@ const axios = require('axios');
 const dotenv = require('dotenv').config();
 
 const blockchain_service_url = process.env.URL;
+const stream_name = process.env.STREAM;
 
 exports.getTotalCount = [
         auth,
@@ -108,8 +109,8 @@ exports.getInventoryDetailsForProduct = [
 			const {authorization} = req.headers;
                         checkToken(req, res, async result => {
                                 if (result.success) {
-					const {stream, key} = req.query;
-                                        const response = await axios.get(`${blockchain_service_url}/queryDataByKey?stream=${stream}&key=${key}`);
+					const {key} = req.query;
+                                        const response = await axios.get(`${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${key}`);
                                         const items = response.data.items;
 					console.log("items",items)
                                         res.json({data:items});
@@ -129,11 +130,11 @@ exports.getAllInventoryDetails = [
                         const {authorization} = req.headers;
                         checkToken(req, res, async result => {
                                 if (result.success) {
-										//API to get all inventory records from inventory stream
-                                        //const response = await axios.get(`${url}/apiendpoint?stream=vl_inventory_stream`);
-                                        //const items = response.data.items;
-                                        //res.json(JSON.parse(items));
-                                        res.json("Inventory details")
+                                        const {address} = req.query;
+                                        const response = await axios.get(`${blockchain_service_url}/queryDataByPublishers?stream=${stream_name}&address=${address}`);
+                                        const items = response.data.items;
+                                        console.log("items",items)
+                                        res.json({data:items});
                                 } else {
                                         res.status(403).json(result);
                                 }
@@ -151,9 +152,9 @@ exports.addNewInventory = [
                         const {authorization} = req.headers;
                         checkToken(req, res, async result => {
                                 if (result.success) {
-					const { key, data,stream,address } = req.body;
+					const { key, data,address } = req.body;
 					const userData = {
-    						stream: stream,
+    						stream: stream_name,
 					        key: key,
 						address: address,
 					        data: data,
