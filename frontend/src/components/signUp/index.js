@@ -1,92 +1,77 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from 'react-router-dom';
 
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import 'bootstrap-css-only/css/bootstrap.min.css';
-import 'mdbreact/dist/css/mdb.css';
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBCard, MDBCardBody } from 'mdbreact';
-import 'typeface-roboto';
-import './style.scss';
+import '../login/style.scss';
 import Key from "../../assets/icons/key.png";
 import User from "../../assets/icons/user.png";
 import Mail from "../../assets/icons/mail.png";
 import hide from "../../assets/icons/hide.png";
 import logo from "../../assets/brands/VaccineLedgerlogo.svg";
 const FormPage = (props) => {
+  const [passwordType, setPasswordType] = useState(true);
   return (
-    <div className="admin-login1">
-    <MDBContainer>
-
-      <MDBRow><MDBCol md="6" className="h1"> 
-      <img id ="img1" src={logo}/>
-
-      <div id="Welcome1">Welcome ,</div>
-      <div id="Sign1">Signup to continue</div>
-
-        </MDBCol>
-        <MDBCol md="6" className="signin1">
-          <MDBCard className="card1">
-            <MDBCardBody>
-              <form>
-              <p className="heading1">Signup</p>
-                <div className="input1">
-                <MDBRow>
-                <MDBCol md="2">
-                <img  className="icon" width = "25px" src={User} /></MDBCol>
-                <MDBCol md="10" id="col1">
-                  <MDBInput
-                    label="Name"
-                    group
-                    type="text"
-                    validate
-                    error="wrong"
-                    success="right"
-                    value={props.name}
-                    onChange={props.onNameChange}
-                  /></MDBCol></MDBRow>
-                  <MDBRow>
-                <MDBCol md="2">
-                <img  className="icon" width = "25px" src={Mail} /></MDBCol>
-                <MDBCol md="10" id="col1">
-                  <MDBInput
-                    label="Email"
-                    group
-                    type="email"
-                    validate
-                    error="wrong"
-                    success="right"
-                    value={props.email}
-                    onChange={props.onEmailChange}
-                  /></MDBCol></MDBRow>
-                  <MDBRow>
-                <MDBCol md="2">
-                <img  className="icon" width = "25px" src={Key} /><img  className="icon" id="eye1"width = "25px" src={hide} /></MDBCol>
-                <MDBCol md="10"id="col1">
-                  <MDBInput
-                    label="Password"
-                    group
-                    type="password"
-                    validate
-                    value={props.password}
-                    onChange={props.onPasswordChange}
-                  /></MDBCol></MDBRow>
-
+    <div className="login-wrapper">
+      <div className="container">
+        <div className="row">
+          <div className="col-sm-6 col-lg-6">
+            <div className="form-content">
+              <img className="logo" src={logo} />
+              <h1>Welcome,</h1>
+              <p>Signup to continue</p>
+            </div>
+          </div>
+          <div className="col-sm-6 col-lg-5">
+            <div className="card">
+              <div className="card-body">
+                <div className="login-form">
+                  <div className="card-title">Signup</div>
+                  <div className="form-group">
+                    <img alt="" src={User} className="icon" />
+                    <input type="text"
+                      className="form-control"
+                      value={props.name}
+                      onChange={props.onNameChange}
+                      placeholder="Name" />
+                  </div>
+                  <div className="form-group">
+                    <img alt="" src={Mail} className="icon" />
+                    <input type="email"
+                      className="form-control"
+                      value={props.email}
+                      onChange={props.onEmailChange}
+                      placeholder="Email" />
+                  </div>
+                  <div className="form-group">
+                    <img alt="" src={Key} className="icon" />
+                    <input type={passwordType ? 'password' : 'text'}
+                      className="form-control"
+                      value={props.password}
+                      onChange={props.onPasswordChange}
+                      placeholder="Password" />
+                    <img
+                      className="showpassword"
+                      alt=""
+                      src={hide}
+                      onClick={() => setPasswordType(!passwordType)}
+                    />
+                  </div>
+                  {
+                    props.errorMessage && <div className="alert alert-danger">{props.errorMessage}</div>
+                  }
+                  <div className="text-center mt-2">
+                    <button type="button" className="btn btn-primary" onClick={props.onSignup}>
+                      SIGNUP
+                    </button>
+                  </div>
+                  <div className="signup-link text-center mt-2">
+                    Already have an Account? <Link to="/login">Login</Link>
+                  </div>
                 </div>
-                <label className="text-danger">{props.errorMessage}</label>
-                <div className="text-center py-4 mt-3">
-                  <MDBBtn id="submit1" color="cyan" onClick={props.onSignup}>
-                    SIGNUP
-                  </MDBBtn>
-                </div>
-                <div id="text-center1"><Link to="/login">
-                  <div id="noaccount">Already have an Account? Login</div>
-                </Link></div>
-              </form>
-            </MDBCardBody>
-          </MDBCard>
-        </MDBCol>
-      </MDBRow>
-    </MDBContainer>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
@@ -95,4 +80,3 @@ export default FormPage;
 
 
 
-     

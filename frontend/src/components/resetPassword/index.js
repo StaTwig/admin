@@ -1,66 +1,64 @@
-import React from "react";
+import React, { useState } from "react";
 
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import 'bootstrap-css-only/css/bootstrap.min.css';
-import 'mdbreact/dist/css/mdb.css';
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBCard, MDBCardBody } from 'mdbreact';
-import 'typeface-roboto';
-import './style.scss';
+import '../login/style.scss';
 import Key from "../../assets/icons/key.png";
 import hide from "../../assets/icons/hide.png";
 import logo from "../../assets/brands/VaccineLedgerlogo.svg";
 const resetPasswordPage = () => {
+  const [passwordType, setPasswordType] = useState(true);
+  const [confirmPasswordType, setConfirmPasswordType] = useState(true);
   return (
-    <div className="admin-login4">
-    <MDBContainer>
-
-      <MDBRow><MDBCol md="6" className="h4"> 
-      <img id ="img4" src={logo}/>
-
-      <div id="Welcome4">Welcome</div>
-
-        </MDBCol>
-        <MDBCol md="6" className="signin4">
-          <MDBCard className="card4">
-            <MDBCardBody>
-              <form>
-              <p className="heading4">Reset Password</p>
-                <div className="input4">
-              
-                  <MDBRow>
-                <MDBCol md="2">
-                <img  className="icon" width = "25px" src={Key} id="key4"/><img  className="icon" id="eye4"width = "25px" src={hide} /></MDBCol>
-                <MDBCol md="10"id="col4">
-                  <MDBInput
-                    label="Password"
-                    group
-                    type="password"
-                    validate
-                  /></MDBCol></MDBRow>
-                  <MDBRow>
-                <MDBCol md="2">
-                <img  className="icon" width = "25px" src={Key} id="key4"/><img  className="icon" id="eye4"width = "25px" src={hide} /></MDBCol>
-                <MDBCol md="10"id="col4">
-                  <MDBInput
-                    label="Confirm Password"
-                    group
-                    type="password"
-                    validate
-                  /></MDBCol></MDBRow>
-
+    <div className="login-wrapper">
+      <div className="container">
+        <div className="row">
+          <div className="col-sm-6 col-lg-6">
+            <div className="form-content">
+              <img className="logo" src={logo} />
+              <h1>Welcome,</h1>
+              <p>Reset to continue</p>
+            </div>
+          </div>
+          <div className="col-sm-6 col-lg-5">
+            <div className="card">
+              <div className="card-body">
+                <div className="login-form">
+                  <div className="card-title">Reset Password</div>
+                  <div className="form-group">
+                    <img alt="" src={Key} className="icon" />
+                    <input type={passwordType ? 'password' : 'text'} className="form-control"
+                      value=""
+                      placeholder="Password" />
+                    <img
+                      className="showpassword"
+                      alt=""
+                      src={hide}
+                      onClick={() => setPasswordType(!passwordType)}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <img alt="" src={Key} className="icon" />
+                    <input type={passwordType ? 'password' : 'text'} className="form-control"
+                      value=""
+                      placeholder="Confirm Password" />
+                    <img
+                      className="showpassword"
+                      alt=""
+                      src={hide}
+                      onClick={() => setConfirmPasswordType(!confirmPasswordType)}
+                    />
+                  </div>
+                  
+                  <div className="text-center">
+                    <button type="button" className="btn btn-primary">
+                      Reset
+                    </button>
+                  </div>
                 </div>
-                <div className="text-center py-4 mt-3">
-                  <MDBBtn id="submit4" color="cyan" type="submit">
-                    SUBMIT
-                  </MDBBtn>
-                </div>
-               
-              </form>
-            </MDBCardBody>
-          </MDBCard>
-        </MDBCol>
-      </MDBRow>
-    </MDBContainer>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
