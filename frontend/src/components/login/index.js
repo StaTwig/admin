@@ -25,14 +25,16 @@ import './style.scss';
 const FormLoginPage = (props) => {
   const { password, email, onEmailChange, onPasswordChange, errorMessage, onLogin } = props;
   return (
-    <div className="admin-login2">
+    <div className="login-wrapper">
       <MDBContainer>
         <MDBRow>
-          <MDBCol md="6" className="h2">
-            <img id="img2" src={logo} />
+          <MDBCol md="6" className="h2 d-flex align-items-center">
+            <div>
+              <img id="img2" src={logo} />
+              <div id="Welcome2">Welcome Back ,</div>
+              <div id="Sign2">Login to continue</div>
+            </div>
 
-            <div id="Welcome2">Welcome Back ,</div>
-            <div id="Sign2">Login to continue</div>
           </MDBCol>
           <MDBCol md="6" className="signin2">
             <MDBCard className="card2">
@@ -40,11 +42,11 @@ const FormLoginPage = (props) => {
                 <form>
                   <p className="heading2">Login</p>
                   <div className="input2">
-                    <MDBRow>
-                      <MDBCol md="2">
-                        <img className="icon" width="25px" src={User} />
-                      </MDBCol>
-                      <MDBCol md="10" id="col2">
+                    <div className="row no-gutters">
+                      <div className="icon col-sm-2">
+                        <img width="25px" src={User} />
+                      </div>
+                      <div className="col-sm-10">
                         <MDBInput
                           label="Email"
                           group
@@ -55,19 +57,18 @@ const FormLoginPage = (props) => {
                           value={email}
                           onChange={onEmailChange}
                         />
-                      </MDBCol>
-                    </MDBRow>
-                    <MDBRow>
-                      <MDBCol md="2">
-                        <img className="icon" width="25px" src={Key} />
+                      </div>
+                    </div>
+                    <div className="row no-gutters">
+                      <div className="icon col-sm-2">
+                        <img width="25px" src={Key} />
+                      </div>
+                      <div className="col-sm-10">
                         <img
-                          className="icon"
                           id="eye2"
                           width="25px"
                           src={hide}
                         />
-                      </MDBCol>
-                      <MDBCol md="10" id="col2">
                         <MDBInput
                           label="Password"
                           group
@@ -76,20 +77,25 @@ const FormLoginPage = (props) => {
                           value={password}
                           onChange={onPasswordChange}
                         />
-                      </MDBCol>
-                    </MDBRow>
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-center py-4 mt-3">
+                  <div id="notify">Forgot Password?</div>
+                  <div id="alert">
+                    <input type="checkbox" />
+                    Remember me
+                  </div>
+                  <div className="text-center mt-3">
                     <MDBBtn id="submit2" color="cyan" onClick={onLogin}>
                       Login
                     </MDBBtn>
                   </div>
                   <label id="danger">{errorMessage}</label>
-                  <div id="notify">Forgot Password?</div>
-                  <div id="alert">Remember me</div>
-                  <div id="text-center2"><Link to="/signup">
-                    <div id ="noaccount">Don't have an account? Signup</div>
-                  </Link></div>
+                  <div id="text-center2">
+                    <Link to="/signup">
+                      <div id="noaccount">Don't have an account? Signup</div>
+                    </Link>
+                  </div>
                 </form>
               </MDBCardBody>
             </MDBCard>
