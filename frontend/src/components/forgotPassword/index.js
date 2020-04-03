@@ -1,11 +1,6 @@
 import React from "react";
 
-import '@fortawesome/fontawesome-free/css/all.min.css';
-import 'bootstrap-css-only/css/bootstrap.min.css';
-import 'mdbreact/dist/css/mdb.css';
-import { MDBContainer, MDBRow, MDBCol, MDBInput, MDBBtn, MDBCard, MDBCardBody } from 'mdbreact';
-import 'typeface-roboto';
-import './style.scss';
+import '../login/style.scss';
 
 import Mail from "../../assets/icons/mail.png";
 import logo from "../../assets/brands/VaccineLedgerlogo.svg";
@@ -13,50 +8,39 @@ import logo from "../../assets/brands/VaccineLedgerlogo.svg";
 
 const ForgotPassword = () => {
   return (
-    <div className="admin-login3">
-    <MDBContainer>
-
-      <MDBRow><MDBCol md="6" className="h3"> 
-      <img id ="img3" src={logo}/>
-
-      <div id="Welcome3">Welcome </div>
-      
-
-        </MDBCol>
-        <MDBCol md="6" className="signin3">
-          <MDBCard className="cardForgot">
-            <MDBCardBody>
-              <form>
-              <p className="heading3">Forgot Password</p>
-                <div className="input3">
-             
-                  <MDBRow>
-                <MDBCol md="2">
-                <img  className="icon" width = "25px" src={Mail} /></MDBCol>
-                <MDBCol md="10" id="col3">
-                  <MDBInput
-                    label="Email"
-                    group
-                    type="email"
-                    validate
-                    error="wrong"
-                    success="right"
-                  /></MDBCol></MDBRow>
-                 
-
-                </div>
-                <div className="text-center py-4 mt-3">
-                  <MDBBtn id="submit3" color="cyan" type="submit">
+    <div className="login-wrapper">
+      <div className="container">
+        <div className="row">
+          <div className="col-sm-6 col-lg-6">
+            <div className="form-content">
+              <img className="logo" src={logo} />
+              <h1>Welcome</h1>
+              <p>Rest you're Password</p>
+            </div>
+          </div>
+          <div className="col-sm-6 col-lg-5">
+            <div className="card">
+              <div className="card-body">
+                <div className="login-form">
+                <div className="card-title">Forgot Password</div>
+                  <div className="form-group">
+                    <img alt="" src={Mail} className="icon" />
+                    <input type="email"
+                      className="form-control"
+                      value=""
+                      placeholder="Email" />
+                  </div>
+                  <div className="text-center">
+                    <button type="button" className="btn btn-primary">
                     SUBMIT
-                  </MDBBtn>
+                    </button>
+                  </div>
                 </div>
-                
-              </form>
-            </MDBCardBody>
-          </MDBCard>
-        </MDBCol>
-      </MDBRow>
-    </MDBContainer>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
