@@ -9,10 +9,7 @@ export const shipmentReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_SHIPMENTS_SUCCESS:
       const shipments = action.payload.data.map(shipment => JSON.parse(shipment.data));
-      return [
-        ...state,
-        ...shipments
-      ];
+      return shipments;
     case GET_SHIPMENTS_FAILURE:
       return initialState
     default:
