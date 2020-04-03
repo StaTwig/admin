@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 import './style.scss';
@@ -10,7 +11,16 @@ import icon2 from '../../assets/icons/location-icon.png';
 import icon3 from '../../assets/icons/chain-icon.png';
 import mob from '../../assets/brands/mobile.png';
 import big from '../../assets/brands/blockchain-flow-diagram.png';
-const HomeContainer = () => {
+const HomeContainer = (props) => {
+  const user = useSelector(state => {
+    return state.user
+  });
+
+  useEffect(() => {
+    if(user) {
+      props.history.push('/overview');
+    }
+  }, []);
   return (
     <div className="Homecontainer">
       {/* Header */}

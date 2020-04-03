@@ -1,19 +1,17 @@
-import React from "react";
-import {
-  Link
-} from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 import 'typeface-roboto';
-import totalshipments from "../../assets/icons/TotalShipmentsCompleted.svg";
-import totalinventory from "../../assets/icons/TotalInventoryAdded.svg";
-import currentshipment from "../../assets/icons/CurrentShipmentInTransit.svg";
-import Totalshipments from "../../assets/icons/TotalShipments.svg";
-import shipmentsdelayed from "../../assets/icons/TotalShipmentsDelayed.svg";
-import dp from "../../assets/icons/harsha.jpg";
+import totalshipments from '../../assets/icons/TotalShipmentsCompleted.svg';
+import totalinventory from '../../assets/icons/TotalInventoryAdded.svg';
+import currentshipment from '../../assets/icons/CurrentShipmentInTransit.svg';
+import Totalshipments from '../../assets/icons/TotalShipments.svg';
+import shipmentsdelayed from '../../assets/icons/TotalShipmentsDelayed.svg';
+import dp from '../../assets/icons/harsha.jpg';
 import './style.scss';
-import ChartsPage from '../doughnut'
+import ChartsPage from '../doughnut';
 
-const Overview = () => {
+  const Overview = props => {
   return (
     <div className="overview">
       <h1 className="breadcrumb">OVERVIEW</h1>
@@ -24,7 +22,9 @@ const Overview = () => {
           </div>
           <div className="d-flex flex-column">
             <div className="title">Total Shipments Completed</div>
-            <div className="count">1.3 M <small className="dayStatus">This Year</small></div>
+            <div className="count">
+              1.3 M <small className="dayStatus">This Year</small>
+            </div>
           </div>
         </div>
         <span className="divider" />
@@ -35,7 +35,9 @@ const Overview = () => {
 
           <div className="d-flex flex-column">
             <div className="title">Total Inventory Added</div>
-            <div className="count" >5.4 M <small className="dayStatus">This Year</small></div>
+            <div className="count">
+              5.4 M <small className="dayStatus">This Year</small>
+            </div>
           </div>
         </div>
         <span className="divider" />
@@ -45,7 +47,9 @@ const Overview = () => {
           </div>
           <div className="d-flex flex-column">
             <div className="title">Current Shipment in transit</div>
-            <div className="count">53 <small className="dayStatus">Today</small></div>
+            <div className="count">
+              53 <small className="dayStatus">Today</small>
+            </div>
           </div>
         </div>
         <span className="divider" />
@@ -55,7 +59,9 @@ const Overview = () => {
           </div>
           <div className="d-flex flex-column">
             <div className="title">Total Shipments</div>
-            <div className="count">42 <small className="dayStatus">Today</small></div>
+            <div className="count">
+              42 <small className="dayStatus">Today</small>
+            </div>
           </div>
         </div>
         <span className="divider" />
@@ -65,7 +71,9 @@ const Overview = () => {
           </div>
           <div className="d-flex flex-column">
             <div className="title">Total Shipments Delayed</div>
-            <div className="count">32 <small className="dayStatus">This Month</small></div>
+            <div className="count">
+              32 <small className="dayStatus">This Month</small>
+            </div>
           </div>
         </div>
       </div>
@@ -80,13 +88,18 @@ const Overview = () => {
                   <button className="btn-primary btn"> Add Inventory</button>
                 </Link>
               </div>
-              <div id="chartjs-render-monitor" ><ChartsPage /></div>
+              <div id="chartjs-render-monitor">
+                <ChartsPage />
+              </div>
               <div className="total">
                 Total Current Inventory
                 <div className="value">1200</div>
               </div>
-              
-              <Link to="/inventory" className="card-link btn btn-outline-primary">
+
+              <Link
+                to="/inventory"
+                className="card-link btn btn-outline-primary"
+              >
                 View More
               </Link>
             </div>
@@ -104,7 +117,7 @@ const Overview = () => {
               <table className="table table-borderless">
                 <thead>
                   <tr>
-                    <th scope="col"></th>
+                    <th scope="col" />
                     <th scope="col">Client</th>
                     <th scope="col">Shipment ID</th>
                     <th scope="col">Shipping Date</th>
@@ -114,72 +127,37 @@ const Overview = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <th scope="row"><img className="image" src={dp} width="25px" /></th>
-                    <td>Andrew Mctyre</td>
-                    <td>3987</td>
-                    <td>29/03/2014</td>
-                    <td>New York</td>
-                    <td>8°C</td>
-                    <td><span className="badge badge-pill badge-success p-2">Received</span></td>
-                  </tr>
-                  <tr>
-                    <th scope="row"><img className="image" src={dp} width="25px" /></th>
-                    <td>Jacob Smith</td>
-                    <td>4128</td>
-                    <td>01/08/1997</td>
-                    <td>Sydney</td>
-                    <td>6°C</td>
-                    <td><span className="badge badge-pill badge-warning p-2">In Transit</span></td>
-                  </tr>
-                  <tr>
-                    <th scope="row"><img className="image" src={dp} width="25px" /></th>
-                    <td>Larry Bird</td>
-                    <td>4128</td>
-                    <td>01/08/1997</td>
-                    <td>Mumbai</td>
-                    <td>6°C</td>
-                    <td><span className="badge badge-pill badge-light p-2">On  Hold</span></td>
-                  </tr>
-                  <tr>
-                    <th scope="row"><img className="image" src={dp} width="25px" /></th>
-                    <td >Vince McMohan</td>
-                    <td>4128</td>
-                    <td>01/08/1997</td>
-                    <td>Brimingaham</td>
-                    <td>6°C</td>
-                    <td><span className="badge badge-pill badge-danger p-2">Cancelled</span></td>
-                  </tr>
-                  <tr>
-                    <th scope="row"><img className="image" src={dp} width="25px" /></th>
-                    <td >Larry Bird</td>
-                    <td>4128</td>
-                    <td>01/08/1997</td>
-                    <td>Cape Town</td>
-                    <td>6°C</td>
-                    <td><span className="badge badge-pill badge-success p-2 ">Received</span></td>
-                  </tr>
-                  <tr>
-                    <th scope="row"><img className="image" src={dp} width="25px" /></th>
-                    <td >Peter Skye</td>
-                    <td>4128</td>
-                    <td>01/08/1997</td>
-                    <td>Wellington</td>
-                    <td>6°C</td>
-                    <td ><span className="badge badge-pill badge-success p-2">Received</span></td>
-                  </tr>
+                  {props.shipments.map(shipment => (
+                    <tr key={shipment.Shipment_ID}>
+                      <th scope="row">
+                        <img className="image" src={dp} width="25px" />
+                      </th>
+                      <td>{shipment['Deliver_To']}</td>
+                      <td>{shipment['Shipment_ID']}</td>
+                      <td>{shipment['Shipment_Date']}</td>
+                      <td>{shipment['Delivery Location']}</td>
+                      <td>8°C</td>
+                      <td>
+                        <span className="badge badge-pill badge-success p-2">
+                          Received
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
-              <Link to="/shipments" className="card-link btn btn-outline-primary">
+              <Link
+                to="/shipments"
+                className="card-link btn btn-outline-primary"
+              >
                 View More
               </Link>
             </div>
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 
 export default Overview;
-
