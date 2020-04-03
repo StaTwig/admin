@@ -9,7 +9,11 @@ const jwt = require("jsonwebtoken");
 const mailer = require("../helpers/mailer");
 const { constants } = require("../helpers/constants");
 var base64Img = require('base64-img');
-const auth = require("../middlewares/jwt")
+const auth = require("../middlewares/jwt");
+const axios = require('axios');
+const dotenv = require('dotenv').config();
+const blockchain_service_url = process.env.URL;
+
 /**
  * User registration.
  *
@@ -405,7 +409,18 @@ exports.resetPassword = [
 		}];
 		
 		
-
+	exports.createUserAddress = [
+        	async (req, res) => {
+                	try {
+                                      const response = await axios.get(`${blockchain_service_url}/createUserAddress`);
+                                      const items = response.data.items;
+                                      console.log("res + items",response,items)
+                                      res.json({address:items});
+                	} catch (err) {
+                        	return apiResponse.ErrorResponse(res, err);
+                	}
+        	}
+	];
 	
 	
 
