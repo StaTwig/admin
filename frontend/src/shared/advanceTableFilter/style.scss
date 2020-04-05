@@ -1,26 +1,23 @@
 @import '../../assets/styles/global.scss';
 
 .filter {
-
   .filter-item {
-    max-width: 60%;
     flex: 1;
-    justify-content: space-around;
+    justify-content: center;
     display: flex;
+    max-width: 80%;
+    align-items: center;
 
     .filterTitle {
-      font-size: 18px;
-      font-weight: 400;
+      font-size: 13px;
+      color: #000;
+      margin-left: 5px;
+      margin-right: 5px;
     }
 
     .filterAction {
       cursor: pointer;
     }
-  }
-
-  .bg-grey {
-    background-color: $eeGrey;
-    margin-left: -3.556689rem !important;
   }
 
   .divider {
@@ -32,13 +29,9 @@
 
   .box {
     background: $eeGrey;
-    padding: 1rem;
+    padding: 5px 0;
     display: flex;
     justify-content: center;
     align-items: center;
-
-    &:first-child {
-      justify-content: flex-end;
-    }
   }
 }

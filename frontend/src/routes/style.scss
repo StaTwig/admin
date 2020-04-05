@@ -1,10 +1,12 @@
 @import '../assets/styles/global.scss';
 .content {
-  padding: 10rem 0 0 0;
+  padding: 110px 0 0 0;
+  margin-left: 6rem;
+  width: 100%;
 
-  @media (min-width: $xl){
-    padding: 10rem 0 1rem 9rem;
-    width: 100%;
+  @media screen and (max-width: 768px) {
+    margin-left: 0;
+    padding: 100px 30px; 
   }
 }
 

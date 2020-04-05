@@ -41,17 +41,17 @@ const EditTable = () => {
             </div>
             <div className="rTableCell">
               <div className="input-group">
-                <input type="date" className="form-field" placeholder="MM/YYYY" />
+                <input type="text" className="form-field" placeholder="MM/YYYY" />
                 <div className="input-group-append">
-                  <img src={calenderBlue} alt="downarrow" width="16" height="16" />
+                  <img src={calenderBlue} alt="downarrow" width="9" height="9" />
                 </div>
               </div>
             </div>
             <div className="rTableCell">
               <div className="input-group">
-                <input type="date" className="form-field" placeholder="MM/YYYY" />
+                <input type="text" className="form-field" placeholder="MM/YYYY" />
                 <div className="input-group-append">
-                  <img src={calenderBlue} alt="downarrow" width="16" height="16" />
+                  <img src={calenderBlue} alt="downarrow" width="9" height="9" />
                 </div>
               </div>
             </div>
@@ -69,7 +69,7 @@ const EditTable = () => {
               <div className="input-group">
                 <input type="text" className="form-field" placeholder="Enter Serial Numbers" />
                 <div className="input-group-append">
-                  <img src={downArrow} alt="downarrow" width="16" height="16" />
+                  <img src={downArrow} alt="downarrow" width="9" height="9" />
                 </div>
               </div>
             </div>

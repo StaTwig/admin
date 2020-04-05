@@ -16,7 +16,7 @@ const dropdownButtonGroup = ({
         onClick={() => setMenu(!menu)}
       >
         <span>{name}</span>
-        <img src={upDownArrow} alt="downarrow" width="16" height="16" />
+        <img src={upDownArrow} alt="downarrow" width="9" height="9" />
       </button>
       {
         menu && <div className="dropdown-menu show transform-group">

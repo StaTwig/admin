@@ -1,9 +1,12 @@
-@import '../../assets/styles/global.scss';
-
+@import "../../assets/styles/global.scss";
 
 .Newinventory {
-  padding-left: 3rem;
   padding-right: 3rem;
+  padding-left: 3rem;
+  @media (max-width: $md) {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
 
   .form-group,
   .input-group {
@@ -39,24 +42,20 @@
       cursor: pointer;
     }
   }
-  .total{
+  .total {
     color: $OBBlue;
-    font:  25px/13px $roboto;
-   
+    font: 25px/13px $roboto;
   }
-  .value{
+  .value {
     color: $black;
-    font:  25px/13px $roboto;
-  }
-
-  hr {
-    border-width: 2px;
+    font: 25px/13px $roboto;
   }
 
   .table {
     .overflow {
-      height: auto;
-      max-height: 400px;
+      height: 100%;
+      overflow: auto;
+      min-height: 200px;
     }
   }
 }

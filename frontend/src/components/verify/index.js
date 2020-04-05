@@ -13,7 +13,6 @@ import {
   MDBCard,
   MDBCardBody,
 } from 'mdbreact';
-import 'typeface-roboto';
 import './style.scss';
 import Key from '../../assets/icons/key.png';
 import User from '../../assets/icons/user.png';

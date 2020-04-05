@@ -4,6 +4,7 @@ import {
 } from "react-router-dom";
 import { logoutUser } from '../../actions/userActions';
 import { useDispatch } from 'react-redux';
+import DrawerMenu from "./drawerMenu";
 
 import logo from '../../assets/brands/vaccineledger.png';
 import searchingIcon from "../../assets/icons/searching@2x.png";
@@ -16,12 +17,16 @@ import './style.scss'
 
 const Header = props => {
   const [menu, setMenu] = useState(false);
+  const [sidebar, openSidebar] = useState(false);
   const dispatch = useDispatch();
 
   return (
     <div className="header">
       <div className="branding">
-        <img src={logo} alt="vaccineledger" width="30%"/>
+        <div className="mobile-menu" onClick={() => openSidebar(true)}>
+          <i className="fa fa-bars" aria-hidden="true"></i>
+        </div>
+        <img src={logo} alt="vaccineledger" />
       </div>
       <div className="actions">
         <div className="search-form">
@@ -33,11 +38,14 @@ const Header = props => {
             <img src={bellIcon} alt="notification" />
           </div>
           <div className="divider" />
-          <div className="userName">John Wilson</div>
-          
-            <div className="userPic">
-              <img src={userIcon} alt="Jhon Name" className="rounded rounded-circle" />
-            </div>
+          <div className="userName">
+            <p className="cname">ABC Pvt Ltd.</p>
+            <p className="uname">Jhon Doe</p>
+          </div>
+
+          <div className="userPic">
+            <img src={userIcon} alt="Jhon Name" className="rounded rounded-circle" />
+          </div>
           <div className="userActions">
             <img src={dropdownIcon} alt="actions" onClick={() => setMenu(!menu)} />
           </div>
@@ -46,8 +54,11 @@ const Header = props => {
           menu && <div className="slider-menu">
             {
               <React.Fragment>
-              <Link className="slider-item" to="/profile">My profile</Link>
-                
+                <div className="slider-item-text">
+                  <p>Jhon Wilson</p>
+                  <p>ABC Pvt. Ltd.</p>
+                </div>
+                <Link className="slider-item border-top-0" to="/profile">My profile</Link>
                 <div className="slider-item">
                   Settings
                 </div>
@@ -61,6 +72,10 @@ const Header = props => {
 
             }
           </div>
+        }
+
+        {
+          sidebar && <DrawerMenu {...props} close={() => openSidebar(false)} />
         }
       </div>
     </div>
