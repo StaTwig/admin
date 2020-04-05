@@ -8,7 +8,7 @@ export default ComposedComponent => {
       const { user } = this.props;
       switch (user) {
         case null:
-          return <Redirect to="/login" />;
+          return <Redirect to="/" />;
 
         default:
           return <ComposedComponent {...this.props} />;

@@ -18,6 +18,9 @@ module.exports = function routes(app) {
     //POST routes
     app.post('/publish', require('./data/publish').writeData);
     app.post('/publishBulkData', require('./data/publish').writeBulkData);
+    
+    //User address creation
+    app.get('/createUserAddress', require('./users/register').createUser); 
 }
 
 

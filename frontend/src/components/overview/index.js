@@ -13,7 +13,7 @@ import shipmentsdelayed from "../../assets/icons/TotalShipmentsDelayed.svg";
 
 import './style.scss';
 
-const Overview = () => {
+  const Overview = props => {
   return (
     <div className="overview">
       <h1 className="breadcrumb">OVERVIEW</h1>
@@ -133,9 +133,8 @@ const Overview = () => {
           </div>
         </div>
       </div>
-    </div >
+    </div>
   );
 };
 
 export default Overview;
-
