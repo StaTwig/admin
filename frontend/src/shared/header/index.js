@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Link
 } from "react-router-dom";
@@ -11,7 +11,8 @@ import searchingIcon from "../../assets/icons/searching@2x.png";
 import bellIcon from "../../assets/icons/bellwhite.png";
 import userIcon from "../../assets/brands/user-image/Image73@2x.png";
 import dropdownIcon from "../../assets/icons/drop-down.png";
-
+const axios = require("axios");
+import { SERVER_URL } from '../../config';
 
 import './style.scss'
 
@@ -19,7 +20,14 @@ const Header = props => {
   const [menu, setMenu] = useState(false);
   const [sidebar, openSidebar] = useState(false);
   const dispatch = useDispatch();
-
+  const [profile, setProfile] = React.useState([]);
+useEffect(() => {
+  axios.get(`${SERVER_URL}/usermanagement/api/auth/userInfo`)
+    .then(res => {
+      const prof =res.data;
+      setProfile(prof);
+    })
+ }, [])
   return (
     <div className="header">
       <div className="branding">

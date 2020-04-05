@@ -343,11 +343,24 @@ exports.resetPassword = [
 	}];
 	
 	exports.userInfo = [
-				 
+		auth,		 
 		(req, res) => {
 			try {
-		
-				res.json("User profile details")
+				console.log(req.user.email);
+				UserModel.findOne({email : req.user.email}).then((user) => {
+					if (user) {
+						console.log(user);
+						let user_data = {
+							name : user.name,
+							profile_picture : user.profile_picture
+						}
+						return apiResponse.successResponseWithData(res,"Sent image image",user_data);
+					}
+					else {
+					console.log("Updated")
+					return apiResponse.ErrorResponse(res);
+					}
+				});
 					
 			
 			} catch (err) {
@@ -384,30 +397,7 @@ exports.resetPassword = [
 			}
 		}];
 
-		exports.fetchImage = [
-		auth,		 
-		(req, res) => {
-			try {
-				console.log(req.body.email);
-				UserModel.findOne({email : req.user.email}).then((user) => {
-					if (user) {
-						console.log(user);
-						let user_data = {
-							profile_picture : user.profile_picture
-						}
-						return apiResponse.successResponseWithData(res,"Updated image",user_data);
-					}
-					else {
-					console.log("Updated")
-					return apiResponse.ErrorResponse(res);
-					}
-				});
-					
-			
-			} catch (err) {
-				return apiResponse.ErrorResponse(res, err);
-			}
-		}];
+		
 		
 		
 	exports.createUserAddress = [
