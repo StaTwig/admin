@@ -1,6 +1,6 @@
-@import './colors.scss';
-@import './fonts.scss';
-@import './breakpoints.scss';
+@import "./colors.scss";
+@import "./fonts.scss";
+@import "./breakpoints.scss";
 
 body {
   background-color: $softGrey;
@@ -14,21 +14,24 @@ body {
   border-radius: 0;
   display: inline-block;
   text-transform: uppercase;
-  margin-bottom: 2.5rem;
+  margin-bottom: 25px;
   border-bottom: 3px solid $lightBlue;
-  font-size: 35px;
+  font-size: 24px;
   color: $darkGrey;
   font-weight: bold;
-}
-
-.card {
-  box-shadow: 0px 3px 10px $grey;
-  border-radius: 10px;
+  @media (min-width: $xl) {
+    font-size: 30px;
+  }
 }
 
 .shadow-radius {
   border-radius: 10px;
   box-shadow: 0px 3px 6px $grey;
+}
+
+.btn {
+  padding: 5px 20px;
+  height: 45px;
 }
 
 .btn-white {
@@ -43,7 +46,6 @@ body {
   border-color: transparent;
 }
 
-
 .btn-main-blue {
   background: $primaryBlue;
   border-radius: 10px;
@@ -56,7 +58,6 @@ body {
   }
 }
 
-
 .btn-blue {
   background: $skyBlue;
   border-radius: 10px;
@@ -65,7 +66,7 @@ body {
 }
 
 .btn-orange {
-  background-color: #FA7923;
+  background-color: #fa7923;
   color: $white;
   box-shadow: 0px 3px 6px $grey;
   border-radius: 10px;
@@ -74,7 +75,7 @@ body {
 }
 
 .btn-yellow {
-  background-color: #FFAB1D;
+  background-color: #ffab1d;
   color: $white;
   box-shadow: 0px 3px 6px $grey;
   border-radius: 10px;
@@ -86,28 +87,23 @@ body {
   }
 }
 
-.fontSize20 {
-  font-size: 20px;
-}
-
 .btn-outline-primary {
-  color: $primaryBlue;
-  border-color: $primaryBlue;
+  color: $primaryBlue !important;
+  border-color: $primaryBlue !important;
+  border-width: 1px !important;
+  border-radius: 10px !important;
 }
 
-.card {
-  box-shadow: 0px 3px 6px $grey;
+.custom-card {
+  box-shadow: 0px 3px 10px $grey;
   border-radius: 15px;
   background-color: $white;
   margin-right: 1rem;
   padding: 1rem;
-
-  &:last-child {
-    margin-right: 0;
-  }
 }
 
-table.table th, table.table td {
+table.table th,
+table.table td {
   padding-top: 1.1rem;
-  padding-bottom: .5rem;
+  padding-bottom: 0.5rem;
 }

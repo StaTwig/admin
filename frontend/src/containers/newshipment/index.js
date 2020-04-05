@@ -6,7 +6,7 @@ import Sidebar from '../../shared/sidebarMenu';
 const newShipmentContainer = props => {
   return (
     <div className="container-fluid p-0">
-      <Header />
+      <Header {...props} />
       <div className="d-flex">
         <Sidebar {...props} />
         <div className="content">

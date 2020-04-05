@@ -1,5 +1,4 @@
 import React from "react";
-import 'typeface-roboto';
 import searchingIcon from "../../assets/icons/searching@2x.png";
 import Filter from '../../assets/icons/Filter.svg';
 import updownarrow from "../../assets/icons/up-and-down-white.svg";

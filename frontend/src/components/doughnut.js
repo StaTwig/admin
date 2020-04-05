@@ -21,14 +21,11 @@ const ChartsPage = () => {
         ]
       }
     ],
-    legend: {
-      position: "right",
-    }
   });
 
   return (
     <MDBContainer>
-      <Doughnut data={dataDoughnut} options={{responsive: true }} />
+      <Doughnut data={dataDoughnut}/>
     </MDBContainer>
   );
 };
