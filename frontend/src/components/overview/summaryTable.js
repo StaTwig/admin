@@ -2,9 +2,26 @@ import React from "react";
 import dp from "../../assets/icons/harsha.jpg";
 import './table-style.scss';
 
-const SummaryTable = () => {
+const SummaryTable = props => {
     return (
         <React.Fragment>
+            {/* {props.shipments.map(shipment => (
+                    <tr key={shipment.Shipment_ID}>
+                      <th scope="row">
+                        <img className="image" src={dp} width="25px" />
+                      </th>
+                      <td>{shipment['Deliver_To']}</td>
+                      <td>{shipment['Shipment_ID']}</td>
+                      <td>{shipment['Shipment_Date']}</td>
+                      <td>{shipment['Delivery Location']}</td>
+                      <td>8°C</td>
+                      <td>
+                        <span className="badge badge-pill badge-success p-2">
+                          Received
+                        </span>
+                      </td>
+                    </tr>
+                  ))} */}
             <div className="summaryTable">
                 <div className="rowData">
                     <div className="headline">Client</div>

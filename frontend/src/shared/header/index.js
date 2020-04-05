@@ -6,7 +6,7 @@ import { logoutUser } from '../../actions/userActions';
 import { useDispatch } from 'react-redux';
 import DrawerMenu from "./drawerMenu";
 
-import logo from '../../assets/brands/vaccineledger.png';
+import logo from '../../assets/brands/VACCINELEDGER.png';
 import searchingIcon from "../../assets/icons/searching@2x.png";
 import bellIcon from "../../assets/icons/bellwhite.png";
 import userIcon from "../../assets/brands/user-image/Image73@2x.png";

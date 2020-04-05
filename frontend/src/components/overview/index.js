@@ -121,7 +121,7 @@ import './style.scss';
               </div>
             </div>
             <div className="card-body">
-              <SummaryTable/>
+              <SummaryTable {...props}/>
               </div>
             <div className="card-footer">
               <div className="d-flex align-items-center justify-content-center">
