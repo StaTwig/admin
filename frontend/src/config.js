@@ -14,16 +14,18 @@ export function config() {
       inventoriesUrl: `${LOCAL_SERVER_URL_INVENTORY}/api/inventory/getAllInventoryDetails`,
       createShipmentUrl: `${LOCAL_SERVER_URL_SHIPMENT}/api/shipping/createShipment`,
       addInventoryUrl: `${LOCAL_SERVER_URL_INVENTORY}/api/inventory/addNewInventory`,
+      userInfoUrl: `${LOCAL_SERVER_URL_USER}/api/auth/userInfo`,
+
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
       registerUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/register`,
-      verifyOtpUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login/verify-otp`,
+      verifyOtpUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/verify-otp`,
       shipmentsUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/shipmentStatistics`,
       createShipmentUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/createShipment`,
       inventoriesUrl: `${TEST_SERVER_URL}/inventorymanagement/inventory/getAllInventoryDetails`,
       addInventoryUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/addNewInventory`,
-
+      userInfoUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/userInfo`,
     }
   };
 
