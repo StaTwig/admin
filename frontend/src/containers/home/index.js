@@ -43,9 +43,9 @@ const HomeContainer = (props) => {
         <div className="collapse navbar-collapse" id="navbarNavDropdown">
           <ul className="navbar-nav ml-auto">
             <li className="nav-item mr-4">
-              <a className="nav-link" href="#">
+              <Link className="nav-link" to="/trackAndTrace">
                 Track & Trace
-              </a>
+              </Link>
             </li>
             <li className="nav-item active">
               <Link className="nav-link" to="/login">
@@ -54,9 +54,9 @@ const HomeContainer = (props) => {
             </li>
             <div className="divider" />
             <li className="nav-item">
-              <a className="nav-link" href="#">
+              <Link className="nav-link" to="/signup">
                 Signup
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

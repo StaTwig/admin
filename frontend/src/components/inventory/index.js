@@ -12,7 +12,7 @@ import Expiration from "../../assets/icons/TotalVaccinenearExpiration.svg";
 import TotalVaccineExpired from "../../assets/icons/TotalVaccineExpired.svg";
 import Add from '../../assets/icons/add.svg';
 
-const Inventory = () => {
+const Inventory = (props) => {
       return (
             <div className="inventory">
                   <div className="d-flex justify-content-between">
@@ -102,7 +102,7 @@ const Inventory = () => {
                   <div className="ribben-space">
                         <div className="row no-gutter">
                               <div className="col-sm-12 col-xl-9">
-                                    <Table />
+                                    <Table {...props} />
                               </div>
                               <div className="col-sm-12 col-xl-3">
                                     <div className="list-container">

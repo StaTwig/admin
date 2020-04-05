@@ -1,19 +1,16 @@
-import {
-  GET_SHIPMENTS_SUCCESS,
-  GET_SHIPMENTS_FAILURE
-} from '../constants/shipmentConstants';
+import {GET_INVENTORIES_SUCCESS, GET_INVENTORIES_FAILURE} from "../constants/inventoryConstants";
 
 export const initialState = [];
 
 export const inventoryReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_SHIPMENTS_SUCCESS:
-      const shipments = action.payload.data.map(shipment => JSON.parse(shipment.data));
+    case GET_INVENTORIES_SUCCESS:
+      const inventories = action.payload.data.map(shipment => JSON.parse(shipment.data));
       return [
         ...state,
-        ...shipments
+        ...inventories
       ];
-    case GET_SHIPMENTS_FAILURE:
+    case GET_INVENTORIES_FAILURE:
       return initialState
     default:
       return state;

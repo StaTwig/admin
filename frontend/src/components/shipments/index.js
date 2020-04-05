@@ -13,7 +13,7 @@ import TableFilter from '../../shared/advanceTableFilter';
 import Modal from '../../shared/modal';
 import PurchaseForm from '../../components/purchaseform';
 
-const ShipmentAnalytic = () => {
+const ShipmentAnalytic = (props) => {
       const [openPurchaseOrder, setOpenPurchaseOrder] = useState(false);
       const closeModal = () => {
             setOpenPurchaseOrder(false);
@@ -43,7 +43,7 @@ const ShipmentAnalytic = () => {
                               <TableFilter />
                         </div>
                         <div className="ribben-space">
-                              <Table />
+                              <Table {...props}/>
                         </div>
                   {
                         openPurchaseOrder && <Modal
