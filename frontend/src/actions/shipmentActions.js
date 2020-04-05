@@ -17,6 +17,17 @@ export const getShipments = () => {
 
 }
 
+export const createShipment = async (data) => {
+  try {
+    debugger;
+      const result =  await axios.post(config().createShipmentUrl, data);
+     return result.data;
+  }catch(e){
+    return e.response;
+  }
+
+}
+
 const setShipments = (data) =>{
   return {
     type: GET_SHIPMENTS_SUCCESS,

@@ -1,10 +1,66 @@
-import React from "react";
-import EditTable from '../../shared/table/editTabel';
-import updownArrow from "../../assets/icons/up-and-down-dark.svg";
-import calenderDark from "../../assets/icons/calendar-grey.svg";
+import React, { useState } from 'react';
+import EditTable from '../../shared/table/editTable';
+import updownArrow from '../../assets/icons/up-and-down-dark.svg';
+import calenderDark from '../../assets/icons/calendar-grey.svg';
 import './style.scss';
+import { createShipment } from '../../actions/shipmentActions';
 
 const NewShipment = () => {
+
+  const [shipmentId, setShipmentId] = useState('');
+  const [client, setClient] = useState('');
+  const [supplier, setSupplier] = useState('');
+  const [supplierLocation, setSupplierLocation] = useState('');
+  const [shipmentDate, setShipmentDate] = useState('');
+  const [deliveryTo, setDeliveryTo] = useState('');
+  const [deliveryLocation, setDeliveryLocation] = useState('');
+  const [estimateDeliveryDate, setEstimateDeliveryDate] = useState('');
+  const [message, setMessage] = useState('');
+  const [productName, setProductName] = useState('Select Product');
+  const [manufacturerName, setManufacturerName] = useState(
+    'Select Manufacturer',
+  );
+  const [quantity, setQuantity] = useState('');
+  const [manufacturingDate, setManufacturingDate] = useState('');
+  const [expiryDate, setExpiryDate] = useState('');
+  const [storageCondition, setStorageCondition] = useState('');
+  const [batchNumber, setBatchNumber] = useState('');
+  const [serialNumber, setSerialNumber] = useState('');
+  const editTableProps = {
+    manufacturerName,
+    setManufacturerName,
+    productName,
+    setProductName,
+    quantity,
+    setQuantity,
+    manufacturingDate,
+    setManufacturingDate,
+    expiryDate,
+    setExpiryDate,
+    storageCondition,
+    setStorageCondition,
+    batchNumber,
+    setBatchNumber,
+    serialNumber,
+    setSerialNumber,
+  };
+  const onAssign = async () => {
+    const data = {
+      shipmentId,
+      client,
+      supplier,
+      supplierLocation,
+      shipmentDate,
+      deliveryTo,
+      deliveryLocation,
+      estimateDeliveryDate,
+    };
+
+    const result = await createShipment({ data });
+    if (result) {
+      setMessage('Assigned Shipment Success');
+    }
+  };
   return (
     <div className="NewShipment">
       <h1 className="breadcrumb">CREATE SHIPMENTS</h1>
@@ -12,52 +68,95 @@ const NewShipment = () => {
         <div className="col mr-3">
           <div className="form-group">
             <label htmlFor="shipmentId">Shipment ID</label>
-            <input type="text" className="form-control" name="shipmentId" placeholder="Enter Shipment ID" />
+            <input
+              type="text"
+              className="form-control"
+              name="shipmentId"
+              placeholder="Enter Shipment ID"
+              onChange={e => setShipmentId(e.target.value)}
+            />
           </div>
           <div className="form-group">
             <label htmlFor="client">Client</label>
-            <input type="text" className="form-control" name="client" placeholder="Enter Client" />
+            <input
+              type="text"
+              className="form-control"
+              name="client"
+              placeholder="Enter Client"
+              onChange={e => setClient(e.target.value)}
+            />
           </div>
         </div>
         <div className="col mr-3">
           <div className="form-group">
             <label htmlFor="shipmentId">Supplier</label>
-            <input type="text" className="form-control" name="shipmentId" placeholder="John Doe" />
+            <input
+              type="text"
+              className="form-control"
+              name="shipmentId"
+              placeholder="John Doe"
+              onChange={e => setSupplier(e.target.value)}
+            />
           </div>
           <div className="input-group">
             <label htmlFor="shipmentId">Supplier Location</label>
-            <input type="text" className="form-control" placeholder="Select Location" />
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Select Location"
+              onChange={e => setSupplierLocation(e.target.value)}
+            />
             <div className="input-group-append">
               <img src={updownArrow} alt="downarrow" width="13" height="13" />
             </div>
           </div>
           <div className="input-group">
             <label htmlFor="shipmentId">Shipment Date</label>
-            <input type="text" className="form-control" placeholder="Select Shipment Date" />
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Select Shipment Date"
+              onChange={e => setShipmentDate(e.target.value)}
+            />
             <div className="input-group-append">
               <img src={calenderDark} alt="downarrow" width="13" height="13" />
             </div>
           </div>
         </div>
         <div className="col">
-        <div className="input-group">
+          <div className="input-group">
             <label htmlFor="shipmentId">Delivery To</label>
-            <input type="text" className="form-control" placeholder="Select" />
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Select"
+              onChange={e => setDeliveryTo(e.target.value)}
+            />
             <div className="input-group-append">
               <img src={updownArrow} alt="downarrow" width="13" height="13" />
             </div>
           </div>
           <div className="input-group">
             <label htmlFor="shipmentId">Delivery Location</label>
-            <input type="text" className="form-control" placeholder="Select Delivery Location" />
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Select Delivery Location"
+              onChange={e => setDeliveryLocation(e.target.value)}
+            />
             <div className="input-group-append">
               <img src={updownArrow} alt="downarrow" width="13" height="13" />
             </div>
           </div>
-         
+
           <div className="input-group">
             <label htmlFor="shipmentId"> Estimate Delivery Date</label>
-            <input type="text" className="form-control" placeholder="Deivery Date" />
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Deivery Date"
+              onChange={e => setEstimateDeliveryDate(e.target.value)}
+            />
             <div className="input-group-append">
               <img src={calenderDark} alt="downarrow" width="13" height="13" />
             </div>
@@ -65,24 +164,25 @@ const NewShipment = () => {
         </div>
       </div>
       <hr />
-      <EditTable />
-      <button className="btn btn-white shadow-radius font-weight-bold">
+      <EditTable {...editTableProps }/>
+      <button className="btn btn-white shadow-radius font-bold">
         +<span> Add Another Product</span>
       </button>
       <hr />
-      
+
       <div className="d-flex justify-content-between">
-      <div className="total">Grand Total</div>
-      <div className="value">0</div>
-      <div className="d-flex ">
-      <button className="btn-primary btn">Assign Shipmnet Order</button>
-      <button className="btn-primary btn">Proceed To Review</button>
+        <div className="total">Grand Total</div>
+        <div className="value">0</div>
+        <div className="d-flex ">
+          <button className="btn-primary btn" onClick={onAssign}>
+            Assign Shipmnet Order
+          </button>
+          <button className="btn-primary btn">Proceed To Review</button>
+        </div>
       </div>
-      </div>
+      {message && <div className="alert alert-success">{message}</div>}
     </div>
-   
   );
 };
 
 export default NewShipment;
-

@@ -2,144 +2,35 @@ import React from "react";
 
 import './style.scss';
 
-const Table = () => {
+const Table = (props) => {
   return (
     <div className="table">
       <div className="rTable">
         <div className="rTableHeading">
           <div className="rTableHead">Product Name</div>
-          <div className="rTableHead"><span>Telephone</span></div>
           <div className="rTableHead">Quantity</div>
-          <div className="rTableHead"><span>Telephone</span></div>
-          <div className="rTableHead">Name</div>
-          <div className="rTableHead"><span>Telephone</span></div>
-          <div className="rTableHead"><span>Telephone</span></div>
+          <div className="rTableHead"><span>Manufacturing Date</span></div>
+          <div className="rTableHead">Expiry Date</div>
+          <div className="rTableHead"><span>Storage Condition</span></div>
+          <div className="rTableHead"><span>Batch Number</span></div>
+          <div className="rTableHead"><span>Serial Number</span></div>
         </div>
         <div className="overflow">
-          <div className="rTableRow">
+          {props.inventories.map(inventory =>  <div className="rTableRow">
             <div className="rTableCell">
               <div className="combine-data">
-                <div className="round-sign">OPV</div>
-                <a href="#">OPV</a>
+                <div className="round-sign">{inventory.productName}</div>
+                <a href="#">{inventory.productName}</a>
               </div>
             </div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell">John</div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell"><b>+1415</b></div>
-            <div className="rTableCell">18/06/2008</div>
-            
-            <div className="rTableCell">18/06/2008</div>
-          </div>
-          <div className="rTableRow">
-            <div className="rTableCell"><div className="combine-data">
-            <div className="round-sign">OPV</div>
-            <a href="#">OPV</a>
-          </div></div>
-            <div className="rTableCell">9876 532 432</div>
-            <div className="rTableCell">John</div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell"><b>+1415</b></div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell">18/06/2008</div>
-          </div>
-          <div className="rTableRow">
-            <div className="rTableCell"><div className="combine-data">
-            <div className="round-sign">OPV</div>
-            <a href="#">OPV</a>
-          </div></div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell">John</div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell"><b>+1415</b></div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell">18/06/2008</div>
-          </div>
-          <div className="rTableRow">
-            <div className="rTableCell"><div className="combine-data">
-            <div className="round-sign">OPV</div>
-            <a href="#">OPV</a>
-          </div></div>
-            <div className="rTableCell">9876 532 432</div>
-            <div className="rTableCell">John</div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell"><b>+1415</b></div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell">18/06/2008</div>
-          </div>
-          <div className="rTableRow">
-            <div className="rTableCell"><div className="combine-data">
-            <div className="round-sign">OPV</div>
-            <a href="#">OPV</a>
-          </div></div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell">John</div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell"><b>+1415</b></div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell">18/06/2008</div>
-          </div>
-          <div className="rTableRow">
-            <div className="rTableCell"><div className="combine-data">
-            <div className="round-sign">OPV</div>
-            <a href="#">OPV</a>
-          </div></div>
-            <div className="rTableCell">9876 532 432</div>
-            <div className="rTableCell">John</div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell"><b>+1415</b></div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell">18/06/2008</div>
-          </div>
-          <div className="rTableRow">
-            <div className="rTableCell"><div className="combine-data">
-            <div className="round-sign">OPV</div>
-            <a href="#">OPV</a>
-          </div></div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell">John</div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell"><b>+1415</b></div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell">18/06/2008</div>
-          </div>
-          <div className="rTableRow">
-            <div className="rTableCell"><div className="combine-data">
-            <div className="round-sign">OPV</div>
-            <a href="#">OPV</a>
-          </div></div>
-            <div className="rTableCell">9876 532 432</div>
-            <div className="rTableCell">John</div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell"><b>+1415</b></div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell">18/06/2008</div>
-          </div>
+            <div className="rTableCell">{inventory.quantity}</div>
+            <div className="rTableCell">{inventory.manufacturingDate}</div>
+            <div className="rTableCell">{inventory.expiryDate}</div>
+            <div className="rTableCell"><b>{inventory.storageCondition}</b></div>
+            <div className="rTableCell">{inventory.batchNumber}</div>
 
-          <div className="rTableRow">
-            <div className="rTableCell"><div className="combine-data">
-            <div className="round-sign">OPV</div>
-            <a href="#">OPV</a>
-          </div></div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell">John</div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell"><b>+1415</b></div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell">18/06/2008</div>
-          </div>
-          <div className="rTableRow">
-            <div className="rTableCell"><div className="combine-data">
-            <div className="round-sign">OPV</div>
-            <a href="#">OPV</a>
-          </div></div>
-            <div className="rTableCell">9876 532 432</div>
-            <div className="rTableCell">John</div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell"><b>+1415</b></div>
-            <div className="rTableCell">18/06/2008</div>
-            <div className="rTableCell">18/06/2008</div>
-          </div>
+            <div className="rTableCell">{inventory.serialNumber}</div>
+          </div>)}
         </div>
 
       </div>

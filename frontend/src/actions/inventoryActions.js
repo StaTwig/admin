@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { config } from '../config/config';
+import { config } from '../config';
 import { GET_INVENTORIES_FAILURE, GET_INVENTORIES_SUCCESS } from "../constants/inventoryConstants";
 
 export const getInventories = () => {
@@ -29,4 +29,16 @@ const resetInventories = (data) =>{
     type: GET_INVENTORIES_FAILURE,
     payload: data,
   };
+}
+
+
+export const addInventory = async (data) => {
+  try {
+    debugger;
+    const result =  await axios.post(config().addInventoryUrl, data);
+    return result.data;
+  }catch(e){
+    return e.response;
+  }
+
 }

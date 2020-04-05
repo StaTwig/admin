@@ -1,39 +1,88 @@
-import React, { useState } from "react";
-import EditTable from '../../shared/table/editTabel';
+import React, { useState } from 'react';
+import EditTable from '../../shared/table/editTable';
 import './style.scss';
 import Modal from '../../shared/modal';
-import InventoryPopUp from './inventorypopup'
+import InventoryPopUp from './inventorypopup';
+import {addInventory} from "../../actions/inventoryActions";
 
 const NewInventory = () => {
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
+  const [productName, setProductName] = useState('Select Product');
+  const [manufacturerName, setManufacturerName] = useState(
+    'Select Manufacturer',
+  );
+  const [quantity, setQuantity] = useState('');
+  const [manufacturingDate, setManufacturingDate] = useState('');
+  const [expiryDate, setExpiryDate] = useState('');
+  const [storageCondition, setStorageCondition] = useState('');
+  const [batchNumber, setBatchNumber] = useState('');
+  const [serialNumber, setSerialNumber] = useState('');
+  const editTableProps = {
+    manufacturerName,
+    setManufacturerName,
+    productName,
+    setProductName,
+    quantity,
+    setQuantity,
+    manufacturingDate,
+    setManufacturingDate,
+    expiryDate,
+    setExpiryDate,
+    storageCondition,
+    setStorageCondition,
+    batchNumber,
+    setBatchNumber,
+    serialNumber,
+    setSerialNumber,
+  };
   const closeModal = () => {
     setOpenCreatedInventory(false);
-  }
+  };
+
+  const onAddInventory = async() => {
+    const data = {
+      productName,
+      quantity,
+      manufacturingDate,
+      expiryDate,
+      storageCondition,
+      batchNumber,
+      serialNumber,
+    };
+    console.log(data);
+    const result = await addInventory({ data });
+    if (result) {
+      setOpenCreatedInventory(true);
+    }
+
+  };
   return (
     <div className="Newinventory">
       <h1 className="breadcrumb">ADD INVENTORY</h1>
-      <EditTable />
+      <EditTable {...editTableProps} />
       <button className="btn btn-white shadow-radius font-bold">
         +<span> Add Another Product</span>
       </button>
       <hr />
       <div className="d-flex justify-content-between">
-      <div className="d-flex w-25 justify-content-between">
-        <div className="total">Grand Total</div>
-        <span className="value">0</span>
+        <div className="d-flex w-25 justify-content-between">
+          <div className="total">Grand Total</div>
+          <span className="value">0</span>
+        </div>
+
+        <button className="btn-primary btn" onClick={onAddInventory}>
+          {' '}
+          Add Inventory
+        </button>
       </div>
-        
-        <button className="btn-primary btn" onClick={() => setOpenCreatedInventory(true)}> Add Inventory</button>
-      </div>
-      {
-        openCreatedInventory && <Modal
+      {openCreatedInventory && (
+        <Modal
           close={() => closeModal()}
           size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
           <InventoryPopUp />
         </Modal>
-      }
-
+      )}
     </div>
   );
 };

@@ -9,6 +9,7 @@ var UserSchema = new mongoose.Schema({
 	password: {type: String, required: true},
 	isConfirmed: {type: Boolean, required: true, default: 0},
 	confirmOTP: {type: String, required:false},
+	address: {type: String, required:false, default: ''},
 	otpTries: {type: Number, required:false, default: 0},
 	status: {type: Boolean, required: true, default: 1},
 	profile_picture: {type: String, required:false, default: defaultdp},
