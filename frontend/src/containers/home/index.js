@@ -1,29 +1,29 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import MobileHeader from '../../shared/header/mobileHeader';
 
 import './style.scss';
 import logo from '../../assets/brands/VACCINELEDGER.png';
-import lap from '../../assets/brands/laptop.png';
 import icon from '../../assets/icons/block-icon.png';
 import icon1 from '../../assets/icons/temprature-icon.png';
 import icon2 from '../../assets/icons/location-icon.png';
 import icon3 from '../../assets/icons/chain-icon.png';
 import mob from '../../assets/brands/mobile.png';
-import big from '../../assets/brands/blockchain-flow-diagram.png';
 const HomeContainer = (props) => {
   const user = useSelector(state => {
     return state.user
   });
 
   useEffect(() => {
-    if(user) {
+    if (user) {
       props.history.push('/overview');
     }
   }, []);
   return (
     <div className="Homecontainer">
       {/* Header */}
+      <MobileHeader/>
       <nav className="navbar sticky-top navbar-expand-lg">
         <a className="navbar-brand" href="#">
           <img src={logo} width="230" height="30" alt="logo" />
@@ -42,9 +42,9 @@ const HomeContainer = (props) => {
         </button>
         <div className="collapse navbar-collapse" id="navbarNavDropdown">
           <ul className="navbar-nav ml-auto">
-            <li className="nav-item">
+            <li className="nav-item mr-4">
               <a className="nav-link" href="#">
-                Track&Trace
+                Track & Trace
               </a>
             </li>
             <li className="nav-item active">
@@ -65,90 +65,90 @@ const HomeContainer = (props) => {
       <section className="Herobanner">
         <div className="container">
           <div className="row hero align-items-center">
-            <div className="col-sm-6">
-              <img src={logo} width="450" height="60" />
+            <div className="col-sm-12 col-md-4">
+              <img src={logo} width="350" height="50" />
               <p className="hero-paragraph">
                 {' '}
-                Vaccine ledger is a blockchain based platform<br />to track and
-                trace vaccines journey acreoss the<br />supply chain
+                Vaccine ledger is a blockchain based platform to track and
+                trace vaccines journey across thesupply chain
               </p>
             </div>
-            <img src={lap} alt="vaccinedashboard" className="hero-image" />
+            <div className="hero-image" />
           </div>
         </div>
       </section>
-      <section className="OurSolution">
+      <section className="OurSolution pb-0">
         <div className="container solution">
           <h2 className="display-4">Our Solution</h2>
           <div className="row align-items-center">
             <div className="col">
               <div className="d-flex flex-column justify-content-center">
                 <div className="rounded-images">
-                  <img src={icon} width="60" height="60" />
+                  <img src={icon} width="40" height="40" />
                 </div>
-                <p>Blockchain based Platform</p>
+                <p>Blockchain based<br /> Platform</p>
               </div>
             </div>
             <div className="col">
               <div className="d-flex flex-column justify-content-center">
                 <div className="rounded-images">
-                  <img src={icon1} width="60" height="60" />
+                  <img src={icon1} width="40" height="40" />
                 </div>
-                <p>Live Temperature Tracking</p>
+                <p>Live Temperature<br /> Tracking</p>
               </div>
             </div>
             <div className="col">
               <div className="d-flex flex-column justify-content-center">
                 <div className="rounded-images">
-                  <img src={icon2} width="60" height="60" />
+                  <img src={icon2} width="40" height="40" />
                 </div>
-                <p>Live Location Tracking</p>
+                <p>Live Location<br /> Tracking</p>
               </div>
             </div>
             <div className="col">
               <div className="d-flex flex-column justify-content-center">
                 <div className="rounded-images">
-                  <img src={icon3} width="60" height="60" />
+                  <img src={icon3} width="40" height="40" />
                 </div>
-                <p>Visibility across SupplyChain</p>
+                <p>Visibility Across<br /> Supply Chain</p>
               </div>
             </div>
           </div>
         </div>
       </section>
-      <section className="what_we_do">
-        <div className="container mt-5">
+      <section className="what_we_do pt-0">
+        <div className="container">
           <div className="row">
-            <div className="col-7 align-text-center my-auto">
+            <div className="col-md-6 col-sm-12 align-text-center my-auto">
               <h2 className="display-4">What We Do</h2>
               <p>
                 StaTwig provides serialization solutions to detect fake and
-                expired products<br />in the production using blockchain
+                expired productsin the production using blockchain
                 technology and IoT.<br />We are focused towards creating an
-                efficient food and vaccine distribution<br />supply cahin.This
-                helps in preventing failures of distribution, predicting the<br />resources.Through
-                our platform, we connect all stakeholders viatamper-<br />proof,
+                efficient food and vaccine distribution supply cahin.This
+                helps in preventing failures of distribution, predicting the resources.Through
+                our platform, we connect all stakeholders viatamper-proof,
                 open ledgers using our platform SC Blockchain
               </p>
             </div>
-            <div className="col-5 align-items-center">
-              <img src={mob} width="600" height="450" />
+            <div className="col-md-6 align-items-center hide-sm">
+              <img src={mob} width="100%" height="450" />
             </div>
           </div>
         </div>
       </section>
       <section className="How_it_works">
-        <div className="container mt-5">
+        <div className="container">
           <div className="row">
             <div className="col align-text-center mx auto">
               <h2 className="display-4">How it Works</h2>
-              <img src={big} wdith="950" height="500" />
+              <div className="bg-work-flow"></div>
             </div>
           </div>
         </div>
       </section>
       <section className="contact_us">
-        <div className="container mt-5 h-100">
+        <div className="container">
           <div className="row h-100 align-items-center">
             <div className="d-flex flex-column">
               <h2 className="display-4">Contact Us</h2>
@@ -156,34 +156,24 @@ const HomeContainer = (props) => {
                 Interested in having chat with us about vaccine ledger ?<br />Drop
                 your email below and we will get back to you shortly !
               </p>
-              <form action="/email.php">
+              <div className="form form-inline">
                 <input
                   type="text"
                   placeholder="Enter Your Email Address"
                   name="email"
+                  className="form-control mr-3"
                 />
-              </form>
-            </div>
-            <svg className="Line_1" viewBox="0 0 398 1">
-              <path
-                fill="transparent"
-                stroke="rgba(112,112,112,1)"
-                stroke-width="0.3px"
-                stroke-linejoin="miter"
-                stroke-linecap="butt"
-                stroke-miterlimit="4"
-                id="Line_1"
-                d="M 0 0 L 398 0"
-              />
-            </svg>
-            <div className="d-flex flex-row w-100 justify-content-between align-items-start">
-              <img src={logo} width="260" height="30" />
-              <p>© 2020 STATWIG</p>
-              <p>Powered by Blockchain</p>
+                <button className="btn btn-primary btn-sm">SUBMIT</button>
+              </div>
             </div>
           </div>
         </div>
       </section>
+      <footer>
+          <img src={logo} width="260" height="30" />
+          <p className="copywrite">© 2020 STATWIG</p>
+          <p className="poweredby">Powered by Blockchain</p>
+      </footer>
     </div>
   );
 };
