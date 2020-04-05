@@ -179,16 +179,25 @@ exports.verifyConfirm = [
 				return apiResponse.validationErrorWithData(res, "Validation Error.", errors.array());
 			}else {
 				var query = {email : req.body.email};
-				UserModel.findOne(query).then(user => {
+				UserModel.findOne(query).then( async user => {
 					if (user) {
 						//Check already confirm or not.
 						if(!user.isConfirmed){
 							//Check account confirmation.
 							if(user.confirmOTP == req.body.otp){
+                const response = await axios.get(`${blockchain_service_url}/createUserAddress`);
+                const address = response.data.items;
+                const userData = {
+                  stream: stream_name,
+                  address
+                };
+                await axios.post(`${blockchain_service_url}/grantPermission`,userData); //Granting permissons to the user
+
 								//Update user as confirmed
 								UserModel.findOneAndUpdate(query, {
 									isConfirmed: 1,
-									confirmOTP: null 
+									confirmOTP: null,
+									address
 								}).catch(err => {
 									return apiResponse.ErrorResponse(res, err);
 								});
