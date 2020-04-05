@@ -20,7 +20,8 @@ module.exports = function routes(app) {
     app.post('/publishBulkData', require('./data/publish').writeBulkData);
     
     //User address creation
-    app.get('/createUserAddress', require('./users/register').createUser); 
+    app.get('/createUserAddress', require('./users/register').createUser);
+    app.post('/grantPermission', require('./users/register').grantPermission);
 }
 
 
