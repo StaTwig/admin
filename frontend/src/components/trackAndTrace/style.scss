@@ -1,9 +1,38 @@
-@import '../../assets/styles/global.scss';
-
+@import "../../assets/styles/global.scss";
 
 .trackTrace {
-  padding-left: 3rem;
   padding-right: 3rem;
+  padding-left: 3rem;
+  @media (max-width: $md) {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  .full-width-ribben {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background-color: $eeGrey;
+    @media screen and (max-width: 768px) {
+      position: unset;
+    }
+
+    .row {
+      margin-left: 9rem;
+      @media screen and (max-width: 768px) {
+        margin-left: 0;
+        flex-direction: column;
+      }
+    }
+  }
+
+  .ribben-space {
+    margin-top: 8rem;
+
+    @media screen and (max-width: 768px) {
+      margin-top: 2rem;
+    }
+  }
 
   .filter {
     display: flex;
@@ -11,27 +40,35 @@
   }
 
   .search-form {
-    width: 50%;
+    width: 60%;
     position: relative;
 
     .search-icon {
       position: absolute;
       right: 6px;
       top: 8px;
-      width: 35px;
+      width: 25px;
     }
 
-    .flex-basis-80 {
-      flex-basis: 85%;
+    .allfilterbtn {
+      display: flex;
+      justify-content: space-around;
+      flex-basis: 80%;
+      align-items: center;
+
+      img {
+        width: 9px;
+        height: 9px;
+      }
     }
 
     .search-field {
-      height: 50px;
+      height: 40px;
       background: $white;
       box-shadow: 0px 1px 3px $lightGrey;
       border-radius: 8px;
-      padding: 0 0 0 15rem;
-      font-size: 18px;
+      padding: 0 0 0 9rem;
+      font-size: 16px;
     }
 
     .floated {
@@ -39,14 +76,15 @@
       left: 0;
       top: 0;
       margin: 0;
-      height: 50px;
+      height: 40px;
       bottom: 0;
       width: 20%;
       display: flex;
       align-items: center;
-      font-size: 18px;
+      font-size: 14px;
       padding: 0;
       justify-content: space-around;
+      cursor: pointer;
     }
   }
 
@@ -68,44 +106,62 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
-    &:first-child {
-      justify-content: flex-end;
+    border-right: 1px solid $d6Grey;
+    @media screen and (max-width: 768px) {
+      border-right: none;
+      justify-content: flex-start;
     }
 
     .picture {
-      width: 60px;
-      height: 60px;
+      width: 52px;
+      height: 52px;
       box-shadow: 0px 3px 6px #00000029;
       border-radius: 50%;
-      display: flex;
       justify-content: center;
       align-items: center;
-      margin-right: 2rem;
+      margin-right: 11px;
+      display: none;
+
+      @media (min-width: 1280px) {
+        display: flex;
+      }
+      @media (min-width: $xl) {
+        display: flex;
+        width: 60px;
+        height: 60px;
+      }
 
       img {
-          width: 35px;
-          height: 26px;
-          
+        width: 52px;
+        height: 26px;
       }
 
       &.truck-bg {
-          background: $white ;
-          opacity:1;
+        background: $white;
       }
-  }
+    }
 
     .title {
-      font-size: 12px;
+      font-size: 8px;
+      line-height: 12px;
+      font-weight: bold;
+      color: #707070;
+      @media (min-width: $xl) {
+        font-size: 12px;
+      }
     }
 
     .count {
-      font-size: 25px;
+      font-size: 26px;
       color: $primaryBlue;
       font-weight: bold;
     }
 
-
+    .dayStatus {
+      font-size: 9px;
+      align-self: flex-end;
+      color: $black;
+    }
 
     &:after {
       border: 1px solid $lightGrey;

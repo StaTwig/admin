@@ -1,47 +1,99 @@
-@import '../../assets/styles/global.scss';
-
+@import "../../assets/styles/global.scss";
 
 .overview {
-  @media (min-width: $xl){
-    padding-right: 3rem;
+  padding-right: 3rem;
+    padding-left: 3rem;
+    @media (max-width: $md) {
+      padding-right: 10px;
+      padding-left: 10px;
+    }
+
+  .full-width-ribben {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background-color: $eeGrey;
+    @media screen and (max-width: 768px) {
+      position: unset;
+    }
+
+    .row {
+      margin-left: 9rem;
+      @media screen and (max-width: 768px) {
+        margin-left: 0;
+        flex-direction: column;
+      }
+    }
   }
 
-  .card {
-    min-height: 580px;
+  .ribben-space {
+    margin-top: 8rem;
+
+    @media screen and (max-width: 768px) {
+      margin-top: 2rem;
+
+      .col-lg-5 {
+        margin-bottom: 1rem;
+      }
+
+      .col-lg-7 {
+        margin-bottom: 1rem;
+      }
+    }
+  }
+
+  .custom-card {
+    height: auto;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    .card-title {
+      margin-bottom: 0.75rem;
+      font-size: 17px;
+      font-weight: 500;
+    }
+    .card-header,
+    .card-footer {
+      background-color: transparent;
+      border: none;
+    }
+    @media screen and (max-width: $sm) {
+      margin: 0;
+    }
+    @media (min-width: $lg) {
+      height: 420px;
+    }
+
+    @media (min-width: $xl) {
+      height: 450px;
+    }
 
     .card-body {
       display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+      flex-direction: column;
+      justify-content: space-between;
 
-    .card-link {
-      align-self: center;
-      box-shadow: none;
-      border-radius: 15px;
-      border-width: 1px !important;
-    }
-
-    .total {
-      .value {
-        font-size: 30px;
-    font-weight: bold;
+      .card-link {
+        align-self: center;
+        box-shadow: none;
+        border-radius: 15px;
+        border-width: 1px !important;
       }
-    }
+
+      .total {
+        .value {
+          font-size: 30px;
+          font-weight: bold;
+        }
+      }
     }
   }
 
   .bg-grey {
     background-color: $eeGrey;
-    @media (min-width: $xl){
+    @media (min-width: $md) {
       margin-left: -3.556689rem !important;
     }
-  }
-
-  .divider {
-    height: 70px;
-    border: 1px solid $d6Grey;
-    display: flex;
-    align-self: center;
   }
 
   .panel {
@@ -50,43 +102,53 @@
     display: flex;
     justify-content: center;
     align-items: center;
-
-    &:first-child {
-      justify-content: flex-end;
+    border-right: 1px solid $d6Grey;
+    @media screen and (max-width: 768px) {
+      border-right: none;
+      justify-content: flex-start;
     }
+
     .picture {
-      width: 60px;
-      height: 60px;
+      width: 52px;
+      height: 52px;
       box-shadow: 0px 3px 6px #00000029;
       border-radius: 50%;
       justify-content: center;
       align-items: center;
-      margin-right: 2rem;
+      margin-right: 11px;
       display: none;
+
+      @media (min-width: 1280px) {
+        display: flex;
+      }
       @media (min-width: $xl) {
         display: flex;
+        width: 60px;
+        height: 60px;
       }
 
       img {
-          width: 35px;
-          height: 26px;
-          
+        width: 52px;
+        height: 26px;
       }
 
       &.truck-bg {
-          background: $white ;
-          opacity:1;
+        background: $white;
       }
-  }
-
-    
+    }
 
     .title {
-      font-size: 12px;
+      font-size: 8px;
+      line-height: 12px;
+      font-weight: bold;
+      color: #707070;
+      @media (min-width: $xl) {
+        font-size: 12px;
+      }
     }
 
     .count {
-      font-size: 25px;
+      font-size: 26px;
       color: $primaryBlue;
       font-weight: bold;
     }

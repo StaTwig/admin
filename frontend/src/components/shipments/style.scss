@@ -3,84 +3,159 @@
 .shipment {
     padding-right: 3rem;
     padding-left: 3rem;
-
-    .fix-wrap {
-        flex-wrap: wrap;
-
-        @media (min-width: 1600px) {
-            flex-wrap: nowrap;
-        }
+    @media (max-width: $md) {
+      padding-right: 10px;
+      padding-left: 10px;
     }
+
+    .full-width-ribben {
+        position: absolute;
+        left: 0;
+        right: 0;
+        background-color: #eaeaea;
+        .filter {
+          margin-left: 9rem;
+          margin-right: 3rem;
+        }
+      }
+    
+      .ribben-space {
+        margin-top: 8rem;
+      }
 
     .panel {
         box-shadow: 0px 3px 6px $grey;
         border-radius: 15px;
         background-color: $white;
-        flex-basis: 30%;
-        margin-top: 2rem;
-        margin-right: 1rem;
-        padding: 30px;
-
-        &:last-child {
-            margin-right: 0;
+        padding: 20px 20px 5px 20px;
+        margin-top: 20px;
+        display: flex;
+        align-items: flex-start;
+    
+        & > .d-flex {
+          margin-top: 15px;
         }
-
+    
+        @media screen and (max-width: 768px) {
+          border-right: none;
+          justify-content: flex-start;
+        }
+    
+        @media (max-width: $lg) {
+          &:nth-child(2) {
+            margin-right: 0;
+          }
+        }
+    
+        &:last-child {
+          margin-right: 0;
+        }
+    
         .picture {
+          width: 40px;
+          height: 40px;
+          box-shadow: 0px 3px 6px #00000029;
+          border-radius: 50%;
+          justify-content: center;
+          align-items: center;
+          margin-right: 13px;
+          display: flex;
+    
+          @media (min-width: $xl) {
             width: 60px;
             height: 60px;
-            box-shadow: 0px 3px 6px #00000029;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-right: 2rem;
-
-            img {
-                width: 35px;
-                height: 26px;
-                opacity: 1;
-            }
-
-            &.truck-bg {
-                background: #35BFCC96 ;
-                opacity:0.3;
-            }
-
-            &.sent-bg {
-                background: $lightBlue;
-            }
-
-            &.recived-bg {
-                background: $darkYellow;
-            }
-
-            &.transit-bg {
-                background: $C0Blue;
-            }
+          }
+    
+          img {
+            width: 40px;
+            height: 18px;
+          }
+    
+          &.truck-bg {
+            background: $deepGreen;
+          }
+    
+          &.sent-bg {
+            background: $lightBlue;
+          }
+    
+          &.recived-bg {
+            background: #FA7923;
+          }
+    
+          &.transit-bg {
+            background: $C0Blue;
+          }
         }
-
-        .fontSize25 {
-            font-size: 23px;
+    
+        .tab-container {
+          display: flex;
+          justify-content: space-between;
+          .tab-item {
+            font-size: 8px;
+            color: #707070;
+            margin-right: 3px;
+            cursor: pointer;
+    
+            &.active {
+              color: #000000;
+              font-weight: bold;
+              position: relative;
+              &:after {
+                content: "";
+                border-bottom: 1.2px solid #000000;
+                position: absolute;
+                width: 100%;
+                bottom: 0;
+                left: 0;
+                top: 12px;
+              }
+            }
+          }
         }
-
-        .fontSize30 {
-            font-size: 30px;
+    
+        .title {
+          font-size: 12px;
+          line-height: 9px;
+          font-weight: bold;
+          color: #707070;
+          margin-bottom: 8px;
+          @media (min-width: $xl) {
+            font-size: 14px;
+          }
         }
-
+    
+        .count {
+          font-size: 26px;
+          margin-top: 12px;
+          font-weight: bold;
+        }
+    
+        .dayStatus {
+          font-size: 9px;
+          align-self: flex-end;
+          color: $black;
+        }
+    
+        &:after {
+          border: 1px solid $lightGrey;
+          height: 50px;
+        }
+    
         .truck-text {
-            color: $deepGreen;
+          color: $deepGreen;
         }
-
+    
         .sent-text {
-            color: $lightBlue;
+          color: $lightBlue;
         }
-
+    
         .recived-text {
-            color: $darkYellow;
+          color: #FA7923;
         }
-
+    
         .transit-text {
-            color: $deepBlue;
+          color: $deepBlue;
         }
-    }
+      }
 }

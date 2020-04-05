@@ -28,14 +28,14 @@ const NewShipment = () => {
             <label htmlFor="shipmentId">Supplier Location</label>
             <input type="text" className="form-control" placeholder="Select Location" />
             <div className="input-group-append">
-              <img src={updownArrow} alt="downarrow" width="16" height="16" />
+              <img src={updownArrow} alt="downarrow" width="13" height="13" />
             </div>
           </div>
           <div className="input-group">
             <label htmlFor="shipmentId">Shipment Date</label>
             <input type="text" className="form-control" placeholder="Select Shipment Date" />
             <div className="input-group-append">
-              <img src={calenderDark} alt="downarrow" width="16" height="16" />
+              <img src={calenderDark} alt="downarrow" width="13" height="13" />
             </div>
           </div>
         </div>
@@ -44,14 +44,14 @@ const NewShipment = () => {
             <label htmlFor="shipmentId">Delivery To</label>
             <input type="text" className="form-control" placeholder="Select" />
             <div className="input-group-append">
-              <img src={updownArrow} alt="downarrow" width="16" height="16" />
+              <img src={updownArrow} alt="downarrow" width="13" height="13" />
             </div>
           </div>
           <div className="input-group">
             <label htmlFor="shipmentId">Delivery Location</label>
             <input type="text" className="form-control" placeholder="Select Delivery Location" />
             <div className="input-group-append">
-              <img src={updownArrow} alt="downarrow" width="16" height="16" />
+              <img src={updownArrow} alt="downarrow" width="13" height="13" />
             </div>
           </div>
          
@@ -59,14 +59,14 @@ const NewShipment = () => {
             <label htmlFor="shipmentId"> Estimate Delivery Date</label>
             <input type="text" className="form-control" placeholder="Deivery Date" />
             <div className="input-group-append">
-              <img src={calenderDark} alt="downarrow" width="16" height="16" />
+              <img src={calenderDark} alt="downarrow" width="13" height="13" />
             </div>
           </div>
         </div>
       </div>
       <hr />
       <EditTable />
-      <button className="btn btn-white shadow-radius font-bold">
+      <button className="btn btn-white shadow-radius font-weight-bold">
         +<span> Add Another Product</span>
       </button>
       <hr />

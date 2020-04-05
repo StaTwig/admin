@@ -26,7 +26,7 @@ const resetPasswordPage = () => {
                   <div className="form-group">
                     <img alt="" src={Key} className="icon" />
                     <input type={passwordType ? 'password' : 'text'} className="form-control"
-                      value=""
+                      //value=""
                       placeholder="Password" />
                     <img
                       className="showpassword"
@@ -38,7 +38,7 @@ const resetPasswordPage = () => {
                   <div className="form-group">
                     <img alt="" src={Key} className="icon" />
                     <input type={passwordType ? 'password' : 'text'} className="form-control"
-                      value=""
+                     // value=""
                       placeholder="Confirm Password" />
                     <img
                       className="showpassword"

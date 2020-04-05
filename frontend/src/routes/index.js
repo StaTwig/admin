@@ -30,23 +30,23 @@ import './style.scss';
 const routes = (
   <Switch>
     <Route exact path="/" component={Home} />
-    <Route path="/overview" component={requireAuth(OverView)} />
+    <Route path="/overview" component={OverView} />
     <Route path="/login" component={Login} />
     <Route path="/verify" component={Verify} />
     <Route path="/signup" component={Signup} />
     <Route path="/forgotPassword" component={ForgotPassword} />
     <Route path="/resetPassword" component={resetPasswordPage} />
-    <Route path="/landingpage" component={requireAuth(LandingPage)} />
-    <Route path="/profile" component={requireAuth(Profile)} />
-    <Route path="/adminprofile" component={requireAuth(AdminProfile)} />
-    <Route path="/shipments" component={requireAuth(Shipment)} />
-    <Route path="/newshipment" component={requireAuth(NewShipment)} />
-    <Route path="/verifyshipment" component={requireAuth(VerifyShipment)} />
-    <Route path="/inventory" component={requireAuth(Inventory)} />
-    <Route path="/newinventory" component={requireAuth(NewInventory)} />
-    <Route path="/trackAndTrace" component={requireAuth(trackAndTrace)} />
-    <Route path="/tracing" component={requireAuth(Tracing)} />
-    <Route path="/network" component={requireAuth(Network)} />
+    <Route path="/landingpage" component={LandingPage} />
+    <Route path="/profile" component={Profile} />
+    <Route path="/adminprofile" component={AdminProfile} />
+    <Route path="/shipments" component={Shipment} />
+    <Route path="/newshipment" component={NewShipment} />
+    <Route path="/verifyshipment" component={VerifyShipment} />
+    <Route path="/inventory" component={Inventory} />
+    <Route path="/newinventory" component={NewInventory} />
+    <Route path="/trackAndTrace" component={trackAndTrace} />
+    <Route path="/tracing" component={Tracing} />
+    <Route path="/network" component={Network} />
     <Route component={NoMatch} />
   </Switch>
 )

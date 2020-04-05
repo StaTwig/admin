@@ -9,7 +9,6 @@ const ButtonGroup = () => {
       <button className="year">This Month</button>
       <button className="year">This Week</button>
       <button className="year">Today</button>
-
     </div>
   );
 };

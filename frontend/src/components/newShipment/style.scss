@@ -2,8 +2,12 @@
 
 
 .NewShipment {
-  padding-left: 3rem;
   padding-right: 3rem;
+    padding-left: 3rem;
+    @media (max-width: $md) {
+      padding-right: 10px;
+      padding-left: 10px;
+    }
 
   .form-group,
   .input-group {
@@ -14,7 +18,7 @@
     label {
       color: #707070;
       text-align: left;
-      font-size: 16px;
+      font-size: 13px;
     }
 
     .form-control {
@@ -22,10 +26,27 @@
       background: transparent;
       border-bottom: 2px solid #d6d6d6;
       border-radius: 0;
-      // color: #A8A8A8;
       color: $black;
-      flex-basis: 65%;
+      flex-basis: 55%;
       flex-grow: inherit;
+      font-size: 10px;
+    }
+
+    @media (min-width: $xl) {
+      label {
+        font-size: 16px;
+      }
+  
+      .form-control {
+        border: none;
+        background: transparent;
+        border-bottom: 2px solid #d6d6d6;
+        border-radius: 0;
+        color: $black;
+        flex-basis: 65%;
+        flex-grow: inherit;
+        font-size: 14px;
+      }
     }
   }
 

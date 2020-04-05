@@ -1,150 +1,238 @@
-@import '../../assets/styles/global.scss';
+@import "../../assets/styles/global.scss";
 
 .inventory {
-    @media (min-width: $xl){
-        padding-right: 3rem;
-        padding-left: 3rem;
+  padding-right: 3rem;
+  padding-left: 3rem;
+  @media (max-width: $md) {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  .full-width-ribben {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background-color: #eaeaea;
+    .filter {
+      margin-left: 9rem;
+      margin-right: 3rem;
+    }
+  }
+
+  .ribben-space {
+    margin-top: 8rem;
+  }
+
+  .fix-wrap {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    @media (min-width: 1600px) {
+      flex-wrap: nowrap;
+      justify-content: space-between;
+    }
+  }
+
+  .list-container {
+    h4 {
+      color: $OBBlue;
+      font-weight: 400;
+      font-size: 16px;
+    }
+
+    .btn {
+      font-size: 11px;
+      padding: 0;
+    }
+
+    .overflow {
+      .col-sm-6 {
+        margin-top: 12px;
+        padding-bottom: 8px;
+      }
+    }
+
+    .round-sign {
+      border-radius: 100%;
+      font: Bold 13px Roboto;
+      letter-spacing: 0px;
+      color: #707070;
+      padding: 5px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    .ellipseOne {
+      background-color: #ffbcc4;
+    }
+
+    .ellipseTwo {
+      background-color: #c1e3f2;
+    }
+
+    .ellipseThree {
+      background-color: #ffc18c;
+    }
+
+    .ellipseFour {
+      background-color: #ffef83;
+    }
+
+    p {
+      font-size: 10px;
+      margin-top: 0.5rem;
+      text-align: center;
+      min-height: 30px;
+      margin-bottom: 0.2rem;
+    }
+
+    h3 {
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .overflow {
+      overflow: auto;
+      height: 400px;
+    }
+  }
+
+  .panel {
+    box-shadow: 0px 3px 6px $grey;
+    border-radius: 15px;
+    background-color: $white;
+    padding: 20px 20px 5px 20px;
+    margin-top: 20px;
+    display: flex;
+    align-items: flex-start;
+
+    & > .d-flex {
+      margin-top: 15px;
+    }
+
+    @media screen and (max-width: 768px) {
+      border-right: none;
+      justify-content: flex-start;
+    }
+
+    @media (max-width: $lg) {
+      &:nth-child(2) {
+        margin-right: 0;
+      }
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    .picture {
+      width: 40px;
+      height: 40px;
+      box-shadow: 0px 3px 6px #00000029;
+      border-radius: 50%;
+      justify-content: center;
+      align-items: center;
+      margin-right: 13px;
+      display: flex;
+
+      @media (min-width: $xl) {
+        width: 60px;
+        height: 60px;
       }
 
-    .fix-wrap {
-        flex-wrap: wrap;
-        justify-content: space-between;
-        @media (min-width: 1600px) {
-            flex-wrap: nowrap;
-            justify-content: space-between;
-        }
+      img {
+        width: 40px;
+        height: 18px;
+      }
+
+      &.truck-bg {
+        background: $deepGreen;
+      }
+
+      &.sent-bg {
+        background: $lightBlue;
+      }
+
+      &.recived-bg {
+        background: $darkYellow;
+      }
+
+      &.transit-bg {
+        background: $C0Blue;
+      }
     }
 
-    .list-container {
+    .tab-container {
+      display: flex;
+      justify-content: space-between;
+      .tab-item {
+        font-size: 8px;
+        color: #707070;
+        margin-right: 3px;
+        cursor: pointer;
 
-        h4 {
-            color: $OBBlue;
+        &.active {
+          color: #000000;
+          font-weight: bold;
+          position: relative;
+          &:after {
+            content: "";
+            border-bottom: 1.2px solid #000000;
+            position: absolute;
+            width: 100%;
+            bottom: 0;
+            left: 0;
+            top: 12px;
+          }
         }
-
-        .round-sign {
-            border-radius: 100%;
-            font: Bold 16px Roboto;
-            letter-spacing: 0px;
-            color: #707070;
-            padding: 5px;
-            width: 65px;
-            height: 65px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .ellipseOne {
-            background-color: #FFBCC4;
-        }
-
-        .ellipseTwo {
-            background-color: #C1E3F2;
-        }
-
-        .ellipseThree {
-            background-color: #FFC18C;
-        }
-
-        .ellipseFour {
-            background-color: #FFEF83;
-        }
-
-        p {
-            font-size: 10px;
-            margin-top: .5rem;
-            text-align: center;
-            min-height: 30px;
-            margin-bottom: .2rem;
-        }
-
-        h3 {
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .overflow {
-            overflow: auto;
-            height: 400px;
-        }
+      }
     }
 
-    .panel {
-        box-shadow: 0px 3px 6px $grey;
-        border-radius: 15px;
-        background-color: $white;
-        flex-basis: 48%;
-        margin-top: 2rem;
-        margin-right: 1rem;
-        padding: 30px;
-        @media (min-width: $xl) {
-            flex-basis: 30%;
-        }
-
-        @media (max-width: $xl) {
-            &:nth-child(2) {
-                margin-right: 0;
-            }
-        }
-
-        &:last-child {
-            margin-right: 0;
-        }
-
-        .picture {
-            width: 60px;
-            height: 60px;
-            box-shadow: 0px 3px 6px #00000029;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-right: 2rem;
-
-            img {
-                width: 35px;
-                height: 26px;
-            }
-
-            &.truck-bg {
-                background: $deepGreen;
-            }
-
-            &.sent-bg {
-                background: $lightBlue;
-            }
-
-            &.recived-bg {
-                background: $darkYellow;
-            }
-
-            &.transit-bg {
-                background: $C0Blue;
-            }
-        }
-
-        .fontSize25 {
-            font-size: 23px;
-        }
-
-        .fontSize30 {
-            font-size: 30px;
-        }
-
-        .truck-text {
-            color: $deepGreen;
-        }
-
-        .sent-text {
-            color: $lightBlue;
-        }
-
-        .recived-text {
-            color: $darkYellow;
-        }
-
-        .transit-text {
-            color: $deepBlue;
-        }
+    .title {
+      font-size: 14px;
+      line-height: 12px;
+      font-weight: bold;
+      color: #707070;
+      margin-bottom: 8px;
+      @media (min-width: $xl) {
+        font-size: 14px;
+      }
     }
+
+    .count {
+      font-size: 26px;
+      margin-top: 12px;
+      font-weight: bold;
+    }
+
+    .dayStatus {
+      font-size: 9px;
+      align-self: flex-end;
+      color: $black;
+    }
+
+    &:after {
+      border: 1px solid $lightGrey;
+      height: 50px;
+    }
+
+    .truck-text {
+      color: $deepGreen;
+    }
+
+    .sent-text {
+      color: $lightBlue;
+    }
+
+    .recived-text {
+      color: $darkYellow;
+    }
+
+    .transit-text {
+      color: $deepBlue;
+    }
+  }
 }

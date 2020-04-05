@@ -7,14 +7,25 @@ footer {
   justify-content: center;
   color: $white;
   font-size: 12px;
+  position: fixed;
+  bottom: 3rem;
+  align-self: center;
 
   p {
     margin-bottom: 0;
   }
 
-  .branding {
+  .footer-branding {
     display: flex;
     margin-top: .5rem;
+
+    img {
+      width: 80px;
+    }
+
+    @media screen and (max-width: 768px){
+      width: 150px;
+    }
 
     h1 {
       font-size: 19px;

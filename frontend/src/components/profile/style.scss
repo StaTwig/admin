@@ -2,8 +2,12 @@
 
 
 .profile {
-  padding-left: 3rem;
   padding-right: 3rem;
+    padding-left: 3rem;
+    @media (max-width: $md) {
+      padding-right: 10px;
+      padding-left: 10px;
+    }
 
   .divider {
     border: 1px solid $d6Grey;
