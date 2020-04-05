@@ -69,8 +69,8 @@ const HomeContainer = (props) => {
               <img src={logo} width="450" height="60" />
               <p className="hero-paragraph">
                 {' '}
-                Vaccine ledger is a blockchain based platform<br />to track and
-                trace vaccines journey acreoss the<br />supply chain
+                Vaccine ledger is a block-chain based platform<br />to track and
+                trace vaccines journey across the<br />supply chain
               </p>
             </div>
             <img src={lap} alt="vaccinedashboard" className="hero-image" />
