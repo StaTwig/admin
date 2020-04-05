@@ -9,7 +9,7 @@ import HomeSelectedIcon from '../../assets/icons/Overviewselected.png';
 import shipIcon from '../../assets/icons/Shippment.png';
 import InventoryIcon from '../../assets/icons/Inventory.png';
 import trackIcon from '../../assets/icons/Track_Trace.png';
-import NetworkIcon from '../../assets/icons/NetworkSelected.svg';
+import NetworkIcon from '../../assets/icons/Network.svg';
 import shipSelectedIcon from '../../assets/icons/Shippmentselected.png';
 import InventorySelectedIcon from '../../assets/icons/Inventoryselected.png';
 import trackSelectedIcon from '../../assets/icons/Track_Traceselected.png';

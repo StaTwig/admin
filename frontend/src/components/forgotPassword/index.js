@@ -15,7 +15,7 @@ const ForgotPassword = () => {
             <div className="form-content">
               <img className="logo" src={logo} />
               <h1>Welcome</h1>
-              <p>Rest you're Password</p>
+              <p>Reset you're Password</p>
             </div>
           </div>
           <div className="col-sm-6 col-lg-5">
@@ -27,7 +27,7 @@ const ForgotPassword = () => {
                     <img alt="" src={Mail} className="icon" />
                     <input type="email"
                       className="form-control"
-                      value=""
+                     //value="" 
                       placeholder="Email" />
                   </div>
                   <div className="text-center">
