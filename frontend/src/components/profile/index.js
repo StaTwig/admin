@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ProfilePic from "../../assets/brands/user-image/Image73@2x.png";
 import Pen from "../../assets/icons/pen.svg";
 import './style.scss';
-import { SERVER_URL } from '../../config';
+import { config } from '../../config';
 const axios = require("axios");
 
 class Profile extends React.Component{
@@ -19,7 +19,7 @@ class Profile extends React.Component{
     this.onChange = this.onChange.bind(this);
 }
 componentDidMount() {
-  axios.get(`${SERVER_URL}/usermanagement/api/auth/userInfo`)
+  axios.get(config().userInfoUrl)
     .then(res => {
       const prof = res.data;
       this.setState({profile : prof})
@@ -43,12 +43,12 @@ onChange(e)  {
     console.log(this.state.selectedFile)
     const formData = new FormData();
     formData.append('profile',this.state.selectedFile);
-    const config = {
+    const configs = {
         headers: {
             'content-type': 'multipart/form-data'
         }
     };
-    axios.post(`${SERVER_URL}/usermanagement/api/auth/upload`,formData,config)
+    axios.post(config().upload,formData,configs)
         .then((response) => {
             alert("The file is successfully uploaded" + response);
         }).catch((error) => {
