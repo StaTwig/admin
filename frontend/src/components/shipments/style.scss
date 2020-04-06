@@ -60,6 +60,7 @@
           align-items: center;
           margin-right: 13px;
           display: flex;
+          
     
           @media (min-width: $xl) {
             width: 60px;
@@ -80,7 +81,8 @@
           }
     
           &.recived-bg {
-            background: #FA7923;
+            background: #fed8b1;
+            
           }
     
           &.transit-bg {
