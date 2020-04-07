@@ -29,6 +29,15 @@ export const loginUser = async data => {
   }
 };
 
+export const getUserInfo = async () => {
+  try {
+    const result = await axios.get(config().userInfoUrl );
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
 // Set logged in user
 export const setCurrentUser = decoded => {
   return {

@@ -20,7 +20,7 @@ const Modal = props => {
               {props.children}
             </div>
             {props.buttonName && <div className="modal-footer">
-            <button type="button" className={`btn btn-lg fontSize20 font-weight-bold ${props.buttonClass}`}>{props.buttonName}</button>
+            <button type="button" className={`btn-orange btn-lg fontSize20 font-weight-bold ${props.buttonClass}`}>{props.buttonName}</button>
           </div>}
             
           </div>
