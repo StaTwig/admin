@@ -1,38 +1,38 @@
 import React, { useState, useEffect } from 'react';
-import {
-  Link
-} from "react-router-dom";
-import { logoutUser } from '../../actions/userActions';
+import { Link } from 'react-router-dom';
+import { getUserInfo, logoutUser } from '../../actions/userActions';
 import { useDispatch } from 'react-redux';
-import DrawerMenu from "./drawerMenu";
+import DrawerMenu from './drawerMenu';
 
 import logo from '../../assets/brands/VACCINELEDGER.png';
-import searchingIcon from "../../assets/icons/searching@2x.png";
-import bellIcon from "../../assets/icons/bellwhite.png";
-import userIcon from "../../assets/brands/user-image/Image73@2x.png";
-import dropdownIcon from "../../assets/icons/drop-down.png";
-const axios = require("axios");
-import { SERVER_URL } from '../../config';
+import searchingIcon from '../../assets/icons/searching@2x.png';
+import bellIcon from '../../assets/icons/bellwhite.png';
+import userIcon from '../../assets/brands/user-image/Image73@2x.png';
+import dropdownIcon from '../../assets/icons/drop-down.png';
 
-import './style.scss'
+import './style.scss';
 
 const Header = props => {
   const [menu, setMenu] = useState(false);
   const [sidebar, openSidebar] = useState(false);
   const dispatch = useDispatch();
   const [profile, setProfile] = React.useState([]);
-useEffect(() => {
-  axios.get(`${SERVER_URL}/usermanagement/api/auth/userInfo`)
-    .then(res => {
-      const prof =res.data;
-      setProfile(prof);
-    })
- }, [])
+  useEffect(() => {
+    async function fetchUserInfo() {
+      try {
+        const res = await getUserInfo();
+        const prof = res.data;
+        setProfile(prof);
+      } catch (e) {
+        console.log('error in fetching userinfo', e);
+      }
+    }
+  }, []);
   return (
     <div className="header">
       <div className="branding">
         <div className="mobile-menu" onClick={() => openSidebar(true)}>
-          <i className="fa fa-bars" aria-hidden="true"></i>
+          <i className="fa fa-bars" aria-hidden="true" />
         </div>
         <img src={logo} alt="vaccineledger" />
       </div>
@@ -52,42 +52,48 @@ useEffect(() => {
           </div>
 
           <div className="userPic">
-            <img src={userIcon} alt="Jhon Name" className="rounded rounded-circle" />
+            <img
+              src={userIcon}
+              alt="Jhon Name"
+              className="rounded rounded-circle"
+            />
           </div>
           <div className="userActions">
-            <img src={dropdownIcon} alt="actions" onClick={() => setMenu(!menu)} />
+            <img
+              src={dropdownIcon}
+              alt="actions"
+              onClick={() => setMenu(!menu)}
+            />
           </div>
         </div>
-        {
-          menu && <div className="slider-menu">
+        {menu && (
+          <div className="slider-menu">
             {
               <React.Fragment>
                 <div className="slider-item-text">
                   <p>Jhon Wilson</p>
                   <p>ABC Pvt. Ltd.</p>
                 </div>
-                <Link className="slider-item border-top-0" to="/profile">My profile</Link>
-                <div className="slider-item">
-                  Settings
-                </div>
-                <div className="slider-item">
-                  Change Password
-                </div>
-                <div className="slider-item" onClick={() => dispatch(logoutUser())}>
+                <Link className="slider-item border-top-0" to="/profile">
+                  My profile
+                </Link>
+                <div className="slider-item">Settings</div>
+                <div className="slider-item">Change Password</div>
+                <div
+                  className="slider-item"
+                  onClick={() => dispatch(logoutUser())}
+                >
                   Logout
                 </div>
               </React.Fragment>
-
             }
           </div>
-        }
+        )}
 
-        {
-          sidebar && <DrawerMenu {...props} close={() => openSidebar(false)} />
-        }
+        {sidebar && <DrawerMenu {...props} close={() => openSidebar(false)} />}
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default Header;
