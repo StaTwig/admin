@@ -50,7 +50,7 @@ class Profile extends React.Component {
       },
     };
     axios
-      .post(`${LOCAL_SERVER_URL_USER}/api/auth/upload`, formData, configs)
+      .post(`${TEST_SERVER_URL}/api/auth/upload`, formData, configs)
       .then(response => {
         alert('The file is successfully uploaded' + response);
       })
