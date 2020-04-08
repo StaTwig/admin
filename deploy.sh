@@ -9,6 +9,6 @@ cd -P .
 for dir in ./*/
 do cd -P "$dir" ||continue
    printf %s\\n "$PWD" >&2
-   npm install && pm2 start index.js && cd "$OLDPWD" || 
+   npm install && pm2 start && cd "$OLDPWD" || 
 ! break; done || ! cd - >&2
 #How to run trafeik in background as per the environment e.g. ./deploy.sh prod web or ./dploy prod mobile or iot
