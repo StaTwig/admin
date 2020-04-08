@@ -1,40 +1,14 @@
 #!/bin/bash
 
-for i in {0..9}
-do
-   echo "killing pm2 process with id $i "
-   pm2 stop $i
-done
-
+#Killing all the previous pm2 process
+pm2 stop all
+#starting backend services
 cd backend
-cd blockchain_service	
-pm2 start index.js
-cd ..
 
-cd log_service		
-pm2 start index.js
-cd ..
-
-cd shipping_service	
-pm2 start index.js
-cd ..
-
-cd transaction_service
-pm2 start index.js
-cd ..
-
-cd alert_service		
-pm2 start index.js
-cd ..
-
-cd inventory_service	
-pm2 start index.js
-cd ..
-
-cd notification_service	
-pm2 start index.js
-cd ..
-
-cd track_trace
-pm2 start index.js
-cd ..
+cd -P .
+for dir in ./*/
+do cd -P "$dir" ||continue
+   printf %s\\n "$PWD" >&2
+   npm install && pm2 start index.js && cd "$OLDPWD" || 
+! break; done || ! cd - >&2
+#How to run trafeik in background as per the environment e.g. ./deploy.sh prod web or ./dploy prod mobile or iot
