@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ProfilePic from '../../assets/brands/user-image/Image73@2x.png';
 import Pen from '../../assets/icons/pen.svg';
 import './style.scss';
-import {LOCAL_SERVER_URL_USER, TEST_SERVER_URL} from '../../config';
+import { config } from '../../config';
 const axios = require('axios');
 import { getUserInfo } from '../../actions/userActions';
 class Profile extends React.Component {
@@ -50,7 +50,7 @@ class Profile extends React.Component {
       },
     };
     axios
-      .post(`${TEST_SERVER_URL}/api/auth/upload`, formData, configs)
+      .post(config().upload, formData, configs)
       .then(response => {
         alert('The file is successfully uploaded' + response);
       })
