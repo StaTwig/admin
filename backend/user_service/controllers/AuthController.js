@@ -376,13 +376,26 @@ exports.resetPassword = [
 			}
 		}];
 		
-	exports.updateImage = [
+	exports.updateProfile = [
 		auth,		 
 		(req, res) => {
 			try {
 		
 				UserModel.findOne({email : req.user.email}).then((user) => {
 					if (user) {
+						if(req.body.name){
+							user.name = req.body.name;
+						}
+						if(req.body.organization){
+							user.organization = req.body.organization;
+						}
+						if(req.body.email){
+							user.email = req.body.email;
+						}
+						if(req.body.phone){
+							user.phone = req.body.phone;
+						}
+						if(req.file){		
 						console.log(req.file);
 						base64Img.base64('uploads/'+req.file.filename, function(err, data) {
 						user.profile_picture = data;
@@ -391,12 +404,12 @@ exports.resetPassword = [
 								user.save(function (err) {
 									if (err) { return apiResponse.ErrorResponse(res, err); }
 									
-								});
-								
-						})
+								});								
+							})
+						}
 					}
 					console.log("Updated")
-					return apiResponse.successResponse(res,"Updated image");
+					return apiResponse.successResponse(res,"Updated");
 				});
 					
 			
@@ -404,10 +417,37 @@ exports.resetPassword = [
 				return apiResponse.ErrorResponse(res, err);
 			}
 		}];
-
+		exports.uploadImage = [
+			auth,		 
+			(req, res) => {
+				try {
+			
+					UserModel.findOne({email : req.user.email}).then((user) => {
+						if (user) {
 		
-		
-exports.createUserAddress = [
+							console.log(req.file);
+							base64Img.base64('uploads/'+req.file.filename, function(err, data) {
+							user.profile_picture = data;
+							user.image_location = req.file.filename;
+									// Save user.
+									user.save(function (err) {
+										if (err) { return apiResponse.ErrorResponse(res, err); }
+										
+									});								
+								})
+							}
+						
+						console.log("Updated")
+						return apiResponse.successResponse(res,"Updated");
+					});
+						
+				
+				} catch (err) {
+					return apiResponse.ErrorResponse(res, err);
+				}
+			}];
+					
+	exports.createUserAddress = [
         	async (req, res) => {
                 	try {
                                 const response = await axios.get(`${blockchain_service_url}/createUserAddress`);

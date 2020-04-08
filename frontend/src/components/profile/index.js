@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import ProfilePic from '../../assets/brands/user-image/Image73@2x.png';
 import Pen from '../../assets/icons/pen.svg';
 import './style.scss';
-import {SERVER_URL, TEST_SERVER_URL} from '../../config';
+import {LOCAL_SERVER_URL_USER, TEST_SERVER_URL} from '../../config';
 const axios = require('axios');
 import { getUserInfo } from '../../actions/userActions';
 class Profile extends React.Component {
@@ -21,8 +21,9 @@ class Profile extends React.Component {
   async componentDidMount() {
     const response = await getUserInfo();
     if (response.status === 200) {
-      const prof = res.data;
+      const prof = response.data;
       this.setState({ profile: prof });
+      console.log
     } else {
       //error
     }
@@ -43,13 +44,13 @@ class Profile extends React.Component {
     console.log(this.state.selectedFile);
     const formData = new FormData();
     formData.append('profile', this.state.selectedFile);
-    const config = {
+    const configs = {
       headers: {
         'content-type': 'multipart/form-data',
       },
     };
     axios
-      .post(`${TEST_SERVER_URL}/usermanagement/api/auth/upload`, formData, config)
+      .post(`${TEST_SERVER_URL}/api/auth/upload`, formData, configs)
       .then(response => {
         alert('The file is successfully uploaded' + response);
       })
