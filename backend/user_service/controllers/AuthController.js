@@ -416,7 +416,7 @@ exports.createUserAddress = [
                                                 address
                                           };
 				const response_grant = await axios.post(`${blockchain_service_url}/grantPermission`,userData);
-				res.json({address:items});
+				res.json({address:address});
                 	} catch (err) {
                         	return apiResponse.ErrorResponse(res, err);
                 	}
