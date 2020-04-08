@@ -22,7 +22,7 @@ const PurchaseForm = () => {
       </div>
       <div className="d-flex justify-content-between">
         <div className="input-group">
-          <label htmlFor="shipmentId">Delievery To</label>
+          <label htmlFor="shipmentId">Delivery To</label>
           <input type="text" className="form-control" placeholder="Select Person" />
           <div className="input-group-append">
             <img src={updownArrow} alt="downarrow" width="16" height="16" />

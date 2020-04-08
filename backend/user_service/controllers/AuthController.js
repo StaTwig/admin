@@ -13,7 +13,6 @@ const auth = require("../middlewares/jwt");
 const axios = require('axios');
 const dotenv = require('dotenv').config();
 const blockchain_service_url = process.env.URL;
-const stream_name = process.env.SHIPMENT_STREAM;
 
 /**
  * User registration.
@@ -187,8 +186,7 @@ exports.verifyConfirm = [
 							if(user.confirmOTP == req.body.otp){
                 const response = await axios.get(`${blockchain_service_url}/createUserAddress`);
                 const address = response.data.items;
-                const userData = {
-                  stream: stream_name,
+		const userData = {
                   address
                 };
                 await axios.post(`${blockchain_service_url}/grantPermission`,userData); //Granting permissons to the user
@@ -362,12 +360,17 @@ exports.resetPassword = [
 						console.log(user);
 						let user_data = {
 							name : user.name,
-							profile_picture : user.profile_picture
+							email : user.email,
+							phone : user.phone,
+							address : user.address,
+							organization : user.organization,
+							status : user.status,
+							profile_picture : user.profile_picture,
 						}
-						return apiResponse.successResponseWithData(res,"Sent image image",user_data);
+						return apiResponse.successResponseWithData(res,"Sent Profile",user_data);
 					}
 					else {
-					console.log("Updated")
+					console.log("Failed")
 					return apiResponse.ErrorResponse(res);
 					}
 				});
@@ -378,27 +381,46 @@ exports.resetPassword = [
 			}
 		}];
 		
-	exports.updateImage = [
+	exports.updateProfile = [
 		auth,		 
 		(req, res) => {
 			try {
 		
 				UserModel.findOne({email : req.user.email}).then((user) => {
 					if (user) {
-						console.log(req.file);
-						base64Img.base64('uploads/'+req.file.filename, function(err, data) {
-						user.profile_picture = data;
-						user.image_location = req.file.filename;
-								// Save user.
-								user.save(function (err) {
-									if (err) { return apiResponse.ErrorResponse(res, err); }
+						console.log(user.name)
+						if(req.body.name){
+							user.name = req.body.name;
+							console.log(user.name)
+						}
+						if(req.body.organization){
+							user.organization = req.body.organization;
+						}
+						if(req.body.email){
+							user.email = req.body.email;
+						}
+						if(req.body.phone){
+							user.phone = req.body.phone;
+						}
+						user.save(function (err) {
+							if (err) { return apiResponse.ErrorResponse(res, err); }
+							
+						});	
+						// if(req.file){		
+						// console.log(req.file);
+						// base64Img.base64('uploads/'+req.file.filename, function(err, data) {
+						// user.profile_picture = data;
+						// user.image_location = req.file.filename;
+						// 		// Save user.
+						// 		user.save(function (err) {
+						// 			if (err) { return apiResponse.ErrorResponse(res, err); }
 									
-								});
-								
-						})
+						// 		});								
+						// 	})
+						// }
 					}
 					console.log("Updated")
-					return apiResponse.successResponse(res,"Updated image");
+					return apiResponse.successResponse(res, user.name + " user Updated");
 				});
 					
 			
@@ -406,26 +428,50 @@ exports.resetPassword = [
 				return apiResponse.ErrorResponse(res, err);
 			}
 		}];
-
+		exports.uploadImage = [
+			auth,		 
+			(req, res) => {
+				try {
+			
+					UserModel.findOne({email : req.user.email}).then((user) => {
+						if (user) {
 		
-		
-		
+							console.log(req.file);
+							base64Img.base64('uploads/'+req.file.filename, function(err, data) {
+							user.profile_picture = data;
+							user.image_location = req.file.filename;
+									// Save user.
+									user.save(function (err) {
+										if (err) { return apiResponse.ErrorResponse(res, err); }
+										
+									});								
+								})
+							}
+						
+						console.log("Updated")
+						return apiResponse.successResponse(res,"Updated");
+					});
+						
+				
+				} catch (err) {
+					return apiResponse.ErrorResponse(res, err);
+				}
+			}];
+					
 	exports.createUserAddress = [
         	async (req, res) => {
                 	try {
-                                 const response = await axios.get(`${blockchain_service_url}/createUserAddress`);
-                                 const items = response.data.items;
+                                const response = await axios.get(`${blockchain_service_url}/createUserAddress`);
+                                const address = response.data.items;
                                         const userData = {
-                                                stream: stream_name,
-                                                address: items
+                                                address
                                           };
 				const response_grant = await axios.post(`${blockchain_service_url}/grantPermission`,userData);
-				res.json({address:items});
+				res.json({address:address});
                 	} catch (err) {
                         	return apiResponse.ErrorResponse(res, err);
                 	}
         	}
 	];
-	
 	
 

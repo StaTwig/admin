@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "start": "pm2 start index.js --watch"
+    "start": "node blockchain_server.js"
   },
   "author": "",
   "license": "ISC",

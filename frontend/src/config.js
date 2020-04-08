@@ -15,7 +15,7 @@ export function config() {
       createShipmentUrl: `${LOCAL_SERVER_URL_SHIPMENT}/api/shipping/createShipment`,
       addInventoryUrl: `${LOCAL_SERVER_URL_INVENTORY}/api/inventory/addNewInventory`,
       userInfoUrl: `${LOCAL_SERVER_URL_USER}/api/auth/userInfo`,
-
+      upload: `${LOCAL_SERVER_URL_USER}/api/auth/upload`
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -26,6 +26,7 @@ export function config() {
       inventoriesUrl: `${TEST_SERVER_URL}/inventorymanagement/inventory/getAllInventoryDetails`,
       addInventoryUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/addNewInventory`,
       userInfoUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/userInfo`,
+      upload: `${TEST_SERVER_URL}/usermanagement/api/auth/upload`
     }
   };
 
