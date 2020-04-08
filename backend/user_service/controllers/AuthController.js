@@ -13,7 +13,6 @@ const auth = require("../middlewares/jwt");
 const axios = require('axios');
 const dotenv = require('dotenv').config();
 const blockchain_service_url = process.env.URL;
-const stream_name = process.env.SHIPMENT_STREAM;
 
 /**
  * User registration.
@@ -187,8 +186,7 @@ exports.verifyConfirm = [
 							if(user.confirmOTP == req.body.otp){
                 const response = await axios.get(`${blockchain_service_url}/createUserAddress`);
                 const address = response.data.items;
-                const userData = {
-                  stream: stream_name,
+		const userData = {
                   address
                 };
                 await axios.post(`${blockchain_service_url}/grantPermission`,userData); //Granting permissons to the user
@@ -409,23 +407,20 @@ exports.resetPassword = [
 
 		
 		
-		
-	exports.createUserAddress = [
+exports.createUserAddress = [
         	async (req, res) => {
                 	try {
-                                 const response = await axios.get(`${blockchain_service_url}/createUserAddress`);
-                                 const items = response.data.items;
+                                const response = await axios.get(`${blockchain_service_url}/createUserAddress`);
+                                const address = response.data.items;
                                         const userData = {
-                                                stream: stream_name,
-                                                address: items
+                                                address
                                           };
 				const response_grant = await axios.post(`${blockchain_service_url}/grantPermission`,userData);
-				res.json({address:items});
+				res.json({address:address});
                 	} catch (err) {
                         	return apiResponse.ErrorResponse(res, err);
                 	}
         	}
 	];
-	
 	
 
