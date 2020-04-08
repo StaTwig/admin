@@ -383,8 +383,10 @@ exports.resetPassword = [
 		
 				UserModel.findOne({email : req.user.email}).then((user) => {
 					if (user) {
+						console.log(user.name)
 						if(req.body.name){
 							user.name = req.body.name;
+							console.log(user.name)
 						}
 						if(req.body.organization){
 							user.organization = req.body.organization;
@@ -395,21 +397,25 @@ exports.resetPassword = [
 						if(req.body.phone){
 							user.phone = req.body.phone;
 						}
-						if(req.file){		
-						console.log(req.file);
-						base64Img.base64('uploads/'+req.file.filename, function(err, data) {
-						user.profile_picture = data;
-						user.image_location = req.file.filename;
-								// Save user.
-								user.save(function (err) {
-									if (err) { return apiResponse.ErrorResponse(res, err); }
+						user.save(function (err) {
+							if (err) { return apiResponse.ErrorResponse(res, err); }
+							
+						});	
+						// if(req.file){		
+						// console.log(req.file);
+						// base64Img.base64('uploads/'+req.file.filename, function(err, data) {
+						// user.profile_picture = data;
+						// user.image_location = req.file.filename;
+						// 		// Save user.
+						// 		user.save(function (err) {
+						// 			if (err) { return apiResponse.ErrorResponse(res, err); }
 									
-								});								
-							})
-						}
+						// 		});								
+						// 	})
+						// }
 					}
 					console.log("Updated")
-					return apiResponse.successResponse(res,"Updated");
+					return apiResponse.successResponse(res, user.name + " user Updated");
 				});
 					
 			
