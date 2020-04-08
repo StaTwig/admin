@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 var base64Img = require('base64-img');
-const defaultdp = base64Img.base64('uploads/default.jpg', function(err, data) {
+const defaultdp = base64Img.base64('./default.jpg', function(err, data) {
 	return data;
 })
 var UserSchema = new mongoose.Schema({
@@ -14,8 +14,8 @@ var UserSchema = new mongoose.Schema({
 	status: {type: Boolean, required: true, default: 1},
 	profile_picture: {type: String, required:false, default: defaultdp},
 	image_location: {type:String,require:false},
-	organization: {type: String, required: false},
-	phone: {type: String, required: false}
+	organization: {type: String, required: false, default: ''},
+	phone: {type: String, required: false, default: ''}
 }, {timestamps: true});
 
 // Virtual for user's full name

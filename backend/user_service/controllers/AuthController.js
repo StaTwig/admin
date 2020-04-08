@@ -360,12 +360,17 @@ exports.resetPassword = [
 						console.log(user);
 						let user_data = {
 							name : user.name,
-							profile_picture : user.profile_picture
+							email : user.email,
+							phone : user.phone,
+							address : user.address,
+							organization : user.organization,
+							status : user.status,
+							profile_picture : user.profile_picture,
 						}
-						return apiResponse.successResponseWithData(res,"Sent image image",user_data);
+						return apiResponse.successResponseWithData(res,"Sent Profile",user_data);
 					}
 					else {
-					console.log("Updated")
+					console.log("Failed")
 					return apiResponse.ErrorResponse(res);
 					}
 				});
