@@ -8,7 +8,7 @@ import Table from '../../shared/table';
 import './style.scss';
 
 
-const trackAndTrace = () => {
+const trackAndTrace = (props) => {
   return (
     <div className="trackTrace">
       <div className="d-flex justify-content-between mb-3">
@@ -28,7 +28,7 @@ const trackAndTrace = () => {
       <StatusBar />
       <div className="ribben-space ">
         <h1>Latest Transactions</h1>
-        <Table />
+        <Table {...props} />
       </div>
     </div >
   );
