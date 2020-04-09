@@ -84,9 +84,9 @@ class Profile extends React.Component {
   }
 
   onChange(e) {
-    this.setState({ selectedFile: event.target.files[0] });
+    this.setState({ selectedFile: event.target.files[0] }) 
+    console.log(this.state.selectedFile)
     e.preventDefault();
-    console.log(this.state.selectedFile);
     const formData = new FormData();
     formData.append('profile', this.state.selectedFile);
     const configs = {
@@ -94,15 +94,20 @@ class Profile extends React.Component {
         'content-type': 'multipart/form-data',
       },
     };
+    if(this.state.selectedFile){
     axios
       .post(config().upload, formData, configs)
       .then(response => {
-        alert('The file is successfully uploaded' + response);
+        alert('The file is successfully uploaded');
       })
       .catch(error => {
         alert(error);
       });
     this.setState({ selectedFile: null });
+    }
+    else{
+      alert('File not selected, please try again')
+    }
   }
 
   async onSubmit() {
