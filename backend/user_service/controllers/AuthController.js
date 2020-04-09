@@ -541,6 +541,7 @@ exports.uploadImage = [
         if (user) {
           console.log(req.file);
           base64Img.base64('uploads/' + req.file.filename, function(err, data) {
+            var base64ImgData = data;
             user.profile_picture = data;
             user.image_location = req.file.filename;
             // Save user.
@@ -548,12 +549,13 @@ exports.uploadImage = [
               if (err) {
                 return apiResponse.ErrorResponse(res, err);
               }
+              console.log('Updated');
+              return apiResponse.successResponseWithData(res, 'Updated', base64ImgData);
             });
           });
         }
 
-        console.log('Updated');
-        return apiResponse.successResponse(res, 'Updated');
+        
       });
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);

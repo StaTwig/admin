@@ -85,20 +85,22 @@ class Profile extends React.Component {
 
   onChange(e) {
     this.setState({ selectedFile: event.target.files[0] }) 
-    console.log(this.state.selectedFile)
+    console.log(event.target.files[0])
     e.preventDefault();
     const formData = new FormData();
-    formData.append('profile', this.state.selectedFile);
+    formData.append('profile', event.target.files[0]);
     const configs = {
       headers: {
         'content-type': 'multipart/form-data',
       },
     };
-    if(this.state.selectedFile){
+    if(event.target.files[0]){
     axios
       .post(config().upload, formData, configs)
       .then(response => {
-        alert('The file is successfully uploaded');
+        alert('Profile Picture updated Successfully');
+        console.log(response);
+        this.setState({ profile_picture: response.data.data }) 
       })
       .catch(error => {
         alert(error);
