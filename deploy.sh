@@ -16,7 +16,22 @@ do cd -P "$dir" ||continue
 cd ..
 echo $(pwd)
 #start frontend
-
+cd frontend
+if [ "$1" -eq "PROD" ] || [ "$1" == "TEST" ];
+then
+echo "Building frontend in $1 mode....."
+sudo systemctl stop nginx
+npm install
+npm run build
+sudo systemctl start nginx
+sudo systemctl status nginx
+else
+echo "Building and starting forntend in local mode...."
+npm install
+npm run build
+npm start &
+fi
+cd ..
 
 #start api gateway - traefik
 killall traefik
