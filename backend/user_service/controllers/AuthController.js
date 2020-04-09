@@ -481,7 +481,6 @@ exports.userInfo = [
       console.log(req.user.email);
       UserModel.findOne({ email: req.user.email }).then(user => {
         if (user) {
-          console.log(user);
           let user_data = {
             name: user.name,
             email: user.email,
