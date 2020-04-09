@@ -1,5 +1,7 @@
 const init = require('../common/init');
-var shell = require('shelljs')
+const dotenv = require('dotenv').config();
+
+var shell = require('shelljs');
 
 exports.createUser = function (req, res) {
     const multichain = init.getMultichain();
@@ -11,9 +13,15 @@ exports.createUser = function (req, res) {
 
 exports.grantPermission = function (req, res) {
     const multichain = init.getMultichain();
-	var stream = req.body.stream;
- 	var address = req.body.address;
-        shell.exec("multichain-cli chain1 grant " + address + " " + stream + ".write")
-        shell.exec("multichain-cli chain1 grant " + address + " send");
+	var address = req.body.address;
+	var streams = process.env.STREAMS.split(",");
+	
+	for (var i = 0; i < streams.length; i++) {
+	var stream = streams[i];
+	shell.exec("multichain-cli chain1 grant " + address + " " + stream + ".write")
+	}
+
+	shell.exec("multichain-cli chain1 grant " + address + " send");
         res.json("success");
 }
+

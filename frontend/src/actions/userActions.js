@@ -2,6 +2,15 @@ import { AUTH_SUCCESS, AUTH_ERROR } from '../constants/userConstants';
 import { config } from '../config';
 import axios from 'axios';
 
+export const updateProfile = async (data) => {
+  try  {
+    const result = await  axios.post(config().updateProfileUrl, data);
+    return result;
+  }catch(e) {
+    return e.response;
+  }
+};
+
 export const verifyOtp = async (data) => {
   try  {
     const result = await  axios.post(config().verifyOtpUrl, data);

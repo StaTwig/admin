@@ -13,7 +13,8 @@ router.post("/forgotPassword", AuthController.forgotPassword);
 router.post("/resetPassword", AuthController.resetPassword);
 router.get("/userInfo", AuthController.userInfo);
 // router.get("/image", AuthController.fetchImage);
-router.post("/upload", upload.single("profile"), AuthController.updateImage);
+router.post("/updateProfile", AuthController.updateProfile);
+router.post("/upload", upload.single("profile"), AuthController.uploadImage);
 router.get("/createAddress", AuthController.createUserAddress);
 
 module.exports = router;
