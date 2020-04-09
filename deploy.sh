@@ -16,6 +16,8 @@ do cd -P "$dir" ||continue
 cd ..
 echo $(pwd)
 #start frontend
+echo "Frontend is commented out .Not building frontend"
+: <<'END'
 cd frontend
 if [ "$1" -eq "PROD" ] || [ "$1" == "TEST" ];
 then
@@ -32,10 +34,12 @@ npm run build
 npm start &
 fi
 cd ..
+END
 
 #start api gateway - traefik
 killall traefik
 cd apigateway
+echo $(pwd)
 if [ "$1" == "PROD" ];
 then
 echo "Starting traefik in PROD mode ......"
@@ -49,3 +53,6 @@ echo "Starting traefik in DEV mode ......"
 traefik --configFile=traefik-local-dev-api.yml &
 fi
 cd ..
+
+echo $(pwd)
+pm2 status
