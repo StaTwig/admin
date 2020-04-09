@@ -13,10 +13,24 @@ do cd -P "$dir" ||continue
    npm install && pm2 start && cd "$OLDPWD" || 
 ! break; done || ! cd - >&2
 
-
+cd ..
+echo $(pwd)
 #start frontend
 
 
 #start api gateway - traefik
-
-#How to run trafeik in background as per the environment e.g. ./deploy.sh prod web or ./dploy prod mobile or iot
+killall traefik
+cd apigateway
+if [ "$1" == "PROD" ];
+then
+echo "Starting traefik in PROD mode ......"
+traefik --configFile=traefik-cloud-prod-api.yml &
+elif [ "$1" == "TEST" ];
+then
+echo "Starting traefik in TEST mode ......"
+traefik --configFile=traefik-cloud-dev-api.yml &
+else
+echo "Starting traefik in DEV mode ......"
+traefik --configFile=traefik-local-dev-api.yml &
+fi
+cd ..
