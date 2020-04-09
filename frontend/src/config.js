@@ -33,7 +33,7 @@ export function config() {
     }
   };
 
-  const conf = confs['local'];
+  const conf = confs['test'];
   // conf = confs['local'];
   // conf = confs['preprod'];
 
