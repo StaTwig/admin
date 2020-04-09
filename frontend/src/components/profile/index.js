@@ -4,39 +4,84 @@ import Pen from '../../assets/icons/pen.svg';
 import './style.scss';
 import { config } from '../../config';
 const axios = require('axios');
-import { getUserInfo } from '../../actions/userActions';
+import { getUserInfo, updateProfile } from '../../actions/userActions';
 class Profile extends React.Component {
-  // const Profile = props => {
-  // const [file, setFile] = useState('')
-  // const [profile, setProfile] = useState('')
-  // const upload = useRef(null);
   constructor(props) {
     super(props);
     this.state = {
       selectedFile: null,
       profile: null,
+      editMode: false,
+      role: '',
+      organisation: '',
+      affiliateOrganisation: '',
+      walletAddress: '',
+      phone: '',
+      status: '',
+      email: '',
+      profileData: {},
+      profile_picture: '',
+      message: '',
     };
     this.onChange = this.onChange.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onCancel = this.onCancel.bind(this);
   }
   async componentDidMount() {
     const response = await getUserInfo();
     if (response.status === 200) {
-      const prof = response.data;
-      this.setState({ profile: prof });
-      console.log
+      const {
+        profile_picture,
+        email,
+        name,
+        phone,
+        address,
+        organisation,
+        status,
+        role,
+        affiliateOrganisation,
+      } = response.data.data;
+      this.setState({
+        profile_picture,
+        email,
+        name,
+        phone,
+        walletAddress: address,
+        organisation,
+        affiliateOrganisation,
+        status,
+        role,
+        profileData: response.data.data,
+      });
     } else {
       //error
     }
   }
 
+  onCancel() {
+    const {
+      prof,
+      email,
+      name,
+      phone,
+      address,
+      organisation,
+      affiliateOrganisation,
+      status,
+    } = this.state.profileData;
 
-  // useEffect(() => {
-  //   axios.get(`${SERVER_URL}/auth/userInfo`)
-  //     .then(res => {
-  //       const profile = res.data;
-  //       setProfile({ profile });
-  //     })
-  //  }, [])
+    this.setState({
+      editMode: false,
+      profile: prof,
+      email,
+      name,
+      phone,
+      walletAddress: address,
+      organisation,
+      affiliateOrganisation,
+      status,
+    });
+  }
 
   onChange(e) {
     this.setState({ selectedFile: event.target.files[0] });
@@ -57,10 +102,34 @@ class Profile extends React.Component {
       .catch(error => {
         alert(error);
       });
-    state = { selectedFile: null };
+    this.setState({ selectedFile: null });
   }
 
+  async onSubmit() {
+    const { name, organisation, affiliateOrganisation, phone } = this.state;
+    const data = { name, organisation, affiliateOrganisation, phone }  ;
+    const result = await updateProfile(data);
+    debugger;
+    if (result.status === 200) {
+      this.setState({ message: result.data.message, editMode: false });
+    } else {
+      this.setState({ message: 'Error while updating please try again.' });
+    }
+  }
   render() {
+    const {
+      editMode,
+      role,
+      organisation,
+      affiliateOrganisation,
+      walletAddress,
+      phone,
+      status,
+      email,
+      name,
+      message,
+      profile_picture
+    } = this.state;
     return (
       <div className="profile">
         <h1 className="breadcrumb">Profile</h1>
@@ -69,15 +138,10 @@ class Profile extends React.Component {
             <div className="d-flex flex-row justify-content-between">
               <div className="col-2">
                 <div className="userPic mb-4 mr-2">
-                  {this.state.profile ? (
-                    <img
-                      src={this.state.profile.data.profile_picture}
-                      alt="John Name"
-                      className="rounded rounded-circle"
-                    />
-                  ) : (
-                    ''
-                  )}
+                  <img
+                    src={profile_picture}
+                    className="rounded rounded-circle"
+                  />
                 </div>
                 <input
                   id="profile"
@@ -96,43 +160,112 @@ class Profile extends React.Component {
                 </button>
               </div>
               <div className="col-8 mt-5">
-                {this.state.profile ? (
-                  <h3>{this.state.profile.data.name}</h3>
+                {editMode ? (
+                  <div className="col-sm-12">
+                    <div>
+                      <label>Name </label>
+                      <input
+                        value={name}
+                        onChange={e => this.setState({ name: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <label>Role </label>
+                      <input
+                        disabled
+                        value={role}
+                        onChange={e => this.setState({ role: e.target.value })}
+                      />
+                    </div>
+                    <div>
+                      <label>Organisation</label>
+                      <input
+                        value={organisation}
+                        onChange={e =>
+                          this.setState({ organisation: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label>Affiliated Organisation</label>
+                      <input
+                        value={affiliateOrganisation}
+                        onChange={e =>
+                          this.setState({
+                            affiliateOrganisation: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label>Wallet Address</label>
+                      <input
+                        disabled
+                        value={walletAddress}
+                        onChange={e =>
+                          this.setState({ walletAddress: e.target.value })
+                        }
+                      />
+                    </div>
+                    <div>
+                      <label>Phone</label>
+                      <input
+                        value={phone}
+                        onChange={e => this.setState({ phone: e.target.value })}
+                      />
+                    </div>
+                  </div>
                 ) : (
-                  'Name'
+                  <div className="row">
+                    <ul>
+                      <li>Name</li>
+                      <li>Role</li>
+                      <li>Organisation</li>
+                      <li>Affiliated Organisation</li>
+                      <li>Wallet Address</li>
+                      <li>Email</li>
+                      <li>Phone</li>
+                      <li>Account Status</li>
+                    </ul>
+                    <ul>
+                      <li>{name}</li>
+                      <li>{role}</li>
+                      <li>{organisation}</li>
+                      <li>{affiliateOrganisation}</li>
+                      <li>{walletAddress}</li>
+                      <li>{email}</li>
+                      <li>{phone}</li>
+                      {status && <li>Active</li>}
+                    </ul>
+                  </div>
                 )}
-                <div className="row">
-                  <ul>
-                    <li>Role</li>
-                    <li>Organisation</li>
-                    <li>Affiliated Organisation</li>
-                    <li>Wallet Address</li>
-                    <li>Email</li>
-                    <li>Phone</li>
-                    <li>Account Status</li>
-                  </ul>
-                  <ul>
-                    <li>ERP Specialist</li>
-                    <li>XYZ Ltd.</li>
-                    <li>
-                      ABC Ltd. | ABC Ltd. | ABC Ltd. | ABC Ltd. | ABC Ltd.
-                    </li>
-                    <li>09hsfyaryyeryvbr77r7rfgrvrbv66787898788</li>
-                    <li>JohnDoe@gmail.com</li>
-                    <li>+91 8846554789</li>
-                    <li>Active</li>
-                  </ul>
+              </div>
+              {!editMode ? (
+                <div className="col">
+                  <button
+                    className="btn-primary btn"
+                    onClick={() => this.setState({ editMode: true })}
+                  >
+                    <img src={Pen} width="15" height="15" className="mr-3" />
+                    <span>EDIT</span>
+                  </button>
                 </div>
-              </div>
-              <div className="col">
-                <button className="btn-primary btn">
-                  <img src={Pen} width="15" height="15" className="mr-3" />
-                  <span>EDIT</span>
-                </button>
-              </div>
+              ) : (
+                <div className="col">
+                  <button className="btn-primary btn" onClick={this.onCancel}>
+                    <span>Cancel</span>
+                  </button>
+                  <button className="btn-primary btn" onClick={this.onSubmit}>
+                    <span>Submit</span>
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
+        {
+          message && <div className="alert alert-success">{message}</div>
+        }
       </div>
     );
   }
