@@ -15,7 +15,7 @@ const ForgotPassword = () => {
             <div className="form-content">
               <img className="logo" src={logo} />
               <h1>Welcome</h1>
-              <p>Reset you're Password</p>
+              <p>Reset your Password</p>
             </div>
           </div>
           <div className="col-sm-6 col-lg-5">
