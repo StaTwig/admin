@@ -48,7 +48,7 @@ const Header = props => {
           <div className="divider" />
           <div className="userName">
             <p className="cname">ABC Pvt Ltd.</p>
-            <p className="uname">Jhon Doe</p>
+            <p className="uname">John Doe</p>
           </div>
 
           <div className="userPic">
