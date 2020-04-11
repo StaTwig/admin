@@ -157,7 +157,7 @@ class Profile extends React.Component {
                   ref={ref => (this.upload = ref)}
                   style={{ display: 'none' }}
                 />
-
+                {editMode ? (
                 <button
                   type="button"
                   onClick={e => this.upload.click()}
@@ -165,6 +165,7 @@ class Profile extends React.Component {
                 >
                   Change Photo
                 </button>
+                ) : '' }
               </div>
               <div className="col-8 mt-5">
                 {editMode ? (

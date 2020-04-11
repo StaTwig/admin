@@ -16,18 +16,26 @@ const Header = props => {
   const [menu, setMenu] = useState(false);
   const [sidebar, openSidebar] = useState(false);
   const dispatch = useDispatch();
-  const [profile, setProfile] = React.useState([]);
-  useEffect(() => {
-    async function fetchUserInfo() {
-      try {
-        const res = await getUserInfo();
-        const prof = res.data;
-        setProfile(prof);
-      } catch (e) {
-        console.log('error in fetching userinfo', e);
-      }
-    }
+  const [profile, setProfile] = useState([]);
+  useEffect(() => {     
+    fetchUserInfo()
   }, []);
+
+  async function fetchUserInfo() {
+    try {
+      const res = await getUserInfo();      
+      console.log(res.data.data)
+      setProfile(res.data);
+      const {
+        profile_picture,
+        name,
+        organisation
+      } = res.data.data;
+      console.log(profile)
+    } catch (e) {
+      console.log('error in fetching userinfo', e);
+    }
+  }
   return (
     <div className="header">
       <div className="branding">
@@ -47,7 +55,7 @@ const Header = props => {
           </div>
           <div className="divider" />
           <div className="userName">
-            <p className="cname">ABC Pvt Ltd.</p>
+            <p className="cname">Organisation</p>
             <p className="uname">Jhon Doe</p>
           </div>
 
