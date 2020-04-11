@@ -1,6 +1,7 @@
 import {
   AUTH_SUCCESS,
-  AUTH_ERROR
+  AUTH_ERROR,
+  PROFILE_SUCCESS
 } from '../constants/userConstants';
 
 export const initialState = null;
@@ -14,6 +15,11 @@ export const userReducer = (state = initialState, action) => {
       };
     case AUTH_ERROR:
       return initialState
+    case PROFILE_SUCCESS:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }

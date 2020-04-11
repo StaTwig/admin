@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getUserInfo, logoutUser } from '../../actions/userActions';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import DrawerMenu from './drawerMenu';
 
 import logo from '../../assets/brands/VACCINELEDGER.png';
@@ -15,19 +15,16 @@ import './style.scss';
 const Header = props => {
   const [menu, setMenu] = useState(false);
   const [sidebar, openSidebar] = useState(false);
+
+
+  const profile = useSelector(state => {
+    return state.user;
+  });
   const dispatch = useDispatch();
-  const [profile, setProfile] = React.useState([]);
   useEffect(() => {
-    async function fetchUserInfo() {
-      try {
-        const res = await getUserInfo();
-        const prof = res.data;
-        setProfile(prof);
-      } catch (e) {
-        console.log('error in fetching userinfo', e);
-      }
-    }
+    dispatch(getUserInfo());
   }, []);
+ console.log(profile)
   return (
     <div className="header">
       <div className="branding">
@@ -47,13 +44,13 @@ const Header = props => {
           </div>
           <div className="divider" />
           <div className="userName">
-            <p className="cname">ABC Pvt Ltd.</p>
-            <p className="uname">John Doe</p>
+            <p className="cname">{profile.organisation}</p>
+            <p className="uname">{profile.name}</p>
           </div>
 
           <div className="userPic">
             <img
-              src={userIcon}
+              src={profile.profile_picture}
               alt="Jhon Name"
               className="rounded rounded-circle"
             />
@@ -71,8 +68,8 @@ const Header = props => {
             {
               <React.Fragment>
                 <div className="slider-item-text">
-                  <p>Jhon Wilson</p>
-                  <p>ABC Pvt. Ltd.</p>
+                  <p>{profile.name}</p>
+                  <p>{profile.organisation}</p>
                 </div>
                 <Link className="slider-item border-top-0" to="/profile">
                   My profile

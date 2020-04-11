@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import ProfilePic from '../../assets/brands/user-image/Image73@2x.png';
+import { useDispatch } from 'react-redux';
 import Pen from '../../assets/icons/pen.svg';
 import './style.scss';
 import { config } from '../../config';
 const axios = require('axios');
-import { getUserInfo, updateProfile } from '../../actions/userActions';
+import { getUserInfoUpdated, updateProfile, getUserInfo } from '../../actions/userActions';
 class Profile extends React.Component {
   constructor(props) {
     super(props);
@@ -28,7 +29,7 @@ class Profile extends React.Component {
     this.onCancel = this.onCancel.bind(this);
   }
   async componentDidMount() {
-    const response = await getUserInfo();
+    const response = await getUserInfoUpdated();
     if (response.status === 200) {
       const {
         profile_picture,
@@ -84,8 +85,7 @@ class Profile extends React.Component {
   }
 
   onChange(e) {
-    this.setState({ selectedFile: event.target.files[0] }) 
-    console.log(event.target.files[0])
+    this.setState({ selectedFile: event.target.files[0] })
     e.preventDefault();
     const formData = new FormData();
     formData.append('profile', event.target.files[0]);
@@ -99,13 +99,13 @@ class Profile extends React.Component {
       .post(config().upload, formData, configs)
       .then(response => {
         alert('Profile Picture updated Successfully');
-        console.log(response);
         this.setState({ profile_picture: response.data.data }) 
       })
       .catch(error => {
         alert(error);
       });
-    this.setState({ selectedFile: null });
+    this.setState({ selectedFile: null });           
+    
     }
     else{
       alert('File not selected, please try again')
@@ -119,6 +119,8 @@ class Profile extends React.Component {
     debugger;
     if (result.status === 200) {
       this.setState({ message: result.data.message, editMode: false });
+      const dispatch = useDispatch();    
+    dispatch(getUserInfo());
     } else {
       this.setState({ message: 'Error while updating please try again.' });
     }
@@ -157,7 +159,7 @@ class Profile extends React.Component {
                   ref={ref => (this.upload = ref)}
                   style={{ display: 'none' }}
                 />
-
+                {editMode ? (
                 <button
                   type="button"
                   onClick={e => this.upload.click()}
@@ -165,6 +167,7 @@ class Profile extends React.Component {
                 >
                   Change Photo
                 </button>
+                ) : '' }
               </div>
               <div className="col-8 mt-5">
                 {editMode ? (
