@@ -1,4 +1,4 @@
-import { AUTH_SUCCESS, AUTH_ERROR } from '../constants/userConstants';
+import { AUTH_SUCCESS, AUTH_ERROR, PROFILE_SUCCESS } from '../constants/userConstants';
 import { config } from '../config';
 import axios from 'axios';
 
@@ -38,14 +38,28 @@ export const loginUser = async data => {
   }
 };
 
-export const getUserInfo = async () => {
+export const getUserInfo = () => {
   try {
-    const result = await axios.get(config().userInfoUrl );
-    return result;
+    return async dispatch => {
+      const result = await axios.get(config().userInfoUrl );
+      dispatch(setProfile(result.data.data));
+      return result;
+    }
   } catch (e) {
     return e.response;
   }
 };
+
+export const getUserInfoUpdated = async () => {
+  try {    
+      const result = await axios.get(config().userInfoUrl );
+      return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+
 
 // Set logged in user
 export const setCurrentUser = decoded => {
@@ -60,5 +74,13 @@ export const logoutUser = () => {
   localStorage.removeItem('theLedgerToken')
   return {
     type: AUTH_ERROR,
+  };
+};
+
+// Set user profile
+export const setProfile = (data) => {
+  return {
+    type: PROFILE_SUCCESS,
+    payload: data,
   };
 };
