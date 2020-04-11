@@ -8,12 +8,12 @@ const Table = (props) => {
       <div className="rTable">
         <div className="rTableHeading">
           <div className="rTableHead">Product Name</div>
-          <div className="rTableHead">Quantity</div>
-          <div className="rTableHead"><span>Manufacturing Date</span></div>
-          <div className="rTableHead">Expiry Date</div>
-          <div className="rTableHead"><span>Storage Condition</span></div>
+          <div className="rTableHead">Manufacturer</div>
           <div className="rTableHead"><span>Batch Number</span></div>
-          <div className="rTableHead"><span>Serial Number</span></div>
+          <div className="rTableHead">Qunatity</div>
+          <div className="rTableHead"><span>Date Added</span></div>
+          <div className="rTableHead"><span>Mfg Date</span></div>
+          <div className="rTableHead"><span>Exp Date</span></div>
         </div>
         <div className="overflow">
           {props.inventories.map(inventory =>  <div className="rTableRow">

@@ -69,8 +69,8 @@ const HomeContainer = (props) => {
               <img src={logo} width="350" height="50" />
               <p className="hero-paragraph">
                 {' '}
-                Vaccine ledger is a blockchain based platform to track and
-                trace vaccines journey across thesupply chain
+                Vaccine ledger is a Blockchain based platform to track and
+                trace Vaccines journey across the Supply chain
               </p>
             </div>
             <div className="hero-image" />
@@ -123,11 +123,11 @@ const HomeContainer = (props) => {
               <h2 className="display-4">What We Do</h2>
               <p>
                 StaTwig provides serialization solutions to detect fake and
-                expired productsin the production using blockchain
+                expired products in the production using Blockchain
                 technology and IoT.<br />We are focused towards creating an
-                efficient food and vaccine distribution supply cahin.This
+                efficient food and Vaccine distribution Supply chain.This
                 helps in preventing failures of distribution, predicting the resources.Through
-                our platform, we connect all stakeholders viatamper-proof,
+                our platform, we connect all stakeholders via tamper-proof,
                 open ledgers using our platform SC Blockchain
               </p>
             </div>
@@ -153,7 +153,7 @@ const HomeContainer = (props) => {
             <div className="d-flex flex-column">
               <h2 className="display-4">Contact Us</h2>
               <p>
-                Interested in having chat with us about vaccine ledger ?<br />Drop
+                Interested in having chat with us about Vaccineledger ?<br />Drop
                 your email below and we will get back to you shortly !
               </p>
               <div className="form form-inline">

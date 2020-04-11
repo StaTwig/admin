@@ -49,7 +49,7 @@ import './style.scss';
                 <img src={currentshipment} alt="truck" />
               </div>
               <div className="d-flex flex-column">
-                <div className="title">Current Shipment in transit</div>
+                <div className="title">Current Shipment in Transit</div>
                 <div className="count">53 <small className="dayStatus">Today</small></div>
               </div>
             </div>
@@ -86,7 +86,7 @@ import './style.scss';
           <div className="custom-card">
             <div className="card-header">
               <div className="d-flex align-items-center justify-content-between">
-                <h5 className="card-title">Inventory Summary</h5>
+                <h5 className="card-title font-weight-bold">Inventory Summary</h5>
                 <Link to="/newinventory">
                   <button className="btn-primary btn-sm btn"> Add Inventory</button>
                 </Link>
@@ -114,7 +114,7 @@ import './style.scss';
           <div className="custom-card">
             <div className="card-header">
               <div className="d-flex align-items-center justify-content-between">
-                <h5 className="card-title">Shipment Summary</h5>
+                <h5 className="card-title font-weight-bold">Shipment Summary</h5>
                 <Link to="/newshipment">
                   <button className="btn-primary btn-sm btn"> Create Shipment</button>
                 </Link>
