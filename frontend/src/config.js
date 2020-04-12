@@ -1,4 +1,4 @@
-export const TEST_SERVER_URL = 'http://13.52.184.142:9001';
+export const TEST_SERVER_URL = 'http://3.87.42.168:9001';
 export const LOCAL_SERVER_URL_USER = 'http://localhost:3001';
 export const LOCAL_SERVER_URL_SHIPMENT = 'http://localhost:3002';
 export const LOCAL_SERVER_URL_INVENTORY = 'http://localhost:3007';
@@ -17,7 +17,8 @@ export function config() {
       inventoriesUrl: `${LOCAL_SERVER_URL_INVENTORY}/api/inventory/getAllInventoryDetails`,
       createShipmentUrl: `${LOCAL_SERVER_URL_SHIPMENT}/api/shipping/createShipment`,
       addInventoryUrl: `${LOCAL_SERVER_URL_INVENTORY}/api/inventory/addNewInventory`,
-
+      shipmentsSearch: `${LOCAL_SERVER_URL_SHIPMENT}/api/shipping/fetchShipments?key=`,
+      inventorySearch: `${LOCAL_SERVER_URL_INVENTORY}/api/inventory/getInventoryDetailsForProduct?key`
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -29,7 +30,9 @@ export function config() {
       addInventoryUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/addNewInventory`,
       userInfoUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/userInfo`,
       updateProfileUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/updateProfile`,
-      upload: `${TEST_SERVER_URL}/usermanagement/api/auth/upload`
+      upload: `${TEST_SERVER_URL}/usermanagement/api/auth/upload`,
+      shipmentsSearch: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchShipments?key=`,
+      inventorySearch: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key`
     }
   };
 
