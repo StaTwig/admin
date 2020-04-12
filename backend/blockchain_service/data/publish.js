@@ -27,7 +27,7 @@ exports.writeData = async function (req, res) {
 	var key = req.body.key
         var address = req.body.address
         var dataStream = req.body.stream
-	 
+	uilogger.info("Publishing data to stream",dataStream,"key",key,"address",address,"data",data);
 	 multichain.publishFrom({from:address, stream:dataStream, key:key , data:data }, (err, tx) => {
          res.json({transactionId: tx});
       })
