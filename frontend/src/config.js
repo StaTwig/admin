@@ -18,7 +18,7 @@ export function config() {
       createShipmentUrl: `${LOCAL_SERVER_URL_SHIPMENT}/api/shipping/createShipment`,
       addInventoryUrl: `${LOCAL_SERVER_URL_INVENTORY}/api/inventory/addNewInventory`,
       shipmentsSearch: `${LOCAL_SERVER_URL_SHIPMENT}/api/shipping/fetchShipments?key=`,
-      inventorySearch: `${LOCAL_SERVER_URL_INVENTORY}/api/inventory/getInventoryDetailsForProduct?key`
+      inventorySearch: `${LOCAL_SERVER_URL_INVENTORY}/api/inventory/getInventoryDetailsForProduct?key=`
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -32,7 +32,7 @@ export function config() {
       updateProfileUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${TEST_SERVER_URL}/usermanagement/api/auth/upload`,
       shipmentsSearch: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchShipments?key=`,
-      inventorySearch: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key`
+      inventorySearch: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`
     }
   };
 
