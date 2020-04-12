@@ -149,9 +149,7 @@ const EditTable = props => {
                   value={serialNumber}
                   onChange={e => setSerialNumber(e.target.value)}
                 />
-                <div className="input-group-append">
-                  <img src={downArrow} alt="downarrow" width="9" height="9" />
-                </div>
+               
               </div>
             </div>
           </div>
@@ -162,3 +160,8 @@ const EditTable = props => {
 };
 
 export default EditTable;
+
+
+/*<div className="input-group-append">
+<img src={downArrow} alt="downarrow" width="9" height="9" />
+</div>*/
