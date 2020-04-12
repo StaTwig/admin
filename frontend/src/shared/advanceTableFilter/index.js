@@ -67,7 +67,7 @@ const AdvanceTableFilter = () => {
         </div>
         <div className="">
         <div className="box col">
-          <button className="btn btn-md btn-main-blue">
+          <button className="btn btn-md btn-main-blue mr-2">
             <div className="d-flex align-items-center">
               <img src={FilterIcon} width="16" height="16" className="mr-3" />
               <span>Filter</span>
