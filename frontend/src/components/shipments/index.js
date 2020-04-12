@@ -23,7 +23,7 @@ const ShipmentAnalytic = (props) => {
                   <div className="d-flex justify-content-between">
                         <h1 className="breadcrumb">SHIPMENT</h1>
                         <div className="d-flex">
-                              <button className="btn btn-orange fontSize20 font-bold" onClick={() => setOpenPurchaseOrder(true)}>
+                              <button className="btn btn-orange fontSize20 font-bold mr-2" onClick={() => setOpenPurchaseOrder(true)}>
                                     <img src={Order} width='14' height='14' className="mr-2" />
                                     <span>Create Purchase Order</span>
                               </button>
