@@ -3,7 +3,7 @@ import './style.scss';
 import Checked from "../../assets/icons/checked.svg";
 
 
-const InventoryPopUp = () => {
+const InventoryPopUp = (props) => {
   return (
     <div className="inventorypopup">
       <div className="d-flex justify-content-between flex-column align-items-center">
@@ -14,7 +14,7 @@ const InventoryPopUp = () => {
         <div className="data">
           Your Inventory has been added Successfully!
         </div>
-        <button className="btn-primary btn">OK</button>
+        <button className="btn-primary btn" onClick={props.onHide}>OK</button>
       </div>
 
     </div>
