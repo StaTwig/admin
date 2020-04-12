@@ -60,7 +60,7 @@ const EditTable = props => {
             <div className="rTableCell">
               <DropdownButton
                 name={manufacturerName}
-                onSelect={item => setManufacturerName(item)}
+                onSelect={item => setManufacturerName(item.replace( '<small>Qty: 2148</small>', ''))}
                 groups={[
                   'Manufacturer A <small>Qty: 2148</small>',
                   'Manufacturer D <small>Qty: 2148</small>',

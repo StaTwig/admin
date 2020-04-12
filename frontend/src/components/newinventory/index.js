@@ -81,7 +81,7 @@ const NewInventory = () => {
           close={() => closeModal()}
           size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
-          <InventoryPopUp />
+          <InventoryPopUp onHide={closeModal} />
         </Modal>
       )}
     </div>
