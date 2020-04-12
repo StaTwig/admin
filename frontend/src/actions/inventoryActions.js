@@ -17,6 +17,20 @@ export const getInventories = () => {
 
 }
 
+export const getInventoriesById = (query) => {
+  try {
+    return async dispatch => {
+      const result =  await axios.get(config().inventorySearch + query );
+      dispatch(setInventories(result.data));
+    }
+  }catch(e){
+    return dispatch => {
+      dispatch(resetInventories(e.response));
+    }
+  }
+
+}
+
 const setInventories = (data) =>{
   return {
     type: GET_INVENTORIES_SUCCESS,

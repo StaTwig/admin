@@ -5,9 +5,8 @@ export const initialState = [];
 export const inventoryReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_INVENTORIES_SUCCESS:
-      const inventories = action.payload.data.map(shipment => JSON.parse(shipment.data));
+      const inventories = action.payload.data.map(inventory => JSON.parse(inventory.data));
       return [
-        ...state,
         ...inventories
       ];
     case GET_INVENTORIES_FAILURE:

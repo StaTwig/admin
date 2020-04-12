@@ -9,13 +9,29 @@ import searchingIcon from '../../assets/icons/searching@2x.png';
 import bellIcon from '../../assets/icons/bellwhite.png';
 import userIcon from '../../assets/brands/user-image/Image73@2x.png';
 import dropdownIcon from '../../assets/icons/drop-down.png';
-
+import {getShipments, getShipmentsById} from "../../actions/shipmentActions";
+import { getInventories, getInventoriesById} from "../../actions/inventoryActions";
 import './style.scss';
 
 const Header = props => {
   const [menu, setMenu] = useState(false);
   const [sidebar, openSidebar] = useState(false);
+  const [search,setSearch] = useState('');
 
+  function onSearchChange(e)
+  {
+    console.log(e.target.value);
+    setSearch(e.target.value)
+  }
+  function onSeach(){
+    if(search != '')
+    {
+      dispatch(getShipmentsById(search))
+      dispatch(getInventoriesById(search))
+    }
+    dispatch(getShipments())
+    dispatch(getInventories())
+  }
 
   const profile = useSelector(state => {
     return state.user;
@@ -35,8 +51,15 @@ const Header = props => {
       </div>
       <div className="actions">
         <div className="search-form">
-          <input type="text" className="form-control search-field" />
-          <img src={searchingIcon} alt="searching" />
+          <input 
+            type="text" 
+            // value={search} 
+            onChange={onSearchChange} 
+            className="form-control search-field" />
+          <img 
+            src={searchingIcon} 
+            onClick={onSeach} 
+            alt="searching" />
         </div>
         <div className="user-info">
           <div className="notifications">

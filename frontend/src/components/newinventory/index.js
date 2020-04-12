@@ -42,6 +42,7 @@ const NewInventory = () => {
   const onAddInventory = async() => {
     const data = {
       productName,
+      manufacturerName,
       quantity,
       manufacturingDate,
       expiryDate,

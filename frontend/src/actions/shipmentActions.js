@@ -16,6 +16,19 @@ export const getShipments = () => {
   }
 
 }
+export const getShipmentsById = (query) => {
+  try {
+    return async dispatch => {
+      const result =  await axios.get(config().shipmentsSearch + query);
+      dispatch(setShipments(result.data));
+    }
+  }catch(e){
+    return dispatch => {
+      dispatch(resetShipments(e.response));
+    }
+  }
+
+}
 
 export const createShipment = async (data) => {
   try {
