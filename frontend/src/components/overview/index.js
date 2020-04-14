@@ -4,7 +4,7 @@ import {
 } from "react-router-dom";
 import ChartsPage from '../doughnut'
 import SummaryTable from './summaryTable';
-import { getLastDates } from '../../utils/getLatestDate';
+import { getLastDates } from '../../utils/dateHelper';
 import totalshipments from "../../assets/icons/TotalShipmentsCompleted.svg";
 import totalinventory from "../../assets/icons/TotalInventoryAdded.svg";
 import currentshipment from "../../assets/icons/CurrentShipmentInTransit.svg";
@@ -23,11 +23,10 @@ import './style.scss';
     const manufacturingDates = props.shipments.map((data, index) => {
       return data.shipmentDate;
     });
-    const InventoryDates = props.inventory.map((data, index) => {
-      console.log(data.length)
-      return data.length;
+    // const InventoryDates = props.inventory.map((data, index) => {
+    //   return data.length;
       
-    })
+    // })
     const last24hrsDates = getLastDates(manufacturingDates, 24);
     const last3Months = getLastDates(manufacturingDates, 2190);
     const last6Months = getLastDates(manufacturingDates, 14380);
@@ -35,7 +34,7 @@ import './style.scss';
       set3MonthsCount(last3Months.length);
       set6MonthsCount(last6Months.length)
       setAllTimeCount(manufacturingDates.length);
-      setTotalInventoryAdded(InventoryDates);
+      //setTotalInventoryAdded(InventoryDates);
     })
 
   return (
