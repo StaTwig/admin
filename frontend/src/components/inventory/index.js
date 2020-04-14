@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import {
       Link
 } from "react-router-dom";
 
+import { expired, expiringIn, Count } from '../../utils/dateHelper';
 import './style.scss';
 import Table from '../../shared/table';
 import TableFilter from '../../shared/advanceTableFilter';
@@ -13,6 +14,28 @@ import TotalVaccineExpired from "../../assets/icons/TotalVaccineExpired.svg";
 import Add from '../../assets/icons/add.svg';
 
 const Inventory = (props) => {
+     const [inventoryExpiring, setInventoryExpiring] = useState('');
+     const [inventoryExpired, setInventoryExpired] = useState('');
+     const [inventoryTotal, setInventoryTotal] = useState('');
+     const [inventoryCurrent, setInventoryCurrent] = useState('');
+    useEffect(() => {
+    
+    const inventoryDates = props.inventories.map((data, index) => {
+      return data;      
+    })
+    const expiring = expiringIn(inventoryDates, 2190);
+    const expired_data = expired(inventoryDates, 0);
+    const expiredCount = Count(expired_data);
+    const expiringCount = Count(expiring)
+    const inventoryCount = Count(inventoryDates);
+
+    console.log(expiredCount);
+    setInventoryExpired(expiredCount);
+    setInventoryExpiring(expiringCount - expiredCount);
+    setInventoryTotal(inventoryCount);
+    setInventoryCurrent(inventoryCount);
+      
+    })
       return (
             <div className="inventory">
                   <div className="d-flex justify-content-between">
@@ -40,7 +63,7 @@ const Inventory = (props) => {
                                                 <div className="tab-item">This Week</div>
                                                 <div className="tab-item">Today</div>
                                           </div>
-                                          <div className="truck-text count">2,34,532</div>
+                                          <div className="truck-text count">{inventoryTotal}</div>
                                     </div>
                               </div>
                         </div>
@@ -57,7 +80,7 @@ const Inventory = (props) => {
                                                 <div className="tab-item">This Week</div>
                                                 <div className="tab-item">Today</div>
                                           </div>
-                                          <div className="sent-text count">14,532</div>
+                                          <div className="sent-text count">{inventoryCurrent}</div>
                                     </div>
                               </div>
                         </div>
@@ -74,7 +97,7 @@ const Inventory = (props) => {
                                                 <div className="tab-item">This Week</div>
                                                 <div className="tab-item">Today</div>
                                           </div>
-                                          <div className="recived-text count">1,532</div>
+                                          <div className="recived-text count">{inventoryExpiring}</div>
                                     </div>
                               </div>
                         </div>
@@ -91,7 +114,7 @@ const Inventory = (props) => {
                                                 <div className="tab-item">This Week</div>
                                                 <div className="tab-item">Today</div>
                                           </div>
-                                          <div className="transit-text count">1,532</div>
+                                          <div className="transit-text count">{inventoryExpired}</div>
                                     </div>
                               </div>
                         </div>
