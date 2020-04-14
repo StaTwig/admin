@@ -28,9 +28,7 @@ exports.register = [
   body('name')
     .isLength({ min: 1 })
     .trim()
-    .withMessage('name must be specified.')
-    .isAlphanumeric()
-    .withMessage('name has non-alphanumeric characters.'),
+    .withMessage('name must be specified.'),
   body('email')
     .isLength({ min: 1 })
     .trim()
@@ -55,6 +53,20 @@ exports.register = [
   // Process request after validation and sanitization.
   async (req, res) => {
     try {
+      var re = /^[a-z0-9 ]+$/i;
+      if(!req.body.name.match(re))
+      {
+       errors =  { 
+          "data":[
+            {
+              "value":"",
+              "msg":"Name should only consist of letters",
+              "param":"name",
+              "location":"body"
+            }
+          ]
+        }
+      }
       // Extract the validation errors from a request.
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
