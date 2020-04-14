@@ -24,10 +24,20 @@ const Header = props => {
     setSearch(e.target.value)
   }
   function onSeach(){
-    if(search != '')
+    const path = props.match.path;
+    if(search != '' )
     {
-      dispatch(getShipmentsById(search))
-      dispatch(getInventoriesById(search))
+      if(path === '/overview') {
+        dispatch(getShipmentsById(search))
+
+      }else {
+        dispatch(getInventoriesById(search))
+      }
+
+    }
+    else {
+      dispatch(getShipments());
+      dispatch(getInventories())
     }
     else{
     dispatch(getShipments())
