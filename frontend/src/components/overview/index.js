@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Link
 } from "react-router-dom";
 import ChartsPage from '../doughnut'
 import SummaryTable from './summaryTable';
-
+import { getLastDates } from '../../utils/getLatestDate';
 import totalshipments from "../../assets/icons/TotalShipmentsCompleted.svg";
 import totalinventory from "../../assets/icons/TotalInventoryAdded.svg";
 import currentshipment from "../../assets/icons/CurrentShipmentInTransit.svg";
@@ -14,6 +14,30 @@ import shipmentsdelayed from "../../assets/icons/TotalShipmentsDelayed.svg";
 import './style.scss';
 
   const Overview = props => {
+    const [Hours24Count, set24HoursCount] =useState('');
+    const [Months3Count, set3MonthsCount] =useState('');
+    const [Months6Count, set6MonthsCount] =useState('');
+    const [AllTimeCount, setAllTimeCount] =useState('');
+    const [TotalInventoryAdded, setTotalInventoryAdded] =useState('')
+    useEffect(() => {
+    const manufacturingDates = props.shipments.map((data, index) => {
+      return data.shipmentDate;
+    });
+    const InventoryDates = props.inventory.map((data, index) => {
+      console.log(data.length)
+      return data.length;
+      
+    })
+    const last24hrsDates = getLastDates(manufacturingDates, 24);
+    const last3Months = getLastDates(manufacturingDates, 2190);
+    const last6Months = getLastDates(manufacturingDates, 14380);
+      set24HoursCount(last24hrsDates.length);
+      set3MonthsCount(last3Months.length);
+      set6MonthsCount(last6Months.length)
+      setAllTimeCount(manufacturingDates.length);
+      setTotalInventoryAdded(InventoryDates);
+    })
+
   return (
     <div className="overview">
       <h1 className="breadcrumb">OVERVIEW</h1>
@@ -26,7 +50,7 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Shipments Completed</div>
-                <div className="count">1.3 M <small className="dayStatus">This Year</small></div>
+                <div className="count">{AllTimeCount}<small className="dayStatus">This Year</small></div>
               </div>
             </div>
           </div>
@@ -38,7 +62,7 @@ import './style.scss';
 
               <div className="d-flex flex-column">
                 <div className="title">Total Inventory Added</div>
-                <div className="count" >5.4 M <small className="dayStatus">This Year</small></div>
+                <div className="count" > 52 <small className="dayStatus">This Year</small></div>
               </div>
             </div>
 
@@ -49,8 +73,8 @@ import './style.scss';
                 <img src={currentshipment} alt="truck" />
               </div>
               <div className="d-flex flex-column">
-                <div className="title">Current Shipment in Transit</div>
-                <div className="count">53 <small className="dayStatus">Today</small></div>
+                <div className="title">Total Shipmentst</div>
+                <div className="count">{Months6Count}<small className="dayStatus">Last 6 Month</small></div>
               </div>
             </div>
 
@@ -62,7 +86,7 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Shipments</div>
-                <div className="count">42 <small className="dayStatus">Today</small></div>
+                <div className="count">{Months3Count}<small className="dayStatus">Last 3 Month</small></div>
               </div>
             </div>
 
@@ -73,8 +97,8 @@ import './style.scss';
                 <img src={shipmentsdelayed} alt="truck" />
               </div>
               <div className="d-flex flex-column">
-                <div className="title">Total Shipments Delayed</div>
-                <div className="count">32 <small className="dayStatus">This Month</small></div>
+                <div className="title">Total Shipments</div>
+                <div className="count">{Hours24Count} <small className="dayStatus">Today</small></div>
               </div>
             </div>
           </div>
