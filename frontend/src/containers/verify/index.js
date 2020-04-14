@@ -16,8 +16,8 @@ const VerifyContainer = props => {
       setErrorMessage(`${result.data.message} redirecting to login`);
       setTimeout(() => props.history.push('/login'), 3000);
     } else {
-      const err = result.data;
-      setErrorMessage(err.message);
+      const err = result.data.data[0];
+      setErrorMessage(err.msg);
     }
   });
   return (

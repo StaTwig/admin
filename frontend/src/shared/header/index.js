@@ -39,6 +39,10 @@ const Header = props => {
       dispatch(getShipments());
       dispatch(getInventories())
     }
+    else{
+    dispatch(getShipments())
+    dispatch(getInventories())
+    }
   }
 
   const profile = useSelector(state => {
