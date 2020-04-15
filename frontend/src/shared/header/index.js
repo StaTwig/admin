@@ -34,14 +34,9 @@ const Header = props => {
         dispatch(getInventoriesById(search))
       }
 
-    }
-    else {
+    }else {
       dispatch(getShipments());
       dispatch(getInventories())
-    }
-    else{
-    dispatch(getShipments())
-    dispatch(getInventories())
     }
   }
 
