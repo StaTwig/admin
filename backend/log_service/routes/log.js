@@ -3,6 +3,6 @@ const LogController = require("../controllers/LogController");
 
 var router = express.Router();
 
-router.get("/getQueryLog", AlertController.getQueryLog);
+router.get("/getQueryLog", LogController.getQueryLog);
 
 module.exports = router;
