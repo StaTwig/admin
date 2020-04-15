@@ -3,7 +3,12 @@
 #Killing all the previous pm2 process
 pm2 stop all
 pm2 delete all
+
+#Creating env variables
+./pre-deploy.sh
+
 #starting backend services
+
 cd backend
 
 cd -P .
