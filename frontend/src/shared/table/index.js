@@ -7,21 +7,22 @@ const Table = props => {
     <div className="table">
       <div className="rTable">
         <div className="rTableHeading">
-          <div className="rTableHead">Product Name</div>
-          <div className="rTableHead">Manufacturer</div>
+          <div className="rTableHead">{props.data.coloumn1}</div>
+          <div className="rTableHead">{props.data.coloumn2}</div>
           <div className="rTableHead">
-            <span>Batch Number</span>
+            <span>{props.data.coloumn3}</span>
           </div>
-          <div className="rTableHead">Qunatity</div>
+          <div className="rTableHead">{props.data.coloumn4}</div>
           <div className="rTableHead">
-            <span>Serial Number</span>
-          </div>
-          <div className="rTableHead">
-            <span>Mfg Date</span>
+            <span>{props.data.coloumn5}</span>
           </div>
           <div className="rTableHead">
-            <span>Exp Date</span>
+            <span>{props.data.coloumn6}</span>
           </div>
+          <div className="rTableHead">
+            <span>{props.data.coloumn7}</span>
+          </div>
+          
         </div>
         <div className="overflow">
           {props.inventories.map(inventory => (
