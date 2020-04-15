@@ -116,7 +116,7 @@ const Inventory = (props) => {
                                           <img src={Expiration} alt="truck" />
                                     </div>
                                     <div className="d-flex flex-column">
-                                          <div className="title received-text">Total Vaccine near Expiration</div>
+                                          <div className="title recived-text">Total Vaccine near Expiration</div>
                                           <div className="tab-container">
                                                 <div className="tab-item active">This Year</div>
                                                 <div className="tab-item">This Month</div>

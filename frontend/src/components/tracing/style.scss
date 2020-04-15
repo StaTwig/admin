@@ -53,7 +53,15 @@
       justify-content: space-around;
     }
   }
+
+  .head{
+    color: #0159EA;
+  }
   
+  hr {
+    border-width: 5px;
+    
+  }
   .panel {
     box-shadow: 0px 3px 6px $grey;
     border-radius: 15px;
@@ -62,9 +70,18 @@
     margin-right: 1rem;
     padding: 30px;
 
-    hr {
-      border-width: 10px;
+    .divider {
+      width:300px;
+      margin:1rem;
+      border: 1px solid $d6Grey;
+      display: flex;
+      align-self: center;
+      @media (max-width: $md) {
+        width:200px;
+      }
+  
     }
+  
 
     &:last-child {
         margin-right: 0;
