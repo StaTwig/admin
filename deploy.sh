@@ -16,13 +16,16 @@ pm2 delete all
 
 #Creating env variables
 if [ "$1" == "PROD" ] && [ [ "$2" == "SERVICESI" ] || [ "$2" == "SERVICESII" ] ];
-then
-./pre-deploy-prod.sh
+   then
+      ./pre-deploy-prod.sh
+
 elif [ "$1" == "TEST" ];
-then 
-./pre-deploy-test.sh
+   then 
+      ./pre-deploy-test.sh
+
 else
 ./pre-deploy.sh
+
 if
 
 #starting backend services
@@ -30,28 +33,32 @@ if
 
 cd backend
 if [ "$1" == "PROD" ] && [ "$2" == "SERVICESI" ];
-then
-rm -rf blockchain_service	log_service alert_service notification_service
+   then
+      rm -rf blockchain_service	log_service alert_service notification_service
+
 elif [ "$1" == "PROD" ] && [ "$2" == "SERVICESII" ];
-then
-rm -rf shipping_service	transaction_service inventory_service	track_trace		user_service
+   then
+      rm -rf shipping_service	transaction_service inventory_service	track_trace		user_service
+
 fi
 
 if [ "$1" == "PROD" ] || [ "$1" == "TEST" ];
-then
-cd -P .
-for dir in ./*/
-do cd -P "$dir" ||continue
-   printf %s\\n "$PWD" >&2
-   npm install && pm2 start && cd "$OLDPWD" || 
-! break; done || ! cd - >&2
+   then
+      cd -P .
+      for dir in ./*/
+         do cd -P "$dir" ||continue
+            printf %s\\n "$PWD" >&2
+            npm install && pm2 start && cd "$OLDPWD" || 
+         ! break; done || ! cd - >&2
+
 elif [ "$1" == "LOCAL" ];
-then
-for dir in ./*/
-do cd -P "$dir" ||continue
-   printf %s\\n "$PWD" >&2
-   npm install && cd "$OLDPWD" || 
-! break; done || ! cd - >&2
+   then
+      cd -P .
+      for dir in ./*/
+         do cd -P "$dir" ||continue
+            printf %s\\n "$PWD" >&2
+            npm install && cd "$OLDPWD" || 
+         ! break; done || ! cd - >&2
 fi
 
 cd ..
@@ -63,41 +70,47 @@ echo "Building frontend"
 cd frontend
 
 if [ [ "$1" -eq "PROD" ] || [ "$1" == "TEST" ] ] && [ "$2" == "FRONTEND" ];
-then
-echo "Building frontend in $1 mode....."
-sudo systemctl stop nginx
-sudo rm -rf /var/wwww/html/dist /var/wwww/html/index.html
-npm install
-npm run build
-sudo cp -r dist /var/www/html/
-sudo cp index.html /var/wwww/html/
-sudo systemctl start nginx
-sudo systemctl status nginx
+   then
+      echo "Building frontend in $1 mode....."
+      sudo systemctl stop nginx
+      sudo rm -rf /var/wwww/html/dist /var/wwww/html/index.html
+      npm install
+      npm run build
+      sudo cp -r dist /var/www/html/
+      sudo cp index.html /var/wwww/html/
+      sudo systemctl start nginx
+      sudo systemctl status nginx
+
 elif [ "$1" == "LOCAL" ] && [ "$2" == "FROTNEND" ];
-then
-echo "Building and starting forntend in local mode...."
-npm install
-npm run build
-#npm start &
+   then
+      echo "Building and starting forntend in local mode...."
+      npm install
+      npm run build
+      #npm start &
+
 fi
 
 cd ..
 
 #start api gateway - traefik
 if [ "$2" == "GATEWAY" ];
-then
-killall traefik
-cd apigateway
-echo $(pwd)
-if [ "$1" == "PROD" ];
-then
-echo "Starting traefik in PROD mode ......"
-traefik --configFile=traefik-cloud-prod-api.yml &
-elif [ "$1" == "TEST" ];
-then
-echo "Starting traefik in TEST mode ......"
-traefik --configFile=traefik-cloud-dev-api.yml &
-fi
+   then
+      killall traefik
+      cd apigateway
+      echo $(pwd)
+      
+      if [ "$1" == "PROD" ];
+         then
+            echo "Starting traefik in PROD mode ......"
+            traefik --configFile=traefik-cloud-prod-api.yml &
+      
+      elif [ "$1" == "TEST" ];
+         then
+            echo "Starting traefik in TEST mode ......"
+            traefik --configFile=traefik-cloud-dev-api.yml &
+      
+      fi
+
 fi
 
 cd ..
