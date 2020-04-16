@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import {
       Link
 } from "react-router-dom";
@@ -19,6 +19,7 @@ import Status from '../../assets/icons/Status.svg';
 
 const ShipmentAnalytic = (props) => {
       const [openPurchaseOrder, setOpenPurchaseOrder] = useState(false);
+      
       const closeModal = () => {
             setOpenPurchaseOrder(false);
       }
@@ -64,7 +65,7 @@ const ShipmentAnalytic = (props) => {
                               </Link>
                         </div>
                   </div>
-                  <Tiles />
+                  <Tiles {...props}/>
                   <div className="mt-4">
                         <Tabs />
                   </div>
