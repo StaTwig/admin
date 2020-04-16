@@ -24,7 +24,8 @@ elif [ "$1" == "TEST" ];
       ./pre-deploy-test.sh
 
 else
-./pre-deploy.sh
+   then
+      ./pre-deploy.sh
 
 if
 
