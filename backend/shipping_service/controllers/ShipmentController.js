@@ -97,7 +97,6 @@ exports.createShipment = [
     .isLength({ min: 8 })
     .trim()
     .withMessage('Estimated Delivery Date must be specified.'),
-  sanitizeBody('name').escape(),
   async (req, res) => {
     try {
       const errors = validationResult(req);
