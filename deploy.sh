@@ -1,5 +1,12 @@
 #!/bin/bash
 
+#Chekcing arguments
+if [ $# -eq 0 ]
+  then
+    echo "Please choose the mode: PROD TEST LOCAL"
+    exit
+fi
+
 #Killing all the previous pm2 process
 pm2 stop all
 pm2 delete all
@@ -21,7 +28,7 @@ do cd -P "$dir" ||continue
 cd ..
 echo $(pwd)
 #start frontend
-echo "Frontend is commented out .Not building frontend"
+echo "Building frontend"
 
 cd frontend
 if [ "$1" -eq "PROD" ] || [ "$1" == "TEST" ];
