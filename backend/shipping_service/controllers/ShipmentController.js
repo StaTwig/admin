@@ -65,8 +65,50 @@ exports.fetchShipments = [
 
 exports.createShipment = [
   auth,
+  body('data.shipmentId')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Shipment ID must be specified.'),
+  body('data.client')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Client must be specified.'),
+  body('data.supplier')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Supplier must be specified.'),
+  body('data.supplierLocation')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Supplier Location must be specified.'),
+  body('data.shipmentDate')
+    .isLength({ min: 8 })
+    .trim()
+    .withMessage('Shipment Date must be specified.'),
+  body('data.deliveryTo')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Delivery To must be specified.'),
+  body('data.deliveryLocation')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Delivery Location must be specified.'),
+  body('data.estimateDeliveryDate')
+    .isLength({ min: 8 })
+    .trim()
+    .withMessage('Estimated Delivery Date must be specified.'),
+  sanitizeBody('name').escape(),
   async (req, res) => {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        // Display sanitized values/errors messages.
+        return apiResponse.validationErrorWithData(
+          res,
+          'Validation Error.',
+          errors.array(),
+        );
+      } 
       checkToken(req, res, async result => {
         if (result.success) {
           const { address } = req.user;
@@ -89,7 +131,9 @@ exports.createShipment = [
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
     }
+  
   },
+  
 ];
 
 exports.reviewShipment = [
@@ -146,11 +190,31 @@ exports.modifyShipment = [
       checkToken(req, res, async result => {
         if (result.success) {
           const { data } = result.data;
-          //API to add new shipment record
-          //const response = await axios.get(`${url}/apiendpoint?stream=vl_shipping_stream&key=$username&&data=$data`);
-          //const items = response.data.items;
-          //res.json(JSON.parse(items));
-          res.json('Shipment created');
+          const { key,status } = req.query;
+          const response = await axios.get(
+            `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${key}`,
+          );
+          
+          const  item  = response.data.items[response.data.items.length-1]
+          console.log(item.data)
+          const shipment = JSON.parse(item.data);
+          shipment.status=status;
+          
+          
+          const { address } = req.user;
+          const userData = {
+            stream: stream_name,
+            key: shipment.shipmentId,
+            address: address,
+            data: shipment,
+          };
+          const response2 = await axios.post(
+            `${blockchain_service_url}/publish`,
+            userData,
+          );
+          res.status(200).json({ response: response2.data.transactionId });
+          
+          //res.json('Shipment created');
         } else {
           res.status(403).json(result);
         }
