@@ -15,16 +15,16 @@ import './style.scss';
 const Tracing = () => {
   return (
     <div className="tracing">
-      <div className="d-flex justify-content-between">
+     <div className="d-flex justify-content-between mb-3">
         <h1 className="breadcrumb">Track & Trace</h1>
         <div className="search-form">
           <input type="text" className="form-control search-field" />
           <button className="btn btn-main-blue fontSize20 font-bold floated">
-            <div className="flex-basis-80">
-              <img src={Filter} width='16' height='16' className="mr-2" />
+            <div className="allfilterbtn">
+              <img src={Filter} />
               <span> All Filter</span>
+              <img src={updownarrow} />
             </div>
-            <img src={updownarrow} width='14' height='14' />
           </button>
           <img src={searchingIcon} alt="searching" className="search-icon" />
         </div>
@@ -32,7 +32,7 @@ const Tracing = () => {
       <div className="row">
         <div className="col-sm-4 d-flex flex-column col-sm-4">
           <h5 className="head">Shipment Details</h5>
-          <div className="panel d-flex justify-content-between">
+          <div className="panel d-flex justify-content-between mb-3">
             <ul>
               <li>Transaction ID</li>
               <li>Shipment ID</li>
@@ -117,7 +117,7 @@ const Tracing = () => {
           <div className="d-flex flex-column">
             <div className="d-flex justify-content-between">
               <div className="panel"></div>
-              <div className="panel ">
+              <div className="panel">
               <div className="d-flex justify-content-between">
               <div class = "row">
 
@@ -141,7 +141,7 @@ const Tracing = () => {
               <Chart />
          </div>
             </div>
-            <h3>Geographical Tracking/ Chain of Custody</h3>
+            <h5 className="head">Geographical Tracking/ Chain of Custody</h5>
             <div className="panel "></div>
 
           </div>
