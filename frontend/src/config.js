@@ -1,4 +1,4 @@
-export const TEST_SERVER_URL = 'http://3.87.42.168:9001';
+export const TEST_SERVER_URL = 'http://test.vaccineledger.com:9001';
 export const LOCAL_SERVER_URL_USER = 'http://localhost:3001';
 export const LOCAL_SERVER_URL_SHIPMENT = 'http://localhost:3002';
 export const LOCAL_SERVER_URL_INVENTORY = 'http://localhost:3007';

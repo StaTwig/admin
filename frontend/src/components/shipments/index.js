@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from 'react';
 import {
       Link
 } from "react-router-dom";
@@ -15,6 +15,7 @@ import PurchaseForm from '../../components/purchaseform';
 
 const ShipmentAnalytic = (props) => {
       const [openPurchaseOrder, setOpenPurchaseOrder] = useState(false);
+      
       const closeModal = () => {
             setOpenPurchaseOrder(false);
       }
@@ -35,7 +36,7 @@ const ShipmentAnalytic = (props) => {
                               </button>
                         </div>
                   </div>
-                  <Tiles />
+                  <Tiles {...props}/>
                   <div className="mt-4">
                         <Tabs />
                   </div>
