@@ -88,26 +88,26 @@
     #Define how to reach user management service on our infrastructure
     [http.services.user-management.loadBalancer]
       [[http.services.user-management.loadBalancer.servers]]
-        url = "http://127.0.0.1:3001/"
+        url = "http://3.87.194.115:3001/"
     [http.services.shipment-management.loadBalancer]
       [[http.services.shipment-management.loadBalancer.servers]]
-        url = "http://127.0.0.1:3002/"
+        url = "http://3.87.194.115:3002/"
     [http.services.transaction-management.loadBalancer]
       [[http.services.transaction-management.loadBalancer.servers]]
-        url = "http://127.0.0.1:3003/"
+        url = "http://3.87.194.115:3003/"
     [http.services.alert-management.loadBalancer]
       [[http.services.alert-management.loadBalancer.servers]]
-        url = "http://127.0.0.1:3004/"
+        url = "http://54.165.199.13:3004/"
     [http.services.track-trace-management.loadBalancer]
       [[http.services.track-trace-management.loadBalancer.servers]]
-        url = "http://127.0.0.1:3005/"
+        url = "http://3.87.194.115:3005/"
     [http.services.notification-management.loadBalancer]
       [[http.services.notification-management.loadBalancer.servers]]
-        url = "http://127.0.0.1:3006/"
+        url = "http://54.165.199.13:3006/"
     [http.services.inventory-management.loadBalancer]
       [[http.services.inventory-management.loadBalancer.servers]]
-        url = "http://127.0.0.1:3007/"
+        url = "http://3.87.194.115:3007/"
     [http.services.blockchain-management.loadBalancer]
       [[http.services.blockchain-management.loadBalancer.servers]]
-        url = "http://127.0.0.1:3008/"
+        url = "http://54.165.199.13:3008/"
     
