@@ -74,11 +74,13 @@ sudo cp index.html /var/wwww/html/
 sudo systemctl start nginx
 sudo systemctl status nginx
 elif [ "$1" == "LOCAL" ] && [ "$2" == "FROTNEND" ];
+then
 echo "Building and starting forntend in local mode...."
 npm install
 npm run build
 #npm start &
 fi
+
 cd ..
 
 #start api gateway - traefik
@@ -97,6 +99,7 @@ echo "Starting traefik in TEST mode ......"
 traefik --configFile=traefik-cloud-dev-api.yml &
 fi
 fi
+
 cd ..
 
 echo $(pwd)
