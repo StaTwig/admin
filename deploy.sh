@@ -23,7 +23,7 @@ echo "Creating Env variables .... "
 
 if [ "$1" == "PROD" ] && ([ "$2" == "SERVICESI" ] || [ "$2" == "SERVICESII" ]);
    then
-      pre-deploy-prod.sh
+      ./pre-deploy-prod.sh
 
 elif [ "$1" == "TEST" ];
    then 
