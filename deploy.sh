@@ -80,11 +80,11 @@ if ([ "$1" == "PROD" ] || [ "$1" == "TEST" ]) && [ "$2" == "FRONTEND" ];
    then
       echo "Building frontend in $1 mode....."
       sudo systemctl stop nginx
-      sudo rm -rf /var/wwww/html/dist /var/wwww/html/index.html
+      sudo rm -rf /var/www/html/dist /var/wwww/html/index.html
       npm install
       npm run build
       sudo cp -r dist /var/www/html/
-      sudo cp index.html /var/wwww/html/
+      sudo cp index.html /var/www/html/
       sudo systemctl start nginx
       sudo systemctl status nginx
 
