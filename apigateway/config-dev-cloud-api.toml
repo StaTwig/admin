@@ -109,5 +109,5 @@
         url = "http://127.0.0.1:3007/"
     [http.services.blockchain-management.loadBalancer]
       [[http.services.blockchain-management.loadBalancer.servers]]
-        url = "http://127.0.0.1:3008/"
+        url = "http://52.90.57.31:3008/"
     
