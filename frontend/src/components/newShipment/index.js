@@ -16,6 +16,7 @@ const NewShipment = () => {
   const [deliveryLocation, setDeliveryLocation] = useState('');
   const [estimateDeliveryDate, setEstimateDeliveryDate] = useState('');
   const [message, setMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [productName, setProductName] = useState('Select Product');
   const [manufacturerName, setManufacturerName] = useState(
     'Select Manufacturer',
@@ -57,8 +58,14 @@ const NewShipment = () => {
     };
 
     const result = await createShipment({ data });
-    if (result) {
+    if (result.status != 400) {
       setMessage('Assigned Shipment Success');
+      setErrorMessage('');
+    }
+    else
+    {
+      const err = result.data.data[0];
+      setErrorMessage(err.msg);
     }
   };
   return (
@@ -175,6 +182,7 @@ const NewShipment = () => {
         </div>
       </div>
       {message && <div className="alert alert-success">{message}</div>}
+      {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
     </div>
   );
 };

@@ -11,6 +11,7 @@ const NewInventory = () => {
   const [manufacturerName, setManufacturerName] = useState(
     'Select Manufacturer',
   );
+  const [errorMessage, setErrorMessage] = useState('');
   const [quantity, setQuantity] = useState('');
   const [manufacturingDate, setManufacturingDate] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
@@ -52,8 +53,12 @@ const NewInventory = () => {
     };
     console.log(data);
     const result = await addInventory({ data });
-    if (result) {
+    if (result.status != 400) {
       setOpenCreatedInventory(true);
+    }
+    else {
+      const err = result.data.data[0];
+      setErrorMessage(err.msg);
     }
 
   };
@@ -84,6 +89,7 @@ const NewInventory = () => {
           <InventoryPopUp onHide={closeModal} />
         </Modal>
       )}
+      {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
     </div>
   );
 };

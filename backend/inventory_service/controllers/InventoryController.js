@@ -1,5 +1,6 @@
 const UserModel = require('../models/UserModel');
 const { body, validationResult } = require('express-validator');
+const { sanitizeBody } = require('express-validator');
 //helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
 const utility = require('../helpers/utility');
@@ -151,8 +152,49 @@ exports.getAllInventoryDetails = [
 
 exports.addNewInventory = [
   auth,
+  body('data.productName')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Product Name must be specified.'),
+  body('data.manufacturerName')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Manafacturer must be specified.'),
+  body('data.quantity')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Quantity must be specified.'),
+  body('data.manufacturingDate')
+    .isLength({ min: 4 })
+    .trim()
+    .withMessage('Manafacturing Date must be specified.'),
+  body('data.expiryDate')
+    .isLength({ min: 4 })
+    .trim()
+    .withMessage('Expiry Date must be specified.'),
+  body('data.storageCondition')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Storage Condition must be specified.'),
+  body('data.batchNumber')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Batch Number must be specified.'),
+  body('data.serialNumber')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Serial Number must be specified.'),
   async (req, res) => {
     try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        // Display sanitized values/errors messages.
+        return apiResponse.validationErrorWithData(
+          res,
+          'Validation Error.',
+          errors.array(),
+        );
+      } 
       checkToken(req, res, async result => {
         if (result.success) {
           const { data } = req.body;
