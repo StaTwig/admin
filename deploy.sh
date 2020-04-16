@@ -15,7 +15,7 @@ pm2 stop all
 pm2 delete all
 
 #Creating env variables
-if [ "$1" == "PROD" ] && [[ "$2" == "SERVICESI" ] || [ "$2" == "SERVICESII"]];
+if [ "$1" == "PROD" ] && [ [ "$2" == "SERVICESI" ] || [ "$2" == "SERVICESII" ] ];
 then
 ./pre-deploy-prod.sh
 elif [ "$1" == "TEST" ];
@@ -62,7 +62,7 @@ echo $(pwd)
 echo "Building frontend"
 cd frontend
 
-if [[ "$1" -eq "PROD" ] || [ "$1" == "TEST" ]] && [ "$2" == "FRONTEND" ];
+if [ [ "$1" -eq "PROD" ] || [ "$1" == "TEST" ] ] && [ "$2" == "FRONTEND" ];
 then
 echo "Building frontend in $1 mode....."
 sudo systemctl stop nginx
