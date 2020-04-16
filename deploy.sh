@@ -28,6 +28,7 @@ if [ "$1" -eq "PROD" ] || [ "$1" == "TEST" ];
 then
 echo "Building frontend in $1 mode....."
 sudo systemctl stop nginx
+sudo rm -rf /var/wwww/html/dist /var/wwww/html/index.html
 npm install
 npm run build
 cp -r dist /var/www/html/
