@@ -1,49 +1,55 @@
 #!/bin/bash
 
 #Chekcing arguments
-if [ $# -eq 0 ]
+if [ $# -eq 0 ];
   then
     echo "Please choose the mode: PROD TEST LOCAL"
     echo "Followed by the sercices: FRONTEND GATEWAY SERVICESI SERVICESII"
     echo "SERVICESI - shipping_service	transaction_service inventory_service	track_trace		user_service"
     echo "SERVICESII - blockchain_service	log_service alert_service notification_service"
     exit
+
+else
+   echo "Executing script in $1 mode for $2 service..."
 fi
 
 #Killing all the previous pm2 process
+echo "Killing all pm2 process......"
 pm2 stop all
 pm2 delete all
 
 #Creating env variables
-if [ "$1" == "PROD" ] && [ [ "$2" == "SERVICESI" ] || [ "$2" == "SERVICESII" ] ];
+echo "Creating Env variables .... "
+
+if [ "$1" == "PROD" ] && ([ "$2" == "SERVICESI" ] || [ "$2" == "SERVICESII" ]);
    then
-      ./pre-deploy-prod.sh
+      pre-deploy-prod.sh
 
 elif [ "$1" == "TEST" ];
    then 
       ./pre-deploy-test.sh
 
 else
-   then
-      ./pre-deploy.sh
+   ./pre-deploy.sh
 
-if
+fi
 
 #starting backend services
 
 
 cd backend
-if [ "$1" == "PROD" ] && [ "$2" == "SERVICESI" ];
+
+if [ "$1" == "PROD" ] && [ "$2" == "SERVICESI" ]
    then
       rm -rf blockchain_service	log_service alert_service notification_service
 
-elif [ "$1" == "PROD" ] && [ "$2" == "SERVICESII" ];
+elif [ "$1" == "PROD" ] && [ "$2" == "SERVICESII" ]
    then
       rm -rf shipping_service	transaction_service inventory_service	track_trace		user_service
 
 fi
 
-if [ "$1" == "PROD" ] || [ "$1" == "TEST" ];
+if ([ "$1" == "PROD" ] || [ "$1" == "TEST" ]) && ([ "$2" == "SERVICESI" ] || [ "$2" == "SERVICESII" ]);
    then
       cd -P .
       for dir in ./*/
@@ -52,7 +58,7 @@ if [ "$1" == "PROD" ] || [ "$1" == "TEST" ];
             npm install && pm2 start && cd "$OLDPWD" || 
          ! break; done || ! cd - >&2
 
-elif [ "$1" == "LOCAL" ];
+elif [ "$1" == "LOCAL" ]
    then
       cd -P .
       for dir in ./*/
@@ -70,7 +76,7 @@ echo $(pwd)
 echo "Building frontend"
 cd frontend
 
-if [ [ "$1" -eq "PROD" ] || [ "$1" == "TEST" ] ] && [ "$2" == "FRONTEND" ];
+if ([ "$1" == "PROD" ] || [ "$1" == "TEST" ]) && [ "$2" == "FRONTEND" ];
    then
       echo "Building frontend in $1 mode....."
       sudo systemctl stop nginx
@@ -82,7 +88,7 @@ if [ [ "$1" -eq "PROD" ] || [ "$1" == "TEST" ] ] && [ "$2" == "FRONTEND" ];
       sudo systemctl start nginx
       sudo systemctl status nginx
 
-elif [ "$1" == "LOCAL" ] && [ "$2" == "FROTNEND" ];
+elif [ "$1" == "LOCAL" ] && [ "$2" == "FROTNEND" ]
    then
       echo "Building and starting forntend in local mode...."
       npm install
@@ -94,18 +100,18 @@ fi
 cd ..
 
 #start api gateway - traefik
-if [ "$2" == "GATEWAY" ];
+if [ "$2" == "GATEWAY" ]
    then
       killall traefik
       cd apigateway
       echo $(pwd)
       
-      if [ "$1" == "PROD" ];
+      if [ "$1" == "PROD" ]
          then
             echo "Starting traefik in PROD mode ......"
             traefik --configFile=traefik-cloud-prod-api.yml &
       
-      elif [ "$1" == "TEST" ];
+      elif [ "$1" == "TEST" ]
          then
             echo "Starting traefik in TEST mode ......"
             traefik --configFile=traefik-cloud-dev-api.yml &
