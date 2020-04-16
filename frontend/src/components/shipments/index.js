@@ -4,7 +4,7 @@ import {
 } from "react-router-dom";
 import './style.scss';
 import ButtonGroup from '../button';
-import Table from '../../shared/table';
+import Table from './table';
 import Tabs from '../../shared/tabs';
 import Tiles from './tiles';
 import Add from '../../assets/icons/add.svg';
@@ -34,19 +34,6 @@ const ShipmentAnalytic = (props) => {
             img3: <img src={Package} width="16" height="16" />,
             img4:  <img src={Status} width="16" height="16" />
       }
-
-      const tableHeaders = {
-            coloumn1 : "Client",
-            coloumn2:  "Shipment ID",
-            coloumn3:  "Alert",
-            coloumn4:  "Product Name",
-            coloumn5:  "Quantity",
-            coloumn6:  "Shipment Date",
-            coloumn7:  "Delivery To",
-            coloumn8:  "Delivery Date",
-            coloumn9:  "Delivery Location",
-            coloumn10:  "Status",
-}
       return (
             <div className="shipment">
                   <div className="d-flex justify-content-between">
@@ -73,7 +60,7 @@ const ShipmentAnalytic = (props) => {
                               <TableFilter data={headers} />
                         </div>
                         <div className="ribben-space">
-                              <Table data={tableHeaders} {...props}/>
+                              <Table  {...props}/>
                         </div>
                   {
                         openPurchaseOrder && <Modal
