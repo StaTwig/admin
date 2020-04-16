@@ -22,7 +22,7 @@ cd ..
 echo $(pwd)
 #start frontend
 echo "Frontend is commented out .Not building frontend"
-: <<'END'
+
 cd frontend
 if [ "$1" -eq "PROD" ] || [ "$1" == "TEST" ];
 then
@@ -30,6 +30,8 @@ echo "Building frontend in $1 mode....."
 sudo systemctl stop nginx
 npm install
 npm run build
+cp -r dist /var/www/html/
+cp index.html /var/wwww/html/
 sudo systemctl start nginx
 sudo systemctl status nginx
 else
@@ -39,7 +41,6 @@ npm run build
 npm start &
 fi
 cd ..
-END
 
 #start api gateway - traefik
 killall traefik
