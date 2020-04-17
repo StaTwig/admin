@@ -1,0 +1,96 @@
+.login-wrapper {
+  background: url(../../assets/brands/background.png);
+  background-size:cover;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+
+  .form-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100%;
+
+    @media screen and (max-width: 767px){
+      align-items: center;
+    }
+
+    .logo {
+      max-width: 80%;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 50px;
+      font-weight: bolder;
+      @media screen and (max-width: 767px){
+        font-size: 34px;
+      }
+    }
+    p {
+      font-size: 28px;
+      @media screen and (max-width: 767px){
+        font-size: 24px;
+      }
+    }
+  }
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    .card-title {
+      font-size: 33px;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .form-group {
+      position: relative;
+      margin-bottom: 2rem;;
+      img {
+        width: 18px;
+        height: 18px;
+        position: absolute;
+        top: 12px;
+        left: 5px;
+      }
+
+      .showpassword {
+        position: absolute;
+        top: 10px;
+        right: 5px;
+        left: unset;
+        z-index: 9;
+        cursor: pointer;
+      }
+
+
+      .form-control {
+        border: none;
+        border-bottom: 1px solid #D6D6D6;
+        border-radius: 0;
+        font-size: 20px;
+        padding-left: 2rem;
+        outline: none;
+      }
+    }
+
+    .forgot-link {
+      align-self: flex-end;
+      color: #A8A8A8;
+      font-size: 14px;
+    }
+
+    .checkbox-group {
+      span {
+        color: #707070;
+      }
+    }
+
+    .signup-link {
+      font-size: 14px;
+      color: #707070;
+    }
+  }
+}
+
+
