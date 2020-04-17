@@ -224,6 +224,7 @@ class Profile extends React.Component {
                         value={phone}
                         onChange={e => this.setState({ phone: e.target.value })}
                       /></li>
+                      
                   </ul>
                   </div>
                   </div>
