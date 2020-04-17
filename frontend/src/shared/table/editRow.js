@@ -64,7 +64,7 @@ const EditRow = props => {
                 <input
                   type="text"
                   className="form-field"
-                  placeholder="MM/YYYY"
+                  placeholder="Mm/dd/yyyy"
                   value={manufacturingDate}
                   onChange={e => setManufacturingDate(e.target.value)}
                 />
@@ -83,7 +83,7 @@ const EditRow = props => {
                 <input
                   type="text"
                   className="form-field"
-                  placeholder="MM/YYYY"
+                  placeholder="Mm/dd/yyyy"
                   value={expiryDate}
                   onChange={e => setExpiryDate(e.target.value)}
                 />

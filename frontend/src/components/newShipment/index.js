@@ -120,7 +120,7 @@ const NewShipment = () => {
             <input
               type="text"
               className="form-control"
-              placeholder="Enter Shipment Date"
+              placeholder="Mm/dd/yyyy"
               onChange={e => setShipmentDate(e.target.value)}
             />
             <div className="input-group-append">
@@ -155,7 +155,7 @@ const NewShipment = () => {
             <input
               type="text"
               className="form-control"
-              placeholder="Enter Deivery Date"
+              placeholder="Mm/dd/yyyy"
               onChange={e => setEstimateDeliveryDate(e.target.value)}
             />
             <div className="input-group-append">
