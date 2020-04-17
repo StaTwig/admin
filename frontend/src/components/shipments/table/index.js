@@ -9,12 +9,9 @@ const Table = props => {
         <div className="rTableHeading">
           <div className="rTableHead">Client</div>
           <div className="rTableHead">Shipment ID</div>
+          <div className="rTableHead">Supplier</div>
           <div className="rTableHead">
-            <span>Alert</span>
-          </div>
-          <div className="rTableHead">Product Name</div>
-          <div className="rTableHead">
-            <span>Quantity</span>
+            <span>Supplier Location</span>
           </div>
           <div className="rTableHead">
             <span>Shipment Date</span>
@@ -23,33 +20,32 @@ const Table = props => {
             <span>Delivery To</span>
           </div>
           <div className="rTableHead">
-            <span>Delivery Date</span>
-          </div>
-          <div className="rTableHead">
             <span>Delivery Location</span>
           </div>
           <div className="rTableHead">
-            <span>Status</span>
+            <span>Estimate Delivery Date</span>
           </div>
           
         </div>
         <div className="overflow">
-          {props.inventories.map(inventory => (
+          {props.shipments.map(shipment => (
             <div className="rTableRow">
               <div className="rTableCell">
                 <div className="combine-data">
-                  <div className="round-sign">{inventory.productName}</div>
-                  <a href="#">{inventory.productName}</a>
+                <div className="round-sign">{shipment.client}</div>
+                  <a href="#">{shipment.client}</a>
                 </div>
               </div>
-              <div className="rTableCell">{inventory.manufacturerName}</div>
-              <div className="rTableCell">{inventory.batchNumber}</div>
-              <div className="rTableCell">{inventory.quantity}</div>
-              <div className="rTableCell">{inventory.serialNumber}</div>
+              <div className="rTableCell">{shipment.shipmentId}</div>
+             
+              <div className="rTableCell">{shipment.supplier}</div>
+              <div className="rTableCell">{shipment.supplierLocation}</div>
+              <div className="rTableCell">{shipment.shipmentDate}</div>
 
-              <div className="rTableCell">{inventory.manufacturingDate}</div>
-              <div className="rTableCell">{inventory.expiryDate}</div>
-
+              <div className="rTableCell">{shipment.deliveryTo}</div>
+              <div className="rTableCell">{shipment.deliveryLocation}</div>
+             
+              <div className="rTableCell">{shipment.estimateDeliveryDate}</div>
             </div>
           ))}
         </div>
