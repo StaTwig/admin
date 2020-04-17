@@ -9,14 +9,14 @@ EMAIL_SMTP_PORT=587
 EMAIL_SMTP_USERNAME=info@babyboo.in
 EMAIL_SMTP_PASSWORD=NetStar2019
 EMAIL_SMTP_SECURE=false
-URL='http://localhost:9001/blockchainmanagement'" >> backend/user_service/.env
+URL='http://test.vaccineledger.com:9001/blockchainmanagement'" >> backend/user_service/.env
 
 
 #creating env file for shipping service
 rm -f backend/shipping_service/.env
 echo "JWT_SECRET=abcdefghijklmnopqrstuvwxyz1234567890
 JWT_TIMEOUT_DURATION=\"2 hours\"
-URL='http://localhost:9001/blockchainmanagement'
+URL='http://test.vaccineledger.com:9001/blockchainmanagement'
 STREAM='test_stream_shipment'" >> backend/shipping_service/.env
 
 
@@ -24,7 +24,7 @@ STREAM='test_stream_shipment'" >> backend/shipping_service/.env
 rm -f backend/inventory_service/.env
 echo "JWT_SECRET=abcdefghijklmnopqrstuvwxyz1234567890
 JWT_TIMEOUT_DURATION=\"2 hours\"
-URL='http://localhost:9001/blockchainmanagement'
+URL='http://test.vaccineledger.com:9001/blockchainmanagement'
 STREAM='test_stream_inventory'" >> backend/inventory_service/.env
 
 
