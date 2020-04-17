@@ -31,7 +31,7 @@ STREAM='test_stream_inventory'" >> backend/inventory_service/.env
 #creating env file for blockchain service
 rm -f backend/blockchain_service/.env
 echo "PORT = 7424
-HOST = 'localhost'
+HOST = '52.90.57.31'
 USERNAME = 'multichainrpc'
 PASSWORD = '2rc2t2sPSaYQfCCcArSmL2SByXL1ef2Q5uo2QiktgWtU'
 MC_VERSION = '1.0'
