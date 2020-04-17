@@ -559,10 +559,11 @@ exports.updateProfile = [
           
           bcrypt.hash(req.body.password, 10, function(err, hash) {
             var passwordNew = hash;
+            if(req.body.password) {
             if(req.body.password.length>2){
             user.password = passwordNew;
             console.log("password updated")
-            }
+            } }
             user.save(function(err) {
             if (err) {
               return apiResponse.ErrorResponse(res, err);
