@@ -6,7 +6,8 @@ import Mail from "../../assets/icons/mail.png";
 import logo from "../../assets/brands/VaccineLedgerlogo.svg";
 
 
-const ForgotPassword = () => {
+const ForgotPassword = (props) => {
+  const {email,errorMessage,onForgot,onEmailChange } = props;
   return (
     <div className="login-wrapper">
       <div className="container">
@@ -27,11 +28,12 @@ const ForgotPassword = () => {
                     <img alt="" src={Mail} className="icon" />
                     <input type="email"
                       className="form-control"
-                     //value="" 
+                      value={email}
+                      onChange={onEmailChange}
                       placeholder="Email" />
                   </div>
                   <div className="text-center">
-                    <button type="button" className="btn btn-primary">
+                    <button type="button" className="btn btn-primary" onClick={onForgot}>
                     SUBMIT
                     </button>
                   </div>

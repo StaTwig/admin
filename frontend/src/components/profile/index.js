@@ -225,16 +225,10 @@ class Profile extends React.Component {
                       <input
                         value={phone}
                         onChange={e => this.setState({ phone: e.target.value })}
-                      />
-                    </div>
-                    <div>
-                      <label>Password</label>
-                      <input
-                        type = "password"
-                        value={password}
-                        onChange={e => this.setState({ password: e.target.value })}
-                      />
-                    </div>
+                      /></li>
+                      
+                  </ul>
+                  </div>
                   </div>
                 ) : (
                   <div className="row">

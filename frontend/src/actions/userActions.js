@@ -38,6 +38,15 @@ export const loginUser = async data => {
   }
 };
 
+export const forgotPassword = async data => {
+  try {
+    const result = await axios.post(config().forgotPasswordUrl, data );
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
 export const getUserInfo = () => {
   try {
     return async dispatch => {
