@@ -14,6 +14,7 @@ class Profile extends React.Component {
       profile: null,
       editMode: false,
       role: '',
+      password: '',
       organisation: '',
       affiliateOrganisation: '',
       walletAddress: '',
@@ -81,6 +82,7 @@ class Profile extends React.Component {
       organisation,
       affiliateOrganisation,
       status,
+      password
     });
   }
 
@@ -113,8 +115,8 @@ class Profile extends React.Component {
   }
 
   async onSubmit() {
-    const { name, organisation, affiliateOrganisation, phone } = this.state;
-    const data = { name, organisation, affiliateOrganisation, phone }  ;
+    const { name, organisation, affiliateOrganisation, phone, password } = this.state;
+    const data = { name, organisation, affiliateOrganisation, phone, password }  ;
     const result = await updateProfile(data);
     debugger;
     if (result.status === 200) {
@@ -137,7 +139,8 @@ class Profile extends React.Component {
       email,
       name,
       message,
-      profile_picture
+      profile_picture,
+      password
     } = this.state;
     return (
       <div className="profile">
@@ -223,9 +226,16 @@ class Profile extends React.Component {
                   <li> <input
                         value={phone}
                         onChange={e => this.setState({ phone: e.target.value })}
-                      /></li>
-                  </ul>
-                  </div>
+                      />
+                    </div>
+                    <div>
+                      <label>Password</label>
+                      <input
+                        type = "password"
+                        value={password}
+                        onChange={e => this.setState({ password: e.target.value })}
+                      />
+                    </div>
                   </div>
 
                 ) : (

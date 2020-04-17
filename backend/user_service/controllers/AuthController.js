@@ -13,7 +13,7 @@ const auth = require('../middlewares/jwt');
 const axios = require('axios');
 const dotenv = require('dotenv').config();
 const blockchain_service_url = process.env.URL;
-
+var md5 = require('md5');
 /**
  * User registration.
  *
@@ -423,17 +423,41 @@ exports.forgotPassword = [
       } else {
         return UserModel.findOne({ email: req.body.email }).then(user => {
           if (user) {
-            let html = '<p>your password is XXXXX.</p>';
+            let newPassword = req.body.email + utility.randomNumber(10);
+            //hash input password
+            bcrypt.hash(newPassword, 10, function(err, hash) {
+              console.log(hash)
+              
+          // Html email body
+          let html = '<p>your new password is </p>' + newPassword;
             // Send confirmation email
             mailer.send(
               constants.confirmEmails.from,
               req.body.email,
               'ForgotPassword',
               html,
-            );
-            return res.send(
-              'Password has been sent successfully to RegisteredEmail',
-            );
+            )
+            .then(function() {
+              // Save user.
+                    
+              user.password = hash;
+              user.save(function(err) {
+                if (err) {
+                  return apiResponse.ErrorResponse(res, err);
+                }
+                else {
+                  return res.send(
+                    'Password has been sent successfully to RegisteredEmail',
+                  );
+                }
+              });
+            })
+            .catch(err => {
+              console.log(err);
+              return apiResponse.ErrorResponse(res, err);
+            });
+        });     
+            
           }
         });
       }
@@ -526,19 +550,32 @@ exports.updateProfile = [
     try {
       UserModel.findOne({ email: req.user.email }).then(user => {
         if (user) {
-        	const { name, organisation, affiliateOrganisation, phone } = req.body;
+        	const { name, organisation, affiliateOrganisation, phone, password } = req.body;
         	user.name = name;
         	user.organisation = organisation;
         	user.affiliateOrganisation = affiliateOrganisation;
-        	user.phone = phone;
-          user.save(function(err) {
+          user.phone = phone;
+          console.log(req.body.password.length)
+          
+          bcrypt.hash(req.body.password, 10, function(err, hash) {
+            var passwordNew = hash;
+            if(req.body.password.length>2){
+            user.password = passwordNew;
+            console.log("password updated")
+            }
+            user.save(function(err) {
             if (err) {
               return apiResponse.ErrorResponse(res, err);
             }
+            else{
+              console.log('Updated');
+              return apiResponse.successResponse(res, user.name + ' user Updated');
+            }
           });
+          }) 
+          
         }
-        console.log('Updated');
-        return apiResponse.successResponse(res, user.name + ' user Updated');
+        
       });
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
