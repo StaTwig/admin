@@ -48,7 +48,7 @@ import './style.scss';
                 <img src={totalshipments} alt="truck" />
               </div>
               <div className="d-flex flex-column">
-                <div className="title">Total Shipments Completed</div>
+                <div className="title">Total Shipments</div>
                 <div className="count">{AllTimeCount}<small className="dayStatus">This Year</small></div>
               </div>
             </div>
@@ -72,7 +72,7 @@ import './style.scss';
                 <img src={currentshipment} alt="truck" />
               </div>
               <div className="d-flex flex-column">
-                <div className="title">Total Shipmentst</div>
+                <div className="title">Current Shipment in Transit</div>
                 <div className="count">{Months6Count}<small className="dayStatus">Last 6 Month</small></div>
               </div>
             </div>
@@ -96,7 +96,7 @@ import './style.scss';
                 <img src={shipmentsdelayed} alt="truck" />
               </div>
               <div className="d-flex flex-column">
-                <div className="title">Total Shipments</div>
+                <div className="title">Total Shipments Delayed</div>
                 <div className="count">{Hours24Count} <small className="dayStatus">Today</small></div>
               </div>
             </div>
