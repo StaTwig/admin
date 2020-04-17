@@ -2,7 +2,7 @@ export const TEST_SERVER_URL = 'http://test.vaccineledger.com:9001';
 export const LOCAL_SERVER_URL_USER = 'http://localhost:3001';
 export const LOCAL_SERVER_URL_SHIPMENT = 'http://localhost:3002';
 export const LOCAL_SERVER_URL_INVENTORY = 'http://localhost:3007';
-export const PROD_SERVER_URL = 'api.vaccineledger.com:9001';
+export const PROD_SERVER_URL = 'http://api.vaccineledger.com:9001';
 export function config() {
 
   const confs = {
@@ -50,7 +50,7 @@ export function config() {
     }
   };
 
-  const conf = confs['test'];
+  const conf = confs['prod'];
   // conf = confs['local'];
   // conf = confs['preprod'];
 
