@@ -9,6 +9,14 @@ import './style.scss';
 
 
 const trackAndTrace = (props) => {
+  const tableHeaders = {
+    coloumn1 : "Transaction Id",
+    coloumn2:  "From",
+    coloumn3:  "To",
+    coloumn4:  "date",
+    coloumn5:  "Vaccine",
+   
+}
   return (
     <div className="trackTrace">
       <div className="d-flex justify-content-between mb-3">
@@ -28,7 +36,7 @@ const trackAndTrace = (props) => {
       <StatusBar />
       <div className="ribben-space ">
         <h1>Latest Transactions</h1>
-        <Table {...props} />
+        <Table data={tableHeaders}{...props} />
       </div>
     </div >
   );

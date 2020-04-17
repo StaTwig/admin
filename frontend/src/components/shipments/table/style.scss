@@ -1,4 +1,4 @@
-@import '../../assets/styles/global.scss';
+@import '../../../assets/styles/global.scss';
 
 .table {
   .overflow{
@@ -78,54 +78,4 @@
       }
     }
   }
-}
-
-.editTable {
-  .square-box {
-    width: 25px;
-    height: 20px;
-    background-color: $lightBlue;
-    border-radius: 5px;
-    margin-right: 5px;
-  }
-  .rTable {
-
-    .input-group,
-    .form-group {
-      margin-bottom: 0;
-
-      .form-field {
-        border: none;
-        font-size: 10px;
-      }
-    }
-
-    .rTableRow {
-      padding: 0;
-
-      .rTableCell {
-        border-right: 1px solid #d6d6d6;
-        padding: 5px 8px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        
-
-        &:last-child {
-          border-right: none;
-        }
-
-        .form-group {
-          flex-basis: 100%;
-
-          .form-field {
-            width: 100%;
-            font-size: 10px;
-          }
-        }
-      }
-    }
-  }
-
-
 }

@@ -60,7 +60,7 @@ const EditTable = props => {
             <div className="rTableCell">
               <DropdownButton
                 name={manufacturerName}
-                onSelect={item => setManufacturerName(item)}
+                onSelect={item => setManufacturerName(item.replace( '<small>Qty: 2148</small>', ''))}
                 groups={[
                   'Manufacturer A <small>Qty: 2148</small>',
                   'Manufacturer D <small>Qty: 2148</small>',
@@ -149,9 +149,7 @@ const EditTable = props => {
                   value={serialNumber}
                   onChange={e => setSerialNumber(e.target.value)}
                 />
-                <div className="input-group-append">
-                  <img src={downArrow} alt="downarrow" width="9" height="9" />
-                </div>
+               
               </div>
             </div>
           </div>
@@ -162,3 +160,8 @@ const EditTable = props => {
 };
 
 export default EditTable;
+
+
+/*<div className="input-group-append">
+<img src={downArrow} alt="downarrow" width="9" height="9" />
+</div>*/

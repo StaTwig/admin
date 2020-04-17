@@ -7,20 +7,29 @@ const Table = props => {
     <div className="table">
       <div className="rTable">
         <div className="rTableHeading">
-          <div className="rTableHead">{props.data.coloumn1}</div>
-          <div className="rTableHead">{props.data.coloumn2}</div>
+          <div className="rTableHead">Client</div>
+          <div className="rTableHead">Shipment ID</div>
           <div className="rTableHead">
-            <span>{props.data.coloumn3}</span>
+            <span>Alert</span>
           </div>
-          <div className="rTableHead">{props.data.coloumn4}</div>
+          <div className="rTableHead">Product Name</div>
           <div className="rTableHead">
-            <span>{props.data.coloumn5}</span>
-          </div>
-          <div className="rTableHead">
-            <span>{props.data.coloumn6}</span>
+            <span>Quantity</span>
           </div>
           <div className="rTableHead">
-            <span>{props.data.coloumn7}</span>
+            <span>Shipment Date</span>
+          </div>
+          <div className="rTableHead">
+            <span>Delivery To</span>
+          </div>
+          <div className="rTableHead">
+            <span>Delivery Date</span>
+          </div>
+          <div className="rTableHead">
+            <span>Delivery Location</span>
+          </div>
+          <div className="rTableHead">
+            <span>Status</span>
           </div>
           
         </div>

@@ -101,7 +101,7 @@ const NewShipment = () => {
               type="text"
               className="form-control"
               name="shipmentId"
-              placeholder="John Doe"
+              placeholder="Enter Supplier"
               onChange={e => setSupplier(e.target.value)}
             />
           </div>
@@ -110,19 +110,17 @@ const NewShipment = () => {
             <input
               type="text"
               className="form-control"
-              placeholder="Select Location"
+              placeholder="Enter Location"
               onChange={e => setSupplierLocation(e.target.value)}
             />
-            <div className="input-group-append">
-              <img src={updownArrow} alt="downarrow" width="13" height="13" />
-            </div>
+           
           </div>
           <div className="input-group">
             <label htmlFor="shipmentId">Shipment Date</label>
             <input
               type="text"
               className="form-control"
-              placeholder="Select Shipment Date"
+              placeholder="Enter Shipment Date"
               onChange={e => setShipmentDate(e.target.value)}
             />
             <div className="input-group-append">
@@ -136,24 +134,20 @@ const NewShipment = () => {
             <input
               type="text"
               className="form-control"
-              placeholder="Select"
+              placeholder=" Enter Receiver"
               onChange={e => setDeliveryTo(e.target.value)}
             />
-            <div className="input-group-append">
-              <img src={updownArrow} alt="downarrow" width="13" height="13" />
-            </div>
+            
           </div>
           <div className="input-group">
             <label htmlFor="shipmentId">Delivery Location</label>
             <input
               type="text"
               className="form-control"
-              placeholder="Select Delivery Location"
+              placeholder="Enter Location"
               onChange={e => setDeliveryLocation(e.target.value)}
             />
-            <div className="input-group-append">
-              <img src={updownArrow} alt="downarrow" width="13" height="13" />
-            </div>
+           
           </div>
 
           <div className="input-group">
@@ -161,7 +155,7 @@ const NewShipment = () => {
             <input
               type="text"
               className="form-control"
-              placeholder="Deivery Date"
+              placeholder="Enter Deivery Date"
               onChange={e => setEstimateDeliveryDate(e.target.value)}
             />
             <div className="input-group-append">
@@ -181,7 +175,7 @@ const NewShipment = () => {
         <div className="total">Grand Total</div>
         <div className="value">0</div>
         <div className="d-flex ">
-          <button className="btn-primary btn" onClick={onAssign}>
+          <button className="btn btn-outline-info mr-2" onClick={onAssign}>
             Assign Shipmnet Order
           </button>
           <button className="btn-primary btn">Proceed To Review</button>
@@ -194,3 +188,7 @@ const NewShipment = () => {
 };
 
 export default NewShipment;
+
+/* <div className="input-group-append">
+              <img src={updownArrow} alt="downarrow" width="13" height="13" />
+            </div> */

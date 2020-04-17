@@ -81,6 +81,14 @@
       background-color: #ffef83;
     }
 
+    .ellipseFive {
+      background-color: #d4e7ff;
+    }
+
+    .ellipseSix {
+      background-color: #e0b0ff;
+    }
+
     p {
       font-size: 10px;
       margin-top: 0.5rem;
@@ -148,16 +156,18 @@
         height: 18px;
       }
 
+     
       &.truck-bg {
-        background: $deepGreen;
-      }
+        background:  #e8f4f8;
+      }                                       
 
       &.sent-bg {
-        background: $lightBlue;
+        background: #d4ebf2;
       }
 
       &.recived-bg {
-        background: $darkYellow;
+        background: #fff2e5;
+        
       }
 
       &.transit-bg {
