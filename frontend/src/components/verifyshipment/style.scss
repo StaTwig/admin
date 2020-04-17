@@ -1,0 +1,39 @@
+@import '../../assets/styles/global.scss';
+
+
+.verifyshipment {
+  padding-left: 3rem;
+  padding-right: 3rem; 
+  
+  
+  ul {
+    padding: 0.5rem 0.5rem;
+    display: flex;
+    flex-direction: column;
+
+    li {
+      padding: 0.3rem 0.3rem;
+      margin:0.3rem;
+      list-style: none;
+    }
+}
+
+.btn{
+
+  border-radius: 10px;
+}
+
+  .total{
+    color: $OBBlue;
+    font:  25px/13px $roboto;
+   
+  }
+  .value{
+    color: $black;
+    font:  25px/13px $roboto;
+  }
+
+  hr {
+    border-width: 2px;
+  }
+}

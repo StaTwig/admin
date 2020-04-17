@@ -1,0 +1,52 @@
+@import "../../assets/styles/global.scss";
+
+.custom-dropdown {
+  flex-basis: 100%;
+  display: flex;
+  outline: none;
+  position: relative;
+
+  small {
+    color: $a8Grey;
+  }
+  .btn-custom-dropdown {
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    color: $a8Grey;
+    flex-basis: 100%;
+    outline: none;
+    align-items: center;
+    font-size: 10px;
+
+    &.active {
+      color: $primaryBlue;
+    }
+  }
+
+  .dropdown-menu {
+    box-shadow: 0px 3px 10px $grey;
+    border-radius: 8px;
+    border: none;
+    padding: 0.5rem;
+    .dropdown-item {
+      padding: 0;
+      clear: both;
+      font-size: 14px;
+      cursor: pointer;
+    }
+    hr {
+      border-width: 2px;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+  }
+  .transform-group {
+    position: absolute;
+    transform: translate3d(0px, 38px, 0px);
+    top: 0;
+    left: -16px;
+    right: -15px;
+    will-change: transform;
+  }
+}

@@ -1,0 +1,41 @@
+@import '../../assets/styles/global.scss';
+
+
+.profile {
+  padding-right: 3rem;
+    padding-left: 3rem;
+    @media (max-width: $md) {
+      padding-right: 10px;
+      padding-left: 10px;
+    }
+
+  .divider {
+    border: 1px solid $d6Grey;
+    display: flex;
+    align-self: center;
+  }
+
+  .btn{
+
+    border-radius: 15px;
+}
+
+  ul {
+    padding: 0.8rem 0.8rem;
+    display: flex;
+    flex-direction: column;
+
+    li {
+      padding: 0.3rem 0.3rem;
+      margin:0.4rem;
+      list-style: none;
+    }
+}
+
+  .userPic {
+    img {
+      width:160px;
+    }
+  }
+
+}

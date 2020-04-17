@@ -1,0 +1,41 @@
+@import '../../assets/styles/global.scss';
+
+footer {
+  display: flex !important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: $white;
+  font-size: 12px;
+  position: fixed;
+  bottom: 3rem;
+  align-self: center;
+
+  p {
+    margin-bottom: 0;
+  }
+
+  .footer-branding {
+    display: flex;
+    margin-top: .5rem;
+
+    img {
+      width: 80px;
+    }
+
+    @media screen and (max-width: 768px){
+      width: 150px;
+    }
+
+    h1 {
+      font-size: 19px;
+      font-weight: bold;
+      letter-spacing: 1.9px;
+      text-transform: uppercase;
+
+      &:last-child {
+        color: $black;
+      }
+    }
+  }
+}
