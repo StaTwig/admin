@@ -175,38 +175,33 @@ class Profile extends React.Component {
               <div className="col-8 mt-5">
                 {editMode ? (
                   <div className="col-sm-12">
-                  <div className="row">
-
-                  <ul>
-                  <li> <label>Name </label></li>
-                  <li><label>Role </label></li>
-                  <li> <label>Organisation</label></li>
-                  <li><label>Affiliated Organisation</label></li>
-                  <li><label>Wallet Address</label></li>
-                  <li><label>Phone</label></li>
-                  </ul>
-
-                  <ul>
-                  <li> 
+                    <div>
+                      <label>Name </label>
                       <input
                         value={name}
                         onChange={e => this.setState({ name: e.target.value })}
                       />
-                      </li>
-                  <li><input
+                    </div>
+                    <div>
+                      <label>Role </label>
+                      <input
                         disabled
                         value={role}
                         onChange={e => this.setState({ role: e.target.value })}
                       />
-                      </li>
-                  <li>
+                    </div>
+                    <div>
+                      <label>Organisation</label>
                       <input
                         value={organisation}
                         onChange={e =>
                           this.setState({ organisation: e.target.value })
                         }
-                      /></li>
-                  <li>  <input
+                      />
+                    </div>
+                    <div>
+                      <label>Affiliated Organisation</label>
+                      <input
                         value={affiliateOrganisation}
                         onChange={e =>
                           this.setState({
@@ -214,16 +209,20 @@ class Profile extends React.Component {
                           })
                         }
                       />
-                    </li>
-                  <li> <input
+                    </div>
+                    <div>
+                      <label>Wallet Address</label>
+                      <input
                         disabled
                         value={walletAddress}
                         onChange={e =>
                           this.setState({ walletAddress: e.target.value })
                         }
                       />
-                    </li>
-                  <li> <input
+                    </div>
+                    <div>
+                      <label>Phone</label>
+                      <input
                         value={phone}
                         onChange={e => this.setState({ phone: e.target.value })}
                       />
@@ -237,7 +236,6 @@ class Profile extends React.Component {
                       />
                     </div>
                   </div>
-
                 ) : (
                   <div className="row">
                     <ul>
@@ -274,12 +272,12 @@ class Profile extends React.Component {
                   </button>
                 </div>
               ) : (
-                <div className="d-flex flex-row justify-content-between">
-                  <button className="btn-primary btn mr-2" onClick={this.onSubmit}>
-                    <span>Submit</span>
-                  </button>
+                <div className="col">
                   <button className="btn-primary btn" onClick={this.onCancel}>
                     <span>Cancel</span>
+                  </button>
+                  <button className="btn-primary btn" onClick={this.onSubmit}>
+                    <span>Submit</span>
                   </button>
                 </div>
               )}
