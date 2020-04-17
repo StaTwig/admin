@@ -49,7 +49,7 @@ elif [ "$1" == "PROD" ] && [ "$2" == "SERVICESII" ]
 
 fi
 
-if ([ "$1" == "PROD" ] || [ "$1" == "TEST" ]) && ([ "$2" == "SERVICESI" ] || [ "$2" == "SERVICESII" ]);
+if ([ "$1" == "PROD" ] || [ "$1" == "TEST" ]) && ([ "$2" == "SERVICESI" ] || [ "$2" == "SERVICESII" ] || [ "$2" == "ALL" ]);
    then
       cd -P .
       for dir in ./*/
