@@ -180,7 +180,9 @@ class Profile extends React.Component {
                   <li> <label>Organisation</label></li>
                   <li><label>Affiliated Organisation</label></li>
                   <li><label>Wallet Address</label></li>
+                  <li><label>Email</label></li>
                   <li><label>Phone</label></li>
+                  
                   </ul>
 
                   <ul>
@@ -220,10 +222,19 @@ class Profile extends React.Component {
                         }
                       />
                     </li>
+                    <li> <input
+                        disabled
+                        value={email}
+                        onChange={e =>
+                          this.setState({ email: e.target.value })
+                        }
+                      />
+                    </li>
                   <li> <input
                         value={phone}
                         onChange={e => this.setState({ phone: e.target.value })}
                       /></li>
+                       
                   </ul>
                   </div>
                   </div>
@@ -266,7 +277,7 @@ class Profile extends React.Component {
               ) : (
                 <div className="d-flex flex-row justify-content-between">
                   <button className="btn-primary btn mr-2" onClick={this.onSubmit}>
-                    <span>Submit</span>
+                    <span>Save</span>
                   </button>
                   <button className="btn-primary btn" onClick={this.onCancel}>
                     <span>Cancel</span>
