@@ -126,8 +126,8 @@ import './style.scss';
             </div>
             <div className="card-footer">
               <div className="d-flex align-items-center justify-content-center">
-                <Link to="/inventory" className="card-link btn btn-outline-primary">
-                  View More
+                <Link to="/inventory">
+                <button className=" card-link btn btn-outline-primary"> View More</button>
               </Link>
               </div>
             </div>
@@ -148,9 +148,9 @@ import './style.scss';
               </div>
             <div className="card-footer">
               <div className="d-flex align-items-center justify-content-center">
-                <Link to="/shipments" className="card-link btn btn-outline-primary">
-                  View More
-                </Link>
+                <Link to="/shipments">
+                <button className=" card-link btn btn-outline-primary"> View More</button>
+                  </Link>
               </div>
             </div>
           </div>
