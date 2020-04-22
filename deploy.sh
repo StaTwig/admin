@@ -4,7 +4,7 @@
 if [ $# -eq 0 ];
   then
     echo "Please choose the mode: PROD TEST LOCAL"
-    echo "Followed by the sercices: FRONTEND GATEWAY SERVICESI SERVICESII"
+    echo "Followed by the sercices: FRONTEND GATEWAY SERVICESI SERVICESII ALL"
     echo "SERVICESI - shipping_service	transaction_service inventory_service	track_trace		user_service"
     echo "SERVICESII - blockchain_service	log_service alert_service notification_service"
     exit
@@ -13,10 +13,6 @@ else
    echo "Executing script in $1 mode for $2 service..."
 fi
 
-#Killing all the previous pm2 process
-echo "Killing all pm2 process......"
-pm2 stop all
-pm2 delete all
 
 #Creating env variables
 echo "Creating Env variables .... "
@@ -76,7 +72,7 @@ echo $(pwd)
 echo "Building frontend"
 cd frontend
 
-if ([ "$1" == "PROD" ] || [ "$1" == "TEST" ]) && [ "$2" == "FRONTEND" ];
+if ([ "$1" == "PROD" ] || [ "$1" == "TEST" ]) && ([ "$2" == "FRONTEND" ] || [ "$2" == "ALL" ]);
    then
       echo "Building frontend in $1 mode....."
       sudo systemctl stop nginx
@@ -100,7 +96,7 @@ fi
 cd ..
 
 #start api gateway - traefik
-if [ "$2" == "GATEWAY" ]
+if ([ "$2" == "GATEWAY" ] || [ "$2" == "ALL" ]);
    then
       killall traefik
       cd apigateway
