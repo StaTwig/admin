@@ -6,8 +6,10 @@ import OPV from "../../assets/icons/OPV.svg";
 import MMR from "../../assets/icons/MMR.svg";
 import HiB from "../../assets/icons/HiB.svg";
 import HepB from "../../assets/icons/HepB.svg";
+import currentinventory from "../../assets/icons/CurrentInventory.svg";
 import CurrentTemperature from "../../assets/icons/CurrentTemperature.png";
 import Chart from "./temperature";
+import Map from './map';
 
 import './style.scss';
 
@@ -116,33 +118,66 @@ const Tracing = () => {
         <div className="col-sm-8">
           <div className="d-flex flex-column">
             <div className="d-flex justify-content-between">
-              <div className="panel"></div>
+              <div className="panel col"><h3 className="head">Geographical Tracking</h3><Map /></div>
               <div className="panel">
               <div className="d-flex justify-content-between">
               <div class = "row">
 
-              <img src={CurrentTemperature} width='30' height='30' className="mr-2" />
+              <img src={CurrentTemperature} width='20' height='20' className="mr-2" />
               
               <div className="d-flex flex-column">
 
-              <div>Current temperature</div>
-              <div>3°C</div>
+              <div className="info">Current temperature</div>
+              <div className="info">3°C</div>
               </div>
               
               </div>
                  
               <div className="d-flex flex-column">
 
-              <div>Last Upadated on</div>
-              <div>07:00 am</div>
+              <div className="info">Last Upadated on</div>
+              <div className="info">07:00 am</div>
               </div>
               
               </div>
               <Chart />
          </div>
             </div>
-            <h5 className="head">Geographical Tracking/ Chain of Custody</h5>
-            <div className="panel "></div>
+            <h5 className="head mt-3">Chain of Custody</h5>
+            <div className="panel ">
+              <div className="d-flex flex-row">
+                 <ul className="mr-3">
+                   <li> <div className="picture transit-bg">
+                                          <img src={currentinventory} alt="truck" />
+                                    </div> </li>
+                                     <li className="my-3 ml-3"><div className="picture symbol-bg "></div></li>
+                                    <li className="my-3 ml-3"><div className="picture symbol-bg"> </div></li>
+                                    <li className="my-3 ml-3"><div className="picture symbol-bg"> </div></li>  
+                                    <li className="my-3 ml-3"><div className="picture last-bg"> </div></li>   
+                   </ul>
+                   <ul className="mr-5">
+                   <li className="col"> <div>Shipment Number</div>
+                   <div>AGHJKJSG78999</div> </li>
+                   <li className="col"> <div>Hyderabad,India</div>
+                   <div>12/12/2019</div> </li>
+                   <li className="col"> <div>Hyderabad Airport</div>
+                   <div>01/02/2020</div> </li>
+                   <li > Kenya Airport</li>
+                   <li > UNICEF Kenya</li>
+                  </ul>
+                   <ul>
+                   <li className="col"> <div>Added to inventory</div>
+                   <div>Wallet Address:</div> </li>
+                   <li>Delivered</li>
+                   <li > In Transit</li>
+                   <li >Pending Delivered</li>
+                   
+                   </ul>
+
+
+              </div>
+
+            </div>
 
           </div>
 
