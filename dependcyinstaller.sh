@@ -1,5 +1,6 @@
 #!/bin/bash
 
+cd ..
 
 #Installing nginx
 sudo apt update
