@@ -3,6 +3,9 @@ export const LOCAL_SERVER_URL_USER = 'http://localhost:3001';
 export const LOCAL_SERVER_URL_SHIPMENT = 'http://localhost:3002';
 export const LOCAL_SERVER_URL_INVENTORY = 'http://localhost:3007';
 export const PROD_SERVER_URL = 'http://api.vaccineledger.com:9001';
+export const STABLE_SERVER_URL_USER = 'http://52.90.57.31:3001';
+export const STABLE_SERVER_URL_SHIPMENT = 'http://52.90.57.31:3002';
+export const STABLE_SERVER_URL_INVENTORY = 'http://52.90.57.31:3007';
 export function config() {
 
   const confs = {
@@ -11,6 +14,7 @@ export function config() {
       registerUrl: `${LOCAL_SERVER_URL_USER}/api/auth/register`,
       verifyOtpUrl: `${LOCAL_SERVER_URL_USER}/api/auth/verify-otp`,
       userInfoUrl: `${LOCAL_SERVER_URL_USER}/api/auth/userInfo`,
+      getAllUsersUrl: `${LOCAL_SERVER_URL_USER}/api/auth/getAllUsers`,
       updateProfileUrl: `${LOCAL_SERVER_URL_USER}/api/auth/updateProfile`,
       upload: `${LOCAL_SERVER_URL_USER}/api/auth/upload`,
       shipmentsUrl: `${LOCAL_SERVER_URL_SHIPMENT}/api/shipping/shipmentStatistics`,
@@ -19,6 +23,21 @@ export function config() {
       addInventoryUrl: `${LOCAL_SERVER_URL_INVENTORY}/api/inventory/addNewInventory`,
       shipmentsSearch: `${LOCAL_SERVER_URL_SHIPMENT}/api/shipping/fetchShipments?key=`,
       inventorySearch: `${LOCAL_SERVER_URL_INVENTORY}/api/inventory/getInventoryDetailsForProduct?key=`
+    },
+    stable: {
+      loginUrl: `${STABLE_SERVER_URL_USER}/api/auth/login`,
+      registerUrl: `${STABLE_SERVER_URL_USER}/api/auth/register`,
+      verifyOtpUrl: `${STABLE_SERVER_URL_USER}/api/auth/verify-otp`,
+      userInfoUrl: `${STABLE_SERVER_URL_USER}/api/auth/userInfo`,
+      getAllUsersUrl: `${STABLE_SERVER_URL_USER}/api/auth/getAllUsers`,
+      updateProfileUrl: `${STABLE_SERVER_URL_USER}/api/auth/updateProfile`,
+      upload: `${STABLE_SERVER_URL_USER}/api/auth/upload`,
+      shipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/api/shipping/shipmentStatistics`,
+      inventoriesUrl: `${STABLE_SERVER_URL_INVENTORY}/api/inventory/getAllInventoryDetails`,
+      createShipmentUrl: `${STABLE_SERVER_URL_SHIPMENT}/api/shipping/createShipment`,
+      addInventoryUrl: `${STABLE_SERVER_URL_INVENTORY}/api/inventory/addNewInventory`,
+      shipmentsSearch: `${STABLE_SERVER_URL_SHIPMENT}/api/shipping/fetchShipments?key=`,
+      inventorySearch: `${STABLE_SERVER_URL_INVENTORY}/api/inventory/getInventoryDetailsForProduct?key=`
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -50,7 +69,7 @@ export function config() {
     }
   };
 
-  const conf = confs['prod'];
+  const conf = confs['stable'];
   // conf = confs['local'];
   // conf = confs['preprod'];
 
