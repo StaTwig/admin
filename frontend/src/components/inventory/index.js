@@ -35,7 +35,7 @@ const Inventory = (props) => {
             coloumn2:  "Manufacturer",
             coloumn3:  "Batch Number",
             coloumn4:  "Quantity",
-            coloumn5:  "Date Added",
+            coloumn5:  "Serial Number",
             coloumn6:  "Mfg Date",
             coloumn7:  "Exp Date",
       }
