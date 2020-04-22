@@ -27,6 +27,17 @@
       flex-basis: 65%;
       flex-grow: inherit;
     }
+
+    .user {
+      border: none;
+      background: transparent;
+      border-radius: 0;
+      color: $deepBlue;
+      flex-basis: 80%;
+      flex-grow: inherit;
+      font: 25px Helvetica Neue;
+      font-weight: bold;
+    }
   }
 
   .input-group {

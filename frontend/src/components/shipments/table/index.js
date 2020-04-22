@@ -32,8 +32,8 @@ const Table = props => {
             <div className="rTableRow" key={index}>
               <div className="rTableCell">
                 <div className="combine-data">
-                <div className="round-sign">{shipment.client}</div>
-                  <a href="#">{shipment.client}</a>
+                {shipment.client}
+                  
                 </div>
               </div>
               <div className="rTableCell">{shipment.shipmentId}</div>

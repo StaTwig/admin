@@ -12,12 +12,13 @@ const PurchaseForm = props => {
 
   const userNames = users.map(usr => usr.name);
   const [deliveryTo, setDeliveryTo] = useState('Thrinethra');
-  const [products, setProducts] = useState(['bOPV', 'MMR', 'Hib', 'Hep B']);
+  const [products, setProducts] = useState(['bOPV', 'MMR', 'PVC', 'BCG','RV','Hep B']);
   const [manufacturers, setManufacturers] = useState([
-    'Manufacturer A',
-    'Manufacturer D',
-    'Manufacturer C',
-    'Manufacturer D',
+                    'Bharat Biotech',
+                  'Aroma Biotech',
+                  'Chronly industries',
+                  'GH Pharmas',
+
   ]);
 
   const [product, setProduct] = useState('Select Product');
@@ -57,8 +58,9 @@ const PurchaseForm = props => {
         <div className="input-group">
           <label htmlFor="shipmentId">Supplier</label>
           <input
+            disabled
             type="text"
-            className="form-control"
+            className="user"
             placeholder="Select Supplier"
             value={user.name}
           />
