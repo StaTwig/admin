@@ -12,12 +12,12 @@ const PurchaseForm = props => {
 
   const userNames = users.map(usr => usr.name);
   const [deliveryTo, setDeliveryTo] = useState('Thrinethra');
-  const [products, setProducts] = useState(['bOPV', 'MMR', 'PVC', 'BCG','RV','Hep B',]);
+  const [products, setProducts] = useState(['bOPV', 'MMR', 'Hib', 'Hep B']);
   const [manufacturers, setManufacturers] = useState([
-                  'Bharat Biotech',
-                  'Aroma Biotech',
-                  'Chronly industries',
-                  'GH Pharmas',
+    'Manufacturer A',
+    'Manufacturer D',
+    'Manufacturer C',
+    'Manufacturer D',
   ]);
 
   const [product, setProduct] = useState('Select Product');
@@ -57,18 +57,18 @@ const PurchaseForm = props => {
         <div className="input-group">
           <label htmlFor="shipmentId">Supplier</label>
           <input
-            disabled
             type="text"
-            className="user"
+            className="form-control"
             placeholder="Select Supplier"
             value={user.name}
           />
-
+          <div className="input-group-append">
+            <img src={updownArrow} alt="downarrow" width="16" height="16" />
+          </div>
         </div>
         <p>Date: {todayDate}</p>
       </div>
       <div className="d-flex justify-content-between">
-       
         <div className="input-group">
           <label htmlFor="shipmentId">Delivery To</label>
           <DropdownButton
@@ -76,17 +76,22 @@ const PurchaseForm = props => {
             onSelect={item => setDeliveryTo(item)}
             groups={userNames}
           />
+          <div className="input-group-append">
+            <img src={updownArrow} alt="downarrow" width="16" height="16" />
+          </div>
         </div>
         <div className="input-group">
           <label htmlFor="shipmentId">Delivery Location</label>
           <input
             type="text"
             className="form-control"
-            placeholder="Enter Delivery Location"
+            placeholder="Select Delivery Location"
             value={destination}
             onChange={e => setDestination(e.target.value)}
           />
-          
+          <div className="input-group-append">
+            <img src={updownArrow} alt="downarrow" width="16" height="16" />
+          </div>
         </div>
       </div>
       <hr />
@@ -113,8 +118,3 @@ const PurchaseForm = props => {
 };
 
 export default PurchaseForm;
-
-
-/*<div className="input-group-append">
-            <img src={updownArrow} alt="downarrow" width="16" height="16" />
-          </div> */

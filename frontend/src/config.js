@@ -32,7 +32,7 @@ export function config() {
       getAllUsersUrl: `${STABLE_SERVER_URL_USER}/api/auth/getAllUsers`,
       updateProfileUrl: `${STABLE_SERVER_URL_USER}/api/auth/updateProfile`,
       upload: `${STABLE_SERVER_URL_USER}/api/auth/upload`,
-      shipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/api/shipping/shipmentStatistics`,
+      shipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/api/shipping/fetchPublisherLatestShipments`,
       inventoriesUrl: `${STABLE_SERVER_URL_INVENTORY}/api/inventory/getAllInventoryDetails`,
       createShipmentUrl: `${STABLE_SERVER_URL_SHIPMENT}/api/shipping/createShipment`,
       addInventoryUrl: `${STABLE_SERVER_URL_INVENTORY}/api/inventory/addNewInventory`,

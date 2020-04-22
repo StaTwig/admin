@@ -28,7 +28,10 @@ const Table = props => {
           {props.inventories.map(inventory => (
             <div className="rTableRow">
               <div className="rTableCell">
-              {inventory.productName}
+                <div className="combine-data">
+                  <div className="round-sign">{inventory.productName}</div>
+                  <a href="#">{inventory.productName}</a>
+                </div>
               </div>
               <div className="rTableCell">{inventory.manufacturerName}</div>
               <div className="rTableCell">{inventory.batchNumber}</div>
@@ -47,8 +50,3 @@ const Table = props => {
 };
 
 export default Table;
-
-/* <div className="combine-data">
-                  <div className="round-sign">{inventory.productName}</div>
-                  <a href="#">{inventory.productName}</a>
-                </div>   */ 

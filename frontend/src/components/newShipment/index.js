@@ -73,16 +73,18 @@ const NewShipment = () => {
     setSerialNumber,
   };
   const onAssign = async () => {
+    const receiver = users.find(usr => usr.name === deliveryTo);
     const data = {
       shipmentId,
       client,
+      receiver: receiver.address,
       supplier,
       supplierLocation,
       shipmentDate,
       deliveryTo,
       deliveryLocation,
       estimateDeliveryDate,
-      status: 'In Transit',
+      status: 'Shipped',
       products:[{
         productName,
         quantity,
@@ -95,6 +97,7 @@ const NewShipment = () => {
       }]
     };
 
+    console.log('new shipment data', data);
     const result = await createShipment({ data });
     if (result.status != 400) {
       setMessage('Assigned Shipment Success');

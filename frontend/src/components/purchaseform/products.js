@@ -47,7 +47,7 @@ const ProductsTable = props => {
             <div className="rTableCell">
               <div className="form-group">
                 <input
-                  type="number"
+                  type="text"
                   className="form-field"
                   placeholder="Enter Qunatity"
                   value={quantity}

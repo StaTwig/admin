@@ -52,7 +52,7 @@ const SummaryTable = props => {
           <div className="headline">Status</div>
           {shipments.map((shipment, index) => (
             <div className="combine-data" key={index}>
-              <div>Received</div>
+              <div>{shipment.status}</div>
             </div>
           ))}
         </div>
@@ -84,7 +84,7 @@ const SummaryTable = props => {
               <div className="mr-3">Status</div>
               <div className="font-weight-bold">
                 <span className="badge badge-pill badge-success p-2">
-                  Received
+                  {shipment.status}
                 </span>
               </div>
             </div>
