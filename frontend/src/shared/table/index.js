@@ -29,8 +29,8 @@ const Table = props => {
             <div className="rTableRow">
               <div className="rTableCell">
                 <div className="combine-data">
-                  <div className="round-sign">{inventory.productName}</div>
-                  <a href="#">{inventory.productName}</a>
+                 {inventory.productName}
+                 
                 </div>
               </div>
               <div className="rTableCell">{inventory.manufacturerName}</div>

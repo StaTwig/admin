@@ -33,7 +33,7 @@ const EditRow = props => {
               <DropdownButton
                 name={productName}
                 onSelect={item => setProductName(item)}
-                groups={['bOPV', 'MMR', 'Hib', 'Hep B']}
+                groups={['bOPV', 'MMR', 'PVC', 'BCG','RV','Hep B']}
               />
             </div>
             <div className="rTableCell">
@@ -41,10 +41,10 @@ const EditRow = props => {
                 name={manufacturerName}
                 onSelect={item => setManufacturerName(item.replace( '<small>Qty: 2148</small>', ''))}
                 groups={[
-                  'Manufacturer A <small>Qty: 2148</small>',
-                  'Manufacturer D <small>Qty: 2148</small>',
-                  'Manufacturer C <small>Qty: 2148</small>',
-                  'Manufacturer D <small>Qty: 2148</small>',
+                  'Bharat Biotech',
+                  'Aroma Biotech',
+                  'Chronly industries',
+                  'GH Pharmas',
                 ]}
               />
             </div>

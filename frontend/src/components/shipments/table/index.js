@@ -28,12 +28,12 @@ const Table = props => {
           
         </div>
         <div className="overflow">
-          {props.shipments.map(shipment => (
-            <div className="rTableRow">
+          {props.shipments.map((shipment, index) => (
+            <div className="rTableRow" key={index}>
               <div className="rTableCell">
                 <div className="combine-data">
-                <div className="round-sign">{shipment.client}</div>
-                  <a href="#">{shipment.client}</a>
+                {shipment.client}
+                  
                 </div>
               </div>
               <div className="rTableCell">{shipment.shipmentId}</div>

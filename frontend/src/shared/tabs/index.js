@@ -7,10 +7,10 @@ const Tabs = props => {
     <div className="tabs">
       <ul className="nav nav-pills">
         <li className="nav-item">
-          <a className="nav-link active" href="#">Purchase Orders</a>
+          <a className="nav-link active" href="#">Recent Shipments</a>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="#">Recent Shipments</a>
+          <a className="nav-link" href="#">Purchase Orders</a>
         </li>
       </ul>
     </div>

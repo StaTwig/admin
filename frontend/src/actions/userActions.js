@@ -1,4 +1,4 @@
-import { AUTH_SUCCESS, AUTH_ERROR, PROFILE_SUCCESS } from '../constants/userConstants';
+import { AUTH_SUCCESS, AUTH_ERROR, PROFILE_SUCCESS, GET_ALL_USERS_SUCCESS } from '../constants/userConstants';
 import { config } from '../config';
 import axios from 'axios';
 
@@ -93,3 +93,23 @@ export const setProfile = (data) => {
     payload: data,
   };
 };
+
+// Set user profile
+export const setAllUsers = (data) => {
+  return {
+    type: GET_ALL_USERS_SUCCESS,
+    payload: data,
+  };
+};
+
+export const getAllUsers = () => {
+  try {
+    return async dispatch => {
+      const result = await axios.get(config().getAllUsersUrl );
+      dispatch(setAllUsers(result.data.data));
+      return result;
+    }
+  } catch (e) {
+    return e.response;
+  }
+}

@@ -1,15 +1,42 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import {useSelector, useDispatch} from "react-redux";
+
 import EditTable from '../../shared/table/editTable';
 import updownArrow from '../../assets/icons/up-and-down-dark.svg';
 import calenderDark from '../../assets/icons/calendar-grey.svg';
 import './style.scss';
 import { createShipment } from '../../actions/shipmentActions';
+import { getPOs, getPO } from '../../actions/poActions';
+import DropdownButton from '../../shared/dropdownButtonGroup';
+import {getAllUsers} from "../../actions/userActions";
 
 const NewShipment = () => {
 
+  const dispatch = useDispatch();
+  useEffect(() => {
+    async function fetchData() {
+      const result = await getPOs();
+      setPos(result.data.data);
+    }
+    fetchData();
+    dispatch(getAllUsers());
+  },[]);
+
+  useEffect(() => {
+    setSupplier(user.name);
+  }, [user]);
+  const users = useSelector(state => {
+    return state.users;
+  });
+  const user = useSelector(state => {
+    return state.user;
+  });
+  const userNames = users.map(usr => usr.name);
+  const [pos, setPos] = useState([]);
+  const [po, setPo] = useState('Select PO');
   const [shipmentId, setShipmentId] = useState('');
   const [client, setClient] = useState('');
-  const [supplier, setSupplier] = useState('');
+  const [supplier, setSupplier] = useState(user.username);
   const [supplierLocation, setSupplierLocation] = useState('');
   const [shipmentDate, setShipmentDate] = useState('');
   const [deliveryTo, setDeliveryTo] = useState('');
@@ -46,28 +73,52 @@ const NewShipment = () => {
     setSerialNumber,
   };
   const onAssign = async () => {
+    const receiver = users.find(usr => usr.name === deliveryTo);
     const data = {
       shipmentId,
       client,
+      receiver: receiver.address,
       supplier,
       supplierLocation,
       shipmentDate,
       deliveryTo,
       deliveryLocation,
       estimateDeliveryDate,
+      status: 'Shipped',
+      products:[{
+        productName,
+        quantity,
+        manufacturerName,
+        storageCondition,
+        manufacturingDate,
+        expiryDate,
+        batchNumber,
+        serialNumber
+      }]
     };
 
+    console.log('new shipment data', data);
     const result = await createShipment({ data });
     if (result.status != 400) {
       setMessage('Assigned Shipment Success');
       setErrorMessage('');
-    }
-    else
-    {
+    } else {
       const err = result.data.data[0];
       setErrorMessage(err.msg);
     }
   };
+
+  const onSelectPO = async (item) => {
+    setPo(item);
+    const result = await getPO(item);
+    const poDetail = JSON.parse(result[result.length -1].data);
+    const { products } = poDetail;
+    const product = Object.keys(products[0])[0];
+    setQuantity(products[0][product]);
+    setProductName(product.split('-')[0]);
+    setManufacturerName(product.split('-')[1]);
+  }
+
   return (
     <div className="NewShipment">
       <h1 className="breadcrumb">CREATE SHIPMENTS</h1>
@@ -102,7 +153,7 @@ const NewShipment = () => {
               className="form-control"
               name="shipmentId"
               placeholder="Enter Supplier"
-              onChange={e => setSupplier(e.target.value)}
+              value={supplier}
             />
           </div>
           <div className="input-group">
@@ -113,7 +164,6 @@ const NewShipment = () => {
               placeholder="Enter Location"
               onChange={e => setSupplierLocation(e.target.value)}
             />
-           
           </div>
           <div className="input-group">
             <label htmlFor="shipmentId">Shipment Date</label>
@@ -131,13 +181,11 @@ const NewShipment = () => {
         <div className="col">
           <div className="input-group">
             <label htmlFor="shipmentId">Delivery To</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder=" Enter Receiver"
-              onChange={e => setDeliveryTo(e.target.value)}
+            <DropdownButton
+              name={deliveryTo}
+              onSelect={item => setDeliveryTo(item)}
+              groups={userNames}
             />
-            
           </div>
           <div className="input-group">
             <label htmlFor="shipmentId">Delivery Location</label>
@@ -147,7 +195,6 @@ const NewShipment = () => {
               placeholder="Enter Location"
               onChange={e => setDeliveryLocation(e.target.value)}
             />
-           
           </div>
 
           <div className="input-group">
@@ -165,10 +212,16 @@ const NewShipment = () => {
         </div>
       </div>
       <hr />
-      <EditTable {...editTableProps }/>
-      <button className="btn btn-white shadow-radius font-bold">
+      <EditTable {...editTableProps} />
+     {/* <button className="btn btn-white shadow-radius font-bold">
         +<span> Add Another Product</span>
-      </button>
+      </button>*/}
+
+      <DropdownButton
+        name={po}
+        onSelect={onSelectPO}
+        groups={pos}
+      />
       <hr />
 
       <div className="d-flex justify-content-between">
