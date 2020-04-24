@@ -14,7 +14,8 @@ const axios = require("axios");
 const dotenv = require("dotenv").config();
 
 const blockchain_service_url = process.env.URL;
-const stream_name = process.env.STREAM;
+const stream_name = process.env.SHIP_STREAM;
+const po_stream_name = process.env.PO_STREAM;
 
 exports.shipmentStatistics = [
   auth,
@@ -22,7 +23,16 @@ exports.shipmentStatistics = [
     try {
       checkToken(req, res, async (result) => {
         if (result.success) {
-          const { address } = req.user;
+	  const { address } = req.user;
+          /* const { jwt_address } = req.user;
+	  const { user_address } = req.query;
+	  var address = "";
+	  if ( user_address ) {
+			address = user_address;
+	  }
+		else {
+			address = jwt_address;
+	  }*/
           const response = await axios.get(
             `${blockchain_service_url}/queryDataByPublishers?stream=${stream_name}&address=${address}`
           );
@@ -49,6 +59,29 @@ exports.fetchShipments = [
           const { key } = req.query;
           const response = await axios.get(
             `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${key}`
+          );
+          const items = response.data.items;
+          console.log("items", items);
+          res.json({ data: items });
+        } else {
+          res.status(403).json(result);
+        }
+      });
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.fetchAllPurchaseOrders = [
+  auth,
+  async (req, res) => {
+    try {
+      const { authorization } = req.headers;
+      checkToken(req, res, async (result) => {
+        if (result.success) {
+          const response = await axios.get(
+            `${blockchain_service_url}/queryAllStreamKeys?stream=${po_stream_name}`
           );
           const items = response.data.items;
           console.log("items", items);
@@ -115,7 +148,8 @@ exports.createShipment = [
           const userData = {
             stream: stream_name,
             key: data.shipmentId,
-            address: address,
+            //address: address,
+            address: req.query.address ? req.query.address : address,
             data: data,
           };
           const response = await axios.post(
@@ -209,6 +243,129 @@ exports.modifyShipment = [
             userData
           );
           res.status(200).json({ response: postResponse.data.transactionId });
+        } else {
+          res.status(403).json(result);
+        }
+      });
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.fetchPurchaseOrder = [
+  auth,
+  async (req, res) => {
+    try {
+      const { authorization } = req.headers;
+      checkToken(req, res, async result => {
+        if (result.success) {
+          const { key } = req.query;
+          const response = await axios.get(
+            `${blockchain_service_url}/queryDataByKey?stream=${po_stream_name}&key=${key}`,
+          );
+          const items = response.data.items;
+          console.log('items', items);
+          res.json({ data: items });
+        } else {
+          res.status(403).json(result);
+        }
+      });
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.createPurchaseOrder = [
+  auth,
+  async (req, res) => {
+    try {
+      checkToken(req, res, async result => {
+        if (result.success) {
+          const { address } = req.user;
+          const { data } = req.body;
+          const userData = {
+            stream: po_stream_name,
+            key: data.orderID,
+            address: address,
+            data: data,
+          };
+          const response = await axios.post(
+            `${blockchain_service_url}/publish`,
+            userData,
+          );
+          res.status(200).json({ response: response.data.transactionId });
+        } else {
+          res.status(403).json(result);
+        }
+      });
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.fetchPublisherLatestShipments = [
+  auth,
+  async (req, res) => {
+    try {
+      const { authorization } = req.headers;
+      checkToken(req, res, async (result) => {
+        if (result.success) {
+	  //const { address } = req.query;
+	 const { address } = req.user;
+          const response = await axios.get(
+            `${blockchain_service_url}/queryAllPublisherKeys?stream=${stream_name}&address=${address}`
+          );
+        var keys = response.data.items;
+        const unique_keys = [ ...new Set(keys)]  
+        var items_array = new Array();
+	for (var i = 0; i < unique_keys.length; i++) {
+         var key = unique_keys[i];
+         
+	  const response = await axios.get(
+            `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${key}`
+          );
+          const items = response.data.items;
+          items_array.push(items);
+	 }
+          res.json({ data: items_array });
+        } else {
+          res.status(403).json(result);
+        }
+      });
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.fetchAllLatestShipments = [
+  auth,
+  async (req, res) => {
+    try {
+      const { authorization } = req.headers;
+      checkToken(req, res, async (result) => {
+        if (result.success) {
+          const response = await axios.get(
+            `${blockchain_service_url}/queryAllStreamKeys?stream=${stream_name}`
+          );
+        var keys = response.data.items;
+        const unique_keys = [ ...new Set(keys)]
+		console.log("keys",keys)
+		console.log("unique",unique_keys)
+        var items_array = new Array();
+        for (var i = 0; i < unique_keys.length; i++) {
+         var key = unique_keys[i];
+
+          const response = await axios.get(
+            `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${key}`
+          );
+          const items = response.data.items;
+          items_array.push(items);
+         }
+          res.json({ data: items_array });
         } else {
           res.status(403).json(result);
         }

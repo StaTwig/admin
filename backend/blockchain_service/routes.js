@@ -7,8 +7,13 @@ module.exports = function routes(app) {
      //GET routes
     app.get('/queryDataByKey', require('./data/query').fetchDataByKey);
     app.get('/queryDataByAddress', require('./data/query').fetchDataByAddr);
-    app.get('/queryDataByPublishers',require('./data/query').fetchDataByPublishers); 
+    app.get('/queryDataByPublishers',require('./data/query').fetchDataByPublishers);
     app.get('/queryDataByTxHash',require('./data/query').fetchDataByTxHash);
+    app.get('/queryAllStreamKeys',require('./data/query').fetchStreamKeys);
+    app.get('/queryAllStreamItems',require('./data/query').fetchStreamItems);
+    app.get('/queryTotalBlocks',require('./data/query').fetchTotalBlocks);
+    app.get('/queryAllPublisherKeys',require('./data/query').fetchPublisherKeys);
+    
     //app.get('/',(req,res)=>res.send('welcome'));
     app.get('/getTemperatureData', require('./models/temperature').getData);
     app.get('/getHumidityData', require('./models/humidity').getData);
