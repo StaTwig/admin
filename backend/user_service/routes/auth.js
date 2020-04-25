@@ -12,6 +12,7 @@ router.post("/resend-verify-otp", AuthController.resendConfirmOtp);
 router.post("/forgotPassword", AuthController.forgotPassword);
 router.post("/resetPassword", AuthController.resetPassword);
 router.get("/userInfo", AuthController.userInfo);
+router.get("/getAllUsers", AuthController.getAllUsers);
 // router.get("/image", AuthController.fetchImage);
 router.post("/updateProfile", AuthController.updateProfile);
 router.post("/upload", upload.single("profile"), AuthController.uploadImage);

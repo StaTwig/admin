@@ -633,3 +633,21 @@ exports.createUserAddress = [
     }
   },
 ];
+
+exports.getAllUsers = [
+  auth,
+  async (req, res) => {
+    try {
+      console.log(req.user.email);
+      const users = await UserModel.find({},  'name address email');
+      const confirmedUsers = users.filter( user => user.address !== '');;
+      return apiResponse.successResponseWithData(
+        res,
+        'Users Retrieved Success',
+        confirmedUsers,
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
