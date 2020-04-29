@@ -14,6 +14,8 @@ router.post("/createPurchaseOrder", ShipmentController.createPurchaseOrder);
 router.get("/reviewShipment", ShipmentController.reviewShipment);
 router.get("/verifyShipment", ShipmentController.verifyShipment);
 router.post("/modifyShipment", ShipmentController.modifyShipment);
+router.get("/getManufacturers", ShipmentController.getManufacturers);
+router.get("/getProducts", ShipmentController.getProducts);
 
 module.exports = router;
 

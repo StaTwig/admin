@@ -17,6 +17,9 @@ const blockchain_service_url = process.env.URL;
 const stream_name = process.env.SHIP_STREAM;
 const po_stream_name = process.env.PO_STREAM;
 
+const products = require('../data/products');
+const manufacturers = require('../data/manufacturers');
+
 exports.shipmentStatistics = [
   auth,
   async (req, res) => {
@@ -374,4 +377,27 @@ exports.fetchAllLatestShipments = [
       return apiResponse.ErrorResponse(res, err);
     }
   },
+];
+
+exports.getProducts = [
+  auth,
+  (req, res) => {
+    return apiResponse.successResponseWithData(
+      res,
+      'Products lists',
+      products,
+    );
+  }
+
+];
+exports.getManufacturers = [
+  auth,
+  (req, res) => {
+    return apiResponse.successResponseWithData(
+      res,
+      'Manufacturers lists',
+      manufacturers,
+    );
+  }
+
 ];
