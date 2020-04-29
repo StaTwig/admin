@@ -7,6 +7,7 @@ export const STABLE_SERVER_URL_USER = 'http://52.90.57.31:3001';
 export const STABLE_SERVER_URL_SHIPMENT = 'http://52.90.57.31:3002';
 export const STABLE_SERVER_URL_INVENTORY = 'http://52.90.57.31:3007';
 export const DEV_SERVER_URL = 'http://127.0.0.1:9001';
+
 export function config() {
 
   const confs = {
@@ -100,9 +101,7 @@ export function config() {
     }
   };
 
-  const conf = confs['prod']; // change prod to test, local,stable, dev for respective environments
-  // conf = confs['local'];
-  // conf = confs['preprod'];
-
+  const environment = process.env.ENVIRONMENT || 'test'; // change prod to test, local,stable, dev for respective environments
+  const conf = confs[environment];
   return conf;
 }
