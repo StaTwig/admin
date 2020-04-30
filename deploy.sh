@@ -78,7 +78,16 @@ if ([ "$1" == "PROD" ] || [ "$1" == "TEST" ]) && ([ "$2" == "FRONTEND" ] || [ "$
       sudo systemctl stop nginx
       sudo rm -rf /var/www/html/dist /var/wwww/html/index.html
       npm install
-      npm run build
+
+      if [ "$1" == "PROD" ];
+         then
+            echo "Building frotend for PROD enviornment......"
+            ENVIRONMENT=prod npm run build
+      else
+         echo "Building frotend for TESt enviornment......"
+         ENVIRONMENT=test npm run build
+      fi
+      
       sudo cp -r dist /var/www/html/
       sudo cp index.html /var/www/html/
       sudo systemctl start nginx
