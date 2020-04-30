@@ -2,11 +2,15 @@ import React, { useState } from 'react';
 import DropdownButton from '../dropdownButtonGroup';
 import calenderBlue from '../../assets/icons/calendar-blue.svg';
 import downArrow from '../../assets/icons/up-and-down-dark.svg';
+import DatePicker from 'react-date-picker';
 
 import './style.scss';
 
 const EditRow = props => {
 
+  const onChange = date => setManufacturingDate({ date })
+  const onChange1 = date1 => setExpiryDate({ date1 })
+ 
   const {
     manufacturerName,
     setManufacturerName,
@@ -25,6 +29,8 @@ const EditRow = props => {
     serialNumber,
     setSerialNumber,
   } = props;
+
+  
 
   return (
           <div className="rTableRow">
@@ -53,48 +59,36 @@ const EditRow = props => {
                 <input
                   type="number"
                   className="form-field"
+                   min="0" 
                   placeholder="Enter Quantity"
-                  value={quantity}
-                  onChange={e => setQuantity(e.target.value)}
+                  value = {quantity}
+                onChange={e => setQuantity(e.target.value)}
                 />
               </div>
             </div>
             <div className="rTableCell">
               <div className="input-group">
-                <input
-                  type="text"
-                  className="form-field"
-                  placeholder="Mm/dd/yyyy"
-                  value={manufacturingDate}
-                  onChange={e => setManufacturingDate(e.target.value)}
-                />
-                <div className="input-group-append">
-                  <img
-                    src={calenderBlue}
-                    alt="downarrow"
-                    width="9"
-                    height="9"
-                  />
-                </div>
+
+              <DatePicker
+               className="form-control"
+              placeholder="Enter Shipment Date"
+              onChange = {onChange}
+              value = {manufacturingDate.date}
+              />
+            
+               
               </div>
             </div>
             <div className="rTableCell">
               <div className="input-group">
-                <input
-                  type="text"
-                  className="form-field"
-                  placeholder="Mm/dd/yyyy"
-                  value={expiryDate}
-                  onChange={e => setExpiryDate(e.target.value)}
-                />
-                <div className="input-group-append">
-                  <img
-                    src={calenderBlue}
-                    alt="downarrow"
-                    width="9"
-                    height="9"
-                  />
-                </div>
+              
+              <DatePicker
+               className="form-control"
+              placeholder="Enter Shipment Date"
+              onChange = {onChange1}
+              value = {expiryDate.date1}
+              />
+               
               </div>
             </div>
             <div className="rTableCell">

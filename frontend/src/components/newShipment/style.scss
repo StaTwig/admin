@@ -21,6 +21,24 @@
       font-size: 13px;
     }
 
+    .react-date-picker__wrapper{
+     
+      border:none;
+    }
+
+    .react-date-picker__button {
+      padding: 0px 15px;
+      height:0px;
+      width:0px;
+    
+      background: transparent;
+     
+      
+    }
+
+    
+
+    
     .form-control {
       border: none;
       background: transparent;
@@ -46,10 +64,11 @@
         flex-basis: 65%;
         flex-grow: inherit;
         font-size: 14px;
+        
       }
     }
   }
-
+ 
   .input-group {
     position: relative;
     margin-bottom: 1rem;

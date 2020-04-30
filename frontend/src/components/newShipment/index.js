@@ -9,6 +9,7 @@ import { createShipment } from '../../actions/shipmentActions';
 import { getPOs, getPO } from '../../actions/poActions';
 import DropdownButton from '../../shared/dropdownButtonGroup';
 import {getAllUsers} from "../../actions/userActions";
+import DatePicker from 'react-date-picker';
 
 const NewShipment = () => {
 
@@ -72,6 +73,9 @@ const NewShipment = () => {
     serialNumber,
     setSerialNumber,
   };
+
+  const onChange = date => setShipmentDate({ date })
+  const onChange1 = date1 => setEstimateDeliveryDate({ date1 })
   const onAssign = async () => {
     const receiver = users.find(usr => usr.name === deliveryTo);
     const data = {
@@ -167,15 +171,13 @@ const NewShipment = () => {
           </div>
           <div className="input-group">
             <label htmlFor="shipmentId">Shipment Date</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Mm/dd/yyyy"
-              onChange={e => setShipmentDate(e.target.value)}
-            />
-            <div className="input-group-append">
-              <img src={calenderDark} alt="downarrow" width="13" height="13" />
-            </div>
+
+            <DatePicker
+               className="form-control"
+              placeholder="Enter Shipment Date"
+              onChange = {onChange}
+              value = {shipmentDate.date}
+              />
           </div>
         </div>
         <div className="col">
@@ -199,15 +201,12 @@ const NewShipment = () => {
 
           <div className="input-group">
             <label htmlFor="shipmentId"> Estimate Delivery Date</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Mm/dd/yyyy"
-              onChange={e => setEstimateDeliveryDate(e.target.value)}
-            />
-            <div className="input-group-append">
-              <img src={calenderDark} alt="downarrow" width="13" height="13" />
-            </div>
+            <DatePicker
+               className="form-control"
+              placeholder="Enter Shipment Date"
+              onChange = {onChange1}
+              value = {estimateDeliveryDate.date1}
+              />
           </div>
         </div>
       </div>

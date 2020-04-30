@@ -57,10 +57,10 @@ const Tiles = (props) => {
                     <div className="d-flex flex-column">
                         <div className="title sent-text ">Total Shipments Sent</div>
                         <div className="tab-container">
-                            <div className="tab-item active">This Year</div>
-                            <div className="tab-item">This Month</div>
-                            <div className="tab-item">This Week</div>
-                            <div className="tab-item">Today</div>
+                            <div className="tab-item ">This Year</div>
+                            <div className="tab-item ">This Month</div>
+                            <div className="tab-item ">This Week</div>
+                            <div className="tab-item ">Today</div>
                         </div>
                         <div className="sent-text count">{shipmentsSent}</div>
                     </div>

@@ -47,9 +47,9 @@ const PurchaseForm = props => {
     console.log(data);
     const result = await createPO(data);
     if (result.status === 200) {
-      setMessage('Success');
+      setMessage('Success !');
     }else {
-      setMessage('Error');
+      setMessage('Unable to process , Please Check the Data entered');
     }
   };
   return (
@@ -64,9 +64,7 @@ const PurchaseForm = props => {
             placeholder="Select Supplier"
             value={user.name}
           />
-          <div className="input-group-append">
-            <img src={updownArrow} alt="downarrow" width="16" height="16" />
-          </div>
+         
         </div>
         <p>Date: {todayDate}</p>
       </div>
@@ -78,22 +76,18 @@ const PurchaseForm = props => {
             onSelect={item => setDeliveryTo(item)}
             groups={userNames}
           />
-          <div className="input-group-append">
-            <img src={updownArrow} alt="downarrow" width="16" height="16" />
-          </div>
+        
         </div>
         <div className="input-group">
           <label htmlFor="shipmentId">Delivery Location</label>
           <input
             type="text"
             className="form-control"
-            placeholder="Select Delivery Location"
+            placeholder="Enter Delivery Location"
             value={destination}
             onChange={e => setDestination(e.target.value)}
           />
-          <div className="input-group-append">
-            <img src={updownArrow} alt="downarrow" width="16" height="16" />
-          </div>
+         
         </div>
       </div>
       <hr />
@@ -111,11 +105,13 @@ const PurchaseForm = props => {
       {/* <button className="btn btn-white shadow-radius font-bold">
         +<span> Add Another Product</span>
       </button>*/}
+      
       <button className="btn btn-primary" onClick={onReview}>
         REVIEW
       </button>
-      <label className="text text-success">{message}</label>
-    </div>
+      <div className="text text-success my-3 ">{message}</div>
+      </div>
+    
   );
 };
 

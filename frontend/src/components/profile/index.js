@@ -116,11 +116,12 @@ class Profile extends React.Component {
     const { name, organisation, affiliateOrganisation, phone } = this.state;
     const data = { name, organisation, affiliateOrganisation, phone }  ;
     const result = await updateProfile(data);
-    debugger;
+    
     if (result.status === 200) {
       this.setState({ message: result.data.message, editMode: false });
       const dispatch = useDispatch();    
-    dispatch(getUserInfo());
+      dispatch(getUserInfo());
+      history.push('/profile');
     } else {
       this.setState({ message: 'Error while updating please try again.' });
     }
@@ -182,6 +183,7 @@ class Profile extends React.Component {
                   <li><label>Wallet Address</label></li>
                   <li><label>Email</label></li>
                   <li><label>Phone</label></li>
+                  <li>Account Status</li>
                   
                   </ul>
 
@@ -234,6 +236,12 @@ class Profile extends React.Component {
                         value={phone}
                         onChange={e => this.setState({ phone: e.target.value })}
                       /></li>
+
+                         <li> 
+                       
+                        {status && <li>Active</li>}
+                      
+                       </li>
                        
                   </ul>
                   </div>
