@@ -69,7 +69,7 @@ import './style.scss';
           <div className="col">
             <div className="panel">
               <div className="picture truck-bg">
-                <img src={currentshipment} alt="truck" />
+                <img className= "currentintransit" src={currentshipment} alt="truck" />
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Current Shipment in Transit</div>
