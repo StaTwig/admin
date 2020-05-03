@@ -17,7 +17,8 @@ rm -f backend/shipping_service/.env
 echo "JWT_SECRET=abcdefghijklmnopqrstuvwxyz1234567890
 JWT_TIMEOUT_DURATION=\"2 hours\"
 URL='http://test.vaccineledger.com:9001/blockchainmanagement'
-STREAM='test_stream_shipment'" >> backend/shipping_service/.env
+SHIP_STREAM='test_stream_shipment'
+PO_STREAM='test_stream_order'" >> backend/shipping_service/.env
 
 
 #creating env file for inventory service
@@ -35,6 +36,6 @@ HOST = 'localhost'
 USERNAME = 'multichainrpc'
 PASSWORD = '2rc2t2sPSaYQfCCcArSmL2SByXL1ef2Q5uo2QiktgWtU'
 MC_VERSION = '1.0'
-STREAMS = \"test_stream_shipment,test_stream_inventory\"" >> backend/blockchain_service/.env
+STREAMS = \"test_stream_shipment,test_stream_inventory,test_stream_order\"" >> backend/blockchain_service/.env
 
 
