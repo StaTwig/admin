@@ -47,7 +47,6 @@ console.log(process.argv[0])
           })
           .set('authorization','Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTllMzFjZjU3ODhlOTg2MWE3MjQ5Y2EiLCJlbWFpbCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJhZGRyZXNzIjoiMVhwUWNwb2hhc25zM0RoUFo0dWJZQ0ZpZU50dTczVUFMZDFMSG0iLCJpYXQiOjE1ODgyMDIyOTEsImV4cCI6NDc0Mzk2MjI5MX0.IrtugBNzc8JB5bDvbbh-X583KHPW-nwGpUeOxWaoyXI')
              .end((err, res) => {
-		    console.log(err,res)
                     if (err) return done(err);
                     res.should.have.status(200);
                     return done();
