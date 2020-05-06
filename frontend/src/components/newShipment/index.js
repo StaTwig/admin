@@ -84,10 +84,10 @@ const NewShipment = () => {
       receiver: receiver.address,
       supplier,
       supplierLocation,
-      shipmentDate: shipmentDate.date.toDateString(),
+      shipmentDate: shipmentDate.date.toLocaleDateString(),
       deliveryTo,
       deliveryLocation,
-      estimateDeliveryDate: estimateDeliveryDate.date1.toDateString(),
+      estimateDeliveryDate: estimateDeliveryDate.date1.toLocaleDateString(),
       status: 'Shipped',
       products:[{
         productName,
