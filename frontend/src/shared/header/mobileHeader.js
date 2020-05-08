@@ -24,7 +24,7 @@ const MobileHeader = props => {
                     sidebar && <div className="slider-menu">
                         {
                             <React.Fragment>
-                                <Link className="slider-item border-top-0" to="/trackAndTrace">Track & Trace</Link>
+                                
                                 <Link className="slider-item" to="/login">Login</Link>
                                 <Link className="slider-item" to="/signup">Sign Out</Link>
                             </React.Fragment>

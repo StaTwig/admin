@@ -61,11 +61,11 @@
       margin: 0;
     }
     @media (min-width: $lg) {
-      height: 420px;
+      height: auto;
     }
 
     @media (min-width: $xl) {
-      height: 450px;
+      height: auto;
     }
 
     .card-body {

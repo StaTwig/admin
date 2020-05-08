@@ -42,11 +42,7 @@ const HomeContainer = (props) => {
         </button>
         <div className="collapse navbar-collapse" id="navbarNavDropdown">
           <ul className="navbar-nav ml-auto">
-            <li className="nav-item mr-4">
-              <Link className="nav-link" to="/trackAndTrace">
-                Track & Trace
-              </Link>
-            </li>
+            
             <li className="nav-item active">
               <Link className="nav-link" to="/login">
                 Login <span className="sr-only">(current)</span>

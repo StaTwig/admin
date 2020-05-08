@@ -1,8 +1,12 @@
 import React from 'react';
-import dp from '../../assets/icons/harsha.jpg';
+import { useSelector } from 'react-redux';
 import './table-style.scss';
 
 const SummaryTable = props => {
+
+  const profile = useSelector(state => {
+    return state.user;
+  });
   const { shipments } = props;
   return (
     <React.Fragment>
@@ -11,7 +15,7 @@ const SummaryTable = props => {
           <div className="headline">Client</div>
           {shipments.map((shipment, index) => (
             <div className="combine-data" key={index}>
-              <img className="round-sign" src={dp} width="15" />
+              <img className="round-sign" src={profile.profile_picture} width="15" />
               <a>{shipment.client}</a>
             </div>
           ))}
@@ -52,7 +56,7 @@ const SummaryTable = props => {
           <div className="headline">Status</div>
           {shipments.map((shipment, index) => (
             <div className="combine-data" key={index}>
-              <div>{shipment.status}</div>
+              <div><span className="badge badge-pill badge-success p-2">{shipment.status}</span></div>
             </div>
           ))}
         </div>
@@ -61,7 +65,7 @@ const SummaryTable = props => {
         <div className="row">
           {shipments.map((shipment, index) =>  <div key={index} className="col-sm-12 col-md-6 mb-3">
             <div className="combine-data mb-3">
-              <img className="rounded mr-2" src={dp} width="15" />
+              <img className="rounded mr-2" src={profile.profile_picture} width="15" />
               <a>{shipment.client}</a>
             </div>
             <div className="d-flex">
