@@ -8,6 +8,14 @@ import './style.scss';
 
 const EditRow = props => {
 
+  const isNumberKey = (event) => {
+  
+    const keyCode = event.keyCode || event.which;
+    const keyValue = String.fromCharCode(keyCode);
+    if (/\+|-/.test(keyValue))
+      event.preventDefault(); 
+  }
+
   const onChange = date => setManufacturingDate({ date })
   const onChange1 = date1 => setExpiryDate({ date1 })
  
@@ -57,12 +65,13 @@ const EditRow = props => {
             <div className="rTableCell">
               <div className="form-group">
                 <input
-                  type="number"
-                  className="form-field"
-                   min="0" 
-                  placeholder="Enter Quantity"
-                  value = {quantity}
-                onChange={e => setQuantity(e.target.value)}
+
+                 type="number" 
+                onKeyPress={isNumberKey}
+                className="form-field"
+                placeholder="Enter Quantity"
+                value = {quantity}
+                onChange={e => setQuantity(e.target.value.replace(/\D/,''))}
                 />
               </div>
             </div>
