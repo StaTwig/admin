@@ -185,7 +185,7 @@ const NewShipment = () => {
           <div className="d-flex flex-row ">
             <div className="delivery mr-5">
             <label htmlFor="shipmentId">Delivery To</label></div>
-            <div className="ml-5">
+            <div className="del ml-5">
             <DropdownButton
               name={deliveryTo}
               onSelect={item => setDeliveryTo(item)}
