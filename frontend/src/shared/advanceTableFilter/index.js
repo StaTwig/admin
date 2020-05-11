@@ -65,7 +65,7 @@ const AdvanceTableFilter = (props) => {
           <button className="btn btn-md btn-blue mr-2">
             <div className="d-flex align-items-center">
               <img src={FilterIcon} width="16" height="16" className="mr-3" />
-              <span>Filter</span>
+              <span className="text">Filter</span>
               <img src={dropdownIcon} width="16" height="16" className="ml-3" />
             </div>
           </button>

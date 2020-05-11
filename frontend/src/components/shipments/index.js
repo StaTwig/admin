@@ -9,7 +9,7 @@ import Order from '../../assets/icons/order.svg';
 import TableFilter from '../../shared/advanceTableFilter';
 import Modal from '../../shared/modal';
 import PurchaseForm from '../../components/purchaseform';
-import user from '../../assets/icons/brand.svg';
+import mon from '../../assets/icons/brand.svg';
 import Package from '../../assets/icons/package.svg';
 import calender from '../../assets/icons/calendar.svg';
 import Status from '../../assets/icons/Status.svg';
@@ -40,7 +40,7 @@ const ShipmentAnalytic = props => {
     coloumn3: 'Product Type',
     coloumn4: 'Status',
 
-    img1: <img src={user} width="16" height="16" />,
+    img1: <img src={mon} width="16" height="16" />,
     img2: <img src={calender} width="16" height="16" />,
     img3: <img src={Package} width="16" height="16" />,
     img4: <img src={Status} width="16" height="16" />,

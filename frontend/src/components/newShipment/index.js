@@ -181,13 +181,17 @@ const NewShipment = () => {
           </div>
         </div>
         <div className="col">
-          <div className="input-group">
-            <label htmlFor="shipmentId">Delivery To</label>
+      
+          <div className="d-flex flex-row ">
+            <div className="delivery mr-5">
+            <label htmlFor="shipmentId">Delivery To</label></div>
+            <div className="ml-5">
             <DropdownButton
               name={deliveryTo}
               onSelect={item => setDeliveryTo(item)}
               groups={userNames}
             />
+         </div>
           </div>
           <div className="input-group">
             <label htmlFor="shipmentId">Delivery Location</label>
@@ -216,11 +220,12 @@ const NewShipment = () => {
         +<span> Add Another Product</span>
       </button>*/}
 
-      <DropdownButton
+     <div className="po"> <DropdownButton
         name={po}
         onSelect={onSelectPO}
         groups={pos}
       />
+      </div>
       <hr />
 
       <div className="d-flex justify-content-between">
