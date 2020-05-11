@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import DropdownButton from '../dropdownButtonGroup';
 import calenderBlue from '../../assets/icons/calendar-blue.svg';
 import downArrow from '../../assets/icons/up-and-down-dark.svg';
-import DatePicker from 'react-date-picker';
+import DatePicker from 'react-datepicker';
 
 import './style.scss';
 
@@ -70,23 +70,31 @@ const EditRow = props => {
               <div className="input-group">
 
               <DatePicker
-               className="form-control"
-              placeholder="Enter Shipment Date"
+              className="form-field"
               onChange = {onChange}
-              value = {manufacturingDate.date}
+              selected = {manufacturingDate.date}
+              placeholderText="Enter Mfg Date"
+              showYearDropdown
+              dateFormatCalendar="MMMM"
+              yearDropdownItemNumber={15}
+              scrollableYearDropdown
+              isClearable
               />
-            
-               
               </div>
             </div>
             <div className="rTableCell">
               <div className="input-group">
-              
-              <DatePicker
-               className="form-control"
-              placeholder="Enter Shipment Date"
+               <DatePicker
+              className="form-field"
+              isClearable
+              placeholderText="Enter Exp Date"
               onChange = {onChange1}
-              value = {expiryDate.date1}
+              selected = {expiryDate.date1}
+              showYearDropdown
+              dateFormatCalendar="MMMM"
+              yearDropdownItemNumber={15}
+              scrollableYearDropdown
+              isClearable
               />
                
               </div>
