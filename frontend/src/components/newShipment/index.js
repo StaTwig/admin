@@ -9,7 +9,9 @@ import { createShipment } from '../../actions/shipmentActions';
 import { getPOs, getPO } from '../../actions/poActions';
 import DropdownButton from '../../shared/dropdownButtonGroup';
 import {getAllUsers} from "../../actions/userActions";
-import DatePicker from 'react-date-picker';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+
 
 const NewShipment = () => {
 
@@ -55,6 +57,7 @@ const NewShipment = () => {
   const [storageCondition, setStorageCondition] = useState('');
   const [batchNumber, setBatchNumber] = useState('');
   const [serialNumber, setSerialNumber] = useState('');
+  
   const editTableProps = {
     manufacturerName,
     setManufacturerName,
@@ -158,6 +161,7 @@ const NewShipment = () => {
               name="shipmentId"
               placeholder="Enter Supplier"
               value={supplier}
+            
             />
           </div>
           <div className="input-group">
@@ -169,20 +173,27 @@ const NewShipment = () => {
               onChange={e => setSupplierLocation(e.target.value)}
             />
           </div>
-          <div className="input-group">
-            <label htmlFor="shipmentId">Shipment Date</label>
-
+          <div className="input-group" >
+            <div className="shipmentdate">
+            <label htmlFor="shipmentId" className="mr-5">Shipment Date</label>
+          
             <DatePicker
-               className="form-control"
-              placeholder="Enter Shipment Date"
-              onChange = {onChange}
-              value = {shipmentDate.date}
-              />
+              className="form-control ml-4"
+              selected={shipmentDate.date}
+              placeholderText="Enter Shipment Date"
+              onChange={onChange}
+              showYearDropdown
+              dateFormatCalendar="MMMM"
+              yearDropdownItemNumber={15}
+              scrollableYearDropdown
+              isClearable
+             />
+            </div>  
           </div>
         </div>
         <div className="col">
       
-          <div className="d-flex flex-row ">
+          <div className="d-flex flex-row mb-4 ">
             <div className="delivery mr-5">
             <label htmlFor="shipmentId">Delivery To</label></div>
             <div className="del ml-5">
@@ -203,14 +214,23 @@ const NewShipment = () => {
             />
           </div>
 
-          <div className="input-group">
-            <label htmlFor="shipmentId"> Estimate Delivery Date</label>
+          <div className="input-group ">
+          <div className="shipmentdate">
+           
+            <label htmlFor="shipmentId " className="mr-4"> Estimate Delivery Date</label>
+      
             <DatePicker
-               className="form-control"
-              placeholder="Enter Shipment Date"
+              className="form-control"
+              placeholderText="Enter Delivery Date"
               onChange = {onChange1}
-              value = {estimateDeliveryDate.date1}
+              selected = {estimateDeliveryDate.date1}
+              showYearDropdown
+              dateFormatCalendar="MMMM"
+              yearDropdownItemNumber={100}
+              scrollableYearDropdown
+              isClearable
               />
+              </div>
           </div>
         </div>
       </div>

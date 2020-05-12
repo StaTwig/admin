@@ -25,7 +25,8 @@
    .del{
      width:200px;
    }
-
+   
+  
   .form-group,
   .input-group {
     display: flex;
@@ -34,28 +35,10 @@
 
     label {
       color: #707070;
-      text-align: left;
+      text-align: center;
       font-size: 13px;
     }
 
-    .react-date-picker__wrapper{
-     
-      border:none;
-    }
-
-    .react-date-picker__button {
-      padding: 0px 15px;
-      height:0px;
-      width:0px;
-    
-      background: transparent;
-     
-      
-    }
-
-    
-
-    
     .form-control {
       border: none;
       background: transparent;
@@ -66,6 +49,7 @@
       flex-grow: inherit;
       font-size: 10px;
     }
+     
 
     @media (min-width: $xl) {
       label {
@@ -81,14 +65,18 @@
         flex-basis: 65%;
         flex-grow: inherit;
         font-size: 14px;
+       
         
       }
+
     }
   }
  
   .input-group {
     position: relative;
     margin-bottom: 1rem;
+
+    
 
     .input-group-append {
       position: absolute;
