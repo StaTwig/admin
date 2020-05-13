@@ -60,7 +60,7 @@ const PurchaseForm = props => {
           <input
             disabled
             type="text"
-            className="user"
+            className="form-control"
             placeholder="Select Supplier"
             value={user.name}
           />
@@ -71,12 +71,13 @@ const PurchaseForm = props => {
       <div className="d-flex justify-content-between">
         <div className="input-group">
           <label htmlFor="shipmentId">Delivery To</label>
+          <div className="form-control">
           <DropdownButton
-            name={deliveryTo}
+           name={deliveryTo}
             onSelect={item => setDeliveryTo(item)}
             groups={userNames}
           />
-        
+        </div>
         </div>
         <div className="input-group">
           <label htmlFor="shipmentId">Delivery Location</label>
@@ -106,12 +107,15 @@ const PurchaseForm = props => {
         +<span> Add Another Product</span>
       </button>*/}
       
-      <button className="btn btn-primary" onClick={onReview}>
+     <button className="btn btn-primary review" onClick={onReview}>
         REVIEW
       </button>
-      <div className="text text-success my-3 ">{message}</div>
+      <div className="text text-success">{message}</div>
+      
+      
       </div>
-    
+
+      
   );
 };
 

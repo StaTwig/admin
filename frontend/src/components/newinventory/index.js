@@ -39,14 +39,15 @@ const NewInventory = () => {
   const closeModal = () => {
     setOpenCreatedInventory(false);
   };
-
+  
+  var numeric = { year: 'numeric', month: 'numeric' };
   const onAddInventory = async() => {
     const data = {
       productName,
       manufacturerName,
       quantity,
-      manufacturingDate:manufacturingDate.date.toLocaleDateString(),
-      expiryDate : expiryDate.date1.toLocaleDateString(),
+      manufacturingDate:manufacturingDate.date.toLocaleDateString('en-GB', numeric),
+      expiryDate : expiryDate.date1.toLocaleDateString('en-GB', numeric),
       storageCondition,
       batchNumber,
       serialNumber,

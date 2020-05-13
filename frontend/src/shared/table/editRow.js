@@ -82,6 +82,7 @@ const EditRow = props => {
               className="form-field"
               onChange = {onChange}
               selected = {manufacturingDate.date}
+              dateFormat="MM/yyyy"
               placeholderText="Enter Mfg Date"
               showYearDropdown
               dateFormatCalendar="MMMM"
@@ -97,6 +98,7 @@ const EditRow = props => {
               className="form-field"
               isClearable
               placeholderText="Enter Exp Date"
+              dateFormat="MM/yyyy"
               onChange = {onChange1}
               selected = {expiryDate.date1}
               showYearDropdown
