@@ -42,7 +42,7 @@ const NewShipment = () => {
   const [supplier, setSupplier] = useState(user.username);
   const [supplierLocation, setSupplierLocation] = useState('');
   const [shipmentDate, setShipmentDate] = useState('');
-  const [deliveryTo, setDeliveryTo] = useState('');
+  const [deliveryTo, setDeliveryTo] = useState('Select Receiver');
   const [deliveryLocation, setDeliveryLocation] = useState('');
   const [estimateDeliveryDate, setEstimateDeliveryDate] = useState('');
   const [message, setMessage] = useState('');
@@ -151,6 +151,16 @@ const NewShipment = () => {
               onChange={e => setClient(e.target.value)}
             />
           </div>
+          <div className="form-group">
+          <label htmlFor="client">Purchase Order</label>
+        <div className="form-control"> 
+          <DropdownButton
+         name={po}
+        onSelect={onSelectPO}
+        groups={pos}
+      />
+      </div>
+      </div>
         </div>
         <div className="col mr-3">
           <div className="form-group">
@@ -238,12 +248,7 @@ const NewShipment = () => {
         +<span> Add Another Product</span>
       </button>*/}
 
-     <div className="po"> <DropdownButton
-        name={po}
-        onSelect={onSelectPO}
-        groups={pos}
-      />
-      </div>
+    
       <hr />
 
       <div className="d-flex justify-content-between">
