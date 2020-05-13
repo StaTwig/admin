@@ -24,7 +24,7 @@
       border-radius: 0;
       // color: #A8A8A8;
       color: $black;
-      flex-basis: 65%;
+      flex-basis: 67%;
       flex-grow: inherit;
     }
 
@@ -39,7 +39,9 @@
       font-weight: bold;
     }
   }
-
+      .review{
+        float:right;
+      }
   .input-group {
     position: relative;
     margin-bottom: 1rem;

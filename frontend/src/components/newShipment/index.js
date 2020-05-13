@@ -174,11 +174,11 @@ const NewShipment = () => {
             />
           </div>
           <div className="input-group" >
-            <div className="shipmentdate">
-            <label htmlFor="shipmentId" className="mr-5">Shipment Date</label>
-          
+           
+            <label htmlFor="shipmentId">Shipment Date</label>
+             <div className="form-control">
             <DatePicker
-              className="form-control ml-4"
+              className="date"
               selected={shipmentDate.date}
               placeholderText="Enter Shipment Date"
               onChange={onChange}
@@ -188,22 +188,21 @@ const NewShipment = () => {
               scrollableYearDropdown
               isClearable
              />
-            </div>  
+             </div>
           </div>
         </div>
         <div className="col">
-      
-          <div className="d-flex flex-row mb-4 ">
-            <div className="delivery mr-5">
-            <label htmlFor="shipmentId">Delivery To</label></div>
-            <div className="del ml-5">
+            <div className="input-group">
+            <label htmlFor="shipmentId">Delivery To</label>
+            <div className="form-control">
             <DropdownButton
               name={deliveryTo}
               onSelect={item => setDeliveryTo(item)}
               groups={userNames}
             />
+            </div>
          </div>
-          </div>
+          
           <div className="input-group">
             <label htmlFor="shipmentId">Delivery Location</label>
             <input
@@ -215,12 +214,11 @@ const NewShipment = () => {
           </div>
 
           <div className="input-group ">
-          <div className="shipmentdate">
-           
-            <label htmlFor="shipmentId " className="mr-4"> Estimate Delivery Date</label>
-      
+         
+          <label htmlFor="shipmentId "> Estimate Delivery Date</label>
+              <div className="form-control">
             <DatePicker
-              className="form-control"
+              className="date"
               placeholderText="Enter Delivery Date"
               onChange = {onChange1}
               selected = {estimateDeliveryDate.date1}
@@ -230,7 +228,7 @@ const NewShipment = () => {
               scrollableYearDropdown
               isClearable
               />
-              </div>
+             </div>
           </div>
         </div>
       </div>
