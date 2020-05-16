@@ -10,6 +10,7 @@ import icon1 from '../../assets/icons/temprature-icon.png';
 import icon2 from '../../assets/icons/location-icon.png';
 import icon3 from '../../assets/icons/chain-icon.png';
 import mob from '../../assets/brands/mobile.png';
+import playstore from '../../assets/icons/googleplay.jpg';
 const HomeContainer = (props) => {
   const user = useSelector(state => {
     return state.user
@@ -148,10 +149,11 @@ const HomeContainer = (props) => {
           </div>
         </div>
       </section>
+
       <section className="contact_us">
-        <div className="container">
+        <div className="container d-flex flex-row justify-content-between">
           <div className="row h-100 align-items-center">
-            <div className="d-flex flex-column">
+            <div className="d-flex flex-column"> 
               <h2 className="display-4">Contact Us</h2>
               <p>
                 Interested in having chat with us about Vaccineledger ?<br />Drop
@@ -166,6 +168,17 @@ const HomeContainer = (props) => {
                 />
                 <button className="btn btn-primary btn-sm">SUBMIT</button>
               </div>
+            </div>
+          </div>
+          <div className="row h-100 align-items-center">
+            <div className="d-flex flex-column">
+         
+              <h2 className="display-4">Our Mobile Application</h2>
+              <div>Download the Vaccine Ledger Mobile app for Android, ios from below </div>
+              <div className="mt-4"><img src={playstore} width="30" height="30" alt="logo" />Google Play Link : <a href="https://play.google.com/store/apps/details?id=com.thevaccineledger" 
+              target="_blank" >
+                Click Here</a></div> 
+     
             </div>
           </div>
         </div>
