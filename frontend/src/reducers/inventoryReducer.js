@@ -7,7 +7,7 @@ export const inventoryReducer = (state = initialState, action) => {
     case GET_INVENTORIES_SUCCESS:
       const inventories = action.payload.data.map(inventory => JSON.parse(inventory.data));
       return [
-        ...inventories
+        ...inventories.reverse()
       ];
     case GET_INVENTORIES_FAILURE:
       return initialState

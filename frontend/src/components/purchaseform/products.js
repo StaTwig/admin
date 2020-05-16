@@ -4,13 +4,6 @@ import './style.scss';
 
 const ProductsTable = props => {
 
-  const isNumberKey = (event) => {
-  
-    const keyCode = event.keyCode || event.which;
-    const keyValue = String.fromCharCode(keyCode);
-    if (/\+|-/.test(keyValue))
-      event.preventDefault(); 
-  }
   const {
     tableHeader,
     products,
@@ -56,7 +49,8 @@ const ProductsTable = props => {
               <div className="form-group">
                 <input
                   type="number"
-                  onKeyPress={isNumberKey}
+                  onKeyDown={ e => ( e.keyCode === 69 || e.keyCode === 190||e.keyCode === 189
+                  ||e.keyCode === 187||e.keyCode === 40||e.keyCode === 38) && e.preventDefault() }
                   className="form-field"
                   placeholder="Enter Qunatity"
                   value={quantity}

@@ -101,7 +101,7 @@ const PurchaseForm = props => {
         product={product}
         manufacturer={manufacturer}
         quantity={quantity}
-        onQuantityChange={e => setQuantity(e.target.value.replace(/\D/,''))}
+        onQuantityChange={e => setQuantity(e.target.value)}
       />
       {/* <button className="btn btn-white shadow-radius font-bold">
         +<span> Add Another Product</span>
