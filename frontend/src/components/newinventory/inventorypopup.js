@@ -6,13 +6,16 @@ import Checked from "../../assets/icons/checked.svg";
 const InventoryPopUp = (props) => {
   return (
     <div className="inventorypopup">
-      <div className="d-flex justify-content-between flex-column align-items-center">
-        <img src={Checked} width='80' height='80' className="mb-2" />
-        <div className="alert font-weight-bold" >
+      <div className="d-flex  flex-column align-items-center">
+        <img src={Checked} width='60' height='60' className="mb-3" />
+        <div className="alert" >
           Success!
         </div>
         <div className="data">
-          Your Inventory has been added Successfully!
+          Your Inventory has been
+        </div>
+        <div className="data mb-4">
+         added Successfully!
         </div>
         <button className="btn-primary btn" onClick={props.onHide}>OK</button>
       </div>
