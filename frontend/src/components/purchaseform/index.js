@@ -26,7 +26,8 @@ const PurchaseForm = props => {
   const [quantity, setQuantity] = useState('');
   const [destination, setDestination] = useState('');
   const [message, setMessage] = useState('');
-  const todayDate = new Date().getDate() + '/' + new Date().getMonth() + '/'  +new Date().getFullYear();
+  const month = new Date().getMonth()+1;
+  const todayDate = new Date().getDate() + '/' + month + '/'  +new Date().getFullYear();
 
   const onReview = async () => {
    // const productId = `PO${Math.floor(Math.random() * 90000) + 10000}`;
@@ -107,7 +108,7 @@ const PurchaseForm = props => {
         +<span> Add Another Product</span>
       </button>*/}
       
-     <button className="btn btn-primary review" onClick={onReview}>
+     <button className="btn btn-orange review" onClick={onReview}>
         REVIEW
       </button>
       <div className="text text-success">{message}</div>

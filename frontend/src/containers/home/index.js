@@ -10,7 +10,7 @@ import icon1 from '../../assets/icons/temprature-icon.png';
 import icon2 from '../../assets/icons/location-icon.png';
 import icon3 from '../../assets/icons/chain-icon.png';
 import mob from '../../assets/brands/mobile.png';
-import playstore from '../../assets/icons/googleplay.jpg';
+import playstore from '../../assets/icons/googleplay.png';
 const HomeContainer = (props) => {
   const user = useSelector(state => {
     return state.user
@@ -71,7 +71,7 @@ const HomeContainer = (props) => {
               <img src={logo} width="350" height="50" />
               <p className="hero-paragraph">
                 {' '}
-                Vaccine ledger is a Blockchain based platform to track and
+                VaccineLedger is a Blockchain based platform to track and
                 trace vaccine's journey across the supply chain
               </p>
             </div>
@@ -130,7 +130,7 @@ const HomeContainer = (props) => {
                 efficient food and Vaccine distribution Supply chain.This
                 helps in preventing failures of distribution, predicting the resources.Through
                 our platform, we connect all stakeholders via tamper-proof,
-                open ledgers using our platform SC Blockchain
+                open ledgers using our platform VaccineLedger
               </p>
             </div>
             <div className="col-md-6 align-items-center hide-sm">
@@ -156,7 +156,7 @@ const HomeContainer = (props) => {
             <div className="d-flex flex-column"> 
               <h2 className="display-4">Contact Us</h2>
               <p>
-                Interested in having chat with us about Vaccineledger ?<br />Drop
+                Interested in having chat with us about VaccineLedger ?<br />Drop
                 your email below and we will get back to you shortly !
               </p>
               <div className="form form-inline">
@@ -173,11 +173,11 @@ const HomeContainer = (props) => {
           <div className="row h-100 align-items-center">
             <div className="d-flex flex-column">
          
-              <h2 className="display-4">Our Mobile Application</h2>
-              <div>Download the Vaccine Ledger Mobile app for Android, ios from below </div>
-              <div className="mt-4"><img src={playstore} width="30" height="30" alt="logo" />Google Play Link : <a href="https://play.google.com/store/apps/details?id=com.thevaccineledger" 
+              <h2 className="display-4">Mobile Application</h2>
+              <p>Download the VaccineLedger Mobile app for Android, ios from below </p>
+              <div className="mt-1"><a href="https://play.google.com/store/apps/details?id=com.thevaccineledger" 
               target="_blank" >
-                Click Here</a></div> 
+                <img src={playstore} width="180" height="100" alt="logo" /></a></div> 
      
             </div>
           </div>
