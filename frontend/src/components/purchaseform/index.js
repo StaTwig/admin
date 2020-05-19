@@ -11,7 +11,7 @@ const PurchaseForm = props => {
   const { user, users } = props;
 
   const userNames = users.map(usr => usr.name);
-  const [deliveryTo, setDeliveryTo] = useState('Thrinethra');
+  const [deliveryTo, setDeliveryTo] = useState('trinethra');
   const [products, setProducts] = useState(['bOPV', 'MMR', 'PVC', 'BCG','RV','Hep B']);
   const [manufacturers, setManufacturers] = useState([
                     'Bharat Biotech',
@@ -21,13 +21,58 @@ const PurchaseForm = props => {
 
   ]);
 
-  const [product, setProduct] = useState('Select Product');
-  const [manufacturer, setManufacturer] = useState('Select Manufacturer');
+  const [product, setProduct] = useState('select product');
+  const [manufacturer, setManufacturer] = useState('select manufacturer');
   const [quantity, setQuantity] = useState('');
   const [destination, setDestination] = useState('');
   const [message, setMessage] = useState('');
   const month = new Date().getMonth()+1;
   const todayDate = new Date().getDate() + '/' + month + '/'  +new Date().getFullYear();
+  const [deliverytoError, setdeliverytoError ] = useState('');
+  const [destinationError, setdestinationError] = useState('');
+  const [quantityError, setquantityError] = useState('');
+  const [productError, setproductError] = useState('');
+  const [manufacturerError, setmanufacturerError] = useState('');
+ 
+  
+  const onValidate = () => {
+
+if (deliveryTo.length<1){
+      setdeliverytoError("DeliveryTo must be specified")
+      setTimeout(() => {setdeliverytoError('')} , 2000)
+    } 
+   
+    else if(destination.length<1)
+    {
+      setdestinationError("Delivery Location must be specified")
+      setTimeout(() => {setdestinationError('')} , 2000)
+       }
+   
+
+    else if(product.length<1||product === 'select product'){
+      setproductError("Product Name must be Selected")
+      setTimeout(() => {setproductError('')} , 2000)
+    }
+     else if(manufacturer.length<1||manufacturer === 'select manufacturer')
+     {
+      setmanufacturerError("Manufacturer must be selected")
+      setTimeout(() => {setmanufacturerError('')} , 2000)
+    }
+   
+    else if(quantity.length<1){
+      setquantityError("Quantity must be specified")
+      setTimeout(() => {setquantityError('')} , 2000)
+    }
+    else if(quantity=== '0'){
+      setquantityError("Quantity can't be 0")
+      setTimeout(() => {setquantityError('')} , 2000)
+    }
+
+    else{
+     onReview();
+    }
+  }
+
 
   const onReview = async () => {
    // const productId = `PO${Math.floor(Math.random() * 90000) + 10000}`;
@@ -53,6 +98,7 @@ const PurchaseForm = props => {
       setMessage('Unable to process , Please Check the Data entered');
     }
   };
+
   return (
     <div className="purchaseform">
       <div className="d-flex justify-content-between">
@@ -102,17 +148,24 @@ const PurchaseForm = props => {
         product={product}
         manufacturer={manufacturer}
         quantity={quantity}
+        productError={productError}
+        manufacturerError={manufacturerError}
+        quantityError={quantityError}
         onQuantityChange={e => setQuantity(e.target.value)}
       />
       {/* <button className="btn btn-white shadow-radius font-bold">
         +<span> Add Another Product</span>
       </button>*/}
       
-     <button className="btn btn-orange review" onClick={onReview}>
+     <button className="btn btn-orange review" onClick={onValidate}>
         REVIEW
       </button>
       <div className="text text-success">{message}</div>
+      <div className="text text-primary">
+        
+      {deliverytoError}{destinationError}{productError}{manufacturerError}{quantityError}
       
+      </div>
       
       </div>
 
