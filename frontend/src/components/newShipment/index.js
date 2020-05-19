@@ -256,7 +256,7 @@ const NewShipment = () => {
         <div className="value">0</div>
         <div className="d-flex ">
           <button className="btn btn-outline-info mr-2" onClick={onAssign}>
-            Assign Shipmnet Order
+            Assign Shipment Order
           </button>
           <button className="btn-primary btn">Proceed To Review</button>
         </div>
