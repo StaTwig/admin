@@ -15,7 +15,8 @@ const NewInventory = () => {
   const [quantity, setQuantity] = useState('');
   const [manufacturingDate, setManufacturingDate] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
-  const [storageCondition, setStorageCondition] = useState('');
+  const [storageConditionmin, setStorageConditionmin] = useState('');
+  const [storageConditionmax, setStorageConditionmax] = useState('');
   const [batchNumber, setBatchNumber] = useState('');
   const [serialNumber, setSerialNumber] = useState('');
   const editTableProps = {
@@ -29,8 +30,10 @@ const NewInventory = () => {
     setManufacturingDate,
     expiryDate,
     setExpiryDate,
-    storageCondition,
-    setStorageCondition,
+    storageConditionmin,
+    setStorageConditionmin,
+    storageConditionmax,
+    setStorageConditionmax,
     batchNumber,
     setBatchNumber,
     serialNumber,
@@ -48,7 +51,8 @@ const NewInventory = () => {
       quantity,
       manufacturingDate:manufacturingDate.date.toLocaleDateString('en-GB', numeric),
       expiryDate : expiryDate.date1.toLocaleDateString('en-GB', numeric),
-      storageCondition,
+      storageConditionmin,
+      storageConditionmax,
       batchNumber,
       serialNumber,
     };

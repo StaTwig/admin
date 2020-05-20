@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 
 import './style.scss';
 import Key from '../../assets/icons/key.png';
-import User from '../../assets/icons/user.png';
+import User from '../../assets/icons/mail.png';
 import hide from '../../assets/icons/hide.png';
 import logo from '../../assets/brands/VaccineLedgerlogo.svg';
+import eye from '../../assets/icons/eye.png';
 
 import './style.scss';
 
@@ -33,7 +34,7 @@ const FormLoginPage = (props) => {
                     <input type="email" className="form-control"
                       value={email}
                       onChange={onEmailChange}
-                      placeholder="Username" />
+                      placeholder="Email" />
                   </div>
                   <div className="form-group">
                     <img alt="" src={Key} className="icon" />
@@ -44,7 +45,7 @@ const FormLoginPage = (props) => {
                     <img
                       className="showpassword"
                       alt=""
-                      src={hide}
+                      src={` ${ passwordType ? hide : eye}`}
                       onClick={() => setPasswordType(!passwordType)}
                     />
                   </div>

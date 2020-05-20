@@ -54,7 +54,8 @@ const NewShipment = () => {
   const [quantity, setQuantity] = useState('');
   const [manufacturingDate, setManufacturingDate] = useState('');
   const [expiryDate, setExpiryDate] = useState('');
-  const [storageCondition, setStorageCondition] = useState('');
+  const [storageConditionmin, setStorageConditionmin] = useState('');
+  const [storageConditionmax, setStorageConditionmax] = useState('');
   const [batchNumber, setBatchNumber] = useState('');
   const [serialNumber, setSerialNumber] = useState('');
   
@@ -69,8 +70,10 @@ const NewShipment = () => {
     setManufacturingDate,
     expiryDate,
     setExpiryDate,
-    storageCondition,
-    setStorageCondition,
+    storageConditionmin,
+    setStorageConditionmin,
+    storageConditionmax,
+    setStorageConditionmax,
     batchNumber,
     setBatchNumber,
     serialNumber,
@@ -256,7 +259,7 @@ const NewShipment = () => {
         <div className="value">0</div>
         <div className="d-flex ">
           <button className="btn btn-outline-info mr-2" onClick={onAssign}>
-            Assign Shipmnet Order
+            Assign Shipment Order
           </button>
           <button className="btn-primary btn">Proceed To Review</button>
         </div>

@@ -3,6 +3,7 @@ import DropdownButton from '../dropdownButtonGroup';
 import calenderBlue from '../../assets/icons/calendar-blue.svg';
 import downArrow from '../../assets/icons/up-and-down-dark.svg';
 import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
 
 import './style.scss';
 
@@ -22,8 +23,10 @@ const EditRow = props => {
     setManufacturingDate,
     expiryDate,
     setExpiryDate,
-    storageCondition,
-    setStorageCondition,
+    storageConditionmin,
+    setStorageConditionmin,
+    storageConditionmax,
+    setStorageConditionmax,
     batchNumber,
     setBatchNumber,
     serialNumber,
@@ -76,11 +79,9 @@ const EditRow = props => {
               selected = {manufacturingDate.date}
               dateFormat="MM/yyyy"
               placeholderText="Enter Mfg Date"
-              showYearDropdown
-              dateFormatCalendar="MMMM"
-              yearDropdownItemNumber={15}
-              scrollableYearDropdown
-              isClearable
+              showMonthYearPicker
+              showFullMonthYearPicker
+               isClearable
               />
               </div>
             </div>
@@ -93,11 +94,8 @@ const EditRow = props => {
               dateFormat="MM/yyyy"
               onChange = {onChange1}
               selected = {expiryDate.date1}
-              showYearDropdown
-              dateFormatCalendar="MMMM"
-              yearDropdownItemNumber={15}
-              scrollableYearDropdown
-              isClearable
+              showMonthYearPicker
+              showFullMonthYearPicker
               />
                
               </div>
@@ -105,12 +103,22 @@ const EditRow = props => {
             <div className="rTableCell">
               <div className="form-group">
                 <input
-                  type="text"
-                  className="form-field"
-                  placeholder="Enter Storage Conditions"
-                  value={storageCondition}
-                  onChange={e => setStorageCondition(e.target.value)}
+                  type="number"
+                  className="form-field1"
+                  placeholder="Min"
+                  value={storageConditionmin}
+                  onChange={e => setStorageConditionmin(e.target.value)}
+                
                 />
+                  <div className="divider mr-auto">°C</div>
+                 <input
+                  type="number"
+                  className="form-field1"
+                  placeholder="Max"
+                  value={storageConditionmax}
+                  onChange={e => setStorageConditionmax(e.target.value)}
+                />
+                   <div className="divider mr-auto">°C</div>
               </div>
             </div>
             <div className="rTableCell">
