@@ -6,6 +6,7 @@ import Key from "../../assets/icons/key.png";
 import User from "../../assets/icons/user.png";
 import Mail from "../../assets/icons/mail.png";
 import hide from "../../assets/icons/hide.png";
+import eye from "../../assets/icons/eye.png";
 import logo from "../../assets/brands/VaccineLedgerlogo.svg";
 const FormPage = (props) => {
   const [passwordType, setPasswordType] = useState(true);
@@ -51,7 +52,7 @@ const FormPage = (props) => {
                     <img
                       className="showpassword"
                       alt=""
-                      src={hide}
+                      src={` ${ passwordType ? hide : eye}`}
                       onClick={() => setPasswordType(!passwordType)}
                     />
                   </div>
