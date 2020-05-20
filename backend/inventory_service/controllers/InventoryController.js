@@ -172,10 +172,15 @@ exports.addNewInventory = [
     .isLength({ min: 4 })
     .trim()
     .withMessage('Expiry Date must be specified.'),
-  body('data.storageCondition')
+  body('data.storageConditionmin')
     .isLength({ min: 1 })
     .trim()
-    .withMessage('Storage Condition must be specified.'),
+    .withMessage('Storage Conditionmin must be specified.'),
+    body('data.storageConditionmax')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Storage Conditionmax must be specified.'),
+
   body('data.batchNumber')
     .isLength({ min: 1 })
     .trim()
