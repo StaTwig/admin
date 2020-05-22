@@ -71,7 +71,7 @@ echo $(pwd)
 #start frontend
 echo "Building frontend"
 cd frontend
-
+: <<'END'
 if ([ "$1" == "PROD" ] || [ "$1" == "TEST" ]) && ([ "$2" == "FRONTEND" ] || [ "$2" == "ALL" ]);
    then
       echo "Building frontend in $1 mode....."
@@ -101,7 +101,7 @@ elif [ "$1" == "LOCAL" ] && [ "$2" == "FROTNEND" ]
       #npm start &
 
 fi
-
+END
 cd ..
 
 #start api gateway - traefik
