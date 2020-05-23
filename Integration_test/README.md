@@ -1,11 +1,11 @@
 ## How to Run the Integration test
 
-
+Navigate to the test directory
 ```sh
 cd theledger/Integration_test
 ````
 
-to install the npm packages
+To install the npm packages
 ```sh
 npm install
 ````
