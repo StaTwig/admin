@@ -69,7 +69,7 @@ export function config() {
       registerUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/register`,
       verifyOtpUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/verify-otp`,
       userInfoUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/userInfo`,
-      getAllUsersUrl: `${STABLE_SERVER_URL_USER}/api/auth/getAllUsers`,
+      getAllUsersUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${TEST_SERVER_URL}/usermanagement/api/auth/upload`,
       shipmentsUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchPublisherLatestShipments`,
