@@ -27,6 +27,7 @@ import './style.scss';
     //   return data.length;
       
     // })
+
     const last24hrsDates = getLastDates(manufacturingDates, 24);
     const last3Months = getLastDates(manufacturingDates, 2190);
     const last6Months = getLastDates(manufacturingDates, 14380);

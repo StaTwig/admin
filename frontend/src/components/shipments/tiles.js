@@ -13,21 +13,21 @@ const Tiles = (props) => {
       const [shipmentsSent, setShipmentsSent] = useState('0');
       const [shipmentsReceived, setShipmentsReceived] = useState('0');
       const [shipmentsTransit, setShipmentsTransit] = useState('0');
-      useEffect(() => {
+
+  useEffect(() => {
       
         const shipmentDates = props.shipments.map((data, index) => {
           return data;      
         })
       
         const total =  shipmentDates.filter(d => d.status != '');   
-        const sent = shipmentDates.filter(d => d.status == 'sent')
-        const received = shipmentDates.filter(d => d.status == 'received')
-        const transit = shipmentDates.filter(d => d.status == 'transit');
+        const sent = shipmentDates.filter(d => d.status == 'Shipped')
+        const received = shipmentDates.filter(d => d.status == 'Received')
+        const transit = shipmentDates.filter(d => d.status == 'In Transit');
         setTotalShipments(total.length);
         setShipmentsSent(sent.length);
         setShipmentsTransit(transit.length);
         setShipmentsReceived(received.length);
-        
         })
         
     return (
