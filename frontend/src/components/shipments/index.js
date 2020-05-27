@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './style.scss';
 import Table from './table';
+import PoTable from './potable';
 import Tabs from '../../shared/tabs';
 import Tiles from './tiles';
 import Add from '../../assets/icons/add.svg';
@@ -17,8 +18,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsers } from '../../actions/userActions';
 
 const ShipmentAnalytic = props => {
+  
   const [openPurchaseOrder, setOpenPurchaseOrder] = useState(false);
-  const dispatch = useDispatch();
+  const [visible, setvisible] = useState(false);
+
+
+ const dispatch = useDispatch();
 
   const closeModal = () => {
     setOpenPurchaseOrder(false);
@@ -67,13 +72,13 @@ const ShipmentAnalytic = props => {
       </div>
       <Tiles {...props} />
       <div className="mt-4">
-        <Tabs />
+        <Tabs {...props} setvisible = {setvisible}  />
       </div>
       <div className="full-width-ribben mt-4">
         <TableFilter data={headers} />
       </div>
       <div className="ribben-space">
-        <Table {...props} />
+       { visible ? <PoTable {...props}/> : <Table {...props}/> }
       </div>
       {openPurchaseOrder && (
         <Modal

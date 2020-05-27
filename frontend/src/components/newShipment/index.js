@@ -5,7 +5,7 @@ import EditTable from '../../shared/table/editTable';
 import updownArrow from '../../assets/icons/up-and-down-dark.svg';
 import calenderDark from '../../assets/icons/calendar-grey.svg';
 import './style.scss';
-import { createShipment } from '../../actions/shipmentActions';
+import { createShipment, setReviewShipments } from '../../actions/shipmentActions';
 import { getPOs, getPO } from '../../actions/poActions';
 import DropdownButton from '../../shared/dropdownButtonGroup';
 import {getAllUsers} from "../../actions/userActions";
@@ -13,7 +13,7 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
 
-const NewShipment = () => {
+const NewShipment = (props) => {
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -81,7 +81,44 @@ const NewShipment = () => {
   };
 
   const onChange = date => setShipmentDate({ date })
-  const onChange1 = date1 => setEstimateDeliveryDate({ date1 })
+  const onChange1 = date1 => setEstimateDeliveryDate({ date1 });
+
+  const onProceedToReview = () => {
+    const receiver = users.find(usr => usr.name === deliveryTo);
+    const data = {
+      shipmentId,
+      client,
+      receiver: receiver.address,
+      supplier,
+      supplierLocation,
+      shipmentDate: shipmentDate.date.toLocaleDateString(),
+      deliveryTo,
+      deliveryLocation,
+      estimateDeliveryDate: estimateDeliveryDate.date1.toLocaleDateString(),
+      status: 'Shipped',
+      products:[{
+        productName,
+        quantity,
+        manufacturerName,
+        storageConditionmin,
+        storageConditionmax,
+        manufacturingDate,
+        expiryDate,
+        batchNumber,
+        serialNumber
+      }]
+    };
+
+
+    //Store in reducer
+    dispatch(setReviewShipments(data));
+
+    //Redirect to review page.
+    props.history.push('/reviewshipment');
+  
+
+    console.log('new shipment data', data);
+  }
   const onAssign = async () => {
     const receiver = users.find(usr => usr.name === deliveryTo);
     const data = {
@@ -262,7 +299,7 @@ const NewShipment = () => {
           <button className="btn btn-outline-info mr-2" onClick={onAssign}>
             Assign Shipment Order
           </button>
-          <button className="btn-primary btn">Proceed To Review</button>
+          <button className="btn-primary btn"  onClick={onProceedToReview}>Proceed To Review</button>
         </div>
       </div>
       {message && <div className="alert alert-success">{message}</div>}

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { config } from '../config';
-import { GET_INVENTORIES_FAILURE, GET_INVENTORIES_SUCCESS } from "../constants/inventoryConstants";
+import { GET_INVENTORIES_FAILURE, GET_INVENTORIES_SUCCESS ,SET_REVIEW_INVENTORY} from "../constants/inventoryConstants";
 
 export const getInventories = () => {
   try {
@@ -34,6 +34,15 @@ export const getInventoriesById = (query) => {
 const setInventories = (data) =>{
   return {
     type: GET_INVENTORIES_SUCCESS,
+    payload: data,
+  };
+
+}
+
+
+export const setReviewinventories = (data) =>{
+  return {
+    type: SET_REVIEW_INVENTORY,
     payload: data,
   };
 
