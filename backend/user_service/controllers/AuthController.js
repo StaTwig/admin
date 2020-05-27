@@ -550,13 +550,34 @@ exports.updateProfile = [
     try {
       UserModel.findOne({ email: req.user.email }).then(user => {
         if (user) {
-        	const { name, organisation, affiliateOrganisation, phone, password } = req.body;
+        	const { name, organisation, affiliateOrganisation, phone } = req.body;
         	user.name = name;
         	user.organisation = organisation;
         	user.affiliateOrganisation = affiliateOrganisation;
           user.phone = phone;
-          console.log(req.body.password.length)
-          
+          user.save(function(err) {
+            if (err) {
+              return apiResponse.ErrorResponse(res, err);
+            }
+            else{
+              console.log('Updated');
+              return apiResponse.successResponse(res, user.name + ' user Updated');
+            }
+          });
+        }
+        
+      });
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+exports.updatePassword = [
+  auth,
+  (req, res) => {
+    try {
+      UserModel.findOne({ email: req.user.email }).then(user => {
+        if (user) {
           bcrypt.hash(req.body.password, 10, function(err, hash) {
             var passwordNew = hash;
             if(req.body.password) {
@@ -570,13 +591,13 @@ exports.updateProfile = [
             }
             else{
               console.log('Updated');
-              return apiResponse.successResponse(res, user.name + ' user Updated');
+              return apiResponse.successResponse(res, user.name + ' password Updated');
             }
           });
-          }) 
-          
+          })
+
         }
-        
+
       });
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
