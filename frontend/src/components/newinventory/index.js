@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import EditTable from '../../shared/table/editTable';
+import { useDispatch} from "react-redux";
 import './style.scss';
 import Modal from '../../shared/modal';
 import InventoryPopUp from './inventorypopup';
-import {addInventory} from "../../actions/inventoryActions";
+import {addInventory,setReviewinventories} from "../../actions/inventoryActions";
+//import FailurePopUp from './failurepopup';
 
-const NewInventory = () => {
+const NewInventory = (props) => {
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [productName, setProductName] = useState('Select Product');
   const [manufacturerName, setManufacturerName] = useState(
@@ -44,6 +46,35 @@ const NewInventory = () => {
   };
   
   var numeric = { year: 'numeric', month: 'numeric' };
+  
+  const dispatch = useDispatch();
+  const onProceedToReview = () => {
+    
+    const data = {
+      productName,
+      manufacturerName,
+      quantity,
+      manufacturingDate:manufacturingDate.date.toLocaleDateString('en-GB', numeric),
+      expiryDate : expiryDate.date1.toLocaleDateString('en-GB', numeric),
+      storageConditionmin,
+      storageConditionmax,
+      batchNumber,
+      serialNumber,
+    };
+
+    //Store in reducer
+    dispatch(setReviewinventories(data));
+    console.log('new inventory data', data);
+
+  console.log('clicked');
+    //Redirect to review page.
+    props.history.push('/reviewinventory');
+  
+
+    console.log('new inventory data', data);
+    console.log('clicked');
+
+  }
   const onAddInventory = async() => {
     const data = {
       productName,
@@ -80,18 +111,17 @@ const NewInventory = () => {
           <div className="total">Grand Total</div>
           <span className="value">0</span>
         </div>
-
-        <button className="btn-primary btn" onClick={onAddInventory}>
-          {' '}
-          Add Inventory
-        </button>
+        <button className="btn-primary btn"  onClick={onProceedToReview}>Proceed To Review</button>
+        
       </div>
       {openCreatedInventory && (
         <Modal
           close={() => closeModal()}
           size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
-          <InventoryPopUp onHide={closeModal} />
+          <InventoryPopUp onHide={closeModal} //FailurePopUp
+          
+          />
         </Modal>
       )}
       {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
@@ -100,3 +130,9 @@ const NewInventory = () => {
 };
 
 export default NewInventory;
+
+
+/*<button className="btn-primary btn" onClick={onAddInventory}>
+          {' '}
+          Add Inventory
+        </button>*/

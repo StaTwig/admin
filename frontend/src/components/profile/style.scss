@@ -24,11 +24,30 @@
     padding: 0.8rem 0.8rem;
     display: flex;
     flex-direction: column;
-
+   
     li {
       padding: 0.3rem 0.3rem;
       margin:0.4rem;
       list-style: none;
+    
+      
+      .form-control {
+        border: none;
+        background: transparent;
+        border-bottom: 2px solid #d6d6d6;
+        border-radius: 0;
+        color: $black;
+        flex-basis: 55%;
+        flex-grow: inherit;
+        font-size: 12px;
+      }
+
+      .wallet{
+        border-bottom:none;
+        
+      }
+     
+    
     }
 }
 
@@ -37,6 +56,10 @@
       height:160px;
       width:160px;
     }
+
+    
+
+  
   }
 
 }

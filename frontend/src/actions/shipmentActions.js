@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { config } from '../config';
-import { GET_SHIPMENTS_FAILURE, GET_SHIPMENTS_SUCCESS } from "../constants/shipmentConstants";
+import { GET_SHIPMENTS_FAILURE, GET_SHIPMENTS_SUCCESS, SET_REVIEW_SHIPMENT } from "../constants/shipmentConstants";
 
 export const getShipments = () => {
   try {
@@ -44,6 +44,15 @@ export const createShipment = async (data) => {
 const setShipments = (data) =>{
   return {
     type: GET_SHIPMENTS_SUCCESS,
+    payload: data,
+  };
+
+}
+
+
+export const setReviewShipments = (data) =>{
+  return {
+    type: SET_REVIEW_SHIPMENT,
     payload: data,
   };
 

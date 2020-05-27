@@ -190,11 +190,13 @@ class Profile extends React.Component {
                   <ul>
                   <li> 
                       <input
+                        className="form-control"
                         value={name}
                         onChange={e => this.setState({ name: e.target.value })}
                       />
                       </li>
                   <li><input
+                        className="form-control"
                         disabled
                         value={role}
                         onChange={e => this.setState({ role: e.target.value })}
@@ -202,12 +204,14 @@ class Profile extends React.Component {
                       </li>
                   <li>
                       <input
+                        className="form-control"
                         value={organisation}
                         onChange={e =>
                           this.setState({ organisation: e.target.value })
                         }
                       /></li>
                   <li>  <input
+                         className="form-control"
                         value={affiliateOrganisation}
                         onChange={e =>
                           this.setState({
@@ -217,7 +221,7 @@ class Profile extends React.Component {
                       />
                     </li>
                   <li> <input
-                        disabled
+                        className="form-control wallet"
                         value={walletAddress}
                         onChange={e =>
                           this.setState({ walletAddress: e.target.value })
@@ -225,6 +229,7 @@ class Profile extends React.Component {
                       />
                     </li>
                     <li> <input
+                        className="form-control"
                         disabled
                         value={email}
                         onChange={e =>
@@ -233,13 +238,14 @@ class Profile extends React.Component {
                       />
                     </li>
                   <li> <input
+                        className="form-control"
                         value={phone}
                         onChange={e => this.setState({ phone: e.target.value })}
                       /></li>
 
-                         <li> 
+                         <li > 
                        
-                        {status && <li>Active</li>}
+                        {status && <li className="form-control wallet">Active</li>}
                       
                        </li>
                        
@@ -284,12 +290,13 @@ class Profile extends React.Component {
                 </div>
               ) : (
                 <div className="d-flex flex-row justify-content-between">
-                  <button className="btn-primary btn mr-2" onClick={this.onSubmit}>
-                    <span>Save</span>
+                   <button className="btn btn-outline-info mr-2" onClick={this.onCancel}>
+                    <span>CANCEL</span>
                   </button>
-                  <button className="btn-primary btn" onClick={this.onCancel}>
-                    <span>Cancel</span>
+                   <button className="btn-primary btn" onClick={this.onSubmit}>
+                    <span>SAVE</span>
                   </button>
+                  
                 </div>
               )}
             </div>
@@ -304,3 +311,10 @@ class Profile extends React.Component {
 }
 
 export default Profile;
+
+
+
+
+
+
+

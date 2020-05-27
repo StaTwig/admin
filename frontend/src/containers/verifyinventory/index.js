@@ -1,21 +1,21 @@
 import React from "react";
-import NewInventory from '../../components/newinventory';
+import VerifyInventory from '../../components/verifyinventory';
 import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
 
-const NewInventoryContainer = props => {
+const VerifyInventoryContainer = props => {
   return (
     <div className="container-fluid p-0">
       <Header {...props} />
       <div className="d-flex">
         <Sidebar {...props} />
         <div className="content">
-          <NewInventory {...props}/>
+          <VerifyInventory {...props}/>
         </div>
       </div>
     </div>
   );
 };
 
-export default NewInventoryContainer;
+export default VerifyInventoryContainer;
 

@@ -49,7 +49,7 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Shipments</div>
-                <div className="count">{AllTimeCount}<small className="dayStatus">This Year</small></div>
+                <div className="count1">{AllTimeCount}<small className="dayStatus">This Year</small></div>
               </div>
             </div>
           </div>
@@ -61,7 +61,7 @@ import './style.scss';
 
               <div className="d-flex flex-column">
                 <div className="title">Total Inventory Added</div>
-                <div className="count" > 52 <small className="dayStatus">This Year</small></div>
+                <div className="count2" > 52 <small className="dayStatus">This Year</small></div>
               </div>
             </div>
 
@@ -73,7 +73,7 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Current Shipment in Transit</div>
-                <div className="count">{Months6Count}<small className="dayStatus">Last 6 Month</small></div>
+                <div className="count3">{Months6Count}<small className="dayStatus">Last 6 Month</small></div>
               </div>
             </div>
 
@@ -85,7 +85,7 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Shipments</div>
-                <div className="count">{Months3Count}<small className="dayStatus">Last 3 Month</small></div>
+                <div className="count4">{Months3Count}<small className="dayStatus">Last 3 Month</small></div>
               </div>
             </div>
 
@@ -97,7 +97,7 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Shipments Delayed</div>
-                <div className="count">{Hours24Count} <small className="dayStatus">Today</small></div>
+                <div className="count5">{Hours24Count} <small className="dayStatus">Today</small></div>
               </div>
             </div>
           </div>

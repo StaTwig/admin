@@ -10,7 +10,7 @@ const newShipmentContainer = props => {
       <div className="d-flex">
         <Sidebar {...props} />
         <div className="content">
-          <NewShipment />
+          <NewShipment {...props}/>
         </div>
       </div>
     </div>

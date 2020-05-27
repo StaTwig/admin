@@ -9,28 +9,26 @@
     li {
       a {
         &.nav-link {
-          color: #707070;
+          color: #0093E9;
           font-size: 18px;
           padding-bottom: 1rem;
           font-weight: bold;
-        }
-
-        &.nav-link.active {
-          color: #0093E9;
           background-color: transparent;
           position: relative;
-
-          &:after {
-            border-bottom: 10px solid #0093E9;
-            border-radius: 10px;
-            content: "";
-            position: absolute;
-            bottom: -7px;
-            width: 100%;
-            left: 0;
-          }
+          cursor: pointer;
+        }
+        &.nav-in {
+          color: rgb(101, 116, 126);
+          
+         
         }
       }
+      a:hover {
+        color: #0093E9;
+        border-bottom: 10px solid #0093E9;
+        border-radius: 10px;
+      }
+    
     }
   }
 }
