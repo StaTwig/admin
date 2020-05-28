@@ -6,23 +6,23 @@ import Modal from '../../shared/modal';
 import ShipmentPopUp from './shipmentpopup';
 import './style.scss';
 
-const VerifyShipment = () => {
+const VerifyShipment = (props) => {
   //const [message, setMessage] = useState('');
   //const [errorMessage, setErrorMessage] = useState('');
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const closeModal = () => {
-    setOpenCreatedInventory(false);
+    props.history.push('/shipments');
   };
 
    const reviewShipment = useSelector(state => {
     return state.reviewShipment;
   });
 
-  /*const onEdit = ()=>{
+  const onEdit = ()=>{
     props.history.push('/newshipment');
   }
 
-  console.log('review shipment data', reviewShipment);*/
+
   const onAssign = async () => {
   console.log('clicked');
   console.log('review shipment data', reviewShipment);
@@ -47,8 +47,8 @@ const VerifyShipment = () => {
             <div className="d-flex flex-row">
             <div className="row mr-auto">
              <ul>
-             <li>Shipment Number</li>
-             <li>Client Name</li>
+             <li className="bold">Shipment Number</li>
+             <li className="bold">Client Name</li>
              </ul>
               <ul>
              <li>{reviewShipment.shipmentId}</li>
@@ -57,9 +57,9 @@ const VerifyShipment = () => {
              </div>
          <div className="row mr-auto">
              <ul>
-             <li>Supplier</li>
-             <li>Supplier Location</li>
-             <li>Supplier Date</li>
+             <li className="bold">Supplier</li>
+             <li className="bold">Supplier Location</li>
+             <li className="bold">Supplier Date</li>
              </ul>
              <ul>
              <li>{reviewShipment.supplier}</li>
@@ -69,9 +69,9 @@ const VerifyShipment = () => {
              </div>
           <div className="row mr-auto">
              <ul>
-             <li>Delivery To</li>
-             <li>Delivery Location</li>
-             <li>Delivery Date</li>
+             <li className="bold">Delivery To</li>
+             <li className="bold">Delivery Location</li>
+             <li className="bold">Delivery Date</li>
             </ul>
              <ul>
              <li>{reviewShipment.deliveryTo}</li>
@@ -83,40 +83,40 @@ const VerifyShipment = () => {
          <h5 className="head">Description Of Goods </h5>
          <div className="d-flex flex-row justify-content-between">
               <ul>
-             <li>Product Name</li>
+             <li className="bold">Product Name</li>
              <li>{reviewShipment.products[0].productName}</li>
              </ul>
              <ul>
-             <li>Manufacturer</li>
+             <li className="bold">Manufacturer</li>
              <li>{reviewShipment.products[0].manufacturerName}</li>
               </ul>
              <ul>
-             <li>Quantity</li>
+             <li className="bold">Quantity</li>
              <li> {reviewShipment.products[0].quantity}</li>
              </ul>
              <ul>
-             <li>Manufacturer Date</li>
+             <li className="bold">Manufacturer Date</li>
              <li>{reviewShipment.products[0].manufacturingDate}</li>
              </ul>
              <ul>
-             <li>Expiry Date</li>
+             <li className="bold">Expiry Date</li>
              <li>{reviewShipment.products[0].expiryDate}</li>
              </ul>
              <ul>
-             <li>Batch Number</li>
+             <li className="bold">Batch Number</li>
              <li>{reviewShipment.products[0].batchNumber}</li>
              </ul>
              <ul>
-             <li>Serial Numbers Range</li>
+             <li className="bold">Serial Numbers Range</li>
              <li>{reviewShipment.products[0].serialNumber}</li>
              </ul>
           </div>
           <hr />
       <div className="d-flex justify-content-between">
       <div className="total">Total</div>
-      <div className="value">Quantity</div>
+      <div className="value">{reviewShipment.products[0].quantity}</div>
       <div className="d-flex flex-row">
-         <button className="btn-primary btn mr-2" ><img src={Pen} width='15' height='15' className="mr-3" />
+         <button className="btn-primary btn mr-2" onClick={onEdit}><img src={Pen} width='15' height='15' className="mr-3" />
                                <span>EDIT</span>
                                    </button>
       <button className="btn-primary btn" onClick={onAssign}>SEND</button>

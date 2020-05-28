@@ -14,7 +14,7 @@ const ReviewPo = props => {
           size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
           buttonclassName="btn-orange"
         >
-          <PurchaseFormReview />
+          <PurchaseFormReview  />
         </Modal>
       
     </div>

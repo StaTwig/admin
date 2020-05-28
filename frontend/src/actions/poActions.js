@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { config } from '../config';
+import {SET_REVIEW_PO} from "../constants/poConstants";
 
 export const createPO = async (data) => {
   try {
@@ -29,5 +30,13 @@ export const getPO = async (po) => {
   }catch(e){
     return e.response;
   }
+
+}
+
+export const setReviewPos = (data) =>{
+  return {
+    type: SET_REVIEW_PO,
+    payload: data,
+  };
 
 }

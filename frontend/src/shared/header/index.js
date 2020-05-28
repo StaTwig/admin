@@ -54,7 +54,7 @@ const Header = props => {
         <div className="mobile-menu" onClick={() => openSidebar(true)}>
           <i className="fa fa-bars" aria-hidden="true" />
         </div>
-        <img src={logo} alt="vaccineledger" />
+        <img src={logo} alt="vaccineledger" className="logo" onClick={() =>props.history.push('/overview')} />
       </div>
       <div className="actions">
         <div className="search-form">

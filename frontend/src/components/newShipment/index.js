@@ -82,7 +82,7 @@ const NewShipment = (props) => {
 
   const onChange = date => setShipmentDate({ date })
   const onChange1 = date1 => setEstimateDeliveryDate({ date1 });
-
+  var numeric = { year: 'numeric', month: 'numeric' };
   const onProceedToReview = () => {
     const receiver = users.find(usr => usr.name === deliveryTo);
     const data = {
@@ -102,8 +102,8 @@ const NewShipment = (props) => {
         manufacturerName,
         storageConditionmin,
         storageConditionmax,
-        manufacturingDate,
-        expiryDate,
+        manufacturingDate: manufacturingDate.date.toLocaleDateString('en-GB', numeric),
+        expiryDate : expiryDate.date1.toLocaleDateString('en-GB', numeric),
         batchNumber,
         serialNumber
       }]
@@ -294,11 +294,9 @@ const NewShipment = (props) => {
 
       <div className="d-flex justify-content-between">
         <div className="total">Grand Total</div>
-        <div className="value">0</div>
+    <div className="value">{quantity}</div>
         <div className="d-flex ">
-          <button className="btn btn-outline-info mr-2" onClick={onAssign}>
-            Assign Shipment Order
-          </button>
+         
           <button className="btn-primary btn"  onClick={onProceedToReview}>Proceed To Review</button>
         </div>
       </div>
@@ -312,4 +310,7 @@ export default NewShipment;
 
 /* <div className="input-group-append">
               <img src={updownArrow} alt="downarrow" width="13" height="13" />
-            </div> */
+        
+         <button className="btn btn-outline-info mr-2" onClick={onAssign}>
+            Assign Shipment Order
+          </button>      </div> */

@@ -1,6 +1,10 @@
-import React from 'react';
+import React,{useState} from "react";
 import ProductsTableReview from './productsReview';
+import {useSelector} from "react-redux";
+import { createPO} from '../../actions/poActions';
 
+import Modal from '../../shared/modal';
+import PoPopUp from './poPopUp';
 import './style.scss';
 
 const tableHeader = ['Product Name', 'Manufacturer', 'Quantity'];
@@ -8,18 +12,51 @@ const tableHeader = ['Product Name', 'Manufacturer', 'Quantity'];
 const PurchaseFormReview = props => {
   const month = new Date().getMonth()+1;
   const todayDate = new Date().getDate() + '/' + month + '/'  +new Date().getFullYear();
+  const [openCreatedPo, setOpenCreatedPo] = useState(false);
 
+    const reviewPo = useSelector(state => {
+        return state.reviewPo;
+      
+      });
+
+
+      const closeModal = () => {
+        props.setEditMode(true);
+      };
+    
+      const onEdit = () => {
+        props.setEditMode(true);
+      };
+    
+          
+            
+
+  const onAssign = async () => {
+
+    console.log('clicked');
+    console.log('review inventory data', reviewPo);
+    const data = reviewPo;
+    const result = await createPO({ data });
+    console.log(result);
+    
+    if (result.status != 400) {
+      setOpenCreatedPo(true);
+    }
+    
+  
+
+  }
   return (
     <div className="purchaseform">
       <div className="d-flex justify-content-between">
         <div className="input-group">
           <label htmlFor="shipmentId">Supplier</label>
           <input
-        
+            disabled
             type="text"
             className="form-control"
             placeholder="Select Supplier"
-            value="harsha"
+            value={reviewPo.data.supplier.name}
           />
          
         </div>
@@ -30,10 +67,11 @@ const PurchaseFormReview = props => {
           <label htmlFor="shipmentId">Delivery To</label>
         
           <input
+          disabled
            type="text"
            className="form-control"
            placeholder="Select Supplier"
-           value="harsha"
+           value={reviewPo.data.receiver.name}
            
           />
       
@@ -41,10 +79,11 @@ const PurchaseFormReview = props => {
         <div className="input-group">
           <label htmlFor="shipmentId">Delivery Location</label>
           <input
+          disabled
             type="text"
             className="form-control"
             placeholder="Enter Delivery Location"
-            value="harsha"
+            value={reviewPo.data.destination}
     
           />
          
@@ -53,16 +92,35 @@ const PurchaseFormReview = props => {
       <hr />
       <ProductsTableReview
         tableHeader={tableHeader}
+        product={reviewPo.data.product}
+        manufacturer={reviewPo.data.manufacturer}
+        quantity={reviewPo.data.quantity}
       />
       {/* <button className="btn btn-white shadow-radius font-bold">
         +<span> Add Another Product</span>
       </button>*/}
+
+
+    
       
-     <button className="btn btn-orange review" >
-        REVIEW
+     <button className="btn btn-orange review " onClick={onAssign} >
+        SEND
+      </button>
+
+      <button className="btn btn-orange review mr-4 " onClick={onEdit} >
+        EDIT
       </button>
  
-        
+      {openCreatedPo && (
+        <Modal
+          close={() => closeModal()}
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+          <PoPopUp onHide={closeModal} //FailurePopUp
+          
+          />
+        </Modal>
+      )}
     
       
       </div>
