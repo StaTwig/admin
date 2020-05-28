@@ -52,6 +52,29 @@ exports.shipmentStatistics = [
   },
 ];
 
+exports.purchaseOrderStatistics = [
+  auth,
+  async (req, res) => {
+    try {
+      checkToken(req, res, async (result) => {
+        if (result.success) {
+          const { address } = req.user;
+          const response = await axios.get(
+            `${blockchain_service_url}/queryDataByPublishers?stream=${po_stream_name}&address=${address}`
+          );
+          const items = response.data.items;
+          console.log("items", items);
+          res.json({ data: items });
+        } else {
+          res.status(403).json(result);
+        }
+      });
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
 exports.fetchShipments = [
   auth,
   async (req, res) => {
