@@ -7,7 +7,7 @@ import InventoryPopUp from './inventorypopup';
 import './style.scss';
 
 
-const VerifyInventory = () => {
+const VerifyInventory = (props) => {
     const reviewInventory = useSelector(state => {
         return state.reviewInventory;
       
@@ -15,7 +15,7 @@ const VerifyInventory = () => {
 
       const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const closeModal = () => {
-    setOpenCreatedInventory(false);
+    props.history.push('/inventory');
   };
 
       const onAssign = async () => {
@@ -30,7 +30,9 @@ const VerifyInventory = () => {
         }
         };
       
-        
+        const onEdit= () => {
+          props.history.push('/newinventory');
+        }; 
      
   return (
     <div className="verifyinventory">
@@ -43,40 +45,40 @@ const VerifyInventory = () => {
          <h5 className="head">Description Of Goods </h5>
          <div className="d-flex flex-row justify-content-between">
               <ul>
-             <li>Product Name</li>
+             <li className="bold">Product Name</li>
              <li>{reviewInventory.productName}</li>
              </ul>
              <ul>
-             <li>Manufacturer</li>
+             <li className="bold">Manufacturer</li>
                <li>{reviewInventory.manufacturerName}</li>
               </ul>
              <ul>
-             <li>Quantity</li>
+             <li className="bold">Quantity</li>
              <li>{reviewInventory.quantity}</li>
              </ul>
              <ul>
-             <li>Manufacturer Date</li>
+             <li className="bold">Manufacturer Date</li>
              <li>{reviewInventory.manufacturingDate}</li>
              </ul>
              <ul>
-             <li>Expiry Date</li>
+             <li className="bold">Expiry Date</li>
              <li>{reviewInventory.expiryDate}</li>
              </ul>
              <ul>
-             <li>Batch Number</li>
+             <li className="bold">Batch Number</li>
                  <li>{reviewInventory.batchNumber}</li>
              </ul>
              <ul>
-             <li>Serial Numbers Range</li>
+             <li className="bold"> Serial Numbers Range</li>
              <li>{reviewInventory.serialNumber}</li>
              </ul>
           </div>
           <hr />
       <div className="d-flex justify-content-between">
       <div className="total">Total</div>
-      <div className="value">Quantity</div>
+      <div className="value">{reviewInventory.quantity}</div>
       <div className="d-flex flex-row">
-         <button className="btn-primary btn mr-2"><img src={Pen} width='15' height='15' className="mr-3" />
+         <button className="btn-primary btn mr-2" onClick={onEdit}><img src={Pen} width='15' height='15' className="mr-3" />
                                <span>EDIT</span>
                                    </button>
       <button className="btn-primary btn" onClick={onAssign}>SEND</button>

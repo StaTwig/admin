@@ -33,20 +33,20 @@ const PoTable = props => {
             <div className="rTableRow" key={index}>
        <div className="rTableCell">
                 <div className="combine-data">
-            client
+            {shipment.client}
                   
                 </div>
               </div>
-        <div className="rTableCell"></div>
+        <div className="rTableCell">SHI567</div>
              
-              <div className="rTableCell">hot</div>
-              <div className="rTableCell">cool</div>
-              <div className="rTableCell">cool</div>
+              <div className="rTableCell">ShI563</div>
+              <div className="rTableCell">bOPV</div>
+              <div className="rTableCell">12/12/2020</div>
 
-              <div className="rTableCell">coo</div>
-        <div className="rTableCell"></div>
+              <div className="rTableCell">Victor</div>
+        <div className="rTableCell">Sydney</div>
              
-              <div className="rTableCell">dsvcv</div>
+              <div className="rTableCell">Shipped</div>
             </div>
           ))}
        </div>

@@ -25,27 +25,30 @@ const ProductsTableReview = props => {
             <div className="rTableCell">
               <div className="square-box" />
               <input
+              disabled
                type="text"
                className="form-control"
                placeholder="Select Supplier"
-               value="harsha"
+               value={props.product}
               />
             </div>
             <div className="rTableCell">
               <input
+              disabled
                type="text"
                className="form-control"
                placeholder="Select Supplier"
-               value="harsha"
+               value={props.manufacturer}
               />
             </div>
             <div className="rTableCell">
               <div className="form-group">
                 <input
+                disabled
                   type="number"
-                  className="form-field"
+                  className="form-control"
                   placeholder="Enter Qunatity"
-                  value="harsha"
+                  value={props.quantity}
                 />
               </div>
             </div>

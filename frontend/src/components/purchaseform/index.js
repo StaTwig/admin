@@ -3,7 +3,10 @@ import ProductsTable from './products';
 import updownArrow from '../../assets/icons/up-and-down-dark.svg';
 import './style.scss';
 import DropdownButton from '../../shared/dropdownButtonGroup';
-import { createPO } from '../../actions/poActions';
+import { createPO ,setReviewPos} from '../../actions/poActions';
+import { useDispatch} from "react-redux";
+
+
 
 const tableHeader = ['Product Name', 'Manufacturer', 'Quantity'];
 
@@ -11,7 +14,7 @@ const PurchaseForm = props => {
   const { user, users } = props;
 
   const userNames = users.map(usr => usr.name);
-  const [deliveryTo, setDeliveryTo] = useState('trinethra');
+  const [deliveryTo, setDeliveryTo] = useState('select receiver');
   const [products, setProducts] = useState(['bOPV', 'MMR', 'PVC', 'BCG','RV','Hep B']);
   const [manufacturers, setManufacturers] = useState([
                     'Bharat Biotech',
@@ -69,24 +72,57 @@ if (deliveryTo.length<1){
     }
 
     else{
-     onReview();
+     onProceed();
     }
   }
-
-
-  const onReview = async () => {
-   // const productId = `PO${Math.floor(Math.random() * 90000) + 10000}`;
+  const dispatch = useDispatch();
+  const onProceed = () =>{
     const productId = 'PO1805';
     const deliveryToObject = users.find(usr => usr.name === deliveryTo);
-    const productManufacturer = { [`${product}-${manufacturer}`]: quantity };
     const data = {
       data: {
         orderID: productId,
         receiver: deliveryToObject,
         supplier: { name: user.name, email: user.email },
         destination,
-        products: [productManufacturer],
+        product: product,
+        manufacturer:manufacturer,
         date:todayDate,
+        quantity
+      },
+    };
+
+    //Store in reducer
+    dispatch(setReviewPos(data));
+    console.log('new po data', data);
+
+  console.log('clicked');
+    //Redirect to review page.
+    props.setEditMode(true);
+  
+
+    console.log('new po data', data);
+    console.log('clicked');
+
+  
+    
+  }
+
+  const onReview = async () => {
+   // const productId = `PO${Math.floor(Math.random() * 90000) + 10000}`;
+    const productId = 'PO1805';
+    const deliveryToObject = users.find(usr => usr.name === deliveryTo);
+   // const productManufacturer = { [`${product}-${manufacturer}`]: quantity };
+    const data = {
+      data: {
+        orderID: productId,
+        receiver: deliveryToObject,
+        supplier: { name: user.name, email: user.email },
+        destination,
+        productName:product,
+        manufacturerName: manufacturer,
+        date:todayDate,
+        quantity,
       },
     };
     debugger;

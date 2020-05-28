@@ -11,6 +11,10 @@
   z-index: 99;
   box-shadow: 0px 0px 8px #00000029;
 
+  .logo{
+    cursor: pointer;
+  }
+
   .branding {
     display: flex;
     padding-left: 30px;

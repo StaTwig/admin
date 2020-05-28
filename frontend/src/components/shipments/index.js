@@ -16,12 +16,13 @@ import calender from '../../assets/icons/calendar.svg';
 import Status from '../../assets/icons/Status.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsers } from '../../actions/userActions';
+import PurchaseFormReview from '../../components/verifypo/purchaseFormReview';
 
 const ShipmentAnalytic = props => {
   
   const [openPurchaseOrder, setOpenPurchaseOrder] = useState(false);
   const [visible, setvisible] = useState(false);
-
+  const [ editMode, setEditMode ] = useState(false);
 
  const dispatch = useDispatch();
 
@@ -87,7 +88,7 @@ const ShipmentAnalytic = props => {
           size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
           buttonclassName="btn-orange"
         >
-          <PurchaseForm users={users} user={user}/>
+          {editMode ? <PurchaseFormReview setEditMode ={setEditMode} setEditMode={() => setEditMode(false)}/> : <PurchaseForm setEditMode={() => setEditMode(true)} users={users} user={user}/>}
         </Modal>
       )}
     </div>
