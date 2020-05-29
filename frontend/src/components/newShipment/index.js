@@ -117,7 +117,7 @@ const NewShipment = (props) => {
       deliveryTo,
       deliveryLocation,
       estimateDeliveryDate: estimateDeliveryDate.date1.toLocaleDateString(),
-      status: 'Shipped',
+      status: 'InTransit',
       products:[{
         productName,
         quantity,
