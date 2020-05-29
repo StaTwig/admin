@@ -197,13 +197,16 @@
     }
 
     .title {
-      font-size: 14px;
-      line-height: 12px;
+      font-size: 12px;
+      line-height: 9px;
       font-weight: bold;
       color: #707070;
       margin-bottom: 8px;
       @media (min-width: $xl) {
         font-size: 14px;
+      }
+      @media (min-width: $sm,$md,$lg) {
+        font-size: 12px;
       }
     }
 
@@ -234,6 +237,7 @@
 
     .recived-text {
       color: $darkYellow;
+      
     }
 
     .transit-text {

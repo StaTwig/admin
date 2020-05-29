@@ -31,6 +31,7 @@ const EditRow = props => {
     setBatchNumber,
     serialNumber,
     setSerialNumber,
+    
   } = props;
 
   
@@ -43,6 +44,7 @@ const EditRow = props => {
                 name={productName}
                 onSelect={item => setProductName(item)}
                 groups={['bOPV', 'MMR', 'PVC', 'BCG','RV','Hep B']}
+                
               />
             </div>
             <div className="rTableCell">

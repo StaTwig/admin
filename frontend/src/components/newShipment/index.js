@@ -11,6 +11,8 @@ import DropdownButton from '../../shared/dropdownButtonGroup';
 import {getAllUsers} from "../../actions/userActions";
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import ShipmentPopUp from './shipmentpopup';
+import Modal from '../../shared/modal';
 
 
 const NewShipment = (props) => {
@@ -58,6 +60,11 @@ const NewShipment = (props) => {
   const [storageConditionmax, setStorageConditionmax] = useState('');
   const [batchNumber, setBatchNumber] = useState('');
   const [serialNumber, setSerialNumber] = useState('');
+  const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
+  
+  const closeModal = () => {
+    props.history.push('/shipments');
+  };
   
   const editTableProps = {
     manufacturerName,
@@ -83,6 +90,21 @@ const NewShipment = (props) => {
   const onChange = date => setShipmentDate({ date })
   const onChange1 = date1 => setEstimateDeliveryDate({ date1 });
   var numeric = { year: 'numeric', month: 'numeric' };
+
+  
+
+     /* const onVisible = () => { 
+        
+        
+        if(((shipmentId.length>1)&&(client.length>1)&&(supplier.length>1)&&(supplierLocation.length>1)&&(estimateDeliveryDate.length>1)&&(deliveryTo.length>1)&&(deliveryLocation.length>1)&&(shipmentDate.length>1))&&((productName.length>1)||(quantity.length>1)||(manufacturerName.length>1)||(storageConditionmin.length>1)||(storageConditionmax.length>1)||(manufacturingDate.length>1)||(expiryDate.length>1)||(batchNumber.length>1)||(serialNumber.length>1)))
+        {
+        setVisible(true)
+      }
+    
+      
+      
+      }
+        */
   const onProceedToReview = () => {
     const receiver = users.find(usr => usr.name === deliveryTo);
     const data = {
@@ -148,8 +170,10 @@ const NewShipment = (props) => {
     console.log('new shipment data', data);
     const result = await createShipment({ data });
     if (result.status != 400) {
-      setMessage('Assigned Shipment Success');
-      setErrorMessage('');
+      
+        setOpenCreatedInventory(true);
+      
+      
     } else {
       const err = result.data.data[0];
       setErrorMessage(err.msg);
@@ -222,6 +246,7 @@ const NewShipment = (props) => {
               className="form-control"
               placeholder="Enter Location"
               onChange={e => setSupplierLocation(e.target.value)}
+              
             />
           </div>
           <div className="input-group" >
@@ -261,6 +286,7 @@ const NewShipment = (props) => {
               className="form-control"
               placeholder="Enter Location"
               onChange={e => setDeliveryLocation(e.target.value)}
+            
             />
           </div>
 
@@ -297,9 +323,21 @@ const NewShipment = (props) => {
     <div className="value">{quantity}</div>
         <div className="d-flex ">
          
-          <button className="btn-primary btn"  onClick={onProceedToReview}>Proceed To Review</button>
+        <button className="btn btn-outline-info mr-2" onClick={onAssign}> Assign Shipment Order</button> 
+       <button className="btn-primary btn"  onClick={onProceedToReview}>Proceed To Review</button> 
+      
         </div>
       </div>
+      {openCreatedInventory && (
+        <Modal
+          close={() => closeModal()}
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+          <ShipmentPopUp onHide={closeModal} //FailurePopUp
+          
+          />
+        </Modal>
+      )}
       {message && <div className="alert alert-success">{message}</div>}
       {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
     </div>

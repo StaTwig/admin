@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import './style.scss';
 import Checked from "../../assets/icons/checked.svg";
 
 
-const PoPopUp = (props) => {
+const ShipmentPopUp = (props) => {
   return (
     <div className="inventorypopup">
       <div className="d-flex  flex-column align-items-center">
@@ -12,10 +12,10 @@ const PoPopUp = (props) => {
           Success!
         </div>
         <div className="data">
-          Your PurchaseOrder <span className="bold">{props.productId}</span>
+          Your Shipment has been
         </div>
         <div className="data mb-4">
-         Created Successfully!
+         added Successfully!
         </div>
         <button className="btn-primary btn" onClick={props.onHide}>OK</button>
       </div>
@@ -24,6 +24,6 @@ const PoPopUp = (props) => {
   );
 };
 
-export default PoPopUp;
+export default ShipmentPopUp;
 
 

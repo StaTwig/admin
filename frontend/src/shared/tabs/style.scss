@@ -7,7 +7,16 @@
 
   ul {
     li {
+      &.nav-item-active{
+        
+        color: #0093E9;
+        border-bottom: 10px solid #0093E9;
+        border-radius: 10px;
+        cursor: pointer;
+    }
       a {
+
+       
         &.nav-link {
           color: #0093E9;
           font-size: 18px;
@@ -16,6 +25,7 @@
           background-color: transparent;
           position: relative;
           cursor: pointer;
+         
         }
         &.nav-in {
           color: rgb(101, 116, 126);
@@ -23,11 +33,7 @@
          
         }
       }
-      a:hover {
-        color: #0093E9;
-        border-bottom: 10px solid #0093E9;
-        border-radius: 10px;
-      }
+      
     
     }
   }

@@ -36,6 +36,7 @@ const ProductsTable = props => {
                 groups={products}
                 onSelect={onProductSelect}
                 name={product}
+                className="text"
               />
             </div>
             <div className="rTableCell">
@@ -43,6 +44,7 @@ const ProductsTable = props => {
                 groups={manufacturers}
                 onSelect={onManufacturerSelect}
                 name={manufacturer}
+                className="text"
               />
             </div>
             <div className="rTableCell">

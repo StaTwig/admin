@@ -40,6 +40,7 @@ const ShipmentAnalytic = props => {
     dispatch(getAllUsers());
   }, []);
 
+  
   const headers = {
     coloumn1: 'Client',
     coloumn2: 'Shipping Date',
@@ -73,7 +74,7 @@ const ShipmentAnalytic = props => {
       </div>
       <Tiles {...props} />
       <div className="mt-4">
-        <Tabs {...props} setvisible = {setvisible}  />
+        <Tabs {...props} setvisible = {setvisible} visible={visible}  />
       </div>
       <div className="full-width-ribben mt-4">
         <TableFilter data={headers} />

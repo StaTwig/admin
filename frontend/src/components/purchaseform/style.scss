@@ -26,6 +26,11 @@
       color: $black;
       flex-basis: 67%;
       flex-grow: inherit;
+     
+    }
+
+    .custom-dropdown .btn-custom-dropdown{
+      font-size:15px;
     }
 
     .user {
@@ -94,12 +99,17 @@
         align-items: center;
         justify-content: space-between;
 
+        .custom-dropdown .btn-custom-dropdown{
+          font-size:15px;
+        }
+
         &:last-child {
           border-right: none;
         }
 
         .form-group {
           flex-basis: 100%;
+          
 
           .form-field {
             width: 100%;
