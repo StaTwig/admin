@@ -33,6 +33,17 @@ export const getPO = async (po) => {
 
 }
 
+export const getPurchaseStats = async () => {
+  try {
+    const result =  await axios.get(config().fetchPurchaseOrderStatisticsUrl);
+    return result;
+  }catch(e){
+    return e.response;
+  }
+
+}
+
+
 export const setReviewPos = (data) =>{
   return {
     type: SET_REVIEW_PO,

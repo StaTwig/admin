@@ -119,7 +119,7 @@ const VerifyShipment = (props) => {
          <button className="btn-primary btn mr-2" onClick={onEdit}><img src={Pen} width='15' height='15' className="mr-3" />
                                <span>EDIT</span>
                                    </button>
-      <button className="btn-primary btn" onClick={onAssign}>SEND</button>
+      <button className="btn-primary btn" onClick={onAssign}>CREATE SHIPMENT</button>
       {openCreatedInventory && (
         <Modal
           close={() => closeModal()}

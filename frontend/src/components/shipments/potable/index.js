@@ -1,8 +1,11 @@
-import React from 'react';
+import React,{useEffect } from 'react';
 
 import './style.scss';
 
 const PoTable = props => {
+
+ 
+
   return (
     <div className="table">
       <div className="rTable">

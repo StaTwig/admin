@@ -117,7 +117,7 @@ const NewShipment = (props) => {
       deliveryTo,
       deliveryLocation,
       estimateDeliveryDate: estimateDeliveryDate.date1.toLocaleDateString(),
-      status: 'InTransit',
+      status: 'In Transit',
       products:[{
         productName,
         quantity,
@@ -311,9 +311,9 @@ const NewShipment = (props) => {
       </div>
       <hr />
       <EditTable {...editTableProps} />
-     {/* <button className="btn btn-white shadow-radius font-bold">
+      <button className="btn btn-white shadow-radius font-bold">
         +<span> Add Another Product</span>
-      </button>*/}
+      </button>
 
     
       <hr />

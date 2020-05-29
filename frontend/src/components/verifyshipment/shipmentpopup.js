@@ -15,7 +15,7 @@ const ShipmentPopUp = (props) => {
           Your Shipment has been
         </div>
         <div className="data mb-4">
-         added Successfully!
+         Created Successfully!
         </div>
         <button className="btn-primary btn" onClick={props.onHide}>OK</button>
       </div>
