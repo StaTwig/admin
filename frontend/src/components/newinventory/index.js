@@ -101,7 +101,12 @@ const NewInventory = (props) => {
   return (
     <div className="Newinventory">
       <h1 className="breadcrumb">ADD INVENTORY</h1>
-      <EditTable {...editTableProps} />
+      <EditTable {...editTableProps} />   
+      
+      <button className="btn btn-white shadow-radius font-bold">
+        +<span> Add Another Product</span>
+      </button>
+
      
       <hr />
       <div className="d-flex justify-content-between">
@@ -133,7 +138,5 @@ export default NewInventory;
 /*<button className="btn-primary btn" onClick={onAddInventory}>
           {' '}
           Add Inventory
-        </button>*
-         <button className="btn btn-white shadow-radius font-bold">
-        +<span> Add Another Product</span>
-      </button>*/
+        </button>*/
+      
