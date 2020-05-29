@@ -32,15 +32,9 @@ const PurchaseFormReview = props => {
             
 
   const onAssign = async () => {
-
-    console.log('clicked');
-    console.log('review inventory data', reviewPo);
     const data = reviewPo;
-    const result = await createPO({ data });
+    const result = await createPO(data);
     console.log(result);
-
-  
-    
     if (result.status != 400) {
       setOpenCreatedPo(true);
     }
@@ -94,9 +88,7 @@ const PurchaseFormReview = props => {
       <hr />
       <ProductsTableReview
         tableHeader={tableHeader}
-        product={reviewPo.data.product}
-        manufacturer={reviewPo.data.manufacturer}
-        quantity={reviewPo.data.quantity}
+        products={reviewPo.data.products}
       />
       {/* <button className="btn btn-white shadow-radius font-bold">
         +<span> Add Another Product</span>
