@@ -5,8 +5,11 @@ const ProductsTableReview = props => {
 
   const {
     tableHeader,
-    
+    products
   } = props;
+  const product = Object.keys(products[0])[0].split('-')[0];
+  const manufacturer = Object.keys(products[0])[0].split('-')[1];
+  const quantity = products[0][`${product}-${manufacturer}`];
   return (
     <div className="table productTable">
       <div className="rTable">
@@ -29,7 +32,7 @@ const ProductsTableReview = props => {
                type="text"
                className="form-control"
                placeholder="Select Supplier"
-               value={props.product}
+               value={product}
               />
             </div>
             <div className="rTableCell">
@@ -38,7 +41,7 @@ const ProductsTableReview = props => {
                type="text"
                className="form-control"
                placeholder="Select Supplier"
-               value={props.manufacturer}
+               value={manufacturer}
               />
             </div>
             <div className="rTableCell">
@@ -48,7 +51,7 @@ const ProductsTableReview = props => {
                   type="number"
                   className="form-control"
                   placeholder="Enter Qunatity"
-                  value={props.quantity}
+                  value={quantity}
                 />
               </div>
             </div>

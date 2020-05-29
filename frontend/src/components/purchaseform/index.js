@@ -96,16 +96,15 @@ const shuffleArray = (array) => {
     const productId = 'PO'+ shuffleArray(numbers).slice(0,4).join('');
     console.log(productId);
     const deliveryToObject = users.find(usr => usr.name === deliveryTo);
+    const productManufacturer = { [`${product}-${manufacturer}`]: quantity };
     const data = {
       data: {
         orderID: productId,
         receiver: deliveryToObject,
         supplier: { name: user.name, email: user.email },
         destination,
-        product: product,
-        manufacturer:manufacturer,
+        products: [productManufacturer],
         date:todayDate,
-        quantity
       },
     };
 
@@ -129,20 +128,18 @@ const shuffleArray = (array) => {
    // const productId = `PO${Math.floor(Math.random() * 90000) + 10000}`;
     const productId = 'PO1805';
     const deliveryToObject = users.find(usr => usr.name === deliveryTo);
-   // const productManufacturer = { [`${product}-${manufacturer}`]: quantity };
+    const productManufacturer = { [`${product}-${manufacturer}`]: quantity };
     const data = {
       data: {
         orderID: productId,
         receiver: deliveryToObject,
         supplier: { name: user.name, email: user.email },
         destination,
-        productName:product,
-        manufacturerName: manufacturer,
+        products: [productManufacturer],
         date:todayDate,
-        quantity,
       },
     };
-    debugger;
+
     console.log(data);
     const result = await createPO(data);
     if (result.status === 200) {
