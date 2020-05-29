@@ -2,7 +2,7 @@ import React,{useState} from "react";
 import ProductsTableReview from './productsReview';
 import {useSelector} from "react-redux";
 import { createPO} from '../../actions/poActions';
-
+import Pen from "../../assets/icons/po.svg";
 import Modal from '../../shared/modal';
 import PoPopUp from './poPopUp';
 import './style.scss';
@@ -38,6 +38,8 @@ const PurchaseFormReview = props => {
     const data = reviewPo;
     const result = await createPO({ data });
     console.log(result);
+
+  
     
     if (result.status != 400) {
       setOpenCreatedPo(true);
@@ -104,19 +106,19 @@ const PurchaseFormReview = props => {
     
       
      <button className="btn btn-orange review " onClick={onAssign} >
-        SEND
+        CREATE
       </button>
 
-      <button className="btn btn-orange review mr-4 " onClick={onEdit} >
-        EDIT
-      </button>
+      <button className="btn edit mr-4" onClick={onEdit}><img src={Pen} width='15' height='15' className=" mr-2" />
+                               <span>EDIT</span>
+                                   </button>
  
       {openCreatedPo && (
         <Modal
           close={() => closeModal()}
           size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
-          <PoPopUp onHide={closeModal} //FailurePopUp
+          <PoPopUp onHide={closeModal} productId={reviewPo.data.orderID} //FailurePopUp
           
           />
         </Modal>

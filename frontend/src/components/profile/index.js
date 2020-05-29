@@ -222,6 +222,7 @@ class Profile extends React.Component {
                     </li>
                   <li> <input
                         className="form-control wallet"
+                        disabled
                         value={walletAddress}
                         onChange={e =>
                           this.setState({ walletAddress: e.target.value })

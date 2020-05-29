@@ -19,14 +19,20 @@ import './style.scss';
     const [Months6Count, set6MonthsCount] =useState('');
     const [AllTimeCount, setAllTimeCount] =useState('');
     const [TotalInventoryAdded, setTotalInventoryAdded] =useState('')
+    const [TotalInventory, setTotalInventory] =useState('')
+    
+ var key;
+    
     useEffect(() => {
     const manufacturingDates = props.shipments.map((data, index) => {
       return data.shipmentDate;
     });
-    // const InventoryDates = props.inventory.map((data, index) => {
-    //   return data.length;
+    const InventoryDates = props.inventory.map((data, index) => {
+      key=index+1;
+       return data.length;
       
-    // })
+     });
+    
 
     const last24hrsDates = getLastDates(manufacturingDates, 24);
     const last3Months = getLastDates(manufacturingDates, 2190);
@@ -35,7 +41,7 @@ import './style.scss';
       set3MonthsCount(last3Months.length);
       set6MonthsCount(last6Months.length)
       setAllTimeCount(manufacturingDates.length);
-      //setTotalInventoryAdded(InventoryDates);
+      setTotalInventoryAdded(key);
     })
 
   return (
@@ -62,7 +68,7 @@ import './style.scss';
 
               <div className="d-flex flex-column">
                 <div className="title">Total Inventory Added</div>
-                <div className="count2" > 52 <small className="dayStatus">This Year</small></div>
+                <div className="count2" > {TotalInventoryAdded} <small className="dayStatus">This Year</small></div>
               </div>
             </div>
 

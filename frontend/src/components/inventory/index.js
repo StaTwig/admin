@@ -44,9 +44,12 @@ const Inventory = (props) => {
   const [inventoryExpired, setInventoryExpired] = useState('');
   const [inventoryTotal, setInventoryTotal] = useState('');
   const [inventoryCurrent, setInventoryCurrent] = useState('');
+  var key;
   useEffect(() => {
 
+   
     const inventoryDates = props.inventories.map((data, index) => {
+         key=index+1
       return data;
     })
     const expiring = expiringIn(inventoryDates, 2190);
@@ -54,18 +57,19 @@ const Inventory = (props) => {
     const expiredCount = Count(expired_data);
     const expiringCount = Count(expiring)
     const inventoryCount = Count(inventoryDates);
+    
 
     console.log(expiredCount);
     setInventoryExpired(expiredCount);
     setInventoryExpiring(expiringCount - expiredCount);
-    setInventoryTotal(inventoryCount);
-    setInventoryCurrent(inventoryCount);
+    setInventoryTotal(key);
+    setInventoryCurrent(key);
 
   })
   return (
     <div className="inventory">
       <div className="d-flex justify-content-between">
-        <h1 className="breadcrumb">INVENTORY</h1>
+        <h1 className="breadcrumb">INVENTORY </h1>
         <div className="d-flex">
           <Link to="/newinventory">
             <button className="btn btn-yellow font-weight-bold">
@@ -116,12 +120,12 @@ const Inventory = (props) => {
               <img src={Expiration} alt="truck" />
             </div>
             <div className="d-flex flex-column">
-              <div className="title recived-text">Total Vaccine near Expiration</div>
+              <div className="title recived-text">Total Vaccines near Expiration</div>
               <div className="tab-container">
                 <div className="tab-item active">This Year</div>
                 <div className="tab-item">This Month</div>
                 <div className="tab-item">This Week</div>
-                <div className="tab-item">Today</div>
+                <div className="tab-item mr-3">Today</div>
               </div>
               <div className="recived-text count">{inventoryExpiring}</div>
             </div>

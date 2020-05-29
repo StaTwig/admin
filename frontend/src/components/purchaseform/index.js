@@ -8,6 +8,8 @@ import { useDispatch} from "react-redux";
 
 
 
+
+
 const tableHeader = ['Product Name', 'Manufacturer', 'Quantity'];
 
 const PurchaseForm = props => {
@@ -76,8 +78,23 @@ if (deliveryTo.length<1){
     }
   }
   const dispatch = useDispatch();
+
+  var numbers = [0,1,2,3,4,5,6,7,8,9];
+
+const shuffleArray = (array) => {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+}
+
+
   const onProceed = () =>{
-    const productId = 'PO1805';
+    const productId = 'PO'+ shuffleArray(numbers).slice(0,4).join('');
+    console.log(productId);
     const deliveryToObject = users.find(usr => usr.name === deliveryTo);
     const data = {
       data: {
@@ -159,6 +176,7 @@ if (deliveryTo.length<1){
            name={deliveryTo}
             onSelect={item => setDeliveryTo(item)}
             groups={userNames}
+            className="text"
           />
         </div>
         </div>

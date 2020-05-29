@@ -5,10 +5,10 @@ const Tabs = props => {
  return (
     <div className="tabs">
       <ul className="nav nav-pills">
-        <li className="nav-item " onClick = {() => props.setvisible(false)}>
+        <li className={ props.visible ? "nav-item" : "nav-item-active"} onClick = {() => props.setvisible(false)}>
           <a className="nav-link">Recent Shipments</a>
         </li>
-        <li className="nav-item" onClick = {() => props.setvisible(true)}>
+        <li className= { props.visible ? "nav-item-active " : "nav-item"} onClick = {() => props.setvisible(true)}>
           <a className="nav-link">Purchase Orders</a>
         </li>
       </ul>

@@ -3,6 +3,8 @@ import EditRow from './editRow';
 import './style.scss';
 
 const EditTable = props => {
+
+  
  return (
     <div className="table editTable">
       <div className="rTable">
@@ -25,7 +27,7 @@ const EditTable = props => {
           </div>
         </div>
         <div >
-         <EditRow {...props}/>
+         <EditRow {...props} />
         </div>
       </div>
     </div>
