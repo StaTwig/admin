@@ -5,6 +5,7 @@ var router = express.Router();
 
 router.get("/shipmentStatistics", ShipmentController.shipmentStatistics);
 router.get("/purchaseOrderStatistics", ShipmentController.purchaseOrderStatistics);
+router.get("/fetchPublisherPurchaseOrders", ShipmentController.fetchPublisherPurchaseOrders);
 router.get("/fetchShipments", ShipmentController.fetchShipments);
 router.post("/createShipment", ShipmentController.createShipment);
 router.get("/fetchPurchaseOrder", ShipmentController.fetchPurchaseOrder);

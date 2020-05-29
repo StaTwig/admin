@@ -122,6 +122,31 @@ exports.fetchAllPurchaseOrders = [
   },
 ];
 
+exports.fetchPublisherPurchaseOrders = [
+  auth,
+  async (req, res) => {
+    try {
+      const { authorization } = req.headers;
+      checkToken(req, res, async (result) => {
+        if (result.success) {
+	  const { address } = req.user;
+          const response = await axios.get(
+	    `${blockchain_service_url}/queryAllPublisherKeys?stream=${po_stream_name}&address=${address}`
+          );
+          const items = response.data.items;
+	  let unique_items = [...new Set(items)];
+          console.log("items", unique_items,items);
+          res.json({ data: unique_items });
+        } else {
+          res.status(403).json(result);
+        }
+      });
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
 exports.createShipment = [
   auth,
   body("data.shipmentId")
