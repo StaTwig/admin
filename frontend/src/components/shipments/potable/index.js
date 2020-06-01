@@ -1,16 +1,25 @@
-import React,{useEffect } from 'react';
+import React,{useState,useEffect } from 'react';
+import { getPurchaseStats } from '../../../actions/poActions';
 
 import './style.scss';
 
 const PoTable = props => {
-
- 
+  const [purchases, setPurchases] = useState([]);
+  
+  useEffect(() => {
+    async function fetchData() {
+      const result = await getPurchaseStats();
+      setPurchases(result.data.data.reverse());
+    }
+    fetchData();
+  
+  },[]);
 
   return (
     <div className="table">
       <div className="rTable">
         <div className="rTableHeading">
-          <div className="rTableHead">Client</div>
+          <div className="rTableHead">Manufacturer</div>
           <div className="rTableHead">Order ID</div>
           <div className="rTableHead">Product Name</div>
           <div className="rTableHead">
@@ -32,26 +41,28 @@ const PoTable = props => {
         </div>
         <div className="overflow">
           
-        {props.shipments.map((shipment, index) => (
+        {purchases.map((purchase, index) => {
+          const p= JSON.parse(purchase.data);
+          console.log('o' , p);
+          return(<div> 
             <div className="rTableRow" key={index}>
-       <div className="rTableCell">
-                <div className="combine-data">
-            {shipment.client}
-                  
-                </div>
-              </div>
-        <div className="rTableCell">SHI567</div>
-             
-              <div className="rTableCell">ShI563</div>
-              <div className="rTableCell">bOPV</div>
-              <div className="rTableCell">12/12/2020</div>
-
-              <div className="rTableCell">Victor</div>
-        <div className="rTableCell">Sydney</div>
-             
-              <div className="rTableCell">Shipped</div>
-            </div>
-          ))}
+          <div className="rTableCell">
+                   <div className="combine-data">
+                  {Object.keys(p.products[0])[0].split('-')[1]}
+                 </div>
+                 </div>
+           <div className="rTableCell">{p.orderID}</div>
+                <div className="rTableCell">{Object.keys(p.products[0])[0].split('-')[0]}</div>
+                 <div className="rTableCell">{p.products[0][`${Object.keys(p.products[0])[0].split('-')[0]}-${Object.keys(p.products[0])[0].split('-')[1]}`]}
+                 </div>
+                <div className="rTableCell">{p.date}</div>
+           <div className="rTableCell">{p.receiver.name}</div>
+           <div className="rTableCell">{p.destination}</div>
+                 <div className="rTableCell">Shipped</div>
+               </div>
+               </div>)
+        
+})}
        </div>
       </div>
     </div>
