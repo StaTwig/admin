@@ -10,6 +10,22 @@ var cors = require("cors");
 
 var app = express();
 
+// DB connection
+var MONGODB_URL = process.env.MONGODB_URL;
+var mongoose = require("mongoose");
+mongoose.connect(MONGODB_URL, { useNewUrlParser: true }).then(() => {
+  //don't show the log when it is test
+  if(process.env.NODE_ENV !== "test") {
+    console.log("Connected to %s", MONGODB_URL);
+    console.log("App is running ... \n");
+    console.log("Press CTRL + C to stop the process. \n");
+  }
+})
+  .catch(err => {
+    console.error("App starting error:", err.message);
+    process.exit(1);
+  });
+var db = mongoose.connection;
 //don't show the log when it is test
 if(process.env.NODE_ENV !== "test") {
 	app.use(logger("dev"));
