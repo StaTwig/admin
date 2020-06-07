@@ -14,9 +14,14 @@ const { test: { inventorySearch } } = config
 const { test: { SERVER_URL } } = config
 const { chai} = require("./testConfig");
 
-//SHIPMENT
-console.log(process.argv[0])
+const dotenv = require("dotenv").config();
+
+var n = process.env.NO_OF_RUNS;
+
+ console.log(process.argv[0])
   describe('/createShipment', () => {
+  for (i=0;i<n;i++)
+     {
       it('it should GET all the Shipments', (done) => {
        chai.request(SERVER_URL)
            .post(createShipmentUrl)
@@ -51,41 +56,51 @@ console.log(process.argv[0])
                     res.should.have.status(200);
                     return done();
             });
-      });
+    	});
+  }
  });
+ 
 
  describe('/fetchShipments', () => {
-      it('it should GET all the Shipments', (done) => {
+for (i=0;i<n;i++)
+    { 
+ it('it should GET all the Shipments', (done) => {
        chai.request(SERVER_URL)
            .get(shipmentsSearch)
            .set('authorization','Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTllMzFjZjU3ODhlOTg2MWE3MjQ5Y2EiLCJlbWFpbCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJhZGRyZXNzIjoiMVhwUWNwb2hhc25zM0RoUFo0dWJZQ0ZpZU50dTczVUFMZDFMSG0iLCJpYXQiOjE1ODgyMDIyOTEsImV4cCI6NDc0Mzk2MjI5MX0.IrtugBNzc8JB5bDvbbh-X583KHPW-nwGpUeOxWaoyXI')
             .query({'key':'SHP5919'})
             .end((err, res) => {
                   if (err) return done(err);
-	 	  res.should.have.status(200);
+                  res.should.have.status(200);
                   return done();
             });
       });
+ }
  });
 
 
  describe('/shipmentStatistics', () => {
-      it('it should GET all the Shipments', (done) => {
+for (i=0;i<n;i++)
+                {  
+  it('it should GET all the Shipments', (done) => {
        chai.request(SERVER_URL)
            .get(shipmentsUrl)
            .set('authorization','Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTllMzFjZjU3ODhlOTg2MWE3MjQ5Y2EiLCJlbWFpbCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJhZGRyZXNzIjoiMVhwUWNwb2hhc25zM0RoUFo0dWJZQ0ZpZU50dTczVUFMZDFMSG0iLCJpYXQiOjE1ODgyMDIyOTEsImV4cCI6NDc0Mzk2MjI5MX0.IrtugBNzc8JB5bDvbbh-X583KHPW-nwGpUeOxWaoyXI')
             .end((err, res) => {
                  if (err) return done(err);
-		 res.should.have.status(200);
+                 res.should.have.status(200);
                  return done();
             });
       });
+    }
  });
- 
+
 
 //INVENTORY
  describe('/addNewInventory', () => {
-      it('it should GET all the Shipments', (done) => {
+      for (i=0;i<n;i++)
+                {
+	  it('it should ADD new Inventory', (done) => {
        chai.request(SERVER_URL)
            .post(addInventoryUrl)
            .send({
@@ -107,34 +122,41 @@ console.log(process.argv[0])
                     return done();
             });
       });
+}
  });
 
  describe('/getAllInventoryDetails', () => {
-      it('it should GET all the Inventory', (done) => {
+for (i=0;i<n;i++)
+                { 
+ it('it should GET all the Inventory', (done) => {
        chai.request(SERVER_URL)
            .get(inventoriesUrl)
            .set('authorization','Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTllMzFjZjU3ODhlOTg2MWE3MjQ5Y2EiLCJlbWFpbCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJhZGRyZXNzIjoiMVhwUWNwb2hhc25zM0RoUFo0dWJZQ0ZpZU50dTczVUFMZDFMSG0iLCJpYXQiOjE1ODgyMDIyOTEsImV4cCI6NDc0Mzk2MjI5MX0.IrtugBNzc8JB5bDvbbh-X583KHPW-nwGpUeOxWaoyXI')
              .end((err, res) => {
                      if (err) return done(err);
-		     res.should.have.status(200);
+                     res.should.have.status(200);
                      return done();
             });
       });
+	  }
  });
- 
+
 
  describe('/getInventoryDetailsForProduct', () => {
-      it('it should details of the Product', (done) => {
+      for (i=0;i<n;i++)
+                {
+	  it('it should details of the Product', (done) => {
        chai.request(SERVER_URL)
            .get(inventorySearch)
            .set('authorization','Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTllMzFjZjU3ODhlOTg2MWE3MjQ5Y2EiLCJlbWFpbCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJhZGRyZXNzIjoiMVhwUWNwb2hhc25zM0RoUFo0dWJZQ0ZpZU50dTczVUFMZDFMSG0iLCJpYXQiOjE1ODgyMDIyOTEsImV4cCI6NDc0Mzk2MjI5MX0.IrtugBNzc8JB5bDvbbh-X583KHPW-nwGpUeOxWaoyXI')
-	   .query({'key':'5919'})
+           .query({'key':'5919'})
            .end((err, res) => {
                   if (err) return done(err);
-		  res.should.have.status(200);
+                  res.should.have.status(200);
                   return done();
             });
       });
+	  }
  });
 
 
@@ -149,9 +171,9 @@ console.log(process.argv[0])
                 "password":"12345678!",
                 "email":"hema@statwig.com",
                 "name":"Hemz",
-		"confirmOTP":"1845"
+                "confirmOTP":"1845"
         };
- 
+
 
  describe("/register", () => {
                 it("It should Register user", (done) => {
@@ -179,10 +201,12 @@ console.log(process.argv[0])
                                 });
                 });
         });
-		
+
 
         describe("/login", () => {
-                it("it should do user Login", (done) => {
+                for (i=0;i<n;i++)
+                {
+                        it("it should do user Login", (done) => {
                         chai.request(SERVER_URL)
                                 .post(loginUrl)
                                 .send({"email":"hema@statwig.com","password": "12345678!"})
@@ -193,4 +217,6 @@ console.log(process.argv[0])
                                         done();
                                 });
                 });
+                }
         });
+
