@@ -27,7 +27,7 @@ import './style.scss';
     const manufacturingDates = props.shipments.map((data, index) => {
       return data.shipmentDate;
     });
-    const InventoryDates = props.inventory.map((data, index) => {
+    const InventoryDates = props.inventories.map((data, index) => {
       key=index+1;
        return data.length;
       
@@ -43,6 +43,13 @@ import './style.scss';
       setAllTimeCount(manufacturingDates.length);
       setTotalInventoryAdded(key);
     })
+
+    let total = 0;
+
+    {props.inventories.map(inventory => (
+      
+    total += JSON.parse(inventory.quantity)
+    ))}
 
   return (
     <div className="overview">
@@ -68,7 +75,7 @@ import './style.scss';
 
               <div className="d-flex flex-column">
                 <div className="title">Total Inventory Added</div>
-                <div className="count2" > {TotalInventoryAdded} <small className="dayStatus">This Year</small></div>
+                <div className="count2" > {total} <small className="dayStatus">This Year</small></div>
               </div>
             </div>
 
