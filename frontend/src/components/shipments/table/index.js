@@ -1,8 +1,14 @@
 import React from 'react';
+import { setTracingShipments } from '../../../actions/shipmentActions';
+import { useDispatch} from 'react-redux';
 
 import './style.scss';
 
-const Table = props => {
+const Table = (props) => {
+
+  const dispatch = useDispatch ();
+  
+
   return (
     <div className="table">
       <div className="rTable">
@@ -29,7 +35,15 @@ const Table = props => {
         </div>
         <div className="overflow">
           {props.shipments.map((shipment, index) => (
-            <div className="rTableRow" key={index}>
+            <div className="rTableRow" key={index} onClick={() =>  
+                     {
+                       const data = props.shipments[index]
+                       dispatch(setTracingShipments(data));
+                     props.history.push(`/tracing/${props.shipments[index].shipmentId}`)
+                
+                     }
+                
+                  } >
               <div className="rTableCell">
                 <div className="combine-data">
                 {shipment.client}
