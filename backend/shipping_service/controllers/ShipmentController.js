@@ -1,4 +1,8 @@
+const UserTransactionModel = require("../models/UserTransactionModel");
 const UserModel = require("../models/UserModel");
+const ShipmentModel = require("../models/ShipmentModel");
+const ProductModel = require("../models/ProductModel");
+const OrganisationModel = require("../models/OrganisationModel");
 const { body, validationResult } = require("express-validator");
 const { sanitizeBody } = require("express-validator");
 //this helper file to prepare responses.
@@ -194,11 +198,12 @@ exports.createShipment = [
       }
       checkToken(req, res, async (result) => {
         if (result.success) {
-          const { address } = req.user;
+          const { address, email } = req.user;
           const { data } = req.body;
+          const { shipmentId } = data;
           const userData = {
             stream: stream_name,
-            key: data.shipmentId,
+            key: shipmentId,
             //address: address,
             address: req.query.address ? req.query.address : address,
             data: data,
@@ -207,9 +212,65 @@ exports.createShipment = [
             `${blockchain_service_url}/publish`,
             userData
           );
-          res.status(200).json({ response: response.data.transactionId });
+
+          const txnId = response.data.transactionId;
+          const userModel = await UserModel.findOne({email});
+          const user = await UserTransactionModel.findOne({destinationUser: email});
+          const shipmentFound = await ShipmentModel.findOne({ shipmentId });
+          const organisationFound = await OrganisationModel.findOne({organisationId: userModel.role});
+
+          //User Transaction Collection
+          if(!user) {
+            const newUser = new UserTransactionModel({
+              destinationUser: email,
+              txnIds: [txnId]
+            })
+            await newUser.save();
+          }else {
+            const txnIds = [...user.txnIds, txnId];
+            await UserTransactionModel.updateOne({destinationUser: email}, {txnIds});
+          }
+          //Shipment Collection
+          if(!shipmentFound) {
+            const newShipment = new ShipmentModel({
+              shipmentId,
+              txnIds:[txnId]
+            })
+            await newShipment.save();
+          }else {
+            const txnIds = [...shipmentFound.txnIds, txnId];
+            await ShipmentModel.updateOne({shipmentNumber: shipmentId }, {txnIds});
+          }
+          //Organisation Collection
+          if(!organisationFound) {
+            const newOrganisation = new OrganisationModel({
+              organisationId: userModel.role,
+              shipmentNumber:[shipmentId]
+            })
+            await newOrganisation.save();
+          }else {
+            const shipmentNumbers = [...organisationFound.shipmentNumbers, data.shipmentId];
+
+            await OrganisationModel.updateOne({organisationId: userModel.role}, {shipmentNumbers});
+          }
+          //Products Collection
+          await utility.asyncForEach(data.products, async product => {
+            const productQuery = { serialNumber: product.serialNumber };
+            const productFound = await ProductModel.findOne(productQuery);
+            if(productFound) {
+              await ProductModel.updateOne(productQuery, { txnIds: [...productFound.txnIds, txnId ]})
+            }else {
+              const newProduct = new ProductModel({
+                serialNumber: product.serialNumber,
+                txnIds:[txnId]
+              })
+              await newProduct.save();
+            }
+          });
+
+          res.status(200).json({ response: 'Success'});
         } else {
-          res.status(403).json(result);
+          res.status(403).json({response: 'Fail'});
         }
       });
     } catch (err) {
