@@ -66,6 +66,12 @@ const Inventory = (props) => {
     setInventoryCurrent(key);
 
   })
+  let total = 0;
+
+  {props.inventories.map(inventory => (
+    
+  total += JSON.parse(inventory.quantity)
+  ))}
   return (
     <div className="inventory">
       <div className="d-flex justify-content-between">
@@ -93,7 +99,7 @@ const Inventory = (props) => {
                 <div className="tab-item">This Week</div>
                 <div className="tab-item">Today</div>
               </div>
-              <div className="truck-text count">{inventoryTotal}</div>
+              <div className="truck-text count">{total}</div>
             </div>
           </div>
         </div>

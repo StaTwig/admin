@@ -37,6 +37,7 @@
         }
       }
   
+     
       .search-field {
         height: 40px;
         background: $white;
@@ -144,8 +145,24 @@
         background: grey;
     }
     }
+    .icon{
+      border-radius: 50%;
+      height: 40px;
+      width:40px;
+      background-color:pink;
+      color: black;
+      text-align: center;
+      font-size:13px;
+      padding: 10px 8px;
+      
 
-    
+    }
+    .manufacturer{
+      color:#0093E9;;
+    }
+    .bold{
+      font-weight: bold;
+    }
     
   ul {
     padding: 0.1rem 0.1rem;
@@ -155,6 +172,9 @@
     li {
       padding: 0.2rem 0.2rem;
       list-style: none;
+    }
+    .bold{
+      font-weight: bold;
     }
 }
 }

@@ -10,7 +10,7 @@ const TracingContainer = props => {
       <div className="d-flex">
         <Sidebar {...props} />
         <div className="content">
-          <Tracing />
+          <Tracing {...props}/>
         </div>
       </div>
     </div>

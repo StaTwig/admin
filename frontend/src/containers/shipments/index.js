@@ -23,7 +23,7 @@ const ShipmentContainer = props => {
                   <div className="d-flex">
                         <Sidebar {...props} />
                         <div className="content">
-                              <Shipment shipments={shipments}/>
+                              <Shipment shipments={shipments} {...props}/>
                         </div>
                   </div>
             </div>

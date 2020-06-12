@@ -7,6 +7,7 @@ import { usersReducer } from './usersReducer';
 import { reviewShipmentReducer } from './reviewShipmentReducer';
 import { reviewInventoryReducer } from './reviewInventoryReducer';
 import { reviewPoReducer } from './reviewPoReducer';
+import { tracingShipmentReducer} from './tracingShipmentReducer';
 
 const rootReducer = (history) => combineReducers({
   shipments: shipmentReducer,
@@ -14,6 +15,7 @@ const rootReducer = (history) => combineReducers({
   user: userReducer,
   users: usersReducer,
   reviewShipment: reviewShipmentReducer,
+  tracingShipment:tracingShipmentReducer,
   reviewInventory: reviewInventoryReducer,
   reviewPo: reviewPoReducer,
   router: connectRouter(history)

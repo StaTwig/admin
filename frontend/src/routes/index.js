@@ -48,7 +48,7 @@ const routes = (
     <Route path="/newinventory" component={requireAuth(NewInventory)} />
     <Route path="/reviewinventory" component={requireAuth(VerifyInventory)} />
     <Route path="/trackAndTrace" component={requireAuth(trackAndTrace)} />
-    <Route path="/tracing" component={requireAuth(Tracing)} />
+    <Route path="/tracing/:id" component={requireAuth(Tracing)} />
     <Route path="/network" component={requireAuth(Network)} />
     <Route component={NoMatch} />
   </Switch>

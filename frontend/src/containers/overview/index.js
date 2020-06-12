@@ -12,7 +12,7 @@ const OverviewContainer = props => {
   const shipments = useSelector(state => {
     return state.shipments;
   });
-  const inventory = useSelector(state =>{
+  const inventories = useSelector(state =>{
     return state.inventories;
   })
   useEffect(() => {
@@ -25,7 +25,7 @@ const OverviewContainer = props => {
       <div className="d-flex">
         <Sidebar {...props} />
         <div className="content">
-          <OverView shipments={shipments} inventory={inventory}/>
+          <OverView shipments={shipments} inventories={inventories}/>
         </div>
       </div>
     </div>
