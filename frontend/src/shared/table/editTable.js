@@ -27,7 +27,7 @@ const EditTable = props => {
           </div>
         </div>
         <div >
-         <EditRow {...props} />
+          {props.editRowData.map(rowData => <EditRow {...rowData} />)}
         </div>
       </div>
     </div>

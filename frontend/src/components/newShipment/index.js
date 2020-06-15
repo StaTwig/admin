@@ -63,7 +63,8 @@ const NewShipment = (props) => {
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   
   const closeModal = () => {
-    props.history.push('/shipments');
+    setOpenCreatedInventory(false);
+   // props.history.push('/shipments');
   };
   
   const editTableProps = {
@@ -87,8 +88,14 @@ const NewShipment = (props) => {
     setSerialNumber,
   };
 
+  const [editRowData, setEditRowData] = useState([editTableProps]);
   const onChange = date => setShipmentDate({ date })
   const onChange1 = date1 => setEstimateDeliveryDate({ date1 });
+  const onAddRow = () => {
+    const editRowDataCopy = JSON.parse(JSON.stringify(editRowData));
+    editRowDataCopy.push(editTableProps);
+    setEditRowData(editRowDataCopy);
+  }
   var numeric = { year: 'numeric', month: 'numeric' };
 
   
@@ -310,8 +317,8 @@ const NewShipment = (props) => {
         </div>
       </div>
       <hr />
-      <EditTable {...editTableProps} />
-      <button className="btn btn-white shadow-radius font-bold">
+      <EditTable editRowData={editRowData} />
+      <button className="btn btn-white shadow-radius font-bold" onClick={onAddRow}>
         +<span> Add Another Product</span>
       </button>
 
