@@ -239,7 +239,7 @@ exports.createShipment = [
             await newShipment.save();
           }else {
             const txnIds = [...shipmentFound.txnIds, txnId];
-            await ShipmentModel.updateOne({shipmentNumber: shipmentId }, {txnIds});
+            await ShipmentModel.updateOne({shipmentId }, {txnIds});
           }
           //Organisation Collection
           if(!organisationFound) {
