@@ -19,5 +19,15 @@ router.post("/modifyShipment", ShipmentController.modifyShipment);
 router.get("/getManufacturers", ShipmentController.getManufacturers);
 router.get("/getProducts", ShipmentController.getProducts);
 
+router.get("/getAllShipmentColl", ShipmentController.getAllShipmentColl);
+router.get("/getAllUserColl", ShipmentController.getAllUserColl);
+router.get("/getAllOrgColl", ShipmentController.getAllOrgColl);
+router.get("/getAllProductColl", ShipmentController.getAllProductColl);
+
+router.get("/trackShipment", ShipmentController.trackShipment);
+router.get("/trackProduct", ShipmentController.trackProduct);
+router.get("/fetchUserShipments", ShipmentController.fetchUserShipments);
+router.get("/fetchOrgShipments", ShipmentController.fetchOrgShipments);
+
 module.exports = router;
 

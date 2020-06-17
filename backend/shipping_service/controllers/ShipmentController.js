@@ -199,6 +199,7 @@ exports.createShipment = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           const { address, email } = req.user;
+
           const { data } = req.body;
           const { shipmentId } = data;
           const userData = {
@@ -212,23 +213,35 @@ exports.createShipment = [
             `${blockchain_service_url}/publish`,
             userData
           );
-
           const txnId = response.data.transactionId;
           const userModel = await UserModel.findOne({email});
-          const user = await UserTransactionModel.findOne({destinationUser: email});
+	  const sender_address = address;
+          const receiver_address = data.receiver;
+          const sender = await UserTransactionModel.findOne({destinationUser: sender_address});
+	  const receiver = await UserTransactionModel.findOne({destinationUser: receiver_address});
           const shipmentFound = await ShipmentModel.findOne({ shipmentId });
-          const organisationFound = await OrganisationModel.findOne({organisationId: userModel.role});
-
+          const organisationFound = await OrganisationModel.findOne({organisationId: userModel.organisation});
           //User Transaction Collection
-          if(!user) {
+          if(!sender) {
             const newUser = new UserTransactionModel({
-              destinationUser: email,
+              destinationUser: sender_address,
               txnIds: [txnId]
             })
             await newUser.save();
           }else {
-            const txnIds = [...user.txnIds, txnId];
-            await UserTransactionModel.updateOne({destinationUser: email}, {txnIds});
+            const txnIds = [...sender.txnIds, txnId];
+            await UserTransactionModel.updateOne({destinationUser: sender_address}, {txnIds});
+          }
+          
+           if(!receiver) {
+            const newUser = new UserTransactionModel({
+              destinationUser: receiver_address,
+              txnIds: [txnId]
+            })
+            await newUser.save();
+          }else {
+            const txnIds = [...receiver.txnIds, txnId];
+            await UserTransactionModel.updateOne({destinationUser: receiver_address}, {txnIds});
           }
           //Shipment Collection
           if(!shipmentFound) {
@@ -240,18 +253,19 @@ exports.createShipment = [
           }else {
             const txnIds = [...shipmentFound.txnIds, txnId];
             await ShipmentModel.updateOne({shipmentId }, {txnIds});
+		  console.log(shipmentId,txnIds)
           }
           //Organisation Collection
           if(!organisationFound) {
             const newOrganisation = new OrganisationModel({
-              organisationId: userModel.role,
+	      organisationId: userModel.organisation,
               shipmentNumber:[shipmentId]
             })
             await newOrganisation.save();
           }else {
             const shipmentNumbers = [...organisationFound.shipmentNumbers, data.shipmentId];
 
-            await OrganisationModel.updateOne({organisationId: userModel.role}, {shipmentNumbers});
+	     await OrganisationModel.updateOne({organisationId: userModel.organisation}, {shipmentNumbers});
           }
           //Products Collection
           await utility.asyncForEach(data.products, async product => {
@@ -510,3 +524,179 @@ exports.getManufacturers = [
   }
 
 ];
+
+exports.getAllShipmentColl = [
+  auth,
+  async (req, res) => {
+    try {
+       const { model } = req.query;
+      const users = await ShipmentModel.find({});
+      return apiResponse.successResponseWithData(
+        res,
+        users,
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  }
+]
+
+exports.getAllUserColl = [
+  auth,
+  async (req, res) => {
+    try {
+       const { model } = req.query;
+      const users = await UserTransactionModel.find({});
+      return apiResponse.successResponseWithData(
+        res,
+        users,
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  }
+]
+
+exports.getAllOrgColl = [
+  auth,
+  async (req, res) => {
+    try {
+       const { model } = req.query;
+      const users = await OrganisationModel.find({});
+      return apiResponse.successResponseWithData(
+        res,
+        users,
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  }
+]
+
+exports.getAllProductColl = [
+  auth,
+  async (req, res) => {
+    try {
+       const { model } = req.query;
+      const users = await ProductModel.find({});
+      return apiResponse.successResponseWithData(
+        res,
+        users,
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  }
+]
+
+
+exports.trackShipment = [
+  auth,
+  async (req, res) => {
+    try {
+	const { shipmentId } = req.query;
+        ShipmentModel.findOne({ shipmentId: shipmentId }).then(async (user) => {
+	var txnIDs = user.txnIds
+	var items_array = new Array();
+        for (var i = 0; i < txnIDs.length; i++) {
+         var key = txnIDs[i];
+
+          const response = await axios.get(
+            `${blockchain_service_url}/queryDataByTxHash?stream=${stream_name}&txid=${key}`
+          );
+          const items = response.data.items;
+          items_array.push(items);
+         }
+          res.json({ data: items_array });
+        });
+      }
+       catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  }
+];
+
+exports.trackProduct = [
+  auth,
+  async (req, res) => {
+    try {
+        const { serialNumber } = req.query;
+        ProductModel.findOne({ serialNumber: serialNumber }).then(async (user) => {
+        var txnIDs = user.txnIds
+        var items_array = new Array();
+        for (var i = 0; i < txnIDs.length; i++) {
+         var key = txnIDs[i];
+
+          const response = await axios.get(
+            `${blockchain_service_url}/queryDataByTxHash?stream=${stream_name}&txid=${key}`
+          );
+          const items = response.data.items;
+          items_array.push(items);
+         }
+          res.json({ data: items_array });
+        });
+      }
+       catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  }
+];
+
+
+exports.fetchUserShipments = [
+  auth,
+  async (req, res) => {
+    try {
+        const { user } = req.query;
+      UserTransactionModel.findOne({ destinationUser: user }).then(async (user) => {
+        
+	var txnIDs = user.txnIds
+        var items_array = new Array();
+        for (var i = 0; i < txnIDs.length; i++) {
+         var key = txnIDs[i];
+
+          const response = await axios.get(
+            `${blockchain_service_url}/queryDataByTxHash?stream=${stream_name}&txid=${key}`
+          );
+          const items = response.data.items;
+          items_array.push(items);
+         }
+          res.json({ data: items_array });
+        });
+      }
+       catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  }
+];
+
+
+exports.fetchOrgShipments = [
+  auth,
+  async (req, res) => {
+    try {
+        const { organisationId } = req.query;
+        OrganisationModel.findOne({ organisationId: organisationId }).then(async (user) => {
+
+        var shipIDs = user.shipmentNumbers;
+	let unique_shipIDs = [...new Set(shipIDs)];
+
+        var items_array = new Array();
+        for (var i = 0; i < unique_shipIDs.length; i++) {
+        var key = unique_shipIDs[i];
+
+          const response = await axios.get(
+            `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${key}`
+          );
+          const items = response.data.items;
+          items_array.push(items);
+         }
+          res.json({ data: items_array });
+        });
+      }
+       catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  }
+];
+
