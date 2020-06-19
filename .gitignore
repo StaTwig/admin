@@ -122,4 +122,13 @@ thumb
 sketch
 
 # End of https://www.gitignore.io/api/node,react
-
+#Custom ignores
+./backend/blockchain_service/.env
+./backend/track_trace/.env
+./backend/notification_service/.env
+./backend/shipping_service/.env
+./backend/alert_service/.env
+./backend/inventory_service/.env
+./backend/user_service/.env
+./backend/log_service/.env
+./backend/transaction_service/.env
