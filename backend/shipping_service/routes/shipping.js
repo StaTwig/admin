@@ -27,7 +27,6 @@ router.get("/getAllProductColl", ShipmentController.getAllProductColl);
 router.get("/trackShipment", ShipmentController.trackShipment);
 router.get("/trackProduct", ShipmentController.trackProduct);
 router.get("/fetchUserShipments", ShipmentController.fetchUserShipments);
-router.get("/fetchOrgShipments", ShipmentController.fetchOrgShipments);
 
 module.exports = router;
 
