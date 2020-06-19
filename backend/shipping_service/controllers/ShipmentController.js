@@ -439,7 +439,7 @@ exports.createPurchaseOrder = [
             `${blockchain_service_url}/publish`,
             userData,
           );
-          res.status(200).json({ response: response.data.transactionId });
+ 	  res.status(200).json({ txid: response.data.transactionId, orderID: orderID});
         } else {
           res.status(403).json(result);
         }
