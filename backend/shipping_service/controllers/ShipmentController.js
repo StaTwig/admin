@@ -428,9 +428,10 @@ exports.createPurchaseOrder = [
         if (result.success) {
           const { address } = req.user;
           const { data } = req.body;
+ 	  const orderID  = "PO" + Math.floor(1000 + Math.random() * 9000);
           const userData = {
             stream: po_stream_name,
-            key: data.orderID,
+            key: orderID,
             address: address,
             data: data,
           };
@@ -438,7 +439,7 @@ exports.createPurchaseOrder = [
             `${blockchain_service_url}/publish`,
             userData,
           );
-          res.status(200).json({ response: response.data.transactionId });
+ 	  res.status(200).json({ txid: response.data.transactionId, orderID: orderID});
         } else {
           res.status(403).json(result);
         }
