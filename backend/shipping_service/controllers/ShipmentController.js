@@ -641,20 +641,17 @@ exports.fetchUserShipments = [
     try {
       const { user } = req;
       if (user.role !== 'Warehouse') {
-        UserTransactionModel.findOne({ destinationUser: user }).then(
-          async user => {
-            var txnIDs = user.txnIds;
-            var items_array = [];
-            await utility.asyncForEach(txnIDs, async txnId => {
-              const response = await axios.get(
-                `${blockchain_service_url}/queryDataByTxHash?stream=${stream_name}&txid=${txnId}`,
-              );
-              const items = response.data.items;
-              items_array.push(items);
-            });
-            res.json({ data: items_array });
-          },
-        );
+        const destinationUser = await UserTransactionModel.findOne({ destinationUser: user.email });
+        const txnIDs = destinationUser.txnIds;
+        const items_array = [];
+        await utility.asyncForEach(txnIDs, async txnId => {
+          const response = await axios.get(
+            `${blockchain_service_url}/queryDataByTxHash?stream=${stream_name}&txid=${txnId}`,
+          );
+          const items = response.data.items;
+          items_array.push(JSON.parse(items));
+        });
+        res.json({ data: items_array });
       } else {
         OrganisationModel.findOne({ organisationId: user.organisation }).then(
           async user => {
@@ -667,7 +664,7 @@ exports.fetchUserShipments = [
                 `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${shipId}`,
               );
               const items = response.data.items;
-              items_array.push(items);
+              items_array.push(JSON.parse(items));
             });
             res.json({ data: items_array });
           },
