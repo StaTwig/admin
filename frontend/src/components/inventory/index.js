@@ -35,38 +35,40 @@ const Inventory = (props) => {
     coloumn2:  "Manufacturer",
     coloumn3:  "Batch Number",
     coloumn4:  "Quantity",
-            coloumn5:  "Serial Number",
+    coloumn5:  "Serial Number",
     coloumn6:  "Mfg Date",
     coloumn7:  "Exp Date",
   }
-
   const [inventoryExpiring, setInventoryExpiring] = useState('');
   const [inventoryExpired, setInventoryExpired] = useState('');
-  const [inventoryTotal, setInventoryTotal] = useState('');
   const [inventoryCurrent, setInventoryCurrent] = useState('');
-  var key;
+  const month = new Date().getMonth()+1;
+  const newMonth = `0${month}`.slice(-2);
+  const todayDate =  newMonth + '/'  +new Date().getFullYear();
+  let key;
+  let count=0;
   useEffect(() => {
+    props.inventories.map((inventory,index) => {
+          key = index+1;
+          let a =inventory.expiryDate.slice(-4)
+          let b =todayDate.slice(-4)
+          let c = inventory.expiryDate.substring(0,2)
+          let d = todayDate.substring(0,2)
+          if(a<b){
+            count++;
 
-   
-    const inventoryDates = props.inventories.map((data, index) => {
-         key=index+1
-      return data;
-    })
-    const expiring = expiringIn(inventoryDates, 2190);
-    const expired_data = expired(inventoryDates, 0);
-    const expiredCount = Count(expired_data);
-    const expiringCount = Count(expiring)
-    const inventoryCount = Count(inventoryDates);
-    
-
-    console.log(expiredCount);
-    setInventoryExpired(expiredCount);
-    setInventoryExpiring(expiringCount - expiredCount);
-    setInventoryTotal(key);
-    setInventoryCurrent(key);
-
+          }
+          else if(a==b&&c<d)
+           {
+             count++;
+           }
+           else if(a==b&&c<=(d-2)){}
   })
-  let total = 0;
+setInventoryCurrent(key);
+setInventoryExpired(count);
+  })
+  
+let total = 0;
 
   {props.inventories.map(inventory => (
     
@@ -126,14 +128,14 @@ const Inventory = (props) => {
               <img src={Expiration} alt="truck" />
             </div>
             <div className="d-flex flex-column">
-              <div className="title recived-text">Total Vaccines near Expiration</div>
+              <div className="title recived-text">Vaccines near Expiration</div>
               <div className="tab-container">
                 <div className="tab-item active">This Year</div>
                 <div className="tab-item">This Month</div>
                 <div className="tab-item">This Week</div>
                 <div className="tab-item mr-3">Today</div>
               </div>
-              <div className="recived-text count">{inventoryExpiring}</div>
+              <div className="recived-text count">2</div>
             </div>
           </div>
         </div>
@@ -150,7 +152,7 @@ const Inventory = (props) => {
                 <div className="tab-item">This Week</div>
                 <div className="tab-item">Today</div>
               </div>
-              <div className="transit-text count">{inventoryExpired}</div>
+        <div className="transit-text count">{inventoryExpired}</div>
             </div>
           </div>
         </div>

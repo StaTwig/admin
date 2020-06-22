@@ -63,7 +63,7 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Shipments</div>
-                <div className="count1">{AllTimeCount}<small className="dayStatus">This Year</small></div>
+                <div className="count1">{AllTimeCount}<small className="dayStatus ml-1">This Year</small></div>
               </div>
             </div>
           </div>
@@ -75,7 +75,7 @@ import './style.scss';
 
               <div className="d-flex flex-column">
                 <div className="title">Total Inventory Added</div>
-                <div className="count2" > {total} <small className="dayStatus">This Year</small></div>
+                <div className="count2" > {total} <small className="dayStatus">ThisYear</small></div>
               </div>
             </div>
 
@@ -87,7 +87,7 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Current Shipment in Transit</div>
-                <div className="count3">{Months6Count}<small className="dayStatus">Last 6 Month</small></div>
+                <div className="count3">{Months6Count}<small className="dayStatus ml-1">Last 6 Month</small></div>
               </div>
             </div>
 
@@ -99,7 +99,7 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Shipments</div>
-                <div className="count4">{Months3Count}<small className="dayStatus">Last 3 Month</small></div>
+                <div className="count4">{Months3Count}<small className="dayStatus ml-1">Last 3 Month</small></div>
               </div>
             </div>
 
