@@ -47,6 +47,7 @@ const Inventory = (props) => {
   const todayDate =  newMonth + '/'  +new Date().getFullYear();
   let key;
   let count=0;
+  let near=0;
   useEffect(() => {
     props.inventories.map((inventory,index) => {
           key = index+1;
@@ -54,18 +55,16 @@ const Inventory = (props) => {
           let b =todayDate.slice(-4)
           let c = inventory.expiryDate.substring(0,2)
           let d = todayDate.substring(0,2)
-          if(a<b){
+          if(a<b||(a==b&&c<=d)){
             count++;
-
           }
-          else if(a==b&&c<d)
-           {
-             count++;
+           else if(a==b&&(c==parseInt(d)+1||c==parseInt(d)+2)){
+            near++;
            }
-           else if(a==b&&c<=(d-2)){}
   })
 setInventoryCurrent(key);
 setInventoryExpired(count);
+setInventoryExpiring(near);
   })
   
 let total = 0;
@@ -133,9 +132,9 @@ let total = 0;
                 <div className="tab-item active">This Year</div>
                 <div className="tab-item">This Month</div>
                 <div className="tab-item">This Week</div>
-                <div className="tab-item mr-3">Today</div>
+                <div className="tab-item">Today</div>
               </div>
-              <div className="recived-text count">2</div>
+       <div className="recived-text count">{inventoryExpiring}</div>
             </div>
           </div>
         </div>

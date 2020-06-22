@@ -9,27 +9,31 @@ import CurrentShipment from "../../assets/icons/CurrentShipmentInTransit2.svg";
 import './style.scss'
 
 const Tiles = (props) => {
-    const [totalShipments, setTotalShipments] = useState('0');
-      const [shipmentsSent, setShipmentsSent] = useState('0');
+    const [totalShipments, setTotalShipments] = useState('');
+      const [shipmentsSent, setShipmentsSent] = useState('');
       const [shipmentsReceived, setShipmentsReceived] = useState('0');
       const [shipmentsTransit, setShipmentsTransit] = useState('0');
-
-  useEffect(() => {
+      let count=0;
+      let near=0;
+      let key=0;
+      useEffect(() => {
+        props.shipments.map((shipment,index) => {
+              key = index+1;
+             if(shipment.status=='Shipped'||shipment.status=='In Transit'){
+                count++;
+             }
+             else if(shipment.status=='In Transit')
+             {
+                 near++;
+             }
+      })
+    setTotalShipments(key);
+    setShipmentsSent(count);
+    setShipmentsTransit(near);
+      })
       
-        const shipmentDates = props.shipments.map((data, index) => {
-          return data;      
-        })
       
-        const total =  shipmentDates.filter(d => d.status != '');   
-        const sent = shipmentDates.filter(d => d.status == 'Shipped')
-        const received = shipmentDates.filter(d => d.status == 'Received')
-        const transit = shipmentDates.filter(d => d.status == 'In Transit');
-        setTotalShipments(total.length);
-        setShipmentsSent(sent.length);
-        setShipmentsTransit(transit.length);
-        setShipmentsReceived(received.length);
-        })
-        
+       
     return (
         <div className="row mb-4">
             <div className="col">
@@ -79,7 +83,7 @@ const Tiles = (props) => {
                             <div className="tab-item">This Week</div>
                             <div className="tab-item">Today</div>
                         </div>
-                        <div className="recived-text count">{shipmentsReceived}</div>
+                        <div className="recived-text count">2</div>
                     </div>
                 </div>
             </div>
