@@ -14,34 +14,22 @@ import shipmentsdelayed from "../../assets/icons/TotalShipmentsDelayed.svg";
 import './style.scss';
 
   const Overview = props => {
-    const [Hours24Count, set24HoursCount] =useState('');
-    const [Months3Count, set3MonthsCount] =useState('');
-    const [Months6Count, set6MonthsCount] =useState('');
+
+    const [shipmentsTransit, setShipmentsTransit] =useState('');
     const [AllTimeCount, setAllTimeCount] =useState('');
-    const [TotalInventoryAdded, setTotalInventoryAdded] =useState('')
-    const [TotalInventory, setTotalInventory] =useState('')
-    
- var key;
+    let near=0;
     
     useEffect(() => {
     const manufacturingDates = props.shipments.map((data, index) => {
+      if(data.status=='In Transit')
+      {
+          near++;
+      }
       return data.shipmentDate;
     });
-    const InventoryDates = props.inventories.map((data, index) => {
-      key=index+1;
-       return data.length;
-      
-     });
-    
-
-    const last24hrsDates = getLastDates(manufacturingDates, 24);
-    const last3Months = getLastDates(manufacturingDates, 2190);
-    const last6Months = getLastDates(manufacturingDates, 14380);
-      set24HoursCount(last24hrsDates.length);
-      set3MonthsCount(last3Months.length);
-      set6MonthsCount(last6Months.length)
+      setShipmentsTransit(near);
       setAllTimeCount(manufacturingDates.length);
-      setTotalInventoryAdded(key);
+      
     })
 
     let total = 0;
@@ -87,7 +75,7 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Current Shipment in Transit</div>
-                <div className="count3">{Months6Count}<small className="dayStatus ml-1">Last 6 Month</small></div>
+                <div className="count3">{shipmentsTransit}<small className="dayStatus ml-1">Last 6 Month</small></div>
               </div>
             </div>
 
@@ -99,7 +87,7 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Shipments</div>
-                <div className="count4">{Months3Count}<small className="dayStatus ml-1">Last 3 Month</small></div>
+                <div className="count4">{AllTimeCount}<small className="dayStatus ml-1">Last 3 Month</small></div>
               </div>
             </div>
 
@@ -111,7 +99,7 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Shipments Delayed</div>
-                <div className="count5">{Hours24Count} <small className="dayStatus">Today</small></div>
+                <div className="count5">0 <small className="dayStatus">Today</small></div>
               </div>
             </div>
           </div>
