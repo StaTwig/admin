@@ -16,7 +16,7 @@ import calender from '../../assets/icons/calendar.svg';
 import Status from '../../assets/icons/Status.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsers } from '../../actions/userActions';
-import PurchaseFormReview from '../../components/verifypo/purchaseFormReview';
+import PurchaseFormReview from '../../components/verifyPO/purchaseFormReview';
 
 const ShipmentAnalytic = props => {
   

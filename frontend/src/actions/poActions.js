@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { config } from '../config';
-import {SET_REVIEW_PO} from "../constants/poConstants";
+import {SET_REVIEW_PO} from "../constants/poconstants";
 
 export const createPO = async (data) => {
   try {

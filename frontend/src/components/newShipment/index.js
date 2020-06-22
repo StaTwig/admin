@@ -11,7 +11,7 @@ import DropdownButton from '../../shared/dropdownButtonGroup';
 import {getAllUsers} from "../../actions/userActions";
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import ShipmentPopUp from './shipmentpopup';
+import ShipmentPopUp from './shipmentPopUp';
 import Modal from '../../shared/modal';
 
 
