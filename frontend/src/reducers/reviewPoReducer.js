@@ -1,6 +1,6 @@
 import {
     SET_REVIEW_PO
-  } from '../constants/poConstants';
+  } from '../constants/poconstants';
   
   export const initialState = null;
   

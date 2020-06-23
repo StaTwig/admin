@@ -11,7 +11,7 @@ import DropdownButton from '../../shared/dropdownButtonGroup';
 import {getAllUsers} from "../../actions/userActions";
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import ShipmentPopUp from './shipmentpopup';
+import ShipmentPopUp from './shipmentPopUp';
 import Modal from '../../shared/modal';
 
 
@@ -88,14 +88,10 @@ const NewShipment = (props) => {
     setSerialNumber,
   };
 
-  const [editRowData, setEditRowData] = useState([editTableProps]);
+
   const onChange = date => setShipmentDate({ date })
   const onChange1 = date1 => setEstimateDeliveryDate({ date1 });
-  const onAddRow = () => {
-    const editRowDataCopy = JSON.parse(JSON.stringify(editRowData));
-    editRowDataCopy.push(editTableProps);
-    setEditRowData(editRowDataCopy);
-  }
+  
   var numeric = { year: 'numeric', month: 'numeric' };
 
   
@@ -317,8 +313,8 @@ const NewShipment = (props) => {
         </div>
       </div>
       <hr />
-      <EditTable editRowData={editRowData} />
-      <button className="btn btn-white shadow-radius font-bold" onClick={onAddRow}>
+      <EditTable {...editTableProps} />
+      <button className="btn btn-white shadow-radius font-bold">
         +<span> Add Another Product</span>
       </button>
 

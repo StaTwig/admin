@@ -6,7 +6,6 @@ import Verify from '../containers/verify';
 import LandingPage from '../containers/landingpage';
 import OverView from '../containers/overview';
 import Shipment from '../containers/shipments';
-import ReviewPo from '../components/verifyPO';
 import NewShipment from '../containers/newshipment';
 import VerifyShipment from '../containers/verifyshipment';
 import VerifyInventory from '../containers/verifyinventory';
@@ -41,7 +40,6 @@ const routes = (
     <Route path="/profile" component={requireAuth(Profile)} />
     <Route path="/adminprofile" component={requireAuth(AdminProfile)} />
     <Route path="/shipments" component={requireAuth(Shipment)} />
-    <Route path="/reviewPo" component={requireAuth(ReviewPo)} />
     <Route path="/newshipment" component={requireAuth(NewShipment)} />
     <Route path="/reviewshipment" component={requireAuth(VerifyShipment)} />
     <Route path="/inventory" component={requireAuth(Inventory)} />
