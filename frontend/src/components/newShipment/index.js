@@ -21,7 +21,7 @@ const NewShipment = (props) => {
   useEffect(() => {
     async function fetchData() {
       const result = await getPOs();
-      setPos(result.data.data);
+      setPos(result.data.data.reverse());
     }
     fetchData();
     dispatch(getAllUsers());

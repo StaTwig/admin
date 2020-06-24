@@ -22,7 +22,7 @@ const Tiles = (props) => {
              if(shipment.status=='Shipped'||shipment.status=='In Transit'){
                 count++;
              }
-             else if(shipment.status=='In Transit')
+             if(shipment.status=='In Transit')
              {
                  near++;
              }
@@ -83,7 +83,7 @@ const Tiles = (props) => {
                             <div className="tab-item">This Week</div>
                             <div className="tab-item">Today</div>
                         </div>
-                        <div className="recived-text count">2</div>
+                        <div className="recived-text count">0</div>
                     </div>
                 </div>
             </div>

@@ -13,6 +13,7 @@ const PurchaseFormReview = props => {
   const month = new Date().getMonth()+1;
   const todayDate = new Date().getDate() + '/' + month + '/'  +new Date().getFullYear();
   const [openCreatedPo, setOpenCreatedPo] = useState(false);
+  const [productID, setProductID] = useState('');
 
     const reviewPo = useSelector(state => {
         return state.reviewPo;
@@ -33,8 +34,10 @@ const PurchaseFormReview = props => {
 
   const onAssign = async () => {
     const data = reviewPo;
+    console.log('data', data)
     const result = await createPO(data);
-    console.log(result);
+    console.log('result', result);
+    setProductID(result.data.orderID)
     if (result.status != 400) {
       setOpenCreatedPo(true);
     }
@@ -110,7 +113,7 @@ const PurchaseFormReview = props => {
           close={() => closeModal()}
           size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
-          <PoPopUp onHide={closeModal} productId={reviewPo.data.orderID} //FailurePopUp
+          <PoPopUp onHide={closeModal}  productID={productID}//FailurePopUp
           
           />
         </Modal>

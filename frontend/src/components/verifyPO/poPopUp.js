@@ -12,7 +12,7 @@ const PoPopUp = (props) => {
           Success!
         </div>
         <div className="data">
-          Your PurchaseOrder <span className="bold">{props.productId}</span>
+          Your PurchaseOrder <span className="bold">{props.productID}</span>
         </div>
         <div className="data mb-4">
          Created Successfully!
