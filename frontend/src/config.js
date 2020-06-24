@@ -92,7 +92,7 @@ export function config() {
       registerUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/register`,
       verifyOtpUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/verify-otp`,
       userInfoUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/userInfo`,
-      getAllUsersUrl: `${STABLE_SERVER_URL_USER}/api/auth/getAllUsers`,
+      getAllUsersUrl: `${PROD_SERVER_URL}/api/auth/getAllUsers`,
       updateProfileUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${PROD_SERVER_URL}/usermanagement/api/auth/upload`,
       shipmentsUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchUserShipments`,
