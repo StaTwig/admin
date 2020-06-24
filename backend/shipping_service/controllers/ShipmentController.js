@@ -214,7 +214,7 @@ exports.createShipment = [
             userData,
           );
           const txnId = response.data.transactionId;
-          const userModel = await UserModel.findOne({ address });
+          const userModel = await UserModel.findOne({ email }); //TODO why mongo is not recognising address for UserModel
           const sender_address = address;
           const receiver_address = data.receiver;
           const sender = await UserTransactionModel.findOne({
