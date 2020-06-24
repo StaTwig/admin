@@ -214,7 +214,7 @@ exports.createShipment = [
             userData,
           );
           const txnId = response.data.transactionId;
-          const userModel = await UserModel.findOne({ email });
+          const userModel = await UserModel.findOne({ address });
           const sender_address = address;
           const receiver_address = data.receiver;
           const sender = await UserTransactionModel.findOne({
@@ -286,19 +286,22 @@ exports.createShipment = [
             );
           }
           //Products Collection
-          const productQuery = { serialNumber: product.serialNumber };
-          const productFound = await ProductModel.findOne(productQuery);
-          if (productFound) {
-            await ProductModel.updateOne(productQuery, {
-              txnIds: [...productFound.txnIds, txnId],
-            });
-          } else {
-            const newProduct = new ProductModel({
-              serialNumber: product.serialNumber,
-              txnIds: [txnId],
-            });
-            await newProduct.save();
-          }
+          await utility.asyncForEach(data.products, async product => {
+            const productQuery = { serialNumber: product.serialNumber };
+            const productFound = await ProductModel.findOne(productQuery);
+            if (productFound) {
+              await ProductModel.updateOne(productQuery, {
+                txnIds: [...productFound.txnIds, txnId],
+              });
+            } else {
+              const newProduct = new ProductModel({
+                serialNumber: product.serialNumber,
+                txnIds: [txnId],
+              });
+              await newProduct.save();
+            }
+          })
+
         }else{
           return apiResponse.ErrorResponse(res, 'User not authenticated');
         }
@@ -641,9 +644,13 @@ exports.fetchUserShipments = [
     try {
       const { user } = req;
       if (user.role !== 'Warehouse') {
-        const destinationUser = await UserTransactionModel.findOne({ destinationUser: user.email });
-        const txnIDs = destinationUser.txnIds;
-        const items_array = [];
+        const destinationUser = await UserTransactionModel.findOne({ destinationUser: user.address });
+        let items_array = [];
+        let txnIDs = [];
+        if(destinationUser) {
+          txnIDs = destinationUser.txnIds
+        }
+
         await utility.asyncForEach(txnIDs, async txnId => {
           const response = await axios.get(
             `${blockchain_service_url}/queryDataByTxHash?stream=${stream_name}&txid=${txnId}`,
