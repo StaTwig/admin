@@ -15,9 +15,9 @@ const Table = (props) => {
         <div className="rTableHeading">
           <div className="rTableHead">Client</div>
           <div className="rTableHead">Shipment ID</div>
-          <div className="rTableHead">Supplier</div>
+          <div className="rTableHead">Product Name</div>
           <div className="rTableHead">
-            <span>Supplier Location</span>
+            <span>Quantity</span>
           </div>
           <div className="rTableHead">
             <span>Shipment Date</span>
@@ -52,8 +52,8 @@ const Table = (props) => {
               </div>
               <div className="rTableCell">{shipment.shipmentId}</div>
              
-              <div className="rTableCell">{shipment.supplier}</div>
-              <div className="rTableCell">{shipment.supplierLocation}</div>
+              <div className="rTableCell">{shipment.products[0].productName}</div>
+              <div className="rTableCell">{shipment.products[0].quantity}</div>
               <div className="rTableCell">{shipment.shipmentDate}</div>
 
               <div className="rTableCell">{shipment.deliveryTo}</div>
