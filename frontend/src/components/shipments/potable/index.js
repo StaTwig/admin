@@ -51,7 +51,7 @@ const PoTable = props => {
                   {Object.keys(p.products[0])[0].split('-')[1]}
                  </div>
                  </div>
-           <div className="rTableCell">{p.orderID}</div>
+           <div className="rTableCell">{purchase.key}</div>
                 <div className="rTableCell">{Object.keys(p.products[0])[0].split('-')[0]}</div>
                  <div className="rTableCell">{p.products[0][`${Object.keys(p.products[0])[0].split('-')[0]}-${Object.keys(p.products[0])[0].split('-')[1]}`]}
                  </div>
