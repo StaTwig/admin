@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Profiler } from 'react';
 
-
+import { useSelector } from 'react-redux';
 import truckthree from "../../assets/icons/truckthree.svg";
 import Sent from "../../assets/icons/Sent.svg";
 import Received from "../../assets/icons/Received.svg";
@@ -16,6 +16,14 @@ const Tiles = (props) => {
       let count=0;
       let near=0;
       let key=0;
+      let received=0;
+
+      const profile = useSelector(state => {
+        return state.user;
+      });
+
+
+
       useEffect(() => {
         props.shipments.map((shipment,index) => {
               key = index+1;
@@ -26,10 +34,15 @@ const Tiles = (props) => {
              {
                  near++;
              }
+             if(shipment.receiver==profile.address)
+             {
+                 received ++;
+             }
       })
     setTotalShipments(key);
     setShipmentsSent(count);
     setShipmentsTransit(near);
+    setShipmentsReceived(received);
       })
       
       
@@ -83,7 +96,7 @@ const Tiles = (props) => {
                             <div className="tab-item">This Week</div>
                             <div className="tab-item">Today</div>
                         </div>
-                        <div className="recived-text count">0</div>
+                        <div className="recived-text count">{shipmentsReceived}</div>
                     </div>
                 </div>
             </div>

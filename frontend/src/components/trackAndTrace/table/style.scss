@@ -1,0 +1,70 @@
+@import '../../../assets/styles/global.scss';
+
+.trackandtrace {
+  .overflow{
+    height: 400px;
+    overflow: auto;
+  }
+
+  .rTable {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    
+    .rTableBody {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .rTableRow {
+      display: flex;
+      background: #fff;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding: 5px 10px;
+      border-radius: 10px;
+      box-shadow: 0px 3px 10px #00000029;
+    }
+
+    .rTableFoot {
+      display: table-footer-group;
+      font-weight: bold;
+      background-color: #ddd;
+    }
+
+    .rTableCell {
+      flex: 1;
+      padding: 3px 10px;
+      align-self: center;
+      font-size: 12px;
+      color: #707070;
+    }
+    .round-sign {
+        border-radius: 4px;
+      }
+      
+      .transactions{
+        flex: 1;
+        padding: 3px 10px;
+        align-self: center;
+        font-size: 12px;
+        color: #0093E9;
+        font-weight:600;
+        .bold{
+            color: black;
+            font-weight: bold;
+        }
+    }
+    .rTableCell {
+      color: $black;
+        font-weight: 400;
+      a {
+        color: $black;
+        font-weight: 400;
+      }
+    
+    }
+
+  }
+}

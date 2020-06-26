@@ -4,19 +4,12 @@ import StatusBar from './statusBar';
 import Filter from '../../assets/icons/Filter.svg';
 import updownarrow from "../../assets/icons/up-and-down-white.svg";
 import searchingIcon from "../../assets/icons/searching@2x.png";
-import Table from '../../shared/table';
+import Table from './table';
 import './style.scss';
 
 
 const trackAndTrace = (props) => {
-  const tableHeaders = {
-    coloumn1 : "Transaction Id",
-    coloumn2:  "From",
-    coloumn3:  "To",
-    coloumn4:  "date",
-    coloumn5:  "Vaccine",
-   
-}
+ 
   return (
     <div className="trackTrace">
       <div className="d-flex justify-content-between mb-3">
@@ -35,8 +28,8 @@ const trackAndTrace = (props) => {
       </div>
       <StatusBar />
       <div className="ribben-space ">
-        <h1>Latest Transactions</h1>
-        <Table data={tableHeaders}{...props} />
+        <h5 className="heading ml-3">Latest Transactions</h5>
+        <Table {...props} />
       </div>
     </div >
   );

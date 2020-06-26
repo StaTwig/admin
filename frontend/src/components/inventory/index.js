@@ -45,7 +45,7 @@ const Inventory = (props) => {
   const month = new Date().getMonth()+1;
   const newMonth = `0${month}`.slice(-2);
   const todayDate =  newMonth + '/'  +new Date().getFullYear();
-  let key;
+  let key=0;
   let count=0;
   let near=0;
   useEffect(() => {
@@ -66,12 +66,64 @@ setInventoryCurrent(key);
 setInventoryExpired(count);
 setInventoryExpiring(near);
   })
-  
+
 let total = 0;
+let bOPV = 0;  
+let MMR  = 0;
+let PVC = 0; 
+let BCG = 0;
+let RV= 0;
+let HepB= 0;
+
+const [bopvQuantity, setBopvQuantity] = useState('');
+const [mmrQuantity, setMmrQuantity] = useState('');
+const [pvcQuantity, setPvcQuantity] = useState(''); 
+const [bcgQuantity, setBcgQuantity] = useState('');
+const [rvQuantity, setRvQuantity] = useState('');
+const [hepbQuantity, setHepbQuantity] = useState('');
+
+
+  useEffect(() => {
+    props.inventories.map((inventory) => {
+          if(inventory.productName=="bOPV"){
+            bOPV += JSON.parse(inventory.quantity)
+          }
+           else if(inventory.productName=="MMR")
+           {
+            MMR += JSON.parse(inventory.quantity)
+           }
+           else if(inventory.productName=="PVC")
+           {
+            PVC += JSON.parse(inventory.quantity)
+           }
+           else if(inventory.productName=="BCG")
+           {
+            BCG += JSON.parse(inventory.quantity)
+           }
+           else if(inventory.productName=="RV")
+           {
+            RV += JSON.parse(inventory.quantity)
+           }
+           else if(inventory.productName=="Hep B")
+           {
+            HepB += JSON.parse(inventory.quantity)
+           }
+  })
+setBopvQuantity(bOPV);
+setMmrQuantity(MMR);
+setPvcQuantity(PVC);
+setBcgQuantity(BCG);
+setRvQuantity(RV);
+setHepbQuantity(HepB);
+  })
+  
+
 
   {props.inventories.map(inventory => (
     
   total += JSON.parse(inventory.quantity)
+  
+
   ))}
   return (
     <div className="inventory">
@@ -173,62 +225,47 @@ let total = 0;
               <div className="row overflow">
                 <div className="col-sm-6">
                   <div className="d-flex card flex-column align-items-center">
-                    <div className="round-sign ellipseOne">OPV</div>
+                    <div className="round-sign ellipseOne">bOPV</div>
                     <p>Oral Polio Vaccine</p>
-                    <h3>Qty: 1,64,250</h3>
-                  </div>
-                </div>
-                <div className="col-sm-6">
-                  <div className="d-flex card flex-column align-items-center">
-                    <div className="round-sign ellipseFour">HepB</div>
-                    <p>Hepatitis B Vaccine</p>
-                    <h3>Qty: 68,480</h3>
+                      <h3>Qty : {bopvQuantity}</h3>
                   </div>
                 </div>
                 <div className="col-sm-6">
                   <div className="d-flex card flex-column align-items-center">
                     <div className="round-sign ellipseTwo">MMR</div>
                     <p>Mumps, Measles & Rubella Vaccine</p>
-                    <h3>Qty: 60,000</h3>
+                     <h3>Qty : {mmrQuantity}</h3>
                   </div>
                 </div>
                 <div className="col-sm-6">
                   <div className="d-flex card flex-column align-items-center">
                     <div className="round-sign ellipseThree">PVC</div>
                     <p>Pneumococcal conjugate Vaccine</p>
-                    <h3>Qty: 40,050</h3>
+                      <h3>Qty : {pvcQuantity}</h3>
+                  </div>
+                </div>
+                <div className="col-sm-6">
+                  <div className="d-flex card flex-column align-items-center">
+                    <div className="round-sign ellipseSix">BCG</div>
+                    <p>Bacillus Calmette–Guérin vaccine</p>
+                    <h3>Qty : {bcgQuantity}</h3>
                   </div>
                 </div>
                 <div className="col-sm-6">
                   <div className="d-flex card flex-column align-items-center">
                     <div className="round-sign ellipseFive">RV</div>
                     <p>Rotavirus Vaccine</p>
-                    <h3>Qty: 69,500</h3>
-                  </div>
-                </div>
-                <div className="col-sm-6">
-                  <div className="d-flex card flex-column align-items-center">
-                    <div className="round-sign ellipseSix">IPV</div>
-                    <p>Inactivated Polio Vaccine</p>
-                    <h3>Qty: 74,000</h3>
+                    <h3>Qty : {rvQuantity}</h3>
                   </div>
                 </div>
                 <div className="col-sm-6">
                   <div className="d-flex card flex-column align-items-center">
                     <div className="round-sign ellipseFour">HepB</div>
                     <p>Hepatitis B Vaccine</p>
-                    <h3>Qty: 74,000</h3>
+                    <h3>Qty : {hepbQuantity}</h3>
                   </div>
                 </div>
-                <div className="col-sm-6">
-                  <div className="d-flex card flex-column align-items-center">
-                    <div className="round-sign ellipseOne">OPV</div>
-                    <p>Oral Polio Vaccine</p>
-                    <h3>Qty: 74,000</h3>
-                  </div>
                 </div>
-
-              </div>
             </div>
           </div>
         </div>
