@@ -68,13 +68,11 @@ setInventoryExpiring(near);
   })
 
 let total = 0;
-let bOPV = 0;  
-let MMR  = 0;
-let PVC = 0; 
-let BCG = 0;
-let RV= 0;
-let HepB= 0;
-
+let  Vaccines = [];
+for(let Vaccine=0;Vaccine<=5;Vaccine++)
+{
+     Vaccines[Vaccine] =0;
+}
 const [bopvQuantity, setBopvQuantity] = useState('');
 const [mmrQuantity, setMmrQuantity] = useState('');
 const [pvcQuantity, setPvcQuantity] = useState(''); 
@@ -85,45 +83,23 @@ const [hepbQuantity, setHepbQuantity] = useState('');
 
   useEffect(() => {
     props.inventories.map((inventory) => {
-          if(inventory.productName=="bOPV"){
-            bOPV += JSON.parse(inventory.quantity)
-          }
-           else if(inventory.productName=="MMR")
-           {
-            MMR += JSON.parse(inventory.quantity)
-           }
-           else if(inventory.productName=="PVC")
-           {
-            PVC += JSON.parse(inventory.quantity)
-           }
-           else if(inventory.productName=="BCG")
-           {
-            BCG += JSON.parse(inventory.quantity)
-           }
-           else if(inventory.productName=="RV")
-           {
-            RV += JSON.parse(inventory.quantity)
-           }
-           else if(inventory.productName=="Hep B")
-           {
-            HepB += JSON.parse(inventory.quantity)
-           }
+      {inventory.productName=="bOPV"?  Vaccines[0] += JSON.parse(inventory.quantity) : null }
+      {inventory.productName=="MMR" ?  Vaccines[1] += JSON.parse(inventory.quantity) : null }
+      {inventory.productName=="PVC" ?  Vaccines[2] += JSON.parse(inventory.quantity) : null }
+      {inventory.productName=="BCG" ?  Vaccines[3] += JSON.parse(inventory.quantity) : null }
+      {inventory.productName=="RV" ?   Vaccines[4] += JSON.parse(inventory.quantity) : null }
+      {inventory.productName=="Hep B" ? Vaccines[5] += JSON.parse(inventory.quantity) : null }
   })
-setBopvQuantity(bOPV);
-setMmrQuantity(MMR);
-setPvcQuantity(PVC);
-setBcgQuantity(BCG);
-setRvQuantity(RV);
-setHepbQuantity(HepB);
+setBopvQuantity(Vaccines[0]);
+setMmrQuantity(Vaccines[1]);
+setPvcQuantity(Vaccines[2]);
+setBcgQuantity(Vaccines[3]);
+setRvQuantity(Vaccines[4]);
+setHepbQuantity(Vaccines[5]);
   })
   
-
-
   {props.inventories.map(inventory => (
-    
-  total += JSON.parse(inventory.quantity)
-  
-
+     total += JSON.parse(inventory.quantity)
   ))}
   return (
     <div className="inventory">
