@@ -13,9 +13,6 @@ module.exports = function routes(app) {
     app.get('/blockchainmanagement/queryAllStreamItems',require('./data/query').fetchStreamItems);
     app.get('/blockchainmanagement/queryTotalBlocks',require('./data/query').fetchTotalBlocks);
     app.get('/blockchainmanagement/queryAllPublisherKeys',require('./data/query').fetchPublisherKeys);
-    
-    app.get('/blockchainmanagement/getTemperatureData', require('./models/temperature').getData);
-    app.get('/blockchainmanagement/getHumidityData', require('./models/humidity').getData);
     app.get('/blockchainmanagement/createUserAddress', require('./users/register').createUser);
 
     //Publish services
