@@ -31,20 +31,10 @@ exports.shipmentStatistics = [
       checkToken(req, res, async result => {
         if (result.success) {
           const { address } = req.user;
-          /* const { jwt_address } = req.user;
-	  const { user_address } = req.query;
-	  var address = "";
-	  if ( user_address ) {
-			address = user_address;
-	  }
-		else {
-			address = jwt_address;
-	  }*/
           const response = await axios.get(
             `${blockchain_service_url}/queryDataByPublishers?stream=${stream_name}&address=${address}`,
           );
           const items = response.data.items;
-          console.log('items', items);
           res.json({ data: items });
         } else {
           res.status(403).json(result);
@@ -67,7 +57,6 @@ exports.purchaseOrderStatistics = [
             `${blockchain_service_url}/queryDataByPublishers?stream=${po_stream_name}&address=${address}`,
           );
           const items = response.data.items;
-          console.log('items', items);
           res.json({ data: items });
         } else {
           res.status(403).json(result);
@@ -91,7 +80,6 @@ exports.fetchShipments = [
             `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${key}`,
           );
           const items = response.data.items;
-          console.log('items', items);
           res.json({ data: items });
         } else {
           res.status(403).json(result);
@@ -114,7 +102,6 @@ exports.fetchAllPurchaseOrders = [
             `${blockchain_service_url}/queryAllStreamKeys?stream=${po_stream_name}`,
           );
           const items = response.data.items;
-          console.log('items', items);
           res.json({ data: items });
         } else {
           res.status(403).json(result);
@@ -139,7 +126,6 @@ exports.fetchPublisherPurchaseOrders = [
           );
           const items = response.data.items;
           let unique_items = [...new Set(items)];
-          console.log('items', unique_items, items);
           res.json({ data: unique_items });
         } else {
           res.status(403).json(result);
@@ -205,7 +191,6 @@ exports.createShipment = [
           const userData = {
             stream: stream_name,
             key: shipmentId,
-            //address: address,
             address: req.query.address ? req.query.address : address,
             data: data,
           };
@@ -265,7 +250,6 @@ exports.createShipment = [
           } else {
             const txnIds = [...shipmentFound.txnIds, txnId];
             await ShipmentModel.updateOne({ shipmentId }, { txnIds });
-            console.log(shipmentId, txnIds);
           }
           //Organisation Collection
           if (!organisationFound) {
@@ -321,10 +305,6 @@ exports.reviewShipment = [
       checkToken(req, res, async result => {
         if (result.success) {
           const { shipment_id } = result.data.shipment_id;
-          //API to get shipment details for the Shipment ID
-          //const response = await axios.get(`${url}/apiendpoint?stream=vl_shipping_stream&key=$shipment_id`);
-          //const items = response.data.items;
-          //res.json(JSON.parse(items));
           res.json('Shipment Review');
         } else {
           res.status(403).json(result);
@@ -344,10 +324,6 @@ exports.verifyShipment = [
       checkToken(req, res, async result => {
         if (result.success) {
           const { shipment_id } = result.data.shipment_id;
-          //API to get shipment details for the Shipment ID
-          //const response = await axios.get(`${url}/apiendpoint?stream=vl_shipping_stream&key=$shipment_id`);
-          //const items = response.data.items;
-          //res.json(JSON.parse(items));
           res.json('Shipment Verify');
         } else {
           res.status(403).json(result);
@@ -373,7 +349,6 @@ exports.modifyShipment = [
           );
 
           const item = response.data.items[response.data.items.length - 1];
-          console.log(item.data);
           const shipment = JSON.parse(item.data);
           shipment.status = status;
 
@@ -411,7 +386,6 @@ exports.fetchPurchaseOrder = [
             `${blockchain_service_url}/queryDataByKey?stream=${po_stream_name}&key=${key}`,
           );
           const items = response.data.items;
-          console.log('items', items);
           res.json({ data: items });
         } else {
           res.status(403).json(result);
@@ -500,8 +474,6 @@ exports.fetchAllLatestShipments = [
           );
           var keys = response.data.items;
           const unique_keys = [...new Set(keys)];
-          console.log('keys', keys);
-          console.log('unique', unique_keys);
           var items_array = new Array();
           for (var i = 0; i < unique_keys.length; i++) {
             var key = unique_keys[i];
