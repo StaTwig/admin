@@ -159,7 +159,8 @@ const NewShipment = (props) => {
 
     console.log('new shipment data', data);
     const result = await createShipment({ data });
-    if (result.status == 200) {
+    debugger;
+    if (result.status == 1) {
       
         setOpenCreatedInventory(true);
       
