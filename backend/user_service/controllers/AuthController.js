@@ -117,7 +117,6 @@ exports.register = [
               });
             })
             .catch(err => {
-              console.log(err);
               return apiResponse.ErrorResponse(res, err);
             });
         });
@@ -426,7 +425,6 @@ exports.forgotPassword = [
             let newPassword = req.body.email + utility.randomNumber(10);
             //hash input password
             bcrypt.hash(newPassword, 10, function(err, hash) {
-              console.log(hash)
               
           // Html email body
           let html = '<p>your new password is </p>' + newPassword;
@@ -453,7 +451,6 @@ exports.forgotPassword = [
               });
             })
             .catch(err => {
-              console.log(err);
               return apiResponse.ErrorResponse(res, err);
             });
         });     
@@ -514,7 +511,6 @@ exports.userInfo = [
   auth,
   (req, res) => {
     try {
-      console.log(req.user.email);
       UserModel.findOne({ email: req.user.email }).then(user => {
         if (user) {
           let user_data = {
@@ -534,7 +530,6 @@ exports.userInfo = [
             user_data,
           );
         } else {
-          console.log('Failed');
           return apiResponse.ErrorResponse(res);
         }
       });
@@ -560,7 +555,6 @@ exports.updateProfile = [
               return apiResponse.ErrorResponse(res, err);
             }
             else{
-              console.log('Updated');
               return apiResponse.successResponse(res, user.name + ' user Updated');
             }
           });
@@ -583,14 +577,12 @@ exports.updatePassword = [
             if(req.body.password) {
             if(req.body.password.length>2){
             user.password = passwordNew;
-            console.log("password updated")
             } }
             user.save(function(err) {
             if (err) {
               return apiResponse.ErrorResponse(res, err);
             }
             else{
-              console.log('Updated');
               return apiResponse.successResponse(res, user.name + ' password Updated');
             }
           });
@@ -610,7 +602,6 @@ exports.uploadImage = [
     try {
       UserModel.findOne({ email: req.user.email }).then(user => {
         if (user) {
-          console.log(req.file);
           base64Img.base64('uploads/' + req.file.filename, function(err, data) {
             var base64ImgData = data;
             user.profile_picture = data;
@@ -620,7 +611,6 @@ exports.uploadImage = [
               if (err) {
                 return apiResponse.ErrorResponse(res, err);
               }
-              console.log('Updated');
               return apiResponse.successResponseWithData(res, 'Updated', base64ImgData);
             });
           });
@@ -659,7 +649,6 @@ exports.getAllUsers = [
   auth,
   async (req, res) => {
     try {
-      console.log(req.user.email);
       const users = await UserModel.find({},  'name address email');
       const confirmedUsers = users.filter( user => user.address !== '');;
       return apiResponse.successResponseWithData(

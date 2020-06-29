@@ -13,19 +13,11 @@ module.exports = function routes(app) {
     app.get('/blockchainmanagement/queryAllStreamItems',require('./data/query').fetchStreamItems);
     app.get('/blockchainmanagement/queryTotalBlocks',require('./data/query').fetchTotalBlocks);
     app.get('/blockchainmanagement/queryAllPublisherKeys',require('./data/query').fetchPublisherKeys);
-    
-    //app.get('/',(req,res)=>res.send('welcome'));
-    app.get('/blockchainmanagement/getTemperatureData', require('./models/temperature').getData);
-    app.get('/blockchainmanagement/getHumidityData', require('./models/humidity').getData);
-    //app.post('/getMilestoneData', require('./data/query').fetchMilestoneData);
+    app.get('/blockchainmanagement/createUserAddress', require('./users/register').createUser);
 
     //Publish services
     //POST routes
     app.post('/blockchainmanagement/publish', require('./data/publish').writeData);
-    app.post('/blockchainmanagement/publishBulkData', require('./data/publish').writeBulkData);
-    
-    //User address creation
-    app.get('/blockchainmanagement/createUserAddress', require('./users/register').createUser);
     app.post('/blockchainmanagement/grantPermission', require('./users/register').grantPermission);
 }
 
