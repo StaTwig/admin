@@ -95,19 +95,6 @@ const NewShipment = (props) => {
   var numeric = { year: 'numeric', month: 'numeric' };
 
   
-
-     /* const onVisible = () => { 
-        
-        
-        if(((shipmentId.length>1)&&(client.length>1)&&(supplier.length>1)&&(supplierLocation.length>1)&&(estimateDeliveryDate.length>1)&&(deliveryTo.length>1)&&(deliveryLocation.length>1)&&(shipmentDate.length>1))&&((productName.length>1)||(quantity.length>1)||(manufacturerName.length>1)||(storageConditionmin.length>1)||(storageConditionmax.length>1)||(manufacturingDate.length>1)||(expiryDate.length>1)||(batchNumber.length>1)||(serialNumber.length>1)))
-        {
-        setVisible(true)
-      }
-    
-      
-      
-      }
-        */
   const onProceedToReview = () => {
     const receiver = users.find(usr => usr.name === deliveryTo);
     const data = {
@@ -172,12 +159,17 @@ const NewShipment = (props) => {
 
     console.log('new shipment data', data);
     const result = await createShipment({ data });
-    if (result.status != 400) {
+    debugger;
+    if (result.status == 1) {
       
         setOpenCreatedInventory(true);
       
       
-    } else {
+    } else if(result.status === 500){
+      const err = result.data.message;
+      setErrorMessage(err);
+    }
+    else {
       const err = result.data.data[0];
       setErrorMessage(err.msg);
     }

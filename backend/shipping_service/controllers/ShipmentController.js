@@ -194,6 +194,11 @@ exports.createShipment = [
             address: req.query.address ? req.query.address : address,
             data: data,
           };
+          const emptyShipmentNumber = data.products.find(product => product.serialNumber === '');
+          const emptyBatchNumber = data.products.find(product => product.batchNumber === '');
+          if(emptyShipmentNumber || emptyBatchNumber) {
+            return apiResponse.ErrorResponse(res, 'Serial/Batch Number cannot be empty');
+          }
           const response = await axios.post(
             `${blockchain_service_url}/publish`,
             userData,
@@ -289,7 +294,7 @@ exports.createShipment = [
         }else{
           return apiResponse.ErrorResponse(res, 'User not authenticated');
         }
-        res.status(200).json({ response: 'Success' });
+        apiResponse.successResponseWithData(res, 'Success');
       });
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
