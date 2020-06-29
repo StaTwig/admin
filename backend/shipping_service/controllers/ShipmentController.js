@@ -209,6 +209,10 @@ exports.createShipment = [
             address: req.query.address ? req.query.address : address,
             data: data,
           };
+          const emptyShipmentNumber = data.products.find(product => product.serialNumber === '');
+          if(emptyShipmentNumber) {
+            return apiResponse.ErrorResponse(res, 'Serial Number cannot be empty');
+          }
           const response = await axios.post(
             `${blockchain_service_url}/publish`,
             userData,
