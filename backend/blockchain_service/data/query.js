@@ -5,13 +5,7 @@ const log4js = init.getLog();
 const logger = log4js.getLogger('backend-logs');
 const uilogger = log4js.getLogger('frontend-logs');
 
-/* log4js.configure({
-  appenders: { logs: { type: 'file', filename: 'logs/backend.log' } },
-  categories: { default: { appenders: ['logs'], level: 'info' } }
-}); */
-
 exports.fetchDataByKey = function (req, res) {
-    console.log('txId ', req.query);
     const {stream, key} = req.query;
     const multichain = init.getMultichain();
 
@@ -40,7 +34,6 @@ exports.fetchDataByKey = function (req, res) {
 
 
 exports.fetchDataByAddr = function (req, res) {
-    console.log('txId ', req.query);
     const {address, count} = req.query;
     const multichain = init.getMultichain();
 
@@ -65,7 +58,6 @@ exports.fetchDataByAddr = function (req, res) {
 }
 
 exports.fetchDataByPublishers = function (req, res) {
-    console.log('txId ', req.query);
     const {stream, address} = req.query;
     const multichain = init.getMultichain();
 
@@ -102,7 +94,6 @@ exports.fetchDataByTxHash = function (req, res) {
         verbose: true
     }, (err, data) => {
        res.setHeader('Access-Control-Allow-Origin', '*');
-        //data.forEach(item => {
         data1 = Buffer.from(data.data, 'hex').toString('utf8')
         logger.info("Fetch data from",stream,"for the txid",txid);
         res.json({items: data1});

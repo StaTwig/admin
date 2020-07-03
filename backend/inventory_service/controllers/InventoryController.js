@@ -21,10 +21,6 @@ exports.getTotalCount = [
       const { authorization } = req.headers;
       checkToken(req, res, async result => {
         if (result.success) {
-          //API to get all shipping records from shipping stream
-          //const response = await axios.get(`${url}/apiendpoint?stream=vl_inventory_stream`);
-          //const items = response.data.items;
-          //res.json(JSON.parse(items));
           res.json('Total inventory count');
         } else {
           res.status(403).json(result);
@@ -43,10 +39,6 @@ exports.getTotalCountOnHold = [
       const { authorization } = req.headers;
       checkToken(req, res, async result => {
         if (result.success) {
-          //API to get all shipping records from shipping stream
-          //const response = await axios.get(`${url}/apiendpoint?stream=vl_inventory_stream`);
-          //const items = response.data.items;
-          //res.json(JSON.parse(items));
           res.json('Total inventory count on Hold');
         } else {
           res.status(403).json(result);
@@ -65,10 +57,6 @@ exports.getExpiringInventory = [
       const { authorization } = req.headers;
       checkToken(req, res, async result => {
         if (result.success) {
-          //API to get all shipping records from shipping stream
-          //const response = await axios.get(`${url}/apiendpoint?stream=vl_inventory_stream`);
-          //const items = response.data.items;
-          //res.json(JSON.parse(items));
           res.json('Total inventory count expiring');
         } else {
           res.status(403).json(result);
@@ -88,10 +76,6 @@ exports.getInventoryforProduct = [
       checkToken(req, res, async result => {
         if (result.success) {
           const { product_id } = result.data.key;
-          //API to get all shipping records from shipping stream
-          //const response = await axios.get(`${url}/apiendpoint?stream=vl_inventory_stream&key=$product_id`);
-          //const items = response.data.items;
-          //res.json(JSON.parse(items));
           res.json('Inventory details for product');
         } else {
           res.status(403).json(result);
