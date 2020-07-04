@@ -648,7 +648,7 @@ exports.fetchUserShipments = [
                 const response = await axios.get(
                   `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${shipId}`,
                 );
-                const items = response.data.items;
+                const items = response.data.items.map(item => item.data);
                 items_array.push(JSON.parse(items));
               });
             }
