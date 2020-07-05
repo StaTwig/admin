@@ -4,9 +4,13 @@ Vaccine Ledger 1.0
 
 # Online Links:
 [Roadmap] (https://trello.com/b/DCItcgrQ/statwig-product-roadmap)
+
 [SlackChannel] (https://join.slack.com/t/statwig-group/shared_invite/zt-flzyf6ci-giVkco5NmdvZjVuO85~dlw)
+
 [Wiki](https://gitlab.com/statwig-public/theledger/-/wikis/home)
+
 [Issues](https://gitlab.com/statwig-public/theledger/-/issues)
+
 
 # GitFlow
 Branch out from development, merge requests/pull requests shall be to development, no direct commits to development or master
@@ -47,11 +51,10 @@ Step 1: [Recursive] go to each directory and run
 Step 2: go to apigateway
     
     * traefik --configFile=traefik-(environment)-(platform)-(target).yml
-    ```
     environment - dev , prod
     platform - cloud, local
     target - api, mobile
-    ```
+    
 Step 3: in browser open 
     * localhost:3000
 
