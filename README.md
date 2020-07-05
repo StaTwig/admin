@@ -3,9 +3,10 @@
 Vaccine Ledger 1.0
 
 # Online Links:
-[Roadmap] (https://trello.com/b/DCItcgrQ/statwig-product-roadmap)
 
-[SlackChannel] (https://join.slack.com/t/statwig-group/shared_invite/zt-flzyf6ci-giVkco5NmdvZjVuO85~dlw)
+[Roadmap](https://trello.com/b/DCItcgrQ/statwig-product-roadmap)
+
+[SlackChannel](https://join.slack.com/t/statwig-group/shared_invite/zt-flzyf6ci-giVkco5NmdvZjVuO85~dlw)
 
 [Wiki](https://gitlab.com/statwig-public/theledger/-/wikis/home)
 
@@ -56,6 +57,7 @@ Step 2: go to apigateway
     target - api, mobile
     
 Step 3: in browser open 
+
     * localhost:3000
 
 OR
