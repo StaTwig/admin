@@ -11,21 +11,14 @@ Branch out from development, merge requests/pull requests shall be to developmen
 | services | http port | https port |
 |:---------:|:---------:|:----------:|
 | usermanagement|  3001 | 4001|
-|:---------:|:---------:|:----------:|
 |shipmentmanagement| 3002| 4002|
-|:---------:|:---------:|:----------:|
 |transactionmanagement |  3003 | 4003|
-|:---------:|:---------:|:----------:|
 | alertmanagement| 3004 | 4004|
-|:---------:|:---------:|:----------:|
 | tracttracemanagement|  3005 | 4005|
-|:---------:|:---------:|:----------:|
 |notificationmanagement| 3006 | 4006|
-|:---------:|:---------:|:----------:|
 |inventorymanagement| 3007| 4007|
-|:---------:|:---------:|:----------:|
 |blockchainmanagement| 3008| 4008|
-|:---------:|:---------:|:----------:|
+
 
 # Dependencies:
 1. NodeJS
@@ -53,7 +46,7 @@ Step 2: go to apigateway
     environment - dev , prod
     platform - cloud, local
     target - api, mobile
-```
+    ```
 Step 3: in browser open 
     * localhost:3000
 
