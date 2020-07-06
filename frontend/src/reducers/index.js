@@ -8,6 +8,8 @@ import { reviewShipmentReducer } from './reviewShipmentReducer';
 import { reviewInventoryReducer } from './reviewInventoryReducer';
 import { reviewPoReducer } from './reviewPoReducer';
 import { tracingShipmentReducer} from './tracingShipmentReducer';
+import { trackShipmentReducer} from './trackShipmentReducer';
+
 
 const rootReducer = (history) => combineReducers({
   shipments: shipmentReducer,
@@ -17,6 +19,7 @@ const rootReducer = (history) => combineReducers({
   reviewShipment: reviewShipmentReducer,
   tracingShipment:tracingShipmentReducer,
   reviewInventory: reviewInventoryReducer,
+  trackShipment: trackShipmentReducer,
   reviewPo: reviewPoReducer,
   router: connectRouter(history)
 })
