@@ -3,7 +3,6 @@ import {
   Link
 } from "react-router-dom";
 
-import { expired, expiringIn, Count } from '../../utils/dateHelper';
 import './style.scss';
 import Table from '../../shared/table';
 import TableFilter from '../../shared/advanceTableFilter';
@@ -38,10 +37,11 @@ const Inventory = (props) => {
     coloumn5:  "Serial Number",
     coloumn6:  "Mfg Date",
     coloumn7:  "Exp Date",
+    
+ 
   }
   const [inventoryExpiring, setInventoryExpiring] = useState('');
   const [inventoryExpired, setInventoryExpired] = useState('');
-  const [inventoryCurrent, setInventoryCurrent] = useState('');
   const month = new Date().getMonth()+1;
   const newMonth = `0${month}`.slice(-2);
   const todayDate =  newMonth + '/'  +new Date().getFullYear();
@@ -62,45 +62,9 @@ const Inventory = (props) => {
             near++;
            }
   })
-setInventoryCurrent(key);
 setInventoryExpired(count);
 setInventoryExpiring(near);
   })
-
-let total = 0;
-let  Vaccines = [];
-for(let Vaccine=0;Vaccine<=5;Vaccine++)
-{
-     Vaccines[Vaccine] =0;
-}
-const [bopvQuantity, setBopvQuantity] = useState('');
-const [mmrQuantity, setMmrQuantity] = useState('');
-const [pvcQuantity, setPvcQuantity] = useState(''); 
-const [bcgQuantity, setBcgQuantity] = useState('');
-const [rvQuantity, setRvQuantity] = useState('');
-const [hepbQuantity, setHepbQuantity] = useState('');
-
-
-  useEffect(() => {
-    props.inventories.map((inventory) => {
-      {inventory.productName=="bOPV"?  Vaccines[0] += JSON.parse(inventory.quantity) : null }
-      {inventory.productName=="MMR" ?  Vaccines[1] += JSON.parse(inventory.quantity) : null }
-      {inventory.productName=="PVC" ?  Vaccines[2] += JSON.parse(inventory.quantity) : null }
-      {inventory.productName=="BCG" ?  Vaccines[3] += JSON.parse(inventory.quantity) : null }
-      {inventory.productName=="RV" ?   Vaccines[4] += JSON.parse(inventory.quantity) : null }
-      {inventory.productName=="Hep B" ? Vaccines[5] += JSON.parse(inventory.quantity) : null }
-  })
-setBopvQuantity(Vaccines[0]);
-setMmrQuantity(Vaccines[1]);
-setPvcQuantity(Vaccines[2]);
-setBcgQuantity(Vaccines[3]);
-setRvQuantity(Vaccines[4]);
-setHepbQuantity(Vaccines[5]);
-  })
-  
-  {props.inventories.map(inventory => (
-     total += JSON.parse(inventory.quantity)
-  ))}
   return (
     <div className="inventory">
       <div className="d-flex justify-content-between">
@@ -128,7 +92,7 @@ setHepbQuantity(Vaccines[5]);
                 <div className="tab-item">This Week</div>
                 <div className="tab-item">Today</div>
               </div>
-              <div className="truck-text count">{total}</div>
+  <div className="truck-text count">{props.inventoriesCount.tot_qty}</div>
             </div>
           </div>
         </div>
@@ -145,7 +109,7 @@ setHepbQuantity(Vaccines[5]);
                 <div className="tab-item">This Week</div>
                 <div className="tab-item">Today</div>
               </div>
-              <div className="sent-text count">{inventoryCurrent}</div>
+              <div className="sent-text count">{props.inventoriesCount.tot_inv}</div>
             </div>
           </div>
         </div>
@@ -203,42 +167,42 @@ setHepbQuantity(Vaccines[5]);
                   <div className="d-flex card flex-column align-items-center">
                     <div className="round-sign ellipseOne">bOPV</div>
                     <p>Oral Polio Vaccine</p>
-                      <h3>Qty : {bopvQuantity}</h3>
+                      <h3>Qty : {props.inventoriesCount.bOPV}</h3>
                   </div>
                 </div>
                 <div className="col-sm-6">
                   <div className="d-flex card flex-column align-items-center">
                     <div className="round-sign ellipseTwo">MMR</div>
                     <p>Mumps, Measles & Rubella Vaccine</p>
-                     <h3>Qty : {mmrQuantity}</h3>
+                     <h3>Qty : {props.inventoriesCount.MMR}</h3>
                   </div>
                 </div>
                 <div className="col-sm-6">
                   <div className="d-flex card flex-column align-items-center">
                     <div className="round-sign ellipseThree">PVC</div>
                     <p>Pneumococcal conjugate Vaccine</p>
-                      <h3>Qty : {pvcQuantity}</h3>
+                      <h3>Qty : {props.inventoriesCount.PVC}</h3>
                   </div>
                 </div>
                 <div className="col-sm-6">
                   <div className="d-flex card flex-column align-items-center">
                     <div className="round-sign ellipseSix">BCG</div>
                     <p>Bacillus Calmette–Guérin vaccine</p>
-                    <h3>Qty : {bcgQuantity}</h3>
+                    <h3>Qty : {props.inventoriesCount.BCG}</h3>
                   </div>
                 </div>
                 <div className="col-sm-6">
                   <div className="d-flex card flex-column align-items-center">
                     <div className="round-sign ellipseFive">RV</div>
                     <p>Rotavirus Vaccine</p>
-                    <h3>Qty : {rvQuantity}</h3>
+                    <h3>Qty : {props.inventoriesCount.RV}</h3>
                   </div>
                 </div>
                 <div className="col-sm-6">
                   <div className="d-flex card flex-column align-items-center">
                     <div className="round-sign ellipseFour">HepB</div>
                     <p>Hepatitis B Vaccine</p>
-                    <h3>Qty : {hepbQuantity}</h3>
+                    <h3>Qty : {props.inventoriesCount.HepB}</h3>
                   </div>
                 </div>
                 </div>

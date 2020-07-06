@@ -5,7 +5,7 @@ import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
 import {getShipments} from "../../actions/shipmentActions";
 import {getInventories} from "../../actions/inventoryActions";
-import {getUserInfo} from "../../actions/userActions";
+
 
 const OverviewContainer = props => {
   const dispatch = useDispatch();
@@ -15,6 +15,12 @@ const OverviewContainer = props => {
   const inventories = useSelector(state =>{
     return state.inventories;
   })
+  const shipmentsCount= useSelector(state => {
+    return state.shipmentsCount;
+  });
+  const inventoriesCount = useSelector(state => {
+    return state.inventoriesCount;
+  });
   useEffect(() => {
     dispatch(getShipments());
     dispatch(getInventories());
@@ -25,7 +31,7 @@ const OverviewContainer = props => {
       <div className="d-flex">
         <Sidebar {...props} />
         <div className="content">
-          <OverView shipments={shipments} inventories={inventories}/>
+          <OverView shipments={shipments} inventories={inventories} shipmentsCount={shipmentsCount} inventoriesCount={inventoriesCount} {...props} />
         </div>
       </div>
     </div>

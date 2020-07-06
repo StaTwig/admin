@@ -16,8 +16,8 @@ const Table = (props) => {
         <div className="overflow">
           {props.shipments.map((shipment, index) => (
             <div className="rTableRow">
-              <div className="rTableCell"><img className="round-sign mr-1" src={profile.profile_picture} width="20" /> Transaction Id</div>
-              <div className="transactions"><span className="bold mr-1">From:</span>{profile.address}</div>
+              <div className="rTableCell"><img className="round-sign mr-1" src={profile.profile_picture} width="20" />{shipment.txnId}</div>
+              <div className="transactions"><span className="bold mr-1">From:</span>{shipment.supplierAddress}</div>
              
               <div className="transactions mr-5"><span className="bold mr-1">To:</span>{shipment.receiver}</div>
               <div className="rTableCell">{shipment.shipmentDate}</div>

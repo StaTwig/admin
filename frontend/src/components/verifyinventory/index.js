@@ -1,14 +1,18 @@
 import React ,{useState}from "react";
-import {useSelector} from "react-redux";
+import {useSelector, useDispatch} from "react-redux";
 import Pen from "../../assets/icons/pen.svg";
-import {addInventory} from "../../actions/inventoryActions";
+import {addInventory,setEditInventories} from "../../actions/inventoryActions";
 import Modal from '../../shared/modal';
 import InventoryPopUp from './inventorypopup';
+import { initialState } from "../../reducers/editInventoryReducer";
 import './style.scss';
 
 
+
 const VerifyInventory = (props) => {
-    const reviewInventory = useSelector(state => {
+   
+  const dispatch = useDispatch();
+  const reviewInventory = useSelector(state => {
         return state.reviewInventory;
       
       });
@@ -27,10 +31,12 @@ const VerifyInventory = (props) => {
       
         if (result.status != 400) {
           setOpenCreatedInventory(true);
+          dispatch(setEditInventories(initialState));
         }
         };
       
         const onEdit= () => {
+          dispatch(setEditInventories(reviewInventory))
           props.history.push('/newinventory');
         }; 
      
@@ -58,7 +64,7 @@ const VerifyInventory = (props) => {
              </ul>
              <ul>
              <li className="bold">Manufacturer Date</li>
-             <li>{reviewInventory.manufacturingDate}</li>
+               <li>{reviewInventory.manufacturingDate}</li>
              </ul>
              <ul>
              <li className="bold">Expiry Date</li>

@@ -1,17 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect} from 'react';
 import DropdownButton from '../dropdownButtonGroup';
 import calenderBlue from '../../assets/icons/calendar-blue.svg';
 import downArrow from '../../assets/icons/up-and-down-dark.svg';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import {getProducts,getManufacturers} from '../../actions/poActions';
 
 import './style.scss';
 
 const EditRow = props => {
 
-  const onChange = date => setManufacturingDate({ date })
-  const onChange1 = date1 => setExpiryDate({ date1 })
- 
+  useEffect(() => {
+    async function fetchData() {
+      const result = await getProducts();
+      const manufacturerResult = await getManufacturers();
+      setProducts(result);
+      setManufacturers(manufacturerResult);
+    }
+    fetchData();
+  },[]);
+
+  const onChange = date => setManufacturingDate(date)
+  const onChange1 = date=> setExpiryDate(date)
+  const [products, setProducts] = useState([]);
+  const [manufacturers, setManufacturers] = useState([]);
   const {
     manufacturerName,
     setManufacturerName,
@@ -43,7 +55,7 @@ const EditRow = props => {
               <DropdownButton
                 name={productName}
                 onSelect={item => setProductName(item)}
-                groups={['bOPV', 'MMR', 'PVC', 'BCG','RV','Hep B']}
+                groups={products}
                 
               />
             </div>
@@ -51,18 +63,14 @@ const EditRow = props => {
               <DropdownButton
                 name={manufacturerName}
                 onSelect={item => setManufacturerName(item.replace( '<small>Qty: 2148</small>', ''))}
-                groups={[
-                  'Bharat Biotech',
-                  'Aroma Biotech',
-                  'Chronly industries',
-                  'GH Pharmas',
-                ]}
+                groups={manufacturers}
               />
             </div>
             <div className="rTableCell">
               <div className="form-group">
                 <input
                 type="number" 
+                min="0"
                 onKeyDown={ e => ( e.keyCode === 69 || e.keyCode === 190||e.keyCode === 189
                   ||e.keyCode === 187||e.keyCode === 40||e.keyCode === 38) && e.preventDefault() }
                 className="form-field"
@@ -78,7 +86,7 @@ const EditRow = props => {
               <DatePicker
               className="form-field"
               onChange = {onChange}
-              selected = {manufacturingDate.date}
+              selected = {manufacturingDate ? new Date(Date.parse(manufacturingDate)) : manufacturingDate}
               dateFormat="MM/yyyy"
               placeholderText="Enter Mfg Date"
               showMonthYearPicker
@@ -95,11 +103,11 @@ const EditRow = props => {
               placeholderText="Enter Exp Date"
               dateFormat="MM/yyyy"
               onChange = {onChange1}
-              selected = {expiryDate.date1}
+              selected = {expiryDate ? new Date(Date.parse(expiryDate)) : expiryDate}
               showMonthYearPicker
               showFullMonthYearPicker
               />
-               
+              <div>{console.log("expiry date", expiryDate , new Date(Date.parse(expiryDate)))}</div> 
               </div>
             </div>
             <div className="rTableCell">
@@ -108,6 +116,7 @@ const EditRow = props => {
                   type="number"
                   className="form-field1"
                   placeholder="Min"
+                  min="0"
                   value={storageConditionmin}
                   onChange={e => setStorageConditionmin(e.target.value)}
                 
@@ -117,6 +126,7 @@ const EditRow = props => {
                   type="number"
                   className="form-field1"
                   placeholder="Max"
+                  min="0"
                   value={storageConditionmax}
                   onChange={e => setStorageConditionmax(e.target.value)}
                 />

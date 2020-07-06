@@ -1,35 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import ProductsTable from './products';
 import updownArrow from '../../assets/icons/up-and-down-dark.svg';
 import './style.scss';
 import DropdownButton from '../../shared/dropdownButtonGroup';
-import { createPO ,setReviewPos} from '../../actions/poActions';
-import { useDispatch} from "react-redux";
-
-
-
-
+import { createPO ,setReviewPos,getProducts,getManufacturers} from '../../actions/poActions';
+import { useDispatch,useSelector} from "react-redux";
 
 const tableHeader = ['Product Name', 'Manufacturer', 'Quantity'];
 
 const PurchaseForm = props => {
+  const editPo = useSelector(state => {
+    return state.editPo;
+  });
   const { user, users } = props;
 
   const userNames = users.map(usr => usr.name);
-  const [deliveryTo, setDeliveryTo] = useState('select receiver');
-  const [products, setProducts] = useState(['bOPV', 'MMR', 'PVC', 'BCG','RV','Hep B']);
-  const [manufacturers, setManufacturers] = useState([
-                    'Bharat Biotech',
-                  'Aroma Biotech',
-                  'Chronly industries',
-                  'GH Pharmas',
-
-  ]);
-
-  const [product, setProduct] = useState('select product');
-  const [manufacturer, setManufacturer] = useState('select manufacturer');
-  const [quantity, setQuantity] = useState('');
-  const [destination, setDestination] = useState('');
+  const [deliveryTo, setDeliveryTo] = useState(editPo.receiver.name);
+  const [products, setProducts] = useState([]);
+  const [manufacturers, setManufacturers] = useState([]);
+  const [product, setProduct] = useState(Object.keys(editPo.products[0])[0].split('-')[0]);
+  const [manufacturer, setManufacturer] = useState(Object.keys(editPo.products[0])[0].split('-')[1]);
+  const [quantity, setQuantity] = useState(editPo.products[0][`${product}-${manufacturer}`]);
+  const [destination, setDestination] = useState(editPo.destination);
   const [message, setMessage] = useState('');
   const month = new Date().getMonth()+1;
   const todayDate = new Date().getDate() + '/' + month + '/'  +new Date().getFullYear();
@@ -39,7 +31,16 @@ const PurchaseForm = props => {
   const [productError, setproductError] = useState('');
   const [manufacturerError, setmanufacturerError] = useState('');
  
-  
+  useEffect(() => {
+    async function fetchData() {
+      const result = await getProducts();
+      const manufacturerResult = await getManufacturers();
+      setProducts(result);
+      setManufacturers(manufacturerResult);
+    }
+    fetchData();
+  },[]);
+
   const onValidate = () => {
 
 if (deliveryTo.length<1){
@@ -79,6 +80,7 @@ if (deliveryTo.length<1){
   }
   const dispatch = useDispatch();
 
+  
  
 
   const onProceed = () =>{

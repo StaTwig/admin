@@ -1,17 +1,21 @@
 import axios from 'axios';
 
 import { config } from '../config';
-import { GET_SHIPMENTS_FAILURE, GET_SHIPMENTS_SUCCESS, SET_REVIEW_SHIPMENT,SET_TRACING_SHIPMENT} from "../constants/shipmentConstants";
+import { GET_SHIPMENTS_FAILURE, GET_SHIPMENTS_SUCCESS, SET_REVIEW_SHIPMENT,SET_TRACING_SHIPMENT,
+  GET_SHIPMENTSCOUNT_FAILURE, GET_SHIPMENTSCOUNT_SUCCESS,SET_EDIT_SHIPMENT} from "../constants/shipmentConstants";
 
 export const getShipments = () => {
   try {
     return async dispatch => {
       const result =  await axios.get(config().shipmentsUrl);
       dispatch(setShipments(result.data));
+      dispatch(setShipmentsCount(result.data));
     }
   }catch(e){
     return dispatch => {
       dispatch(resetShipments(e.response));
+      dispatch(resetShipmentsCount(e.response));
+
     }
   }
 
@@ -49,10 +53,27 @@ const setShipments = (data) =>{
 
 }
 
+const setShipmentsCount = (data) =>{
+  return {
+    type: GET_SHIPMENTSCOUNT_SUCCESS,
+    payload: data,
+  };
+
+}
+
+
 
 export const setReviewShipments = (data) =>{
   return {
     type: SET_REVIEW_SHIPMENT,
+    payload: data,
+  };
+
+}
+
+export const setEditShipments = (data) =>{
+  return {
+    type: SET_EDIT_SHIPMENT,
     payload: data,
   };
 
@@ -68,6 +89,14 @@ export const setTracingShipments = (data) =>{
 const resetShipments = (data) =>{
   return {
     type: GET_SHIPMENTS_FAILURE,
+    payload: data,
+  };
+}
+
+
+const resetShipmentsCount = (data) =>{
+  return {
+    type: GET_SHIPMENTSCOUNT_FAILURE,
     payload: data,
   };
 }
