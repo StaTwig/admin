@@ -194,18 +194,7 @@ exports.createShipment = [
             address: req.query.address ? req.query.address : address,
             data: data,
           };
-          const emptyShipmentNumber = data.products.find(
-            product => product.serialNumber === '',
-          );
-          const emptyBatchNumber = data.products.find(
-            product => product.batchNumber === '',
-          );
-          if (emptyShipmentNumber || emptyBatchNumber) {
-            return apiResponse.ErrorResponse(
-              res,
-              'Serial/Batch Number cannot be empty',
-            );
-          }
+
           const response = await axios.post(
             `${blockchain_service_url}/publish`,
             userData,
@@ -281,22 +270,31 @@ exports.createShipment = [
               { shipmentNumbers },
             );
           }
-          //Products Collection
-          await utility.asyncForEach(data.products, async product => {
-            const productQuery = { serialNumber: product.serialNumber };
-            const productFound = await ProductModel.findOne(productQuery);
-            if (productFound) {
-              await ProductModel.updateOne(productQuery, {
-                txnIds: [...productFound.txnIds, txnId],
-              });
-            } else {
-              const newProduct = new ProductModel({
-                serialNumber: product.serialNumber,
-                txnIds: [txnId],
-              });
-              await newProduct.save();
-            }
-          });
+          const emptyShipmentNumber = data.products.find(
+            product => product.serialNumber === '',
+          );
+          const emptyBatchNumber = data.products.find(
+            product => product.batchNumber === '',
+          );
+          if(!emptyBatchNumber && !emptyShipmentNumber) {
+            //Products Collection
+            await utility.asyncForEach(data.products, async product => {
+              const productQuery = { serialNumber: product.serialNumber };
+              const productFound = await ProductModel.findOne(productQuery);
+              if (productFound) {
+                await ProductModel.updateOne(productQuery, {
+                  txnIds: [...productFound.txnIds, txnId],
+                });
+              } else {
+                const newProduct = new ProductModel({
+                  serialNumber: product.serialNumber,
+                  txnIds: [txnId],
+                });
+                await newProduct.save();
+              }
+            });
+          }
+
         } else {
           return apiResponse.ErrorResponse(res, 'User not authenticated');
         }
