@@ -14,6 +14,9 @@ const dotenv = require('dotenv').config();
 const blockchain_service_url = process.env.URL;
 const stream_name = process.env.STREAM;
 
+const init = require('../logging/init');
+const logger = init.getLog();
+
 exports.getTotalCount = [
   auth,
   async (req, res) => {
@@ -21,12 +24,15 @@ exports.getTotalCount = [
       const { authorization } = req.headers;
       checkToken(req, res, async result => {
         if (result.success) {
+          logger.log('info', '<<<<< InventoryService < InventoryController < getTotalCount : ')
           res.json('Total inventory count');
         } else {
+          logger.log('warn', '<<<<< InventoryService < InventoryController < getTotalCount : ')
           res.status(403).json(result);
         }
       });
     } catch (err) {
+      logger.log('error', '<<<<< InventoryService < InventoryController < getTotalCount : ')
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -39,12 +45,15 @@ exports.getTotalCountOnHold = [
       const { authorization } = req.headers;
       checkToken(req, res, async result => {
         if (result.success) {
+          logger.log('info', '<<<<< InventoryService < InventoryController < getTotalCountOnHold : ')
           res.json('Total inventory count on Hold');
         } else {
+          logger.log('warn', '<<<<< InventoryService < InventoryController < getTotalCountOnHold : ')
           res.status(403).json(result);
         }
       });
     } catch (err) {
+      logger.log('error', '<<<<< InventoryService < InventoryController < getTotalCountOnHold : ')
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -57,12 +66,15 @@ exports.getExpiringInventory = [
       const { authorization } = req.headers;
       checkToken(req, res, async result => {
         if (result.success) {
+          logger.log('info', '<<<<< InventoryService < InventoryController < getExpiringInventory : ')
           res.json('Total inventory count expiring');
         } else {
+          logger.log('warn', '<<<<< InventoryService < InventoryController < getExpiringInventory : ')
           res.status(403).json(result);
         }
       });
     } catch (err) {
+      logger.log('error', '<<<<< InventoryService < InventoryController < getExpiringInventory : ')
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -75,13 +87,16 @@ exports.getInventoryforProduct = [
       const { authorization } = req.headers;
       checkToken(req, res, async result => {
         if (result.success) {
+          logger.log('info', '<<<<< InventoryService < InventoryController < getInventoryforProduct : ')
           const { product_id } = result.data.key;
           res.json('Inventory details for product');
         } else {
+          logger.log('warn', '<<<<< InventoryService < InventoryController < getInventoryforProduct : ')
           res.status(403).json(result);
         }
       });
     } catch (err) {
+      logger.log('error', '<<<<< InventoryService < InventoryController < getInventoryforProduct : ')
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -94,18 +109,22 @@ exports.getInventoryDetailsForProduct = [
       const { authorization } = req.headers;
       checkToken(req, res, async result => {
         if (result.success) {
+          logger.log('info', '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : ')
           const { key } = req.query;
           const response = await axios.get(
             `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${key}`,
           );
           const items = response.data.items;
           console.log('items', items);
+          logger.log('info', '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : ')
           res.json({ data: items });
         } else {
+          logger.log('warn', '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : ')
           res.status(403).json(result);
         }
       });
     } catch (err) {
+      logger.log('error', '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : ')
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -117,18 +136,22 @@ exports.getAllInventoryDetails = [
     try {
       checkToken(req, res, async result => {
         if (result.success) {
+          logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : ')
           const { address } = req.user;
           const response = await axios.get(
             `${blockchain_service_url}/queryDataByPublishers?stream=${stream_name}&address=${address}`,
           );
           const items = response.data.items;
           console.log('items', items);
+          logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : ')
           res.json({ data: items });
         } else {
+          logger.log('warn', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : ')
           res.status(403).json(result);
         }
       });
     } catch (err) {
+      logger.log('error', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : ')
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -177,6 +200,7 @@ exports.addNewInventory = [
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
+        logger.log('error', '<<<<< InventoryService < InventoryController < addNewInventory : Validation Error')
         // Display sanitized values/errors messages.
         return apiResponse.validationErrorWithData(
           res,
@@ -186,6 +210,7 @@ exports.addNewInventory = [
       } 
       checkToken(req, res, async result => {
         if (result.success) {
+          logger.log('info', '<<<<< InventoryService < InventoryController < addNewInventory : ')
           const { data } = req.body;
           const { address } = req.user;
           const userData = {
@@ -198,12 +223,15 @@ exports.addNewInventory = [
             `${blockchain_service_url}/publish`,
             userData,
           );
+          logger.log('info', '<<<<< InventoryService < InventoryController < addNewInventory : ')
           res.status(200).json({ response: response.data.transactionId });
         } else {
+          logger.log('warn', '<<<<< InventoryService < InventoryController < addNewInventory : ')
           res.status(403).json(result);
         }
       });
     } catch (err) {
+      logger.log('error', '<<<<< InventoryService < InventoryController < addNewInventory : ')
       return apiResponse.ErrorResponse(res, err);
     }
   },
