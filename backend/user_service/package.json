@@ -30,7 +30,8 @@
     "multer": "^1.4.2",
     "nodemailer": "^6.3.1",
     "npx": "^10.2.2",
-    "pm2": "^4.2.3"
+    "pm2": "^4.2.3",
+    "winston-logzio": "^5.1.2"
   },
   "devDependencies": {
     "chai": "^4.2.0",
