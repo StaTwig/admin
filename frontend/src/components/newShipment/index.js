@@ -5,19 +5,20 @@ import EditTable from '../../shared/table/editTable';
 import updownArrow from '../../assets/icons/up-and-down-dark.svg';
 import calenderDark from '../../assets/icons/calendar-grey.svg';
 import './style.scss';
-import { createShipment, setReviewShipments } from '../../actions/shipmentActions';
+import {
+  createShipment,
+  setReviewShipments,
+} from '../../actions/shipmentActions';
 import { getPOs, getPO } from '../../actions/poActions';
 import DropdownButton from '../../shared/dropdownButtonGroup';
-import {getAllUsers} from "../../actions/userActions";
+import { getAllUsers } from '../../actions/userActions';
 import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
+import 'react-datepicker/dist/react-datepicker.css';
 import ShipmentPopUp from './shipmentPopUp';
 import ShipmentFailPopUp from './shipmentFailPopUp';
 import Modal from '../../shared/modal';
 
-
-const NewShipment = (props) => {
-
+const NewShipment = props => {
   const dispatch = useDispatch();
 
   const editShipment = useSelector(state => {
@@ -31,11 +32,14 @@ const NewShipment = (props) => {
     }
     fetchData();
     dispatch(getAllUsers());
-  },[]);
+  }, []);
 
-  useEffect(() => {
-    setSupplier(user.name);
-  }, [user]);
+  useEffect(
+    () => {
+      setSupplier(user.name);
+    },
+    [user],
+  );
   const users = useSelector(state => {
     return state.users;
   });
@@ -70,7 +74,7 @@ const NewShipment = (props) => {
   
   const closeModal = () => {
     setOpenCreatedInventory(false);
-   // props.history.push('/shipments');
+    // props.history.push('/shipments');
   };
   const closeModalFail = () => {
     setOpenShipmentFail(false);
@@ -162,16 +166,14 @@ const NewShipment = (props) => {
       }]
     };
 
-
     //Store in reducer
     dispatch(setReviewShipments(data));
 
     //Redirect to review page.
     props.history.push('/reviewshipment');
-  
 
     console.log('new shipment data', data);
-  }
+  };
   const onAssign = async () => {
     if(checkValidationErrors(assignShipmentFields)) {
 
@@ -189,47 +191,45 @@ const NewShipment = (props) => {
       deliveryLocation,
       estimateDeliveryDate: estimateDeliveryDate.toLocaleDateString(),
       status: 'Shipped',
-      products:[{
-        productName,
-        quantity,
-        manufacturerName,
-        storageConditionmin,
-        storageConditionmax,
-        manufacturingDate,
-        expiryDate,
-        batchNumber,
-        serialNumber
-      }]
+      products: [
+        {
+          productName,
+          quantity,
+          manufacturerName,
+          storageConditionmin,
+          storageConditionmax,
+          manufacturingDate,
+          expiryDate,
+          batchNumber,
+          serialNumber,
+        },
+      ],
     };
 
     console.log('new shipment data', data);
     const result = await createShipment({ data });
     debugger;
     if (result.status == 1) {
-      
-        setOpenCreatedInventory(true);
-      
-      
-    } else if(result.status === 500){
+      setOpenCreatedInventory(true);
+    } else if (result.status === 500) {
       const err = result.data.message;
       setErrorMessage(err);
-    }
-    else {
+    } else {
       const err = result.data.data[0];
       setErrorMessage(err.msg);
     }
   };
 
-  const onSelectPO = async (item) => {
+  const onSelectPO = async item => {
     setPo(item);
     const result = await getPO(item);
-    const poDetail = JSON.parse(result[result.length -1].data);
+    const poDetail = JSON.parse(result[result.length - 1].data);
     const { products } = poDetail;
     const product = Object.keys(products[0])[0];
     setQuantity(products[0][product]);
     setProductName(product.split('-')[0]);
     setManufacturerName(product.split('-')[1]);
-  }
+  };
 
   return (
     <div className="NewShipment">
@@ -259,15 +259,11 @@ const NewShipment = (props) => {
             />
           </div>
           <div className="form-group">
-          <label htmlFor="client">Purchase Order</label>
-        <div className="form-control"> 
-          <DropdownButton
-         name={po}
-        onSelect={onSelectPO}
-        groups={pos}
-      />
-      </div>
-      </div>
+            <label htmlFor="client">Purchase Order</label>
+            <div className="form-control">
+              <DropdownButton name={po} onSelect={onSelectPO} groups={pos} />
+            </div>
+          </div>
         </div>
         <div className="col mr-3">
           <div className="form-group">
@@ -278,7 +274,6 @@ const NewShipment = (props) => {
               name="shipmentId"
               placeholder="Enter Supplier"
               value={supplier}
-            
             />
           </div>
           <div className="input-group">
@@ -292,8 +287,7 @@ const NewShipment = (props) => {
               
             />
           </div>
-          <div className="input-group" >
-           
+          <div className="input-group">
             <label htmlFor="shipmentId">Shipment Date</label>
              <div className="form-control">
             <DatePicker
@@ -312,17 +306,17 @@ const NewShipment = (props) => {
           </div>
         </div>
         <div className="col">
-            <div className="input-group">
+          <div className="input-group">
             <label htmlFor="shipmentId">Delivery To</label>
             <div className="form-control">
-            <DropdownButton
-              name={deliveryTo}
-              onSelect={item => setDeliveryTo(item)}
-              groups={userNames}
-            />
+              <DropdownButton
+                name={deliveryTo}
+                onSelect={item => setDeliveryTo(item)}
+                groups={userNames}
+              />
             </div>
-         </div>
-          
+          </div>
+
           <div className="input-group">
             <label htmlFor="shipmentId">Delivery Location</label>
             <input
@@ -361,17 +355,17 @@ const NewShipment = (props) => {
         +<span> Add Another Product</span>
       </button>
 
-    
       <hr />
 
       <div className="d-flex justify-content-between">
         <div className="total">Grand Total</div>
-    <div className="value">{quantity}</div>
+        <div className="value">{quantity}</div>
         <div className="d-flex ">
-         
-        <button className="btn btn-outline-info mr-2" onClick={onAssign}> Assign Shipment Order</button> 
-       <button className="btn-primary btn"  onClick={onProceedToReview}>Proceed To Review</button> 
-      
+          <button className="btn btn-outline-info mr-2" onClick={onAssign}>
+            {' '}
+            Assign Shipment Order
+          </button>
+          {/*<button className="btn-primary btn"  onClick={onProceedToReview}>Proceed To Review</button> */}
         </div>
       </div>
       {openCreatedInventory && (
@@ -379,8 +373,8 @@ const NewShipment = (props) => {
           close={() => closeModal()}
           size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
-          <ShipmentPopUp onHide={closeModal} //FailurePopUp
-          
+          <ShipmentPopUp
+            onHide={closeModal} //FailurePopUp
           />
         </Modal>
       )}
