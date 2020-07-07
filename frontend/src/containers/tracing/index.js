@@ -8,7 +8,7 @@ import {trackShipment} from "../../actions/shipmentActions";
 const TracingContainer = props => {
   const dispatch = useDispatch();
 
-  const shipment = useSelector(state => {
+  const shipments = useSelector(state => {
     return state.trackShipment;
   });
   useEffect(() => {
@@ -21,7 +21,7 @@ const TracingContainer = props => {
       <div className="d-flex">
         <Sidebar {...props} />
         <div className="content">
-          <Tracing shipment={shipment}/>
+          <Tracing shipments={shipments}/>
         </div>
       </div>
     </div>
