@@ -13,6 +13,7 @@ import {inventoryCountReducer} from './inventoryCountReducer';
 import {editShipmentReducer} from './editShipmentReducer'
 import {editInventoryReducer} from './editInventoryReducer'
 import {editPoReducer} from './editPoReducer'
+import { trackShipmentReducer} from './trackShipmentReducer';
 
 const rootReducer = (history) => combineReducers({
   shipments: shipmentReducer,
@@ -25,6 +26,7 @@ const rootReducer = (history) => combineReducers({
   reviewShipment: reviewShipmentReducer,
   editShipment: editShipmentReducer,
   tracingShipment:tracingShipmentReducer,
+  trackShipment: trackShipmentReducer,
   reviewInventory: reviewInventoryReducer,
   reviewPo: reviewPoReducer,
   editPo: editPoReducer,

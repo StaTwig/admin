@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { config } from '../config';
 import { GET_SHIPMENTS_FAILURE, GET_SHIPMENTS_SUCCESS, SET_REVIEW_SHIPMENT,SET_TRACING_SHIPMENT,
-  GET_SHIPMENTSCOUNT_FAILURE, GET_SHIPMENTSCOUNT_SUCCESS,SET_EDIT_SHIPMENT} from "../constants/shipmentConstants";
+  GET_SHIPMENTSCOUNT_FAILURE, GET_SHIPMENTSCOUNT_SUCCESS,SET_EDIT_SHIPMENT, SET_TRACK_SHIPMENT} from "../constants/shipmentConstants";
 
 export const getShipments = () => {
   try {
@@ -45,6 +45,21 @@ export const createShipment = async (data) => {
 
 }
 
+export const trackShipment = (shipmentId) => {
+  try {
+    return async dispatch => {
+      const result =  await axios.get(config().trackShipment + shipmentId);
+      dispatch(setTrackShipment(result.data));
+    }
+  }catch(e){
+    return dispatch => {
+      dispatch(resetTrackShipment());
+    }
+  }
+
+}
+
+
 const setShipments = (data) =>{
   return {
     type: GET_SHIPMENTS_SUCCESS,
@@ -86,6 +101,15 @@ export const setTracingShipments = (data) =>{
   };
 
 }
+
+export const setTrackShipment = (data) =>{
+  return {
+    type: SET_TRACK_SHIPMENT,
+    payload: data,
+  };
+
+}
+
 const resetShipments = (data) =>{
   return {
     type: GET_SHIPMENTS_FAILURE,
