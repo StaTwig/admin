@@ -194,3 +194,51 @@ exports.fetchTracking = [
     }
   }
 ];
+
+
+exports.fetchTemp = [
+  (req, res) => {
+    try {
+      var date_obj = new Date();
+
+      var hours = date_obj.getHours();
+      var minutes = date_obj.getMinutes();
+      var seconds = date_obj.getSeconds();
+
+      const max = 4.99; //req.body.max;
+      const min = -9.97; //req.body.min;
+      
+      var tempData = {
+        time: [],
+        temperature: []
+      }
+      
+      for(var i=0; i<20; i++){
+          
+        seconds = seconds  + 5;
+
+        if(seconds >= 60) { 
+          seconds -= 60;
+          minutes += 1;
+        } 
+        if(minutes >= 60) {
+          minutes -= 60;
+          hours += 1;
+        }
+        if(hours >= 24) hours -= 24;
+
+        tempData.time.push(hours + ":" + minutes + ":" + seconds);
+        tempData.temperature.push((Math.random() * (max - min) + min).toFixed(2))
+      }
+      
+      console.log(tempData);
+      return apiResponse.successResponseWithData(
+        res,
+        "Time-Temperature Data sent",
+        tempData
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  }
+];
