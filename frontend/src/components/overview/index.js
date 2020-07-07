@@ -4,7 +4,6 @@ import {
 } from "react-router-dom";
 import ChartsPage from '../doughnut'
 import SummaryTable from './summaryTable';
-import { getLastDates } from '../../utils/dateHelper';
 import totalshipments from "../../assets/icons/TotalShipmentsCompleted.svg";
 import totalinventory from "../../assets/icons/TotalInventoryAdded.svg";
 import currentshipment from "../../assets/icons/CurrentShipmentInTransit.svg";
@@ -14,32 +13,7 @@ import shipmentsdelayed from "../../assets/icons/TotalShipmentsDelayed.svg";
 import './style.scss';
 
   const Overview = props => {
-
-    const [shipmentsTransit, setShipmentsTransit] =useState('');
-    const [AllTimeCount, setAllTimeCount] =useState('');
-    let near=0;
-    
-    useEffect(() => {
-    const manufacturingDates = props.shipments.map((data, index) => {
-      if(data.status=='In Transit')
-      {
-          near++;
-      }
-      return data.shipmentDate;
-    });
-      setShipmentsTransit(near);
-      setAllTimeCount(manufacturingDates.length);
-      
-    })
-
-    let total = 0;
-
-    {props.inventories.map(inventory => (
-      
-    total += JSON.parse(inventory.quantity)
-    ))}
-
-  return (
+ return (
     <div className="overview">
       <h1 className="breadcrumb">OVERVIEW</h1>
       <div className="full-width-ribben">
@@ -51,7 +25,7 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Shipments</div>
-                <div className="count1">{AllTimeCount}<small className="dayStatus ml-1">This Year</small></div>
+                <div className="count1">{props.shipmentsCount.total}<small className="dayStatus ml-1">This Year</small></div>
               </div>
             </div>
           </div>
@@ -63,7 +37,7 @@ import './style.scss';
 
               <div className="d-flex flex-column">
                 <div className="title">Total Inventory Added</div>
-                <div className="count2" > {total} <small className="dayStatus">ThisYear</small></div>
+                <div className="count2" >{props.inventoriesCount.tot_qty}<small className="dayStatus ml-1">ThisYear</small></div>
               </div>
             </div>
 
@@ -75,7 +49,7 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Current Shipment in Transit</div>
-                <div className="count3">{shipmentsTransit}<small className="dayStatus ml-1">Last 6 Month</small></div>
+                <div className="count3">{props.shipmentsCount.transit}<small className="dayStatus ml-1">Last 6 Month</small></div>
               </div>
             </div>
 
@@ -87,7 +61,7 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Shipments</div>
-                <div className="count4">{AllTimeCount}<small className="dayStatus ml-1">Last 3 Month</small></div>
+                <div className="count4">{props.shipmentsCount.total}<small className="dayStatus ml-1">Last 3 Month</small></div>
               </div>
             </div>
 
@@ -119,10 +93,10 @@ import './style.scss';
             </div>
             <div className="card-body">
 
-              <div id="chartjs-render-monitor" ><ChartsPage /></div>
+              <div id="chartjs-render-monitor" ><ChartsPage {...props}/></div>
               <div className="total">
                 Total Current Inventory
-                <div className="value">1200</div>
+              <div className="value">{props.inventoriesCount.tot_qty}</div>
               </div>
 
             </div>

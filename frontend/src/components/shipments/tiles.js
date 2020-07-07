@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-
-
+import React from 'react';
 import truckthree from "../../assets/icons/truckthree.svg";
 import Sent from "../../assets/icons/Sent.svg";
 import Received from "../../assets/icons/Received.svg";
@@ -9,30 +7,6 @@ import CurrentShipment from "../../assets/icons/CurrentShipmentInTransit2.svg";
 import './style.scss'
 
 const Tiles = (props) => {
-    const [totalShipments, setTotalShipments] = useState('');
-      const [shipmentsSent, setShipmentsSent] = useState('');
-      const [shipmentsReceived, setShipmentsReceived] = useState('0');
-      const [shipmentsTransit, setShipmentsTransit] = useState('0');
-      let count=0;
-      let near=0;
-      let key=0;
-      useEffect(() => {
-        props.shipments.map((shipment,index) => {
-              key = index+1;
-             if(shipment.status=='Shipped'||shipment.status=='In Transit'){
-                count++;
-             }
-             if(shipment.status=='In Transit')
-             {
-                 near++;
-             }
-      })
-    setTotalShipments(key);
-    setShipmentsSent(count);
-    setShipmentsTransit(near);
-      })
-      
-      
        
     return (
         <div className="row mb-4">
@@ -49,7 +23,7 @@ const Tiles = (props) => {
                             <div className="tab-item">This Week</div>
                             <div className="tab-item">Today</div>
                         </div>
-                        <div className="truck-text count">{totalShipments}</div>
+                         <div className="truck-text count">{props.shipmentsCount.total}</div>
                     </div>
                 </div>
             </div>
@@ -66,7 +40,7 @@ const Tiles = (props) => {
                             <div className="tab-item ">This Week</div>
                             <div className="tab-item ">Today</div>
                         </div>
-                        <div className="sent-text count">{shipmentsSent}</div>
+                        <div className="sent-text count">{parseInt(props.shipmentsCount.total)-parseInt(props.shipmentsCount.received)}</div>
                     </div>
                 </div>
             </div>
@@ -83,7 +57,7 @@ const Tiles = (props) => {
                             <div className="tab-item">This Week</div>
                             <div className="tab-item">Today</div>
                         </div>
-                        <div className="recived-text count">0</div>
+                        <div className="recived-text count">{props.shipmentsCount.received}</div>
                     </div>
                 </div>
             </div>
@@ -100,7 +74,7 @@ const Tiles = (props) => {
                             <div className="tab-item">This Week</div>
                             <div className="tab-item">Today</div>
                         </div>
-                        <div className="transit-text count">{shipmentsTransit}</div>
+                        <div className="transit-text count">{props.shipmentsCount.transit}</div>
                     </div>
                 </div>
             </div>

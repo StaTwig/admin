@@ -1,15 +1,17 @@
 import React ,{useState}from "react";
 import Pen from "../../assets/icons/pen.svg";
-import {useSelector} from "react-redux";
-import { createShipment} from '../../actions/shipmentActions';
+import {useSelector, useDispatch} from "react-redux";
+import { createShipment,setEditShipments} from '../../actions/shipmentActions';
 import Modal from '../../shared/modal';
 import ShipmentPopUp from './shipmentpopup';
 import './style.scss';
+import { initialState } from "../../reducers/editShipmentReducer";
 
 const VerifyShipment = (props) => {
   //const [message, setMessage] = useState('');
   //const [errorMessage, setErrorMessage] = useState('');
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
+  const dispatch = useDispatch();
   const closeModal = () => {
     props.history.push('/shipments');
   };
@@ -19,6 +21,7 @@ const VerifyShipment = (props) => {
   });
 
   const onEdit = ()=>{
+    dispatch(setEditShipments(reviewShipment));
     props.history.push('/newshipment');
   }
 
@@ -32,6 +35,8 @@ const VerifyShipment = (props) => {
 
   if (result.status != 400) {
     setOpenCreatedInventory(true);
+   dispatch(setEditShipments(initialState));
+
   }
   };
 
@@ -96,11 +101,11 @@ const VerifyShipment = (props) => {
              </ul>
              <ul>
              <li className="bold">Manufacturer Date</li>
-             <li>{reviewShipment.products[0].manufacturingDate}</li>
+             <li>{new Date(Date.parse(reviewShipment.products[0].manufacturingDate)).getMonth()+1+"/"+new Date(Date.parse(reviewShipment.products[0].manufacturingDate)).getFullYear()}</li>
              </ul>
              <ul>
              <li className="bold">Expiry Date</li>
-             <li>{reviewShipment.products[0].expiryDate}</li>
+             <li>{new Date(Date.parse(reviewShipment.products[0].expiryDate)).getMonth()+1+"/"+new Date(Date.parse(reviewShipment.products[0].expiryDate)).getFullYear()}</li>
              </ul>
              <ul>
              <li className="bold">Batch Number</li>

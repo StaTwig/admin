@@ -191,6 +191,7 @@ class Profile extends React.Component {
                   <li> 
                       <input
                         className="form-control"
+                        disabled
                         value={name}
                         onChange={e => this.setState({ name: e.target.value })}
                       />

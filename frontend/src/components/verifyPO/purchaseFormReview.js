@@ -1,15 +1,19 @@
 import React,{useState} from "react";
 import ProductsTableReview from './productsReview';
-import {useSelector} from "react-redux";
-import { createPO} from '../../actions/poActions';
+import {useSelector, useDispatch} from "react-redux";
+import { createPO,setEditPos} from '../../actions/poActions';
 import Pen from "../../assets/icons/po.svg";
 import Modal from '../../shared/modal';
 import PoPopUp from './poPopUp';
+import { initialState } from "../../reducers/editPoReducer";
 import './style.scss';
+
+
 
 const tableHeader = ['Product Name', 'Manufacturer', 'Quantity'];
 
 const PurchaseFormReview = props => {
+  const dispatch= useDispatch();
   const month = new Date().getMonth()+1;
   const todayDate = new Date().getDate() + '/' + month + '/'  +new Date().getFullYear();
   const [openCreatedPo, setOpenCreatedPo] = useState(false);
@@ -22,10 +26,13 @@ const PurchaseFormReview = props => {
 
 
       const closeModal = () => {
+      
         props.setEditMode(true);
+        dispatch(setEditPos(initialState));
       };
     
       const onEdit = () => {
+        dispatch(setEditPos(reviewPo));
         props.setEditMode(true);
       };
     
@@ -39,7 +46,10 @@ const PurchaseFormReview = props => {
     console.log('result', result);
     setProductID(result.data.orderID)
     if (result.status != 400) {
+     
       setOpenCreatedPo(true);
+      
+      
     }
     
   

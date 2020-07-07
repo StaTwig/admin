@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { config } from '../config';
-import {SET_REVIEW_PO} from "../constants/poconstants";
+import {SET_REVIEW_PO,SET_EDIT_PO} from "../constants/poconstants";
 
 export const createPO = async (data) => {
   try {
@@ -33,6 +33,27 @@ export const getPO = async (po) => {
 
 }
 
+export const getProducts = async () => {
+  try {
+    const result =  await axios.get(config().getProducts);
+    return result.data.data;
+  }catch(e){
+    return e.response;
+  }
+
+}
+
+
+export const getManufacturers = async () => {
+  try {
+    const result =  await axios.get(config().getManufacturers);
+    return result.data.data;
+  }catch(e){
+    return e.response;
+  }
+
+}
+
 export const getPurchaseStats = async () => {
   try {
     const result =  await axios.get(config().fetchPurchaseOrderStatisticsUrl);
@@ -47,6 +68,15 @@ export const getPurchaseStats = async () => {
 export const setReviewPos = (data) =>{
   return {
     type: SET_REVIEW_PO,
+    payload: data,
+  };
+
+}
+
+
+export const setEditPos = (data) =>{
+  return {
+    type: SET_EDIT_PO,
     payload: data,
   };
 
