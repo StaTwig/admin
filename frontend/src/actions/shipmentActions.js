@@ -20,6 +20,20 @@ export const getShipments = () => {
   }
 
 }
+
+export const trackShipment = (shipmentId) => {
+  try {
+    return async dispatch => {
+      const result =  await axios.get(config().trackShipment + shipmentId);
+      dispatch(setTrackShipment(result.data));
+    }
+  }catch(e){
+    return dispatch => {
+      dispatch(resetTrackShipment());
+    }
+  }
+
+}
 export const getShipmentsById = (query) => {
   try {
     return async dispatch => {
