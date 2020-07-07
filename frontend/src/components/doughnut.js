@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import { Doughnut } from "react-chartjs-2";
 import { MDBContainer } from "mdbreact";
-import { getInventories} from '../actions/shipmentActions';
+import { getInventories} from '../actions/inventoryActions';
 
 const ChartsPage = (props) => {
 

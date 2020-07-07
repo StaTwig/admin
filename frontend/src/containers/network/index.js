@@ -1,7 +1,9 @@
 import React from "react";
-import Inventory from '../../components/inventory';
+
 import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
+import network from '../../assets/icons/NetworkBG.png';
+
 
 const NetworkContainer = props => {
       return (
@@ -10,7 +12,8 @@ const NetworkContainer = props => {
                   <div className="d-flex">
                         <Sidebar {...props} />
                         <div className="content">
-                              Network ....
+                        <h1 className="breadcrumb ml-4">BLOCKCHAIN NETWORK </h1>
+                        <img alt="" src={network} className="icon" width="1200" height="600"/>
                         </div>
                   </div>
             </div>
@@ -18,4 +21,3 @@ const NetworkContainer = props => {
 };
 
 export default NetworkContainer;
-
