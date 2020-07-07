@@ -9,7 +9,7 @@ import Map from './map';
 import './style.scss';
 
 const Tracing = props => {
-  const tracingShipment = props.shipment;
+  const tracingShipment = props.shipments[0];
   return (
     <div className="tracing">
       <div className="d-flex justify-content-between mb-3">
@@ -114,7 +114,6 @@ const Tracing = props => {
               <div className="d-flex flex-row">
                 <ul className="mr-3">
                   <li>
-                    {' '}
                     <div className="picture transit-bg">
                       <img src={currentinventory} alt="truck" />
                     </div>{' '}
@@ -138,7 +137,6 @@ const Tracing = props => {
                     <div>{tracingShipment.shipmentId}</div>{' '}
                   </li>
                   <li className="col">
-                    {' '}
                     <div>{tracingShipment.supplierLocation}</div>
                     <div>{tracingShipment.shipmentDate}</div>
                   </li>
@@ -149,7 +147,6 @@ const Tracing = props => {
                 </ul>
                 <ul>
                   <li className="col">
-                    {' '}
                     <div>Added to inventory</div>
                     <div>Wallet Address: {tracingShipment.supplierAddress}</div>{' '}
                   </li>
