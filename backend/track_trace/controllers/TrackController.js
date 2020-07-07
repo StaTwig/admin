@@ -228,7 +228,7 @@ exports.fetchTemp = [
         if(hours >= 24) hours -= 24;
 
         tempData.time.push(hours + ":" + minutes + ":" + seconds);
-        tempData.temperature.push((Math.random() * (max - min) + min).toFixed(3))
+        tempData.temperature.push((Math.random() * (max - min) + min).toFixed(2))
       }
       
       console.log(tempData);
