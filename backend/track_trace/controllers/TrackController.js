@@ -205,15 +205,15 @@ exports.fetchTemp = [
       var minutes = date_obj.getMinutes();
       var seconds = date_obj.getSeconds();
 
-      const max = req.body.max;
-      const min = req.body.min;
+      const max = 4.99; //req.body.max;
+      const min = -9.97; //req.body.min;
       
       var tempData = {
         time: [],
         temperature: []
       }
       
-      for(var i=0; i<50; i++){
+      for(var i=0; i<20; i++){
           
         seconds = seconds  + 5;
 
