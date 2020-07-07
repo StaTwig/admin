@@ -36,6 +36,7 @@ export function config() {
       registerUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/register`,
       verifyOtpUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/verify-otp`,
       userInfoUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/userInfo`,
+      getAllUsersUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${DEV_SERVER_URL}/usermanagement/api/auth/upload`,
       shipmentsUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/fetchUserShipments`,
