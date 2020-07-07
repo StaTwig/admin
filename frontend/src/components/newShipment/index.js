@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import {useSelector, useDispatch} from "react-redux";
 
 import EditTable from '../../shared/table/editTable';
@@ -12,12 +12,18 @@ import {getAllUsers} from "../../actions/userActions";
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import ShipmentPopUp from './shipmentPopUp';
+import ShipmentFailPopUp from './shipmentFailPopUp';
 import Modal from '../../shared/modal';
 
 
 const NewShipment = (props) => {
 
   const dispatch = useDispatch();
+
+  const editShipment = useSelector(state => {
+    return state.editShipment;
+  });
+
   useEffect(() => {
     async function fetchData() {
       const result = await getPOs();
@@ -39,31 +45,35 @@ const NewShipment = (props) => {
   const userNames = users.map(usr => usr.name);
   const [pos, setPos] = useState([]);
   const [po, setPo] = useState('Select PO');
-  const [shipmentId, setShipmentId] = useState('');
-  const [client, setClient] = useState('');
+  const [shipmentId, setShipmentId] = useState(editShipment.shipmentId);
+  const [client, setClient] = useState(editShipment.client);
   const [supplier, setSupplier] = useState(user.username);
-  const [supplierLocation, setSupplierLocation] = useState('');
-  const [shipmentDate, setShipmentDate] = useState('');
-  const [deliveryTo, setDeliveryTo] = useState('Select Receiver');
-  const [deliveryLocation, setDeliveryLocation] = useState('');
-  const [estimateDeliveryDate, setEstimateDeliveryDate] = useState('');
+  const [supplierLocation, setSupplierLocation] = useState(editShipment.supplierLocation);
+  const [shipmentDate, setShipmentDate] = useState(editShipment.shipmentDate);
+  const [deliveryTo, setDeliveryTo] = useState(editShipment.deliveryTo);
+  const [deliveryLocation, setDeliveryLocation] = useState(editShipment.deliveryLocation);
+  const [estimateDeliveryDate, setEstimateDeliveryDate] = useState(editShipment.estimateDeliveryDate);
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [productName, setProductName] = useState('Select Product');
-  const [manufacturerName, setManufacturerName] = useState(
-    'Select Manufacturer',
-  );
-  const [quantity, setQuantity] = useState('');
-  const [manufacturingDate, setManufacturingDate] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
-  const [storageConditionmin, setStorageConditionmin] = useState('');
-  const [storageConditionmax, setStorageConditionmax] = useState('');
-  const [batchNumber, setBatchNumber] = useState('');
-  const [serialNumber, setSerialNumber] = useState('');
+  const [productName, setProductName] = useState(editShipment.products[0].productName);
+  const [manufacturerName, setManufacturerName] = useState(editShipment.products[0].manufacturerName);
+  const [quantity, setQuantity] = useState(editShipment.products[0].quantity);
+  const [manufacturingDate, setManufacturingDate] = useState(editShipment.products[0].manufacturingDate);
+  const [expiryDate, setExpiryDate] = useState(editShipment.products[0].expiryDate);
+  const [storageConditionmin, setStorageConditionmin] = useState(editShipment.products[0].storageConditionmin);
+  const [storageConditionmax, setStorageConditionmax] = useState(editShipment.products[0].storageConditionmax);
+  const [batchNumber, setBatchNumber] = useState(editShipment.products[0].batchNumber);
+  const [serialNumber, setSerialNumber] = useState(editShipment.products[0].serialNumber);
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
+  const [openShipmentFail, setOpenShipmentFail] = useState(false);
+  const [shipmentError, setShipmentError] = useState('');
   
   const closeModal = () => {
     setOpenCreatedInventory(false);
+   // props.history.push('/shipments');
+  };
+  const closeModalFail = () => {
+    setOpenShipmentFail(false);
    // props.history.push('/shipments');
   };
   
@@ -89,24 +99,55 @@ const NewShipment = (props) => {
   };
 
 
-  const onChange = date => setShipmentDate({ date })
-  const onChange1 = date1 => setEstimateDeliveryDate({ date1 });
+  const onChange = date => setShipmentDate( date )
+  const onChange1 = date => setEstimateDeliveryDate(date);
   
-  var numeric = { year: 'numeric', month: 'numeric' };
+  const shipmentFields= ['shipmentId', 'client','deliveryTo','supplierLocation','deliveryLocation','shipmentDate',
+  'estimateDeliveryDate','productName','quantity','manufacturerName','storageConditionmin','storageConditionmax',
+  'manufacturingDate','expiryDate','batchNumber','serialNumber']
 
+  const assignShipmentFields= ['shipmentId', 'client','deliveryTo','supplierLocation','deliveryLocation','shipmentDate',
+  'estimateDeliveryDate']
   
+  const profile = useSelector(state => {
+    return state.user;
+  });
+
+  const checkValidationErrors = (validations) => {
+    
+    let error = false;
+    for(let i=0; i< validations.length; i++) {
+      let validationVariable =  eval(validations[i]);
+      if(validationVariable.length < 1||validationVariable=="Select Product"||validationVariable=="Select Manufacturer"
+      ||validationVariable=="Select receiver") {
+        setShipmentError(validations[i])
+        setOpenShipmentFail(true);
+        error = true;
+        break;
+      }
+    }
+   
+    return error;
+  }
   const onProceedToReview = () => {
+    console.log("expiryDate",expiryDate);
+    if(checkValidationErrors(shipmentFields)) {
+
+      return;
+    }
+    debugger;
     const receiver = users.find(usr => usr.name === deliveryTo);
     const data = {
       shipmentId,
       client,
       receiver: receiver.address,
       supplier,
+      supplierAddress : profile.address,
       supplierLocation,
-      shipmentDate: shipmentDate.date.toLocaleDateString(),
+      shipmentDate: typeof shipmentDate =='string' ? shipmentDate : shipmentDate.toLocaleDateString(),
       deliveryTo,
       deliveryLocation,
-      estimateDeliveryDate: estimateDeliveryDate.date1.toLocaleDateString(),
+      estimateDeliveryDate: typeof estimateDeliveryDate =='string' ? estimateDeliveryDate : estimateDeliveryDate.toLocaleDateString(),
       status: 'In Transit',
       products:[{
         productName,
@@ -114,8 +155,8 @@ const NewShipment = (props) => {
         manufacturerName,
         storageConditionmin,
         storageConditionmax,
-        manufacturingDate: manufacturingDate.date.toLocaleDateString('en-GB', numeric),
-        expiryDate : expiryDate.date1.toLocaleDateString('en-GB', numeric),
+        manufacturingDate: typeof manufacturingDate == 'string' ? manufacturingDate : manufacturingDate.toLocaleDateString(),
+        expiryDate : typeof expiryDate == 'string' ? expiryDate : expiryDate.toLocaleDateString(),
         batchNumber,
         serialNumber
       }]
@@ -132,6 +173,10 @@ const NewShipment = (props) => {
     console.log('new shipment data', data);
   }
   const onAssign = async () => {
+    if(checkValidationErrors(assignShipmentFields)) {
+
+      return;
+    }
     const receiver = users.find(usr => usr.name === deliveryTo);
     const data = {
       shipmentId,
@@ -139,10 +184,10 @@ const NewShipment = (props) => {
       receiver: receiver.address,
       supplier,
       supplierLocation,
-      shipmentDate: shipmentDate.date.toLocaleDateString(),
+      shipmentDate: shipmentDate.toLocaleDateString(),
       deliveryTo,
       deliveryLocation,
-      estimateDeliveryDate: estimateDeliveryDate.date1.toLocaleDateString(),
+      estimateDeliveryDate: estimateDeliveryDate.toLocaleDateString(),
       status: 'Shipped',
       products:[{
         productName,
@@ -199,6 +244,7 @@ const NewShipment = (props) => {
               name="shipmentId"
               placeholder="Enter Shipment ID"
               onChange={e => setShipmentId(e.target.value)}
+              value={shipmentId}
             />
           </div>
           <div className="form-group">
@@ -209,6 +255,7 @@ const NewShipment = (props) => {
               name="client"
               placeholder="Enter Client"
               onChange={e => setClient(e.target.value)}
+              value={client}
             />
           </div>
           <div className="form-group">
@@ -241,6 +288,7 @@ const NewShipment = (props) => {
               className="form-control"
               placeholder="Enter Location"
               onChange={e => setSupplierLocation(e.target.value)}
+              value={supplierLocation}
               
             />
           </div>
@@ -250,14 +298,15 @@ const NewShipment = (props) => {
              <div className="form-control">
             <DatePicker
               className="date"
-              selected={shipmentDate.date}
+              selected={shipmentDate ? new Date(Date.parse(shipmentDate)) : shipmentDate}
               placeholderText="Enter Shipment Date"
               onChange={onChange}
+            
               showYearDropdown
               dateFormatCalendar="MMMM"
               yearDropdownItemNumber={15}
               scrollableYearDropdown
-              isClearable
+       
              />
              </div>
           </div>
@@ -281,6 +330,7 @@ const NewShipment = (props) => {
               className="form-control"
               placeholder="Enter Location"
               onChange={e => setDeliveryLocation(e.target.value)}
+              value={deliveryLocation}
             
             />
           </div>
@@ -293,13 +343,14 @@ const NewShipment = (props) => {
               className="date"
               placeholderText="Enter Delivery Date"
               onChange = {onChange1}
-              selected = {estimateDeliveryDate.date1}
+              selected = {estimateDeliveryDate ? new Date(Date.parse(estimateDeliveryDate)) : estimateDeliveryDate}
               showYearDropdown
               dateFormatCalendar="MMMM"
               yearDropdownItemNumber={100}
               scrollableYearDropdown
-              isClearable
+            
               />
+              <div>{console.log("expiry date", estimateDeliveryDate , new Date(Date.parse(estimateDeliveryDate)))}</div>
              </div>
           </div>
         </div>
@@ -331,6 +382,16 @@ const NewShipment = (props) => {
           <ShipmentPopUp onHide={closeModal} //FailurePopUp
           
           />
+        </Modal>
+      )}
+       {openShipmentFail && (
+        <Modal
+          close={() => closeModalFail()}
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+          <ShipmentFailPopUp onHide={closeModalFail} //FailurePopUp
+          
+   shipmentError={shipmentError}       />
         </Modal>
       )}
       {message && <div className="alert alert-success">{message}</div>}

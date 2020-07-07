@@ -10,6 +10,10 @@ const InventoryContainer = props => {
   const inventories = useSelector(state => {
     return state.inventories;
   });
+
+  const inventoriesCount = useSelector(state => {
+      return state.inventoriesCount;
+    });
   useEffect(() => {
     dispatch(getInventories());
   }, []);
@@ -20,7 +24,7 @@ const InventoryContainer = props => {
                   <div className="d-flex">
                         <Sidebar {...props} />
                         <div className="content">
-                              <Inventory  inventories={inventories}/>
+                              <Inventory  inventories={inventories} inventoriesCount={inventoriesCount} {...props}/>
                         </div>
                   </div>
             </div>

@@ -1,26 +1,31 @@
 import React, { useState } from 'react';
 import EditTable from '../../shared/table/editTable';
-import { useDispatch} from "react-redux";
+import { useDispatch,useSelector} from "react-redux";
 import './style.scss';
 import Modal from '../../shared/modal';
 import InventoryPopUp from './inventorypopup';
+import FailurePopUp  from './failurepopup';
 import {addInventory,setReviewinventories} from "../../actions/inventoryActions";
 //import FailurePopUp from './failurepopup';
 
 const NewInventory = (props) => {
+
+  const editInventory = useSelector(state => {
+    return state.editInventory;
+  });
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
-  const [productName, setProductName] = useState('Select Product');
-  const [manufacturerName, setManufacturerName] = useState(
-    'Select Manufacturer',
-  );
+  const [openFailInventory, setOpenFailInventory] = useState(false);
+  const [inventoryError, setInventoryError] = useState('');
+  const [productName, setProductName] = useState(editInventory.productName);
+  const [manufacturerName, setManufacturerName] = useState(editInventory.manufacturerName);
   const [errorMessage, setErrorMessage] = useState('');
-  const [quantity, setQuantity] = useState('');
-  const [manufacturingDate, setManufacturingDate] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
-  const [storageConditionmin, setStorageConditionmin] = useState('');
-  const [storageConditionmax, setStorageConditionmax] = useState('');
-  const [batchNumber, setBatchNumber] = useState('');
-  const [serialNumber, setSerialNumber] = useState('');
+  const [quantity, setQuantity] = useState(editInventory.quantity);
+  const [manufacturingDate, setManufacturingDate] = useState(editInventory.manufacturingDate);
+  const [expiryDate, setExpiryDate] = useState(editInventory.expiryDate);
+  const [storageConditionmin, setStorageConditionmin] = useState(editInventory.storageConditionmin);
+  const [storageConditionmax, setStorageConditionmax] = useState(editInventory.storageConditionmin);
+  const [batchNumber, setBatchNumber] = useState(editInventory.batchNumber);
+  const [serialNumber, setSerialNumber] = useState(editInventory.serialNumber);
   const editTableProps = {
     manufacturerName,
     setManufacturerName,
@@ -44,18 +49,46 @@ const NewInventory = (props) => {
   const closeModal = () => {
     setOpenCreatedInventory(false);
   };
+
+  const closeModalFail = () => {
+    setOpenFailInventory(false);
+  };
   
   var numeric = { year: 'numeric', month: 'numeric' };
   
   const dispatch = useDispatch();
+
+  const inventoryFields= ['productName','manufacturerName','quantity','storageConditionmin','storageConditionmax',
+  'manufacturingDate','expiryDate','batchNumber','serialNumber']
+
+  
+  const checkValidationErrors = (validations) => {
+    
+    let error = false;
+    for(let i=0; i< validations.length; i++) {
+      let validationVariable =  eval(validations[i]);
+      if(validationVariable.length < 1|| validationVariable=="Select Product"||validationVariable=="Select Manufacturer") {
+        setInventoryError(validations[i])
+        setOpenFailInventory(true);
+        error = true;
+        break;
+      }
+    }
+   
+    return error;
+  }
   const onProceedToReview = () => {
+    if(checkValidationErrors(inventoryFields)) {
+
+      return;
+    }
     
     const data = {
       productName,
       manufacturerName,
       quantity,
-      manufacturingDate:manufacturingDate.date.toLocaleDateString('en-GB', numeric),
-      expiryDate : expiryDate.date1.toLocaleDateString('en-GB', numeric),
+      manufacturingDate:manufacturingDate.toLocaleDateString('ko-KR', numeric),
+      expiryDate : expiryDate.toLocaleDateString('ko-KR', numeric),
       storageConditionmin,
       storageConditionmax,
       batchNumber,
@@ -124,6 +157,17 @@ const NewInventory = (props) => {
         >
           <InventoryPopUp onHide={closeModal} //FailurePopUp
           
+          />
+        </Modal>
+      )}
+
+    {openFailInventory && (
+        <Modal
+          close={() => closeModalFail()}
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+          <FailurePopUp onHide={closeModalFail} //FailurePopUp
+          inventoryError={inventoryError}
           />
         </Modal>
       )}

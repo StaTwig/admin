@@ -1,21 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import './style.scss';
-import Checked from "../../assets/icons/cancel.svg";
+import Cancel from "../../assets/icons/cancel.svg";
 
 
-const FailurePopUp = (props) => {
+const ShipmentFailPopUp = (props) => {
   return (
     <div className="inventorypopup">
       <div className="d-flex  flex-column align-items-center">
-        <img src={Checked} width='60' height='60' className="mb-3" />
+        <img src={Cancel} width='60' height='60' className="mb-3" />
         <div className="alert" >
-         Fail!
+          Fail!
         </div>
         <div className="data">
-  <span className="font-weight-bolder">{props.inventoryError}</span> can't be Empty
+  <span className="font-weight-bolder">{props.shipmentError}</span> can't be Empty
         </div>
         <div className="data mb-4">
-         Please try again
+         Please Try Again
         </div>
         <button className="btn-primary btn" onClick={props.onHide}>TRY AGAIN</button>
       </div>
@@ -24,6 +24,6 @@ const FailurePopUp = (props) => {
   );
 };
 
-export default FailurePopUp;
+export default ShipmentFailPopUp;
 
 
