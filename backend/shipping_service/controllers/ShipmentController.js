@@ -243,32 +243,40 @@ exports.createShipment = [
             logger.log('info', '<<<<< ShipmentService < ShipmentController < createShipment : ')
             const newUser = new UserTransactionModel({
               destinationUser: sender_address,
-              txnIds: [txnId],
+              shipmentIds: [shipmentId],
             });
             await newUser.save();
           } else {
             logger.log('info', '<<<<< ShipmentService < ShipmentController < createShipment : ')
-            const txnIds = [...sender.txnIds, txnId];
-            await UserTransactionModel.updateOne(
-              { destinationUser: sender_address },
-              { txnIds },
-            );
+            //const txnIds = [...sender.shipmentIds, shipmentId];
+            const shipmentFound = sender.shipmentIds.find(shpId => shpId === shipmentId);
+            if(!shipmentFound){
+              const shipmentIds = [...sender.shipmentIds, shipmentId];
+              await UserTransactionModel.updateOne(
+                { destinationUser: sender_address },
+                { shipmentIds },
+              );
+            }
           }
 
           if (!receiver) {
             logger.log('info', '<<<<< ShipmentService < ShipmentController < createShipment : ')
             const newUser = new UserTransactionModel({
               destinationUser: receiver_address,
-              txnIds: [txnId],
+              shipmentIds: [shipmentId],
             });
             await newUser.save();
           } else {
             logger.log('info', '<<<<< ShipmentService < ShipmentController < createShipment : ')
-            const txnIds = [...receiver.txnIds, txnId];
-            await UserTransactionModel.updateOne(
-              { destinationUser: receiver_address },
-              { txnIds },
-            );
+            //const txnIds = [...receiver.txnIds, txnId];
+            const shipmentFound = receiver.shipmentIds.find(shpId => shpId === shipmentId);
+            if(!shipmentFound){
+              const shipmentIds = [...receiver.shipmentIds, shipmentId];
+              await UserTransactionModel.updateOne(
+                { destinationUser: receiver_address },
+                { shipmentIds },
+              );
+            }
           }
           //Shipment Collection
           if (!shipmentFound) {
@@ -706,18 +714,24 @@ exports.fetchUserShipments = [
         logger.log('info', '<<<<< ShipmentService < ShipmentController < fetchUserShipments : ')
         const destinationUser = await UserTransactionModel.findOne({ destinationUser: user.address });
         let items_array = [];
-        let txnIDs = [];
+        let shipmentIds = [];
         if(destinationUser) {
           logger.log('info', '<<<<< ShipmentService < ShipmentController < fetchUserShipments : ')
-          txnIDs = destinationUser.txnIds
+          shipmentIds = destinationUser.shipmentIds;
         }
 
-        await utility.asyncForEach(txnIDs, async txnId => {
+        await utility.asyncForEach(shipmentIds, async shipmentId => {
           const response = await axios.get(
-            `${blockchain_service_url}/queryDataByTxHash?stream=${stream_name}&txid=${txnId}`,
+            `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${shipmentId}`,
           );
-          const items = response.data.items;
-          items_array.push(JSON.parse(items));
+          let txnId = '';
+          const items = response.data.items.map(item => {
+            txnId = item.txid;
+            return item.data;
+          });
+          const itemsObject = JSON.parse(items);
+          itemsObject.txnId = txnId;
+          items_array.push(itemsObject);
         });
         logger.log('info', '<<<<< ShipmentService < ShipmentController < fetchUserShipments : ')
         res.json({ data: items_array });
@@ -733,8 +747,14 @@ exports.fetchUserShipments = [
                 const response = await axios.get(
                   `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${shipId}`,
                 );
-                const items = response.data.items;
-                items_array.push(JSON.parse(items));
+                let txnId = '';
+                const items = response.data.items.map(item => {
+                  txnId = item.txid;
+                  return item.data;
+                });
+                const itemsObject = JSON.parse(items);
+                itemsObject.txnId = txnId;
+               items_array.push(itemsObject);
               });
             }
             logger.log('info', '<<<<< ShipmentService < ShipmentController < fetchUserShipments : ')

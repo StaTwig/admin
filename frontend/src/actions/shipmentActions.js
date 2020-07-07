@@ -59,21 +59,6 @@ export const createShipment = async (data) => {
 
 }
 
-export const trackShipment = (shipmentId) => {
-  try {
-    return async dispatch => {
-      const result =  await axios.get(config().trackShipment + shipmentId);
-      dispatch(setTrackShipment(result.data));
-    }
-  }catch(e){
-    return dispatch => {
-      dispatch(resetTrackShipment());
-    }
-  }
-
-}
-
-
 const setShipments = (data) =>{
   return {
     type: GET_SHIPMENTS_SUCCESS,
