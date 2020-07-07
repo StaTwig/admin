@@ -249,11 +249,14 @@ exports.createShipment = [
           } else {
             logger.log('info', '<<<<< ShipmentService < ShipmentController < createShipment : ')
             //const txnIds = [...sender.shipmentIds, shipmentId];
-            const shipmentIds = [...sender.shipmentIds, shipmentId];
-            await UserTransactionModel.updateOne(
-              { destinationUser: sender_address },
-              { shipmentIds },
-            );
+            const shipmentFound = sender.shipmentIds.find(shpId => shpId === shipmentId);
+            if(!shipmentFound){
+              const shipmentIds = [...sender.shipmentIds, shipmentId];
+              await UserTransactionModel.updateOne(
+                { destinationUser: sender_address },
+                { shipmentIds },
+              );
+            }
           }
 
           if (!receiver) {
@@ -266,11 +269,14 @@ exports.createShipment = [
           } else {
             logger.log('info', '<<<<< ShipmentService < ShipmentController < createShipment : ')
             //const txnIds = [...receiver.txnIds, txnId];
-            const shipmentIds = [...receiver.shipmentIds, shipmentId];
-            await UserTransactionModel.updateOne(
-              { destinationUser: receiver_address },
-              { shipmentIds },
-            );
+            const shipmentFound = receiver.shipmentIds.find(shpId => shpId === shipmentId);
+            if(!shipmentFound){
+              const shipmentIds = [...receiver.shipmentIds, shipmentId];
+              await UserTransactionModel.updateOne(
+                { destinationUser: receiver_address },
+                { shipmentIds },
+              );
+            }
           }
           //Shipment Collection
           if (!shipmentFound) {
