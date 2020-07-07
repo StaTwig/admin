@@ -1,22 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import {useSelector, useDispatch} from "react-redux";
+import { useSelector, useDispatch } from 'react-redux';
 
 import EditTable from '../../shared/table/editTable';
 import updownArrow from '../../assets/icons/up-and-down-dark.svg';
 import calenderDark from '../../assets/icons/calendar-grey.svg';
 import './style.scss';
-import { createShipment, setReviewShipments } from '../../actions/shipmentActions';
+import {
+  createShipment,
+  setReviewShipments,
+} from '../../actions/shipmentActions';
 import { getPOs, getPO } from '../../actions/poActions';
 import DropdownButton from '../../shared/dropdownButtonGroup';
-import {getAllUsers} from "../../actions/userActions";
+import { getAllUsers } from '../../actions/userActions';
 import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
+import 'react-datepicker/dist/react-datepicker.css';
 import ShipmentPopUp from './shipmentPopUp';
 import Modal from '../../shared/modal';
 
-
-const NewShipment = (props) => {
-
+const NewShipment = props => {
   const dispatch = useDispatch();
   useEffect(() => {
     async function fetchData() {
@@ -25,11 +26,14 @@ const NewShipment = (props) => {
     }
     fetchData();
     dispatch(getAllUsers());
-  },[]);
+  }, []);
 
-  useEffect(() => {
-    setSupplier(user.name);
-  }, [user]);
+  useEffect(
+    () => {
+      setSupplier(user.name);
+    },
+    [user],
+  );
   const users = useSelector(state => {
     return state.users;
   });
@@ -61,12 +65,12 @@ const NewShipment = (props) => {
   const [batchNumber, setBatchNumber] = useState('');
   const [serialNumber, setSerialNumber] = useState('');
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
-  
+
   const closeModal = () => {
     setOpenCreatedInventory(false);
-   // props.history.push('/shipments');
+    // props.history.push('/shipments');
   };
-  
+
   const editTableProps = {
     manufacturerName,
     setManufacturerName,
@@ -88,13 +92,11 @@ const NewShipment = (props) => {
     setSerialNumber,
   };
 
-
-  const onChange = date => setShipmentDate({ date })
+  const onChange = date => setShipmentDate({ date });
   const onChange1 = date1 => setEstimateDeliveryDate({ date1 });
-  
+
   var numeric = { year: 'numeric', month: 'numeric' };
 
-  
   const onProceedToReview = () => {
     const receiver = users.find(usr => usr.name === deliveryTo);
     const data = {
@@ -108,29 +110,32 @@ const NewShipment = (props) => {
       deliveryLocation,
       estimateDeliveryDate: estimateDeliveryDate.date1.toLocaleDateString(),
       status: 'In Transit',
-      products:[{
-        productName,
-        quantity,
-        manufacturerName,
-        storageConditionmin,
-        storageConditionmax,
-        manufacturingDate: manufacturingDate.date.toLocaleDateString('en-GB', numeric),
-        expiryDate : expiryDate.date1.toLocaleDateString('en-GB', numeric),
-        batchNumber,
-        serialNumber
-      }]
+      products: [
+        {
+          productName,
+          quantity,
+          manufacturerName,
+          storageConditionmin,
+          storageConditionmax,
+          manufacturingDate: manufacturingDate.date.toLocaleDateString(
+            'en-GB',
+            numeric,
+          ),
+          expiryDate: expiryDate.date1.toLocaleDateString('en-GB', numeric),
+          batchNumber,
+          serialNumber,
+        },
+      ],
     };
-
 
     //Store in reducer
     dispatch(setReviewShipments(data));
 
     //Redirect to review page.
     props.history.push('/reviewshipment');
-  
 
     console.log('new shipment data', data);
-  }
+  };
   const onAssign = async () => {
     const receiver = users.find(usr => usr.name === deliveryTo);
     const data = {
@@ -144,47 +149,45 @@ const NewShipment = (props) => {
       deliveryLocation,
       estimateDeliveryDate: estimateDeliveryDate.date1.toLocaleDateString(),
       status: 'Shipped',
-      products:[{
-        productName,
-        quantity,
-        manufacturerName,
-        storageConditionmin,
-        storageConditionmax,
-        manufacturingDate,
-        expiryDate,
-        batchNumber,
-        serialNumber
-      }]
+      products: [
+        {
+          productName,
+          quantity,
+          manufacturerName,
+          storageConditionmin,
+          storageConditionmax,
+          manufacturingDate,
+          expiryDate,
+          batchNumber,
+          serialNumber,
+        },
+      ],
     };
 
     console.log('new shipment data', data);
     const result = await createShipment({ data });
     debugger;
     if (result.status == 1) {
-      
-        setOpenCreatedInventory(true);
-      
-      
-    } else if(result.status === 500){
+      setOpenCreatedInventory(true);
+    } else if (result.status === 500) {
       const err = result.data.message;
       setErrorMessage(err);
-    }
-    else {
+    } else {
       const err = result.data.data[0];
       setErrorMessage(err.msg);
     }
   };
 
-  const onSelectPO = async (item) => {
+  const onSelectPO = async item => {
     setPo(item);
     const result = await getPO(item);
-    const poDetail = JSON.parse(result[result.length -1].data);
+    const poDetail = JSON.parse(result[result.length - 1].data);
     const { products } = poDetail;
     const product = Object.keys(products[0])[0];
     setQuantity(products[0][product]);
     setProductName(product.split('-')[0]);
     setManufacturerName(product.split('-')[1]);
-  }
+  };
 
   return (
     <div className="NewShipment">
@@ -212,15 +215,11 @@ const NewShipment = (props) => {
             />
           </div>
           <div className="form-group">
-          <label htmlFor="client">Purchase Order</label>
-        <div className="form-control"> 
-          <DropdownButton
-         name={po}
-        onSelect={onSelectPO}
-        groups={pos}
-      />
-      </div>
-      </div>
+            <label htmlFor="client">Purchase Order</label>
+            <div className="form-control">
+              <DropdownButton name={po} onSelect={onSelectPO} groups={pos} />
+            </div>
+          </div>
         </div>
         <div className="col mr-3">
           <div className="form-group">
@@ -231,7 +230,6 @@ const NewShipment = (props) => {
               name="shipmentId"
               placeholder="Enter Supplier"
               value={supplier}
-            
             />
           </div>
           <div className="input-group">
@@ -241,39 +239,37 @@ const NewShipment = (props) => {
               className="form-control"
               placeholder="Enter Location"
               onChange={e => setSupplierLocation(e.target.value)}
-              
             />
           </div>
-          <div className="input-group" >
-           
+          <div className="input-group">
             <label htmlFor="shipmentId">Shipment Date</label>
-             <div className="form-control">
-            <DatePicker
-              className="date"
-              selected={shipmentDate.date}
-              placeholderText="Enter Shipment Date"
-              onChange={onChange}
-              showYearDropdown
-              dateFormatCalendar="MMMM"
-              yearDropdownItemNumber={15}
-              scrollableYearDropdown
-              isClearable
-             />
-             </div>
+            <div className="form-control">
+              <DatePicker
+                className="date"
+                selected={shipmentDate.date}
+                placeholderText="Enter Shipment Date"
+                onChange={onChange}
+                showYearDropdown
+                dateFormatCalendar="MMMM"
+                yearDropdownItemNumber={15}
+                scrollableYearDropdown
+                isClearable
+              />
+            </div>
           </div>
         </div>
         <div className="col">
-            <div className="input-group">
+          <div className="input-group">
             <label htmlFor="shipmentId">Delivery To</label>
             <div className="form-control">
-            <DropdownButton
-              name={deliveryTo}
-              onSelect={item => setDeliveryTo(item)}
-              groups={userNames}
-            />
+              <DropdownButton
+                name={deliveryTo}
+                onSelect={item => setDeliveryTo(item)}
+                groups={userNames}
+              />
             </div>
-         </div>
-          
+          </div>
+
           <div className="input-group">
             <label htmlFor="shipmentId">Delivery Location</label>
             <input
@@ -281,26 +277,24 @@ const NewShipment = (props) => {
               className="form-control"
               placeholder="Enter Location"
               onChange={e => setDeliveryLocation(e.target.value)}
-            
             />
           </div>
 
           <div className="input-group ">
-         
-          <label htmlFor="shipmentId "> Estimate Delivery Date</label>
-              <div className="form-control">
-            <DatePicker
-              className="date"
-              placeholderText="Enter Delivery Date"
-              onChange = {onChange1}
-              selected = {estimateDeliveryDate.date1}
-              showYearDropdown
-              dateFormatCalendar="MMMM"
-              yearDropdownItemNumber={100}
-              scrollableYearDropdown
-              isClearable
+            <label htmlFor="shipmentId "> Estimate Delivery Date</label>
+            <div className="form-control">
+              <DatePicker
+                className="date"
+                placeholderText="Enter Delivery Date"
+                onChange={onChange1}
+                selected={estimateDeliveryDate.date1}
+                showYearDropdown
+                dateFormatCalendar="MMMM"
+                yearDropdownItemNumber={100}
+                scrollableYearDropdown
+                isClearable
               />
-             </div>
+            </div>
           </div>
         </div>
       </div>
@@ -310,17 +304,17 @@ const NewShipment = (props) => {
         +<span> Add Another Product</span>
       </button>
 
-    
       <hr />
 
       <div className="d-flex justify-content-between">
         <div className="total">Grand Total</div>
-    <div className="value">{quantity}</div>
+        <div className="value">{quantity}</div>
         <div className="d-flex ">
-         
-        <button className="btn btn-outline-info mr-2" onClick={onAssign}> Assign Shipment Order</button> 
-       <button className="btn-primary btn"  onClick={onProceedToReview}>Proceed To Review</button> 
-      
+          <button className="btn btn-outline-info mr-2" onClick={onAssign}>
+            {' '}
+            Assign Shipment Order
+          </button>
+          {/*<button className="btn-primary btn"  onClick={onProceedToReview}>Proceed To Review</button> */}
         </div>
       </div>
       {openCreatedInventory && (
@@ -328,8 +322,8 @@ const NewShipment = (props) => {
           close={() => closeModal()}
           size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
-          <ShipmentPopUp onHide={closeModal} //FailurePopUp
-          
+          <ShipmentPopUp
+            onHide={closeModal} //FailurePopUp
           />
         </Modal>
       )}
