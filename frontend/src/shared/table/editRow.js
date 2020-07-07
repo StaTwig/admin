@@ -72,7 +72,7 @@ const EditRow = props => {
                 />
               </div>
             </div>
-            <div className="rTableCell">
+           {/* <div className="rTableCell">
               <div className="input-group">
 
               <DatePicker
@@ -145,7 +145,7 @@ const EditRow = props => {
                 />
                
               </div>
-            </div>
+            </div>*/}
           </div>
         
     
