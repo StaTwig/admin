@@ -12,7 +12,6 @@ const NetworkContainer = props => {
                   <div className="d-flex">
                         <Sidebar {...props} />
                         <div className="content">
-                        <h1 className="breadcrumb ml-4">BLOCKCHAIN NETWORK </h1>
                         <img alt="" src={network} className="icon" width="1200" height="600"/>
                         </div>
                   </div>

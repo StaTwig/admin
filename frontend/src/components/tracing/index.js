@@ -66,16 +66,6 @@ const Tracing = props => {
                 </span>
               </div>
             </div>
-            <div className="row">
-              <div className="col">
-                <span className="bold">Mfg Date :</span>
-                {tracingShipment.products[0].manufacturingDate}
-              </div>
-              <div className="col">
-                <span className="bold">Exp Date : </span>
-                {tracingShipment.products[0].expiryDate}
-              </div>
-            </div>
           </div>
         </div>
         <div className="col-sm-8">
