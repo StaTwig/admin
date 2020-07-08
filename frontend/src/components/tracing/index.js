@@ -37,7 +37,7 @@ const Tracing = props => {
               <li className="bold">Total Quantity</li>
             </ul>
             <ul>
-              <li>transaction ID</li>
+              <li>d790fr5dsf34fgsr65r...</li>
               <li>{tracingShipment.shipmentId}</li>
               <li>{tracingShipment.client}</li>
               <li>{tracingShipment.products[0].quantity}</li>
