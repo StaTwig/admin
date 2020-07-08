@@ -719,7 +719,6 @@ exports.fetchUserShipments = [
           logger.log('info', '<<<<< ShipmentService < ShipmentController < fetchUserShipments : ')
           shipmentIds = destinationUser.shipmentIds;
         }
-console.log("d",shipmentIds)
         await utility.asyncForEach(shipmentIds, async shipmentId => {
           const response = await axios.get(
             `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${shipmentId}`,
@@ -729,8 +728,6 @@ console.log("d",shipmentIds)
             txnId = item.txid;
             return item.data;
           });
-		console.log("txid",txnId)
-		console.log("items",items)
           const itemsObject = JSON.parse(items);
           itemsObject.txnId = txnId;
           items_array.push(itemsObject);
@@ -752,7 +749,6 @@ console.log("d",shipmentIds)
                                 received++;
                  }
 	counts_array.push({total:total},{transit:transit},{shipped:shipped},{received:received})
-	console.log("counts_array",counts_array)
         logger.log('info', '<<<<< ShipmentService < ShipmentController < fetchUserShipments : ')
 	res.json({ data: items_array ,counts:{total:total,transit:transit,shipped:shipped,received:received}});
       } else {
