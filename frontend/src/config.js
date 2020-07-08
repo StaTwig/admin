@@ -31,12 +31,14 @@ export function config() {
       fetchAllPurchaseOrdersUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchPublisherPurchaseOrders`,
       fetchAllPurchaseOrderUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
       fetchPurchaseOrderStatisticsUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/purchaseOrderStatistics`,
+      trackShipment: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
     },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
       registerUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/register`,
       verifyOtpUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/verify-otp`,
       userInfoUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/userInfo`,
+      getAllUsersUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${DEV_SERVER_URL}/usermanagement/api/auth/upload`,
       shipmentsUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/fetchUserShipments`,
@@ -50,7 +52,8 @@ export function config() {
       createPurchaseOrderUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/createPurchaseOrder`,
       fetchAllPurchaseOrdersUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/fetchPublisherPurchaseOrders`,
       fetchAllPurchaseOrderUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
-      fetchPurchaseOrderStatisticsUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/purchaseOrderStatistics`
+      fetchPurchaseOrderStatisticsUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/purchaseOrderStatistics`,
+      trackShipment: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
     },
     stable: {
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
@@ -72,6 +75,7 @@ export function config() {
       inventorySearch: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`,
       inventoriesUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getAllInventoryDetails`,
       addInventoryUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/addNewInventory`,
+      trackShipment: `${STABLE_SERVER_URL_INVENTORY}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -93,6 +97,7 @@ export function config() {
       inventorySearch: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`,
       inventoriesUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getAllInventoryDetails`,
       addInventoryUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/addNewInventory`,
+      trackShipment: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
 
     },
     prod: {
@@ -104,10 +109,10 @@ export function config() {
       updateProfileUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${PROD_SERVER_URL}/usermanagement/api/auth/upload`,
       shipmentsUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchUserShipments`,
-      getProducts: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/getProducts`,
-      getManufacturers: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/getManufacturers`,
       createShipmentUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/createShipment`,
       shipmentsSearch: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchShipments?key=`,
+      getProducts: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/getProducts`,
+      getManufacturers: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/getManufacturers`,
       createPurchaseOrderUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/createPurchaseOrder`,
       fetchAllPurchaseOrdersUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchPublisherPurchaseOrders`,
       fetchAllPurchaseOrderUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
@@ -115,10 +120,11 @@ export function config() {
       inventorySearch: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`,
       inventoriesUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getAllInventoryDetails`,
       addInventoryUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/addNewInventory`,
+      trackShipment: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
     }
   };
 
-  const environment = process.env.ENVIRONMENT || 'local'; // change prod to test, local,stable, dev for respective environments
+  const environment = process.env.ENVIRONMENT || 'stable'; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
   return conf;
 }
