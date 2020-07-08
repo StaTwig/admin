@@ -1,10 +1,10 @@
 import React, { useState,useEffect} from 'react';
-import DropdownButton from '../dropdownButtonGroup';
-import calenderBlue from '../../assets/icons/calendar-blue.svg';
-import downArrow from '../../assets/icons/up-and-down-dark.svg';
-import DatePicker from 'react-datepicker';
+import DropdownButton from '../../../shared/dropdownButtonGroup';
+//import calenderBlue from '/../../assets/icons/calendar-blue.svg';
+//import downArrow from '/../../assets/icons/up-and-down-dark.svg';
+//import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import {getProducts,getManufacturers} from '../../actions/poActions';
+import {getProducts,getManufacturers} from '../../../actions/poActions';
 
 import './style.scss';
 
@@ -80,7 +80,7 @@ const EditRow = props => {
                 />
               </div>
             </div>
-           <div className="rTableCell">
+           {/* <div className="rTableCell">
               <div className="input-group">
 
               <DatePicker
@@ -91,7 +91,7 @@ const EditRow = props => {
               placeholderText="Enter Mfg Date"
               showMonthYearPicker
               showFullMonthYearPicker
-               
+               isClearable
               />
               </div>
             </div>
@@ -99,7 +99,7 @@ const EditRow = props => {
               <div className="input-group">
                <DatePicker
               className="form-field"
-              
+              isClearable
               placeholderText="Enter Exp Date"
               dateFormat="MM/yyyy"
               onChange = {onChange1}
@@ -155,7 +155,7 @@ const EditRow = props => {
                 />
                
               </div>
-            </div>
+            </div>*/}
           </div>
         
     

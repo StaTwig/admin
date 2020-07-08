@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from 'react';
 import {useSelector, useDispatch} from "react-redux";
 
-import EditTable from '../../shared/table/editTable';
+import EditTable from './table/editTable';
 import updownArrow from '../../assets/icons/up-and-down-dark.svg';
 import calenderDark from '../../assets/icons/calendar-grey.svg';
 import './style.scss';
@@ -74,7 +74,7 @@ const NewShipment = props => {
   
   const closeModal = () => {
     setOpenCreatedInventory(false);
-    // props.history.push('/shipments');
+    props.history.push('/shipments');
   };
   const closeModalFail = () => {
     setOpenShipmentFail(false);
