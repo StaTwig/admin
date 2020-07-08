@@ -719,7 +719,6 @@ exports.fetchUserShipments = [
           logger.log('info', '<<<<< ShipmentService < ShipmentController < fetchUserShipments : ')
           shipmentIds = destinationUser.shipmentIds;
         }
-
         await utility.asyncForEach(shipmentIds, async shipmentId => {
           const response = await axios.get(
             `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${shipmentId}`,
@@ -733,8 +732,25 @@ exports.fetchUserShipments = [
           itemsObject.txnId = txnId;
           items_array.push(itemsObject);
         });
+	  let counts_array = [];
+	  var total = items_array.length;
+          var transit = 0;
+          var shipped = 0;
+          var received = 0;
+
+          for (i=0;i<items_array.length;i++)
+        {
+                var status = items_array[i].status
+                if (status == "In Transit")
+                                transit++;
+                        else if (status == "Shipped")
+                                shipped++;
+                        else if (status == "Received")
+                                received++;
+                 }
+	counts_array.push({total:total},{transit:transit},{shipped:shipped},{received:received})
         logger.log('info', '<<<<< ShipmentService < ShipmentController < fetchUserShipments : ')
-        res.json({ data: items_array });
+	res.json({ data: items_array ,counts:{total:total,transit:transit,shipped:shipped,received:received}});
       } else {
         logger.log('info', '<<<<< ShipmentService < ShipmentController < fetchUserShipments : ')
         OrganisationModel.findOne({ organisationId: userObject.organisation }).then(
@@ -757,8 +773,24 @@ exports.fetchUserShipments = [
                items_array.push(itemsObject);
               });
             }
-            logger.log('info', '<<<<< ShipmentService < ShipmentController < fetchUserShipments : ')
-            res.json({ data: items_array });
+	  let counts_array = [];
+	  var total = items_array.length;
+          var transit = 0;
+          var shipped = 0;
+          var received = 0;
+
+          for (i=0;i<items_array.length;i++)
+        {
+                var status = items_array[i].status
+                if (status == "In Transit")
+                                transit++;
+                        else if (status == "Shipped")
+                                shipped++;
+                        else if (status == "Received")
+                                received++;
+                 }
+	     logger.log('info', '<<<<< ShipmentService < ShipmentController < fetchUserShipments : ')
+             res.json({ data: items_array ,counts:{total:total,transit:transit,shipped:shipped,received:received}});
           },
         );
       }

@@ -142,9 +142,37 @@ exports.getAllInventoryDetails = [
             `${blockchain_service_url}/queryDataByPublishers?stream=${stream_name}&address=${address}`,
           );
           const items = response.data.items;
-          console.log('items', items);
+	  var count_array = [];
+          var tot_qty = 0;
+          var bOPV_count = 0;
+          var MMR_count = 0;
+          var PVC_count = 0;
+          var BCG_count = 0;
+          var RV_count = 0;
+          var HepB_count = 0;
+
+          var total_inv = items.length;
+          for (i=0;i<items.length;i++)
+                {
+                        var productName = JSON.parse(items[i].data).productName;
+                        var count = parseInt(JSON.parse(items[i].data).quantity);
+                        tot_qty = tot_qty + count;
+                        if (productName == "bOPV")
+                                bOPV_count = bOPV_count + count;
+                        else if (productName == "MMR")
+                                MMR_count = MMR_count + count;
+                        else if (productName == "PVC")
+                                PVC_count = PVC_count + count;
+                        else if (productName == "BCG")
+                                BCG_count = BCG_count + count;
+                        else if (productName == "RV")
+                                RV_count = RV_count + count;
+                        else if (productName == "HepB")
+                                HepB_count = HepB_count + count;
+                }
+          count_array.push({tot_qty:tot_qty},{tot_inv:total_inv},{bOPV:bOPV_count},{MMR:MMR_count},{PVC:PVC_count},{BCG:BCG_count},{RV:RV_count},{HepB:HepB_count})
           logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : ')
-          res.json({ data: items });
+          res.json({ data: items , count :{tot_qty:tot_qty,tot_inv:total_inv,bOPV:bOPV_count,MMR:MMR_count,PVC:PVC_count,BCG:BCG_count,RV:RV_count,HepB:HepB_count}});
         } else {
           logger.log('warn', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : ')
           res.status(403).json(result);
