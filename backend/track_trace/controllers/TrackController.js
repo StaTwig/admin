@@ -208,11 +208,8 @@ exports.fetchTemp = [
       const max = 4.99; //req.body.max;
       const min = -9.97; //req.body.min;
       
-      var tempData = {
-        time: [],
-        temperature: []
-      }
-      
+      var tempData = {}
+    
       for(var i=0; i<20; i++){
           
         seconds = seconds  + 5;
@@ -227,8 +224,10 @@ exports.fetchTemp = [
         }
         if(hours >= 24) hours -= 24;
 
-        tempData.time.push(hours + ":" + minutes + ":" + seconds);
-        tempData.temperature.push((Math.random() * (max - min) + min).toFixed(2))
+        var time = hours + ":" + minutes + ":" + seconds;
+        var temp = (Math.random() * (max - min) + min).toFixed(2);
+
+        tempData[time] = temp;
       }
       
       console.log(tempData);
