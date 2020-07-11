@@ -24,15 +24,15 @@ exports.getTotalCount = [
       const { authorization } = req.headers;
       checkToken(req, res, async result => {
         if (result.success) {
-          logger.log('info', '<<<<< InventoryService < InventoryController < getTotalCount : ')
+          logger.log('info', '<<<<< InventoryService < InventoryController < getTotalCount : token verifed successfully')
           res.json('Total inventory count');
         } else {
-          logger.log('warn', '<<<<< InventoryService < InventoryController < getTotalCount : ')
+          logger.log('warn', '<<<<< InventoryService < InventoryController < getTotalCount : refuted token')
           res.status(403).json(result);
         }
       });
     } catch (err) {
-      logger.log('error', '<<<<< InventoryService < InventoryController < getTotalCount : ')
+      logger.log('error', '<<<<< InventoryService < InventoryController < getTotalCount : error (catch block)')
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -45,15 +45,15 @@ exports.getTotalCountOnHold = [
       const { authorization } = req.headers;
       checkToken(req, res, async result => {
         if (result.success) {
-          logger.log('info', '<<<<< InventoryService < InventoryController < getTotalCountOnHold : ')
+          logger.log('info', '<<<<< InventoryService < InventoryController < getTotalCountOnHold : token verified successfully')
           res.json('Total inventory count on Hold');
         } else {
-          logger.log('warn', '<<<<< InventoryService < InventoryController < getTotalCountOnHold : ')
+          logger.log('warn', '<<<<< InventoryService < InventoryController < getTotalCountOnHold : refuted token')
           res.status(403).json(result);
         }
       });
     } catch (err) {
-      logger.log('error', '<<<<< InventoryService < InventoryController < getTotalCountOnHold : ')
+      logger.log('error', '<<<<< InventoryService < InventoryController < getTotalCountOnHold : error (catch block)')
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -66,15 +66,15 @@ exports.getExpiringInventory = [
       const { authorization } = req.headers;
       checkToken(req, res, async result => {
         if (result.success) {
-          logger.log('info', '<<<<< InventoryService < InventoryController < getExpiringInventory : ')
+          logger.log('info', '<<<<< InventoryService < InventoryController < getExpiringInventory : token verified successfully')
           res.json('Total inventory count expiring');
         } else {
-          logger.log('warn', '<<<<< InventoryService < InventoryController < getExpiringInventory : ')
+          logger.log('warn', '<<<<< InventoryService < InventoryController < getExpiringInventory : refuted token')
           res.status(403).json(result);
         }
       });
     } catch (err) {
-      logger.log('error', '<<<<< InventoryService < InventoryController < getExpiringInventory : ')
+      logger.log('error', '<<<<< InventoryService < InventoryController < getExpiringInventory : error (catch block)')
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -87,16 +87,16 @@ exports.getInventoryforProduct = [
       const { authorization } = req.headers;
       checkToken(req, res, async result => {
         if (result.success) {
-          logger.log('info', '<<<<< InventoryService < InventoryController < getInventoryforProduct : ')
+          logger.log('info', '<<<<< InventoryService < InventoryController < getInventoryforProduct : token verified successfullly')
           const { product_id } = result.data.key;
           res.json('Inventory details for product');
         } else {
-          logger.log('warn', '<<<<< InventoryService < InventoryController < getInventoryforProduct : ')
+          logger.log('warn', '<<<<< InventoryService < InventoryController < getInventoryforProduct : refuted token')
           res.status(403).json(result);
         }
       });
     } catch (err) {
-      logger.log('error', '<<<<< InventoryService < InventoryController < getInventoryforProduct : ')
+      logger.log('error', '<<<<< InventoryService < InventoryController < getInventoryforProduct : error (catch block)')
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -109,22 +109,22 @@ exports.getInventoryDetailsForProduct = [
       const { authorization } = req.headers;
       checkToken(req, res, async result => {
         if (result.success) {
-          logger.log('info', '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : ')
+          logger.log('info', '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : token verified successfullly, querying data by key')
           const { key } = req.query;
           const response = await axios.get(
             `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${key}`,
           );
           const items = response.data.items;
           console.log('items', items);
-          logger.log('info', '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : ')
+          logger.log('info', '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : queried data by key')
           res.json({ data: items });
         } else {
-          logger.log('warn', '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : ')
+          logger.log('warn', '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : refuted token')
           res.status(403).json(result);
         }
       });
     } catch (err) {
-      logger.log('error', '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : ')
+      logger.log('error', '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : error (catch block)')
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -136,7 +136,7 @@ exports.getAllInventoryDetails = [
     try {
       checkToken(req, res, async result => {
         if (result.success) {
-          logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : ')
+          logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : token verified successfullly, querying data by publisher')
           const { address } = req.user;
           const response = await axios.get(
             `${blockchain_service_url}/queryDataByPublishers?stream=${stream_name}&address=${address}`,
@@ -152,34 +152,40 @@ exports.getAllInventoryDetails = [
           var HepB_count = 0;
 
           var total_inv = items.length;
-          for (i=0;i<items.length;i++)
-                {
-                        var productName = JSON.parse(items[i].data).productName;
-                        var count = parseInt(JSON.parse(items[i].data).quantity);
-                        tot_qty = tot_qty + count;
-                        if (productName == "bOPV")
-                                bOPV_count = bOPV_count + count;
-                        else if (productName == "MMR")
-                                MMR_count = MMR_count + count;
-                        else if (productName == "PVC")
-                                PVC_count = PVC_count + count;
-                        else if (productName == "BCG")
-                                BCG_count = BCG_count + count;
-                        else if (productName == "RV")
-                                RV_count = RV_count + count;
-                        else if (productName == "HepB")
-                                HepB_count = HepB_count + count;
-                }
+          for (i=0;i<items.length;i++){
+              var productName = JSON.parse(items[i].data).productName;
+              var count = parseInt(JSON.parse(items[i].data).quantity);
+              tot_qty = tot_qty + count;
+              if (productName == "bOPV"){
+                logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : product name is bOPV');
+                bOPV_count = bOPV_count + count;
+              } else if (productName == "MMR"){
+                logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : product name is MMR');
+                MMR_count = MMR_count + count;
+              } else if (productName == "PVC"){
+                logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : product name is PVC');
+                PVC_count = PVC_count + count;
+              } else if (productName == "BCG"){
+                logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : product name is BCG');
+                BCG_count = BCG_count + count;
+              } else if (productName == "RV"){
+                logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : product name is RV');
+                RV_count = RV_count + count;
+              } else if (productName == "HepB"){
+                logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : product name is HepB');
+                HepB_count = HepB_count + count;
+              }                                
+          }
           count_array.push({tot_qty:tot_qty},{tot_inv:total_inv},{bOPV:bOPV_count},{MMR:MMR_count},{PVC:PVC_count},{BCG:BCG_count},{RV:RV_count},{HepB:HepB_count})
-          logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : ')
+          logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : queried and pushed data')
           res.json({ data: items , count :{tot_qty:tot_qty,tot_inv:total_inv,bOPV:bOPV_count,MMR:MMR_count,PVC:PVC_count,BCG:BCG_count,RV:RV_count,HepB:HepB_count}});
         } else {
-          logger.log('warn', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : ')
+          logger.log('warn', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : refuted token')
           res.status(403).json(result);
         }
       });
     } catch (err) {
-      logger.log('error', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : ')
+      logger.log('error', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : error (catch block)')
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -238,7 +244,7 @@ exports.addNewInventory = [
       } 
       checkToken(req, res, async result => {
         if (result.success) {
-          logger.log('info', '<<<<< InventoryService < InventoryController < addNewInventory : ')
+          logger.log('info', '<<<<< InventoryService < InventoryController < addNewInventory : token verified successfullly, publishing data')
           const { data } = req.body;
           const { address } = req.user;
           const userData = {
@@ -251,15 +257,15 @@ exports.addNewInventory = [
             `${blockchain_service_url}/publish`,
             userData,
           );
-          logger.log('info', '<<<<< InventoryService < InventoryController < addNewInventory : ')
+          logger.log('info', '<<<<< InventoryService < InventoryController < addNewInventory : publised data to blockchain')
           res.status(200).json({ response: response.data.transactionId });
         } else {
-          logger.log('warn', '<<<<< InventoryService < InventoryController < addNewInventory : ')
+          logger.log('warn', '<<<<< InventoryService < InventoryController < addNewInventory : refuted token')
           res.status(403).json(result);
         }
       });
     } catch (err) {
-      logger.log('error', '<<<<< InventoryService < InventoryController < addNewInventory : ')
+      logger.log('error', '<<<<< InventoryService < InventoryController < addNewInventory : error (catch block)')
       return apiResponse.ErrorResponse(res, err);
     }
   },
