@@ -3,6 +3,10 @@ const { sanitizeBody } = require("express-validator");
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
+
+const init = require('../logging/init');
+const logger = init.getLog();
+
 exports.trackStats = [
   auth,
   (req, res) => {
@@ -15,6 +19,7 @@ exports.trackStats = [
         TotalUnitsShipped: 132,
         user: req.user.email
       };
+      logger.log('info', '<<<<< TrackTraceService < TrackController < trackStats : successfully sending response with data ', overviewObject);
       return apiResponse.successResponseWithData(
         res,
         "Data sent",
@@ -22,6 +27,7 @@ exports.trackStats = [
       );
     } catch (err) {
       //throw error in json response with status 500.
+      logger.log('error', '<<<<< TrackTraceService < TrackController < trackStats : error (catch block) ', err);
       return apiResponse.ErrorResponse(res, err);
     }
   }
@@ -48,12 +54,14 @@ exports.fetchTransactions = [
           user: req.user.email
         }
       ];
+      logger.log('info', '<<<<< TrackTraceService < TrackController < fetchTransactions : successfully sending response with data ', transactionObject);
       return apiResponse.successResponseWithData(
         res,
         "Transactions Sent",
         transactionObject
       );
     } catch (err) {
+      logger.log('error', '<<<<< TrackTraceService < TrackController < fetchTransactions : error (catch block) ', err);
       return apiResponse.ErrorResponse(res, err);
     }
   }
@@ -69,13 +77,14 @@ exports.fetchShipmentDetails = [
         TotalQuantity: "60,000",
         user: req.user.email
       };
-
+      logger.log('info', '<<<<< TrackTraceService < TrackController < fetchShipmentDetails : successfully sending response with data ', shipmentObject);
       return apiResponse.successResponseWithData(
         res,
         "Data sent",
         shipmentObject
       );
     } catch (err) {
+      logger.log('error', '<<<<< TrackTraceService < TrackController < fetchShipmentDetails : error (catch block) ', err);
       return apiResponse.ErrorResponse(res, err);
     }
   }
@@ -89,13 +98,14 @@ exports.fetchLocation = [
         GPS: "17.54537,67.37463298",
         user: req.user.email
       };
-
+      logger.log('info', '<<<<< TrackTraceService < TrackController < fetchLocation : successfully sending response with data ', locationObject);
       return apiResponse.successResponseWithData(
         res,
         "Data sent",
         locationObject
       );
     } catch (err) {
+      logger.log('error', '<<<<< TrackTraceService < TrackController < fetchLocation : error (catch block) ', err);
       return apiResponse.ErrorResponse(res, err);
     }
   }
@@ -115,12 +125,14 @@ exports.fetchTemperature = [
           user: req.user.email
         }
       ];
+      logger.log('info', '<<<<< TrackTraceService < TrackController < fetchTemperature : successfully sending response with data ', temperatureObject);
       return apiResponse.successResponseWithData(
         res,
         "Data sent",
         temperatureObject
       );
     } catch (err) {
+      logger.log('error', '<<<<< TrackTraceService < TrackController < fetchTemperature : error (catch block) ', err);
       return apiResponse.ErrorResponse(res, err);
     }
   }
@@ -153,8 +165,10 @@ exports.fetchGoodsByID = [
           ExpDate: "04/01/2023"
         }
       ];
+      logger.log('info', '<<<<< TrackTraceService < TrackController < fetchGoodsByID : successfully sending response with data ', goodsObject);
       return apiResponse.successResponseWithData(res, "Data sent", goodsObject);
     } catch (err) {
+      logger.log('error', '<<<<< TrackTraceService < TrackController < fetchGoodsByID : error (catch block) ', err);
       return apiResponse.ErrorResponse(res, err);
     }
   }
@@ -184,12 +198,14 @@ exports.fetchTracking = [
           Wallet: "0x5cdeca3cf356ad83B813fC2c8eA483AAC76A736e"
         }
       ];
+      logger.log('info', '<<<<< TrackTraceService < TrackController < fetchTracking : successfully sending response with data ', trackingObject);
       return apiResponse.successResponseWithData(
         res,
         "Data sent",
         trackingObject
       );
     } catch (err) {
+      logger.log('error', '<<<<< TrackTraceService < TrackController < fetchTracking : error (catch block) ', err);
       return apiResponse.ErrorResponse(res, err);
     }
   }
@@ -230,13 +246,15 @@ exports.fetchTemp = [
         tempData[time] = temp;
       }
       
-      console.log(tempData);
+      // console.log(tempData);
+      logger.log('info', '<<<<< TrackTraceService < TrackController < fetchTemp : successfully sending response with data ', tempData);
       return apiResponse.successResponseWithData(
         res,
         "Time-Temperature Data sent",
         tempData
       );
     } catch (err) {
+      logger.log('error', '<<<<< TrackTraceService < TrackController < fetchTemp : error (catch block) ', err);
       return apiResponse.ErrorResponse(res, err);
     }
   }
