@@ -28,10 +28,10 @@ exports.writeData = async function (req, res) {
 	    var key = req.body.key
         var address = req.body.address
         var dataStream = req.body.stream
-        logz.log('info', '<<<<< BlockchainService < Publish < writeData : Publishing data to stream ', dataStream, " key ", key, " address ", address, " data ", data);
+        logz.log('info', '<<<<< BlockchainService < Publish < writeData : Publishing data to stream ');
 	    uilogger.info("Publishing data to stream",dataStream,"key",key,"address",address,"data",data);
 	    multichain.publishFrom({from:address, stream:dataStream, key:key , data:data }, (err, tx) => {
-            logz.log('info', '<<<<< BlockchainService < Publish < writeData : Published data to stream with txnId : ', tx);
+            logz.log('info', '<<<<< BlockchainService < Publish < writeData : Published data to stream with txnId');
             res.json({transactionId: tx});
       })
     }

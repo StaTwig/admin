@@ -13,7 +13,7 @@ exports.createUser = function (req, res) {
     const multichain = init.getMultichain();
     multichain.getNewAddress({
     }, (err, data) => {
-	logz.log('info', '<<<<< BlockchainService < Register < createUser : Created new address', data);
+	logz.log('info', '<<<<< BlockchainService < Register < createUser : Created new address');
 	logger.info("Created new address",data);
         res.json({items: data});
     })
@@ -29,7 +29,7 @@ exports.grantPermission = function (req, res) {
 	var stream = streams[i];
 	shell.exec("multichain-cli chain1 grant " + address + " " + stream + ".write")
 	logger.info("Granting permission for address",address,"to stream",stream);
-	logz.log('info', '<<<<< BlockchainService < Register < grantPrmission : Granting permission for address', address, "to stream", stream);
+	logz.log('info', '<<<<< BlockchainService < Register < grantPrmission : Granting permission for address to a stream');
 	}
 
 	shell.exec("multichain-cli chain1 grant " + address + " send");
