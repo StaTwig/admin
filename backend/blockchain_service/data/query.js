@@ -1,9 +1,11 @@
 const init = require('../common/init');
 var date = require('date-and-time');
 
+const logz = init.getLogz();
+
 const log4js = init.getLog();
 const logger = log4js.getLogger('backend-logs');
-const uilogger = log4js.getLogger('frontend-logs');
+// const uilogger = log4js.getLogger('frontend-logs');
 
 exports.fetchDataByKey = function (req, res) {
     const {stream, key} = req.query;
@@ -16,17 +18,19 @@ exports.fetchDataByKey = function (req, res) {
         count : 1,
         start: -1,
     }, (err, data) => {
-	res.setHeader('Access-Control-Allow-Origin', '*');
-        if(err)  {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    if(err)  {
+        logz.log('error', '<<<<< BlockchainService < Query < fetchDataByKey : error while fetching ', err);
 		logger.info("Fetch data from",stream,"for the key null error:",err);
 		res.json({error: err});
 	}
-	    else
+    else
 	    {
 		data.forEach(item => {
                 item.data = Buffer.from(item.data, 'hex').toString('utf8')
         });
-        logger.info("Fetch data from",stream,"for the key",key);
+        logz.log('info', '<<<<< BlockchainService < Query < fetchDataByKey : Fetch data from ', stream, " for the key ", key);
+        logger.info("Fetch data from ", stream, " for the key ", key);
         res.json({items: data});
  	}
     });
@@ -43,6 +47,7 @@ exports.fetchDataByAddr = function (req, res) {
     }, (err, data) => {
 	  res.setHeader('Access-Control-Allow-Origin', '*');
 	 if(err)  {
+        logz.log('error', '<<<<< BlockchainService < Query < fetchDataByAddr : error while fetching ', err);
 		logger.info("Fetch data from",stream,"for the address null error:",err);
                 res.json({error: err});
         }
@@ -51,7 +56,8 @@ exports.fetchDataByAddr = function (req, res) {
             data.forEach(item => {
             item.data = Buffer.from(item.data, 'hex').toString('utf8')
         });
-	logger.info("Fetch data from",stream,"for the address",address);
+        logz.log('info', '<<<<< BlockchainService < Query < fetchDataByAddr : Fetch data from ', stream, ' for the address ', address);
+	    logger.info("Fetch data from",stream,"for the address",address);
         res.json({items: data});
   	}
     });
@@ -62,25 +68,27 @@ exports.fetchDataByPublishers = function (req, res) {
     const multichain = init.getMultichain();
 
     multichain.listStreamPublisherItems({
-	stream,
+	    stream,
         address,
         verbose: true,
-	start : 0,
-	count : 9999999
+	    start : 0,
+	    count : 9999999
     }, (err, data) => {
 	  res.setHeader('Access-Control-Allow-Origin', '*');
-	 if(err)  {
-                logger.info("Fetch data from",stream,"for the publisher address null error:",err);
-                res.json({error: err});
+	    if(err)  {
+            logz.log('error', '<<<<< BlockchainService < Query < fetchDataByPublishers : error while fetching ', err);
+            logger.info("Fetch data from",stream,"for the publisher address null error:",err);
+            res.json({error: err});
         }
-           else
-          {
-        data.forEach(item => {
+        else
+        {
+            data.forEach(item => {
             item.data = Buffer.from(item.data, 'hex').toString('utf8')
-        });
-        logger.info("Fetch data from",stream,"and publisher address",address);
-        res.json({items: data});
- 	}
+            });
+            logz.log('info', '<<<<< BlockchainService < Query < fetchDataByAddr : fetch data from ', stream, ' and publisher address ', address);
+            logger.info("Fetch data from",stream,"and publisher address",address);
+            res.json({items: data});
+ 	    }
     });
 }
 
@@ -94,7 +102,8 @@ exports.fetchDataByTxHash = function (req, res) {
         verbose: true
     }, (err, data) => {
        res.setHeader('Access-Control-Allow-Origin', '*');
-        data1 = Buffer.from(data.data, 'hex').toString('utf8')
+        data1 = Buffer.from(data.data, 'hex').toString('utf8');
+        logz.log('info', '<<<<< BlockchainService < Query < fetchDataByTxHash : fetch data from ', stream, ' for the txid ', txid);
         logger.info("Fetch data from",stream,"for the txid",txid);
         res.json({items: data1});
     });
@@ -112,14 +121,16 @@ exports.fetchStreamKeys = function (req, res) {
     }, (err, data) => {
 	    res.setHeader('Access-Control-Allow-Origin', '*');
 	      if(err)  {
-                logger.info("Fetch all keys from the stream",stream,"error:",err);
-                res.json({error: err});
+            logz.log('error', '<<<<< BlockchainService < Query < fetchStreamKeys : error in fetching ', err);
+            logger.info("Fetch all keys from the stream",stream,"error:",err);
+            res.json({error: err});
         }
            else
           {
               data.forEach(item=> {
                  key_array.push(item.key);
       });
+      logz.log('info', '<<<<< BlockchainService < Query < fetchStreamKeys : fetch all keys from stream ', stream);
 	   logger.info("Fetch all keys from stream",stream);
            res.json({items: key_array});	
  	}
@@ -139,6 +150,7 @@ exports.fetchPublisherKeys = function (req, res) {
     }, (err, data) => {
             res.setHeader('Access-Control-Allow-Origin', '*');
               if(err)  {
+                logz.log('error', '<<<<< BlockchainService < Query < fetchPublisherKeys : error in fetching ', err); 
                 logger.info("Fetch all keys from the stream for the publisher",stream,"error:",err);
                 res.json({error: err});
         }
@@ -147,6 +159,7 @@ exports.fetchPublisherKeys = function (req, res) {
               data.forEach(item=> {
                  key_array.push(item.key);
       });
+      logz.log('info', '<<<<< BlockchainService < Query < fetchPublisherKeys : fetch all keys from stream ', stream, ' for publisher ', address);
            logger.info("Fetch all keys from stream",stream,"for publisher",address);
            res.json({items: key_array});
         }
@@ -162,6 +175,7 @@ exports.fetchStreamItems = function (req, res) {
     }, (err, data) => {
 	    res.setHeader('Access-Control-Allow-Origin', '*');
 	    if(err)  {
+            logz.log('error', '<<<<< BlockchainService < Query < fetchStreamItems : error in fetching ', err);
                 logger.info("Fetch all stream items of the stream",stream,"error:",err);
                 res.json({error: err});
         }
@@ -170,6 +184,7 @@ exports.fetchStreamItems = function (req, res) {
               data.forEach(item=> {
                  items_array.push(item);
       });
+      logz.log('info', '<<<<< BlockchainService < Query < fetchStreamItems : fetch all stream items from stream ', stream);
 	   logger.info("Fetch all stream items from stream",stream);
            res.json({items: items_array});
 	}
@@ -183,14 +198,16 @@ exports.fetchTotalBlocks = function (req, res) {
     }, (err, data) => {
             res.setHeader('Access-Control-Allow-Origin', '*');
             if(err)  {
+                logz.log('error', '<<<<< BlockchainService < Query < fetchTotalBlocks : error in fetching ', err);
                 logger.info("Fetch all stream items of the stream",stream,"error:",err);
                 res.json({error: err});
         }
            else
           {
                data = data.blocks;
-	       logger.info("Fetching total blocks")
- 	       res.json({block_size: data});
+               logz.log('info', '<<<<< BlockchainService < Query < fetchTotalBlocks : fetching total blocks');
+    	       logger.info("Fetching total blocks")
+ 	           res.json({block_size: data});
         }
     });
 }
