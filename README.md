@@ -28,6 +28,7 @@ Branch out from development, merge requests/pull requests shall be to developmen
 |notificationmanagement| 3006 | 4006|
 |inventorymanagement| 3007| 4007|
 |blockchainmanagement| 3008| 4008|
+|productmanagement| 3010| 4010|
 
 
 # Dependencies:

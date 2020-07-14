@@ -56,6 +56,12 @@
       #middlewares = ["blockchain-stripprefix"]
       #If the rule matches, forward to the user management service (declared below)
       service = "blockchain-management"
+    [http.routers.products-management]
+      rule = "Host(`test.vaccineledger.com`) && PathPrefix(`/productmanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["products-stripprefix"]
+      #If the rule matches, forward to the user management service (declared below)
+      service = "products-management"
 
   [http.middlewares]
     [http.middlewares.test-stripprefix.stripPrefix]
@@ -79,6 +85,8 @@
       prefixes = ["/inventorymanagement", "/inventorymanagement/"]
     [http.middlewares.blockchain-stripprefix.stripPrefix]
       prefixes = ["/blockchainmanagement", "/blockchainmanagement/"]
+    [http.middlewares.products-stripprefix.stripPrefix]
+      prefixes = ["/productmanagement", "/productmanagement/"]
     
   [http.services]
     # Define how to reach an existing service on our infrastructure
@@ -110,4 +118,7 @@
     [http.services.blockchain-management.loadBalancer]
       [[http.services.blockchain-management.loadBalancer.servers]]
         url = "http://52.90.57.31:3008/"
+    [http.services.products-management.loadBalancer]
+      [[http.services.products-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3010/"
     
