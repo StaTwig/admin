@@ -1,13 +1,13 @@
 module.exports = {
   apps : [{
     name: 'Alert Service',
-    script: 'index.js',
+    script: 'products_server.js',
 
     // Options reference: https://pm2.keymetrics.io/docs/usage/application-declaration/
     args: 'one two',
     instances: 1,
-    autorestart: false,
-    watch: false,
+    autorestart: true,
+    watch: true,
     max_memory_restart: '1G',
     env: {
       NODE_ENV: 'development'

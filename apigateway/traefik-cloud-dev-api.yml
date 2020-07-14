@@ -12,7 +12,7 @@ entryPoints:
 log:
     level: DEBUG
     filePath: ./traefik.log
-    format: common
+    format: json
                
 
 providers:

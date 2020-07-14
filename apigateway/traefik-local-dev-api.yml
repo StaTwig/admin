@@ -12,7 +12,7 @@ entryPoints:
 log:
     level: DEBUG
     filePath: ./traefik.log
-    format: common
+    format: json
 
 providers:
     # Enable the file provider to define routers / middlewares / services in file

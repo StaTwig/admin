@@ -5,7 +5,7 @@ if [ $# -eq 0 ];
   then
     echo "Please choose the mode: PROD TEST LOCAL"
     echo "Followed by the sercices: FRONTEND GATEWAY SERVICESI SERVICESII ALL"
-    echo "SERVICESI - shipping_service	transaction_service inventory_service	track_trace		user_service"
+    echo "SERVICESI - shipping_service	transaction_service inventory_service	track_trace		user_service products_service"
     echo "SERVICESII - blockchain_service	log_service alert_service notification_service"
     exit
 
@@ -41,7 +41,7 @@ if [ "$1" == "PROD" ] && [ "$2" == "SERVICESI" ]
 
 elif [ "$1" == "PROD" ] && [ "$2" == "SERVICESII" ]
    then
-      rm -rf shipping_service	transaction_service inventory_service	track_trace		user_service
+      rm -rf shipping_service	transaction_service inventory_service	track_trace		user_service products_service
 
 fi
 
@@ -51,7 +51,7 @@ if ([ "$1" == "PROD" ] || [ "$1" == "TEST" ]) && ([ "$2" == "SERVICESI" ] || [ "
       for dir in ./*/
          do cd -P "$dir" ||continue
             printf %s\\n "$PWD" >&2
-            npm install && pm2 start && cd "$OLDPWD" || 
+            npm install && pm2 start && pm2 save && cd "$OLDPWD" || 
          ! break; done || ! cd - >&2
 
 elif [ "$1" == "LOCAL" ]
