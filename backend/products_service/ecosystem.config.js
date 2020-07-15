@@ -1,6 +1,6 @@
 module.exports = {
   apps : [{
-    name: 'Alert Service',
+    name: 'Products Service',
     script: 'products_server.js',
 
     // Options reference: https://pm2.keymetrics.io/docs/usage/application-declaration/

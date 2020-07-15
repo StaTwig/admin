@@ -1,7 +1,7 @@
 module.exports = {
   apps : [{
     name: 'Track & Trace Service',
-    script: 'index.js',
+    script: 'tracktrace_server.js',
 
     // Options reference: https://pm2.keymetrics.io/docs/usage/application-declaration/
     args: 'one two',

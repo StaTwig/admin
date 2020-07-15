@@ -50,6 +50,7 @@ if ([ "$1" == "PROD" ] || [ "$1" == "TEST" ]) && ([ "$2" == "SERVICESI" ] || [ "
       cd -P .
       for dir in ./*/
          do cd -P "$dir" ||continue
+            echo "starting $PWD "
             printf %s\\n "$PWD" >&2
             npm install && pm2 start && pm2 save && cd "$OLDPWD" || 
          ! break; done || ! cd - >&2

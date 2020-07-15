@@ -1,5 +1,5 @@
 {
-  "name": "theledgeruserservice",
+  "name": "theledgershippingservice",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -25,6 +25,8 @@
     "mongoose": "^5.7.6",
     "morgan": "~1.9.0",
     "nodemailer": "^6.3.1",
+    "npx": "^10.2.2",
+    "pm2": "^4.2.3",
     "winston-logzio": "^5.1.2"
   },
   "devDependencies": {
