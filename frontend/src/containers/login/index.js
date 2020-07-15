@@ -33,13 +33,20 @@ const LoginContainer = props => {
       setErrorMessage(err.msg);
     }
   });
+  const onkeydown = (event) => {
+    if (event.keyCode  === 13) {
+      onLogin();
+    }
+   }
+
   return(
-    <div className="container-fluid p-0">
+    <div className="container-fluid p-0" tabindex="-1" onKeyDown={onkeydown}>
       <Login
         errorMessage={errorMessage}
         onLogin={onLogin}
         onEmailChange={e => setEmail(e.target.value)}
         onPasswordChange={e => setPassword(e.target.value)}
+     
       />
     </div>
   );

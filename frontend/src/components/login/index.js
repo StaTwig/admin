@@ -13,6 +13,13 @@ import './style.scss';
 const FormLoginPage = (props) => {
   const { password, email, onEmailChange, onPasswordChange, errorMessage, onLogin } = props;
   const [passwordType, setPasswordType] = useState(true);
+
+  
+  const onkeydown = (event) => {
+    if (event.keyCode  === 13) {
+      onLogin();
+    }
+   }
   return (
     <div className="login-wrapper">
       <div className="container">
@@ -41,7 +48,10 @@ const FormLoginPage = (props) => {
                     <input type={passwordType ? 'password' : 'text'} className="form-control"
                       value={password}
                       onChange={onPasswordChange}
-                      placeholder="Password" />
+                      placeholder="Password" 
+                 
+                      />
+                   
                     <img
                       className="showpassword"
                       alt=""

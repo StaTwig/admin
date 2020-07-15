@@ -58,7 +58,7 @@ const PoTable = props => {
                 <div className="rTableCell">{p.date}</div>
            <div className="rTableCell">{p.receiver.name}</div>
            <div className="rTableCell">{p.destination}</div>
-                 <div className="rTableCell">Shipped</div>
+                 <div className="rTableCell" ><div className="status"><span className="text">Sent</span></div></div>
                </div>
                </div>)
         

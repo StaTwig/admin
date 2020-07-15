@@ -1,11 +1,10 @@
 import React,{useState} from "react";
 import ProductsTableReview from './productsReview';
 import {useSelector, useDispatch} from "react-redux";
-import { createPO,setEditPos} from '../../actions/poActions';
+import { createPO,setEditPos,resetEditPos} from '../../actions/poActions';
 import Pen from "../../assets/icons/po.svg";
 import Modal from '../../shared/modal';
 import PoPopUp from './poPopUp';
-import { initialState } from "../../reducers/editPoReducer";
 import './style.scss';
 
 
@@ -23,12 +22,10 @@ const PurchaseFormReview = props => {
         return state.reviewPo;
       
       });
-
+     
 
       const closeModal = () => {
-      
-        props.setEditMode(true);
-        dispatch(setEditPos(initialState));
+        props.setEditMode(false);
       };
     
       const onEdit = () => {
@@ -46,15 +43,10 @@ const PurchaseFormReview = props => {
     console.log('result', result);
     setProductID(result.data.orderID)
     if (result.status != 400) {
-     
+      dispatch(resetEditPos());
       setOpenCreatedPo(true);
-      
-      
+ }
     }
-    
-  
-
-  }
   return (
     <div className="purchaseform">
       <div className="d-flex justify-content-between">

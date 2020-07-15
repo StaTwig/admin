@@ -12,9 +12,9 @@ import {
   status: '',
   products:[
     {
-  productName:'Select product',
+  productName:'Select Product',
   quantity:'',
-  manufacturerName:'Select manufacturer',
+  manufacturerName:'Select Manufacturer',
   storageConditionmin:'',
   storageConditionmax:'',
   manufacturingDate: '',

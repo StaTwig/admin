@@ -97,21 +97,22 @@
 }
 
 
-.inventorypopup{
+.shipmentpopup{
 
   .data{
-    font: Regular 20px/33px Roboto;
+    font: 16px/27px $roboto ;
      color: #707070;
-
-
-  }
-
-
-  .alert{
-    font: Bold 25px/33px Roboto;
-    color: #000000;
 }
 
+.error{
+  font: 22px/36px $roboto ;
+  color: #707070;
+}
+
+  .alert{
+    font:  25px/0.1px $roboto;
+    color: #000000;
+}
 
 
 }

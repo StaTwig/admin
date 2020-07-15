@@ -2,10 +2,12 @@ export const TEST_SERVER_URL = 'http://test.vaccineledger.com:9001';
 export const LOCAL_SERVER_URL_USER = 'http://localhost:3001';
 export const LOCAL_SERVER_URL_SHIPMENT = 'http://localhost:3002';
 export const LOCAL_SERVER_URL_INVENTORY = 'http://localhost:3007';
+export const LOCAL_SERVER_URL_TRACKANDTRACE = 'http://localhost:3005';
 export const PROD_SERVER_URL = 'http://api.vaccineledger.com:9001';
 export const STABLE_SERVER_URL_USER = 'http://52.90.57.31:3001';
 export const STABLE_SERVER_URL_SHIPMENT = 'http://52.90.57.31:3002';
 export const STABLE_SERVER_URL_INVENTORY = 'http://52.90.57.31:3007';
+export const STABLE_SERVER_URL_TRACKANDTRACE = 'http://52.90.57.31:3005';
 export const DEV_SERVER_URL = 'http://127.0.0.1:9001';
 
 export function config() {
@@ -32,6 +34,7 @@ export function config() {
       fetchAllPurchaseOrderUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
       fetchPurchaseOrderStatisticsUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/purchaseOrderStatistics`,
       trackShipment: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
+      trackTemperature:`${LOCAL_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/track/fetchTemp`
     },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
@@ -54,6 +57,7 @@ export function config() {
       fetchAllPurchaseOrderUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
       fetchPurchaseOrderStatisticsUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/purchaseOrderStatistics`,
       trackShipment: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
+      trackTemperature:`${DEV_SERVER_URL}/tracktracemanagement/api/track/fetchTemp`
     },
     stable: {
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
@@ -76,6 +80,7 @@ export function config() {
       inventoriesUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getAllInventoryDetails`,
       addInventoryUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/addNewInventory`,
       trackShipment: `${STABLE_SERVER_URL_INVENTORY}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
+      trackTemperature:`${STABLE_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/track/fetchTemp`
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -98,6 +103,7 @@ export function config() {
       inventoriesUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getAllInventoryDetails`,
       addInventoryUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/addNewInventory`,
       trackShipment: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
+      trackTemperature:`${TEST_SERVER_URL}/tracktracemanagement/api/track/fetchTemp`
 
     },
     prod: {
@@ -121,10 +127,11 @@ export function config() {
       inventoriesUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getAllInventoryDetails`,
       addInventoryUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/addNewInventory`,
       trackShipment: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
+      trackTemperature:`${PROD_SERVER_URL}/tracktracemanagement/api/track/fetchTemp`
     }
   };
 
-  const environment = process.env.ENVIRONMENT || 'local'; // change prod to test, local,stable, dev for respective environments
+  const environment = process.env.ENVIRONMENT || 'test'; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
   return conf;
 }

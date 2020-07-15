@@ -54,7 +54,20 @@
         color: $black;
         font-weight: 400;
       }
+      .status{
+        height:20px;
+        width:50px;
+       background: #FFB100 0% 0% no-repeat padding-box;
+        border-radius: 5px;
+        display: inline-block;
+        text-align:center;
+        .text{
+          color:white;
+        }
+      }
+     
     }
+    
 
     .combine-data {
       display: flex;

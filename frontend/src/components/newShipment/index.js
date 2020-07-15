@@ -111,11 +111,25 @@ const NewShipment = props => {
   'manufacturingDate','expiryDate','batchNumber','serialNumber']
 
   const assignShipmentFields= ['shipmentId', 'client','deliveryTo','supplierLocation','deliveryLocation','shipmentDate',
-  'estimateDeliveryDate']
+  'estimateDeliveryDate','productName','quantity','manufacturerName']
   
   const profile = useSelector(state => {
     return state.user;
   });
+
+  const dates = ['shipmentDate','estimateDeliveryDate']
+  const dateValidation = (date) => {
+       let error = false;
+       let a =eval(date[0])
+       let b = eval(date[1])
+       if(a>b)
+       {
+       setShipmentError('Check deliveryDate')
+       setOpenShipmentFail(true);
+        error = true;
+       }
+        return error;
+  }
 
   const checkValidationErrors = (validations) => {
     
@@ -139,6 +153,7 @@ const NewShipment = props => {
 
       return;
     }
+  
     debugger;
     const receiver = users.find(usr => usr.name === deliveryTo);
     const data = {
@@ -175,10 +190,8 @@ const NewShipment = props => {
     console.log('new shipment data', data);
   };
   const onAssign = async () => {
-    if(checkValidationErrors(assignShipmentFields)) {
-
-      return;
-    }
+    if(checkValidationErrors(assignShipmentFields)) {return;}
+    if(dateValidation(dates)) {return;}
     const receiver = users.find(usr => usr.name === deliveryTo);
     const data = {
       shipmentId,

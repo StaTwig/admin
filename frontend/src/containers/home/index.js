@@ -12,7 +12,7 @@ import icon3 from '../../assets/icons/chain-icon.png';
 import mob from '../../assets/brands/mobile.png';
 import playstore from '../../assets/icons/googleplay.png';
 const HomeContainer = (props) => {
-  const user = useSelector(state => {
+  const user = useSelector(state => {  
     return state.user
   });
 
@@ -174,10 +174,10 @@ const HomeContainer = (props) => {
             <div className="d-flex flex-column">
          
               <h2 className="display-4">Mobile Application</h2>
-              <p>Download the VaccineLedger Mobile app for Android, ios from below </p>
+              <p>Download the VaccineLedger Mobile app for Android, iOS from below </p>
               <div className="mt-1"><a href="https://play.google.com/store/apps/details?id=com.thevaccineledger" 
               target="_blank" >
-                <img src={playstore} width="180" height="100" alt="logo" /></a></div> 
+                <img src={playstore}  alt="logo" /></a></div> 
      
             </div>
           </div>

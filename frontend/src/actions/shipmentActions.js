@@ -34,6 +34,16 @@ export const trackShipment = (shipmentId) => {
   }
 
 }
+
+export const getTemperature = async () => {
+  try {
+    const result =  await axios.get(config().trackTemperature);
+    return result.data;
+  }catch(e){
+    return e.response;
+  }
+
+}
 export const getShipmentsById = (query) => {
   try {
     return async dispatch => {
