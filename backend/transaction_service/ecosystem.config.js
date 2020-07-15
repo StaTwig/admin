@@ -1,7 +1,7 @@
 module.exports = {
   apps : [{
     name: 'Transaction Service',
-    script: 'index.js',
+    script: 'transaction_server.js',
 
     // Options reference: https://pm2.keymetrics.io/docs/usage/application-declaration/
     args: 'one two',
