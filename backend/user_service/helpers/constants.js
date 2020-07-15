@@ -1,9 +1,9 @@
 exports.constants = {
 	admin: {
 		name: "admin",
-		email: "info@babyboo.in"
+		email: "dev@statwig.com"
 	},
 	confirmEmails: {
-		from : "info@babyboo.in"
+		from : "dev@statwig.com"
 	}
 };

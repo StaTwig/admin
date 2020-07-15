@@ -97,7 +97,7 @@ exports.register = [
             confirmOTP: otp,
           });
           // Html email body
-          let html = `<p>Please Confirm your Account.</p><p>OTP: ${otp}. Verify Link http://localhost:3000/verify </p>`;
+          let html = `<p>Please Confirm your Account.</p><p>OTP: ${otp}. Verify Link ${req.headers.origin}/verify </p>`;
           // Send confirmation email
           mailer
             .send(
