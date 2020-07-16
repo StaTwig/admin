@@ -107,7 +107,6 @@ const EditRow = props => {
               showMonthYearPicker
               showFullMonthYearPicker
               />
-              <div>{console.log("expiry date", expiryDate , new Date(Date.parse(expiryDate)))}</div> 
               </div>
             </div>
             <div className="rTableCell">
@@ -116,7 +115,8 @@ const EditRow = props => {
                   type="number"
                   className="form-field1"
                   placeholder="Min"
-                  min="0"
+                  onKeyDown={ e => ( e.keyCode === 69 ||e.keyCode === 189
+                    ||e.keyCode === 187||e.keyCode === 40||e.keyCode === 38) && e.preventDefault() }
                   value={storageConditionmin}
                   onChange={e => setStorageConditionmin(e.target.value)}
                 
@@ -126,7 +126,8 @@ const EditRow = props => {
                   type="number"
                   className="form-field1"
                   placeholder="Max"
-                  min="0"
+                  onKeyDown={ e => ( e.keyCode === 69||e.keyCode === 189
+                    ||e.keyCode === 187||e.keyCode === 40||e.keyCode === 38) && e.preventDefault() }
                   value={storageConditionmax}
                   onChange={e => setStorageConditionmax(e.target.value)}
                 />

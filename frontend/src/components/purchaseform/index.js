@@ -43,7 +43,7 @@ const PurchaseForm = props => {
 
   const onValidate = () => {
 
-if (deliveryTo.length<1){
+if (deliveryTo.length<1||deliveryTo === 'Select Receiver'){
       setdeliverytoError("DeliveryTo must be specified")
       setTimeout(() => {setdeliverytoError('')} , 2000)
     } 
@@ -55,11 +55,11 @@ if (deliveryTo.length<1){
        }
    
 
-    else if(product.length<1||product === 'select product'){
+    else if(product.length<1||product === 'Select Product'){
       setproductError("Product Name must be Selected")
       setTimeout(() => {setproductError('')} , 2000)
     }
-     else if(manufacturer.length<1||manufacturer === 'select manufacturer')
+     else if(manufacturer.length<1||manufacturer === 'Select Manufacturer')
      {
       setmanufacturerError("Manufacturer must be selected")
       setTimeout(() => {setmanufacturerError('')} , 2000)
@@ -195,10 +195,13 @@ if (deliveryTo.length<1){
       {/* <button className="btn btn-white shadow-radius font-bold">
         +<span> Add Another Product</span>
       </button>*/}
-      
-     <button className="btn btn-orange review" onClick={onValidate}>
-        REVIEW
-      </button>
+ <hr />
+    <div className="d-flex flex-row justify-content-between">
+      <div>Total Quantity</div>
+        <div className="font-weight-bolder">{quantity}</div>
+        <button className="btn btn-orange review" onClick={onValidate}>REVIEW</button>
+      </div>
+     
       <div className="text text-success">{message}</div>
       <div className="text text-primary">
         

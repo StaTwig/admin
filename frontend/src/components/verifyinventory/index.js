@@ -64,11 +64,11 @@ const VerifyInventory = (props) => {
              </ul>
              <ul>
              <li className="bold">Manufacturer Date</li>
-               <li>{reviewInventory.manufacturingDate}</li>
+       <li>{`0${new Date(Date.parse(reviewInventory.manufacturingDate)).getMonth()+1}`.slice(-2)+"/"+new Date(Date.parse(reviewInventory.manufacturingDate)).getFullYear()}</li>
              </ul>
              <ul>
              <li className="bold">Expiry Date</li>
-             <li>{reviewInventory.expiryDate}</li>
+             <li>{`0${new Date(Date.parse(reviewInventory.expiryDate)).getMonth()+1}`.slice(-2)+"/"+new Date(Date.parse(reviewInventory.expiryDate)).getFullYear()}</li>
              </ul>
              <ul>
              <li className="bold">Batch Number</li>

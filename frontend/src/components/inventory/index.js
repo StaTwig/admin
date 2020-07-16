@@ -51,9 +51,11 @@ const Inventory = (props) => {
   useEffect(() => {
     props.inventories.map((inventory,index) => {
           key = index+1;
-          let a =inventory.expiryDate.slice(-4)
+          let a = inventory.expiryDate.length>7 ? new Date(Date.parse(inventory.expiryDate)).getFullYear(): inventory.expiryDate.slice(-4)
+          console.log(a)
           let b =todayDate.slice(-4)
-          let c = inventory.expiryDate.substring(0,2)
+          let c = inventory.expiryDate.length>7 ? `0${new Date(Date.parse(inventory.expiryDate)).getMonth()+1}`.slice(-2) : inventory.expiryDate.substring(0,2)
+          console.log(c)
           let d = todayDate.substring(0,2)
           if(a<b||(a==b&&c<=d)){
             count++;

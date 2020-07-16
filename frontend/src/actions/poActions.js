@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { config } from '../config';
-import {SET_REVIEW_PO,SET_EDIT_PO} from "../constants/poconstants";
+import {SET_REVIEW_PO,SET_EDIT_PO,RESET_EDIT_PO} from "../constants/poconstants";
 
 export const createPO = async (data) => {
   try {
@@ -80,4 +80,11 @@ export const setEditPos = (data) =>{
     payload: data,
   };
 
+}
+
+export const resetEditPos = (data) =>{
+  return {
+    type: RESET_EDIT_PO,
+    payload: data,
+  };
 }

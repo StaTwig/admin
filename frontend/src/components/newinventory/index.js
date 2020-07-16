@@ -61,7 +61,26 @@ const NewInventory = (props) => {
   const inventoryFields= ['productName','manufacturerName','quantity','storageConditionmin','storageConditionmax',
   'manufacturingDate','expiryDate','batchNumber','serialNumber']
 
-  
+  const month = new Date().getMonth()+1;
+  const newMonth = `0${month}`.slice(-2);
+  const todayDate =  newMonth + '/'  +new Date().getFullYear();
+  const dateValidationFields =['expiryDate']
+  //const [validate,setValidate] = useState('')
+  const expiryDateValidation = (date) =>
+  {
+    let error = false;
+    let validationVariable =  eval(date[0]);
+    let a = new Date(Date.parse(typeof validationVariable =='string' ?   validationVariable  : validationVariable.toLocaleDateString())).getFullYear()
+    let b =todayDate.slice(-4)
+    let c = `0${new Date(Date.parse(  typeof validationVariable =='string' ?   validationVariable  : validationVariable.toLocaleDateString())).getMonth()+1}`.slice(-2)
+    let d = todayDate.substring(0,2)
+    if(a<b||(a==b&&c<=d)){
+      setInventoryError('Check expiryDate')
+      setOpenFailInventory(true);
+      error = true;
+    }
+    return error;
+  }
   const checkValidationErrors = (validations) => {
     
     let error = false;
@@ -78,17 +97,14 @@ const NewInventory = (props) => {
     return error;
   }
   const onProceedToReview = () => {
-    if(checkValidationErrors(inventoryFields)) {
-
-      return;
-    }
-    
-    const data = {
+    if(checkValidationErrors(inventoryFields)) { return; }
+    else if(expiryDateValidation(dateValidationFields)){return;}
+     const data = {
       productName,
       manufacturerName,
       quantity,
-      manufacturingDate: typeof manufacturingDate =='string' ?   manufacturingDate  :manufacturingDate.toLocaleDateString('ko-KR', numeric),
-      expiryDate : typeof expiryDate =='string' ?   expiryDate  : expiryDate.toLocaleDateString('ko-KR', numeric),
+      manufacturingDate: typeof manufacturingDate =='string' ?   manufacturingDate  :manufacturingDate.toLocaleDateString(),
+      expiryDate : typeof expiryDate =='string' ?   expiryDate  : expiryDate.toLocaleDateString(),
       storageConditionmin,
       storageConditionmax,
       batchNumber,
