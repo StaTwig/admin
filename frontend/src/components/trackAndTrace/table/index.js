@@ -9,19 +9,25 @@ const Table = (props) => {
         return state.user;
       });
 
-
-  return (
+ return (
     <div className="trackandtrace mt-3">
       <div className="rTable">
         <div className="overflow">
           {props.shipments.map((shipment, index) => (
             <div className="rTableRow">
-              <div className="rTableCell"><img className="round-sign mr-1" src={profile.profile_picture} width="20" />{shipment.txnId}</div>
-              <div className="transactions"><span className="bold mr-1">From:</span>{profile.address}</div>
-             
-              <div className="transactions"><span className="bold mr-1">To:</span>{shipment.receiver}</div>
+                <div className="combine-data mr-5">
+              <img className="round-sign1" src={profile.profile_picture} width="20" height="20"/>
+              <a href="javascript:void(0);">{shipment.txnId}</a>
+            </div>
+              <div className="combine-data mr-5">
+             <span className="round-sign">From :</span>
+              <a href="javascript:void(0);">{profile.address}</a>
+            </div>
+            <div className="combine-data mr-5">
+             <span className="round-sign">To :</span>
+              <a href="javascript:void(0);">{shipment.receiver}</a>
+            </div>
               <div className="rTableCell">{shipment.shipmentDate}</div>
-
               <div className="rTableCell">{shipment.products[0].productName}</div>
             </div>
           ))}

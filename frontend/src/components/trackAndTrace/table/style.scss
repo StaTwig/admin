@@ -40,22 +40,35 @@
       font-size: 12px;
       color: #707070;
     }
-    .round-sign {
-        border-radius: 4px;
-      }
-      
-      .transactions{
-        flex: 1;
-        padding: 3px 10px;
-        align-self: center;
+
+    .combine-data {
+      display: flex;
+      align-items: center;
+      a {
+        color:$primaryBlue;
         font-size: 12px;
-        color: #0093E9;
         font-weight:600;
-        .bold{
-            color: black;
-            font-weight: bold;
+         white-space: nowrap;
+         overflow:hidden;
+         text-overflow: ellipsis;
+         display:inline-block;
+         width : 200px;
+        @media (min-width: $xl) {
+          font-size: 13px;
         }
+       }
+
+      .round-sign1 {
+        border-radius: 4px;
+        margin-right: 15px;
+      }
     }
+    .round-sign {
+      font-size: 12px;
+      font-weight:600;
+        margin-right: 15px;
+      }
+     
     .rTableCell {
       color: $black;
         font-weight: 400;
