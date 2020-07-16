@@ -6,8 +6,8 @@ let transporter = nodemailer.createTransport({
 	port: '587',
 	//secure: process.env.EMAIL_SMTP_SECURE, // lack of ssl commented this. You can uncomment it.
 	auth: {
-		user: 'dev@statwig.com',
-		pass: 'StaTwig@123'
+		user: `${process.env.EMAIL_SMTP_USERNAME}`,
+		pass: `${process.env.EMAIL_SMTP_PASSWORD}`
 	},
 	tls:{
 		rejectUnauthorized: false
