@@ -12,7 +12,10 @@ const SignupContainer = (props) => {
     const result = await authenticateUser(data);
     if(result.status === 200) {
       props.history.push('/verify');
-    }else{
+    }else if(result.status === 500) {
+      setErrorMessage(result.data.message);
+    }
+    else{
       const err = result.data.data[0];
       setErrorMessage(err.msg);
     }
