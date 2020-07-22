@@ -141,7 +141,7 @@ if (deliveryTo.length<1||deliveryTo === 'Select Receiver'){
     <div className="purchaseform">
       <div className="d-flex justify-content-between">
         <div className="input-group">
-          <label htmlFor="shipmentId">Supplier</label>
+          <label className="reference">Supplier</label>
           <input
             disabled
             type="text"
@@ -155,7 +155,7 @@ if (deliveryTo.length<1||deliveryTo === 'Select Receiver'){
       </div>
       <div className="d-flex justify-content-between">
         <div className="input-group">
-          <label htmlFor="shipmentId">Delivery To</label>
+          <label className="reference">Delivery To</label>
           <div className="form-control">
           <DropdownButton
            name={deliveryTo}
@@ -166,7 +166,7 @@ if (deliveryTo.length<1||deliveryTo === 'Select Receiver'){
         </div>
         </div>
         <div className="input-group">
-          <label htmlFor="shipmentId">Delivery Location</label>
+          <label className="reference">Delivery Location</label>
           <input
             type="text"
             className="form-control"
@@ -203,7 +203,7 @@ if (deliveryTo.length<1||deliveryTo === 'Select Receiver'){
       </div>
      
       <div className="text text-success">{message}</div>
-      <div className="text text-primary">
+      <div className="text text-danger">
         
       {deliverytoError}{destinationError}{productError}{manufacturerError}{quantityError}
       

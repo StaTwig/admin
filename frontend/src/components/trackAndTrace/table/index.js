@@ -15,17 +15,23 @@ const Table = (props) => {
         <div className="overflow">
           {props.shipments.map((shipment, index) => (
             <div className="rTableRow">
-                <div className="combine-data mr-5">
+                   <div className="rTableCell mr-5">
+                <div className="combine-data">
               <img className="round-sign1" src={profile.profile_picture} width="20" height="20"/>
-              <a href="javascript:void(0);">{shipment.txnId}</a>
+              <a className="txn" href="javascript:void(0);">{shipment.txnId}</a>
+              </div>
             </div>
-              <div className="combine-data mr-5">
+            <div className="rTableCell">
+              <div className="combine-data">
              <span className="round-sign">From :</span>
-              <a href="javascript:void(0);">{profile.address}</a>
+             <a className="address">{shipment.supplier}</a>
             </div>
-            <div className="combine-data mr-5">
+            </div>
+            <div className="rTableCell">
+            <div className="combine-data">
              <span className="round-sign">To :</span>
-              <a href="javascript:void(0);">{shipment.receiver}</a>
+              <a className="address">{shipment.deliveryTo}</a>
+            </div>
             </div>
               <div className="rTableCell">{shipment.shipmentDate}</div>
               <div className="rTableCell">{shipment.products[0].productName}</div>

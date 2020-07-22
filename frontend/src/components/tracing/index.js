@@ -31,49 +31,49 @@ const Tracing = props => {
           <h5 className="head">Shipment Details</h5>
           <div className="panel d-flex justify-content-between mb-3">
             <ul>
-              <li className="bold">Transaction ID</li>
-              <li className="bold">Shipment ID</li>
-              <li className="bold">Client Name</li>
-              <li className="bold">Total Quantity</li>
+              <li>Transaction ID</li>
+              <li>Shipment ID</li>
+              <li>Client Name</li>
+              <li>Total Quantity</li>
             </ul>
             <ul>
-              <li>d790fr5dsf34fgsr65r...</li>
-              <li>{tracingShipment.shipmentId}</li>
-              <li>{tracingShipment.client}</li>
-              <li>{tracingShipment.products[0].quantity}</li>
+              <li className="bold">d790fr5dsf34fgsr65r...</li>
+              <li className="bold">{tracingShipment.shipmentId}</li>
+              <li className="bold">{tracingShipment.client}</li>
+              <li className="bold">{tracingShipment.products[0].quantity}</li>
             </ul>
           </div>
           <h5 className="head">Product List</h5>
 
           <div className="panel d-flex flex-column">
-            <div className="d-flex">
-              <div className="icon mr-2 ">
+            <div className="d-flex justify-content-between mb-3">
+              <div className="row">
+              <div className="icon mr-3">
                 {tracingShipment.products[0].productName}
               </div>
-              <div className="mr-5 bold">
+              <div className="manufacturer mt-2">
                 {tracingShipment.products[0].productName}
               </div>
-              <div>
-                <span className="bold">Quantity: </span>
-                {tracingShipment.products[0].quantity}
+              </div>
+              <div className="label">
+               Quantity: 
+               <span className="manufacturer"> {tracingShipment.products[0].quantity}</span>
               </div>
             </div>
-            <div className="row">
-              <div className="col">
-                <span className="bold">Manufacturer :</span>{' '}
-                <span className="manufacturer">
+            <div className="row mb-3">
+              <div className="label mr-3">Manufacturer :</div>{' '}
+                <div className="manufacturer">
                   {tracingShipment.products[0].manufacturerName}
-                </span>
+                </div>
+               </div>
+             <div className="d-flex justify-content-between">
+               <div className="row">
+                <div className="label mr-2">Mfg Date :</div>
+                <div className="bold">{tracingShipment.products[0].manufacturingDate}</div>
               </div>
-            </div>
-             <div className="row">
-              <div className="col">
-                <span className="bold">Mfg Date :</span>
-                {tracingShipment.products[0].manufacturingDate}
-              </div>
-              <div className="col">
-                <span className="bold">Exp Date : </span>
-                {tracingShipment.products[0].expiryDate}
+              <div className="row">
+                <div className="label mr-2">Exp Date : </div>
+                <div className="bold">{tracingShipment.products[0].expiryDate}</div>
               </div>
             </div>
 
@@ -111,48 +111,53 @@ const Tracing = props => {
               </div>
             </div>
             <h5 className="head mt-3">Chain of Custody</h5>
-            <div className="panel ">
-              <div className="d-flex flex-row">
-                <ul className="mr-3">
-                  <li>
+            <div className="panel d-flex flex-column">
+              <div className="d-flex flex-column">
+                <div className="row mb-4">
                     <div className="picture transit-bg">
                       <img src={currentinventory} alt="truck" />
                     </div>{' '}
-                  </li>
-                  <li className="my-3 ml-3">
-                    <div className="picture symbol-bg " />
-                  </li>
-                  <li className="my-3 ml-3">
-                    <div className="picture symbol-bg"> </div>
-                  </li>
-                  <li className="my-3 ml-3">
-                    <div className="picture symbol-bg"> </div>
-                  </li>
-                  <li className="my-3 ml-3">
-                    <div className="picture last-bg"> </div>
-                  </li>
-                </ul>
-                <ul className="mr-5">
-                  <li className="col">
-                    <div>Shipment Number</div>
-                    <div>{tracingShipment.shipmentId}</div>{' '}
-                  </li>
-                  <li className="col">
-                    <div>{tracingShipment.supplierLocation}</div>
-                    <div>{tracingShipment.shipmentDate}</div>
-                  </li>
-                  <li className="col">
-                    <div>{tracingShipment.deliveryTo}</div>
-                    <div>{tracingShipment.estimateDeliveryDate}</div>{' '}
-                  </li>
-                </ul>
-                <ul>
-                  <li className="col">
-                    <div>Added to inventory</div>
-                    <div>Wallet Address: {tracingShipment.supplierAddress}</div>{' '}
-                  </li>
-                  <li>{tracingShipment.status}</li>
-                </ul>
+                  <div className="col">
+                  <div className="label">Shipment Number</div>
+                  <div className="font-weight-bold">{tracingShipment.shipmentId}</div>{' '}
+                  </div>
+                  </div>
+                  <div className="row mb-4">
+                  <div className="picture1"><div className="symbol-bg"></div></div>
+                  <div className="col">
+                  <div>{tracingShipment.supplierLocation}</div>
+                  <div className="wallet">{tracingShipment.shipmentDate}</div>
+                  </div>
+                  <div className="col">
+                  <div>Added to inventory by the manufacturer</div>
+                  <div className="wallet">Wallet Address :{tracingShipment.receiver}</div>{' '}
+                  </div>
+                  </div>
+
+                  <div className="row mb-4">
+                  <div className="picture1"><div className="symbol-bg"></div></div>
+                  <div className="col">
+                  <div>{tracingShipment.supplierLocation}</div>
+                  <div className="wallet">{tracingShipment.estimateDeliveryDate}</div>
+                  </div>
+                  <div className="col">
+                  <div>Dispatched from {tracingShipment.products[0].manufacturerName} Warehouse</div>
+                  <div className="wallet">Wallet Address :{tracingShipment.receiver}</div>{' '}
+                  </div>
+                  </div>
+
+                  <div className="row mb-4">
+                  <div className="picture1"><div className="symbol-bg"></div></div>
+                   <div className="col">{tracingShipment.deliveryLocation}</div>
+                  <div className="col">{tracingShipment.status}</div>{' '}
+                  </div>
+                  
+                  {tracingShipment.status=='Shipped' ? null : 
+                  <div className="row">
+                  <div className="picture1"><div className="last-bg"></div></div>
+                   <div className="col">{tracingShipment.deliveryLocation}</div>
+                  <div className="col">Pending Delivered</div>{' '}
+                  </div>}
               </div>
             </div>
           </div>
