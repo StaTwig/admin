@@ -9,7 +9,7 @@ import Map from './map';
 import './style.scss';
 
 const Tracing = props => {
-  const tracingShipment = props.shipments[0];
+  const tracingShipment = props.shipments[props.shipments.length-1];
   return (
     <div className="tracing">
       <div className="d-flex justify-content-between mb-3">
