@@ -44,7 +44,7 @@
     .combine-data {
       display: flex;
       align-items: center;
-      a {
+      .txn{
         color:$primaryBlue;
         font-size: 12px;
         font-weight:600;
@@ -57,6 +57,15 @@
           font-size: 13px;
         }
        }
+       .address{
+        color:$primaryBlue;
+        font-size: 12px;
+        font-weight:600;
+        @media (min-width: $xl) {
+          font-size: 13px;
+        }
+       }
+
 
       .round-sign1 {
         border-radius: 4px;

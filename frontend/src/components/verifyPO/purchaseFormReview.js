@@ -51,7 +51,7 @@ const PurchaseFormReview = props => {
     <div className="purchaseform">
       <div className="d-flex justify-content-between">
         <div className="input-group">
-          <label htmlFor="shipmentId">Supplier</label>
+          <label className="reference">Supplier</label>
           <input
             disabled
             type="text"
@@ -65,7 +65,7 @@ const PurchaseFormReview = props => {
       </div>
       <div className="d-flex justify-content-between">
         <div className="input-group">
-          <label htmlFor="shipmentId">Delivery To</label>
+          <label className="reference">Delivery To</label>
         
           <input
           disabled
@@ -78,7 +78,7 @@ const PurchaseFormReview = props => {
       
         </div>
         <div className="input-group">
-          <label htmlFor="shipmentId">Delivery Location</label>
+          <label className="reference">Delivery Location</label>
           <input
           disabled
             type="text"

@@ -122,26 +122,46 @@
         width: 60px;
         height: 60px;
       }
-
-      img {
-        width: 40px;
-        height: 18px;
-      }
-
-     
+      
       &.transit-bg {
         background: #d4ebf2;
       } 
       
-      &.symbol-bg {
+      img {
+        width: 40px;
+        height: 18px;
+      }
+    }
+    .picture1 {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      justify-content: center;
+      align-items: center;
+      margin-right: 13px;
+      display: flex;
+
+      @media (min-width: $xl) {
+        width: 60px;
+        height: 60px;
+      }
+      .symbol-bg {
         width:10px;
         height: 10px;
+        border-radius: 50%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
         background: skyblue;
        
       }  
-      &.last-bg {
+      .last-bg {
         width:10px;
         height: 10px;
+        border-radius: 50%;
+        justify-content: center;
+        align-items: center;
+        display: flex;
         background: grey;
     }
     }
@@ -153,7 +173,7 @@
       color: black;
       text-align: center;
       font-size:13px;
-      padding: 10px 8px;
+      padding: 10px 6px;
       
 
     }
@@ -161,9 +181,20 @@
       color:#0093E9;;
     }
     .bold{
-      font-weight: bold;
+      color:#707070;
     }
-    
+    .label{
+      color : #A8A8A8;
+    }
+
+    .wallet{
+         white-space: nowrap;
+         overflow:hidden;
+         text-overflow: ellipsis;
+         display:inline-block;
+         font-size:11px;
+         color:#707070;
+    } 
   ul {
     padding: 0.1rem 0.1rem;
     display: flex;
@@ -172,9 +203,10 @@
     li {
       padding: 0.2rem 0.2rem;
       list-style: none;
+      color : #A8A8A8;
     }
     .bold{
-      font-weight: bold;
+      color:#707070;
     }
 }
 }

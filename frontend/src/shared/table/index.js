@@ -14,13 +14,13 @@ const Table = props => {
           </div>
           <div className="rTableHead">{props.data.coloumn4}</div>
           <div className="rTableHead">
-            <span>{props.data.coloumn5}</span>
-          </div>
-          <div className="rTableHead">
             <span>{props.data.coloumn6}</span>
           </div>
           <div className="rTableHead">
             <span>{props.data.coloumn7}</span>
+          </div>
+          <div className="rTableHead">
+            <span>Status</span>
           </div>
           
         </div>
@@ -37,10 +37,9 @@ const Table = props => {
               <div className="rTableCell">{inventory.manufacturerName}</div>
               <div className="rTableCell">{inventory.batchNumber}</div>
               <div className="rTableCell">{inventory.quantity}</div>
-              <div className="rTableCell">{inventory.serialNumber}</div>
             <div className="rTableCell">{inventory.manufacturingDate.length >7  ? `0${new Date(Date.parse(inventory.manufacturingDate)).getMonth()+1}`.slice(-2)+"/"+new Date(Date.parse(inventory.manufacturingDate)).getFullYear() : inventory.manufacturingDate}</div>
               <div className="rTableCell">{inventory.expiryDate.length >7  ? `0${new Date(Date.parse(inventory.expiryDate)).getMonth()+1}`.slice(-2)+"/"+new Date(Date.parse(inventory.expiryDate)).getFullYear() : inventory.expiryDate}</div>
-
+             <div className="rTableCell"> <span class="badge badge-warning">ADDED</span></div>
             </div>
           ))}
         </div>
@@ -50,3 +49,5 @@ const Table = props => {
 };
 
 export default Table;
+
+/*   <button type="button" class="btn btn-outline-primary">SHOW MORE</button>*/
