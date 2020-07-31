@@ -1,10 +1,30 @@
-import React from 'react';
-import './style.scss';
+import React, { useState ,useEffect} from 'react';
 import Add from '../../assets/icons/add.svg';
 import uploadBlue from '../../assets/icons/UploadBlue.svg';
 import uploadWhite from '../../assets/icons/UploadWhite.svg';
+import {getManufacturers} from '../../actions/poActions';
+import DropdownButton from '../../shared/dropdownButtonGroup';
+import './style.scss'
 
 const AddProduct = (props) => {
+  
+  const [manufacturer, setManufacturer] = useState('Select Manufacturer');
+  const [manufacturers, setManufacturers] = useState([]);
+  const[productName,setProductName]=useState('');
+  const[category,setCategory]=useState('');
+  const[subCategory,setSubCategory]=useState('');
+  const[storageConditions,setStorageConditions]=useState('');
+  const[description,setDescription]=useState('');
+  
+
+
+  useEffect(() => {
+    async function fetchData() {
+     const manufacturerResult = await getManufacturers();
+     setManufacturers(manufacturerResult);
+    }
+    fetchData();
+  },[]);
      
   return (
       <div className="addproduct">
@@ -18,32 +38,32 @@ const AddProduct = (props) => {
             <input
               type="text"
               className="form-control"
-              name="shipmentId"
-              placeholder="Enter Product"
-              onChange={e => (e.target.value)}
-              value="Enter Product"
+              name="product"
+              placeholder="Enter Product Name"
+              onChange={e => setProductName(e.target.value)}
+              value={productName}
             />
+
           </div>
           <div className="form-group">
             <label htmlFor="shipmentId">Manufacturer</label>
-            <input
-              type="text"
-              className="form-control"
-              name="shipmentId"
-              placeholder="Enter Product"
-              onChange={e => (e.target.value)}
-              value="Select Manufacturer"
-            />
+            <div className="form-control">
+              <DropdownButton
+                name={manufacturer}
+                onSelect={item => setManufacturer(item)}
+                groups={manufacturers}
+               />
+          </div>
           </div>
           <div className="form-group">
             <label htmlFor="shipmentId">Product Category</label>
             <input
               type="text"
               className="form-control"
-              name="shipmentId"
+              name="productcategory"
               placeholder="Select Product-Category"
-              onChange={e => (e.target.value)}
-              value="Enter Product"
+              onChange={e => setCategory(e.target.value)}
+              value={category}
             />
           </div>
           <div className="form-group">
@@ -51,10 +71,10 @@ const AddProduct = (props) => {
             <input
               type="text"
               className="form-control"
-              name="shipmentId"
-              placeholder="Enter Product"
-              onChange={e => (e.target.value)}
-              value="Select Product Sub-category"
+              name="productsubcategory"
+              placeholder="Enter Product Sub-category"
+              onChange={e => setSubCategory(e.target.value)}
+              value={subCategory}
             />
           </div>
           <div className="form-group">
@@ -62,10 +82,10 @@ const AddProduct = (props) => {
             <input
               type="text"
               className="form-control"
-              name="shipmentId"
-              placeholder="Enter Product"
-              onChange={e => (e.target.value)}
-              value="Select Storage conditions"
+              name="StorageConditions"
+              placeholder="Enter StorageConditions"
+              onChange={e => setStorageConditions(e.target.value)}
+              value={storageConditions}
             />
           </div>
           <div className="form-group">
@@ -73,10 +93,10 @@ const AddProduct = (props) => {
             <input
               type="text"
               className="form-control"
-              name="shipmentId"
+              name="description"
               placeholder="Enter Short Description"
-              onChange={e => (e.target.value)}
-              value="Enter Short Description"
+              onChange={e => setDescription(e.target.value)}
+              value={description}
             />
           </div>
           
