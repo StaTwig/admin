@@ -11,6 +11,7 @@ import VerifyShipment from '../containers/verifyshipment';
 import VerifyInventory from '../containers/verifyinventory';
 import Inventory from '../containers/inventory';
 import NewInventory from '../containers/newinventory';
+import ProductList  from '../containers/productList'
 import trackAndTrace from '../containers/trackAndTrace';
 import Tracing from '../containers/tracing';
 import Network from '../containers/network';
@@ -18,6 +19,7 @@ import Profile from '../containers/profile';
 import AdminProfile from '../containers/adminprofile';
 import requireAuth from '../components/hocs/requireAuth';
 
+import AddProduct from '../containers/addproduct';
 import Signup from '../containers/signUp';
 import ForgotPassword from '../containers/forgotPassword';
 import resetPasswordPage from '../containers/resetPassword';
@@ -43,6 +45,8 @@ const routes = (
     <Route path="/newshipment" component={requireAuth(NewShipment)} />
     <Route path="/reviewshipment" component={requireAuth(VerifyShipment)} />
     <Route path="/inventory" component={requireAuth(Inventory)} />
+    <Route path="/productlist" component={requireAuth(ProductList)} />
+    <Route path="/addproduct" component={requireAuth(AddProduct)} />
     <Route path="/newinventory" component={requireAuth(NewInventory)} />
     <Route path="/reviewinventory" component={requireAuth(VerifyInventory)} />
     <Route path="/trackAndTrace" component={requireAuth(trackAndTrace)} />

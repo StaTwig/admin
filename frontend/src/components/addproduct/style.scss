@@ -1,0 +1,88 @@
+@import '../../assets/styles/global.scss';
+
+
+.addproduct {
+  padding-right: 3rem;
+    padding-left: 3rem;
+    @media (max-width: $md) {
+      padding-right: 10px;
+      padding-left: 10px;
+    }
+
+    .upload{
+      height:200px;
+      width:350px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px dashed #707070;
+      border-radius: 8px;
+    }
+    .form-group,
+    .input-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  
+      label {
+        color:#000000;
+        text-align: center;
+        font-size: 14px;
+    
+        
+      }
+       .date{
+         border:none;
+         background: none;
+       }
+      .form-control {
+        border: none;
+        background: transparent;
+        border-bottom: 2px solid #d6d6d6;
+        border-radius: 0;
+        color: #707070;
+        flex-basis: 55%;
+        flex-grow: inherit;
+        font-size: 14px;
+      }
+       
+  
+      @media (min-width: $xl) {
+        label {
+          font-size: 16px;
+        } 
+  
+    
+        .form-control {
+          border: none;
+          background: transparent;
+          border-bottom: 2px solid #d6d6d6;
+          border-radius: 0;
+          color: $black;
+          flex-basis: 65%;
+          flex-grow: inherit;
+          font-size: 14px;
+         
+          
+        }
+  
+      }
+    }
+   
+    .input-group {
+      position: relative;
+      margin-bottom: 1rem;
+  
+      
+  
+      .input-group-append {
+        position: absolute;
+        right: 0;
+        cursor: pointer;
+      }
+    }
+  
+   
+  
+
+}
