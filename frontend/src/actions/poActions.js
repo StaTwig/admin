@@ -54,6 +54,18 @@ export const getManufacturers = async () => {
 
 }
 
+export const addNewProduct = async (data) => {
+  try {
+  const url = config().addNewProduct;
+    const result =  await axios.post(config().addNewProduct, data, {headers: { 'Content-Type': 'multipart/form-data' } });
+    debugger;
+    return result.data;
+  }catch(e){
+    return e.response;
+  }
+
+}
+
 export const getPurchaseStats = async () => {
   try {
     const result =  await axios.get(config().fetchPurchaseOrderStatisticsUrl);

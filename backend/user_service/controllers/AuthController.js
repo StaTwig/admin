@@ -267,7 +267,7 @@ exports.login = [
                     );
                   }
                 } else {
-                  logger.log(
+                  console.log(
                     'warn',
                     '<<<<< UserService < AuthController < login : account is not confirmed',
                   );
