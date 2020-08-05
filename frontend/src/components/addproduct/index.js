@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Add from '../../assets/icons/add.svg';
 import uploadBlue from '../../assets/icons/UploadBlue.svg';
 import uploadWhite from '../../assets/icons/UploadWhite.svg';
-import { getManufacturers, addNewProduct } from '../../actions/poActions';
+import { getManufacturers, addNewProduct, addMultipleProducts } from '../../actions/poActions';
 import DropdownButton from '../../shared/dropdownButtonGroup';
 import './style.scss';
 
@@ -15,6 +15,7 @@ const AddProduct = props => {
   const [storageConditions, setStorageConditions] = useState('');
   const [description, setDescription] = useState('');
   const [photo, setPhoto] = useState('');
+  const [excel, setExcel] = useState('');
 
   useEffect(() => {
     async function fetchData() {
@@ -41,8 +42,21 @@ const AddProduct = props => {
       console.log('success add product');
     }
   }
+  const addProducts = async () => {
+    let formData = new FormData();
+
+    formData.append('excel', excel);
+    debugger;
+    const result = await addMultipleProducts(formData);
+    if(result.status === 200) {
+      console.log('success add product');
+    }
+  }
   const setFile = evt => {
     setPhoto(evt.target.files[0]);
+  };
+  const setExcelFile = evt => {
+    setExcel(evt.target.files[0]);
   };
 
   return (
@@ -123,6 +137,7 @@ const AddProduct = props => {
               <div className="d-flex flex-column upload">
                 <img src={uploadBlue} name="photo" width="50" height="50" className="mt-3" />
                 <input type='file' onChange={setFile}/>
+                <input type='file' onChange={setExcelFile}/>
                 <div>Drag and drop files here</div>
                 <div>or</div>
                 <button className="btn btn-primary mb-3">Browse Files</button>
@@ -142,6 +157,10 @@ const AddProduct = props => {
               <button className="btn btn-orange fontSize20 font-bold mr-4" onClick={addProduct}>
                 <img src={Add} width="14" height="14" className="mr-2" />
                 <span>Add New Product</span>
+              </button>
+              <button className="btn btn-orange fontSize20 font-bold mr-4" onClick={addProducts}>
+                <img src={Add} width="14" height="14" className="mr-2" />
+                <span>Add Multiple Products</span>
               </button>
             </div>{' '}
           </div>
