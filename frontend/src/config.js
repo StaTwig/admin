@@ -37,7 +37,8 @@ export function config() {
       fetchPurchaseOrderStatisticsUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/purchaseOrderStatistics`,
       trackShipment: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
       trackTemperature:`${LOCAL_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/track/fetchTemp`,
-      addNewProduct:`${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/addProductName`
+      addNewProduct:`${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/addProductName`,
+      addMultipleProducts:`${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/addMultipleProducts`,
     },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
@@ -61,7 +62,8 @@ export function config() {
       fetchPurchaseOrderStatisticsUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/purchaseOrderStatistics`,
       trackShipment: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
       trackTemperature:`${DEV_SERVER_URL}/tracktracemanagement/api/track/fetchTemp`,
-      addNewProduct:`${DEV_SERVER_URL}/productmanagement/api/products/addProductName`
+      addNewProduct:`${DEV_SERVER_URL}/productmanagement/api/products/addProductName`,
+      addMultipleProducts:`${DEV_SERVER_URL}/productmanagement/api/products/addMultipleProducts`,
 
     },
     stable: {
@@ -86,7 +88,8 @@ export function config() {
       addInventoryUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/addNewInventory`,
       trackShipment: `${STABLE_SERVER_URL_INVENTORY}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
       trackTemperature:`${STABLE_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/track/fetchTemp`,
-      addNewProduct:`${STABLE_SERVER_URL_PRODUCTS}/productmanagement/api/products/addProductName`
+      addNewProduct:`${STABLE_SERVER_URL_PRODUCTS}/productmanagement/api/products/addProductName`,
+      addMultipleProducts:`${STABLE_SERVER_URL_PRODUCTS}/productmanagement/api/products/addMultipleProducts`,
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -110,7 +113,8 @@ export function config() {
       addInventoryUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/addNewInventory`,
       trackShipment: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
       trackTemperature:`${TEST_SERVER_URL}/tracktracemanagement/api/track/fetchTemp`,
-      addNewProduct:`${TEST_SERVER_URL}/productmanagement/api/products/addProductName`
+      addNewProduct:`${TEST_SERVER_URL}/productmanagement/api/products/addProductName`,
+      addMultipleProducts:`${TEST_SERVER_URL}/productmanagement/api/products/addMultipleProducts`,
     },
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
@@ -134,7 +138,8 @@ export function config() {
       addInventoryUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/addNewInventory`,
       trackShipment: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
       trackTemperature:`${PROD_SERVER_URL}/tracktracemanagement/api/track/fetchTemp`,
-      addNewProduct:`${PROD_SERVER_URL}/productmanagement/api/products/addProductName`
+      addNewProduct:`${PROD_SERVER_URL}/productmanagement/api/products/addProductName`,
+      addMultipleProducts:`${PROD_SERVER_URL}/productmanagement/api/products/addMultipleProducts`,
     }
   };
 
