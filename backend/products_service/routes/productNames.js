@@ -22,4 +22,9 @@ router.post(
   upload.single('photo'),
   ProductNamesController.addProductName,
 );
+router.post(
+  '/addMultipleProducts',
+  upload.single('excel'),
+  ProductNamesController.addMultipleProducts,
+);
 module.exports = router;
