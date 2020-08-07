@@ -17,6 +17,7 @@ const AddProduct = props => {
   const [storageConditions, setStorageConditions] = useState('');
   const [description, setDescription] = useState('');
   const [photo, setPhoto] = useState('');
+  const [excel, setExcel] = useState('');
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
 
   const closeModal = () => {
