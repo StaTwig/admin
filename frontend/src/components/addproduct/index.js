@@ -4,7 +4,9 @@ import uploadBlue from '../../assets/icons/UploadBlue.svg';
 import uploadWhite from '../../assets/icons/UploadWhite.svg';
 import { getManufacturers, addNewProduct } from '../../actions/poActions';
 import DropdownButton from '../../shared/dropdownButtonGroup';
+import Modal from '../../shared/modal';
 import './style.scss';
+import ProductPopUp from './productPopUp'
 
 const AddProduct = props => {
   const [manufacturer, setManufacturer] = useState('Select Manufacturer');
@@ -15,6 +17,12 @@ const AddProduct = props => {
   const [storageConditions, setStorageConditions] = useState('');
   const [description, setDescription] = useState('');
   const [photo, setPhoto] = useState('');
+  const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
+
+  const closeModal = () => {
+    setOpenCreatedInventory(false);
+    props.history.push('/inventory');
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -37,7 +45,8 @@ const AddProduct = props => {
     formData.append('photo', photo);
     debugger;
     const result = await addNewProduct(formData);
-    if(result.status === 200) {
+    if(result.status == 1) {
+      setOpenCreatedInventory(true);
       console.log('success add product');
     }
   }
@@ -79,7 +88,7 @@ const AddProduct = props => {
                   type="text"
                   className="form-control"
                   name="productcategory"
-                  placeholder="Select Product-Category"
+                  placeholder="Enter Product-Category"
                   onChange={e => setCategory(e.target.value)}
                   value={category}
                 />
@@ -128,27 +137,41 @@ const AddProduct = props => {
                 <button className="btn btn-primary mb-3">Browse Files</button>
               </div>
             </div>
-            <button className="btn btn-primary font-bold">
-              <img src={uploadWhite} width="14" height="14" className="mr-2" />
-              <span>Upload</span>
-            </button>
+           <div></div>
           </div>
 
           <div className="d-flex flex-row justify-content-between">
             <div />
             <div>
               {' '}
-              <button className="btn btn-outline-primary mr-4">cancel</button>
-              <button className="btn btn-orange fontSize20 font-bold mr-4" onClick={addProduct}>
+              <button className="btn btn-outline-primary mr-4" onClick={() => props.history.push('/productlist')}>cancel</button>
+              <button className="btn btn-orange fontSize20 font-bold mr-4 product" onClick={addProduct}>
                 <img src={Add} width="14" height="14" className="mr-2" />
                 <span>Add New Product</span>
               </button>
             </div>{' '}
+            {openCreatedInventory && (
+        <Modal
+          close={() => closeModal()}
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+          <ProductPopUp
+            onHide={closeModal} //FailurePopUp
+          />
+        </Modal>
+      )}
           </div>
         </div>
       </div>
     </div>
+    
   );
 };
 
 export default AddProduct;
+
+
+/*<button className="btn btn-primary font-bold">
+<img src={uploadWhite} width="14" height="14" className="mr-2" />
+<span>Upload</span>
+</button> */

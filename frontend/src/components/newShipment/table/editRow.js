@@ -14,7 +14,10 @@ const EditRow = props => {
     async function fetchData() {
       const result = await getProducts();
       const manufacturerResult = await getManufacturers();
-      setProducts(result);
+      const productArray = result.map((product, index) => (
+        product.productName
+     ))
+      setProducts(productArray);
       setManufacturers(manufacturerResult);
     }
     fetchData();

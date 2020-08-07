@@ -12,15 +12,18 @@ const ChartsPage = (props) => {
     fetchData();
 
   },[]);
-  const inventoriesKeys  = Object.keys(props.inventoriesCount);
-  const filteredInventoriesKeys = inventoriesKeys.filter(inventory => inventory !== 'tot_qty' && inventory !== 'tot_inv')
-  const labels = filteredInventoriesKeys.filter(inventoryKey => props.inventoriesCount[inventoryKey] !== 0);
+  const inventoriesKeys  = Object.keys(props.inventoriesCount.dict);
+  //const filteredInventoriesKeys = inventoriesKeys.filter(inventory => inventory !== 'tot_qty' && inventory !== 'tot_inv')
+  const labels = inventoriesKeys.filter(inventoryKey => props.inventoriesCount.dict[inventoryKey] !== 0);
+  //const data = props.inventoriesCount[filteredInventoriesKeys]
+  const data = labels.map((product, index) => (
+    props.inventoriesCount.dict[product]
+ ))
   const [dataDoughnut] = useState({
     labels: labels,
     datasets: [
       {
-        data: [props.inventoriesCount.bOPV,props.inventoriesCount.MMR,props.inventoriesCount.PVC,
-          props.inventoriesCount.BCG,props.inventoriesCount.RV,props.inventoriesCount.HepB],
+        data: data,
         backgroundColor: [
           "#ffbcc4",
           "#c1e3f2",
@@ -28,6 +31,19 @@ const ChartsPage = (props) => {
           "#ffef83",
           "#d4e7ff",
           "#e0b0ff",
+          "#000000",
+          "#EDE7F6",
+          "#D1C4E9",
+          "#B39DDB",
+          "#9575CD",
+          "#E0F7FA",
+          "#B2EBF2",
+          "#80DEEA",
+          "#4DD0E1",
+          "#78909C",
+          "#607D8B",
+          "#546E7A",
+          "#455A64",
         ],
         hoverBackgroundColor: [
           "#ffbcc4",
@@ -36,6 +52,20 @@ const ChartsPage = (props) => {
           "#ffef83",
           "#d4e7ff",
           "#e0b0ff",
+          "#000000",
+          "#EDE7F6",
+          "#D1C4E9",
+          "#B39DDB",
+          "#9575CD",
+          "#9575CD",
+          "#E0F7FA",
+          "#B2EBF2",
+          "#80DEEA",
+          "#4DD0E1",
+          "#78909C",
+          "#607D8B",
+          "#546E7A",
+          "#455A64",
 
         ]
       }
