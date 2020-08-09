@@ -24,7 +24,7 @@ export function config() {
       updateProfileUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/updateProfile`,
       upload: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/upload`,
       shipmentsUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchUserShipments`,
-      getProducts: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/getProducts`,
+      getProducts: `${LOCAL_SERVER_URL_SHIPMENT}/productmanagement/api/products/getProductNames`,
       getManufacturers: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/getManufacturers`,
       inventoriesUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getAllInventoryDetails`,
       createShipmentUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/createShipment`,
@@ -49,7 +49,7 @@ export function config() {
       updateProfileUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${DEV_SERVER_URL}/usermanagement/api/auth/upload`,
       shipmentsUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/fetchUserShipments`,
-      getProducts: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/getProducts`,
+      getProducts: `${DEV_SERVER_URL}/productmanagement/api/products/getProductNames`,
       getManufacturers: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/getManufacturers`,
       createShipmentUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/createShipment`,
       inventoriesUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getAllInventoryDetails`,
@@ -75,7 +75,7 @@ export function config() {
       updateProfileUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/updateProfile`,
       upload: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/upload`,
       shipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchUserShipments`,
-      getProducts: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/getProducts`,
+      //getProducts: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/getProducts`,
       getManufacturers: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/getManufacturers`,
       createShipmentUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/createShipment`,
       shipmentsSearch: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchShipments?key=`,
@@ -89,7 +89,9 @@ export function config() {
       trackShipment: `${STABLE_SERVER_URL_INVENTORY}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
       trackTemperature:`${STABLE_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/track/fetchTemp`,
       addNewProduct:`${STABLE_SERVER_URL_PRODUCTS}/productmanagement/api/products/addProductName`,
+      getProducts: `${STABLE_SERVER_URL_PRODUCTS}/productmanagement/api/products/getProductNames`,
       addMultipleProducts:`${STABLE_SERVER_URL_PRODUCTS}/productmanagement/api/products/addMultipleProducts`,
+    
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -100,7 +102,7 @@ export function config() {
       updateProfileUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${TEST_SERVER_URL}/usermanagement/api/auth/upload`,
       shipmentsUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchUserShipments`,
-      getProducts: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/getProducts`,
+      //getProducts: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/getProducts`,
       getManufacturers: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/getManufacturers`,
       createShipmentUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/createShipment`,
       shipmentsSearch: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchShipments?key=`,
@@ -114,6 +116,7 @@ export function config() {
       trackShipment: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
       trackTemperature:`${TEST_SERVER_URL}/tracktracemanagement/api/track/fetchTemp`,
       addNewProduct:`${TEST_SERVER_URL}/productmanagement/api/products/addProductName`,
+      getProducts: `${TEST_SERVER_URL}/productmanagement/api/products/getProductNames`,
       addMultipleProducts:`${TEST_SERVER_URL}/productmanagement/api/products/addMultipleProducts`,
     },
     prod: {
@@ -127,7 +130,7 @@ export function config() {
       shipmentsUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchUserShipments`,
       createShipmentUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/createShipment`,
       shipmentsSearch: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchShipments?key=`,
-      getProducts: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/getProducts`,
+      getProducts: `${PROD_SERVER_URL}/productmanagement/api/products/getProductNames`,
       getManufacturers: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/getManufacturers`,
       createPurchaseOrderUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/createPurchaseOrder`,
       fetchAllPurchaseOrdersUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchPublisherPurchaseOrders`,
@@ -143,7 +146,7 @@ export function config() {
     }
   };
 
-  const environment = process.env.ENVIRONMENT || 'test'; // change prod to test, local,stable, dev for respective environments
+  const environment = process.env.ENVIRONMENT || 'stable'; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
   return conf;
 }
