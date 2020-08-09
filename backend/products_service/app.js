@@ -1,12 +1,14 @@
 var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
+var cors = require("cors");
+const fs = require('fs');
 var logger = require("morgan");
 require("dotenv").config();
 var indexRouter = require("./routes/index");
 var apiRouter = require("./routes/api");
 var apiResponse = require("./helpers/apiResponse");
-var cors = require("cors");
+
 
 // DB connection
 var MONGODB_URL = process.env.MONGODB_URL;
@@ -43,7 +45,10 @@ app.use(cors());
 //Route Prefixes
 app.use("/", indexRouter);
 app.use("/productmanagement/api/", apiRouter);
-
+const dir = `./images`;
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir);
+}
 // throw 404 if URL not found
 app.all("*", function(req, res) {
 	return apiResponse.notFoundResponse(res, "Page not found");
