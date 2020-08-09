@@ -12,6 +12,8 @@ const axios = require('axios');
 const dotenv = require('dotenv').config();
 
 const blockchain_service_url = process.env.URL;
+const product_service_url = process.env.PRODUCT_URL;
+
 const stream_name = process.env.STREAM;
 
 const init = require('../logging/init');
@@ -130,6 +132,8 @@ exports.getInventoryDetailsForProduct = [
   },
 ];
 
+var products_array = [];
+var dict = {};
 exports.getAllInventoryDetails = [
   auth,
   async (req, res) => {
@@ -142,43 +146,47 @@ exports.getAllInventoryDetails = [
             `${blockchain_service_url}/queryDataByPublishers?stream=${stream_name}&address=${address}`,
           );
           const items = response.data.items;
-	  var count_array = [];
           var tot_qty = 0;
-          var bOPV_count = 0;
-          var MMR_count = 0;
-          var PVC_count = 0;
-          var BCG_count = 0;
-          var RV_count = 0;
-          var HepB_count = 0;
+	
+	  await axios.get(`${product_service_url}/getProductNames`, {
+          headers: {
+            'Authorization': req.headers.authorization
+          }
+        })
+        .then((res) => {
+        for (i=0;i<res.data.data.length;i++)
+                {
+                        var test = res.data.data[i].productName;
+                        products_array.push(test)
+                }
+        })
+        .catch((error) => {
+	logger.log('error', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : Error in fetching products list')
+        })
+                products_array.forEach(element => {
+                var ele = `${element}`;
+        });
 
           var total_inv = items.length;
           for (i=0;i<items.length;i++){
               var productName = JSON.parse(items[i].data).productName;
               var count = parseInt(JSON.parse(items[i].data).quantity);
               tot_qty = tot_qty + count;
-              if (productName == "bOPV"){
-                logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : product name is bOPV');
-                bOPV_count = bOPV_count + count;
-              } else if (productName == "MMR"){
-                logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : product name is MMR');
-                MMR_count = MMR_count + count;
-              } else if (productName == "PVC"){
-                logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : product name is PVC');
-                PVC_count = PVC_count + count;
-              } else if (productName == "BCG"){
-                logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : product name is BCG');
-                BCG_count = BCG_count + count;
-              } else if (productName == "RV"){
-                logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : product name is RV');
-                RV_count = RV_count + count;
-              } else if (productName == "HepB"){
-                logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : product name is HepB');
-                HepB_count = HepB_count + count;
-              }                                
+		
+	      const index = products_array.indexOf(productName);
+                        var name = products_array[index];
+                        if(name in dict)
+		   	 {
+                        	var exis = dict[name];
+                        	var new_val = count;
+                        	dict[name] = exis + new_val;
+                           }	
+                        else {
+                        	  dict[name] = count;
+                      	}
           }
-          count_array.push({tot_qty:tot_qty},{tot_inv:total_inv},{bOPV:bOPV_count},{MMR:MMR_count},{PVC:PVC_count},{BCG:BCG_count},{RV:RV_count},{HepB:HepB_count})
           logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : queried and pushed data')
-          res.json({ data: items , count :{tot_qty:tot_qty,tot_inv:total_inv,bOPV:bOPV_count,MMR:MMR_count,PVC:PVC_count,BCG:BCG_count,RV:RV_count,HepB:HepB_count}});
+	  res.json({ data: items , count :{tot_qty:tot_qty,tot_inv:total_inv},dict:dict});
         } else {
           logger.log('warn', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : refuted token')
           res.status(403).json(result);
