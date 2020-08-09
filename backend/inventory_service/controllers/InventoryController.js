@@ -146,7 +146,6 @@ exports.getAllInventoryDetails = [
             `${blockchain_service_url}/queryDataByPublishers?stream=${stream_name}&address=${address}`,
           );
           const items = response.data.items;
-	  var count_array = [];
           var tot_qty = 0;
 	
 	  await axios.get(`${product_service_url}/getProductNames`, {
