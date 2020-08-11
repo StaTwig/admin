@@ -10,5 +10,6 @@ router.get("/getInventoryforProduct", InventoryController.getInventoryforProduct
 router.get("/getInventoryDetailsForProduct", InventoryController.getInventoryDetailsForProduct);
 router.get("/getAllInventoryDetails", InventoryController.getAllInventoryDetails);
 router.post("/addNewInventory", InventoryController.addNewInventory);
+router.post("/addMultipleInventories", InventoryController.addMultipleInventories);
 
 module.exports = router;

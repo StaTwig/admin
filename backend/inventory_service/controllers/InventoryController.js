@@ -278,3 +278,54 @@ exports.addNewInventory = [
     }
   },
 ];
+
+exports.addMultipleInventories = [
+  auth,
+  body('inventories')
+    .isLength({ min: 1 })
+    .withMessage('Inventories  must be specified.'),
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        logger.log('error', '<<<<< InventoryService < InventoryController < addNewInventory : Validation Error')
+        // Display sanitized values/errors messages.
+        return apiResponse.validationErrorWithData(
+          res,
+          'Validation Error.',
+          errors.array(),
+        );
+      }
+      checkToken(req, res, async result => {
+        if (result.success) {
+          logger.log('info', '<<<<< InventoryService < InventoryController < addNewInventory : token verified successfullly, publishing data')
+          const { inventories } = req.body;
+          const { address } = req.user;
+          let txnIds = [];
+          await utility.asyncForEach(inventories, async data => {
+            const userData = {
+              stream: stream_name,
+              key: data.serialNumber,
+              address: address,
+              data: data,
+            };
+            const response = await axios.post(
+              `${blockchain_service_url}/publish`,
+              userData,
+            );
+            txnIds.push((response.data.transactionId));
+            logger.log('info', '<<<<< InventoryService < InventoryController < addNewInventory : publised data to blockchain')
+          })
+
+          res.status(200).json({ response: txnIds });
+        } else {
+          logger.log('warn', '<<<<< InventoryService < InventoryController < addNewInventory : refuted token')
+          res.status(403).json(result);
+        }
+      });
+    } catch (err) {
+      logger.log('error', '<<<<< InventoryService < InventoryController < addNewInventory : error (catch block)')
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
