@@ -17,6 +17,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import ShipmentPopUp from './shipmentPopUp';
 import ShipmentFailPopUp from './shipmentFailPopUp';
 import Modal from '../../shared/modal';
+import ReactTooltip from 'react-tooltip';
 
 const NewShipment = props => {
   const dispatch = useDispatch();
@@ -377,10 +378,12 @@ const NewShipment = props => {
         <div className="total">Grand Total</div>
         <div className="value">{quantity}</div>
         <div className="d-flex ">
-          <button className="btn btn-outline-info mr-2 " title ="Assigning to scan batch number and serial numbers" onClick={onAssign}>
+
+          <button className="btn btn-outline-info mr-2 " data-tip ="Assigning to scan Batch number and Serial numbers" onClick={onAssign}>
             {' '}
             Assign Shipment Order
           </button>
+          <ReactTooltip  backgroundColor="#0093E9"/>
           
           {/*<button className="btn-primary btn"  onClick={onProceedToReview}>Proceed To Review</button> */}
         </div>
