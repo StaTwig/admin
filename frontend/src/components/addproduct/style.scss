@@ -9,6 +9,7 @@
       padding-left: 10px;
     }
 
+    
     .product{
       background: transparent linear-gradient(90deg, #FA7923 0%, #FFAB1D 100%) 0% 0% no-repeat padding-box;
     }
@@ -26,6 +27,11 @@
       align-items: center;
       border: 1px dashed #707070;
       border-radius: 8px;
+
+      .select{
+        display: none;
+      }
+  
     }
     .form-group,
     .input-group {
@@ -40,6 +46,8 @@
     
         
       }
+
+     
        .date{
          border:none;
          background: none;

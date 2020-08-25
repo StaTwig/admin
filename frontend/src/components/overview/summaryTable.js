@@ -1,6 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import empty from "../../assets/icons/empty.png";
 import './table-style.scss';
+
 
 const SummaryTable = props => {
 
@@ -10,6 +12,12 @@ const SummaryTable = props => {
   const { shipments } = props;
   return (
     <React.Fragment>
+      {shipments.length === 0 ?  <div className="summaryTable justify-content-center ">
+        <div className="d-flex flex-column ">
+      <img src={empty} height="200" width="200"/>
+       <div> EMPTY SHIPMENTS </div> 
+       </div> 
+       </div>  : 
       <div className="summaryTable">
         <div className="rowData">
           <div className="headline ml-4">Client</div>
@@ -66,7 +74,8 @@ const SummaryTable = props => {
             </div> :null
           ))}
         </div>
-      </div>
+        </div>
+       }
       <div className="summaryTable sm-only">
         <div className="row">
           {shipments.map((shipment, index) => 

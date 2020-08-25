@@ -43,12 +43,7 @@ const HomeContainer = (props) => {
         </button>
         <div className="collapse navbar-collapse" id="navbarNavDropdown">
           <ul className="navbar-nav ml-auto">
-          <li className="nav-item mr-3">
-              <Link className="nav-link" to="/trackAndTrace">
-                Track & Trace
-              </Link>
-            </li>
-            <div className="divider" />
+          
             <li className="nav-item active">
               <Link className="nav-link" to="/login">
                 Login <span className="sr-only">(current)</span>
@@ -193,3 +188,9 @@ const HomeContainer = (props) => {
 };
 
 export default HomeContainer;
+/* <li className="nav-item mr-3">
+              <Link className="nav-link" to="/trackAndTrace">
+                Track & Trace
+              </Link>
+            </li>
+            <div className="divider" />*/

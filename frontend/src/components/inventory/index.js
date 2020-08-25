@@ -67,6 +67,7 @@ const Inventory = (props) => {
 setInventoryExpired(count);
 setInventoryExpiring(near);
   })
+const products = Object.keys(props.inventoriesCount.dict)
   return (
     <div className="inventory">
       <div className="d-flex justify-content-between">
@@ -165,49 +166,19 @@ setInventoryExpiring(near);
                <Link to='/productlist'><button className="btn btn-link">View all</button></Link> 
               </div>
               <div className="row overflow">
-                <div className="col-sm-6">
+                
+                 {products.map((product, index) => (
+                    <div className="col-sm-6"  key={index}>
                   <div className="d-flex card flex-column align-items-center">
-                    <div className="round-sign ellipseOne">bOPV</div>
-                    <p>Oral Polio Vaccine</p>
-                      <h3>Qty : {props.inventoriesCount.dict.bOPV}</h3>
+                    <div className="round-sign ellipseOne">{product}</div>
+                    <p className="product">{product}</p>
+                    <h3>Qty : {props.inventoriesCount.dict[product]}</h3>
                   </div>
                 </div>
-                <div className="col-sm-6">
-                  <div className="d-flex card flex-column align-items-center">
-                    <div className="round-sign ellipseTwo">MMR</div>
-                    <p>Mumps, Measles & Rubella Vaccine</p>
-                     <h3>Qty : {props.inventoriesCount.dict.MMR}</h3>
-                  </div>
-                </div>
-                <div className="col-sm-6">
-                  <div className="d-flex card flex-column align-items-center">
-                    <div className="round-sign ellipseThree">PVC</div>
-                    <p>Pneumococcal conjugate Vaccine</p>
-                      <h3>Qty : {props.inventoriesCount.dict.PVC}</h3>
-                  </div>
-                </div>
-                <div className="col-sm-6">
-                  <div className="d-flex card flex-column align-items-center">
-                    <div className="round-sign ellipseSix">BCG</div>
-                    <p>Bacillus Calmette–Guérin vaccine</p>
-                    <h3>Qty : {props.inventoriesCount.dict.BCG}</h3>
-                  </div>
-                </div>
-                <div className="col-sm-6">
-                  <div className="d-flex card flex-column align-items-center">
-                    <div className="round-sign ellipseFive">RV</div>
-                    <p>Rotavirus Vaccine</p>
-                    <h3>Qty : {props.inventoriesCount.dict.RV}</h3>
-                  </div>
-                </div>
-                <div className="col-sm-6">
-                  <div className="d-flex card flex-column align-items-center">
-                    <div className="round-sign ellipseFour">HepB</div>
-                    <p>Hepatitis B Vaccine</p>
-                    <h3>Qty : {props.inventoriesCount.dict.HepB}</h3>
-                  </div>
-                </div>
-                </div>
+                 ))}
+                     
+
+                </div>  
             </div>
           </div>
         </div>

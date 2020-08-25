@@ -9,6 +9,8 @@
       padding-left: 10px;
     }
 
+
+
   .form-group,
   .input-group {
     display: flex;
@@ -87,6 +89,30 @@
   .btn-outline-info{
     border-radius: 10px;
   }
+
+  .tooltip {
+    position: relative;
+ }
+ .tooltip::before {
+    background-color: white;
+    border: 1px solid #888;
+    border-radius: 2px;
+    color: #444;
+    content: attr(data-title);
+    display: none;
+    font-family: sans-serif;
+    font-size: 14px;
+    padding: 2px 5px;
+    position: absolute;
+    top: 20px;
+    left: 5px;
+    z-index: 1;
+ }
+ .tooltip:hover::before {
+    display: block;
+ }
+
+  
 
   .table {
     .overflow {

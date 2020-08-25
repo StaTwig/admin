@@ -242,6 +242,9 @@ const NewShipment = props => {
     setQuantity(products[0][product]);
     setProductName(product.split('-')[0]);
     setManufacturerName(product.split('-')[1]);
+    setDeliveryTo(poDetail.receiver.name);
+    setDeliveryLocation(poDetail.destination);
+    
   };
 
   return (
@@ -374,10 +377,11 @@ const NewShipment = props => {
         <div className="total">Grand Total</div>
         <div className="value">{quantity}</div>
         <div className="d-flex ">
-          <button className="btn btn-outline-info mr-2" onClick={onAssign}>
+          <button className="btn btn-outline-info mr-2 " title ="Assigning to scan batch number and serial numbers" onClick={onAssign}>
             {' '}
             Assign Shipment Order
           </button>
+          
           {/*<button className="btn-primary btn"  onClick={onProceedToReview}>Proceed To Review</button> */}
         </div>
       </div>

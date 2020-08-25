@@ -145,11 +145,9 @@ const AddProduct = props => {
               <h6 className="font-weight-bold mb-4">Product Image</h6>
               <div className="d-flex flex-column upload">
                 <img src={uploadBlue} name="photo" width="50" height="50" className="mt-3" />
-                <input type='file' onChange={setFile}/>
-                <input type='file' onChange={setExcelFile}/>
-                <div>Drag and drop files here</div>
-                <div>or</div>
-                <button className="btn btn-primary mb-3">Browse Files</button>
+               <label class="btn btn-primary"> <span>ADD IMAGE</span> <input type='file' class="select" onChange={setFile}/> </label>
+               <div>or</div>
+               <label class="btn btn-primary"> <span>BROWSE FILES</span> <input type='file'  class="select" onChange={setExcelFile}/> </label>
               </div>
             </div>
            <div></div>
