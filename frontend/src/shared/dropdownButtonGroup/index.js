@@ -1,11 +1,11 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef } from 'react';
 import parse from 'html-react-parser';
 import useOnclickOutside from 'react-cool-onclickoutside';
 
-import upDownArrow from "../../assets/icons/up-and-down-blue.svg";
+import upDownArrow from '../../assets/icons/up-and-down-blue.svg';
 import './style.scss';
 
-const dropdownButtonGroup = (props) => {
+const dropdownButtonGroup = props => {
   const [menu, setMenu] = useState(false);
   const { groups, name, onSelect } = props;
 
@@ -13,7 +13,7 @@ const dropdownButtonGroup = (props) => {
   useOnclickOutside(ref, () => {
     setMenu(false);
   });
-  const useParse = name.includes('<');
+  const useParse = name && name.includes('<');
   return (
     <div className="custom-dropdown">
       <button
@@ -25,30 +25,29 @@ const dropdownButtonGroup = (props) => {
         {useParse && <span>{parse(name)}</span>}
         <img src={upDownArrow} alt="downarrow" width="9" height="9" />
       </button>
-      {
-        menu && <div ref={ref} className="dropdown-menu show transform-group">
-          {
-            groups && groups.map((item,index) => {
+      {menu && (
+        <div ref={ref} className="dropdown-menu show transform-group">
+          {groups &&
+            groups.map((item, index) => {
               return (
                 <React.Fragment key={index}>
-                  <span className="dropdown-item" onClick={() => {
-                    setMenu(false);
-                    onSelect(item);
-                  }} >{ parse(item) }</span>
-                  {
-                    (index + 1 < groups.length) && <hr />
-                  }
+                  <span
+                    className="dropdown-item"
+                    onClick={() => {
+                      setMenu(false);
+                      onSelect(item);
+                    }}
+                  >
+                    {parse(item)}
+                  </span>
+                  {index + 1 < groups.length && <hr />}
                 </React.Fragment>
-              )
-            })
-          }
+              );
+            })}
         </div>
-      }
+      )}
     </div>
   );
 };
 
-
-
 export default dropdownButtonGroup;
-

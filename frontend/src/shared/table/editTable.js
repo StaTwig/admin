@@ -27,7 +27,7 @@ const EditTable = props => {
           </div>
         </div>
         <div >
-         <EditRow {...props} />
+          {props.inventories.map((inventory, index) => <EditRow {...inventory} {...props} idx={index} />)}
         </div>
       </div>
     </div>
