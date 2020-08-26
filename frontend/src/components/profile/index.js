@@ -23,6 +23,7 @@ class Profile extends React.Component {
       profileData: {},
       profile_picture: '',
       message: '',
+      location:'',
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -41,6 +42,7 @@ class Profile extends React.Component {
         status,
         role,
         affiliateOrganisation,
+        location,
       } = response.data.data;
       this.setState({
         profile_picture,
@@ -53,6 +55,7 @@ class Profile extends React.Component {
         status,
         role,
         profileData: response.data.data,
+        location
       });
     } else {
       //error
@@ -69,6 +72,7 @@ class Profile extends React.Component {
       organisation,
       affiliateOrganisation,
       status,
+      location,
     } = this.state.profileData;
 
     this.setState({
@@ -81,6 +85,7 @@ class Profile extends React.Component {
       organisation,
       affiliateOrganisation,
       status,
+      location,
     });
   }
 
@@ -113,8 +118,8 @@ class Profile extends React.Component {
   }
 
   async onSubmit() {
-    const { name, organisation, affiliateOrganisation, phone } = this.state;
-    const data = { name, organisation, affiliateOrganisation, phone }  ;
+    const { name, organisation, affiliateOrganisation, phone,location } = this.state;
+    const data = { name, organisation, affiliateOrganisation, phone ,location}  ;
     const result = await updateProfile(data);
     
     if (result.status === 200) {
@@ -138,6 +143,7 @@ class Profile extends React.Component {
       email,
       name,
       message,
+      location,
       profile_picture
     } = this.state;
     return (
@@ -181,6 +187,7 @@ class Profile extends React.Component {
                   <li> <label>Organisation</label></li>
                   <li><label>Affiliated Organisation</label></li>
                   <li><label>Wallet Address</label></li>
+                  <li><label>location</label></li>
                   <li><label>Email</label></li>
                   <li><label>Phone</label></li>
                   <li>Account Status</li>
@@ -190,14 +197,14 @@ class Profile extends React.Component {
                   <ul>
                   <li> 
                       <input
-                        className="form-control"
+                        className="form-control wallet"
                         disabled
                         value={name}
                         onChange={e => this.setState({ name: e.target.value })}
                       />
                       </li>
                   <li><input
-                        className="form-control"
+                        className="form-control wallet"
                         disabled
                         value={role}
                         onChange={e => this.setState({ role: e.target.value })}
@@ -232,6 +239,14 @@ class Profile extends React.Component {
                     </li>
                     <li> <input
                         className="form-control"
+                        value={location}
+                        onChange={e =>
+                          this.setState({ location: e.target.value })
+                        }
+                      />
+                    </li>
+                    <li> <input
+                        className="form-control wallet"
                         disabled
                         value={email}
                         onChange={e =>
@@ -263,6 +278,7 @@ class Profile extends React.Component {
                       <li>Organisation</li>
                       <li>Affiliated Organisation</li>
                       <li>Wallet Address</li>
+                      <li>location</li>
                       <li>Email</li>
                       <li>Phone</li>
                       <li>Account Status</li>
@@ -273,6 +289,7 @@ class Profile extends React.Component {
                       <li>{organisation}</li>
                       <li>{affiliateOrganisation}</li>
                       <li>{walletAddress}</li>
+                      <li>{location}</li>
                       <li>{email}</li>
                       <li>{phone}</li>
                       {status && <li>Active</li>}
