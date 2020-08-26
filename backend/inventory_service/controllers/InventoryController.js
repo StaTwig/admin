@@ -133,7 +133,7 @@ exports.getInventoryDetailsForProduct = [
 ];
 
 var products_array = [];
-var dict = {};
+
 exports.getAllInventoryDetails = [
   auth,
   async (req, res) => {
@@ -168,6 +168,7 @@ exports.getAllInventoryDetails = [
         });
 
           var total_inv = items.length;
+          var dict = {};
           for (i=0;i<items.length;i++){
               var productName = JSON.parse(items[i].data).productName;
               var count = parseInt(JSON.parse(items[i].data).quantity);
