@@ -2,7 +2,7 @@ import {
     SET_REVIEW_INVENTORY
   } from '../constants/inventoryConstants';
   
-  export const initialState = null;
+  export const initialState = [];
   
   export const reviewInventoryReducer = (state = initialState, action) => {
     switch (action.type) {

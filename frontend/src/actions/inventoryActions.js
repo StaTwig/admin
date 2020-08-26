@@ -89,3 +89,13 @@ export const addInventory = async (data) => {
   }
 
 }
+export const addMultipleInventories = async (data) => {
+  try {
+    debugger;
+    const result =  await axios.post(config().addMultipleInventories, data);
+    return result.data;
+  }catch(e){
+    return e.response;
+  }
+
+}
