@@ -1,6 +1,7 @@
 import React from 'react';
 import { setTracingShipments } from '../../../actions/shipmentActions';
 import { useDispatch} from 'react-redux';
+import EmptyShipments from "../../../assets/icons/EmptyShipments.png";
 
 import './style.scss';
 
@@ -8,9 +9,11 @@ const Table = (props) => {
 
   const dispatch = useDispatch ();
   
-
   return (
     <div className="table">
+      { props.shipments.length === 0 ?
+      <img src={EmptyShipments} height="300" width="300"/>
+       :
       <div className="rTable">
         <div className="rTableHeading">
           <div className="rTableHead">Client</div>
@@ -64,6 +67,7 @@ const Table = (props) => {
           ))}
         </div>
       </div>
+}
     </div>
   );
 };
