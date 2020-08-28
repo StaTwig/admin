@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import empty from "../../assets/icons/empty.png";
+import EmptyShipments from "../../assets/icons/EmptyShipments.png";
 import './table-style.scss';
 
 
@@ -14,8 +14,7 @@ const SummaryTable = props => {
     <React.Fragment>
       {shipments.length === 0 ?  <div className="summaryTable justify-content-center ">
         <div className="d-flex flex-column ">
-      <img src={empty} height="200" width="200"/>
-       <div> EMPTY SHIPMENTS </div> 
+      <img src={EmptyShipments} height="200" width="200"/>
        </div> 
        </div>  : 
       <div className="summaryTable">

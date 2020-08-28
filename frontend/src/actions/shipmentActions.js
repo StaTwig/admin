@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { config } from '../config';
-import { GET_SHIPMENTS_FAILURE, GET_SHIPMENTS_SUCCESS, SET_REVIEW_SHIPMENT,SET_TRACING_SHIPMENT,
+import { GET_SHIPMENTS_FAILURE, GET_SHIPMENTS_SUCCESS, SET_REVIEW_SHIPMENT,SET_TRACING_SHIPMENT,SET_VISIBLE_SHIPMENT,
   GET_SHIPMENTSCOUNT_FAILURE, GET_SHIPMENTSCOUNT_SUCCESS,SET_EDIT_SHIPMENT, SET_TRACK_SHIPMENT} from "../constants/shipmentConstants";
 
 export const getShipments = () => {
@@ -94,6 +94,15 @@ export const setReviewShipments = (data) =>{
   };
 
 }
+
+export const setVisibleShipments = (index, visible) =>{
+  return {
+    type: SET_VISIBLE_SHIPMENT,
+    payload: { index, visible },
+  };
+
+}
+
 
 export const setEditShipments = (data) =>{
   return {

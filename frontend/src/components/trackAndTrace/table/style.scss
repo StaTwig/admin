@@ -52,11 +52,28 @@
          overflow:hidden;
          text-overflow: ellipsis;
          display:inline-block;
-         width : 200px;
+         width : 150px;
         @media (min-width: $xl) {
           font-size: 13px;
         }
-       }
+      }
+        .txn1{
+          color:#707070;
+          font-size: 9px;
+          font-weight:600;
+           white-space: nowrap;
+           overflow:hidden;
+           text-overflow: ellipsis;
+           display:inline-block;
+           width :80px;
+          @media (min-width: $xl) {
+            font-size:9px;
+          }
+          }
+          .wallettext{
+            color:#707070;
+            font-size: 9px;
+          }
        .address{
         color:$primaryBlue;
         font-size: 12px;
@@ -65,19 +82,50 @@
           font-size: 13px;
         }
        }
-
-
-      .round-sign1 {
-        border-radius: 4px;
-        margin-right: 15px;
-      }
     }
+   .badge{
+      height: 22px;
+      width: 60px;
+      border-radius: 8px;
+      color: white;
+      display: flex; 
+      justify-content: center;
+      cursor: pointer;
+      padding-top: 5px;
+    }
+    .shipped{
+      background-color:#0B65C1;
+    }
+    .trans{
+    background-color: #FFB100;
+    }
+    .sent{
+      background-color: #0093E9;
+    }
+    .received{
+      background-color: #009F12;
+      }
+      .btn-outline-info{
+        border-radius: 8px;
+      }
     .round-sign {
       font-size: 12px;
       font-weight:600;
         margin-right: 15px;
       }
-     
+      .rounded-circle{
+        width: 6px;
+        height:6px;
+      }
+     .primary{
+      
+      background-color:#00000065;
+     }
+     .secondary{
+      
+      background-color:#2A9FAA;
+     }
+
     .rTableCell {
       color: $black;
         font-weight: 400;
@@ -90,3 +138,7 @@
 
   }
 }
+
+/* @media (max-width: $md) {
+            font-size:6px;
+          }*/
