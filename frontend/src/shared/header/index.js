@@ -27,7 +27,7 @@ const Header = props => {
     const path = props.match.path;
     if(search != '' )
     {
-      if(path === '/overview') {
+      if(path === '/overview' || path === '/shipments') {
         dispatch(getShipmentsById(search))
 
       }else {

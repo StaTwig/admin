@@ -48,7 +48,8 @@ export const getShipmentsById = (query) => {
   try {
     return async dispatch => {
       const result =  await axios.get(config().shipmentsSearch + query);
-      dispatch(setShipments(result.data));
+      const shipments = result.data.data.map(shipment =>  JSON.parse(shipment.data));
+      dispatch(setShipments({data: shipments}));
     }
   }catch(e){
     return dispatch => {
