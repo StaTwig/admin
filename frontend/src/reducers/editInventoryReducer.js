@@ -1,5 +1,6 @@
 import {
-    SET_EDIT_INVENTORY
+    SET_EDIT_INVENTORY,
+  RESET_EDIT_INVENTORY
   } from '../constants/inventoryConstants';
   
   export const initialState = {
@@ -18,7 +19,9 @@ import {
     switch (action.type) {
       case SET_EDIT_INVENTORY:
         return action.payload;
-      
+      case RESET_EDIT_INVENTORY:
+        return initialState;
+
       default:
         return state;
     }

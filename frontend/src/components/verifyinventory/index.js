@@ -4,6 +4,7 @@ import Pen from '../../assets/icons/pen.svg';
 import {
   addMultipleInventories,
   setEditInventories,
+  resetEditInventories
 } from '../../actions/inventoryActions';
 import Modal from '../../shared/modal';
 import InventoryPopUp from './inventorypopup';
@@ -27,9 +28,9 @@ const VerifyInventory = props => {
     });
     console.log(result);
 
-    if (result.status != 400) {
+    if (result.response) {
       setOpenCreatedInventory(true);
-      dispatch(setEditInventories());
+      dispatch(resetEditInventories());
     }
   };
 
