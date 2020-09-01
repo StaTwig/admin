@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { config } from '../config';
 import { GET_INVENTORIES_FAILURE, GET_INVENTORIES_SUCCESS ,SET_REVIEW_INVENTORY,GET_INVENTORIESCOUNT_FAILURE,
-   GET_INVENTORIESCOUNT_SUCCESS,SET_EDIT_INVENTORY, RESET_EDIT_INVENTORY } from "../constants/inventoryConstants";
+   GET_INVENTORIESCOUNT_SUCCESS,SET_EDIT_INVENTORY, RESET_REVIEW_INVENTORY } from "../constants/inventoryConstants";
 
 export const getInventories = () => {
   try {
@@ -66,9 +66,9 @@ export const setEditInventories = (data) =>{
   };
 
 }
-export const resetEditInventories = () =>{
+export const resetReviewInventories = () =>{
   return {
-    type: RESET_EDIT_INVENTORY,
+    type: RESET_REVIEW_INVENTORY,
   };
 
 }

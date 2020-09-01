@@ -29,6 +29,7 @@ const ShipmentContainer = props => {
                               <Shipment shipments={shipments} shipmentsCount={shipmentsCount}{...props}/>
                         </div>
                   </div>
+
             </div>
       );
 };

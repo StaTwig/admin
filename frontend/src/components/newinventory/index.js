@@ -13,7 +13,7 @@ import { getManufacturers, getProducts } from '../../actions/poActions';
 
 const NewInventory = props => {
   const editInventories = useSelector(state => {
-    return state.editInventory;
+    return state.reviewInventory;
   });
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const NewInventory = props => {
     storageConditionmin: '',
     storageConditionmax: '',
   };
-  const [inventoryState, setInventoryState] = useState([editInventories]);
+  const [inventoryState, setInventoryState] = useState(editInventories);
   const editTableProps = {
     products,
     manufacturers,
