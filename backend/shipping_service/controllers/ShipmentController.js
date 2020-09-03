@@ -974,8 +974,8 @@ exports.fetchUserShipments = [
             'info',
             '<<<<< ShipmentService < ShipmentController < fetchUserShipments : destination user shipments',
           );
-          shipmentIds = destinationUser.shipmentIds.filter(
-            (shipmentId, index) => index >= parseInt(skip) && index < parseInt(limit),
+          shipmentIds = destinationUser.shipmentIds.reverse().filter(
+            (shipmentId, index) => index >= parseInt(skip) && index < (parseInt(limit) + parseInt(skip)),
           );
         }
         await utility.asyncForEach(shipmentIds, async shipmentId => {

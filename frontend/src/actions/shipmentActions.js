@@ -13,7 +13,7 @@ import {
   SET_TRACK_SHIPMENT,
 } from '../constants/shipmentConstants';
 
-export const getShipments = (skip = 0, limit = 10) => {
+export const getShipments = (skip = 0, limit = 5) => {
   try {
     return async dispatch => {
       const result = await axios.get(
@@ -21,6 +21,7 @@ export const getShipments = (skip = 0, limit = 10) => {
       );
       dispatch(setShipments(result.data));
       dispatch(setShipmentsCount(result.data));
+      return result.data.data.length;
     };
   } catch (e) {
     return dispatch => {
@@ -126,7 +127,7 @@ export const setTrackShipment = data => {
   };
 };
 
-const resetShipments = data => {
+export const resetShipments = data => {
   return {
     type: GET_SHIPMENTS_FAILURE,
     payload: data,

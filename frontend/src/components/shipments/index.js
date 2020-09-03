@@ -17,14 +17,18 @@ import Status from '../../assets/icons/Status.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsers } from '../../actions/userActions';
 import PurchaseFormReview from '../../components/verifyPO/purchaseFormReview';
+import {getShipments, resetShipments} from "../../actions/shipmentActions";
 
 const ShipmentAnalytic = props => {
   
   const [openPurchaseOrder, setOpenPurchaseOrder] = useState(false);
   const [visible, setvisible] = useState(false);
   const [ editMode, setEditMode ] = useState(false);
+  const [skip, setSkip] = useState(5);
+  const [limit, setLimit] = useState(5);
+  const [loadMore, setLoadMore] = useState(true);
 
- const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const closeModal = () => {
     setOpenPurchaseOrder(false);
@@ -37,9 +41,18 @@ const ShipmentAnalytic = props => {
     return state.user;
   });
   useEffect(() => {
+    dispatch(resetShipments());
     dispatch(getAllUsers());
   }, []);
 
+  const onLoadMore = async () => {
+    const newSkip = skip + 5;
+    setSkip(newSkip);
+    const results = await dispatch(getShipments(skip, limit));
+    if(results === 0) {
+      setLoadMore(false);
+    }
+  }
   
   const headers = {
     coloumn1: 'Client',
@@ -81,6 +94,7 @@ const ShipmentAnalytic = props => {
       </div>
       <div className="ribben-space">
        { visible ? <PoTable {...props}/> : <Table {...props}/> }
+        {loadMore && <button className="btn btn-success" onClick={onLoadMore}>Load More</button>}
       </div>
       {openPurchaseOrder && (
         <Modal

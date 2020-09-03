@@ -3,7 +3,7 @@ import Shipment from '../../components/shipments';
 import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
 import { useDispatch, useSelector } from 'react-redux';
-import {getShipments} from "../../actions/shipmentActions";
+import {getShipments, resetShipments} from "../../actions/shipmentActions";
 
 
 const ShipmentContainer = props => {
@@ -17,7 +17,7 @@ const ShipmentContainer = props => {
     });
     useEffect(() => {
       dispatch(getShipments());
-      
+      return () => dispatch(resetShipments());
     }, []);
 
       return (
