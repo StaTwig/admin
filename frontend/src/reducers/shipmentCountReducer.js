@@ -3,7 +3,7 @@ import {
     GET_SHIPMENTSCOUNT_FAILURE
   } from '../constants/shipmentConstants';
   
-  export const initialState = [];
+  export const initialState = {};
   
   export const shipmentCountReducer = (state = initialState, action) => {
     switch (action.type) {

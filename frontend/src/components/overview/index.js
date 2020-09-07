@@ -37,7 +37,7 @@ import './style.scss';
 
               <div className="d-flex flex-column">
                 <div className="title">Total Inventory Added</div>
-                <div className="count2" >{props.inventoriesCount.count.tot_qty}<small className="dayStatus ml-1">ThisYear</small></div>
+                <div className="count2" >{ props.inventoriesCount.counts.inventoryAdded.total}<small className="dayStatus ml-1">ThisYear</small></div>
               </div>
             </div>
 
@@ -96,7 +96,7 @@ import './style.scss';
               <div id="chartjs-render-monitor" ><ChartsPage {...props}/></div>
               <div className="total">
                 Total Current Inventory
-              <div className="value">{props.inventoriesCount.count.tot_qty}</div>
+              <div className="value">{ props.inventoriesCount.counts.currentInventory.total}</div>
               </div>
 
             </div>
