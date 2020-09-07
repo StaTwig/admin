@@ -12,7 +12,7 @@ export const shipmentReducer = (state = initialState, action) => {
       const shipments = action.payload.data.map(shipment => {
         return {...shipment, visible: false}
       });
-      return shipments.reverse();
+      return [...state, ...shipments];
     
     case GET_SHIPMENTS_FAILURE:
       return initialState

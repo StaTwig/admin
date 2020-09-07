@@ -3,8 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import Pen from '../../assets/icons/pen.svg';
 import {
   addMultipleInventories,
-  setEditInventories,
-  resetEditInventories
+  resetReviewInventories
 } from '../../actions/inventoryActions';
 import Modal from '../../shared/modal';
 import InventoryPopUp from './inventorypopup';
@@ -30,7 +29,7 @@ const VerifyInventory = props => {
 
     if (result.response) {
       setOpenCreatedInventory(true);
-      dispatch(resetEditInventories());
+      dispatch(resetReviewInventories());
     }
   };
 
