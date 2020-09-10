@@ -27,7 +27,6 @@ const ShipmentAnalytic = props => {
   const [skip, setSkip] = useState(5);
   const [limit, setLimit] = useState(5);
   const [loadMore, setLoadMore] = useState(true);
-
   const dispatch = useDispatch();
 
   const closeModal = () => {
