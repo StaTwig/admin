@@ -61,22 +61,12 @@ exports.register = [
   // Process request after validation and sanitization.
   async (req, res) => {
     try {
-      var re = /^[a-z0-9 ]+$/i;
-      if (!req.body.name.match(re)) {
+      if (!req.body.name.match('[A-Za-z]')) {
         logger.log(
           'warn',
           '<<<<< UserService < AuthController < register : Name should only consist of letters',
         );
-        errors = {
-          data: [
-            {
-              value: '',
-              msg: 'Name should only consist of letters',
-              param: 'name',
-              location: 'body',
-            },
-          ],
-        };
+        return apiResponse.ErrorResponse(res, 'Name should only consists of letters');
       }
       // Extract the validation errors from a request.
       const errors = validationResult(req);
