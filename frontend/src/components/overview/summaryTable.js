@@ -69,7 +69,7 @@ const SummaryTable = props => {
           {shipments.map((shipment, index) => (
             index < 5 ?
             <div className="combine-data" key={index}>
-              <div><span className="badge badge-pill badge-success p-2">{shipment.status}</span></div>
+              <div className="status" target={shipment.status}>{shipment.status}</div>
             </div> :null
           ))}
         </div>
