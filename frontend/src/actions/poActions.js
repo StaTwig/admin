@@ -34,6 +34,15 @@ export const getPO = async po => {
   }
 };
 
+export const changePOStatus = async (data) => {
+  try {
+    const result = await axios.post(config().changePOStatus, data );
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
 export const getProducts = async () => {
   try {
     const result = await axios.get(config().getProducts);

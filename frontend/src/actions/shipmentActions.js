@@ -52,6 +52,8 @@ export const getTemperature = async () => {
     return e.response;
   }
 };
+
+
 export const getShipmentsById = query => {
   try {
     return async dispatch => {
