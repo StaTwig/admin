@@ -11,6 +11,7 @@ const [temp,setTemp]= useState({})
   
 
     useEffect(() => {
+
     async function fetchData() {
       const result = await getTemperature();
        setTemp(result.data)
@@ -29,7 +30,6 @@ const [temp,setTemp]= useState({})
           />
     
         </div>
-    
     
       );
 
