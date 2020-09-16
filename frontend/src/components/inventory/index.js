@@ -379,7 +379,7 @@ const Inventory = props => {
       </div>
       <div className="ribben-space">
         <div className="row no-gutter">
-          <div className="col-sm-12 col-xl-9">
+        <div className="col-sm-12 col-xl-9 rTableHeader">
             <Table data={tableHeaders} {...props} />
           </div>
           <div className="col-sm-12 col-xl-3">

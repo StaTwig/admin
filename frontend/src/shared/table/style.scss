@@ -44,6 +44,8 @@
       padding: 1px 22px;
       align-self: center;
       font-size: 12px;
+      font-weight: bold;
+      text-align: center;
       color: #707070;
     }
 
@@ -51,6 +53,7 @@
     
     .rTableCell {
       color: $black;
+      align-content: center;
         font-weight: 400;
       a {
         color: $black;
@@ -66,6 +69,7 @@
     .combine-data {
       display: flex;
       align-items: center;
+      text-align: center;
       font-weight: bold;
       
         color: #0093E9;
@@ -120,7 +124,7 @@
      
       .form-field {
         border: none;
-        font-size: 10px;
+        font-size: 12px;
       }
     }
 
@@ -151,12 +155,12 @@
 
           .form-field {
             width: 100%;
-            font-size: 10px;
+            font-size: 12px;
           }
           
           .form-field1 {
             width:30%;
-            font-size: 10px;
+            font-size: 12px;
             border: none;
           }
 
