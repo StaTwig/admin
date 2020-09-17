@@ -1,6 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import Signup from '../../components/signUp';
 import {authenticateUser} from '../../actions/userActions';
+import MobileHeader from '../../shared/header/mobileHeader';
+import logo from '../../assets/brands/VACCINELEDGER.png';
+import { Link } from 'react-router-dom';
 
 const SignupContainer = (props) => {
   const [email, setEmail] = useState('');
@@ -23,6 +26,13 @@ const SignupContainer = (props) => {
 
   return (
     <div className="container-fluid p-0">
+ <MobileHeader {...props} />
+   <nav className="navbar sticky-top navbar-expand-lg">
+        <a className="navbar-brand" href="#">
+          <img src={logo} width="230" height="30" alt="logo" onClick={() =>props.history.push('/#')} />
+        </a>
+</nav>
+
       <Signup
         email={email}
         password={password}
