@@ -963,7 +963,7 @@ var tr = 0,wr = 0,mr = 0,yr = 0;
 
 function getDateDiff(dateOne, dateTwo) {
 
-today = 0,week = 0,month = 0,year = 0;
+today = 0,week = 0,month = 0,year = 0, prev_year = 0;
 
     if ((dateOne.charAt(2) == '-' || dateOne.charAt(1) == '-') & (dateTwo.charAt(2) == '-' || dateTwo.charAt(1) == '-')) {
         dateOne = new Date(formatDate(dateOne));
@@ -976,20 +976,22 @@ today = 0,week = 0,month = 0,year = 0;
     let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
     let message = "Difference in Days: " + diffDays;
-    if (diffDays == 0) {
-        today++;
-    } else if (diffDays >= 0 && diffDays <= 7) {
-        week++;
-    } else if (diffDays >= 0 && diffDays <= 30) {
-        month++;
-    } else if (diffDays >= 0 && diffDays <= 365) {
-        year++;
+    switch (true) {	
+	case (diffDays == 0):
+	today++;
+	case (diffDays >= 0 && diffDays <= 7):
+	week++;
+	case (diffDays >= 0 && diffDays <= 30):
+	month++;
+	case(diffDays >= 0 && diffDays <= 365):
+	year++;
     }
     return {
         today,
         week,
         month,
-        year
+        year,
+	prev_year
     }
 }
 
@@ -1019,6 +1021,7 @@ exports.fetchUserShipments = [
         const destinationUser = await UserTransactionModel.findOne({
           destinationUser: user.address,
         });
+	      console.log("duser",destinationUser)
         let items_array = [];
         let shipmentIds = [];
         if (destinationUser) {
@@ -1030,6 +1033,7 @@ exports.fetchUserShipments = [
             (shipmentId, index) => index >= parseInt(skip) && index < (parseInt(limit) + parseInt(skip)),
           );
         }
+	      console.log("sids",shipmentIds)
         await utility.asyncForEach(shipmentIds, async shipmentId => {
           const response = await axios.get(
             `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${shipmentId}`,
@@ -1075,6 +1079,7 @@ exports.fetchUserShipments = [
                         var m = myDate.getMonth();
                         m += 1;
                         var shipdate = (myDate.getDate() + "-" + m + "-" + myDate.getFullYear());
+			    console.log("d",shipdate)
                         var s = getDateDiff(today, shipdate)
                         ts += s.today;
                         ws += s.week;
@@ -1281,3 +1286,37 @@ exports.fetchUserShipments = [
     }
   },
 ];
+
+var QRCode = require('qrcode');
+
+exports.generateQRCode = [
+  auth,
+  async (req, res) => {
+    try {
+      checkToken(req, res, async result => {
+        if (result.success) {
+          const { address } = req.user;
+          const { data } = req.body;
+          const { filename } = req.query;
+          const json_data = JSON.stringify(req.body);
+          QRCode.toFile(filename + ".png", "'" + json_data + "'" , {
+          color: {
+            dark: '#00F',  // Blue dots
+            light: '#0000' // Transparent background
+          }
+        }, function (err) {
+  if (err) throw err
+})
+          res.status(200).json({ message:"success"});
+        } else {
+          logger.log('warn', '<<<<< ShipmentService < ShipmentController < GenerateQRCode')
+          res.status(403).json(result);
+        }
+      });
+    } catch (err) {
+      logger.log('error', '<<<<< ShipmentService < ShipmentController < GenerateQRCode : error (catch block)')
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+

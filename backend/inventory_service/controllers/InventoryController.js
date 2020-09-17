@@ -117,7 +117,6 @@ exports.getInventoryDetailsForProduct = [
             `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${key}`,
           );
           const items = response.data.items;
-          console.log('items', items);
           logger.log('info', '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : queried data by key')
           res.json({ data: items });
         } else {
@@ -133,9 +132,9 @@ exports.getInventoryDetailsForProduct = [
 ];
 
 var total_inv = 0, total_qty = 0,total_ne = 0,total_ne = 0;
-var today_inv = 0,week_inv = 0,month_inv = 0,year_inv = 0;
-var today_qty = 0,week_qty = 0,month_qty = 0,year_qty = 0;
-var today_exp = 0,week_exp = 0,month_exp = 0,year_exp = 0;
+var today_inv = 0,week_inv = 0,month_inv = 0,year_inv = 0,prev_year_inv = 0;
+var today_qty = 0,week_qty = 0,month_qty = 0,year_qty = 0,prev_year_qty = 0;
+var today_exp = 0,week_exp = 0,month_exp = 0,year_exp = 0,prev_year_exp = 0;
 var today_ne = 0,week_ne = 0,month_ne = 0,year_ne = 0;
 
 function getDateDiff(dateOne, dateTwo, dateThree, dateFour, quantity) {
@@ -156,43 +155,47 @@ function getDateDiff(dateOne, dateTwo, dateThree, dateFour, quantity) {
 
     let timeDiff1 = Math.abs(dateThree.getTime() - dateFour.getTime());
     let diffDays1 = Math.ceil(timeDiff1 / (1000 * 3600 * 24));
-
     if (dateTwo < dateOne) {
-        if (diffDays == 0) {
-            today_exp++;
-        } else if ( diffDays <= 7 ) {
-            week_exp++;
-        } else if ( diffDays <= 31 ) {
-            month_exp++;
-        } else if ( diffDays <= 365 ) {
-            year_exp++;
+        switch (true) {
+        case (diffDays == 0):
+        today_exp++;
+        case (diffDays >= 0 && diffDays <= 7):
+        week_exp++;
+        case (diffDays >= 0 && diffDays <= 30):
+        month_exp++;
+        case(diffDays >= 0 && diffDays <= 365):
+        year_exp++;
+	case(diffDays == 0 ):
+	prev_year_exp++;
         }
-
     } else if (dateTwo >= dateOne && diffDays < 30) {
-        if (diffDays == 0) {
-                        today_ne++;
-        } else if ( diffDays <= 7 ) {
-            week_ne++;
-        } else if ( diffDays <= 31 ) {
-            month_ne++;
-        } else if ( diffDays <= 365 ) {
-            year_ne++;
-        }
-
+        switch (true) {
+        case (diffDays == 0):
+        today_ne++;
+        case (diffDays >= 0 && diffDays <= 7):
+        week_ne++;
+        case (diffDays >= 0 && diffDays <= 30):
+        month_ne++;
+        case(diffDays >= 0 && diffDays <= 365):
+        year_ne++;
     }
-
-    if (diffDays1 == 0) {
+    }
+    switch (true) {
+        case (diffDays1 == 0):
         today_inv++;
         today_qty += quantity;
-    } else if (  diffDays1 <= 7 ) {
+        case (diffDays1 >= 0 && diffDays1 <= 7):
         week_inv++;
         week_qty += quantity;
-    } else if ( diffDays1 <= 31 ) {
+        case (diffDays1 >= 0 && diffDays1 <= 30):
         month_inv++;
         month_qty += quantity;
-    } else if (  diffDays1 <= 365 ) {
+        case(diffDays1 >= 0 && diffDays1 <= 365):
         year_inv++;
         year_qty += quantity;
+	case(diffDays1 > 365):
+        prev_year_inv++;
+        prev_year_qty += quantity;
     }
 
     return {
@@ -257,11 +260,11 @@ exports.getAllInventoryDetails = [
 
           var total_inv = items.length;
           var dict = {};
-          today_exp = 0,week_exp = 0,month_exp = 0,year_exp = 0;
+          today_exp = 0,week_exp = 0,month_exp = 0,year_exp = 0, prev_year_exp = 0;
           today_ne = 0,week_ne = 0,month_ne = 0,year_ne = 0;
-          today_inv = 0,week_inv = 0,month_inv = 0,year_inv = 0;
-          today_qty = 0,week_qty = 0,month_qty = 0,year_qty = 0;
-          total_inv = 0, total_qty = 0,total_ne = 0,total_ne = 0;
+          today_inv = 0,week_inv = 0,month_inv = 0,year_inv = 0, prev_year_inv = 0;
+          today_qty = 0,week_qty = 0,month_qty = 0,year_qty = 0, prev_year_qty = 0;
+          total_inv = 0, total_qty = 0,total_ne = 0,total_exp = 0;
 
           for (i=0;i<items.length;i++){
               var productName = JSON.parse(items[i].data).productName;
@@ -297,10 +300,10 @@ exports.getAllInventoryDetails = [
                             created_date = today_full;
                         }
                         var s = getDateDiff(today, expiry_date1, today_full, created_date, count);
-                        total_exp = today_exp + week_exp + month_exp + year_exp;
-                        total_ne = today_ne + week_ne + month_ne + year_ne;
-                        total_inv = today_inv + week_inv + month_inv + year_inv;
-                        total_qty = today_qty + week_qty + month_qty + year_qty;
+		       total_exp = year_exp; 
+		       total_ne = year_ne;
+		       total_inv = year_inv;
+		       total_qty = year_qty;
                     }
           logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : queried and pushed data')
           res.json({
@@ -411,6 +414,7 @@ exports.addNewInventory = [
           let year = date_ob.getFullYear();
           var today = date + "-" + month + "-" + year;
           var createdDate = {createdDate: today};
+
           const { address } = req.user;
           const userData = {
             stream: stream_name,
