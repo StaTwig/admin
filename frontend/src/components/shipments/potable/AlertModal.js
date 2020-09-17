@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import './style.scss';
-import Checked from '../../assets/icons/checked.svg';
-import Cross from '../../assets/icons/cross.svg';
+import Checked from '../../../assets/icons/checked.svg';
+import Cross from '../../../assets/icons/cross.svg';
 
-const PoPopUp = props => {
+const AlertModal = props => {
   return (
     <div className="inventorypopup">
       <div className="d-flex  flex-column align-items-center">
@@ -14,9 +14,8 @@ const PoPopUp = props => {
         )}
         <div className="alert">{props.type}</div>
         <div className="data">
-          Your PurchaseOrder <span className="bold">{props.productID}</span>
+          Your PurchaseOrder status changed <span className="bold">{props.productID}</span>
         </div>
-        <div className="data mb-4">{props.message}</div>
         <button className="btn-primary btn" onClick={props.onHide}>
           OK
         </button>
@@ -25,4 +24,4 @@ const PoPopUp = props => {
   );
 };
 
-export default PoPopUp;
+export default AlertModal;
