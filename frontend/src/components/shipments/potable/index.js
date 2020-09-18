@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { getPurchaseStats, changePOStatus } from '../../../actions/poActions';
+import { turnOff, turnOn } from "../../../actions/spinnerActions";
 import Modal from '../../../shared/modal';
 import POModal from './POModal';
 import AlertModal from './AlertModal';
@@ -13,10 +14,14 @@ const PoTable = props => {
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [purchaseOrder, setPurchaseOrder] = useState({});
   const [alertMessage, setAlertMessage] = useState({});
+  const dispatch = useDispatch();
+
   useEffect(() => {
     async function fetchData() {
+      dispatch(turnOn());
       const result = await getPurchaseStats();
       setPurchases(result.data.data);
+      dispatch(turnOff());
     }
     fetchData();
   }, []);
@@ -54,7 +59,9 @@ const PoTable = props => {
       {showModal && (
         <Modal
           close={closeModal}
-          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+          title="Purchase Order"
+          size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
+          buttonclassName="btn-orange"
         >
           <POModal
             onHide={closeModal}
@@ -92,6 +99,14 @@ const PoTable = props => {
         <div className="overflow">
           {purchases.map((purchase, index) => {
             const p = JSON.parse(purchase.data);
+            let statusStyle = 'warning-bg';
+            if (purchase.status === 'Accepted') {
+              statusStyle = 'success-bg';
+            } else if (purchase.status === 'Received') {
+              statusStyle = 'info-bg';
+            } else if (purchase.status === 'Rejected') {
+              statusStyle = 'secondary-bg';
+            }
             return (
               <div>
                 <div className="rTableRow" key={index}>
@@ -117,13 +132,13 @@ const PoTable = props => {
                   <div className="rTableCell">{p.receiver.name}</div>
                   <div className="rTableCell">{p.destination}</div>
                   <div className="rTableCell">
-                    <div className="status">
-                      <span className="text">{purchase.status}</span>
+                    <div className={`status ${statusStyle}`}>
+                      {purchase.status}
                     </div>
                   </div>
                   <div className="rTableCell">
                     <button
-                      className="success"
+                      className="btn btn-outline-primary"
                       onClick={() => openModal(purchase)}
                     >
                       View

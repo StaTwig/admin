@@ -17,13 +17,12 @@ import Status from '../../assets/icons/Status.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsers } from '../../actions/userActions';
 import PurchaseFormReview from '../../components/verifyPO/purchaseFormReview';
-import {getShipments, resetShipments} from "../../actions/shipmentActions";
+import { getShipments, resetShipments } from '../../actions/shipmentActions';
 
 const ShipmentAnalytic = props => {
-  
   const [openPurchaseOrder, setOpenPurchaseOrder] = useState(false);
   const [visible, setvisible] = useState(false);
-  const [ editMode, setEditMode ] = useState(false);
+  const [editMode, setEditMode] = useState(false);
   const [skip, setSkip] = useState(5);
   const [limit, setLimit] = useState(5);
   const [loadMore, setLoadMore] = useState(true);
@@ -48,11 +47,11 @@ const ShipmentAnalytic = props => {
     const newSkip = skip + 5;
     setSkip(newSkip);
     const results = await dispatch(getShipments(skip, limit));
-    if(results === 0) {
+    if (results === 0) {
       setLoadMore(false);
     }
-  }
-  
+  };
+
   const headers = {
     coloumn1: 'Client',
     coloumn2: 'Shipping Date',
@@ -86,14 +85,18 @@ const ShipmentAnalytic = props => {
       </div>
       <Tiles {...props} />
       <div className="mt-4">
-        <Tabs {...props} setvisible = {setvisible} visible={visible}  />
+        <Tabs {...props} setvisible={setvisible} visible={visible} />
       </div>
       <div className="full-width-ribben mt-4">
         <TableFilter data={headers} />
       </div>
       <div className="ribben-space">
-       { visible ? <PoTable {...props}/> : <Table {...props}/> }
-        {loadMore && <button className="btn btn-success" onClick={onLoadMore}>Load More</button>}
+        {visible ? <PoTable {...props} /> : <Table {...props} />}
+        {loadMore && (
+          <button className="btn btn-success" onClick={onLoadMore}>
+            Load More
+          </button>
+        )}
       </div>
       {openPurchaseOrder && (
         <Modal
@@ -102,7 +105,18 @@ const ShipmentAnalytic = props => {
           size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
           buttonclassName="btn-orange"
         >
-          {editMode ? <PurchaseFormReview setEditMode ={setEditMode} setEditMode={() => setEditMode(false)}/> : <PurchaseForm setEditMode={() => setEditMode(true)} users={users} user={user}/>}
+          {editMode ? (
+            <PurchaseFormReview
+              setEditMode={setEditMode}
+              setEditMode={() => setEditMode(false)}
+            />
+          ) : (
+            <PurchaseForm
+              setEditMode={() => setEditMode(true)}
+              users={users}
+              user={user}
+            />
+          )}
         </Modal>
       )}
     </div>

@@ -12,15 +12,18 @@ import {
   SET_EDIT_SHIPMENT,
   SET_TRACK_SHIPMENT,
 } from '../constants/shipmentConstants';
+import { turnOff, turnOn } from "./spinnerActions";
 
 export const getShipments = (skip = 0, limit = 5) => {
   try {
     return async dispatch => {
+      dispatch(turnOn());
       const result = await axios.get(
         `${config().shipmentsUrl}?skip=${skip}&limit=${limit}`,
       );
       dispatch(setShipments(result.data));
       dispatch(setShipmentsCount(result.data));
+      dispatch(turnOff());
       return result.data.data.length;
     };
   } catch (e) {
