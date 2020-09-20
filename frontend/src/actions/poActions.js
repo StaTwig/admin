@@ -5,6 +5,7 @@ import {
   SET_EDIT_PO,
   RESET_EDIT_PO,
 } from '../constants/poconstants';
+import { turnOff, turnOn } from "./spinnerActions";
 
 export const createPO = async data => {
   try {
@@ -29,6 +30,15 @@ export const getPO = async po => {
   try {
     const result = await axios.get(config().fetchAllPurchaseOrderUrl + po);
     return result.data.data;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+export const changePOStatus = async (data) => {
+  try {
+    const result = await axios.post(config().changePOStatus, data );
+    return result;
   } catch (e) {
     return e.response;
   }

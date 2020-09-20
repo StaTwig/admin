@@ -31,8 +31,47 @@
         font-size: 9px;
         @media (min-width: $xl) {
           font-size: 13px;
-        }
-      }
+
+}        }
+     .status[target=Shipped] {
+                                color: white;
+                                background-color: #3CB049;
+                                border: none;
+                                padding: 3px 10px;
+                                text-align: center;
+                                text-decoration: none;
+                                display: inline-block;
+                                margin: 4px 2px;
+                                cursor: pointer;
+                                border-radius: 10px;
+                        }
+                        .status[target="In Transit"] {
+                                color: white;
+                                background-color: #FFB100;
+                                border: none;
+                                padding: 3px 10px;
+                                text-align: center;
+                                text-decoration: none;
+                                display: inline-block;
+                                margin: 4px 2px;
+                                cursor: pointer;
+                                border-radius: 10px;
+                        }
+                        .status[target=Received] {
+                                color: white;
+                                background-color: #0093E9;
+                                border: none;
+                                padding: 3px 10px;
+                                text-align: center;
+                                text-decoration: none;
+                                display: inline-block;
+                                margin: 4px 2px;
+                                cursor: pointer;
+                                border-radius: 10px;
+                        }
+
+
+     
 
       .round-sign {
         border-radius: 4px;
@@ -49,7 +88,10 @@
     display: none;
   }
 
-  //   .rTable {
+  
+
+
+//   .rTable {
   //     display: flex;
   //     flex-direction: column;
   //     width: 100%;

@@ -1,15 +1,15 @@
-import { AppContainer } from 'react-hot-loader'
-import { Provider } from 'react-redux'
-import React from 'react'
-import ReactDOM from 'react-dom'
+import { AppContainer } from 'react-hot-loader';
+import { Provider } from 'react-redux';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import jwt_decode from 'jwt-decode';
 
-import App from './App'
-import configureStore, { history } from './configureStore'
-import {setCurrentUser, logoutUser} from "./actions/userActions";
-import  setAuthToken  from './utils/setAuthToken';
+import App from './App';
+import configureStore, { history } from './configureStore';
+import { setCurrentUser, logoutUser } from './actions/userActions';
+import setAuthToken from './utils/setAuthToken';
 
-const store = configureStore()
+const store = configureStore();
 const render = () => {
   ReactDOM.render(
     <AppContainer>
@@ -17,10 +17,9 @@ const render = () => {
         <App history={history} />
       </Provider>
     </AppContainer>,
-    document.getElementById('react-root')
-  )
-}
-
+    document.getElementById('react-root'),
+  );
+};
 
 setAuthToken();
 // Check for token
@@ -42,13 +41,12 @@ if (localStorage.theLedgerToken) {
   }
 }
 
-
-render()
+render();
 
 // Hot reloading
 if (module.hot) {
   // Reload components
   module.hot.accept('./App', () => {
-    render()
-  })
+    render();
+  });
 }

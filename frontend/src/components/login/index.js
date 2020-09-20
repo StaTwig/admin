@@ -8,8 +8,6 @@ import hide from '../../assets/icons/hide.png';
 import logo from '../../assets/brands/VaccineLedgerlogo.svg';
 import eye from '../../assets/icons/eye.png';
 
-import './style.scss';
-
 const FormLoginPage = (props) => {
   const { password, email, onEmailChange, onPasswordChange, errorMessage, onLogin } = props;
   const [passwordType, setPasswordType] = useState(true);
@@ -23,7 +21,12 @@ const FormLoginPage = (props) => {
   return (
     <div className="login-wrapper">
       <div className="container">
-        <div className="row">
+        <div className="mobile-header">
+            <div className="branding">
+                <img src={logo} alt="vaccineledger" />
+            </div>
+</div>
+          <div className="row">
           <div className="col-sm-6 col-lg-6">
             <div className="form-content">
               <img className="logo" src={logo} />
@@ -84,3 +87,4 @@ const FormLoginPage = (props) => {
 };
 
 export default FormLoginPage;
+
