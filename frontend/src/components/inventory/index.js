@@ -40,6 +40,10 @@ const Inventory = props => {
   const [inventoryExpired, setInventoryExpired] = useState('');
   const [inventoriesCount, setInventoriesCount] = useState('');
   const [currentInventoriesCount, setCurrentInventoriesCount] = useState('');
+
+  const colors = ["#ffbcc4", "#c1e3f2", "#ffc18c", "#ffef83",
+        "#d4e7ff", "#e0b0ff", "#F1EFCE", "#D7FAF1", "#F2B6AF" ];
+
   const products = Object.keys(props.inventoriesCount.dict);
   useEffect(() => {
       setInventoriesCount(
@@ -394,7 +398,7 @@ const Inventory = props => {
                 {products.map((product, index) => (
                   <div className="col-sm-6" key={index}>
                     <div className="d-flex card flex-column align-items-center">
-                      <div className="round-sign ellipseOne">{product}</div>
+                    <div className="round-sign" style={{backgroundColor: colors[index]}}>{product}</div>
                       <p className="product">{product}</p>
                       <h3>Qty : {props.inventoriesCount.dict[product]}</h3>
                     </div>
