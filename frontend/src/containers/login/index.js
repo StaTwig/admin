@@ -1,7 +1,9 @@
 import React,{ useState, useCallback} from 'react';
 import jwt_decode from 'jwt-decode';
 import { useSelector, useDispatch } from 'react-redux';
-
+import MobileHeader from '../../shared/header/mobileHeader';
+import logo from '../../assets/brands/VACCINELEDGER.png';
+import { Link } from 'react-router-dom';
 import Login from '../../components/login';
 import { loginUser, setCurrentUser } from '../../actions/userActions';
 import setAuthToken from '../../utils/setAuthToken';
@@ -40,8 +42,15 @@ const LoginContainer = props => {
    }
 
   return(
-    <div className="container-fluid p-0" tabindex="-1" onKeyDown={onkeydown}>
-      <Login
+
+    <div className="container-fluid p-0" tabIndex="-1" onKeyDown={onkeydown}>
+    <MobileHeader {...props} />  
+   <nav className="navbar sticky-top navbar-expand-lg">
+        <a className="navbar-brand" href="#">
+          <img src={logo}  width="230" height="30" alt="logo" onClick={() =>props.history.push('/#')} />
+        </a>
+</nav>
+ <Login
         errorMessage={errorMessage}
         onLogin={onLogin}
         onEmailChange={e => setEmail(e.target.value)}
@@ -49,6 +58,7 @@ const LoginContainer = props => {
      
       />
     </div>
+
   );
 };
 

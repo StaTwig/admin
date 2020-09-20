@@ -24,9 +24,9 @@ module.exports = {
       {
         test: /\.s[ac]ss$/i,
         use: [
-        "style-loader",
-        "css-loader",
-        "sass-loader"
+          "style-loader",
+          "css-loader",
+          "sass-loader"
         ]
       },
       {
@@ -41,7 +41,7 @@ module.exports = {
       },
       {
         test: /\.(ttf|eot|svg|png|jpg)(\?[\s\S]+)?$/,
-       
+
         use: 'file-loader'
       },
     ],

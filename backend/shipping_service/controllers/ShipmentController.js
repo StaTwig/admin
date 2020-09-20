@@ -1,5 +1,6 @@
 const UserTransactionModel = require('../models/UserTransactionModel');
 const UserModel = require('../models/UserModel');
+const POModel = require('../models/POModel');
 const ShipmentModel = require('../models/ShipmentModel');
 const ProductModel = require('../models/ProductModel');
 const OrganisationModel = require('../models/OrganisationModel');
@@ -76,15 +77,34 @@ exports.purchaseOrderStatistics = [
             '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : token verified successfully, querying data by publisher',
           );
           const { address } = req.user;
-          const response = await axios.get(
-            `${blockchain_service_url}/queryDataByPublishers?stream=${po_stream_name}&address=${address}`,
-          );
-          const items = response.data.items;
-          res.json({ data: items });
+          const senderPOs = await POModel.find({ sender: address });
+          const receiverPos = await POModel.find({ receiver: address });
+          let poItems = []
+          await utility.asyncForEach(senderPOs, async po => {
+            const response = await axios.get(
+              `${blockchain_service_url}/queryDataByKey?stream=${po_stream_name}&key=${po.orderID}`,
+            );
+            const items = response.data.items;
+            const item = items[items.length-1];
+            item['status'] = po.status === 'Created' ? 'Sent' : po.status;
+            poItems.push(item);
+          });
+
+          await utility.asyncForEach(receiverPos, async po => {
+            const response = await axios.get(
+              `${blockchain_service_url}/queryDataByKey?stream=${po_stream_name}&key=${po.orderID}`,
+            );
+            const items = response.data.items;
+            const item = items[items.length-1];
+            item['status'] = po.status === 'Created' ? 'Received' : po.status;
+            poItems.push(item);
+          });
+
           logger.log(
             'info',
             '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : queried data by publisher',
           );
+          res.json({ data: poItems.reverse() });
         } else {
           logger.log(
             'warn',
@@ -624,6 +644,55 @@ exports.fetchPurchaseOrder = [
   },
 ];
 
+exports.changePOStatus = [
+  auth,
+  async(req, res) => {
+    try {
+      checkToken(req, res, async result => {
+        if (result.success) {
+          logger.log(
+            'info',
+            '<<<<< POStatus < ShipmentController < changePOStatus : token verified successfully',
+          );
+          try {
+            const { address } = req.user;
+            const { orderID, status } = req.body;
+            const po = await POModel.findOne({ orderID });
+            if(po && po.receiver === address) {
+              await POModel.update({ orderID }, { status });
+              return apiResponse.successResponseWithData(
+                res,
+                'PO Status',
+                'Success',
+              );
+            }else {
+              return apiResponse.ErrorResponse(res, 'You are not authorised to change the status');
+            }
+
+            logger.log(
+              'info',
+              '<<<<< POStatus < ShipmentController < changePOStatus : Changed Successfully',
+            );
+          } catch (e) {
+            return apiResponse.ErrorResponse(res, 'Error from Blockchain');
+          }
+        } else {
+          logger.log(
+            'warn',
+            '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : refuted token',
+          );
+          return apiResponse.ErrorResponse(res, result);
+        }
+      });
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  }
+];
 exports.createPurchaseOrder = [
   auth,
   async (req, res) => {
@@ -634,32 +703,43 @@ exports.createPurchaseOrder = [
             'info',
             '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : token verified successfully, publishing to blockchain',
           );
-          const { address } = req.user;
-          const { data } = req.body;
-          const orderID = 'PO' + Math.floor(1000 + Math.random() * 9000);
-          const userData = {
-            stream: po_stream_name,
-            key: orderID,
-            address: address,
-            data: data,
-          };
-          const response = await axios.post(
-            `${blockchain_service_url}/publish`,
-            userData,
-          );
-          logger.log(
-            'info',
-            '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : published to blockchain',
-          );
-          res
-            .status(200)
-            .json({ txid: response.data.transactionId, orderID: orderID });
+          try {
+            const { address } = req.user;
+            const { data } = req.body;
+            const orderID = 'PO' + Math.floor(1000 + Math.random() * 9000);
+
+            const userData = {
+              stream: po_stream_name,
+              key: orderID,
+              address: address,
+              data: data,
+            };
+            const response = await axios.post(
+              `${blockchain_service_url}/publish`,
+              userData,
+            );
+            const newPO = new POModel({
+              orderID,
+              sender: address,
+              receiver: data.receiver.address,
+            });
+            await newPO.save();
+            logger.log(
+              'info',
+              '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : published to blockchain',
+            );
+            res
+              .status(200)
+              .json({ txid: response.data.transactionId, orderID: orderID });
+          } catch (e) {
+            return apiResponse.ErrorResponse(res, 'Error from Blockchain');
+          }
         } else {
           logger.log(
             'warn',
             '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : refuted token',
           );
-          res.status(403).json(result);
+          return apiResponse.ErrorResponse(res, result);
         }
       });
     } catch (err) {
@@ -953,17 +1033,36 @@ exports.trackProduct = [
 ];
 
 let counts_array = [];
-var today = 0,week = 0,month = 0,year = 0;
+var today = 0,
+  week = 0,
+  month = 0,
+  year = 0;
 
-var today_total = 0,week_total = 0,month_total = 0,year_total = 0;
-var total = 0,transit = 0,shipped = 0,received = 0;
-var tt = 0,wt = 0,mt = 0,yt = 0;
-var ts = 0,ws = 0,ms = 0,ys = 0;
-var tr = 0,wr = 0,mr = 0,yr = 0;
+var today_total = 0,
+  week_total = 0,
+  month_total = 0,
+  year_total = 0;
+var total = 0,
+  transit = 0,
+  shipped = 0,
+  received = 0;
+var tt = 0,
+  wt = 0,
+  mt = 0,
+  yt = 0;
+var ts = 0,
+  ws = 0,
+  ms = 0,
+  ys = 0;
+var tr = 0,
+  wr = 0,
+  mr = 0,
+  yr = 0;
 
 function getDateDiff(dateOne, dateTwo) {
+  (today = 0), (week = 0), (month = 0), (year = 0);
 
-today = 0,week = 0,month = 0,year = 0;
+today = 0,week = 0,month = 0,year = 0, prev_year = 0;
 
     if ((dateOne.charAt(2) == '-' || dateOne.charAt(1) == '-') & (dateTwo.charAt(2) == '-' || dateTwo.charAt(1) == '-')) {
         dateOne = new Date(formatDate(dateOne));
@@ -976,25 +1075,30 @@ today = 0,week = 0,month = 0,year = 0;
     let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
 
     let message = "Difference in Days: " + diffDays;
-    if (diffDays == 0) {
-        today++;
-    } else if (diffDays >= 0 && diffDays <= 7) {
-        week++;
-    } else if (diffDays >= 0 && diffDays <= 30) {
-        month++;
-    } else if (diffDays >= 0 && diffDays <= 365) {
-        year++;
+    switch (true) {	
+	case (diffDays == 0):
+	today++;
+	case (diffDays >= 0 && diffDays <= 7):
+	week++;
+	case (diffDays >= 0 && diffDays <= 30):
+	month++;
+	case(diffDays >= 0 && diffDays <= 365):
+	year++;
     }
     return {
         today,
         week,
         month,
-        year
+        year,
+	prev_year
     }
 }
 
 function formatDate(date) {
-    return date.split('-').reverse().join('-');
+  return date
+    .split('-')
+    .reverse()
+    .join('-');
 }
 
 exports.fetchUserShipments = [
@@ -1004,12 +1108,12 @@ exports.fetchUserShipments = [
       const { user } = req;
       const { skip, limit } = req.query;
       const userObject = await UserModel.findOne({ address: user.address });
-	
-        transit = 0,shipped = 0,received = 0;
-        today_total = 0,week_total = 0,month_total = 0,year_total = 0;
-        tt = 0,wt = 0,mt = 0,yt = 0;
-        ts = 0,ws = 0,ms = 0,ys = 0;
-        tr = 0,wr = 0,mr = 0,yr = 0;
+
+      (transit = 0), (shipped = 0), (received = 0);
+      (today_total = 0), (week_total = 0), (month_total = 0), (year_total = 0);
+      (tt = 0), (wt = 0), (mt = 0), (yt = 0);
+      (ts = 0), (ws = 0), (ms = 0), (ys = 0);
+      (tr = 0), (wr = 0), (mr = 0), (yr = 0);
 
       if (userObject.role !== 'Warehouse') {
         logger.log(
@@ -1019,6 +1123,7 @@ exports.fetchUserShipments = [
         const destinationUser = await UserTransactionModel.findOne({
           destinationUser: user.address,
         });
+	      console.log("duser",destinationUser)
         let items_array = [];
         let shipmentIds = [];
         if (destinationUser) {
@@ -1026,10 +1131,15 @@ exports.fetchUserShipments = [
             'info',
             '<<<<< ShipmentService < ShipmentController < fetchUserShipments : destination user shipments',
           );
-          shipmentIds = destinationUser.shipmentIds.reverse().filter(
-            (shipmentId, index) => index >= parseInt(skip) && index < (parseInt(limit) + parseInt(skip)),
-          );
+          shipmentIds = destinationUser.shipmentIds
+            .reverse()
+            .filter(
+              (shipmentId, index) =>
+                index >= parseInt(skip) &&
+                index < parseInt(limit) + parseInt(skip),
+            );
         }
+	      console.log("sids",shipmentIds)
         await utility.asyncForEach(shipmentIds, async shipmentId => {
           const response = await axios.get(
             `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${shipmentId}`,
@@ -1043,19 +1153,19 @@ exports.fetchUserShipments = [
           itemsObject.txnId = txnId;
           items_array.push(itemsObject);
         });
-      total = items_array.length;
-                for (i = 0; i < items_array.length; i++) {
-                    var myDate = new Date(items_array[i].shipmentDate);
-                    var m = myDate.getMonth();
-                    m += 1;
-                    var shipdate = (myDate.getDate() + "-" + m + "-" + myDate.getFullYear());
+        total = items_array.length;
+        for (i = 0; i < items_array.length; i++) {
+          var myDate = new Date(items_array[i].shipmentDate);
+          var m = myDate.getMonth();
+          m += 1;
+          var shipdate =
+            myDate.getDate() + '-' + m + '-' + myDate.getFullYear();
 
-                    let date_ob = new Date();
-                    let date = ("0" + date_ob.getDate()).slice(-2);
-                    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-                    let year = date_ob.getFullYear();
-                    var today = date + "-" + month + "-" + year;
-
+          let date_ob = new Date();
+          let date = ('0' + date_ob.getDate()).slice(-2);
+          let month = ('0' + (date_ob.getMonth() + 1)).slice(-2);
+          let year = date_ob.getFullYear();
+          var today = date + '-' + month + '-' + year;
 
                     var status = items_array[i].status
                     if (status == "In Transit") {
@@ -1075,6 +1185,7 @@ exports.fetchUserShipments = [
                         var m = myDate.getMonth();
                         m += 1;
                         var shipdate = (myDate.getDate() + "-" + m + "-" + myDate.getFullYear());
+			    console.log("d",shipdate)
                         var s = getDateDiff(today, shipdate)
                         ts += s.today;
                         ws += s.week;
@@ -1098,49 +1209,57 @@ exports.fetchUserShipments = [
                 month_total = mt + ms + mr;
                 year_total = yt + ys + yr;
 
-                counts_array.push({
-                    total: total
-                }, {
-                    transit: transit
-                }, {
-                    shipped: shipped
-                }, {
-                    received: received
-                })
-                logger.log('info', '<<<<< ShipmentService < ShipmentController < fetchUserShipments : pushed total, transit, shipped and received')
-                res.json({
-                    data: items_array,
-                    counts: {
-                        totalShipments: {
-                            total: total,
-                            thisYear: year_total,
-                            thisMonth: month_total,
-                            thisWeek: week_total,
-                            today: today_total
-                        },
-                        totalShipmentsSent: {
-                            total: shipped,
-                            thisYear: ys,
-                            thisMonth: ms,
-                            thisWeek: ws,
-                            today: ts
-                        },
-                        totalShipmentsReceived: {
-                            total: received,
-                            thisYear: yr,
-                            thisMonth: mr,
-                            thisWeek: wr,
-                            today: tr
-                        },
-                        currentShipments: {
-                            total: transit,
-                            thisYear: yt,
-                            thisMonth: mt,
-                            thisWeek: wt,
-                            today: tt
-                        }
-                    }
-                });
+        counts_array.push(
+          {
+            total: total,
+          },
+          {
+            transit: transit,
+          },
+          {
+            shipped: shipped,
+          },
+          {
+            received: received,
+          },
+        );
+        logger.log(
+          'info',
+          '<<<<< ShipmentService < ShipmentController < fetchUserShipments : pushed total, transit, shipped and received',
+        );
+        res.json({
+          data: items_array,
+          counts: {
+            totalShipments: {
+              total: total,
+              thisYear: year_total,
+              thisMonth: month_total,
+              thisWeek: week_total,
+              today: today_total,
+            },
+            totalShipmentsSent: {
+              total: shipped,
+              thisYear: ys,
+              thisMonth: ms,
+              thisWeek: ws,
+              today: ts,
+            },
+            totalShipmentsReceived: {
+              total: received,
+              thisYear: yr,
+              thisMonth: mr,
+              thisWeek: wr,
+              today: tr,
+            },
+            currentShipments: {
+              total: transit,
+              thisYear: yt,
+              thisMonth: mt,
+              thisWeek: wt,
+              today: tt,
+            },
+          },
+        });
       } else {
         logger.log(
           'info',
@@ -1171,108 +1290,118 @@ exports.fetchUserShipments = [
               items_array.push(itemsObject);
             });
           }
-        total = items_array.length;
-                        for (i = 0; i < items_array.length; i++) {
-                            var myDate = new Date(items_array[i].shipmentDate);
-                            var m = myDate.getMonth();
-                            m += 1;
-                            var shipdate = (myDate.getDate() + "-" + m + "-" + myDate.getFullYear());
+          total = items_array.length;
+          for (i = 0; i < items_array.length; i++) {
+            var myDate = new Date(items_array[i].shipmentDate);
+            var m = myDate.getMonth();
+            m += 1;
+            var shipdate =
+              myDate.getDate() + '-' + m + '-' + myDate.getFullYear();
 
-                            let date_ob = new Date();
-                            let date = ("0" + date_ob.getDate()).slice(-2);
-                            let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-                            let year = date_ob.getFullYear();
-                            var today = date + "-" + month + "-" + year;
-                            var status = items_array[i].status
-                            if (status == "In Transit") {
-                                transit++;
-                                var myDate = new Date(items_array[i].shipmentDate);
-                                var m = myDate.getMonth();
-                                m += 1;
-                                var shipdate = (myDate.getDate() + "-" + m + "-" + myDate.getFullYear());
-                                var s = getDateDiff(today, shipdate)
-                                tt += s.today;
-                                wt += s.week;
-                                mt += s.month;
-                                yt += s.year;
-                            } else if (status == "Shipped") {
-                                shipped++;
-                                var myDate = new Date(items_array[i].shipmentDate);
-                                var m = myDate.getMonth();
-                                m += 1;
-                                var shipdate = (myDate.getDate() + "-" + m + "-" + myDate.getFullYear());
-                                var s = getDateDiff(today, shipdate)
-                                ts += s.today;
-                                ws += s.week;
-                                ms += s.month;
-                                ys += s.year;
-                            } else if (status == "Received") {
-                                received++;
-                                var myDate = new Date(items_array[i].shipmentDate);
-                                var m = myDate.getMonth();
-                                m += 1;
-                                var shipdate = (myDate.getDate() + "-" + m + "-" + myDate.getFullYear());
-                                var s = getDateDiff(today, shipdate)
-                                tr += s.today;
-                                wr += s.week;
-                                mr += s.month;
-                                yr += s.year;
-
-                            }
-                        }
-                        today_total = tr + ts + tr;
-                        week_total = wt + ws + wr;
-                        month_total = mt + ms + mr;
-                        year_total = yt + ys + yr;
-                         console.log("trans",transit,tt,mt,wt,yt)
-
-                        counts_array.push({
-                            total: total
-                        }, {
-                            transit: transit
-                        }, {
-                            shipped: shipped
-                        }, {
-                            received: received
-                        })
-                        logger.log('info', '<<<<< ShipmentService < ShipmentController < fetchUserShipments : pushed total, transit, shipped and received')
-                        res.json({
-                            data: items_array,
-                            counts: {
-                                totalShipments: {
-                                    total: total,
-                                    thisYear: year_total,
-                                    thisMonth: month_total,
-                                    thisWeek: week_total,
-                                    today: today_total
-                                },
-                                totalShipmentsSent: {
-                                    total: shipped,
-                                    thisYear: ys,
-                                    thisMonth: ms,
-                                    thisWeek: ws,
-                                    today: ts
-                                },
-                                totalShipmentsReceived: {
-                                    total: received,
-                                    thisYear: yr,
-                                    thisMonth: mr,
-                                    thisWeek: wr,
-                                    today: tr
-                                },
-                                currentShipments: {
-                                    total: transit,
-                                    thisYear: yt,
-                                    thisMonth: mt,
-                                    thisWeek: wt,
-                                    today: tt
-                                }
-                            }
-                        });
-                    },
-                );
+            let date_ob = new Date();
+            let date = ('0' + date_ob.getDate()).slice(-2);
+            let month = ('0' + (date_ob.getMonth() + 1)).slice(-2);
+            let year = date_ob.getFullYear();
+            var today = date + '-' + month + '-' + year;
+            var status = items_array[i].status;
+            if (status == 'In Transit') {
+              transit++;
+              var myDate = new Date(items_array[i].shipmentDate);
+              var m = myDate.getMonth();
+              m += 1;
+              var shipdate =
+                myDate.getDate() + '-' + m + '-' + myDate.getFullYear();
+              var s = getDateDiff(today, shipdate);
+              tt += s.today;
+              wt += s.week;
+              mt += s.month;
+              yt += s.year;
+            } else if (status == 'Shipped') {
+              shipped++;
+              var myDate = new Date(items_array[i].shipmentDate);
+              var m = myDate.getMonth();
+              m += 1;
+              var shipdate =
+                myDate.getDate() + '-' + m + '-' + myDate.getFullYear();
+              var s = getDateDiff(today, shipdate);
+              ts += s.today;
+              ws += s.week;
+              ms += s.month;
+              ys += s.year;
+            } else if (status == 'Received') {
+              received++;
+              var myDate = new Date(items_array[i].shipmentDate);
+              var m = myDate.getMonth();
+              m += 1;
+              var shipdate =
+                myDate.getDate() + '-' + m + '-' + myDate.getFullYear();
+              var s = getDateDiff(today, shipdate);
+              tr += s.today;
+              wr += s.week;
+              mr += s.month;
+              yr += s.year;
             }
-        } catch (err) {
+          }
+          today_total = tr + ts + tr;
+          week_total = wt + ws + wr;
+          month_total = mt + ms + mr;
+          year_total = yt + ys + yr;
+          console.log('trans', transit, tt, mt, wt, yt);
+
+          counts_array.push(
+            {
+              total: total,
+            },
+            {
+              transit: transit,
+            },
+            {
+              shipped: shipped,
+            },
+            {
+              received: received,
+            },
+          );
+          logger.log(
+            'info',
+            '<<<<< ShipmentService < ShipmentController < fetchUserShipments : pushed total, transit, shipped and received',
+          );
+          res.json({
+            data: items_array,
+            counts: {
+              totalShipments: {
+                total: total,
+                thisYear: year_total,
+                thisMonth: month_total,
+                thisWeek: week_total,
+                today: today_total,
+              },
+              totalShipmentsSent: {
+                total: shipped,
+                thisYear: ys,
+                thisMonth: ms,
+                thisWeek: ws,
+                today: ts,
+              },
+              totalShipmentsReceived: {
+                total: received,
+                thisYear: yr,
+                thisMonth: mr,
+                thisWeek: wr,
+                today: tr,
+              },
+              currentShipments: {
+                total: transit,
+                thisYear: yt,
+                thisMonth: mt,
+                thisWeek: wt,
+                today: tt,
+              },
+            },
+          });
+        });
+      }
+    } catch (err) {
       logger.log(
         'error',
         '<<<<< ShipmentService < ShipmentController < fetchUserShipments : error (catch block)',
@@ -1281,3 +1410,37 @@ exports.fetchUserShipments = [
     }
   },
 ];
+
+var QRCode = require('qrcode');
+
+exports.generateQRCode = [
+  auth,
+  async (req, res) => {
+    try {
+      checkToken(req, res, async result => {
+        if (result.success) {
+          const { address } = req.user;
+          const { data } = req.body;
+          const { filename } = req.query;
+          const json_data = JSON.stringify(req.body);
+          QRCode.toFile(filename + ".png", "'" + json_data + "'" , {
+          color: {
+            dark: '#00F',  // Blue dots
+            light: '#0000' // Transparent background
+          }
+        }, function (err) {
+  if (err) throw err
+})
+          res.status(200).json({ message:"success"});
+        } else {
+          logger.log('warn', '<<<<< ShipmentService < ShipmentController < GenerateQRCode')
+          res.status(403).json(result);
+        }
+      });
+    } catch (err) {
+      logger.log('error', '<<<<< ShipmentService < ShipmentController < GenerateQRCode : error (catch block)')
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+

@@ -13,6 +13,7 @@ router.get("/fetchAllPurchaseOrders",ShipmentController.fetchAllPurchaseOrders);
 router.get("/fetchPublisherLatestShipments",ShipmentController.fetchPublisherLatestShipments);
 router.get("/fetchAllLatestShipments",ShipmentController.fetchAllLatestShipments);
 router.post("/createPurchaseOrder", ShipmentController.createPurchaseOrder);
+router.post("/changePOStatus", ShipmentController.changePOStatus);
 router.get("/reviewShipment", ShipmentController.reviewShipment);
 router.get("/verifyShipment", ShipmentController.verifyShipment);
 router.post("/modifyShipment", ShipmentController.modifyShipment);
