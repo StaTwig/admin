@@ -91,12 +91,7 @@ const ShipmentAnalytic = props => {
         <TableFilter data={headers} />
       </div>
       <div className="ribben-space">
-        {visible ? <PoTable {...props} /> : <Table {...props} />}
-        {loadMore && (
-          <button className="btn btn-success" onClick={onLoadMore}>
-            Load More
-          </button>
-        )}
+        {visible ? <PoTable {...props}/> : <Table {...props} loadMore={loadMore} onLoadMore={onLoadMore}/>}
       </div>
       {openPurchaseOrder && (
         <Modal

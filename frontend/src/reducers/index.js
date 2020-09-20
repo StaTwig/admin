@@ -15,6 +15,7 @@ import {editInventoryReducer} from './editInventoryReducer'
 import {editPoReducer} from './editPoReducer'
 import { trackShipmentReducer} from './trackShipmentReducer';
 import { spinnerReducer } from './spinnerReducer';
+import { poReducer } from './poReducer';
 
 const rootReducer = (history) => combineReducers({
   shipments: shipmentReducer,
@@ -33,6 +34,7 @@ const rootReducer = (history) => combineReducers({
   reviewPo: reviewPoReducer,
   editPo: editPoReducer,
   spinner: spinnerReducer,
+  pos: poReducer,
   router: connectRouter(history)
 })
 
