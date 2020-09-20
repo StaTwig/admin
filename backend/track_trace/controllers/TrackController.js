@@ -226,7 +226,7 @@ exports.fetchTemp = [
       
       var tempData = {}
     
-      for(var i=0; i<20; i++){
+      for(var i=0; i<5; i++){
           
         seconds = seconds  + 5;
 
