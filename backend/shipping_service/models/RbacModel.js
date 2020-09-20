@@ -1,9 +1,10 @@
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-var RbacSchema = new mongoose.Schema({
-	role: {type: String, required: false},
-	permissions: {type: Array, required: false},
+const RbacSchema = new mongoose.Schema({
+	permissions: {type: Array, required: true},
+	role:{type: String, required: true}
+	// permissions: [{type: String}]
 }, {timestamps: true});
 
 
-module.exports = mongoose.model("User", RbacSchema);
+module.exports = mongoose.model("permissions", RbacSchema);

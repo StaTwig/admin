@@ -41,7 +41,7 @@ exports.getProductNames = [
             "result" : result,
             "permissionRequired" : "viewProductList"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, async permissionResult => {
             if(permissionResult.success) {
    
             const productNames = await ProductNamesModel.find({});
@@ -79,7 +79,7 @@ exports.addMultipleProducts = [
             "result" : result,
             "permissionRequired" : ""
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, async permissionResult => {
             if(permissionResult.success) {
    
             const dir = `uploads`;
@@ -186,7 +186,7 @@ exports.addProductName = [
             "result" : result,
             "permissionRequired" : "addNewProduct"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, async permissionResult => {
             if(permissionResult.success) {
    
             try {
@@ -245,7 +245,7 @@ exports.uploadImage = async function(req, res) {
         "result" : result,
         "permissionRequired" : "addProduct"
       }
-      checkPermissions(permission_request, response, async permissionResult => {
+      checkPermissions(permission_request, async permissionResult => {
         if(permissionResult.success) {
 
     const { data } = result;

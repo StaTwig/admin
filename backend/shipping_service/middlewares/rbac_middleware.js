@@ -2,17 +2,22 @@ const UserModel = require('../models/UserModel');
 const RbacModel = require('../models/RbacModel');
 // const { request, response } = require('express');
 
-let checkPermissions = (request, response, next) => {
-    var result = request["result"]
-    var required_permission = request["permissionRequired"]
-    var user_email = result.email;
+const checkPermissions = async (request, next) => {
+    const result = request["result"]
+    // console.log(result)
+    const required_permission = request["permissionRequired"]
+    const user_email = result.data.email;
+    console.log(user_email)
+
     // Fetch the user by id 
-    var user = await UserModel.findOne({email: user_email})
-    var user_role = user.role;
+    const user = await UserModel.findOne({email: user_email})
+    // console.log(user)
+    const user_role = user.role;
     //fetch permissions using role
-    var rbacObject = await RbacModel.findOne({role: user_role})
-    var permissions = rbacObject.permissions
-    if (permissions.indexOf(required_permission) > -1) {
+    console.log(user_role)
+    const rbacObject = await RbacModel.findOne({role: user_role})
+    // const permissions = rbacObject.permissions
+    if (rbacObject && rbacObject.permissions.indexOf(required_permission) > -1) {
         next({
             success: true,
             message: 'Permission Granted'

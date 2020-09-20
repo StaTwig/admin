@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken');
 const { constants } = require('../helpers/constants');
 const auth = require('../middlewares/jwt');
 const checkToken = require('../middlewares/middleware').checkToken;
-const checkPermissions = require('../middlewares/rbac_middleware').checkPermissions;
+const checkPermissions = require('../middlewares/rbac_middleware').checkPermissions
 const axios = require('axios');
 const dotenv = require('dotenv').config();
 
@@ -33,7 +33,7 @@ exports.getTotalCount = [
             "result" : result,
             "permissionRequired" : "viewInventory"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, permissionResult => {
             if(permissionResult.success) {
               res.json('Total inventory count');
             }else{
@@ -65,7 +65,7 @@ exports.getTotalCountOnHold = [
             "result" : result,
             "permissionRequired" : "viewInventory"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, permissionResult => {
             if(permissionResult.success) {
               res.json('Total inventory count on Hold');
             }else{
@@ -97,7 +97,7 @@ exports.getExpiringInventory = [
             "result" : result,
             "permissionRequired" : "viewInventory"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, permissionResult => {
             if(permissionResult.success) {
               res.json('Total inventory count expiring');
             }else{
@@ -129,7 +129,7 @@ exports.getInventoryforProduct = [
             "result" : result,
             "permissionRequired" : "viewInventory"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, permissionResult => {
             if(permissionResult.success) {
               const { product_id } = result.data.key;
               res.json('Inventory details for product');
@@ -162,7 +162,7 @@ exports.getInventoryDetailsForProduct = [
             "result" : result,
             "permissionRequired" : "viewInventory"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, async permissionResult => {
             if(permissionResult.success) {
               const { key } = req.query;
               const response = await axios.get(
@@ -294,7 +294,7 @@ exports.getAllInventoryDetails = [
             "result" : result,
             "permissionRequired" : "viewInventory"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, async permissionResult => {
             if(permissionResult.success) {
 
             const { address } = req.user;
@@ -481,7 +481,7 @@ exports.addNewInventory = [
             "result" : result,
             "permissionRequired" : "addInventory"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, async permissionResult => {
             if(permissionResult.success) {
    
             var { data } = req.body;
@@ -546,7 +546,7 @@ exports.addMultipleInventories = [
             "result" : result,
             "permissionRequired" : "addInventory"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, async permissionResult => {
             if(permissionResult.success) {
        
             const { inventories } = req.body;

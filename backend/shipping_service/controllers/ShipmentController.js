@@ -44,7 +44,7 @@ exports.shipmentStatistics = [
             "result" : result,
             "permissionRequired" : "viewShipment"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, async permissionResult => {
             if(permissionResult.success) {
      
             const { address } = req.user;
@@ -94,7 +94,7 @@ exports.purchaseOrderStatistics = [
             "result" : result,
             "permissionRequired" : "viewPO"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, async permissionResult => {
             if(permissionResult.success) {
      
             const { address } = req.user;
@@ -164,7 +164,7 @@ exports.fetchShipments = [
             "result" : result,
             "permissionRequired" : "receiveShipment"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, async permissionResult => {
             if(permissionResult.success) {
      
             const { key } = req.query;
@@ -215,7 +215,7 @@ exports.fetchAllPurchaseOrders = [
             "result" : result,
             "permissionRequired" : "receivePO"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, async permissionResult => {
             if(permissionResult.success) {
      
             const response = await axios.get(
@@ -265,7 +265,7 @@ exports.fetchPublisherPurchaseOrders = [
             "result" : result,
             "permissionRequired" : "viewPO"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, async permissionResult => {
             if(permissionResult.success) {
      
             const { address } = req.user;
@@ -361,7 +361,7 @@ exports.createShipment = [
             "result" : result,
             "permissionRequired" : "createShipmentOrder"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, async permissionResult => {
             if(permissionResult.success) {
      
             const { address, email } = req.user;
@@ -577,7 +577,7 @@ exports.reviewShipment = [
             "result" : result,
             "permissionRequired" : "scanShipment"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, permissionResult => {
             if(permissionResult.success) {
      
             const { shipment_id } = result.data.shipment_id;
@@ -620,7 +620,7 @@ exports.verifyShipment = [
             "result" : result,
             "permissionRequired" : "completeShipment"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, permissionResult => {
             if(permissionResult.success) {
      
             const { shipment_id } = result.data.shipment_id;
@@ -663,7 +663,7 @@ exports.modifyShipment = [
             "result" : result,
             "permissionRequired" : "scanShipment"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, async permissionResult => {
             if(permissionResult.success) {
      
             const { data } = result.data;
@@ -730,7 +730,7 @@ exports.fetchPurchaseOrder = [
             "result" : result,
             "permissionRequired" : "viewPO"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, async permissionResult => {
             if(permissionResult.success) {
      
             const { key } = req.query;
@@ -780,7 +780,7 @@ exports.changePOStatus = [
             "result" : result,
             "permissionRequired" : "receivePO"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, async permissionResult => {
             if(permissionResult.success) {
      
             try {
@@ -841,7 +841,7 @@ exports.createPurchaseOrder = [
             "result" : result,
             "permissionRequired" : "createPO"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, async permissionResult => {
             if(permissionResult.success) {
      
             try {
@@ -914,7 +914,7 @@ exports.fetchPublisherLatestShipments = [
             "result" : result,
             "permissionRequired" : "viewShipment"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, async permissionResult => {
             if(permissionResult.success) {
      
             const { address } = req.user;
@@ -976,7 +976,7 @@ exports.fetchAllLatestShipments = [
             "result" : result,
             "permissionRequired" : "viewShipment"
           }
-          checkPermissions(permission_request, response, async permissionResult => {
+          checkPermissions(permission_request, async permissionResult => {
             if(permissionResult.success) {
      
             const response = await axios.get(
