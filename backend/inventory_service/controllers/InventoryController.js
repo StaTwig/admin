@@ -543,7 +543,7 @@ exports.addMultipleInventories = [
 
           permission_request = {
             "result" : result,
-            "permissionRequired" : "viewInventory"
+            "permissionRequired" : "addInventory"
           }
           checkPermissions(permission_request, response, async permissionResult => {
             if(permissionResult.success) {
