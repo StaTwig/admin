@@ -4,8 +4,10 @@ import {
   SET_REVIEW_PO,
   SET_EDIT_PO,
   RESET_EDIT_PO,
+  SET_POS,
+  RESET_POS
 } from '../constants/poconstants';
-import { turnOff, turnOn } from "./spinnerActions";
+import { turnOn, turnOff } from "./spinnerActions";
 
 export const createPO = async data => {
   try {
@@ -35,14 +37,20 @@ export const getPO = async po => {
   }
 };
 
-export const changePOStatus = async (data) => {
+export const changePOStatus = async data => {
   try {
-    const result = await axios.post(config().changePOStatus, data );
+    const result = await axios.post(config().changePOStatus, data);
     return result;
   } catch (e) {
     return e.response;
   }
 };
+
+export const resetPurchaseStats = () => {
+  return {
+    type: RESET_POS
+  }
+}
 
 export const getProducts = async () => {
   try {
@@ -87,15 +95,30 @@ export const addMultipleProducts = async data => {
   }
 };
 
-export const getPurchaseStats = async () => {
+export const getPurchaseStats = (skip = 0, limit = 5) => {
   try {
-    const result = await axios.get(config().fetchPurchaseOrderStatisticsUrl);
-    return result;
+    return async dispatch => {
+      dispatch(turnOn());
+      const result = await axios.get(
+        `${
+          config().fetchPurchaseOrderStatisticsUrl
+        }?skip=${skip}&limit=${limit}`,
+      );
+      dispatch(setPurchaseOrders(result.data.data));
+      dispatch(turnOff());
+      return result;
+    };
   } catch (e) {
     return e.response;
   }
 };
 
+const setPurchaseOrders = data => {
+  return {
+    type: SET_POS,
+    payload: data,
+  };
+};
 export const setReviewPos = data => {
   return {
     type: SET_REVIEW_PO,

@@ -5,7 +5,7 @@ import EmptyShipments from '../../../assets/icons/EmptyShipments.png';
 
 const Table = props => {
   const dispatch = useDispatch();
-
+  const { loadMore, onLoadMore } = props;
   return (
     <div className="table">
       {props.shipments.length === 0 ? (
@@ -69,12 +69,17 @@ const Table = props => {
                       );
                     }}
                   >
-                    Track{' '}
+                    Track
                   </button>
                 </div>
               </div>
             ))}
           </div>
+          {loadMore && (
+            <button className="btn btn-success" onClick={onLoadMore}>
+              Load More
+            </button>
+          )}
         </div>
       )}
     </div>

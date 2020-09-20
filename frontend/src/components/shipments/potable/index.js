@@ -1,29 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { getPurchaseStats, changePOStatus } from '../../../actions/poActions';
-import { turnOff, turnOn } from "../../../actions/spinnerActions";
+import { getPurchaseStats, changePOStatus, resetPurchaseStats } from '../../../actions/poActions';
 import Modal from '../../../shared/modal';
 import POModal from './POModal';
 import AlertModal from './AlertModal';
 import './style.scss';
 
 const PoTable = props => {
-  const [purchases, setPurchases] = useState([]);
+  //const [purchases, setPurchases] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showAlertModal, setShowAlertModal] = useState(false);
   const [purchaseOrder, setPurchaseOrder] = useState({});
   const [alertMessage, setAlertMessage] = useState({});
   const dispatch = useDispatch();
+  const [skip, setSkip] = useState(5);
+  const [limit, setLimit] = useState(5);
+  const [loadMore, setLoadMore] = useState(true);
+
+  const purchases = useSelector(state => state.pos);
 
   useEffect(() => {
-    async function fetchData() {
-      dispatch(turnOn());
-      const result = await getPurchaseStats();
-      setPurchases(result.data.data);
-      dispatch(turnOff());
-    }
-    fetchData();
+    dispatch(getPurchaseStats());
+    return () => dispatch(resetPurchaseStats());
   }, []);
 
   const user = useSelector(state => state.user);
@@ -33,6 +32,7 @@ const PoTable = props => {
     setShowModal(true);
   };
 
+  const onCreateShipment = () => props.history.push('/newshipment')
   const onPOStatusChange = async status => {
     const data = { status, orderID: purchaseOrder.key };
     const result = await changePOStatus(data);
@@ -40,11 +40,19 @@ const PoTable = props => {
       setAlertMessage('Success');
       setShowAlertModal(true);
       setShowModal(false);
-      const purchaseStatsResult = await getPurchaseStats();
-      setPurchases(purchaseStatsResult.data.data);
+      dispatch(getPurchaseStats());
     } else {
       setShowAlertModal(true);
       setAlertMessage('Fail');
+    }
+  };
+
+  const onLoadMore = async () => {
+    const newSkip = skip + 5;
+    setSkip(newSkip);
+    const purchaseStatsResult = await dispatch(getPurchaseStats(skip, limit));
+    if (purchaseStatsResult.data.data.length === 0) {
+      setLoadMore(false);
     }
   };
   return (
@@ -69,6 +77,7 @@ const PoTable = props => {
             userAddress={user.address}
             onAccept={onPOStatusChange}
             onReject={onPOStatusChange}
+            onCreateShipment={onCreateShipment}
           />
         </Modal>
       )}
@@ -150,6 +159,11 @@ const PoTable = props => {
           })}
         </div>
       </div>
+      {loadMore && (
+        <button className="btn btn-success" onClick={onLoadMore}>
+          Load More
+        </button>
+      )}
     </div>
   );
 };

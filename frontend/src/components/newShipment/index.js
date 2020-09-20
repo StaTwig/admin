@@ -1,5 +1,5 @@
-import React, { useState, useEffect} from 'react';
-import {useSelector, useDispatch} from "react-redux";
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import EditTable from './table/editTable';
 import updownArrow from '../../assets/icons/up-and-down-dark.svg';
@@ -29,7 +29,7 @@ const NewShipment = props => {
   useEffect(() => {
     async function fetchData() {
       const result = await getPOs();
-      setPos(result.data.data.reverse());
+      setPos(result.data.data);
     }
     fetchData();
     dispatch(getAllUsers());
@@ -53,35 +53,57 @@ const NewShipment = props => {
   const [shipmentId, setShipmentId] = useState(editShipment.shipmentId);
   const [client, setClient] = useState(editShipment.client);
   const [supplier, setSupplier] = useState(user.username);
-  const [supplierLocation, setSupplierLocation] = useState(editShipment.supplierLocation);
+  const [supplierLocation, setSupplierLocation] = useState(
+    editShipment.supplierLocation,
+  );
   const [shipmentDate, setShipmentDate] = useState(editShipment.shipmentDate);
   const [deliveryTo, setDeliveryTo] = useState(editShipment.deliveryTo);
-  const [deliveryLocation, setDeliveryLocation] = useState(editShipment.deliveryLocation);
-  const [estimateDeliveryDate, setEstimateDeliveryDate] = useState(editShipment.estimateDeliveryDate);
+  const [deliveryLocation, setDeliveryLocation] = useState(
+    editShipment.deliveryLocation,
+  );
+  const [estimateDeliveryDate, setEstimateDeliveryDate] = useState(
+    editShipment.estimateDeliveryDate,
+  );
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [productName, setProductName] = useState(editShipment.products[0].productName);
-  const [manufacturerName, setManufacturerName] = useState(editShipment.products[0].manufacturerName);
+  const [productName, setProductName] = useState(
+    editShipment.products[0].productName,
+  );
+  const [manufacturerName, setManufacturerName] = useState(
+    editShipment.products[0].manufacturerName,
+  );
   const [quantity, setQuantity] = useState(editShipment.products[0].quantity);
-  const [manufacturingDate, setManufacturingDate] = useState(editShipment.products[0].manufacturingDate);
-  const [expiryDate, setExpiryDate] = useState(editShipment.products[0].expiryDate);
-  const [storageConditionmin, setStorageConditionmin] = useState(editShipment.products[0].storageConditionmin);
-  const [storageConditionmax, setStorageConditionmax] = useState(editShipment.products[0].storageConditionmax);
-  const [batchNumber, setBatchNumber] = useState(editShipment.products[0].batchNumber);
-  const [serialNumber, setSerialNumber] = useState(editShipment.products[0].serialNumber);
+  const [manufacturingDate, setManufacturingDate] = useState(
+    editShipment.products[0].manufacturingDate,
+  );
+  const [expiryDate, setExpiryDate] = useState(
+    editShipment.products[0].expiryDate,
+  );
+  const [storageConditionmin, setStorageConditionmin] = useState(
+    editShipment.products[0].storageConditionmin,
+  );
+  const [storageConditionmax, setStorageConditionmax] = useState(
+    editShipment.products[0].storageConditionmax,
+  );
+  const [batchNumber, setBatchNumber] = useState(
+    editShipment.products[0].batchNumber,
+  );
+  const [serialNumber, setSerialNumber] = useState(
+    editShipment.products[0].serialNumber,
+  );
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [openShipmentFail, setOpenShipmentFail] = useState(false);
   const [shipmentError, setShipmentError] = useState('');
-  
+
   const closeModal = () => {
     setOpenCreatedInventory(false);
     props.history.push('/shipments');
   };
   const closeModalFail = () => {
     setOpenShipmentFail(false);
-   // props.history.push('/shipments');
+    // props.history.push('/shipments');
   };
-  
+
   const editTableProps = {
     manufacturerName,
     setManufacturerName,
@@ -103,83 +125,119 @@ const NewShipment = props => {
     setSerialNumber,
   };
 
-
-  const onChange = date => setShipmentDate( date )
+  const onChange = date => setShipmentDate(date);
   const onChange1 = date => setEstimateDeliveryDate(date);
-  
-  const shipmentFields= ['shipmentId', 'client','deliveryTo','supplierLocation','deliveryLocation','shipmentDate',
-  'estimateDeliveryDate','productName','quantity','manufacturerName','storageConditionmin','storageConditionmax',
-  'manufacturingDate','expiryDate','batchNumber','serialNumber']
 
-  const assignShipmentFields= ['shipmentId', 'client','deliveryTo','supplierLocation','deliveryLocation','shipmentDate',
-  'estimateDeliveryDate','productName','quantity','manufacturerName']
-  
+  const shipmentFields = [
+    'shipmentId',
+    'client',
+    'deliveryTo',
+    'supplierLocation',
+    'deliveryLocation',
+    'shipmentDate',
+    'estimateDeliveryDate',
+    'productName',
+    'quantity',
+    'manufacturerName',
+    'storageConditionmin',
+    'storageConditionmax',
+    'manufacturingDate',
+    'expiryDate',
+    'batchNumber',
+    'serialNumber',
+  ];
+
+  const assignShipmentFields = [
+    'shipmentId',
+    'client',
+    'deliveryTo',
+    'supplierLocation',
+    'deliveryLocation',
+    'shipmentDate',
+    'estimateDeliveryDate',
+    'productName',
+    'quantity',
+    'manufacturerName',
+  ];
+
   const profile = useSelector(state => {
     return state.user;
   });
 
-  const dates = ['shipmentDate','estimateDeliveryDate']
-  const dateValidation = (date) => {
-       let error = false;
-       let a =eval(date[0])
-       let b = eval(date[1])
-       if(a>b)
-       {
-       setShipmentError('Check deliveryDate')
-       setOpenShipmentFail(true);
-        error = true;
-       }
-        return error;
-  }
-
-  const checkValidationErrors = (validations) => {
-    
+  const dates = ['shipmentDate', 'estimateDeliveryDate'];
+  const dateValidation = date => {
     let error = false;
-    for(let i=0; i< validations.length; i++) {
-      let validationVariable =  eval(validations[i]);
-      if(validationVariable.length < 1||validationVariable=="Select Product"||validationVariable=="Select Manufacturer"
-      ||validationVariable=="Select receiver") {
-        setShipmentError(validations[i])
+    let a = eval(date[0]);
+    let b = eval(date[1]);
+    if (a > b) {
+      setShipmentError('Check deliveryDate');
+      setOpenShipmentFail(true);
+      error = true;
+    }
+    return error;
+  };
+
+  const checkValidationErrors = validations => {
+    let error = false;
+    for (let i = 0; i < validations.length; i++) {
+      let validationVariable = eval(validations[i]);
+      if (
+        validationVariable.length < 1 ||
+        validationVariable == 'Select Product' ||
+        validationVariable == 'Select Manufacturer' ||
+        validationVariable == 'Select receiver'
+      ) {
+        setShipmentError(validations[i]);
         setOpenShipmentFail(true);
         error = true;
         break;
       }
     }
-   
-    return error;
-  }
-  const onProceedToReview = () => {
-    console.log("expiryDate",expiryDate);
-    if(checkValidationErrors(shipmentFields)) {
 
+    return error;
+  };
+  const onProceedToReview = () => {
+    if (checkValidationErrors(shipmentFields)) {
       return;
     }
-  
-    debugger;
     const receiver = users.find(usr => usr.name === deliveryTo);
     const data = {
       shipmentId,
       client,
       receiver: receiver.address,
       supplier,
-      supplierAddress : profile.address,
+      supplierAddress: profile.address,
       supplierLocation,
-      shipmentDate: typeof shipmentDate =='string' ? shipmentDate : shipmentDate.toLocaleDateString(),
+      shipmentDate:
+        typeof shipmentDate == 'string'
+          ? shipmentDate
+          : shipmentDate.toLocaleDateString(),
       deliveryTo,
       deliveryLocation,
-      estimateDeliveryDate: typeof estimateDeliveryDate =='string' ? estimateDeliveryDate : estimateDeliveryDate.toLocaleDateString(),
+      estimateDeliveryDate:
+        typeof estimateDeliveryDate == 'string'
+          ? estimateDeliveryDate
+          : estimateDeliveryDate.toLocaleDateString(),
       status: 'In Transit',
-      products:[{
-        productName,
-        quantity,
-        manufacturerName,
-        storageConditionmin,
-        storageConditionmax,
-        manufacturingDate: typeof manufacturingDate == 'string' ? manufacturingDate : manufacturingDate.toLocaleDateString(),
-        expiryDate : typeof expiryDate == 'string' ? expiryDate : expiryDate.toLocaleDateString(),
-        batchNumber,
-        serialNumber
-      }]
+      products: [
+        {
+          productName,
+          quantity,
+          manufacturerName,
+          storageConditionmin,
+          storageConditionmax,
+          manufacturingDate:
+            typeof manufacturingDate == 'string'
+              ? manufacturingDate
+              : manufacturingDate.toLocaleDateString(),
+          expiryDate:
+            typeof expiryDate == 'string'
+              ? expiryDate
+              : expiryDate.toLocaleDateString(),
+          batchNumber,
+          serialNumber,
+        },
+      ],
     };
 
     //Store in reducer
@@ -191,8 +249,12 @@ const NewShipment = props => {
     console.log('new shipment data', data);
   };
   const onAssign = async () => {
-    if(checkValidationErrors(assignShipmentFields)) {return;}
-    if(dateValidation(dates)) {return;}
+    if (checkValidationErrors(assignShipmentFields)) {
+      return;
+    }
+    if (dateValidation(dates)) {
+      return;
+    }
     const receiver = users.find(usr => usr.name === deliveryTo);
     const data = {
       shipmentId,
@@ -245,7 +307,6 @@ const NewShipment = props => {
     setManufacturerName(product.split('-')[1]);
     setDeliveryTo(poDetail.receiver.name);
     setDeliveryLocation(poDetail.destination);
-    
   };
 
   return (
@@ -301,25 +362,26 @@ const NewShipment = props => {
               placeholder="Enter Location"
               onChange={e => setSupplierLocation(e.target.value)}
               value={supplierLocation}
-              
             />
           </div>
           <div className="input-group">
             <label htmlFor="shipmentId">Shipment Date</label>
-             <div className="form-control">
-            <DatePicker
-              className="date"
-              selected={shipmentDate ? new Date(Date.parse(shipmentDate)) : shipmentDate}
-              placeholderText="Enter Shipment Date"
-              onChange={onChange}
-            
-              showYearDropdown
-              dateFormatCalendar="MMMM"
-              yearDropdownItemNumber={15}
-              scrollableYearDropdown
-       
-             />
-             </div>
+            <div className="form-control">
+              <DatePicker
+                className="date"
+                selected={
+                  shipmentDate
+                    ? new Date(Date.parse(shipmentDate))
+                    : shipmentDate
+                }
+                placeholderText="Enter Shipment Date"
+                onChange={onChange}
+                showYearDropdown
+                dateFormatCalendar="MMMM"
+                yearDropdownItemNumber={15}
+                scrollableYearDropdown
+              />
+            </div>
           </div>
         </div>
         <div className="col">
@@ -342,27 +404,34 @@ const NewShipment = props => {
               placeholder="Enter Location"
               onChange={e => setDeliveryLocation(e.target.value)}
               value={deliveryLocation}
-            
             />
           </div>
 
           <div className="input-group ">
-         
-          <label htmlFor="shipmentId "> Estimated Delivery</label>
-              <div className="form-control">
-            <DatePicker
-              className="date"
-              placeholderText="Enter Delivery Date"
-              onChange = {onChange1}
-              selected = {estimateDeliveryDate ? new Date(Date.parse(estimateDeliveryDate)) : estimateDeliveryDate}
-              showYearDropdown
-              dateFormatCalendar="MMMM"
-              yearDropdownItemNumber={100}
-              scrollableYearDropdown
-            
+            <label htmlFor="shipmentId "> Estimate Delivery Date</label>
+            <div className="form-control">
+              <DatePicker
+                className="date"
+                placeholderText="Enter Delivery Date"
+                onChange={onChange1}
+                selected={
+                  estimateDeliveryDate
+                    ? new Date(Date.parse(estimateDeliveryDate))
+                    : estimateDeliveryDate
+                }
+                showYearDropdown
+                dateFormatCalendar="MMMM"
+                yearDropdownItemNumber={100}
+                scrollableYearDropdown
               />
-              <div>{console.log("expiry date", estimateDeliveryDate , new Date(Date.parse(estimateDeliveryDate)))}</div>
-             </div>
+              <div>
+                {console.log(
+                  'expiry date',
+                  estimateDeliveryDate,
+                  new Date(Date.parse(estimateDeliveryDate)),
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -378,13 +447,16 @@ const NewShipment = props => {
         <div className="total">Grand Total</div>
         <div className="value">{quantity}</div>
         <div className="d-flex ">
-
-          <button className="btn btn-outline-info mr-2 " data-tip ="Assigning to scan Batch number and Serial numbers" onClick={onAssign}>
+          <button
+            className="btn btn-outline-info mr-2 "
+            data-tip="Assigning to scan Batch number and Serial numbers"
+            onClick={onAssign}
+          >
             {' '}
             Assign Shipment Order
           </button>
-          <ReactTooltip  backgroundColor="#0093E9"/>
-          
+          <ReactTooltip backgroundColor="#0093E9" />
+
           {/*<button className="btn-primary btn"  onClick={onProceedToReview}>Proceed To Review</button> */}
         </div>
       </div>
@@ -398,14 +470,15 @@ const NewShipment = props => {
           />
         </Modal>
       )}
-       {openShipmentFail && (
+      {openShipmentFail && (
         <Modal
           close={() => closeModalFail()}
           size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
-          <ShipmentFailPopUp onHide={closeModalFail} //FailurePopUp
-          
-   shipmentError={shipmentError}       />
+          <ShipmentFailPopUp
+            onHide={closeModalFail} //FailurePopUp
+            shipmentError={shipmentError}
+          />
         </Modal>
       )}
       {message && <div className="alert alert-success">{message}</div>}
