@@ -15,6 +15,7 @@ const mailer = require('../helpers/mailer');
 const { constants } = require('../helpers/constants');
 const auth = require('../middlewares/jwt');
 const checkToken = require('../middlewares/middleware').checkToken;
+const checkPermissions = require('../middlewares/rbac_middleware').checkPermissions;
 const axios = require('axios');
 const dotenv = require('dotenv').config();
 
