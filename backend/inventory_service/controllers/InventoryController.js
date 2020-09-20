@@ -27,7 +27,18 @@ exports.getTotalCount = [
       checkToken(req, res, async result => {
         if (result.success) {
           logger.log('info', '<<<<< InventoryService < InventoryController < getTotalCount : token verifed successfully')
-          res.json('Total inventory count');
+
+          permission_request = {
+            "result" : result,
+            "permissionRequired" : "viewInventory"
+          }
+          checkPermissions(permission_request, response, async permissionResult => {
+            if(permissionResult.success) {
+              res.json('Total inventory count');
+            }else{
+              res.json("Sorry! User does not have enough Permissions")
+            }
+          });
         } else {
           logger.log('warn', '<<<<< InventoryService < InventoryController < getTotalCount : refuted token')
           res.status(403).json(result);
@@ -48,7 +59,18 @@ exports.getTotalCountOnHold = [
       checkToken(req, res, async result => {
         if (result.success) {
           logger.log('info', '<<<<< InventoryService < InventoryController < getTotalCountOnHold : token verified successfully')
-          res.json('Total inventory count on Hold');
+
+          permission_request = {
+            "result" : result,
+            "permissionRequired" : "viewInventory"
+          }
+          checkPermissions(permission_request, response, async permissionResult => {
+            if(permissionResult.success) {
+              res.json('Total inventory count on Hold');
+            }else{
+              res.json("Sorry! User does not have enough Permissions")
+            }
+          });
         } else {
           logger.log('warn', '<<<<< InventoryService < InventoryController < getTotalCountOnHold : refuted token')
           res.status(403).json(result);
@@ -69,7 +91,18 @@ exports.getExpiringInventory = [
       checkToken(req, res, async result => {
         if (result.success) {
           logger.log('info', '<<<<< InventoryService < InventoryController < getExpiringInventory : token verified successfully')
-          res.json('Total inventory count expiring');
+
+          permission_request = {
+            "result" : result,
+            "permissionRequired" : "viewInventory"
+          }
+          checkPermissions(permission_request, response, async permissionResult => {
+            if(permissionResult.success) {
+              res.json('Total inventory count expiring');
+            }else{
+              res.json("Sorry! User does not have enough Permissions")
+            }
+          });
         } else {
           logger.log('warn', '<<<<< InventoryService < InventoryController < getExpiringInventory : refuted token')
           res.status(403).json(result);
@@ -90,8 +123,19 @@ exports.getInventoryforProduct = [
       checkToken(req, res, async result => {
         if (result.success) {
           logger.log('info', '<<<<< InventoryService < InventoryController < getInventoryforProduct : token verified successfullly')
-          const { product_id } = result.data.key;
-          res.json('Inventory details for product');
+
+          permission_request = {
+            "result" : result,
+            "permissionRequired" : "viewInventory"
+          }
+          checkPermissions(permission_request, response, async permissionResult => {
+            if(permissionResult.success) {
+              const { product_id } = result.data.key;
+              res.json('Inventory details for product');
+            }else{
+              res.json("Sorry! User does not have enough Permissions")
+            }
+          });
         } else {
           logger.log('warn', '<<<<< InventoryService < InventoryController < getInventoryforProduct : refuted token')
           res.status(403).json(result);
@@ -112,13 +156,25 @@ exports.getInventoryDetailsForProduct = [
       checkToken(req, res, async result => {
         if (result.success) {
           logger.log('info', '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : token verified successfullly, querying data by key')
-          const { key } = req.query;
-          const response = await axios.get(
-            `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${key}`,
-          );
-          const items = response.data.items;
-          logger.log('info', '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : queried data by key')
-          res.json({ data: items });
+
+          permission_request = {
+            "result" : result,
+            "permissionRequired" : "viewInventory"
+          }
+          checkPermissions(permission_request, response, async permissionResult => {
+            if(permissionResult.success) {
+              const { key } = req.query;
+              const response = await axios.get(
+                `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${key}`,
+              );
+              const items = response.data.items;
+              console.log('items', items);
+              logger.log('info', '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : queried data by key')
+              res.json({ data: items });
+            }else{
+              res.json("Sorry! User does not have enough Permissions")
+            }
+          });
         } else {
           logger.log('warn', '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : refuted token')
           res.status(403).json(result);
@@ -232,114 +288,126 @@ exports.getAllInventoryDetails = [
       checkToken(req, res, async result => {
         if (result.success) {
           logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : token verified successfullly, querying data by publisher')
-          const { address } = req.user;
-          const response = await axios.get(
-            `${blockchain_service_url}/queryDataByPublishers?stream=${stream_name}&address=${address}`,
-          );
-          const items = response.data.items;
-          var count_array = [];
-          var tot_qty = 0;
-          await axios.get(`${product_service_url}/getProductNames`, {
-          headers: {
-            'Authorization': req.headers.authorization
+
+          permission_request = {
+            "result" : result,
+            "permissionRequired" : "viewInventory"
           }
-        })
-        .then((res) => {
-        for (i=0;i<res.data.data.length;i++)
-                {
-                        var test = res.data.data[i].productName;
-                        products_array.push(test)
-                }
-        })
-        .catch((error) => {
-        logger.log('error', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : Error in fetching products list')
-        })
-                products_array.forEach(element => {
-                var ele = `${element}`;
-        });
+          checkPermissions(permission_request, response, async permissionResult => {
+            if(permissionResult.success) {
 
-          var total_inv = items.length;
-          var dict = {};
-          today_exp = 0,week_exp = 0,month_exp = 0,year_exp = 0, prev_year_exp = 0;
-          today_ne = 0,week_ne = 0,month_ne = 0,year_ne = 0;
-          today_inv = 0,week_inv = 0,month_inv = 0,year_inv = 0, prev_year_inv = 0;
-          today_qty = 0,week_qty = 0,month_qty = 0,year_qty = 0, prev_year_qty = 0;
-          total_inv = 0, total_qty = 0,total_ne = 0,total_exp = 0;
+            const { address } = req.user;
+            const response = await axios.get(
+              `${blockchain_service_url}/queryDataByPublishers?stream=${stream_name}&address=${address}`,
+            );
+            const items = response.data.items;
+            var count_array = [];
+            var tot_qty = 0;
+            await axios.get(`${product_service_url}/getProductNames`, {
+            headers: {
+              'Authorization': req.headers.authorization
+            }
+          })
+          .then((res) => {
+          for (i=0;i<res.data.data.length;i++)
+                  {
+                          var test = res.data.data[i].productName;
+                          products_array.push(test)
+                  }
+          })
+          .catch((error) => {
+          logger.log('error', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : Error in fetching products list')
+          })
+                  products_array.forEach(element => {
+                  var ele = `${element}`;
+          });
 
-          for (i=0;i<items.length;i++){
-              var productName = JSON.parse(items[i].data).productName;
-              var count = parseInt(JSON.parse(items[i].data).quantity);
-              tot_qty = tot_qty + count;
+            var total_inv = items.length;
+            var dict = {};
+            today_exp = 0,week_exp = 0,month_exp = 0,year_exp = 0, prev_year_exp = 0;
+            today_ne = 0,week_ne = 0,month_ne = 0,year_ne = 0;
+            today_inv = 0,week_inv = 0,month_inv = 0,year_inv = 0, prev_year_inv = 0;
+            today_qty = 0,week_qty = 0,month_qty = 0,year_qty = 0, prev_year_qty = 0;
+            total_inv = 0, total_qty = 0,total_ne = 0,total_exp = 0;
 
-              const index = products_array.indexOf(productName);
-                        var name = products_array[index];
-                        if(name in dict)
-                         {
-                                var exis = dict[name];
-                                var new_val = count;
-                                dict[name] = exis + new_val;
-                           }
-                        else {
-                                  dict[name] = count;
-                        }
+            for (i=0;i<items.length;i++){
+                var productName = JSON.parse(items[i].data).productName;
+                var count = parseInt(JSON.parse(items[i].data).quantity);
+                tot_qty = tot_qty + count;
 
-                        let date_ob = new Date();
-                        let date = ("0" + date_ob.getDate()).slice(-2);
-                        let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-                        let year = date_ob.getFullYear();
-                        var today = month + "-" + year;
-                        var today_full = date + "-" + month + "-" + year;
-                        var expiry_date = JSON.parse(items[i].data).expiryDate;
-                        var myDate = new Date(expiry_date);
-                        var m = myDate.getMonth();
-                        var y = myDate.getFullYear();
-                        var expiry_date1 = (m + "-" + myDate.getFullYear());
-
-                        var created_date = JSON.parse(items[i].data).createdDate;
-                        if (created_date == undefined) {
-                            created_date = today_full;
-                        }
-                        var s = getDateDiff(today, expiry_date1, today_full, created_date, count);
-		       total_exp = year_exp; 
-		       total_ne = year_ne;
-		       total_inv = year_inv;
-		       total_qty = year_qty;
-                    }
-          logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : queried and pushed data')
-          res.json({
-                        data: items,
-                        dict: dict,
-                        counts: {
-                            inventoryAdded: {
-                                total : total_inv,
-                                thisYear: year_inv,
-                                thisMonth: month_inv,
-                                thisWeek: week_inv,
-                                today: today_inv
-                            },
-                            currentInventory: {
-                                total : total_qty,
-                                thisYear: year_qty,
-                                thisMonth: month_qty,
-                                thisWeek: week_qty,
-                                today: today_qty
-                            },
-                            vaccinesNearExpiration: {
-                                total : total_ne,
-                                thisYear: year_ne,
-                                thisMonth: month_ne,
-                                thisWeek: week_ne,
-                                today: today_ne
-                            },
-                            vaccinesExpired: {
-                                total : total_exp,
-                                thisYear: year_exp,
-                                thisMonth: month_exp,
-                                thisWeek: week_exp,
-                                today: today_exp
+                const index = products_array.indexOf(productName);
+                          var name = products_array[index];
+                          if(name in dict)
+                          {
+                                  var exis = dict[name];
+                                  var new_val = count;
+                                  dict[name] = exis + new_val;
                             }
-                        }
-                    });
+                          else {
+                                    dict[name] = count;
+                          }
+
+                          let date_ob = new Date();
+                          let date = ("0" + date_ob.getDate()).slice(-2);
+                          let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+                          let year = date_ob.getFullYear();
+                          var today = month + "-" + year;
+                          var today_full = date + "-" + month + "-" + year;
+                          var expiry_date = JSON.parse(items[i].data).expiryDate;
+                          var myDate = new Date(expiry_date);
+                          var m = myDate.getMonth();
+                          var y = myDate.getFullYear();
+                          var expiry_date1 = (m + "-" + myDate.getFullYear());
+
+                          var created_date = JSON.parse(items[i].data).createdDate;
+                          if (created_date == undefined) {
+                              created_date = today_full;
+                          }
+                          var s = getDateDiff(today, expiry_date1, today_full, created_date, count);
+            total_exp = year_exp; 
+            total_ne = year_ne;
+            total_inv = year_inv;
+            total_qty = year_qty;
+                      }
+            logger.log('info', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : queried and pushed data')
+            res.json({
+                          data: items,
+                          dict: dict,
+                          counts: {
+                              inventoryAdded: {
+                                  total : total_inv,
+                                  thisYear: year_inv,
+                                  thisMonth: month_inv,
+                                  thisWeek: week_inv,
+                                  today: today_inv
+                              },
+                              currentInventory: {
+                                  total : total_qty,
+                                  thisYear: year_qty,
+                                  thisMonth: month_qty,
+                                  thisWeek: week_qty,
+                                  today: today_qty
+                              },
+                              vaccinesNearExpiration: {
+                                  total : total_ne,
+                                  thisYear: year_ne,
+                                  thisMonth: month_ne,
+                                  thisWeek: week_ne,
+                                  today: today_ne
+                              },
+                              vaccinesExpired: {
+                                  total : total_exp,
+                                  thisYear: year_exp,
+                                  thisMonth: month_exp,
+                                  thisWeek: week_exp,
+                                  today: today_exp
+                              }
+                          }
+                      });
+                    }else{
+                      res.json("Sorry! User does not have enough Permissions")
+                    }
+                  });        
           } else {
           logger.log('warn', '<<<<< InventoryService < InventoryController < getAllInventoryDetails : refuted token')
           res.status(403).json(result);
@@ -407,28 +475,40 @@ exports.addNewInventory = [
       checkToken(req, res, async result => {
         if (result.success) {
           logger.log('info', '<<<<< InventoryService < InventoryController < addNewInventory : token verified successfullly, publishing data')
-          var { data } = req.body;
-          let date_ob = new Date();
-          let date = ("0" + date_ob.getDate()).slice(-2);
-          let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-          let year = date_ob.getFullYear();
-          var today = date + "-" + month + "-" + year;
-          var createdDate = {createdDate: today};
 
-          const { address } = req.user;
-          const userData = {
-            stream: stream_name,
-            key: data.serialNumber,
-            address: address,
-            data: {...data,...createdDate},
-          };
-          const response = await axios.post(
-            `${blockchain_service_url}/publish`,
-            userData,
-          );
-          logger.log('info', '<<<<< InventoryService < InventoryController < addNewInventory : publised data to blockchain')
-          res.status(200).json({ response: response.data.transactionId });
-        } else {
+          permission_request = {
+            "result" : result,
+            "permissionRequired" : "addInventory"
+          }
+          checkPermissions(permission_request, response, async permissionResult => {
+            if(permissionResult.success) {
+   
+            var { data } = req.body;
+            let date_ob = new Date();
+            let date = ("0" + date_ob.getDate()).slice(-2);
+            let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+            let year = date_ob.getFullYear();
+            var today = date + "-" + month + "-" + year;
+            var createdDate = {createdDate: today};
+
+            const { address } = req.user;
+            const userData = {
+              stream: stream_name,
+              key: data.serialNumber,
+              address: address,
+              data: {...data,...createdDate},
+            };
+            const response = await axios.post(
+              `${blockchain_service_url}/publish`,
+              userData,
+            );
+            logger.log('info', '<<<<< InventoryService < InventoryController < addNewInventory : publised data to blockchain')
+            res.status(200).json({ response: response.data.transactionId });
+          }else{
+            res.json("Sorry! User does not have enough Permissions")
+          }
+        });
+      } else {
           logger.log('warn', '<<<<< InventoryService < InventoryController < addNewInventory : refuted token')
           res.status(403).json(result);
         }
@@ -449,7 +529,7 @@ exports.addMultipleInventories = [
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        logger.log('error', '<<<<< InventoryService < InventoryController < addNewInventory : Validation Error')
+        logger.log('error', '<<<<< InventoryService < InventoryController < addMultipleInventories : Validation Error')
         // Display sanitized values/errors messages.
         return apiResponse.validationErrorWithData(
           res,
@@ -459,33 +539,45 @@ exports.addMultipleInventories = [
       }
       checkToken(req, res, async result => {
         if (result.success) {
-          logger.log('info', '<<<<< InventoryService < InventoryController < addNewInventory : token verified successfullly, publishing data')
-          const { inventories } = req.body;
-          const { address } = req.user;
-          let txnIds = [];
-          await utility.asyncForEach(inventories, async data => {
-            const userData = {
-              stream: stream_name,
-              key: data.serialNumber,
-              address: address,
-              data: data,
-            };
-            const response = await axios.post(
-              `${blockchain_service_url}/publish`,
-              userData,
-            );
-            txnIds.push((response.data.transactionId));
-            logger.log('info', '<<<<< InventoryService < InventoryController < addNewInventory : publised data to blockchain')
-          })
+          logger.log('info', '<<<<< InventoryService < InventoryController < addMultipleInventories : token verified successfullly, publishing data')
 
-          res.status(200).json({ response: txnIds });
-        } else {
+          permission_request = {
+            "result" : result,
+            "permissionRequired" : "viewInventory"
+          }
+          checkPermissions(permission_request, response, async permissionResult => {
+            if(permissionResult.success) {
+       
+            const { inventories } = req.body;
+            const { address } = req.user;
+            let txnIds = [];
+            await utility.asyncForEach(inventories, async data => {
+              const userData = {
+                stream: stream_name,
+                key: data.serialNumber,
+                address: address,
+                data: data,
+              };
+              const response = await axios.post(
+                `${blockchain_service_url}/publish`,
+                userData,
+              );
+              txnIds.push((response.data.transactionId));
+              logger.log('info', '<<<<< InventoryService < InventoryController < addMultipleInventories : publised data to blockchain')
+            })
+
+            res.status(200).json({ response: txnIds });
+          }else{
+            res.json("Sorry! User does not have enough Permissions")
+          }
+        });
+      } else {
           logger.log('warn', '<<<<< InventoryService < InventoryController < addNewInventory : refuted token')
           res.status(403).json(result);
         }
       });
     } catch (err) {
-      logger.log('error', '<<<<< InventoryService < InventoryController < addNewInventory : error (catch block)')
+      logger.log('error', '<<<<< InventoryService < InventoryController < addMultipleInventories : error (catch block)')
       return apiResponse.ErrorResponse(res, err);
     }
   },
