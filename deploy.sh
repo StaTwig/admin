@@ -6,7 +6,7 @@ if [ $# -eq 0 ];
     echo "Please choose the mode: PROD TEST LOCAL"
     echo "Followed by the sercices: FRONTEND GATEWAY SERVICESI SERVICESII ALL"
     echo "SERVICESI - shipping_service	transaction_service inventory_service	track_trace		user_service products_service"
-    echo "SERVICESII - blockchain_service	log_service alert_service notification_service"
+    echo "SERVICESII - blockchain_service	log_service alert_service notification_service rbac_service"
     exit
 
 else
@@ -37,7 +37,7 @@ cd backend
 
 if [ "$1" == "PROD" ] && [ "$2" == "SERVICESI" ]
    then
-      rm -rf blockchain_service	log_service alert_service notification_service
+      rm -rf blockchain_service	log_service alert_service notification_service rbac_service
 
 elif [ "$1" == "PROD" ] && [ "$2" == "SERVICESII" ]
    then

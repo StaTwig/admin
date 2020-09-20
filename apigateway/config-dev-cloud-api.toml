@@ -62,6 +62,12 @@
       #middlewares = ["products-stripprefix"]
       #If the rule matches, forward to the user management service (declared below)
       service = "products-management"
+    [http.routers.rbac-management]
+      rule = "Host(`test.vaccineledger.com`) && PathPrefix(`/rbacmanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["rbac-stripprefix"]
+      #If the rule matches, forward to the rbac management service (declared below)
+      service = "rbac-management"
 
   [http.middlewares]
     [http.middlewares.test-stripprefix.stripPrefix]
@@ -87,7 +93,9 @@
       prefixes = ["/blockchainmanagement", "/blockchainmanagement/"]
     [http.middlewares.products-stripprefix.stripPrefix]
       prefixes = ["/productmanagement", "/productmanagement/"]
-    
+    [http.middlewares.rbac-stripprefix.stripPrefix]
+      prefixes = ["/rbacmanagement", "/rbacmanagement/"]
+
   [http.services]
     # Define how to reach an existing service on our infrastructure
     [http.services.whoami.loadBalancer]
@@ -121,4 +129,6 @@
     [http.services.products-management.loadBalancer]
       [[http.services.products-management.loadBalancer.servers]]
         url = "http://127.0.0.1:3010/"
-    
+    [http.services.rbac-management.loadBalancer]
+      [[http.services.rbac-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3011/"
