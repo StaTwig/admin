@@ -348,7 +348,7 @@ const NewShipment = props => {
 
           <div className="input-group ">
          
-          <label htmlFor="shipmentId "> Estimate Delivery Date</label>
+          <label htmlFor="shipmentId "> Estimated Delivery</label>
               <div className="form-control">
             <DatePicker
               className="date"
