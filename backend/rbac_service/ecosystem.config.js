@@ -1,7 +1,7 @@
 module.exports = {
   apps : [{
-    name: 'Products Service',
-    script: 'products_server.js',
+    name: 'Rbac Service',
+    script: 'rbac_server.js',
 
     // Options reference: https://pm2.keymetrics.io/docs/usage/application-declaration/
     args: 'one two',
