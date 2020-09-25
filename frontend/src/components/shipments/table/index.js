@@ -37,7 +37,6 @@ const Table = props => {
           </div>
           <div className="overflow">
             {props.shipments.map((shipment, index) => {
-           // const s = JSON.parse(JSON.stringify(props.shipments.data));
             let statusStyle = 'secondary-bg';
             if (shipment.status === 'Shipped') {
               statusStyle = 'success-bg';
