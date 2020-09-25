@@ -55,7 +55,7 @@ const ProductsTable = props => {
                   onKeyDown={ e => ( e.keyCode === 69 || e.keyCode === 190||e.keyCode === 189
                   ||e.keyCode === 187||e.keyCode === 40||e.keyCode === 38) && e.preventDefault() }
                   className="form-control"
-                  placeholder="Enter Qunatity"
+                  placeholder="Enter Quantity"
                   value={quantity}
                   onChange={onQuantityChange}
                 />
