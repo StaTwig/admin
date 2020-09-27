@@ -36,7 +36,16 @@ const Table = props => {
             </div>
           </div>
           <div className="overflow">
-            {props.shipments.map((shipment, index) => (
+            {props.shipments.map((shipment, index) => {
+            let statusStyle = 'secondary-bg';
+            if (shipment.status === 'Shipped') {
+              statusStyle = 'success-bg';
+            } else if (shipment.status === 'Received') {
+              statusStyle = 'info-bg';
+            } else if (shipment.status === 'In Transit') {
+              statusStyle = 'warning-bg';
+            }
+            return (
               <div className="rTableRow" key={index}>
                 <div className="rTableCell">
                   <div className="combine-data">{shipment.client}</div>
@@ -54,9 +63,9 @@ const Table = props => {
                 <div className="rTableCell">{shipment.deliveryTo}</div>
                 <div className="rTableCell">{shipment.deliveryLocation}</div>
                 <div className="rTableCell">
-                  <div class="status" target={shipment.status}>
-                    {shipment.status}
-                  </div>
+                <div className={`status ${statusStyle}`}>
+                      {shipment.status}
+                </div>
                 </div>
                 <div className="rTableCell">
                   <button
@@ -73,7 +82,7 @@ const Table = props => {
                   </button>
                 </div>
               </div>
-            ))}
+            )})}
           </div>
           {loadMore && (
             <button className="btn btn-success" onClick={onLoadMore}>

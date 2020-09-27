@@ -50,7 +50,7 @@ const ProductsTableReview = props => {
                 disabled
                   type="number"
                   className="form-control"
-                  placeholder="Enter Qunatity"
+                  placeholder="Enter Quantity"
                   value={quantity}
                 />
               </div>
