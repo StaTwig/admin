@@ -113,9 +113,11 @@ exports.purchaseOrderStatistics = [
                   }`,
                 );
                 const items = response.data.items;
-                const item = items[items.length - 1];
-                item['status'] = po.status === 'Created' ? 'Sent' : po.status;
-                poItems.push(item);
+                if(items.length > 0) {
+                  const item = items[items.length - 1];
+                  item['status'] = po.status === 'Created' ? 'Sent' : po.status;
+                  poItems.push(item);
+                }
               });
 
               await utility.asyncForEach(receiverPos, async po => {
@@ -125,10 +127,13 @@ exports.purchaseOrderStatistics = [
                   }`,
                 );
                 const items = response.data.items;
-                const item = items[items.length - 1];
-                item['status'] =
-                  po.status === 'Created' ? 'Received' : po.status;
-                poItems.push(item);
+                if(items.length > 0) {
+                  const item = items[items.length - 1];
+                  item['status'] =
+                    po.status === 'Created' ? 'Received' : po.status;
+                  poItems.push(item);
+                }
+
               });
 
               logger.log(
