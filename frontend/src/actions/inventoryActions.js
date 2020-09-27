@@ -87,7 +87,6 @@ const resetInventoriesCount = (data) =>{
 
 export const addInventory = async (data) => {
   try {
-    debugger;
     const result =  await axios.post(config().addInventoryUrl, data);
     return result.data;
   }catch(e){
@@ -95,13 +94,25 @@ export const addInventory = async (data) => {
   }
 
 }
+
 export const addMultipleInventories = async (data) => {
   try {
-    debugger;
     const result =  await axios.post(config().addMultipleInventories, data);
     return result.data;
   }catch(e){
     return e.response;
   }
-
 }
+
+export const addInventoriesFromExcel = async data => {
+  try {
+    const url = config().addInventoriesFromExcel;
+    const result = await axios.post(url, data, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    debugger;
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
