@@ -77,7 +77,7 @@ exports.addMultipleProducts = [
 
           permission_request = {
             "result" : result,
-            "permissionRequired" : ""
+            "permissionRequired" : "addNewProduct"
           }
           checkPermissions(permission_request, async permissionResult => {
             if(permissionResult.success) {
