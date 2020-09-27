@@ -7,35 +7,35 @@ import {getTemperature} from '../../actions/shipmentActions';
 
 const Chart = () => {
 const [temp,setTemp]= useState({})
- 
-  
+
+
 
     useEffect(() => {
-
+const interval = setInterval(() => {
     async function fetchData() {
       const result = await getTemperature();
        setTemp(result.data)
       }
     fetchData();
+ }, 5000);
+return () => {
+      window.clearInterval(interval); // clear the interval in the cleanup function
+    };
   },[]);
 
 
 
     return (
         <div>
-          <LineChart 
-          ymin="-10" ymax="5" min={-10} max={10}  
-          colors={["#FA7923", "#666"]} 
-          data={temp} 
+          <LineChart
+          ymin="-5" ymax="10" min={-5} max={10}
+          colors={["#FA7923", "#666"]}
+          data={temp}
           />
-    
+
         </div>
-    
+
       );
 
 };
-
-
- 
-
 export default Chart;
