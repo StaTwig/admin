@@ -36,6 +36,23 @@ exports.writeData = async function (req, res) {
       })
     }
 
+//To publish data from excel in parallel
+exports.writeExcelData = async function (req, res) {
+        const data = Buffer.from(JSON.stringify(req.body.data), 'utf8').toString('hex');
+        var serialNumber = req.body.data.serialNumber
+        logz.log('info', '<<<<< BlockchainService < Publish < writeExcelData : instantiating multichain');
+        const multichain = init.getMultichain();
+        var key = req.body.key
+        var address = req.body.address
+        var dataStream = req.body.stream
+        logz.log('info', '<<<<< BlockchainService < Publish < writeData : Publishing data to stream ');
+        uilogger.info("Publishing data to stream",dataStream,"key",key,"address",address,"data",data);
+        multichain.publishFrom({from:address, stream:dataStream, key:key , data:data }, (err, tx) => {
+        logz.log('info', '<<<<< BlockchainService < Publish < writeData : Published data to stream with txnId');
+        res.json({serialNumber:serialNumber,transactionId: tx});
+      })
+    }
+
 exports.recordLog = function (req, res) {
     let message = req.body;
     logz.log('info', '<<<<< BlockchainService < Publish < recordLog : recording logs for front end events');
