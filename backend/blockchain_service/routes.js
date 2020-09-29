@@ -18,6 +18,7 @@ module.exports = function routes(app) {
     //Publish services
     //POST routes
     app.post('/blockchainmanagement/publish', require('./data/publish').writeData);
+    app.post('/blockchainmanagement/publishExcelData', require('./data/publish').writeExcelData);
     app.post('/blockchainmanagement/grantPermission', require('./users/register').grantPermission);
 }
 
