@@ -619,7 +619,11 @@ exports.addNewInventory = [
                 'info',
                 '<<<<< InventoryService < InventoryController < addNewInventory : publised data to blockchain',
               );
-              res.status(200).json({ serialNumber: response.data.serialNumber, response: response.data.transactionId });
+              res.status(200).json({ serialNumber: response.data.serialNumber,
+                                     manufacturingDate:response.data.manufacturingDate,
+                                     expiryDate:response.data.expiryDate,
+                                     owner:response.data.owner,
+                                     response: response.data.transactionId });
             } else {
               res.json('Sorry! User does not have enough Permissions');
             }
