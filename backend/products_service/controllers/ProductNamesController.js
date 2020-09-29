@@ -1,7 +1,6 @@
 const ProductNamesModel = require('../models/ProductNamesModel');
 const { body, validationResult } = require('express-validator');
 const checkPermissions = require('../middlewares/rbac_middleware').checkPermissions;
-const xlsx = require('node-xlsx');
 const multer = require('multer');
 const moveFile = require('move-file');
 const fs = require('fs');

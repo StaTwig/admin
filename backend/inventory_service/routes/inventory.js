@@ -1,5 +1,18 @@
 var express = require("express");
+const multer = require('multer');
+
 const InventoryController = require("../controllers/InventoryController");
+
+const Storage = multer.diskStorage({
+  destination(req, file, callback) {
+    callback(null, './images');
+  },
+  filename(req, file, callback) {
+    callback(null, `${Date.now()}`);
+  },
+});
+
+const upload = multer({ storage: Storage });
 
 var router = express.Router();
 
@@ -12,4 +25,9 @@ router.get("/getAllInventoryDetails", InventoryController.getAllInventoryDetails
 router.post("/addNewInventory", InventoryController.addNewInventory);
 router.post("/addMultipleInventories", InventoryController.addMultipleInventories);
 
+router.post(
+  '/addInventoriesFromExcel',
+  upload.single('excel'),
+  InventoryController.addInventoriesFromExcel,
+);
 module.exports = router;

@@ -44,7 +44,6 @@ const AddProduct = props => {
     formData.append('storageConditions', storageConditions);
     formData.append('description', description);
     formData.append('photo', photo);
-    debugger;
     const result = await addNewProduct(formData);
     if(result.status == 1) {
       setOpenCreatedInventory(true);
@@ -53,9 +52,7 @@ const AddProduct = props => {
   }
   const addProducts = async () => {
     let formData = new FormData();
-
     formData.append('excel', excel);
-    debugger;
     const result = await addMultipleProducts(formData);
     if(result.status === 200) {
       console.log('success add product');

@@ -113,7 +113,7 @@ exports.purchaseOrderStatistics = [
                   }`,
                 );
                 const items = response.data.items;
-                if(items.length > 0) {
+                if (items.length > 0) {
                   const item = items[items.length - 1];
                   item['status'] = po.status === 'Created' ? 'Sent' : po.status;
                   poItems.push(item);
@@ -127,13 +127,12 @@ exports.purchaseOrderStatistics = [
                   }`,
                 );
                 const items = response.data.items;
-                if(items.length > 0) {
+                if (items.length > 0) {
                   const item = items[items.length - 1];
                   item['status'] =
                     po.status === 'Created' ? 'Received' : po.status;
                   poItems.push(item);
                 }
-
               });
 
               logger.log(
@@ -288,7 +287,11 @@ exports.fetchPublisherPurchaseOrders = [
                 '<<<<< ShipmentService < ShipmentController < fetchPublisherPurchaseOrders : queried all publisher keys',
               );
               const poIds = acceptedPOs.map(po => po.orderID);
-              apiResponse.successResponseWithData(res, 'Purchase Orders', poIds);
+              apiResponse.successResponseWithData(
+                res,
+                'Purchase Orders',
+                poIds,
+              );
             } else {
               res.json('Sorry! User does not have enough Permissions');
             }
@@ -746,7 +749,11 @@ exports.fetchPurchaseOrder = [
                 'info',
                 '<<<<< ShipmentService < ShipmentController < fetchPurchaseOrder : queried data by key',
               );
-              return apiResponse.successResponseWithData(res, 'Purchase Order Info', items );
+              return apiResponse.successResponseWithData(
+                res,
+                'Purchase Order Info',
+                items,
+              );
             } else {
               res.json('Sorry! User does not have enough Permissions');
             }
@@ -874,12 +881,10 @@ exports.createPurchaseOrder = [
                   'info',
                   '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : published to blockchain',
                 );
-                res
-                  .status(200)
-                  .json({
-                    txid: response.data.transactionId,
-                    orderID: orderID,
-                  });
+                res.status(200).json({
+                  txid: response.data.transactionId,
+                  orderID: orderID,
+                });
               } catch (e) {
                 return apiResponse.ErrorResponse(res, 'Error from Blockchain');
               }
@@ -1208,30 +1213,55 @@ exports.trackProduct = [
 ];
 
 let counts_array = [];
-var today = 0,week = 0,month = 0,year = 0;
-var today_delay = 0,week_delay = 0,month_delay = 0,year_delay = 0;
-var today_total = 0,week_total = 0,month_total = 0,year_total = 0;
-var total = 0,transit = 0,shipped = 0,received = 0;
-var tt = 0,wt = 0,mt = 0,yt = 0;
-var ts = 0,ws = 0,ms = 0,ys = 0;
-var tr = 0,wr = 0,mr = 0,yr = 0;
+var today = 0,
+  week = 0,
+  month = 0,
+  year = 0;
+var today_delay = 0,
+  week_delay = 0,
+  month_delay = 0,
+  year_delay = 0;
+var today_total = 0,
+  week_total = 0,
+  month_total = 0,
+  year_total = 0;
+var total = 0,
+  transit = 0,
+  shipped = 0,
+  received = 0;
+var tt = 0,
+  wt = 0,
+  mt = 0,
+  yt = 0;
+var ts = 0,
+  ws = 0,
+  ms = 0,
+  ys = 0;
+var tr = 0,
+  wr = 0,
+  mr = 0,
+  yr = 0;
 var delayed = 0;
 
 function getDateDiff(dateOne, dateTwo, dateThree) {
-    today = 0,week = 0,month = 0,year = 0;
-    if ((dateOne.charAt(2) == '-' || dateOne.charAt(1) == '-') & (dateTwo.charAt(2) == '-' || dateTwo.charAt(1) == '-')  & (dateThree.charAt(2) == '-' || dateThree.charAt(1) == '-')) {
-        dateOne = new Date(formatDate(dateOne));
-        dateTwo = new Date(formatDate(dateTwo));
-        dateThree = new Date(formatDate(dateThree));
-    } else {
-        dateOne = new Date(dateOne);
-        dateTwo = new Date(dateTwo);
-        dateThree = new Date(dateThree);
-    }
+  (today = 0), (week = 0), (month = 0), (year = 0);
+  if (
+    (dateOne.charAt(2) == '-' || dateOne.charAt(1) == '-') &
+    (dateTwo.charAt(2) == '-' || dateTwo.charAt(1) == '-') &
+    (dateThree.charAt(2) == '-' || dateThree.charAt(1) == '-')
+  ) {
+    dateOne = new Date(formatDate(dateOne));
+    dateTwo = new Date(formatDate(dateTwo));
+    dateThree = new Date(formatDate(dateThree));
+  } else {
+    dateOne = new Date(dateOne);
+    dateTwo = new Date(dateTwo);
+    dateThree = new Date(dateThree);
+  }
 
   let timeDiff = Math.abs(dateOne.getTime() - dateTwo.getTime());
   let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-  
+
   let timeDiff_delay = 0;
   let diffDays_delay = 0;
 
@@ -1246,28 +1276,26 @@ function getDateDiff(dateOne, dateTwo, dateThree) {
       year++;
   }
 
-
-    if (dateOne > dateThree)
-	{
-            timeDiff_delay = Math.abs(dateOne.getTime() - dateThree.getTime());
-            diffDays_delay = Math.ceil(timeDiff_delay / (1000 * 3600 * 24));
-            delayed++;
-	        switch (true) {
-       		 case (diffDays_delay == 0):
-        	 today_delay++;
-	         case (diffDays_delay >= 0 && diffDays_delay <= 7):
-	         week_delay++;
-	         case (diffDays_delay >= 0 && diffDays_delay <= 30):
-	         month_delay++;
-        	 case(diffDays_delay >= 0 && diffDays_delay <= 365):
-	        year_delay++;
-             }
-	}
+  if (dateOne > dateThree) {
+    timeDiff_delay = Math.abs(dateOne.getTime() - dateThree.getTime());
+    diffDays_delay = Math.ceil(timeDiff_delay / (1000 * 3600 * 24));
+    delayed++;
+    switch (true) {
+      case diffDays_delay == 0:
+        today_delay++;
+      case diffDays_delay >= 0 && diffDays_delay <= 7:
+        week_delay++;
+      case diffDays_delay >= 0 && diffDays_delay <= 30:
+        month_delay++;
+      case diffDays_delay >= 0 && diffDays_delay <= 365:
+        year_delay++;
+    }
+  }
   return {
     today,
     week,
     month,
-    year
+    year,
   };
 }
 
@@ -1286,9 +1314,9 @@ exports.fetchUserShipments = [
       const { skip, limit } = req.query;
       const userObject = await UserModel.findOne({ address: user.address });
 
-      (transit = 0), (shipped = 0), (received = 0),(delayed = 0);
-      (today_total = 0),(week_total = 0),(month_total = 0), (year_total = 0);
-      (today_delay = 0),(week_delay = 0),(month_delay = 0), (year_delay = 0);
+      (transit = 0), (shipped = 0), (received = 0), (delayed = 0);
+      (today_total = 0), (week_total = 0), (month_total = 0), (year_total = 0);
+      (today_delay = 0), (week_delay = 0), (month_delay = 0), (year_delay = 0);
       (tt = 0), (wt = 0), (mt = 0), (yt = 0);
       (ts = 0), (ws = 0), (ms = 0), (ys = 0);
       (tr = 0), (wr = 0), (mr = 0), (yr = 0);
@@ -1334,12 +1362,14 @@ exports.fetchUserShipments = [
           var myDate = new Date(items_array[i].shipmentDate);
           var m = myDate.getMonth();
           m += 1;
-          var shipdate = myDate.getDate() + '-' + m + '-' + myDate.getFullYear();
+          var shipdate =
+            myDate.getDate() + '-' + m + '-' + myDate.getFullYear();
 
-	  var myEstDate = new Date(items_array[i].estimateDeliveryDate);
+          var myEstDate = new Date(items_array[i].estimateDeliveryDate);
           var m1 = myEstDate.getMonth();
           m1 += 1;
-	  var deliverydate = (myEstDate.getDate() + "-" + m1 + "-" + myEstDate.getFullYear());
+          var deliverydate =
+            myEstDate.getDate() + '-' + m1 + '-' + myEstDate.getFullYear();
 
           let date_ob = new Date();
           let date = ('0' + date_ob.getDate()).slice(-2);
@@ -1347,31 +1377,29 @@ exports.fetchUserShipments = [
           let year = date_ob.getFullYear();
           var today = date + '-' + month + '-' + year;
           var status = items_array[i].status;
+          var s = getDateDiff(today, shipdate, deliverydate);
           if (status == 'In Transit') {
             transit++;
-            if ( !deliverydate.includes("NaN"))
-	    {
-            var s = getDateDiff(today, shipdate,deliverydate);
-	    }
+            if (!deliverydate.includes('NaN')) {
+              var s = getDateDiff(today, shipdate, deliverydate);
+            }
             tt += s.today;
             wt += s.week;
             mt += s.month;
             yt += s.year;
           } else if (status == 'Shipped') {
             shipped++;
-            if ( !deliverydate.includes("NaN"))
-            {
-            var s = getDateDiff(today, shipdate,deliverydate);
+            if (!deliverydate.includes('NaN')) {
+              var s = getDateDiff(today, shipdate, deliverydate);
             }
-	    ts += s.today;
+            ts += s.today;
             ws += s.week;
             ms += s.month;
             ys += s.year;
           } else if (status == 'Received') {
             received++;
-	    if ( !deliverydate.includes("NaN"))
-            {
-            var s = getDateDiff(today, shipdate,deliverydate);
+            if (!deliverydate.includes('NaN')) {
+              var s = getDateDiff(today, shipdate, deliverydate);
             }
             tr += s.today;
             wr += s.week;
@@ -1433,12 +1461,12 @@ exports.fetchUserShipments = [
               thisWeek: wt,
               today: tt,
             },
-	   shipmentsDelayed: {
+            shipmentsDelayed: {
               total: delayed,
               thisYear: year_delay,
               thisMonth: month_delay,
               thisWeek: week_delay,
-              today: today_delay
+              today: today_delay,
             },
           },
         });
@@ -1474,28 +1502,29 @@ exports.fetchUserShipments = [
           }
           total = items_array.length;
           for (i = 0; i < items_array.length; i++) {
-	     var myDate = new Date(items_array[i].shipmentDate);
-             var m = myDate.getMonth();
-             m += 1;
-             var shipdate = myDate.getDate() + '-' + m + '-' + myDate.getFullYear();
+            var myDate = new Date(items_array[i].shipmentDate);
+            var m = myDate.getMonth();
+            m += 1;
+            var shipdate =
+              myDate.getDate() + '-' + m + '-' + myDate.getFullYear();
 
-             var myEstDate = new Date(items_array[i].estimateDeliveryDate);
-             var m1 = myEstDate.getMonth();
-             m1 += 1;
-             var deliverydate = (myEstDate.getDate() + "-" + m1 + "-" + myEstDate.getFullYear());
+            var myEstDate = new Date(items_array[i].estimateDeliveryDate);
+            var m1 = myEstDate.getMonth();
+            m1 += 1;
+            var deliverydate =
+              myEstDate.getDate() + '-' + m1 + '-' + myEstDate.getFullYear();
 
-             let date_ob = new Date();
-             let date = ('0' + date_ob.getDate()).slice(-2);
-             let month = ('0' + (date_ob.getMonth() + 1)).slice(-2);
-             let year = date_ob.getFullYear();
-             var today = date + '-' + month + '-' + year;
+            let date_ob = new Date();
+            let date = ('0' + date_ob.getDate()).slice(-2);
+            let month = ('0' + (date_ob.getMonth() + 1)).slice(-2);
+            let year = date_ob.getFullYear();
+            var today = date + '-' + month + '-' + year;
 
             var status = items_array[i].status;
             if (status == 'In Transit') {
               transit++;
-	      if ( !deliverydate.includes("NaN"))
-              {
-              var s = getDateDiff(today, shipdate,deliverydate);
+              if (!deliverydate.includes('NaN')) {
+                var s = getDateDiff(today, shipdate, deliverydate);
               }
               tt += s.today;
               wt += s.week;
@@ -1503,9 +1532,8 @@ exports.fetchUserShipments = [
               yt += s.year;
             } else if (status == 'Shipped') {
               shipped++;
-	      if ( !deliverydate.includes("NaN"))
-              {
-              var s = getDateDiff(today, shipdate,deliverydate);
+              if (!deliverydate.includes('NaN')) {
+                var s = getDateDiff(today, shipdate, deliverydate);
               }
               ts += s.today;
               ws += s.week;
@@ -1513,10 +1541,9 @@ exports.fetchUserShipments = [
               ys += s.year;
             } else if (status == 'Received') {
               received++;
-	      if ( !deliverydate.includes("NaN"))
-              {
-               var s = getDateDiff(today, shipdate,deliverydate);
-               }
+              if (!deliverydate.includes('NaN')) {
+                var s = getDateDiff(today, shipdate, deliverydate);
+              }
               tr += s.today;
               wr += s.week;
               mr += s.month;
@@ -1578,13 +1605,13 @@ exports.fetchUserShipments = [
                 thisWeek: wt,
                 today: tt,
               },
-	      shipmentsDelayed: {
+              shipmentsDelayed: {
                 total: delayed,
                 thisYear: year_delay,
                 thisMonth: month_delay,
                 thisWeek: week_delay,
-                today: today_delay
-            },
+                today: today_delay,
+              },
             },
           });
         });

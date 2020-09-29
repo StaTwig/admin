@@ -8,8 +8,10 @@ import FailurePopUp from './failurepopup';
 import {
   addMultipleInventories,
   setReviewinventories,
+  addInventoriesFromExcel
 } from '../../actions/inventoryActions';
-import { getManufacturers, getProducts } from '../../actions/poActions';
+import { turnOn , turnOff } from '../../actions/spinnerActions'
+import {getManufacturers, getProducts} from '../../actions/poActions';
 
 const NewInventory = props => {
   const editInventories = useSelector(state => {
@@ -34,6 +36,7 @@ const NewInventory = props => {
   const [products, setProducts] = useState([]);
   const [manufacturers, setManufacturers] = useState([]);
   const [quantity, setQuantity] = useState('');
+  const [excel, setExcel] = useState('');
   const blankInventory = {
     productName: 'Select Product',
     manufacturerName: 'Select Manufacturer',
@@ -171,6 +174,21 @@ const NewInventory = props => {
     setInventoryState(updatedInventoryState);
   };
 
+  const setExcelFile = evt => {
+    setExcel(evt.target.files[0]);
+  };
+
+  const uploadExcel = async () => {
+    let formData = new FormData();
+    formData.append('excel', excel);
+    dispatch(turnOn());
+    const result = await addInventoriesFromExcel(formData);
+    if(result.status === 200) {
+      console.log('success add product');
+      setOpenCreatedInventory(true);
+    }
+    dispatch(turnOff());
+  }
   return (
     <div className="Newinventory">
       <h1 className="breadcrumb">ADD INVENTORY</h1>
@@ -186,7 +204,13 @@ const NewInventory = props => {
       >
         +<span> Add Another Product</span>
       </button>
-
+      <label class="btn btn-primary"> <span>Import from Excel</span> <input type='file'  class="select" onChange={setExcelFile}/> </label>
+      <button
+        className="btn btn-white shadow-radius font-bold"
+        onClick={uploadExcel}
+      >
+        +<span> Upload Excel </span>
+      </button>
       <hr />
       <div className="d-flex justify-content-between">
         <div className="total">Grand Total</div>
