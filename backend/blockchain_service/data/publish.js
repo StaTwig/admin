@@ -40,6 +40,9 @@ exports.writeData = async function (req, res) {
 exports.writeExcelData = async function (req, res) {
         const data = Buffer.from(JSON.stringify(req.body.data), 'utf8').toString('hex');
         var serialNumber = req.body.data.serialNumber
+        var manufacturingDate = req.body.data.manufacturingDate
+        var expiryDate = req.body.data.expiryDate
+
         logz.log('info', '<<<<< BlockchainService < Publish < writeExcelData : instantiating multichain');
         const multichain = init.getMultichain();
         var key = req.body.key
@@ -49,9 +52,10 @@ exports.writeExcelData = async function (req, res) {
         uilogger.info("Publishing data to stream",dataStream,"key",key,"address",address,"data",data);
         multichain.publishFrom({from:address, stream:dataStream, key:key , data:data }, (err, tx) => {
         logz.log('info', '<<<<< BlockchainService < Publish < writeData : Published data to stream with txnId');
-        res.json({serialNumber:serialNumber,transactionId: tx});
+        res.json({serialNumber:serialNumber, manufacturingDate:manufacturingDate, expiryDate:expiryDate, owner:address, transactionId: tx});
       })
     }
+
 
 exports.recordLog = function (req, res) {
     let message = req.body;
