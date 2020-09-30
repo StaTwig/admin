@@ -612,14 +612,18 @@ exports.addNewInventory = [
                 data: { ...data, ...createdDate },
               };
               const response = await axios.post(
-                `${blockchain_service_url}/publish`,
+                `${blockchain_service_url}/publishExcelData`,
                 userData,
               );
               logger.log(
                 'info',
                 '<<<<< InventoryService < InventoryController < addNewInventory : publised data to blockchain',
               );
-              res.status(200).json({ response: response.data.transactionId });
+              res.status(200).json({ serialNumber: response.data.serialNumber,
+                                     manufacturingDate:response.data.manufacturingDate,
+                                     expiryDate:response.data.expiryDate,
+                                     owner:response.data.owner,
+                                     response: response.data.transactionId });
             } else {
               res.json('Sorry! User does not have enough Permissions');
             }
