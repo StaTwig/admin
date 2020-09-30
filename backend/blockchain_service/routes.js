@@ -14,6 +14,7 @@ module.exports = function routes(app) {
     app.get('/blockchainmanagement/queryTotalBlocks',require('./data/query').fetchTotalBlocks);
     app.get('/blockchainmanagement/queryAllPublisherKeys',require('./data/query').fetchPublisherKeys);
     app.get('/blockchainmanagement/createUserAddress', require('./users/register').createUser);
+    app.get('/blockchainmanagement/queryDataByRawTxHash',require('./data/query').fetchDataByRawTxHash);
 
     //Publish services
     //POST routes
