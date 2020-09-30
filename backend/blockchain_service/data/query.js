@@ -212,3 +212,27 @@ exports.fetchTotalBlocks = function (req, res) {
     });
 }
 
+function hex_to_ascii(str) {
+    var hex = str.toString();
+    var str = '';
+    for (var n = 0; n < hex.length; n += 2) {
+        str += String.fromCharCode(parseInt(hex.substr(n, 2), 16));
+    }
+    return str;
+}
+
+exports.fetchDataByRawTxHash = function (req, res) {
+    const {txid} = req.query;
+    const multichain = init.getMultichain();
+
+    multichain.getRawTransaction({
+        txid,
+        verbose: true
+    }, (err, data) => {
+       res.setHeader('Access-Control-Allow-Origin', '*');
+        dataString = hex_to_ascii(data.data)
+        logz.log('info', '<<<<< BlockchainService < Query < fetchDataByRawTxHash : fetch data from stream for a raw txid ');
+        logger.info("Fetch data for the txid",txid);
+        res.json({items: dataString});
+    });
+}
