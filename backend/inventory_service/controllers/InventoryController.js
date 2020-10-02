@@ -385,7 +385,7 @@ exports.getAllInventoryDetails = [
                   console.log("finished re indexing")
                 })
               })*/
-              InventoryModel.createIndexes();
+             // InventoryModel.createIndexes();
               const inventoryResult = await InventoryModel.find({
                 owner: address,
               })
