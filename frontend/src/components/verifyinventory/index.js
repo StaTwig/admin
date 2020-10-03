@@ -5,9 +5,9 @@ import {
   addMultipleInventories,
   resetReviewInventories
 } from '../../actions/inventoryActions';
+import { turnOff, turnOn } from "../../actions/spinnerActions";
 import Modal from '../../shared/modal';
 import InventoryPopUp from './inventorypopup';
-import { initialState } from '../../reducers/editInventoryReducer';
 import './style.scss';
 
 const VerifyInventory = props => {
@@ -17,24 +17,28 @@ const VerifyInventory = props => {
   });
 
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
+  const [ successMessage, setSuccessMessage ] = useState('');
+  const [ errorMessage, setErrorMessage ] = useState('');
   const closeModal = () => {
     props.history.push('/inventory');
   };
 
   const onAssign = async () => {
+    dispatch(turnOn());
     const result = await addMultipleInventories({
       inventories: reviewInventories,
     });
-    console.log(result);
-
-    if (result.response) {
-      setOpenCreatedInventory(true);
-      dispatch(resetReviewInventories());
+    setOpenCreatedInventory(true);
+    if (result.status === 1) {
+      setSuccessMessage(result.message)
+    }else {
+      setErrorMessage(result.data.message);
     }
+    dispatch(turnOff());
+    dispatch(resetReviewInventories());
   };
 
   const onEdit = () => {
-    //dispatch(setEditInventories(reviewInventory))
     props.history.push('/newinventory');
   };
 
@@ -117,6 +121,8 @@ const VerifyInventory = props => {
                 >
                   <InventoryPopUp
                     onHide={closeModal} //FailurePopUp
+                    successMessage={successMessage}
+                    errorMessage={errorMessage}
                   />
                 </Modal>
               )}

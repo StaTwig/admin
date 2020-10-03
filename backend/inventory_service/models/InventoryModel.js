@@ -2,14 +2,11 @@ const mongoose = require('mongoose');
 
 const InventorySchema = new mongoose.Schema(
   {
-    productName: { type: String },
-    manufacturerName: { type: String },
     manufacturingDate: { type: String },
     expiryDate: { type: String },
-    storageConditionMax: { type: String },
-    storageConditionMIn: { type: String },
-    batchNumber: { type: String },
-    serialNumber: { type: String },
+    serialNumber: { type: String, unique: true },
+    owner: { type: String },
+    transactionIds: {type: Array }
   },
   { timestamps: true },
 );

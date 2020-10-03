@@ -22,7 +22,19 @@ export const reviewInventoryReducer = (state = initialState, action) => {
     case SET_REVIEW_INVENTORY:
       return action.payload;
     case RESET_REVIEW_INVENTORY:
-      return initialState;
+      return [
+        {
+          productName: 'Select Product',
+          manufacturerName: 'Select Manufacturer',
+          quantity: '',
+          manufacturingDate: '',
+          expiryDate: '',
+          storageConditionmin: '',
+          storageConditionmax: '',
+          batchNumber: '',
+          serialNumber: '',
+        },
+      ];;
 
     default:
       return state;

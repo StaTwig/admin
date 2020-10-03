@@ -215,7 +215,7 @@ exports.getInventoryDetailsForProduct = [
                 `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${key}`,
               );
               const items = response.data.items;
-              console.log('items', items);
+              logger.log('items', items);
               logger.log(
                 'info',
                 '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : queried data by key',
@@ -266,6 +266,7 @@ var today_ne = 0,
   week_ne = 0,
   month_ne = 0,
   year_ne = 0;
+var total_exp = 0;
 
 function getDateDiff(dateOne, dateTwo, dateThree, dateFour, quantity) {
   if (
@@ -358,8 +359,6 @@ function formatDate(date) {
     .join('-');
 }
 
-var products_array = [];
-
 exports.getAllInventoryDetails = [
   auth,
   async (req, res) => {
@@ -378,36 +377,46 @@ exports.getAllInventoryDetails = [
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
               const { address } = req.user;
-              const response = await axios.get(
-                `${blockchain_service_url}/queryDataByPublishers?stream=${stream_name}&address=${address}`,
-              );
-              const items = response.data.items;
+              const { skip, limit } = req.query;
+              let chunkUrls = [];
+
+             /* InventoryModel.collection.dropIndexes(function(){
+                InventoryModel.collection.reIndex(function(finished){
+                  console.log("finished re indexing")
+                })
+              })*/
+             // InventoryModel.createIndexes();
+              const inventoryResult = await InventoryModel.find({
+                owner: address,
+              })
+                .sort({ createdAt: -1 })
+                .skip(parseInt(skip))
+                .limit(parseInt(limit));
+              inventoryResult.forEach(inventory => {
+                const chunkUrl = axios.get(
+                  `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${
+                    inventory.serialNumber
+                  }`,
+                );
+                chunkUrls.push(chunkUrl);
+              });
+              const responses = await axios.all(chunkUrls);
+              const items = responses.map(response => response.data.items[0]);
               var count_array = [];
               var tot_qty = 0;
-              await axios
-                .get(`${product_service_url}/getProductNames`, {
+              const productNamesResponse = await axios.get(
+                `${product_service_url}/getProductNames`,
+                {
                   headers: {
                     Authorization: req.headers.authorization,
                   },
-                })
-                .then(res => {
-                  for (i = 0; i < res.data.data.length; i++) {
-                    var test = res.data.data[i].productName;
-                    products_array.push(test);
-                  }
-                })
-                .catch(error => {
-                  logger.log(
-                    'error',
-                    '<<<<< InventoryService < InventoryController < getAllInventoryDetails : Error in fetching products list',
-                  );
-                });
-              products_array.forEach(element => {
-                var ele = `${element}`;
-              });
+                },
+              );
 
+              const products_array = productNamesResponse.data.data.map(product => product.productName);
               var total_inv = items.length;
               var dict = {};
+              let total_exp = 0;
               (today_exp = 0),
                 (week_exp = 0),
                 (month_exp = 0),
@@ -475,7 +484,7 @@ exports.getAllInventoryDetails = [
               );
               res.json({
                 data: items,
-                dict: dict,
+                dict,
                 counts: {
                   inventoryAdded: {
                     total: total_inv,
@@ -619,11 +628,13 @@ exports.addNewInventory = [
                 'info',
                 '<<<<< InventoryService < InventoryController < addNewInventory : publised data to blockchain',
               );
-              res.status(200).json({ serialNumber: response.data.serialNumber,
-                                     manufacturingDate:response.data.manufacturingDate,
-                                     expiryDate:response.data.expiryDate,
-                                     owner:response.data.owner,
-                                     response: response.data.transactionId });
+              res.status(200).json({
+                serialNumber: response.data.serialNumber,
+                manufacturingDate: response.data.manufacturingDate,
+                expiryDate: response.data.expiryDate,
+                owner: response.data.owner,
+                response: response.data.transactionId,
+              });
             } else {
               res.json('Sorry! User does not have enough Permissions');
             }
@@ -682,7 +693,38 @@ exports.addMultipleInventories = [
               const { inventories } = req.body;
               const { address } = req.user;
               let txnIds = [];
-              await utility.asyncForEach(inventories, async data => {
+              let chunkUrls = [];
+              inventories.forEach(inventory => {
+                const userData = {
+                  stream: stream_name,
+                  key: inventory.serialNumber,
+                  address: address,
+                  data: inventory,
+                };
+                const postRequest = axios.post(
+                  `${blockchain_service_url}/publishExcelData`,
+                  userData,
+                );
+                chunkUrls.push(postRequest);
+              });
+              const inventoryResponses = await axios.all(chunkUrls);
+              const inventoryData = inventoryResponses.map(
+                response => response.data,
+              );
+              try {
+
+                const inventoryMongoResult = await InventoryModel.insertMany(inventoryData);
+                const txnIds = inventoryMongoResult.map(inventory => inventory.transactionIds)
+                apiResponse.successResponseWithData(
+                  res,
+                  'Created Inventory Success',
+                  txnIds,
+                );
+              }catch(e) {
+                apiResponse.ErrorResponse(res, 'Error in creating inventory Duplicate Serial Number ');
+              }
+
+              /*await utility.asyncForEach(inventories, async data => {
                 const userData = {
                   stream: stream_name,
                   key: data.serialNumber,
@@ -693,14 +735,29 @@ exports.addMultipleInventories = [
                   `${blockchain_service_url}/publish`,
                   userData,
                 );
-                txnIds.push(response.data.transactionId);
-                logger.log(
-                  'info',
-                  '<<<<< InventoryService < InventoryController < addMultipleInventories : publised data to blockchain',
-                );
-              });
-
-              res.status(200).json({ response: txnIds });
+                if (response.data && response.data.transactionId) {
+                  logger.log(
+                    'info',
+                    '<<<<< InventoryService < InventoryController < addMultipleInventories : publised data to blockchain',
+                  );
+                  const inventory = new InventoryModel({
+                    manufacturingDate: data.manufacturingDate,
+                    expiryDate: data.expiryDate,
+                    serialNumber: data.serialNumber,
+                    owner: address,
+                    transactionId: response.data.transactionId,
+                  });
+                  await inventory.save();
+                  txnIds.push(response.data.transactionId);
+                  apiResponse.successResponseWithData(
+                    res,
+                    'Created Inventory Success',
+                    txnIds,
+                  );
+                } else {
+                  apiResponse.ErrorResponse(res, 'Error in creating inventory');
+                }
+              });*/
             } else {
               res.json('Sorry! User does not have enough Permissions');
             }
@@ -742,46 +799,79 @@ exports.addInventoriesFromExcel = [
               await moveFile(req.file.path, `${dir}/${req.file.originalname}`);
               const workbook = XLSX.readFile(`${dir}/${req.file.originalname}`);
               const sheet_name_list = workbook.SheetNames;
-              const data = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[2]],  {dateNF:'dd/mm/yyyy;@', cellDates:true, raw: false});
-            //  const data = data1.filter((s, i) => i<5);
-              const { address } = req.user;
-              InventoryModel.insertMany(data, (err, res) => {
-                if (err) throw err;
-                console.log("Number of documents inserted into mongo: " + res.length);
-              });
-              let postUrls = [];
-              data.forEach(inventory => {
-                const userData = {
-                  stream: stream_name,
-                  key: inventory.serialNumber,
-                  address: address,
-                  data: inventory,
-                };
-                const postRequest = axios.post(`${blockchain_service_url}/publish`,
-                  userData);
-                postUrls.push(postRequest)
-              })
-              axios
-                .all(postUrls)
-                .then(
-                  axios.spread((...responses) => {
-                    const responseOne = responses[0];
-                    const responseTwo = responses[1];
-                    const responesThree = responses[2];
-
-                    // use/access the results
-                    console.log(responseOne, responseTwo, responesThree);
-                  })
-                )
-                .catch(errors => {
-                  // react on errors.
-                  console.error(errors);
-                });
-              return apiResponse.successResponseWithData(
-                res,
-                'Success',
-                data,
+              const data = XLSX.utils.sheet_to_json(
+                workbook.Sheets[sheet_name_list[0]],
+                { dateNF: 'dd/mm/yyyy;@', cellDates: true, raw: false },
               );
+              const { address } = req.user;
+              let start = new Date();
+              let count = 0;
+              const chunkSize = 50;
+              let limit = chunkSize;
+              let skip = 0;
+              logger.log('Inserting excel data in chunks');
+              function recursiveFun() {
+                skip = chunkSize * count;
+                count++;
+                limit = chunkSize * count;
+                logger.log('skip', skip);
+
+                logger.log('limit', limit);
+                const chunkedData = data.slice(skip, limit);
+                let chunkUrls = [];
+                chunkedData.forEach(inventory => {
+                  const userData = {
+                    stream: stream_name,
+                    key: inventory.serialNumber,
+                    address: address,
+                    data: inventory,
+                  };
+                  const postRequest = axios.post(
+                    `${blockchain_service_url}/publishExcelData`,
+                    userData,
+                  );
+                  chunkUrls.push(postRequest);
+                });
+                axios
+                  .all(chunkUrls)
+                  .then(
+                    axios.spread(async (...responses) => {
+                      const inventoryData = responses.map(
+                        response => response.data,
+                      );
+                      logger.log('Inventory Data length', inventoryData.length);
+                      logger.log(
+                        'Transaction Id',
+                        inventoryData[0].transactionId,
+                      );
+                      InventoryModel.insertMany(inventoryData, (err, res) => {
+                        if (err) {
+                          logger.log(err.errmsg);
+                        } else
+                          logger.log(
+                            'Number of documents inserted into mongo: ' +
+                              res.length,
+                          );
+                      });
+
+                      if (limit < data.length) {
+                        recursiveFun();
+                      } else {
+                        logger.log(
+                          `Insertion of excel sheet data is completed. Time Taken to insert ${
+                            data.length
+                          } in seconds - `,
+                          (new Date() - start) / 1000,
+                        );
+                      }
+                    }),
+                  )
+                  .catch(errors => {
+                    logger.log(errors);
+                  });
+              }
+              recursiveFun();
+              return apiResponse.successResponseWithData(res, 'Success', data);
             } else {
               res.json('Sorry! User does not have enough Permissions');
             }

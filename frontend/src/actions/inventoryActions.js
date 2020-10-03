@@ -4,10 +4,10 @@ import { config } from '../config';
 import { GET_INVENTORIES_FAILURE, GET_INVENTORIES_SUCCESS ,SET_REVIEW_INVENTORY,GET_INVENTORIESCOUNT_FAILURE,
    GET_INVENTORIESCOUNT_SUCCESS,SET_EDIT_INVENTORY, RESET_REVIEW_INVENTORY } from "../constants/inventoryConstants";
 
-export const getInventories = () => {
+export const getInventories = (skip=0, limit=5) => {
   try {
     return async dispatch => {
-      const result =  await axios.get(config().inventoriesUrl);
+      const result =  await axios.get(`${config().inventoriesUrl}?skip=${skip}&limit=${limit}`);
       dispatch(setInventories(result.data));
       dispatch(setInventoriesCount(result.data));
     }

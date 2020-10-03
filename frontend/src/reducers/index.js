@@ -30,7 +30,6 @@ const rootReducer = (history) => combineReducers({
   tracingShipment:tracingShipmentReducer,
   trackShipment: trackShipmentReducer,
   reviewInventory: reviewInventoryReducer,
-  trackShipment: trackShipmentReducer,
   reviewPo: reviewPoReducer,
   editPo: editPoReducer,
   spinner: spinnerReducer,
