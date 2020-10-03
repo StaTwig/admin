@@ -538,7 +538,6 @@ exports.createShipment = [
                 product => product.batchNumber === '',
               );
               if (!emptyBatchNumber && !emptyShipmentNumber) {
-                //Products Collection
                 logger.log(
                   'info',
                   '<<<<< ShipmentService < ShipmentController < createShipment : Shipment ad batch numbers are not empty',
