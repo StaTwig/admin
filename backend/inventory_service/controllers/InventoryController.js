@@ -714,7 +714,7 @@ exports.addMultipleInventories = [
               try {
 
                 const inventoryMongoResult = await InventoryModel.insertMany(inventoryData);
-                const txnIds = inventoryMongoResult.map(inventory => inventory.transactionId)
+                const txnIds = inventoryMongoResult.map(inventory => inventory.transactionIds)
                 apiResponse.successResponseWithData(
                   res,
                   'Created Inventory Success',
