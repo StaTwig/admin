@@ -3,6 +3,7 @@ const UserModel = require('../models/UserModel');
 const POModel = require('../models/POModel');
 const ShipmentModel = require('../models/ShipmentModel');
 const ProductModel = require('../models/ProductModel');
+const InventoryModel = require('../models/InventoryModel');
 const OrganisationModel = require('../models/OrganisationModel');
 const { body, validationResult } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
@@ -512,6 +513,24 @@ exports.createShipment = [
                   { shipmentNumbers },
                 );
               }
+
+              if (data.status == "Received")
+                    {
+                  await utility.asyncForEach(data.products, async product => {
+                  const productQuery = { serialNumber: product.serialNumber };
+                  const productFound = await InventoryModel.findOne(productQuery);
+                  if (productFound) {
+                    logger.log(
+                      'info',
+                      '<<<<< ShipmentService < ShipmentController < createShipment : product found status receive',
+                    );
+                    await InventoryModel.updateOne(productQuery, {
+                      owner: data.receiver,
+                    });
+                    }
+                })
+              }
+
               const emptyShipmentNumber = data.products.find(
                 product => product.serialNumber === '',
               );
@@ -519,30 +538,29 @@ exports.createShipment = [
                 product => product.batchNumber === '',
               );
               if (!emptyBatchNumber && !emptyShipmentNumber) {
-                //Products Collection
                 logger.log(
                   'info',
                   '<<<<< ShipmentService < ShipmentController < createShipment : Shipment ad batch numbers are not empty',
                 );
                 await utility.asyncForEach(data.products, async product => {
                   const productQuery = { serialNumber: product.serialNumber };
-                  const productFound = await ProductModel.findOne(productQuery);
+                  const productFound = await InventoryModel.findOne(productQuery);
                   if (productFound) {
                     logger.log(
                       'info',
                       '<<<<< ShipmentService < ShipmentController < createShipment : product found',
                     );
-                    await ProductModel.updateOne(productQuery, {
-                      txnIds: [...productFound.txnIds, txnId],
+                    await InventoryModel.updateOne(productQuery, {
+                      transactionIds: [...productFound.transactionIds, txnId],
                     });
                   } else {
                     logger.log(
                       'info',
                       '<<<<< ShipmentService < ShipmentController < createShipment : creating new product',
                     );
-                    const newProduct = new ProductModel({
+                    const newProduct = new InventoryModel({
                       serialNumber: product.serialNumber,
-                      txnIds: [txnId],
+                      transactionId: [txnId],
                     });
                     await newProduct.save();
                   }
@@ -1186,12 +1204,12 @@ exports.trackProduct = [
         'info',
         '<<<<< ShipmentService < ShipmentController < trackProduct : tracking product, querying by transaction hash',
       );
-      ProductModel.findOne({ serialNumber: serialNumber }).then(async user => {
-        let txnIDs = user.txnIds;
+      InventoryModel.findOne({ serialNumber: serialNumber }).then(async user => {
+        let txnIDs = user.transactionIds;
         let items_array = [];
         await utility.asyncForEach(txnIDs, async txnId => {
           const response = await axios.get(
-            `${blockchain_service_url}/queryDataByTxHash?stream=${stream_name}&txid=${txnId}`,
+              `${blockchain_service_url}/queryDataByRawTxHash?txid=${txnId}`,
           );
           const items = response.data.items;
           items_array.push(items);

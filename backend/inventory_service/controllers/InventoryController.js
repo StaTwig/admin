@@ -628,6 +628,16 @@ exports.addNewInventory = [
                 'info',
                 '<<<<< InventoryService < InventoryController < addNewInventory : publised data to blockchain',
               );
+              
+              const newInventory = new InventoryModel({
+                manufacturingDate: response.data.manufacturingDate,
+                expiryDate: response.data.expiryDate,
+                serialNumber: response.data.serialNumber,
+                owner: response.data.owner,
+                transactionIds: [response.data.transactionId]
+              });
+             await newInventory.save();
+
               res.status(200).json({
                 serialNumber: response.data.serialNumber,
                 manufacturingDate: response.data.manufacturingDate,
