@@ -1,10 +1,11 @@
 export const TEST_SERVER_URL = 'http://test.vaccineledger.com:9001';
+export const PROD_SERVER_URL = 'http://api.vaccineledger.com:9001';
+export const DEMO_SERVER_URL = 'http://demo.vaccineledger.com:9001';
 export const LOCAL_SERVER_URL_USER = 'http://localhost:3001';
 export const LOCAL_SERVER_URL_SHIPMENT = 'http://localhost:3002';
 export const LOCAL_SERVER_URL_INVENTORY = 'http://localhost:3007';
 export const LOCAL_SERVER_URL_TRACKANDTRACE = 'http://localhost:3005';
 export const LOCAL_SERVER_URL_PRODUCTS = 'http://localhost:3010';
-export const PROD_SERVER_URL = 'http://api.vaccineledger.com:9001';
 export const STABLE_SERVER_URL_USER = 'http://3.81.12.69:3001';
 export const STABLE_SERVER_URL_SHIPMENT = 'http://3.81.12.69:3002';
 export const STABLE_SERVER_URL_INVENTORY = 'http://3.81.12.69:3007';
@@ -128,6 +129,34 @@ export function config() {
       addNewProduct:`${TEST_SERVER_URL}/productmanagement/api/products/addProductName`,
       getProducts: `${TEST_SERVER_URL}/productmanagement/api/products/getProductNames`,
       addMultipleProducts:`${TEST_SERVER_URL}/productmanagement/api/products/addMultipleProducts`,
+    },
+    demo: {
+      loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
+      registerUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/register`,
+      verifyOtpUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/verify-otp`,
+      userInfoUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/userInfo`,
+      getAllUsersUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
+      updateProfileUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/updateProfile`,
+      upload: `${DEMO_SERVER_URL}/usermanagement/api/auth/upload`,
+      shipmentsUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/fetchUserShipments`,
+      getManufacturers: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/getManufacturers`,
+      createShipmentUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/createShipment`,
+      shipmentsSearch: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/fetchShipments?key=`,
+      createPurchaseOrderUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/createPurchaseOrder`,
+      fetchAllPurchaseOrdersUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/fetchPublisherPurchaseOrders`,
+      changePOStatus: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/changePOStatus`,
+      fetchAllPurchaseOrderUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
+      fetchPurchaseOrderStatisticsUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/purchaseOrderStatistics`,
+      inventorySearch: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`,
+      inventoriesUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getAllInventoryDetails`,
+      addMultipleInventories: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/addMultipleInventories`,
+      addInventoriesFromExcel: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/addInventoriesFromExcel`,
+      addInventoryUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/addNewInventory`,
+      trackShipment: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
+      trackTemperature:`${DEMO_SERVER_URL}/tracktracemanagement/api/track/fetchTemp`,
+      addNewProduct:`${DEMO_SERVER_URL}/productmanagement/api/products/addProductName`,
+      getProducts: `${DEMO_SERVER_URL}/productmanagement/api/products/getProductNames`,
+      addMultipleProducts:`${DEMO_SERVER_URL}/productmanagement/api/products/addMultipleProducts`,
     },
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
