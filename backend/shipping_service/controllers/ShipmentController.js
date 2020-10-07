@@ -514,24 +514,28 @@ exports.createShipment = [
                 );
               }
 
-              if (data.status == "Received")
+             if (data.status == "Received")
                     {
                   await utility.asyncForEach(data.products, async product => {
-                  const productQuery = { serialNumber: product.serialNumber };
+                  const productQuery = { serialNumber: product};
                   const productFound = await InventoryModel.findOne(productQuery);
                   if (productFound) {
                     logger.log(
                       'info',
                       '<<<<< ShipmentService < ShipmentController < createShipment : product found status receive',
                     );
-                    await InventoryModel.updateOne(productQuery, {
+                     await InventoryModel.updateOne(productQuery, {
+                      transactionIds: [...productFound.transactionIds, txnId],
+                      });
+
+                     await InventoryModel.updateOne(productQuery, {
                       owner: data.receiver,
                     });
                     }
                 })
               }
 
-              if (data.status == "In Transit")
+            if (data.status == "In Transit")
                     {
                   await utility.asyncForEach(data.products, async product => {
                   const productQuery = { serialNumber: product };
@@ -541,12 +545,14 @@ exports.createShipment = [
                       'info',
                       '<<<<< ShipmentService < ShipmentController < createShipment : product found status receive',
                     );
-                    await InventoryModel.updateOne(productQuery, {
-                      owner: data.receiver,
-                    });
+                      await InventoryModel.updateOne(productQuery, {
+                      transactionIds: [...productFound.transactionIds, txnId],
+                      });
                     }
                 })
               }
+
+              
 
 
               const emptyShipmentNumber = data.products.find(
