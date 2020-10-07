@@ -724,50 +724,15 @@ exports.addMultipleInventories = [
               try {
 
                 const inventoryMongoResult = await InventoryModel.insertMany(inventoryData);
-                const txnIds = inventoryMongoResult.map(inventory => inventory.transactionIds)
+                const transactionIds = inventoryMongoResult.map(inventory => inventory.transactionIds)
                 apiResponse.successResponseWithData(
                   res,
                   'Created Inventory Success',
-                  txnIds,
+                  transactionIds,
                 );
               }catch(e) {
                 apiResponse.ErrorResponse(res, 'Error in creating inventory Duplicate Serial Number ');
               }
-
-              /*await utility.asyncForEach(inventories, async data => {
-                const userData = {
-                  stream: stream_name,
-                  key: data.serialNumber,
-                  address: address,
-                  data: data,
-                };
-                const response = await axios.post(
-                  `${blockchain_service_url}/publish`,
-                  userData,
-                );
-                if (response.data && response.data.transactionId) {
-                  logger.log(
-                    'info',
-                    '<<<<< InventoryService < InventoryController < addMultipleInventories : publised data to blockchain',
-                  );
-                  const inventory = new InventoryModel({
-                    manufacturingDate: data.manufacturingDate,
-                    expiryDate: data.expiryDate,
-                    serialNumber: data.serialNumber,
-                    owner: address,
-                    transactionId: response.data.transactionId,
-                  });
-                  await inventory.save();
-                  txnIds.push(response.data.transactionId);
-                  apiResponse.successResponseWithData(
-                    res,
-                    'Created Inventory Success',
-                    txnIds,
-                  );
-                } else {
-                  apiResponse.ErrorResponse(res, 'Error in creating inventory');
-                }
-              });*/
             } else {
               res.json('Sorry! User does not have enough Permissions');
             }

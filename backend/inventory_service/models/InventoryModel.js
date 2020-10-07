@@ -6,7 +6,8 @@ const InventorySchema = new mongoose.Schema(
     expiryDate: { type: String },
     serialNumber: { type: String, unique: true },
     owner: { type: String },
-    transactionIds: {type: Array }
+    transactionIds: { type: Array },
+    productName: { type: String },
   },
   { timestamps: true },
 );
