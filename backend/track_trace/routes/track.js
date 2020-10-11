@@ -10,9 +10,7 @@ router.get("/fetchLocation"  , TrackController.fetchLocation);
 router.get("/fetchTemperature" , TrackController.fetchTemperature);
 router.get("/fetchGoodsByID" , TrackController.fetchGoodsByID);
 router.get("/fetchTracking" , TrackController.fetchTracking);
-
 router.get("/fetchTemp", TrackController.fetchTemp);
-
-
+router.get("/track", TrackController.track);
 
 module.exports = router;
