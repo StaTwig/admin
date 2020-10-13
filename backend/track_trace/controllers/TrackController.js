@@ -4,8 +4,25 @@ const { sanitizeBody } = require("express-validator");
 const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
 
+const InventoryModel = require('../models/InventoryModel');
+const ShipmentModel = require('../models/ShipmentModel');
+
+const checkToken = require('../middlewares/middleware').checkToken;
+const checkPermissions = require('../middlewares/rbac_middleware').checkPermissions;
+const axios = require('axios');
+
+const fs = require('fs');
+const stream_name = process.env.SHIP_STREAM;
+const blockchain_service_url = process.env.URL;
+
 const init = require('../logging/init');
 const logger = init.getLog();
+
+
+const UserModel = require('../models/UserModel');
+const utility = require('../helpers/utility');
+const jwt = require('jsonwebtoken');
+const { constants } = require('../helpers/constants');
 
 exports.trackStats = [
   auth,
@@ -265,6 +282,7 @@ exports.track = [
   async (req, res) => {
     try {
       const { trackingNumber } = req.query;
+	    console.log("tr",trackingNumber)
       logger.log(
         'info',
         '<<<<< ShipmentService < ShipmentController < trackNumber : tracking , querying by transaction hash',

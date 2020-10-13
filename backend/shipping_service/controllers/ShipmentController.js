@@ -552,47 +552,8 @@ exports.createShipment = [
                       });
                     }
                 })
+		}
               }
-
-
-              const emptyShipmentNumber = data.products.find(
-                product => product.serialNumber === '',
-              );
-              const emptyBatchNumber = data.products.find(
-                product => product.batchNumber === '',
-              );
-              if (!emptyBatchNumber && !emptyShipmentNumber) {
-                logger.log(
-                  'info',
-                  '<<<<< ShipmentService < ShipmentController < createShipment : Shipment ad batch numbers are not empty',
-                );
-                await utility.asyncForEach(data.products, async product => {
-                  const productQuery = { serialNumber: product.serialNumber };
-                  const productFound = await InventoryModel.findOne(productQuery);
-                  if (productFound) {
-                    logger.log(
-                      'info',
-                      '<<<<< ShipmentService < ShipmentController < createShipment : product found',
-                    );
-                    await InventoryModel.updateOne(productQuery, {
-                      transactionIds: [...productFound.transactionIds, txnId],
-                    });
-                  } else {
-                    logger.log(
-                      'info',
-                      '<<<<< ShipmentService < ShipmentController < createShipment : creating new product',
-                    );
-                    const newProduct = new InventoryModel({
-                      serialNumber: product.serialNumber,
-                      transactionId: [txnId],
-                    });
-                    await newProduct.save();
-                  }
-                });
-              }
-            } else {
-              res.json('Sorry! User does not have enough Permissions');
-            }
           });
         } else {
           logger.log(
