@@ -14,6 +14,7 @@ import NewInventory from '../containers/newinventory';
 import ProductList  from '../containers/productList'
 import trackAndTrace from '../containers/trackAndTrace';
 import Tracing from '../containers/tracing';
+import ProductTracing from '../containers/productTracing';
 import Network from '../containers/network';
 import Profile from '../containers/profile';
 import AdminProfile from '../containers/adminprofile';
@@ -51,6 +52,7 @@ const routes = (
     <Route path="/reviewinventory" component={requireAuth(VerifyInventory)} />
     <Route path="/trackAndTrace" component={requireAuth(trackAndTrace)} />
     <Route path="/tracing/:id" component={requireAuth(Tracing)} />
+    <Route path="/producttracing" component={requireAuth(ProductTracing)} />
     <Route path="/network" component={requireAuth(Network)} />
     <Route component={NoMatch} />
   </Switch>

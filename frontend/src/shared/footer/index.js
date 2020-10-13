@@ -6,7 +6,7 @@ import './style.scss'
 const Footer = () => {
   return (
     <footer>
-      <p>Version 1.2</p>
+      <p>Version 2.0</p>
       <p>Made with care</p>
       <div className="footer-branding">
         <img src={statwigLogo} alt="statwig logo" width="80px"/>

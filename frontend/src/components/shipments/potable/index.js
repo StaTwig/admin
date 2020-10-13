@@ -27,6 +27,7 @@ const PoTable = props => {
 
   const user = useSelector(state => state.user);
   const closeModal = () => setShowModal(false);
+  const closeAlertModal = () => setShowAlertModal(false);
   const openModal = purchase => {
     setPurchaseOrder(purchase);
     setShowModal(true);
@@ -47,6 +48,7 @@ const PoTable = props => {
     }
   };
 
+
   const onLoadMore = async () => {
     const newSkip = skip + 5;
     setSkip(newSkip);
@@ -58,11 +60,16 @@ const PoTable = props => {
   return (
     <div className="table">
       {showAlertModal && (
-        <AlertModal
+         <Modal
+         close={() => closeAlertModal()}
+         size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+       >
+      <AlertModal
           type={alertMessage}
           productID={purchaseOrder.key}
           onHide={() => setShowAlertModal(false)}
         />
+          </Modal>
       )}
       {showModal && (
         <Modal

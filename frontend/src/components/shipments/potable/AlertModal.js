@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './style.scss';
 import Checked from '../../../assets/icons/checked.svg';
-import Cross from '../../../assets/icons/cross.svg';
+import Cross from '../../../assets/icons/cancel.svg';
 
 const AlertModal = props => {
   return (
@@ -14,8 +14,13 @@ const AlertModal = props => {
         )}
         <div className="alert">{props.type}</div>
         <div className="data">
-          Your PurchaseOrder status changed <span className="bold">{props.productID}</span>
+          Your PurchaseOrder <strong>{props.productID}</strong>
         </div>
+       { props.type === 'Success' ? (<div className="data mb-3">
+          status has changed 
+        </div>):(<div className="data mb-3">
+          Was Cancelled 
+        </div>)}
         <button className="btn-primary btn" onClick={props.onHide}>
           OK
         </button>
