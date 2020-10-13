@@ -704,10 +704,18 @@ exports.addMultipleInventories = [
               const { address } = req.user;
               let txnIds = [];
               let chunkUrls = [];
+              const serialNumbers = inventories.map(inventory => {
+                return {serialNumber: inventory.serialNumber.trim()}
+              });
+              const inventoriesFound = await InventoryModel.findOne({ $or: serialNumbers});
+              if(inventoriesFound) {
+                return apiResponse.ErrorResponse(res, 'Duplicate Inventory Found');
+              }
               inventories.forEach(inventory => {
+                inventory.serialNumber = inventory.serialNumber.trim();
                 const userData = {
                   stream: stream_name,
-                  key: inventory.serialNumber,
+                  key: inventory.serialNumber.trim(),
                   address: address,
                   data: inventory,
                 };
@@ -784,20 +792,29 @@ exports.addInventoriesFromExcel = [
               const chunkSize = 50;
               let limit = chunkSize;
               let skip = 0;
-              logger.log('Inserting excel data in chunks');
-              function recursiveFun() {
+
+              logger.log('info', 'Inserting excel data in chunks');
+              async function recursiveFun() {
                 skip = chunkSize * count;
                 count++;
                 limit = chunkSize * count;
-                logger.log('skip', skip);
+                logger.log('info', `skip ${skip}`);
 
-                logger.log('limit', limit);
+                logger.log('info', `limit ${limit}`);
                 const chunkedData = data.slice(skip, limit);
                 let chunkUrls = [];
+                const serialNumbers = chunkedData.map(inventory => {
+                  return {serialNumber: inventory.serialNumber.trim()}
+                });
+                const inventoriesFound = await InventoryModel.findOne({ $or: serialNumbers});
+                if(inventoriesFound) {
+                  return apiResponse.ErrorResponse(res, 'Duplicate Inventory Found');
+                }
                 chunkedData.forEach(inventory => {
+                  inventory.serialNumber = inventory.serialNumber.trim();
                   const userData = {
                     stream: stream_name,
-                    key: inventory.serialNumber,
+                    key: inventory.serialNumber.trim(),
                     address: address,
                     data: inventory,
                   };
@@ -814,16 +831,16 @@ exports.addInventoriesFromExcel = [
                       const inventoryData = responses.map(
                         response => response.data,
                       );
-                      logger.log('Inventory Data length', inventoryData.length);
+                      logger.log('info', `Inventory Data length' ${inventoryData.length}`);
                       logger.log(
-                        'Transaction Id',
-                        inventoryData[0].transactionId,
+                        'info', `Transaction Id,
+                        ${inventoryData[0].transactionId}`,
                       );
                       InventoryModel.insertMany(inventoryData, (err, res) => {
                         if (err) {
-                          logger.log(err.errmsg);
+                          logger.log('error', err.errmsg);
                         } else
-                          logger.log(
+                          logger.log('info',
                             'Number of documents inserted into mongo: ' +
                               res.length,
                           );
@@ -832,7 +849,7 @@ exports.addInventoriesFromExcel = [
                       if (limit < data.length) {
                         recursiveFun();
                       } else {
-                        logger.log(
+                        logger.log('info',
                           `Insertion of excel sheet data is completed. Time Taken to insert ${
                             data.length
                           } in seconds - `,
@@ -848,7 +865,7 @@ exports.addInventoriesFromExcel = [
               recursiveFun();
               return apiResponse.successResponseWithData(res, 'Success', data);
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              return apiResponse.ErrorResponse(res, 'Sorry! User does not have enough Permissions');
             }
           });
         } else {

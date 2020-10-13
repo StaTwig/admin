@@ -30,6 +30,7 @@ export const getShipments = (skip = 0, limit = 5) => {
     return dispatch => {
       dispatch(resetShipments(e.response));
       dispatch(resetShipmentsCount(e.response));
+      dispatch(turnOff());
     };
   }
 };

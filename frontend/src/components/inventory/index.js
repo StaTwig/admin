@@ -61,6 +61,9 @@ const Inventory = props => {
       )
     }
   , [props.inventoriesCount])
+
+
+
   return (
     <div className="inventory">
       <div className="d-flex justify-content-between">
@@ -384,7 +387,7 @@ const Inventory = props => {
       <div className="ribben-space">
         <div className="row no-gutter">
         <div className="col-sm-12 col-xl-9 rTableHeader">
-            <Table data={tableHeaders} {...props} />
+            <Table data={tableHeaders} {...props} loadMore={props.loadMore} onLoadMore={props.onLoadMore} />
           </div>
           <div className="col-sm-12 col-xl-3">
             <div className="list-container">

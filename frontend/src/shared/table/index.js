@@ -3,6 +3,7 @@ import React from 'react';
 import './style.scss';
 
 const Table = props => {
+  const { loadMore, onLoadMore } = props;
   return (
     <div className="table">
       <div className="rTable">
@@ -43,6 +44,11 @@ const Table = props => {
             </div>
           ))}
         </div>
+        {loadMore && (
+          <button className="btn btn-success" onClick={onLoadMore}>
+            Load More
+          </button>
+        )}
       </div>
     </div>
   );
@@ -50,4 +56,3 @@ const Table = props => {
 
 export default Table;
 
-/*   <button type="button" class="btn btn-outline-primary">SHOW MORE</button>*/
