@@ -956,17 +956,13 @@ exports.assignVaccineConsumer = [
   async (req, res) => {
     try {
 
-
-
-//	    checkToken(req, res, async result => {
-  //      if (result.success) {
-    //      logger.log(
-      //      'info',
-        //    '<<<<< InventoryService < InventoryController < getAllInventoryDetails : token verified successfullly, querying data by publisher',
-         // );
-
-
-console.log("1",req.body.vaccine)
+    checkToken(req, res, async result => {
+        if (result.success) {
+          logger.log(
+            'info',
+            '<<<<< InventoryService < InventoryController < getAllInventoryDetails : token verified successfullly, querying data by publisher',
+          );
+		console.log("res",result.data.address)
     var user = new ConsumerModel({
 			shipmentId: req.body.consumer.shipmentId,
 	                name: req.body.consumer.name,
@@ -988,8 +984,7 @@ console.log("1",req.body.vaccine)
                   '<<<<< UserService < AuthController < registerConsumer : Successfully saving Consumer',
                 );
 
-	         //const { address } = req.user;i
-	         let date_ob = new Date();
+	      let date_ob = new Date();
               let date = ('0' + date_ob.getDate()).slice(-2);
               let month = ('0' + (date_ob.getMonth() + 1)).slice(-2);
               let year = date_ob.getFullYear();
@@ -1006,15 +1001,10 @@ console.log("1",req.body.vaccine)
                 `${blockchain_service_url}/publish`,
                 userData1,
               );
-
-    const txnId = response.data.transactionId;
-
-
-	    console.log("tx",txnId) 
+	    const txnId = response.data.transactionId;
 
 	    const productQuery = { serialNumber: req.body.vaccine.serialNumber };
-                  const productFound = await InventoryModel.findOne(productQuery);
-                          console.log("trn",productFound)
+            const productFound = await InventoryModel.findOne(productQuery);
                   if (productFound) {
                     logger.log(
                       'info',
@@ -1024,14 +1014,14 @@ console.log("1",req.body.vaccine)
                       transactionIds: [...productFound.transactionIds, txnId],
                       });
                     }
-
                 return apiResponse.successResponseWithData(
                   res,
                   'Registration Success.',
                   userData,
                 );
-	//}
-//		    });
+	         }
+       });
+
     } catch (err) {
 	    console.log("err")
       logger.log(
