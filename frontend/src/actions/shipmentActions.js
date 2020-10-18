@@ -65,7 +65,7 @@ export const getShipmentsById = query => {
       const shipments = result.data.data.map(shipment =>
         JSON.parse(shipment.data),
       );
-      dispatch(setShipments({ data: shipments }));
+      dispatch(setTracingShipments({ data: shipments }));
     };
   } catch (e) {
     return dispatch => {

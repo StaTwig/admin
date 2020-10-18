@@ -23,22 +23,16 @@ const Header = props => {
     console.log(e.target.value);
     setSearch(e.target.value)
   }
-  function onSeach(){
-    const path = props.match.path;
-    if(search != '' )
-    {
-      if(path === '/overview' || path === '/shipments') {
-        dispatch(getShipmentsById(search))
 
-      }else {
-        dispatch(getInventoriesById(search))
-      }
-
-    }else {
-      dispatch(getShipments());
-      dispatch(getInventories())
-    }
+  const onSeach = () =>{
+    props.history.push(
+      `/tracing/${search}`,
+    );
+  
   }
+
+  /*const data = search;
+    dispatch(getShipmentsById(data)); */
 
   const profile = useSelector(state => {
     return state.user;

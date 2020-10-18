@@ -14,7 +14,7 @@ const PoPopUp = props => {
         )}
         <div className="alert">{props.type}</div>
         <div className="data">
-          Your PurchaseOrder <span className="bold">{props.productID}</span>
+          Your PurchaseOrder <span className="bold">{props.productId}</span>
         </div>
         <div className="data mb-4">{props.message}</div>
         <button className="btn-primary btn" onClick={props.onHide}>

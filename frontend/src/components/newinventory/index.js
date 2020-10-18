@@ -4,7 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import './style.scss';
 import Modal from '../../shared/modal';
 import InventoryPopUp from './inventorypopup';
+import ExcelPopUp from './excelpopup';
 import FailurePopUp from './failurepopup';
+import uploadBlue from '../../assets/icons/UploadWhite.svg';
+import ExportIcon from '../../assets/icons/Export.svg';
+import dropdownIcon from '../../assets/icons/drop-down.svg';
+
 import {
   addMultipleInventories,
   setReviewinventories,
@@ -36,7 +41,9 @@ const NewInventory = props => {
   const [products, setProducts] = useState([]);
   const [manufacturers, setManufacturers] = useState([]);
   const [quantity, setQuantity] = useState('');
-  const [excel, setExcel] = useState('');
+  
+  const[menu,setMenu] = useState(false);
+  const[openExcel,setOpenExcel]= useState(false);
   const blankInventory = {
     productName: 'Select Product',
     manufacturerName: 'Select Manufacturer',
@@ -55,6 +62,9 @@ const NewInventory = props => {
   };
   const closeModal = () => {
     setOpenCreatedInventory(false);
+  };
+  const closeExcelModal = () => {
+    setOpenExcel(false);
   };
 
   const closeModalFail = () => {
@@ -174,43 +184,54 @@ const NewInventory = props => {
     setInventoryState(updatedInventoryState);
   };
 
-  const setExcelFile = evt => {
-    setExcel(evt.target.files[0]);
-  };
-
-  const uploadExcel = async () => {
-    let formData = new FormData();
-    formData.append('excel', excel);
-    dispatch(turnOn());
-    const result = await addInventoriesFromExcel(formData);
-    if(result.status === 200) {
-      console.log('success add product');
-      setOpenCreatedInventory(true);
-    }
-    dispatch(turnOff());
-  }
   return (
     <div className="Newinventory">
+      <div className="d-flex justify-content-between mb-5">
       <h1 className="breadcrumb">ADD INVENTORY</h1>
+        <div className="d-flex flex-column align-items-center">
+         <button className="btn-primary btn" onClick = {()=>setMenu(!menu)}>
+            <div className="d-flex  align-items-center">
+              <img src={ExportIcon} width="16" height="16" className="mr-3" />
+              <span>Import</span>
+              <img src={dropdownIcon} width="16" height="16" className="ml-3" />
+            </div>
+          </button>
+          {
+          menu ? 
+          <div class="menu">
+         <button className=" btn btn-outline-primary mb-2" onClick={()=>setOpenExcel(true)}> Excel</button>
+         <button className=" btn btn-outline-primary"> Other</button>
+       </div> : null
+       }
+       {openExcel && (
+        <Modal
+           title="Import"
+          close={() => closeExcelModal()}
+          size="modal-md" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+          <ExcelPopUp
+            onHide={closeExcelModal} //FailurePopUp
+            setOpenCreatedInventory={setOpenCreatedInventory}
+          />
+        </Modal>
+      )}
+          </div>
+         
+          </div>
       <EditTable
         {...editTableProps}
         inventories={inventoryState}
         handleInventoryChange={handleInventoryChange}
       />
 
+     <div className="d-flex justify-content-between">
       <button
         className="btn btn-white shadow-radius font-bold"
         onClick={onAddAnotherProduct}
       >
         +<span> Add Another Product</span>
       </button>
-      <label class="btn btn-primary"> <span>Import from Excel</span> <input type='file'  class="select" onChange={setExcelFile}/> </label>
-      <button
-        className="btn btn-white shadow-radius font-bold"
-        onClick={uploadExcel}
-      >
-        +<span> Upload Excel </span>
-      </button>
+      </div>
       <hr />
       <div className="d-flex justify-content-between">
         <div className="total">Grand Total</div>
@@ -253,3 +274,14 @@ export default NewInventory;
           {' '}
           Add Inventory
         </button>*/
+
+
+        /* <div className="d-flex flex-column">
+      <div className="text-primary font-weight-bold">Import Inventory from Excel </div><input type='file'  class="select" onChange={setExcelFile}/> 
+      <button
+        className="btn-primary btn  w-50 mt-2"
+        onClick={uploadExcel}
+      >
+       <img src={uploadBlue} width="14" height="14" className="mr-2" /> <span>Upload</span>  
+      </button>
+      </div>*/
