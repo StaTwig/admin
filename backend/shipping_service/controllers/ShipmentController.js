@@ -519,7 +519,6 @@ exports.createShipment = [
                   await utility.asyncForEach(data.products, async product => {
                   const productQuery = { serialNumber: product};
                   const productFound = await InventoryModel.findOne(productQuery);
-			  console.log("rec",productFound,data.receiver)
                   if (productFound) {
                     logger.log(
                       'info',
@@ -541,7 +540,6 @@ exports.createShipment = [
                   await utility.asyncForEach(data.products, async product => {
                   const productQuery = { serialNumber: product };
                   const productFound = await InventoryModel.findOne(productQuery);
-			  console.log("trn",productFound)
                   if (productFound) {
                     logger.log(
                       'info',
