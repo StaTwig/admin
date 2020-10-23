@@ -304,7 +304,7 @@ exports.track = [
           'info',
           '<<<<< ShipmentService < ShipmentController < trackProduct : tracked product, queried data by transaction hash',
         );
-        res.json({ data: items_array });
+        res.json({ data: JSON.parse(items_array) });
       });
     }
        else
@@ -323,7 +323,7 @@ exports.track = [
           'info',
           '<<<<< ShipmentService < ShipmentController < trackShipment : tracked shipment, queried data by transaction hash',
         );
-        res.json({ data: items_array });
+        res.json({ data: JSON.parse(items_array) });
       });
             }
     } catch (err) {
