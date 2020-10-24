@@ -951,7 +951,7 @@ exports.getAllUsers = [
   },
 ];
 
-exports.assignVaccineConsumer = [
+exports.assignProductConsumer = [
 
   async (req, res) => {
     try {
