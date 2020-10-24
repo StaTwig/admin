@@ -550,49 +550,8 @@ exports.createShipment = [
                       });
                     }
                 })
+		}
               }
-
-              
-
-
-              const emptyShipmentNumber = data.products.find(
-                product => product.serialNumber === '',
-              );
-              const emptyBatchNumber = data.products.find(
-                product => product.batchNumber === '',
-              );
-              if (!emptyBatchNumber && !emptyShipmentNumber) {
-                logger.log(
-                  'info',
-                  '<<<<< ShipmentService < ShipmentController < createShipment : Shipment ad batch numbers are not empty',
-                );
-                await utility.asyncForEach(data.products, async product => {
-                  const productQuery = { serialNumber: product.serialNumber };
-                  const productFound = await InventoryModel.findOne(productQuery);
-                  if (productFound) {
-                    logger.log(
-                      'info',
-                      '<<<<< ShipmentService < ShipmentController < createShipment : product found',
-                    );
-                    await InventoryModel.updateOne(productQuery, {
-                      transactionIds: [...productFound.transactionIds, txnId],
-                    });
-                  } else {
-                    logger.log(
-                      'info',
-                      '<<<<< ShipmentService < ShipmentController < createShipment : creating new product',
-                    );
-                    const newProduct = new InventoryModel({
-                      serialNumber: product.serialNumber,
-                      transactionId: [txnId],
-                    });
-                    await newProduct.save();
-                  }
-                });
-              }
-            } else {
-              res.json('Sorry! User does not have enough Permissions');
-            }
           });
         } else {
           logger.log(
@@ -1213,41 +1172,6 @@ exports.trackShipment = [
       logger.log(
         'error',
         '<<<<< ShipmentService < ShipmentController < trackShipment : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-
-exports.trackProduct = [
-  auth,
-  async (req, res) => {
-    try {
-      const { serialNumber } = req.query;
-      logger.log(
-        'info',
-        '<<<<< ShipmentService < ShipmentController < trackProduct : tracking product, querying by transaction hash',
-      );
-      InventoryModel.findOne({ serialNumber: serialNumber }).then(async user => {
-        let txnIDs = user.transactionIds;
-        let items_array = [];
-        await utility.asyncForEach(txnIDs, async txnId => {
-          const response = await axios.get(
-              `${blockchain_service_url}/queryDataByRawTxHash?txid=${txnId}`,
-          );
-          const items = response.data.items;
-          items_array.push(items);
-        });
-        logger.log(
-          'info',
-          '<<<<< ShipmentService < ShipmentController < trackProduct : tracked product, queried data by transaction hash',
-        );
-        res.json({ data: items_array });
-      });
-    } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< ShipmentService < ShipmentController < trackProduct : error (catch block)',
       );
       return apiResponse.ErrorResponse(res, err);
     }

@@ -1,4 +1,6 @@
 const UserModel = require('../models/UserModel');
+const ConsumerModel = require('../models/ConsumerModel');
+const InventoryModel = require('../models/InventoryModel');
 const { body, validationResult } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
 //helper file to prepare responses.
@@ -13,7 +15,9 @@ const auth = require('../middlewares/jwt');
 const axios = require('axios');
 const dotenv = require('dotenv').config();
 const blockchain_service_url = process.env.URL;
+const stream_name = process.env.INV_STREAM;
 
+const checkToken = require('../middlewares/middleware').checkToken;
 const init = require('../logging/init');
 const logger = init.getLog();
 const EmailContent = require('../components/EmailContent');
@@ -946,3 +950,86 @@ exports.getAllUsers = [
     }
   },
 ];
+
+exports.assignProductConsumer = [
+
+  async (req, res) => {
+    try {
+
+    checkToken(req, res, async result => {
+        if (result.success) {
+          logger.log(
+            'info',
+            '<<<<< InventoryService < InventoryController < getAllInventoryDetails : token verified successfullly, querying data by publisher',
+          );
+		console.log("res",result.data.address)
+    var user = new ConsumerModel({
+			shipmentId: req.body.consumer.shipmentId,
+	                name: req.body.consumer.name,
+			gender: req.body.consumer.gender,
+			age: req.body.consumer.age,
+            	        aadhar: req.body.consumer.aadhar,
+	       	        vaccineId : req.body.vaccine.serialNumber,
+	          });
+              
+	      await user.save()
+              let userData = {
+                  _id: user._id,
+                  Name: user.name,
+                  Aadhar: user.aadhar,
+				  ShipmentId: user.ShipmentId,
+                };
+                logger.log(
+                  'info',
+                  '<<<<< UserService < AuthController < registerConsumer : Successfully saving Consumer',
+                );
+
+	      let date_ob = new Date();
+              let date = ('0' + date_ob.getDate()).slice(-2);
+              let month = ('0' + (date_ob.getMonth() + 1)).slice(-2);
+              let year = date_ob.getFullYear();
+              var today = date + '-' + month + '-' + year;
+
+	        const userData1 = {
+                stream: stream_name,
+                key: req.body.vaccine.serialNumber,
+                address: "1bCBUXox5GXGAiTxGgNbmhETUaHMJZVLwctveT",
+                data: {...req.body,...{"consumedStatus":"Y","consumedDate":today}}
+              };
+	      console.log("userData",userData1) 
+	        const response = await axios.post(
+                `${blockchain_service_url}/publish`,
+                userData1,
+              );
+	    const txnId = response.data.transactionId;
+
+	    const productQuery = { serialNumber: req.body.vaccine.serialNumber };
+            const productFound = await InventoryModel.findOne(productQuery);
+                  if (productFound) {
+                    logger.log(
+                      'info',
+                      '<<<<< ShipmentService < ShipmentController < createShipment : product found status receive',
+                    );
+                      await InventoryModel.updateOne(productQuery, {
+                      transactionIds: [...productFound.transactionIds, txnId],
+                      });
+                    }
+                return apiResponse.successResponseWithData(
+                  res,
+                  'Registration Success.',
+                  userData,
+                );
+	         }
+       });
+
+    } catch (err) {
+	    console.log("err")
+      logger.log(
+        'error',
+        '<<<<< UserService < AuthController < registerConsumer : Error in catch block',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
