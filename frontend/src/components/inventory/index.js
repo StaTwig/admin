@@ -157,7 +157,7 @@ const Inventory = props => {
               <img src={currentinventory} alt="truck" />
             </div>
             <div className="d-flex flex-column">
-              <div className="title sent-text">Current Inventory</div>
+              <div className="title sent-text">Cold Chain Failure</div>
               <div className="tab-container">
                 <div
                   className="tab-item active"
