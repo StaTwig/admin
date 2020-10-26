@@ -288,7 +288,7 @@ exports.track = [
         '<<<<< ShipmentService < ShipmentController < trackNumber : tracking , querying by transaction hash',
       );
 
-      if (trackingNumber.includes("0000"))
+      if (trackingNumber.includes("000"))
             {
         var type = "serialNumber";
         InventoryModel.findOne({ serialNumber: trackingNumber }).then(async user => {
