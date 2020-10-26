@@ -290,6 +290,7 @@ exports.track = [
 
       if (trackingNumber.includes("0000"))
             {
+        var type = "serialNumber";
         InventoryModel.findOne({ serialNumber: trackingNumber }).then(async user => {
         let txnIDs = user.transactionIds;
         let items_array = [];
@@ -304,11 +305,12 @@ exports.track = [
           'info',
           '<<<<< ShipmentService < ShipmentController < trackProduct : tracked product, queried data by transaction hash',
         );
-        res.json({ data:items_array});
+        res.json({ data:items_array,type:type});
       });
     }
        else
             {
+        var type = "shipmentId";
         ShipmentModel.findOne({ shipmentId: trackingNumber }).then(async user => {
         let txnIDs = user.txnIds;
         let items_array = [];
@@ -323,7 +325,7 @@ exports.track = [
           'info',
           '<<<<< ShipmentService < ShipmentController < trackShipment : tracked shipment, queried data by transaction hash',
         );
-        res.json({ data:items_array});
+        res.json({ data:items_array,type:type});
       });
             }
     } catch (err) {
