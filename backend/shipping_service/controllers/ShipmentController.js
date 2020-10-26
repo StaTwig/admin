@@ -382,7 +382,7 @@ exports.createShipment = [
               const userData = {
                 stream: stream_name,
                 key: shipmentId,
-                address: req.query.address ? req.query.address : address,
+                address: req.query.address || address,
                 data: data,
               };
 
@@ -474,9 +474,15 @@ exports.createShipment = [
                   'info',
                   '<<<<< ShipmentService < ShipmentController < createShipment : shipment found in collection',
                 );
+                const estimatedDeliveryDateArray = data.estimateDeliveryDate.split('/');
+                const estimatedDeliveryDate = new Date(estimatedDeliveryDateArray[2], parseInt(estimatedDeliveryDateArray[1])-1, estimatedDeliveryDateArray[0]);
                 const newShipment = new ShipmentModel({
                   shipmentId,
                   txnIds: [txnId],
+                  receiver:receiver_address,
+                  sender:address,
+                  status: data.status,
+                  estimatedDeliveryDate:estimatedDeliveryDate.toISOString()
                 });
                 await newShipment.save();
               } else {
@@ -485,7 +491,7 @@ exports.createShipment = [
                   '<<<<< ShipmentService < ShipmentController < createShipment : updating shipment in shipment model',
                 );
                 const txnIds = [...shipmentFound.txnIds, txnId];
-                await ShipmentModel.updateOne({ shipmentId }, { txnIds });
+                await ShipmentModel.updateOne({ shipmentId }, { txnIds, status: data.status });
               }
               //Organisation Collection
               if (!organisationFound) {
@@ -1178,100 +1184,6 @@ exports.trackShipment = [
   },
 ];
 
-let counts_array = [];
-var today = 0,
-  week = 0,
-  month = 0,
-  year = 0;
-var today_delay = 0,
-  week_delay = 0,
-  month_delay = 0,
-  year_delay = 0;
-var today_total = 0,
-  week_total = 0,
-  month_total = 0,
-  year_total = 0;
-var total = 0,
-  transit = 0,
-  shipped = 0,
-  received = 0;
-var tt = 0,
-  wt = 0,
-  mt = 0,
-  yt = 0;
-var ts = 0,
-  ws = 0,
-  ms = 0,
-  ys = 0;
-var tr = 0,
-  wr = 0,
-  mr = 0,
-  yr = 0;
-var delayed = 0;
-
-function getDateDiff(dateOne, dateTwo, dateThree) {
-  (today = 0), (week = 0), (month = 0), (year = 0);
-  if (
-    (dateOne.charAt(2) == '-' || dateOne.charAt(1) == '-') &
-    (dateTwo.charAt(2) == '-' || dateTwo.charAt(1) == '-') &
-    (dateThree.charAt(2) == '-' || dateThree.charAt(1) == '-')
-  ) {
-    dateOne = new Date(formatDate(dateOne));
-    dateTwo = new Date(formatDate(dateTwo));
-    dateThree = new Date(formatDate(dateThree));
-  } else {
-    dateOne = new Date(dateOne);
-    dateTwo = new Date(dateTwo);
-    dateThree = new Date(dateThree);
-  }
-
-  let timeDiff = Math.abs(dateOne.getTime() - dateTwo.getTime());
-  let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-  let timeDiff_delay = 0;
-  let diffDays_delay = 0;
-
-  switch (true) {
-    case diffDays == 0:
-      today++;
-    case diffDays >= 0 && diffDays <= 7:
-      week++;
-    case diffDays >= 0 && diffDays <= 30:
-      month++;
-    case diffDays >= 0 && diffDays <= 365:
-      year++;
-  }
-
-  if (dateOne > dateThree) {
-    timeDiff_delay = Math.abs(dateOne.getTime() - dateThree.getTime());
-    diffDays_delay = Math.ceil(timeDiff_delay / (1000 * 3600 * 24));
-    delayed++;
-    switch (true) {
-      case diffDays_delay == 0:
-        today_delay++;
-      case diffDays_delay >= 0 && diffDays_delay <= 7:
-        week_delay++;
-      case diffDays_delay >= 0 && diffDays_delay <= 30:
-        month_delay++;
-      case diffDays_delay >= 0 && diffDays_delay <= 365:
-        year_delay++;
-    }
-  }
-  return {
-    today,
-    week,
-    month,
-    year,
-  };
-}
-
-function formatDate(date) {
-  return date
-    .split('-')
-    .reverse()
-    .join('-');
-}
-
 exports.fetchUserShipments = [
   auth,
   async (req, res) => {
@@ -1279,14 +1191,27 @@ exports.fetchUserShipments = [
       const { user } = req;
       const { skip, limit } = req.query;
       const userObject = await UserModel.findOne({ address: user.address });
-
-      (transit = 0), (shipped = 0), (received = 0), (delayed = 0);
-      (today_total = 0), (week_total = 0), (month_total = 0), (year_total = 0);
-      (today_delay = 0), (week_delay = 0), (month_delay = 0), (year_delay = 0);
-      (tt = 0), (wt = 0), (mt = 0), (yt = 0);
-      (ts = 0), (ws = 0), (ms = 0), (ys = 0);
-      (tr = 0), (wr = 0), (mr = 0), (yr = 0);
-
+      let totalSent = 0;
+      let thisYearSent = 0;
+      let thisMonthSent = 0;
+      let thisWeekSent = 0;
+      let todaySent = 0;
+      let totalReceived = 0;
+      let thisYearReceived = 0;
+      let thisMonthReceived = 0;
+      let thisWeekReceived = 0;
+      let todayReceived = 0;
+      let totalTransit = 0;
+      let thisYearTransit = 0;
+      let thisMonthTransit = 0;
+      let thisWeekTransit = 0;
+      let todayTransit = 0;
+      let totalDelayed = 0;
+      let thisYearDelayed = 0;
+      let thisMonthDelayed = 0;
+      let thisWeekDelayed = 0;
+      let todayDelayed = 0;
+      let items_array = [];
       if (userObject.role !== 'Warehouse') {
         logger.log(
           'info',
@@ -1295,7 +1220,7 @@ exports.fetchUserShipments = [
         const destinationUser = await UserTransactionModel.findOne({
           destinationUser: user.address,
         });
-        let items_array = [];
+
         let shipmentIds = [];
         if (destinationUser) {
           logger.log(
@@ -1323,119 +1248,10 @@ exports.fetchUserShipments = [
           itemsObject.txnId = txnId;
           items_array.push(itemsObject);
         });
-        total = items_array.length;
-        for (i = 0; i < items_array.length; i++) {
-          var myDate = new Date(items_array[i].shipmentDate);
-          var m = myDate.getMonth();
-          m += 1;
-          var shipdate =
-            myDate.getDate() + '-' + m + '-' + myDate.getFullYear();
-
-          var myEstDate = new Date(items_array[i].estimateDeliveryDate);
-          var m1 = myEstDate.getMonth();
-          m1 += 1;
-          var deliverydate =
-            myEstDate.getDate() + '-' + m1 + '-' + myEstDate.getFullYear();
-
-          let date_ob = new Date();
-          let date = ('0' + date_ob.getDate()).slice(-2);
-          let month = ('0' + (date_ob.getMonth() + 1)).slice(-2);
-          let year = date_ob.getFullYear();
-          var today = date + '-' + month + '-' + year;
-          var status = items_array[i].status;
-          var s = getDateDiff(today, shipdate, deliverydate);
-          if (status == 'In Transit') {
-            transit++;
-            if (!deliverydate.includes('NaN')) {
-              var s = getDateDiff(today, shipdate, deliverydate);
-            }
-            tt += s.today;
-            wt += s.week;
-            mt += s.month;
-            yt += s.year;
-          } else if (status == 'Shipped') {
-            shipped++;
-            if (!deliverydate.includes('NaN')) {
-              var s = getDateDiff(today, shipdate, deliverydate);
-            }
-            ts += s.today;
-            ws += s.week;
-            ms += s.month;
-            ys += s.year;
-          } else if (status == 'Received') {
-            received++;
-            if (!deliverydate.includes('NaN')) {
-              var s = getDateDiff(today, shipdate, deliverydate);
-            }
-            tr += s.today;
-            wr += s.week;
-            mr += s.month;
-            yr += s.year;
-          }
-        }
-        today_total = tr + ts + tr;
-        week_total = wt + ws + wr;
-        month_total = mt + ms + mr;
-        year_total = yt + ys + yr;
-
-        counts_array.push(
-          {
-            total: total,
-          },
-          {
-            transit: transit,
-          },
-          {
-            shipped: shipped,
-          },
-          {
-            received: received,
-          },
-        );
         logger.log(
           'info',
           '<<<<< ShipmentService < ShipmentController < fetchUserShipments : pushed total, transit, shipped and received',
         );
-        res.json({
-          data: items_array,
-          counts: {
-            totalShipments: {
-              total: total,
-              thisYear: year_total,
-              thisMonth: month_total,
-              thisWeek: week_total,
-              today: today_total,
-            },
-            totalShipmentsSent: {
-              total: shipped,
-              thisYear: ys,
-              thisMonth: ms,
-              thisWeek: ws,
-              today: ts,
-            },
-            totalShipmentsReceived: {
-              total: received,
-              thisYear: yr,
-              thisMonth: mr,
-              thisWeek: wr,
-              today: tr,
-            },
-            currentShipments: {
-              total: transit,
-              thisYear: yt,
-              thisMonth: mt,
-              thisWeek: wt,
-              today: tt,
-            },
-            shipmentsDelayed: {
-              total: delayed,
-              thisYear: year_delay,
-              thisMonth: month_delay,
-              thisWeek: week_delay,
-              today: today_delay,
-            },
-          },
-        });
       } else {
         logger.log(
           'info',
@@ -1444,7 +1260,6 @@ exports.fetchUserShipments = [
         OrganisationModel.findOne({
           organisationId: userObject.organisation,
         }).then(async user => {
-          let items_array = [];
           if (user) {
             logger.log(
               'info',
@@ -1466,122 +1281,73 @@ exports.fetchUserShipments = [
               items_array.push(itemsObject);
             });
           }
-          total = items_array.length;
-          for (i = 0; i < items_array.length; i++) {
-            var myDate = new Date(items_array[i].shipmentDate);
-            var m = myDate.getMonth();
-            m += 1;
-            var shipdate =
-              myDate.getDate() + '-' + m + '-' + myDate.getFullYear();
 
-            var myEstDate = new Date(items_array[i].estimateDeliveryDate);
-            var m1 = myEstDate.getMonth();
-            m1 += 1;
-            var deliverydate =
-              myEstDate.getDate() + '-' + m1 + '-' + myEstDate.getFullYear();
-
-            let date_ob = new Date();
-            let date = ('0' + date_ob.getDate()).slice(-2);
-            let month = ('0' + (date_ob.getMonth() + 1)).slice(-2);
-            let year = date_ob.getFullYear();
-            var today = date + '-' + month + '-' + year;
-
-            var status = items_array[i].status;
-            if (status == 'In Transit') {
-              transit++;
-              if (!deliverydate.includes('NaN')) {
-                var s = getDateDiff(today, shipdate, deliverydate);
-              }
-              tt += s.today;
-              wt += s.week;
-              mt += s.month;
-              yt += s.year;
-            } else if (status == 'Shipped') {
-              shipped++;
-              if (!deliverydate.includes('NaN')) {
-                var s = getDateDiff(today, shipdate, deliverydate);
-              }
-              ts += s.today;
-              ws += s.week;
-              ms += s.month;
-              ys += s.year;
-            } else if (status == 'Received') {
-              received++;
-              if (!deliverydate.includes('NaN')) {
-                var s = getDateDiff(today, shipdate, deliverydate);
-              }
-              tr += s.today;
-              wr += s.week;
-              mr += s.month;
-              yr += s.year;
-            }
-          }
-          today_total = tr + ts + tr;
-          week_total = wt + ws + wr;
-          month_total = mt + ms + mr;
-          year_total = yt + ys + yr;
-          console.log('trans', transit, tt, mt, wt, yt);
-
-          counts_array.push(
-            {
-              total: total,
-            },
-            {
-              transit: transit,
-            },
-            {
-              shipped: shipped,
-            },
-            {
-              received: received,
-            },
-          );
           logger.log(
             'info',
             '<<<<< ShipmentService < ShipmentController < fetchUserShipments : pushed total, transit, shipped and received',
           );
-          res.json({
-            data: items_array,
-            counts: {
-              totalShipments: {
-                total: total,
-                thisYear: year_total,
-                thisMonth: month_total,
-                thisWeek: week_total,
-                today: today_total,
-              },
-              totalShipmentsSent: {
-                total: shipped,
-                thisYear: ys,
-                thisMonth: ms,
-                thisWeek: ws,
-                today: ts,
-              },
-              totalShipmentsReceived: {
-                total: received,
-                thisYear: yr,
-                thisMonth: mr,
-                thisWeek: wr,
-                today: tr,
-              },
-              currentShipments: {
-                total: transit,
-                thisYear: yt,
-                thisMonth: mt,
-                thisWeek: wt,
-                today: tt,
-              },
-              shipmentsDelayed: {
-                total: delayed,
-                thisYear: year_delay,
-                thisMonth: month_delay,
-                thisWeek: week_delay,
-                today: today_delay,
-              },
-            },
-          });
         });
       }
+
+      const thisYear = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
+      const thisMonth = new Date(new Date().setMonth(new Date().getMonth() - 1));
+      const thisWeek = new Date(new Date().setDate(new Date().getDate() - 7));
+      const today = new Date(new Date().setHours(0,0,0,0));
+      totalSent = await ShipmentModel.find({ sender: user.address, status: "Shipped" }).count();
+      thisYearSent = await ShipmentModel.find({ sender: user.address, status: "Shipped", "createdAt" : { $gte : thisYear.toISOString() } }).count();
+      thisMonthSent = await ShipmentModel.find({ sender: user.address, status: "Shipped", "createdAt" : { $gte : thisMonth.toISOString() } }).count();
+      thisWeekSent = await ShipmentModel.find({ sender: user.address, status: "Shipped", "createdAt" : { $gte : thisWeek.toISOString() } }).count();
+      todaySent = await ShipmentModel.find({ sender: user.address, status: "Shipped", "createdAt" : { $gte : today.toISOString()} }).count();
+      totalReceived = await ShipmentModel.find({ sender: user.address, status: "Received" }).count();
+      thisYearReceived = await ShipmentModel.find({ sender: user.address, status: "Received", "createdAt" : { $gte : thisYear.toISOString() } }).count();
+      thisMonthReceived = await ShipmentModel.find({ sender: user.address, status: "Received", "createdAt" : { $gte : thisMonth.toISOString() } }).count();
+      thisWeekReceived = await ShipmentModel.find({ sender: user.address, status: "Received", "createdAt" : { $gte : thisWeek.toISOString() } }).count();
+      todayReceived = await ShipmentModel.find({ sender: user.address, status: "Received", "createdAt" : { $gte : today.toISOString()} }).count();
+      totalTransit = await ShipmentModel.find({ sender: user.address, status: "In Transit" }).count();
+      thisYearTransit = await ShipmentModel.find({ sender: user.address, status: "In Transit", "createdAt" : { $gte : thisYear.toISOString() } }).count();
+      thisMonthTransit = await ShipmentModel.find({ sender: user.address, status: "In Transit", "createdAt" : { $gte : thisMonth.toISOString() } }).count();
+      thisWeekTransit = await ShipmentModel.find({ sender: user.address, status: "In Transit", "createdAt" : { $gte : thisWeek.toISOString() } }).count();
+      todayTransit = await ShipmentModel.find({ sender: user.address, status: "In Transit", "createdAt" : { $gte : today.toISOString()} }).count();
+      res.json({
+        data: items_array,
+        counts: {
+          totalShipments:{
+            total: totalSent,
+            thisYear: thisYearSent,
+            thisMonth: thisMonthSent,
+            thisWeek: thisWeekSent,
+            today: todaySent,
+          },
+          totalShipmentsSent: {
+            total: totalSent,
+            thisYear: thisYearSent,
+            thisMonth: thisMonthSent,
+            thisWeek: thisWeekSent,
+            today: todaySent,
+          },
+          totalShipmentsReceived: {
+            total: totalReceived,
+            thisYear: thisYearReceived,
+            thisMonth: thisMonthReceived,
+            thisWeek: thisWeekReceived,
+            today: todayReceived,
+          },
+          currentShipments: {
+            total: totalTransit,
+            thisYear: thisYearTransit,
+            thisMonth: thisMonthTransit,
+            thisWeek: thisWeekTransit,
+            today: todayTransit,
+          },
+          shipmentsDelayed: {
+            total: totalDelayed,
+            thisYear: thisYearDelayed,
+            thisMonth: thisMonthDelayed,
+            thisWeek: thisWeekDelayed,
+            today: todayDelayed,
+          },
+        },
+      });
     } catch (err) {
       logger.log(
         'error',
@@ -1589,7 +1355,7 @@ exports.fetchUserShipments = [
       );
       return apiResponse.ErrorResponse(res, err);
     }
-  },
+  }
 ];
 
 var QRCode = require('qrcode');
