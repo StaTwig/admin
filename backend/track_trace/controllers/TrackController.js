@@ -288,8 +288,9 @@ exports.track = [
         '<<<<< ShipmentService < ShipmentController < trackNumber : tracking , querying by transaction hash',
       );
 
-      if (trackingNumber.includes("0000"))
+      if (trackingNumber.includes("000"))
             {
+        var type = "serialNumber";
         InventoryModel.findOne({ serialNumber: trackingNumber }).then(async user => {
         let txnIDs = user.transactionIds;
         let items_array = [];
@@ -298,17 +299,18 @@ exports.track = [
               `${blockchain_service_url}/queryDataByRawTxHash?txid=${txnId}`,
           );
           const items = response.data.items;
-          items_array.push(items);
+          items_array.push(JSON.parse(items));
         });
         logger.log(
           'info',
           '<<<<< ShipmentService < ShipmentController < trackProduct : tracked product, queried data by transaction hash',
         );
-        res.json({ data: JSON.parse(items_array) });
+        res.json({ data:items_array,type:type});
       });
     }
        else
             {
+        var type = "shipmentId";
         ShipmentModel.findOne({ shipmentId: trackingNumber }).then(async user => {
         let txnIDs = user.txnIds;
         let items_array = [];
@@ -317,13 +319,13 @@ exports.track = [
             `${blockchain_service_url}/queryDataByTxHash?stream=${stream_name}&txid=${txnId}`,
           );
           const items = response.data.items;
-          items_array.push(items);
+          items_array.push(JSON.parse(items));
         });
         logger.log(
           'info',
           '<<<<< ShipmentService < ShipmentController < trackShipment : tracked shipment, queried data by transaction hash',
         );
-        res.json({ data: JSON.parse(items_array) });
+        res.json({ data:items_array,type:type});
       });
             }
     } catch (err) {
