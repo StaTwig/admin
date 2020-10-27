@@ -5,6 +5,10 @@
   padding-left: 3rem;
   padding-right: 3rem;
 
+  .date-alignment{
+    text-align: right;
+  }
+
   .form-group,
   .input-group {
     display: flex;
@@ -28,6 +32,7 @@
       flex-grow: inherit;
      
     }
+
 
     .custom-dropdown .btn-custom-dropdown{
       font-size:16px;
