@@ -482,6 +482,8 @@ exports.getAllInventoryDetails = [
                 'info',
                 '<<<<< InventoryService < InventoryController < getAllInventoryDetails : queried and pushed data',
               );
+
+              total_inv = await InventoryModel.find({owner: address}).count();
               res.json({
                 data: items,
                 dict,
@@ -808,7 +810,8 @@ exports.addInventoriesFromExcel = [
                 });
                 const inventoriesFound = await InventoryModel.findOne({ $or: serialNumbers});
                 if(inventoriesFound) {
-                  return apiResponse.ErrorResponse(res, 'Duplicate Inventory Found');
+                  console.log('Duplicate Inventory Found');
+                  return;
                 }
                 chunkedData.forEach(inventory => {
                   inventory.serialNumber = inventory.serialNumber.trim();
