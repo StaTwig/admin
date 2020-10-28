@@ -105,12 +105,12 @@ const AddProduct = props => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="shipmentId">Product sub-Category</label>
+                <label htmlFor="shipmentId">Product Sub-Category</label>
                 <input
                   type="text"
                   className="form-control"
                   name="productsubcategory"
-                  placeholder="Enter Product Sub-category"
+                  placeholder="Enter Sub-Category"
                   onChange={e => setSubCategory(e.target.value)}
                   value={subCategory}
                 />
@@ -121,7 +121,7 @@ const AddProduct = props => {
                   type="text"
                   className="form-control"
                   name="StorageConditions"
-                  placeholder="Enter StorageConditions"
+                  placeholder="Enter Storage Conditions"
                   onChange={e => setStorageConditions(e.target.value)}
                   value={storageConditions}
                 />
