@@ -16,16 +16,19 @@ const PurchaseForm = props => {
 
   const userNames = users.map(usr => usr.name);
   const [deliveryTo, setDeliveryTo] = useState(editPo.receiver.name);
+  const [sendPOTo, setSendPOTo] = useState(editPo.sendPOTo);
   const [products, setProducts] = useState([]);
   const [manufacturers, setManufacturers] = useState([]);
   const [product, setProduct] = useState(Object.keys(editPo.products[0])[0].split('-')[0]);
   const [manufacturer, setManufacturer] = useState(Object.keys(editPo.products[0])[0].split('-')[1]);
   const [quantity, setQuantity] = useState(editPo.products[0][`${product}-${manufacturer}`]);
   const [destination, setDestination] = useState(editPo.destination);
+  const [client, setClient] = useState(editPo.client);
   const [message, setMessage] = useState('');
   const month = new Date().getMonth()+1;
   const todayDate = new Date().getDate() + '/' + month + '/'  +new Date().getFullYear();
   const [deliverytoError, setdeliverytoError ] = useState('');
+  const [sendPOToError, setSendPOToError ] = useState('');
   const [destinationError, setdestinationError] = useState('');
   const [quantityError, setquantityError] = useState('');
   const [productError, setproductError] = useState('');
@@ -50,7 +53,13 @@ if (deliveryTo.length<1||deliveryTo === 'Select Receiver'){
       setdeliverytoError("DeliveryTo must be specified")
       setTimeout(() => {setdeliverytoError('')} , 2000)
     } 
-   
+
+    else if (sendPOTo.length<1||sendPOTo === 'Select'){
+      setSendPOToError("Send PO To must be specified")
+      setTimeout(() => {setSendPOToError('')} , 2000)
+    } 
+
+    
     else if(destination.length<1)
     {
       setdestinationError("Delivery Location must be specified")
@@ -88,12 +97,15 @@ if (deliveryTo.length<1||deliveryTo === 'Select Receiver'){
 
   const onProceed = () =>{
     const deliveryToObject = users.find(usr => usr.name === deliveryTo);
+    const sendPOToObject = users.find(usr => usr.name === sendPOTo);
     const productManufacturer = { [`${product}-${manufacturer}`]: quantity };
     const data = {
       data: {
         receiver: deliveryToObject,
+        sendpoto: sendPOToObject, 
         supplier: { name: user.name, email: user.email },
         destination,
+        client,
         products: [productManufacturer],
         date:todayDate,
       },
@@ -119,12 +131,15 @@ if (deliveryTo.length<1||deliveryTo === 'Select Receiver'){
    // const productId = `PO${Math.floor(Math.random() * 90000) + 10000}`;
     const productId = 'PO1805';
     const deliveryToObject = users.find(usr => usr.name === deliveryTo);
+    const sendPOToObject = users.find(usr => usr.name === sendPOTo);
     const productManufacturer = { [`${product}-${manufacturer}`]: quantity };
     const data = {
       data: {
         orderID: productId,
         receiver: deliveryToObject,
+        sendpoto: sendPOToObject,
         supplier: { name: user.name, email: user.email },
+        client,
         destination,
         products: [productManufacturer],
         date:todayDate,
@@ -142,9 +157,21 @@ if (deliveryTo.length<1||deliveryTo === 'Select Receiver'){
 
   return (
     <div className="purchaseform">
+        <p className="date-alignment">Date: {todayDate}</p>
       <div className="d-flex justify-content-between">
-        <div className="input-group">
-          <label className="reference">Supplier</label>
+      <div className="input-group">
+          <label className="reference">Send PO To</label>
+          <div className="form-control">
+          <DropdownButton
+           name={sendPOTo}
+            onSelect={item => setSendPOTo(item)}
+            groups={userNames}
+            className="text"
+          />
+          </div>
+        </div>
+        {/* <div className="input-group">
+          <label className="reference">Send PO To</label>
           <input
             disabled
             type="text"
@@ -153,8 +180,18 @@ if (deliveryTo.length<1||deliveryTo === 'Select Receiver'){
             value={user.name}
           />
          
+        </div> */}
+        <div className="input-group">
+          <label className="reference">Client</label>
+          <input
+            type="text"
+            className="form-control"
+            placeholder="Enter Client"
+            value={client}
+            onChange={e => setClient(e.target.value)}
+          />
+         
         </div>
-        <p>Date: {todayDate}</p>
       </div>
       <div className="d-flex justify-content-between">
         <div className="input-group">
@@ -166,7 +203,7 @@ if (deliveryTo.length<1||deliveryTo === 'Select Receiver'){
             groups={userNames}
             className="text"
           />
-        </div>
+          </div>
         </div>
         <div className="input-group">
           <label className="reference">Delivery Location</label>
@@ -208,7 +245,7 @@ if (deliveryTo.length<1||deliveryTo === 'Select Receiver'){
       <div className="text text-success">{message}</div>
       <div className="text text-danger">
         
-      {deliverytoError}{destinationError}{productError}{manufacturerError}{quantityError}
+    {deliverytoError}{sendPOToError}{destinationError}{productError}{manufacturerError}{quantityError}
       
       </div>
       

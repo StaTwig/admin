@@ -50,18 +50,28 @@ const PurchaseFormReview = props => {
   };
   return (
     <div className="purchaseform">
+        <p>Date: {todayDate}</p>
       <div className="d-flex justify-content-between">
         <div className="input-group">
-          <label className="reference">Supplier</label>
+          <label className="reference">Send PO To</label>
           <input
             disabled
             type="text"
             className="form-control"
             placeholder="Select Supplier"
-            value={reviewPo.data.supplier.name}
+            value={reviewPo.data.sendpoto.name}
           />
         </div>
-        <p>Date: {todayDate}</p>
+        <div className="input-group">
+          <label className="reference">Client</label>
+          <input
+            disabled
+            type="text"
+            className="form-control"
+            placeholder="Select Client"
+            value={reviewPo.data.client}
+          />
+        </div>
       </div>
       <div className="d-flex justify-content-between">
         <div className="input-group">
