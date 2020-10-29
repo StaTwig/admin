@@ -43,12 +43,9 @@
         color:#000000;
         text-align: center;
         font-size: 14px;
-    
-        
-      }
-
-     
-       .date{
+       
+    }
+   .date{
          border:none;
          background: none;
        }
@@ -67,6 +64,9 @@
       @media (min-width: $xl) {
         label {
           font-size: 16px;
+          flex-basis: 100%;
+          flex-grow: inherit;
+          text-align: left;
         } 
   
     
@@ -76,7 +76,7 @@
           border-bottom: 2px solid #d6d6d6;
           border-radius: 0;
           color: $black;
-          flex-basis: 65%;
+          flex-basis: 100%;
           flex-grow: inherit;
           font-size: 14px;
          

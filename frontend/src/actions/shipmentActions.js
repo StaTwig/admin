@@ -48,6 +48,19 @@ export const trackShipment = shipmentId => {
   }
 };
 
+export const trackProduct = async(id) => {
+  try {
+    const configObject = config();
+    const url  = configObject.trackProduct+id;
+    const result = await axios.get(url);
+    return result.data;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+  
+
 export const getTemperature = async () => {
   try {
     const result = await axios.get(config().trackTemperature);

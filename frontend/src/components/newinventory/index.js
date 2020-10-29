@@ -235,7 +235,7 @@ const NewInventory = props => {
       <hr />
       <div className="d-flex justify-content-between">
         <div className="total">Grand Total</div>
-        <span className="value">{quantity}</span>
+        <span className="value">{inventoryState[0].quantity}</span>
 
         <button className="btn-primary btn" onClick={onProceedToReview}>
           Proceed To Review

@@ -6,10 +6,11 @@ import currentinventory from '../../assets/icons/CurrentInventory.svg';
 import CurrentTemperature from '../../assets/icons/CurrentTemperature.png';
 import Chart from './temperature';
 import Map from './map';
+import Serial from './serial';
 import './style.scss';
 
 const Tracing = props => {
-  const tracingShipment = props.shipments[props.shipments.length-1];
+  const tracingShipment =  props.shipments.data ? props.shipments.data[props.shipments.data.length-1] : { products:[{quantity: 0}]};
   return (
     <div className="tracing">
       <div className="d-flex justify-content-between mb-3">
@@ -28,8 +29,9 @@ const Tracing = props => {
       </div>
       <div className="row">
         <div className="col-sm-4 d-flex flex-column col-sm-4">
-          <h5 className="head">Shipment Details</h5>
-          <div className="panel d-flex justify-content-between mb-3">
+          <h5 className="head"> {props.shipments.type=="shipmentId" ? "Shipment Details" : "Product Details"}</h5>
+          {
+          props.shipments.type=="shipmentId" ? <div className="panel d-flex justify-content-between mb-3">
             <ul>
               <li>Transaction ID</li>
               <li>Shipment ID</li>
@@ -42,9 +44,28 @@ const Tracing = props => {
               <li className="bold">{tracingShipment.client}</li>
               <li className="bold">{tracingShipment.products[0].quantity}</li>
             </ul>
-          </div>
-          <h5 className="head">Product List</h5>
-
+          </div>: <div className="panel d-flex justify-content-between mb-3">
+            <ul>
+            <li>Serial No</li>
+            <li>Product Name</li>
+            <li>Manufacturer</li>
+            <li>Batch</li>
+            <li>Mfg Date</li>
+            <li>Exp Date</li>
+          </ul>
+          <ul>
+ <li className="bold">{tracingShipment.serialNumber}</li>
+            <li className="bold">{tracingShipment.productName}</li>
+            <li className="bold">{tracingShipment.manufacturerName}</li>
+            <li className="bold">{tracingShipment.batchNumber}</li>
+            <li className="bold">{`0${new Date(Date.parse(tracingShipment.manufacturingDate)).getMonth()+1}`.slice(-2)+"/"+new Date(Date.parse(tracingShipment.manufacturingDate)).getFullYear()}</li>
+            <li className="bold">{`0${new Date(Date.parse(tracingShipment.expiryDate)).getMonth()+1}`.slice(-2)+"/"+new Date(Date.parse(tracingShipment.expiryDate)).getFullYear()}</li>
+          </ul>
+        </div>
+          }
+          
+          <h5 className="head"> {props.shipments.type=="shipmentId" ? "Product List" :null}</h5>
+          {props.shipments.type=="shipmentId" ?
           <div className="panel d-flex flex-column">
             <div className="d-flex justify-content-between mb-3">
               <div className="row">
@@ -77,7 +98,7 @@ const Tracing = props => {
               </div>
             </div>
 
-          </div>
+          </div> : null }
         </div>
         <div className="col-sm-8">
           <div className="d-flex flex-column">
@@ -110,7 +131,9 @@ const Tracing = props => {
                 <Chart />
               </div>
             </div>
+            
             <h5 className="head mt-3">Chain of Custody</h5>
+            {props.shipments.type=="shipmentId" ?
             <div className="panel d-flex flex-column">
               <div className="d-flex flex-column">
                 <div className="row mb-4">
@@ -159,7 +182,7 @@ const Tracing = props => {
                   <div className="col">Pending Delivered</div>{' '}
                   </div>}
               </div>
-            </div>
+            </div> :<Serial tracingShipment={tracingShipment}/>}
           </div>
         </div>
       </div>
@@ -168,3 +191,6 @@ const Tracing = props => {
 };
 
 export default Tracing;
+
+
+/*  const tracingShipment =  props.shipments.data ? props.shipments.data[props.shipments.data.length-1] : { products:[{quantity: 0}]};*/
