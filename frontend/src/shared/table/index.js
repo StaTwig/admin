@@ -25,8 +25,8 @@ const Table = props => {
         </div>
         <div className="overflow">
 
-          {props.inventories.map(inventory => (
-            <div className="rTableRow">
+          {props.inventories.map((inventory, index) => (
+            <div className="rTableRow" key={index}>
               <div className="rTableCell">
                 <div className="combine-data">
                  {inventory.productName}
