@@ -880,8 +880,8 @@ exports.createPurchaseOrder = [
                 );
                 const newPO = new POModel({
                   orderID,
-                  sender: data.sendpoto.address,
-                  receiver: data.receiver.address,
+                  sender: address,
+                  receiver: data.sendpoto.address,
                 });
                 await newPO.save();
                 logger.log(
