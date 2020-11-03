@@ -27,7 +27,8 @@ const NewInventory = props => {
     async function fetchData() {
       const result = await getProducts();
       const manufacturerResult = await getManufacturers();
-      const productArray = result.map(product => product.productName);
+      let productArray = []
+      productArray = result && result.map(product => product.productName);
       setProducts(productArray);
       setManufacturers(manufacturerResult);
     }

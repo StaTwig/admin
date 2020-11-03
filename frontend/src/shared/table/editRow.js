@@ -25,7 +25,7 @@ const EditRow = props => {
   } = props;
 
   return (
-    <div className="rTableRow">
+    <div className="rTableRow" key={idx}>
       <div className="rTableCell">
         <div className="square-box" />
         <DropdownButton

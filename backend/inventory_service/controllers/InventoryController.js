@@ -380,12 +380,12 @@ exports.getAllInventoryDetails = [
               const { skip, limit } = req.query;
               let chunkUrls = [];
 
-             /* InventoryModel.collection.dropIndexes(function(){
+              /* InventoryModel.collection.dropIndexes(function(){
                 InventoryModel.collection.reIndex(function(finished){
                   console.log("finished re indexing")
                 })
               })*/
-             // InventoryModel.createIndexes();
+              // InventoryModel.createIndexes();
               const inventoryResult = await InventoryModel.find({
                 owner: address,
               })
@@ -402,8 +402,6 @@ exports.getAllInventoryDetails = [
               });
               const responses = await axios.all(chunkUrls);
               const items = responses.map(response => response.data.items[0]);
-              var count_array = [];
-              var tot_qty = 0;
               const productNamesResponse = await axios.get(
                 `${product_service_url}/getProductNames`,
                 {
@@ -413,33 +411,14 @@ exports.getAllInventoryDetails = [
                 },
               );
 
-              const products_array = productNamesResponse.data.data.map(product => product.productName);
-              var total_inv = items.length;
-              var dict = {};
-              let total_exp = 0;
-              (today_exp = 0),
-                (week_exp = 0),
-                (month_exp = 0),
-                (year_exp = 0),
-                (prev_year_exp = 0);
-              (today_ne = 0), (week_ne = 0), (month_ne = 0), (year_ne = 0);
-              (today_inv = 0),
-                (week_inv = 0),
-                (month_inv = 0),
-                (year_inv = 0),
-                (prev_year_inv = 0);
-              (today_qty = 0),
-                (week_qty = 0),
-                (month_qty = 0),
-                (year_qty = 0),
-                (prev_year_qty = 0);
-              (total_inv = 0), (total_qty = 0), (total_ne = 0), (total_exp = 0);
+              const products_array = productNamesResponse.data.data.map(
+                product => product.productName,
+              );
+              const dict = {};
 
               for (i = 0; i < items.length; i++) {
-                var productName = JSON.parse(items[i].data).productName;
-                var count = parseInt(JSON.parse(items[i].data).quantity);
-                tot_qty = tot_qty + count;
-
+                const productName = JSON.parse(items[i].data).productName;
+                const count = parseInt(JSON.parse(items[i].data).quantity);
                 const index = products_array.indexOf(productName);
                 var name = products_array[index];
                 if (name in dict) {
@@ -449,72 +428,161 @@ exports.getAllInventoryDetails = [
                 } else {
                   dict[name] = count;
                 }
-
-                let date_ob = new Date();
-                let date = ('0' + date_ob.getDate()).slice(-2);
-                let month = ('0' + (date_ob.getMonth() + 1)).slice(-2);
-                let year = date_ob.getFullYear();
-                var today = month + '-' + year;
-                var today_full = date + '-' + month + '-' + year;
-                var expiry_date = JSON.parse(items[i].data).expiryDate;
-                var myDate = new Date(expiry_date);
-                var m = myDate.getMonth();
-                var y = myDate.getFullYear();
-                var expiry_date1 = m + '-' + myDate.getFullYear();
-
-                var created_date = JSON.parse(items[i].data).createdDate;
-                if (created_date == undefined) {
-                  created_date = today_full;
-                }
-                var s = getDateDiff(
-                  today,
-                  expiry_date1,
-                  today_full,
-                  created_date,
-                  count,
-                );
-                total_exp = year_exp;
-                total_ne = year_ne;
-                total_inv = year_inv;
-                total_qty = year_qty;
               }
               logger.log(
                 'info',
                 '<<<<< InventoryService < InventoryController < getAllInventoryDetails : queried and pushed data',
               );
+              const nextYear = new Date(
+                new Date().setFullYear(new Date().getFullYear() + 1),
+              );
+              nextYear.setMonth(0);
+              nextYear.setUTCHours(0,0,0,0);
+              nextYear.setDate(1);
+              const thisYear = new Date(
+                new Date().setFullYear(new Date().getFullYear()),
+              );
+              thisYear.setMonth(0);
+              thisYear.setDate(1);
+              thisYear.setUTCHours(0,0,0,0);
+              const nextMonth = new Date(
+                new Date().setMonth(new Date().getMonth() + 1),
+              );
+              nextMonth.setUTCHours(0,0,0,0);
+              const thisMonth = new Date(
+                new Date().setMonth(new Date().getMonth()),
+              );
+              thisMonth.setUTCHours(0,0,0,0);
+              const nextWeek = new Date(
+                new Date().setDate(new Date().getDate() + 7),
+              );
+              nextWeek.setUTCHours(0,0,0,0);
+              const thisWeek = new Date(
+                new Date().setDate(new Date().getDate()),
+              );
+              thisWeek.setUTCHours(0,0,0,0);
+              const tomorrow = new Date(
+                new Date().setDate(new Date().getDate() + 1),
+              );
+              tomorrow.setUTCHours(0, 0, 0, 0);
+              const today = new Date();
+              today.setUTCHours(0, 0, 0, 0);
 
-              total_inv = await InventoryModel.find({owner: address}).count();
+              total_inv = await InventoryModel.find({
+                owner: address,
+              }).countDocuments();
+              const thisYearAdded = await InventoryModel.find({
+                owner: address,
+                createdAt: {
+                  $gte: thisYear.toISOString(),
+                  $lte: nextYear.toISOString(),
+                },
+              }).countDocuments();
+              const thisMonthAdded = await InventoryModel.find({
+                owner: address,
+                createdAt: {
+                  $gte: thisMonth.toISOString(),
+                  $lte: nextMonth.toISOString(),
+                },
+              }).countDocuments();
+              const thisWeekAdded = await InventoryModel.find({
+                owner: address,
+                createdAt: {
+                  $gte: thisWeek.toISOString(),
+                  $lte: nextWeek.toISOString(),
+                },
+              }).countDocuments();
+              const todayAdded = await InventoryModel.find({
+                owner: address,
+                createdAt: {
+                  $gte: today.toISOString(),
+                  $lt: tomorrow.toISOString(),
+                },
+              }).countDocuments();
+              const thisYearExpire = await InventoryModel.find({
+                owner: address,
+                expiryDate: {
+                  $gte: thisYear.toISOString(),
+                  $lt: nextYear.toISOString(),
+                },
+              }).countDocuments();
+              const thisMonthExpire = await InventoryModel.find({
+                owner: address,
+                expiryDate: {
+                  $gte: thisMonth.toISOString(),
+                  $lt: nextMonth.toISOString(),
+                },
+              }).countDocuments();
+              const thisWeekExpire = await InventoryModel.find({
+                owner: address,
+                expiryDate: {
+                  $gte: thisWeek.toISOString(),
+                  $lt: nextWeek.toISOString(),
+                },
+              }).countDocuments();
+              const todayExpire = await InventoryModel.find({
+                owner: address,
+                expiryDate: {
+                  $gte: today.toISOString(),
+                  $lt: tomorrow.toISOString(),
+                },
+              }).countDocuments();
+              const totalExpired = await InventoryModel.find({
+                owner: address,
+                expiryDate: { $lte: today.toISOString() },
+              }).countDocuments();
+              const thisMonthExpired = await InventoryModel.find({
+                owner: address,
+                expiryDate: {
+                  $gte: thisMonth.toISOString(),
+                  $lte: today.toISOString(),
+                },
+              }).countDocuments();
+              const thisYearExpired = await InventoryModel.find({
+                owner: address,
+                expiryDate: {
+                  $gte: thisYear.toISOString(),
+                  $lte: today.toISOString(),
+                },
+              }).countDocuments();
+              const thisWeekExpired = await InventoryModel.find({
+                owner: address,
+                expiryDate: {
+                  $gte: thisWeek.toISOString(),
+                  $lte: today.toISOString(),
+                },
+              }).countDocuments();
               res.json({
                 data: items,
                 dict,
                 counts: {
                   inventoryAdded: {
                     total: total_inv,
-                    thisYear: year_inv,
-                    thisMonth: month_inv,
-                    thisWeek: week_inv,
-                    today: today_inv,
+                    thisYear: thisYearAdded,
+                    thisMonth: thisMonthAdded,
+                    thisWeek: thisWeekAdded,
+                    today: todayAdded,
                   },
                   currentInventory: {
-                    total: total_qty,
-                    thisYear: year_qty,
-                    thisMonth: month_qty,
-                    thisWeek: week_qty,
-                    today: today_qty,
+                    total: total_inv,
+                    thisYear: thisYearAdded,
+                    thisMonth: thisMonthAdded,
+                    thisWeek: thisWeekAdded,
+                    today: todayAdded,
                   },
                   vaccinesNearExpiration: {
-                    total: total_ne,
-                    thisYear: year_ne,
-                    thisMonth: month_ne,
-                    thisWeek: week_ne,
-                    today: today_ne,
+                    total: thisYearExpire,
+                    thisYear: thisYearExpire,
+                    thisMonth: thisMonthExpire,
+                    thisWeek: thisWeekExpire,
+                    today: todayExpire,
                   },
                   vaccinesExpired: {
-                    total: total_exp,
-                    thisYear: year_exp,
-                    thisMonth: month_exp,
-                    thisWeek: week_exp,
-                    today: today_exp,
+                    total: totalExpired,
+                    thisYear: thisYearExpired,
+                    thisMonth: thisMonthExpired,
+                    thisWeek: thisWeekExpired,
+                    today: todayExpire,
                   },
                 },
               });
@@ -630,15 +698,15 @@ exports.addNewInventory = [
                 'info',
                 '<<<<< InventoryService < InventoryController < addNewInventory : publised data to blockchain',
               );
-             console.log("res",response.data) 
+              console.log('res', response.data);
               const newInventory = new InventoryModel({
                 manufacturingDate: response.data.manufacturingDate,
                 expiryDate: response.data.expiryDate,
                 serialNumber: response.data.serialNumber,
                 owner: response.data.owner,
-                transactionIds: [response.data.transactionIds]
+                transactionIds: [response.data.transactionIds],
               });
-             await newInventory.save();
+              await newInventory.save();
 
               res.status(200).json({
                 serialNumber: response.data.serialNumber,
@@ -707,11 +775,16 @@ exports.addMultipleInventories = [
               let txnIds = [];
               let chunkUrls = [];
               const serialNumbers = inventories.map(inventory => {
-                return {serialNumber: inventory.serialNumber.trim()}
+                return { serialNumber: inventory.serialNumber.trim() };
               });
-              const inventoriesFound = await InventoryModel.findOne({ $or: serialNumbers});
-              if(inventoriesFound) {
-                return apiResponse.ErrorResponse(res, 'Duplicate Inventory Found');
+              const inventoriesFound = await InventoryModel.findOne({
+                $or: serialNumbers,
+              });
+              if (inventoriesFound) {
+                return apiResponse.ErrorResponse(
+                  res,
+                  'Duplicate Inventory Found',
+                );
               }
               inventories.forEach(inventory => {
                 inventory.serialNumber = inventory.serialNumber.trim();
@@ -732,16 +805,22 @@ exports.addMultipleInventories = [
                 response => response.data,
               );
               try {
-
-                const inventoryMongoResult = await InventoryModel.insertMany(inventoryData);
-                const transactionIds = inventoryMongoResult.map(inventory => inventory.transactionIds)
+                const inventoryMongoResult = await InventoryModel.insertMany(
+                  inventoryData,
+                );
+                const transactionIds = inventoryMongoResult.map(
+                  inventory => inventory.transactionIds,
+                );
                 apiResponse.successResponseWithData(
                   res,
                   'Created Inventory Success',
                   transactionIds,
                 );
-              }catch(e) {
-                apiResponse.ErrorResponse(res, 'Error in creating inventory Duplicate Serial Number ');
+              } catch (e) {
+                apiResponse.ErrorResponse(
+                  res,
+                  'Error in creating inventory Duplicate Serial Number ',
+                );
               }
             } else {
               res.json('Sorry! User does not have enough Permissions');
@@ -806,10 +885,12 @@ exports.addInventoriesFromExcel = [
                 const chunkedData = data.slice(skip, limit);
                 let chunkUrls = [];
                 const serialNumbers = chunkedData.map(inventory => {
-                  return {serialNumber: inventory.serialNumber.trim()}
+                  return { serialNumber: inventory.serialNumber.trim() };
                 });
-                const inventoriesFound = await InventoryModel.findOne({ $or: serialNumbers});
-                if(inventoriesFound) {
+                const inventoriesFound = await InventoryModel.findOne({
+                  $or: serialNumbers,
+                });
+                if (inventoriesFound) {
                   console.log('Duplicate Inventory Found');
                   return;
                 }
@@ -834,16 +915,21 @@ exports.addInventoriesFromExcel = [
                       const inventoryData = responses.map(
                         response => response.data,
                       );
-                      logger.log('info', `Inventory Data length' ${inventoryData.length}`);
                       logger.log(
-                        'info', `Transaction Id,
+                        'info',
+                        `Inventory Data length' ${inventoryData.length}`,
+                      );
+                      logger.log(
+                        'info',
+                        `Transaction Id,
                         ${inventoryData[0].transactionId}`,
                       );
                       InventoryModel.insertMany(inventoryData, (err, res) => {
                         if (err) {
                           logger.log('error', err.errmsg);
                         } else
-                          logger.log('info',
+                          logger.log(
+                            'info',
                             'Number of documents inserted into mongo: ' +
                               res.length,
                           );
@@ -852,7 +938,8 @@ exports.addInventoriesFromExcel = [
                       if (limit < data.length) {
                         recursiveFun();
                       } else {
-                        logger.log('info',
+                        logger.log(
+                          'info',
                           `Insertion of excel sheet data is completed. Time Taken to insert ${
                             data.length
                           } in seconds - `,
@@ -868,7 +955,10 @@ exports.addInventoriesFromExcel = [
               recursiveFun();
               return apiResponse.successResponseWithData(res, 'Success', data);
             } else {
-              return apiResponse.ErrorResponse(res, 'Sorry! User does not have enough Permissions');
+              return apiResponse.ErrorResponse(
+                res,
+                'Sorry! User does not have enough Permissions',
+              );
             }
           });
         } else {
@@ -890,22 +980,24 @@ exports.trackProduct = [
         'info',
         '<<<<< ShipmentService < ShipmentController < trackProduct : tracking product, querying by transaction hash',
       );
-      InventoryModel.findOne({ serialNumber: serialNumber }).then(async user => {
-        let txnIDs = user.transactionIds;
-        let items_array = [];
-        await utility.asyncForEach(txnIDs, async txnId => {
-          const response = await axios.get(
+      InventoryModel.findOne({ serialNumber: serialNumber }).then(
+        async user => {
+          let txnIDs = user.transactionIds;
+          let items_array = [];
+          await utility.asyncForEach(txnIDs, async txnId => {
+            const response = await axios.get(
               `${blockchain_service_url}/queryDataByRawTxHash?txid=${txnId}`,
+            );
+            const items = response.data.items;
+            items_array.push(items);
+          });
+          logger.log(
+            'info',
+            '<<<<< ShipmentService < ShipmentController < trackProduct : tracked product, queried data by transaction hash',
           );
-          const items = response.data.items;
-          items_array.push(items);
-        });
-        logger.log(
-          'info',
-          '<<<<< ShipmentService < ShipmentController < trackProduct : tracked product, queried data by transaction hash',
-        );
-        res.json({ data: items_array });
-      });
+          res.json({ data: items_array });
+        },
+      );
     } catch (err) {
       logger.log(
         'error',
@@ -915,4 +1007,3 @@ exports.trackProduct = [
     }
   },
 ];
-
