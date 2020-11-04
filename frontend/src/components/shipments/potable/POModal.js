@@ -12,7 +12,7 @@ const POModal = props => {
     onCreateShipment,
   } = props;
   const po = JSON.parse(purchaseOrder.data);
-  const receiverAddress = po.receiver.address;
+  const receiverAddress = po.sendpoto.address;
   return (
     <div>
       <div className="d-flex justify-content-between">
