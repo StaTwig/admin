@@ -555,7 +555,7 @@ exports.getAllInventoryDetails = [
 
               res.json({
                 data: items,
-                productCounts,
+                dict,
                 counts: {
                   inventoryAdded: {
                     total: total_inv,
