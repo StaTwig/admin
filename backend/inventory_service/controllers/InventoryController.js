@@ -552,9 +552,30 @@ exports.getAllInventoryDetails = [
                   $lte: today.toISOString(),
                 },
               }).countDocuments();
+
+              var products = await InventoryModel.aggregate([{ $match : { owner : address } } ,
+              {"$group" : {"_id": "$productName","productName":{"$first":"$productName"}, "quantity": { "$sum": "$quantity" }}}
+              ]);
+              var productCounts = {};
+
+          for (var j = 0; j < products.length; j++) {
+          var productName = products[j].productName;
+          var count = products[j].quantity;
+
+          const index = products_array.indexOf(productName);
+          var name = products_array[index];
+            if (name in productCounts) {
+              var exis = productCounts[name];
+              var new_val = count;
+              productCounts[name] = exis + new_val;
+            } else {
+              productCounts[name] = count;
+            }
+        }
+
               res.json({
                 data: items,
-                dict,
+                productCounts,
                 counts: {
                   inventoryAdded: {
                     total: total_inv,
