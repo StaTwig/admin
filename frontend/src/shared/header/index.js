@@ -1,38 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getUserInfo, logoutUser } from '../../actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
-import DrawerMenu from './drawerMenu';
+import './style.scss';
 
+import DrawerMenu from './drawerMenu';
+import { getUserInfo, logoutUser } from '../../actions/userActions';
 import logo from '../../assets/brands/VACCINELEDGER.png';
 import searchingIcon from '../../assets/icons/searching@2x.png';
 import bellIcon from '../../assets/icons/bellwhite.png';
-import userIcon from '../../assets/brands/user-image/Image73@2x.png';
 import dropdownIcon from '../../assets/icons/drop-down.png';
-import {getShipments, getShipmentsById} from "../../actions/shipmentActions";
-import { getInventories, getInventoriesById} from "../../actions/inventoryActions";
-import './style.scss';
+import { getNotifications, deleteNotification } from '../../actions/notificationActions';
+import { turnOff, turnOn } from "../../actions/spinnerActions";
 
 const Header = props => {
   const [menu, setMenu] = useState(false);
   const [sidebar, openSidebar] = useState(false);
-  const [search,setSearch] = useState('');
+  const [search, setSearch] = useState('');
+  const [notifications, setNotifications] = useState([]);
+  const [showNotifications, setShowNotifications] = useState(false);
 
-  function onSearchChange(e)
-  {
+  function onSearchChange(e) {
     console.log(e.target.value);
-    setSearch(e.target.value)
+    setSearch(e.target.value);
   }
 
-  const onSeach = () =>{
-    props.history.push(
-      `/tracing/${search}`,
-    );
-  
-  }
-
-  /*const data = search;
-    dispatch(getShipmentsById(data)); */
+  const onSeach = () => {
+    props.history.push(`/tracing/${search}`);
+  };
 
   const profile = useSelector(state => {
     return state.user;
@@ -40,31 +34,71 @@ const Header = props => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUserInfo());
+    async function fetchApi() {
+      dispatch(turnOn());
+      const response = await getNotifications();
+      setNotifications(response.data);
+      dispatch(turnOff());
+    }
+    fetchApi();
   }, []);
- console.log(profile)
+
+  const clearNotification = async notification => {
+    const response = await deleteNotification(notification._id);
+    setNotifications(response.data);
+  }
+
   return (
     <div className="header">
       <div className="branding">
         <div className="mobile-menu" onClick={() => openSidebar(true)}>
           <i className="fa fa-bars" aria-hidden="true" />
         </div>
-        <img src={logo} alt="vaccineledger" className="logo" onClick={() =>props.history.push('/overview')} />
+        <img
+          src={logo}
+          alt="vaccineledger"
+          className="logo"
+          onClick={() => props.history.push('/overview')}
+        />
       </div>
       <div className="actions">
         <div className="search-form">
-          <input 
-            type="text" 
-            // value={search} 
-            onChange={onSearchChange} 
-            className="form-control search-field" />
-          <img 
-            src={searchingIcon} 
-            onClick={onSeach} 
-            alt="searching" />
+          <input
+            type="text"
+            // value={search}
+            onChange={onSearchChange}
+            className="form-control search-field"
+          />
+          <img src={searchingIcon} onClick={onSeach} alt="searching" />
         </div>
         <div className="user-info">
           <div className="notifications">
-            <img src={bellIcon} alt="notification" />
+            <div className="bellicon-wrap" onClick={() => setShowNotifications(!showNotifications)}>
+              <img src={bellIcon} alt="notification" />
+              {notifications.length > 0 && <span className="badge badge-light">{notifications.length }</span> }
+            </div>
+            {showNotifications && notifications.length > 0 && (
+              <div className="slider-menu">
+                <React.Fragment>
+                  {notifications.map(notification =>  <div className="slider-item">
+                    <div className="row justify-content-between align-items-center" onClick={() => clearNotification(notification)}>
+                      <div className="col-sm-10">
+                        <div>{notification.message}</div>
+                      </div>
+                      <div className="col-sm-2">
+                        <button
+                          type="button"
+                          className="close"
+                          aria-label="Close"
+                        >
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>)}
+                </React.Fragment>
+              </div>
+            )}
           </div>
           <div className="divider" />
           <div className="userName">
