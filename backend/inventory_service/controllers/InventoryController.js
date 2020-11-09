@@ -414,21 +414,7 @@ exports.getAllInventoryDetails = [
               const products_array = productNamesResponse.data.data.map(
                 product => product.productName,
               );
-              const dict = {};
 
-              for (i = 0; i < items.length; i++) {
-                const productName = JSON.parse(items[i].data).productName;
-                const count = parseInt(JSON.parse(items[i].data).quantity);
-                const index = products_array.indexOf(productName);
-                var name = products_array[index];
-                if (name in dict) {
-                  var exis = dict[name];
-                  var new_val = count;
-                  dict[name] = exis + new_val;
-                } else {
-                  dict[name] = count;
-                }
-              }
               logger.log(
                 'info',
                 '<<<<< InventoryService < InventoryController < getAllInventoryDetails : queried and pushed data',
@@ -552,6 +538,26 @@ exports.getAllInventoryDetails = [
                   $lte: today.toISOString(),
                 },
               }).countDocuments();
+
+              var products = await InventoryModel.aggregate([{ $match : { owner : address } } ,
+              {"$group" : {"_id": "$productName","productName":{"$first":"$productName"}, "quantity": { "$sum": "$quantity" }}}
+              ]);
+              var dict = {};
+
+              for (var j = 0; j < products.length; j++) {
+              var productName = products[j].productName;
+              var count = products[j].quantity;
+
+              const index = products_array.indexOf(productName);
+              var name = products_array[index];
+                if (name in dict) {
+                  var exis = dict[name];
+                  var new_val = count;
+                  dict[name] = exis + new_val;
+                } else {
+                  dict[name] = count;
+                }
+            }
 
               res.json({
                 data: items,
