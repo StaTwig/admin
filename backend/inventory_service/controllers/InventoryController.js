@@ -1,22 +1,17 @@
-const UserModel = require('../models/UserModel');
 const { body, validationResult } = require('express-validator');
-const { sanitizeBody } = require('express-validator');
-const multer = require('multer');
 const moveFile = require('move-file');
 const XLSX = require('xlsx');
 //helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
 const utility = require('../helpers/utility');
-const jwt = require('jsonwebtoken');
-const { constants } = require('../helpers/constants');
 const auth = require('../middlewares/jwt');
 const InventoryModel = require('../models/InventoryModel');
+const NotificationModel = require('../models/NotificationModel');
 
 const checkToken = require('../middlewares/middleware').checkToken;
 const checkPermissions = require('../middlewares/rbac_middleware')
   .checkPermissions;
 const axios = require('axios');
-const dotenv = require('dotenv').config();
 
 const fs = require('fs');
 const blockchain_service_url = process.env.URL;
@@ -423,30 +418,30 @@ exports.getAllInventoryDetails = [
                 new Date().setFullYear(new Date().getFullYear() + 1),
               );
               nextYear.setMonth(0);
-              nextYear.setUTCHours(0,0,0,0);
+              nextYear.setUTCHours(0, 0, 0, 0);
               nextYear.setDate(1);
               const thisYear = new Date(
                 new Date().setFullYear(new Date().getFullYear()),
               );
               thisYear.setMonth(0);
               thisYear.setDate(1);
-              thisYear.setUTCHours(0,0,0,0);
+              thisYear.setUTCHours(0, 0, 0, 0);
               const nextMonth = new Date(
                 new Date().setMonth(new Date().getMonth() + 1),
               );
-              nextMonth.setUTCHours(0,0,0,0);
+              nextMonth.setUTCHours(0, 0, 0, 0);
               const thisMonth = new Date(
                 new Date().setMonth(new Date().getMonth()),
               );
-              thisMonth.setUTCHours(0,0,0,0);
+              thisMonth.setUTCHours(0, 0, 0, 0);
               const nextWeek = new Date(
                 new Date().setDate(new Date().getDate() + 7),
               );
-              nextWeek.setUTCHours(0,0,0,0);
+              nextWeek.setUTCHours(0, 0, 0, 0);
               const thisWeek = new Date(
                 new Date().setDate(new Date().getDate()),
               );
-              thisWeek.setUTCHours(0,0,0,0);
+              thisWeek.setUTCHours(0, 0, 0, 0);
               const tomorrow = new Date(
                 new Date().setDate(new Date().getDate() + 1),
               );
@@ -539,17 +534,24 @@ exports.getAllInventoryDetails = [
                 },
               }).countDocuments();
 
-              var products = await InventoryModel.aggregate([{ $match : { owner : address } } ,
-              {"$group" : {"_id": "$productName","productName":{"$first":"$productName"}, "quantity": { "$sum": "$quantity" }}}
+              var products = await InventoryModel.aggregate([
+                { $match: { owner: address } },
+                {
+                  $group: {
+                    _id: '$productName',
+                    productName: { $first: '$productName' },
+                    quantity: { $sum: '$quantity' },
+                  },
+                },
               ]);
               var dict = {};
 
               for (var j = 0; j < products.length; j++) {
-              var productName = products[j].productName;
-              var count = products[j].quantity;
+                var productName = products[j].productName;
+                var count = products[j].quantity;
 
-              const index = products_array.indexOf(productName);
-              var name = products_array[index];
+                const index = products_array.indexOf(productName);
+                var name = products_array[index];
                 if (name in dict) {
                   var exis = dict[name];
                   var new_val = count;
@@ -557,7 +559,7 @@ exports.getAllInventoryDetails = [
                 } else {
                   dict[name] = count;
                 }
-            }
+              }
 
               res.json({
                 data: items,
@@ -899,6 +901,13 @@ exports.addInventoriesFromExcel = [
                 });
                 if (inventoriesFound) {
                   console.log('Duplicate Inventory Found');
+                  const newNotification = new NotificationModel({
+                    owner: address,
+                    message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${
+                      inventoriesFound.serialNumber
+                    }`,
+                  });
+                  await newNotification.save();
                   return;
                 }
                 chunkedData.forEach(inventory => {
@@ -952,6 +961,11 @@ exports.addInventoriesFromExcel = [
                           } in seconds - `,
                           (new Date() - start) / 1000,
                         );
+                        const newNotification = new NotificationModel({
+                          owner: address,
+                          message: `Your inventories from excel is added successfully on ${new Date().toLocaleString()}`,
+                        });
+                        await newNotification.save();
                       }
                     }),
                   )

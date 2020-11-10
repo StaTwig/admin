@@ -107,6 +107,29 @@
         max-width: 100%;
       }
       .notifications {
+        position: relative;
+        .bellicon-wrap {
+          position: relative;
+          cursor: pointer;
+          .badge {
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            border-radius: 100%;
+          }
+        }
+        .slider-menu {
+          top: .9rem;
+          right: 0rem !important;
+
+          .slider-item {
+            white-space: pre-wrap;
+            min-width: 200px;
+            &:first-child {
+              border-top: none;
+            }
+          }
+        }
         @media screen and (max-width: 768px){
           display: none;
         }
