@@ -1,5 +1,6 @@
 const { body, validationResult } = require('express-validator');
 const moveFile = require('move-file');
+require('../utils/date');
 const XLSX = require('xlsx');
 //helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
@@ -238,122 +239,6 @@ exports.getInventoryDetailsForProduct = [
   },
 ];
 
-var total_inv = 0,
-  total_qty = 0,
-  total_ne = 0,
-  total_ne = 0;
-var today_inv = 0,
-  week_inv = 0,
-  month_inv = 0,
-  year_inv = 0,
-  prev_year_inv = 0;
-var today_qty = 0,
-  week_qty = 0,
-  month_qty = 0,
-  year_qty = 0,
-  prev_year_qty = 0;
-var today_exp = 0,
-  week_exp = 0,
-  month_exp = 0,
-  year_exp = 0,
-  prev_year_exp = 0;
-var today_ne = 0,
-  week_ne = 0,
-  month_ne = 0,
-  year_ne = 0;
-var total_exp = 0;
-
-function getDateDiff(dateOne, dateTwo, dateThree, dateFour, quantity) {
-  if (
-    (dateOne.charAt(2) == '-' || dateOne.charAt(1) == '-') &
-    (dateTwo.charAt(2) == '-' || dateTwo.charAt(1) == '-')
-  ) {
-    dateOne = new Date(formatDate(dateOne));
-    dateTwo = new Date(formatDate(dateTwo));
-    dateThree = new Date(formatDate(dateThree));
-    dateFour = new Date(formatDate(dateFour));
-  } else {
-    dateOne = new Date(dateOne);
-    dateTwo = new Date(dateTwo);
-    dateThree = new Date(dateThree);
-    dateFour = new Date(dateFour);
-  }
-
-  let timeDiff = Math.abs(dateOne.getTime() - dateTwo.getTime());
-  let diffDays = Math.ceil(timeDiff / (1000 * 3600 * 24));
-
-  let timeDiff1 = Math.abs(dateThree.getTime() - dateFour.getTime());
-  let diffDays1 = Math.ceil(timeDiff1 / (1000 * 3600 * 24));
-  if (dateTwo < dateOne) {
-    switch (true) {
-      case diffDays == 0:
-        today_exp++;
-      case diffDays >= 0 && diffDays <= 7:
-        week_exp++;
-      case diffDays >= 0 && diffDays <= 30:
-        month_exp++;
-      case diffDays >= 0 && diffDays <= 365:
-        year_exp++;
-      case diffDays == 0:
-        prev_year_exp++;
-    }
-  } else if (dateTwo >= dateOne && diffDays < 30) {
-    switch (true) {
-      case diffDays == 0:
-        today_ne++;
-      case diffDays >= 0 && diffDays <= 7:
-        week_ne++;
-      case diffDays >= 0 && diffDays <= 30:
-        month_ne++;
-      case diffDays >= 0 && diffDays <= 365:
-        year_ne++;
-    }
-  }
-  switch (true) {
-    case diffDays1 == 0:
-      today_inv++;
-      today_qty += quantity;
-    case diffDays1 >= 0 && diffDays1 <= 7:
-      week_inv++;
-      week_qty += quantity;
-    case diffDays1 >= 0 && diffDays1 <= 30:
-      month_inv++;
-      month_qty += quantity;
-    case diffDays1 >= 0 && diffDays1 <= 365:
-      year_inv++;
-      year_qty += quantity;
-    case diffDays1 > 365:
-      prev_year_inv++;
-      prev_year_qty += quantity;
-  }
-
-  return {
-    today_inv,
-    week_inv,
-    month_inv,
-    year_inv,
-    today_qty,
-    week_qty,
-    month_qty,
-    year_qty,
-    today_ne,
-    week_ne,
-    month_ne,
-    year_ne,
-    today_exp,
-    week_exp,
-    month_exp,
-    year_exp,
-  };
-}
-
-function formatDate(date) {
-  return date
-    .split('-')
-    .reverse()
-    .join('-');
-}
-
 exports.getAllInventoryDetails = [
   auth,
   async (req, res) => {
@@ -433,15 +318,17 @@ exports.getAllInventoryDetails = [
               const thisMonth = new Date(
                 new Date().setMonth(new Date().getMonth()),
               );
+              thisMonth.setUTCDate(1);
               thisMonth.setUTCHours(0, 0, 0, 0);
-              const nextWeek = new Date(
+             /* const nextWeek = new Date(
                 new Date().setDate(new Date().getDate() + 7),
               );
-              nextWeek.setUTCHours(0, 0, 0, 0);
-              const thisWeek = new Date(
+              nextWeek.setUTCHours(0, 0, 0, 0);*/
+             /* const thisWeek = new Date(
                 new Date().setDate(new Date().getDate()),
-              );
-              thisWeek.setUTCHours(0, 0, 0, 0);
+              );*/
+              const thisWeek = Date.monday();
+              const nextWeek = Date.next().monday();
               const tomorrow = new Date(
                 new Date().setDate(new Date().getDate() + 1),
               );
@@ -534,7 +421,7 @@ exports.getAllInventoryDetails = [
                 },
               }).countDocuments();
 
-              var products = await InventoryModel.aggregate([
+              const products = await InventoryModel.aggregate([
                 { $match: { owner: address } },
                 {
                   $group: {
@@ -544,17 +431,17 @@ exports.getAllInventoryDetails = [
                   },
                 },
               ]);
-              var dict = {};
+              const dict = {};
 
-              for (var j = 0; j < products.length; j++) {
-                var productName = products[j].productName;
-                var count = products[j].quantity;
+              for (let j = 0; j < products.length; j++) {
+                const productName = products[j].productName;
+                const count = products[j].quantity;
 
                 const index = products_array.indexOf(productName);
-                var name = products_array[index];
+                const name = products_array[index];
                 if (name in dict) {
-                  var exis = dict[name];
-                  var new_val = count;
+                  const exis = dict[name];
+                  const new_val = count;
                   dict[name] = exis + new_val;
                 } else {
                   dict[name] = count;
