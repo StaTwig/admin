@@ -1,3 +1,10 @@
+const { body, validationResult } = require('express-validator');
+const fs = require('fs');
+const moveFile = require('move-file');
+const XLSX = require('xlsx');
+const axios = require('axios');
+
+const { sanitizeBody } = require('express-validator');
 const UserTransactionModel = require('../models/UserTransactionModel');
 const UserModel = require('../models/UserModel');
 const POModel = require('../models/POModel');
@@ -5,20 +12,14 @@ const ShipmentModel = require('../models/ShipmentModel');
 const ProductModel = require('../models/ProductModel');
 const InventoryModel = require('../models/InventoryModel');
 const OrganisationModel = require('../models/OrganisationModel');
-const { body, validationResult } = require('express-validator');
-const { sanitizeBody } = require('express-validator');
+const NotificationModel = require('../models/NotificationModel');
 //this helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
 const utility = require('../helpers/utility');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const mailer = require('../helpers/mailer');
-const { constants } = require('../helpers/constants');
 const auth = require('../middlewares/jwt');
 const checkToken = require('../middlewares/middleware').checkToken;
 const checkPermissions = require('../middlewares/rbac_middleware')
   .checkPermissions;
-const axios = require('axios');
 const dotenv = require('dotenv').config();
 
 const blockchain_service_url = process.env.URL;
@@ -474,15 +475,21 @@ exports.createShipment = [
                   'info',
                   '<<<<< ShipmentService < ShipmentController < createShipment : shipment found in collection',
                 );
-                const estimatedDeliveryDateArray = data.estimateDeliveryDate.split('/');
-                const estimatedDeliveryDate = new Date(estimatedDeliveryDateArray[2], parseInt(estimatedDeliveryDateArray[1])-1, estimatedDeliveryDateArray[0]);
+                const estimatedDeliveryDateArray = data.estimateDeliveryDate.split(
+                  '/',
+                );
+                const estimatedDeliveryDate = new Date(
+                  estimatedDeliveryDateArray[2],
+                  parseInt(estimatedDeliveryDateArray[1]) - 1,
+                  estimatedDeliveryDateArray[0],
+                );
                 const newShipment = new ShipmentModel({
                   shipmentId,
                   txnIds: [txnId],
-                  receiver:receiver_address,
-                  sender:address,
+                  receiver: receiver_address,
+                  sender: address,
                   status: data.status,
-                  estimatedDeliveryDate:estimatedDeliveryDate.toISOString()
+                  estimatedDeliveryDate: estimatedDeliveryDate.toISOString(),
                 });
                 await newShipment.save();
               } else {
@@ -491,7 +498,10 @@ exports.createShipment = [
                   '<<<<< ShipmentService < ShipmentController < createShipment : updating shipment in shipment model',
                 );
                 const txnIds = [...shipmentFound.txnIds, txnId];
-                await ShipmentModel.updateOne({ shipmentId }, { txnIds, status: data.status });
+                await ShipmentModel.updateOne(
+                  { shipmentId },
+                  { txnIds, status: data.status },
+                );
               }
               //Organisation Collection
               if (!organisationFound) {
@@ -520,44 +530,46 @@ exports.createShipment = [
                 );
               }
 
-             if (data.status == "Received")
-                    {
-                  await utility.asyncForEach(data.products, async product => {
-                  const productQuery = { serialNumber: product};
-                  const productFound = await InventoryModel.findOne(productQuery);
+              if (data.status == 'Received') {
+                await utility.asyncForEach(data.products, async product => {
+                  const productQuery = { serialNumber: product };
+                  const productFound = await InventoryModel.findOne(
+                    productQuery,
+                  );
                   if (productFound) {
                     logger.log(
                       'info',
                       '<<<<< ShipmentService < ShipmentController < createShipment : product found status receive',
                     );
-                     await InventoryModel.updateOne(productQuery, {
+                    await InventoryModel.updateOne(productQuery, {
                       transactionIds: [...productFound.transactionIds, txnId],
-                      });
+                    });
 
-                     await InventoryModel.updateOne(productQuery, {
+                    await InventoryModel.updateOne(productQuery, {
                       owner: data.receiver,
                     });
-                    }
-                })
+                  }
+                });
               }
 
-            if (data.status == "In Transit")
-                    {
-                  await utility.asyncForEach(data.products, async product => {
+              if (data.status == 'In Transit') {
+                await utility.asyncForEach(data.products, async product => {
                   const productQuery = { serialNumber: product };
-                  const productFound = await InventoryModel.findOne(productQuery);
+                  const productFound = await InventoryModel.findOne(
+                    productQuery,
+                  );
                   if (productFound) {
                     logger.log(
                       'info',
                       '<<<<< ShipmentService < ShipmentController < createShipment : product found status receive',
                     );
-                      await InventoryModel.updateOne(productQuery, {
+                    await InventoryModel.updateOne(productQuery, {
                       transactionIds: [...productFound.transactionIds, txnId],
-                      });
-                    }
-                })
-		}
+                    });
+                  }
+                });
               }
+            }
           });
         } else {
           logger.log(
@@ -880,8 +892,8 @@ exports.createPurchaseOrder = [
                 );
                 const newPO = new POModel({
                   orderID,
-                  sender: address,
-                  receiver: data.sendpoto.address,
+                  sender: data.sendpoto.address,
+                  receiver: data.receiver.address,
                 });
                 await newPO.save();
                 logger.log(
@@ -1289,29 +1301,90 @@ exports.fetchUserShipments = [
         });
       }
 
-      const thisYear = new Date(new Date().setFullYear(new Date().getFullYear() - 1));
-      const thisMonth = new Date(new Date().setMonth(new Date().getMonth() - 1));
+      const thisYear = new Date(
+        new Date().setFullYear(new Date().getFullYear() - 1),
+      );
+      const thisMonth = new Date(
+        new Date().setMonth(new Date().getMonth() - 1),
+      );
       const thisWeek = new Date(new Date().setDate(new Date().getDate() - 7));
-      const today = new Date(new Date().setHours(0,0,0,0));
-      totalSent = await ShipmentModel.find({ sender: user.address, status: "Shipped" }).count();
-      thisYearSent = await ShipmentModel.find({ sender: user.address, status: "Shipped", "createdAt" : { $gte : thisYear.toISOString() } }).count();
-      thisMonthSent = await ShipmentModel.find({ sender: user.address, status: "Shipped", "createdAt" : { $gte : thisMonth.toISOString() } }).count();
-      thisWeekSent = await ShipmentModel.find({ sender: user.address, status: "Shipped", "createdAt" : { $gte : thisWeek.toISOString() } }).count();
-      todaySent = await ShipmentModel.find({ sender: user.address, status: "Shipped", "createdAt" : { $gte : today.toISOString()} }).count();
-      totalReceived = await ShipmentModel.find({ sender: user.address, status: "Received" }).count();
-      thisYearReceived = await ShipmentModel.find({ sender: user.address, status: "Received", "createdAt" : { $gte : thisYear.toISOString() } }).count();
-      thisMonthReceived = await ShipmentModel.find({ sender: user.address, status: "Received", "createdAt" : { $gte : thisMonth.toISOString() } }).count();
-      thisWeekReceived = await ShipmentModel.find({ sender: user.address, status: "Received", "createdAt" : { $gte : thisWeek.toISOString() } }).count();
-      todayReceived = await ShipmentModel.find({ sender: user.address, status: "Received", "createdAt" : { $gte : today.toISOString()} }).count();
-      totalTransit = await ShipmentModel.find({ sender: user.address, status: "In Transit" }).count();
-      thisYearTransit = await ShipmentModel.find({ sender: user.address, status: "In Transit", "createdAt" : { $gte : thisYear.toISOString() } }).count();
-      thisMonthTransit = await ShipmentModel.find({ sender: user.address, status: "In Transit", "createdAt" : { $gte : thisMonth.toISOString() } }).count();
-      thisWeekTransit = await ShipmentModel.find({ sender: user.address, status: "In Transit", "createdAt" : { $gte : thisWeek.toISOString() } }).count();
-      todayTransit = await ShipmentModel.find({ sender: user.address, status: "In Transit", "createdAt" : { $gte : today.toISOString()} }).count();
+      const today = new Date(new Date().setHours(0, 0, 0, 0));
+      totalSent = await ShipmentModel.find({
+        sender: user.address,
+        status: 'Shipped',
+      }).count();
+      thisYearSent = await ShipmentModel.find({
+        sender: user.address,
+        status: 'Shipped',
+        createdAt: { $gte: thisYear.toISOString() },
+      }).count();
+      thisMonthSent = await ShipmentModel.find({
+        sender: user.address,
+        status: 'Shipped',
+        createdAt: { $gte: thisMonth.toISOString() },
+      }).count();
+      thisWeekSent = await ShipmentModel.find({
+        sender: user.address,
+        status: 'Shipped',
+        createdAt: { $gte: thisWeek.toISOString() },
+      }).count();
+      todaySent = await ShipmentModel.find({
+        sender: user.address,
+        status: 'Shipped',
+        createdAt: { $gte: today.toISOString() },
+      }).count();
+      totalReceived = await ShipmentModel.find({
+        sender: user.address,
+        status: 'Received',
+      }).count();
+      thisYearReceived = await ShipmentModel.find({
+        sender: user.address,
+        status: 'Received',
+        createdAt: { $gte: thisYear.toISOString() },
+      }).count();
+      thisMonthReceived = await ShipmentModel.find({
+        sender: user.address,
+        status: 'Received',
+        createdAt: { $gte: thisMonth.toISOString() },
+      }).count();
+      thisWeekReceived = await ShipmentModel.find({
+        sender: user.address,
+        status: 'Received',
+        createdAt: { $gte: thisWeek.toISOString() },
+      }).count();
+      todayReceived = await ShipmentModel.find({
+        sender: user.address,
+        status: 'Received',
+        createdAt: { $gte: today.toISOString() },
+      }).count();
+      totalTransit = await ShipmentModel.find({
+        sender: user.address,
+        status: 'In Transit',
+      }).count();
+      thisYearTransit = await ShipmentModel.find({
+        sender: user.address,
+        status: 'In Transit',
+        createdAt: { $gte: thisYear.toISOString() },
+      }).count();
+      thisMonthTransit = await ShipmentModel.find({
+        sender: user.address,
+        status: 'In Transit',
+        createdAt: { $gte: thisMonth.toISOString() },
+      }).count();
+      thisWeekTransit = await ShipmentModel.find({
+        sender: user.address,
+        status: 'In Transit',
+        createdAt: { $gte: thisWeek.toISOString() },
+      }).count();
+      todayTransit = await ShipmentModel.find({
+        sender: user.address,
+        status: 'In Transit',
+        createdAt: { $gte: today.toISOString() },
+      }).count();
       res.json({
         data: items_array,
         counts: {
-          totalShipments:{
+          totalShipments: {
             total: totalSent,
             thisYear: thisYearSent,
             thisMonth: thisMonthSent,
@@ -1355,10 +1428,10 @@ exports.fetchUserShipments = [
       );
       return apiResponse.ErrorResponse(res, err);
     }
-  }
+  },
 ];
 
-var QRCode = require('qrcode');
+const QRCode = require('qrcode');
 
 exports.generateQRCode = [
   auth,
@@ -1397,6 +1470,194 @@ exports.generateQRCode = [
         'error',
         '<<<<< ShipmentService < ShipmentController < GenerateQRCode : error (catch block)',
       );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.addPOsFromExcel = [
+  auth,
+  async (req, res) => {
+    try {
+      checkToken(req, res, async result => {
+        if (result.success) {
+          const permission_request = {
+            result: result,
+            permissionRequired: 'createPO',
+          };
+          checkPermissions(permission_request, async permissionResult => {
+            if (permissionResult.success) {
+              try {
+                const dir = `uploads`;
+                if (!fs.existsSync(dir)) {
+                  fs.mkdirSync(dir);
+                }
+                await moveFile(
+                  req.file.path,
+                  `${dir}/${req.file.originalname}`,
+                );
+                const workbook = XLSX.readFile(
+                  `${dir}/${req.file.originalname}`,
+                );
+                const sheet_name_list = workbook.SheetNames;
+                const data = XLSX.utils.sheet_to_json(
+                  workbook.Sheets[sheet_name_list[1]],
+                  { dateNF: 'dd/mm/yyyy;@', cellDates: true, raw: false },
+                );
+
+                let poDataArray = [];
+                await utility.asyncForEach(data, async item => {
+                  const receiverDetails = await UserModel.findOne({
+                    name: item['Country Name'],
+                  });
+                  const senderDetails = await UserModel.findOne({
+                    name: item['Vendor Name'],
+                  });
+                  let productName = item['Material Description'].split(',')[0];
+                  productName = productName.includes('BCG')
+                    ? 'BCG'
+                    : productName;
+                  const productManufacturer = `${productName}-${
+                    item['Vendor Name']
+                  }`;
+                  if (receiverDetails && senderDetails) {
+                    const poData = {
+                      client: item['Vendor Name'],
+                      orderID: `PO${item['UNICEf PO Number']}`,
+                      clientId: item['Vendor'],
+                      date: item['Document Date'],
+                      destination: item['Country Name'],
+                      products: [
+                        { [productManufacturer]: item['Order Quantity'] },
+                      ],
+                      receiver: {
+                        address: receiverDetails.address,
+                        name: receiverDetails.name,
+                        email: receiverDetails.email,
+                      },
+                      sendpoto: {
+                        address: senderDetails.address,
+                        name: senderDetails.name,
+                        email: senderDetails.email,
+                      },
+                      ipCode: item['IP Code'],
+                      ipName: item['IP Name'],
+                      incoterms: item['Incoterms'],
+                      incoterms2: item['Incoterms (Part 2)'],
+                      material: item['Material'],
+                      matrialDescription: item['Material Description'],
+                      quantity: item['Order Quantity'],
+                      unit: item['Order Unit'],
+                      poItem: item['PO Item#'],
+                      plant: item['Plant'],
+                      vendor: item['Vendor'],
+                      vendorName: item['Vendor Name'],
+                      reference: item['Your Reference'],
+                    };
+                    poDataArray.push(poData);
+                  }
+                });
+                logger.log(
+                  'info',
+                  '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : published to blockchain',
+                );
+                console.log(poDataArray);
+                let duplciatePOFound = false;
+                utility.asyncForEach(poDataArray, async (item, index) => {
+                  if(duplciatePOFound) return;
+                  const { address } = req.user;
+                  const {
+                    client,
+                    clientId,
+                    date,
+                    destination,
+                    incoterms,
+                    incoterms2,
+                    ipCode,
+                    ipName,
+                    material,
+                    materialDescription,
+                    orderID,
+                    plant,
+                    poItem,
+                    products,
+                    quantity,
+                    reference,
+                    unit,
+                    vendor,
+                    vendorName,
+                  } = item;
+                  const userData = {
+                    stream: po_stream_name,
+                    key: item.orderID,
+                    address,
+                    data: item,
+
+                  };
+                  duplicatePO = await POModel.findOne({ orderID });
+
+                  if(duplicatePO) {
+                    const newNotification = new NotificationModel({
+                      owner: req.user.address,
+                      message: `Your POs from excel is failed to add due to duplicate PO ID ${orderID}`,
+                    });
+                    await newNotification.save();
+                  }
+                  const response = await axios.post(
+                    `${blockchain_service_url}/publish`,
+                    userData,
+                  );
+                  const newPO = new POModel({
+                    orderID,
+                    sender: item.sendpoto.address,
+                    receiver: item.receiver.address,
+                    client,
+                    clientId,
+                    date,
+                    destination,
+                    incoterms,
+                    incoterms2,
+                    ipCode,
+                    ipName,
+                    material,
+                    materialDescription,
+                    plant,
+                    poItem,
+                    products,
+                    quantity,
+                    reference,
+                    unit,
+                    vendor,
+                    vendorName,
+                    txnId: response.data.transactionId,
+                    status: 'Accepted'
+                  });
+                  await newPO.save();
+                  if(index === poDataArray.length-1) {
+                    const newNotification = new NotificationModel({
+                      owner: req.user.address,
+                      message: `Your POs from excel is added successfully`,
+                    });
+                    await newNotification.save();
+                  }
+                });
+                return apiResponse.successResponseWithData(
+                  res,
+                  'Upload Result',
+                );
+              } catch (e) {
+                return apiResponse.ErrorResponse(res, 'Error from Blockchain');
+
+              }
+            } else {
+              res.json('Sorry! User does not have enough Permissions');
+            }
+          });
+        } else {
+          return apiResponse.ErrorResponse(res, 'User not authenticated');
+        }
+      });
+    } catch (e) {
       return apiResponse.ErrorResponse(res, err);
     }
   },

@@ -1,7 +1,19 @@
-var express = require("express");
+const express = require("express");
+const multer = require('multer');
 const ShipmentController = require("../controllers/ShipmentController");
 
-var router = express.Router();
+const Storage = multer.diskStorage({
+  destination(req, file, callback) {
+    callback(null, './images');
+  },
+  filename(req, file, callback) {
+    callback(null, `${Date.now()}`);
+  },
+});
+
+const upload = multer({ storage: Storage });
+
+const router = express.Router();
 
 router.get("/shipmentStatistics", ShipmentController.shipmentStatistics);
 router.get("/purchaseOrderStatistics", ShipmentController.purchaseOrderStatistics);
@@ -27,6 +39,10 @@ router.get("/getAllProductColl", ShipmentController.getAllProductColl);
 
 router.get("/trackShipment", ShipmentController.trackShipment);
 router.get("/fetchUserShipments", ShipmentController.fetchUserShipments);
-
+router.post(
+  '/addPOsFromExcel',
+  upload.single('excel'),
+  ShipmentController.addPOsFromExcel,
+);
 module.exports = router;
 
