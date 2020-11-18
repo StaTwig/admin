@@ -530,6 +530,23 @@ exports.createShipment = [
                 );
               }
 
+            //PurchaseOrder collection
+            const orderID = "PO45163183";
+            const POFound = await POModel.findOne({ orderID });
+            if (!POFound) {
+                logger.log(
+                  'info',
+                  '<<<<< ShipmentService < ShipmentController < createPO : PO not found in collection',
+                );
+				      } else {
+				          logger.log(
+                  'info',
+                  '<<<<< ShipmentService < ShipmentController < createPO : updating ShipmentId in PO model',
+                );
+              const shipmentIds = [...POFound.shipmentIds, shipmentId];
+              await POModel.updateOne({ orderID }, {shipmentIds});
+				      }
+
               if (data.status == 'Received') {
                 await utility.asyncForEach(data.products, async product => {
                   const productQuery = { serialNumber: product };
