@@ -18,9 +18,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsers } from '../../actions/userActions';
 import PurchaseFormReview from '../../components/verifyPO/purchaseFormReview';
 import { getShipments, resetShipments } from '../../actions/shipmentActions';
+import ExcelPopUp from './ExcelPopup';
 
 const ShipmentAnalytic = props => {
   const [openPurchaseOrder, setOpenPurchaseOrder] = useState(false);
+  const [openPOExcel, setOpenPOExcel] = useState(false);
   const [visible, setvisible] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [skip, setSkip] = useState(5);
@@ -30,6 +32,7 @@ const ShipmentAnalytic = props => {
 
   const closeModal = () => {
     setOpenPurchaseOrder(false);
+    setOpenPOExcel(false);
   };
 
   const users = useSelector(state => {
@@ -68,6 +71,8 @@ const ShipmentAnalytic = props => {
       <div className="d-flex justify-content-between">
         <h1 className="breadcrumb">SHIPMENT</h1>
         <div className="d-flex">
+          <button className=" btn btn-outline-primary mb-2" onClick={()=>setOpenPOExcel(true)}>Excel</button>
+
           <button
             className="btn btn-orange fontSize20 font-bold mr-2"
             onClick={() => setOpenPurchaseOrder(true)}
@@ -83,6 +88,18 @@ const ShipmentAnalytic = props => {
           </Link>
         </div>
       </div>
+      {openPOExcel && (
+        <Modal
+          title="Import"
+          close={closeModal}
+          size="modal-md" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+          <ExcelPopUp
+            onHide={closeModal} //FailurePopUp
+            setOpenPOExcel={setOpenPOExcel}
+          />
+        </Modal>
+      )}
       <Tiles {...props} />
       <div className="mt-4">
         <Tabs {...props} setvisible={setvisible} visible={visible} />

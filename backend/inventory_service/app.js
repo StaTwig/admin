@@ -2,12 +2,15 @@ const express = require("express");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const cors = require("cors");
+const fs = require('fs');
+const mongoose = require("mongoose");
+
 require("dotenv").config();
 const indexRouter = require("./routes/index");
 const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
-const cors = require("cors");
-const fs = require('fs');
+
 const dir = `images`;
 if (!fs.existsSync(dir)) {
   fs.mkdirSync(dir);
@@ -17,7 +20,6 @@ const app = express();
 
 // DB connection
 const MONGODB_URL = process.env.MONGODB_URL;
-const mongoose = require("mongoose");
 mongoose.connect(MONGODB_URL, { useNewUrlParser: true }).then(() => {
   //don't show the log when it is test
   if(process.env.NODE_ENV !== "test") {

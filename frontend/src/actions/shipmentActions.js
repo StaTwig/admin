@@ -159,3 +159,16 @@ const resetShipmentsCount = data => {
     payload: data,
   };
 };
+
+export const addPOsFromExcel = async data => {
+  try {
+    const url = config().addPOsFromExcelUrl;
+    debugger;
+    const result = await axios.post(url, data, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
