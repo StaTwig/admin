@@ -6,6 +6,7 @@ const auth = require("../middlewares/jwt");
 
 const InventoryModel = require('../models/InventoryModel');
 const ShipmentModel = require('../models/ShipmentModel');
+const POModel = require('../models/POModel');
 
 const checkToken = require('../middlewares/middleware').checkToken;
 const checkPermissions = require('../middlewares/rbac_middleware').checkPermissions;
@@ -282,52 +283,85 @@ exports.track = [
   async (req, res) => {
     try {
       const { trackingNumber } = req.query;
-	    console.log("tr",trackingNumber)
       logger.log(
         'info',
         '<<<<< ShipmentService < ShipmentController < trackNumber : tracking , querying by transaction hash',
       );
 
-      if (trackingNumber.includes("000"))
-            {
-        var type = "serialNumber";
-        InventoryModel.findOne({ serialNumber: trackingNumber }).then(async user => {
-        let txnIDs = user.transactionIds;
+    if (trackingNumber.includes("PO")) {
+    var type = "PoId";
+    POModel.findOne({
+        orderID: trackingNumber
+    }).then(async user => {
+        let txnId = user.txnId;
+        let shipmentIDs = user.shipmentIds;
         let items_array = [];
-        await utility.asyncForEach(txnIDs, async txnId => {
-          const response = await axios.get(
-              `${blockchain_service_url}/queryDataByRawTxHash?txid=${txnId}`,
-          );
-          const items = response.data.items;
-          items_array.push(JSON.parse(items));
+        let shipment_array = [];
+        const response = await axios.get(
+            `${blockchain_service_url}/queryDataByTxHash?stream=test_stream_order&txid=${txnId}`,
+        );
+        const items = response.data.items;
+        items_array.push(JSON.parse(items));
+        await utility.asyncForEach(shipmentIDs, async shipmentId => {
+            shipment_array.push(shipmentId);
         });
         logger.log(
-          'info',
-          '<<<<< ShipmentService < ShipmentController < trackProduct : tracked product, queried data by transaction hash',
+            'info',
+            '<<<<< ShipmentService < ShipmentController < trackShipment : tracked PO, queried data by transaction hash',
         );
-        res.json({ data:items_array,type:type});
-      });
-    }
-       else
-            {
-        var type = "shipmentId";
-        ShipmentModel.findOne({ shipmentId: trackingNumber }).then(async user => {
+        res.json({
+            POTxn: items_array,
+            shipments: shipment_array,
+            type: type
+        });
+    });
+  } else if (trackingNumber.includes("SHP")) {
+    var type = "shipmentId";
+    ShipmentModel.findOne({
+        shipmentId: trackingNumber
+    }).then(async user => {
         let txnIDs = user.txnIds;
         let items_array = [];
         await utility.asyncForEach(txnIDs, async txnId => {
-          const response = await axios.get(
-            `${blockchain_service_url}/queryDataByTxHash?stream=${stream_name}&txid=${txnId}`,
-          );
-          const items = response.data.items;
-          items_array.push(JSON.parse(items));
+            const response = await axios.get(
+                `${blockchain_service_url}/queryDataByTxHash?stream=${stream_name}&txid=${txnId}`,
+            );
+            const items = response.data.items;
+            items_array.push(JSON.parse(items));
         });
         logger.log(
-          'info',
-          '<<<<< ShipmentService < ShipmentController < trackShipment : tracked shipment, queried data by transaction hash',
+            'info',
+            '<<<<< ShipmentService < ShipmentController < trackShipment : tracked shipment, queried data by transaction hash',
         );
-        res.json({ data:items_array,type:type});
-      });
-            }
+        res.json({
+            data: items_array,
+            type: type
+        });
+    });
+  } else {
+	var type = "serialNumber";
+  InventoryModel.findOne({
+        serialNumber: trackingNumber
+    }).then(async user => {
+        let txnIDs = user.transactionIds;
+        let items_array = [];
+        await utility.asyncForEach(txnIDs, async txnId => {
+            const response = await axios.get(
+                `${blockchain_service_url}/queryDataByRawTxHash?txid=${txnId}`,
+            );
+            const items = response.data.items;
+            items_array.push(JSON.parse(items));
+        });
+        logger.log(
+            'info',
+            '<<<<< ShipmentService < ShipmentController < trackProduct : tracked product, queried data by transaction hash',
+        );
+        res.json({
+            data: items_array,
+            type: type
+        });
+    });
+}
     } catch (err) {
       logger.log(
         'error',

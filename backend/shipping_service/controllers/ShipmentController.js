@@ -530,6 +530,23 @@ exports.createShipment = [
                 );
               }
 
+            //PurchaseOrder collection
+            const orderID = "PO45163183";
+            const POFound = await POModel.findOne({ orderID });
+            if (!POFound) {
+                logger.log(
+                  'info',
+                  '<<<<< ShipmentService < ShipmentController < createPO : PO not found in collection',
+                );
+				      } else {
+				          logger.log(
+                  'info',
+                  '<<<<< ShipmentService < ShipmentController < createPO : updating ShipmentId in PO model',
+                );
+              const shipmentIds = [...POFound.shipmentIds, shipmentId];
+              await POModel.updateOne({ orderID }, {shipmentIds});
+				      }
+
               if (data.status == 'Received') {
                 await utility.asyncForEach(data.products, async product => {
                   const productQuery = { serialNumber: product };
@@ -890,12 +907,31 @@ exports.createPurchaseOrder = [
                   `${blockchain_service_url}/publish`,
                   userData,
                 );
-                const newPO = new POModel({
+
+              const txnIdPO = response.data.transactionId;
+              const POFound = await POModel.findOne({ orderID });
+
+              if (!POFound) {
+                logger.log(
+                  'info',
+                  '<<<<< ShipmentService < ShipmentController < createPO : PO found in collection',
+                );
+              const newPO = new POModel({
                   orderID,
-                  sender: data.sendpoto.address,
-                  receiver: data.receiver.address,
+                  txnIds: [txnIdPO],
+                  sender: address,
+                  receiver: data.sendpoto.address,
                 });
-                await newPO.save();
+              await newPO.save();
+              } else {
+                logger.log(
+                  'info',
+                  '<<<<< ShipmentService < ShipmentController < createPO : updating PO in PO model',
+                );
+              const txnIds = [...POFound.txnIds, txnIdPO];
+              await POModel.updateOne({ orderID }, { txnIds });
+              }
+
                 logger.log(
                   'info',
                   '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : published to blockchain',
