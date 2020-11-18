@@ -2,6 +2,8 @@ var mongoose = require("mongoose");
 
 var POSchema = new mongoose.Schema({
   orderID: {type: String, required: true, unique: true},
+  txnId: {type: String},
+  shipmentIds: {type: Array, required: true},
 	sender: {type: String, required: true},
 	receiver: {type: String, required: true},
   client: {type: String},
@@ -23,7 +25,6 @@ var POSchema = new mongoose.Schema({
   unit: {type: String},
   vendor: {type: String},
   vendorName: {type: String},
-  txnId: {type: String},
   status:{type: String, required: true, default: 'Created'}
 }, {timestamps: true});
 
