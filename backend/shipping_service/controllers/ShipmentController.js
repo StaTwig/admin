@@ -97,12 +97,20 @@ exports.purchaseOrderStatistics = [
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
-              const { address } = req.user;
+              const { address, role } = req.user;
               const { skip, limit } = req.query;
-              const senderPOs = await POModel.find({ sender: address })
-                .sort({ createdAt: -1 })
-                .skip(parseInt(skip))
-                .limit(parseInt(limit));
+              let senderPOs = [];
+              if(role === 'powerUser') {
+                senderPOs = await POModel.find({})
+                  .sort({ createdAt: -1 })
+                  .skip(parseInt(skip))
+                  .limit(parseInt(limit));
+              }else {
+                senderPOs = await POModel.find({ sender: address })
+                  .sort({ createdAt: -1 })
+                  .skip(parseInt(skip))
+                  .limit(parseInt(limit));
+              }
               const receiverPos = await POModel.find({ receiver: address })
                 .sort({ createdAt: -1 })
                 .skip(parseInt(skip))
@@ -112,7 +120,7 @@ exports.purchaseOrderStatistics = [
                 const response = await axios.get(
                   `${blockchain_service_url}/queryDataByKey?stream=${po_stream_name}&key=${
                     po.orderID
-                  }`,
+                    }`,
                 );
                 const items = response.data.items;
                 if (items.length > 0) {
@@ -121,21 +129,23 @@ exports.purchaseOrderStatistics = [
                   poItems.push(item);
                 }
               });
+              if(role !== 'powerUser') {
+                await utility.asyncForEach(receiverPos, async po => {
+                  const response = await axios.get(
+                    `${blockchain_service_url}/queryDataByKey?stream=${po_stream_name}&key=${
+                      po.orderID
+                      }`,
+                  );
+                  const items = response.data.items;
+                  if (items.length > 0) {
+                    const item = items[items.length - 1];
+                    item['status'] =
+                      po.status === 'Created' ? 'Received' : po.status;
+                    poItems.push(item);
+                  }
+                });
+              }
 
-              await utility.asyncForEach(receiverPos, async po => {
-                const response = await axios.get(
-                  `${blockchain_service_url}/queryDataByKey?stream=${po_stream_name}&key=${
-                    po.orderID
-                  }`,
-                );
-                const items = response.data.items;
-                if (items.length > 0) {
-                  const item = items[items.length - 1];
-                  item['status'] =
-                    po.status === 'Created' ? 'Received' : po.status;
-                  poItems.push(item);
-                }
-              });
 
               logger.log(
                 'info',
@@ -916,13 +926,13 @@ exports.createPurchaseOrder = [
                   'info',
                   '<<<<< ShipmentService < ShipmentController < createPO : PO found in collection',
                 );
-              const newPO = new POModel({
+                const newPO = new POModel({
                   orderID,
                   txnIds: [txnIdPO],
-                  sender: address,
-                  receiver: data.sendpoto.address,
+                  sender: data.sendpoto.address,
+                  receiver: data.receiver.address,
                 });
-              await newPO.save();
+                await newPO.save();
               } else {
                 logger.log(
                   'info',
@@ -1555,7 +1565,7 @@ exports.addPOsFromExcel = [
                     : productName;
                   const productManufacturer = `${productName}-${
                     item['Vendor Name']
-                  }`;
+                    }`;
                   if (receiverDetails && senderDetails) {
                     const poData = {
                       client: item['Vendor Name'],

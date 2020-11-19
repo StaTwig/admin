@@ -232,6 +232,7 @@ exports.login = [
                       Name: user.Name,
                       email: user.email,
                       address: user.address,
+                      role: user.role
                     };
                     //Prepare JWT token for authentication
                     const jwtPayload = userData;
