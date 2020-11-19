@@ -5,7 +5,8 @@ const ProductsTableReview = props => {
 
   const {
     tableHeader,
-    products
+    products,
+    materialId
   } = props;
   const product = Object.keys(products[0])[0].split('-')[0];
   const manufacturer = Object.keys(products[0])[0].split('-')[1];
@@ -25,13 +26,19 @@ const ProductsTableReview = props => {
         </div>
         <div>
           <div className="rTableRow">
-            <div className="rTableCell">
-              <div className="square-box" />
+          <div className="rTableCell">
               <input
               disabled
                type="text"
                className="form-control"
-               placeholder="Select Supplier"
+               value={materialId}
+              />
+            </div>
+            <div className="rTableCell">
+              <input
+              disabled
+               type="text"
+               className="form-control"
                value={product}
               />
             </div>
@@ -40,7 +47,6 @@ const ProductsTableReview = props => {
               disabled
                type="text"
                className="form-control"
-               placeholder="Select Supplier"
                value={manufacturer}
               />
             </div>
@@ -50,7 +56,6 @@ const ProductsTableReview = props => {
                 disabled
                   type="number"
                   className="form-control"
-                  placeholder="Enter Quantity"
                   value={quantity}
                 />
               </div>

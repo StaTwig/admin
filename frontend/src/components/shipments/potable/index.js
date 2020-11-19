@@ -90,8 +90,8 @@ const PoTable = props => {
       )}
       <div className="rTable">
         <div className="rTableHeading">
-          <div className="rTableHead">Manufacturer</div>
-          <div className="rTableHead">Order ID</div>
+          <div className="rTableHead">Vendor</div>
+          <div className="rTableHead">Purchase Order ID</div>
           <div className="rTableHead">Product Name</div>
           <div className="rTableHead">
             <span>Quantity</span>
@@ -100,13 +100,10 @@ const PoTable = props => {
             <span>Order Date</span>
           </div>
           <div className="rTableHead">
-            <span>Delivery To</span>
+            <span>Shipped From</span>
           </div>
           <div className="rTableHead">
-            <span>Delivery Location</span>
-          </div>
-          <div className="rTableHead">
-            <span>Status</span>
+            <span>To Location</span>
           </div>
           <div className="rTableHead">
             <span />
@@ -147,11 +144,6 @@ const PoTable = props => {
                   <div className="rTableCell">{p.date}</div>
                   <div className="rTableCell">{p.receiver.name}</div>
                   <div className="rTableCell">{p.destination}</div>
-                  <div className="rTableCell">
-                    <div className={`status ${statusStyle}`}>
-                      {purchase.status}
-                    </div>
-                  </div>
                   <div className="rTableCell">
                     <button
                       className="btn btn-outline-primary"
