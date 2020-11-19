@@ -7,7 +7,7 @@ import Modal from '../../shared/modal';
 import PoPopUp from './poPopUp';
 import './style.scss';
 
-const tableHeader = ['Product Name', 'Manufacturer', 'Quantity'];
+const tableHeader = ['Material Id','Product Name', 'Manufacturer', 'Quantity'];
 
 const PurchaseFormReview = props => {
   const dispatch = useDispatch();
@@ -50,7 +50,7 @@ const PurchaseFormReview = props => {
   };
   return (
     <div className="purchaseform">
-        <p>Date: {todayDate}</p>
+        <p className="date-alignment">Date: {todayDate}</p>
       <div className="d-flex justify-content-between">
         <div className="input-group">
           <label className="reference">Send PO To</label>
@@ -58,48 +58,83 @@ const PurchaseFormReview = props => {
             disabled
             type="text"
             className="form-control"
-            placeholder="Select Supplier"
             value={reviewPo.data.sendpoto.name}
           />
         </div>
         <div className="input-group">
-          <label className="reference">Client</label>
+          <label className="reference">Vendor Id</label>
           <input
             disabled
             type="text"
             className="form-control"
-            placeholder="Select Client"
-            value={reviewPo.data.client}
+            value={reviewPo.data.vendorId}
           />
         </div>
       </div>
       <div className="d-flex justify-content-between">
         <div className="input-group">
-          <label className="reference">Delivery To</label>
-
-          <input
+          <label className="reference">Purchase Order Id</label>
+           <input
             disabled
             type="text"
             className="form-control"
-            placeholder="Select Supplier"
-            value={reviewPo.data.receiver.name}
+            value={reviewPo.data.unicefPo}
           />
         </div>
         <div className="input-group">
-          <label className="reference">Delivery Location</label>
+          <label className="reference">Vendor Name</label>
           <input
             disabled
             type="text"
             className="form-control"
-            placeholder="Enter Delivery Location"
-            value={reviewPo.data.destination}
+            value={reviewPo.data.receiver.name}
           />
         </div>
       </div>
-      <hr />
+      <div className="d-flex justify-content-between">
+        <div className="input-group">
+          <label className="reference">Po Item#</label>
+          <input
+            disabled
+            type="text"
+            className="form-control"
+            value={reviewPo.data.poNum}
+          />
+        </div>
+        <div className="input-group">
+          <label className="reference">To Location Id</label>
+          <input
+            disabled
+            type="text"
+            className="form-control"
+            value={reviewPo.data.locationId}
+          />
+        </div>
+      </div>
+      <div className="d-flex justify-content-between">
+        <div className="input-group">
+          <label className="reference">Shipped From</label>
+          <input
+            disabled
+            type="text"
+            className="form-control"
+            value={reviewPo.data.shippedFrom}
+          />
+        </div>
+        <div className="input-group">
+          <label className="reference">To Location</label>
+          <input
+            disabled
+            type="text"
+            className="form-control"
+            value={reviewPo.data.toLocation}
+          />
+        </div>
+      </div>
       <ProductsTableReview
         tableHeader={tableHeader}
         products={reviewPo.data.products}
+        materialId={reviewPo.data.materialId}
       />
 
       <button className="btn btn-orange review " onClick={onAssign}>

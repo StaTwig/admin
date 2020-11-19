@@ -7,6 +7,9 @@ const ProductsTable = props => {
   const {
     tableHeader,
     products,
+    materialIds,
+    materialId,
+    onMaterialSelect,
     manufacturers,
     onProductSelect,
     onManufacturerSelect,
@@ -16,13 +19,13 @@ const ProductsTable = props => {
     onQuantityChange,
   } = props;
   return (
-    <div className="table productTable">
+    <div className="table productTable mt-2">
       <div className="rTable">
         <div className="rTableHeading">
           {tableHeader &&
             tableHeader.map((item, index) => {
               return (
-                <div key={index} className="rTableHead">
+                <div key={index} className="rTableHead pro">
                   {item}
                 </div>
               );
@@ -30,8 +33,15 @@ const ProductsTable = props => {
         </div>
         <div>
           <div className="rTableRow">
+          <div className="rTableCell">
+              <DropdownButton
+                groups={materialIds}
+                onSelect={onMaterialSelect}
+                name={materialId}
+                className="text"
+              />
+            </div>
             <div className="rTableCell">
-              <div className="square-box" />
               <DropdownButton
                 groups={products}
                 onSelect={onProductSelect}

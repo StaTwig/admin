@@ -22,10 +22,14 @@
         align-items: center;
 
         .modal-title {
-          font: Bold 35px/13px Roboto;
+          font: Bold 25px/13px Roboto;
           letter-spacing: 0;
           color: $primaryBlue;
         }
+      }
+
+      .modal-body{
+        padding:0rem;
       }
 
       .modal-footer {

@@ -258,6 +258,7 @@ const NewShipment = props => {
     const receiver = users.find(usr => usr.name === deliveryTo);
     const data = {
       shipmentId,
+      po,
       client,
       receiver: receiver.address,
       supplier,
