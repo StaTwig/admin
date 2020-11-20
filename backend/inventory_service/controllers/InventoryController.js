@@ -704,12 +704,10 @@ exports.insertInventories = [
          }
          inventories.push(inventory);
       }
-      let bulkArr = [];
-      const inventoryMongoResult = await InventoryModel.insertMany(
+      await InventoryModel.insertMany(
         inventories,
       );
 
-      await InventoryModel.bulkWrite(bulkArr)
       apiResponse.successResponseWithData(res, 'Inserted Success');
     }catch(e) {
       apiResponse.ErrorResponse(res, e);
