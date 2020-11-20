@@ -142,7 +142,7 @@ const PoTable = props => {
                     }
                   </div>
                   <div className="rTableCell">{p.date}</div>
-                  <div className="rTableCell">{p.receiver.name}</div>
+                  <div className="rTableCell">{p.incoterms2}</div>
                   <div className="rTableCell">{p.destination}</div>
                   <div className="rTableCell">
                     <button
