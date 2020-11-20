@@ -1608,6 +1608,7 @@ exports.addPOsFromExcel = [
                       message: `Your POs from excel is failed to add due to duplicate PO ID ${orderID}`,
                     });
                     await newNotification.save();
+                    return;
                   }
                   const response = await axios.post(
                     `${blockchain_service_url}/publish`,
