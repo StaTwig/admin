@@ -71,7 +71,7 @@ const ShipmentAnalytic = props => {
       <div className="d-flex justify-content-between">
         <h1 className="breadcrumb">SHIPMENT</h1>
         <div className="d-flex">
-          <button className=" btn btn-outline-primary mb-2" onClick={()=>setOpenPOExcel(true)}>Excel</button>
+           <button className=" btn-primary btn mr-2" onClick={()=>setOpenPOExcel(true)}>Import PO</button>
 
           <button
             className="btn btn-orange fontSize20 font-bold mr-2"
