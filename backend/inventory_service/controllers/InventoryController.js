@@ -633,6 +633,90 @@ exports.addNewInventory = [
   },
 ];
 
+exports.updateInventories = [
+  auth,
+  async (req, res) => {
+    try {
+      const { address } = req.user;
+      const { data } = req.body;
+      const { serialNumberRange, manufacturingDate, expiryDate, productName } = data;
+      const serialNumbers = serialNumberRange.split('-');
+      const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
+      const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
+
+      const serialNumberText = serialNumbers[1].split(/(\d+)/)[0]
+      let inventories = [];
+      for(let i=serialNumbersFrom; i<=serialNumbersTo; i++) {
+         const inventory = {
+           transactionIds: [],
+           serialNumber: `${serialNumberText}${i}`,
+           manufacturingDate,
+           expiryDate,
+           productName,
+           quantity: 1,
+           owner: address
+         }
+         inventories.push(inventory);
+      }
+      let bulkArr = [];
+     /* const inventoryMongoResult = await InventoryModel.insertMany(
+        inventories,
+      );*/
+      for (const i of inventories) {
+        bulkArr.push({
+          updateOne: {
+            "filter": { "serialNumber": i.serialNumber },
+            "update": { "owner": address }
+          }
+        })
+      }
+
+      await InventoryModel.bulkWrite(bulkArr)
+      apiResponse.successResponseWithData(res, 'Updated Success');
+    }catch(e) {
+      apiResponse.ErrorResponse(res, e);
+    }
+
+  }
+]
+exports.insertInventories = [
+  auth,
+  async (req, res) => {
+    try {
+      const { address } = req.user;
+      const { data } = req.body;
+      const { serialNumberRange, manufacturingDate, expiryDate, productName } = data;
+      const serialNumbers = serialNumberRange.split('-');
+      const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
+      const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
+
+      const serialNumberText = serialNumbers[1].split(/(\d+)/)[0]
+      let inventories = [];
+      for(let i=serialNumbersFrom; i<=serialNumbersTo; i++) {
+         const inventory = {
+           transactionIds: [],
+           serialNumber: `${serialNumberText}${i}`,
+           manufacturingDate,
+           expiryDate,
+           productName,
+           quantity: 1,
+           owner: address
+         }
+         inventories.push(inventory);
+      }
+      let bulkArr = [];
+      const inventoryMongoResult = await InventoryModel.insertMany(
+        inventories,
+      );
+
+      await InventoryModel.bulkWrite(bulkArr)
+      apiResponse.successResponseWithData(res, 'Inserted Success');
+    }catch(e) {
+      apiResponse.ErrorResponse(res, e);
+    }
+
+  }
+]
 exports.addMultipleInventories = [
   auth,
   body('inventories')
