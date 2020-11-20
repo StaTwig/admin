@@ -541,8 +541,8 @@ exports.createShipment = [
               }
 
             //PurchaseOrder collection
-            const orderID = "PO45163183";
-            const POFound = await POModel.findOne({ orderID });
+           // const orderID = "PO45163183";
+            const POFound = await POModel.findOne({ orderID: data.orderID });
             if (!POFound) {
                 logger.log(
                   'info',
@@ -556,46 +556,6 @@ exports.createShipment = [
               const shipmentIds = [...POFound.shipmentIds, shipmentId];
               await POModel.updateOne({ orderID }, {shipmentIds});
 				      }
-
-              if (data.status == 'Received') {
-                await utility.asyncForEach(data.products, async product => {
-                  const productQuery = { serialNumber: product };
-                  const productFound = await InventoryModel.findOne(
-                    productQuery,
-                  );
-                  if (productFound) {
-                    logger.log(
-                      'info',
-                      '<<<<< ShipmentService < ShipmentController < createShipment : product found status receive',
-                    );
-                    await InventoryModel.updateOne(productQuery, {
-                      transactionIds: [...productFound.transactionIds, txnId],
-                    });
-
-                    await InventoryModel.updateOne(productQuery, {
-                      owner: data.receiver,
-                    });
-                  }
-                });
-              }
-
-              if (data.status == 'In Transit') {
-                await utility.asyncForEach(data.products, async product => {
-                  const productQuery = { serialNumber: product };
-                  const productFound = await InventoryModel.findOne(
-                    productQuery,
-                  );
-                  if (productFound) {
-                    logger.log(
-                      'info',
-                      '<<<<< ShipmentService < ShipmentController < createShipment : product found status receive',
-                    );
-                    await InventoryModel.updateOne(productQuery, {
-                      transactionIds: [...productFound.transactionIds, txnId],
-                    });
-                  }
-                });
-              }
             }
           });
         } else {

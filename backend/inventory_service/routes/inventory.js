@@ -26,6 +26,8 @@ router.get("/trackProduct", InventoryController.trackProduct);
 
 router.post("/addNewInventory", InventoryController.addNewInventory);
 router.post("/addMultipleInventories", InventoryController.addMultipleInventories);
+router.post("/updateInventories", InventoryController.updateInventories);
+router.post("/insertInventories", InventoryController.insertInventories);
 
 router.post(
   '/addInventoriesFromExcel',
