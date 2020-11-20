@@ -83,14 +83,14 @@ const Tracing = props => {
             <li>669577</li>
             <li>Serium Institute of Pvt</li>
             <li>12:45</li>
-            {menu== true ? <li>Po Item#</li> : null}
-           {menu== true ? <li>Vendor ID</li> : null}
-           {menu== true ? <li>Shipped From</li> : null}
-           {menu== true ? <li>To Location ID</li> : null}
-           {menu== true ? <li>To Location</li> : null}
-           {menu== true ? <li>Material ID</li> : null}
-           {menu== true ? <li>Product Name</li> : null}
-           {menu== true ? <li>Quantity</li> : null}
+            {menu== true ? <li>90</li> : null}
+           {menu== true ? <li>9000777</li> : null}
+           {menu== true ? <li>Mumbai</li> : null}
+           {menu== true ? <li>5645</li> : null}
+           {menu== true ? <li>Niger</li> : null}
+           {menu== true ? <li>8uy655</li> : null}
+           {menu== true ? <li>bOPV</li> : null}
+           {menu== true ? <li>800000</li> : null}
            </ul>
            <div></div>
           </div>
