@@ -78,7 +78,7 @@ export function config() {
       trackProduct: `${DEV_SERVER_URL}/tracktracemanagement/api/track/track?trackingNumber=`,
       addNewProduct: `${DEV_SERVER_URL}/productmanagement/api/products/addProductName`,
       addMultipleProducts: `${DEV_SERVER_URL}/productmanagement/api/products/addMultipleProducts`,
-      getNotifications: `${DEV_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
+      getNotificationsUrl: `${DEV_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotification: `${DEV_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
     },
     stable: {
@@ -110,7 +110,7 @@ export function config() {
       addNewProduct: `${STABLE_SERVER_URL_PRODUCTS}/productmanagement/api/products/addProductName`,
       trackProduct: `${STABLE_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/track/track?trackingNumber=`,
       addMultipleProducts: `${STABLE_SERVER_URL_PRODUCTS}/productmanagement/api/products/addMultipleProducts`,
-      getNotifications: `${STABLE_SERVER_URL_PRODUCTS}/notificationmanagement/api/notification/getNotifications`,
+      getNotificationsUrl: `${STABLE_SERVER_URL_PRODUCTS}/notificationmanagement/api/notification/getNotifications`,
       deleteNotification: `${STABLE_SERVER_URL_PRODUCTS}/notificationmanagement/api/notification/deleteNotification`,
     },
     test: {
@@ -142,7 +142,7 @@ export function config() {
       addNewProduct: `${TEST_SERVER_URL}/productmanagement/api/products/addProductName`,
       getProducts: `${TEST_SERVER_URL}/productmanagement/api/products/getProductNames`,
       addMultipleProducts: `${TEST_SERVER_URL}/productmanagement/api/products/addMultipleProducts`,
-      getNotifications: `${TEST_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
+      getNotificationsUrl: `${TEST_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotification: `${TEST_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
     },
     demo: {
@@ -206,7 +206,7 @@ export function config() {
       trackProduct: `${PROD_SERVER_URL}/tracktracemanagement/api/track/track?trackingNumber=`,
       addNewProduct: `${PROD_SERVER_URL}/productmanagement/api/products/addProductName`,
       addMultipleProducts: `${PROD_SERVER_URL}/productmanagement/api/products/addMultipleProducts`,
-      getNotifications: `${PROD_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
+      getNotificationsUrl: `${PROD_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotification: `${PROD_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
     },
   };
