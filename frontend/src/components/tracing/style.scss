@@ -36,7 +36,18 @@
     }
   }
   }
-
+   .dot {
+    height: 8px;
+    width: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .big-dot {
+    height: 11px;
+    width: 11px;
+    border-radius: 50%;
+    display: inline-block;
+  }
    
   .arrow{
     width: 25px;
@@ -50,8 +61,8 @@
     }
 
     .picture {
-      width: 40px;
-      height: 40px;
+      width: 35px;
+      height: 35px;
       box-shadow: 0px 3px 6px #00000029;
       border-radius: 50%;
       justify-content: center;
@@ -69,7 +80,9 @@
     font: 10px/15px $roboto ;
   }
 
-
+.dir{
+ height:30px;
+}
   .chainPad{
     padding: 1rem  2rem 1rem 2rem ;
   }
