@@ -3,10 +3,10 @@ var mongoose = require("mongoose");
 var POSchema = new mongoose.Schema({
   orderID: {type: String, required: true, unique: true},
   txnId: {type: String},
+  txnIds: {type: Array},
   shipmentIds: {type: Array},
 	sender: {type: String, required: true},
 	receiver: {type: String, required: true},
-  client: {type: String},
   client: {type: String},
   clientId: {type: String},
   date: {type: String},
