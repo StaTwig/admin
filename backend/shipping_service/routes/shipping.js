@@ -39,6 +39,7 @@ router.get("/getAllProductColl", ShipmentController.getAllProductColl);
 
 router.get("/trackShipment", ShipmentController.trackShipment);
 router.get("/fetchPOdetailsByShipmentID", ShipmentController.getPOdetailsByShipmentID);
+router.get("/fetchProductdetailsByshipmentID", ShipmentController.getProductdetailsByshipmentID);
 router.get("/fetchUserShipments", ShipmentController.fetchUserShipments);
 router.post(
   '/addPOsFromExcel',
