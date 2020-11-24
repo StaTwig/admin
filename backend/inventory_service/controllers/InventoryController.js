@@ -601,6 +601,8 @@ exports.addNewInventory = [
                 serialNumber: response.data.serialNumber,
                 owner: response.data.owner,
                 transactionIds: [response.data.transactionIds],
+                shipmentId: data.shipmentId,
+                poNumber: data.poNumber
               });
               await newInventory.save();
 

@@ -389,7 +389,7 @@ exports.createShipment = [
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
               const { data } = req.body;
-              const { shipmentId } = data;
+              const { shipmentId, batchNumber, poNumber } = data;
               const userData = {
                 stream: stream_name,
                 key: shipmentId,
@@ -495,6 +495,8 @@ exports.createShipment = [
                 );
                 const newShipment = new ShipmentModel({
                   shipmentId,
+                  poNumber,
+                  batchNumber,
                   txnIds: [txnId],
                   receiver: receiver_address,
                   sender: address,

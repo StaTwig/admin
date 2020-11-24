@@ -6,6 +6,8 @@ ShipmentSchema = new mongoose.Schema({
 	sender: {type: String, required: true},
 	status: {type: String, required: true},
 	estimatedDeliveryDate: {type: String, required: true},
+	poNumber: {type: String },
+	batchNumber: {type: String },
 }, {timestamps: true});
 
 
