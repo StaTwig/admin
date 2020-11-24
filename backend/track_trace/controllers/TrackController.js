@@ -14,6 +14,7 @@ const axios = require('axios');
 
 const fs = require('fs');
 const stream_name = process.env.SHIP_STREAM;
+const po_stream_name = process.env.PO_STREAM;
 const blockchain_service_url = process.env.URL;
 
 const init = require('../logging/init');
@@ -298,7 +299,7 @@ exports.track = [
         let items_array = [];
         let shipment_array = [];
         const response = await axios.get(
-            `${blockchain_service_url}/queryDataByTxHash?stream=test_stream_order&txid=${txnId}`,
+            `${blockchain_service_url}/queryDataByTxHash?stream=${po_stream_name}&txid=${txnId}`,
         );
         const items = response.data.items;
         items_array.push(JSON.parse(items));
@@ -317,29 +318,50 @@ exports.track = [
     });
   } else if (trackingNumber.includes("SHP")) {
     var type = "shipmentId";
-    ShipmentModel.findOne({
+
+        let po_array = [];
+        let shipment_array = [];
+
+        await ShipmentModel.findOne({
+        shipmentId: trackingNumber
+    }).then(async user => {
+        let POId = user.POId;
+        await POModel.findOne({
+        orderID: POId
+       }).then(async user => {
+        let txnId = user.txnId;
+        const po_response = await axios.get(
+            `${blockchain_service_url}/queryDataByTxHash?stream=${po_stream_name}&txid=${txnId}`,
+        );
+        const items = po_response.data.items;
+        po_array.push(JSON.parse(items));
+       })
+        })
+
+  await ShipmentModel.findOne({
         shipmentId: trackingNumber
     }).then(async user => {
         let txnIDs = user.txnIds;
-        let items_array = [];
         await utility.asyncForEach(txnIDs, async txnId => {
             const response = await axios.get(
                 `${blockchain_service_url}/queryDataByTxHash?stream=${stream_name}&txid=${txnId}`,
             );
             const items = response.data.items;
-            items_array.push(JSON.parse(items));
+            shipment_array.push(JSON.parse(items));
         });
         logger.log(
             'info',
             '<<<<< ShipmentService < ShipmentController < trackShipment : tracked shipment, queried data by transaction hash',
         );
-        res.json({
-            data: items_array,
+    });
+           res.json({
+            poTxns : po_array,
+            shipmentTxns : shipment_array,
             type: type
         });
-    });
+
   } else {
-	var type = "serialNumber";
+        var type = "serialNumber";
   InventoryModel.findOne({
         serialNumber: trackingNumber
     }).then(async user => {
@@ -371,4 +393,5 @@ exports.track = [
     }
   },
 ];
+
 
