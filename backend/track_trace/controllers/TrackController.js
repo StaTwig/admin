@@ -290,7 +290,7 @@ exports.track = [
       );
 
     if (trackingNumber.includes("PO")) {
-    var type = "PoId";
+    var type = "poNumber";
     POModel.findOne({
         orderID: trackingNumber
     }).then(async user => {
@@ -325,9 +325,9 @@ exports.track = [
         await ShipmentModel.findOne({
         shipmentId: trackingNumber
     }).then(async user => {
-        let POId = user.POId;
+        let poNumber = user.poNumber;
         await POModel.findOne({
-        orderID: POId
+        orderID: poNumber
        }).then(async user => {
         let txnId = user.txnId;
         const po_response = await axios.get(
