@@ -337,7 +337,7 @@ exports.track = [
         po_array.push(JSON.parse(items));
        })
         })
-
+  var shipmentNumber,supplierLocation,deliveryLocation;
   await ShipmentModel.findOne({
         shipmentId: trackingNumber
     }).then(async user => {
@@ -348,6 +348,9 @@ exports.track = [
             );
             const items = response.data.items;
             shipment_array.push(JSON.parse(items));
+            shipmentNumber = shipment_array[0].shipmentId;
+            supplierLocation = shipment_array[0].supplierLocation;
+            deliveryLocation = shipment_array[0].deliveryLocation;
         });
         logger.log(
             'info',
@@ -355,6 +358,7 @@ exports.track = [
         );
     });
            res.json({
+            shipmentDetails : {"shipmentNumber":shipmentNumber,"supplierLocation":supplierLocation,"deliveryLocation":deliveryLocation},
             poTxns : po_array,
             shipmentTxns : shipment_array,
             type: type
