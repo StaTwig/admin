@@ -1669,3 +1669,29 @@ exports.addPOsFromExcel = [
     }
   },
 ];
+
+exports.getPOdetailsByShipmentID = [
+  auth,
+  async (req, res) => {
+    try {
+      const { shipmentId } = req.query;
+      logger.log(
+        'info',
+        '<<<<< ShipmentService < ShipmentController < trackShipment : tracking shipment, querying data by transaction hash',
+      );
+      ShipmentModel.findOne({ shipmentId: shipmentId }).then(async user => {
+            let poId = user.poId;
+      POModel.findOne({ poId: poId }).then(async user => {
+            let poDetails = user;
+            res.json({poDetails: poDetails});
+        })
+      });
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< ShipmentService < ShipmentController < trackShipment : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
