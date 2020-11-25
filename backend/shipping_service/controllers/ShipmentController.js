@@ -389,7 +389,7 @@ exports.createShipment = [
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
               const { data } = req.body;
-              const { shipmentId } = data;
+              const { shipmentId, batchNumber, poNumber } = data;
               const userData = {
                 stream: stream_name,
                 key: shipmentId,
@@ -495,6 +495,8 @@ exports.createShipment = [
                 );
                 const newShipment = new ShipmentModel({
                   shipmentId,
+                  poNumber,
+                  batchNumber,
                   txnIds: [txnId],
                   receiver: receiver_address,
                   sender: address,
@@ -865,7 +867,7 @@ exports.createPurchaseOrder = [
               try {
                 const { address } = req.user;
                 const { data } = req.body;
-                const orderID = 'PO' + Math.floor(1000 + Math.random() * 9000);
+                const orderID = data.poNum || 'PO' + Math.floor(1000 + Math.random() * 9000);
 
                 const userData = {
                   stream: po_stream_name,
@@ -891,6 +893,7 @@ exports.createPurchaseOrder = [
                   txnIds: [txnIdPO],
                   sender: data.sendpoto.address,
                   receiver: data.receiver.address,
+                  txnId: txnIdPO,
                 });
                 await newPO.save();
               } else {

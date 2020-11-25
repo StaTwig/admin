@@ -8,6 +8,8 @@ const InventorySchema = new mongoose.Schema(
     owner: { type: String },
     transactionIds: { type: Array },
     productName: { type: String },
+    shipmentId: { type: String },
+    poNumber: { type: String },
     quantity: { type: Number },
   },
   { timestamps: true },

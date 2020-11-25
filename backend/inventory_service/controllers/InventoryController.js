@@ -601,6 +601,8 @@ exports.addNewInventory = [
                 serialNumber: response.data.serialNumber,
                 owner: response.data.owner,
                 transactionIds: [response.data.transactionIds],
+                shipmentId: data.shipmentId,
+                poNumber: data.poNumber
               });
               await newInventory.save();
 
@@ -685,7 +687,7 @@ exports.insertInventories = [
     try {
       const { address } = req.user;
       const { data } = req.body;
-      const { serialNumberRange, manufacturingDate, expiryDate, productName } = data;
+      const { serialNumberRange, manufacturingDate, expiryDate, productName, poNumber, shipmentId } = data;
       const serialNumbers = serialNumberRange.split('-');
       const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
       const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
@@ -700,6 +702,8 @@ exports.insertInventories = [
            expiryDate,
            productName,
            quantity: 1,
+           poNumber,
+           shipmentId,
            owner: address
          }
          inventories.push(inventory);
