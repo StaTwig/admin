@@ -21,7 +21,7 @@ const ChainOfCustody = (props) => {
               <div className="mr-4">10:23 AM</div>
             </div>
             {props.chain==true ?<div className="d-flex flex-row mt-4">
-            <button className="btn btn-yellow dir">View Purchase Order</button>
+            <button className="btn btn-yellow dir" onClick = {()=> props.setOpenPurchase(true)}>View Purchase Order</button>
             <button className="btn btn-main-blue dir ml-2" 
             onClick={() =>{props.setHighLight(true)
                 props.setMenuShip(true)}
