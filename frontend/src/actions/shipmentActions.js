@@ -53,7 +53,7 @@ export const trackProduct = async(id) => {
     const configObject = config();
     const url  = configObject.trackProduct+id;
     const result = await axios.get(url);
-    return result.data;
+    return result;
   } catch (e) {
     return e.response;
   }

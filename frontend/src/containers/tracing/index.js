@@ -12,8 +12,13 @@ const TracingContainer = props => {
    useEffect(() => {
     async function fetchData() {
       const result = await trackProduct(props.match.params.id);
-       setTrackData(result);
-    }
+       if (result.status==200)
+       {
+       setTrackData(result.data);
+       }else{
+         setTrackData({});
+       }
+}
     fetchData();
   },[]);
 
