@@ -14,13 +14,19 @@ import traceDrop from '../../assets/icons/traceDrop.png';
 import Serial from './serial';
 import './style.scss';
 import ChainOfCustody from './chainofcustody';
+import Modal from '../../shared/modal';
+import PurchasePopUp from './purchaseform/purchasepopup'
 
 const Tracing = props => {
   const[menu,setMenu]=useState(false);
   const[menuShip,setMenuShip]=useState(false);
   const[chain,setChain]=useState(false);
   const[highLight,setHighLight]=useState(false);
+  const[openPurchase,setOpenPurchase]=useState(false);
   const tracking = props.shipments 
+  const closeModal = () => {
+    setOpenPurchase(false);
+  }
 
   return (
     <div className="tracing">
@@ -80,6 +86,17 @@ const Tracing = props => {
                   </div>
                 </div><Chart/> </div>
              </div>
+             {openPurchase && (
+                <Modal
+                  title="Purchase Order Details"
+                  close={() => closeModal()}
+                  size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
+                >
+                  <PurchasePopUp
+                    shipments = {tracking}
+                  />
+                </Modal>
+              )}
           <h6 className="heading mb-4">CHAIN OF CUSTODY</h6> 
           {Object.keys(props.shipments).length === 0 ? <div>N/A</div> :
           <div className="row mb-3 ">
@@ -101,7 +118,7 @@ const Tracing = props => {
           </div>
           }  
          <ChainOfCustody chain= {chain} setChain = {setChain} shipments = {tracking} highLight = {highLight}
-         setHighLight = {setHighLight} setMenuShip = {setMenuShip} />
+         setHighLight = {setHighLight} setMenuShip = {setMenuShip} setOpenPurchase = {setOpenPurchase} />
            </div>
           </div>
      </div>
