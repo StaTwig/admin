@@ -1672,3 +1672,65 @@ exports.addPOsFromExcel = [
     }
   },
 ];
+
+exports.getPOdetailsByShipmentID = [
+  auth,
+  async (req, res) => {
+    try {
+      const { shipmentId } = req.query;
+      logger.log(
+        'info',
+        '<<<<< ShipmentService < ShipmentController < trackShipment : tracking shipment, querying data by transaction hash',
+      );
+      ShipmentModel.findOne({ shipmentId: shipmentId }).then(async user => {
+            let poNumber = user.poNumber;
+      POModel.findOne({ orderID: poNumber }).then(async user => {
+            let poDetails = user;
+            res.json({poDetails: poDetails});
+        })
+      });
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< ShipmentService < ShipmentController < trackShipment : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getProductdetailsByshipmentID = [
+  auth,
+  async (req, res) => {
+    try {
+      const { shipmentId } = req.query;
+      logger.log(
+        'info',
+        '<<<<< ShipmentService < ShipmentController < trackShipment : tracking shipment, querying data by transaction hash',
+      );
+    const products = await InventoryModel.aggregate([
+                { $match: { shipmentId: shipmentId } },
+                {
+                  $group: {
+                    _id: '$productName',
+                    productName: { $first: '$productName' },
+                    quantity: { $sum: '$quantity' },
+                  },
+                },
+              ]);
+             const productDict = {};
+              for (let j = 0; j < products.length; j++) {
+                const productName = products[j].productName;
+                const count = products[j].quantity;
+                  productDict[productName] = count;
+              }
+            res.json({productDetails: productDict});
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< ShipmentService < ShipmentController < trackShipment : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
