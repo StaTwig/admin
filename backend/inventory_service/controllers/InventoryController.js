@@ -258,7 +258,6 @@ exports.getAllInventoryDetails = [
             if (permissionResult.success) {
               const { address } = req.user;
               const { skip, limit } = req.query;
-              let chunkUrls = [];
 
               /* InventoryModel.collection.dropIndexes(function(){
                 InventoryModel.collection.reIndex(function(finished){
@@ -272,6 +271,8 @@ exports.getAllInventoryDetails = [
                 .sort({ createdAt: -1 })
                 .skip(parseInt(skip))
                 .limit(parseInt(limit));
+             /*
+               let chunkUrls = [];
               inventoryResult.forEach(inventory => {
                 const chunkUrl = axios.get(
                   `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${
@@ -279,9 +280,9 @@ exports.getAllInventoryDetails = [
                   }`,
                 );
                 chunkUrls.push(chunkUrl);
-              });
-              const responses = await axios.all(chunkUrls);
-              const items = responses.map(response => response.data.items[0]);
+              });*/
+             // const responses = await axios.all(chunkUrls);
+              //const items = responses.map(response => response.data.items[0]);
               const productNamesResponse = await axios.get(
                 `${product_service_url}/getProductNames`,
                 {
@@ -449,7 +450,7 @@ exports.getAllInventoryDetails = [
               }
 
               res.json({
-                data: items,
+                data: inventoryResult,
                 dict,
                 counts: {
                   inventoryAdded: {
