@@ -40,7 +40,8 @@ exports.validateEmail = email => {
       ) !== -1
     ) {
       //VALID
-      return true;
+     // return true;
+      return false; //Removing email validation check
     }
   }
   return false;
