@@ -1,4 +1,5 @@
 import React from 'react';
+import DropdownButton from '../../shared/dropdownButtonGroup';
 import './style.scss';
 
 const ProductsTable = props => {
@@ -10,7 +11,9 @@ const ProductsTable = props => {
     onProductSelect,
     onManufacturerSelect,
     product,
+    products,
     manufacturer,
+    manufacturers,
     quantity,
     onQuantityChange,
   } = props;
@@ -41,24 +44,20 @@ const ProductsTable = props => {
 
             </div>
             <div className="rTableCell">
-               <input
-              type="text"
-              className="form-control"
-              name="shipmentId"
-              placeholder="Enter Product"
-              onChange={onProductSelect}
-              value={product}
-            />
+            <DropdownButton
+                groups={products}
+                onSelect={onProductSelect}
+                name={product}
+                className="text"
+              />
             </div>
             <div className="rTableCell">
-                <input
-              type="text"
-              className="form-control"
-              name="shipmentId"
-              placeholder="Enter Manufacturer"
-              onChange={onManufacturerSelect}
-              value={manufacturer}
-            />
+            <DropdownButton
+                groups={manufacturers}
+                onSelect={onManufacturerSelect}
+                name={manufacturer}
+                className="text"
+              />
             </div>
             <div className="rTableCell">
               <div className="form-group">

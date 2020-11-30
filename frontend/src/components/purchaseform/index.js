@@ -261,10 +261,12 @@ const PurchaseForm = props => {
         tableHeader={tableHeader}
         materialId={materialId}
         onMaterialSelect={e => setMaterialId(e.target.value)}
-        onProductSelect={e => setProduct(e.target.value)}
-        onManufacturerSelect={e => setManufacturer(e.target.value)}
+        onProductSelect={item => setProduct(item)}
+        onManufacturerSelect={item => setManufacturer(item)}
         product={product}
         manufacturer={manufacturer}
+        manufacturers={manufacturers}
+        products={products}
         quantity={quantity}
         onQuantityChange={e => setQuantity(e.target.value)}
       />

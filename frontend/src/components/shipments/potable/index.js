@@ -142,8 +142,8 @@ const PoTable = props => {
                     }
                   </div>
                   <div className="rTableCell">{p.date}</div>
-                  <div className="rTableCell">{p.incoterms2}</div>
-                  <div className="rTableCell">{p.destination}</div>
+                  <div className="rTableCell">{p.shippedFrom}</div>
+                  <div className="rTableCell">{p.toLocation}</div>
                   <div className="rTableCell">
                     <button
                       className="btn btn-outline-primary"

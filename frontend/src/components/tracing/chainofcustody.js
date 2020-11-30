@@ -18,7 +18,7 @@ const ChainOfCustody = (props) => {
             <div className="row justify-content-between">
               <div>By: <strong>{props.shipments.poTxns[props.shipments.poTxns.length-1].vendorName}</strong></div>
               <div>Unicef Po ID : <strong>{props.shipments.poTxns[props.shipments.poTxns.length-1].orderID}</strong></div>
-              <div className="mr-4">10:23 AM</div>
+              <div>Shipment ID : <strong>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].shipmentId}</strong></div>
             </div>
             {props.chain==true ?<div className="d-flex flex-row mt-4">
             <button className="btn btn-yellow dir" onClick = {()=> props.setOpenPurchase(true)}>View Purchase Order</button>
