@@ -1721,13 +1721,7 @@ exports.getProductdetailsByshipmentID = [
                   },
                 },
               ]);
-             const productDict = {};
-              for (let j = 0; j < products.length; j++) {
-                const productName = products[j].productName;
-                const count = products[j].quantity;
-                  productDict[productName] = count;
-              }
-            res.json({productDetails: productDict});
+            res.json({productDetails: products});
     } catch (err) {
       logger.log(
         'error',
