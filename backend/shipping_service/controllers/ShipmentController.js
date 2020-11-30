@@ -1683,10 +1683,12 @@ exports.getPOdetailsByShipmentID = [
         '<<<<< ShipmentService < ShipmentController < trackShipment : tracking shipment, querying data by transaction hash',
       );
       ShipmentModel.findOne({ shipmentId: shipmentId }).then(async user => {
-            let poNumber = user.poNumber;
-      POModel.findOne({ orderID: poNumber }).then(async user => {
-            let poDetails = user;
-            res.json({poDetails: poDetails});
+          let txnIds = user.txnIds
+          let txnId = txnIds[txnIds.length-1]
+          let poNumber = user.poNumber;
+          POModel.findOne({ orderID: poNumber }).then(async user => {
+          let poDetails = user;
+          res.json({poDetails: poDetails,txnIds: txnIds,txnId: txnId});
         })
       });
     } catch (err) {
@@ -1709,10 +1711,11 @@ exports.getProductdetailsByshipmentID = [
         '<<<<< ShipmentService < ShipmentController < trackShipment : tracking shipment, querying data by transaction hash',
       );
     const products = await InventoryModel.aggregate([
-                { $match: { shipmentId: shipmentId } },
+                  { $match: { shipmentId: shipmentId } },
                 {
                   $group: {
-                    _id: '$productName',
+                    _id : {productName:"$productName",batchNumber:"$batchNumber"},
+                    serialNumber:{$addToSet:"$serialNumber"},manufacturingDate:{$max:"$manufacturingDate"},expiryDate:{$max:"$expiryDate"},
                     productName: { $first: '$productName' },
                     quantity: { $sum: '$quantity' },
                   },
