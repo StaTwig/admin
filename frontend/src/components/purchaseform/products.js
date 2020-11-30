@@ -1,16 +1,12 @@
 import React from 'react';
-import DropdownButton from '../../shared/dropdownButtonGroup';
 import './style.scss';
 
 const ProductsTable = props => {
 
   const {
     tableHeader,
-    products,
-    materialIds,
     materialId,
     onMaterialSelect,
-    manufacturers,
     onProductSelect,
     onManufacturerSelect,
     product,
@@ -34,28 +30,35 @@ const ProductsTable = props => {
         <div>
           <div className="rTableRow">
           <div className="rTableCell">
-              <DropdownButton
-                groups={materialIds}
-                onSelect={onMaterialSelect}
-                name={materialId}
-                className="text"
-              />
+                <input
+              type="text"
+              className="form-control"
+              name="shipmentId"
+              placeholder="Enter Material Id"
+              onChange={onMaterialSelect}
+              value={materialId}
+            />
+
             </div>
             <div className="rTableCell">
-              <DropdownButton
-                groups={products}
-                onSelect={onProductSelect}
-                name={product}
-                className="text"
-              />
+               <input
+              type="text"
+              className="form-control"
+              name="shipmentId"
+              placeholder="Enter Product"
+              onChange={onProductSelect}
+              value={product}
+            />
             </div>
             <div className="rTableCell">
-              <DropdownButton
-                groups={manufacturers}
-                onSelect={onManufacturerSelect}
-                name={manufacturer}
-                className="text"
-              />
+                <input
+              type="text"
+              className="form-control"
+              name="shipmentId"
+              placeholder="Enter Manufacturer"
+              onChange={onManufacturerSelect}
+              value={manufacturer}
+            />
             </div>
             <div className="rTableCell">
               <div className="form-group">
