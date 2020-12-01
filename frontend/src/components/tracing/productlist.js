@@ -20,7 +20,7 @@ const ProductList = (props) => {
             <li>{txn.manufacturingDate}</li>
             <li>{txn.expiryDate}</li>
             <li>{txn._id.batchNumber}</li>
-            <li>{txn.serialNumber[0]}-{txn.serialNumber[txn.serialNumber.length-1]}</li>
+            <li>{txn.serialNumberFirst}-{txn.serialNumberLast}</li>
            </ul>
            <div></div></div>)}
            </div>
