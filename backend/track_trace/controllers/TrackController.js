@@ -321,6 +321,7 @@ exports.track = [
 
         let po_array = [];
         let shipment_array = [];
+        var po_status;
 
         await ShipmentModel.findOne({
         shipmentId: trackingNumber
@@ -330,6 +331,7 @@ exports.track = [
         orderID: poNumber
        }).then(async user => {
         let txnId = user.txnId;
+        po_status = user.status;
         const po_response = await axios.get(
             `${blockchain_service_url}/queryDataByTxHash?stream=${po_stream_name}&txid=${txnId}`,
         );
@@ -360,6 +362,7 @@ exports.track = [
            res.json({
             shipmentDetails : {"shipmentNumber":shipmentNumber,"supplierLocation":supplierLocation,"deliveryLocation":deliveryLocation},
             poTxns : po_array,
+            poStatus: po_status,
             shipmentTxns : shipment_array,
             type: type
         });
