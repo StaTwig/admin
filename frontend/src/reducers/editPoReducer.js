@@ -2,8 +2,8 @@ import {
     SET_EDIT_PO,RESET_EDIT_PO
   } from '../constants/poconstants';
 
-  const a = ""
-  const b =""
+  const a = "Select Product"
+  const b ="Select Manufacturer"
 
   export const initialState = {
       sendPOTo:'Select Send Po To',

@@ -23,10 +23,10 @@ const ShipmentSummary = (props) => {
             <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].supplierLocation}</li>
             <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].deliveryLocation}</li>
             <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].shipmentDate}</li>
-            <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].products[0].quantity}</li>
+            <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].quantity}</li>
             <li>{props.shipments.poTxns[props.shipments.poTxns.length-1].vendor}</li>
             <li className="vendor">{props.shipments.poTxns[props.shipments.poTxns.length-1].vendorName}</li>
-            <li className="txn">{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].txnId}</li>
+            <li className="txn">{props.poCard.txnId}</li>
             </ul>
             <div className="font-weight-bold">
                 <span className="badge badge-pill badge-warning">

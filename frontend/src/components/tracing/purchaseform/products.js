@@ -42,7 +42,7 @@ const ProductsTable = props => {
             disabled
             type="text"
             className="form-control"
-            value={props.productData.shipmentTxns[props.productData.shipmentTxns.length-1].products[0].productName}
+            value={props.productData.poTxns[props.productData.poTxns.length-1].quantity}
           />
             </div>
             <div className="rTableCell">
@@ -51,7 +51,7 @@ const ProductsTable = props => {
             disabled
             type="text"
             className="form-control"
-            value={props.productData.shipmentTxns[props.productData.shipmentTxns.length-1].products[0].quantity}
+            value={props.productData.poTxns[props.productData.poTxns.length-1].quantity}
           />
               </div>
             </div>

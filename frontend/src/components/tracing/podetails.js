@@ -3,7 +3,7 @@ import './style.scss';
 
 const PoDetails = (props) => {
     return(
- Object.keys(props.shipments).length === 0 ? <div className="row panel justify-content-between">N/A</div> :
+ Object.keys(props.poCard).length === 0 ? <div className="row panel justify-content-between">N/A</div> :
 <div className="row panel justify-content-between">
           <ul >
             <li>Unicef PO ID</li>
@@ -19,16 +19,16 @@ const PoDetails = (props) => {
 
            </ul>
            <ul className="bold">
-            <li>{props.shipments.poTxns[props.shipments.poTxns.length-1].orderID}</li>
-            <li className="vendor">{props.shipments.poTxns[props.shipments.poTxns.length-1].vendorName}</li>
-            <li>{props.shipments.poTxns[props.shipments.poTxns.length-1].vendor}</li>
-            {props.menu== true ? <li>{props.shipments.poTxns[props.shipments.poTxns.length-1].poItem}</li> : null}
-           {props.menu== true ? <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].supplierLocation}</li> : null}
-           {props.menu== true ? <li>{props.shipments.poTxns[props.shipments.poTxns.length-1].vendor}</li> : null}
-           {props.menu== true ? <li>{props.shipments.poTxns[props.shipments.poTxns.length-1].destination}</li> : null}
-           {props.menu== true ? <li>{props.shipments.poTxns[props.shipments.poTxns.length-1].material}</li> : null}
-           {props.menu== true ? <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].products[0].productName}</li> : null}
-           {props.menu== true ? <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].products[0].quantity}</li> : null}
+            <li>{props.poCard.poDetails.orderID}</li>
+            <li className="vendor">{props.poCard.poDetails.vendorName}</li>
+            <li>{props.poCard.poDetails.vendor}</li>
+            {props.menu== true ? <li>{props.poCard.poDetails.poItem}</li> : null}
+           {props.menu== true ? <li>{props.poCard.poDetails.incoterms2}</li> : null}
+           {props.menu== true ? <li>{props.poCard.poDetails.plant}</li> : null}
+           {props.menu== true ? <li>{props.poCard.poDetails.destination}</li> : null}
+           {props.menu== true ? <li>{props.poCard.poDetails.material}</li> : null}
+           {props.menu== true ? <li>{Object.keys(props.poCard.poDetails.products[0])[0].split('-')[0]}</li> : null}
+           {props.menu== true ? <li>{props.poCard.poDetails.quantity}</li> : null}
            </ul>
            <div></div>
           </div>

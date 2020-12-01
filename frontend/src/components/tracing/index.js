@@ -23,7 +23,9 @@ const Tracing = props => {
   const[chain,setChain]=useState(false);
   const[highLight,setHighLight]=useState(false);
   const[openPurchase,setOpenPurchase]=useState(false);
-  const tracking = props.shipments 
+  const tracking = props.shipments;
+  const productCard = props.productDetails;
+  const poCard = props.poDetails;
   const closeModal = () => {
     setOpenPurchase(false);
   }
@@ -46,12 +48,12 @@ const Tracing = props => {
        <div className ="row">
         <div className="col-sm-4">
         <h6 className="heading mb-3">SHIPMENT SUMMARY</h6>
-         <ShipmentSummary shipments = {tracking}/>
+         <ShipmentSummary shipments = {tracking}  poCard = {poCard}/>
         <h6 className="heading mt-3 mb-3">PURCHASE ORDER DETAILS</h6>
-        <PoDetails menu = {menu}  shipments = {tracking}/>
+        <PoDetails menu = {menu}  poCard = {poCard}/>
         <div className="arrow float-right"><img src={traceDrop} alt="actions" height="7" width ="12" onClick={() =>setMenu(!menu)} /></div>
           <h6 className="heading mt-3 mb-3">SHIPMENT DETAILS</h6>
-        <ShipmentDetails menuShip = {menuShip} shipments = {tracking} highLight = {highLight} setHighLight = {setHighLight}/>
+        <ShipmentDetails   poCard = {poCard} menuShip = {menuShip} shipments = {tracking} highLight = {highLight} setHighLight = {setHighLight}/>
           <div className="arrow float-right"><img src={traceDrop} alt="actions" height="7" width ="12" 
           onClick={() => {
             setMenuShip(!menuShip)
@@ -59,7 +61,7 @@ const Tracing = props => {
           } }
           /></div>
           <h6 className="heading mt-3 mb-3">PRODUCT LIST</h6> 
-        <ProductList shipments = {tracking}/>
+        <ProductList productCard = {productCard}/>
         </div>
            <div className="col-sm-8">
             <div className="row ml-1 mb-4">
@@ -94,6 +96,7 @@ const Tracing = props => {
                 >
                   <PurchasePopUp
                     shipments = {tracking}
+                    
                   />
                 </Modal>
               )}
@@ -118,7 +121,7 @@ const Tracing = props => {
           </div>
           }  
          <ChainOfCustody chain= {chain} setChain = {setChain} shipments = {tracking} highLight = {highLight}
-         setHighLight = {setHighLight} setMenuShip = {setMenuShip} setOpenPurchase = {setOpenPurchase} />
+         setHighLight = {setHighLight} setMenuShip = {setMenuShip} setOpenPurchase = {setOpenPurchase}  poCard = {poCard} />
            </div>
           </div>
      </div>
