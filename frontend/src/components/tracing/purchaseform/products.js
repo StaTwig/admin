@@ -2,9 +2,7 @@ import React from 'react';
 import './style.scss';
 
 const ProductsTable = props => {
- /* const product = Object.keys(props.productData.poTxns.products)[0].split('-')[0];
-  const manufacturer = Object.keys(props.productData.poTxns.products[0])[0].split('-')[1];
-  const quantity = props.productData.poTxns.products[0][`${product}-${manufacturer}`]; */
+ 
   return (
     <div className="table productTable mt-2">
       <div className="rTable">
@@ -42,7 +40,7 @@ const ProductsTable = props => {
             disabled
             type="text"
             className="form-control"
-            value={props.productData.poTxns[props.productData.poTxns.length-1].quantity}
+            value=  {Object.keys(props.productData.poTxns[props.productData.poTxns.length-1].products[0])[0].split('-')[0]}
           />
             </div>
             <div className="rTableCell">
