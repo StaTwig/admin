@@ -1715,7 +1715,7 @@ exports.getProductdetailsByshipmentID = [
                 {
                   $group: {
                     _id : {productName:"$productName",batchNumber:"$batchNumber"},
-                    serialNumber:{$addToSet:"$serialNumber"},manufacturingDate:{$max:"$manufacturingDate"},expiryDate:{$max:"$expiryDate"},
+                    serialNumberFirst:{$first:"$serialNumber"},serialNumberLast:{$last:"$serialNumber"},serialNumbers:{$addToSet:"$serialNumber"},manufacturingDate:{$max:"$manufacturingDate"},expiryDate:{$max:"$expiryDate"},
                     productName: { $first: '$productName' },
                     quantity: { $sum: '$quantity' },
                   },
