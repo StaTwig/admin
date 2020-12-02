@@ -1233,7 +1233,7 @@ exports.fetchUserShipments = [
       let thisWeekDelayed = 0;
       let todayDelayed = 0;
       let items_array = [];
-      if (userObject.role !== 'Warehouse') {
+      if (userObject.role !== 'Warehouse' && userObject.role !== 'powerUser') {
         logger.log(
           'info',
           '<<<<< ShipmentService < ShipmentController < fetchUserShipments : fetching user shipments',
