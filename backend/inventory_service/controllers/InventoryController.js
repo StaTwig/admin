@@ -744,11 +744,23 @@ exports.insertInventories = [
             await newNotification.save();
           }
         }catch(e){
-          const newNotification = new NotificationModel({
+         /* const newNotification = new NotificationModel({
             owner: address,
             message: `${e.errmsg} on ${new Date().toLocaleString()}`,
           });
-          await newNotification.save();
+          await newNotification.save();*/
+         //If inventories are duplicate then update inventories with new owner
+          let bulkArr = [];
+          for (const i of inventories) {
+            bulkArr.push({
+              updateOne: {
+                "filter": { "serialNumber": i.serialNumber },
+                "update": { "owner": address }
+              }
+            })
+          }
+
+          await InventoryModel.bulkWrite(bulkArr)
         }
 
 
