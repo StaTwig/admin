@@ -29,6 +29,10 @@ elif [ "$1" == "DEMO" ];
    then
       ./pre-deploy-demo.sh
 
+elif [ "$1" == "PROD"];
+   then
+      ./pre-deploy-prod.sh
+
 else
    ./pre-deploy.sh
 
