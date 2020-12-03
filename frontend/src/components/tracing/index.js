@@ -14,14 +14,18 @@ import traceDrop from '../../assets/icons/traceDrop.png';
 import Serial from './serial';
 import './style.scss';
 import ChainOfCustody from './chainofcustody';
+import PoChainOfCustody from './pochainofcustody';
 import Modal from '../../shared/modal';
 import PurchasePopUp from './purchaseform/purchasepopup'
 
 const Tracing = props => {
   const[menu,setMenu]=useState(false);
   const[menuShip,setMenuShip]=useState(false);
+  const[menuProduct,setMenuProduct]=useState(false);
   const[chain,setChain]=useState(false);
+  const[poChain,setPoChain]=useState(false);
   const[highLight,setHighLight]=useState(false);
+  const[productHighLight,setProductHighLight]=useState(false);
   const[openPurchase,setOpenPurchase]=useState(false);
   const tracking = props.shipments;
   const productCard = props.productDetails;
@@ -61,7 +65,12 @@ const Tracing = props => {
           } }
           /></div>
           <h6 className="heading mt-3 mb-3">PRODUCT LIST</h6> 
-        <ProductList productCard = {productCard}/>
+        <ProductList productCard = {productCard} productHighLight={productHighLight} menuProduct = {menuProduct}/>
+        <div className="arrow float-right"><img src={traceDrop} alt="actions" height="7" width ="12"
+         onClick={() =>{
+           setMenuProduct(!menuProduct)
+           setProductHighLight(false);
+         }} /></div>
         </div>
            <div className="col-sm-8">
             <div className="row ml-1 mb-4">
@@ -120,8 +129,11 @@ const Tracing = props => {
            </div>
           </div>
           }  
-         <ChainOfCustody chain= {chain} setChain = {setChain} shipments = {tracking} highLight = {highLight}
-         setHighLight = {setHighLight} setMenuShip = {setMenuShip} setOpenPurchase = {setOpenPurchase}  poCard = {poCard} />
+           <PoChainOfCustody poChain= {poChain} setPoChain = {setPoChain} shipments = {tracking}
+         setOpenPurchase = {setOpenPurchase}  poCard = {poCard} />
+         <ChainOfCustody chain= {chain} setChain = {setChain} shipments = {tracking} 
+         setHighLight = {setHighLight} setMenuShip = {setMenuShip} setMenuProduct = {setMenuProduct}
+        setProductHighLight = {setProductHighLight} poCard = {poCard} />
            </div>
           </div>
      </div>

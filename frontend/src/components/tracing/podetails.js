@@ -3,7 +3,7 @@ import './style.scss';
 
 const PoDetails = (props) => {
     return(
- Object.keys(props.poCard).length === 0 ? <div className="row panel justify-content-between">N/A</div> :
+ Object.keys(props.poCard).length === 0 || (!props.poCard.poDetails) ? <div className="row panel justify-content-between">N/A</div> :
 <div className="row panel justify-content-between">
           <ul >
             <li>Unicef PO ID</li>
