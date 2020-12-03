@@ -320,6 +320,7 @@ exports.track = [
     var type = "shipmentId";
 
         let po_array = [];
+        let shipmentNumbers = [];
         let shipment_array = [];
         var po_status;
 
@@ -331,6 +332,7 @@ exports.track = [
         orderID: poNumber
        }).then(async user => {
         let txnId = user.txnId;
+        shipmentNumbers = user.shipmentIds;
         po_status = user.status;
         const po_response = await axios.get(
             `${blockchain_service_url}/queryDataByTxHash?stream=${po_stream_name}&txid=${txnId}`,
@@ -340,6 +342,7 @@ exports.track = [
        })
         })
   var shipmentNumber,supplierLocation,deliveryLocation;
+  await utility.asyncForEach(shipmentNumbers, async trackingNumber => {
   await ShipmentModel.findOne({
         shipmentId: trackingNumber
     }).then(async user => {
@@ -359,6 +362,7 @@ exports.track = [
             '<<<<< ShipmentService < ShipmentController < trackShipment : tracked shipment, queried data by transaction hash',
         );
     });
+  });
            res.json({
             shipmentDetails : {"shipmentNumber":shipmentNumber,"supplierLocation":supplierLocation,"deliveryLocation":deliveryLocation},
             poTxns : po_array,
