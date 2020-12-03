@@ -16,13 +16,13 @@ const ShipmentDetails = (props) => {
            {props.menuShip== true ? <li>Transaction ID</li> : null}
           </ul>
            <ul className="bold">
-            <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].shipmentId}</li>
-            <li className= "vendor">{props.shipments.poTxns[props.shipments.poTxns.length-1].vendorName}</li>
-            {props.menuShip== true ? <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].shipmentDate}</li> : null}
-           {props.menuShip== true ? <li>26/20/2022</li> : null}
-           {props.menuShip== true ? <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].supplierLocation}</li> : null}
+            <li>{props.shipments.shipmentTxns[0].shipmentId}</li>
+            <li className= "vendor">{props.shipments.poTxns[0].vendorName}</li>
+            {props.menuShip== true ? <li>{props.shipments.shipmentTxns[0].shipmentDate}</li> : null}
+           {props.menuShip== true ? <li>{props.shipments.shipmentTxns[0].estimateDeliveryDate}</li> : null}
+           {props.menuShip== true ? <li>{props.shipments.shipmentTxns[0].supplierLocation}</li> : null}
            {props.menuShip== true ? <li>5678</li> : null}
-           {props.menuShip== true ? <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].deliveryLocation}</li> : null}
+           {props.menuShip== true ? <li>{props.shipments.shipmentTxns[0].deliveryLocation}</li> : null}
            {props.menuShip== true ? <li className="txn">{props.poCard.txnId}</li> : null}
            </ul>
            <div></div>

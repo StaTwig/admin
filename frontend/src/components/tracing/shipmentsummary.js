@@ -18,19 +18,19 @@ const ShipmentSummary = (props) => {
             <li>Transaction ID</li>
             </ul>
             <ul className="bold">
-            <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].shipmentId}</li>
-            <li>{props.shipments.poTxns[props.shipments.poTxns.length-1].orderID}</li>
-            <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].supplierLocation}</li>
-            <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].deliveryLocation}</li>
-            <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].shipmentDate}</li>
-            <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].quantity}</li>
-            <li>{props.shipments.poTxns[props.shipments.poTxns.length-1].vendor}</li>
-            <li className="vendor">{props.shipments.poTxns[props.shipments.poTxns.length-1].vendorName}</li>
+            <li>{props.shipments.shipmentTxns[0].shipmentId}</li>
+            <li>{props.shipments.poTxns[0].orderID}</li>
+            <li>{props.shipments.shipmentTxns[0].supplierLocation}</li>
+            <li>{props.shipments.shipmentTxns[0].deliveryLocation}</li>
+            <li>{props.shipments.shipmentTxns[0].shipmentDate}</li>
+            <li>{props.shipments.shipmentTxns[0].quantity}</li>
+            <li>{props.shipments.poTxns[0].vendor}</li>
+            <li className="vendor">{props.shipments.poTxns[0].vendorName}</li>
             <li className="txn">{props.poCard.txnId}</li>
             </ul>
             <div className="font-weight-bold">
                 <span className="badge badge-pill badge-warning">
-                {props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].status}
+                {props.shipments.shipmentTxns[0].status}
                 </span>
               </div>
         </div> 
