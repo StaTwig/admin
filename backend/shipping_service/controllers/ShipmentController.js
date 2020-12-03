@@ -544,7 +544,7 @@ exports.createShipment = [
 
             //PurchaseOrder collection
            // const orderID = "PO45163183";
-            const POFound = await POModel.findOne({ orderID: data.orderID });
+            const POFound = await POModel.findOne({ orderID: data.poNumber });
             if (!POFound) {
                 logger.log(
                   'info',
@@ -556,7 +556,7 @@ exports.createShipment = [
                   '<<<<< ShipmentService < ShipmentController < createPO : updating ShipmentId in PO model',
                 );
               const shipmentIds = [...POFound.shipmentIds, shipmentId];
-              await POModel.updateOne({ orderID }, {shipmentIds});
+              await POModel.updateOne({ orderID: data.poNumber }, {shipmentIds});
 				      }
             }
           });
