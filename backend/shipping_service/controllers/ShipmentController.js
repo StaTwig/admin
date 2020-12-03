@@ -555,7 +555,8 @@ exports.createShipment = [
                   'info',
                   '<<<<< ShipmentService < ShipmentController < createPO : updating ShipmentId in PO model',
                 );
-              const shipmentIds = [...POFound.shipmentIds, shipmentId];
+              let shipmentIds = [...POFound.shipmentIds, shipmentId];
+              shipmentIds = [...new Set(shipmentIds)]
               await POModel.updateOne({ orderID: data.poNumber }, {shipmentIds});
 				      }
             }
