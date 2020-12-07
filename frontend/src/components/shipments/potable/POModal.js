@@ -90,8 +90,8 @@ const POModal = props => {
           <tr>
             <th scope="col" />
             <th scope="col">Manufacturer</th>
-            <th scope="col">Material Id</th>
             <th scope="col">Product Name</th>
+            <th scope="col">Material Id</th>
              <th scope="col">Quantity</th>
             </tr>
         </thead>
