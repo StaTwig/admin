@@ -27,12 +27,21 @@ exports.grantPermission = function (req, res) {
 	
 	for (var i = 0; i < streams.length; i++) {
 	var stream = streams[i];
-	shell.exec("multichain-cli chain1 grant " + address + " " + stream + ".write")
+	
+	multichain.grant({
+        addresses: address,
+        permissions: stream + ".write"
+        }, (err, data) => {
+    })
+    multichain.grant({
+        addresses: address,
+        permissions: "send"
+        }, (err, data) => {
+    })
+
 	logger.info("Granting permission for address",address,"to stream",stream);
 	logz.log('info', '<<<<< BlockchainService < Register < grantPrmission : Granting permission for address to a stream');
 	}
-
-	shell.exec("multichain-cli chain1 grant " + address + " send");
-        res.json("success");
+    res.json("All permissions granted for the address");
 }
 
