@@ -92,6 +92,7 @@ return (
       <ProductsTable
         tableHeader={tableHeader}
         productData = {productData}
+     
       />
       
       </div>

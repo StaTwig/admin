@@ -19,21 +19,16 @@ const PurchaseForm = props => {
   const { user, users } = props;
 
   const userNames = users.map(usr => usr.name);
-  const vendorIds = ['1900000363','1900000501','1900008579','1900000363','1900007249','1900007249','1900000462','1900000363'];
   const [deliveryTo, setDeliveryTo] = useState(editPo.receiver.name);
   const [sendPOTo, setSendPOTo] = useState(editPo.sendPOTo);
   const [vendorId, setVendorId] = useState(editPo.vendorId);
   const [unicefPo, setUnicefPo] = useState(editPo.unicefPo);
-  const unicefPos =['45163183','45163206','45163239','45163283','45163284','45163285','45163287','45163289']
   const [vendorName, setVendorName] = useState(editPo.vendorName);
-  const poNums = ['45163183','45163206','45163239','45163283','45163284','45163285','45163287','45163289']
   const [poNum, setPoNum] = useState(editPo.poNum);
   const [locationId, setLocationId] = useState(editPo.locationId);
-  const locationIds = ['5577','5588','5597','5543','5581','5623','5548','5573'];
   const [products, setProducts] = useState([]);
   const [shippedFrom, setShippedFrom] = useState(editPo.shippedFrom);
   const [toLocation, setToLocation] = useState(editPo.toLocation);
-  const locations= ['Niger','Guinea','Madagascar','Congo','Mali','Ethiopia','Republic of Cameroon','Chad'];
   const [manufacturers, setManufacturers] = useState([]);
   const [product, setProduct] = useState(Object.keys(editPo.products[0])[0].split('-')[0]);
   const [manufacturer, setManufacturer] = useState(Object.keys(editPo.products[0])[0].split('-')[1]);
@@ -80,13 +75,7 @@ const PurchaseForm = props => {
           validationVariable == 'Select Manufacturer' ||
           validationVariable == 'Select receiver'||
           validationVariable == 'Select Send Po To'||
-          validationVariable == 'Select Vendor Id'||
-          validationVariable == 'Select Po'||
           validationVariable == 'Select Vendor Name'||
-          validationVariable == 'Select Po#'||
-          validationVariable == 'Select location Id'||
-          validationVariable == 'Select Shipped From'||
-          validationVariable == 'Select to Location'||
           validationVariable == 'Select Material Id'
       ) {
           setPoError(validations[i] +" "+"must be Specified");
@@ -186,28 +175,27 @@ const PurchaseForm = props => {
         </div> */}
          <div className="input-group">
           <label className="reference">Vendor Id</label>
-          <div className="form-control">
-          <DropdownButton
-            name={vendorId}
-            onSelect={item => setVendorId(item)}
-            groups={vendorIds}
-            className="text"
-          />
+            <input
+              type="text"
+              className="form-control"
+              name="shipmentId"
+              placeholder="Enter Vendor Id"
+              onChange={e => setVendorId(e.target.value)}
+              value={vendorId}
+            />
           </div>
-        </div>
       </div>
       <div className="d-flex justify-content-between">
-
-      <div className="input-group">
+        <div className="input-group">
       <label className="reference">Purchase Order ID</label>
-          <div className="form-control">
-          <DropdownButton
-           name={unicefPo}
-            onSelect={item => setUnicefPo(item)}
-            groups={unicefPos}
-            className="text"
-          />
-          </div>
+          <input
+              type="text"
+              className="form-control"
+              name="shipmentId"
+              placeholder="Enter Purchase Id"
+              onChange={e => setUnicefPo(e.target.value)}
+              value={unicefPo}
+            />
         </div>
        <div className="input-group">
           <label className="reference">Vendor Name</label>
@@ -224,62 +212,61 @@ const PurchaseForm = props => {
       <div className="d-flex justify-content-between">
       <div className="input-group">
           <label className="reference">PO Item#</label>
-          <div className="form-control">
-          <DropdownButton
-           name={poNum}
-            onSelect={item => setPoNum(item)}
-            groups={poNums}
-            className="text"
-          />
-          </div>
+           <input
+              type="text"
+              className="form-control"
+              name="shipmentId"
+              placeholder="Enter PO Item#"
+              onChange={e => setPoNum(e.target.value)}
+              value={poNum}
+            />
         </div>
         <div className="input-group">
           <label className="reference">To Location ID</label>
-          <div className="form-control">
-          <DropdownButton
-           name={locationId}
-            onSelect={item => setLocationId(item)}
-            groups={locationIds}
-            className="text"
-          />
-          </div>
+           <input
+              type="text"
+              className="form-control"
+              name="shipmentId"
+              placeholder="Enter Location Id"
+              onChange={e => setLocationId(e.target.value)}
+              value={locationId}
+            />
         </div>
       </div>
       <div className="d-flex justify-content-between">
         <div className="input-group">
           <label className="reference">Shipped From</label>
-          <div className="form-control">
-          <DropdownButton
-           name={shippedFrom}
-            onSelect={item => setShippedFrom(item)}
-            groups={locations}
-            className="text"
-          />
-          </div>
+          <input
+              type="text"
+              className="form-control"
+              name="shipmentId"
+              placeholder="Enter Shipped From"
+              onChange={e => setShippedFrom(e.target.value)}
+              value={shippedFrom}
+            />
         </div>
         <div className="input-group">
           <label className="reference">To Location</label>
-          <div className="form-control">
-          <DropdownButton
-           name={toLocation}
-            onSelect={item => setToLocation(item)}
-            groups={locations}
-            className="text"
-          />
-          </div>
+           <input
+              type="text"
+              className="form-control"
+              name="shipmentId"
+              placeholder="Enter To Location"
+              onChange={e => setToLocation(e.target.value)}
+              value={toLocation}
+            />
         </div>
       </div>
       <ProductsTable
         tableHeader={tableHeader}
-        manufacturers={manufacturers}
-        products={products}
         materialId={materialId}
-        materialIds={materialIds}
-        onMaterialSelect={item => setMaterialId(item)}
+        onMaterialSelect={e => setMaterialId(e.target.value)}
         onProductSelect={item => setProduct(item)}
         onManufacturerSelect={item => setManufacturer(item)}
         product={product}
         manufacturer={manufacturer}
+        manufacturers={manufacturers}
+        products={products}
         quantity={quantity}
         onQuantityChange={e => setQuantity(e.target.value)}
       />

@@ -6,15 +6,14 @@ const ProductsTable = props => {
 
   const {
     tableHeader,
-    products,
-    materialIds,
     materialId,
     onMaterialSelect,
-    manufacturers,
     onProductSelect,
     onManufacturerSelect,
     product,
+    products,
     manufacturer,
+    manufacturers,
     quantity,
     onQuantityChange,
   } = props;
@@ -34,15 +33,18 @@ const ProductsTable = props => {
         <div>
           <div className="rTableRow">
           <div className="rTableCell">
-              <DropdownButton
-                groups={materialIds}
-                onSelect={onMaterialSelect}
-                name={materialId}
-                className="text"
-              />
+                <input
+              type="text"
+              className="form-control"
+              name="shipmentId"
+              placeholder="Enter Material Id"
+              onChange={onMaterialSelect}
+              value={materialId}
+            />
+
             </div>
             <div className="rTableCell">
-              <DropdownButton
+            <DropdownButton
                 groups={products}
                 onSelect={onProductSelect}
                 name={product}
@@ -50,7 +52,7 @@ const ProductsTable = props => {
               />
             </div>
             <div className="rTableCell">
-              <DropdownButton
+            <DropdownButton
                 groups={manufacturers}
                 onSelect={onManufacturerSelect}
                 name={manufacturer}

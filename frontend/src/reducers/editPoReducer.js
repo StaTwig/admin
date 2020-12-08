@@ -7,14 +7,14 @@ import {
 
   export const initialState = {
       sendPOTo:'Select Send Po To',
-      vendorId:'Select Vendor Id',
-      unicefPo:'Select Po',
+      vendorId:'',
+      unicefPo:'',
       vendorName:'Select Vendor Name',
-       poNum :'Select Po#',
-       locationId :'Select location Id',
-       shippedFrom:'Select Shipped From',
-       toLocation:'Select to Location',
-      materialId:'Select Material Id',
+       poNum :'',
+       locationId :'',
+       shippedFrom:'',
+       toLocation:'',
+      materialId:'',
       receiver: {name:"Select Receiver"},
       products : [{ [`${a}-${b}`]: "" }]
 }

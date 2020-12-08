@@ -3,30 +3,26 @@ import './style.scss'
 
 const ProductList = (props) => {
     return (
-    Object.keys(props.shipments).length === 0 ? <div className="row panel justify-content-between">N/A</div> :
-        <div className="row panel justify-content-between">
+    Object.keys(props.productCard).length === 0 ? <div className="row panel justify-content-between">N/A</div> :
+   <div className= {props.productHighLight ? "row panel highlight " : "row panel "}>
+       {props.productCard.productDetails.map((txn, index) => <div className="row justify-content-between ml-2 " key={index}>
             <ul >
-            <li>Material ID</li>
             <li>Product Name</li>
             <li>Quantity</li>
             <li>Mfg Date</li>
-            <li>Exp Date</li>
-            <li>Batch No</li>
-            <li>Optimum Temp</li>
-            <li>Serial No</li>
+            {props.menuProduct== true ?  <li>Exp Date</li> : null}
+            {props.menuProduct== true ? <li>Batch No</li> : null}
+            {props.menuProduct== true ? <li>Serial No Range</li> : null}
            </ul>
-           <ul className="bold">
-            <li>{props.shipments.poTxns[props.shipments.poTxns.length-1].material}</li>
-            <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].products[0].productName}</li>
-            <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].products[0].quantity}</li>
-            <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].products[0].manufacturingDate}</li>
-            <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].products[0].expiryDate}</li>
-            <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].products[0].batchNumber}</li>
-            <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].products[0].storageConditionmin} to
-            <span className="ml-1">{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].products[0].storageConditionmax}</span></li>
-            <li>{props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].products[0].serialNumber}</li>
+           <ul className="bold ml-4">
+            <li>{txn.productName}</li>
+            <li>{txn.quantity}</li>
+            <li>{txn.manufacturingDate}</li>
+            {props.menuProduct== true ? <li>{txn.expiryDate}</li> : null}
+            {props.menuProduct== true ?<li>{txn._id.batchNumber}</li> : null}
+            {props.menuProduct== true ?<li>{txn.serialNumberFirst}-{txn.serialNumberLast}</li> : null}
            </ul>
-           <div></div>
+           <div></div></div>)}
            </div>
 
     )
