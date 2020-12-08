@@ -125,7 +125,7 @@
         url = "http://127.0.0.1:3007/"
     [http.services.blockchain-management.loadBalancer]
       [[http.services.blockchain-management.loadBalancer.servers]]
-        url = "http://15.206.159.129:3008/"
+        url = "http://127.0.0.1:3008/"
     [http.services.products-management.loadBalancer]
       [[http.services.products-management.loadBalancer.servers]]
         url = "http://127.0.0.1:3010/"
