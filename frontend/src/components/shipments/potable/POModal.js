@@ -23,7 +23,7 @@ const POModal = props => {
           </div>
           <div className="input-group">
             <label className="reference mr-5">Delivery To : </label>
-            <p className="ml-3">{po.receiver.name}</p>
+            <p className="ml-3">{po.destination}</p>
           </div>
           <div className="input-group">
             <label className="reference mr-3">Delivery Location : </label>
