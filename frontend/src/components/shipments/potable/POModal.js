@@ -14,32 +14,73 @@ const POModal = props => {
   const po = JSON.parse(purchaseOrder.data);
   const receiverAddress = po.sendpoto.address;
   return (
-    <div>
+    <div className="PO">
       <div className="d-flex justify-content-between">
         <div className="d-flex flex-column justify-content-between">
           <div className="input-group">
-            <label className="reference">Purchase order ID:</label>
-            <p className="font-weight-bold ml-2">{purchaseOrder.key}</p>
+            <label className="reference mr-3">Purchase order ID : </label>
+            <p>{purchaseOrder.key}</p>
           </div>
           <div className="input-group">
-            <label className="reference">Delivery To</label>
-            <p className="font-weight-bold ml-2">{po.receiver.name}</p>
+            <label className="reference mr-5">Delivery To : </label>
+            <p className="ml-3">{po.receiver.name}</p>
+          </div>
+          <div className="input-group">
+            <label className="reference mr-3">Delivery Location : </label>
+            <p>{po.destination}</p>
+          </div>
+          <div className="input-group">
+            <label className="reference mr-5">In Coterms : </label>
+            <p className="ml-3">{po.incoterms}</p>
+          </div>
+          <div className="input-group">
+            <label className="reference mr-5">In Coterms2 : </label>
+            <p>{po.incoterms2}</p>
           </div>
         </div>
+        
         <div className="d-flex flex-column justify-content-between">
           <div className="input-group">
-            <label className="reference">Client</label>
-            <p className="font-weight-bold ml-2">{po.client}</p>
+            <label className="reference mr-5">Client : </label>
+            <p>{po.client}</p>
           </div>
           <div className="input-group">
-            <label className="reference">Delivery Location</label>
-            <p className="font-weight-bold ml-2">{po.destination}</p>
+            <label className="reference mr-4">Client Id  : </label>
+            <p>{po.clientId}</p>
+          </div>
+           <div className="input-group">
+            <label className="reference mr-4">Ip Code : </label>
+            <p>{po.ipCode}</p>
+          </div>
+          <div className="input-group">
+            <label className="reference mr-4">Ip Name : </label>
+            <p>{po.ipName}</p>
+          </div>
+          <div className="input-group">
+            <label className="reference mr-5">Unit : </label>
+            <p className="ml-2">{po.unit}</p>
           </div>
         </div>
-        <div className="d-flex flex-column  align-self-center">
+        <div className="d-flex flex-column justify-content-between mr-5">
           <div className="input-group">
-            <label className="reference">Date</label>
-            <p className="font-weight-bold ml-2">{po.date}</p>
+            <label className="reference mr-5">Date : </label>
+            <p>{po.date}</p>
+          </div>
+          <div className="input-group">
+            <label className="reference mr-3">Vendor ID : </label>
+            <p>{po.vendor}</p>
+          </div>
+          <div className="input-group">
+            <label className="reference mr-5">Plant : </label>
+            <p>{po.plant}</p>
+          </div>
+          <div className="input-group">
+            <label className="reference mr-5">Po Item : </label>
+            <p>{po.poItem}</p>
+          </div>
+          <div className="input-group">
+            <label className="reference mr-3">Reference : </label>
+            <p>{po.reference}</p>
           </div>
         </div>
       </div>
@@ -48,18 +89,20 @@ const POModal = props => {
         <thead>
           <tr>
             <th scope="col" />
-            <th scope="col">Product Name</th>
             <th scope="col">Manufacturer</th>
-            <th scope="col">Quantity</th>
-          </tr>
+            <th scope="col">Product Name</th>
+            <th scope="col">Material Id</th>
+             <th scope="col">Quantity</th>
+            </tr>
         </thead>
         <tbody>
           <tr>
             <th scope="row">
               <div className="square-box" />
             </th>
-            <td>{Object.keys(po.products[0])[0].split('-')[0]}</td>
             <td>{Object.keys(po.products[0])[0].split('-')[1]}</td>
+            <td>{Object.keys(po.products[0])[0].split('-')[0]}</td>
+            <td>{po.material}</td>
             <td>{parseInt(po.products[0][Object.keys(po.products[0])])}</td>
           </tr>
         </tbody>
