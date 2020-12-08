@@ -111,7 +111,7 @@ const PoTable = props => {
         </div>
         <div className="overflow">
           {purchases.map((purchase, index) => {
-            const p = JSON.parse(purchase.data);
+            const p = purchase;
             let statusStyle = 'warning-bg';
             if (purchase.status === 'Accepted') {
               statusStyle = 'success-bg';
@@ -128,7 +128,7 @@ const PoTable = props => {
                       {Object.keys(p.products[0])[0].split('-')[1]}
                     </div>
                   </div>
-                  <div className="rTableCell">{purchase.key}</div>
+                  <div className="rTableCell">{purchase.orderID}</div>
                   <div className="rTableCell">
                     {Object.keys(p.products[0])[0].split('-')[0]}
                   </div>

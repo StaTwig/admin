@@ -11,19 +11,19 @@ const POModal = props => {
     onReject,
     onCreateShipment,
   } = props;
-  const po = JSON.parse(purchaseOrder.data);
-  const receiverAddress = po.sendpoto.address;
+  const po = purchaseOrder;
+  const receiverAddress = po.receiver;
   return (
     <div>
       <div className="d-flex justify-content-between">
         <div className="d-flex flex-column justify-content-between">
           <div className="input-group">
             <label className="reference">Purchase order ID:</label>
-            <p className="font-weight-bold ml-2">{purchaseOrder.key}</p>
+            <p className="font-weight-bold ml-2">{purchaseOrder.orderID}</p>
           </div>
           <div className="input-group">
             <label className="reference">Delivery To</label>
-            <p className="font-weight-bold ml-2">{po.receiver.name}</p>
+            <p className="font-weight-bold ml-2">{po.destination}</p>
           </div>
         </div>
         <div className="d-flex flex-column justify-content-between">
