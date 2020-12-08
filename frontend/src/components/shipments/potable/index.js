@@ -35,7 +35,7 @@ const PoTable = props => {
 
   const onCreateShipment = () => props.history.push('/newshipment')
   const onPOStatusChange = async status => {
-    const data = { status, orderID: purchaseOrder.key };
+    const data = { status, orderID: purchaseOrder.orderID };
     const result = await changePOStatus(data);
     if (result.status === 200) {
       setAlertMessage('Success');

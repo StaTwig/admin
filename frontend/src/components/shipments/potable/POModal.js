@@ -19,7 +19,7 @@ const POModal = props => {
         <div className="d-flex flex-column justify-content-between">
           <div className="input-group">
             <label className="reference mr-3">Purchase order ID : </label>
-            <p>{purchaseOrder.key}</p>
+            <p>{purchaseOrder.orderID}</p>
           </div>
           <div className="input-group">
             <label className="reference mr-5">Delivery To : </label>
