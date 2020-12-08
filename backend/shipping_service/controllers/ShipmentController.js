@@ -99,53 +99,61 @@ exports.purchaseOrderStatistics = [
             if (permissionResult.success) {
               const { address, role } = req.user;
               const { skip, limit } = req.query;
-              let senderPOs = [];
-              if(role === 'powerUser') {
-                senderPOs = await POModel.find({})
-                  .sort({ createdAt: -1 })
-                  .skip(parseInt(skip))
-                  .limit(parseInt(limit));
-              }else {
-                senderPOs = await POModel.find({ sender: address })
-                  .sort({ createdAt: -1 })
-                  .skip(parseInt(skip))
-                  .limit(parseInt(limit));
-              }
+              const senderPOs = await POModel.find({ sender: address })
+                .sort({ createdAt: -1 })
+                .skip(parseInt(skip))
+                .limit(parseInt(limit));
               const receiverPos = await POModel.find({ receiver: address })
                 .sort({ createdAt: -1 })
                 .skip(parseInt(skip))
                 .limit(parseInt(limit));
               let poItems = [];
-              await utility.asyncForEach(senderPOs, async po => {
-                const response = await axios.get(
-                  `${blockchain_service_url}/queryDataByKey?stream=${po_stream_name}&key=${
-                    po.orderID
-                    }`,
-                );
-                const items = response.data.items;
-                if (items.length > 0) {
-                  const item = items[items.length - 1];
-                  item['status'] = po.status === 'Created' ? 'Sent' : po.status;
-                  poItems.push(item);
-                }
+              poItems = senderPOs.map(po => {
+                const status = po.status === 'Created' ? 'Sent' : po.status;
+                const item = {...po._doc, status };
+                return item;
               });
-              if(role !== 'powerUser') {
-                await utility.asyncForEach(receiverPos, async po => {
-                  const response = await axios.get(
-                    `${blockchain_service_url}/queryDataByKey?stream=${po_stream_name}&key=${
-                      po.orderID
-                      }`,
-                  );
-                  const items = response.data.items;
-                  if (items.length > 0) {
-                    const item = items[items.length - 1];
-                    item['status'] =
-                      po.status === 'Created' ? 'Received' : po.status;
-                    poItems.push(item);
-                  }
-                });
-              }
 
+              /* await utility.asyncForEach(senderPOs, async po => {
+                 const response = await axios.get(
+                   `${blockchain_service_url}/queryDataByKey?stream=${po_stream_name}&key=${
+                     po.orderID
+                     }`,
+                 );
+                 const items = response.data.items;
+                 if (items.length > 0) {
+                   const item = items[items.length - 1];
+                   item['status'] = po.status === 'Created' ? 'Sent' : po.status;
+                   poItems.push(item);
+                 }
+               });*/
+              poItems = receiverPos.map(po => {
+                const status = po.status === 'Created' ? 'Received' : po.status;
+                const item = {...po._doc, status };
+                return item;
+              });
+              /* await utility.asyncForEach(receiverPos, async po => {
+                 const response = await axios.get(
+                   `${blockchain_service_url}/queryDataByKey?stream=${po_stream_name}&key=${
+                     po.orderID
+                     }`,
+                 );
+                 const items = response.data.items;
+                 if (items.length > 0) {
+                   const item = items[items.length - 1];
+                   item['status'] =
+                     po.status === 'Created' ? 'Received' : po.status;
+                   poItems.push(item);
+                 }
+               });*/
+              if(role === 'powerUser') {
+                const allPos = await POModel.find({})
+                  .sort({ createdAt: -1 })
+                  .skip(parseInt(skip))
+                  .limit(parseInt(limit));
+                const poItemsFiltered = allPos.filter(po => !poItems.find(poItem => poItem.orderID === po.orderID));
+                poItems = [...poItems, ...poItemsFiltered];
+              }
 
               logger.log(
                 'info',
@@ -542,23 +550,23 @@ exports.createShipment = [
                 );
               }
 
-            //PurchaseOrder collection
-           // const orderID = "PO45163183";
-            const POFound = await POModel.findOne({ orderID: data.poNumber });
-            if (!POFound) {
+              //PurchaseOrder collection
+              // const orderID = "PO45163183";
+              const POFound = await POModel.findOne({ orderID: data.poNumber });
+              if (!POFound) {
                 logger.log(
                   'info',
                   '<<<<< ShipmentService < ShipmentController < createPO : PO not found in collection',
                 );
-				      } else {
-				          logger.log(
+              } else {
+                logger.log(
                   'info',
                   '<<<<< ShipmentService < ShipmentController < createPO : updating ShipmentId in PO model',
                 );
-              let shipmentIds = [...POFound.shipmentIds, shipmentId];
-              shipmentIds = [...new Set(shipmentIds)]
-              await POModel.updateOne({ orderID: data.poNumber }, {shipmentIds});
-				      }
+                let shipmentIds = [...POFound.shipmentIds, shipmentId];
+                shipmentIds = [...new Set(shipmentIds)]
+                await POModel.updateOne({ orderID: data.poNumber }, {shipmentIds});
+              }
             }
           });
         } else {
@@ -881,30 +889,30 @@ exports.createPurchaseOrder = [
                   userData,
                 );
 
-              const txnIdPO = response.data.transactionId;
-              const POFound = await POModel.findOne({ orderID });
+                const txnIdPO = response.data.transactionId;
+                const POFound = await POModel.findOne({ orderID });
 
-              if (!POFound) {
-                logger.log(
-                  'info',
-                  '<<<<< ShipmentService < ShipmentController < createPO : PO found in collection',
-                );
-                const newPO = new POModel({
-                  orderID,
-                  txnIds: [txnIdPO],
-                  sender: data.sendpoto.address,
-                  receiver: data.receiver.address,
-                  txnId: txnIdPO,
-                });
-                await newPO.save();
-              } else {
-                logger.log(
-                  'info',
-                  '<<<<< ShipmentService < ShipmentController < createPO : updating PO in PO model',
-                );
-              const txnIds = [...POFound.txnIds, txnIdPO];
-              await POModel.updateOne({ orderID }, { txnIds });
-              }
+                if (!POFound) {
+                  logger.log(
+                    'info',
+                    '<<<<< ShipmentService < ShipmentController < createPO : PO found in collection',
+                  );
+                  const newPO = new POModel({
+                    orderID,
+                    txnIds: [txnIdPO],
+                    sender: data.sendpoto.address,
+                    receiver: data.receiver.address,
+                    txnId: txnIdPO,
+                  });
+                  await newPO.save();
+                } else {
+                  logger.log(
+                    'info',
+                    '<<<<< ShipmentService < ShipmentController < createPO : updating PO in PO model',
+                  );
+                  const txnIds = [...POFound.txnIds, txnIdPO];
+                  await POModel.updateOne({ orderID }, { txnIds });
+                }
 
                 logger.log(
                   'info',
@@ -1686,8 +1694,8 @@ exports.getPOdetailsByShipmentID = [
       ShipmentModel.findOne({ shipmentId: shipmentId }).then(async user => {
           let txnIds = user.txnIds
           let txnId = txnIds[txnIds.length-1]
-          let poNumber = user.poNumber;
-          POModel.findOne({ orderID: poNumber }).then(async user => {
+        let poNumber = user.poNumber;
+        POModel.findOne({ orderID: poNumber }).then(async user => {
           let poDetails = user;
           res.json({poDetails: poDetails,txnIds: txnIds,txnId: txnId});
         })
@@ -1711,17 +1719,17 @@ exports.getProductdetailsByshipmentID = [
         'info',
         '<<<<< ShipmentService < ShipmentController < trackShipment : tracking shipment, querying data by transaction hash',
       );
-    const products = await InventoryModel.aggregate([
-                  { $match: { shipmentId: shipmentId } },
-                {
-                  $group: {
+      const products = await InventoryModel.aggregate([
+        { $match: { shipmentId: shipmentId } },
+        {
+          $group: {
                     _id : {productName:"$productName",batchNumber:"$batchNumber"},
                     serialNumberFirst:{$first:"$serialNumber"},serialNumberLast:{$last:"$serialNumber"},serialNumbers:{$addToSet:"$serialNumber"},manufacturingDate:{$max:"$manufacturingDate"},expiryDate:{$max:"$expiryDate"},
-                    productName: { $first: '$productName' },
-                    quantity: { $sum: '$quantity' },
-                  },
-                },
-              ]);
+            productName: { $first: '$productName' },
+            quantity: { $sum: '$quantity' },
+          },
+        },
+      ]);
             res.json({productDetails: products});
     } catch (err) {
       logger.log(

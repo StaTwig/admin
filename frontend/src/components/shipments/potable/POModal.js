@@ -11,8 +11,8 @@ const POModal = props => {
     onReject,
     onCreateShipment,
   } = props;
-  const po = JSON.parse(purchaseOrder.data);
-  const receiverAddress = po.sendpoto.address;
+  const po = purchaseOrder;
+  const receiverAddress = po.receiver;
   return (
     <div className="PO">
       <div className="d-flex justify-content-between">
