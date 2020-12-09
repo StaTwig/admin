@@ -876,7 +876,7 @@ exports.createPurchaseOrder = [
               try {
                 const { address } = req.user;
                 const { data } = req.body;
-                const orderID = data.poNum || 'PO' + Math.floor(1000 + Math.random() * 9000);
+                const orderID = data.orderID || 'PO' + Math.floor(1000 + Math.random() * 9000);
 
                 const userData = {
                   stream: po_stream_name,
