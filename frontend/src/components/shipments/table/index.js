@@ -53,10 +53,10 @@ const Table = props => {
                 <div className="rTableCell">{shipment.shipmentId}</div>
 
                 <div className="rTableCell">
-                  {Object.keys(shipment.products[0])[0].split('-')[0]}
+                  {shipment.products[0].productName}
                 </div>
                 <div className="rTableCell">
-                  {shipment.quantity}
+                  {shipment.products[0].quantity}
                 </div>
                 <div className="rTableCell">{shipment.shipmentDate}</div>
 
