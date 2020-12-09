@@ -898,11 +898,13 @@ exports.createPurchaseOrder = [
                     '<<<<< ShipmentService < ShipmentController < createPO : PO found in collection',
                   );
                   const newPO = new POModel({
+                    ...data,
                     orderID,
                     txnIds: [txnIdPO],
                     sender: data.sendpoto.address,
                     receiver: data.receiver.address,
                     txnId: txnIdPO,
+
                   });
                   await newPO.save();
                 } else {
