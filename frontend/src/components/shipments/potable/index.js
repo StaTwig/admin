@@ -106,6 +106,9 @@ const PoTable = props => {
             <span>To Location</span>
           </div>
           <div className="rTableHead">
+            <span>Status</span>
+          </div>
+          <div className="rTableHead">
             <span />
           </div>
         </div>
@@ -115,7 +118,7 @@ const PoTable = props => {
             let statusStyle = 'warning-bg';
             if (purchase.status === 'Accepted') {
               statusStyle = 'success-bg';
-            } else if (purchase.status === 'Received') {
+            } else if (purchase.status === 'Created') {
               statusStyle = 'info-bg';
             } else if (purchase.status === 'Rejected') {
               statusStyle = 'secondary-bg';
@@ -144,6 +147,9 @@ const PoTable = props => {
                   <div className="rTableCell">{p.date}</div>
                   <div className="rTableCell">{p.incoterms2}</div>
                   <div className="rTableCell">{p.destination}</div>
+                  <div className="rTableCell">
+                  <div className= {`status ${statusStyle}`}>{p.status}</div>
+                  </div>
                   <div className="rTableCell">
                     <button
                       className="btn btn-outline-primary"
