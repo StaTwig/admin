@@ -20,21 +20,20 @@ const PurchaseForm = props => {
 
   const userNames = users.map(usr => usr.name);
   const [deliveryTo, setDeliveryTo] = useState(editPo.receiver.name);
-  const [sendPOTo, setSendPOTo] = useState(editPo.sendPOTo);
-  const [vendorId, setVendorId] = useState(editPo.vendorId);
-  const [unicefPo, setUnicefPo] = useState(editPo.unicefPo);
+  const [sendPOTo, setSendPOTo] = useState(editPo.sendpoto.name);
+  const [vendorId, setVendorId] = useState(editPo.vendor);
+  const [unicefPo, setUnicefPo] = useState(editPo.orderID);
   const [vendorName, setVendorName] = useState(editPo.vendorName);
-  const [poNum, setPoNum] = useState(editPo.poNum);
-  const [locationId, setLocationId] = useState(editPo.locationId);
+  const [Receiver, setReceiver] = useState(editPo.receiver.name);
+  const [locationId, setLocationId] = useState(editPo.plant);
   const [products, setProducts] = useState([]);
-  const [shippedFrom, setShippedFrom] = useState(editPo.shippedFrom);
-  const [toLocation, setToLocation] = useState(editPo.toLocation);
+  const [shippedFrom, setShippedFrom] = useState(editPo.incoterms2);
+  const [toLocation, setToLocation] = useState(editPo.destination);
   const [manufacturers, setManufacturers] = useState([]);
   const [product, setProduct] = useState(Object.keys(editPo.products[0])[0].split('-')[0]);
   const [manufacturer, setManufacturer] = useState(Object.keys(editPo.products[0])[0].split('-')[1]);
   const [quantity, setQuantity] = useState(editPo.products[0][`${product}-${manufacturer}`]);
-  const  [materialId, setMaterialId] = useState(editPo.materialId);
-  const  materialIds= ['S359190','S359191','S359192','S359193','S359194', 'S359195', 'S359196', 'S359197']
+  const  [materialId, setMaterialId] = useState(editPo.material);
   const [destination, setDestination] = useState(editPo.destination);
   const [client, setClient] = useState(editPo.client);
   const [message, setMessage] = useState('');
@@ -61,7 +60,7 @@ const PurchaseForm = props => {
     fetchData();
   },[]);
 
-  const poFields= ['sendPOTo','vendorId','unicefPo','vendorName','poNum','locationId','shippedFrom','toLocation',
+  const poFields= ['sendPOTo','vendorId','unicefPo','vendorName','Receiver','locationId','shippedFrom','toLocation',
                       'materialId','product','manufacturer','quantity'];
 
     const checkValidationErrors = (validations) => {
@@ -72,10 +71,9 @@ const PurchaseForm = props => {
         if (
           validationVariable.length < 1 ||
           validationVariable == 'Select Product' ||
+          validationVariable == 'Select Receiver'||
           validationVariable == 'Select Manufacturer' ||
-          validationVariable == 'Select receiver'||
           validationVariable == 'Select Send Po To'||
-          validationVariable == 'Select Vendor Name'||
           validationVariable == 'Select Material Id'
       ) {
           setPoError(validations[i] +" "+"must be Specified");
@@ -91,7 +89,7 @@ const PurchaseForm = props => {
     if (checkValidationErrors(poFields)) {
       return;
     }
-    const deliveryToObject = users.find(usr => usr.name === vendorName);
+    const deliveryToObject = users.find(usr => usr.name === Receiver);
     const sendPOToObject = users.find(usr => usr.name === sendPOTo);
     const productManufacturer = { [`${product}-${manufacturer}`]: quantity };
     const data = {
@@ -99,13 +97,14 @@ const PurchaseForm = props => {
         receiver: deliveryToObject,
         sendpoto: sendPOToObject, 
         supplier: { name: user.name, email: user.email },
-        vendorId,
-        unicefPo,
-        poNum,
-        locationId,
-        shippedFrom,
-        toLocation,
-        materialId,
+        vendorName,
+        vendor:  vendorId,
+        orderID: unicefPo,
+        clientId:vendorId,
+        plant: locationId,
+        incoterms2: shippedFrom,
+        destination: toLocation,
+        material: materialId,
         products: [productManufacturer],
         date:todayDate,
       },
@@ -199,27 +198,27 @@ const PurchaseForm = props => {
         </div>
        <div className="input-group">
           <label className="reference">Vendor Name</label>
-          <div className="form-control">
-          <DropdownButton
-           name={vendorName}
-            onSelect={item => setVendorName(item)}
-            groups={userNames}
-            className="text"
-          />
-          </div>
-        </div>
-      </div>
-      <div className="d-flex justify-content-between">
-      <div className="input-group">
-          <label className="reference">PO Item#</label>
            <input
               type="text"
               className="form-control"
               name="shipmentId"
-              placeholder="Enter PO Item#"
-              onChange={e => setPoNum(e.target.value)}
-              value={poNum}
+              placeholder="Enter Vendor Name"
+              onChange={e => setVendorName(e.target.value)}
+              value={vendorName}
             />
+        </div>
+      </div>
+      <div className="d-flex justify-content-between">
+      <div className="input-group">
+          <label className="reference">Receiver</label>
+          <div className="form-control">
+           <DropdownButton
+            name={Receiver}
+            onSelect={item => setReceiver(item)}
+            groups={userNames}
+            className="text"
+          />
+          </div>
         </div>
         <div className="input-group">
           <label className="reference">To Location ID</label>

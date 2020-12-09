@@ -67,7 +67,7 @@ const PurchaseFormReview = props => {
             disabled
             type="text"
             className="form-control"
-            value={reviewPo.data.vendorId}
+            value={reviewPo.data.vendor}
           />
         </div>
       </div>
@@ -78,7 +78,7 @@ const PurchaseFormReview = props => {
             disabled
             type="text"
             className="form-control"
-            value={reviewPo.data.unicefPo}
+            value={reviewPo.data.orderID}
           />
         </div>
         <div className="input-group">
@@ -87,18 +87,18 @@ const PurchaseFormReview = props => {
             disabled
             type="text"
             className="form-control"
-            value={reviewPo.data.receiver.name}
+            value={reviewPo.data.vendorName}
           />
         </div>
       </div>
       <div className="d-flex justify-content-between">
         <div className="input-group">
-          <label className="reference">Po Item#</label>
+          <label className="reference">Receiver</label>
           <input
             disabled
             type="text"
             className="form-control"
-            value={reviewPo.data.poNum}
+            value={reviewPo.data.receiver.name}
           />
         </div>
         <div className="input-group">
@@ -107,7 +107,7 @@ const PurchaseFormReview = props => {
             disabled
             type="text"
             className="form-control"
-            value={reviewPo.data.locationId}
+            value={reviewPo.data.plant}
           />
         </div>
       </div>
@@ -118,7 +118,7 @@ const PurchaseFormReview = props => {
             disabled
             type="text"
             className="form-control"
-            value={reviewPo.data.shippedFrom}
+            value={reviewPo.data.incoterms2}
           />
         </div>
         <div className="input-group">
@@ -127,14 +127,14 @@ const PurchaseFormReview = props => {
             disabled
             type="text"
             className="form-control"
-            value={reviewPo.data.toLocation}
+            value={reviewPo.data.destination}
           />
         </div>
       </div>
       <ProductsTableReview
         tableHeader={tableHeader}
         products={reviewPo.data.products}
-        materialId={reviewPo.data.materialId}
+        materialId={reviewPo.data.material}
       />
 
       <button className="btn btn-orange review " onClick={onAssign}>
