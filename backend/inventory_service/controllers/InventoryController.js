@@ -688,7 +688,7 @@ exports.insertInventories = [
     try {
       const { address } = req.user;
       const { data } = req.body;
-      const { serialNumberRange, manufacturingDate, expiryDate, productName, poNumber, shipmentId } = data;
+      const { serialNumberRange, manufacturingDate, expiryDate, productName, poNumber, shipmentId, manufacturerName, batchNumber } = data;
       const serialNumbers = serialNumberRange.split('-');
       const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
       const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
@@ -705,6 +705,8 @@ exports.insertInventories = [
            quantity: 1,
            poNumber,
            shipmentId,
+           manufacturerName,
+           batchNumber,
            owner: address
          }
          inventories.push(inventory);
