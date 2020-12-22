@@ -7,12 +7,12 @@ export const LOCAL_SERVER_URL_INVENTORY = 'http://localhost:3007';
 export const LOCAL_SERVER_URL_TRACKANDTRACE = 'http://localhost:3005';
 export const LOCAL_SERVER_URL_NOTIFICATION = 'http://localhost:3006';
 export const LOCAL_SERVER_URL_PRODUCTS = 'http://localhost:3010';
-export const STABLE_SERVER_URL_USER = 'http://54.164.66.73:3001';
-export const STABLE_SERVER_URL_SHIPMENT = 'http://54.164.66.73:3002';
-export const STABLE_SERVER_URL_INVENTORY = 'http://54.164.66.73:3007';
-export const STABLE_SERVER_URL_TRACKANDTRACE = 'http://54.164.66.73:3005';
-export const STABLE_SERVER_URL_NOTIFICATION = 'http://54.164.66.73:3006';
-export const STABLE_SERVER_URL_PRODUCTS = 'http://54.164.66.73:3010';
+export const STABLE_SERVER_URL_USER = 'http://65.0.135.24:3001';
+export const STABLE_SERVER_URL_SHIPMENT = 'http://65.0.135.24:3002';
+export const STABLE_SERVER_URL_INVENTORY = 'http://65.0.135.24:3007';
+export const STABLE_SERVER_URL_TRACKANDTRACE = 'http://65.0.135.24:3005';
+export const STABLE_SERVER_URL_NOTIFICATION = 'http://65.0.135.24:3006';
+export const STABLE_SERVER_URL_PRODUCTS = 'http://65.0.135.24:3010';
 export const DEV_SERVER_URL = 'http://127.0.0.1:9001';
 
 export function config() {
@@ -28,7 +28,9 @@ export function config() {
       shipmentsUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchUserShipments`,
       getProducts: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/getProductNames`,
       getManufacturers: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/getManufacturers`,
-      inventoriesUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getAllInventoryDetails`,
+      inventoriesUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getGroupedInventoryDetails?skip=0&limit=100`,
+      getSerialNumbersByBatchNumber: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
+      getInventoryByBatchNumber:`${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getBatchDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
       addMultipleInventories: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/addMultipleInventories`,
       addInventoriesFromExcel: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/addInventoriesFromExcel`,
       createShipmentUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/createShipment`,
@@ -63,7 +65,9 @@ export function config() {
       getProducts: `${DEV_SERVER_URL}/productmanagement/api/products/getProductNames`,
       getManufacturers: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/getManufacturers`,
       createShipmentUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/createShipment`,
-      inventoriesUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getAllInventoryDetails`,
+      inventoriesUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getGroupedInventoryDetails?skip=0&limit=100`,
+      getSerialNumbersByBatchNumber: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
+      getInventoryByBatchNumber:`${DEV_SERVER_URL}/inventorymanagement/api/inventory/getBatchDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
       addMultipleInventories: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/addMultipleInventories`,
       addInventoriesFromExcel: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/addInventoriesFromExcel`,
       addInventoryUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/addNewInventory`,
@@ -105,10 +109,12 @@ export function config() {
       fetchAllPurchaseOrderUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
       fetchPurchaseOrderStatisticsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/purchaseOrderStatistics`,
       inventorySearch: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`,
-      inventoriesUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getAllInventoryDetails`,
+      inventoriesUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getGroupedInventoryDetails?skip=0&limit=100`,
       addMultipleInventories: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/addMultipleInventories`,
       addInventoriesFromExcel: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/addInventoriesFromExcel`,
       addInventoryUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/addNewInventory`,
+      getSerialNumbersByBatchNumber: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
+      getInventoryByBatchNumber:`${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getBatchDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
       trackShipment: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
       poDetailsByShipmentId:`${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
@@ -138,7 +144,9 @@ export function config() {
       fetchAllPurchaseOrderUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
       fetchPurchaseOrderStatisticsUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/purchaseOrderStatistics`,
       inventorySearch: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`,
-      inventoriesUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getAllInventoryDetails`,
+      inventoriesUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getGroupedInventoryDetails?skip=0&limit=100`,
+      getSerialNumbersByBatchNumber: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
+      getInventoryByBatchNumber:`${TEST_SERVER_URL}/inventorymanagement/api/inventory/getBatchDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
       addMultipleInventories: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/addMultipleInventories`,
       addInventoriesFromExcel: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/addInventoriesFromExcel`,
       addInventoryUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/addNewInventory`,
@@ -172,7 +180,9 @@ export function config() {
       fetchAllPurchaseOrderUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
       fetchPurchaseOrderStatisticsUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/purchaseOrderStatistics`,
       inventorySearch: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`,
-      inventoriesUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getAllInventoryDetails`,
+      inventoriesUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getGroupedInventoryDetails?skip=0&limit=100`,
+      getSerialNumbersByBatchNumber: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
+      getInventoryByBatchNumber:`${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getBatchDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
       addMultipleInventories: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/addMultipleInventories`,
       addInventoriesFromExcel: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/addInventoriesFromExcel`,
       addInventoryUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/addNewInventory`,
@@ -207,7 +217,9 @@ export function config() {
       fetchAllPurchaseOrderUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
       fetchPurchaseOrderStatisticsUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/purchaseOrderStatistics`,
       inventorySearch: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`,
-      inventoriesUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getAllInventoryDetails`,
+      inventoriesUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getGroupedInventoryDetails?skip=0&limit=100`,
+      getSerialNumbersByBatchNumber: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
+      getInventoryByBatchNumber:`${PROD_SERVER_URL}/inventorymanagement/api/inventory/getBatchDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
       addInventoryUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/addNewInventory`,
       addMultipleInventories: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/addMultipleInventories`,
       addInventoriesFromExcel: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/addInventoriesFromExcel`,
@@ -223,7 +235,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || 'test'; // change prod to test, local,stable, dev for respective environments
+  const environment = process.env.ENVIRONMENT || 'stable'; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
   return conf;
 }

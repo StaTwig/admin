@@ -23,6 +23,8 @@ import Layers from "../../assets/icons/layers.svg";
 
 const ProductList = props => {
 
+  const { loadMore, onLoadMore } = props;
+
   const headers = {
     coloumn1: 'Product Name',
     coloumn2: 'Manufacturer',
@@ -71,12 +73,17 @@ const ProductList = props => {
         </div>
       </div>
 
-      <div className="full-width-ribben mt-4">
+      <div className="full-width-ribben">
         <TableFilter data={headers} />
       </div>
       <div className="ribben-space">
       <Table {...props}/>
       </div>
+      {loadMore && (
+          <button className="btn btn-success" onClick={onLoadMore}>
+            Load More
+          </button>
+        )}
       
     </div>
   );

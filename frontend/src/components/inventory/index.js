@@ -33,7 +33,7 @@ const Inventory = props => {
     coloumn3: 'Batch Number',
     coloumn4: 'Quantity',
     coloumn5: 'Serial Number',
-    coloumn6: 'Mfg Date',
+    coloumn6: 'Date',
     coloumn7: 'Exp Date',
   };
   const [inventoryNearExpiration, setInventoryNearExpiration] = useState('');
@@ -393,7 +393,7 @@ const Inventory = props => {
             <div className="list-container">
               <div className="d-flex justify-content-between align-items-center">
                 <h4>Product List</h4>
-                <Link to="/productlist">
+                <Link to="/productlist/all">
                   <button className="btn btn-link">View all</button>
                 </Link>
               </div>
