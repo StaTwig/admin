@@ -1299,7 +1299,7 @@ exports.getGroupedInventoryDetails = [
   },
 ];
 
-exports.getBatchInventoryDetails = [
+exports.getInventoryDetailsByBatchNumber = [
         auth,
   async (req, res) => {
     try {
@@ -1307,7 +1307,7 @@ exports.getBatchInventoryDetails = [
         if (result.success) {
           logger.log(
             'info',
-            '<<<<< InventoryService < InventoryController < getBatchInventoryDetails : token verified successfullly, querying data by publisher',
+            '<<<<< InventoryService < InventoryController < getInventoryDetailsByBatchNumber : token verified successfullly, querying data by publisher',
           );
 
           permission_request = {
@@ -1337,14 +1337,67 @@ exports.getBatchInventoryDetails = [
         } else {
           logger.log(
             'warn',
-            '<<<<< InventoryService < InventoryController < getBatchInventoryDetails : refuted token',
+            '<<<<< InventoryService < InventoryController < getInventoryDetailsByBatchNumber : refuted token',
           );
           res.status(403).json(result);
         }
       });
     } catch (err) {
       logger.log( 'error',
-        '<<<<< InventoryService < InventoryController < getBatchInventoryDetails : error (catch block)',
+        '<<<<< InventoryService < InventoryController < getInventoryDetailsByBatchNumber : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getBatchDetailsByBatchNumber = [
+auth,
+  async (req, res) => {
+    try {
+      checkToken(req, res, async result => {
+        if (result.success) {
+          logger.log(
+            'info',
+            '<<<<< InventoryService < InventoryController < getBatchDetailsByBatchNumber : token verified successfullly, querying data by publisher',
+          );
+
+          permission_request = {
+            result: result,
+            permissionRequired: 'viewInventory',
+          };
+          checkPermissions(permission_request, async permissionResult => {
+            if (permissionResult.success) {
+              const { address } = req.user;
+              const { skip, limit, batchNumber } = req.query;
+
+              const inventoryResult = await InventoryModel.aggregate([{$match:{ owner:address, batchNumber:batchNumber}},{$group: {_id:{batchNumber:'$batchNumber'},
+              batchNumber:{$first:'$batchNumber'},quantity:{$sum:'$quantity'},manufacturingDate:{$first:'$manufacturingDate'},
+              expiryDate:{$first:'$expiryDate'},owner:{$first:'$owner'},productName:{$first:'$productName'},
+              manufacturerName:{$first:'$manufacturerName'},createdAt:{$first:'$createdAt'}}}])
+              .sort({ createdAt: -1 })
+              .skip(parseInt(skip))
+              .limit(parseInt(limit));
+
+              res.json({
+                data: inventoryResult,
+              });
+            } else {
+              res.json('Sorry! User does not have enough Permissions');
+            }
+          });
+        } else {
+          logger.log(
+            'warn',
+            '<<<<< InventoryService < InventoryController < getBatchDetailsByBatchNumber : refused token',
+          );
+          res.status(403).json(result);
+        }
+      });
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< InventoryService < InventoryController < getBatchDetailsByBatchNumber : error (catch block)',
       );
       return apiResponse.ErrorResponse(res, err);
     }
