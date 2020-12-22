@@ -1083,9 +1083,199 @@ exports.getGroupedInventoryDetails = [
               .sort({ createdAt: -1 })
               .skip(parseInt(skip))
               .limit(parseInt(limit));
+            
+              const productNamesResponse = await axios.get(
+                `${product_service_url}/getProductNames`,
+                {
+                  headers: {
+                    Authorization: req.headers.authorization,
+                  },
+                },
+              );
+
+              const products_array = productNamesResponse.data.data.map(
+                product => product.productName,
+              );
+
+              logger.log(
+                'info',
+                '<<<<< InventoryService < InventoryController < getAllInventoryDetails : queried and pushed data',
+              );
+              const nextYear = new Date(
+                new Date().setFullYear(new Date().getFullYear() + 1),
+              );
+              nextYear.setMonth(0);
+              nextYear.setUTCHours(0, 0, 0, 0);
+              nextYear.setDate(1);
+              const thisYear = new Date(
+                new Date().setFullYear(new Date().getFullYear()),
+              );
+              thisYear.setMonth(0);
+              thisYear.setDate(1);
+              thisYear.setUTCHours(0, 0, 0, 0);
+              const nextMonth = new Date(
+                new Date().setMonth(new Date().getMonth() + 1),
+              );
+              nextMonth.setUTCHours(0, 0, 0, 0);
+              const thisMonth = new Date(
+                new Date().setMonth(new Date().getMonth()),
+              );
+              thisMonth.setUTCDate(1);
+              thisMonth.setUTCHours(0, 0, 0, 0);
+              const thisWeek = Date.monday();
+              const nextWeek = Date.next().monday();
+              const tomorrow = new Date(
+                new Date().setDate(new Date().getDate() + 1),
+              );
+              tomorrow.setUTCHours(0, 0, 0, 0);
+              const today = new Date();
+              today.setUTCHours(0, 0, 0, 0);
+
+              total_inv = await InventoryModel.find({
+                owner: address,
+              }).countDocuments();
+              const thisYearAdded = await InventoryModel.find({
+                owner: address,
+                createdAt: {
+                  $gte: thisYear.toISOString(),
+                  $lte: nextYear.toISOString(),
+                },
+              }).countDocuments();
+              const thisMonthAdded = await InventoryModel.find({
+                owner: address,
+                createdAt: {
+                  $gte: thisMonth.toISOString(),
+                  $lte: nextMonth.toISOString(),
+                },
+              }).countDocuments();
+              const thisWeekAdded = await InventoryModel.find({
+                owner: address,
+                createdAt: {
+                  $gte: thisWeek.toISOString(),
+                  $lte: nextWeek.toISOString(),
+                },
+              }).countDocuments();
+              const todayAdded = await InventoryModel.find({
+                owner: address,
+                createdAt: {
+                  $gte: today.toISOString(),
+                  $lt: tomorrow.toISOString(),
+                },
+              }).countDocuments();
+              const thisYearExpire = await InventoryModel.find({
+                owner: address,
+                expiryDate: {
+                  $gte: thisYear.toISOString(),
+                  $lt: nextYear.toISOString(),
+                },
+              }).countDocuments();
+              const thisMonthExpire = await InventoryModel.find({
+                owner: address,
+                expiryDate: {
+                  $gte: thisMonth.toISOString(),
+                  $lt: nextMonth.toISOString(),
+                },
+              }).countDocuments();
+              const thisWeekExpire = await InventoryModel.find({
+                owner: address,
+                expiryDate: {
+                  $gte: thisWeek.toISOString(),
+                  $lt: nextWeek.toISOString(),
+                },
+              }).countDocuments();
+              const todayExpire = await InventoryModel.find({
+                owner: address,
+                expiryDate: {
+                  $gte: today.toISOString(),
+                  $lt: tomorrow.toISOString(),
+                },
+              }).countDocuments();
+              const totalExpired = await InventoryModel.find({
+                owner: address,
+                expiryDate: { $lte: today.toISOString() },
+              }).countDocuments();
+              const thisMonthExpired = await InventoryModel.find({
+                owner: address,
+                expiryDate: {
+                  $gte: thisMonth.toISOString(),
+                  $lte: today.toISOString(),
+                },
+              }).countDocuments();
+              const thisYearExpired = await InventoryModel.find({
+                owner: address,
+                expiryDate: {
+                  $gte: thisYear.toISOString(),
+                  $lte: today.toISOString(),
+                },
+              }).countDocuments();
+              const thisWeekExpired = await InventoryModel.find({
+                owner: address,
+                expiryDate: {
+                  $gte: thisWeek.toISOString(),
+                  $lte: today.toISOString(),
+                },
+              }).countDocuments();
+
+              const products = await InventoryModel.aggregate([
+                { $match: { owner: address } },
+                {
+                  $group: {
+                    _id: '$productName',
+                    productName: { $first: '$productName' },
+                    quantity: { $sum: '$quantity' },
+                  },
+                },
+              ]);
+              const dict = {};
+
+              for (let j = 0; j < products.length; j++) {
+                const productName = products[j].productName;
+                const count = products[j].quantity;
+
+                const index = products_array.indexOf(productName);
+                const name = products_array[index];
+                if (name in dict) {
+                  const exis = dict[name];
+                  const new_val = count;
+                  dict[name] = exis + new_val;
+                } else {
+                  dict[name] = count;
+                }
+              }
 
               res.json({
-                data: inventoryResult
+                data: inventoryResult,
+                dict,
+                counts: {
+                  inventoryAdded: {
+                    total: total_inv,
+                    thisYear: thisYearAdded,
+                    thisMonth: thisMonthAdded,
+                    thisWeek: thisWeekAdded,
+                    today: todayAdded,
+                  },
+                  currentInventory: {
+                    total: total_inv,
+                    thisYear: thisYearAdded,
+                    thisMonth: thisMonthAdded,
+                    thisWeek: thisWeekAdded,
+                    today: todayAdded,
+                  },
+                  vaccinesNearExpiration: {
+                    total: thisYearExpire,
+                    thisYear: thisYearExpire,
+                    thisMonth: thisMonthExpire,
+                    thisWeek: thisWeekExpire,
+                    today: todayExpire,
+                  },
+                  vaccinesExpired: {
+                    total: totalExpired,
+                    thisYear: thisYearExpired,
+                    thisMonth: thisMonthExpired,
+                    thisWeek: thisWeekExpired,
+                    today: todayExpire,
+                  },
+                },
               });
             } else {
               res.json('Sorry! User does not have enough Permissions');
