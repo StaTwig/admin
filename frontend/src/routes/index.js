@@ -18,6 +18,7 @@ import ProductTracing from '../containers/productTracing';
 import Network from '../containers/network';
 import Profile from '../containers/profile';
 import AdminProfile from '../containers/adminprofile';
+import DashBoard from '../containers/dashboard';
 import requireAuth from '../components/hocs/requireAuth';
 
 import AddProduct from '../containers/addproduct';
@@ -47,6 +48,7 @@ const routes = (
     <Route path="/reviewshipment" component={requireAuth(VerifyShipment)} />
     <Route path="/inventory" component={requireAuth(Inventory)} />
     <Route path="/productlist/:id" component={requireAuth(ProductList)} />
+    <Route path="/dashboard" component={requireAuth(DashBoard)} />
     <Route path="/addproduct" component={requireAuth(AddProduct)} />
     <Route path="/newinventory" component={requireAuth(NewInventory)} />
     <Route path="/reviewinventory" component={requireAuth(VerifyInventory)} />
