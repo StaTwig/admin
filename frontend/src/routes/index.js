@@ -46,7 +46,7 @@ const routes = (
     <Route path="/newshipment" component={requireAuth(NewShipment)} />
     <Route path="/reviewshipment" component={requireAuth(VerifyShipment)} />
     <Route path="/inventory" component={requireAuth(Inventory)} />
-    <Route path="/productlist" component={requireAuth(ProductList)} />
+    <Route path="/productlist/:id" component={requireAuth(ProductList)} />
     <Route path="/addproduct" component={requireAuth(AddProduct)} />
     <Route path="/newinventory" component={requireAuth(NewInventory)} />
     <Route path="/reviewinventory" component={requireAuth(VerifyInventory)} />
