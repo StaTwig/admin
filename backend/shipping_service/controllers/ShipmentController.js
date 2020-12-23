@@ -297,14 +297,11 @@ exports.fetchPublisherPurchaseOrders = [
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
               const { address } = req.user;
-               const acceptedPOs = await POModel.find({ $or: 
-               [
-               { sender: address },
-               { receiver: address }
-               ],
-                status: 'Accepted'
-               })
-               
+              const acceptedPOs = await POModel.find({
+                receiver: address,
+                status: 'Accepted',
+              });
+ 
               logger.log(
                 'info',
                 '<<<<< ShipmentService < ShipmentController < fetchPublisherPurchaseOrders : queried all publisher keys',
