@@ -1630,8 +1630,8 @@ exports.addPOsFromExcel = [
                   );
                   const newPO = new POModel({
                     orderID,
-                    sender: item.sendpoto.address,
-                    receiver: item.receiver.address,
+                    sender: req.user.address,
+                    receiver: item.sendpoto.address,
                     client,
                     clientId,
                     date,
