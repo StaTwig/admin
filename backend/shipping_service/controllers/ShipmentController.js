@@ -901,8 +901,8 @@ exports.createPurchaseOrder = [
                     ...data,
                     orderID,
                     txnIds: [txnIdPO],
-                    sender: data.sendpoto.address,
-                    receiver: data.receiver.address,
+                    sender: req.user.address,
+                    receiver: data.sendpoto.address,
                     txnId: txnIdPO,
 
                   });
