@@ -1,11 +1,13 @@
 import React from 'react';
-import './style.scss';
+import 'leaflet/dist/leaflet.css';
+import MapView from './MapView';
+
 
 const DashBoard = (props) => {
     return(
          <div className="dashboard">
           <h1 className="breadcrumb">DASH BOARD </h1>
-          <div>...DASH BOARD</div>
+           <MapView/>
         </div>
     )
 }
