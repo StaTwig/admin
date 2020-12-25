@@ -906,9 +906,8 @@ exports.createPurchaseOrder = [
                     orderID,
                     txnIds: [txnIdPO],
                     sender: req.user.address,
-                    receiver: data.sendpoto.address,
+                    receiver: req.user.address  === data.sendpoto.address ? data.receiver.address : data.sendpoto.address,
                     txnId: txnIdPO,
-
                   });
                       
                   await newPO.save();
