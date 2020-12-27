@@ -902,7 +902,7 @@ exports.createPurchaseOrder = [
 
                   const newPO = new POModel({
                     ...data,
-                    status: req.user.address  === data.sendpoto.address ? 'ACCEPTED':'CREATED',
+                    status: req.user.address  === data.sendpoto.address ? 'Accepted':'Created',
                     orderID,
                     txnIds: [txnIdPO],
                     sender: req.user.address,
