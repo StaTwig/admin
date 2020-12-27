@@ -1634,8 +1634,8 @@ exports.addPOsFromExcel = [
                   );
                   const newPO = new POModel({
                     orderID,
-                    sender: req.user.address,
-                    receiver: item.sendpoto.address,
+                    sender: item.sendpoto.address,
+                    receiver: item.receiver.address,
                     client,
                     clientId,
                     date,
