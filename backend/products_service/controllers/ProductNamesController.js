@@ -298,7 +298,7 @@ exports.getQRCodes = async function(req, res) {
   try {
     let qrCodes = [];
     for(let i=0; i<1000; i++) {
-      const randomNumber = 'QR' + Math.random() * 10000;
+      const randomNumber = 'QR' + parseInt(Math.random() * 10000);
       const qrCode = await QRCode.toDataURL(randomNumber);
       qrCodes.push(qrCode);
     }
