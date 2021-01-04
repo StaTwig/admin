@@ -22,11 +22,11 @@ const Table = props => {
               <div className="rTableCell ml-5">{inventory.createdAt.substring(8,10)+"/"+inventory.createdAt.substring(5,7)+"/"+inventory.createdAt.substring(0,4)}</div>
             <div className="rTableCell ml-5">{inventory.manufacturingDate.substring(5,7)+"/"+inventory.manufacturingDate.substring(0,4)}</div>
           <div className="rTableCell">{inventory.expiryDate.substring(5,7)+"/"+inventory.expiryDate.substring(0,4)}</div>
-              <div className="rTableCell">{batch === inventory.batchNumber?<button className="btn btn-outline-info fontSize200 show" 
+              <div className="rTableCell">{batch === inventory.batchNumber?<button className="btn btn-outline-info fontSize200 dod" 
               onClick = {()=>{
                 setBatch('')
                   }}
-            >SHOW LESS</button>:<button className="btn btn-outline-info fontSize200 show" 
+            >SHOW LESS</button>:<button className="btn btn-outline-info fontSize200 enlarge" 
              onClick = {()=>{
               setBatch(inventory.batchNumber)
                 }}>SHOW MORE</button>}
