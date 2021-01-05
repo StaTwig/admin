@@ -5,7 +5,9 @@ const checkPermissions = require('../middlewares/rbac_middleware')
 const multer = require('multer');
 const moveFile = require('move-file');
 const fs = require('fs');
-const QRCode = require('qrcode')
+const QRCode = require('qrcode');
+const uniqid = require('uniqid');
+const symbology = require('symbology');
 
 //helper file to prepare responses.
 const checkToken = require('../middlewares/middleware').checkToken;
@@ -288,22 +290,40 @@ exports.generateQRCode = async function(req, res) {
     const { text } = req.body;
     const qrCode = await QRCode.toDataURL(text);
     console.log(await QRCode.toDataURL(text));
-    return apiResponse.successResponseWithData(res, qrCode)
+    return apiResponse.successResponseWithData(res, qrCode);
   } catch (err) {
-    console.error(err)
+    console.error(err);
   }
 };
 
 exports.getQRCodes = async function(req, res) {
   try {
     let qrCodes = [];
-    for(let i=0; i<1000; i++) {
-      const randomNumber = 'QR' + parseInt(Math.random() * 10000);
-      const qrCode = await QRCode.toDataURL(randomNumber);
-      qrCodes.push(qrCode);
+    const { limit, type } = req.query;
+    if (type === 'qrcode') {
+      for (let i = 0; i < limit; i++) {
+        const uniqueId = uniqid();
+        const qrCode = await QRCode.toDataURL(uniqueId);
+
+        qrCodes.push(qrCode);
+      }
+    } else if (type === 'barcode') {
+      for(let i = 0; i < limit; i++) {
+        const uniqueId = uniqid();
+        const data = await symbology.createStream(
+          {
+            symbology: symbology.Barcode.CODE128,
+            backgroundColor: 'ff00ff',
+            foregroundColor: '00ff00',
+          },
+          uniqueId,
+        );
+        qrCodes.push(data.data);
+      }
     }
-    return apiResponse.successResponseWithData(res, qrCodes)
+
+    return apiResponse.successResponseWithData(res, qrCodes);
   } catch (err) {
-    console.error(err)
+    console.error(err);
   }
 };
