@@ -285,18 +285,7 @@ exports.uploadImage = async function(req, res) {
   });
 };
 
-exports.generateQRCode = async function(req, res) {
-  try {
-    const { text } = req.body;
-    const qrCode = await QRCode.toDataURL(text);
-    console.log(await QRCode.toDataURL(text));
-    return apiResponse.successResponseWithData(res, qrCode);
-  } catch (err) {
-    console.error(err);
-  }
-};
-
-exports.getQRCodes = async function(req, res) {
+exports.generateCodes = async function(req, res) {
   try {
     let qrCodes = [];
     const { limit, type } = req.query;
