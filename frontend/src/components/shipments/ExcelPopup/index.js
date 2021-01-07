@@ -46,9 +46,9 @@ const ExcelPopUp = props => {
             className="btn-outline-primary btn mr-3"
             onClick={props.onHide}
           >
-            CANCEl
+            CANCEL
           </button>
-          <button className="btn-primary btn mr-1" onClick={uploadExcel}>
+          <button className="btn-primary btn mr-4" onClick={uploadExcel}>
             IMPORT
           </button>
         </div>
