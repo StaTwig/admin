@@ -12,7 +12,7 @@ const DashBoard = (props) => {
           <h1 className="breadcrumb dash">DASHBOARD </h1>
      <div><Tabs {...props} visible={visible} setVisible = {setVisible}/></div>
     </div>
-    <div className="panel mt-1"><MapView/></div>
+    <div className="panel"><MapView/></div>
    </div>
     )
 }
