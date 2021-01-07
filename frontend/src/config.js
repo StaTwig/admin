@@ -27,6 +27,7 @@ export function config() {
       upload: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/upload`,
       shipmentsUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchUserShipments`,
       getProducts: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/getProductNames`,
+      generateCodes: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/generateCodes`,
       getManufacturers: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/getManufacturers`,
       inventoriesUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getGroupedInventoryDetails?skip=0&limit=100`,
       getSerialNumbersByBatchNumber: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
@@ -63,6 +64,7 @@ export function config() {
       upload: `${DEV_SERVER_URL}/usermanagement/api/auth/upload`,
       shipmentsUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/fetchUserShipments`,
       getProducts: `${DEV_SERVER_URL}/productmanagement/api/products/getProductNames`,
+      generateCodes: `${DEV_SERVER_URL}/productmanagement/api/products/generateCodes`,
       getManufacturers: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/getManufacturers`,
       createShipmentUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/createShipment`,
       inventoriesUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getGroupedInventoryDetails?skip=0&limit=100`,
@@ -99,6 +101,7 @@ export function config() {
       upload: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/upload`,
       shipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchUserShipments`,
       getProducts: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/getProducts`,
+      generateCodes: `${STABLE_SERVER_URL_SHIPMENT}/productmanagement/api/products/generateCodes`,
       getManufacturers: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/getManufacturers`,
       createShipmentUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/createShipment`,
       shipmentsSearch: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchShipments?key=`,
@@ -157,6 +160,7 @@ export function config() {
       trackProduct: `${TEST_SERVER_URL}/tracktracemanagement/api/track/track?trackingNumber=`,
       addNewProduct: `${TEST_SERVER_URL}/productmanagement/api/products/addProductName`,
       getProducts: `${TEST_SERVER_URL}/productmanagement/api/products/getProductNames`,
+      generateCodes: `${TEST_SERVER_URL}/productmanagement/api/products/generateCodes`,
       addMultipleProducts: `${TEST_SERVER_URL}/productmanagement/api/products/addMultipleProducts`,
       getNotificationsUrl: `${TEST_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${TEST_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
@@ -193,6 +197,7 @@ export function config() {
       trackProduct: `${DEMO_SERVER_URL}/tracktracemanagement/api/track/track?trackingNumber=`,
       addNewProduct: `${DEMO_SERVER_URL}/productmanagement/api/products/addProductName`,
       getProducts: `${DEMO_SERVER_URL}/productmanagement/api/products/getProductNames`,
+      generateCodes: `${DEMO_SERVER_URL}/productmanagement/api/products/generateCodes`,
       addMultipleProducts: `${DEMO_SERVER_URL}/productmanagement/api/products/addMultipleProducts`,
       getNotifications: `${DEMO_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${DEMO_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
@@ -209,6 +214,7 @@ export function config() {
       createShipmentUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/createShipment`,
       shipmentsSearch: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchShipments?key=`,
       getProducts: `${PROD_SERVER_URL}/productmanagement/api/products/getProductNames`,
+      generateCodes: `${PROD_SERVER_URL}/productmanagement/api/products/generateCodes`,
       getManufacturers: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/getManufacturers`,
       createPurchaseOrderUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/createPurchaseOrder`,
       addPOsFromExcelUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/addPOsFromExcel`,
@@ -235,7 +241,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || 'stable'; // change prod to test, local,stable, dev for respective environments
+  const environment = process.env.ENVIRONMENT || 'test'; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
   return conf;
 }

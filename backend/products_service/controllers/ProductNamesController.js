@@ -8,8 +8,20 @@ const fs = require('fs');
 const QRCode = require('qrcode');
 const uniqid = require('uniqid');
 const symbology = require('symbology');
+const array = require('lodash/array');
 
-//helper file to prepare responses.
+// Define font files
+const fonts = {
+  Roboto: {
+    normal: 'fonts/Roboto-Regular.ttf',
+    bold: 'fonts/Roboto-Medium.ttf',
+    italics: 'fonts/Roboto-Italic.ttf',
+    bolditalics: 'fonts/Roboto-MediumItalic.ttf',
+  },
+};
+
+const PdfPrinter = require('pdfmake');
+const printer = new PdfPrinter(fonts); //helper file to prepare responses.
 const checkToken = require('../middlewares/middleware').checkToken;
 const auth = require('../middlewares/jwt');
 
@@ -289,6 +301,7 @@ exports.generateCodes = async function(req, res) {
   try {
     let qrCodes = [];
     const { limit, type } = req.query;
+    if(limit > 1000) return apiResponse.ErrorResponse(res, 'Limit cannot be more than 1000');
     if (type === 'qrcode') {
       for (let i = 0; i < limit; i++) {
         const uniqueId = uniqid();
@@ -302,16 +315,65 @@ exports.generateCodes = async function(req, res) {
         const data = await symbology.createStream(
           {
             symbology: symbology.Barcode.CODE128,
-            backgroundColor: 'ff00ff',
-            foregroundColor: '00ff00',
+            backgroundColor: 'ffffff',
+            foregroundColor: '000000',
           },
           uniqueId,
         );
         qrCodes.push(data.data);
       }
     }
-
-    return apiResponse.successResponseWithData(res, qrCodes);
+    const qrCodesImages = qrCodes.map(qrCode => {
+      return { image: qrCode, width: 150 };
+    });
+    const chunkedData = array.chunk(qrCodesImages, 3).slice();
+    let lastArray = chunkedData[chunkedData.length -1];
+    if(lastArray.length === 1){
+      lastArray.push({ text:'', width: 150});
+      lastArray.push({ text:'', width: 150});
+    }else if(lastArray.length === 2) {
+      lastArray.push({ text:'', width: 150});
+    }
+    const documentDefinition = {
+      content: [
+        {
+          style: 'tableExample',
+          table: {
+            body: chunkedData,
+          },
+        },
+      ],
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true,
+          margin: [0, 0, 0, 10],
+        },
+        subheader: {
+          fontSize: 16,
+          bold: true,
+          margin: [0, 10, 0, 5],
+        },
+        tableExample: {
+          margin: [0, 5, 0, 15],
+        },
+        tableHeader: {
+          bold: true,
+          fontSize: 13,
+          color: 'black',
+        },
+      },
+      defaultStyle: {
+        // alignment: 'justify'
+      },
+    };
+    const pdfDoc = printer.createPdfKitDocument(documentDefinition, {});
+    pdfDoc.pipe(fs.createWriteStream(`${__dirname}/../images/codes.pdf`).on('close', () => {
+      console.log('file done');
+      var path = require('path');
+      res.sendFile(path.resolve(`${__dirname}/../images/codes.pdf`));
+    }));
+    pdfDoc.end();
   } catch (err) {
     console.error(err);
   }
