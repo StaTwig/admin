@@ -1,0 +1,91 @@
+@import '../../assets/styles/global.scss';
+
+.dashbar {
+  background: transparent linear-gradient(180deg, $white 0%, $white 100%) 0% 0% no-repeat padding-box;
+  box-shadow: 5px 0px 10px #00000029;
+  border-radius: 0px 0px 0px 0px;
+  height: calc(100vh - 80px);
+  color: $white;
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 0px 20px 0 20px;
+  z-index: 9;
+  top: 80px;
+  
+ @media screen and (max-width: 768px) {
+    display: none;
+  }
+   img{
+     float: right;
+   }
+    .panel {
+      box-shadow: 0px 3px 6px $grey;
+      border-radius: 12px;
+      background: transparent linear-gradient(246deg, 	#3366ff 0%, #3366ff 100%) 0% 0% no-repeat padding-box;
+      flex-basis: auto;
+      padding: 20px 20px 10px 20px;
+      
+      ul {
+        padding: 0;
+        margin: 0;
+    
+        li {
+          list-style: none;
+          font-size: 12px;
+    }
+  }
+}
+
+  .address{
+      background: transparent linear-gradient(246deg, 	$white 0%, $white 100%) 0% 0% no-repeat padding-box;
+      color:#707070;
+      font-size: 11px;
+}
+
+.prod{
+  color:#707070;
+  font-size: 12px;
+}
+.sho{
+  float:right;
+  height: 30px;
+  width: 70px;
+  border: 1px solid #0093E9;
+  border-radius: 7px;
+  font-size: 10px;
+  padding: 2px 2px;
+ 
+
+}
+.bod{
+  border-bottom: 0.01px solid #707070;
+
+}
+.form-group,
+  .input-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: unset;
+
+    label {
+      color: #707070;
+      text-align: center;
+      font-size: 13px;
+    }
+     
+    .form-control {
+      border: none;
+      background: transparent;
+      border-bottom: 2px solid #d6d6d6;
+      border-radius: 0;
+      color: $black;
+      flex-basis: 100%;
+      flex-grow: inherit;
+      font-size: 12px;
+    }
+  }
+
+}

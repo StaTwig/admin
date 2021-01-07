@@ -20,6 +20,7 @@ import Profile from '../containers/profile';
 import AdminProfile from '../containers/adminprofile';
 import DashBoard from '../containers/dashboard';
 import requireAuth from '../components/hocs/requireAuth';
+import QrCode from '../containers/qrcode';
 
 import AddProduct from '../containers/addproduct';
 import Signup from '../containers/signUp';
@@ -50,6 +51,7 @@ const routes = (
     <Route path="/productlist/:id" component={requireAuth(ProductList)} />
     <Route path="/dashboard" component={requireAuth(DashBoard)} />
     <Route path="/addproduct" component={requireAuth(AddProduct)} />
+    <Route path="/qrcode" component={requireAuth(QrCode)} />
     <Route path="/newinventory" component={requireAuth(NewInventory)} />
     <Route path="/reviewinventory" component={requireAuth(VerifyInventory)} />
     <Route path="/trackAndTrace" component={requireAuth(trackAndTrace)} />

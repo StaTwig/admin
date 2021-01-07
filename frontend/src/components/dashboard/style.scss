@@ -3,14 +3,20 @@
 .dashboard{
     padding-right: 3rem;
     padding-left: 3rem;
+    
     @media (max-width: $md) {
       padding-right: 10px;
       padding-left: 10px;
     }
 
+    .dash{
+      margin-bottom:0.2rem;
+    }
+
 }
 .leaflet-container {
-  width: 90vw;
-  height: 80vh;
-  bottom: 10px;
+  width: 1250px;
+  height: 500px;
+  z-index: 9;
+
 }

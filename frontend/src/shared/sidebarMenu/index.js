@@ -16,6 +16,8 @@ import shipSelectedIcon from '../../assets/icons/Shippmentselected.png';
 import InventorySelectedIcon from '../../assets/icons/Inventoryselected.png';
 import trackSelectedIcon from '../../assets/icons/Track_Traceselected.png';
 import NetworkSelectedIcon from '../../assets/icons/NetworkSelected.svg';
+import UtilitiesSelected from '../../assets/icons/utilitieswhite.png';
+import UtilitiesIcon from '../../assets/icons/utilitiesblue.png';
 import './style.scss'
 const SideBar = ({
   match,
@@ -59,6 +61,12 @@ const SideBar = ({
           <Link to="/network">
             <img src={(url === '/network') ? NetworkSelectedIcon : NetworkIcon} alt="Network" />
             <span>Network</span>
+          </Link>
+        </li>
+        <li className={(url === '/qrcode') ? 'active' : ''} >
+          <Link to="/qrcode">
+            <img src={(url === '/qrcode') ? UtilitiesSelected : UtilitiesIcon} alt="Network" />
+            <span>Utilities</span>
           </Link>
         </li>
       </ul>

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import 'leaflet/dist/leaflet.css';
 import Markers from './VenueMarkers';
 import { MapContainer, TileLayer } from 'react-leaflet'
-import './style.scss';
+import '../style.scss';
 const data ={
   "venues": [
     {
