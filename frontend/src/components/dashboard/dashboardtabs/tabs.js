@@ -9,7 +9,7 @@ const Tabs = props => {
   };
 
  return (
-    <div className="tabs">
+    <div className="dashboardtabs">
       <ul className="nav nav-pills mb-2">
         <li className={ props.visible ? "nav-item" : "nav-item-active"} onClick = {() => props.setVisible(false)}>
           <a className="nav-link">Warehouse</a>

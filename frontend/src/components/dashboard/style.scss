@@ -11,12 +11,16 @@
 
     .dash{
       margin-bottom:0.2rem;
-    }
+    }  
 
 }
 .leaflet-container {
-  width: 1250px;
-  height: 500px;
-  z-index: 9;
+    border-top: 3px solid #D6D6D6;
+    bottom: 0;
+    top: 198px;
+    position: fixed;
+    left: 95px;
+    z-index: 9;
+    width: 100%;
 
 }
