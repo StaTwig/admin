@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import BarCode from '../../assets/icons/barcode.png';
 import Qr from '../../assets/icons/qrcode.png';
 import Download from '../../assets/icons/download.png';
+import DownloadOrange from '../../assets/icons/downloadorange.png';
+import DownloadYellow from '../../assets/icons/downloadyellow.png'
+import BarCodeColor from '../../assets/icons/barcodecolor.png'
+import QrCodeColor from '../../assets/icons/qrcolor.png'
 import './style.scss';
 
 const QrCode = props => {
+  const [barvisible,setBarVisible]=useState(false);
+  const [qrvisible,setQrVisible]=useState(false);
+  const [jpgvisible,setJpgVisible]=useState(false);
+  const[pdfvisible,setPdfVisible]=useState(false);
     return (
     <div className="qrcode">
       <h1 className="breadcrumb">CODE GENERATOR</h1>
@@ -14,12 +22,16 @@ const QrCode = props => {
              <div className="d-flex flex-column">
               <div className="caption mb-3">Select the type of code</div>
               <div className="d-flex flex-row mb-5">
-                  <div className="panel barcode mr-4">
-                <img src={BarCode} height="30" width="30" name="Code" className="mb-4 ml-3"/>
+                  <div className={barvisible? "panel barcodecommon barcodehighlight mr-4" :"panel barcodecommon barcode mr-4"} onClick={()=>setBarVisible(!barvisible)}>
+                <img 
+                src={barvisible ? BarCode : BarCodeColor} 
+                height="30" width="30" name="Code" 
+                className="mb-4 ml-3"
+                />
                 <div>2D Barcode</div>
                   </div>
-                  <div className="panel barcode qr">
-                  <img src={Qr} height="30" width="30" name="Code" className="mb-4 ml-3"/>
+                  <div className={qrvisible? "panel barcodecommon qrhighlight" :"panel barcodecommon qr"} onClick={()=>setQrVisible(!qrvisible)}>
+                  <img src={qrvisible ? Qr:QrCodeColor} height="30" width="30" name="Code" className="mb-4 ml-3"/>
                   <div className="ml-2">QR Code</div>
                   </div>
               </div>
@@ -33,12 +45,12 @@ const QrCode = props => {
                 />
               </div>
               <div className="d-flex flex-row mb-5">
-               <button className="btn btn-orange mr-4 download">
-                <img src={Download} width="14" height="14" className="mr-2" />
+               <button className={jpgvisible?"btn btn-orange mr-4 downloadc downloadhi" :"btn btn-orange mr-4 downloadc"}onClick={()=>setJpgVisible(!jpgvisible)}>
+                <img src={jpgvisible ? DownloadOrange: Download} width="14" height="14" className="mr-2" />
                 <span>JPG</span>
               </button> 
-             <button className="btn btn-yellow download">
-                <img src={Download} width="14" height="14" className="mr-2" />
+             <button className={pdfvisible?"btn btn-yellow downloadc pdhi":"btn btn-yellow downloadc"} onClick={()=>setPdfVisible(!pdfvisible)}>
+                <img src={pdfvisible?DownloadYellow:Download} width="14" height="14" className="mr-2" />
                 <span>PDF</span>
               </button>
              </div>
