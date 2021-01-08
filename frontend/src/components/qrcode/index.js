@@ -11,8 +11,8 @@ import './style.scss';
 const QrCode = props => {
   const [barvisible,setBarVisible]=useState(false);
   const [qrvisible,setQrVisible]=useState(false);
-  const [jpgvisible,setJpgVisible]=useState(false);
-  const[pdfvisible,setPdfVisible]=useState(false);
+  const [jpgvisible,setJpgVisible]=useState(true);
+  const[pdfvisible,setPdfVisible]=useState(true);
     return (
     <div className="qrcode">
       <h1 className="breadcrumb">CODE GENERATOR</h1>
