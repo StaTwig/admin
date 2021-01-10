@@ -1,7 +1,7 @@
 var express = require("express");
-var shippingQueryRouter = require("./po")
+var poQueryRouter = require("./po")
 var app = express();
 
-app.use("/po",shippingQueryRouter);
+app.use("/po",poQueryRouter);
 
 module.exports = app;
