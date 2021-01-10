@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const MONGODB_URL = process.env.MONGODB_URL;
 
-//This is a MongoDB wrapper for the basic mongodb operations
+//This is a MongoDB wrapper for the basic mongodb operations.
 
 function getConnection(url, callback) {
 
