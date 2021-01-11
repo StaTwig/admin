@@ -7,6 +7,8 @@ var indexRouter = require("./routes/index");
 var apiRouter = require("./routes/api");
 var apiResponse = require("./helpers/apiResponse");
 var cors = require("cors");
+const swaggerUi = require('swagger-ui-express');
+const openApiDocumentation = require('./openApiDocumentation');
 
 var app = express();
 
@@ -36,6 +38,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocumentation));
 
 //To allow cross-origin requests
 app.use(cors());

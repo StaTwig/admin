@@ -30,6 +30,8 @@
     "npx": "^10.2.2",
     "pm2": "^4.2.3",
     "qrcode": "^1.4.4",
+    "swagger": "^0.7.5",
+    "swagger-ui-express": "^4.1.6",
     "winston-logzio": "^5.1.2",
     "xlsx": "^0.16.8"
   },
