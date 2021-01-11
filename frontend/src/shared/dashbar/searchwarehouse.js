@@ -17,7 +17,7 @@ const SearchWareHouse = (props) => {
             </div>
             <div className="d-flex flex-column mb-2 region">
                 <div className="form-group">
-                    <label htmlFor="shipmentId">Region</label>
+                  <label htmlFor="shipmentId" className="mt-2">Region</label>
                     <div className="form-control ml-5">
                         <DropdownButton
                             name={region}
@@ -26,8 +26,8 @@ const SearchWareHouse = (props) => {
                     </div>
                 </div>
                 <div className="form-group">
-                    <label htmlFor="shipmentId">Country</label>
-                    <div className="form-control ml-5">
+                    <label htmlFor="shipmentId" className="mt-2 countr">Country</label>
+                    <div className="form-control">
                         <DropdownButton
                             name={country}
                             onSelect={item => (item)}
@@ -35,7 +35,7 @@ const SearchWareHouse = (props) => {
                     </div>
                 </div>
                 <div className="form-group mb-4">
-                    <label htmlFor="shipmentId">Warehouse</label>
+                    <label htmlFor="shipmentId" className="mt-2">Warehouse</label>
                     <div className="form-control ml-4">
                         <DropdownButton
                             name={warehouse}
@@ -44,51 +44,51 @@ const SearchWareHouse = (props) => {
                     </div>
                 </div>
             </div>
-            <div className=" panel  mb-2 searchwarehouse address searchpanel">
+            <div className=" panel  mb-4 searchwarehouse address searchpanel">
             <div className="d-flex flex-row ">
                     <ul className="mr-3">
+                        <li className="mb-2 text-secondary">Country ID</li>
                         <li className="mb-2 text-secondary">Country</li>
-                        <li className="mb-2 text-secondary">Plant Name</li>
                         <li className="mb-2 text-secondary">Warehouse</li>
-                        <li className="mb-2 text-secondary">Warehouse Name</li>
+                        <li className="mb-1 text-secondary">Warehouse Name</li>
                     </ul>
                     <ul>
                         <li className="mb-2">India</li>
                         <li className="mb-2">democartic of serum</li>
                         <li className="mb-2">123</li>
-                        <li className="mb-2">warehouse 123</li>
+                        <li className="mb-1">warehouse 123</li>
                     </ul>
             </div>
             </div>
-            <div className=" panel  mb-2 searchwarehouse address searchpanel">
+            <div className=" panel  mb-4 searchwarehouse address searchpanel">
             <div className="d-flex flex-row ">
                     <ul className="mr-3">
+                        <li className="mb-2 text-secondary">Country ID</li>
                         <li className="mb-2 text-secondary">Country</li>
-                        <li className="mb-2 text-secondary">Plant Name</li>
                         <li className="mb-2 text-secondary">Warehouse</li>
-                        <li className="mb-2 text-secondary">Warehouse Name</li>
+                        <li className="mb-1 text-secondary">Warehouse Name</li>
                     </ul>
                     <ul>
                         <li className="mb-2">India</li>
                         <li className="mb-2">democartic of serum</li>
                         <li className="mb-2">123</li>
-                        <li className="mb-2">warehouse 123</li>
+                        <li className="mb-1">warehouse 123</li>
                     </ul>
             </div>
             </div>
-            <div className=" panel  mb-2 searchwarehouse address searchpanel">
+            <div className=" panel  mb-4 searchwarehouse address searchpanel">
             <div className="d-flex flex-row ">
                     <ul className="mr-3">
+                        <li className="mb-2 text-secondary">Country ID</li>
                         <li className="mb-2 text-secondary">Country</li>
-                        <li className="mb-2 text-secondary">Plant Name</li>
                         <li className="mb-2 text-secondary">Warehouse</li>
-                        <li className="mb-2 text-secondary">Warehouse Name</li>
+                        <li className="mb-1 text-secondary">Warehouse Name</li>
                     </ul>
                     <ul>
                         <li className="mb-2">India</li>
                         <li className="mb-2">democartic of serum</li>
                         <li className="mb-2">123</li>
-                        <li className="mb-2">warehouse 123</li>
+                        <li className="mb-1">warehouse 123</li>
                     </ul>
             </div>
             </div>

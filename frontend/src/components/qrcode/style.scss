@@ -23,11 +23,9 @@
         border-radius: 8px;
     }  
     
-    .barcode{
+    .barcodecommon{
         box-shadow: 0px 3px 6px $grey;
         border-radius: 8px;
-        background: transparent linear-gradient(180deg, #0093E9 0%, #0053A8 100%) 0% 0% no-repeat padding-box;
-        color: $white;
         flex-basis: auto;
         padding: 20px 10px 20px 10px;
         flex-direction: column;
@@ -35,15 +33,47 @@
         font-size: 12px;
         cursor: pointer;
     }
-    .qr{
-        background: transparent linear-gradient(0deg, #0092A0 0%, #33E6F7 100%) 0% 0% no-repeat padding-box;
-        width:80px;
+   
+    .barcode{
+        background: $white;
+        color:$OBBlue;
+        border:1px solid #2A66BB;
     }
-    .download
+    .barcode:hover,.barcodehighlight{
+      background: transparent linear-gradient(180deg, #0093E9 0%, #0053A8 100%) 0% 0% no-repeat padding-box;
+      color: $white;
+}
+    .qr{
+       background: $white;
+       color:#2cb2be;
+       border: 1px solid #4F9DA8;
+       width:81px;
+
+    }
+
+    .qr:hover,.qrhighlight{
+      background: transparent linear-gradient(0deg, #0092A0 0%, #33E6F7 100%) 0% 0% no-repeat padding-box;
+      width:81px;
+      color: $white;
+    }
+    .downloadc
     {
         border-radius:20px;
         height:30px;
         font-size: 12px;
+        color: white;
+        box-shadow: 0px 3px 6px $grey;
+    }
+    .downloadhi{
+      background:$white;
+      color:#FA7923;
+      border: 1px solid #FA7923;
+
+    }
+    .pdhi{
+      background:$white;
+      border: 1px solid #FEB100;
+      color:#FEB100 ;
     }
     .form-group{
       display: flex;
