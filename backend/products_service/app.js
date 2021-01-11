@@ -5,6 +5,8 @@ var cors = require("cors");
 const fs = require('fs');
 var logger = require("morgan");
 require("dotenv").config();
+const swaggerUi = require('swagger-ui-express');
+const openApiDocumentation = require('./openApiDocumentation');
 var indexRouter = require("./routes/index");
 var apiRouter = require("./routes/api");
 var apiResponse = require("./helpers/apiResponse");
@@ -37,6 +39,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocumentation));
+
 app.use('/images', express.static(__dirname+'/uploads/'));
 
 //To allow cross-origin requests
