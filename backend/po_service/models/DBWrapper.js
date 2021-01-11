@@ -28,7 +28,6 @@ module.exports = db = {
 
     insertOneRecord:  function( modelname, data, callback) {
         getConnection(MONGODB_URL, async function(error, collection, db) {
-
 	   try
 		{
 		   const newPO = await new modelname({
@@ -38,7 +37,7 @@ module.exports = db = {
                   await newPO.save();
 		}
 		catch(error) {
-		res.status(400).send("Error")	
+		   return "Error"	
 		}
         })
     },
@@ -78,26 +77,31 @@ module.exports = db = {
 	    console.log("res",res)
 	    return res
     },
-    findAllRecords: async function(modelname, callback) {
-        var res = modelname.find()
+
+   findAllRecords: async function(modelname, skip, limit, callback) {
+	   skip = skip || 0;
+	   limit = limit || 0;
+	   var res = modelname.find()
             .sort({
                 createdAt: -1
             })
-            .skip(parseInt(0))
-            .limit(parseInt(100));
+            .skip(parseInt(skip))
+            .limit(parseInt(limit));
         return res
     },
-    findRecordsAndSort: async function(modelname, query, callback) {
+
+    findRecordsAndSort: async function(modelname, query, skip, limit, callback) {
+	skip = skip || 0;
+        limit = limit || 0;
         var res = "";
             res = modelname.find(
-		    query
+                    query
                 )
                 .sort({
                     createdAt: -1
                 })
-                .skip(parseInt(0))
-                .limit(parseInt(100));
+                .skip(parseInt(skip))
+                .limit(parseInt(limit));
         return res
     },
-
 }
