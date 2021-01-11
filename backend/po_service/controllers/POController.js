@@ -369,7 +369,8 @@ exports.changePOStatus = [
                 const { orderID, status } = req.body;
                 const po = await POModel.findOne({ orderID });
                 if (po && po.receiver === address) {
-                  await POModel.update({ orderID }, { status });
+                  //await POModel.update({ orderID }, { status });
+	           wrapper.updateRecord(POModel,{ orderID }, { status })
                   return apiResponse.successResponseWithData(
                     res,
                     'PO Status',
@@ -453,7 +454,7 @@ exports.createPurchaseOrder = [
                     '<<<<< ShipmentService < ShipmentController < createPO : PO found in collection',
                   );
 
-                  const newPO = new POModel({
+                  const newPO = {
                     ...data,
                     status: req.user.address  === data.sendpoto.address ? 'Accepted':'Created',
                     orderID,
@@ -461,15 +462,11 @@ exports.createPurchaseOrder = [
                     sender: req.user.address,
                     receiver: req.user.address  === data.sendpoto.address ? data.receiver.address : data.sendpoto.address,
                     txnId: txnIdPO,
-                  });
+                  };
 
                   //await newPO.save();
 		 
 		wrapper.insertOneRecord(POModel, newPO, function(error,response){
-  			if(error)
-				  res.status(400).send("Insert Failed")
-  			else
-				  res.status(200).send("Success")
 			})
                 } else {
                   logger.log(
@@ -477,7 +474,8 @@ exports.createPurchaseOrder = [
                     '<<<<< ShipmentService < ShipmentController < createPO : updating PO in PO model',
                   );
                   const txnIds = [...POFound.txnIds, txnIdPO];
-                  await POModel.updateOne({ orderID }, { txnIds });
+		  wrapper.updateRecord(POModel,{ orderID }, { txnIds: txnIds })
+		  //await POModel.updateOne({ orderID }, { txnIds });
                 }
 
                 logger.log(
@@ -683,14 +681,16 @@ exports.addPOsFromExcel = [
                       owner: req.user.address,
                       message: `Your POs from excel is failed to add due to duplicate PO ID ${orderID}`,
                     });
-                    await newNotification.save();
-                    return;
+                    //await newNotification.save();
+                     wrapper.insertOneRecord(NotificationModel, newNotification, function(error,response){
+		     })
+		     return;
                   }
                   const response = await axios.post(
                     `${blockchain_service_url}/publish`,
                     userData,
                   );
-                  const newPO = new POModel({
+                  const newPO = {
                     orderID,
                     sender: item.sendpoto.address,
                     receiver: item.receiver.address,
@@ -714,14 +714,20 @@ exports.addPOsFromExcel = [
                     vendorName,
                     txnId: response.data.transactionId,
                     status: 'Accepted'
-                  });
-                  await newPO.save();
+                  };
+                  //await newPO.save();
+	          wrapper.insertOneRecord(POModel, newPO, function(error,response){
+                      })
+ 
                   if(index === poDataArray.length-1) {
-                    const newNotification = new NotificationModel({
+                    const newNotification = {
                       owner: req.user.address,
                       message: `Your POs from excel is added successfully`,
-                    });
-                    await newNotification.save();
+                    };
+                    //await newNotification.save();
+		     wrapper.insertOneRecord(NotificationModel, newNotification, function(error,response){
+                        })
+
                   }
                 });
                 return apiResponse.successResponseWithData(

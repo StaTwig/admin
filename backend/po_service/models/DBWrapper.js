@@ -57,12 +57,14 @@ module.exports = db = {
             });
         })
     },
-    updateRecord: function(modelname, query, callback) {
+    updateRecord: function(modelname, filter, update, callback) {
         getConnection(MONGODB_URL, async function(error, collection, db) {
 	 try
                 {
-                    const result = await modelname.updateOne(query);
-
+                    const result = await modelname.updateOne(
+		    filter,
+		    update
+		    );
                 }
                 catch(error) {
                     res.status(400).send("Error")
