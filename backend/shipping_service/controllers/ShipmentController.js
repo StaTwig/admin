@@ -107,8 +107,8 @@ exports.purchaseOrderStatistics = [
                 .sort({ createdAt: -1 })
                 .skip(parseInt(skip))
                 .limit(parseInt(limit));
-              let poItems = [];
-              poItems = senderPOs.map(po => {
+              let poItems,poItemsSender,poItemsReceiver = [];
+              poItemsSender = senderPOs.map(po => {
                 const status = po.status === 'Created' ? 'Sent' : po.status;
                 const item = {...po._doc, status };
                 return item;
@@ -127,11 +127,13 @@ exports.purchaseOrderStatistics = [
                    poItems.push(item);
                  }
                });*/
-              poItems = receiverPos.map(po => {
+              poItemsReceiver = receiverPos.map(po => {
                 const status = po.status === 'Created' ? 'Received' : po.status;
                 const item = {...po._doc, status };
                 return item;
               });
+
+                 poItems = poItemsSender.concat(poItemsReceiver)
               /* await utility.asyncForEach(receiverPos, async po => {
                  const response = await axios.get(
                    `${blockchain_service_url}/queryDataByKey?stream=${po_stream_name}&key=${
@@ -154,7 +156,6 @@ exports.purchaseOrderStatistics = [
                 const poItemsFiltered = allPos.filter(po => !poItems.find(poItem => poItem.orderID === po.orderID));
                 poItems = [...poItems, ...poItemsFiltered];
               }
-
               logger.log(
                 'info',
                 '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : queried data by publisher',
@@ -884,6 +885,7 @@ exports.createPurchaseOrder = [
                   address: address,
                   data: data,
                 };
+                    
                 const response = await axios.post(
                   `${blockchain_service_url}/publish`,
                   userData,
@@ -897,15 +899,17 @@ exports.createPurchaseOrder = [
                     'info',
                     '<<<<< ShipmentService < ShipmentController < createPO : PO found in collection',
                   );
+
                   const newPO = new POModel({
                     ...data,
+                    status: req.user.address  === data.sendpoto.address ? 'Accepted':'Created',
                     orderID,
                     txnIds: [txnIdPO],
-                    sender: data.sendpoto.address,
-                    receiver: data.receiver.address,
+                    sender: req.user.address,
+                    receiver: req.user.address  === data.sendpoto.address ? data.receiver.address : data.sendpoto.address,
                     txnId: txnIdPO,
-
                   });
+                      
                   await newPO.save();
                 } else {
                   logger.log(

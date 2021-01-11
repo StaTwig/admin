@@ -120,3 +120,28 @@ export const addInventoriesFromExcel = async data => {
     return e.response;
   }
 };
+
+export const getSerialNumbersByBatchNumber = async(id) => {
+  try {
+    const url  = config().getSerialNumbersByBatchNumber+id.batch;
+    const result = await axios.get(url);
+    return result.data.data;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+export const getInventoryByBatchNumber = id => {
+  try {
+    return async dispatch => {
+      const url  = config().getInventoryByBatchNumber+id;
+      const result = await axios.get(url);
+      dispatch(setInventories(result.data));
+     
+    }
+   
+    
+  } catch (e) {
+    return e.response;
+  }
+};

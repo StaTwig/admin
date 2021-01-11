@@ -16,6 +16,7 @@ const ProductNamesController = require("../controllers/ProductNamesController");
 const router = express.Router();
 
 router.get("/getProductNames", ProductNamesController.getProductNames);
+router.get("/generateCodes", ProductNamesController.generateCodes);
 //router.post("/addProductName", ProductNamesController.addProductName);
 router.post(
   '/addProductName',

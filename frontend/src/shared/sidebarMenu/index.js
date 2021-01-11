@@ -10,10 +10,14 @@ import shipIcon from '../../assets/icons/Shippment.png';
 import InventoryIcon from '../../assets/icons/Inventory.png';
 import trackIcon from '../../assets/icons/Track_Trace.png';
 import NetworkIcon from '../../assets/icons/Network.svg';
+import DashboardIcon from '../../assets/icons/Dashboard.png';
+import DashboardSelectedIcon from '../../assets/icons/Dashboardl.png';
 import shipSelectedIcon from '../../assets/icons/Shippmentselected.png';
 import InventorySelectedIcon from '../../assets/icons/Inventoryselected.png';
 import trackSelectedIcon from '../../assets/icons/Track_Traceselected.png';
 import NetworkSelectedIcon from '../../assets/icons/NetworkSelected.svg';
+import UtilitiesSelected from '../../assets/icons/utilitieswhite.png';
+import UtilitiesIcon from '../../assets/icons/utilitiesblue.png';
 import './style.scss'
 const SideBar = ({
   match,
@@ -27,6 +31,12 @@ const SideBar = ({
           <Link to="/overview">
             <img src={(url === '/overview') ? HomeSelectedIcon : HomeIcon} alt="Overview" />
             <span>Overview</span>
+          </Link>
+        </li>
+        <li className={(url === '/dashboard')  ? 'active' : ''}>
+          <Link to="/dashboard">
+            <img src={(url === '/dashboard')  ? DashboardSelectedIcon : DashboardIcon} alt="Shippment" />
+            <span>Dashboard</span>
           </Link>
         </li>
         <li className={(url === '/shipments' || url === '/newshipment') ? 'active' : ''}>
@@ -47,10 +57,16 @@ const SideBar = ({
             <span>Track & Trace</span>
           </Link>
         </li>
-        <li className={(url === '/network') ? 'active' : ''}>
+        <li className={(url === '/network') ? 'active' : ''} >
           <Link to="/network">
             <img src={(url === '/network') ? NetworkSelectedIcon : NetworkIcon} alt="Network" />
             <span>Network</span>
+          </Link>
+        </li>
+        <li className={(url === '/qrcode') ? 'active' : ''} >
+          <Link to="/qrcode">
+            <img src={(url === '/qrcode') ? UtilitiesSelected : UtilitiesIcon} alt="Network" />
+            <span>Utilities</span>
           </Link>
         </li>
       </ul>

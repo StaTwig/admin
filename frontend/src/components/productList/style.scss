@@ -28,7 +28,7 @@
       }
     
       .ribben-space {
-        margin-top: 7rem;
+        margin-top: 4.5rem;
       }
 
     .panel {
@@ -162,4 +162,11 @@
           color: $deepBlue;
         }
       }
+}
+
+.ungroup{
+  height: auto;
+  max-height: 400px;
+  overflow: auto;
+
 }
