@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var UserSchema = new mongoose.Schema({
+var EmployeeSchema = new mongoose.Schema({
   id: { type: String, required: true, unique: true },
   walletAddress: {
     type: String,
@@ -47,4 +47,4 @@ var UserSchema = new mongoose.Schema({
     default: 'gachibowli, hyderabad, india, earth',
   },
 });
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('Employee', EmployeeSchema);
