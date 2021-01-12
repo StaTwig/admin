@@ -12,10 +12,10 @@ const Tabs = props => {
     <div className="dashboardtabs">
       <ul className="nav nav-pills mb-2">
         <li className={ props.visible ? "nav-item" : "nav-item-active"} onClick = {() => props.setVisible(false)}>
-          <a className="nav-link">Warehouse</a>
+          <a className={props.visible ? "nav-link text-secondary" : "nav-link"}>Storage Location</a>
         </li>
         <li className= { props.visible ? "nav-item-active " : "nav-item"} onClick = {() => props.setVisible(true)}>
-          <a className="nav-link">Shipment In-Transit</a>
+          <a className={props.visible ? "nav-link" : "nav-link text-secondary"}>Shipment In-Transit</a>
         </li>
         <li>
           <div className="search-form">

@@ -18,8 +18,8 @@ return (
      <div><u><small>8g4gb4ff4jej9jehrugknasci99988gdjnddbdb</small></u></div>
      <div className="d-flex flex-row mt-2">
        <ul className="mr-2">
+         <li className="mb-1">Country ID</li>
          <li className="mb-1">Country</li>
-         <li className="mb-1">Plant Name</li>
          <li className="mb-1">Warehouse</li>
          <li className="mb-1">Warehouse Name</li>
        </ul>

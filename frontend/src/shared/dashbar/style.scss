@@ -79,7 +79,7 @@
 .searchwarehouse{
   border-left: 6px solid #0093E9;;
   border-radius: 5px;
-  padding: 10px 20px 10px 20px;
+  padding: 10px 20px 2px 20px;
 }
 .form-group{
       display: flex;
@@ -90,6 +90,9 @@
         text-align: center;
         font-size: 14px;
          }
+         .countr{
+           margin-right: 2.75rem;
+         }
   
      .form-control {
         border: none;
@@ -98,8 +101,9 @@
         border-radius: 0;
         color:#000000;
         font-size: 14px;
+        padding-left: 0;
+        
       }
-       
       .custom-dropdown .btn-custom-dropdown{
         font-size:13px;
         color:#000000;
