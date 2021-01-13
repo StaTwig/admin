@@ -74,6 +74,12 @@
       #middlewares = ["po-stripprefix"]
       #If the rule matches, forward to the rbac management service (declared below)
       service = "po-management"
+    [http.routers.shipmentorder-management]
+      rule = "Host(`test.vaccineledger.com`) && PathPrefix(`/shipmentordermanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["shipmentorder-stripprefix"]
+      #If the rule matches, forward to the shipmentorder management service (declared below)
+      service = "shipmentorder-management"
 
   [http.middlewares]
     [http.middlewares.test-stripprefix.stripPrefix]
@@ -103,6 +109,8 @@
       prefixes = ["/rbacmanagement", "/rbacmanagement/"]
     [http.middlewares.po-stripprefix.stripPrefix]
       prefixes = ["/pomanagement", "/pomanagement/"]
+    [http.middlewares.shipmentorder-stripprefix.stripPrefix]
+      prefixes = ["/shipmentordermanagement", "/shipmentordermanagement/"]
 
   [http.services]
     # Define how to reach an existing service on our infrastructure
@@ -143,3 +151,6 @@
     [http.services.po-management.loadBalancer]
       [[http.services.po-management.loadBalancer.servers]]
         url = "http://127.0.0.1:3012/"
+    [http.services.shipmentorder-management.loadBalancer]
+      [[http.services.shipmentorder-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3013/"
