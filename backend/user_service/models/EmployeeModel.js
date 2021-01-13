@@ -32,13 +32,11 @@ var EmployeeSchema = new mongoose.Schema({
   organisationId: {
     type: String,
     required: false,
-    default: 'pqrstu12345',
   },
   warehouseId: { type: String, required: false, default: 'NA' },
   affiliatedOrganisations: {
-    type: String,
+    type: Array,
     required: false,
-    default: ['pqrstu12345', 'cbvnsdjhf23'],
   },
   role: { type: String, required: false, default: 'PLEASE DEFINE ROLES' },
   postalAddress: {

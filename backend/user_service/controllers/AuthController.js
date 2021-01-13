@@ -21,7 +21,6 @@ const checkToken = require('../middlewares/middleware').checkToken;
 const init = require('../logging/init');
 const logger = init.getLog();
 const EmailContent = require('../components/EmailContent');
-var md5 = require('md5');
 /**
  * User registration.
  *
@@ -33,11 +32,15 @@ var md5 = require('md5');
  */
 exports.register = [
   // Validate fields.
-  body('name')
+  body('firstName')
     .isLength({ min: 1 })
     .trim()
     .withMessage('name must be specified.'),
-  body('email')
+  body('lastName')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('name must be specified.'),
+  body('emailId')
     .isLength({ min: 1 })
     .trim()
     .withMessage('Email must be specified.')
@@ -58,14 +61,10 @@ exports.register = [
     .isLength({ min: 6 })
     .trim()
     .withMessage('Password must be 6 characters or greater.'),
-  // Sanitize fields.
-  sanitizeBody('name').escape(),
-  sanitizeBody('email').escape(),
-  sanitizeBody('password').escape(),
   // Process request after validation and sanitization.
   async (req, res) => {
     try {
-      if (!req.body.name.match('[A-Za-z]')) {
+      if (!req.body.firstName.match('[A-Za-z]') || !req.body.lastName.match('[A-Za-z]')) {
         logger.log(
           'warn',
           '<<<<< UserService < AuthController < register : Name should only consist of letters',
@@ -103,8 +102,9 @@ exports.register = [
           let otp = utility.randomNumber(4);
           // Create User object with escaped and trimmed data
           var user = new UserModel({
-            name: req.body.name,
-            email: req.body.email,
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            emailId: req.body.emailId,
             password: hash,
             confirmOTP: otp,
           });
@@ -114,7 +114,7 @@ exports.register = [
           mailer
             .send(
               constants.confirmEmails.from,
-              req.body.email,
+              req.body.emailId,
               constants.confirmEmails.subject,
               html,
             )
@@ -129,9 +129,10 @@ exports.register = [
                   return apiResponse.ErrorResponse(res, err);
                 }
                 let userData = {
-                  _id: user._id,
-                  Name: user.Name,
-                  email: user.email,
+                  id: user._id,
+                  firstName: user.firstName,
+                  lastName: user.lastName,
+                  emailId: user.emailId,
                 };
                 logger.log(
                   'info',
