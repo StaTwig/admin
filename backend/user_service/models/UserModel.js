@@ -14,6 +14,7 @@ var UserSchema = new mongoose.Schema({
   confirmOTP: {
     type: String,
   },
+  isConfirmed: { type: Boolean, default: false },
   firstName: {
     type: String,
     required: true,

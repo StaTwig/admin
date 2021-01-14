@@ -64,12 +64,18 @@ exports.register = [
   // Process request after validation and sanitization.
   async (req, res) => {
     try {
-      if (!req.body.firstName.match('[A-Za-z]') || !req.body.lastName.match('[A-Za-z]')) {
+      if (
+        !req.body.firstName.match('[A-Za-z]') ||
+        !req.body.lastName.match('[A-Za-z]')
+      ) {
         logger.log(
           'warn',
           '<<<<< UserService < AuthController < register : Name should only consist of letters',
         );
-        return apiResponse.ErrorResponse(res, 'Name should only consists of letters');
+        return apiResponse.ErrorResponse(
+          res,
+          'Name should only consists of letters',
+        );
       }
       // Extract the validation errors from a request.
       const errors = validationResult(req);
@@ -85,13 +91,12 @@ exports.register = [
           errors.array(),
         );
       }
-      if(!mailer.validateEmail(req.body.email)) {
+      if (!mailer.validateEmail(req.body.emailId)) {
         return apiResponse.ErrorResponse(
           res,
           'Your email id is not eligible to register.',
         );
-      }
-      else {
+      } else {
         //hash input password
         bcrypt.hash(req.body.password, 10, function(err, hash) {
           // generate OTP for confirmation
@@ -109,7 +114,11 @@ exports.register = [
             confirmOTP: otp,
           });
           // Html email body
-          let html = EmailContent({name: req.body.name, origin: req.headers.origin, otp});
+          let html = EmailContent({
+            name: req.body.name,
+            origin: req.headers.origin,
+            otp,
+          });
           // Send confirmation email
           mailer
             .send(
@@ -174,7 +183,7 @@ exports.register = [
  * @returns {Object}
  */
 exports.login = [
-  body('email')
+  body('emailId')
     .isLength({ min: 1 })
     .trim()
     .withMessage('Email must be specified.')
@@ -184,7 +193,7 @@ exports.login = [
     .isLength({ min: 1 })
     .trim()
     .withMessage('Password must be specified.'),
-  sanitizeBody('email').escape(),
+  sanitizeBody('emailId').escape(),
   sanitizeBody('password').escape(),
   (req, res) => {
     try {
@@ -200,7 +209,7 @@ exports.login = [
           errors.array(),
         );
       } else {
-        UserModel.findOne({ email: req.body.email }).then(user => {
+        UserModel.findOne({ emailId: req.body.emailId }).then(user => {
           if (user) {
             //Compare given password with db's hash.
             logger.log(
@@ -229,11 +238,10 @@ exports.login = [
                       '<<<<< UserService < AuthController < login : user is active',
                     );
                     let userData = {
-                      _id: user._id,
-                      Name: user.Name,
-                      email: user.email,
-                      address: user.address,
-                      role: user.role
+                      id: user._id,
+                      firstName: user.firstName,
+                      emailId: user.emailId,
+                      role: user.role,
                     };
                     //Prepare JWT token for authentication
                     const jwtPayload = userData;
@@ -314,7 +322,7 @@ exports.login = [
  * @returns {Object}
  */
 exports.verifyConfirm = [
-  body('email')
+  body('emailId')
     .isLength({ min: 1 })
     .trim()
     .withMessage('Email must be specified.')
@@ -340,7 +348,7 @@ exports.verifyConfirm = [
           errors.array(),
         );
       } else {
-        var query = { email: req.body.email };
+        var query = { emailId: req.body.emailId };
         UserModel.findOne(query).then(async user => {
           if (user) {
             logger.log(
@@ -358,9 +366,9 @@ exports.verifyConfirm = [
                 const response = await axios.get(
                   `${blockchain_service_url}/createUserAddress`,
                 );
-                const address = response.data.items;
+                const walletAddress = response.data.items;
                 const userData = {
-                  address,
+                  walletAddress,
                 };
                 logger.log(
                   'info',
@@ -378,9 +386,9 @@ exports.verifyConfirm = [
 
                 //Update user as confirmed
                 UserModel.findOneAndUpdate(query, {
-                  isConfirmed: 1,
+                  isConfirmed: true,
                   confirmOTP: null,
-                  address,
+                  walletAddress,
                 }).catch(err => {
                   logger.log(
                     'error',
@@ -446,7 +454,7 @@ exports.verifyConfirm = [
  * @returns {Object}
  */
 exports.resendConfirmOtp = [
-  body('email')
+  body('emailId')
     .isLength({ min: 1 })
     .trim()
     .withMessage('Email must be specified.')
@@ -467,7 +475,7 @@ exports.resendConfirmOtp = [
           errors.array(),
         );
       } else {
-        var query = { email: req.body.email };
+        var query = { emailId: req.body.emailId };
         UserModel.findOne(query).then(user => {
           if (user) {
             logger.log(
@@ -489,7 +497,7 @@ exports.resendConfirmOtp = [
               mailer
                 .send(
                   constants.confirmEmails.from,
-                  req.body.email,
+                  req.body.emailId,
                   'Confirm Account',
                   html,
                 )
@@ -559,14 +567,14 @@ exports.resendConfirmOtp = [
  */
 exports.forgotPassword = [
   //validate fields
-  body('email')
+  body('emailId')
     .isLength({ min: 1 })
     .trim()
     .withMessage('Email must be specified.')
     .isEmail()
     .withMessage('Email must be a valid email address.'),
   //sanitize fields
-  sanitizeBody('email').escape(),
+  sanitizeBody('emailId').escape(),
   (req, res) => {
     try {
       // Extract the validation errors from a request.
@@ -583,13 +591,13 @@ exports.forgotPassword = [
           errors.array(),
         );
       } else {
-        return UserModel.findOne({ email: req.body.email }).then(user => {
+        return UserModel.findOne({ emailId: req.body.emailId }).then(user => {
           if (user) {
             logger.log(
               'info',
               '<<<<< UserService < AuthController < forgotPassword : user exist',
             );
-            let newPassword = req.body.email + utility.randomNumber(10);
+            let newPassword = req.body.emailId + utility.randomNumber(10);
             //hash input password
             bcrypt.hash(newPassword, 10, function(err, hash) {
               // Html email body
@@ -598,7 +606,7 @@ exports.forgotPassword = [
               mailer
                 .send(
                   constants.confirmEmails.from,
-                  req.body.email,
+                  req.body.emailId,
                   'ForgotPassword',
                   html,
                 )
@@ -704,22 +712,34 @@ exports.userInfo = [
   auth,
   (req, res) => {
     try {
-      UserModel.findOne({ email: req.user.email }).then(user => {
+      UserModel.findOne({ emailId: req.user.emailId }).then(user => {
         if (user) {
           logger.log(
             'info',
             '<<<<< UserService < AuthController < userInfo : user exist',
           );
+          const {
+            firstName,
+            lastName,
+            emailId,
+            phoneNumber,
+            walletAddress,
+            affiliatedOrganisations,
+            organisationId,
+            accountStatus,
+            role,
+            photoId,
+          } = user;
           let user_data = {
-            name: user.name,
-            email: user.email,
-            phone: user.phone,
-            address: user.address,
-            organisation: user.organisation,
-            status: user.status,
-            affiliateOrganisation: user.affiliateOrganisation,
-            role: user.role,
-            profile_picture: user.profile_picture,
+            firstName,
+            emailId,
+            phoneNumber,
+            walletAddress,
+            affiliatedOrganisations,
+            organisationId,
+            accountStatus,
+            role,
+            photoId,
           };
           logger.log(
             'info',
@@ -752,17 +772,26 @@ exports.updateProfile = [
   auth,
   (req, res) => {
     try {
-      UserModel.findOne({ email: req.user.email }).then(user => {
+      UserModel.findOne({ emailId: req.user.emailId }).then(user => {
         if (user) {
           logger.log(
             'info',
             '<<<<< UserService < AuthController < updateProfile : user exist',
           );
-          const { name, organisation, affiliateOrganisation, phone } = req.body;
-          user.name = name;
-          user.organisation = organisation;
-          user.affiliateOrganisation = affiliateOrganisation;
-          user.phone = phone;
+          const {
+            firstName,
+            lastName,
+            emailId,
+            phoneNumber,
+            walletAddress,
+            affiliatedOrganisations,
+            organisationId,
+          } = req.body;
+          user.firstName = firstName;
+          user.lastName = lastName;
+          user.organisationId = organisationId;
+          user.affiliatedOrganisations = affiliatedOrganisations;
+          user.walletAddress = walletAddress;
           user.save(function(err) {
             if (err) {
               logger.log(
@@ -777,7 +806,7 @@ exports.updateProfile = [
               );
               return apiResponse.successResponse(
                 res,
-                user.name + ' user Updated',
+                user.firstName + ' user Updated',
               );
             }
           });
@@ -832,7 +861,7 @@ exports.updatePassword = [
                 );
                 return apiResponse.successResponse(
                   res,
-                  user.name + ' password Updated',
+                  user.firstName + ' password Updated',
                 );
               }
             });
@@ -853,7 +882,7 @@ exports.uploadImage = [
   auth,
   (req, res) => {
     try {
-      UserModel.findOne({ email: req.user.email }).then(user => {
+      UserModel.findOne({ emailId: req.user.emailId }).then(user => {
         if (user) {
           logger.log(
             'info',
@@ -932,8 +961,8 @@ exports.getAllUsers = [
   auth,
   async (req, res) => {
     try {
-      const users = await UserModel.find({}, 'name address email');
-      const confirmedUsers = users.filter(user => user.address !== '');
+      const users = await UserModel.find({}, 'firstName walletAddress emailId');
+      const confirmedUsers = users.filter(user => user.walletAddress !== '');
       logger.log(
         'info',
         '<<<<< UserService < AuthController < getAllUsers : retrieved users successfully',
@@ -954,78 +983,78 @@ exports.getAllUsers = [
 ];
 
 exports.assignProductConsumer = [
-
   async (req, res) => {
     try {
-
-    checkToken(req, res, async result => {
+      checkToken(req, res, async result => {
         if (result.success) {
           logger.log(
             'info',
             '<<<<< InventoryService < InventoryController < getAllInventoryDetails : token verified successfullly, querying data by publisher',
           );
-		console.log("res",result.data.address)
-    var user = new ConsumerModel({
-			shipmentId: req.body.consumer.shipmentId,
-	                name: req.body.consumer.name,
-			gender: req.body.consumer.gender,
-			age: req.body.consumer.age,
-            	        aadhar: req.body.consumer.aadhar,
-	       	        vaccineId : req.body.vaccine.serialNumber,
-	          });
-              
-	      await user.save()
-              let userData = {
-                  _id: user._id,
-                  Name: user.name,
-                  Aadhar: user.aadhar,
-				  ShipmentId: user.ShipmentId,
-                };
-                logger.log(
-                  'info',
-                  '<<<<< UserService < AuthController < registerConsumer : Successfully saving Consumer',
-                );
+          console.log('res', result.data.address);
+          var user = new ConsumerModel({
+            shipmentId: req.body.consumer.shipmentId,
+            name: req.body.consumer.name,
+            gender: req.body.consumer.gender,
+            age: req.body.consumer.age,
+            aadhar: req.body.consumer.aadhar,
+            vaccineId: req.body.vaccine.serialNumber,
+          });
 
-	      let date_ob = new Date();
-              let date = ('0' + date_ob.getDate()).slice(-2);
-              let month = ('0' + (date_ob.getMonth() + 1)).slice(-2);
-              let year = date_ob.getFullYear();
-              var today = date + '-' + month + '-' + year;
+          await user.save();
+          let userData = {
+            _id: user._id,
+            Name: user.name,
+            Aadhar: user.aadhar,
+            ShipmentId: user.ShipmentId,
+          };
+          logger.log(
+            'info',
+            '<<<<< UserService < AuthController < registerConsumer : Successfully saving Consumer',
+          );
 
-	        const userData1 = {
-                stream: stream_name,
-                key: req.body.vaccine.serialNumber,
-                address: "1bCBUXox5GXGAiTxGgNbmhETUaHMJZVLwctveT",
-                data: {...req.body,...{"consumedStatus":"Y","consumedDate":today}}
-              };
-	      console.log("userData",userData1) 
-	        const response = await axios.post(
-                `${blockchain_service_url}/publish`,
-                userData1,
-              );
-	    const txnId = response.data.transactionId;
+          let date_ob = new Date();
+          let date = ('0' + date_ob.getDate()).slice(-2);
+          let month = ('0' + (date_ob.getMonth() + 1)).slice(-2);
+          let year = date_ob.getFullYear();
+          var today = date + '-' + month + '-' + year;
 
-	    const productQuery = { serialNumber: req.body.vaccine.serialNumber };
-            const productFound = await InventoryModel.findOne(productQuery);
-                  if (productFound) {
-                    logger.log(
-                      'info',
-                      '<<<<< ShipmentService < ShipmentController < createShipment : product found status receive',
-                    );
-                      await InventoryModel.updateOne(productQuery, {
-                      transactionIds: [...productFound.transactionIds, txnId],
-                      });
-                    }
-                return apiResponse.successResponseWithData(
-                  res,
-                  'Registration Success.',
-                  userData,
-                );
-	         }
-       });
+          const userData1 = {
+            stream: stream_name,
+            key: req.body.vaccine.serialNumber,
+            address: '1bCBUXox5GXGAiTxGgNbmhETUaHMJZVLwctveT',
+            data: {
+              ...req.body,
+              ...{ consumedStatus: 'Y', consumedDate: today },
+            },
+          };
+          console.log('userData', userData1);
+          const response = await axios.post(
+            `${blockchain_service_url}/publish`,
+            userData1,
+          );
+          const txnId = response.data.transactionId;
 
+          const productQuery = { serialNumber: req.body.vaccine.serialNumber };
+          const productFound = await InventoryModel.findOne(productQuery);
+          if (productFound) {
+            logger.log(
+              'info',
+              '<<<<< ShipmentService < ShipmentController < createShipment : product found status receive',
+            );
+            await InventoryModel.updateOne(productQuery, {
+              transactionIds: [...productFound.transactionIds, txnId],
+            });
+          }
+          return apiResponse.successResponseWithData(
+            res,
+            'Registration Success.',
+            userData,
+          );
+        }
+      });
     } catch (err) {
-	    console.log("err")
+      console.log('err');
       logger.log(
         'error',
         '<<<<< UserService < AuthController < registerConsumer : Error in catch block',
@@ -1034,4 +1063,3 @@ exports.assignProductConsumer = [
     }
   },
 ];
-
