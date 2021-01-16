@@ -11,21 +11,21 @@ const Storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: Storage });
-const ProductNamesController = require("../controllers/ProductNamesController");
+const ProductController = require("../controllers/ProductController");
 
 const router = express.Router();
 
-router.get("/getProductNames", ProductNamesController.getProductNames);
-router.get("/generateCodes", ProductNamesController.generateCodes);
-//router.post("/addProductName", ProductNamesController.addProductName);
+router.get("/getProducts", ProductController.getProducts);
+router.get("/generateCodes", ProductController.generateCodes);
+//router.post("/addProduct", ProductController.addProduct);
 router.post(
-  '/addProductName',
+  '/addProduct',
   upload.single('photo'),
-  ProductNamesController.addProductName,
+  ProductController.addProduct,
 );
 router.post(
   '/addMultipleProducts',
   upload.single('excel'),
-  ProductNamesController.addMultipleProducts,
+  ProductController.addMultipleProducts,
 );
 module.exports = router;
