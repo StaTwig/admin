@@ -1,4 +1,4 @@
-const UserModel = require('../models/UserModel');
+const EmployeeModel = require('../models/EmployeeModel');
 const ConsumerModel = require('../models/ConsumerModel');
 const InventoryModel = require('../models/InventoryModel');
 const { body, validationResult } = require('express-validator');
@@ -47,11 +47,11 @@ exports.register = [
     .isEmail()
     .withMessage('Email must be a valid email address.')
     .custom(value => {
-      return UserModel.findOne({ email: value }).then(user => {
+      return EmployeeModel.findOne({ email: value }).then(user => {
         if (user) {
           logger.log(
             'info',
-            '<<<<< UserService < AuthController < register : Entered email is already present in UserModel',
+            '<<<<< UserService < AuthController < register : Entered email is already present in EmployeeModel',
           );
           return Promise.reject('E-mail already in use');
         }
@@ -106,7 +106,7 @@ exports.register = [
           );
           let otp = utility.randomNumber(4);
           // Create User object with escaped and trimmed data
-          var user = new UserModel({
+          var user = new EmployeeModel({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             emailId: req.body.emailId,
@@ -209,7 +209,7 @@ exports.login = [
           errors.array(),
         );
       } else {
-        UserModel.findOne({ emailId: req.body.emailId }).then(user => {
+        EmployeeModel.findOne({ emailId: req.body.emailId }).then(user => {
           if (user) {
             //Compare given password with db's hash.
             logger.log(
@@ -232,7 +232,7 @@ exports.login = [
                     '<<<<< UserService < AuthController < login : account confirmation done',
                   );
                   // Check User's account active or not.
-                  if (user.status) {
+                  if (user.accountStatus) {
                     logger.log(
                       'info',
                       '<<<<< UserService < AuthController < login : user is active',
@@ -332,8 +332,6 @@ exports.verifyConfirm = [
     .isLength({ min: 1 })
     .trim()
     .withMessage('OTP must be specified.'),
-  sanitizeBody('email').escape(),
-  sanitizeBody('otp').escape(),
   (req, res) => {
     try {
       const errors = validationResult(req);
@@ -349,7 +347,7 @@ exports.verifyConfirm = [
         );
       } else {
         var query = { emailId: req.body.emailId };
-        UserModel.findOne(query).then(async user => {
+        EmployeeModel.findOne(query).then(async user => {
           if (user) {
             logger.log(
               'info',
@@ -385,7 +383,7 @@ exports.verifyConfirm = [
                 );
 
                 //Update user as confirmed
-                UserModel.findOneAndUpdate(query, {
+                EmployeeModel.findOneAndUpdate(query, {
                   isConfirmed: true,
                   confirmOTP: null,
                   walletAddress,
@@ -476,7 +474,7 @@ exports.resendConfirmOtp = [
         );
       } else {
         var query = { emailId: req.body.emailId };
-        UserModel.findOne(query).then(user => {
+        EmployeeModel.findOne(query).then(user => {
           if (user) {
             logger.log(
               'info',
@@ -591,7 +589,7 @@ exports.forgotPassword = [
           errors.array(),
         );
       } else {
-        return UserModel.findOne({ emailId: req.body.emailId }).then(user => {
+        return EmployeeModel.findOne({ emailId: req.body.emailId }).then(user => {
           if (user) {
             logger.log(
               'info',
@@ -712,7 +710,7 @@ exports.userInfo = [
   auth,
   (req, res) => {
     try {
-      UserModel.findOne({ emailId: req.user.emailId }).then(user => {
+      EmployeeModel.findOne({ emailId: req.user.emailId }).then(user => {
         if (user) {
           logger.log(
             'info',
@@ -732,6 +730,7 @@ exports.userInfo = [
           } = user;
           let user_data = {
             firstName,
+            lastName,
             emailId,
             phoneNumber,
             walletAddress,
@@ -772,7 +771,7 @@ exports.updateProfile = [
   auth,
   (req, res) => {
     try {
-      UserModel.findOne({ emailId: req.user.emailId }).then(user => {
+      EmployeeModel.findOne({ emailId: req.user.emailId }).then(user => {
         if (user) {
           logger.log(
             'info',
@@ -826,7 +825,7 @@ exports.updatePassword = [
   auth,
   (req, res) => {
     try {
-      UserModel.findOne({ email: req.user.email }).then(user => {
+      EmployeeModel.findOne({ email: req.user.email }).then(user => {
         if (user) {
           logger.log(
             'info',
@@ -882,7 +881,7 @@ exports.uploadImage = [
   auth,
   (req, res) => {
     try {
-      UserModel.findOne({ emailId: req.user.emailId }).then(user => {
+      EmployeeModel.findOne({ emailId: req.user.emailId }).then(user => {
         if (user) {
           logger.log(
             'info',
@@ -961,7 +960,7 @@ exports.getAllUsers = [
   auth,
   async (req, res) => {
     try {
-      const users = await UserModel.find({}, 'firstName walletAddress emailId');
+      const users = await EmployeeModel.find({}, 'firstName walletAddress emailId');
       const confirmedUsers = users.filter(user => user.walletAddress !== '');
       logger.log(
         'info',
