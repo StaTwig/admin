@@ -16,8 +16,8 @@ const upload = multer({ storage: Storage });
 const router = express.Router();
 router.get("/purchaseOrderStatistics", POController.purchaseOrderStatistics);
 router.get("/fetchPublisherPurchaseOrders", POController.fetchPublisherPurchaseOrders);
-router.get("/fetchPurchaseOrder", POController.fetchPurchaseOrder);
-router.get("/fetchAllPurchaseOrders",POController.fetchAllPurchaseOrders);
+router.get("/fetchPurchaseOrderBC", POController.fetchPurchaseOrder);
+router.get("/fetchAllPurchaseOrdersBC",POController.fetchAllPurchaseOrdersBC);
 
 router.post(
   '/addPOsFromExcel',
