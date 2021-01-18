@@ -1,4 +1,4 @@
-const UserModel = require('../models/UserModel');
+const EmployeeModel = require('../models/EmployeeModel');
 const RbacModel = require('../models/RbacModel');
 // const { request, response } = require('express');
 
@@ -6,11 +6,11 @@ const checkPermissions = async (request, next) => {
     const result = request["result"]
     // console.log(result)
     const required_permission = request["permissionRequired"]
-    const user_email = result.data.email;
+    const user_email = result.data.emailId;
     console.log(user_email)
 
     // Fetch the user by id 
-    const user = await UserModel.findOne({email: user_email})
+    const user = await EmployeeModel.findOne({emailId: user_email})
     // console.log(user)
     const user_role = user.role;
     //fetch permissions using role
