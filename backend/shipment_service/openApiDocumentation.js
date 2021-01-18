@@ -4,8 +4,8 @@ module.exports = {
   openapi: '3.0.1',
   info: {
     version: '1.3.0',
-    title: 'Shipping',
-    description: 'Shipping Service API',
+    title: 'Shipment',
+    description: 'Shipment Service API',
     termsOfService: 'http://api_url/terms/',
     contact: {
       name: 'StaTwig',
@@ -42,7 +42,7 @@ module.exports = {
     }
   ],
   paths: {
-    '/shipmentmanagement/api/shipping/getManufacturers': {
+    '/shipmentmanagement/api/shipment/getManufacturers': {
       get: {
         tags: ['CRUD operations'],
         description: 'GET Manufacturers',

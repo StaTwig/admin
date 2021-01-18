@@ -32,7 +32,7 @@ const manufacturers = require('../data/manufacturers');
 const init = require('../logging/init');
 const logger = init.getLog();
 
-exports.createShipmentOrder = [
+exports.createShipment = [
   auth,
   async (req, res) => {
     try {
@@ -61,7 +61,7 @@ exports.createShipmentOrder = [
   },
 ];
 
-exports.fetchUserShipmentOrders= [
+exports.fetchUserShipments= [
 auth,
   async (req, res) => {
     try {
