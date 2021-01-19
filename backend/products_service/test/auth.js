@@ -1,5 +1,5 @@
 const { chai, server, should } = require("./testConfig");
-const UserModel = require("../models/ProductNamesModel");
+const UserModel = require("../models/UserModel");
 
 /**
  * Test cases to test all the authentication APIs

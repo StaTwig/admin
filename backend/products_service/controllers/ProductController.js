@@ -1,4 +1,4 @@
-const ProductNamesModel = require('../models/ProductNamesModel');
+const ProductModel = require('../models/ProductModel');
 const { body, validationResult } = require('express-validator');
 const checkPermissions = require('../middlewares/rbac_middleware')
   .checkPermissions;
@@ -41,7 +41,7 @@ const Storage = multer.diskStorage({
   },
 });
 
-exports.getProductNames = [
+exports.getProducts = [
   auth,
   async (req, res) => {
     try {
@@ -49,7 +49,7 @@ exports.getProductNames = [
         if (result.success) {
           logger.log(
             'info',
-            '<<<<< ProductNamesService < ProductNamesController < getProductNames : token verifed successfully',
+            '<<<<< ProductService < ProductController < getProducts : token verifed successfully',
           );
 
           permission_request = {
@@ -58,8 +58,8 @@ exports.getProductNames = [
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
-              const productNames = await ProductNamesModel.find({});
-              res.json({ data: productNames });
+              const products = await ProductModel.find({});
+              res.json({ data: products });
             } else {
               res.json('Sorry! User does not have enough Permissions');
             }
@@ -67,7 +67,7 @@ exports.getProductNames = [
         } else {
           logger.log(
             'warn',
-            '<<<<< ProductNamesService < ProductNamesController < getProductNames : user is not authenticated',
+            '<<<<< ProductService < ProductController < getProducts : user is not authenticated',
           );
           res.status(403).json(result);
         }
@@ -75,11 +75,13 @@ exports.getProductNames = [
     } catch (err) {
       logger.log(
         'error',
-        '<<<<< ProductNamesService < ProductNamesController < getProductNames : error (catch block)',
+        '<<<<< ProductService < ProductController < getProducts : error (catch block)',
       );
       return apiResponse.ErrorResponse(res, err);
     }
   },
+  // const products = await ProductModel.find({});
+  // res.json({ data: products });
 ];
 
 exports.addMultipleProducts = [
@@ -104,36 +106,50 @@ exports.addMultipleProducts = [
               const products = data
                 .map(element => {
                   return {
-                    productName: element[0],
-                    productCategory: element[1],
-                    productSubCategory: element[2],
-                    manufacturer: element[3],
-                    storageConditions: element[4],
-                    description: element[5],
+                    product_external_id: element[0],
+                    product_name: element[1],
+                    product_short_name: element[2],
+                    product_type: element[3],
+                    manufacturer: element[4],
+                    temperature_max: element[5],
+                    temperature_min: element[6],
+                    humidity_max: element[7],
+                    humidity_min: element[8],
+                    pressure_max: element[9],
+                    pressure_min: element[10]
+
                   };
                 })
                 .filter((product, index) => index > 0);
               let err = '';
               await utility.asyncForEach(products, async product => {
                 if (err) return;
-                const productDetail = new ProductNamesModel({
-                  productName: product.productName,
+                const product_unique = uniqid('prod-')
+                const productDetail = new ProductModel({
+                  product_id: product_unique,
+                  product_external_id: product.product_external_id,
+                  product_name: product.product_name,
+                  product_short_name: product.product_short_name,
+                  product_type: product.product_type,
                   manufacturer: product.manufacturer,
-                  productCategory: product.productCategory,
-                  productSubCategory: product.productSubCategory,
-                  storageConditions: product.storageConditions,
-                  description: product.description,
-                });
+                  characteristic_set:{
+                    temperature_max: product.temperature_max,
+                    temperature_min: product.temperature_min,
+                    humidity_max: product.humidity_max,
+                    humidity_min: product.humidity_min,
+                    pressure_max: product.pressure_max,
+                    pressure_min: product.pressure_min
+                }});
                 try {
                   await productDetail.save();
                 } catch (e) {
-                  err = product.productName;
+                  err = product.product_name;
                 }
               });
               if (err) {
                 return apiResponse.ErrorResponse(
                   res,
-                  `Duplicate product name ${err}`,
+                  `Error with ${err}`,
                 );
               } else {
                 return apiResponse.successResponseWithData(
@@ -155,28 +171,41 @@ exports.addMultipleProducts = [
     }
   },
 ];
-exports.addProductName = [
+exports.addProduct = [
   auth,
-  body('productName')
+  body('product_external_id')
+    .isLength({ min: 6 })
+    .trim()
+    .withMessage('Product External ID must be greater than 6'),
+  body('product_name')
     .isLength({ min: 1 })
     .trim()
     .withMessage('Product Name must be specified.'),
+  body('product_type')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Product Type must be specified.'),
+  body('product_short_name')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Product Short Name must be specified.'),
   body('manufacturer')
     .isLength({ min: 1 })
     .trim()
-    .withMessage('Manufacturer Name must be specified.'),
-  body('productCategory')
-    .isLength({ min: 1 })
-    .trim()
-    .withMessage('Product Category must be specified.'),
-  body('productSubCategory')
-    .isLength({ min: 1 })
-    .trim()
-    .withMessage('Product Sub Category must be specified.'),
-  body('storageConditions')
-    .isLength({ min: 1 })
-    .trim()
-    .withMessage('Storage Conditions must be specified.'),
+    .withMessage('Product Name must be specified.'),  
+  // body('characteristic_set.*.temperature_max')
+  // .trim()
+  // .withMessage('Storage Conditions must be specified.'),
+  // body('characteristic_set.*.temperature_min')
+  // .trim().withMessage('Storage Conditions must be specified.'),
+  // body('characteristic_set.*.humidity_max')
+  // .trim().withMessage('Storage Conditions must be specified.'),
+  // body('characteristic_set.*.humidity_min')
+  // .trim().withMessage('Storage Conditions must be specified.'),
+  // body('characteristic_set.*.pressure_max')
+  // .trim().withMessage('Storage Conditions must be specified.'), 
+  // body('characteristic_set.*.pressure_min')
+  // .trim().withMessage('Storage Conditions must be specified.'),
   async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -184,7 +213,7 @@ exports.addProductName = [
         // Display sanitized values/errors messages.
         logger.log(
           'error',
-          '<<<<< ProductNamesService < ProductNamesController < addProductName : Validation Error: product name must be specified',
+          '<<<<< ProductService < ProductController < addProduct : Validation Error: product must be specified',
         );
         return apiResponse.validationErrorWithData(
           res,
@@ -196,7 +225,7 @@ exports.addProductName = [
         if (result.success) {
           logger.log(
             'info',
-            '<<<<< ProductNamesService < ProductNamesController < addProductName : token verifed successfully',
+            '<<<<< ProductService < ProductController < addProduct : token verifed successfully',
           );
 
           permission_request = {
@@ -217,16 +246,25 @@ exports.addProductName = [
                   req.file.path,
                   `${dir}/${req.body.productName}.png`,
                 );
-                const product = new ProductNamesModel({
-                  productName: req.body.productName,
+                const product_unique = uniqid('prod-')
+                const product = new ProductModel({
+                  product_id:product_unique,
+                  product_external_id:req.body.product_external_id,
+                  product_name: req.body.product_name,
+                  product_short_name: req.body.product_short_name,
+                  product_type: req.body.product_type,
                   manufacturer: req.body.manufacturer,
-                  productCategory: req.body.productCategory,
-                  productSubCategory: req.body.productSubCategory,
-                  storageConditions: req.body.storageConditions,
-                  description: req.body.description,
                   image: `http://${req.headers.host}/images/${
                     req.body.productName
                   }.png`,
+                  characteristic_set:{
+                    temperature_max: req.body.characteristic_set.temperature_max,
+                    temperature_min: req.body.characteristic_set.temperature_min,
+                    humidity_max: req.body.characteristic_set.humidity_max,
+                    humidity_min: req.body.characteristic_set.humidity_min,
+                    pressure_max: req.body.characteristic_set.pressure_max,
+                    pressure_min: req.body.characteristic_set.pressure_min
+                }
                 });
                 await product.save();
 
@@ -245,7 +283,7 @@ exports.addProductName = [
         } else {
           logger.log(
             'warn',
-            '<<<<< ProductNamesService < ProductNamesController < addProductName : user is not authenticated',
+            '<<<<< ProductService < ProductController < addProduct : user is not authenticated',
           );
           return apiResponse.ErrorResponse(res, 'User not authenticated');
         }
@@ -253,12 +291,12 @@ exports.addProductName = [
     } catch (err) {
       logger.log(
         'error',
-        '<<<<< ProductNamesService < ProductNamesController < addProductName : error (catch block)',
+        '<<<<< ProductService < ProductController < addProduct : error (catch block)',
       );
       return apiResponse.ErrorResponse(res, err);
     }
   },
-];
+  ];
 
 exports.uploadImage = async function(req, res) {
   checkToken(req, res, async result => {
