@@ -1,8 +1,11 @@
 const EmployeeModel = require('../models/EmployeeModel');
+const WarehouseModel = require('../models/WarehouseModel');
 const ConsumerModel = require('../models/ConsumerModel');
 const InventoryModel = require('../models/InventoryModel');
 const { body, validationResult } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
+const uniqid = require('uniqid');
+
 //helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
 const utility = require('../helpers/utility');
@@ -112,6 +115,7 @@ exports.register = [
             emailId: req.body.emailId,
             password: hash,
             confirmOTP: otp,
+            id: uniqid('emp-')
           });
           // Html email body
           let html = EmailContent({
@@ -138,7 +142,7 @@ exports.register = [
                   return apiResponse.ErrorResponse(res, err);
                 }
                 let userData = {
-                  id: user._id,
+                  id: user.id,
                   firstName: user.firstName,
                   lastName: user.lastName,
                   emailId: user.emailId,
@@ -398,6 +402,34 @@ exports.verifyConfirm = [
                   'info',
                   '<<<<< UserService < AuthController < verifyConfirm : Confirming Account successfully',
                 );
+                //Create Inventory and Warehouse
+                const inventoryId = uniqid('inv-');
+                const inventory = new InventoryModel({id: inventoryId});
+                const inventoryResult = await inventory.save();
+                const warehouse = new WarehouseModel({
+                  id: uniqid('war-'),
+                  organisationId: 'org1234',
+                  postalAddress:
+                    'JNIBF, Gachibowli, Hyderabad, Telanagana, India',
+                  region: {
+                    regionId: 'reg123',
+                    regionName: 'Earth Prime',
+                  },
+                  country: {
+                    countryId: '001',
+                    countryName: 'India',
+                  },
+                  location: {
+                    longitude: 12.12323453534,
+                    latitude: 13.123435345435,
+                    geohash: '1231nejf923453',
+                  },
+                  supervisors: [],
+                  employees: [],
+                  employeeId: user.id,
+                  inventoryId: inventoryResult.id,
+                });
+                await warehouse.save();
                 return apiResponse.successResponse(
                   res,
                   'Account confirmed success.',
@@ -589,57 +621,59 @@ exports.forgotPassword = [
           errors.array(),
         );
       } else {
-        return EmployeeModel.findOne({ emailId: req.body.emailId }).then(user => {
-          if (user) {
-            logger.log(
-              'info',
-              '<<<<< UserService < AuthController < forgotPassword : user exist',
-            );
-            let newPassword = req.body.emailId + utility.randomNumber(10);
-            //hash input password
-            bcrypt.hash(newPassword, 10, function(err, hash) {
-              // Html email body
-              let html = '<p>your new password is </p>' + newPassword;
-              // Send confirmation email
-              mailer
-                .send(
-                  constants.confirmEmails.from,
-                  req.body.emailId,
-                  'ForgotPassword',
-                  html,
-                )
-                .then(function() {
-                  // Save user.
+        return EmployeeModel.findOne({ emailId: req.body.emailId }).then(
+          user => {
+            if (user) {
+              logger.log(
+                'info',
+                '<<<<< UserService < AuthController < forgotPassword : user exist',
+              );
+              let newPassword = req.body.emailId + utility.randomNumber(10);
+              //hash input password
+              bcrypt.hash(newPassword, 10, function(err, hash) {
+                // Html email body
+                let html = '<p>your new password is </p>' + newPassword;
+                // Send confirmation email
+                mailer
+                  .send(
+                    constants.confirmEmails.from,
+                    req.body.emailId,
+                    'ForgotPassword',
+                    html,
+                  )
+                  .then(function() {
+                    // Save user.
 
-                  user.password = hash;
-                  user.save(function(err) {
-                    if (err) {
-                      logger.log(
-                        'error',
-                        '<<<<< UserService < AuthController < forgotPassword : error while saving user',
-                      );
-                      return apiResponse.ErrorResponse(res, err);
-                    } else {
-                      logger.log(
-                        'info',
-                        '<<<<< UserService < AuthController < forgotPassword : password sent successfully to registered email',
-                      );
-                      return res.send(
-                        'Password has been sent successfully to RegisteredEmail',
-                      );
-                    }
+                    user.password = hash;
+                    user.save(function(err) {
+                      if (err) {
+                        logger.log(
+                          'error',
+                          '<<<<< UserService < AuthController < forgotPassword : error while saving user',
+                        );
+                        return apiResponse.ErrorResponse(res, err);
+                      } else {
+                        logger.log(
+                          'info',
+                          '<<<<< UserService < AuthController < forgotPassword : password sent successfully to registered email',
+                        );
+                        return res.send(
+                          'Password has been sent successfully to RegisteredEmail',
+                        );
+                      }
+                    });
+                  })
+                  .catch(err => {
+                    logger.log(
+                      'error',
+                      '<<<<< UserService < AuthController < forgotPassword : error (catch block 1)',
+                    );
+                    return apiResponse.ErrorResponse(res, err);
                   });
-                })
-                .catch(err => {
-                  logger.log(
-                    'error',
-                    '<<<<< UserService < AuthController < forgotPassword : error (catch block 1)',
-                  );
-                  return apiResponse.ErrorResponse(res, err);
-                });
-            });
-          }
-        });
+              });
+            }
+          },
+        );
       }
     } catch (err) {
       logger.log(
@@ -960,7 +994,10 @@ exports.getAllUsers = [
   auth,
   async (req, res) => {
     try {
-      const users = await EmployeeModel.find({}, 'firstName walletAddress emailId');
+      const users = await EmployeeModel.find(
+        {},
+        'firstName walletAddress emailId',
+      );
       const confirmedUsers = users.filter(user => user.walletAddress !== '');
       logger.log(
         'info',
