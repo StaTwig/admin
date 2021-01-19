@@ -1,0 +1,223 @@
+{
+	"info": {
+		"_postman_id": "653cbfe7-f5b8-450c-b5e4-a1bbde7ba0cb",
+		"name": "ledger4.0",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "productservice",
+			"item": [
+				{
+					"name": "http://localhost:3010/productmanagement/api/products/getProducts",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMDQ4ZmU0ZGNiODQ2ODA5OTk5ZmZiMSIsImZpcnN0TmFtZSI6IlRocmluZXRocmEiLCJlbWFpbElkIjoidGhyaW5ldGhyYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJQTEVBU0UgREVGSU5FIFJPTEVTIiwiaWF0IjoxNjEwOTg3NjEyLCJleHAiOjE2MTA5OTQ4MTJ9.k1OAbJ750DvahfUu19fw1_tCuDwk0NGuCVTVhL_tlYs",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \"text\" : \"Test\"}"
+						},
+						"url": {
+							"raw": "http://localhost:3010/productmanagement/api/products/getProducts",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"productmanagement",
+								"api",
+								"products",
+								"getProducts"
+							]
+						},
+						"description": "GetProducts"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "employeeService",
+			"item": [
+				{
+					"name": "http://localhost:3001/usermanagement/api/auth/register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjk2ZThlNTIzYTgxNzEzZGU2NTQ2NDgiLCJlbWFpbCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJhZGRyZXNzIjoiMUEySmp4ZHVNbVdla0NUNkhhQVR3clFKU2s4Wm5pYUNFUTdRUloiLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjA3NTM2OTI0LCJleHAiOjE2MDc1NDQxMjR9.eXiDCqUwv5mYkfYFaqGyujvP3vgpmko1nMCs80JfOoo",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"firstName\": \"Thrinethra\",\n\t\"lastName\": \"Siddani\",\n\t\"emailId\": \"thrinethra@statwig.com\",\n\t\"password\": \"apsd2002\"\n\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/usermanagement/api/auth/register",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"usermanagement",
+								"api",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Register"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:3001/usermanagement/api/auth/verify-otp",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjk3ZThjNzFlNDQ4YzJhZWUzZWQ2ZTciLCJlbWFpbCI6Im1hbnNpQHN0YXR3aWcuY29tIiwiYWRkcmVzcyI6IjFKeFE5MlJYelBzRno3VjhYSzVNNG5OZ010c3FQSzNnUWlYZUI1Iiwicm9sZSI6IkVSUCBTcGVjaWFsaXN0IiwiaWF0IjoxNjEwNDY5Nzg2LCJleHAiOjE2MTA0NzY5ODZ9.N02-aJE1Q8i9nk3LHCLpVb4xT2csoHIRhiYM-k-n4ZY\n",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"emailId\": \"thrinethra@statwig.com\",\n\t\"otp\": \"4700\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/usermanagement/api/auth/verify-otp",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"usermanagement",
+								"api",
+								"auth",
+								"verify-otp"
+							]
+						},
+						"description": "verify otp"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:3001/usermanagement/api/auth/login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjk2ZThlNTIzYTgxNzEzZGU2NTQ2NDgiLCJlbWFpbCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJhZGRyZXNzIjoiMUEySmp4ZHVNbVdla0NUNkhhQVR3clFKU2s4Wm5pYUNFUTdRUloiLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjEwNTE0MjA4LCJleHAiOjE2MTA1MjE0MDh9.3NUYb20yuS75KGonB32HEJ8GgI6v6as81HN16YyIOSc",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"emailId\":\"thrinethra@statwig.com\",\n\t\"password\": \"apsd2002\"\n\t\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/usermanagement/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"usermanagement",
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "login"
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:3001/usermanagement/api/auth/userInfo",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMDQ4ZmU0ZGNiODQ2ODA5OTk5ZmZiMSIsImZpcnN0TmFtZSI6IlRocmluZXRocmEiLCJlbWFpbElkIjoidGhyaW5ldGhyYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJQTEVBU0UgREVGSU5FIFJPTEVTIiwiaWF0IjoxNjEwOTE2NTAwLCJleHAiOjE2MTA5MjM3MDB9.7dFVW_hDFbtr-Q65jzgqPJRIjhbrS_3kNTrqVRMBGXw",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3001/usermanagement/api/auth/userInfo",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"usermanagement",
+								"api",
+								"auth",
+								"userInfo"
+							]
+						},
+						"description": "UserInfo"
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
