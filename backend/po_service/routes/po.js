@@ -16,7 +16,7 @@ const upload = multer({ storage: Storage });
 const router = express.Router();
 router.get("/purchaseOrderStatistics", POController.purchaseOrderStatistics);
 router.get("/fetchPublisherPurchaseOrders", POController.fetchPublisherPurchaseOrders);
-router.get("/fetchPurchaseOrderBC", POController.fetchPurchaseOrder);
+router.get("/fetchPurchaseOrderBC", POController.fetchPurchaseOrderBC);
 router.get("/fetchAllPurchaseOrdersBC",POController.fetchAllPurchaseOrdersBC);
 
 router.post(
