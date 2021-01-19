@@ -2,40 +2,40 @@ var mongoose = require('mongoose');
 
 var RecordsSchema = new mongoose.Schema(
   {
-    po_id: { type: String, required:true},
-    po_external_id: {type: String, required:true},
-    po_creation_date: {type: String , required:true},
-    po_created_by: {type: String , required:true},
+    po_id: { type: String},
+    po_external_id: {type: String},
+    po_creation_date: {type: String },
+    po_created_by: {type: String },
     // type: Date, default: Date.now => Created_at
     supplier:{
-      supplier_organization:{type: String, required:true},
-      supplier_incharge: {type: String, required:true}
+      supplier_organization:{type: String},
+      supplier_incharge: {type: String}
     },
     customer: {
-      customer_organization: {type: String, required:true},
-      customer_incharge: {type: String, required:true},
+      customer_organization: {type: String},
+      customer_incharge: {type: String},
       shipping_address: {
-        shipping_address_id: {type: String,required:true},
-        shipment_receiver_id: {type: String, required:true}
+        shipping_address_id: {type: String},
+        shipment_receiver_id: {type: String}
     }},
     products:[
       {
-        po_product_id: {type: String, required:true},
-        po_product_quantity: {type: Number, required:true},
-        po_quantity_delivered:{type: Number, required:true}
+        po_product_id: {type: String},
+        po_product_quantity: {type: Number},
+        po_quantity_delivered:{type: Number}
       }
     ],
-    po_status: { type: String , required:true},
+    po_status: { type: String },
     last_updated_by: {type: String},
     last_updated_on:{},
     shipping_orders:[
       {
-        shipping_order_id:{type: String, required:true},
-        so_created_by: {type: String , required: true},
+        shipping_order_id:{type:String},
+        so_created_by: {type: String},
         so_assigned_to:[String],
         so_updated_on: {type: String},
         so_updated_by: {type: String},
-        so_status: {type: String, required:true}
+        so_status: {type: String}
         },
     ],
     shipments:[

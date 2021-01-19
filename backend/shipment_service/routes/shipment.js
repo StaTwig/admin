@@ -16,7 +16,12 @@ const upload = multer({ storage: Storage });
 const router = express.Router();
 
 router.post("/createShipment", ShipmentController.createShipment);
-router.get("/fetchUserShipmentments", ShipmentController.fetchUserShipments);
+router.get("/fetchShipments/:id", ShipmentController.fetchShipments);
+router.get("/shipment/:id", ShipmentController.Shipment); // Individual Shipment by _id
+
+router.get("/fetchShipments/:po_id", ShipmentController.fetch_po_Shipments);
+router.get("/fetchAllShipments", ShipmentController.fetchAllShipments);
+//router.post("/updateShipmentStatus/:id", ShipmentController.updateStatus);
 
 module.exports = router;
 
