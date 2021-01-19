@@ -510,7 +510,7 @@ exports.addPOsFromExcel = [
                       date: item['Document Date'],
                       destination: item['Country Name'],
                       products: [
-                        { [productManufacturer: item['Order Quantity'],po_quantity_delivered: "QNTY1" },
+                        { [productManufacturer]: item['Order Quantity'] },
                       ],
                       receiver: {
                         address: receiverDetails.address,
