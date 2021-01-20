@@ -242,7 +242,7 @@ exports.login = [
                       '<<<<< UserService < AuthController < login : user is active',
                     );
                     let userData = {
-                      id: user._id,
+                      id: user.id,
                       firstName: user.firstName,
                       emailId: user.emailId,
                       role: user.role,
@@ -403,33 +403,6 @@ exports.verifyConfirm = [
                   '<<<<< UserService < AuthController < verifyConfirm : Confirming Account successfully',
                 );
                 //Create Inventory and Warehouse
-                const inventoryId = uniqid('inv-');
-                const inventory = new InventoryModel({id: inventoryId});
-                const inventoryResult = await inventory.save();
-                const warehouse = new WarehouseModel({
-                  id: uniqid('war-'),
-                  organisationId: 'org1234',
-                  postalAddress:
-                    'JNIBF, Gachibowli, Hyderabad, Telanagana, India',
-                  region: {
-                    regionId: 'reg123',
-                    regionName: 'Earth Prime',
-                  },
-                  country: {
-                    countryId: '001',
-                    countryName: 'India',
-                  },
-                  location: {
-                    longitude: 12.12323453534,
-                    latitude: 13.123435345435,
-                    geohash: '1231nejf923453',
-                  },
-                  supervisors: [],
-                  employees: [],
-                  employeeId: user.id,
-                  inventoryId: inventoryResult.id,
-                });
-                await warehouse.save();
                 return apiResponse.successResponse(
                   res,
                   'Account confirmed success.',
@@ -1099,3 +1072,18 @@ exports.assignProductConsumer = [
     }
   },
 ];
+
+exports.addWarehouse = [
+  auth,
+  async(req, res) => {
+  const inventoryResult = await new InventoryModel({ id: uniqid('inv-')});
+   await inventoryResult.save();
+   const { organisationId, postalAddress, region, country, location, supervisors, employees } = req.body;
+   const warehouseId = uniqid('war-');
+    const warehouse = new WarehouseModel({
+      id: warehouseId, organisationId, postalAddress, region, country, location, supervisors, employees, inventoryId: inventoryResult.id
+    });
+    await warehouse.save();
+    return apiResponse.successResponseWithData(res, 'Warehouse added success', warehouse);
+  }
+]

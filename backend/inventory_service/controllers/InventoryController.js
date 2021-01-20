@@ -7,6 +7,9 @@ const apiResponse = require('../helpers/apiResponse');
 const utility = require('../helpers/utility');
 const auth = require('../middlewares/jwt');
 const InventoryModel = require('../models/InventoryModel');
+const WarehouseModel = require('../models/WarehouseModel');
+const EmployeeModel = require('../models/EmployeeModel');
+const AtomModel = require('../models/AtomModel');
 const NotificationModel = require('../models/NotificationModel');
 
 const checkToken = require('../middlewares/middleware').checkToken;
@@ -36,7 +39,7 @@ exports.getTotalCount = [
           );
 
           permission_request = {
-            result: result,
+            emailId: result,
             permissionRequired: 'viewInventory',
           };
           checkPermissions(permission_request, permissionResult => {
@@ -271,7 +274,7 @@ exports.getAllInventoryDetails = [
                 .sort({ createdAt: -1 })
                 .skip(parseInt(skip))
                 .limit(parseInt(limit));
-             /*
+              /*
                let chunkUrls = [];
               inventoryResult.forEach(inventory => {
                 const chunkUrl = axios.get(
@@ -281,7 +284,7 @@ exports.getAllInventoryDetails = [
                 );
                 chunkUrls.push(chunkUrl);
               });*/
-             // const responses = await axios.all(chunkUrls);
+              // const responses = await axios.all(chunkUrls);
               //const items = responses.map(response => response.data.items[0]);
               const productNamesResponse = await axios.get(
                 `${product_service_url}/getProductNames`,
@@ -321,11 +324,11 @@ exports.getAllInventoryDetails = [
               );
               thisMonth.setUTCDate(1);
               thisMonth.setUTCHours(0, 0, 0, 0);
-             /* const nextWeek = new Date(
+              /* const nextWeek = new Date(
                 new Date().setDate(new Date().getDate() + 7),
               );
               nextWeek.setUTCHours(0, 0, 0, 0);*/
-             /* const thisWeek = new Date(
+              /* const thisWeek = new Date(
                 new Date().setDate(new Date().getDate()),
               );*/
               const thisWeek = Date.monday();
@@ -505,211 +508,93 @@ exports.getAllInventoryDetails = [
   },
 ];
 
-exports.addNewInventory = [
-  auth,
-  body('data.productName')
-    .isLength({ min: 1 })
-    .trim()
-    .withMessage('Product Name must be specified.'),
-  body('data.manufacturerName')
-    .isLength({ min: 1 })
-    .trim()
-    .withMessage('Manafacturer must be specified.'),
-  body('data.quantity')
-    .isLength({ min: 1 })
-    .trim()
-    .withMessage('Quantity must be specified.'),
-  body('data.manufacturingDate')
-    .isLength({ min: 4 })
-    .trim()
-    .withMessage('Manafacturing Date must be specified.'),
-  body('data.expiryDate')
-    .isLength({ min: 4 })
-    .trim()
-    .withMessage('Expiry Date must be specified.'),
-  body('data.storageConditionmin')
-    .isLength({ min: 1 })
-    .trim()
-    .withMessage('Storage Conditionmin must be specified.'),
-  body('data.storageConditionmax')
-    .isLength({ min: 1 })
-    .trim()
-    .withMessage('Storage Conditionmax must be specified.'),
-
-  body('data.batchNumber')
-    .isLength({ min: 1 })
-    .trim()
-    .withMessage('Batch Number must be specified.'),
-  body('data.serialNumber')
-    .isLength({ min: 1 })
-    .trim()
-    .withMessage('Serial Number must be specified.'),
-  async (req, res) => {
-    try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        logger.log(
-          'error',
-          '<<<<< InventoryService < InventoryController < addNewInventory : Validation Error',
-        );
-        // Display sanitized values/errors messages.
-        return apiResponse.validationErrorWithData(
-          res,
-          'Validation Error.',
-          errors.array(),
-        );
-      }
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-            'info',
-            '<<<<< InventoryService < InventoryController < addNewInventory : token verified successfullly, publishing data',
-          );
-
-          permission_request = {
-            result: result,
-            permissionRequired: 'addInventory',
-          };
-          checkPermissions(permission_request, async permissionResult => {
-            if (permissionResult.success) {
-              var { data } = req.body;
-              let date_ob = new Date();
-              let date = ('0' + date_ob.getDate()).slice(-2);
-              let month = ('0' + (date_ob.getMonth() + 1)).slice(-2);
-              let year = date_ob.getFullYear();
-              var today = date + '-' + month + '-' + year;
-              var createdDate = { createdDate: today };
-
-              const { address } = req.user;
-              const userData = {
-                stream: stream_name,
-                key: data.serialNumber,
-                address: address,
-                data: { ...data, ...createdDate },
-              };
-              const response = await axios.post(
-                `${blockchain_service_url}/publishExcelData`,
-                userData,
-              );
-              logger.log(
-                'info',
-                '<<<<< InventoryService < InventoryController < addNewInventory : publised data to blockchain',
-              );
-              console.log('res', response.data);
-              const newInventory = new InventoryModel({
-                manufacturingDate: response.data.manufacturingDate,
-                expiryDate: response.data.expiryDate,
-                serialNumber: response.data.serialNumber,
-                owner: response.data.owner,
-                transactionIds: [response.data.transactionIds],
-                shipmentId: data.shipmentId,
-                poNumber: data.poNumber
-              });
-              await newInventory.save();
-
-              res.status(200).json({
-                serialNumber: response.data.serialNumber,
-                manufacturingDate: response.data.manufacturingDate,
-                expiryDate: response.data.expiryDate,
-                owner: response.data.owner,
-                response: response.data.transactionId,
-              });
-            } else {
-              res.json('Sorry! User does not have enough Permissions');
-            }
-          });
-        } else {
-          logger.log(
-            'warn',
-            '<<<<< InventoryService < InventoryController < addNewInventory : refuted token',
-          );
-          res.status(403).json(result);
-        }
-      });
-    } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< InventoryService < InventoryController < addNewInventory : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-
 exports.updateInventories = [
   auth,
   async (req, res) => {
     try {
       const { address } = req.user;
       const { data } = req.body;
-      const { serialNumberRange, manufacturingDate, expiryDate, productName } = data;
+      const {
+        serialNumberRange,
+        manufacturingDate,
+        expiryDate,
+        productName,
+      } = data;
       const serialNumbers = serialNumberRange.split('-');
       const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
       const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
 
-      const serialNumberText = serialNumbers[1].split(/(\d+)/)[0]
+      const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
       let inventories = [];
-      for(let i=serialNumbersFrom; i<=serialNumbersTo; i++) {
-         const inventory = {
-           transactionIds: [],
-           serialNumber: `${serialNumberText}${i}`,
-           manufacturingDate,
-           expiryDate,
-           productName,
-           quantity: 1,
-           owner: address
-         }
-         inventories.push(inventory);
+      for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
+        const inventory = {
+          transactionIds: [],
+          serialNumber: `${serialNumberText}${i}`,
+          manufacturingDate,
+          expiryDate,
+          productName,
+          quantity: 1,
+          owner: address,
+        };
+        inventories.push(inventory);
       }
       let bulkArr = [];
-     /* const inventoryMongoResult = await InventoryModel.insertMany(
+      /* const inventoryMongoResult = await InventoryModel.insertMany(
         inventories,
       );*/
       for (const i of inventories) {
         bulkArr.push({
           updateOne: {
-            "filter": { "serialNumber": i.serialNumber },
-            "update": { "owner": address }
-          }
-        })
+            filter: { serialNumber: i.serialNumber },
+            update: { owner: address },
+          },
+        });
       }
 
-      await InventoryModel.bulkWrite(bulkArr)
+      await InventoryModel.bulkWrite(bulkArr);
       apiResponse.successResponseWithData(res, 'Updated Success');
-    }catch(e) {
+    } catch (e) {
       apiResponse.ErrorResponse(res, e);
     }
-
-  }
-]
+  },
+];
 exports.insertInventories = [
   auth,
   async (req, res) => {
     try {
       const { address } = req.user;
       const { data } = req.body;
-      const { serialNumberRange, manufacturingDate, expiryDate, productName, poNumber, shipmentId, manufacturerName, batchNumber } = data;
+      const {
+        serialNumberRange,
+        manufacturingDate,
+        expiryDate,
+        productName,
+        poNumber,
+        shipmentId,
+        manufacturerName,
+        batchNumber,
+      } = data;
       const serialNumbers = serialNumberRange.split('-');
       const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
       const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
 
-      const serialNumberText = serialNumbers[1].split(/(\d+)/)[0]
+      const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
       let inventories = [];
-      for(let i=serialNumbersFrom; i<=serialNumbersTo; i++) {
-         const inventory = {
-           transactionIds: [],
-           serialNumber: `${serialNumberText}${i}`,
-           manufacturingDate,
-           expiryDate,
-           productName,
-           quantity: 1,
-           poNumber,
-           shipmentId,
-           manufacturerName,
-           batchNumber,
-           owner: address
-         }
-         inventories.push(inventory);
+      for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
+        const inventory = {
+          transactionIds: [],
+          serialNumber: `${serialNumberText}${i}`,
+          manufacturingDate,
+          expiryDate,
+          productName,
+          quantity: 1,
+          poNumber,
+          shipmentId,
+          manufacturerName,
+          batchNumber,
+          owner: address,
+        };
+        inventories.push(inventory);
       }
       const chunkSize = 50;
       let limit = chunkSize;
@@ -726,9 +611,7 @@ exports.insertInventories = [
         logger.log('info', `limit ${limit}`);
         const chunkedData = inventories.slice(skip, limit);
         try {
-          await InventoryModel.insertMany(
-            chunkedData,
-          );
+          await InventoryModel.insertMany(chunkedData);
           if (limit < inventories.length) {
             recursiveFun();
           } else {
@@ -736,7 +619,7 @@ exports.insertInventories = [
               'info',
               `Insertion of inventories from mobile is completed. Time Taken to insert ${
                 inventories.length
-                } in seconds - `,
+              } in seconds - `,
               (new Date() - start) / 1000,
             );
             const newNotification = new NotificationModel({
@@ -745,41 +628,38 @@ exports.insertInventories = [
             });
             await newNotification.save();
           }
-        }catch(e){
-         /* const newNotification = new NotificationModel({
+        } catch (e) {
+          /* const newNotification = new NotificationModel({
             owner: address,
             message: `${e.errmsg} on ${new Date().toLocaleString()}`,
           });
           await newNotification.save();*/
-         //If inventories are duplicate then update inventories with new owner
+          //If inventories are duplicate then update inventories with new owner
           let bulkArr = [];
           for (const i of inventories) {
             bulkArr.push({
               updateOne: {
-                "filter": { "serialNumber": i.serialNumber },
-                "update": { "owner": address }
-              }
-            })
+                filter: { serialNumber: i.serialNumber },
+                update: { owner: address },
+              },
+            });
           }
 
-          await InventoryModel.bulkWrite(bulkArr)
+          await InventoryModel.bulkWrite(bulkArr);
         }
-
-
       }
       recursiveFun();
       apiResponse.successResponseWithData(res, 'Inserted Success');
-    }catch(e) {
+    } catch (e) {
       apiResponse.ErrorResponse(res, e);
     }
-
-  }
-]
-exports.addMultipleInventories = [
+  },
+];
+exports.addProductsToInventory = [
   auth,
-  body('inventories')
+  body('products')
     .isLength({ min: 1 })
-    .withMessage('Inventories  must be specified.'),
+    .withMessage('Products  must be specified.'),
   async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -795,81 +675,88 @@ exports.addMultipleInventories = [
           errors.array(),
         );
       }
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-            'info',
-            '<<<<< InventoryService < InventoryController < addMultipleInventories : token verified successfullly, publishing data',
-          );
 
-          permission_request = {
-            result: result,
-            permissionRequired: 'addInventory',
-          };
-          checkPermissions(permission_request, async permissionResult => {
-            if (permissionResult.success) {
-              const { inventories } = req.body;
-              const { address } = req.user;
-              let txnIds = [];
-              let chunkUrls = [];
-              const serialNumbers = inventories.map(inventory => {
-                return { serialNumber: inventory.serialNumber.trim() };
-              });
-              const inventoriesFound = await InventoryModel.findOne({
-                $or: serialNumbers,
-              });
-              if (inventoriesFound) {
-                return apiResponse.ErrorResponse(
-                  res,
-                  'Duplicate Inventory Found',
-                );
-              }
-              inventories.forEach(inventory => {
-                inventory.serialNumber = inventory.serialNumber.trim();
-                const userData = {
-                  stream: stream_name,
-                  key: inventory.serialNumber.trim(),
-                  address: address,
-                  data: inventory,
-                };
-                const postRequest = axios.post(
-                  `${blockchain_service_url}/publishExcelData`,
-                  userData,
-                );
-                chunkUrls.push(postRequest);
-              });
-              const inventoryResponses = await axios.all(chunkUrls);
-              const inventoryData = inventoryResponses.map(
-                response => response.data,
-              );
-              try {
-                const inventoryMongoResult = await InventoryModel.insertMany(
-                  inventoryData,
-                );
-                const transactionIds = inventoryMongoResult.map(
-                  inventory => inventory.transactionIds,
-                );
-                apiResponse.successResponseWithData(
-                  res,
-                  'Created Inventory Success',
-                  transactionIds,
-                );
-              } catch (e) {
-                apiResponse.ErrorResponse(
-                  res,
-                  'Error in creating inventory Duplicate Serial Number ',
-                );
-              }
-            } else {
-              res.json('Sorry! User does not have enough Permissions');
+      permission_request = {
+        role: req.user.role,
+        permissionRequired: 'addInventory',
+      };
+      checkPermissions(permission_request, async permissionResult => {
+        if (permissionResult.success) {
+          const { products } = req.body;
+          const { address, id } = req.user;
+          const employee = await EmployeeModel.findOne({ id: id });
+          const warehouseId = employee.warehouseId;
+          const warehouse = await WarehouseModel.findOne({ id: warehouseId });
+          if (!warehouse) {
+            return apiResponse.ErrorResponse(
+              res,
+              'Employee not assigned to any organisation',
+            );
+          }
+          let serialNumbersRange = true
+         for(let i=0; i< products.length; i++) {
+            if(products[i].serialNumbersRange.split('-').length < 2) {
+              serialNumbersRange = false;
+              break;
             }
+         }
+         if(!serialNumbersRange) {
+           return apiResponse.ErrorResponse(
+             res,
+             `Product doesn't conatin valid serial numbers range`,
+           );
+         }
+          const inventory = await InventoryModel.findOne({
+            id: warehouse.inventoryId,
           });
+
+          utility.asyncForEach(products, async product => {
+            inventory.inventoryDetails.push({
+              productId: product.productId,
+              quantity: product.quantity,
+            });
+            await inventory.save();
+            const serialNumbers = product.serialNumbersRange.split('-');
+            const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
+            const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
+
+            const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
+            let atoms = [];
+            for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
+              const atom = {
+                id: `${serialNumberText}${i}`,
+                label: {
+                  labelId: '',
+                  labelType: '',
+                },
+                productId: product.productId,
+                inventoryIds: [inventory.inventoryId],
+                lastInventoryId: '',
+                lastShipmentId: '',
+                poIds: [],
+                shipmentIds: [],
+                txIds: [],
+                batchNumbers: [inventory.batchNumber],
+                atomStatus: 'Healthy',
+                attribute_set: {
+                  mfgDate: product.mfgDate,
+                  expDate: product.expDate,
+                },
+                eolInfo: {
+                  eolId: 'IDN29402-23423-23423',
+                  eolDate: '2021-03-31T18:30:00.000Z',
+                  eolBy: id,
+                  eolUserInfo: '',
+                }
+              };
+              atoms.push(atom);
+            }
+            await AtomModel.insertMany(atoms);
+          });
+
+          return apiResponse.successResponseWithData(res, 'Added products to the inventories')
         } else {
-          logger.log(
-            'warn',
-            '<<<<< InventoryService < InventoryController < addNewInventory : refuted token',
-          );
-          res.status(403).json(result);
+          res.json('Sorry! User does not have enough Permissions');
         }
       });
     } catch (err) {
@@ -1059,7 +946,7 @@ exports.trackProduct = [
 ];
 
 exports.getGroupedInventoryDetails = [
-        auth,
+  auth,
   async (req, res) => {
     try {
       checkToken(req, res, async result => {
@@ -1078,14 +965,26 @@ exports.getGroupedInventoryDetails = [
               const { address } = req.user;
               const { skip, limit } = req.query;
 
-              const inventoryResult = await InventoryModel.aggregate([{$match:{ owner:address}},{$group: {_id:{batchNumber:'$batchNumber'},
-              batchNumber:{$first:'$batchNumber'},quantity:{$sum:'$quantity'},manufacturingDate:{$first:'$manufacturingDate'},
-              expiryDate:{$first:'$expiryDate'},owner:{$first:'$owner'},productName:{$first:'$productName'},
-              manufacturerName:{$first:'$manufacturerName'},createdAt:{$first:'$createdAt'}}}])
-              .sort({ createdAt: -1 })
-              .skip(parseInt(skip))
-              .limit(parseInt(limit));
-            
+              const inventoryResult = await InventoryModel.aggregate([
+                { $match: { owner: address } },
+                {
+                  $group: {
+                    _id: { batchNumber: '$batchNumber' },
+                    batchNumber: { $first: '$batchNumber' },
+                    quantity: { $sum: '$quantity' },
+                    manufacturingDate: { $first: '$manufacturingDate' },
+                    expiryDate: { $first: '$expiryDate' },
+                    owner: { $first: '$owner' },
+                    productName: { $first: '$productName' },
+                    manufacturerName: { $first: '$manufacturerName' },
+                    createdAt: { $first: '$createdAt' },
+                  },
+                },
+              ])
+                .sort({ createdAt: -1 })
+                .skip(parseInt(skip))
+                .limit(parseInt(limit));
+
               const productNamesResponse = await axios.get(
                 `${product_service_url}/getProductNames`,
                 {
@@ -1302,7 +1201,7 @@ exports.getGroupedInventoryDetails = [
 ];
 
 exports.getInventoryDetailsByBatchNumber = [
-        auth,
+  auth,
   async (req, res) => {
     try {
       checkToken(req, res, async result => {
@@ -1323,14 +1222,14 @@ exports.getInventoryDetailsByBatchNumber = [
 
               const inventoryResult = await InventoryModel.find({
                 owner: address,
-                batchNumber:batchNumber
+                batchNumber: batchNumber,
               })
-              .sort({ createdAt: -1 })
-              .skip(parseInt(skip))
-              .limit(parseInt(limit));
+                .sort({ createdAt: -1 })
+                .skip(parseInt(skip))
+                .limit(parseInt(limit));
 
               res.json({
-                data: inventoryResult
+                data: inventoryResult,
               });
             } else {
               res.json('Sorry! User does not have enough Permissions');
@@ -1345,7 +1244,8 @@ exports.getInventoryDetailsByBatchNumber = [
         }
       });
     } catch (err) {
-      logger.log( 'error',
+      logger.log(
+        'error',
         '<<<<< InventoryService < InventoryController < getInventoryDetailsByBatchNumber : error (catch block)',
       );
       return apiResponse.ErrorResponse(res, err);
@@ -1354,7 +1254,7 @@ exports.getInventoryDetailsByBatchNumber = [
 ];
 
 exports.getBatchDetailsByBatchNumber = [
-auth,
+  auth,
   async (req, res) => {
     try {
       checkToken(req, res, async result => {
@@ -1373,13 +1273,25 @@ auth,
               const { address } = req.user;
               const { skip, limit, batchNumber } = req.query;
 
-              const inventoryResult = await InventoryModel.aggregate([{$match:{ owner:address, batchNumber:batchNumber}},{$group: {_id:{batchNumber:'$batchNumber'},
-              batchNumber:{$first:'$batchNumber'},quantity:{$sum:'$quantity'},manufacturingDate:{$first:'$manufacturingDate'},
-              expiryDate:{$first:'$expiryDate'},owner:{$first:'$owner'},productName:{$first:'$productName'},
-              manufacturerName:{$first:'$manufacturerName'},createdAt:{$first:'$createdAt'}}}])
-              .sort({ createdAt: -1 })
-              .skip(parseInt(skip))
-              .limit(parseInt(limit));
+              const inventoryResult = await InventoryModel.aggregate([
+                { $match: { owner: address, batchNumber: batchNumber } },
+                {
+                  $group: {
+                    _id: { batchNumber: '$batchNumber' },
+                    batchNumber: { $first: '$batchNumber' },
+                    quantity: { $sum: '$quantity' },
+                    manufacturingDate: { $first: '$manufacturingDate' },
+                    expiryDate: { $first: '$expiryDate' },
+                    owner: { $first: '$owner' },
+                    productName: { $first: '$productName' },
+                    manufacturerName: { $first: '$manufacturerName' },
+                    createdAt: { $first: '$createdAt' },
+                  },
+                },
+              ])
+                .sort({ createdAt: -1 })
+                .skip(parseInt(skip))
+                .limit(parseInt(limit));
 
               res.json({
                 data: inventoryResult,

@@ -34,6 +34,7 @@ var EmployeeSchema = new mongoose.Schema({
   emailId: {
     type: String,
     required: true,
+    unique: true
   },
   password: {
     type: String,
@@ -44,7 +45,7 @@ var EmployeeSchema = new mongoose.Schema({
   organisationId: {
     type: String,
     required: false,
-    default: 'pqrstu12345',
+    default: 'org1234',
   },
   warehouseId: { type: String, required: false, default: 'NA' },
   affiliatedOrganisations: {

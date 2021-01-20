@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var WarehouseSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
-    organizationId: {
+    organisationId: {
       type: String,
       required: true,
       default: 'org123',
@@ -49,10 +49,6 @@ var WarehouseSchema = new mongoose.Schema(
      required: true,
      unique: true
    },
-    employeeId: {
-      type: String,
-      required: true
-    }
   },
   { timestamps: true },
 );

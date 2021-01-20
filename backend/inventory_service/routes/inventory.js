@@ -27,8 +27,7 @@ router.get("/getInventoryDetailsByBatchNumber", InventoryController.getInventory
 router.get("/getBatchDetailsByBatchNumber",InventoryController.getBatchDetailsByBatchNumber);
 router.get("/trackProduct", InventoryController.trackProduct);
 
-router.post("/addNewInventory", InventoryController.addNewInventory);
-router.post("/addMultipleInventories", InventoryController.addMultipleInventories);
+router.post("/addProductsToInventory", InventoryController.addProductsToInventory);
 router.post("/updateInventories", InventoryController.updateInventories);
 router.post("/insertInventories", InventoryController.insertInventories);
 
