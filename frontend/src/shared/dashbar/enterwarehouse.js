@@ -2,6 +2,7 @@ import React from 'react'
 import {Link} from 'react-router-dom'
 import CloseIcon from '../../assets/icons/cross.svg';
 import PinGrey from '../../assets/icons/pingrey.png';
+import Verifiedpic from '../../assets/icons/Verifiedpic.png';
 import './style.scss'
 
 const EnterWareHouse = (props) => {
@@ -14,20 +15,20 @@ return (
    <img src={CloseIcon} alt="Close" with="30" height="30" />
    </button></div>
    <div className=" panel  mb-3 searchpanel">
-     <div>Unicef Warehouse 123</div>
-     <div><u><small>8g4gb4ff4jej9jehrugknasci99988gdjnddbdb</small></u></div>
+     <div>Bharat Bio-tech Warehouse</div>
+     <div><u><small>8g4gb4ff4jej9jehrugknasci99988gdjnddbdb</small></u><img src={Verifiedpic} width="15" height="15" className="mt-1"/></div>
      <div className="d-flex flex-row mt-2">
-       <ul className="mr-2">
+       <ul className="mr-3">
          <li className="mb-1">Country ID</li>
          <li className="mb-1">Country</li>
          <li className="mb-1">Warehouse</li>
          <li className="mb-1">Warehouse Name</li>
        </ul>
        <ul>
-         <li className="mb-1">India</li>
-         <li className="mb-1">democartic of serum</li>
-         <li className="mb-1">123</li>
-         <li className="mb-1">warehouse 123</li>
+         <li className="mb-1">1212</li>
+         <li className="mb-1">Democratic Republic of Congo</li>
+         <li className="mb-1">WR-851</li>
+         <li className="mb-1">Bharat Bio-tech Warehouse</li>
        </ul>
      </div>
      </div> 
@@ -37,9 +38,9 @@ return (
         <div className="ml-2 text-secondary">Address</div>
         </div> 
      <div>
-     <div>Gobind Mahal , 86B Netaji </div>
-     <div>Subhasg Road ,Mumbai 400002,</div>
-    <div>India.</div> 
+     <div>Gobind Street , 86B Luther </div>
+     <div>Subhasg Road ,Matadi 400002,</div>
+    <div>Congo.</div> 
        </div>
      </div> 
      <div className="d-flex flex-row justify-content-between prod mb-2">

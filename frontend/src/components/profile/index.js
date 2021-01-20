@@ -284,14 +284,14 @@ class Profile extends React.Component {
                       <li>Account Status</li>
                     </ul>
                     <ul>
-                      <li>{name}</li>
-                      <li>{role}</li>
-                      <li>{organisation}</li>
-                      <li>{affiliateOrganisation}</li>
-                      <li>{walletAddress}</li>
-                      <li>{location}</li>
-                      <li>{email}</li>
-                      <li>{phone}</li>
+                      {name?<li>{name}</li>:<li>N/A</li>}
+                      {role?<li>{role}</li>:<li>N/A</li>}
+                      {organisation?<li>{organisation}</li>:<li>N/A</li>}
+                      {affiliateOrganisation?<li>{affiliateOrganisation}</li>:<li>N/A</li>}
+                      {walletAddress?<li>{walletAddress}</li>:<li>N/A</li>}
+                      {location?<li>location</li>:<li>N/A</li>}
+                      {email?<li>{email}</li>:<li>N/A</li>}
+                      {phone?<li>{phone}</li>:<li>N/A</li>}
                       {status && <li>Active</li>}
                     </ul>
                   </div>
