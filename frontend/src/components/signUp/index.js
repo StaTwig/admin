@@ -36,9 +36,17 @@ const FormPage = (props) => {
                     <img alt="" src={User} className="icon" />
                     <input type="text"
                       className="form-control"
-                      value={props.name}
-                      onChange={props.onNameChange}
-                      placeholder="Name" />
+                      value={props.firstName}
+                      onChange={props.onfirstNameChange}
+                      placeholder="First-Name" />
+                  </div>
+                  <div className="form-group">
+                    <img alt="" src={User} className="icon" />
+                    <input type="text"
+                      className="form-control"
+                      value={props.lastName}
+                      onChange={props.onlastNameChange}
+                      placeholder="last-Name" />
                   </div>
                   <div className="form-group">
                     <img alt="" src={Mail} className="icon" />

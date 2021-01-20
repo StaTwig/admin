@@ -9,9 +9,10 @@ const SignupContainer = (props) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [name, setName] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const onSignup =  useCallback(async () => {
-    const data = { email, password, name};
+    const data = {firstName,lastName,emailId:email, password};
     const result = await authenticateUser(data);
     if(result.status === 200) {
       props.history.push('/verify');
@@ -36,12 +37,14 @@ const SignupContainer = (props) => {
       <Signup
         email={email}
         password={password}
-        name={name}
+        firstName={firstName}
+        lastName={lastName}
         onSignup={onSignup}
-        onNameChange={e => setName(e.target.value)}
+        onfirstNameChange={e => setFirstName(e.target.value)}
         errorMessage={errorMessage}
         onEmailChange={e => setEmail(e.target.value)}
         onPasswordChange={e => setPassword(e.target.value)}
+        onlastNameChange={e => setLastName(e.target.value)}
       />
     </div>
   );
