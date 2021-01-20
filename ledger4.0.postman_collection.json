@@ -62,15 +62,15 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjk2ZThlNTIzYTgxNzEzZGU2NTQ2NDgiLCJlbWFpbCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJhZGRyZXNzIjoiMUEySmp4ZHVNbVdla0NUNkhhQVR3clFKU2s4Wm5pYUNFUTdRUloiLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjA3NTM2OTI0LCJleHAiOjE2MDc1NDQxMjR9.eXiDCqUwv5mYkfYFaqGyujvP3vgpmko1nMCs80JfOoo",
 								"type": "text",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjk2ZThlNTIzYTgxNzEzZGU2NTQ2NDgiLCJlbWFpbCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJhZGRyZXNzIjoiMUEySmp4ZHVNbVdla0NUNkhhQVR3clFKU2s4Wm5pYUNFUTdRUloiLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjA3NTM2OTI0LCJleHAiOjE2MDc1NDQxMjR9.eXiDCqUwv5mYkfYFaqGyujvP3vgpmko1nMCs80JfOoo",
 								"disabled": true
 							},
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"value": "application/json"
 							}
 						],
 						"body": {
@@ -102,20 +102,20 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjk3ZThjNzFlNDQ4YzJhZWUzZWQ2ZTciLCJlbWFpbCI6Im1hbnNpQHN0YXR3aWcuY29tIiwiYWRkcmVzcyI6IjFKeFE5MlJYelBzRno3VjhYSzVNNG5OZ010c3FQSzNnUWlYZUI1Iiwicm9sZSI6IkVSUCBTcGVjaWFsaXN0IiwiaWF0IjoxNjEwNDY5Nzg2LCJleHAiOjE2MTA0NzY5ODZ9.N02-aJE1Q8i9nk3LHCLpVb4xT2csoHIRhiYM-k-n4ZY\n",
 								"type": "text",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjk3ZThjNzFlNDQ4YzJhZWUzZWQ2ZTciLCJlbWFpbCI6Im1hbnNpQHN0YXR3aWcuY29tIiwiYWRkcmVzcyI6IjFKeFE5MlJYelBzRno3VjhYSzVNNG5OZ010c3FQSzNnUWlYZUI1Iiwicm9sZSI6IkVSUCBTcGVjaWFsaXN0IiwiaWF0IjoxNjEwNDY5Nzg2LCJleHAiOjE2MTA0NzY5ODZ9.N02-aJE1Q8i9nk3LHCLpVb4xT2csoHIRhiYM-k-n4ZY\n",
 								"disabled": true
 							},
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"value": "application/json"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"emailId\": \"thrinethra@statwig.com\",\n\t\"otp\": \"4700\"\n}"
+							"raw": "{\n\t\"emailId\": \"thrinethra@statwig.com\",\n\t\"otp\": \"5742\"\n}"
 						},
 						"url": {
 							"raw": "http://localhost:3001/usermanagement/api/auth/verify-otp",
@@ -142,15 +142,15 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjk2ZThlNTIzYTgxNzEzZGU2NTQ2NDgiLCJlbWFpbCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJhZGRyZXNzIjoiMUEySmp4ZHVNbVdla0NUNkhhQVR3clFKU2s4Wm5pYUNFUTdRUloiLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjEwNTE0MjA4LCJleHAiOjE2MTA1MjE0MDh9.3NUYb20yuS75KGonB32HEJ8GgI6v6as81HN16YyIOSc",
 								"type": "text",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1Zjk2ZThlNTIzYTgxNzEzZGU2NTQ2NDgiLCJlbWFpbCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJhZGRyZXNzIjoiMUEySmp4ZHVNbVdla0NUNkhhQVR3clFKU2s4Wm5pYUNFUTdRUloiLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjEwNTE0MjA4LCJleHAiOjE2MTA1MjE0MDh9.3NUYb20yuS75KGonB32HEJ8GgI6v6as81HN16YyIOSc",
 								"disabled": true
 							},
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"value": "application/json"
 							}
 						],
 						"body": {
@@ -214,6 +214,49 @@
 							]
 						},
 						"description": "UserInfo"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "inventoryService",
+			"item": [
+				{
+					"name": "http://localhost:3007/inventorymanagement/api/inventory/addProductsToInventory",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC00bXVrazYwMDE1NSIsImZpcnN0TmFtZSI6IlRocmluZXRocmEiLCJlbWFpbElkIjoidGhyaW5ldGhyYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJwb3dlclVzZXIiLCJpYXQiOjE2MTExODU1MTAsImV4cCI6MTYxMTE5MjcxMH0.GlqXTVuR2C6n3gwt4csiq-8LsI59JRWbV_8vPjNCOzQ",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"products\": [\n\t{ \n\t  \"productId\": \"prod-18v6alakkjzss2wl\",\n\t  \"batchNumber\": \"BB1234\",\n\t  \"mfgDate\": \"2020-12-31T18:30:00.000Z\",\n\t  \"expDate\": \"2021-12-30T18:30:00.000Z\",\n\t  \"quantity\": 1000,\n\t  \"serialNumbersRange\": \"SL1-SL1000\"\n\t}\n\n]}"
+						},
+						"url": {
+							"raw": "http://localhost:3007/inventorymanagement/api/inventory/addProductsToInventory",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3007",
+							"path": [
+								"inventorymanagement",
+								"api",
+								"inventory",
+								"addProductsToInventory"
+							]
+						}
 					},
 					"response": []
 				}
