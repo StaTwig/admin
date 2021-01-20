@@ -52,7 +52,10 @@
          overflow:hidden;
          text-overflow: ellipsis;
          display:inline-block;
-         width : 150px;
+         width : 120px;
+         @media (max-width: 1280px) {
+          width : 100px;
+        }
         @media (min-width: $xl) {
           font-size: 13px;
         }

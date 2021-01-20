@@ -23,7 +23,7 @@ const Tabs = props => {
             type="text"
             // value={search}
             //onChange={onSearchChange}
-            placeholder="Enter Warehouse ID"
+            placeholder={props.visible?"Enter Shipment ID":"Enter Warehouse ID"}
             className="form-control search-field"
           />
           <img src={searchingIcon} onClick = {onSeach} alt="searching" />
