@@ -1,6 +1,7 @@
 import React from 'react';
 import traceDrop from '../../assets/icons/traceDrop.png';
 import Down from '../../assets/icons/up.png';
+import Verifiedpic from '../../assets/icons/Verifiedpic.png';
 import './style.scss'
 
 const ShipmentDetails = (props) => {
@@ -26,7 +27,7 @@ const ShipmentDetails = (props) => {
            {props.menuShip== true ? <li  className="mb-1">{props.shipments.shipmentTxns[0].supplierLocation}</li> : null}
            {props.menuShip== true ? <li  className="mb-1">5678</li> : null}
            {props.menuShip== true ? <li  className="mb-1">{props.shipments.shipmentTxns[0].deliveryLocation}</li> : null}
-           {props.menuShip== true ? <li className="txn">{props.poCard.txnId}</li> : null}
+           {props.menuShip== true ? <a className="d-flex flex-row"><li className="txn">{props.poCard.txnId}</li><img src={Verifiedpic} className="mt-1" width="10" height="10"/></a> : null}
            </ul>
            <div>
            

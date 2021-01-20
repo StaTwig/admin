@@ -38,8 +38,8 @@ const Table = props => {
               <div className="rTableCell">{inventory.manufacturerName}</div>
               <div className="rTableCell">{inventory.batchNumber}</div>
              <div className="rTableCell">{inventory.quantity}</div>
-             <div className="rTableCell">{inventory.createdAt.substring(8,10)+"/"+inventory.createdAt.substring(5,7)+"/"+inventory.createdAt.substring(0,4)}</div>
-          <div className="rTableCell">{inventory.expiryDate.substring(5,7)+"/"+inventory.expiryDate.substring(0,4)}</div>
+             <div className="rTableCell">{inventory.createdAt.length>11?inventory.createdAt.substring(8,10)+"/"+inventory.createdAt.substring(5,7)+"/"+inventory.createdAt.substring(0,4):inventory.createdAt}</div>
+          <div className="rTableCell">{inventory.expiryDate.length>11?inventory.expiryDate.substring(5,7)+"/"+inventory.expiryDate.substring(0,4):inventory.expiryDate.split('/')[1]+"/"+inventory.expiryDate.split('/')[2]}</div>
           <div className="rTableCell"><button className="btn btn-outline-info fontSize200 expand" 
               onClick = {()=>{
                         props.history.push(

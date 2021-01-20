@@ -1,4 +1,5 @@
 import React from 'react';
+import Verifiedpic from '../../assets/icons/Verifiedpic.png';
 import './style.scss'
 
 const ShipmentSummary = (props) => {
@@ -26,7 +27,7 @@ const ShipmentSummary = (props) => {
             <li className="mb-1">lll</li>
             <li className="mb-1">{props.shipments.poTxns[0].vendor}</li>
             <li className="txn mb-1">{props.shipments.poTxns[0].vendorName}</li>
-            <li className="txn">{props.poCard.txnId}</li>
+          <a className="d-flex flex-row"><li className="txn">{props.poCard.txnId}</li><img src={Verifiedpic} className="mt-1" width="10" height="10"/></a>
             </ul>
             <div>
                 <span className="badge badge-pill badge-warning text-white">
