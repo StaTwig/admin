@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { setTracingShipments, setVisibleShipments } from '../../../actions/shipmentActions';
 import { useDispatch} from 'react-redux';
+import Verifiedpic from '../../../assets/icons/Verifiedpic.png';
 
 import './style.scss';
 
@@ -22,10 +23,10 @@ const Table = (props) => {
                    <div className="rTableCell">
                 <div className="combine-data">
               <img className="mr-2" src={profile.profile_picture} width="20" height="20"/>
-              <div className="column">
+              <div className="d-flex flex-column">
               <a className="text-info font-weight-bold" href="javascript:void(0);">{shipment.shipmentId}</a>
             
-             {shipment.visible ? <a className="text-info font-weight-bold txn" href="javascript:void(0);">{shipment.txnId}</a>:null}
+             {shipment.visible ? <a ><span className="text-info font-weight-bold txn" href="javascript:void(0);">{shipment.txnId}</span><img src={Verifiedpic} width="10" height="10" className="mb-2"/></a>:null}
               </div>
               </div>
             </div>

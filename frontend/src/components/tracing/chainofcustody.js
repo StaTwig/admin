@@ -12,7 +12,7 @@ const ChainOfCustody = (props) => {
         <div className="big-dot bg-info ml-4"></div>
         <div className="col">
           <div className="color mb-3">{txn.status}</div>
-          <div className="col panel  chain chainpanle ">
+          <div className="col panel  chain chainpanle series">
             <div className="row justify-content-between">
               <div className="col">
                 <div><strong>Shipment {txn.status}</strong></div>

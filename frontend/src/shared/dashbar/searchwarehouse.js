@@ -53,10 +53,10 @@ const SearchWareHouse = (props) => {
                         <li className="mb-1 text-secondary">Warehouse Name</li>
                     </ul>
                     <ul>
-                        <li className="mb-2">India</li>
-                        <li className="mb-2">democartic of serum</li>
-                        <li className="mb-2">123</li>
-                        <li className="mb-1">warehouse 123</li>
+                        <li className="mb-2">CN-731</li>
+                        <li className="mb-2">Democartic Republic of Congo</li>
+                        <li className="mb-2">WR-672</li>
+                        <li className="mb-1">Bharat Bio-tech Warehouse</li>
                     </ul>
             </div>
             </div>
@@ -69,10 +69,10 @@ const SearchWareHouse = (props) => {
                         <li className="mb-1 text-secondary">Warehouse Name</li>
                     </ul>
                     <ul>
-                        <li className="mb-2">India</li>
-                        <li className="mb-2">democartic of serum</li>
-                        <li className="mb-2">123</li>
-                        <li className="mb-1">warehouse 123</li>
+                        <li className="mb-2">CN-876</li>
+                        <li className="mb-2">Democartic Republic of Congo</li>
+                        <li className="mb-2">WR-851</li>
+                        <li className="mb-1">Bharat Bio-tech Warehouse</li>
                     </ul>
             </div>
             </div>
@@ -85,10 +85,10 @@ const SearchWareHouse = (props) => {
                         <li className="mb-1 text-secondary">Warehouse Name</li>
                     </ul>
                     <ul>
-                        <li className="mb-2">India</li>
-                        <li className="mb-2">democartic of serum</li>
-                        <li className="mb-2">123</li>
-                        <li className="mb-1">warehouse 123</li>
+                        <li className="mb-2">CN-385</li>
+                        <li className="mb-2">Kenya</li>
+                        <li className="mb-2">WR-652</li>
+                        <li className="mb-1">Bharat Bio-tech Warehouse</li>
                     </ul>
             </div>
             </div>
