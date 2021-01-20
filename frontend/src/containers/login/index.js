@@ -15,7 +15,7 @@ const LoginContainer = props => {
   const dispatch = useDispatch();
 
   const onLogin = useCallback(async () => {
-    const data = { email, password };
+    const data = { emailId:email, password };
     const result = await loginUser(data);
     if (result.status === 200) {
       // Set auth token auth

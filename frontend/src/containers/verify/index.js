@@ -10,7 +10,7 @@ const VerifyContainer = props => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const verifyOTP = useCallback(async () => {
-    const data = { email, otp };
+    const data = { emailId:email, otp };
     const result = await verifyOtp(data);
     if (result.status === 200) {
       setErrorMessage(`${result.data.message} redirecting to login`);
