@@ -173,39 +173,26 @@ exports.addMultipleProducts = [
 ];
 exports.addProduct = [
   auth,
-  body('product_external_id')
+  body('externalId')
     .isLength({ min: 6 })
     .trim()
     .withMessage('Product External ID must be greater than 6'),
-  body('product_name')
+  body('name')
     .isLength({ min: 1 })
     .trim()
     .withMessage('Product Name must be specified.'),
-  body('product_type')
+  body('type')
     .isLength({ min: 1 })
     .trim()
     .withMessage('Product Type must be specified.'),
-  body('product_short_name')
+  body('shortName')
     .isLength({ min: 1 })
     .trim()
     .withMessage('Product Short Name must be specified.'),
   body('manufacturer')
     .isLength({ min: 1 })
     .trim()
-    .withMessage('Product Name must be specified.'),  
-  // body('characteristic_set.*.temperature_max')
-  // .trim()
-  // .withMessage('Storage Conditions must be specified.'),
-  // body('characteristic_set.*.temperature_min')
-  // .trim().withMessage('Storage Conditions must be specified.'),
-  // body('characteristic_set.*.humidity_max')
-  // .trim().withMessage('Storage Conditions must be specified.'),
-  // body('characteristic_set.*.humidity_min')
-  // .trim().withMessage('Storage Conditions must be specified.'),
-  // body('characteristic_set.*.pressure_max')
-  // .trim().withMessage('Storage Conditions must be specified.'), 
-  // body('characteristic_set.*.pressure_min')
-  // .trim().withMessage('Storage Conditions must be specified.'),
+    .withMessage('Manufacturer must be specified.'),
   async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -241,29 +228,31 @@ exports.addProduct = [
                 if (!fs.existsSync(dir)) {
                   fs.mkdirSync(dir);
                 }
+                  if(req.file) {
+                    await moveFile(
+                      req.file.path,
+                      `${dir}/${req.body.productName}.png`,
+                    );
+                  }
 
-                await moveFile(
-                  req.file.path,
-                  `${dir}/${req.body.productName}.png`,
-                );
                 const product_unique = uniqid('prod-')
                 const product = new ProductModel({
-                  product_id:product_unique,
-                  product_external_id:req.body.product_external_id,
-                  product_name: req.body.product_name,
-                  product_short_name: req.body.product_short_name,
-                  product_type: req.body.product_type,
+                  id:product_unique,
+                  externalId:req.body.externalId,
+                  name: req.body.name,
+                  shortName: req.body.shortName,
+                  type: req.body.type,
                   manufacturer: req.body.manufacturer,
                   image: `http://${req.headers.host}/images/${
-                    req.body.productName
+                    req.body.name
                   }.png`,
-                  characteristic_set:{
-                    temperature_max: req.body.characteristic_set.temperature_max,
-                    temperature_min: req.body.characteristic_set.temperature_min,
-                    humidity_max: req.body.characteristic_set.humidity_max,
-                    humidity_min: req.body.characteristic_set.humidity_min,
-                    pressure_max: req.body.characteristic_set.pressure_max,
-                    pressure_min: req.body.characteristic_set.pressure_min
+                  characteristicSet:{
+                    temperature_max: req.body.characteristicSet.temperature_max,
+                    temperature_min: req.body.characteristicSet.temperature_min,
+                    humidity_max: req.body.characteristicSet.humidity_max,
+                    humidity_min: req.body.characteristicSet.humidity_min,
+                    pressure_max: req.body.characteristicSet.pressure_max,
+                    pressure_min: req.body.characteristicSet.pressure_min
                 }
                 });
                 await product.save();

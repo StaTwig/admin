@@ -22,6 +22,7 @@ router.get("/getExpiringInventory", InventoryController.getExpiringInventory);
 router.get("/getInventoryforProduct", InventoryController.getInventoryforProduct);
 router.get("/getInventoryDetailsForProduct", InventoryController.getInventoryDetailsForProduct);
 router.get("/getAllInventoryDetails", InventoryController.getAllInventoryDetails);
+router.get("/getInventoryDetails", InventoryController.getInventoryDetails);
 router.get("/getGroupedInventoryDetails", InventoryController.getGroupedInventoryDetails);
 router.get("/getInventoryDetailsByBatchNumber", InventoryController.getInventoryDetailsByBatchNumber);
 router.get("/getBatchDetailsByBatchNumber",InventoryController.getBatchDetailsByBatchNumber);

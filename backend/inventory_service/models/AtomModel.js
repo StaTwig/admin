@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var AtomSchema = new mongoose.Schema(
   {
-    id: { type: String, required: true },
+    id: { type: String, required: true, unique: true },
     label: {
       type: Object,
       required: false,
@@ -29,7 +29,7 @@ var AtomSchema = new mongoose.Schema(
       type: Array,
       required: false,
     },
-    batchNos: {
+    batchNumbers: {
       type: Array,
       required: false,
     },
@@ -41,18 +41,18 @@ var AtomSchema = new mongoose.Schema(
       type: Object,
       required: false,
       default: {
-        mfg_date: '2020-12-31T18:30:00.000Z',
-        exp_date: '2021-12-30T18:30:00.000Z',
+        mfgDate: '2020-12-31T18:30:00.000Z',
+        expDate: '2021-12-30T18:30:00.000Z',
       },
     },
     eolInfo: {
       type: Object,
       required: false,
       default: {
-        eol_id: 'IDN29402-23423-23423',
-        eol_date: '2021-03-31T18:30:00.000Z',
-        eol_by: 'user_id',
-        eol_user_info: 'TO_NEED_DEFINE',
+        eolId: 'IDN29402-23423-23423',
+        eolDate: '2021-03-31T18:30:00.000Z',
+        eolBy: 'user_id',
+        eolUserInfo: 'TO_NEED_DEFINE',
       },
     },
   },

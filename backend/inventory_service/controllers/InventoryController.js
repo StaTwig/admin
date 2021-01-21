@@ -10,6 +10,7 @@ const InventoryModel = require('../models/InventoryModel');
 const WarehouseModel = require('../models/WarehouseModel');
 const EmployeeModel = require('../models/EmployeeModel');
 const AtomModel = require('../models/AtomModel');
+const ProductModel = require('../models/ProductModel');
 const NotificationModel = require('../models/NotificationModel');
 
 const checkToken = require('../middlewares/middleware').checkToken;
@@ -710,18 +711,19 @@ exports.addProductsToInventory = [
             id: warehouse.inventoryId,
           });
 
-          utility.asyncForEach(products, async product => {
+          await utility.asyncForEach(products, async product => {
             inventory.inventoryDetails.push({
               productId: product.productId,
               quantity: product.quantity,
             });
-            await inventory.save();
+
             const serialNumbers = product.serialNumbersRange.split('-');
             const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
             const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
 
             const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
             let atoms = [];
+
             for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
               const atom = {
                 id: `${serialNumberText}${i}`,
@@ -730,15 +732,15 @@ exports.addProductsToInventory = [
                   labelType: '',
                 },
                 productId: product.productId,
-                inventoryIds: [inventory.inventoryId],
+                inventoryIds: [inventory.id],
                 lastInventoryId: '',
                 lastShipmentId: '',
                 poIds: [],
                 shipmentIds: [],
                 txIds: [],
-                batchNumbers: [inventory.batchNumber],
+                batchNumbers: [product.batchNumber],
                 atomStatus: 'Healthy',
-                attribute_set: {
+                attributeSet: {
                   mfgDate: product.mfgDate,
                   expDate: product.expDate,
                 },
@@ -751,7 +753,16 @@ exports.addProductsToInventory = [
               };
               atoms.push(atom);
             }
-            await AtomModel.insertMany(atoms);
+
+               AtomModel.insertMany(atoms).then(async (res, err) =>  {
+                if(err) {
+                 // return apiResponse.ErrorResponse(res, 'Duplicate SerialNumber');
+                  console.log('Duplicate SerialNumber');
+                }else {
+                  await inventory.save();
+                }
+              });
+
           });
 
           return apiResponse.successResponseWithData(res, 'Added products to the inventories')
@@ -945,6 +956,37 @@ exports.trackProduct = [
   },
 ];
 
+
+exports.getInventoryDetails = [
+  auth,
+  async(req, res) => {
+  try {
+    const employee = await EmployeeModel.findOne({ id: req.user.id });
+    const warehouse = await WarehouseModel.findOne({ id: employee.warehouseId })
+    if(warehouse) {
+      const inventory = await InventoryModel.findOne({ id: warehouse.inventoryId });
+      let inventoryDetails = []
+      await utility.asyncForEach(inventory.inventoryDetails, async inventoryDetail => {
+        const product = await ProductModel.findOne({ id: inventoryDetail.productId });
+        const atom = await AtomModel.findOne({ productId: inventoryDetail.productId });
+        const inventoryDetailClone = {...inventoryDetail};
+        inventoryDetailClone['productName'] = product.name;
+        inventoryDetailClone['manufacturer'] = product.manufacturer;
+        inventoryDetailClone['batchNumber'] = atom.batchNumbers[0];
+        inventoryDetailClone['expDate'] = atom.attributeSet.expDate;
+        inventoryDetails.push(inventoryDetailClone);
+      })
+
+      return apiResponse.successResponseWithData(res, 'Inventory Details', inventoryDetails);
+    }else {
+      return apiResponse.errorResponse(res, 'Cannot find warehouse for this employee')
+    }
+  }catch(err) {
+    return apiResponse.ErrorResponse(res, err)
+  }
+
+  }
+]
 exports.getGroupedInventoryDetails = [
   auth,
   async (req, res) => {
