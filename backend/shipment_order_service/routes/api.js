@@ -1,7 +1,7 @@
 var express = require("express");
-var shipmentOrderQueryRouter = require("./shipmentorder")
+var shipmentQueryRouter = require("./shipment")
 var app = express();
 
-app.use("/shipmentorder",shipmentOrderQueryRouter);
+app.use("/shipment",shipmentQueryRouter);
 
 module.exports = app;
