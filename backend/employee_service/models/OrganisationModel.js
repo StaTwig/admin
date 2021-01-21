@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var WarehouseSchema = new mongoose.Schema(
+var OrganisationSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
     postalAddress: {
