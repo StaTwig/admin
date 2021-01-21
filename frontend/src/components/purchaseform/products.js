@@ -33,15 +33,17 @@ const ProductsTable = props => {
         <div>
           <div className="rTableRow">
           <div className="rTableCell">
+             <div className="form-group">
                 <input
               type="text"
               className="form-control"
               name="shipmentId"
-              placeholder="Enter Material Id"
+              placeholder="Enter Product ID"
               onChange={onMaterialSelect}
               value={materialId}
             />
 
+</div>
             </div>
             <div className="rTableCell">
             <DropdownButton

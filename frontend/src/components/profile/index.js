@@ -155,7 +155,7 @@ class Profile extends React.Component {
               <div className="col-2">
                 <div className="userPic mb-4 mr-2">
                   <img
-                    src={profile_picture}
+                    src={this.props.user.photoId}
                     className="rounded rounded-circle"
                   />
                 </div>
@@ -185,6 +185,7 @@ class Profile extends React.Component {
                   <li> <label>Name </label></li>
                   <li><label>Role </label></li>
                   <li> <label>Organisation</label></li>
+                  <li> <label>Warehouse Id</label></li>
                   <li><label>Affiliated Organisation</label></li>
                   <li><label>Wallet Address</label></li>
                   <li><label>location</label></li>
@@ -211,6 +212,14 @@ class Profile extends React.Component {
                       />
                       </li>
                   <li>
+                      <input
+                        className="form-control"
+                        value={organisation}
+                        onChange={e =>
+                          this.setState({ organisation: e.target.value })
+                        }
+                      /></li>
+                          <li>
                       <input
                         className="form-control"
                         value={organisation}
@@ -276,23 +285,25 @@ class Profile extends React.Component {
                       <li>Name</li>
                       <li>Role</li>
                       <li>Organisation</li>
+                      <li>Warehouse ID</li>
                       <li>Affiliated Organisation</li>
                       <li>Wallet Address</li>
-                      <li>location</li>
-                      <li>Email</li>
+                      <li>Location</li>
+                      <li>Email ID</li>
                       <li>Phone</li>
                       <li>Account Status</li>
                     </ul>
                     <ul>
-                      {name?<li>{name}</li>:<li>N/A</li>}
-                      {role?<li>{role}</li>:<li>N/A</li>}
+                      {this.props.user.firstName?<li>{this.props.user.firstName+" "+this.props.user.lastName}</li>:<li>N/A</li>}
+                      {this.props.user.role?<li>{this.props.user.role}</li>:<li>N/A</li>}
+                      {organisation?<li>{organisation}</li>:<li>N/A</li>}
                       {organisation?<li>{organisation}</li>:<li>N/A</li>}
                       {affiliateOrganisation?<li>{affiliateOrganisation}</li>:<li>N/A</li>}
-                      {walletAddress?<li>{walletAddress}</li>:<li>N/A</li>}
+                      {this.props.user.walletAddress?<li>{this.props.user.walletAddress}</li>:<li>N/A</li>}
                       {location?<li>location</li>:<li>N/A</li>}
-                      {email?<li>{email}</li>:<li>N/A</li>}
-                      {phone?<li>{phone}</li>:<li>N/A</li>}
-                      {status && <li>Active</li>}
+                      {this.props.user.emailId?<li>{this.props.user.emailId}</li>:<li>N/A</li>}
+                      {this.props.user.phoneNumber?<li>{this.props.user.phoneNumber}</li>:<li>N/A</li>}
+                      {this.props.user.accountStatus?<li>{this.props.user.accountStatus}</li>:<li>Pending</li>}
                     </ul>
                   </div>
                 )}

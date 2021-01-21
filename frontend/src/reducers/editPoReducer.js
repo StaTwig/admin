@@ -6,16 +6,14 @@ import {
   const b ="Select Manufacturer"
 
   export const initialState = {
-    sendpoto:{name:"Select Send Po To"},
-      vendor:'',
-      orderID:'',
-      vendorName:'',
-      plant: '',
-      incoterms2: '',
-      destination:'',
-      material:'',
-      receiver: {name:"Select Receiver"},
-      products : [{ [`${a}-${b}`]: "" }]
+    ExternalPoId:'',
+    OrgId:'Select Organisation ID',
+    vendorName:'',
+    vendorId:'',
+    toDeliveryLocation:'',
+    deliveryId:'',
+    material:'',
+    products : [{ [`${a}-${b}`]: "" }]
 }
   
   export const editPoReducer = (state = initialState, action) => {
