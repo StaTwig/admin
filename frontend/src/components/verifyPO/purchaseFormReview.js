@@ -7,7 +7,7 @@ import Modal from '../../shared/modal';
 import PoPopUp from './poPopUp';
 import './style.scss';
 
-const tableHeader = ['Material Id','Product Name', 'Manufacturer', 'Quantity'];
+const tableHeader = ['Product ID','Product Name', 'Manufacturer', 'Quantity'];
 
 const PurchaseFormReview = props => {
   const dispatch = useDispatch();
@@ -53,81 +53,61 @@ const PurchaseFormReview = props => {
         <p className="date-alignment">Date: {todayDate}</p>
       <div className="d-flex justify-content-between">
         <div className="input-group">
-          <label className="reference">Send PO To</label>
+          <label className="reference">External PO ID</label>
           <input
             disabled
             type="text"
             className="form-control"
-            value={reviewPo.data.sendpoto.name}
+            value={reviewPo.data.ExternalPoId}
           />
         </div>
         <div className="input-group">
-          <label className="reference">Vendor Id</label>
+          <label className="reference">Organisation ID</label>
           <input
             disabled
             type="text"
             className="form-control"
-            value={reviewPo.data.vendor}
+            value={reviewPo.data.OrgId}
           />
         </div>
       </div>
       <div className="d-flex justify-content-between">
         <div className="input-group">
-          <label className="reference">Purchase Order Id</label>
-           <input
-            disabled
-            type="text"
-            className="form-control"
-            value={reviewPo.data.orderID}
-          />
-        </div>
-        <div className="input-group">
           <label className="reference">Vendor Name</label>
-          <input
+           <input
             disabled
             type="text"
             className="form-control"
             value={reviewPo.data.vendorName}
           />
         </div>
-      </div>
-      <div className="d-flex justify-content-between">
         <div className="input-group">
-          <label className="reference">Receiver</label>
+          <label className="reference">Vendor ID</label>
           <input
             disabled
             type="text"
             className="form-control"
-            value={reviewPo.data.receiver.name}
-          />
-        </div>
-        <div className="input-group">
-          <label className="reference">To Location Id</label>
-          <input
-            disabled
-            type="text"
-            className="form-control"
-            value={reviewPo.data.plant}
+            value={reviewPo.data.vendorId}
           />
         </div>
       </div>
       <div className="d-flex justify-content-between">
         <div className="input-group">
-          <label className="reference">Shipped From</label>
+          <label className="reference">To Delivery Location</label>
           <input
             disabled
             type="text"
             className="form-control"
-            value={reviewPo.data.incoterms2}
+            value={reviewPo.data.toDeliveryLocation}
           />
         </div>
         <div className="input-group">
-          <label className="reference">To Location</label>
+          <label className="reference">To Delivery ID</label>
           <input
             disabled
             type="text"
             className="form-control"
-            value={reviewPo.data.destination}
+            value={reviewPo.data.deliveryId}
           />
         </div>
       </div>

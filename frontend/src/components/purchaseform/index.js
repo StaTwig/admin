@@ -10,7 +10,7 @@ import DropdownButton from '../../shared/dropdownButtonGroup';
 import { createPO ,setReviewPos,getProducts,getManufacturers} from '../../actions/poActions';
 import { useDispatch,useSelector} from "react-redux";
 
-const tableHeader = ['Material ID', 'Product Name', 'Manufacturer', 'Quantity'];
+const tableHeader = ['Product ID', 'Product Name', 'Manufacturer', 'Quantity'];
 
 const PurchaseForm = props => {
   const editPo = useSelector(state => {
@@ -18,24 +18,20 @@ const PurchaseForm = props => {
   });
   const { user, users } = props;
 
+  const orgNames = ['St-1','St-2','St-3']
   const userNames = users.map(usr => usr.name);
-  const [deliveryTo, setDeliveryTo] = useState(editPo.receiver.name);
-  const [sendPOTo, setSendPOTo] = useState(editPo.sendpoto.name);
-  const [vendorId, setVendorId] = useState(editPo.vendor);
-  const [unicefPo, setUnicefPo] = useState(editPo.orderID);
+  const [ExternalPoId, setExternalPoId] = useState(editPo.ExternalPoId);
+  const [OrgId, setOrgId] = useState(editPo.OrgId);
+  const [vendorId, setVendorId] = useState(editPo.vendorId);
   const [vendorName, setVendorName] = useState(editPo.vendorName);
-  const [Receiver, setReceiver] = useState(editPo.receiver.name);
-  const [locationId, setLocationId] = useState(editPo.plant);
-  const [products, setProducts] = useState([]);
-  const [shippedFrom, setShippedFrom] = useState(editPo.incoterms2);
-  const [toLocation, setToLocation] = useState(editPo.destination);
-  const [manufacturers, setManufacturers] = useState([]);
+  const [toDeliveryLocation, setToDeliveryLocation] = useState(editPo.toDeliveryLocation);
+  const [products, setProducts] = useState(['12']);
+  const [deliveryId, setDeliveryId] = useState(editPo.deliveryId);
+  const [manufacturers, setManufacturers] = useState(['man']);
   const [product, setProduct] = useState(Object.keys(editPo.products[0])[0].split('-')[0]);
   const [manufacturer, setManufacturer] = useState(Object.keys(editPo.products[0])[0].split('-')[1]);
   const [quantity, setQuantity] = useState(editPo.products[0][`${product}-${manufacturer}`]);
   const  [materialId, setMaterialId] = useState(editPo.material);
-  const [destination, setDestination] = useState(editPo.destination);
-  const [client, setClient] = useState(editPo.client);
   const [message, setMessage] = useState('');
   const month = new Date().getMonth()+1;
   const todayDate = new Date().getDate() + '/' + month + '/'  +new Date().getFullYear();
@@ -60,7 +56,7 @@ const PurchaseForm = props => {
     fetchData();
   },[]);
 
-  const poFields= ['sendPOTo','vendorId','unicefPo','vendorName','Receiver','locationId','shippedFrom','toLocation',
+  const poFields= ['ExternalPoId','OrgId','vendorName','vendorId','toDeliveryLocation','deliveryId',
                       'materialId','product','manufacturer','quantity'];
 
     const checkValidationErrors = (validations) => {
@@ -71,10 +67,9 @@ const PurchaseForm = props => {
         if (
           validationVariable.length < 1 ||
           validationVariable == 'Select Product' ||
-          validationVariable == 'Select Receiver'||
+          validationVariable == 'Select OrgId'||
           validationVariable == 'Select Manufacturer' ||
-          validationVariable == 'Select Send Po To'||
-          validationVariable == 'Select Material Id'
+          validationVariable == 'Select Product ID'
       ) {
           setPoError(validations[i] +" "+"must be Specified");
           error = true;
@@ -89,23 +84,19 @@ const PurchaseForm = props => {
     if (checkValidationErrors(poFields)) {
       return;
     }
-    const deliveryToObject = users.find(usr => usr.name === Receiver);
-    const sendPOToObject = users.find(usr => usr.name === sendPOTo);
+   
     const productManufacturer = { [`${product}-${manufacturer}`]: quantity };
+    
     const data = {
       data: {
-        receiver: deliveryToObject,
-        sendpoto: sendPOToObject, 
-        supplier: { name: user.name, email: user.email },
+        ExternalPoId,
+        OrgId,
         vendorName,
-        vendor:  vendorId,
-        orderID: unicefPo,
-        clientId:vendorId,
-        plant: locationId,
-        incoterms2: shippedFrom,
-        destination: toLocation,
-        material: materialId,
-        products: [productManufacturer],
+        vendorId,
+        toDeliveryLocation,
+        deliveryId,
+        materialId,
+        products: [],
         date:todayDate,
       },
     };
@@ -118,49 +109,22 @@ const PurchaseForm = props => {
     console.log('new po data', data);
     }
 
-  const onReview = async () => {
-   // const productId = `PO${Math.floor(Math.random() * 90000) + 10000}`;
-    const productId = 'PO1805';
-    const deliveryToObject = users.find(usr => usr.name === vendorName);
-    const sendPOToObject = users.find(usr => usr.name === sendPOTo);
-    const productManufacturer = { [`${product}-${manufacturer}`]: quantity };
-    const data = {
-      data: {
-        orderID: productId,
-        receiver: deliveryToObject,
-        sendpoto: sendPOToObject,
-        supplier: { name: user.name, email: user.email },
-        client,
-        destination,
-        products: [productManufacturer],
-        date:todayDate,
-      },
-    };
-
-    console.log(data);
-    const result = await createPO(data);
-    if (result.status === 200) {
-      setMessage('Success !');
-    }else {
-      setMessage('Unable to process , Please Check the Data entered');
-    }
-  };
-
   return (
     <div className="purchaseform">
         <p className="date-alignment">Date: {todayDate}</p>
       <div className="d-flex justify-content-between">
       <div className="input-group">
-          <label className="reference">Send PO To</label>
-          <div className="form-control">
-          <DropdownButton
-           name={sendPOTo}
-            onSelect={item => setSendPOTo(item)}
-            groups={userNames}
-            className="text"
-          />
+          <label className="reference">External PO ID</label>
+            <input
+              type="text"
+              className="form-control"
+              name="shipmentId"
+              placeholder="Enter External PO ID"
+              onChange={e => setExternalPoId(e.target.value)}
+              value={ExternalPoId}
+            />
           </div>
-        </div>
+     
         {/* <div className="input-group">
           <label className="reference">Send PO To</label>
           <input
@@ -172,31 +136,20 @@ const PurchaseForm = props => {
           />
          
         </div> */}
-         <div className="input-group">
-          <label className="reference">Vendor Id</label>
-            <input
-              type="text"
-              className="form-control"
-              name="shipmentId"
-              placeholder="Enter Vendor Id"
-              onChange={e => setVendorId(e.target.value)}
-              value={vendorId}
-            />
-          </div>
-      </div>
-      <div className="d-flex justify-content-between">
         <div className="input-group">
-      <label className="reference">Purchase Order ID</label>
-          <input
-              type="text"
-              className="form-control"
-              name="shipmentId"
-              placeholder="Enter Purchase Id"
-              onChange={e => setUnicefPo(e.target.value)}
-              value={unicefPo}
-            />
+          <label className="reference">Organisation ID</label>
+          <div className="form-control">
+           <DropdownButton
+            name={OrgId}
+            onSelect={item => setOrgId(item)}
+            groups={orgNames}
+            className="text"
+          />
+          </div>
         </div>
-       <div className="input-group">
+       </div>
+      <div className="d-flex justify-content-between">
+      <div className="input-group">
           <label className="reference">Vendor Name</label>
            <input
               type="text"
@@ -207,52 +160,40 @@ const PurchaseForm = props => {
               value={vendorName}
             />
         </div>
+        <div className="input-group">
+          <label className="reference">Vendor ID</label>
+            <input
+              type="text"
+              className="form-control"
+              name="shipmentId"
+              placeholder="Enter Vendor ID"
+              onChange={e => setVendorId(e.target.value)}
+              value={vendorId}
+            />
+          </div>
       </div>
       <div className="d-flex justify-content-between">
       <div className="input-group">
-          <label className="reference">Receiver</label>
-          <div className="form-control">
-           <DropdownButton
-            name={Receiver}
-            onSelect={item => setReceiver(item)}
-            groups={userNames}
-            className="text"
-          />
-          </div>
-        </div>
-        <div className="input-group">
-          <label className="reference">To Location ID</label>
+          <label className="reference">To Delivery Location</label>
            <input
               type="text"
               className="form-control"
               name="shipmentId"
-              placeholder="Enter Location Id"
-              onChange={e => setLocationId(e.target.value)}
-              value={locationId}
+              placeholder="Enter To Delivery Location"
+              onChange={e => setToDeliveryLocation(e.target.value)}
+              value={toDeliveryLocation}
             />
         </div>
-      </div>
-      <div className="d-flex justify-content-between">
+     
         <div className="input-group">
-          <label className="reference">Shipped From</label>
-          <input
-              type="text"
-              className="form-control"
-              name="shipmentId"
-              placeholder="Enter Shipped From"
-              onChange={e => setShippedFrom(e.target.value)}
-              value={shippedFrom}
-            />
-        </div>
-        <div className="input-group">
-          <label className="reference">To Location</label>
+          <label className="reference">To Delivery ID</label>
            <input
               type="text"
               className="form-control"
               name="shipmentId"
-              placeholder="Enter To Location"
-              onChange={e => setToLocation(e.target.value)}
-              value={toLocation}
+              placeholder="Enter To Delivery ID"
+              onChange={e => setDeliveryId(e.target.value)}
+              value={deliveryId}
             />
         </div>
       </div>
@@ -269,9 +210,9 @@ const PurchaseForm = props => {
         quantity={quantity}
         onQuantityChange={e => setQuantity(e.target.value)}
       />
-      {/* <button className="btn btn-white shadow-radius font-bold">
+    <button className="btn btn-white shadow-radius font-bold">
         +<span> Add Another Product</span>
-      </button>*/}
+      </button>
  
     <div className="row float-right">
       <button className="btn-primary btn mr-4" onClick = {()=>setMenu(!menu)}>
@@ -283,7 +224,7 @@ const PurchaseForm = props => {
           </button>
           {
           menu ? 
-          <div class="menu">
+          <div class="menu5">
          <button className=" btn btn-outline-primary" onClick={()=>setOpenExcel(true)}> Excel</button>
        </div> : null
        }
@@ -314,3 +255,31 @@ const PurchaseForm = props => {
 };
 
 export default PurchaseForm;
+
+/*const onReview = async () => {
+   // const productId = `PO${Math.floor(Math.random() * 90000) + 10000}`;
+    const productId = 'PO1805';
+    const deliveryToObject = users.find(usr => usr.name === vendorName);
+    const sendPOToObject = users.find(usr => usr.name === sendPOTo);
+    const productManufacturer = { [`${product}-${manufacturer}`]: quantity };
+    const data = {
+      data: {
+        orderID: productId,
+        receiver: deliveryToObject,
+        sendpoto: sendPOToObject,
+        supplier: { name: user.name, email: user.email },
+        client,
+        destination,
+        products: [productManufacturer],
+        date:todayDate,
+      },
+    };
+
+    console.log(data);
+    const result = await createPO(data);
+    if (result.status === 200) {
+      setMessage('Success !');
+    }else {
+      setMessage('Unable to process , Please Check the Data entered');
+    }
+  }; */
