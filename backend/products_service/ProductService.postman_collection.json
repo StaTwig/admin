@@ -1,0 +1,131 @@
+{
+	"info": {
+		"_postman_id": "d16181de-ef98-4033-90ba-be1fb0e8c2bf",
+		"name": "ProductService",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:3010/productmanagement/api/products/getProducts",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3010/productmanagement/api/organization/getOrganizations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"productmanagement",
+						"api",
+						"organization",
+						"getOrganizations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3010/productmanagement/api/products/addProduct",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"product_external_id\": \"ex12345\",\n    \"product_name\": \"Samsung Galaxy S22 FE\",\n    \"product_short_name\": \"S22 FE\",\n    \"product_type\": \"Mobile Phone\",\n    \"manufacturer\": \"organization_id 1\",\n    \"characteristic_set\":\n      {\n        \"temperature_max\": 97.8,\n        \"temperature_min\": -4.5,\n        \"humidity_max\": 56.3,\n        \"humidity_min\": 23.1,\n        \"pressure_max\": 2,\n        \"pressure_min\": 1\n      }\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3010/productmanagement/api/products/addProduct",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"productmanagement",
+						"api",
+						"products",
+						"addProduct"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3010/productmanagement/api/organization",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3010/productmanagement/api/organization/getOrganizations",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"productmanagement",
+						"api",
+						"organization",
+						"getOrganizations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3010/productmanagement/api/organization/getWarehouses/organx12345",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3010/productmanagement/api/organization/getWarehouses/organx12345",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"productmanagement",
+						"api",
+						"organization",
+						"getWarehouses",
+						"organx12345"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
