@@ -6,7 +6,7 @@ const auth = require('../middlewares/jwt');
 exports.getOrganizations= [
     auth,
     async(req,res)=>{
-        await OrganizationModel.find({}).then((list)=>{
+        await OrganizationModel.find({}).select('organization_name organization_id').then((list)=>{
             return res.status(200).json({Organizations:list})
         }).catch((err)=>{ res.status(500).json({error:err})})
     }
