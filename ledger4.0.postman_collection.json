@@ -49,6 +49,44 @@
 						"description": "GetProducts"
 					},
 					"response": []
+				},
+				{
+					"name": "http://localhost:3010/productmanagement/api/products/addProduct",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC00bXVrazYwMDE1NSIsImZpcnN0TmFtZSI6IlRocmluZXRocmEiLCJlbWFpbElkIjoidGhyaW5ldGhyYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJwb3dlclVzZXIiLCJpYXQiOjE2MTEyMzk0NDQsImV4cCI6MTYxMTI0NjY0NH0.l9NcNhG-AAu62YOPQC3SFBqk3hUBr7e4V7aYIXLkrXw",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"externalId\": \"prod123456\",\n\t\"name\": \"OPV\",\n\t\"shortName\": \"OPV\",\n\t\"type\": \"Vaccine\",\n\t\"manufacturer\": \"Bharath Biotech\",\n    \"characteristicSet\" : {\n    \t \"temperature_max\": 97.8,\n          \"temperature_min\": -4.5,\n          \"humidity_max\": 56.3,\n         \"humidity_min\": 23.1,\n          \"pressure_max\": 2,\n          \"pressure_min\": 1\n    }\n\t\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3010/productmanagement/api/products/addProduct",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3010",
+							"path": [
+								"productmanagement",
+								"api",
+								"products",
+								"addProduct"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -185,14 +223,14 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMDQ4ZmU0ZGNiODQ2ODA5OTk5ZmZiMSIsImZpcnN0TmFtZSI6IlRocmluZXRocmEiLCJlbWFpbElkIjoidGhyaW5ldGhyYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJQTEVBU0UgREVGSU5FIFJPTEVTIiwiaWF0IjoxNjEwOTE2NTAwLCJleHAiOjE2MTA5MjM3MDB9.7dFVW_hDFbtr-Q65jzgqPJRIjhbrS_3kNTrqVRMBGXw",
-								"type": "text"
+								"type": "text",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMDQ4ZmU0ZGNiODQ2ODA5OTk5ZmZiMSIsImZpcnN0TmFtZSI6IlRocmluZXRocmEiLCJlbWFpbElkIjoidGhyaW5ldGhyYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJQTEVBU0UgREVGSU5FIFJPTEVTIiwiaWF0IjoxNjEwOTE2NTAwLCJleHAiOjE2MTA5MjM3MDB9.7dFVW_hDFbtr-Q65jzgqPJRIjhbrS_3kNTrqVRMBGXw"
 							},
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"value": "application/json"
 							}
 						],
 						"body": {
@@ -216,6 +254,44 @@
 						"description": "UserInfo"
 					},
 					"response": []
+				},
+				{
+					"name": "http://localhost:3001/usermanagement/api/auth/updateProfile",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC00bXVrazYwMDE1NSIsImZpcnN0TmFtZSI6IlRocmluZXRocmEiLCJlbWFpbElkIjoidGhyaW5ldGhyYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJwb3dlclVzZXIiLCJpYXQiOjE2MTEzMTI4MzksImV4cCI6MTYxMTMyMDAzOX0.PGYZUAn8jGTii2N9XYzA4YZeUdqDfGuHIe1EZua5Ccc",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"firstName\": \"Thri\",\n\t\"lastName\": \"Sidd\",\n\t\"phoneNumber\": \"9966962396\",\n\t\"organisationId\": \"org1234\",\n\t\"warehouseId\": \"war1234\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:3001/usermanagement/api/auth/updateProfile",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"usermanagement",
+								"api",
+								"auth",
+								"updateProfile"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -235,13 +311,13 @@
 							},
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC00bXVrazYwMDE1NSIsImZpcnN0TmFtZSI6IlRocmluZXRocmEiLCJlbWFpbElkIjoidGhyaW5ldGhyYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJwb3dlclVzZXIiLCJpYXQiOjE2MTExODU1MTAsImV4cCI6MTYxMTE5MjcxMH0.GlqXTVuR2C6n3gwt4csiq-8LsI59JRWbV_8vPjNCOzQ",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC00bXVrazYwMDE1NSIsImZpcnN0TmFtZSI6IlRocmluZXRocmEiLCJlbWFpbElkIjoidGhyaW5ldGhyYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJwb3dlclVzZXIiLCJpYXQiOjE2MTEyMzk0NDQsImV4cCI6MTYxMTI0NjY0NH0.l9NcNhG-AAu62YOPQC3SFBqk3hUBr7e4V7aYIXLkrXw",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"products\": [\n\t{ \n\t  \"productId\": \"prod-18v6alakkjzss2wl\",\n\t  \"batchNumber\": \"BB1234\",\n\t  \"mfgDate\": \"2020-12-31T18:30:00.000Z\",\n\t  \"expDate\": \"2021-12-30T18:30:00.000Z\",\n\t  \"quantity\": 1000,\n\t  \"serialNumbersRange\": \"SL1-SL1000\"\n\t}\n\n]}"
+							"raw": "{\n\t\"products\": [\n\t{ \n\t  \"productId\": \"prod-9bhkk6yiutx\",\n\t  \"batchNumber\": \"BB1234\",\n\t  \"mfgDate\": \"2020-12-31T18:30:00.000Z\",\n\t  \"expDate\": \"2021-12-30T18:30:00.000Z\",\n\t  \"quantity\": 1000,\n\t  \"serialNumbersRange\": \"SL1-SL1000\"\n\t}\n\n]}"
 						},
 						"url": {
 							"raw": "http://localhost:3007/inventorymanagement/api/inventory/addProductsToInventory",
@@ -255,6 +331,76 @@
 								"api",
 								"inventory",
 								"addProductsToInventory"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:3001/usermanagement/api/auth/addWarehouse",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYwMDhhZTlmZTdjMzE0MTc3NjU3MmQyMiIsImZpcnN0TmFtZSI6IlRocmluZXRocmEiLCJlbWFpbElkIjoidGhyaW5ldGhyYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJQTEVBU0UgREVGSU5FIFJPTEVTIiwiaWF0IjoxNjExMTgxODM4LCJleHAiOjE2MTExODkwMzh9.UUmugYCKsbvZGtc7V96akLaAHqHgy62bk9z21z-jd3c",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": \"war12345\",\n    \"organisationId\": \"org1234\",\n    \"postalAddress\": \"JNIBF, Gachibowli, Hyderabad, Telanagana, India\",\n    \"region\": {\n      \"id\": \"reg123\",\n      \"name\": \"Earth Prime\"\n    },\n    \"country\": {\n      \"id\": \"001\",\n      \"name\": \"India\"\n    },\n    \"location\": {\n      \"longitude\": 12.12323453534,\n      \"latitude\": 13.123435345435,\n      \"geohash\": \"1231nejf923453\"\n    },\n    \"supervisors\": [\n      \"user_id 1\",\n      \"user_id 2\"\n    ],\n    \"employeess\": [\n      \"em12345\",\n      \"em12346\",\n      \"em12347\"\n    ]\n   \n  }"
+						},
+						"url": {
+							"raw": "http://localhost:3001/usermanagement/api/auth/addWarehouse",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3001",
+							"path": [
+								"usermanagement",
+								"api",
+								"auth",
+								"addWarehouse"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:3007/inventorymanagement/api/inventory/getInventoryDetails",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC00bXVrazYwMDE1NSIsImZpcnN0TmFtZSI6IlRocmluZXRocmEiLCJlbWFpbElkIjoidGhyaW5ldGhyYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJwb3dlclVzZXIiLCJpYXQiOjE2MTEyMzk0NDQsImV4cCI6MTYxMTI0NjY0NH0.l9NcNhG-AAu62YOPQC3SFBqk3hUBr7e4V7aYIXLkrXw",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3007/inventorymanagement/api/inventory/getInventoryDetails",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3007",
+							"path": [
+								"inventorymanagement",
+								"api",
+								"inventory",
+								"getInventoryDetails"
 							]
 						}
 					},

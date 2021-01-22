@@ -115,7 +115,7 @@ exports.register = [
             emailId: req.body.emailId,
             password: hash,
             confirmOTP: otp,
-            id: uniqid('emp-')
+            id: uniqid('emp-'),
           });
           // Html email body
           let html = EmailContent({
@@ -776,48 +776,26 @@ exports.userInfo = [
 
 exports.updateProfile = [
   auth,
-  (req, res) => {
+  async (req, res) => {
     try {
-      EmployeeModel.findOne({ emailId: req.user.emailId }).then(user => {
-        if (user) {
-          logger.log(
-            'info',
-            '<<<<< UserService < AuthController < updateProfile : user exist',
-          );
-          const {
-            firstName,
-            lastName,
-            emailId,
-            phoneNumber,
-            walletAddress,
-            affiliatedOrganisations,
-            organisationId,
-          } = req.body;
-          user.firstName = firstName;
-          user.lastName = lastName;
-          user.organisationId = organisationId;
-          user.affiliatedOrganisations = affiliatedOrganisations;
-          user.walletAddress = walletAddress;
-          user.save(function(err) {
-            if (err) {
-              logger.log(
-                'error',
-                '<<<<< UserService < AuthController < updateProfile : error while updating user profile',
-              );
-              return apiResponse.ErrorResponse(res, err);
-            } else {
-              logger.log(
-                'info',
-                '<<<<< UserService < AuthController < updateProfile : updating user',
-              );
-              return apiResponse.successResponse(
-                res,
-                user.firstName + ' user Updated',
-              );
-            }
-          });
-        }
+      const employee = await EmployeeModel.findOne({
+        emailId: req.user.emailId,
       });
+      const {
+        firstName,
+        lastName,
+        phoneNumber,
+        organisationId,
+        warehouseId
+      } = req.body;
+      employee.firstName = firstName;
+      employee.lastName = lastName;
+      employee.phoneNumber = phoneNumber;
+      employee.organisationId = organisationId;
+      employee.warehouseId = warehouseId;
+
+      await employee.save();
+      return apiResponse.successResponse(res, 'Employee Profile update Success');
     } catch (err) {
       logger.log(
         'error',
@@ -1075,15 +1053,35 @@ exports.assignProductConsumer = [
 
 exports.addWarehouse = [
   auth,
-  async(req, res) => {
-  const inventoryResult = await new InventoryModel({ id: uniqid('inv-')});
-   await inventoryResult.save();
-   const { organisationId, postalAddress, region, country, location, supervisors, employees } = req.body;
-   const warehouseId = uniqid('war-');
+  async (req, res) => {
+    const inventoryResult = await new InventoryModel({ id: uniqid('inv-') });
+    await inventoryResult.save();
+    const {
+      organisationId,
+      postalAddress,
+      region,
+      country,
+      location,
+      supervisors,
+      employees,
+    } = req.body;
+    const warehouseId = uniqid('war-');
     const warehouse = new WarehouseModel({
-      id: warehouseId, organisationId, postalAddress, region, country, location, supervisors, employees, inventoryId: inventoryResult.id
+      id: warehouseId,
+      organisationId,
+      postalAddress,
+      region,
+      country,
+      location,
+      supervisors,
+      employees,
+      inventoryId: inventoryResult.id,
     });
     await warehouse.save();
-    return apiResponse.successResponseWithData(res, 'Warehouse added success', warehouse);
-  }
-]
+    return apiResponse.successResponseWithData(
+      res,
+      'Warehouse added success',
+      warehouse,
+    );
+  },
+];
