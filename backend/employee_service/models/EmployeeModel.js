@@ -4,7 +4,6 @@ var EmployeeSchema = new mongoose.Schema({
   walletAddress: {
     type: String,
     required: false,
-    unique: true,
     default: 'wallet12345address',
   },
   accountStatus: {

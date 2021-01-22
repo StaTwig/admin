@@ -1054,7 +1054,9 @@ exports.assignProductConsumer = [
 exports.addWarehouse = [
   auth,
   async (req, res) => {
-    const inventoryResult = await new InventoryModel({ id: uniqid('inv-') });
+  try {
+    const inventoryId = uniqid('inv-');
+    const inventoryResult = await new InventoryModel({ id: inventoryId });
     await inventoryResult.save();
     const {
       organisationId,
@@ -1083,5 +1085,10 @@ exports.addWarehouse = [
       'Warehouse added success',
       warehouse,
     );
+  }catch(err) {
+    return apiResponse.ErrorResponse(res, err);
+  }
+
+
   },
 ];
