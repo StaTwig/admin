@@ -24,12 +24,21 @@ exports.createShipment = [
       checkToken(req, res, async result => {
         if (true) {
               const body= req.body.shipments;
-              const shipment = new Record({shipments:body});
-              shipment.save().then((result)=>{
-               return res.status(200).json({ response: "Success - Shipment order created", shipments:result });
-              }).catch((err)=>{
-                return res.status(500).json({error:err})
-              })
+              const poId = req.body.poId;
+              const POFound = await RecordModel.findOne({ id: poId });
+              if(!POFound){
+                logger.log(
+                  'info',
+                  '<<<<< ShippingService < Controller < createSO : PO not found in collection',
+                );  
+              } else{
+                const shipment = new Record({shipments:body});
+                shipment.save().then((result)=>{
+                 return res.status(200).json({ response: "Success - Shipment order created", shipments:result });
+                }).catch((err)=>{
+                  return res.status(500).json({error:err})
+                })  
+              }
     }
      else {
           logger.log(
@@ -56,12 +65,22 @@ auth,
       const { authorization } = req.headers;
       checkToken(req, res, async result => {
         if (result.success) {
+          const poId = req.body.poId;
+          const POFound = await RecordModel.findOne({ id: poId });
+          if(!POFound){
+            logger.log(
+              'info',
+              '<<<<< ShippingService < Controller < createSO : PO not found in collection',
+            );  
+          } else{
               Record.find({"shipments.shipment_id":req.params.id}).select('shipments')
               .then((shipments)=>{
                 return res.json({response:shipments})
               }).catch((err)=>{
                 return res.json({error:err})
               })
+          }
+
         } else {
           logger.log(
             'warn',
@@ -87,12 +106,21 @@ exports.Shipment= [
         const { authorization } = req.headers;
         checkToken(req, res, async result => {
           if (result.success) {
-                Record.find({_id:req.params.id}).select('shipments')
-                .then((shipments)=>{
-                return res.json({response:shipments})
-                }).catch((err)=>{
-            return res.json({error:err})
-  })
+            const poId = req.body.poId;
+            const POFound = await RecordModel.findOne({ id: poId });
+            if(!POFound){
+              logger.log(
+                'info',
+                '<<<<< ShippingService < Controller < createSO : PO not found in collection',
+              );  
+            } else{
+              Record.find({_id:req.params.id}).select('shipments')
+              .then((shipments)=>{
+              return res.json({response:shipments})
+              }).catch((err)=>{
+              return res.json({error:err})
+              })
+            }
           } else {
             logger.log(
               'warn',
@@ -114,16 +142,25 @@ exports.Shipment= [
 
 exports.updateStatus= [
                 async (req, res) => {
-                  Record.findOne({"shipments.shipment_id":req.params.id}).then((old)=>{
-                    old.shipments.shipment_status=req.body.update;
-                    console.log(old);
-                    // console.log(old.shipment_status)
-                    old.save().then((updated)=>{
-                      return res.json({ response: updated});
-              }).catch((err)=>{ return res.json({ error: err, message:"ERROR OCC"})})
-               return res.json({ response: " Not updated "});
-              }).catch((err)=>{ return res.json({ error: err})})
-                  }]
+                  const poId = req.body.poId;
+                  const POFound = await RecordModel.findOne({ id: poId });
+                  if(!POFound){
+                    logger.log(
+                      'info',
+                      '<<<<< ShippingService < Controller < createSO : PO not found in collection',
+                    );  
+                  } else{
+                    Record.findOne({"shipments.shipment_id":req.params.id}).then((old)=>{
+                      old.shipments.shipment_status=req.body.update;
+                      console.log(old);
+                      // console.log(old.shipment_status)
+                      old.save().then((updated)=>{
+                        return res.json({ response: updated});
+                }).catch((err)=>{ return res.json({ error: err, message:"ERROR OCC"})})
+                 return res.json({ response: " Not updated "});
+                }).catch((err)=>{ return res.json({ error: err})})  
+            }
+          }]
 
 exports.fetchAllShipments= [
   auth,
@@ -132,11 +169,20 @@ exports.fetchAllShipments= [
         const { authorization } = req.headers;
         checkToken(req, res, async result => {
           if (result.success) {
-                Record.find().select('shipments').then((result)=>{
-                  return res
-                  .status(200)
-                  .json({AllShipments: result});
-                }).catch((err)=> {return res.json({error:err})})
+            const poId = req.body.poId;
+            const POFound = await RecordModel.findOne({ id: poId });
+            if(!POFound){
+              logger.log(
+                'info',
+                '<<<<< ShippingService < Controller < createSO : PO not found in collection',
+              );  
+            } else{
+              Record.find().select('shipments').then((result)=>{
+                return res
+                .status(200)
+                .json({AllShipments: result});
+              }).catch((err)=> {return res.json({error:err})})
+            }
           } else {
             logger.log(
               'warn',
@@ -162,11 +208,20 @@ exports.fetch_po_Shipments= [
         const { authorization } = req.headers;
         checkToken(req, res, async result => {
           if (result.success) {
-            Record.findOne({ po_id: req.params.po_id}).then((shipments)=>{
-              return res.status(200).json({ response: shipments})
-            }).catch((err)=>{
-              return res.status(500).json({error:err})
-            })
+            const poId = req.body.poId;
+            const POFound = await RecordModel.findOne({ id: poId });
+            if(!POFound){
+              logger.log(
+                'info',
+                '<<<<< ShippingService < Controller < createSO : PO not found in collection',
+              );  
+            } else{
+              Record.findOne({ po_id: req.params.po_id}).then((shipments)=>{
+                return res.status(200).json({ response: shipments})
+              }).catch((err)=>{
+                return res.status(500).json({error:err})
+              })  
+            }
           } else {
             logger.log(
               'warn',

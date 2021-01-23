@@ -91,6 +91,7 @@ exports.createShippingOrder = [
             checkPermissions(permission_request, async permissionResult => {
               if (permissionResult.success) {
                 const { data } = req.body;
+                const poId = data.id;
                 const orderID = data.orderID || 'SO' + Math.floor(1000 + Math.random() * 9000);
               //   const { shipmentId, batchNumber, poNumber } = data;
                 const userData = {
@@ -106,31 +107,39 @@ exports.createShippingOrder = [
                 );
                 console.log("so_response", response);
                 const txnIdSO = response.data.transactionId;
-                const SOFound = await RecordModel.findOne({ shippingOrders: { orderId : orderID } });
-                console.log("SOFound", SOFound);
-                
-                if(!SOFound) {
+                const POFound = await RecordModel.findOne({ id: poId });
+                if(!POFound){
                   logger.log(
-                      'info',
-                      '<<<<< ShippingService < Controller < createSO : PO found in collection',
-                    );
-                  const newSO = {
-                      orderId : orderID,
-                      createdBy : req.user.address,
-                      status : 'Created',
-                      sotransactionIds: txnIdSO,
-                      ...data
-                  };
-                  console.log("newSO", newSO)
-                  wrapper.insertOneRecord(RecordModel, { shippingOrders: newSO }, function(error,response){
-                   })
+                    'info',
+                    '<<<<< ShippingService < Controller < createSO : PO not found in collection',
+                  );
                 } else {
+                  const SOFound = await RecordModel.findOne({ shippingOrders: { orderId : orderID } });
+                  console.log("SOFound", SOFound);
+                  
+                  if(!SOFound) {
                     logger.log(
-                      'info',
-                      '<<<<< ShippingService < Controller < createSO : updating SO in SO model',
-                    );
-                    const txnIds = [...SOFound.sotransactionIds, txnIdSO];
-                    wrapper.updateRecord(RecordModel, { shippingOrders: { orderId: orderID } }, { sotransactionIds: txnIds })        
+                        'info',
+                        '<<<<< ShippingService < Controller < createSO : SO not found in collection',
+                      );
+                    const newSO = {
+                        orderId : orderID,
+                        createdBy : req.user.address,
+                        status : 'Created',
+                        sotransactionIds: txnIdSO,
+                        ...data
+                    };
+                    console.log("newSO", newSO)
+                    wrapper.insertOneRecord(RecordModel, { shippingOrders: newSO }, function(error,response){
+                     })
+                  } else {
+                      logger.log(
+                        'info',
+                        '<<<<< ShippingService < Controller < createSO : updating SO in SO model',
+                      );
+                      const txnIds = [...SOFound.sotransactionIds, txnIdSO];
+                      wrapper.updateRecord(RecordModel, { shippingOrders: { orderId: orderID } }, { sotransactionIds: txnIds })        
+                  }  
                 }
                 logger.log(
                     'info',
@@ -181,22 +190,30 @@ exports.assignShippingOrder = [
               if (permissionResult.success) {
                 try {
                   const { address } = req.user;
-                  const { orderID, assignedTo } = req.body;
-                  const so = await RecordModel.findOne({ shippingOrders: { orderId : orderID } });
-                  console.log("test", so, so.shippingOrders.createdBy, address)
-                  if (so && so.shippingOrders.createdBy === address) {
-                    //await POModel.update({ orderID }, { status });
-                    wrapper.updateRecord(RecordModel,{ shippingOrders : { orderId : orderID } }, { shippingOrders : { assignedTo : assignedTo } })
-                    return apiResponse.successResponseWithData(
-                      res,
-                      'Assign Shipping Order',
-                      'Success',
-                    );
-                  } else {
-                    return apiResponse.ErrorResponse(
-                      res,
-                      'You are not authorised to assign Shipping Order',
-                    );
+                  const { orderID, assignedTo, poId } = req.body;
+                  const POFound = await RecordModel.findOne({ id: poId });
+                  if(!POFound){
+                    logger.log(
+                      'info',
+                      '<<<<< ShippingService < Controller < createSO : PO not found in collection',
+                    );  
+                  } else{
+                    const so = await RecordModel.findOne({ shippingOrders: { orderId : orderID } });
+                    console.log("test", so, so.shippingOrders.createdBy, address)
+                    if (so && so.shippingOrders.createdBy === address) {
+                      //await POModel.update({ orderID }, { status });
+                      wrapper.updateRecord(RecordModel,{ shippingOrders : { orderId : orderID } }, { shippingOrders : { assignedTo : assignedTo } })
+                      return apiResponse.successResponseWithData(
+                        res,
+                        'Assign Shipping Order',
+                        'Success',
+                      );
+                    } else {
+                      return apiResponse.ErrorResponse(
+                        res,
+                        'You are not authorised to assign Shipping Order',
+                      );
+                    }  
                   }
   
                   logger.log(
@@ -247,7 +264,7 @@ exports.assignShippingOrder = [
               if (permissionResult.success) {
                 try {
                   const { address } = req.user;
-                  const { orderID, assignedTo, status } = req.body;
+                  const { orderID, assignedTo, status, poId } = req.body;
                   const { updatedBy } = req.user;
                   let date_ob = new Date();
                   let date = ('0' + date_ob.getDate()).slice(-2);
@@ -256,27 +273,36 @@ exports.assignShippingOrder = [
                   let time = date_ob.getTime();
                   var timestamp = date + '-' + month + '-' + year + 'T' + time;
                   const { updatedAt } = timestamp;
-                  const so = await RecordModel.findOne({ shippingOrders: { orderId : orderID } });
-                  console.log("test", so, so.shippingOrders.createdBy, address)
-                  if (so && so.shippingOrders.createdBy === address) {
-                    //await POModel.update({ orderID }, { status });
-                    wrapper.updateRecord(RecordModel, { shippingOrders : { orderId : orderID } }, 
-                        { shippingOrders : { assignedTo : assignedTo } }, 
-                        { shippingOrders : { status : status } }, 
-                        { shippingOrders : { updatedBy : updatedBy } },
-                        { shippingOrders : { updatedAt : updatedAt } })
-                    return apiResponse.successResponseWithData(
-                      res,
-                      'Update Shipping Order',
-                      'Success',
-                    );
-                  } else {
-                    return apiResponse.ErrorResponse(
-                      res,
-                      'You are not authorised to update Shipping Order',
-                    );
+
+                  const POFound = await RecordModel.findOne({ id: poId });
+                  if(!POFound){
+                    logger.log(
+                      'info',
+                      '<<<<< ShippingService < Controller < createSO : PO not found in collection',
+                    );  
+                  } else{
+                    const so = await RecordModel.findOne({ shippingOrders: { orderId : orderID } });
+                    console.log("test", so, so.shippingOrders.createdBy, address)
+                    if (so && so.shippingOrders.createdBy === address) {
+                      //await POModel.update({ orderID }, { status });
+                      wrapper.updateRecord(RecordModel, { shippingOrders : { orderId : orderID } }, 
+                          { shippingOrders : { assignedTo : assignedTo } }, 
+                          { shippingOrders : { status : status } }, 
+                          { shippingOrders : { updatedBy : updatedBy } },
+                          { shippingOrders : { updatedAt : updatedAt } })
+                      return apiResponse.successResponseWithData(
+                        res,
+                        'Update Shipping Order',
+                        'Success',
+                      );
+                    } else {
+                      return apiResponse.ErrorResponse(
+                        res,
+                        'You are not authorised to update Shipping Order',
+                      );
+                    }  
                   }
-  
+                  
                   logger.log(
                     'info',
                     '<<<<< ShippingService < Controller < updateShippingOrder : Changed Successfully',
@@ -325,24 +351,33 @@ exports.changeSOStatus = [
               if (permissionResult.success) {
                 try {
                   const { address } = req.user;
-                  const { orderID, status } = req.body;
-                  const so = await RecordModel.findOne({ shippingOrders: { orderId : orderID } });
-                  console.log("test", so, so.shippingOrders.createdBy, address)
-                  if (so && so.shippingOrders.createdBy === address) {
-                    //await POModel.update({ orderID }, { status });
-                 wrapper.updateRecord(RecordModel,{ shippingOrders : { orderId : orderID } }, { shippingOrders : { status : status } })
-                    return apiResponse.successResponseWithData(
-                      res,
-                      'SO Status',
-                      'Success',
-                    );
-                  } else {
-                    return apiResponse.ErrorResponse(
-                      res,
-                      'You are not authorised to change the status',
-                    );
+                  const { orderID, status, poId } = req.body;
+
+                  const POFound = await RecordModel.findOne({ id: poId });
+                  if(!POFound){
+                    logger.log(
+                      'info',
+                      '<<<<< ShippingService < Controller < createSO : PO not found in collection',
+                    );  
+                  } else{
+                    const so = await RecordModel.findOne({ shippingOrders: { orderId : orderID } });
+                    console.log("test", so, so.shippingOrders.createdBy, address)
+                    if (so && so.shippingOrders.createdBy === address) {
+                      //await POModel.update({ orderID }, { status });
+                   wrapper.updateRecord(RecordModel,{ shippingOrders : { orderId : orderID } }, { shippingOrders : { status : status } })
+                      return apiResponse.successResponseWithData(
+                        res,
+                        'SO Status',
+                        'Success',
+                      );
+                    } else {
+                      return apiResponse.ErrorResponse(
+                        res,
+                        'You are not authorised to change the status',
+                      );
+                    }  
                   }
-  
+                  
                   logger.log(
                     'info',
                     '<<<<< ShippingService < Controller < changeSOStatus : Changed Successfully',
