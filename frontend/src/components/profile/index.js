@@ -19,9 +19,9 @@ class Profile extends React.Component {
       role: '',
       organisation: '',
       warehouseId: '',
-      affiliateOrganisation: '',
+      lastName: '',
       walletAddress: '',
-      phone: '',
+      phoneNumber: '',
       status: '',
       email: '',
       profileData: {},
@@ -43,25 +43,25 @@ class Profile extends React.Component {
       const {
         profile_picture,
         email,
-        name,
-        phone,
+        firstName,
+        lastName,
+        phoneNumber,
         address,
         organisation,
         warehouseId,
         status,
         role,
-        affiliateOrganisation,
         location,
       } = response.data.data;
       this.setState({
         profile_picture,
         email,
-        name,
-        phone,
+        firstName,
+        lastName,
+        phoneNumber,
         walletAddress: address,
         organisation,
         warehouseId,
-        affiliateOrganisation,
         status,
         role,
         profileData: response.data.data,
@@ -75,7 +75,7 @@ class Profile extends React.Component {
   async onWareHouse(item) {
     const wareHouseResponse = await getWarehouseByOrgId(item);
     if (wareHouseResponse.status === 200) {
-      const wareHouseIdResult = wareHouseResponse.data.data;
+      const wareHouseIdResult = wareHouseResponse.data.warehouses.map((txn) => txn.id)
       this.setState({ wareIds: wareHouseIdResult })
     }
   }
@@ -91,12 +91,12 @@ class Profile extends React.Component {
     const {
       prof,
       email,
-      name,
-      phone,
+      firstName,
+      lastName,
+      phoneNumber,
       address,
       organisation,
       warehouseId,
-      affiliateOrganisation,
       status,
       location,
     } = this.state.profileData;
@@ -105,12 +105,12 @@ class Profile extends React.Component {
       editMode: false,
       profile: prof,
       email,
-      name,
-      phone,
+    firstName,
+      phoneNumber,
       walletAddress: address,
       organisation,
       warehouseId,
-      affiliateOrganisation,
+     lastName,
       status,
       location,
     });
@@ -145,8 +145,8 @@ class Profile extends React.Component {
   }
 
   async onSubmit() {
-    const { name, organisation, warehouseId, affiliateOrganisation, phone, location } = this.state;
-    const data = { name, organisation, warehouseId, affiliateOrganisation, phone, location };
+    const { firstName,lastName, organisation, warehouseId, phoneNumber, location } = this.state;
+    const data = { firstName,lastName, organisation, warehouseId, phoneNumber, location };
     const result = await updateProfile(data);
 
     if (result.status === 200) {
@@ -166,14 +166,14 @@ class Profile extends React.Component {
       editMode,
       role,
       organisation,
-      affiliateOrganisation,
       warehouseId,
       walletAddress,
-      phone,
+      phoneNumber,
       status,
       email,
-      name,
+     firstName,
       message,
+      lastName,
       location,
       orgs,
       wareIds,
@@ -215,12 +215,26 @@ class Profile extends React.Component {
 
                   <div className="col">
                     <div className="form-group">
-                      <label htmlFor="shipmentId">Name</label>
+                      <label htmlFor="shipmentId"> First Name</label>
                       <input
-                        className="form-control wallet"
-                        disabled
-                        value={this.props.user.firstName}
-                        onChange={e => this.setState({ name: e.target.value })}
+                        className="form-control"
+                        value={firstName}
+                        onChange={e => this.setState({ firstName: e.target.value })}
+                      />
+
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="shipmentId">Last Name</label>
+                      <input
+                        className="form-control"
+                        value={lastName}
+                        placeholder="Enter last Name"
+                        onChange={e =>
+                          this.setState({
+                            lastName: e.target.value,
+                          })
+                        }
+
                       />
 
                     </div>
@@ -239,12 +253,11 @@ class Profile extends React.Component {
                       <label htmlFor="shipmentId">Organisation</label>
                       <div className="form-control">
                         <DropdownButton
-                          name={organisation}
+                          name={organisation?organisation:"Select Organisation"}
                           onSelect={item => {
                             this.setState({ organisation: item })
-                            this.onWareHouse(organisation.split('/')[1])
+                            this.onWareHouse(item.split('/')[1])
                           }}
-                          className="text"
                           groups={orgs}
                         />
                       </div>
@@ -253,28 +266,13 @@ class Profile extends React.Component {
                       <label htmlFor="shipmentId">Warehouse ID</label>
                       <div className="form-control">
                         <DropdownButton
-                          name={warehouseId}
+                          name={warehouseId?warehouseId:"Select  Warehouse ID"}
                           onSelect={item => this.setState({ warehouseId: item })}
-                          className="text"
-                          groups={wareIds}
+                          groups={wareIds.length==0?["Organisation needs to be Selected"]:wareIds}
                         />
                       </div>
                     </div>
-                    <div className="form-group">
-                      <label htmlFor="shipmentId">Affiliated Organisation</label>
-                      <input
-                        className="form-control"
-                        value={affiliateOrganisation}
-                        placeholder="Enter Affiliated Organisation"
-                        onChange={e =>
-                          this.setState({
-                            affiliateOrganisation: e.target.value,
-                          })
-                        }
-
-                      />
-
-                    </div>
+                  
                     <div className="form-group">
                       <label htmlFor="shipmentId">Wallet Address</label>
                       <input
@@ -317,9 +315,10 @@ class Profile extends React.Component {
                     <div className="form-group">
                       <label htmlFor="shipmentId">Phone</label>
                       <input
+                      placeholder="Enter PhoneNumber"
                         className="form-control"
-                        value={this.props.user.phoneNumber}
-                        onChange={e => this.setState({ phone: e.target.value })}
+                        value={phoneNumber}
+                        onChange={e => this.setState({ phoneNumber: e.target.value })}
                       />
 
 
@@ -341,11 +340,11 @@ class Profile extends React.Component {
                 ) : (
                     <div className="row">
                       <ul>
-                        <li>Name</li>
+                        <li>First Name</li>
+                        <li>Last Name</li>
                         <li>Role</li>
                         <li>Organisation</li>
                         <li>Warehouse ID</li>
-                        <li>Affiliated Organisation</li>
                         <li>Wallet Address</li>
                         <li>Location</li>
                         <li>Email ID</li>
@@ -354,12 +353,12 @@ class Profile extends React.Component {
                       </ul>
                       <ul>
                         {this.props.user.firstName ? <li>{this.props.user.firstName}</li> : <li>N/A</li>}
+                        { this.props.user.lastName? <li>{this.props.user.lastName}</li> : <li>N/A</li>}
                         {this.props.user.role ? <li>{this.props.user.role}</li> : <li>N/A</li>}
-                        {organisation ? <li>{organisation}</li> : <li>N/A</li>}
-                        {warehouseId ? <li>{warehouseId}</li> : <li>N/A</li>}
-                        {affiliateOrganisation ? <li>{affiliateOrganisation}</li> : <li>N/A</li>}
+                        {this.props.user.organisation ? <li>{this.props.user.organisation}</li> : <li>N/A</li>}
+                        {this.props.user.warehouseId ? <li>{this.props.user.warehouseId}</li> : <li>N/A</li>}
                         {this.props.user.walletAddress ? <li>{this.props.user.walletAddress}</li> : <li>N/A</li>}
-                        {location ? <li>location</li> : <li>N/A</li>}
+                        {this.props.user.location ? <li>{this.props.user.location} </li> : <li>N/A</li>}
                         {this.props.user.emailId ? <li>{this.props.user.emailId}</li> : <li>N/A</li>}
                         {this.props.user.phoneNumber ? <li>{this.props.user.phoneNumber}</li> : <li>N/A</li>}
                         {this.props.user.accountStatus ? <li>{this.props.user.accountStatus}</li> : <li>Pending</li>}
