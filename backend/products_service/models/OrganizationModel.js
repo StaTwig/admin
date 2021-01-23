@@ -13,16 +13,16 @@ var OrganizationSchema = new mongoose.Schema(
       type: Object,
       required: true,
       default: {
-        regionId: 'reg123',
-        regionName: 'Earth Prime',
+        id: 'reg123',
+        name: 'Earth Prime',
       },
     },
     country: {
       type: Object,
       required: true,
       default: {
-        countryId: '001',
-        countryName: 'India',
+        id: '001',
+        name: 'India',
       },
     },
     location: {
