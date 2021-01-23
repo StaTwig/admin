@@ -9,6 +9,8 @@ import {
   GET_INVENTORIESCOUNT_SUCCESS,
   SET_EDIT_INVENTORY,
   RESET_REVIEW_INVENTORY,
+  GET_INVENTORY_DETAILS_SUCCESS,
+  GET_INVENTORY_DETAILS_FAILURE,
 } from '../constants/inventoryConstants';
 import { turnOn, turnOff } from './spinnerActions';
 
@@ -32,6 +34,22 @@ export const getInventories = (skip = 0, limit = 5) => {
   }
 };
 
+export const getInventoryDetails = () => {
+  try {
+    return async dispatch => {
+      dispatch(turnOn());
+      const result = await axios.get(`${config().getInventoryDetailsUrl}`);
+      dispatch(setInventoryDetails(result.data));
+      dispatch(turnOff());
+    };
+  } catch (e) {
+    return dispatch => {
+      dispatch(turnOff());
+      dispatch(resetInventoryDetails());
+    };
+  }
+};
+
 export const getInventoriesById = query => {
   try {
     return async dispatch => {
@@ -48,6 +66,12 @@ export const getInventoriesById = query => {
 const setInventories = data => {
   return {
     type: GET_INVENTORIES_SUCCESS,
+    payload: data,
+  };
+};
+const setInventoryDetails = data => {
+  return {
+    type: GET_INVENTORY_DETAILS_SUCCESS,
     payload: data,
   };
 };
@@ -80,6 +104,12 @@ export const resetReviewInventories = () => {
 export const resetInventories = data => {
   return {
     type: GET_INVENTORIES_FAILURE,
+    payload: data,
+  };
+};
+export const resetInventoryDetails = data => {
+  return {
+    type: GET_INVENTORY_DETAILS_FAILURE,
     payload: data,
   };
 };
@@ -121,9 +151,9 @@ export const addInventoriesFromExcel = async data => {
   }
 };
 
-export const getSerialNumbersByBatchNumber = async(id) => {
+export const getSerialNumbersByBatchNumber = async id => {
   try {
-    const url  = config().getSerialNumbersByBatchNumber+id.batch;
+    const url = config().getSerialNumbersByBatchNumber + id.batch;
     const result = await axios.get(url);
     return result.data.data;
   } catch (e) {
@@ -134,13 +164,10 @@ export const getSerialNumbersByBatchNumber = async(id) => {
 export const getInventoryByBatchNumber = id => {
   try {
     return async dispatch => {
-      const url  = config().getInventoryByBatchNumber+id;
+      const url = config().getInventoryByBatchNumber + id;
       const result = await axios.get(url);
       dispatch(setInventories(result.data));
-     
-    }
-   
-    
+    };
   } catch (e) {
     return e.response;
   }

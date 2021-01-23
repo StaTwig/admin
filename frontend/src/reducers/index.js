@@ -3,6 +3,7 @@ import { connectRouter } from 'connected-react-router'
 import { userReducer } from './userReducer';
 import { shipmentReducer } from './shipmentReducer';
 import { inventoryReducer } from './inventoryReducer';
+import { inventoryDetailsReducer } from './inventoryDetailsReducer';
 import { usersReducer } from './usersReducer';
 import { reviewShipmentReducer } from './reviewShipmentReducer';
 import { reviewInventoryReducer } from './reviewInventoryReducer';
@@ -34,6 +35,7 @@ const rootReducer = (history) => combineReducers({
   editPo: editPoReducer,
   spinner: spinnerReducer,
   pos: poReducer,
+  inventoryDetails: inventoryDetailsReducer,
   router: connectRouter(history)
 })
 

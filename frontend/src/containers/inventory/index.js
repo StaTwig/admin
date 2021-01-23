@@ -3,7 +3,7 @@ import Inventory from '../../components/inventory';
 import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
 import {useDispatch, useSelector} from "react-redux";
-import {getInventories, resetInventories} from "../../actions/inventoryActions";
+import {getInventories, resetInventories, getInventoryDetails} from "../../actions/inventoryActions";
 
 const InventoryContainer = props => {
   const dispatch = useDispatch();
@@ -15,6 +15,9 @@ const InventoryContainer = props => {
   const inventories = useSelector(state => {
     return state.inventories;
   });
+ const inventoryDetails = useSelector(state => {
+    return state.inventoryDetails;
+  });
 
   const inventoriesCount = useSelector(state => {
       return state.inventoriesCount;
@@ -22,6 +25,7 @@ const InventoryContainer = props => {
   useEffect(() => {
     dispatch(resetInventories());
     dispatch(getInventories(0, 5));
+    dispatch(getInventoryDetails());
   }, []);
 
 
@@ -39,7 +43,7 @@ const InventoryContainer = props => {
                   <div className="d-flex">
                         <Sidebar {...props} />
                         <div className="content">
-                              <Inventory  inventories={inventories} inventoriesCount={inventoriesCount}  loadMore={loadMore} onLoadMore={onLoadMore} {...props}/>
+                              <Inventory  inventories={inventories} inventoriesCount={inventoriesCount}  loadMore={loadMore} inventoryDetails={inventoryDetails} onLoadMore={onLoadMore} {...props}/>
                         </div>
                   </div>
             </div>
