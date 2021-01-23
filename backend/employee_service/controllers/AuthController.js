@@ -312,7 +312,7 @@ exports.login = [
         'error',
         '<<<<< UserService < AuthController < login : error in login (catch block)',
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, 'Email already registered. Check Email for verifying the account');
     }
   },
 ];
