@@ -150,10 +150,10 @@ exports.addMultipleProducts = [
               const products = data
                 .map(element => {
                   return {
-                    product_external_id: element[0],
-                    product_name: element[1],
-                    product_short_name: element[2],
-                    product_type: element[3],
+                    externalId: element[0],
+                    name: element[1],
+                    shortName: element[2],
+                    type: element[3],
                     manufacturer: element[4],
                     temperature_max: element[5],
                     temperature_min: element[6],
@@ -170,13 +170,13 @@ exports.addMultipleProducts = [
                 if (err) return;
                 const product_unique = uniqid('prod-')
                 const productDetail = new ProductModel({
-                  product_id: product_unique,
-                  product_external_id: product.product_external_id,
-                  product_name: product.product_name,
-                  product_short_name: product.product_short_name,
-                  product_type: product.product_type,
+                  id: product_unique,
+                  externalId: product.externalId,
+                  name: product.name,
+                  shortName: product.shortName,
+                  type: product.type,
                   manufacturer: product.manufacturer,
-                  characteristic_set:{
+                  characteristicSet:{
                     temperature_max: product.temperature_max,
                     temperature_min: product.temperature_min,
                     humidity_max: product.humidity_max,
@@ -187,7 +187,7 @@ exports.addMultipleProducts = [
                 try {
                   await productDetail.save();
                 } catch (e) {
-                  err = product.product_name;
+                  err = e;
                 }
               });
               if (err) {
