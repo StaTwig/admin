@@ -18,3 +18,22 @@ export const generateCodes = async query => {
     return e;
   }
 };
+
+export const getOrganisations = async () => {
+  try {
+    const result = await axios.get(config().getOrganisations);
+    debugger;
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+export const getWarehouseByOrgId = async (id) => {
+  try {
+    const result = await axios.get(config().getWarehouseByOrgId+id);
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};

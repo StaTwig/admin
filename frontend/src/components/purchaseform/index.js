@@ -161,19 +161,6 @@ const PurchaseForm = props => {
             />
         </div>
         <div className="input-group">
-          <label className="reference">Vendor ID</label>
-            <input
-              type="text"
-              className="form-control"
-              name="shipmentId"
-              placeholder="Enter Vendor ID"
-              onChange={e => setVendorId(e.target.value)}
-              value={vendorId}
-            />
-          </div>
-      </div>
-      <div className="d-flex justify-content-between">
-      <div className="input-group">
           <label className="reference">To Delivery Location</label>
            <input
               type="text"
@@ -184,6 +171,21 @@ const PurchaseForm = props => {
               value={toDeliveryLocation}
             />
         </div>
+        
+      </div>
+      <div className="d-flex justify-content-between">
+     
+        <div className="input-group">
+          <label className="reference">Vendor ID</label>
+            <input
+              type="text"
+              className="form-control"
+              name="shipmentId"
+              placeholder="Enter Vendor ID"
+              onChange={e => setVendorId(e.target.value)}
+              value={vendorId}
+            />
+          </div>
      
         <div className="input-group">
           <label className="reference">To Delivery ID</label>
