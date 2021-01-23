@@ -23,7 +23,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3010/productmanagement/api/organization/getOrganizations",
+					"raw": "http://localhost:3010/productmanagement/api/products/getProducts",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -32,8 +32,8 @@
 					"path": [
 						"productmanagement",
 						"api",
-						"organization",
-						"getOrganizations"
+						"products",
+						"getProducts"
 					]
 				}
 			},
@@ -110,7 +110,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3010/productmanagement/api/organization/getWarehouses/organx12345",
+					"raw": "http://localhost:3010/productmanagement/api/organization/warehouses?id=organx12345",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -120,8 +120,41 @@
 						"productmanagement",
 						"api",
 						"organization",
-						"getWarehouses",
-						"organx12345"
+						"warehouses"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "organx12345"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3010/productmanagement/api/products/productInfo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3010/productmanagement/api/products/productInfo?id=prod-9bhkk6yiutx",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3010",
+					"path": [
+						"productmanagement",
+						"api",
+						"products",
+						"productInfo"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "prod-9bhkk6yiutx"
+						}
 					]
 				}
 			},

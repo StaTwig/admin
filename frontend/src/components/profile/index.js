@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import ProfilePic from '../../assets/brands/user-image/Image73@2x.png';
 import { useDispatch } from 'react-redux';
+import DropdownButton from '../../shared/dropdownButtonGroup';
 import Pen from '../../assets/icons/pen.svg';
 import './style.scss';
 import { config } from '../../config';
 const axios = require('axios');
 import { getUserInfoUpdated, updateProfile, getUserInfo } from '../../actions/userActions';
+import { getOrganisations, getWarehouseByOrgId } from '../../actions/productActions';
+
 class Profile extends React.Component {
   constructor(props) {
     super(props);
@@ -15,6 +18,7 @@ class Profile extends React.Component {
       editMode: false,
       role: '',
       organisation: '',
+      warehouseId: '',
       affiliateOrganisation: '',
       walletAddress: '',
       phone: '',
@@ -23,13 +27,17 @@ class Profile extends React.Component {
       profileData: {},
       profile_picture: '',
       message: '',
-      location:'',
+      location: '',
+      orgs: [],
+      wareIds: []
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onCancel = this.onCancel.bind(this);
   }
+
   async componentDidMount() {
+
     const response = await getUserInfoUpdated();
     if (response.status === 200) {
       const {
@@ -39,6 +47,7 @@ class Profile extends React.Component {
         phone,
         address,
         organisation,
+        warehouseId,
         status,
         role,
         affiliateOrganisation,
@@ -51,6 +60,7 @@ class Profile extends React.Component {
         phone,
         walletAddress: address,
         organisation,
+        warehouseId,
         affiliateOrganisation,
         status,
         role,
@@ -62,6 +72,21 @@ class Profile extends React.Component {
     }
   }
 
+  async onWareHouse(item) {
+    const wareHouseResponse = await getWarehouseByOrgId(item);
+    if (wareHouseResponse.status === 200) {
+      const wareHouseIdResult = wareHouseResponse.data.data;
+      this.setState({ wareIds: wareHouseIdResult })
+    }
+  }
+  async onOrganisation() {
+    const orgResponse = await getOrganisations();
+    if (orgResponse.status === 200) {
+      const organisationResult = orgResponse.data.Organizations.map((txn) => (txn.name + "/" + txn.id))
+      this.setState({ orgs: organisationResult })
+
+    }
+  }
   onCancel() {
     const {
       prof,
@@ -70,6 +95,7 @@ class Profile extends React.Component {
       phone,
       address,
       organisation,
+      warehouseId,
       affiliateOrganisation,
       status,
       location,
@@ -83,6 +109,7 @@ class Profile extends React.Component {
       phone,
       walletAddress: address,
       organisation,
+      warehouseId,
       affiliateOrganisation,
       status,
       location,
@@ -99,44 +126,48 @@ class Profile extends React.Component {
         'content-type': 'multipart/form-data',
       },
     };
-    if(event.target.files[0]){
-    axios
-      .post(config().upload, formData, configs)
-      .then(response => {
-        alert('Profile Picture updated Successfully');
-        this.setState({ profile_picture: response.data.data }) 
-      })
-      .catch(error => {
-        alert(error);
-      });
-    this.setState({ selectedFile: null });           
-    
+    if (event.target.files[0]) {
+      axios
+        .post(config().upload, formData, configs)
+        .then(response => {
+          alert('Profile Picture updated Successfully');
+          this.setState({ profile_picture: response.data.data })
+        })
+        .catch(error => {
+          alert(error);
+        });
+      this.setState({ selectedFile: null });
+
     }
-    else{
+    else {
       alert('File not selected, please try again')
     }
   }
 
   async onSubmit() {
-    const { name, organisation, affiliateOrganisation, phone,location } = this.state;
-    const data = { name, organisation, affiliateOrganisation, phone ,location}  ;
+    const { name, organisation, warehouseId, affiliateOrganisation, phone, location } = this.state;
+    const data = { name, organisation, warehouseId, affiliateOrganisation, phone, location };
     const result = await updateProfile(data);
-    
+
     if (result.status === 200) {
       this.setState({ message: result.data.message, editMode: false });
-      const dispatch = useDispatch();    
+      const dispatch = useDispatch();
       dispatch(getUserInfo());
       history.push('/profile');
     } else {
       this.setState({ message: 'Error while updating please try again.' });
     }
   }
+
+
+
   render() {
     const {
       editMode,
       role,
       organisation,
       affiliateOrganisation,
+      warehouseId,
       walletAddress,
       phone,
       status,
@@ -144,8 +175,11 @@ class Profile extends React.Component {
       name,
       message,
       location,
+      orgs,
+      wareIds,
       profile_picture
     } = this.state;
+
     return (
       <div className="profile">
         <h1 className="breadcrumb">Profile</h1>
@@ -167,168 +201,197 @@ class Profile extends React.Component {
                   style={{ display: 'none' }}
                 />
                 {editMode ? (
-                <button
-                  type="button"
-                  onClick={e => this.upload.click()}
-                  className="btn btn-outline-info"
-                >
-                  Change Photo
-                </button>
-                ) : '' }
+                  <button
+                    type="button"
+                    onClick={e => this.upload.click()}
+                    className="btn btn-outline-info"
+                  >
+                    Change Photo
+                  </button>
+                ) : ''}
               </div>
               <div className="col-8 mt-5">
                 {editMode ? (
-                  <div className="col-sm-12">
-                  <div className="row">
 
-                  <ul>
-                  <li> <label>Name </label></li>
-                  <li><label>Role </label></li>
-                  <li> <label>Organisation</label></li>
-                  <li> <label>Warehouse Id</label></li>
-                  <li><label>Affiliated Organisation</label></li>
-                  <li><label>Wallet Address</label></li>
-                  <li><label>location</label></li>
-                  <li><label>Email</label></li>
-                  <li><label>Phone</label></li>
-                  <li>Account Status</li>
-                  
-                  </ul>
-
-                  <ul>
-                  <li> 
+                  <div className="col">
+                    <div className="form-group">
+                      <label htmlFor="shipmentId">Name</label>
                       <input
                         className="form-control wallet"
                         disabled
-                        value={name}
+                        value={this.props.user.firstName}
                         onChange={e => this.setState({ name: e.target.value })}
                       />
-                      </li>
-                  <li><input
+
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="shipmentId">Role</label>
+                      <input
                         className="form-control wallet"
                         disabled
-                        value={role}
+                        value={this.props.user.role}
                         onChange={e => this.setState({ role: e.target.value })}
+
                       />
-                      </li>
-                  <li>
+
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="shipmentId">Organisation</label>
+                      <div className="form-control">
+                        <DropdownButton
+                          name={organisation}
+                          onSelect={item => {
+                            this.setState({ organisation: item })
+                            this.onWareHouse(organisation.split('/')[1])
+                          }}
+                          className="text"
+                          groups={orgs}
+                        />
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="shipmentId">Warehouse ID</label>
+                      <div className="form-control">
+                        <DropdownButton
+                          name={warehouseId}
+                          onSelect={item => this.setState({ warehouseId: item })}
+                          className="text"
+                          groups={wareIds}
+                        />
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="shipmentId">Affiliated Organisation</label>
                       <input
                         className="form-control"
-                        value={organisation}
-                        onChange={e =>
-                          this.setState({ organisation: e.target.value })
-                        }
-                      /></li>
-                          <li>
-                      <input
-                        className="form-control"
-                        value={organisation}
-                        onChange={e =>
-                          this.setState({ organisation: e.target.value })
-                        }
-                      /></li>
-                  <li>  <input
-                         className="form-control"
                         value={affiliateOrganisation}
+                        placeholder="Enter Affiliated Organisation"
                         onChange={e =>
                           this.setState({
                             affiliateOrganisation: e.target.value,
                           })
                         }
+
                       />
-                    </li>
-                  <li> <input
+
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="shipmentId">Wallet Address</label>
+                      <input
                         className="form-control wallet"
                         disabled
-                        value={walletAddress}
+                        value={this.props.user.walletAddress}
                         onChange={e =>
                           this.setState({ walletAddress: e.target.value })
                         }
                       />
-                    </li>
-                    <li> <input
+
+
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="shipmentId">Location</label>
+
+                      <input
                         className="form-control"
+                        placeholder="Enter Location"
                         value={location}
                         onChange={e =>
                           this.setState({ location: e.target.value })
                         }
                       />
-                    </li>
-                    <li> <input
+
+
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="shipmentId">Email ID</label>
+                      <input
                         className="form-control wallet"
                         disabled
-                        value={email}
+                        value={this.props.user.emailId}
                         onChange={e =>
                           this.setState({ email: e.target.value })
                         }
                       />
-                    </li>
-                  <li> <input
-                        className="form-control"
-                        value={phone}
-                        onChange={e => this.setState({ phone: e.target.value })}
-                      /></li>
 
-                         <li > 
-                       
-                        {status && <li className="form-control wallet">Active</li>}
-                      
-                       </li>
-                       
-                  </ul>
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="shipmentId">Phone</label>
+                      <input
+                        className="form-control"
+                        value={this.props.user.phoneNumber}
+                        onChange={e => this.setState({ phone: e.target.value })}
+                      />
+
+
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="shipmentId">Account Status</label>
+                      <input
+                        className="form-control wallet"
+                        disabled
+                        value={this.props.user.accountStatus}
+                      />
+
+                    </div>
+
+
                   </div>
-                  </div>
+
 
                 ) : (
-                  <div className="row">
-                    <ul>
-                      <li>Name</li>
-                      <li>Role</li>
-                      <li>Organisation</li>
-                      <li>Warehouse ID</li>
-                      <li>Affiliated Organisation</li>
-                      <li>Wallet Address</li>
-                      <li>Location</li>
-                      <li>Email ID</li>
-                      <li>Phone</li>
-                      <li>Account Status</li>
-                    </ul>
-                    <ul>
-                      {this.props.user.firstName?<li>{this.props.user.firstName+" "+this.props.user.lastName}</li>:<li>N/A</li>}
-                      {this.props.user.role?<li>{this.props.user.role}</li>:<li>N/A</li>}
-                      {organisation?<li>{organisation}</li>:<li>N/A</li>}
-                      {organisation?<li>{organisation}</li>:<li>N/A</li>}
-                      {affiliateOrganisation?<li>{affiliateOrganisation}</li>:<li>N/A</li>}
-                      {this.props.user.walletAddress?<li>{this.props.user.walletAddress}</li>:<li>N/A</li>}
-                      {location?<li>location</li>:<li>N/A</li>}
-                      {this.props.user.emailId?<li>{this.props.user.emailId}</li>:<li>N/A</li>}
-                      {this.props.user.phoneNumber?<li>{this.props.user.phoneNumber}</li>:<li>N/A</li>}
-                      {this.props.user.accountStatus?<li>{this.props.user.accountStatus}</li>:<li>Pending</li>}
-                    </ul>
-                  </div>
-                )}
+                    <div className="row">
+                      <ul>
+                        <li>Name</li>
+                        <li>Role</li>
+                        <li>Organisation</li>
+                        <li>Warehouse ID</li>
+                        <li>Affiliated Organisation</li>
+                        <li>Wallet Address</li>
+                        <li>Location</li>
+                        <li>Email ID</li>
+                        <li>Phone</li>
+                        <li>Account Status</li>
+                      </ul>
+                      <ul>
+                        {this.props.user.firstName ? <li>{this.props.user.firstName}</li> : <li>N/A</li>}
+                        {this.props.user.role ? <li>{this.props.user.role}</li> : <li>N/A</li>}
+                        {organisation ? <li>{organisation}</li> : <li>N/A</li>}
+                        {warehouseId ? <li>{warehouseId}</li> : <li>N/A</li>}
+                        {affiliateOrganisation ? <li>{affiliateOrganisation}</li> : <li>N/A</li>}
+                        {this.props.user.walletAddress ? <li>{this.props.user.walletAddress}</li> : <li>N/A</li>}
+                        {location ? <li>location</li> : <li>N/A</li>}
+                        {this.props.user.emailId ? <li>{this.props.user.emailId}</li> : <li>N/A</li>}
+                        {this.props.user.phoneNumber ? <li>{this.props.user.phoneNumber}</li> : <li>N/A</li>}
+                        {this.props.user.accountStatus ? <li>{this.props.user.accountStatus}</li> : <li>Pending</li>}
+                      </ul>
+                    </div>
+                  )}
               </div>
               {!editMode ? (
                 <div className="col">
                   <button
                     className="btn-primary btn"
-                    onClick={() => this.setState({ editMode: true })}
+                    onClick={() => {
+                      this.setState({ editMode: true })
+                      this.onOrganisation()
+                    }
+                    }
                   >
                     <img src={Pen} width="15" height="15" className="mr-3" />
                     <span>EDIT</span>
                   </button>
                 </div>
               ) : (
-                <div className="d-flex flex-row justify-content-between">
-                   <button className="btn btn-outline-info mr-2" onClick={this.onCancel}>
-                    <span>CANCEL</span>
-                  </button>
-                   <button className="btn-primary btn" onClick={this.onSubmit}>
-                    <span>SAVE</span>
-                  </button>
-                  
-                </div>
-              )}
+                  <div className="d-flex flex-row justify-content-between">
+                    <button className="btn btn-outline-info mr-2" onClick={this.onCancel}>
+                      <span>CANCEL</span>
+                    </button>
+                    <button className="btn-primary btn" onClick={this.onSubmit}>
+                      <span>SAVE</span>
+                    </button>
+
+                  </div>
+                )}
             </div>
           </div>
         </div>

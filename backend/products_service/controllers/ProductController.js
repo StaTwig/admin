@@ -84,6 +84,50 @@ exports.getProducts = [
   // res.json({ data: products });
 ];
 
+exports.getProductInfo = [
+  auth,
+   async (req, res) => {
+    try {
+      checkToken(req, res, async result => {
+        if (result.success) {
+          logger.log(
+            'info',
+            '<<<<< ProductService < ProductController < getProducts : token verifed successfully',
+          );
+
+          permission_request = {
+            result: result,
+            permissionRequired: 'viewProductInfo',
+          };
+          checkPermissions(permission_request, async permissionResult => {
+            if (permissionResult.success) {
+              const product = await ProductModel.findOne({id:req.query.id});
+              res.json({ data: product});
+            } else {
+              res.json('Sorry! User does not have enough Permissions');
+            }
+          });
+        } else {
+          logger.log(
+            'warn',
+            '<<<<< ProductService < ProductController < getProducts : user is not authenticated',
+          );
+          res.status(403).json(result);
+        }
+      });
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< ProductService < ProductController < getProducts : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+  //   console.log(req.query.id);
+  // const product = await ProductModel.findOne({id:req.query.id});
+  // res.json({ data: product});}
+];
+
 exports.addMultipleProducts = [
   auth,
   async (req, res) => {
@@ -106,10 +150,10 @@ exports.addMultipleProducts = [
               const products = data
                 .map(element => {
                   return {
-                    product_external_id: element[0],
-                    product_name: element[1],
-                    product_short_name: element[2],
-                    product_type: element[3],
+                    externalId: element[0],
+                    name: element[1],
+                    shortName: element[2],
+                    type: element[3],
                     manufacturer: element[4],
                     temperature_max: element[5],
                     temperature_min: element[6],
@@ -126,13 +170,13 @@ exports.addMultipleProducts = [
                 if (err) return;
                 const product_unique = uniqid('prod-')
                 const productDetail = new ProductModel({
-                  product_id: product_unique,
-                  product_external_id: product.product_external_id,
-                  product_name: product.product_name,
-                  product_short_name: product.product_short_name,
-                  product_type: product.product_type,
+                  id: product_unique,
+                  externalId: product.externalId,
+                  name: product.name,
+                  shortName: product.shortName,
+                  type: product.type,
                   manufacturer: product.manufacturer,
-                  characteristic_set:{
+                  characteristicSet:{
                     temperature_max: product.temperature_max,
                     temperature_min: product.temperature_min,
                     humidity_max: product.humidity_max,
@@ -143,7 +187,7 @@ exports.addMultipleProducts = [
                 try {
                   await productDetail.save();
                 } catch (e) {
-                  err = product.product_name;
+                  err = e;
                 }
               });
               if (err) {
