@@ -4,7 +4,7 @@ const WarehouseModel = require("../models/WarehouseModel")
 const auth = require('../middlewares/jwt');
 
 exports.getOrganizations= [
-    // auth,
+    auth,
     async(req,res)=>{
         await OrganizationModel.find({}).select('name id').then((list)=>{
             return res.status(200).json({Organizations:list})
@@ -13,7 +13,7 @@ exports.getOrganizations= [
 ]
 
 exports.getWarehouses=[
-    // auth,
+    auth,
     (req,res)=>{
         console.log(req.query.id);
         OrganizationModel.find({id:req.query.id}).select('warehouses').then((list)=>{
