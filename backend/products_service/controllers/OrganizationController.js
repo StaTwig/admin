@@ -4,19 +4,20 @@ const WarehouseModel = require("../models/WarehouseModel")
 const auth = require('../middlewares/jwt');
 
 exports.getOrganizations= [
-    auth,
+    // auth,
     async(req,res)=>{
-        await OrganizationModel.find({}).select('organization_name organization_id').then((list)=>{
+        await OrganizationModel.find({}).select('name id').then((list)=>{
             return res.status(200).json({Organizations:list})
         }).catch((err)=>{ res.status(500).json({error:err})})
     }
 ]
 
 exports.getWarehouses=[
-    auth,
+    // auth,
     (req,res)=>{
-        OrganizationModel.find({organization_id:req.params.id}).select('organization_warehouses').then((list)=>{
-        WarehouseModel.find().where('warehouse_id').in(list[0].organization_warehouses).select('warehouse_id').exec((err, records) =>{
+        console.log(req.query.id);
+        OrganizationModel.find({id:req.query.id}).select('warehouses').then((list)=>{
+        WarehouseModel.find().where('id').in(list[0].warehouses).select('id').exec((err, records) =>{
             if(err){ return res.status(500).json({errors:err})}
             return res.status(200).json({warehouses:records})})
     }).catch((err)=>{

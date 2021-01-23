@@ -17,6 +17,8 @@ const router = express.Router();
 
 router.get("/getProducts", ProductController.getProducts);
 router.get("/generateCodes", ProductController.generateCodes);
+router.get("/productInfo", ProductController.getProductInfo);
+
 //router.post("/addProduct", ProductController.addProduct);
 router.post(
   '/addProduct',

@@ -84,6 +84,50 @@ exports.getProducts = [
   // res.json({ data: products });
 ];
 
+exports.getProductInfo = [
+  auth,
+   async (req, res) => {
+    try {
+      checkToken(req, res, async result => {
+        if (result.success) {
+          logger.log(
+            'info',
+            '<<<<< ProductService < ProductController < getProducts : token verifed successfully',
+          );
+
+          permission_request = {
+            result: result,
+            permissionRequired: 'viewProductInfo',
+          };
+          checkPermissions(permission_request, async permissionResult => {
+            if (permissionResult.success) {
+              const product = await ProductModel.findOne({id:req.query.id});
+              res.json({ data: product});
+            } else {
+              res.json('Sorry! User does not have enough Permissions');
+            }
+          });
+        } else {
+          logger.log(
+            'warn',
+            '<<<<< ProductService < ProductController < getProducts : user is not authenticated',
+          );
+          res.status(403).json(result);
+        }
+      });
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< ProductService < ProductController < getProducts : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+  //   console.log(req.query.id);
+  // const product = await ProductModel.findOne({id:req.query.id});
+  // res.json({ data: product});}
+];
+
 exports.addMultipleProducts = [
   auth,
   async (req, res) => {

@@ -1,13 +1,13 @@
 var mongoose = require('mongoose');
 var WarehouseSchema = new mongoose.Schema(
   {
-    warehouse_id: { type: String, required: true, unique: true },
-    warehouse_organization: {
+    id: { type: String, required: true, unique: true },
+    organizationId: {
       type: String,
       required: true,
       default: 'org123',
     },
-    warehouse_postal_address: {
+    postalAddress: {
       type: String,
       required: true,
       default: 'T-Hub, IIIT, Gachibowli, Hyderabad, Telangana, India',
@@ -16,19 +16,19 @@ var WarehouseSchema = new mongoose.Schema(
       type: Object,
       required: true,
       default: {
-        region_id: 'reg123',
-        region_name: 'Earth Prime',
+        regionId: 'reg123',
+        regionName: 'Earth Prime',
       },
     },
-    warehouse_country: {
+    country: {
       type: Object,
       required: true,
       default: {
-        country_id: '001',
-        country_name: 'India',
+        countryId: '001',
+        countryName: 'India',
       },
     },
-    warehouse_location: {
+    location: {
       type: Object,
       default: {
         longitude: 12.12323453534,
@@ -36,11 +36,11 @@ var WarehouseSchema = new mongoose.Schema(
         geohash: '1231nejf923453',
       },
     },
-    warehouse_supervisors: {
+    supervisors: {
       type: Array,
       default: []
     },
-    warehouse_employeess: {
+    employees: {
       type: Array,
       default: []
     }
