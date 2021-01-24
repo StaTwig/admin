@@ -1221,7 +1221,7 @@ exports.getGroupedInventoryDetails = [
                 },
               });
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              apiResponse.ErrorResponse(res, `Sorry! User doens't have permissions`);
             }
           });
         } else {

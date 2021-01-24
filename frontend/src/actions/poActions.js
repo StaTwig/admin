@@ -57,7 +57,7 @@ export const getProducts = async () => {
     const result = await axios.get(config().getProducts);
     return result.data.data;
   } catch (e) {
-    return e.response;
+    return [];
   }
 };
 

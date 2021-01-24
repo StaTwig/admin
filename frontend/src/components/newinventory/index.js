@@ -13,10 +13,10 @@ import dropdownIcon from '../../assets/icons/drop-down.svg';
 import {
   addMultipleInventories,
   setReviewinventories,
-  addInventoriesFromExcel
+  addInventoriesFromExcel,
 } from '../../actions/inventoryActions';
-import { turnOn , turnOff } from '../../actions/spinnerActions'
-import {getManufacturers, getProducts} from '../../actions/poActions';
+import { turnOn, turnOff } from '../../actions/spinnerActions';
+import { getProducts } from '../../actions/poActions';
 
 const NewInventory = props => {
   const editInventories = useSelector(state => {
@@ -25,13 +25,21 @@ const NewInventory = props => {
 
   useEffect(() => {
     async function fetchData() {
-      const result = await getProducts();
-      const manufacturerResult = await getManufacturers();
-      let productArray = []
-      productArray = result && result.map(product => product.productName);
-      setProducts(productArray);
-      setManufacturers(manufacturerResult);
-    }
+      dispatch(turnOn());
+        const result = await getProducts();
+        const productsArray = result.map(
+          product => `${product.name}-${product.id}`,
+        );
+        setProducts(result);
+        setBlankInventory({ ...blankInventory, products: productsArray });
+        if(editInventories.length === 0) {
+          setInventoryState([{ ...blankInventory, products: productsArray }])
+        }else {
+          setInventoryState(editInventories);
+        }
+      dispatch(turnOff());
+      }
+
     fetchData();
   }, []);
 
@@ -40,27 +48,19 @@ const NewInventory = props => {
   const [inventoryError, setInventoryError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [products, setProducts] = useState([]);
-  const [manufacturers, setManufacturers] = useState([]);
-  const [quantity, setQuantity] = useState('');
-  
-  const[menu,setMenu] = useState(false);
-  const[openExcel,setOpenExcel]= useState(false);
-  const blankInventory = {
+  const [ inventoryState, setInventoryState ] = useState([]);
+  const [menu, setMenu] = useState(false);
+  const [openExcel, setOpenExcel] = useState(false);
+  const [blankInventory, setBlankInventory] = useState({
     productName: 'Select Product',
-    manufacturerName: 'Select Manufacturer',
+    manufacturer: 'Select Product',
     quantity: '',
     manufacturingDate: '',
     expiryDate: '',
     batchNumber: '',
     serialNumber: '',
-    storageConditionmin: '',
-    storageConditionmax: '',
-  };
-  const [inventoryState, setInventoryState] = useState(editInventories);
-  const editTableProps = {
-    products,
-    manufacturers,
-  };
+    products: [],
+  });
   const closeModal = () => {
     setOpenCreatedInventory(false);
   };
@@ -78,10 +78,8 @@ const NewInventory = props => {
 
   const inventoryFields = [
     'productName',
-    'manufacturerName',
+    'manufacturer',
     'quantity',
-    'storageConditionmin',
-    'storageConditionmax',
     'manufacturingDate',
     'expiryDate',
     'batchNumber',
@@ -96,7 +94,7 @@ const NewInventory = props => {
   const expiryDateValidation = date => {
     let error = false;
     inventoryState.forEach(inventory => {
-      if(error) return;
+      if (error) return;
       let validationVariable = inventory.expiryDate;
       let a = new Date(
         Date.parse(
@@ -119,14 +117,14 @@ const NewInventory = props => {
         setOpenFailInventory(true);
         error = true;
       }
-    })
+    });
 
     return error;
   };
   const checkValidationErrors = validations => {
     let error = false;
     inventoryState.forEach(inventory => {
-      if(error) return error;
+      if (error) return error;
       for (let i = 0; i < validations.length; i++) {
         let validationVariable = inventory[validations[i]];
         if (
@@ -140,11 +138,8 @@ const NewInventory = props => {
           break;
         }
       }
-
-
     });
     return error;
-
   };
   const onProceedToReview = () => {
     if (checkValidationErrors(inventoryFields)) {
@@ -156,87 +151,79 @@ const NewInventory = props => {
     //Store in reducer
     dispatch(setReviewinventories(inventoryState));
 
-    console.log('clicked');
     //Redirect to review page.
     props.history.push('/reviewinventory');
-
-  };
-  const onAddInventory = async () => {
-    const updatedInventoryState = [...inventoryState];
-    updatedInventoryState.forEach(inventory => inventory.manufacturingDate = inventory.manufacturingDate.date.toLocaleDateString(
-      'en-GB',
-      numeric,
-    ))
-    const result = await addMultipleInventories({ inventories: inventoryState });
-    if (result.status != 400) {
-      setOpenCreatedInventory(true);
-    } else {
-      const err = result.data.data[0];
-      setErrorMessage(err.msg);
-    }
   };
 
   const onAddAnotherProduct = () => {
-    setInventoryState([...inventoryState, { ...blankInventory }]);
+    setInventoryState([...inventoryState, blankInventory ]);
   };
   const handleInventoryChange = (index, key, value) => {
     const updatedInventoryState = [...inventoryState];
     updatedInventoryState[index][key] = value;
+    const product = products.find(
+      p =>
+        `${p.name}-${p.id}` === updatedInventoryState[index]['productName'],
+    );
+    updatedInventoryState[index]['manufacturer'] = product.manufacturer;
     setInventoryState(updatedInventoryState);
   };
 
   return (
     <div className="Newinventory">
       <div className="d-flex justify-content-between mb-5">
-      <h1 className="breadcrumb">ADD INVENTORY</h1>
+        <h1 className="breadcrumb">ADD INVENTORY</h1>
         <div className="d-flex flex-column align-items-center">
-         <button className="btn-primary btn" onClick = {()=>setMenu(!menu)}>
+          <button className="btn-primary btn" onClick={() => setMenu(!menu)}>
             <div className="d-flex  align-items-center">
               <img src={ExportIcon} width="16" height="16" className="mr-3" />
               <span>Import</span>
               <img src={dropdownIcon} width="16" height="16" className="ml-3" />
             </div>
           </button>
-          {
-          menu ? 
-          <div class="menu">
-         <button className=" btn btn-outline-primary mb-2" onClick={()=>setOpenExcel(true)}> Excel</button>
-         <button className=" btn btn-outline-primary"> Other</button>
-       </div> : null
-       }
-       {openExcel && (
-        <Modal
-           title="Import"
-          close={() => closeExcelModal()}
-          size="modal-md" //for other size's use `modal-lg, modal-md, modal-sm`
-        >
-          <ExcelPopUp
-            onHide={closeExcelModal} //FailurePopUp
-            setOpenCreatedInventory={setOpenCreatedInventory}
-          />
-        </Modal>
-      )}
-          </div>
-         
-          </div>
+          {menu ? (
+            <div class="menu">
+              <button
+                className=" btn btn-outline-primary mb-2"
+                onClick={() => setOpenExcel(true)}
+              >
+                {' '}
+                Excel
+              </button>
+              <button className=" btn btn-outline-primary"> Other</button>
+            </div>
+          ) : null}
+          {openExcel && (
+            <Modal
+              title="Import"
+              close={() => closeExcelModal()}
+              size="modal-md" //for other size's use `modal-lg, modal-md, modal-sm`
+            >
+              <ExcelPopUp
+                onHide={closeExcelModal} //FailurePopUp
+                setOpenCreatedInventory={setOpenCreatedInventory}
+              />
+            </Modal>
+          )}
+        </div>
+      </div>
       <EditTable
-        {...editTableProps}
         inventories={inventoryState}
         handleInventoryChange={handleInventoryChange}
       />
 
-     <div className="d-flex justify-content-between">
-      <button
-        className="btn btn-white shadow-radius font-bold"
-        onClick={onAddAnotherProduct}
-      >
-        +<span> Add Another Product</span>
-      </button>
+      <div className="d-flex justify-content-between">
+        <button
+          className="btn btn-white shadow-radius font-bold"
+          onClick={onAddAnotherProduct}
+        >
+          +<span> Add Another Product</span>
+        </button>
       </div>
       <hr />
       <div className="d-flex justify-content-between">
         <div className="total">Grand Total</div>
-        <span className="value">{inventoryState[0].quantity}</span>
+        <span className="value">{}</span>
 
         <button className="btn-primary btn" onClick={onProceedToReview}>
           Proceed To Review
@@ -276,8 +263,7 @@ export default NewInventory;
           Add Inventory
         </button>*/
 
-
-        /* <div className="d-flex flex-column">
+/* <div className="d-flex flex-column">
       <div className="text-primary font-weight-bold">Import Inventory from Excel </div><input type='file'  class="select" onChange={setExcelFile}/> 
       <button
         className="btn-primary btn  w-50 mt-2"

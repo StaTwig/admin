@@ -9,23 +9,20 @@ import './style.scss';
 
 const EditRow = props => {
   const {
-    manufacturerName,
+    manufacturer,
     productName,
     quantity,
     manufacturingDate,
     expiryDate,
-    storageConditionmin,
-    storageConditionmax,
     batchNumber,
     serialNumber,
     products,
-    manufacturers,
     handleInventoryChange,
     idx,
   } = props;
 
   return (
-    <div className="rTableRow" key={idx}>
+    <div className="rTableRow">
       <div className="rTableCell">
         <div className="square-box" />
         <DropdownButton
@@ -35,13 +32,7 @@ const EditRow = props => {
         />
       </div>
       <div className="rTableCell">
-        <DropdownButton
-          name={manufacturerName}
-          onSelect={item =>
-            handleInventoryChange(idx, 'manufacturerName', item)
-          }
-          groups={manufacturers}
-        />
+        <label>{manufacturer}</label>
       </div>
       <div className="rTableCell">
         <div className="form-group">
@@ -98,46 +89,6 @@ const EditRow = props => {
             showMonthYearPicker
             showFullMonthYearPicker
           />
-        </div>
-      </div>
-      <div className="rTableCell">
-        <div className="form-group">
-          <input
-            type="number"
-            className="form-field1"
-            placeholder="Min"
-            onKeyDown={e =>
-              (e.keyCode === 69 ||
-                e.keyCode === 189 ||
-                e.keyCode === 187 ||
-                e.keyCode === 40 ||
-                e.keyCode === 38) &&
-              e.preventDefault()
-            }
-            value={storageConditionmin}
-            onChange={e =>
-              handleInventoryChange(idx, 'storageConditionmin', e.target.value)
-            }
-          />
-          <div className="divider mr-auto">°C</div>
-          <input
-            type="number"
-            className="form-field1"
-            placeholder="Max"
-            onKeyDown={e =>
-              (e.keyCode === 69 ||
-                e.keyCode === 189 ||
-                e.keyCode === 187 ||
-                e.keyCode === 40 ||
-                e.keyCode === 38) &&
-              e.preventDefault()
-            }
-            value={storageConditionmax}
-            onChange={e =>
-              handleInventoryChange(idx, 'storageConditionmax', e.target.value)
-            }
-          />
-          <div className="divider mr-auto">°C</div>
         </div>
       </div>
       <div className="rTableCell">

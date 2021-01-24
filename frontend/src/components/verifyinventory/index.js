@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Pen from '../../assets/icons/pen.svg';
 import {
-  addMultipleInventories,
+  addProductsToInventory,
   resetReviewInventories
 } from '../../actions/inventoryActions';
 import { turnOff, turnOn } from "../../actions/spinnerActions";
@@ -19,14 +19,30 @@ const VerifyInventory = props => {
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [ successMessage, setSuccessMessage ] = useState('');
   const [ errorMessage, setErrorMessage ] = useState('');
+  const [ totalQuantity, setTotalQuantity] = useState('');
   const closeModal = () => {
     props.history.push('/inventory');
   };
-
+  useEffect(() => {
+    let total = 0;
+    reviewInventories.forEach(inventory => total +=inventory.quantity);
+    setTotalQuantity(total);
+  }, [])
   const onAssign = async () => {
     dispatch(turnOn());
-    const result = await addMultipleInventories({
-      inventories: reviewInventories,
+    const postData = reviewInventories.map(inventory => {
+      return {
+        productId: inventory.productName.split('-')[1] + '-' + inventory.productName.split('-')[2],
+        batchNumber: inventory.batchNumber,
+        mfgDate: inventory.manufacturingDate,
+        expDate: inventory.expiryDate,
+        quantity: inventory.quantity,
+        serialNumbersRange: inventory.serialNumber
+      }
+    });
+    debugger;
+    const result = await addProductsToInventory({
+      products: postData,
     });
     setOpenCreatedInventory(true);
     if (result.status === 1) {
@@ -61,7 +77,7 @@ const VerifyInventory = props => {
               </ul>
               <ul>
                 <li className="bold">Manufacturer</li>
-                <li>{reviewInventory.manufacturerName}</li>
+                <li>{reviewInventory.manufacturer}</li>
               </ul>
               <ul>
                 <li className="bold">Quantity</li>
@@ -104,7 +120,7 @@ const VerifyInventory = props => {
           <hr />
           <div className="d-flex justify-content-between">
             <div className="total">Total</div>
-            <div className="value">{}</div>
+            <div className="value">{totalQuantity}</div>
             <div className="d-flex flex-row">
               <button className="btn-primary btn mr-2" onClick={onEdit}>
                 <img src={Pen} width="15" height="15" className="mr-3" />

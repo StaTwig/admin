@@ -35,10 +35,8 @@ const Header = props => {
   useEffect(() => {
     dispatch(getUserInfo());
     async function fetchApi() {
-      dispatch(turnOn());
       const response = await getNotifications();
       setNotifications(response.data);
-      dispatch(turnOff());
     }
     fetchApi();
   }, []);

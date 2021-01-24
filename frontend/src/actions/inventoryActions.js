@@ -15,23 +15,28 @@ import {
 import { turnOn, turnOff } from './spinnerActions';
 
 export const getInventories = (skip = 0, limit = 5) => {
-  try {
+
     return async dispatch => {
-      dispatch(turnOn());
-      const result = await axios.get(
-        `${config().inventoriesUrl}?skip=${skip}&limit=${limit}`,
-      );
-      dispatch(setInventories(result.data));
-      dispatch(setInventoriesCount(result.data));
-      dispatch(turnOff());
-      return result.data.data.length;
-    };
-  } catch (e) {
-    return dispatch => {
-      dispatch(resetInventories(e.response));
-      dispatch(resetInventoriesCount(e.response));
-    };
+      try {
+        dispatch(turnOn());
+        debugger;
+        const result = await axios.get(
+          `${config().inventoriesUrl}?skip=${skip}&limit=${limit}`,
+        );
+        dispatch(setInventories(result.data));
+        dispatch(setInventoriesCount(result.data));
+        dispatch(turnOff());
+        return result.data.data.length;
+      }catch(e) {
+        dispatch(turnOff());
+        return dispatch => {
+          dispatch(resetInventories(e.response));
+          dispatch(resetInventoriesCount(e.response));
+
+        };
+      }
   }
+
 };
 
 export const getInventoryDetails = () => {
@@ -129,9 +134,9 @@ export const addInventory = async data => {
   }
 };
 
-export const addMultipleInventories = async data => {
+export const addProductsToInventory = async data => {
   try {
-    const result = await axios.post(config().addMultipleInventories, data);
+    const result = await axios.post(config().addProductsToInventory, data);
     return result.data;
   } catch (e) {
     return e.response;
