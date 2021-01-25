@@ -9,10 +9,9 @@ const UserTransactionModel = require('../models/UserTransactionModel');
 const UserModel = require('../models/UserModel');
 const POModel = require('../models/POModel');
 const ShipmentModel = require('../models/ShipmentModel');
-const ProductModel = require('../models/ProductModel');
 const InventoryModel = require('../models/InventoryModel');
-const OrganisationModel = require('../models/OrganisationModel');
 const NotificationModel = require('../models/NotificationModel');
+const RecordModel = require('../models/RecordModel');
 //this helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
 const utility = require('../helpers/utility');
@@ -51,67 +50,43 @@ exports.purchaseOrderStatistics = [
             if (permissionResult.success) {
               const { address, role } = req.user;
               const { skip, limit } = req.query;
-              /*const senderPOs = await POModel.find({ sender: address })
-                .sort({ createdAt: -1 })
-                .skip(parseInt(skip))
-                .limit(parseInt(limit));*/
-              const senderPOs = await wrapper.findRecordsAndSort(POModel,{"sender":address},skip,limit);
-              /*const receiverPos = await POModel.find({ receiver: address })
-                .sort({ createdAt: -1 })
-                .skip(parseInt(skip))
-                .limit(parseInt(limit));*/
-              const receiverPos = await wrapper.findRecordsAndSort(POModel,{"receiver":address},skip,limit);
-              let poItems,poItemsSender,poItemsReceiver = [];
-              poItemsSender = senderPOs.map(po => {
+              var supplierPOs = await wrapper.findRecordsAndSort(RecordModel,{"supplier.supplierIncharge":address},skip,limit);
+              var customerPos = await wrapper.findRecordsAndSort(RecordModel,{"customer.customer_incharge":address},skip,limit);
+	      var creatorPos = await wrapper.findRecordsAndSort(RecordModel,{"createdBy":address},skip,limit);
+
+              var poItems,poItemsSupplier,poItemsCustomer,poItemsCreator = [];
+
+              poItemsSupplier = supplierPOs.map(po => {
                 const status = po.status === 'Created' ? 'Sent' : po.status;
                 const item = {...po._doc, status };
                 return item;
               });
 
-              /* await utility.asyncForEach(senderPOs, async po => {
-                 const response = await axios.get(
-                   `${blockchain_service_url}/queryDataByKey?stream=${po_stream_name}&key=${
-                     po.orderID
-                     }`,
-                 );
-                 const items = response.data.items;
-                 if (items.length > 0) {
-                   const item = items[items.length - 1];
-                   item['status'] = po.status === 'Created' ? 'Sent' : po.status;
-                   poItems.push(item);
-                 }
-               });*/
-              poItemsReceiver = receiverPos.map(po => {
+              customerPos = customerPos.map(po => {
                 const status = po.status === 'Created' ? 'Received' : po.status;
                 const item = {...po._doc, status };
                 return item;
               });
+              
+	      poItemsCreator = creatorPos.map(po => {
+                const status = po.status === 'Created' ? 'Received' : po.status;
+                const item = {...po._doc, status };
+                return item;
+              });
+	      
 
-                 poItems = poItemsSender.concat(poItemsReceiver)
-              /* await utility.asyncForEach(receiverPos, async po => {
-                 const response = await axios.get(
-                   `${blockchain_service_url}/queryDataByKey?stream=${po_stream_name}&key=${
-                     po.orderID
-                     }`,
-                 );
-                 const items = response.data.items;
-                 if (items.length > 0) {
-                   const item = items[items.length - 1];
-                   item['status'] =
-                     po.status === 'Created' ? 'Received' : po.status;
-                   poItems.push(item);
-                 }
-               });*/
-              if(role === 'powerUser') {
+               poItems = poItemsSupplier.concat(poItemsCustomer,poItemsCreator)
+              
+		if(role === 'powerUser') {
                 /*const allPos = await POModel.find({})
                   .sort({ createdAt: -1 })
                   .skip(parseInt(skip))
                   .limit(parseInt(limit));*/
 
-		 const allPos = await wrapper.findAllRecords(POModel,skip,limit);
-
-                 const poItemsFiltered = allPos.filter(po => !poItems.find(poItem => poItem.orderID === po.orderID));
-                poItems = [...poItems, ...poItemsFiltered];
+		 const allPos = await wrapper.findAllRecords(RecordModel,skip,limit);
+		 console.log("31",allPos)
+                 //const poItemsFiltered = allPos.filter(po => !poItems.find(poItem => poItem.orderID === po.orderID));
+                poItems = [...poItems, ...allPos];
               }
               logger.log(
                 'info',
@@ -140,7 +115,7 @@ exports.purchaseOrderStatistics = [
   },
 ];
 
-exports.fetchAllPurchaseOrders = [
+exports.fetchAllPurchaseOrdersBC = [
   auth,
   async (req, res) => {
     try {
@@ -245,7 +220,7 @@ exports.fetchPublisherPurchaseOrders = [
   },
 ];
 
-exports.fetchPurchaseOrder = [
+exports.fetchPurchaseOrderBC = [
   auth,
   async (req, res) => {
     try {
@@ -299,54 +274,6 @@ exports.fetchPurchaseOrder = [
   },
 ];
 
-exports.fetchAllPurchaseOrders = [
-  auth,
-  async (req, res) => {
-    try {
-      const { authorization } = req.headers;
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-            'info',
-            '<<<<< ShipmentService < ShipmentController < fetchAllPurchaseOrders : token verified successfully, querying all stream keys',
-          );
-          const permission_request = {
-            result: result,
-            permissionRequired: 'receivePO',
-          };
-          checkPermissions(permission_request, async permissionResult => {
-            if (permissionResult.success) {
-              const response = await axios.get(
-                `${blockchain_service_url}/queryAllStreamKeys?stream=${po_stream_name}`,
-              );
-              const items = response.data.items;
-              logger.log(
-                'info',
-                '<<<<< ShipmentService < ShipmentController < fetchAllPurchaseOrders : queried all stream keys',
-              );
-              res.json({ data: items });
-            } else {
-              res.json('Sorry! User does not have enough Permissions');
-            }
-          });
-        } else {
-          logger.log(
-            'warn',
-            '<<<<< ShipmentService < ShipmentController < fetchAllPurchaseOrders : refuted token',
-          );
-          res.status(403).json(result);
-        }
-      });
-    } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< ShipmentService < ShipmentController < fetchAllPurchaseOrders : error(catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-
 exports.changePOStatus = [
   auth,
   async (req, res) => {
@@ -367,10 +294,11 @@ exports.changePOStatus = [
               try {
                 const { address } = req.user;
                 const { orderID, status } = req.body;
-                const po = await POModel.findOne({ orderID });
-                if (po && po.receiver === address) {
+                const po = await RecordModel.findOne({ id : orderID });
+		  console.log("test",po,po.customer.customer_incharge,address)
+                if (po && po.customer.customer_incharge === address) {
                   //await POModel.update({ orderID }, { status });
-	           wrapper.updateRecord(POModel,{ orderID }, { status })
+	           wrapper.updateRecord(RecordModel,{ id : orderID }, { poStatus : status })
                   return apiResponse.successResponseWithData(
                     res,
                     'PO Status',
@@ -426,7 +354,7 @@ exports.createPurchaseOrder = [
             result: result,
             permissionRequired: 'createPO',
           };
-          checkPermissions(permission_request, async permissionResult => {
+            checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
               try {
                 const { address } = req.user;
@@ -444,17 +372,17 @@ exports.createPurchaseOrder = [
                   `${blockchain_service_url}/publish`,
                   userData,
                 );
-
+		console.log("response",response)
                 const txnIdPO = response.data.transactionId;
-                const POFound = await POModel.findOne({ orderID });
-
+                const POFound = await RecordModel.findOne({ id : orderID });
+		console.log("POFound",POFound)
                 if (!POFound) {
                   logger.log(
                     'info',
                     '<<<<< ShipmentService < ShipmentController < createPO : PO found in collection',
                   );
 
-                  const newPO = {
+                 /* const newPO = {
                     ...data,
                     status: req.user.address  === data.sendpoto.address ? 'Accepted':'Created',
                     orderID,
@@ -462,19 +390,37 @@ exports.createPurchaseOrder = [
                     sender: req.user.address,
                     receiver: req.user.address  === data.sendpoto.address ? data.receiver.address : data.sendpoto.address,
                     txnId: txnIdPO,
-                  };
+                  };*/
+		 let date_ob = new Date();
+                 let date = ('0' + date_ob.getDate()).slice(-2);
+                 let month = ('0' + (date_ob.getMonth() + 1)).slice(-2);
+                 let year = date_ob.getFullYear();
+                 var today = date + '-' + month + '-' + year;
+                 var createdDate = { createdDate: today };
 
+		 const newPO = {
+			 id : orderID,
+			 creationDate : today,
+			 createdBy : req.user.address,
+			 poStatus : 'Created',
+			 potransactionIds: txnIdPO,
+			 ...data
+                  };
+		console.log("newPO",newPO)
                   //await newPO.save();
 		 
-		wrapper.insertOneRecord(POModel, newPO, function(error,response){
-			})
+		//wrapper.insertOneRecord(POModel, newPO, function(error,response){
+		//	})
+
+		wrapper.insertOneRecord(RecordModel, newPO, function(error,response){
+                        })
                 } else {
                   logger.log(
                     'info',
                     '<<<<< ShipmentService < ShipmentController < createPO : updating PO in PO model',
                   );
-                  const txnIds = [...POFound.txnIds, txnIdPO];
-		  wrapper.updateRecord(POModel,{ orderID }, { txnIds: txnIds })
+                  const txnIds = [...POFound.potransactionIds, txnIdPO];
+		  wrapper.updateRecord(RecordModel,{ id: orderID }, { potransactionIds: txnIds })
 		  //await POModel.updateOne({ orderID }, { txnIds });
                 }
 
@@ -505,50 +451,6 @@ exports.createPurchaseOrder = [
       logger.log(
         'error',
         '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-
-const QRCode = require('qrcode');
-
-exports.generateQRCode = [
-  auth,
-  async (req, res) => {
-    try {
-      checkToken(req, res, async result => {
-        if (result.success) {
-          const { address } = req.user;
-          const { data } = req.body;
-          const { filename } = req.query;
-          const json_data = JSON.stringify(req.body);
-          QRCode.toFile(
-            filename + '.png',
-            "'" + json_data + "'",
-            {
-              color: {
-                dark: '#00F', // Blue dots
-                light: '#0000', // Transparent background
-              },
-            },
-            function(err) {
-              if (err) throw err;
-            },
-          );
-          res.status(200).json({ message: 'success' });
-        } else {
-          logger.log(
-            'warn',
-            '<<<<< ShipmentService < ShipmentController < GenerateQRCode',
-          );
-          res.status(403).json(result);
-        }
-      });
-    } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< ShipmentService < ShipmentController < GenerateQRCode : error (catch block)',
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -608,7 +510,7 @@ exports.addPOsFromExcel = [
                       date: item['Document Date'],
                       destination: item['Country Name'],
                       products: [
-                        { [productManufacturer]: item['Order Quantity'] },
+                        { [productManufacturer: item['Order Quantity'],po_quantity_delivered: "QNTY1" },
                       ],
                       receiver: {
                         address: receiverDetails.address,
@@ -690,7 +592,7 @@ exports.addPOsFromExcel = [
                     `${blockchain_service_url}/publish`,
                     userData,
                   );
-                  const newPO = {
+                  /*const newPO = {
                     orderID,
                     sender: item.sendpoto.address,
                     receiver: item.receiver.address,
@@ -715,7 +617,29 @@ exports.addPOsFromExcel = [
                     txnId: response.data.transactionId,
                     status: 'Accepted'
                   };
-                  //await newPO.save();
+*/
+		 const newPO = {
+                        id : orderID,
+                        createdBy: req.user.address,
+                        poStatus: "Accepted",
+			potransactionIds: response.data.transactionId,
+			"supplier":
+			    {
+				    "supplierOrganization": "ORG1",
+				    "supplierIncharge": item.sendpoto.address,
+			    },
+			 products,
+			 creationDate : date,
+			"customer": {
+				    "customer_organization": "ORG2",
+				    "customer_incharge": item.receiver.address,
+				    "shipping_address": {
+				    "shipping_address_id": destination,
+				    "shipment_receiver_id": clientId,
+			    }
+			  },
+                    }
+		 //await newPO.save();
 	          wrapper.insertOneRecord(POModel, newPO, function(error,response){
                       })
  
@@ -751,3 +675,4 @@ exports.addPOsFromExcel = [
     }
   },
 ];
+

@@ -18,30 +18,32 @@
       border-style: solid;
       border-color: #01CEEA;
     }
-    
-.panel {
-    box-shadow: 0px 3px 6px $grey;
-    border-radius: 12px;
-    background-color: $white;
-    flex-basis: 30%;
-    padding: 10px;
 
-    .bold{
-      color : #000000; 
-    }
-    ul {
+  .commonpanle{
+    box-shadow: 0px 3px 10px #00000029;
+    border-radius: 10px;
+    padding: 17px 10px 10px 10px;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+  }
+
+   
+.panel {
+  .elemens{
+    margin-bottom: 0;
+  }
+   ul {
       padding: 0;
-      color : #A8A8A8;
+      color : black;
+
       .txn{
-         font: 13.5px/3px $roboto ;
+         font: 13px/3px $roboto ;
          white-space: nowrap;
          overflow:hidden;
          text-overflow: ellipsis;
-         display:inline-block;
          width : 160px;
-        @media (max-width: $lg) {
-          font-size: 13px;
-          width : 120px;
+        @media (max-width: 1346px) {
+          font-size: 11px;
+          width : 110px;
         }
       }
       .vendor{
@@ -49,7 +51,7 @@
       
       }
     li { 
-      font: 13.5px/3px $roboto ;
+      font: 13px/3px $roboto ;
       text-align: left;
       letter-spacing: 0px;
       padding: 0.5rem;
@@ -63,13 +65,17 @@
     border-radius: 50%;
     display: inline-block;
   }
+  .emp{
+    margin-bottom:19px;
+  }
+  
   .big-dot {
     height: 11px;
     width: 11px;
     border-radius: 50%;
     display: inline-block;
   }
-   
+  
   .arrow{
     width: 25px;
     height: 25px;
@@ -79,6 +85,7 @@
     align-items: center;
     display: flex;
     background:white;
+   cursor: pointer;
     }
 
     .picture {
@@ -96,6 +103,20 @@
   .chain{
     font: 13px/20px $roboto ;
   }
+  .series{
+   background: #D6F2F5 0% 0% no-repeat padding-box;
+
+  }
+  .chainpanle{
+    box-shadow: 0px 3px 10px #00000029;
+    border-radius: 8px;
+    padding: 12px 10px 10px 12px;
+  
+
+  }
+  .chainhead{
+    font: 10px/10px $roboto ;
+  }
 
   .info{
     font: 10px/15px $roboto ;
@@ -104,9 +125,7 @@
 .dir{
  height:30px;
 }
-  .chainPad{
-    padding: 1rem  2rem 1rem 2rem ;
-  }
+  
 
   .color{
     text-align: left;
@@ -119,5 +138,13 @@
 }
   
 
-  
+  .temperature{
+   
+      #chart-1{
+      
+        height:20px;
+        
+      }
+      
+  }
   

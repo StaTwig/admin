@@ -42,15 +42,15 @@ module.exports = {
     }
   ],
   paths: {
-    '/productmanagement/api/products/getProductNames': {
+    '/productmanagement/api/products/getProducts': {
       get: {
         tags: ['CRUD operations'],
-        description: 'GET Product Names',
-        operationId: 'getProductNames',
+        description: 'GET Products',
+        operationId: 'getProducts',
         parameters: [],
         responses: {
           '200': {
-            description: 'Found the Product Names Successfully',
+            description: 'Found the Products Successfully',
             content: {
               'application/json': {
                 schema: {

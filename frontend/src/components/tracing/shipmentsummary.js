@@ -1,38 +1,40 @@
 import React from 'react';
+import Verifiedpic from '../../assets/icons/Verifiedpic.png';
 import './style.scss'
 
 const ShipmentSummary = (props) => {
-  
-    return(
+   return(
         Object.keys(props.shipments).length === 0 ? <div className="row panel justify-content-between">N/A</div> :
-        <div className="row panel justify-content-between">
-          <ul >
-            <li>Shipment ID</li>
-            <li>Unicef PO ID</li>
-            <li>Shipped From</li>
-            <li>Shipped To</li>
-            <li>Shipment Date</li>
-            <li>Quantity</li>
-            <li>Vendor ID</li>
-            <li>Vendor Name</li>
-            <li>Transaction ID</li>
+        <div className="panel commonpanle">
+          <div className="d-flex flex-row  ">
+          <ul className="mr-3 elemens">
+            <li className="mb-1 text-secondary">Shipment ID</li>
+            <li className="mb-1 text-secondary">Unicef PO ID</li>
+            <li className="mb-1 text-secondary">Shipped From</li>
+            <li className="mb-1 text-secondary">Shipped To</li>
+            <li className="mb-1 text-secondary">Shipment Date</li>
+            <li className="mb-1 text-secondary">Quantity</li>
+            <li className="mb-1 text-secondary">Vendor ID</li>
+            <li className="mb-1 text-secondary">Vendor Name</li>
+            <li className="text-secondary">Transaction ID</li>
             </ul>
-            <ul className="bold">
-            <li>{props.shipments.shipmentTxns[0].shipmentId}</li>
-            <li>{props.shipments.poTxns[0].orderID}</li>
-            <li>{props.shipments.shipmentTxns[0].supplierLocation}</li>
-            <li>{props.shipments.shipmentTxns[0].deliveryLocation}</li>
-            <li>{props.shipments.shipmentTxns[0].shipmentDate}</li>
-            <li>{props.shipments.shipmentTxns[0].quantity}</li>
-            <li>{props.shipments.poTxns[0].vendor}</li>
-            <li className="vendor">{props.shipments.poTxns[0].vendorName}</li>
-            <li className="txn">{props.poCard.txnId}</li>
+            <ul className="elemens">
+            <li className="mb-1">{props.shipments.shipmentTxns[0].shipmentId}</li>
+            <li className="mb-1">{props.shipments.poTxns[0].orderID}</li>
+            <li className="mb-1">{props.shipments.shipmentTxns[0].supplierLocation}</li>
+            <li className="mb-1">{props.shipments.shipmentTxns[0].deliveryLocation}</li>
+            <li className="mb-1">{props.shipments.shipmentTxns[0].shipmentDate}</li>
+            <li className="mb-1">lll</li>
+            <li className="mb-1">{props.shipments.poTxns[0].vendor}</li>
+            <li className="txn mb-1">{props.shipments.poTxns[0].vendorName}</li>
+          <a className="d-flex flex-row"><li className="txn">{props.poCard.txnId}</li><img src={Verifiedpic} className="mt-1" width="10" height="10"/></a>
             </ul>
-            <div className="font-weight-bold">
-                <span className="badge badge-pill badge-warning">
+            <div>
+                <span className="badge badge-pill badge-warning text-white">
                 {props.shipments.shipmentTxns[0].status}
                 </span>
               </div>
+        </div> 
         </div> 
     ) 
 }

@@ -66,7 +66,7 @@ const Header = props => {
           <input
             type="text"
             // value={search}
-            placeholder="Enter Shipment ID"
+            placeholder="Search"
             onChange={onSearchChange}
             className="form-control search-field"
           />
