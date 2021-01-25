@@ -1,5 +1,5 @@
 var mongoose = require('mongoose');
-var OrganizationSchema = new mongoose.Schema(
+var OrganisationSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
     name:{type:String, required:true},
@@ -38,15 +38,15 @@ var OrganizationSchema = new mongoose.Schema(
     logoId:String,
     type:String,
     warehouses:{
-        type:Array,
-        default:['ware123','ware234'],
-    },
+      type:Array,
+      default:['ware123','ware234'],
+  },
     supervisors: {
       type: Array,
       required: false,
       default: ['user_id 1', 'user_id 2'],
     },
-    employees: {
+    warehouseEmployeess: {
       type: String,
       required: false,
       default: ['em12345', 'em12346', 'em12347'],
@@ -54,4 +54,4 @@ var OrganizationSchema = new mongoose.Schema(
   },
   { timestamps: true },
 );
-module.exports = mongoose.model('Organization', OrganizationSchema);
+module.exports = mongoose.model('Organisation', OrganisationSchema);
