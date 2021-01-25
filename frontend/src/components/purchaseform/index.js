@@ -25,9 +25,9 @@ const PurchaseForm = props => {
   const [vendorId, setVendorId] = useState(editPo.vendorId);
   const [vendorName, setVendorName] = useState(editPo.vendorName);
   const [toDeliveryLocation, setToDeliveryLocation] = useState(editPo.toDeliveryLocation);
-  const [products, setProducts] = useState(['12']);
+  const [products, setProducts] = useState([]);
   const [deliveryId, setDeliveryId] = useState(editPo.deliveryId);
-  const [manufacturers, setManufacturers] = useState(['man']);
+  const [manufacturers, setManufacturers] = useState([]);
   const [product, setProduct] = useState(Object.keys(editPo.products[0])[0].split('-')[0]);
   const [manufacturer, setManufacturer] = useState(Object.keys(editPo.products[0])[0].split('-')[1]);
   const [quantity, setQuantity] = useState(editPo.products[0][`${product}-${manufacturer}`]);
@@ -95,8 +95,7 @@ const PurchaseForm = props => {
         vendorId,
         toDeliveryLocation,
         deliveryId,
-        materialId,
-        products: [],
+        products: [{materialId,product,manufacturer,quantity}],
         date:todayDate,
       },
     };
