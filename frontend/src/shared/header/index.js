@@ -102,13 +102,13 @@ const Header = props => {
           <div className="divider" />
           <div className="userName">
             <p className="cname">{profile.organisation}</p>
-            <p className="uname">{profile.name}</p>
+            <p className="uname">{profile.firstName}</p>
           </div>
 
           <div className="userPic">
             <img
               src={profile.profile_picture}
-              alt="Jhon Name"
+              alt=""
               className="rounded rounded-circle"
             />
           </div>
