@@ -1,7 +1,7 @@
 const express = require("express");
 
 const ProductsRouter = require("./productNames")
-const OrganisationRouter = require("./OrganizationRouter")
+const OrganisationRouter = require("./OrganisationRouter")
 
 const app = express();
 
