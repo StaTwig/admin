@@ -43,6 +43,11 @@ var WarehouseSchema = new mongoose.Schema(
     employees: {
       type: Array,
       default: []
+    },
+    inventoryId:{
+      type: String,
+      required: true,
+      default: 'inven123456',
     }
   },
   { timestamps: true },
