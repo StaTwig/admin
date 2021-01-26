@@ -979,7 +979,7 @@ exports.getInventoryDetails = [
 
       return apiResponse.successResponseWithData(res, 'Inventory Details', inventoryDetails);
     }else {
-      return apiResponse.errorResponse(res, 'Cannot find warehouse for this employee')
+      return apiResponse.ErrorResponse(res, 'Cannot find warehouse for this employee')
     }
   }catch(err) {
     return apiResponse.ErrorResponse(res, err)
