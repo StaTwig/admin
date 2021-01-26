@@ -38,7 +38,7 @@ var OrganisationSchema = new mongoose.Schema(
       required: false,
       default: ['user_id 1', 'user_id 2'],
     },
-    warehouseEmployeess: {
+    warehouseEmployees: {
       type: String,
       required: false,
       default: ['em12345', 'em12346', 'em12347'],
