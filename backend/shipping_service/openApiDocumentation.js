@@ -19,15 +19,15 @@ module.exports = {
   },
   servers: [
     {
-      url: 'http://localhost:9001/',
+      url: 'http://localhost:3002',
       description: 'Local server'
     },
     {
-      url: 'https://test.vaccineledger.com:9001/',
+      url: 'http://test.vaccineledger.com:9001',
       description: 'Testing server'
     },
     {
-      url: 'https://vaccineledger.com:9001/',
+      url: 'http://api.vaccineledger.com:9001',
       description: 'Production server'
     }
   ],
