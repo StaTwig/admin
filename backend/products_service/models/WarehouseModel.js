@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var WarehouseSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
-    organizationId: {
+    organisationId: {
       type: String,
       required: true,
       default: 'org123',
@@ -16,16 +16,16 @@ var WarehouseSchema = new mongoose.Schema(
       type: Object,
       required: true,
       default: {
-        id: 'reg123',
-        name: 'Earth Prime',
+        regionId: 'reg123',
+        regionName: 'Earth Prime',
       },
     },
     country: {
       type: Object,
       required: true,
       default: {
-        id: '001',
-        name: 'India',
+        countryId: '001',
+        countryName: 'India',
       },
     },
     location: {
@@ -44,12 +44,12 @@ var WarehouseSchema = new mongoose.Schema(
       type: Array,
       default: []
     },
-    inventoryId:{
+    warehouseInventory: {
       type: String,
       required: true,
-      default: 'inven123456',
-    }
+      unique: true
+    },
   },
   { timestamps: true },
 );
-module.exports = mongoose.model('warehouses', WarehouseSchema);
+module.exports = mongoose.model('Warehouse', WarehouseSchema);

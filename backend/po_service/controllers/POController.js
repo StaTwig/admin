@@ -3,9 +3,8 @@ const fs = require('fs');
 const moveFile = require('move-file');
 const XLSX = require('xlsx');
 const axios = require('axios');
+const uniqid = require('uniqid');
 
-const { sanitizeBody } = require('express-validator');
-const UserTransactionModel = require('../models/UserTransactionModel');
 const UserModel = require('../models/UserModel');
 const POModel = require('../models/POModel');
 const ShipmentModel = require('../models/ShipmentModel');
@@ -343,110 +342,47 @@ exports.createPurchaseOrder = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-            'info',
-            '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : token verified successfully, publishing to blockchain',
-          );
+      /* req.body
+       {
+         "externalId": "po1234", //User enters
+         "creationDate": "2021-01-28T18:30:00.000Z", //Date should be in ISO Format from UI
+         "lastUpdatedOn": "2021-01-28T18:30:00.000Z", //Date should be in ISO Format from UI
+         "supplier": {
+           "supplierOrganisation": "organx12345", // use id from Organisation object
+           "supplierIncharge": "emp-1f8ukke4uhhy" // use primaryContactId
+         },
+         "customer": {
+           "customerOrganisation": "org-11111", //use id from customer organisation dropdown
+           "customerIncharge": "emp-18gpp20egkkf54n59", //use primaryContactId
+           "shippingAddress": {
+            "shippingAddressId": "war-1234", //use id from customer location id dorpdown
+            "shipmentReceiverId": "emp-18gpp1kcckke7vrwh" // use supervisors[0] from cuostmer location id dropdown
 
-          const permission_request = {
-            result: result,
-            permissionRequired: 'createPO',
-          };
-            checkPermissions(permission_request, async permissionResult => {
-            if (permissionResult.success) {
-              try {
-                const { address } = req.user;
-                const { data } = req.body;
-                const orderID = data.orderID || 'PO' + Math.floor(1000 + Math.random() * 9000);
-
-                const userData = {
-                  stream: po_stream_name,
-                  key: orderID,
-                  address: address,
-                  data: data,
-                };
-
-                const response = await axios.post(
-                  `${blockchain_service_url}/publish`,
-                  userData,
-                );
-		console.log("response",response)
-                const txnIdPO = response.data.transactionId;
-                const POFound = await RecordModel.findOne({ id : orderID });
-		console.log("POFound",POFound)
-                if (!POFound) {
-                  logger.log(
-                    'info',
-                    '<<<<< ShipmentService < ShipmentController < createPO : PO found in collection',
-                  );
-
-                 /* const newPO = {
-                    ...data,
-                    status: req.user.address  === data.sendpoto.address ? 'Accepted':'Created',
-                    orderID,
-                    txnIds: [txnIdPO],
-                    sender: req.user.address,
-                    receiver: req.user.address  === data.sendpoto.address ? data.receiver.address : data.sendpoto.address,
-                    txnId: txnIdPO,
-                  };*/
-		 let date_ob = new Date();
-                 let date = ('0' + date_ob.getDate()).slice(-2);
-                 let month = ('0' + (date_ob.getMonth() + 1)).slice(-2);
-                 let year = date_ob.getFullYear();
-                 var today = date + '-' + month + '-' + year;
-                 var createdDate = { createdDate: today };
-
-		 const newPO = {
-			 id : orderID,
-			 creationDate : today,
-			 createdBy : req.user.address,
-			 poStatus : 'Created',
-			 potransactionIds: txnIdPO,
-			 ...data
-                  };
-		console.log("newPO",newPO)
-                  //await newPO.save();
-		 
-		//wrapper.insertOneRecord(POModel, newPO, function(error,response){
-		//	})
-
-		wrapper.insertOneRecord(RecordModel, newPO, function(error,response){
-                        })
-                } else {
-                  logger.log(
-                    'info',
-                    '<<<<< ShipmentService < ShipmentController < createPO : updating PO in PO model',
-                  );
-                  const txnIds = [...POFound.potransactionIds, txnIdPO];
-		  wrapper.updateRecord(RecordModel,{ id: orderID }, { potransactionIds: txnIds })
-		  //await POModel.updateOne({ orderID }, { txnIds });
-                }
-
-                logger.log(
-                  'info',
-                  '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : published to blockchain',
-                );
-                res.status(200).json({
-                  txid: response.data.transactionId,
-                  orderID: orderID,
-                });
-              } catch (e) {
-                return apiResponse.ErrorResponse(res, 'Error from Blockchain');
-              }
-            } else {
-              res.json('Sorry! User does not have enough Permissions');
+           }
+         },
+         "products": [
+            {
+              "productId": "prod-9bhkk6yiutx", // use id from products
+              "productQuantity": 1000,
             }
-          });
-        } else {
-          logger.log(
-            'warn',
-            '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : refuted token',
-          );
-          return apiResponse.ErrorResponse(res, result);
-        }
+          ],
+       }
+       */
+      const { externalId, creationDate, supplier, customer, products, lastUpdatedOn } = req.body;
+      const { createdBy, lastUpdatedBy } = req.user.id;
+      const purchaseOrder = new RecordModel({
+        id: uniqid('po-'),
+        externalId,
+        creationDate,
+        supplier,
+        customer,
+        products,
+        lastUpdatedOn,
+        createdBy,
+        lastUpdatedBy
       });
+      const result  = await purchaseOrder.save();
+      return apiResponse.successResponseWithData(res, 'Created PO Success', result.id);
     } catch (err) {
       logger.log(
         'error',

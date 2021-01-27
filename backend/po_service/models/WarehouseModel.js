@@ -1,14 +1,13 @@
 var mongoose = require('mongoose');
-var OrganisationSchema = new mongoose.Schema(
+var WarehouseSchema = new mongoose.Schema(
   {
-    organisation_id: { type: String, required: true, unique: true },
-    organization_name: {
+    id: { type: String, required: true, unique: true },
+    organisationId: {
       type: String,
       required: true,
-      unique: true,
-      default: 'StaTwig Pvt. Ltd.',
+      default: 'org123',
     },
-    postal_address: {
+    postalAddress: {
       type: String,
       required: true,
       default: 'T-Hub, IIIT, Gachibowli, Hyderabad, Telangana, India',
@@ -17,21 +16,40 @@ var OrganisationSchema = new mongoose.Schema(
       type: Object,
       required: true,
       default: {
-        region_id: 'reg123',
-        region_name: 'Earth Prime',
+        regionId: 'reg123',
+        regionName: 'Earth Prime',
       },
     },
     country: {
       type: Object,
       required: true,
       default: {
-        country_id: '001',
-        country_name: 'India',
+        countryId: '001',
+        countryName: 'India',
       },
     },
-    primary_contact_id: { type: String, required: false },
-    organization_type: { type: String, required: false, default: 'SUPPLIER' },
+    location: {
+      type: Object,
+      default: {
+        longitude: 12.12323453534,
+        latitude: 13.123435345435,
+        geohash: '1231nejf923453',
+      },
+    },
+    supervisors: {
+      type: Array,
+      default: []
+    },
+    employees: {
+      type: Array,
+      default: []
+    },
+    warehouseInventory: {
+      type: String,
+      required: true,
+      unique: true
+    },
   },
   { timestamps: true },
 );
-module.exports = mongoose.model('Organisation', OrganisationSchema);
+module.exports = mongoose.model('Warehouse', WarehouseSchema);

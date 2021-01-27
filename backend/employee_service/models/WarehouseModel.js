@@ -44,7 +44,7 @@ var WarehouseSchema = new mongoose.Schema(
       type: Array,
       default: []
     },
-   inventoryId: {
+   warehouseInventory: {
       type: String,
      required: true,
      unique: true

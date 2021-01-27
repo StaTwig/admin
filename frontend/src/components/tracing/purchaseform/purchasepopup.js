@@ -19,7 +19,7 @@ return (
           />
         </div>
          <div className="input-group">
-          <label className="reference">Vendor Id</label>
+          <label className="reference">Supplier Organisation Id</label>
           <input
             disabled
             type="text"
@@ -40,7 +40,7 @@ return (
           />
         </div>
        <div className="input-group">
-          <label className="reference">Vendor Name</label>
+          <label className="reference">Supplier Organisation Name</label>
           <input
             disabled
             type="text"
@@ -60,7 +60,7 @@ return (
           />
         </div>
         <div className="input-group">
-          <label className="reference">To Location ID</label>
+          <label className="reference">Customer Location ID</label>
           <input
             disabled
             type="text"
@@ -80,7 +80,7 @@ return (
           />
         </div>
         <div className="input-group">
-          <label className="reference">To Location</label>
+          <label className="reference">Customer Delivery Location</label>
           <input
             disabled
             type="text"

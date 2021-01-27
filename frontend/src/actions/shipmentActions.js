@@ -12,11 +12,11 @@ import {
   SET_EDIT_SHIPMENT,
   SET_TRACK_SHIPMENT,
 } from '../constants/shipmentConstants';
-import { turnOff, turnOn } from "./spinnerActions";
+import { turnOff, turnOn } from './spinnerActions';
 
 export const getShipments = (skip = 0, limit = 5) => {
-  try {
-    return async dispatch => {
+  return async dispatch => {
+    try {
       dispatch(turnOn());
       const result = await axios.get(
         `${config().shipmentsUrl}?skip=${skip}&limit=${limit}`,
@@ -25,14 +25,12 @@ export const getShipments = (skip = 0, limit = 5) => {
       dispatch(setShipmentsCount(result.data));
       dispatch(turnOff());
       return result.data.data.length;
-    };
-  } catch (e) {
-    return dispatch => {
+    } catch (e) {
+      dispatch(turnOff());
       dispatch(resetShipments(e.response));
       dispatch(resetShipmentsCount(e.response));
-      dispatch(turnOff());
-    };
-  }
+    }
+  };
 };
 
 export const trackShipment = shipmentId => {
@@ -48,10 +46,10 @@ export const trackShipment = shipmentId => {
   }
 };
 
-export const trackProduct = async(id) => {
+export const trackProduct = async id => {
   try {
     const configObject = config();
-    const url  = configObject.trackProduct+id;
+    const url = configObject.trackProduct + id;
     const result = await axios.get(url);
     return result;
   } catch (e) {
@@ -59,10 +57,10 @@ export const trackProduct = async(id) => {
   }
 };
 
-export const poDetailsByShipmentId = async(id) => {
+export const poDetailsByShipmentId = async id => {
   try {
     const configObject = config();
-    const url  = configObject.poDetailsByShipmentId+id;
+    const url = configObject.poDetailsByShipmentId + id;
     const result = await axios.get(url);
     return result;
   } catch (e) {
@@ -70,18 +68,16 @@ export const poDetailsByShipmentId = async(id) => {
   }
 };
 
-export const productDetailsByShipmentId = async(id) => {
+export const productDetailsByShipmentId = async id => {
   try {
     const configObject = config();
-    const url  = configObject.productDetailsByShipmentId+id;
+    const url = configObject.productDetailsByShipmentId + id;
     const result = await axios.get(url);
     return result;
   } catch (e) {
     return e.response;
   }
 };
-
-  
 
 export const getTemperature = async () => {
   try {
@@ -91,7 +87,6 @@ export const getTemperature = async () => {
     return e.response;
   }
 };
-
 
 export const getShipmentsById = query => {
   try {

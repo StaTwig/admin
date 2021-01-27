@@ -136,7 +136,7 @@ const PurchaseForm = props => {
          
         </div> */}
         <div className="input-group">
-          <label className="reference">Organisation ID</label>
+          <label className="reference">Customer Organisation ID</label>
           <div className="form-control">
            <DropdownButton
             name={OrgId}
@@ -149,7 +149,7 @@ const PurchaseForm = props => {
        </div>
       <div className="d-flex justify-content-between">
       <div className="input-group">
-          <label className="reference">Vendor Name</label>
+          <label className="reference">Supplier Organisation Name</label>
            <input
               type="text"
               className="form-control"
@@ -160,7 +160,7 @@ const PurchaseForm = props => {
             />
         </div>
         <div className="input-group">
-          <label className="reference">To Delivery Location</label>
+          <label className="reference">Customer Delivery Location</label>
            <input
               type="text"
               className="form-control"
@@ -175,7 +175,7 @@ const PurchaseForm = props => {
       <div className="d-flex justify-content-between">
      
         <div className="input-group">
-          <label className="reference">Vendor ID</label>
+          <label className="reference">Supplier Organisation ID</label>
             <input
               type="text"
               className="form-control"
@@ -187,7 +187,7 @@ const PurchaseForm = props => {
           </div>
      
         <div className="input-group">
-          <label className="reference">To Delivery ID</label>
+          <label className="reference">Customer Location ID</label>
            <input
               type="text"
               className="form-control"

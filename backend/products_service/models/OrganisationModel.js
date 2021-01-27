@@ -2,16 +2,13 @@ var mongoose = require('mongoose');
 var OrganisationSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
-    name:{type:String, required:true},
+    name: { type: String },
     postalAddress: {
       type: String,
-      required: true,
-      unique: true,
       default: 'JNIBF, Gachibowli, Hyderabad, Telanagana, India',
     },
     region: {
       type: Object,
-      required: true,
       default: {
         id: 'reg123',
         name: 'Earth Prime',
@@ -19,7 +16,6 @@ var OrganisationSchema = new mongoose.Schema(
     },
     country: {
       type: Object,
-      required: true,
       default: {
         id: '001',
         name: 'India',
@@ -34,21 +30,19 @@ var OrganisationSchema = new mongoose.Schema(
         geohash: '1231nejf923453',
       },
     },
-    primaryContactId:String,
-    logoId:String,
-    type:String,
-    warehouses:{
-      type:Array,
-      default:['ware123','ware234'],
-  },
+    primaryContactId: String,
+    logoId: String,
+    type: String,
+    warehouses: {
+      type: Array,
+      default: ['ware123', 'ware234'],
+    },
     supervisors: {
       type: Array,
-      required: false,
       default: ['user_id 1', 'user_id 2'],
     },
     warehouseEmployees: {
       type: String,
-      required: false,
       default: ['em12345', 'em12346', 'em12347'],
     },
   },

@@ -113,13 +113,13 @@ StakeholderSchema = new mongoose.Schema({
               type: String
             }
           },
-          warehouse_employeess: {
+          warehouseEmployees: {
             type: Array,
             items: {
               type: String
             }
           },
-          warehouse_inventory: {
+          warehouseInventory: {
             type: String
           }
         },
