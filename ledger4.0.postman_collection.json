@@ -407,6 +407,49 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "poService",
+			"item": [
+				{
+					"name": "createPurchaseOrder",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjExNzgxMTg4LCJleHAiOjE2MTE3ODgzODh9.MQEJQM7MQ526uZCB0JJliRqawrfncuQ2hV6eYUX0fiY",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n         \"externalId\": \"po1234\", \n         \"creationDate\": \"2021-01-28T18:30:00.000Z\",\n         \"lastUpdatedOn\": \"2021-01-28T18:30:00.000Z\",\n         \"supplier\": {\n           \"supplierOrganisation\": \"organx12345\",\n           \"supplierIncharge\": \"emp-1f8ukke4uhhy\"\n         },\n         \"customer\": {\n           \"customerOrganisation\": \"org-11111\",\n           \"customerIncharge\": \"emp-18gpp20egkkf54n59\", \n           \"shippingAddress\": {\n            \"shippingAddressId\": \"war-1234\", \n            \"shipmentReceiverId\": \"emp-18gpp1kcckke7vrwh\"\n\n           }\n         },\n         \"products\": [\n            {\n              \"productId\": \"prod-9bhkk6yiutx\",\n              \"productQuantity\": 1000\n            }\n          ]\n       }"
+						},
+						"url": {
+							"raw": "http://localhost:3012/pomanagement/api/po/createPurchaseOrder",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3012",
+							"path": [
+								"pomanagement",
+								"api",
+								"po",
+								"createPurchaseOrder"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
