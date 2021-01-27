@@ -7,6 +7,8 @@ const auth = require("../middlewares/jwt");
 const InventoryModel = require('../models/InventoryModel');
 const ShipmentModel = require('../models/ShipmentModel');
 const POModel = require('../models/POModel');
+const RecordModel = require('../models/RecordModel');
+const AtomModel = require('../models/AtomModel');
 
 const checkToken = require('../middlewares/middleware').checkToken;
 const checkPermissions = require('../middlewares/rbac_middleware').checkPermissions;
@@ -290,108 +292,57 @@ exports.track = [
       );
 
     if (trackingNumber.includes("PO")) {
-    var type = "poNumber";
-    POModel.findOne({
-        orderID: trackingNumber
+    var type = "poNumber"; 
+    var shipment_array = [];
+    RecordModel.findOne({
+        id: trackingNumber
     }).then(async user => {
-        let txnId = user.txnId;
-        let shipmentIDs = user.shipmentIds;
-        let items_array = [];
-        let shipment_array = [];
-        const response = await axios.get(
-            `${blockchain_service_url}/queryDataByTxHash?stream=${po_stream_name}&txid=${txnId}`,
-        );
-        const items = response.data.items;
-        items_array.push(JSON.parse(items));
-        await utility.asyncForEach(shipmentIDs, async shipmentId => {
-            shipment_array.push(shipmentId);
-        });
-        logger.log(
+         var arr = JSON.parse(JSON.stringify(user)).shipments.length
+            var val  = JSON.parse(JSON.stringify(user)).shipments
+            shipment_array.push(val)
+	    var poDetails = {"id":user.id,"supplier":user.supplier,"customer":user.customer,"date":user.creationDate,"createdBy":user.createdBy,"status":user.poStatus}
+	    logger.log(
             'info',
             '<<<<< ShipmentService < ShipmentController < trackShipment : tracked PO, queried data by transaction hash',
         );
         res.json({
-            POTxn: items_array,
+	    poDetails: poDetails,
             shipments: shipment_array,
-            type: type
         });
     });
   } else if (trackingNumber.includes("SHP")) {
-    var type = "shipmentId";
-
-        let po_array = [];
-        let shipmentNumbers = [];
-        let shipment_array = [];
-        var po_status;
-
-        await ShipmentModel.findOne({
-        shipmentId: trackingNumber
+     var shipment_array = [];
+     RecordModel.find({
+     "shipments.shipment_id": trackingNumber
     }).then(async user => {
-        let poNumber = user.poNumber;
-        await POModel.findOne({
-        orderID: poNumber
-       }).then(async user => {
-        let txnId = user.txnId;
-        shipmentNumbers = user.shipmentIds;
-        po_status = user.status;
-        const po_response = await axios.get(
-            `${blockchain_service_url}/queryDataByTxHash?stream=${po_stream_name}&txid=${txnId}`,
-        );
-        const items = po_response.data.items;
-        po_array.push(JSON.parse(items));
-       })
-        })
-  var shipmentNumber,supplierLocation,deliveryLocation;
-  await utility.asyncForEach(shipmentNumbers, async trackingNumber => {
-  await ShipmentModel.findOne({
-        shipmentId: trackingNumber
-    }).then(async user => {
-        let txnIDs = user.txnIds;
-        await utility.asyncForEach(txnIDs, async txnId => {
-            const response = await axios.get(
-                `${blockchain_service_url}/queryDataByTxHash?stream=${stream_name}&txid=${txnId}`,
-            );
-            const items = response.data.items;
-            shipment_array.push(JSON.parse(items));
-            shipmentNumber = shipment_array[0].shipmentId;
-            supplierLocation = shipment_array[0].supplierLocation;
-            deliveryLocation = shipment_array[0].deliveryLocation;
+      var poID = user[0].id;
+       RecordModel.find({
+       id: poID
+    }).then(async user => { 
+	    var arr = JSON.parse(JSON.stringify(user)).length
+            var poDetails = {"id":user[0].id,"supplier":user[0].supplier,"customer":user[0].customer,"date":user[0].creationDate,"createdBy":user[0].createdBy,"status":user[0].poStatus}
+	    for (i = 0; i < arr; i++){
+	    var val = JSON.parse(JSON.stringify(user))[i].shipments
+	    shipment_array.push(val)
+	    }
+    	 res.json({
+	    poDetails: poDetails,
+	    shipments: shipment_array
         });
-        logger.log(
-            'info',
-            '<<<<< ShipmentService < ShipmentController < trackShipment : tracked shipment, queried data by transaction hash',
-        );
-    });
-  });
-           res.json({
-            shipmentDetails : {"shipmentNumber":shipmentNumber,"supplierLocation":supplierLocation,"deliveryLocation":deliveryLocation},
-            poTxns : po_array,
-            poStatus: po_status,
-            shipmentTxns : shipment_array,
-            type: type
-        });
-
+      })
+    })
   } else {
-        var type = "serialNumber";
-  InventoryModel.findOne({
-        serialNumber: trackingNumber
+  var type = "serialNumber";
+  AtomModel.findOne({
+        id: trackingNumber
     }).then(async user => {
-        let txnIDs = user.transactionIds;
-        let items_array = [];
-        await utility.asyncForEach(txnIDs, async txnId => {
-            const response = await axios.get(
-                `${blockchain_service_url}/queryDataByRawTxHash?txid=${txnId}`,
-            );
-            const items = response.data.items;
-            items_array.push(JSON.parse(items));
-        });
-        logger.log(
+         console.log(user)
+         logger.log(
             'info',
             '<<<<< ShipmentService < ShipmentController < trackProduct : tracked product, queried data by transaction hash',
         );
         res.json({
-            data: items_array,
-            type: type
+            data: user
         });
     });
 }
