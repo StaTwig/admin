@@ -1056,7 +1056,7 @@ exports.addWarehouse = [
   async (req, res) => {
   try {
     const inventoryId = uniqid('inv-');
-    const inventoryResult = await new InventoryModel({ id: inventoryId });
+    const inventoryResult = new InventoryModel({ id: inventoryId });
     await inventoryResult.save();
     const {
       organisationId,

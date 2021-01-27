@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const InventorySchema = new mongoose.Schema(
   {
-    id: { type: String, required: true, unique: true },
+    id: { type: String, required: true },
     inventoryDetails: {
       type: Array,
       default: []
