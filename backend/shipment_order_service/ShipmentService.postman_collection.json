@@ -34,16 +34,59 @@
 					]
 				}
 			},
-			"response": [
-				{
+			"response": [{
 				"response": "Success - Shipment order created",
 				"shipments": {
 					"n": 1,
 					"nModified": 1,
 					"ok": 1
 				}
-			}
-		]
+			}]
+		},
+		{
+			"name": "update Shipment Status",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"update\":\"Delivered\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3013/shipmentordermanagement/api/shipment/updateShipmentStatus?id=SH1234567890",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3013",
+					"path": [
+						"shipmentordermanagement",
+						"api",
+						"shipment",
+						"updateShipmentStatus"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "SH1234567890"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"response": {
+						"n": 1,
+						"nModified": 1,
+						"ok": 1
+					}
+				}
+			]
 		}
 	]
 }
