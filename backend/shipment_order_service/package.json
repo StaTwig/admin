@@ -9,9 +9,9 @@
     "lint": "eslint --fix --config .eslintrc.json \"**/*.js\""
   },
   "dependencies": {
-    "axios": "^0.19.2",
-    "bcrypt": "^3.0.6",
-    "codacy-coverage": "^3.4.0",
+    "axios": "^0.21.1",
+    "bcrypt": "^5.0.0",
+    "codacy-coverage": "^3.2.0",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
@@ -27,10 +27,10 @@
     "move-file": "^2.0.0",
     "multer": "^1.4.2",
     "nodemailer": "^6.3.1",
-    "npx": "^10.2.2",
+    "npx": "^3.0.0",
     "pm2": "^4.2.3",
     "qrcode": "^1.4.4",
-    "swagger": "^0.7.5",
+    "swagger": "^0.0.1",
     "swagger-ui-express": "^4.1.6",
     "winston-logzio": "^5.1.2",
     "xlsx": "^0.16.8"

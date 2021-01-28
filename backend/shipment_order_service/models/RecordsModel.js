@@ -2,69 +2,74 @@ var mongoose = require('mongoose');
 
 var RecordsSchema = new mongoose.Schema(
   {
-    po_id:String,
-    po_external_id:String,
-    po_creation_date:String,
-    po_created_by:String,
-    // type: Date, default: Date.now => Created_at
+    poId:String,
+    poExternalId:String,
+    poCreationDate:String,
+    poCreatedBy:String,
     supplier:{
-      supplier_organization:String,
-      supplier_incharge:String
+      supplierOrganization:String,
+      supplierIncharge:String
     },
     customer: {
-      customer_organization:String,
-      customer_incharge:String,
-      shipping_address: {
-        shipping_address_id:String,
-        shipment_receiver_id:String
+      customerOrganization:String,
+      customerIncharge:String,
+      shippingAddress: {
+        shippingAddressId:String,
+        shipmentReceiverId:String,
     }},
     products:[
       {
-        po_product_id: String,
-        po_product_quantity: Number,
-        po_quantity_delivered:Number
+        poProductId: String,
+        poProductQuantity: Number,
+        poQuantityDelivered:Number
       }
     ],
-    po_status:String,
-    last_updated_by:String,
-    last_updated_on:{},
-    shipping_orders:[
+    poStatus:String,
+    lastUpdatedBy:String,
+    lastUpdatedOn:{},
+    shippingOrders:[
       {
-        shipping_order_id:String,
-        so_created_by:String,
-        so_assigned_to:[String],
-        so_updated_on:String,
-        so_updated_by:String,
-        so_status:String
+        shippingOrderId:String,
+        soCreatedBy:String,
+        soAssignedTo:String,
+        soUpdatedOn:String,
+        soUpdatedBy:String,
+        soStatus:String,
         },
     ],
     shipments:[
     {
-      shipment_id:String,
+      shipmentId:String,
       label: {
-          label_id:String,
-          label_type:String,
+          labelId:String,
+          labelType:{type:String,default:"QR_2DBAR"},
         },
-      external_shipment_id:String ,
-      shipment_supplier: {
-            supplier_id:String,
-            supplier_location_id:String,
+      externalShipmentId:String ,
+      supplier: {
+            supplierId:String,
+            supplierName:String,
+            supplierLocationId:String,
       },
       receiver:{
-        receiver_id:String,
-        receiver_location_id:String,
+        receiverId:String,
+        receiverLocationId:String,
       },
-      shipping_date:String,
-      expected_delivery_date:String,
-      actual_delivery_date:String,
-      shipment_status:String,
-      transaction_ids:[String],
+      shippingDate:String,
+      expectedDeliveryDate:String,
+      actualDeliveryDate:String,
+      shipmentStatus:String,
+      transactionIds:[String],
       products:[
         {
-          shipment_product_id:String,
-          shipment_product_quantity:Number
+          productId:String,
+          productQuantity:Number,
+          productName:String,
+          manufacturerName:String,
+          labelId:String
         }
-      ]
+      ],
+      airWayBillNo:String,
+
     }
   ]
 },{timestamps: true});

@@ -1,0 +1,92 @@
+{
+	"info": {
+		"_postman_id": "308e8fc8-b5cd-40f1-9a82-028d171c7267",
+		"name": "ShipmentService",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Shipment API",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"shipment\":{\n      \"shipmentId\": \"SH1234567890\",\n      \"airWayBillNo\":\"Bill1234\",\n      \"label\": {\n        \"labelId\": \"uuid1234567899\",\n        \"labelType\": \"QR_2DBAR\"\n      },\n      \"externalShipmentId\": \"HYDROS123456ORP\",\n      \"supplier\": {\n        \"supplierId\": \"user_id\",\n        \"supplierName\":\"NAME SUP\",\n        \"supplierLocationId\": \"warehouse_id\"\n      },\n      \"receiver\": {\n        \"receiverId\": \"user_id\",\n        \"receiverLocationId\": \"warehouse_id\"\n      },\n      \"shippingDate\": \"2021-01-01T18:30:00.000Z\",\n      \"expectedDeliveryDate\": \"2021-01-03T18:30:00.000Z\",\n      \"actualDeliveryDate\": \"2021-01-04T18:30:00.000Z\",\n      \"shipmentStatus\": \"PROCESSING_CREATED_SHIPPED_RECEIVED_LOST_DAMAGED\",\n      \"transactionIds\": [\n        \"tx_id 1\",\n        \"tx_id 2\",\n        \"tx_id 3\"\n      ],\n      \"products\": [\n        {\n          \"productId\": \"product_id 1\",\n          \"productQuantity\": 345,\n          \"productName\":\"NAME PRODUCT\",\n          \"manufacturerName\":\"MAN1234\",\n          \"labelId\":\"label1234\"\n        }\n      ]\n    },\n \"poId\": \"po1234565\"\n}   ",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3013/shipmentordermanagement/api/shipment/createShipment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3013",
+					"path": [
+						"shipmentordermanagement",
+						"api",
+						"shipment",
+						"createShipment"
+					]
+				}
+			},
+			"response": [{
+				"response": "Success - Shipment order created",
+				"shipments": {
+					"n": 1,
+					"nModified": 1,
+					"ok": 1
+				}
+			}]
+		},
+		{
+			"name": "update Shipment Status",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"update\":\"Delivered\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3013/shipmentordermanagement/api/shipment/updateShipmentStatus?id=SH1234567890",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3013",
+					"path": [
+						"shipmentordermanagement",
+						"api",
+						"shipment",
+						"updateShipmentStatus"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "SH1234567890"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"response": {
+						"n": 1,
+						"nModified": 1,
+						"ok": 1
+					}
+				}
+			]
+		}
+	]
+}
