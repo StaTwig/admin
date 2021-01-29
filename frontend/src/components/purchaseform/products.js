@@ -2,23 +2,20 @@ import React from 'react';
 import DropdownButton from '../../shared/dropdownButtonGroup';
 import './style.scss';
 
-const ProductsTable = props => {
+const tableHeader = ['Product ID', 'Product Name', 'Manufacturer', 'Quantity'];
 
+const ProductsTable = props => {
   const {
-    tableHeader,
-    materialId,
-    onMaterialSelect,
     onProductSelect,
-    onManufacturerSelect,
     product,
     products,
-    manufacturer,
-    manufacturers,
     quantity,
     onQuantityChange,
+    index
   } = props;
+  const productIds = products.map(product => product.id);
   return (
-    <div className="table productTable mt-2">
+    <div className="table productTable mt-2" key={index}>
       <div className="rTable">
         <div className="rTableHeading">
           {tableHeader &&
@@ -32,46 +29,43 @@ const ProductsTable = props => {
         </div>
         <div>
           <div className="rTableRow">
-          <div className="rTableCell">
-             <div className="form-group">
-                <input
-              type="text"
-              className="form-control"
-              name="shipmentId"
-              placeholder="Enter Product ID"
-              onChange={onMaterialSelect}
-              value={materialId}
-            />
+            <div className="rTableCell">
+              <DropdownButton
+                groups={productIds}
+                onSelect={ item => onProductSelect(item, index)}
+                name={product.productId}
+                className="text"
+              />
+            </div>
+            <div className="rTableCell">
+              <div className="form-group">
+                <label>{product.productName} </label>
+              </div>
+            </div>
 
-</div>
-            </div>
             <div className="rTableCell">
-            <DropdownButton
-                groups={products}
-                onSelect={onProductSelect}
-                name={product}
-                className="text"
-              />
-            </div>
-            <div className="rTableCell">
-            <DropdownButton
-                groups={manufacturers}
-                onSelect={onManufacturerSelect}
-                name={manufacturer}
-                className="text"
-              />
+              <div className="form-group">
+                <label>{product.manufacturer} </label>
+              </div>
             </div>
             <div className="rTableCell">
               <div className="form-group">
                 <input
                   type="number"
                   min="0"
-                  onKeyDown={ e => ( e.keyCode === 69 || e.keyCode === 190||e.keyCode === 189
-                  ||e.keyCode === 187||e.keyCode === 40||e.keyCode === 38) && e.preventDefault() }
+                  onKeyDown={e =>
+                    (e.keyCode === 69 ||
+                      e.keyCode === 190 ||
+                      e.keyCode === 189 ||
+                      e.keyCode === 187 ||
+                      e.keyCode === 40 ||
+                      e.keyCode === 38) &&
+                    e.preventDefault()
+                  }
                   className="form-control"
                   placeholder="Enter Quantity"
                   value={quantity}
-                  onChange={onQuantityChange}
+                  onChange={item => onQuantityChange(item, index)}
                 />
               </div>
             </div>

@@ -53,7 +53,7 @@ exports.getProducts = [
           );
 
           permission_request = {
-            result: result,
+            role: req.user.role,
             permissionRequired: 'viewProductList',
           };
           checkPermissions(permission_request, async permissionResult => {

@@ -22,18 +22,17 @@ export const generateCodes = async query => {
 export const getOrganisations = async () => {
   try {
     const result = await axios.get(config().getOrganisations);
-    debugger;
-    return result;
+    return result.data.data;
   } catch (e) {
-    return e.response;
+    return [];
   }
 };
 
 export const getWarehouseByOrgId = async (id) => {
   try {
     const result = await axios.get(config().getWarehouseByOrgId+id);
-    return result;
+    return result.data.data;
   } catch (e) {
-    return e.response;
+    return [];
   }
 };
