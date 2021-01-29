@@ -15,7 +15,7 @@ const ProductsTable = props => {
   } = props;
   const productIds = products.map(product => product.id);
   return (
-    <div className="table productTable mt-2" key={index}>
+    <div className="table productTable mt-2">
       <div className="rTable">
         <div className="rTableHeading">
           {tableHeader &&

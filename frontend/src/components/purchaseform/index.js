@@ -6,11 +6,7 @@ import ExportIcon from '../../assets/icons/Export.svg';
 import dropdownIcon from '../../assets/icons/drop-down.svg';
 import './style.scss';
 import DropdownButton from '../../shared/dropdownButtonGroup';
-import {
-  setReviewPos,
-  getProducts,
-  getManufacturers,
-} from '../../actions/poActions';
+import { setReviewPos, getProducts, createPO } from '../../actions/poActions';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getOrganisations,
@@ -36,7 +32,7 @@ const PurchaseForm = props => {
     'Select Location ID',
   );
   const [warehouses, setWarehouses] = useState([]);
-  const [ExternalPoId, setExternalPoId] = useState(editPo.ExternalPoId);
+  const [externalPoId, setExternalPoId] = useState(editPo.ExternalPoId);
   const [customerOrgId, setCustomerOrgId] = useState('Select Org Id');
   const [products, setProducts] = useState([]);
   const defaultProduct = {
@@ -44,10 +40,8 @@ const PurchaseForm = props => {
     productName: 'Select',
     quantity: '',
     manufacturer: 'Select Product Id',
-  }
-  const [productRows, setProductRows] = useState([
-    defaultProduct
-  ]);
+  };
+  const [productRows, setProductRows] = useState([defaultProduct]);
   const [message, setMessage] = useState('');
   const month = new Date().getMonth() + 1;
   const todayDate =
@@ -106,7 +100,7 @@ const PurchaseForm = props => {
   };
   const dispatch = useDispatch();
 
-  const onProceed = () => {
+  const onProceed = async () => {
     /*if (checkValidationErrors(poFields)) {
       return;
     }
@@ -132,6 +126,47 @@ const PurchaseForm = props => {
     //Redirect to review page.
     props.setEditMode(true);
     console.log('new po data', data);*/
+
+    //Temporarily sending post reqeuest
+
+    //Todo this needs to be done after review
+
+    const isoDate = new Date().toISOString();
+    const supplierOrg = organisations.find(org => org.id === orgId);
+    const customerOrg = organisations.find(org => org.id === customerOrgId);
+    const customerWarhouse = warehouses.find(
+      war => war.id === customerLocationId,
+    );
+    const selectedProducts = productRows.map(prod => ({
+      productId: prod.productId,
+      quantity: prod.quantity,
+    }));
+    const data = {
+      externalId: externalPoId,
+      creationDate: isoDate,
+      lastUpdatedOn: isoDate,
+      supplier: {
+        supplierOrganisation: orgId,
+        supplierIncharge: supplierOrg.primaryContactId,
+      },
+      customer: {
+        customerOrganisation: customerOrgId,
+        customerIncharge: customerOrg.primaryContactId,
+        shippingAddress: {
+          shippingAddressId: customerLocationId,
+          shipmentReceiverId: customerWarhouse.supervisors[0],
+        },
+      },
+      products: selectedProducts,
+    };
+
+    console.log('data', data);
+    const result = await createPO(data);
+    if (result.status === 200) {
+      setMessage(result.data.message);
+    } else {
+      setPoError('Failed to create po');
+    }
   };
 
   const onCustomerOrgChange = async item => {
@@ -167,7 +202,7 @@ const PurchaseForm = props => {
 
   const addAnotherProduct = () => {
     setProductRows([...productRows, defaultProduct]);
-  }
+  };
 
   return (
     <div className="purchaseform">
@@ -181,7 +216,7 @@ const PurchaseForm = props => {
             name="shipmentId"
             placeholder="Enter External PO ID"
             onChange={e => setExternalPoId(e.target.value)}
-            value={ExternalPoId}
+            value={externalPoId}
           />
         </div>
         <div className="input-group">
@@ -237,6 +272,7 @@ const PurchaseForm = props => {
       </div>
       {productRows.map((product, index) => (
         <ProductsTable
+          key={index}
           products={products}
           product={product}
           index={index}
@@ -245,7 +281,10 @@ const PurchaseForm = props => {
         />
       ))}
 
-      <button className="btn btn-white shadow-radius font-bold" onClick={addAnotherProduct}>
+      <button
+        className="btn btn-white shadow-radius font-bold"
+        onClick={addAnotherProduct}
+      >
         +<span> Add Another Product</span>
       </button>
 

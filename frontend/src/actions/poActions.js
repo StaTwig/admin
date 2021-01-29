@@ -76,7 +76,6 @@ export const addNewProduct = async data => {
     const result = await axios.post(config().addNewProduct, data, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
-    debugger;
     return result.data;
   } catch (e) {
     return e.response;
