@@ -10,7 +10,13 @@
                 display: flex;
                 flex-direction: column;
                 width: 100%;
-
+  
+                
+                .sub{
+                        font-size: 8px;
+                        word-break: break-all;
+                        
+                }
                 .rTableHeading {
                         display: flex;
                         justify-content: space-between;
@@ -45,13 +51,14 @@
                         align-self: center;
                         font-size: 12px;
                         color: #707070;
-                        word-break:break-word;
+                        word-break: break-all;
                       
                 }
 
                 .rTableCell {
                         color: $black;
                         font-weight: 400;
+                
                         a {
                                 color: $black;
                                 font-weight: 400;
@@ -108,19 +115,17 @@
 
                         .combine-data {
                                 display: flex;
-                                align-items: center;
+                                align-items:flex-start;
                                 font-weight: bold;
 
                                 color: #0093E9;
 
                                 .round-sign {
-                                        margin-right: 10px;
-                                        border-radius: 100%;
-                                        background-color: #FFBCC4;
-                                        font: Bold 11px Roboto;
-                                        letter-spacing: 0px;
-                                        height: 26px;
-                                        width: 26px;
+                                        margin-right: 6px;
+                                        border-radius: 4px;
+                                        background-color:#0093E9;
+                                        height: 20px;
+                                        width: 20px;
                                         display: flex;
                                         justify-content: center;
                                         align-items: center;
@@ -135,9 +140,31 @@
       .reference{
                 color : #A8A8A8;
              }
+            
+                .custom1{
+                        margin-right: 90px;
+                }
+                .custom2{
+                        margin-right: 80px;
+                      
+                }
+                .custom3{
+                        margin-right: 50px; 
+                }
+        
+        
+        table, tr,th, td,tbody {
+                border: none;
+              }
+
+
 }
 
 .poModalTable {
+        table, tr,th, td,tbody {
+                border: none;
+              }
+              
         .square-box {
                 width: 20px;
                 height: 20px;

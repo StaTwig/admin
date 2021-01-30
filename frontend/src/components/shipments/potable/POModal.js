@@ -11,76 +11,40 @@ const POModal = props => {
     onReject,
     onCreateShipment,
   } = props;
-  const po = purchaseOrder;
-  const receiverAddress = po.receiver;
+  //const po = purchaseOrder;
+  //const receiverAddress = po.receiver;
   return (
     <div className="PO">
-      <div className="d-flex justify-content-between">
-        <div className="d-flex flex-column justify-content-between">
+      <div className="row">
+        <div className="col">
           <div className="input-group">
-            <label className="reference mr-3">Purchase order ID : </label>
-            <p>{purchaseOrder.orderID}</p>
+            <label className="reference custom1">External PO ID: </label>
+            <p >PO123409090<span class="badge badge-success ml-5">Success</span></p>
+         
+          </div>
+          <div className="input-group text-primary font-weight-bold mb-2 ">Supplier Details: </div>
+          <div className="input-group">
+            <label className="reference custom2">Organisation ID : </label>
+            <p>PR5678889676</p>
           </div>
           <div className="input-group">
-            <label className="reference mr-5">Delivery To : </label>
-            <p className="ml-3">{po.destination}</p>
-          </div>
-          <div className="input-group">
-            <label className="reference mr-3">Delivery Location : </label>
-            <p>{po.destination}</p>
-          </div>
-          <div className="input-group">
-            <label className="reference mr-5">In Coterms : </label>
-            <p className="ml-3">{po.incoterms}</p>
-          </div>
-          <div className="input-group">
-            <label className="reference mr-5">In Coterms2 : </label>
-            <p>{po.incoterms2}</p>
+            <label className="reference custom3">Organisation Name : </label>
+            <p>Bharat Biotech</p>
           </div>
         </div>
-        
-        <div className="d-flex flex-column justify-content-between">
+        <div className="col">
+          <div className="input-group text-primary font-weight-bold mb-3">Customer Details</div>
           <div className="input-group">
-            <label className="reference mr-5">Client : </label>
-            <p>{po.client}</p>
+            <label className="reference custom2">Organisation ID : </label>
+            <p>Org123</p>
           </div>
           <div className="input-group">
-            <label className="reference mr-4">Client Id  : </label>
-            <p>{po.clientId}</p>
-          </div>
-           <div className="input-group">
-            <label className="reference mr-4">Ip Code : </label>
-            <p>{po.ipCode}</p>
+            <label className="reference custom3">Delivery Location ID : </label>
+            <p>Location 123</p>
           </div>
           <div className="input-group">
-            <label className="reference mr-4">Ip Name : </label>
-            <p>{po.ipName}</p>
-          </div>
-          <div className="input-group">
-            <label className="reference mr-5">Unit : </label>
-            <p className="ml-2">{po.unit}</p>
-          </div>
-        </div>
-        <div className="d-flex flex-column justify-content-between mr-5">
-          <div className="input-group">
-            <label className="reference mr-5">Date : </label>
-            <p>{po.date}</p>
-          </div>
-          <div className="input-group">
-            <label className="reference mr-3">Vendor ID : </label>
-            <p>{po.vendor}</p>
-          </div>
-          <div className="input-group">
-            <label className="reference mr-5">Plant : </label>
-            <p>{po.plant}</p>
-          </div>
-          <div className="input-group">
-            <label className="reference mr-5">Po Item : </label>
-            <p>{po.poItem}</p>
-          </div>
-          <div className="input-group">
-            <label className="reference mr-3">Reference : </label>
-            <p>{po.reference}</p>
+            <label className="reference custom2">Delivery Location : </label>
+            <p>ssssssss</p>
           </div>
         </div>
       </div>
@@ -89,10 +53,10 @@ const POModal = props => {
         <thead>
           <tr>
             <th scope="col" />
-            <th scope="col">Manufacturer</th>
-            <th scope="col">Product Name</th>
-            <th scope="col">Material Id</th>
-             <th scope="col">Quantity</th>
+            <th scope="col" class="text-secondary">Product ID</th>
+            <th scope="col " class="text-secondary">Product Name</th>
+            <th scope="col" class="text-secondary">Manufacturer</th>
+             <th scope="col" class="text-secondary">Quantity</th>
             </tr>
         </thead>
         <tbody>
@@ -100,17 +64,17 @@ const POModal = props => {
             <th scope="row">
               <div className="square-box" />
             </th>
-            <td>{Object.keys(po.products[0])[0].split('-')[1]}</td>
-            <td>{Object.keys(po.products[0])[0].split('-')[0]}</td>
-            <td>{po.material}</td>
-            <td>{parseInt(po.products[0][Object.keys(po.products[0])])}</td>
+            <td>sssssssssssssssssssssss</td>
+            <td>sssssssssssssssssss</td>
+            <td>ssssssssssssssssssssss</td>
+            <td>sssssssss</td>
           </tr>
         </tbody>
       </table>
       <div className="d-flex justify-content-end">
-        <div className="d-flex flex-column">
+        <div className="d-flex flex-column mr-5">
           <span>Total Quantity</span>
-          <h3>{parseInt(po.products[0][Object.keys(po.products[0])])}</h3>
+          <h3>50000</h3>
         </div>
       </div>
       {purchaseOrder.status === 'Received' &&

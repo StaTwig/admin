@@ -21,7 +21,7 @@ const PoTable = props => {
   const purchases = useSelector(state => state.pos);
 
   useEffect(() => {
-    dispatch(getPurchaseStats());
+    //dispatch(getPurchaseStats());
     return () => dispatch(resetPurchaseStats());
   }, []);
 
@@ -60,16 +60,16 @@ const PoTable = props => {
   return (
     <div className="table">
       {showAlertModal && (
-         <Modal
-         close={() => closeAlertModal()}
-         size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
-       >
-      <AlertModal
-          type={alertMessage}
-          productID={purchaseOrder.key}
-          onHide={() => setShowAlertModal(false)}
-        />
-          </Modal>
+        <Modal
+          close={() => closeAlertModal()}
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+          <AlertModal
+            type={alertMessage}
+            productID={purchaseOrder.key}
+            onHide={() => setShowAlertModal(false)}
+          />
+        </Modal>
       )}
       {showModal && (
         <Modal
@@ -90,20 +90,17 @@ const PoTable = props => {
       )}
       <div className="rTable">
         <div className="rTableHeading">
-          <div className="rTableHead">Vendor</div>
+          <div className="rTableHead">Supplier</div>
           <div className="rTableHead">Purchase Order ID</div>
-          <div className="rTableHead">Product Name</div>
+          <div className="rTableHead">Product</div>
           <div className="rTableHead">
             <span>Quantity</span>
           </div>
           <div className="rTableHead">
-            <span>Order Date</span>
+            <span>Customer</span>
           </div>
           <div className="rTableHead">
-            <span>Shipped From</span>
-          </div>
-          <div className="rTableHead">
-            <span>To Location</span>
+            <span>CustomerLocation</span>
           </div>
           <div className="rTableHead">
             <span>Status</span>
@@ -113,55 +110,49 @@ const PoTable = props => {
           </div>
         </div>
         <div className="overflow">
-          {purchases.map((purchase, index) => {
-            const p = purchase;
-            let statusStyle = 'warning-bg';
-            if (purchase.status === 'Accepted') {
-              statusStyle = 'success-bg';
-            } else if (purchase.status === 'Created') {
-              statusStyle = 'info-bg';
-            } else if (purchase.status === 'Rejected') {
-              statusStyle = 'secondary-bg';
-            }
-            return (
-              <div>
-                <div className="rTableRow" key={index}>
-                  <div className="rTableCell">
-                    <div className="combine-data">
-                      {Object.keys(p.products[0])[0].split('-')[1]}
-                    </div>
-                  </div>
-                  <div className="rTableCell">{purchase.orderID}</div>
-                  <div className="rTableCell">
-                    {Object.keys(p.products[0])[0].split('-')[0]}
-                  </div>
-                  <div className="rTableCell">
-                    {
-                      p.products[0][
-                        `${Object.keys(p.products[0])[0].split('-')[0]}-${
-                          Object.keys(p.products[0])[0].split('-')[1]
-                        }`
-                      ]
-                    }
-                  </div>
-                  <div className="rTableCell">{p.date}</div>
-                  <div className="rTableCell">{p.incoterms2}</div>
-                  <div className="rTableCell">{p.destination}</div>
-                  <div className="rTableCell">
-                  <div className= {`status ${statusStyle}`}>{p.status}</div>
-                  </div>
-                  <div className="rTableCell">
-                    <button
-                      className="btn btn-outline-primary"
-                      onClick={() => openModal(purchase)}
-                    >
-                      View
-                    </button>
-                  </div>
+          <div>
+            <div className="rTableRow">
+              <div className="rTableCell">
+                <div className="combine-data">
+                <div className="d-flex flex-column ">
+                  <div className="align-self-start">Richard Parker</div>
+                  <div className="sub align-self-start">123455678</div>
+                </div></div>
+              </div>
+              <div className="rTableCell">ACT1324526</div>
+              <div className="rTableCell">
+                <div className="d-flex flex-column ">
+                  <div>MMR</div>
+                  <div className="sub">PR455678</div>
                 </div>
               </div>
-            );
-          })}
+              <div className="rTableCell ">
+               <div className="ml-1">500000</div> 
+                  </div>
+              <div className="rTableCell"> 
+              <div className="d-flex flex-column ">
+                <div>Bharat1234</div>
+                <div className="sub">PR455678</div>
+              </div></div>
+              <div className="rTableCell">  
+              <div className="d-flex flex-column">
+                <div>Australia</div>
+                <div className="sub">PR455678</div>
+              </div></div>
+
+              <div className="rTableCell">
+                <div className="status success-bg">Status</div>
+              </div>
+              <div className="rTableCell">
+                <button
+                  className="btn btn-outline-primary"
+                  onClick={() =>  setShowModal(true)}
+                >
+                  View
+                    </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       {loadMore && (
