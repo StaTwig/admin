@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { getPurchaseStats, changePOStatus, resetPurchaseStats } from '../../../actions/poActions';
+import { getPOs, changePOStatus, resetPOs} from '../../../actions/poActions';
 import Modal from '../../../shared/modal';
 import POModal from './POModal';
 import AlertModal from './AlertModal';
@@ -21,8 +21,8 @@ const PoTable = props => {
   const purchases = useSelector(state => state.pos);
 
   useEffect(() => {
-    dispatch(getPurchaseStats());
-    return () => dispatch(resetPurchaseStats());
+    dispatch(getPOs());
+    return () => dispatch(resetPOs());
   }, []);
 
   const user = useSelector(state => state.user);
@@ -52,7 +52,7 @@ const PoTable = props => {
   const onLoadMore = async () => {
     const newSkip = skip + 5;
     setSkip(newSkip);
-    const purchaseStatsResult = await dispatch(getPurchaseStats(skip, limit));
+    const purchaseStatsResult = await dispatch(getPOs(skip, limit));
     if (purchaseStatsResult.data.data.length === 0) {
       setLoadMore(false);
     }
@@ -90,20 +90,13 @@ const PoTable = props => {
       )}
       <div className="rTable">
         <div className="rTableHeading">
-          <div className="rTableHead">Vendor</div>
+          <div className="rTableHead">Supplier</div>
           <div className="rTableHead">Purchase Order ID</div>
-          <div className="rTableHead">Product Name</div>
           <div className="rTableHead">
-            <span>Quantity</span>
+            <span>Customer</span>
           </div>
           <div className="rTableHead">
-            <span>Order Date</span>
-          </div>
-          <div className="rTableHead">
-            <span>Shipped From</span>
-          </div>
-          <div className="rTableHead">
-            <span>To Location</span>
+            <span>Customer Location</span>
           </div>
           <div className="rTableHead">
             <span>Status</span>
@@ -128,27 +121,18 @@ const PoTable = props => {
                 <div className="rTableRow" key={index}>
                   <div className="rTableCell">
                     <div className="combine-data">
-                      {Object.keys(p.products[0])[0].split('-')[1]}
+                      {purchase.supplierOrgName}
                     </div>
                   </div>
-                  <div className="rTableCell">{purchase.orderID}</div>
-                  <div className="rTableCell">
-                    {Object.keys(p.products[0])[0].split('-')[0]}
-                  </div>
+                  <div className="rTableCell">{purchase.purchaseOrderID}</div>
                   <div className="rTableCell">
                     {
-                      p.products[0][
-                        `${Object.keys(p.products[0])[0].split('-')[0]}-${
-                          Object.keys(p.products[0])[0].split('-')[1]
-                        }`
-                      ]
+                      purchase.customerOrgName
                     }
                   </div>
-                  <div className="rTableCell">{p.date}</div>
-                  <div className="rTableCell">{p.incoterms2}</div>
-                  <div className="rTableCell">{p.destination}</div>
+                  <div className="rTableCell">{purchase.customerCountryName}</div>
                   <div className="rTableCell">
-                  <div className= {`status ${statusStyle}`}>{p.status}</div>
+                  <div className= {`status ${statusStyle}`}>{purchase.status}</div>
                   </div>
                   <div className="rTableCell">
                     <button

@@ -19,15 +19,6 @@ export const createPO = async data => {
   }
 };
 
-export const getPOs = async () => {
-  try {
-    const result = await axios.get(config().fetchAllPurchaseOrdersUrl);
-    return result;
-  } catch (e) {
-    return e.response;
-  }
-};
-
 export const getPO = async po => {
   try {
     const result = await axios.get(config().fetchAllPurchaseOrderUrl + po);
@@ -46,7 +37,7 @@ export const changePOStatus = async data => {
   }
 };
 
-export const resetPurchaseStats = () => {
+export const resetPOs = () => {
   return {
     type: RESET_POS
   }
@@ -94,21 +85,22 @@ export const addMultipleProducts = async data => {
   }
 };
 
-export const getPurchaseStats = (skip = 0, limit = 5) => {
+export const getPOs = (skip = 0, limit = 5) => {
   try {
     return async dispatch => {
       dispatch(turnOn());
       const result = await axios.get(
         `${
-          config().fetchPurchaseOrderStatisticsUrl
+          config().getPOs
         }?skip=${skip}&limit=${limit}`,
       );
+     // const result = await axios.get('http://54.164.66.73:3012/pomanagement/api/po/purchaseOrderStatistics');
       dispatch(setPurchaseOrders(result.data.data));
       dispatch(turnOff());
       return result;
     };
   } catch (e) {
-    return e.response;
+    return [];
   }
 };
 
