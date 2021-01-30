@@ -4,11 +4,13 @@ export const DEMO_SERVER_URL = 'http://vaccineledger.com:9001';
 export const LOCAL_SERVER_URL_USER = 'http://localhost:3001';
 export const LOCAL_SERVER_URL_SHIPMENT = 'http://localhost:3002';
 export const LOCAL_SERVER_URL_INVENTORY = 'http://localhost:3007';
+export const LOCAL_SERVER_URL_PO = 'http://localhost:3012';
 export const LOCAL_SERVER_URL_TRACKANDTRACE = 'http://localhost:3005';
 export const LOCAL_SERVER_URL_NOTIFICATION = 'http://localhost:3006';
 export const LOCAL_SERVER_URL_PRODUCTS = 'http://localhost:3010';
 export const STABLE_SERVER_URL_USER = 'http://65.0.135.24:3001';
 export const STABLE_SERVER_URL_SHIPMENT = 'http://65.0.135.24:3002';
+export const STABLE_SERVER_URL_PO = 'http://65.0.135.24:3012';
 export const STABLE_SERVER_URL_INVENTORY = 'http://65.0.135.24:3007';
 export const STABLE_SERVER_URL_TRACKANDTRACE = 'http://65.0.135.24:3005';
 export const STABLE_SERVER_URL_NOTIFICATION = 'http://65.0.135.24:3006';
@@ -39,12 +41,11 @@ export function config() {
       addInventoryUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/addNewInventory`,
       shipmentsSearch: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchShipments?key=`,
       inventorySearch: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`,
-      createPurchaseOrderUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/createPurchaseOrder`,
+      createPurchaseOrderUrl: `${LOCAL_SERVER_URL_PO}/pomanagement/api/po/createPurchaseOrder`,
       addPOsFromExcelUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/addPOsFromExcel`,
       changePOStatus: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/changePOStatus`,
-      fetchAllPurchaseOrdersUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchPublisherPurchaseOrders`,
       fetchAllPurchaseOrderUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
-      fetchPurchaseOrderStatisticsUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/purchaseOrderStatistics`,
+      getPOs: `${LOCAL_SERVER_URL_SHIPMENT}/pomanagement/api/po/purchaseOrderStatistics`,
       trackShipment: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
       poDetailsByShipmentId:`${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
@@ -82,9 +83,8 @@ export function config() {
       createPurchaseOrderUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/createPurchaseOrder`,
       addPOsFromExcelUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/addPOsFromExcel`,
       changePOStatus: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/changePOStatus`,
-      fetchAllPurchaseOrdersUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/fetchPublisherPurchaseOrders`,
       fetchAllPurchaseOrderUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
-      fetchPurchaseOrderStatisticsUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/purchaseOrderStatistics`,
+      getPOs: `${DEV_SERVER_URL}/pomanagement/api/po/purchaseOrderStatistics`,
       trackShipment: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
       poDetailsByShipmentId:`${DEV_SERVER_URL}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${DEV_SERVER_URL}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
@@ -111,12 +111,11 @@ export function config() {
       getManufacturers: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/getManufacturers`,
       createShipmentUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/createShipment`,
       shipmentsSearch: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchShipments?key=`,
-      createPurchaseOrderUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/createPurchaseOrder`,
+      createPurchaseOrderUrl: `${STABLE_SERVER_URL_PO}/pomanagement/api/po/createPurchaseOrder`,
       addPOsFromExcelUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/addPOsFromExcel`,
       changePOStatus: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/changePOStatus`,
-      fetchAllPurchaseOrdersUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchPublisherPurchaseOrders`,
       fetchAllPurchaseOrderUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
-      fetchPurchaseOrderStatisticsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/purchaseOrderStatistics`,
+      getPOs: `${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/purchaseOrderStatistics`,
       inventorySearch: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`,
       inventoriesUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getGroupedInventoryDetails?skip=0&limit=100`,
       addProductsToInventory: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/addProductsToInventory`,
@@ -149,12 +148,11 @@ export function config() {
       getManufacturers: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/getManufacturers`,
       createShipmentUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/createShipment`,
       shipmentsSearch: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchShipments?key=`,
-      createPurchaseOrderUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/createPurchaseOrder`,
+      createPurchaseOrderUrl: `${TEST_SERVER_URL}/pomanagement/api/po/createPurchaseOrder`,
       addPOsFromExcelUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/addPOsFromExcel`,
-      fetchAllPurchaseOrdersUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchPublisherPurchaseOrders`,
       changePOStatus: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/changePOStatus`,
       fetchAllPurchaseOrderUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
-      fetchPurchaseOrderStatisticsUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/purchaseOrderStatistics`,
+      getPOs: `${TEST_SERVER_URL}/pomanagement/api/po/purchaseOrderStatistics`,
       inventorySearch: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`,
       inventoriesUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getGroupedInventoryDetails?skip=0&limit=100`,
       getSerialNumbersByBatchNumber: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
@@ -189,12 +187,11 @@ export function config() {
       getManufacturers: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/getManufacturers`,
       createShipmentUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/createShipment`,
       shipmentsSearch: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/fetchShipments?key=`,
-      createPurchaseOrderUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/createPurchaseOrder`,
+      createPurchaseOrderUrl: `${DEMO_SERVER_URL}/pomanagement/api/po/createPurchaseOrder`,
       addPOsFromExcelUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/addPOsFromExcel`,
-      fetchAllPurchaseOrdersUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/fetchPublisherPurchaseOrders`,
       changePOStatus: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/changePOStatus`,
       fetchAllPurchaseOrderUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
-      fetchPurchaseOrderStatisticsUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/purchaseOrderStatistics`,
+      getPOs: `${DEMO_SERVER_URL}/pomanagement/api/po/purchaseOrderStatistics`,
       inventorySearch: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`,
       inventoriesUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getGroupedInventoryDetails?skip=0&limit=100`,
       getSerialNumbersByBatchNumber: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
@@ -231,12 +228,11 @@ export function config() {
       getProducts: `${PROD_SERVER_URL}/productmanagement/api/products/getProductNames`,
       generateCodes: `${PROD_SERVER_URL}/productmanagement/api/products/generateCodes`,
       getManufacturers: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/getManufacturers`,
-      createPurchaseOrderUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/createPurchaseOrder`,
+      createPurchaseOrderUrl: `${PROD_SERVER_URL}/pomanagement/api/po/createPurchaseOrder`,
       addPOsFromExcelUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/addPOsFromExcel`,
       changePOStatus: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/changePOStatus`,
-      fetchAllPurchaseOrdersUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchPublisherPurchaseOrders`,
       fetchAllPurchaseOrderUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
-      fetchPurchaseOrderStatisticsUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/purchaseOrderStatistics`,
+      getPOs: `${PROD_SERVER_URL}/pomanagement/api/po/purchaseOrderStatistics`,
       inventorySearch: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`,
       inventoriesUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getGroupedInventoryDetails?skip=0&limit=100`,
       getSerialNumbersByBatchNumber: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { getPurchaseStats, changePOStatus, resetPurchaseStats } from '../../../actions/poActions';
+import { getPOs, changePOStatus, resetPOs} from '../../../actions/poActions';
 import Modal from '../../../shared/modal';
 import POModal from './POModal';
 import AlertModal from './AlertModal';
@@ -21,8 +21,8 @@ const PoTable = props => {
   const purchases = useSelector(state => state.pos);
 
   useEffect(() => {
-    //dispatch(getPurchaseStats());
-    return () => dispatch(resetPurchaseStats());
+    dispatch(getPOs());
+    return () => dispatch(resetPOs());
   }, []);
 
   const user = useSelector(state => state.user);
@@ -52,7 +52,7 @@ const PoTable = props => {
   const onLoadMore = async () => {
     const newSkip = skip + 5;
     setSkip(newSkip);
-    const purchaseStatsResult = await dispatch(getPurchaseStats(skip, limit));
+    const purchaseStatsResult = await dispatch(getPOs(skip, limit));
     if (purchaseStatsResult.data.data.length === 0) {
       setLoadMore(false);
     }
@@ -94,7 +94,7 @@ const PoTable = props => {
           <div className="rTableHead">Purchase Order ID</div>
           <div className="rTableHead">Product</div>
           <div className="rTableHead">
-            <span>Quantity</span>
+            <span>Customer</span>
           </div>
           <div className="rTableHead">
             <span>Customer</span>
