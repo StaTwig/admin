@@ -60,16 +60,16 @@ const PoTable = props => {
   return (
     <div className="table">
       {showAlertModal && (
-         <Modal
-         close={() => closeAlertModal()}
-         size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
-       >
-      <AlertModal
-          type={alertMessage}
-          productID={purchaseOrder.key}
-          onHide={() => setShowAlertModal(false)}
-        />
-          </Modal>
+        <Modal
+          close={() => closeAlertModal()}
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+          <AlertModal
+            type={alertMessage}
+            productID={purchaseOrder.key}
+            onHide={() => setShowAlertModal(false)}
+          />
+        </Modal>
       )}
       {showModal && (
         <Modal
@@ -92,11 +92,15 @@ const PoTable = props => {
         <div className="rTableHeading">
           <div className="rTableHead">Supplier</div>
           <div className="rTableHead">Purchase Order ID</div>
+          <div className="rTableHead">Product</div>
           <div className="rTableHead">
             <span>Customer</span>
           </div>
           <div className="rTableHead">
-            <span>Customer Location</span>
+            <span>Customer</span>
+          </div>
+          <div className="rTableHead">
+            <span>CustomerLocation</span>
           </div>
           <div className="rTableHead">
             <span>Status</span>
@@ -106,46 +110,49 @@ const PoTable = props => {
           </div>
         </div>
         <div className="overflow">
-          {purchases.map((purchase, index) => {
-            const p = purchase;
-            let statusStyle = 'warning-bg';
-            if (purchase.status === 'Accepted') {
-              statusStyle = 'success-bg';
-            } else if (purchase.status === 'Created') {
-              statusStyle = 'info-bg';
-            } else if (purchase.status === 'Rejected') {
-              statusStyle = 'secondary-bg';
-            }
-            return (
-              <div>
-                <div className="rTableRow" key={index}>
-                  <div className="rTableCell">
-                    <div className="combine-data">
-                      {purchase.supplierOrgName}
-                    </div>
-                  </div>
-                  <div className="rTableCell">{purchase.purchaseOrderID}</div>
-                  <div className="rTableCell">
-                    {
-                      purchase.customerOrgName
-                    }
-                  </div>
-                  <div className="rTableCell">{purchase.customerCountryName}</div>
-                  <div className="rTableCell">
-                  <div className= {`status ${statusStyle}`}>{purchase.status}</div>
-                  </div>
-                  <div className="rTableCell">
-                    <button
-                      className="btn btn-outline-primary"
-                      onClick={() => openModal(purchase)}
-                    >
-                      View
-                    </button>
-                  </div>
+          <div>
+            <div className="rTableRow">
+              <div className="rTableCell">
+                <div className="combine-data">
+                <div className="d-flex flex-column ">
+                  <div className="align-self-start">Richard Parker</div>
+                  <div className="sub align-self-start">123455678</div>
+                </div></div>
+              </div>
+              <div className="rTableCell">ACT1324526</div>
+              <div className="rTableCell">
+                <div className="d-flex flex-column ">
+                  <div>MMR</div>
+                  <div className="sub">PR455678</div>
                 </div>
               </div>
-            );
-          })}
+              <div className="rTableCell ">
+               <div className="ml-1">500000</div> 
+                  </div>
+              <div className="rTableCell"> 
+              <div className="d-flex flex-column ">
+                <div>Bharat1234</div>
+                <div className="sub">PR455678</div>
+              </div></div>
+              <div className="rTableCell">  
+              <div className="d-flex flex-column">
+                <div>Australia</div>
+                <div className="sub">PR455678</div>
+              </div></div>
+
+              <div className="rTableCell">
+                <div className="status success-bg">Status</div>
+              </div>
+              <div className="rTableCell">
+                <button
+                  className="btn btn-outline-primary"
+                  onClick={() =>  setShowModal(true)}
+                >
+                  View
+                    </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       {loadMore && (

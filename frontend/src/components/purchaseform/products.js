@@ -1,9 +1,6 @@
 import React from 'react';
 import DropdownButton from '../../shared/dropdownButtonGroup';
 import './style.scss';
-
-const tableHeader = ['Product ID', 'Product Name', 'Manufacturer', 'Quantity'];
-
 const ProductsTable = props => {
   const {
     onProductSelect,
@@ -15,37 +12,37 @@ const ProductsTable = props => {
   } = props;
   const productIds = products.map(product => product.id);
   return (
-    <div className="table productTable mt-2">
-      <div className="rTable">
-        <div className="rTableHeading">
-          {tableHeader &&
-            tableHeader.map((item, index) => {
-              return (
-                <div key={index} className="rTableHead pro">
-                  {item}
-                </div>
-              );
-            })}
-        </div>
-        <div>
+    
           <div className="rTableRow">
             <div className="rTableCell">
               <DropdownButton
                 groups={productIds}
-                onSelect={ item => onProductSelect(item, index)}
+                onSelect={item => onProductSelect(item, index)}
                 name={product.productId}
                 className="text"
               />
             </div>
             <div className="rTableCell">
               <div className="form-group">
-                <label>{product.productName} </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="Product Name"
+                  placeholder="Product Name"
+                  value={product.productName}
+                />
               </div>
             </div>
 
             <div className="rTableCell">
               <div className="form-group">
-                <label>{product.manufacturer} </label>
+                <input
+                  type="text"
+                  className="form-control"
+                  name="Product Name"
+                  placeholder="Manufacturer"
+                  value={product.manufacturer}
+                />
               </div>
             </div>
             <div className="rTableCell">
@@ -70,9 +67,6 @@ const ProductsTable = props => {
               </div>
             </div>
           </div>
-        </div>
-      </div>
-    </div>
   );
 };
 

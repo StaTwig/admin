@@ -4,6 +4,8 @@
 .purchaseform{
   padding-left: 3rem;
   padding-right: 3rem;
+  height: 450px;
+  overflow: auto;
 
   .date-alignment{
     text-align: right;
@@ -109,12 +111,6 @@
 }
 
 .productTable {
-
-    .overflow {
-      height: auto;
-      max-height: 400px;
-    }
-  
   .square-box {
     width: 20px;
     height: 20px;

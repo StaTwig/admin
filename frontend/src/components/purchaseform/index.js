@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ProductsTable from './products';
+import ProductsHeading from './productsHeading';
 import ExcelPopUp from './excelpopup';
 import Modal from '../../shared/modal';
 import ExportIcon from '../../assets/icons/Export.svg';
@@ -19,29 +20,31 @@ const PurchaseForm = props => {
   });
 
   const [organisationName, setOrganisationName] = useState(
-    'Select Organisation ID',
+    '',
   );
   const [organisations, setOrganisations] = useState([]);
   const [orgIds, setOrgIds] = useState([]);
-  const [orgId, setOrgId] = useState('Select');
+  const [orgId, setOrgId] = useState('Select Organisation ID');
   const [customerLocationIds, setCustomerLocationIds] = useState([]);
   const [customerLocationId, setCustomerLocationId] = useState(
-    'Select Location ID',
+    'Select Delivery Location ID',
   );
   const [customerLocationName, setCustomerLocationName] = useState(
-    'Select Location ID',
+    '',
   );
   const [warehouses, setWarehouses] = useState([]);
-  const [externalPoId, setExternalPoId] = useState(editPo.ExternalPoId);
-  const [customerOrgId, setCustomerOrgId] = useState('Select Org Id');
+  const [ExternalPoId, setExternalPoId] = useState(editPo.ExternalPoId);
+  const [customerOrgId, setCustomerOrgId] = useState('Select Organisation ID');
   const [products, setProducts] = useState([]);
   const defaultProduct = {
-    productId: 'Select',
-    productName: 'Select',
+    productId: 'Select Product ID',
+    productName: '',
     quantity: '',
-    manufacturer: 'Select Product Id',
-  };
-  const [productRows, setProductRows] = useState([defaultProduct]);
+    manufacturer: '',
+  }
+  const [productRows, setProductRows] = useState([
+    defaultProduct
+  ]);
   const [message, setMessage] = useState('');
   const month = new Date().getMonth() + 1;
   const todayDate =
@@ -207,70 +210,96 @@ const PurchaseForm = props => {
   return (
     <div className="purchaseform">
       <p className="date-alignment">Date: {todayDate}</p>
-      <div className="d-flex justify-content-between">
-        <div className="input-group">
-          <label className="reference">External PO ID</label>
-          <input
-            type="text"
-            className="form-control"
-            name="shipmentId"
-            placeholder="Enter External PO ID"
-            onChange={e => setExternalPoId(e.target.value)}
-            value={externalPoId}
-          />
-        </div>
-        <div className="input-group">
-          <label className="reference">Customer Organisation ID</label>
-          <div className="form-control">
-            <DropdownButton
-              name={customerOrgId}
-              onSelect={onCustomerOrgChange}
-              groups={orgIds}
-              className="text"
+      <div className="row">
+      <div className="col mr-3">
+      
+          <div className="input-group">
+            <label className="reference">External PO ID</label>
+            <input
+              type="text"
+              className="form-control"
+              name="shipmentId"
+              placeholder="Enter External PO ID"
+              onChange={e => setExternalPoId(e.target.value)}
+              value={ExternalPoId}
             />
           </div>
-        </div>
-      </div>
-      <div className="d-flex justify-content-between">
-        <div className="input-group">
-          <label className="reference">Supplier Organisation Name</label>
-          <label>{organisationName}</label>
-        </div>
-        <div className="input-group">
-          <label className="reference">Customer Delivery Location</label>
-          <label>{customerLocationName}</label>
-        </div>
-      </div>
-      <div className="d-flex justify-content-between">
-        <div className="input-group">
-          <label className="reference">Supplier Organisation ID</label>
-          <DropdownButton
-            name={orgId}
-            onSelect={item => {
-              setOrgId(item);
-              const org = organisations.find(org => org.id === item);
-              setOrganisationName(org.name);
-            }}
-            groups={orgIds}
-            className="text"
-          />
-        </div>
+          <div className="font-weight-bold">Supplier Details:</div>
+          <div className="input-group">
+           
+            <label className="reference">Organisation ID</label>
+            <div className="form-control">
+              <DropdownButton
+                name={orgId}
+                onSelect={item => {
+                  setOrgId(item);
+                  const org = organisations.find(org => org.id === item);
+                  setOrganisationName(org.name);
+                }}
+                groups={orgIds}
+                className="text"
+              />
+            </div>
+          </div>
+          <div className="input-group">
+            <label className="reference">Organisation Name</label>
+            <input
+              type="text"
+              className="form-control"
+              name="Organisation Name"
+              placeholder="Enter Organisation Name"
+              value={organisationName}
+            />
+          </div>
+         
 
-        <div className="input-group">
-          <label className="reference">Customer Location ID</label>
-          <DropdownButton
-            name={customerLocationId}
-            onSelect={item => {
-              setCustomerLocationId(item);
-              const war = warehouses.find(war => war.id === item);
-              setCustomerLocationName(war.postalAddress);
-            }}
-            groups={customerLocationIds}
-            className="text"
-          />
-        </div>
-      </div>
-      {productRows.map((product, index) => (
+          </div>
+          <div className="col">
+         <p className="mb-2 font-weight-bold">Customer Details : </p>
+         <div className="input-group">
+            <label className="reference">Organisation ID</label>
+            <div className="form-control">
+              <DropdownButton
+                name={customerOrgId}
+                onSelect={onCustomerOrgChange}
+                groups={orgIds}
+                className="text"
+              />
+            </div>
+          </div>
+         
+         <div className="input-group">
+            <label className="reference">Delivery Location ID</label>
+            <div className="form-control">
+              <DropdownButton
+                name={customerLocationId}
+                onSelect={item => {
+                  setCustomerLocationId(item);
+                  const war = warehouses.find(war => war.id === item);
+                  setCustomerLocationName(war.postalAddress);
+                }}
+                groups={customerLocationIds}
+                className="text"
+              />
+            </div>
+          </div>
+        
+          <div className="input-group">
+            <label className="reference">Delivery Location</label>
+            <input
+              type="text"
+              className="form-control"
+              name="Delivery Location"
+              placeholder="Enter Delivery Location"
+              value={customerLocationName}
+            />
+          </div>
+          </div>
+          </div>
+          <div className="table productTable mt-2">
+         <div className="rTable">
+         <ProductsHeading/>
+       {productRows.map((product, index) => (
         <ProductsTable
           key={index}
           products={products}
@@ -280,6 +309,9 @@ const PurchaseForm = props => {
           onQuantityChange={handleQuantityChange}
         />
       ))}
+        
+        </div></div>
+    
 
       <button
         className="btn btn-white shadow-radius font-bold"
