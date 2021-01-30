@@ -89,12 +89,12 @@ export const getPOs = (skip = 0, limit = 5) => {
   try {
     return async dispatch => {
       dispatch(turnOn());
-      /*const result = await axios.get(
+      const result = await axios.get(
         `${
-          config().fetchPurchaseOrderStatisticsUrl
+          config().getPOs
         }?skip=${skip}&limit=${limit}`,
-      ); */
-      const result = await axios.get('http://54.164.66.73:3012/pomanagement/api/po/purchaseOrderStatistics');
+      );
+     // const result = await axios.get('http://54.164.66.73:3012/pomanagement/api/po/purchaseOrderStatistics');
       dispatch(setPurchaseOrders(result.data.data));
       dispatch(turnOff());
       return result;
