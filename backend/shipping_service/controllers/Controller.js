@@ -35,7 +35,7 @@ const manufacturers = require('../data/manufacturers');
 const init = require('../logging/init');
 const logger = init.getLog();
 
-  exports.createShippingOrder = [
+exports.createShippingOrder = [
     auth,
     async (req, res) => {
       try {
@@ -45,7 +45,9 @@ const logger = init.getLog();
             const poId = req.body.poId;
             const shippingOrder = req.body.shippingOrder;
             const POFound = await RecordModel.findOne({id: poId});
-            console.log("Purchase Order Id", poId);
+            existingShippingOrders = POFound.shippingOrders;
+            totalShippingOrders = existingShippingOrders.length;
+            console.log("Purchase Order Id", totalShippingOrders);
             // console.log("shippingOrder", shippingOrder);
 
             if(!POFound){
@@ -56,7 +58,7 @@ const logger = init.getLog();
               return res.status(404).json({error: `${po} PO Not Found`})  
             } else{
               console.log("shippingOrder", shippingOrder);
-              await RecordModel.updateOne({id:poId}, {shippingOrders:shippingOrder}).then((result)=>{
+              await RecordModel.updateOne({id:poId}, {$push: { shippingOrders:shippingOrder} }).then((result)=>{
                 return res.status(200).json({ 
                   response: "Success - Shipping Order created", 
                   shippingOrder: result 
@@ -82,7 +84,53 @@ const logger = init.getLog();
         }    
     }
   ];
-  
+
+  exports.viewShippingOrders = [
+    auth,
+    async (req, res) => {
+      try {
+        const { authorization } = req.headers;
+        checkToken(req, res, async result => {
+          if (result.success) {
+            const poId = req.body.poId;
+            const POFound = await RecordModel.findOne({id: poId});
+            existingShippingOrders = POFound.shippingOrders;
+            totalShippingOrders = existingShippingOrders.length;
+            console.log("Purchase Order Id", totalShippingOrders);
+            // console.log("shippingOrder", shippingOrder);
+
+            if(!POFound){
+              logger.log(
+                'info',
+                '<<<<< ShippingService < Controller < createShippingOrder : PO not found in collection',
+              );
+              return res.status(404).json({error: `${po} PO Not Found`})  
+            } else{
+              console.log("Existing Shipping Orders", existingShippingOrders);
+                return res.status(200).json({ 
+                  response: existingShippingOrders, 
+                }).catch((err)=>{
+                 return res.status(500).json({error:`${err} Error Occured `})
+               }) 
+            }
+          } else {
+            logger.log(
+              'warn',
+              '<<<<< ShippingService < ShippingController < createShippingOrder : refuted token',
+            );
+            res.status(403).json("Auth Failed");
+          }
+       }
+        )} catch (err) {
+        logger.log(
+          'error',
+          '<<<<< ShipmentService < Controller < modifyShipment : error (catch block)',
+        );
+        return apiResponse.ErrorResponse(res, err);
+        }    
+    }
+  ];
+
 exports.assignShippingOrder = [
     auth,
     async (req, res) => {

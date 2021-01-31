@@ -16,12 +16,14 @@ const upload = multer({ storage: Storage });
 
 const router = express.Router();
 
+router.post("/createShippingOrder", Controller.createShippingOrder);
+router.get("/viewShippingOrders", Controller.viewShippingOrders);
+
 router.get("/shipmentStatistics", ShipmentController.shipmentStatistics);
 router.get("/purchaseOrderStatistics", ShipmentController.purchaseOrderStatistics);
 router.get("/fetchPublisherPurchaseOrders", ShipmentController.fetchPublisherPurchaseOrders);
 router.get("/fetchShipments", ShipmentController.fetchShipments);
 router.post("/createShipment", ShipmentController.createShipment);
-router.post("/createShippingOrder", Controller.createShippingOrder);
 router.get("/fetchPurchaseOrder", ShipmentController.fetchPurchaseOrder);
 router.get("/fetchAllPurchaseOrders",ShipmentController.fetchAllPurchaseOrders);
 router.get("/fetchPublisherLatestShipments",ShipmentController.fetchPublisherLatestShipments);
