@@ -11,6 +11,8 @@ const ShipmentModel = require('../models/ShipmentModel');
 const InventoryModel = require('../models/InventoryModel');
 const NotificationModel = require('../models/NotificationModel');
 const RecordModel = require('../models/RecordModel');
+const OrganisationModel = require('../models/OrganisationModel');
+const ProductModel = require('../models/ProductModel');
 //this helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
 const utility = require('../helpers/utility');
@@ -42,18 +44,20 @@ exports.purchaseOrderStatistics = [
             '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : token verified successfully, querying data by publisher',
           );
           const permission_request = {
-            result: result,
+            role: req.user.role,
             permissionRequired: 'viewPO',
           };
-          checkPermissions(permission_request, async permissionResult => {
+           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
               const { address, role } = req.user;
               const { skip, limit } = req.query;
-              var supplierPOs = await wrapper.findRecordsAndSort(RecordModel,{"supplier.supplierIncharge":address},skip,limit);
-              var customerPos = await wrapper.findRecordsAndSort(RecordModel,{"customer.customer_incharge":address},skip,limit);
-	      var creatorPos = await wrapper.findRecordsAndSort(RecordModel,{"createdBy":address},skip,limit);
+	       const poTableArray = [];
 
-              var poItems,poItemsSupplier,poItemsCustomer,poItemsCreator = [];
+              var supplierPOs = await wrapper.findRecordsAndSort(RecordModel,{"supplier.supplierIncharge":address},skip,limit);
+              var customerPos = await wrapper.findRecordsAndSort(RecordModel,{"customer.customerIncharge":address},skip,limit);
+	      var creatorPos = await wrapper.findRecordsAndSort(RecordModel,{"createdBy":address},skip,limit);
+	
+              var allPos,poItemsSupplier,poItemsCustomer,poItemsCreator = [];
 
               poItemsSupplier = supplierPOs.map(po => {
                 const status = po.status === 'Created' ? 'Sent' : po.status;
@@ -74,24 +78,45 @@ exports.purchaseOrderStatistics = [
               });
 	      
 
-               poItems = poItemsSupplier.concat(poItemsCustomer,poItemsCreator)
-              
-		if(role === 'powerUser') {
-                /*const allPos = await POModel.find({})
-                  .sort({ createdAt: -1 })
-                  .skip(parseInt(skip))
-                  .limit(parseInt(limit));*/
+               allPos = poItemsSupplier.concat(poItemsCustomer,poItemsCreator)
 
-		 const allPos = await wrapper.findAllRecords(RecordModel,skip,limit);
-		 console.log("31",allPos)
-                 //const poItemsFiltered = allPos.filter(po => !poItems.find(poItem => poItem.orderID === po.orderID));
-                poItems = [...poItems, ...allPos];
-              }
+		if(role === 'powerUser') {
+ 		  allPos = await wrapper.findAllRecords(RecordModel,skip,limit);
+		}
+
+	         for (i=0; i< allPos.length;i++)
+		{
+		  const productArray = [];
+		  const supplier = await wrapper.findOneRecord(OrganisationModel,{"id":allPos[i].supplier.supplierOrganisation})
+	          const customer = await wrapper.findOneRecord(OrganisationModel,{"id":allPos[i].customer.customerOrganisation})
+		  const product = await wrapper.findOneRecord(ProductModel,{"id":allPos[i].products[0].productId})
+		  for (j=0;j<allPos[i].products.length;j++)
+		   {
+			var productId = allPos[i].products[j].productId;
+			const product = await wrapper.findOneRecord(ProductModel,{"id": "prod-9bhkk6yiutx"})
+			   console.log("ewew",product)
+			var product1 = {productID : allPos[i].products[j].productId,quantity: allPos[i].products[j].quantity,productName:product.name }
+			productArray.push(product1)
+	    	   }  	
+		   poItems = {
+			     suppplierOrgID:allPos[i].supplier.supplierOrganisation,
+			     supplierOrgName:supplier.name,
+		  	     purchaseOrderID : allPos[i].id,
+			     externalId: allPos[i].externalId,
+			     customerOrgID:allPos[i].customer.customerOrganisation,
+			     customerOrgName: customer.name,
+			     customerCountryName: customer.country.name,
+			     customerCountryID: customer.country.id,
+			     products: productArray,
+			     status: allPos[i].poStatus
+		     }
+			    poTableArray.push(poItems)
+			}
               logger.log(
                 'info',
                 '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : queried data by publisher',
               );
-              res.json({ data: poItems });
+              res.json({ data: poTableArray });
             } else {
               res.json('Sorry! User does not have enough Permissions');
             }
