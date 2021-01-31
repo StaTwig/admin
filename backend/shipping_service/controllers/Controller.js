@@ -35,142 +35,54 @@ const manufacturers = require('../data/manufacturers');
 const init = require('../logging/init');
 const logger = init.getLog();
 
-
-exports.createShippingOrder = [
+  exports.createShippingOrder = [
     auth,
-    body('data.orderId')
-      .isLength({ min: 1 })
-      .trim()
-      .withMessage('Shipping Order ID must be specified.'),
-    body('data.createdBy')
-      .isLength({ min: 1 })
-      .trim()
-      .withMessage('Shipping Order Created By must be specified.'),
-    body('data.assignedTo')
-      .isLength({ min: 1 })
-      .trim()
-      .withMessage('Shipping Order Assigned To must be specified.'),
-    body('data.updatedOn')
-      .isLength({ min: 1 })
-      .trim()
-      .withMessage('Shipping Order Updated On must be specified.'),
-    body('data.updatedBy')
-      .isLength({ min: 8 })
-      .trim()
-      .withMessage('Shipping Order Updated By must be specified.'),
-    body('data.status')
-      .isLength({ min: 1 })
-      .trim()
-      .withMessage('Shipping Order Status To must be specified.'),
     async (req, res) => {
       try {
-        const errors = validationResult(req);
-        if (!errors.isEmpty()) {
-          logger.log(
-            'error',
-            '<<<<< ShipmentService < ShipmentController < createShipment : Validation Error',
-          );
-          // Display sanitized values/errors messages.
-          return apiResponse.validationErrorWithData(
-            res,
-            'Validation Error.',
-            errors.array(),
-          );
-        }
+        const { authorization } = req.headers;
         checkToken(req, res, async result => {
           if (result.success) {
-            logger.log(
-              'info',
-              '<<<<< ShipmentService < ShipmentController < createShipment : token verified successfully, shipment creation started',
-            );
-            const { address, email } = req.user;
-            const permission_request = {
-              result: result,
-              permissionRequired: 'createShipmentOrder',
-            };
-            checkPermissions(permission_request, async permissionResult => {
-              if (permissionResult.success) {
-                const { data } = req.body;
-                const poId = data.id;
-                const orderID = data.orderID || 'SO' + Math.floor(1000 + Math.random() * 9000);
-              //   const { shipmentId, batchNumber, poNumber } = data;
-                const userData = {
-                  stream: so_stream_name,
-                  key: orderID,
-                  address: req.query.address || address,
-                  data: data,
-                };
-  
-                const response = await axios.post(
-                  `${blockchain_service_url}/publish`,
-                  userData,
-                );
-                console.log("so_response", response);
-                const txnIdSO = response.data.transactionId;
-                const POFound = await RecordModel.findOne({ id: poId });
-                if(!POFound){
-                  logger.log(
-                    'info',
-                    '<<<<< ShippingService < Controller < createSO : PO not found in collection',
-                  );
-                } else {
-                  const SOFound = await RecordModel.findOne({ shippingOrders: { orderId : orderID } });
-                  console.log("SOFound", SOFound);
-                  
-                  if(!SOFound) {
-                    logger.log(
-                        'info',
-                        '<<<<< ShippingService < Controller < createSO : SO not found in collection',
-                      );
-                    const newSO = {
-                        orderId : orderID,
-                        createdBy : req.user.address,
-                        status : 'Created',
-                        sotransactionIds: txnIdSO,
-                        ...data
-                    };
-                    console.log("newSO", newSO)
-                    wrapper.insertOneRecord(RecordModel, { shippingOrders: newSO }, function(error,response){
-                     })
-                  } else {
-                      logger.log(
-                        'info',
-                        '<<<<< ShippingService < Controller < createSO : updating SO in SO model',
-                      );
-                      const txnIds = [...SOFound.sotransactionIds, txnIdSO];
-                      wrapper.updateRecord(RecordModel, { shippingOrders: { orderId: orderID } }, { sotransactionIds: txnIds })        
-                  }  
-                }
-                logger.log(
-                    'info',
-                    '<<<<< ShippingService < Controller < createSO : published to blockchain',
-                );
-                res.status(200).json({
-                  txid: response.data.transactionId,
-                  orderID: orderID,
-                });
-              } else {
-                  res.json('Sorry! User does not have enough Permissions');
-              }
-            });
-          } else {
-              logger.log(
-                  'warn',
-                  '<<<<< ShippingService < Controller < createSO : refuted token',
-                  );
-                  return apiResponse.ErrorResponse(res, result);
-              }
-          });
-      } catch (err) {
-          logger.log(
-              'error',
-              '<<<<< ShippingService < Controller < createSO : error (catch block)',
-              );
-              return apiResponse.ErrorResponse(res, err);
-          }
-      },
-  ];
+            const poId = req.body.poId;
+            const shippingOrder = req.body.shippingOrder;
+            const POFound = await RecordModel.findOne({id: poId});
+            console.log("Purchase Order Id", poId);
+            // console.log("shippingOrder", shippingOrder);
 
+            if(!POFound){
+              logger.log(
+                'info',
+                '<<<<< ShippingService < Controller < createShippingOrder : PO not found in collection',
+              );
+              return res.status(404).json({error: `${po} PO Not Found`})  
+            } else{
+              console.log("shippingOrder", shippingOrder);
+              await RecordModel.updateOne({id:poId}, {shippingOrders:shippingOrder}).then((result)=>{
+                return res.status(200).json({ 
+                  response: "Success - Shipping Order created", 
+                  shippingOrder: result 
+                });
+               }).catch((err)=>{
+                 return res.status(500).json({error:`${err} Error Occured `})
+               }) 
+            }
+          } else {
+            logger.log(
+              'warn',
+              '<<<<< ShippingService < ShippingController < createShippingOrder : refuted token',
+            );
+            res.status(403).json("Auth Failed");
+          }
+       }
+        )} catch (err) {
+        logger.log(
+          'error',
+          '<<<<< ShipmentService < Controller < modifyShipment : error (catch block)',
+        );
+        return apiResponse.ErrorResponse(res, err);
+        }    
+    }
+  ];
+  
 exports.assignShippingOrder = [
     auth,
     async (req, res) => {

@@ -1,6 +1,7 @@
 const express = require("express");
 const multer = require('multer');
 const ShipmentController = require("../controllers/ShipmentController");
+const Controller = require("../controllers/Controller");
 
 const Storage = multer.diskStorage({
   destination(req, file, callback) {
@@ -20,6 +21,7 @@ router.get("/purchaseOrderStatistics", ShipmentController.purchaseOrderStatistic
 router.get("/fetchPublisherPurchaseOrders", ShipmentController.fetchPublisherPurchaseOrders);
 router.get("/fetchShipments", ShipmentController.fetchShipments);
 router.post("/createShipment", ShipmentController.createShipment);
+router.post("/createShippingOrder", Controller.createShippingOrder);
 router.get("/fetchPurchaseOrder", ShipmentController.fetchPurchaseOrder);
 router.get("/fetchAllPurchaseOrders",ShipmentController.fetchAllPurchaseOrders);
 router.get("/fetchPublisherLatestShipments",ShipmentController.fetchPublisherLatestShipments);
