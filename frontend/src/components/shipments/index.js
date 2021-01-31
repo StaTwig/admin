@@ -29,7 +29,6 @@ const ShipmentAnalytic = props => {
   const [limit, setLimit] = useState(5);
   const [loadMore, setLoadMore] = useState(true);
   const dispatch = useDispatch();
-
   const closeModal = () => {
     setOpenPurchaseOrder(false);
     setOpenPOExcel(false);
@@ -72,7 +71,6 @@ const ShipmentAnalytic = props => {
         <h1 className="breadcrumb">SHIPMENT</h1>
         <div className="d-flex">
            <button className=" btn-primary btn mr-2" onClick={()=>setOpenPOExcel(true)}>Import PO</button>
-
           <button
             className="btn btn-orange fontSize20 font-bold mr-2"
             onClick={() => setOpenPurchaseOrder(true)}

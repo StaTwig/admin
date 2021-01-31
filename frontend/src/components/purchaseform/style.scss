@@ -1,18 +1,23 @@
 @import '../../assets/styles/global.scss';
 
-
-.purchaseform{
+.payStyle {
+  background-image: url('https://www.payumoney.com/media/images/payby_payumoney/new_buttons/21.png');
+  border: none;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+}
+.purchaseform {
   padding-left: 3rem;
   padding-right: 3rem;
   height: 450px;
   overflow: auto;
 
-  .date-alignment{
+  .date-alignment {
     text-align: right;
-    font-size:14px;
+    font-size: 14px;
   }
 
-  .menu5{
+  .menu5 {
     z-index: 1;
     top: 22rem;
     right: 10rem !important;
@@ -31,11 +36,10 @@
     @media (max-width: 1250px) {
       top: 25rem;
     }
-    .btn{
+    .btn {
       width: 120px;
       height: 30px;
       padding-top: 0.1rem;
-
     }
   }
 
@@ -45,7 +49,7 @@
     justify-content: space-between;
     align-items: center;
 
-    .reference{
+    .reference {
       color: #707070;
       text-align: left;
       font: 15px/20px $roboto;
@@ -63,19 +67,16 @@
       color: #707070;
       flex-basis: 67%;
       flex-grow: inherit;
-      font-size:14px;
+      font-size: 14px;
       @media (max-width: 1250px) {
-        font-size:13px;
+        font-size: 13px;
       }
-
-     
     }
 
-
-    .custom-dropdown .btn-custom-dropdown{
-      font-size:14px;
+    .custom-dropdown .btn-custom-dropdown {
+      font-size: 14px;
       @media (max-width: 1250px) {
-        font-size:18px;
+        font-size: 18px;
       }
     }
 
@@ -90,9 +91,9 @@
       font-weight: bold;
     }
   }
-      .review{
-        float:right;
-      }
+  .review {
+    float: right;
+  }
   .input-group {
     position: relative;
     margin-bottom: 1rem;
@@ -119,31 +120,29 @@
     margin-right: 1rem;
   }
   .rTable {
-
     .input-group,
     .form-group {
       margin-bottom: 0;
-    .form-control{
-      font-size:15px;
-      @media (max-width: 1250px) {
-        font-size:14px;
+      .form-control {
+        font-size: 15px;
+        @media (max-width: 1250px) {
+          font-size: 14px;
+        }
       }
-    }
 
       .form-field {
         border: none;
       }
     }
 
-   .rTableHeading{
-     .pro {
-      font-size: 13px;
-      @media (max-width: 1250px) {
-        font-size: 11px;
+    .rTableHeading {
+      .pro {
+        font-size: 13px;
+        @media (max-width: 1250px) {
+          font-size: 11px;
+        }
       }
-       }
-
-   }
+    }
 
     .rTableRow {
       padding: 0;
@@ -155,10 +154,10 @@
         align-items: center;
         justify-content: space-between;
 
-        .custom-dropdown .btn-custom-dropdown{
-          font-size:14px;
+        .custom-dropdown .btn-custom-dropdown {
+          font-size: 14px;
           @media (max-width: 1250px) {
-            font-size:13px;
+            font-size: 13px;
           }
         }
 
@@ -168,7 +167,6 @@
 
         .form-group {
           flex-basis: 100%;
-          
 
           .form-field {
             width: 100%;
@@ -176,12 +174,9 @@
         }
       }
     }
-    .rTableRow:hover{
-      background:none;
-      cursor:pointer;
-
+    .rTableRow:hover {
+      background: none;
+      cursor: pointer;
     }
   }
-
-
 }
