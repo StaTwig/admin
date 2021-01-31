@@ -11,6 +11,7 @@ const POModal = props => {
   //const receiverAddress = po.receiver;
   let totalQuantity = 0;
   purchaseOrder.products.forEach(product => totalQuantity += parseInt(product.quantity));
+
   return (
     <div className="PO">
       <div className="row">
@@ -76,37 +77,6 @@ const POModal = props => {
           <h3>{totalQuantity}</h3>
         </div>
       </div>
-      {purchaseOrder.status === 'Received' &&
-        userAddress === receiverAddress && (
-          <div className="d-flex justify-content-end">
-            <button
-              className="btn btn-outline-success fontSize20 font-bold"
-              onClick={() => onAccept('Accepted')}
-            >
-              <img src={greenTick} width="14" height="14" className="mr-2" />
-              <span>Accept</span>
-            </button>
-            <button
-              className="btn btn-outline-danger fontSize20 font-bold ml-2"
-              onClick={() => onReject('Rejected')}
-            >
-              <img src={crossRed} width="14" height="14" className="mr-2" />
-              <span>Reject</span>
-            </button>
-          </div>
-        )}
-      {purchaseOrder.status === 'Accepted' &&
-        userAddress === receiverAddress && (
-          <div className="d-flex justify-content-end">
-            <button
-              className="btn btn-yellow fontSize20 font-bold"
-              onClick={onCreateShipment}
-            >
-              <img src={addIcon} width="14" height="14" className="mr-2" />
-              <span>Create Shipment</span>
-            </button>
-          </div>
-        )}
     </div>
   );
 };

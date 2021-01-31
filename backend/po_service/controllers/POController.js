@@ -612,3 +612,17 @@ exports.addPOsFromExcel = [
   },
 ];
 
+exports.success = [
+  async (req, res) => {
+    try {
+      const data = req.body;
+      const { phone, payuMoneyId, amount, productinfo } = data;
+      // This check is important as sometimes payumoney is sending multiple success responses
+        const redirectUrl ='http://localhost:3000/shipments'
+
+        return res.redirect(redirectUrl);
+    } catch (err) {
+      //throw error in json response with status 500.
+    }
+  },
+];

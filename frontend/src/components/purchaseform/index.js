@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import ProductsTable from './products';
 import ProductsHeading from './productsHeading';
 import ExcelPopUp from './excelpopup';
@@ -19,9 +20,7 @@ const PurchaseForm = props => {
     return state.editPo;
   });
 
-  const [organisationName, setOrganisationName] = useState(
-    '',
-  );
+  const [organisationName, setOrganisationName] = useState('');
   const [organisations, setOrganisations] = useState([]);
   const [orgIds, setOrgIds] = useState([]);
   const [orgId, setOrgId] = useState('Select Organisation ID');
@@ -29,22 +28,20 @@ const PurchaseForm = props => {
   const [customerLocationId, setCustomerLocationId] = useState(
     'Select Delivery Location ID',
   );
-  const [customerLocationName, setCustomerLocationName] = useState(
-    '',
-  );
+  const [customerLocationName, setCustomerLocationName] = useState('');
   const [warehouses, setWarehouses] = useState([]);
   const [externalPoId, setExternalPoId] = useState(editPo.ExternalPoId);
   const [customerOrgId, setCustomerOrgId] = useState('Select Organisation ID');
   const [products, setProducts] = useState([]);
+  const [cashfreeData, setCashfreeData] = useState({});
+
   const defaultProduct = {
     productId: 'Select Product ID',
     productName: '',
     quantity: '',
     manufacturer: '',
-  }
-  const [productRows, setProductRows] = useState([
-    defaultProduct
-  ]);
+  };
+  const [productRows, setProductRows] = useState([defaultProduct]);
   const [message, setMessage] = useState('');
   const month = new Date().getMonth() + 1;
   const todayDate =
@@ -52,7 +49,7 @@ const PurchaseForm = props => {
   const [menu, setMenu] = useState(false);
   const [poError, setPoError] = useState();
   const [openExcel, setOpenExcel] = useState(false);
-
+  const [ orderAmount , setOrderAmount ] = useState('');
   const closeExcelModal = () => {
     setOpenExcel(false);
   };
@@ -166,6 +163,7 @@ const PurchaseForm = props => {
     console.log('data', data);
     const result = await createPO(data);
     if (result.status === 200) {
+      await onCashfreeClick();
       setMessage(result.data.message);
     } else {
       setPoError('Failed to create po');
@@ -207,12 +205,34 @@ const PurchaseForm = props => {
     setProductRows([...productRows, defaultProduct]);
   };
 
+  const onCashfreeClick = async () => {
+    const data = {
+      orderAmount: orderAmount,
+      orderCurrency: 'INR',
+      orderNote: 'test optional Text',
+      customerName: 'John Doe',
+      customerEmail: 'Johndoe@test.com',
+      customerPhone: '9999999999',
+    };
+    try {
+      const result = await axios.post(
+        'https://payment.vaccineledger.com/request',
+        data,
+      );
+      if (result) {
+        const postData = result.data.postData;
+        setCashfreeData(postData);
+        //const postResult = await axios.post('https://test.cashfree.com/billpay/checkout/post/submit', postData);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <div className="purchaseform">
       <p className="date-alignment">Date: {todayDate}</p>
       <div className="row">
-      <div className="col mr-3">
-      
+        <div className="col mr-3">
           <div className="input-group">
             <label className="reference">External PO ID</label>
             <input
@@ -226,7 +246,6 @@ const PurchaseForm = props => {
           </div>
           <div className="font-weight-bold">Supplier Details:</div>
           <div className="input-group">
-           
             <label className="reference">Organisation ID</label>
             <div className="form-control">
               <DropdownButton
@@ -251,12 +270,10 @@ const PurchaseForm = props => {
               value={organisationName}
             />
           </div>
-         
-
-          </div>
-          <div className="col">
-         <p className="mb-2 font-weight-bold">Customer Details : </p>
-         <div className="input-group">
+        </div>
+        <div className="col">
+          <p className="mb-2 font-weight-bold">Customer Details : </p>
+          <div className="input-group">
             <label className="reference">Organisation ID</label>
             <div className="form-control">
               <DropdownButton
@@ -267,8 +284,8 @@ const PurchaseForm = props => {
               />
             </div>
           </div>
-         
-         <div className="input-group">
+
+          <div className="input-group">
             <label className="reference">Delivery Location ID</label>
             <div className="form-control">
               <DropdownButton
@@ -283,7 +300,7 @@ const PurchaseForm = props => {
               />
             </div>
           </div>
-        
+
           <div className="input-group">
             <label className="reference">Delivery Location</label>
             <input
@@ -294,24 +311,34 @@ const PurchaseForm = props => {
               value={customerLocationName}
             />
           </div>
+          <div className="input-group">
+            <label className="reference">Order Amount</label>
+            <input
+              type="text"
+              className="form-control"
+              name="Amount"
+              placeholder="Enter Amount"
+              onChange={e => setOrderAmount(e.target.value)}
+              value={orderAmount}
+            />
           </div>
-          </div>
-          <div className="table productTable mt-2">
-         <div className="rTable">
-         <ProductsHeading/>
-       {productRows.map((product, index) => (
-        <ProductsTable
-          key={index}
-          products={products}
-          product={product}
-          index={index}
-          onProductSelect={handleProductSelect}
-          onQuantityChange={handleQuantityChange}
-        />
-      ))}
-        
-        </div></div>
-    
+        </div>
+      </div>
+      <div className="table productTable mt-2">
+        <div className="rTable">
+          <ProductsHeading />
+          {productRows.map((product, index) => (
+            <ProductsTable
+              key={index}
+              products={products}
+              product={product}
+              index={index}
+              onProductSelect={handleProductSelect}
+              onQuantityChange={handleQuantityChange}
+            />
+          ))}
+        </div>
+      </div>
 
       <button
         className="btn btn-white shadow-radius font-bold"
@@ -353,6 +380,70 @@ const PurchaseForm = props => {
         <button className="btn btn-orange review" onClick={onProceed}>
           REVIEW
         </button>
+        <form
+          id="redirectForm"
+          method="post"
+          action="https://test.cashfree.com/billpay/checkout/post/submit"
+        >
+          <input type="hidden" name="appId" value={cashfreeData.appId} />
+          <input type="hidden" name="orderId" value={cashfreeData.orderId} />
+          <input
+            type="hidden"
+            name="orderAmount"
+            value={cashfreeData.orderAmount}
+          />
+          <input
+            type="hidden"
+            name="orderCurrency"
+            value={cashfreeData.orderCurrency}
+          />
+          <input
+            type="hidden"
+            name="orderNote"
+            value={cashfreeData.orderNote}
+          />
+          <input
+            type="hidden"
+            name="customerName"
+            value={cashfreeData.customerName}
+          />
+          <input
+            type="hidden"
+            name="customerEmail"
+            value={cashfreeData.customerEmail}
+          />
+          <input
+            type="hidden"
+            name="customerPhone"
+            value={cashfreeData.customerPhone}
+          />
+          <input
+            type="hidden"
+            name="returnUrl"
+            value={cashfreeData.returnUrl}
+          />
+          <input
+            type="hidden"
+            name="notifyUrl"
+            value={cashfreeData.notifyUrl}
+          />
+          <input
+            type="hidden"
+            name="signature"
+            value={cashfreeData.signature}
+          />
+          <input
+            type="hidden"
+            name="vendorSplit"
+            value={cashfreeData.vendorSplit}
+          />
+          <input
+            type="submit"
+            value="Pay"
+            className="btn btn-orange review"
+            disabled={!cashfreeData.appId}
+          />
+        </form>
       </div>
 
       <div className="text text-success">{message}</div>
