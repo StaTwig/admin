@@ -463,7 +463,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": " {\n        \"poId\": \"po1-1yokkig2ts6\", \n        \"shippingOrder\": [\n             {\n                \"shipping_order_id\": \"SO1234567890\",\n                \"so_created_by\": \"user-111\",\n                \"so_assigned_to\": [\n                    \"warehouse_id 1\",\n                    \"warehouse_id 2\"\n                ],\n                \"so_updated_on\": \"2020-01-01T18:30:00.000Z\",\n                \"so_updated_by\": \"user-111\",\n                \"so_status\": \"CREATED\"\n                }\n            ],\n         \"products\": [\n            {\n              \"productId\": \"prod-9bhkk6yiutx\",\n              \"productQuantity\": 1000\n            }\n          ]\n       }",
+							"raw": " {\n        \"poId\": \"po-3kn7pab72kkl1uzai\", \n        \"shippingOrder\": [\n             {\n                \"shippingOrderId\": \"SO1234568790\",\n                \"soCreatedBy\": \"user-121\",\n                \"soAssignedTo\": [\n                    \"warehouse_id 11\",\n                    \"warehouse_id 22\"\n                ],\n                \"soUpdatedOn\": \"2020-01-01T18:30:00.000Z\",\n                \"soUpdatedBy\": \"user-121\",\n                \"soStatus\": \"CREATED\"\n                }\n            ],\n       }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -482,6 +482,46 @@
 								"api",
 								"shipping",
 								"createShippingOrder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:3022/shippingmanagement/api/shipping/viewShippingOrders",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjEyMDk5MTAwLCJleHAiOjE2MTIxMDYzMDB9.7Fwe_MXlzIryl0nXkkjbN9Bn0Cql7HxqJ_LEGEEOt-w",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"poId\": \"po-3kn7pab72kkl1uzai\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3022/shippingmanagement/api/shipping/viewShippingOrders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3022",
+							"path": [
+								"shippingmanagement",
+								"api",
+								"shipping",
+								"viewShippingOrders"
 							]
 						}
 					},
