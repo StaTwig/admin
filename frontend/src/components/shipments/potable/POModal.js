@@ -6,45 +6,43 @@ import addIcon from '../../../assets/icons/add.svg';
 const POModal = props => {
   const {
     purchaseOrder,
-    userAddress,
-    onAccept,
-    onReject,
-    onCreateShipment,
   } = props;
   //const po = purchaseOrder;
   //const receiverAddress = po.receiver;
+  let totalQuantity = 0;
+  purchaseOrder.products.forEach(product => totalQuantity += parseInt(product.quantity));
   return (
     <div className="PO">
       <div className="row">
         <div className="col">
           <div className="input-group">
             <label className="reference custom1">External PO ID: </label>
-            <p >PO123409090<span class="badge badge-success ml-5">Success</span></p>
+            <p >{purchaseOrder.externalId}<span class="badge badge-success ml-5">Success</span></p>
          
           </div>
           <div className="input-group text-primary font-weight-bold mb-2 ">Supplier Details: </div>
           <div className="input-group">
             <label className="reference custom2">Organisation ID : </label>
-            <p>PR5678889676</p>
+            <p>{purchaseOrder.suppplierOrgID}</p>
           </div>
           <div className="input-group">
             <label className="reference custom3">Organisation Name : </label>
-            <p>Bharat Biotech</p>
+            <p>{purchaseOrder.supplierOrgName}</p>
           </div>
         </div>
         <div className="col">
           <div className="input-group text-primary font-weight-bold mb-3">Customer Details</div>
           <div className="input-group">
             <label className="reference custom2">Organisation ID : </label>
-            <p>Org123</p>
+            <p>{purchaseOrder.customerOrgID}</p>
           </div>
           <div className="input-group">
             <label className="reference custom3">Delivery Location ID : </label>
-            <p>Location 123</p>
+            <p>{purchaseOrder.deliveryLocationId}</p>
           </div>
           <div className="input-group">
             <label className="reference custom2">Delivery Location : </label>
-            <p>ssssssss</p>
+            <p>{purchaseOrder.deliveryLocation}</p>
           </div>
         </div>
       </div>
@@ -60,21 +58,22 @@ const POModal = props => {
             </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">
-              <div className="square-box" />
-            </th>
-            <td>sssssssssssssssssssssss</td>
-            <td>sssssssssssssssssss</td>
-            <td>ssssssssssssssssssssss</td>
-            <td>sssssssss</td>
-          </tr>
+        {purchaseOrder.products.map(product => <tr>
+          <th scope="row">
+            <div className="square-box" />
+          </th>
+          <td>{product.productID}</td>
+          <td>{product.productName}</td>
+          <td>{product.manufacturer}</td>
+          <td>{product.quantity}</td>
+        </tr>)}
+
         </tbody>
       </table>
       <div className="d-flex justify-content-end">
         <div className="d-flex flex-column mr-5">
           <span>Total Quantity</span>
-          <h3>50000</h3>
+          <h3>{totalQuantity}</h3>
         </div>
       </div>
       {purchaseOrder.status === 'Received' &&

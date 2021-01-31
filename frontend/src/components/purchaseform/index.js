@@ -33,7 +33,7 @@ const PurchaseForm = props => {
     '',
   );
   const [warehouses, setWarehouses] = useState([]);
-  const [ExternalPoId, setExternalPoId] = useState(editPo.ExternalPoId);
+  const [externalPoId, setExternalPoId] = useState(editPo.ExternalPoId);
   const [customerOrgId, setCustomerOrgId] = useState('Select Organisation ID');
   const [products, setProducts] = useState([]);
   const defaultProduct = {
@@ -221,7 +221,7 @@ const PurchaseForm = props => {
               name="shipmentId"
               placeholder="Enter External PO ID"
               onChange={e => setExternalPoId(e.target.value)}
-              value={ExternalPoId}
+              value={externalPoId}
             />
           </div>
           <div className="font-weight-bold">Supplier Details:</div>
