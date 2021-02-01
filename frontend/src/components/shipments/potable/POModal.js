@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
+import Modal from '../../../shared/modal';
 import greenTick from '../../../assets/icons/tickGreen.svg';
 import crossRed from '../../../assets/icons/crossRed.svg';
 import addIcon from '../../../assets/icons/add.svg';
+import CreateShippingOrder from  '../createShippingOrder';
+import './style.scss';
 
 const POModal = props => {
   const {
@@ -12,8 +15,18 @@ const POModal = props => {
   let totalQuantity = 0;
   purchaseOrder.products.forEach(product => totalQuantity += parseInt(product.quantity));
 
+  const month = new Date().getMonth() + 1;
+  const todayDate =
+    new Date().getDate() + '/' + month + '/' + new Date().getFullYear();
+    const[showCreateShippingOrder,setShowCreateShippingOrder]=useState(false)
+
+    const closeModal = ()=>{
+      setShowCreateShippingOrder(false)
+    }
+
   return (
     <div className="PO">
+      <p className="date-alignment mr-5">Date: {todayDate}</p>
       <div className="row">
         <div className="col">
           <div className="input-group">
@@ -42,7 +55,7 @@ const POModal = props => {
             <p>{purchaseOrder.deliveryLocationId}</p>
           </div>
           <div className="input-group">
-            <label className="reference custom2">Delivery Location : </label>
+            <label className="reference custom4">Delivery Location : </label>
             <p>{purchaseOrder.deliveryLocation}</p>
           </div>
         </div>
@@ -59,7 +72,7 @@ const POModal = props => {
             </tr>
         </thead>
         <tbody>
-        {purchaseOrder.products.map(product => <tr>
+          {purchaseOrder.products.map(product => <tr>
           <th scope="row">
             <div className="square-box" />
           </th>
@@ -71,14 +84,58 @@ const POModal = props => {
 
         </tbody>
       </table>
+      <hr />
       <div className="d-flex justify-content-end">
-        <div className="d-flex flex-column mr-5">
+        <div className="d-flex flex-column mr-5 mt-3">
           <span>Total Quantity</span>
-          <h3>{totalQuantity}</h3>
+          <h3 className="text-info">{totalQuantity}</h3>
         </div>
       </div>
+      {purchaseOrder.status === 'Received' &&
+        userAddress === receiverAddress && (
+          <div className="d-flex justify-content-end">
+            <button
+              className="btn btn-outline-success fontSize20 font-bold"
+              onClick={() => onAccept('Accepted')}
+            >
+              <img src={greenTick} width="14" height="14" className="mr-2" />
+              <span>Accept</span>
+            </button>
+            <button
+              className="btn btn-outline-danger fontSize20 font-bold ml-2"
+              onClick={() => onReject('Rejected')}
+            >
+              <img src={crossRed} width="14" height="14" className="mr-2" />
+              <span>Reject</span>
+            </button>
+          </div>
+        )}
+              {showCreateShippingOrder && (
+          <Modal
+          close={() => closeModal()}
+          title=" Create Shipping Order"
+          size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
+          buttonclassName="btn-orange"
+        >
+          <CreateShippingOrder />
+        </Modal>
+      )}
+      <button onClick={() => setShowCreateShippingOrder(true)}>count</button>
+      {purchaseOrder.status === 'Accepted' &&
+        userAddress === receiverAddress && (
+          <div className="d-flex justify-content-end">
+            <button
+              className="btn btn-yellow fontSize20 font-bold"
+              onClick={onCreateShipment}
+            >
+              <img src={addIcon} width="14" height="14" className="mr-2" />
+              <span>Create Shipment</span>
+            </button>
+          </div>
+        )}
     </div>
   );
 };
 
 export default POModal;
+
