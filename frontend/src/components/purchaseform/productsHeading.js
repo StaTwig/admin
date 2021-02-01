@@ -1,6 +1,6 @@
 import React from 'react';
 import './style.scss';
-const tableHeader = ['Product ID', 'Product Name', 'Manufacturer', 'Quantity'];
+const tableHeader = ['Product ID', 'Product Name', 'Manufacturer', 'Quantity','Price'];
 const ProductsHeading = () => {
 
     return (

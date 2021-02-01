@@ -244,7 +244,7 @@ const PurchaseForm = props => {
               value={externalPoId}
             />
           </div>
-          <div className="font-weight-bold">Supplier Details:</div>
+          <div className="font-weight-bold text-primary">Supplier Details:</div>
           <div className="input-group">
             <label className="reference">Organisation ID</label>
             <div className="form-control">
@@ -272,7 +272,7 @@ const PurchaseForm = props => {
           </div>
         </div>
         <div className="col">
-          <p className="mb-2 font-weight-bold">Customer Details : </p>
+          <p className="mb-2 font-weight-bold text-primary">Customer Details : </p>
           <div className="input-group">
             <label className="reference">Organisation ID</label>
             <div className="form-control">
@@ -311,17 +311,6 @@ const PurchaseForm = props => {
               value={customerLocationName}
             />
           </div>
-          <div className="input-group">
-            <label className="reference">Order Amount</label>
-            <input
-              type="text"
-              className="form-control"
-              name="Amount"
-              placeholder="Enter Amount"
-              onChange={e => setOrderAmount(e.target.value)}
-              value={orderAmount}
-            />
-          </div>
         </div>
       </div>
       <div className="table productTable mt-2">
@@ -333,6 +322,8 @@ const PurchaseForm = props => {
               products={products}
               product={product}
               index={index}
+              orderAmount={orderAmount}
+              setOrderAmount={setOrderAmount}
               onProductSelect={handleProductSelect}
               onQuantityChange={handleQuantityChange}
             />
@@ -348,13 +339,7 @@ const PurchaseForm = props => {
       </button>
 
       <div className="row float-right">
-        <button className="btn-primary btn mr-4" onClick={() => setMenu(!menu)}>
-          <div className="d-flex  align-items-center">
-            <img src={ExportIcon} width="16" height="16" className="mr-3" />
-            <span>Import</span>
-            <img src={dropdownIcon} width="16" height="16" className="ml-3" />
-          </div>
-        </button>
+       
         {menu ? (
           <div class="menu5">
             <button
@@ -377,9 +362,13 @@ const PurchaseForm = props => {
             />
           </Modal>
         )}
-        <button className="btn btn-orange review" onClick={onProceed}>
-          REVIEW
+        <button className="btn btn-yellow review mr-5" onClick={onProceed}>
+          Create PO
         </button>
+         <button className="btn btn-orange review">
+          Pay Now
+        </button>
+        
         <form
           id="redirectForm"
           method="post"
@@ -453,3 +442,12 @@ const PurchaseForm = props => {
 };
 
 export default PurchaseForm;
+
+
+/* <button className="btn-primary btn mr-4" onClick={() => setMenu(!menu)}>
+          <div className="d-flex  align-items-center">
+            <img src={ExportIcon} width="16" height="16" className="mr-3" />
+            <span>Import</span>
+            <img src={dropdownIcon} width="16" height="16" className="ml-3" />
+          </div>
+        </button>*/
