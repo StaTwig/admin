@@ -7,6 +7,8 @@ const ProductsTable = props => {
     product,
     products,
     quantity,
+    orderAmount,
+    setOrderAmount,
     onQuantityChange,
     index
   } = props;
@@ -60,12 +62,25 @@ const ProductsTable = props => {
                     e.preventDefault()
                   }
                   className="form-control"
-                  placeholder="Enter Quantity"
+                  placeholder="Quantity"
                   value={quantity}
                   onChange={item => onQuantityChange(item, index)}
                 />
               </div>
             </div>
+            <div className="rTableCell">
+            <div className="form-group">
+            <input
+              type="text"
+              className="form-control"
+              name="Amount"
+              placeholder="Price"
+              onChange={e => setOrderAmount(e.target.value)}
+              value={orderAmount}
+            />
+          </div>
+          </div>
+
           </div>
   );
 };
