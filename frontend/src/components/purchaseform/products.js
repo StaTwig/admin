@@ -12,7 +12,7 @@ const ProductsTable = props => {
     onQuantityChange,
     index
   } = props;
-  const productIds = products.map(product => product.id);
+  const productIds = products.map(product => product.externalId);
   return (
     
           <div className="rTableRow">
@@ -21,6 +21,7 @@ const ProductsTable = props => {
                 groups={productIds}
                 onSelect={item => onProductSelect(item, index)}
                 name={product.externalId}
+                placeholder="Select ProductId"
                 className="text"
               />
             </div>
