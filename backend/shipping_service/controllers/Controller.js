@@ -23,6 +23,7 @@ const checkPermissions = require('../middlewares/rbac_middleware')
   .checkPermissions;
 const dotenv = require('dotenv').config();
 const wrapper = require('../models/DBWrapper')
+const uniqid = require('uniqid');
 
 const blockchain_service_url = process.env.URL;
 const stream_name = process.env.SHIP_STREAM;
@@ -44,6 +45,7 @@ exports.createShippingOrder = [
           if (result.success) {
             const poId = req.body.poId;
             const shippingOrder = req.body.shippingOrder;
+            shippingOrder.shippingOrderId = uniqid('so-')
             const POFound = await RecordModel.findOne({id: poId});
             existingShippingOrders = POFound.shippingOrders;
             totalShippingOrders = existingShippingOrders.length;
@@ -92,8 +94,10 @@ exports.createShippingOrder = [
         const { authorization } = req.headers;
         checkToken(req, res, async result => {
           if (result.success) {
-            const poId = req.body.poId;
+            const { poId } = req.body;
+            console.log("POId: ", poId);
             const POFound = await RecordModel.findOne({id: poId});
+            console.log("POFound", POFound);
             existingShippingOrders = POFound.shippingOrders;
             totalShippingOrders = existingShippingOrders.length;
             console.log("Purchase Order Id", totalShippingOrders);
