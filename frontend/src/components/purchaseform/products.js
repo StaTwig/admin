@@ -20,7 +20,7 @@ const ProductsTable = props => {
               <DropdownButton
                 groups={productIds}
                 onSelect={item => onProductSelect(item, index)}
-                name={product.externalId}
+                name={product.productId}
                 placeholder="Select ProductId"
                 className="text"
               />
@@ -76,6 +76,7 @@ const ProductsTable = props => {
               className="form-control"
               name="Amount"
               placeholder="Price"
+              disabled={true}
               onChange={e => setOrderAmount(e.target.value)}
               value={orderAmount}
             />
