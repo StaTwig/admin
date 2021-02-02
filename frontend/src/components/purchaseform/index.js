@@ -36,10 +36,11 @@ const PurchaseForm = props => {
   const [cashfreeData, setCashfreeData] = useState({});
 
   const defaultProduct = {
-    productId: 'Select Product ID',
+    productId: 'Select',
     productName: '',
     quantity: '',
     manufacturer: '',
+    externalId: 'Select'
   };
   const [productRows, setProductRows] = useState([defaultProduct]);
   const [message, setMessage] = useState('');
@@ -197,6 +198,7 @@ const PurchaseForm = props => {
       ...productRowsClone[index],
       quantity: e.target.value,
     };
+    setOrderAmount(parseInt(e.target.value) * 10);
     productRowsClone[index] = productRow;
     setProductRows(productRowsClone);
   };
@@ -365,10 +367,7 @@ const PurchaseForm = props => {
         <button className="btn btn-yellow review mr-5" onClick={onProceed}>
           Create PO
         </button>
-         <button className="btn btn-orange review">
-          Pay Now
-        </button>
-        
+
         <form
           id="redirectForm"
           method="post"
@@ -428,7 +427,7 @@ const PurchaseForm = props => {
           />
           <input
             type="submit"
-            value="Pay"
+            value="Pay Now"
             className="btn btn-orange review"
             disabled={!cashfreeData.appId}
           />
