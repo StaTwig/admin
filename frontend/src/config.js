@@ -45,7 +45,7 @@ export function config() {
       addPOsFromExcelUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/addPOsFromExcel`,
       changePOStatus: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/changePOStatus`,
       fetchAllPurchaseOrderUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
-      getPOs: `${LOCAL_SERVER_URL_SHIPMENT}/pomanagement/api/po/purchaseOrderStatistics`,
+      getPOs: `${LOCAL_SERVER_URL_PO}/pomanagement/api/po/purchaseOrderStatistics`,
       trackShipment: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
       poDetailsByShipmentId:`${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
@@ -67,7 +67,7 @@ export function config() {
       updateProfileUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${DEV_SERVER_URL}/usermanagement/api/auth/upload`,
       shipmentsUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/fetchUserShipments`,
-      getProducts: `${DEV_SERVER_URL}/productmanagement/api/products/getProductNames`,
+      getProducts: `${DEV_SERVER_URL}/productmanagement/api/products/getProducts`,
       generateCodes: `${DEV_SERVER_URL}/productmanagement/api/products/generateCodes`,
       getManufacturers: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/getManufacturers`,
       createShipmentUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/createShipment`,
@@ -169,7 +169,7 @@ export function config() {
       getOrganisations:`${TEST_SERVER_URL}/productmanagement/api/organisation/getOrganisations`,
       getWarehouseByOrgId:`${TEST_SERVER_URL}/productmanagement/api/organisation/warehouses?id=`,
       addNewProduct: `${TEST_SERVER_URL}/productmanagement/api/products/addProductName`,
-      getProducts: `${TEST_SERVER_URL}/productmanagement/api/products/getProductNames`,
+      getProducts: `${TEST_SERVER_URL}/productmanagement/api/products/getProducts`,
       generateCodes: `${TEST_SERVER_URL}/productmanagement/api/products/generateCodes`,
       addMultipleProducts: `${TEST_SERVER_URL}/productmanagement/api/products/addMultipleProducts`,
       getNotificationsUrl: `${TEST_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
@@ -255,7 +255,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || 'local'; // change prod to test, local,stable, dev for respective environments
+  const environment = process.env.ENVIRONMENT || 'test'; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
   return conf;
 }
