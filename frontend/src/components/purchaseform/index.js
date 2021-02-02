@@ -180,11 +180,11 @@ const PurchaseForm = props => {
 
   const handleProductSelect = (item, index) => {
     const productRowsClone = [...productRows];
-    const product = products.find(product => product.id === item);
+    const product = products.find(product => product.externalId === item);
     const productRow = {
       ...productRowsClone[index],
-      productId: product.id,
-      productName: product.name,
+      externalId: product.externalId,
+      name: product.name,
       manufacturer: product.manufacturer,
     };
     productRowsClone[index] = productRow;
