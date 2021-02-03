@@ -11,7 +11,6 @@ import { turnOn, turnOff } from "./spinnerActions";
 
 export const createPO = async data => {
   try {
-    debugger;
     const result = await axios.post(config().createPurchaseOrderUrl, data);
     return result;
   } catch (e) {

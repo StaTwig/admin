@@ -10,8 +10,6 @@ const POModal = props => {
   const {
     purchaseOrder,
   } = props;
-  //const po = purchaseOrder;
-  //const receiverAddress = po.receiver;
   let totalQuantity = 0;
   purchaseOrder.products.forEach(product => totalQuantity += parseInt(product.quantity));
 
@@ -91,48 +89,6 @@ const POModal = props => {
           <h3 className="text-info">{totalQuantity}</h3>
         </div>
       </div>
-      {purchaseOrder.status === 'Received' &&
-        userAddress === receiverAddress && (
-          <div className="d-flex justify-content-end">
-            <button
-              className="btn btn-outline-success fontSize20 font-bold"
-              onClick={() => onAccept('Accepted')}
-            >
-              <img src={greenTick} width="14" height="14" className="mr-2" />
-              <span>Accept</span>
-            </button>
-            <button
-              className="btn btn-outline-danger fontSize20 font-bold ml-2"
-              onClick={() => onReject('Rejected')}
-            >
-              <img src={crossRed} width="14" height="14" className="mr-2" />
-              <span>Reject</span>
-            </button>
-          </div>
-        )}
-              {showCreateShippingOrder && (
-          <Modal
-          close={() => closeModal()}
-          title=" Create Shipping Order"
-          size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
-          buttonclassName="btn-orange"
-        >
-          <CreateShippingOrder />
-        </Modal>
-      )}
-      <button onClick={() => setShowCreateShippingOrder(true)}>count</button>
-      {purchaseOrder.status === 'Accepted' &&
-        userAddress === receiverAddress && (
-          <div className="d-flex justify-content-end">
-            <button
-              className="btn btn-yellow fontSize20 font-bold"
-              onClick={onCreateShipment}
-            >
-              <img src={addIcon} width="14" height="14" className="mr-2" />
-              <span>Create Shipment</span>
-            </button>
-          </div>
-        )}
     </div>
   );
 };
