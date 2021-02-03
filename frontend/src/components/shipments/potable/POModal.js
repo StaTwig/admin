@@ -3,10 +3,12 @@ import Modal from '../../../shared/modal';
 import greenTick from '../../../assets/icons/tickGreen.svg';
 import crossRed from '../../../assets/icons/crossRed.svg';
 import addIcon from '../../../assets/icons/add.svg';
+import Order from '../../../assets/icons/order.svg';
 import CreateShippingOrder from  '../createShippingOrder';
 import './style.scss';
 
 const POModal = props => {
+ const[showCreateShippingOrder,setShowCreateShippingOrder]=useState(false);
   const {
     purchaseOrder,
   } = props;
@@ -16,7 +18,6 @@ const POModal = props => {
   const month = new Date().getMonth() + 1;
   const todayDate =
     new Date().getDate() + '/' + month + '/' + new Date().getFullYear();
-    const[showCreateShippingOrder,setShowCreateShippingOrder]=useState(false)
 
     const closeModal = ()=>{
       setShowCreateShippingOrder(false)
@@ -83,12 +84,28 @@ const POModal = props => {
         </tbody>
       </table>
       <hr />
-      <div className="d-flex justify-content-end">
+      {showCreateShippingOrder && (
+          <Modal
+          close={() => closeModal()}
+          title=" Create Shipping Order"
+          size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
+          buttonclassName="btn-orange"
+        >
+          <CreateShippingOrder {...props} />
+        </Modal>
+      )}
+      <div className="d-flex  justify-content-end">
         <div className="d-flex flex-column mr-5 mt-3">
           <span>Total Quantity</span>
           <h3 className="text-info">{totalQuantity}</h3>
         </div>
       </div>
+      <button
+        className="btn btn-orange fontSize20 font-bold mr-2  mt-3 float-left"  onClick={() => setShowCreateShippingOrder(true)} >
+        <img src={Order} width="14" height="14" className="mr-2" />
+        <span>Create Shipping Order</span>
+      </button>
+
     </div>
   );
 };

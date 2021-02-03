@@ -2,6 +2,7 @@ export const TEST_SERVER_URL = 'http://test.vaccineledger.com:9001';
 export const PROD_SERVER_URL = 'http://api.vaccineledger.com:9001';
 export const DEMO_SERVER_URL = 'http://vaccineledger.com:9001';
 export const LOCAL_SERVER_URL_USER = 'http://localhost:3001';
+export const LOCAL_SERVER_URL_SHIPPINGORDER ='http://localhost:3022';
 export const LOCAL_SERVER_URL_SHIPMENT = 'http://localhost:3002';
 export const LOCAL_SERVER_URL_INVENTORY = 'http://localhost:3007';
 export const LOCAL_SERVER_URL_PO = 'http://localhost:3012';
@@ -17,6 +18,9 @@ export const STABLE_SERVER_URL_NOTIFICATION = 'http://65.0.135.24:3006';
 export const STABLE_SERVER_URL_PRODUCTS = 'http://65.0.135.24:3010';
 export const DEV_SERVER_URL = 'http://127.0.0.1:9001';
 
+
+/*Shipping order URL needs to be updated for stable server*/ 
+
 export function config() {
   const confs = {
     local: {
@@ -27,6 +31,7 @@ export function config() {
       getAllUsersUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/updateProfile`,
       upload: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/upload`,
+      createShipmentOrderUrl:`${LOCAL_SERVER_URL_SHIPMENT}/shippingordermanagement/api/shipping/createShippingOrder`,
       shipmentsUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchUserShipments`,
       getProducts: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/getProducts`,
       generateCodes: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/generateCodes`,
@@ -66,6 +71,7 @@ export function config() {
       getAllUsersUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${DEV_SERVER_URL}/usermanagement/api/auth/upload`,
+      createShipmentOrderUrl:`${DEV_SERVER_URL}/shippingordermanagement/api/shipping/createShippingOrder`,
       shipmentsUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/fetchUserShipments`,
       getProducts: `${DEV_SERVER_URL}/productmanagement/api/products/getProducts`,
       generateCodes: `${DEV_SERVER_URL}/productmanagement/api/products/generateCodes`,
@@ -105,10 +111,12 @@ export function config() {
       getAllUsersUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/updateProfile`,
       upload: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/upload`,
+      createShipmentOrderUrl:`${TEST_SERVER_URL}/shippingordermanagement/api/shipping/createShippingOrder`,
       shipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchUserShipments`,
       getProducts: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/getProducts`,
       generateCodes: `${STABLE_SERVER_URL_SHIPMENT}/productmanagement/api/products/generateCodes`,
       getManufacturers: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/getManufacturers`,
+      createShipmentOrderUrl:`${STABLE_SERVER_URL_SHIPMENT}/shippingordermanagement/api/shipping/createShippingOrder`,
       createShipmentUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/createShipment`,
       shipmentsSearch: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchShipments?key=`,
       createPurchaseOrderUrl: `${STABLE_SERVER_URL_PO}/pomanagement/api/po/createPurchaseOrder`,
@@ -183,6 +191,7 @@ export function config() {
       getAllUsersUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${DEMO_SERVER_URL}/usermanagement/api/auth/upload`,
+      createShipmentOrderUrl:`${DEMO_SERVER_URL}/shippingordermanagement/api/shipping/createShippingOrder`,
       shipmentsUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/fetchUserShipments`,
       getManufacturers: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/getManufacturers`,
       createShipmentUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/createShipment`,
@@ -223,6 +232,7 @@ export function config() {
       updateProfileUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${PROD_SERVER_URL}/usermanagement/api/auth/upload`,
       shipmentsUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchUserShipments`,
+      createShipmentOrderUrl:`${PROD_SERVER_URL}/shippingordermanagement/api/shipping/createShippingOrder`,
       createShipmentUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/createShipment`,
       shipmentsSearch: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchShipments?key=`,
       getProducts: `${PROD_SERVER_URL}/productmanagement/api/products/getProducts`,
