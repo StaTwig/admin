@@ -291,16 +291,16 @@ exports.track = [
         '<<<<< ShipmentService < ShipmentController < trackNumber : tracking , querying by transaction hash',
       );
 
-    if (trackingNumber.includes("PO")) {
+    if (trackingNumber.includes("po") || trackingNumber.includes("PO") ) {
     var type = "poNumber"; 
     var shipment_array = [];
     RecordModel.findOne({
         id: trackingNumber
     }).then(async user => {
-         var arr = JSON.parse(JSON.stringify(user)).shipments.length
+            var arr = JSON.parse(JSON.stringify(user)).shipments.length
             var val  = JSON.parse(JSON.stringify(user)).shipments
             shipment_array.push(val)
-	    var poDetails = {"id":user.id,"supplier":user.supplier,"customer":user.customer,"date":user.creationDate,"createdBy":user.createdBy,"status":user.poStatus}
+	    var poDetails = {"id":user.id,"supplier":user.supplier,"customer":user.customer,"date":user.creationDate,"craetedBy":user.createdBy,"status":user.poStatus}
 	    logger.log(
             'info',
             '<<<<< ShipmentService < ShipmentController < trackShipment : tracked PO, queried data by transaction hash',
@@ -333,17 +333,32 @@ exports.track = [
     })
   } else {
   var type = "serialNumber";
+  var shipment_array = [];
   AtomModel.findOne({
         id: trackingNumber
     }).then(async user => {
-         console.log(user)
+         console.log(user.shipmentIds[0])
+	var shipmentIds = user.shipmentIds
+        RecordModel.find({
+       "shipments.shipment_id": shipmentIds[0]
+    }).then(async user => {
+            var arr = JSON.parse(JSON.stringify(user)).length
+            var poDetails = {"id":user[0].id,"supplier":user[0].supplier,"customer":user[0].customer,"date":user[0].creationDate,"createdBy":user[0].createdBy,"status":user[0].poStatus}
+            for (i = 0; i < arr; i++){
+            var val = JSON.parse(JSON.stringify(user))[i].shipments
+            shipment_array.push(val)
+            }
+         res.json({
+	    inventoryDetails: user,
+            poDetails: poDetails,
+            shipments: shipment_array
+        });
+      })
+
          logger.log(
             'info',
             '<<<<< ShipmentService < ShipmentController < trackProduct : tracked product, queried data by transaction hash',
         );
-        res.json({
-            data: user
-        });
     });
 }
     } catch (err) {
