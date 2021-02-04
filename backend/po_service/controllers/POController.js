@@ -13,6 +13,7 @@ const NotificationModel = require('../models/NotificationModel');
 const RecordModel = require('../models/RecordModel');
 const OrganisationModel = require('../models/OrganisationModel');
 const ProductModel = require('../models/ProductModel');
+const WarehouseModel = require('../models/WarehouseModel');
 //this helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
 const utility = require('../helpers/utility');
@@ -51,12 +52,12 @@ exports.purchaseOrderStatistics = [
             if (permissionResult.success) {
               const { address, role } = req.user;
               const { skip, limit } = req.query;
-	       const poTableArray = [];
+               const poTableArray = [];
 
               var supplierPOs = await wrapper.findRecordsAndSort(RecordModel,{"supplier.supplierIncharge":address},skip,limit);
               var customerPos = await wrapper.findRecordsAndSort(RecordModel,{"customer.customerIncharge":address},skip,limit);
-	      var creatorPos = await wrapper.findRecordsAndSort(RecordModel,{"createdBy":address},skip,limit);
-	
+              var creatorPos = await wrapper.findRecordsAndSort(RecordModel,{"createdBy":address},skip,limit);
+
               var allPos,poItemsSupplier,poItemsCustomer,poItemsCreator = [];
 
               poItemsSupplier = supplierPOs.map(po => {
@@ -70,48 +71,51 @@ exports.purchaseOrderStatistics = [
                 const item = {...po._doc, status };
                 return item;
               });
-              
-	      poItemsCreator = creatorPos.map(po => {
+
+              poItemsCreator = creatorPos.map(po => {
                 const status = po.status === 'Created' ? 'Received' : po.status;
                 const item = {...po._doc, status };
                 return item;
               });
-	      
+
 
                allPos = poItemsSupplier.concat(poItemsCustomer,poItemsCreator)
 
-		if(role === 'powerUser') {
- 		  allPos = await wrapper.findAllRecords(RecordModel,skip,limit);
-		}
+                if(role === 'powerUser') {
+                  allPos = await wrapper.findAllRecords(RecordModel,skip,limit);
+                }
 
-	         for (i=0; i< allPos.length;i++)
-		{
-		  const productArray = [];
-		  const supplier = await wrapper.findOneRecord(OrganisationModel,{"id":allPos[i].supplier.supplierOrganisation})
-	          const customer = await wrapper.findOneRecord(OrganisationModel,{"id":allPos[i].customer.customerOrganisation})
-		  const product = await wrapper.findOneRecord(ProductModel,{"id":allPos[i].products[0].productId})
-		  for (j=0;j<allPos[i].products.length;j++)
-		   {
-			var productId = allPos[i].products[j].productId;
-			const product = await wrapper.findOneRecord(ProductModel,{"id": "prod-9bhkk6yiutx"})
-			   console.log("ewew",product)
-			var product1 = {productID : allPos[i].products[j].productId,quantity: allPos[i].products[j].quantity,productName:product.name }
-			productArray.push(product1)
-	    	   }  	
-		   poItems = {
-			     suppplierOrgID:allPos[i].supplier.supplierOrganisation,
-			     supplierOrgName:supplier.name,
-		  	     purchaseOrderID : allPos[i].id,
-			     externalId: allPos[i].externalId,
-			     customerOrgID:allPos[i].customer.customerOrganisation,
-			     customerOrgName: customer.name,
-			     customerCountryName: customer.country.name,
-			     customerCountryID: customer.country.id,
-			     products: productArray,
-			     status: allPos[i].poStatus
-		     }
-			    poTableArray.push(poItems)
-			}
+                 for (i=0; i< allPos.length;i++)
+                {
+                  const productArray = [];
+                  const supplier = await wrapper.findOneRecord(OrganisationModel,{"id":allPos[i].supplier.supplierOrganisation})
+                  const customer = await wrapper.findOneRecord(OrganisationModel,{"id":allPos[i].customer.customerOrganisation})
+                  const product = await wrapper.findOneRecord(ProductModel,{"id":allPos[i].products[0].productId})
+                  const deliveryLocation =  await wrapper.findOneRecord(WarehouseModel,{"id":allPos[i].customer.shippingAddress.shippingAddressId})
+                  for (j=0;j<allPos[i].products.length;j++)
+                   {
+                        var productId = allPos[i].products[j].productId;
+                        const product = await wrapper.findOneRecord(ProductModel,{"id": "prod-9bhkk6yiutx"})
+                        var product1 = {productID : allPos[i].products[j].productId,quantity: allPos[i].products[j].quantity,
+                        productName:product.name,manufacturer:product.manufacturer }
+                        productArray.push(product1)
+                   }
+                   poItems = {
+                             suppplierOrgID:allPos[i].supplier.supplierOrganisation,
+                             supplierOrgName:supplier.name,
+                             purchaseOrderID : allPos[i].id,
+                             externalId: allPos[i].externalId,
+                             customerOrgID:allPos[i].customer.customerOrganisation,
+                             customerOrgName: customer.name,
+                             customerCountryName: customer.country.name,
+                             customerCountryID: customer.country.id,
+                             products: productArray,
+                             deliveryLocationId: allPos[i].customer.shippingAddress.shippingAddressId,
+                             deliveryLocation: deliveryLocation.postalAddress,
+                             status: allPos[i].poStatus
+                     }
+                            poTableArray.push(poItems)
+                        }
               logger.log(
                 'info',
                 '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : queried data by publisher',
@@ -138,6 +142,7 @@ exports.purchaseOrderStatistics = [
     }
   },
 ];
+
 
 exports.fetchAllPurchaseOrdersBC = [
   auth,
