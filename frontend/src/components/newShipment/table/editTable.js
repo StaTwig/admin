@@ -9,11 +9,13 @@ const EditTable = props => {
     <div className="table editTable">
       <div className="rTable">
         <div className="rTableHeading">
-          <div className="rTableHead"> Product Name</div>
+          <div className="rTableHead"> Product ID</div>
           <div className="rTableHead">
-            <span>Manufacturer</span>
+            <span>Product Name</span>
           </div>
+          <div className="rTableHead">Manufacturer</div>
           <div className="rTableHead">Quantity</div>
+          <div className="rTableHead">Lable ID</div>
         {/*  <div className="rTableHead">
             <span>Mfg Date</span>
           </div>
