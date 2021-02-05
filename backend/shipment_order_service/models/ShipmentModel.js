@@ -1,14 +1,43 @@
 var mongoose = require("mongoose");
-ShipmentSchema = new mongoose.Schema({
-  shipmentId: {type: String, required: true, unique: true},
-	txnIds: {type: Array, required: true},
-	receiver: {type: String, required: true},
-	sender: {type: String, required: true},
-	status: {type: String, required: true},
-	estimatedDeliveryDate: {type: String, required: true},
-	poNumber: {type: String },
-	batchNumber: {type: String },
-}, {timestamps: true});
-
+ShipmentSchema = new mongoose.Schema(
+  {
+    id: { type: String, required: true, unique: true },
+    shippingOrderId: String,
+    poId: String,
+    label: {
+      labelId: String,
+      labelType: { type: String, default: "QR_2DBAR" },
+    },
+    externalShipmentId: String,
+    supplier: {
+      id: String,
+      name: String,
+      locationId: String,
+      location: String,
+    },
+    receiver: {
+      id: String,
+      name: String,
+      locationId: String,
+      location: String,
+    },
+    airWayBillNo: String,
+    shippingDate: String,
+    expectedDeliveryDate: String,
+    actualDeliveryDate: String,
+    status: String,
+    transactionIds: [String],
+    products: [
+      {
+        productId: String,
+        productName: String,
+        manufacturer: String,
+        productQuantity: Number,
+        labelId: String,
+      },
+    ],
+  },
+  { timestamps: true }
+);
 
 module.exports = mongoose.model("Shipment", ShipmentSchema);
