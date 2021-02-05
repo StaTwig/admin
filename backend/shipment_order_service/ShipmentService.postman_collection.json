@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\"shipment\":{\n      \"shipmentId\": \"SH1234567890\",\n      \"airWayBillNo\":\"Bill1234\",\n      \"label\": {\n        \"labelId\": \"uuid1234567899\",\n        \"labelType\": \"QR_2DBAR\"\n      },\n      \"externalShipmentId\": \"HYDROS123456ORP\",\n      \"supplier\": {\n        \"supplierId\": \"user_id\",\n        \"supplierName\":\"NAME SUP\",\n        \"supplierLocationId\": \"warehouse_id\"\n      },\n      \"receiver\": {\n        \"receiverId\": \"user_id\",\n        \"receiverLocationId\": \"warehouse_id\"\n      },\n      \"shippingDate\": \"2021-01-01T18:30:00.000Z\",\n      \"expectedDeliveryDate\": \"2021-01-03T18:30:00.000Z\",\n      \"actualDeliveryDate\": \"2021-01-04T18:30:00.000Z\",\n      \"shipmentStatus\": \"PROCESSING_CREATED_SHIPPED_RECEIVED_LOST_DAMAGED\",\n      \"transactionIds\": [\n        \"tx_id 1\",\n        \"tx_id 2\",\n        \"tx_id 3\"\n      ],\n      \"products\": [\n        {\n          \"productId\": \"product_id 1\",\n          \"productQuantity\": 345,\n          \"productName\":\"NAME PRODUCT\",\n          \"manufacturerName\":\"MAN1234\",\n          \"labelId\":\"label1234\"\n        }\n      ]\n    },\n \"poId\": \"po1234565\"\n}   ",
+					"raw": "{ \n      \"airWayBillNo\":\"Bill1234\",\n      \"shippingOrderId\":\"shippingorder123\",\n      \"label\": {\n        \"labelId\": \"uuid1234567899\",\n        \"labelType\": \"QR_2DBAR\"\n      },\n      \"externalShipmentId\": \"HYDROS123456ORP\",\n      \"supplier\": {\n        \"id\": \"user_id\",\n        \"name\":\"NAME SUP\",\n        \"locationId\": \"warehouse_id\",\n        \"location\":\"warehosue address\"\n      },\n      \"receiver\": {\n        \"id\": \"user_id\",\n        \"locationId\": \"warehouse_id\"\n      },\n      \"shippingDate\": \"2021-01-01T18:30:00.000Z\",\n      \"expectedDeliveryDate\": \"2021-01-03T18:30:00.000Z\",\n      \"actualDeliveryDate\": \"2021-01-04T18:30:00.000Z\",\n      \"status\": \"PROCESSING_CREATED_SHIPPED_RECEIVED_LOST_DAMAGED\",\n      \"transactionIds\": [\n        \"tx_id 1\",\n        \"tx_id 2\",\n        \"tx_id 3\"\n      ],\n      \"products\": [\n        {\n          \"productId\": \"product_id 1\",\n          \"productQuantity\": 345,\n          \"productName\":\"NAME PRODUCT\",\n          \"manufacturerName\":\"MAN1234\",\n          \"labelId\":\"label1234\"\n        }\n      ],\n \"poId\": \"po1234565\"\n}   ",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -34,14 +34,7 @@
 					]
 				}
 			},
-			"response": [{
-				"response": "Success - Shipment order created",
-				"shipments": {
-					"n": 1,
-					"nModified": 1,
-					"ok": 1
-				}
-			}]
+			"response": []
 		},
 		{
 			"name": "update Shipment Status",
@@ -78,15 +71,35 @@
 					]
 				}
 			},
-			"response": [
-				{
-					"response": {
-						"n": 1,
-						"nModified": 1,
-						"ok": 1
-					}
+			"response": []
+		},
+		{
+			"name": "fetchShipments?id=warehouse_id1",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3013/shipmentordermanagement/api/shipment/fetchShipments?id=warehouse_id1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3013",
+					"path": [
+						"shipmentordermanagement",
+						"api",
+						"shipment",
+						"fetchShipments"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "warehouse_id1"
+						}
+					]
 				}
-			]
+			},
+			"response": []
 		}
 	]
 }
