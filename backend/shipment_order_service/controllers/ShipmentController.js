@@ -54,7 +54,7 @@ exports.fetchShipments = [
       const { authorization } = req.headers;
       checkToken(req, res, async (result) => {
         if (result.success) {
-          const warehouseId = req.user.warehouseId;
+          const {warehouseId} = req.user
           await ShipmentModel.find({
             $or: [
               { "supplier.locationId": warehouseId},
@@ -205,7 +205,7 @@ exports.updateStatus = [
       const { authorization } = req.headers;
       checkToken(req, res, async (result) => {
         if (result.success) {
-          await Record.update({ id: req.query.id }, { status: req.body.status })
+          await Record.update({ id: req.query.shipmentId }, { status: req.body.status })
             .then((result) => {
               return apiResponse.successResponseWithData(
                 res,

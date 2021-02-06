@@ -15,12 +15,12 @@ const upload = multer({ storage: Storage });
 
 const router = express.Router();
 
-router.post("/createShipment", ShipmentController.createShipment);
-router.get("/fetchShipments", ShipmentController.fetchShipments); // /fetchShipments?warehouseId=123
-router.get("/viewShipment", ShipmentController.Shipment);
+router.post("/createShipment", ShipmentController.createShipment); // /createShipment => POST data of Shipment
+router.get("/fetchShipments", ShipmentController.fetchShipments); // /fetchShipments => Takes warehouseId from req.user header 
+router.get("/viewShipment", ShipmentController.Shipment); // /viewShipment?ShipmentId=SH7TUC_VZIKD
 
-router.get("/fetchShipments/:po_id", ShipmentController.fetch_po_Shipments);
-router.get("/fetchAllShipments", ShipmentController.fetchAllShipments);
+router.get("/viewPoShipments", ShipmentController.fetch_po_Shipments); // /viewPoShipments?poId=po1234565
+router.get("/fetchAllShipments", ShipmentController.fetchAllShipments); // /fetchAllShipments ==> Gives all shipments in the ledger
 router.post("/updateShipmentStatus", ShipmentController.updateStatus); // /updateShipmentStatus?id=123
 
 module.exports = router;
