@@ -451,44 +451,7 @@
 			"name": "shippingOrderService",
 			"item": [
 				{
-					"name": "http://localhost:3022/shippingmanagement/api/shipping/createShippingOrder",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjEyMjg3MjkxLCJleHAiOjE2MTIyOTQ0OTF9.7YfXM-9Z1e3u6_f__MrbK4iylgaJea5MhoVzehkjBlM",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "    {\n        \"poId\": \"po-5yzkklimaud\", \n        \"shippingOrder\": {\n                \"soCreatedBy\": \"user-121\",\n                \"soAssignedTo\": \"warehouse_id 11\",\n                \"soUpdatedOn\": \"2020-01-01T18:30:00.000Z\",\n                \"soUpdatedBy\": \"user-121\",\n                \"soStatus\": \"CREATED\"\n        }\n    }",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:3022/shippingmanagement/api/shipping/createShippingOrder",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "3022",
-							"path": [
-								"shippingmanagement",
-								"api",
-								"shipping",
-								"createShippingOrder"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "http://localhost:3022/shippingmanagement/api/shipping/fetchAllShippingOrders",
+					"name": "http://localhost:3022/shippingordermanagement/api/shipping/viewShippingOrder?shippingOrderId=so-5omx18ktkktckrfj",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -497,13 +460,13 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjEyMjg3MjkxLCJleHAiOjE2MTIyOTQ0OTF9.7YfXM-9Z1e3u6_f__MrbK4iylgaJea5MhoVzehkjBlM",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjEyNTkyNTkzLCJleHAiOjE2MTI1OTk3OTN9.J3xzB7MQxcxczxUWfMGGpsNGV3llabcyxxN_dmacJ0M",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"poId\":\"po-5yzkklimaud\"\n}",
+							"raw": "{\n    \"poId\": \"po-3kn7pab72kkl1uzai\",\n    \"soId\": \"SO1234865790\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -511,14 +474,60 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3022/shippingmanagement/api/shipping/fetchAllShippingOrders",
+							"raw": "http://localhost:3022/shippingordermanagement/api/shipping/viewShippingOrder?shippingOrderId=so-5omx18ktkktckrfj",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "3022",
 							"path": [
-								"shippingmanagement",
+								"shippingordermanagement",
+								"api",
+								"shipping",
+								"viewShippingOrder"
+							],
+							"query": [
+								{
+									"key": "shippingOrderId",
+									"value": "so-5omx18ktkktckrfj"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:3022/shippingordermanagement/api/shipping/fetchAllShippingOrders",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjEyNTkyNTkzLCJleHAiOjE2MTI1OTk3OTN9.J3xzB7MQxcxczxUWfMGGpsNGV3llabcyxxN_dmacJ0M",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3022/shippingordermanagement/api/shipping/fetchAllShippingOrders",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3022",
+							"path": [
+								"shippingordermanagement",
 								"api",
 								"shipping",
 								"fetchAllShippingOrders"
@@ -528,22 +537,19 @@
 					"response": []
 				},
 				{
-					"name": "http://localhost:3022/shippingmanagement/api/shipping/viewShippingOrder",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "http://localhost:3022/shippingordermanagement/api/shipping/createShippingOrder",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjEyMjg3MjkxLCJleHAiOjE2MTIyOTQ0OTF9.7YfXM-9Z1e3u6_f__MrbK4iylgaJea5MhoVzehkjBlM",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjEyNTkyNTkzLCJleHAiOjE2MTI1OTk3OTN9.J3xzB7MQxcxczxUWfMGGpsNGV3llabcyxxN_dmacJ0M",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"poId\": \"po-5yzkklimaud\",\n    \"soId\": \"so-vhec7dyfbkkoaghpm\"\n}",
+							"raw": "{\n    \"soPurchaseOrderId\": \"po-1yokkig2ts6\",\n    \"soAssignedTo\": \"warehouse_id 11\",\n    \"soUpdatedOn\": \"2020-01-01T18:30:00.000Z\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -551,17 +557,17 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:3022/shippingmanagement/api/shipping/viewShippingOrder",
+							"raw": "http://localhost:3022/shippingordermanagement/api/shipping/createShippingOrder",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "3022",
 							"path": [
-								"shippingmanagement",
+								"shippingordermanagement",
 								"api",
 								"shipping",
-								"viewShippingOrder"
+								"createShippingOrder"
 							]
 						}
 					},

@@ -1,7 +1,7 @@
 const express = require("express");
 const multer = require('multer');
 const ShipmentController = require("../controllers/ShipmentController");
-const Controller = require("../controllers/Controller");
+const ShippingOrderController = require("../controllers/ShippingOrderController");
 
 const Storage = multer.diskStorage({
   destination(req, file, callback) {
@@ -16,9 +16,9 @@ const upload = multer({ storage: Storage });
 
 const router = express.Router();
 
-router.post("/createShippingOrder", Controller.createShippingOrder);
-router.get("/fetchAllShippingOrders", Controller.fetchAllShippingOrders);
-router.get("/viewShippingOrder", Controller.viewShippingOrder);
+router.post("/createShippingOrder", ShippingOrderController.createShippingOrder);
+router.get("/fetchAllShippingOrders", ShippingOrderController.fetchAllShippingOrders);
+router.get("/viewShippingOrder", ShippingOrderController.viewShippingOrder);
 
 
 router.get("/shipmentStatistics", ShipmentController.shipmentStatistics);

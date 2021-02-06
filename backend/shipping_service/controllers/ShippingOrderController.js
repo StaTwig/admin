@@ -14,6 +14,7 @@ const InventoryModel = require('../models/InventoryModel');
 const OrganisationModel = require('../models/OrganisationModel');
 const NotificationModel = require('../models/NotificationModel');
 const RecordModel = require('../models/RecordModel');
+const ShippingOrderModel = require('../models/ShippingOrderModel');
 //this helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
 const utility = require('../helpers/utility');
@@ -43,24 +44,33 @@ exports.createShippingOrder = [
         const { authorization } = req.headers;
         checkToken(req, res, async result => {
           if (result.success) {
-            const poId = req.body.poId;
-            const shippingOrder = req.body.shippingOrder;
-            shippingOrder.shippingOrderId = uniqid('so-')
-            const POFound = await RecordModel.findOne({id: poId});
-            existingShippingOrders = POFound.shippingOrders;
-            totalShippingOrders = existingShippingOrders.length;
-            console.log("Purchase Order Id", totalShippingOrders);
-            // console.log("shippingOrder", shippingOrder);
+            const { soPurchaseOrderId, soAssignedTo, soUpdatedOn } = req.body;
+            const { soCreatedBy, soUpdatedBy } = req.user.id;
+            const soStatus = 'CREATED';
+            const shippingOrderId = uniqid('so-');
+
+            const so = new ShippingOrderModel({
+              shippingOrderId,
+              soPurchaseOrderId,
+              soCreatedBy,
+              soAssignedTo,
+              soUpdatedBy,
+              soUpdatedOn,
+              soStatus
+            });
+
+            console.log("poid", soPurchaseOrderId);
+            const POFound = await RecordModel.findOneAndUpdate({ id: soPurchaseOrderId }, {$push: { shippingOrders:shippingOrderId} });
+            console.log("POFound", POFound);
 
             if(!POFound){
               logger.log(
                 'info',
-                '<<<<< ShippingService < Controller < createShippingOrder : PO not found in collection',
+                '<<<<< ShippingOrderService < ShippingController < createShippingOrder : PO not found in collection',
               );
               return res.status(404).json({error: `${po} PO Not Found`})  
             } else{
-              console.log("shippingOrder", shippingOrder);
-              await RecordModel.updateOne({id:poId}, {$push: { shippingOrders:shippingOrder} }).then((result)=>{
+              await so.save().then((result)=>{
                 return res.status(200).json({ 
                   response: "Success - Shipping Order created", 
                   shippingOrder: result 
@@ -72,7 +82,7 @@ exports.createShippingOrder = [
           } else {
             logger.log(
               'warn',
-              '<<<<< ShippingService < ShippingController < createShippingOrder : refuted token',
+              '<<<<< ShippingOrderService < ShippingController < createShippingOrder : refuted token',
             );
             res.status(403).json("Auth Failed");
           }
@@ -80,7 +90,7 @@ exports.createShippingOrder = [
         )} catch (err) {
         logger.log(
           'error',
-          '<<<<< ShipmentService < Controller < modifyShipment : error (catch block)',
+          '<<<<< ShippingOrderService < ShippingController < createShippingOrder : error (catch block)',
         );
         return apiResponse.ErrorResponse(res, err);
         }    
@@ -94,25 +104,21 @@ exports.createShippingOrder = [
         const { authorization } = req.headers;
         checkToken(req, res, async result => {
           if (result.success) {
-            const { poId } = req.body;
-            console.log("POId: ", poId);
-            const POFound = await RecordModel.findOne({id: poId});
-            console.log("POFound", POFound);
-            existingShippingOrders = POFound.shippingOrders;
-            totalShippingOrders = existingShippingOrders.length;
-            console.log("Purchase Order Id", totalShippingOrders);
+            // const { poId } = req.body;
+            // console.log("POId: ", typeof(poId));
+            const SOFound = await ShippingOrderModel.find();
+            console.log("SOFound", SOFound);
             // console.log("shippingOrder", shippingOrder);
 
-            if(!POFound){
+            if(!SOFound){
               logger.log(
                 'info',
-                '<<<<< ShippingService < Controller < createShippingOrder : PO not found in collection',
+                '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : PO not found in collection',
               );
-              return res.status(404).json({error: `${po} PO Not Found`})  
+              return res.status(404).json({error: `${1} SOs Not Found`})  
             } else{
-              console.log("Existing Shipping Orders", existingShippingOrders);
                 return res.status(200).json({ 
-                  response: existingShippingOrders, 
+                  response: SOFound, 
                 }).catch((err)=>{
                  return res.status(500).json({error:`${err} Error Occured `})
                }) 
@@ -120,7 +126,7 @@ exports.createShippingOrder = [
           } else {
             logger.log(
               'warn',
-              '<<<<< ShippingService < ShippingController < createShippingOrder : refuted token',
+              '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : refuted token',
             );
             res.status(403).json("Auth Failed");
           }
@@ -128,7 +134,7 @@ exports.createShippingOrder = [
         )} catch (err) {
         logger.log(
           'error',
-          '<<<<< ShipmentService < Controller < modifyShipment : error (catch block)',
+          '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
         );
         return apiResponse.ErrorResponse(res, err);
         }    
@@ -142,62 +148,40 @@ exports.createShippingOrder = [
         const { authorization } = req.headers;
         checkToken(req, res, async result => {
           if (result.success) {
-            const poId = req.body.poId;
-            const soId = req.body.soId;
-            const POFound = await RecordModel.findOne({id: poId});
-            var SOFound;            
-            existingShippingOrders = POFound.shippingOrders;
-            for(var i=0; i< existingShippingOrders.length; i++){
-              if(soId === existingShippingOrders[i].shippingOrderId){
-                SOFound = existingShippingOrders[i];
-                break;
-              }
-            }
+            const soId = req.query;
+            console.log("SoId", soId.shippingOrderId);
+            const SOFound = await ShippingOrderModel.findOne({shippingOrderId: soId.shippingOrderId});
 
-            totalShippingOrders = existingShippingOrders.length;
-            console.log("Purchase Order Id", totalShippingOrders);
-            // console.log("shippingOrder", shippingOrder);
-
-            if(!POFound){
+            if(!SOFound){
               logger.log(
                 'info',
-                '<<<<< ShippingService < Controller < viewShippingOrder : PO not found in collection',
+                '<<<<< ShippingOrderService < ShippingController < viewShippingOrder : SO not found in collection',
               );
-              return res.status(404).json({error: `${po} PO Not Found`})  
+              return res.status(404).json({error: `${soId} SO Not Found`})  
             } else{
-              if(!SOFound){
-                logger.log(
-                  'info',
-                  '<<<<< ShippingService < Controller < viewShippingOrder : SO not found in collection',
-                );
-                return res.status(404).json({error: `${po} SO Not Found`})    
-              }else{
-                console.log("Requested Shipping Orders", SOFound);
-                return res.status(200).json({ 
-                  response: SOFound, 
-                }).catch((err)=>{
-                 return res.status(500).json({error:`${err} Error Occured `})
-               }) 
-              }
-            }
-          } else {
-            logger.log(
-              'warn',
-              '<<<<< ShippingService < ShippingController < viewShippingOrder : refuted token',
-            );
-            res.status(403).json("Auth Failed");
+              return res.status(200).json({ 
+                response: SOFound, 
+              }).catch((err)=>{
+               return res.status(500).json({error:`${err} Error Occured `})
+             }) 
           }
-       }
-        )} catch (err) {
-        logger.log(
-          'error',
-          '<<<<< ShipmentService < Controller < modifyShipment : error (catch block)',
-        );
-        return apiResponse.ErrorResponse(res, err);
-        }    
-    }
-  ];
-
+        } else {
+          logger.log(
+            'warn',
+            '<<<<< ShippingOrderService < ShippingController < viewShippingOrder : refuted token',
+          );
+          res.status(403).json("Auth Failed");
+        }
+     }
+      )} catch (err) {
+      logger.log(
+        'error',
+        '<<<<< ShippingOrderService < ShippingController < viewShippingOrder : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+      }    
+  }
+];
 
 exports.assignShippingOrder = [
     auth,
