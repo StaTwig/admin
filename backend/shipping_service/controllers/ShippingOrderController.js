@@ -44,7 +44,7 @@ exports.createShippingOrder = [
         const { authorization } = req.headers;
         checkToken(req, res, async result => {
           if (result.success) {
-            const { soPurchaseOrderId, soAssignedTo, soUpdatedOn } = req.body;
+            const { soPurchaseOrderId, soAssignedTo, soUpdatedOn, products, warehouseLocation } = req.body;
             const { soCreatedBy, soUpdatedBy } = req.user.id;
             const soStatus = 'CREATED';
             const shippingOrderId = uniqid('so-');
