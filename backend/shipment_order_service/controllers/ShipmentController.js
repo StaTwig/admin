@@ -54,10 +54,11 @@ exports.fetchShipments = [
       const { authorization } = req.headers;
       checkToken(req, res, async (result) => {
         if (result.success) {
+          const warehouseId = req.user.warehouseId;
           await ShipmentModel.find({
             $or: [
-              { "supplier.locationId": req.query.id },
-              { "receiver.locationId": req.query.id },
+              { "supplier.locationId": warehouseId},
+              { "receiver.locationId": warehouseId},
             ],
           })
             .then((shipments) => {
