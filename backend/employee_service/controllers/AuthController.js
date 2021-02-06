@@ -146,6 +146,7 @@ exports.register = [
                   firstName: user.firstName,
                   lastName: user.lastName,
                   emailId: user.emailId,
+                  warehouseId:user.warehouseId,
                 };
                 logger.log(
                   'info',
@@ -246,6 +247,7 @@ exports.login = [
                       firstName: user.firstName,
                       emailId: user.emailId,
                       role: user.role,
+                      warehouseId:user.warehouseId,
                     };
                     //Prepare JWT token for authentication
                     const jwtPayload = userData;
