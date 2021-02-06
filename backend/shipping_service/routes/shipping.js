@@ -17,7 +17,7 @@ const upload = multer({ storage: Storage });
 const router = express.Router();
 
 router.post("/createShippingOrder", ShippingOrderController.createShippingOrder);
-router.get("/fetchAllShippingOrders", ShippingOrderController.fetchAllShippingOrders);
+router.get("/getShippingOrders", ShippingOrderController.getShippingOrders);
 router.get("/viewShippingOrder", ShippingOrderController.viewShippingOrder);
 
 
