@@ -1,5 +1,6 @@
 const RecordModel = require('../models/RecordModel');
 const ShippingOrderModel = require('../models/ShippingOrderModel');
+const OrganisationModel = require('../models/OrganisationModel');
 const WarehouseModel = require('../models/WarehouseModel');
 //this helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
@@ -71,34 +72,47 @@ exports.createShippingOrder = [
 exports.getShippingOrders = [
   auth,
   async (req, res) => {
-  try {
-    const { warehouseId } = req.user;
-      const shippingOrders = await ShippingOrderModel.find({ "soAssignedTo.warehouseId" : warehouseId });
-      return apiResponse.successResponseWithData(res, 'Shipping Orders', shippingOrders);
-  }catch(err) {
-    logger.log(
-      'error',
-      '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
-    );
-    return apiResponse.ErrorResponse(res, err);
-  }
+    try {
+      const { warehouseId } = req.user;
+      const shippingOrders = await ShippingOrderModel.find({
+        'soAssignedTo.warehouseId': warehouseId,
+      });
+      return apiResponse.successResponseWithData(
+        res,
+        'Shipping Orders',
+        shippingOrders,
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
   },
 ];
 
 exports.getShippingOrderIds = [
   auth,
   async (req, res) => {
-  try {
-    const { warehouseId } = req.user;
-      const shippingOrderIds = await ShippingOrderModel.find({ "soAssignedTo.warehouseId" : warehouseId }, 'id');
-      return apiResponse.successResponseWithData(res, 'Shipping Order Ids', shippingOrderIds);
-  }catch(err) {
-    logger.log(
-      'error',
-      '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
-    );
-    return apiResponse.ErrorResponse(res, err);
-  }
+    try {
+      const { warehouseId } = req.user;
+      const shippingOrderIds = await ShippingOrderModel.find(
+        { 'soAssignedTo.warehouseId': warehouseId },
+        'id',
+      );
+      return apiResponse.successResponseWithData(
+        res,
+        'Shipping Order Ids',
+        shippingOrderIds,
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
   },
 ];
 
@@ -106,39 +120,47 @@ exports.viewShippingOrder = [
   auth,
   async (req, res) => {
     try {
-      const { authorization } = req.headers;
-      checkToken(req, res, async result => {
-        if (result.success) {
-          const soId = req.query;
-          console.log('SoId', soId.shippingOrderId);
-          const SOFound = await ShippingOrderModel.findOne({
-            shippingOrderId: soId.shippingOrderId,
-          });
-
-          if (!SOFound) {
-            logger.log(
-              'info',
-              '<<<<< ShippingOrderService < ShippingController < viewShippingOrder : SO not found in collection',
-            );
-            return res.status(404).json({ error: `${soId} SO Not Found` });
-          } else {
-            return res
-              .status(200)
-              .json({
-                response: SOFound,
-              })
-              .catch(err => {
-                return res.status(500).json({ error: `${err} Error Occured ` });
-              });
-          }
-        } else {
-          logger.log(
-            'warn',
-            '<<<<< ShippingOrderService < ShippingController < viewShippingOrder : refuted token',
-          );
-          res.status(403).json('Auth Failed');
-        }
-      });
+      const { soId } = req.query;
+      const shippingOrder = await ShippingOrderModel.findOne(
+        {
+          id: soId,
+        },
+        'soPurchaseOrderId products',
+      );
+      const poDetails = await RecordModel.findOne(
+        { id: shippingOrder.soPurchaseOrderId },
+        'supplier customer',
+      );
+      const supplierOrg = await OrganisationModel.findOne(
+        { id: poDetails.supplier.supplierOrganisation },
+        'name',
+      );
+      const customerOrg = await OrganisationModel.findOne(
+        { id: poDetails.customer.customerOrganisation },
+        'name',
+      );
+      const warehouse = await WarehouseModel.findOne(
+        { id: poDetails.customer.shippingAddress.shippingAddressId },
+        'postalAddress',
+      );
+      const data = {
+        purchaseOrderId: shippingOrder.soPurchaseOrderId,
+        supplierDetails: {
+          ...poDetails.supplier,
+          supplierOrgName: supplierOrg.name,
+        },
+        customerDetails: {
+          ...poDetails.customer,
+          customerOrgName: customerOrg.name,
+          deliveryLocation: warehouse.postalAddress,
+        },
+        products: shippingOrder.products,
+      };
+      return apiResponse.successResponseWithData(
+        res,
+        'Shipping Order Details',
+        data,
+      );
     } catch (err) {
       logger.log(
         'error',
