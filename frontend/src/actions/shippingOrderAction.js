@@ -12,5 +12,20 @@ export const createShipmentOrderUrl = async data => {
 };
 
 
+export const getAllShippingOrders = async () => {
+  try {
+    const result = await axios.get(config().fetchAllShippingOrders);
+    return result.data.data;
+  } catch (e) {
+    return e.response;
+  }
+};
   
-
+export const getShippingOrderById = async (id) => {
+  try {
+    const result = await axios.get(config().fetchShippingOrdersByKey+id);
+    return result.data.data;
+  } catch (e) {
+    return e.response;
+  }
+};

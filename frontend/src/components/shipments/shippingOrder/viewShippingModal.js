@@ -1,8 +1,15 @@
 import React from 'react';
+import Order from '../../../assets/icons/order.svg';
 import './style.scss';
 
 
-const ViewShippingModal = () => {
+const ViewShippingModal = (props) => {
+  const {
+    singleShippingOrder,
+  } = props;
+
+  let totalQuantity = 0;
+  singleShippingOrder.products.forEach(product => totalQuantity += parseInt(product.quantity));
   const month = new Date().getMonth() + 1;
   const todayDate =
   new Date().getDate() + '/' + month + '/' + new Date().getFullYear();
@@ -12,11 +19,11 @@ const ViewShippingModal = () => {
         <div className="d-flex flex-row ml-4 mb-5">
             <div className="input-group">
               <label className="reference mr-3">Warehouse ID: </label>
-              <div>WA123456</div>
+              <div>{singleShippingOrder.soAssignedTo}</div>
             </div>
             <div className="input-group">
               <label className="reference mr-3">Warehouse Location: </label>
-              <div>Hyderabad</div>
+                <div>{singleShippingOrder.wareHouseLocation}</div>
             </div>
            </div>
            <table className="table poModalTable">
@@ -30,24 +37,31 @@ const ViewShippingModal = () => {
             </tr>
         </thead>
         <tbody>
-          <tr>
+        {singleShippingOrder.products.map(product => <tr>
             <th scope="row">
               <div className="square-box" />
             </th>
-            <td>sssssssssssssssssssssss</td>
-            <td>sssssssssssssssssss</td>
-            <td>ssssssssssssssssssssss</td>
-            <td>sssssssss</td>
+            <td>{product.productID}</td>
+          <td>{product.productName}</td>
+          <td>{product.manufacturer}</td>
+          <td>{product.quantity}</td>
+     
           </tr>
+        )}
         </tbody>
       </table>
       <hr />
       <div className="d-flex justify-content-end">
         <div className="d-flex flex-column mr-5">
           <span>Total Quantity</span>
-          <h3 className="text-info">50000</h3>
+          <h3 className="text-info">{totalQuantity}</h3>
         </div>
       </div>
+      <button
+        className="btn btn-orange fontSize20 font-bold mr-2  mt-3 float-left"  onClick={()=> props.history.push('/newshipment')}>
+        <img src={Order} width="14" height="14" className="mr-2" />
+        <span>Create Shipment</span>
+      </button>
             </div>
 
     );

@@ -23,6 +23,12 @@ const POModal = props => {
       setShowCreateShippingOrder(false)
     }
 
+    const onOpen = () => {
+
+      setShowCreateShippingOrder(true)
+      
+   
+    }
   return (
     <div className="PO">
       <p className="date-alignment mr-5">Date: {todayDate}</p>
@@ -101,7 +107,7 @@ const POModal = props => {
         </div>
       </div>
       <button
-        className="btn btn-orange fontSize20 font-bold mr-2  mt-3 float-left"  onClick={() => setShowCreateShippingOrder(true)} >
+        className="btn btn-orange fontSize20 font-bold mr-2  mt-3 float-left"  onClick={onOpen}>
         <img src={Order} width="14" height="14" className="mr-2" />
         <span>Create Shipping Order</span>
       </button>

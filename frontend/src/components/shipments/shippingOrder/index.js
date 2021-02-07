@@ -1,13 +1,30 @@
-import React, {useState}from 'react';
+import React, {useState,useEffect}from 'react';
 import Modal from '../../../shared/modal';
 import ViewShippingModal from './viewShippingModal'
+import {getAllShippingOrders} from '../../../actions/shippingOrderAction'
 import './style.scss';
 
 const ShippingOrderTable = props => {
   const[showShippingModal,setShowShippingModal]=useState(false);
+  const [shippingOrders,setShippingOrders]=useState({});
+  const[singleShippingOrder,setSingleShippingOrder]=useState({});
   const closeModal = () => {
     setShowShippingModal(false);
   }
+ 
+  const openModal = shipping => {
+    setSingleShippingOrder(shipping);
+    setshowShippingModal(true);
+  };
+ 
+  useEffect(() => {
+    async function fetchData() {
+      const result = await getAllShippingOrders();
+      setShippingOrders(result.data);
+     
+    }
+    fetchData();
+  }, []);
   return (
     <div className="table">
       <div className="rTable">
@@ -33,36 +50,37 @@ const ShippingOrderTable = props => {
         </div>
         <div className="overflow">
           <div>
+          {shippingOrders.length===0? <div>N/A </div>: shippingOrders.map((shipping, index) => {
             <div className="rTableRow">
               <div className="rTableCell text-primary">
-                SG123
+              {shipping.ShippingOrderId}
               </div>
               <div className="rTableCell">
                 <div className="d-flex flex-column ">
-                  <div>MMR</div>
-                  <div className="sub">PR455678</div>
+          <div>{shipping.soAssignedTo}</div>
+                  <div className="sub">{shipping.soAssignedTo}</div>
                 </div>
               </div>
              <div className="rTableCell">
                 <div className="d-flex flex-column ">
-                  <div>MMR</div>
-                  <div className="sub">PR455678</div>
+                  <div>{shipping.products[0].productName}</div>
+                  <div className="sub">{shipping.products[0].productId}</div>
                 </div>
               </div>
               <div className="rTableCell ">
-               <div className="ml-1">500000</div> 
+               <div className="ml-1">{shipping.products[0].quantity}</div> 
                   </div>
-            <div className="rTableCell">ACT1324526</div>
+            <div className="rTableCell">{shipping.products[0].manufacturerName}</div>
               <div className="rTableCell">  
-              20/12/9898</div>
+              {shipping.soUpdatedOn}</div>
 
               <div className="rTableCell">
-                <div className="status success-bg">Status</div>
+                <div className="status success-bg"> {shipping.status}</div>
               </div>
               <div className="rTableCell">
                 <button
                   className="btn btn-outline-primary"
-                  onClick={() =>  setShowShippingModal(true)}
+                  onClick={() => openModal(shipping) }
                 >
                   View
                     </button>
@@ -74,11 +92,14 @@ const ShippingOrderTable = props => {
           size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
           buttonclassName="btn-orange"
         >
-          <ViewShippingModal />
+          <ViewShippingModal singleShippingOrder={singleShippingOrder}{...props}/>
         </Modal>
       )}
             </div>
+          
+              })}
           </div>
+
         </div>
       </div>
       </div>
