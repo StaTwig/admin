@@ -19,7 +19,7 @@ const router = express.Router();
 router.post("/createShippingOrder", ShippingOrderController.createShippingOrder);
 router.get("/getShippingOrders", ShippingOrderController.getShippingOrders);
 router.get("/viewShippingOrder", ShippingOrderController.viewShippingOrder);
-
+router.get("/getShippingOrderIds", ShippingOrderController.getShippingOrderIds);
 
 router.get("/shipmentStatistics", ShipmentController.shipmentStatistics);
 router.get("/purchaseOrderStatistics", ShipmentController.purchaseOrderStatistics);

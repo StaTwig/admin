@@ -85,6 +85,23 @@ exports.getShippingOrders = [
   },
 ];
 
+exports.getShippingOrderIds = [
+  auth,
+  async (req, res) => {
+  try {
+    const { warehouseId } = req.user;
+      const shippingOrderIds = await ShippingOrderModel.find({ "soAssignedTo.warehouseId" : warehouseId }, 'id');
+      return apiResponse.successResponseWithData(res, 'Shipping Order Ids', shippingOrderIds);
+  }catch(err) {
+    logger.log(
+      'error',
+      '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
+    );
+    return apiResponse.ErrorResponse(res, err);
+  }
+  },
+];
+
 exports.viewShippingOrder = [
   auth,
   async (req, res) => {

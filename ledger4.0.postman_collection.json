@@ -593,6 +593,38 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "/getShippingOrderIds",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItMTIzNCIsImlhdCI6MTYxMjcxMzI5NywiZXhwIjoxNjEyNzIwNDk3fQ.k_acJ-0nUn3QGCJA3c2oSRMZfQGOuTwPXrhpA36V_G0",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3022/shippingordermanagement/api/shipping/getShippingOrderIds",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3022",
+							"path": [
+								"shippingordermanagement",
+								"api",
+								"shipping",
+								"getShippingOrderIds"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		}
