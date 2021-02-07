@@ -1,5 +1,6 @@
 const RecordModel = require('../models/RecordModel');
 const ShippingOrderModel = require('../models/ShippingOrderModel');
+const WarehouseModel = require('../models/WarehouseModel');
 //this helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
 const utility = require('../helpers/utility');
@@ -72,7 +73,7 @@ exports.getShippingOrders = [
   async (req, res) => {
   try {
     const { warehouseId } = req.user;
-      const shippingOrders = await ShippingOrderModel.find({ soAssignedTo: warehouseId });
+      const shippingOrders = await ShippingOrderModel.find({ "soAssignedTo.warehouseId" : warehouseId });
       return apiResponse.successResponseWithData(res, 'Shipping Orders', shippingOrders);
   }catch(err) {
     logger.log(
