@@ -85,6 +85,7 @@ const PoTable = props => {
             onAccept={onPOStatusChange}
             onReject={onPOStatusChange}
             onCreateShipment={onCreateShipment}
+            setShowModal={setShowModal}
           />
         </Modal>
       )}

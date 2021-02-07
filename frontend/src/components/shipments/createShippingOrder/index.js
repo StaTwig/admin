@@ -4,50 +4,72 @@ import DropdownButton from '../../../shared/dropdownButtonGroup';
 import Order from '../../../assets/icons/order.svg';
 import './style.scss';
 import { createShipmentOrderUrl } from '../../../actions/shippingOrderAction';
+import Modal from '../../../shared/modal';
 import { getWarehouseByOrgId } from '../../../actions/productActions';
+import AlertModal from './alertModal';
 
 
 const CreateShippingOrder = (props) => {
   const [wareHouseId, setWareHouseId] = useState('Select Warehouse ID');
   const [wareHouseIds, setWareHouseIds] = useState([]);
   const [wareHouseLocation, setWareHouseLocation] = useState('');
+  const [products, setProducts] = useState(props.purchaseOrder.products);
+  const[warehouses,setWareHouses]= useState({})
+  const [openCreatedShipping,setOpenCreatedShipping]=useState(false)
+  const [ modalProps, setModalProps ] = useState({});
   const profile = useSelector(state => {
     return state.user;
   });
 
+  const closeModal =  () => {
+    //setOpenCreatedShipping(false)
+    props.history.push('/shipments')
+  }
   let totalQuantity = 0;
   props.purchaseOrder.products.forEach(product => totalQuantity += parseInt(product.quantity));
 
   useEffect(() => {
     async function fetchData() {
-      const result = await getWarehouseByOrgId(props.purchaseOrder.suppplierOrgID);
-      setWareHouseIds(result);
+      const result = await getWarehouseByOrgId(props.purchaseOrder.customerOrgID);
+     const ids = result.map( item => item.id);
+      setWareHouseIds(ids);
+      setWareHouses(result);
+     
     }
     fetchData();
   }, []);
-
-
+  
+const onQuantityChange = (e,index) => {
+const productsClone = [...products];
+productsClone[index].quantity = e.target.value;
+setProducts(productsClone);
+  
+}
   const onCreateShippingOrder = async () => {
     const isoDate = new Date().toISOString();
     const data = {
-      poId: props.purchaseOrder.purchaseOrderID,
-      shippingOrder: {
+        soPurchaseOrderId: props.purchaseOrder.purchaseOrderID,
         soUpdatedOn: isoDate,
-        soCreatedBy: profile.id,
         soAssignedTo: wareHouseId,
-        wareHouseLocation,
-        soUpdatedBy: profile.id,
-        soStatus: "CREATED",
-        products: props.purchaseOrder.products
-
-      }
+        warehouseLocation: wareHouseLocation,
+        products
     }
     console.log('data', data);
     const result = await createShipmentOrderUrl(data);
+    setOpenCreatedShipping(true);
     if (result.status === 200) {
       setMessage(result.data.message);
-    } else {
+      setModalProps({
+        message: 'Created Successfully!',
+        type: 'Success'
+      })
+    }
+else {
       setMessage(result.data.message)
+      setModalProps({
+        message: result.data.message,
+        type: 'Failure'
+      })
     }
   };
 
@@ -65,7 +87,7 @@ const CreateShippingOrder = (props) => {
           <div className="form-control">
             <DropdownButton
               name={wareHouseId}
-              onSelect={item => setWareHouseId(item)}
+              onSelect={item => { setWareHouseId(item); const location =  warehouses.find(w => w.id === item).postalAddress; setWareHouseLocation(location)  }}
               groups={wareHouseIds}
               className="text"
             />
@@ -79,7 +101,7 @@ const CreateShippingOrder = (props) => {
             className="form-control"
             name="shipmentId"
             placeholder="Enter Warehouse Location"
-            onChange={e => setWareHouseLocation(e.target.value)}
+            disabled
             value={wareHouseLocation}
           />
         </div>
@@ -95,17 +117,44 @@ const CreateShippingOrder = (props) => {
           </tr>
         </thead>
         <tbody>
-          {props.purchaseOrder.products.map(product => <tr>
+          {products.map((product,i) =>{
+
+             return(
+            <tr>
             <th scope="row">
               <div className="square-box" />
             </th>
             <td>{product.productID}</td>
             <td>{product.productName}</td>
             <td>{product.manufacturer}</td>
-            <td>{product.quantity}</td>
-          </tr>)}
+           
+            <td><input
+              type="text"
+              className="form-controler"
+              name="quantity"
+              placeholder="quantity"
+              value={product.quantity}
+              onChange={e => onQuantityChange(e,i)}
+
+            /></td>
+            
+          
+          </tr>)
+ } )}
         </tbody>
       </table>
+      {openCreatedShipping && (
+        <Modal
+          close={() => closeModal()}
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+          <AlertModal
+            onHide={closeModal}
+            {...modalProps}
+            {...props}
+          />
+        </Modal>
+      )}
       <hr />
       <div className="d-flex justify-content-end">
         <div className="d-flex flex-column mr-5">
