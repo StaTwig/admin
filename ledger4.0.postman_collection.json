@@ -531,7 +531,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjEyNjE5Mjk1LCJleHAiOjE2MTI2MjY0OTV9.MBnF8L2LreBKqif1uosvmh_zUZj-oe0kj8aR9JmP-8Y",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItMTIzNCIsImlhdCI6MTYxMjcyODMxNywiZXhwIjoxNjEyNzM1NTE3fQ.2IYCM0KjEsrdqjAEU35UuQAFxZCTcQQRGyU0MQOdNIY",
 								"type": "text"
 							},
 							{
@@ -543,15 +543,15 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\n\t\"soPurchaseOrderId\": \"po1-1yokkig2ts6\",\n\t\"soAssignedTo\": \"war-1234\",\n\t\"soUpdatedOn\": \"2021-02-06T13:50:35.072Z\",\n\t\"products\": [\n\t\t\t\t{\n\t\t\t\t\t\"productId\": \"prod-9bhkk6yiutx\",\n\t\t\t\t\t\"quantity\": 100,\n\t\t\t\t\t\"manufacturer\": \"Bharath Biotech\",\n\t\t\t\t\t\"productName\": \"SPV\"\n\t\t\t\t}\n\t\t]\n}"
+							"raw": "{\n\t\n\t\"soPurchaseOrderId\": \"po1-1yokkig2ts6\",\n\t\"soAssignedTo\": {\n\t\t\"warehouseId\": \"war-1234\",\n\t\t\"warehouseLocation\": \"JNIBF, Gachibowli, Hyderabad, Telanagana, India\"\n\t},\n\t\"soUpdatedOn\": \"2021-02-06T13:50:35.072Z\",\n\t\"products\": [\n\t\t\t\t{\n\t\t\t\t\t\"productId\": \"prod-9bhkk6yiutx\",\n\t\t\t\t\t\"quantity\": 100,\n\t\t\t\t\t\"manufacturer\": \"Bharath Biotech\",\n\t\t\t\t\t\"productName\": \"SPV\"\n\t\t\t\t}\n\t\t]\n}"
 						},
 						"url": {
-							"raw": "http://localhost:3022/shippingordermanagement/api/shipping/createShippingOrder",
+							"raw": "http://localhost:3013/shippingordermanagement/api/shipping/createShippingOrder",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "3022",
+							"port": "3013",
 							"path": [
 								"shippingordermanagement",
 								"api",
@@ -569,7 +569,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItMTIzNCIsImlhdCI6MTYxMjcxMzI5NywiZXhwIjoxNjEyNzIwNDk3fQ.k_acJ-0nUn3QGCJA3c2oSRMZfQGOuTwPXrhpA36V_G0",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItMTIzNCIsImlhdCI6MTYxMjcyODMxNywiZXhwIjoxNjEyNzM1NTE3fQ.2IYCM0KjEsrdqjAEU35UuQAFxZCTcQQRGyU0MQOdNIY",
 								"type": "text"
 							}
 						],
@@ -578,12 +578,12 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:3022/shippingordermanagement/api/shipping/getShippingOrders",
+							"raw": "http://localhost:3013/shippingordermanagement/api/shipping/getShippingOrders",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "3022",
+							"port": "3013",
 							"path": [
 								"shippingordermanagement",
 								"api",
@@ -601,7 +601,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItMTIzNCIsImlhdCI6MTYxMjcxMzI5NywiZXhwIjoxNjEyNzIwNDk3fQ.k_acJ-0nUn3QGCJA3c2oSRMZfQGOuTwPXrhpA36V_G0",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItMTIzNCIsImlhdCI6MTYxMjcyODMxNywiZXhwIjoxNjEyNzM1NTE3fQ.2IYCM0KjEsrdqjAEU35UuQAFxZCTcQQRGyU0MQOdNIY",
 								"type": "text"
 							}
 						],
@@ -610,17 +610,55 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:3022/shippingordermanagement/api/shipping/getShippingOrderIds",
+							"raw": "http://localhost:3013/shippingordermanagement/api/shipping/getShippingOrderIds",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "3022",
+							"port": "3013",
 							"path": [
 								"shippingordermanagement",
 								"api",
 								"shipping",
 								"getShippingOrderIds"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/viewShippingOrder",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItMTIzNCIsImlhdCI6MTYxMjcyODMxNywiZXhwIjoxNjEyNzM1NTE3fQ.2IYCM0KjEsrdqjAEU35UuQAFxZCTcQQRGyU0MQOdNIY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3013/shippingordermanagement/api/shipping/viewShippingOrder?soId=so-1betkkvl0vk9",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3013",
+							"path": [
+								"shippingordermanagement",
+								"api",
+								"shipping",
+								"viewShippingOrder"
+							],
+							"query": [
+								{
+									"key": "soId",
+									"value": "so-1betkkvl0vk9"
+								}
 							]
 						}
 					},

@@ -11,9 +11,7 @@ var ShippingOrderSchema = new mongoose.Schema(
         default: 'user_id',
       },
     soAssignedTo: {
-        type: String,
-       // required: true,
-        default: 'warehouse_id 1',
+        type: Object,
     },
     soUpdatedOn: {
         type: String,
