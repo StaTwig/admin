@@ -108,7 +108,7 @@ export const createShipment = async data => {
   try {
     debugger;
     const result = await axios.post(config().createShipmentUrl, data);
-    return result.data;
+    return result.data.data;
   } catch (e) {
     return e.response;
   }

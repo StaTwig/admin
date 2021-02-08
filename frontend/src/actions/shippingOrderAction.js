@@ -19,7 +19,16 @@ export const getShippingOrders = async () => {
     return [];
   }
 };
-  
+
+export const getShippingOrderIds = async () => {
+  try {
+    const result = await axios.get(config().getShippingOrderIdsUrl);
+    return result.data.data;
+  } catch (e) {
+    return [];
+  }
+};
+
 export const getShippingOrderById = async (id) => {
   try {
     const result = await axios.get(config().viewShippingOrderUrl+id);

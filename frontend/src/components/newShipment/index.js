@@ -1,83 +1,59 @@
-import React,{useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import EditTable from './table/editTable';
-import updownArrow from '../../assets/icons/up-and-down-dark.svg';
-import calenderDark from '../../assets/icons/calendar-grey.svg';
 import './style.scss';
+import { createShipment } from '../../actions/shipmentActions';
+import { turnOn, turnOff } from '../../actions/spinnerActions';
 import {
-  createShipment,
-  setReviewShipments,
-} from '../../actions/shipmentActions';
-import { getPOs, getPO } from '../../actions/poActions';
+  getShippingOrderIds,
+  getShippingOrderById,
+} from '../../actions/shippingOrderAction';
 import DropdownButton from '../../shared/dropdownButtonGroup';
-import { getAllUsers } from '../../actions/userActions';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ShipmentPopUp from './shipmentPopUp';
 import ShipmentFailPopUp from './shipmentFailPopUp';
 import Modal from '../../shared/modal';
-import ReactTooltip from 'react-tooltip';
 
 const NewShipment = props => {
-
-  const[shippings]=useState(["123"])
-  
-  const [shippingOrderId, setShippingOrderId] = useState ('Select Shipping Order ID');
+  const [shippingOrderIds, setShippingOrderIds] = useState([]);
+  const dispatch = useDispatch();
+  const [shippingOrderId, setShippingOrderId] = useState(
+    'Select Shipping Order ID',
+  );
+  const user = useSelector(state => state.user);
+  const [shippingOrderDetails, setShippingOrderDetails] = useState({});
   const [po, setPo] = useState('');
-  const [supplierOrganisationId,setSupplierOrganisationId] = useState('');
-  const [supplierOrganisationName, setSupplierOrganisationName] = useState('');
-  const [customerOrganisationId,setCustomerOrganisationId] = useState('');
-  const [customerOrganisationName, setCustomerOrganisationName] = useState('');
-  const [deliveryLocationId, setDeliveryLocationId] = useState('');
-  const [deliveryLocation, setDeliveryLocation] = useState('');
   const [airWayBillNo, setAirWayBillNo] = useState('');
   const [labelCode, setLabelCode] = useState('');
   const [shipmentDate, setShipmentDate] = useState('');
   const [estimateDeliveryDate, setEstimateDeliveryDate] = useState('');
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [productName, setProductName] = useState('');
-  const [productId, setProductId] = useState('');
-  const [manufacturer, setManufacturer] = useState('');
   const [quantity, setQuantity] = useState('');
-  const [labelId, setLabelId] = useState('');
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [openShipmentFail, setOpenShipmentFail] = useState(false);
   const [shipmentError, setShipmentError] = useState('');
 
+  useEffect(() => {
+    async function fetchData() {
+      const result = await getShippingOrderIds();
+      const ids = result.map(so => so.id);
+      setShippingOrderIds(ids);
+    }
+    fetchData();
+  }, []);
   const closeModal = () => {
     setOpenCreatedInventory(false);
     props.history.push('/shipments');
   };
   const closeModalFail = () => {
     setOpenShipmentFail(false);
-    // props.history.push('/shipments');
-  };
-
-  const editTableProps = {
-    manufacturer,
-    setManufacturer,
-    productId,
-    setProductId,
-    productName,
-    setProductName,
-    quantity,
-    setQuantity,
-    labelId,
-    setLabelId,
   };
 
   const onChange = date => setShipmentDate(date);
   const onChange1 = date => setEstimateDeliveryDate(date);
-
-  const shipmentFields = [
-    
-  ];
-
-  const assignShipmentFields = [
-    
-  ];
 
   const profile = useSelector(state => {
     return state.user;
@@ -85,6 +61,19 @@ const NewShipment = props => {
 
   const dates = ['shipmentDate', 'estimateDeliveryDate'];
   const dateValidation = date => {
+    try {
+      let error = false;
+      let a = eval(date[0]);
+      let b = eval(date[1]);
+      if (a > b) {
+        setShipmentError('Check deliveryDate');
+        setOpenShipmentFail(true);
+        error = true;
+      }
+      return error;
+    } catch (err) {
+      setOpenShipmentFail(true);
+    }
     let error = false;
     let a = eval(date[0]);
     let b = eval(date[1]);
@@ -96,94 +85,66 @@ const NewShipment = props => {
     return error;
   };
 
-  const checkValidationErrors = validations => {
+  const onAssign = async () => {
     let error = false;
-    for (let i = 0; i < validations.length; i++) {
-      let validationVariable = eval(validations[i]);
-      if (
-        validationVariable.length < 1 ||
-        validationVariable == 'Select Product' ||
-        validationVariable == 'Select Manufacturer' ||
-        validationVariable == 'Select receiver'
-      ) {
-        setShipmentError(validations[i]);
-        setOpenShipmentFail(true);
-        error = true;
-        break;
+    // dates.forEach(date => { if(!error) dateValidation(date) }); TODO Add validations
+    if (!error) {
+      const data = {
+        airWayBillNo,
+        shippingOrderId,
+        label: {
+          labelId: labelCode,
+          labelType: 'QR_2DBAR',
+        },
+        externalShipmentId: '',
+        supplier: {
+          id: user.id,
+          locationId: shippingOrderDetails.supplierDetails.locationId,
+        },
+        receiver: {
+          id:
+            shippingOrderDetails.customerDetails.shippingAddress
+              .shipmentReceiverId,
+          locationId:
+            shippingOrderDetails.customerDetails.shippingAddress
+              .shippingAddressId,
+        },
+        shippingDate: shipmentDate.toISOString(),
+        expectedDeliveryDate: estimateDeliveryDate.toISOString(),
+        actualDeliveryDate: estimateDeliveryDate.toISOString(),
+        status: 'CREATED',
+        products: shippingOrderDetails.products,
+        poId: shippingOrderDetails.purchaseOrderId,
+      };
+
+      const result = await createShipment(data);
+      console.log('data', result);
+      if (result?.id) {
+        setMessage('Created Shipment Success');
+      } else {
+        setErrorMessage('Create Shipment Failed');
       }
     }
-
-    return error;
-  };
- 
-  const onAssign = async () => {
-   /* if (checkValidationErrors(assignShipmentFields)) {
-      return;
-    }
-    if (dateValidation(dates)) {
-      return;
-    }
-    const receiver = users.find(usr => usr.name === deliveryTo); */
-    const data = {
-      shipment:{
-      shippingOrderId,
-      po, 
-      supplierDetails:{
-      supplierOrganisationId,
-      supplierOrganisationName
-      },
-      customerDetails:{
-      customerOrganisationId,
-      customerOrganisationName,
-      deliveryLocationId,
-      deliveryLocation
-      },
-      deliveryDetails:{
-      airWayBillNo,
-      labelCode,
-      shipmentDate: shipmentDate.toLocaleDateString(),
-      estimateDeliveryDate: estimateDeliveryDate.toLocaleDateString()
-      },
-     
-      products: [
-        {
-          productId,
-          productName,
-          manufacturer,
-          quantity,
-          labelId
-        },
-      ],
-    }
-    };
-
-    console.log('new shipment data', data);
-    const result = await createShipment(data );
-    debugger;
-    if (result.status == 1) {
-      setOpenCreatedInventory(true);
-    } else if (result.status === 500) {
-      const err = result.data.message;
-      setErrorMessage(err);
-    } else {
-      const err = result.data.data[0];
-      setErrorMessage(err.msg);
-    }
   };
 
-  const onSelectPO = async item => {
-    setPo(item);
-    const result = await getPO(item);
-    const poDetail = JSON.parse(result[result.length - 1].data);
-    const { products } = poDetail;
-    const product = Object.keys(products[0])[0];
-    setQuantity(products[0][product]);
-    setProductName(product.split('-')[0]);
-    setManufacturerName(product.split('-')[1]);
-    setDeliveryTo(poDetail.receiver.name);
-    setDeliveryLocation(poDetail.destination);
+  const handleSOChange = async item => {
+    setShippingOrderId(item);
+    dispatch(turnOn());
+    const result = await getShippingOrderById(item);
+    setShippingOrderDetails(result);
+    dispatch(turnOff());
+  };
+  const handleQuantityChange = (value, i) => {
+    const soDetailsClone = { ...shippingOrderDetails };
+    soDetailsClone.products[i].quantity = value;
+    setShippingOrderDetails(soDetailsClone);
   };
 
+  const handleLabelIdChange = (value, i) => {
+    const soDetailsClone = { ...shippingOrderDetails };
+    soDetailsClone.products[i]['labelId'] = value;
+    setShippingOrderDetails(soDetailsClone);
+  };
   return (
     <div className="NewShipment">
       <h1 className="breadcrumb">CREATE SHIPMENTS</h1>
@@ -193,13 +154,13 @@ const NewShipment = props => {
             <label htmlFor="shipmentId">Shipping Order ID</label>
             <div className="form-control">
               <DropdownButton
-               name={shippingOrderId} 
-                onSelect={item => setShippingOrderId(item)}
-               groups={shippings} 
-               />
+                name={shippingOrderId}
+                onSelect={handleSOChange}
+                groups={shippingOrderIds}
+              />
             </div>
           </div>
-          
+
           <div className="form-group">
             <label htmlFor="client">Purchase Order ID</label>
             <input
@@ -207,47 +168,55 @@ const NewShipment = props => {
               className="form-control"
               name="po"
               placeholder="Purchase Order ID"
-              onChange={e => setPo(e.target.value)}
-              value={po}
+              value={shippingOrderDetails.purchaseOrderId}
+              disabled={true}
             />
           </div>
           <div className="col bg-white low">
-          <label htmlFor="client" className="headsup">Supplier Details:</label>
-          <div className="form-group">
-            <label htmlFor="client">Organisation ID</label>
-            <input
-              type="text"
-              className="form-control"
-              name="organisation ID"
-              placeholder="organisation ID"
-              onChange={e => setSupplierOrganisationId(e.target.value)}
-              value={supplierOrganisationId}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="client">organisation Name</label>
-            <input
-              type="text"
-              className="form-control"
-              name="organisation Name"
-              placeholder="organisation Name"
-              onChange={e => setSupplierOrganisationName(e.target.value)}
-              value={supplierOrganisationName}
-            />
-          </div>
+            <label htmlFor="client" className="headsup">
+              Supplier Details:
+            </label>
+            <div className="form-group">
+              <label htmlFor="client">Organisation ID</label>
+              <input
+                type="text"
+                className="form-control"
+                name="organisation ID"
+                placeholder="organisation ID"
+                value={
+                  shippingOrderDetails?.supplierDetails?.supplierOrganisation
+                }
+                disabled={true}
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="client">organisation Name</label>
+              <input
+                type="text"
+                className="form-control"
+                name="organisation Name"
+                placeholder="organisation Name"
+                disabled={true}
+                value={shippingOrderDetails?.supplierDetails?.supplierOrgName}
+              />
+            </div>
           </div>
         </div>
         <div className="col mr-3 bg-white">
-        <label htmlFor="client" className="headsup">Customer Details:</label>
-        <div className="form-group">
+          <label htmlFor="client" className="headsup">
+            Customer Details:
+          </label>
+          <div className="form-group">
             <label htmlFor="client">Organisation ID</label>
             <input
               type="text"
               className="form-control"
               name="Organsiation ID"
               placeholder="Organisation ID"
-              onChange={e => setCustomerOrganisationId(e.target.value)}
-              value={customerOrganisationId}
+              disabled={true}
+              value={
+                shippingOrderDetails?.customerDetails?.customerOrganisation
+              }
             />
           </div>
           <div className="form-group">
@@ -257,8 +226,7 @@ const NewShipment = props => {
               className="form-control"
               name="Organisation Name"
               placeholder="Organisation Name"
-              onChange={e => setCustomerOrganisationName(e.target.value)}
-              value={customerOrganisationName}
+              value={shippingOrderDetails?.customerDetails?.customerOrgName}
             />
           </div>
           <div className="input-group">
@@ -267,8 +235,11 @@ const NewShipment = props => {
               type="text"
               className="form-control"
               placeholder="Delivery Location ID"
-              onChange={e => setDeliveryLocationId(e.target.value)}
-              value={deliveryLocationId}
+              disabled={true}
+              value={
+                shippingOrderDetails?.customerDetails?.shippingAddress
+                  ?.shippingAddressId
+              }
             />
           </div>
           <div className="input-group">
@@ -277,14 +248,16 @@ const NewShipment = props => {
               type="text"
               className="form-control"
               placeholder="Delivery Location"
-              onChange={e => setDeliveryLocation(e.target.value)}
-              value={deliveryLocation}
+              disabled={true}
+              value={shippingOrderDetails?.customerDetails?.deliveryLocation}
             />
           </div>
         </div>
         <div className="col bg-white">
-        <label htmlFor="client " className="headsup">Delivery Details:</label>
-        <div className="form-group">
+          <label htmlFor="client " className="headsup">
+            Delivery Details:
+          </label>
+          <div className="form-group">
             <label htmlFor="client">Air Way Bill No.</label>
             <input
               type="text"
@@ -343,35 +316,29 @@ const NewShipment = props => {
                 yearDropdownItemNumber={100}
                 scrollableYearDropdown
               />
-              <div>
-                {console.log(
-                  'expiry date',
-                  estimateDeliveryDate,
-                  new Date(Date.parse(estimateDeliveryDate)),
-                )}
-              </div>
+              <div />
             </div>
           </div>
         </div>
       </div>
-      <EditTable {...editTableProps} />
+      {shippingOrderDetails?.products?.map((product, i) => (
+        <EditTable
+          product={product}
+          handleQuantityChange={handleQuantityChange}
+          handleLabelIdChange={handleLabelIdChange}
+          index={i}
+        />
+      ))}
       <hr />
 
       <div className="d-flex justify-content-between">
         <div className="total">Grand Total</div>
         <div className="value">{quantity}</div>
         <div className="d-flex ">
-          <button
-            className="btn btn-primary mr-2 "
-       
-            onClick={onAssign}
-          >
+          <button className="btn btn-primary mr-2 " onClick={onAssign}>
             {' '}
-          Create Shipment
+            Create Shipment
           </button>
-        
-
-          {/*<button className="btn-primary btn"  onClick={onProceedToReview}>Proceed To Review</button> */}
         </div>
       </div>
       {openCreatedInventory && (
@@ -402,10 +369,3 @@ const NewShipment = props => {
 };
 
 export default NewShipment;
-
-/* <div className="input-group-append">
-              <img src={updownArrow} alt="downarrow" width="13" height="13" />
-        
-         <button className="btn btn-outline-info mr-2" onClick={onAssign}>
-            Assign Shipment Order
-          </button>      </div> */

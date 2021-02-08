@@ -20,7 +20,8 @@ var ShippingOrderSchema = new mongoose.Schema(
     },
     soUpdatedBy: { type: String, required: false, default: 'USER_ID' },
     soStatus: { type: String, required: false, default: 'CREATED' },
-    products: {type: Array, default: []}
+    products: {type: Array, default: []},
+    shipmentIds: {type: Array, default: []},
     },{ timestamps: true },
 );
 module.exports = mongoose.model('ShippingOrder', ShippingOrderSchema);
