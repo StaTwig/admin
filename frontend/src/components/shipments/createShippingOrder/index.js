@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import DropdownButton from '../../../shared/dropdownButtonGroup';
 import Order from '../../../assets/icons/order.svg';
 import './style.scss';
-import { createShipmentOrderUrl } from '../../../actions/shippingOrderAction';
+import { createShippingOrderUrl } from '../../../actions/shippingOrderAction';
 import Modal from '../../../shared/modal';
 import { getWarehouseByOrgId } from '../../../actions/productActions';
 import AlertModal from './alertModal';
@@ -55,7 +55,7 @@ setProducts(productsClone);
         products
     }
     console.log('data', data);
-    const result = await createShipmentOrderUrl(data);
+    const result = await createShippingOrderUrl(data);
     setOpenCreatedShipping(true);
     if (result.status === 200) {
       setMessage(result.data.message);

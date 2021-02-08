@@ -19,11 +19,11 @@ const ViewShippingModal = (props) => {
         <div className="d-flex flex-row ml-4 mb-5">
             <div className="input-group">
               <label className="reference mr-3">Warehouse ID: </label>
-              <div>{singleShippingOrder.soAssignedTo}</div>
+              <div>{singleShippingOrder.soAssignedTo.warehouseId}</div>
             </div>
             <div className="input-group">
               <label className="reference mr-3">Warehouse Location: </label>
-                <div>{singleShippingOrder.wareHouseLocation}</div>
+                <div>{singleShippingOrder.soAssignedTo.warehouseLocation}</div>
             </div>
            </div>
            <table className="table poModalTable">
@@ -41,7 +41,7 @@ const ViewShippingModal = (props) => {
             <th scope="row">
               <div className="square-box" />
             </th>
-            <td>{product.productID}</td>
+            <td>{product.productId}</td>
           <td>{product.productName}</td>
           <td>{product.manufacturer}</td>
           <td>{product.quantity}</td>

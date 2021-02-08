@@ -118,8 +118,8 @@ const PoTable = props => {
               statusStyle = 'secondary-bg';
             }
             return (
-              <div>
-                <div className="rTableRow" key={index}>
+              <div key={index}>
+                <div className="rTableRow">
                   <div className="rTableCell">
                     <div className="combine-data">
                       {purchase.supplierOrgName}
