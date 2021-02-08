@@ -125,7 +125,7 @@ exports.viewShippingOrder = [
         {
           id: soId,
         },
-        'soPurchaseOrderId products',
+        'soPurchaseOrderId products soAssignedTo',
       );
       const poDetails = await RecordModel.findOne(
         { id: shippingOrder.soPurchaseOrderId },
@@ -140,19 +140,19 @@ exports.viewShippingOrder = [
         'name',
       );
       const warehouse = await WarehouseModel.findOne(
-        { id: poDetails.customer.shippingAddress.shippingAddressId },
-        'postalAddress',
+      { id: poDetails.customer.shippingAddress.shippingAddressId }
       );
       const data = {
         purchaseOrderId: shippingOrder.soPurchaseOrderId,
         supplierDetails: {
           ...poDetails.supplier,
           supplierOrgName: supplierOrg.name,
+          locationId: shippingOrder.soAssignedTo.warehouseId
         },
         customerDetails: {
           ...poDetails.customer,
           customerOrgName: customerOrg.name,
-          deliveryLocation: warehouse.postalAddress,
+          deliveryLocation: warehouse.postalAddress
         },
         products: shippingOrder.products,
       };

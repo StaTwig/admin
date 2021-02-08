@@ -4,18 +4,10 @@ import './style.scss';
 const EditRow = props => {
 
   const {
-    productId,
-    setProductId,
-    productName,
-    setProductName,
-    manufacturer,
-    setManufacturer,
-    quantity,
-    setQuantity,
-    labelId,
-    setLabelId
-
-
+    product,
+    handleQuantityChange,
+    handleLabelIdChange,
+    index
   } = props;
 
 
@@ -27,8 +19,8 @@ const EditRow = props => {
           <input
             className="form-field"
             placeholder="Product ID"
-            value={productId}
-            onChange={e => setProductId(e.target.value)}
+            value={product.productId}
+            disabled={true}
           />
         </div>
       </div>
@@ -37,8 +29,8 @@ const EditRow = props => {
           <input
             className="form-field"
             placeholder="Product Name"
-            value={productName}
-            onChange={e => setProductName(e.target.value)}
+            value={product.productName}
+            disabled={true}
           />
         </div>
       </div>
@@ -47,8 +39,8 @@ const EditRow = props => {
           <input
             className="form-field"
             placeholder="Manufacturer"
-            value={manufacturer}
-            onChange={e => setManufacturer(e.target.value)}
+            value={product.manufacturer}
+            disabled={true}
           />
         </div>
       </div>
@@ -57,8 +49,8 @@ const EditRow = props => {
           <input
             className="form-field"
             placeholder="Quantity"
-            value={quantity}
-            onChange={e => setQuantity(e.target.value)}
+            value={product.quantity}
+            onChange={e => handleQuantityChange(e.target.value, index)}
           />
         </div>
       </div>
@@ -66,9 +58,10 @@ const EditRow = props => {
         <div className="form-group">
           <input
             className="form-field"
-            placeholder="Quantity"
-            value={labelId}
-            onChange={e => setLabelId(e.target.value)}
+            placeholder="Label Id"
+            value={product.labelId}
+            onChange={e => handleLabelIdChange(e.target.value, index)}
+
           />
         </div>
       </div>

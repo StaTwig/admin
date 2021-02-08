@@ -19,7 +19,6 @@ export const getInventories = (skip = 0, limit = 5) => {
     return async dispatch => {
       try {
         dispatch(turnOn());
-        debugger;
         const result = await axios.get(
           `${config().inventoriesUrl}?skip=${skip}&limit=${limit}`,
         );
