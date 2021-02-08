@@ -90,7 +90,7 @@ export const getPOs = (skip = 0, limit = 5) => {
       dispatch(turnOn());
       const result = await axios.get(
         `${
-          config().getPOs
+          config().getPOsUrl
         }?skip=${skip}&limit=${limit}`,
       );
      // const result = await axios.get('http://54.164.66.73:3012/pomanagement/api/po/purchaseOrderStatistics');
