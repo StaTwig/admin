@@ -1,5 +1,8 @@
 import React from 'react';
 import Order from '../../../assets/icons/order.svg';
+import {
+  Link
+} from "react-router-dom";
 import './style.scss';
 
 
@@ -57,11 +60,13 @@ const ViewShippingModal = (props) => {
           <h3 className="text-info">{totalQuantity}</h3>
         </div>
       </div>
+      <Link to="/newshipment">
       <button
-        className="btn btn-orange fontSize20 font-bold mr-2  mt-3 float-left"  onClick={()=> props.history.push('/newshipment')}>
+        className="btn btn-orange fontSize20 font-bold mr-2  mt-3 float-right">
         <img src={Order} width="14" height="14" className="mr-2" />
         <span>Create Shipment</span>
       </button>
+      </Link>
             </div>
 
     );

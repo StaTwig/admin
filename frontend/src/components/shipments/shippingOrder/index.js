@@ -18,6 +18,7 @@ const ShippingOrderTable = props => {
   useEffect(() => {
     async function fetchData() {
       const result = await getShippingOrders();
+      debugger;
       setShippingOrders(result);
     }
     fetchData();
@@ -54,9 +55,13 @@ const ShippingOrderTable = props => {
                 <div className="rTableRow" key={index}>
                   <div className="rTableCell text-primary">{shipping.id}</div>
                   <div className="rTableCell">
-                    <div className="d-flex flex-column ">
-                      <div>{shipping.soAssignedTo.warehouseId}</div>
+                    <div className="d-flex flex-column sub1">
+                      <div>{shipping.soAssignedTo.warehouseLocation.split(',')[0]}</div>
+                      <div>{shipping.soAssignedTo.warehouseLocation.split(',')[1]}</div>
                     </div>
+                    <div className="sub">
+                    {shipping.soAssignedTo.warehouseId}
+                      </div>
                   </div>
                   <div className="rTableCell">
                     <div className="d-flex flex-column ">
@@ -72,7 +77,7 @@ const ShippingOrderTable = props => {
                   <div className="rTableCell">
                     {shipping.products[0].manufacturer}
                   </div>
-                  <div className="rTableCell">{shipping.soUpdatedOn}</div>
+                  <div className="rTableCell">{shipping.soUpdatedOn.split('T')[0]}</div>
 
                   <div className="rTableCell">
                     <div className="status success-bg">

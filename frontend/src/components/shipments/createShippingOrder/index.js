@@ -17,6 +17,7 @@ const CreateShippingOrder = (props) => {
   const[warehouses,setWareHouses]= useState({})
   const [openCreatedShipping,setOpenCreatedShipping]=useState(false)
   const [ modalProps, setModalProps ] = useState({});
+  const [ message, setMessage ] = useState('');
   const profile = useSelector(state => {
     return state.user;
   });
@@ -50,8 +51,7 @@ setProducts(productsClone);
     const data = {
         soPurchaseOrderId: props.purchaseOrder.purchaseOrderID,
         soUpdatedOn: isoDate,
-        soAssignedTo: wareHouseId,
-        warehouseLocation: wareHouseLocation,
+        soAssignedTo: {warehouseId:wareHouseId,warehouseLocation:wareHouseLocation},
         products
     }
     console.log('data', data);
