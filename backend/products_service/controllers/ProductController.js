@@ -294,6 +294,7 @@ exports.addProduct = [
                   shortName: req.body.shortName,
                   type: req.body.type,
                   manufacturer: req.body.manufacturer,
+                  pricing:req.body.pricing,
                   photoId: `http://${req.headers.host}/images/${req.body.name}.png`,
                   characteristicSet: {
                     temperature_max: req.body.characteristicSet.temperature_max,
