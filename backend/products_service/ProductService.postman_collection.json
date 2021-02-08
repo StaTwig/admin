@@ -46,7 +46,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"product_external_id\": \"ex12345\",\n    \"product_name\": \"Samsung Galaxy S22 FE\",\n    \"product_short_name\": \"S22 FE\",\n    \"product_type\": \"Mobile Phone\",\n    \"manufacturer\": \"organization_id 1\",\n    \"characteristic_set\":\n      {\n        \"temperature_max\": 97.8,\n        \"temperature_min\": -4.5,\n        \"humidity_max\": 56.3,\n        \"humidity_min\": 23.1,\n        \"pressure_max\": 2,\n        \"pressure_min\": 1\n      }\n  }",
+					"raw": "{\n    \"product_external_id\": \"ex12345\",\n    \"product_name\": \"Samsung Galaxy S22 FE\",\n    \"product_short_name\": \"S22 FE\",\n    \"product_type\": \"Mobile Phone\",\n    \"manufacturer\": \"organization_id 1\",\n    \"characteristic_set\":\n      {\n        \"temperature_max\": 97.8,\n        \"temperature_min\": -4.5,\n        \"humidity_max\": 56.3,\n        \"humidity_min\": 23.1,\n        \"pressure_max\": 2,\n        \"pressure_min\": 1\n      },\n      \"pricing\": [\n    {\n      \"perUnitPrice\": 122.2,\n      \"currency\": \"INR\"\n    }\n  ]\n  }",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -77,7 +77,13 @@
 			},
 			"request": {
 				"method": "GET",
-				"header": [],
+				"header": [
+					{
+						"key": "theLedgerToken",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xOGdwcDFrY2Nra2U3dnJ3aCIsImZpcnN0TmFtZSI6IkhlbWEiLCJlbWFpbElkIjoiaGVtYUBzdGF0d2lnLmNvbSIsInJvbGUiOiJwb3dlclVzZXIiLCJpYXQiOjE2MTI0NDk4MDQsImV4cCI6MTYxMjQ1NzAwNH0.tLqkYD-kw7XQ-gW4hEggrRynstE26jfzoYJYW57wRIc",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
 					"raw": "",
@@ -110,7 +116,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:3010/productmanagement/api/organisation/warehouses?id=organx12345",
+					"raw": "http://localhost:3010/productmanagement/api/organisation/warehouses?id=org-12345",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -125,7 +131,7 @@
 					"query": [
 						{
 							"key": "id",
-							"value": "organx12345"
+							"value": "org-12345"
 						}
 					]
 				}
