@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+const { Decimal128} = mongoose.Schema.Types;
 var ProductSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
@@ -28,6 +29,10 @@ var ProductSchema = new mongoose.Schema(
       required: false,
       default: 'organization_id 1',
     },
+    photoId:{
+      type:String,
+      default:"No Image"
+    },
     characteristicSet: {
       type: Object,
       default:
@@ -40,6 +45,12 @@ var ProductSchema = new mongoose.Schema(
           pressure_min: 1,
         },
     },
+    pricing:[
+      {
+      perUnitPrice:Decimal128,
+      currency:String
+      }
+    ]
   },
   { timestamps: true },
 );
