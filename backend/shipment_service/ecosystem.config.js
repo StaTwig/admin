@@ -1,7 +1,7 @@
 module.exports = {
   apps : [{
-    name: 'Shipping Order Service',
-    script: 'shipment_order_server.js',
+    name: 'Shipment Service',
+    script: 'shipment_server.js',
 
     // Options reference: https://pm2.keymetrics.io/docs/usage/application-declaration/
     args: 'one two',
