@@ -77,7 +77,9 @@ const ShippingOrderTable = props => {
                   <div className="rTableCell">
                     {shipping.products[0].manufacturer}
                   </div>
-                  <div className="rTableCell">{shipping.soUpdatedOn.split('T')[0]}</div>
+                  <div className="rTableCell">
+                    {shipping.soUpdatedOn.split('T')[0].split('-')[2]+"/"+shipping.soUpdatedOn.split('T')[0].split('-')[1]+"/"+shipping.soUpdatedOn.split('T')[0].split('-')[0]}
+                    </div>
 
                   <div className="rTableCell">
                     <div className="status success-bg">
