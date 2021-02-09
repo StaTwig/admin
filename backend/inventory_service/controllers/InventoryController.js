@@ -684,8 +684,8 @@ exports.addProductsToInventory = [
       checkPermissions(permission_request, async permissionResult => {
         if (permissionResult.success) {
           const { products } = req.body;
-          const { address, id } = req.user;
-          const employee = await EmployeeModel.findOne({ id: id });
+          const { id } = req.user;
+          const employee = await EmployeeModel.findOne({ id });
           const warehouseId = employee.warehouseId;
           const warehouse = await WarehouseModel.findOne({ id: warehouseId });
           if (!warehouse) {
@@ -711,6 +711,21 @@ exports.addProductsToInventory = [
             id: warehouse.warehouseInventory,
           });
           if(!inventory) return apiResponse.ErrorResponse(res, 'Cannot find inventory to this employee warehouse');
+          let atoms = [];
+          products.forEach(product => {
+            const serialNumbers = product.serialNumbersRange.split('-');
+            const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
+            const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
+
+            const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
+            for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
+              const atom = `${serialNumberText}${i}`
+
+              atoms.push(atom);
+            }
+          })
+          const dupSerialFound = await AtomModel.findOne({id: { $in: atoms}});
+          if(dupSerialFound) return apiResponse.ErrorResponse(res, 'Duplicate Serial Numbers found');
           await utility.asyncForEach(products, async product => {
             inventory.inventoryDetails.push({
               productId: product.productId,
