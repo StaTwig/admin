@@ -67,7 +67,7 @@ const ShippingOrderTable = props => {
                     <div className="d-flex flex-column ">
                       <div>{shipping.products[0].productName}</div>
                       <div className="sub">
-                        {shipping.products[0].productId}
+                        {shipping.products[0].productID}
                       </div>
                     </div>
                   </div>
