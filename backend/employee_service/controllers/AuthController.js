@@ -1079,7 +1079,7 @@ exports.addWarehouse = [
       location,
       supervisors,
       employees,
-      inventoryId: inventoryResult.id,
+      warehouseInventory: inventoryResult.id,
     });
     await warehouse.save();
     return apiResponse.successResponseWithData(
