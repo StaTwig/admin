@@ -107,7 +107,7 @@ const POModal = props => {
         </div>
       </div>
       <button
-        className="btn btn-orange fontSize20 font-bold mr-2  mt-3 float-left"  onClick={onOpen}>
+        className="btn btn-orange fontSize20 font-bold mr-2  mt-3 float-right"  onClick={onOpen}>
         <img src={Order} width="14" height="14" className="mr-2" />
         <span>Create Shipping Order</span>
       </button>

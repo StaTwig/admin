@@ -74,15 +74,15 @@ class Profile extends React.Component {
 
   async onWareHouse(item) {
     const wareHouseResponse = await getWarehouseByOrgId(item);
-    if (wareHouseResponse.status === 200) {
-      const wareHouseIdResult = wareHouseResponse.data.warehouses.map((txn) => txn.id)
+    if (wareHouseResponse.status === 1) {
+      const wareHouseIdResult = wareHouseResponse.data.map((txn) => txn.id)
       this.setState({ wareIds: wareHouseIdResult })
     }
   }
   async onOrganisation() {
     const orgResponse = await getOrganisations();
-    if (orgResponse.status === 200) {
-      const organisationResult = orgResponse.data.Organizations.map((txn) => (txn.name + "/" + txn.id))
+    if (orgResponse.status === 1) {
+      const organisationResult = orgResponse.data.map((txn) => (txn.name + "/" + txn.id))
       this.setState({ orgs: organisationResult })
 
     }

@@ -44,7 +44,7 @@ const ViewShippingModal = (props) => {
             <th scope="row">
               <div className="square-box" />
             </th>
-            <td>{product.productId}</td>
+            <td>{product.productID}</td>
           <td>{product.productName}</td>
           <td>{product.manufacturer}</td>
           <td>{product.quantity}</td>

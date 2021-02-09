@@ -67,7 +67,7 @@ const ShippingOrderTable = props => {
                     <div className="d-flex flex-column ">
                       <div>{shipping.products[0].productName}</div>
                       <div className="sub">
-                        {shipping.products[0].productId}
+                        {shipping.products[0].productID}
                       </div>
                     </div>
                   </div>
@@ -77,7 +77,9 @@ const ShippingOrderTable = props => {
                   <div className="rTableCell">
                     {shipping.products[0].manufacturer}
                   </div>
-                  <div className="rTableCell">{shipping.soUpdatedOn.split('T')[0]}</div>
+                  <div className="rTableCell">
+                    {shipping.soUpdatedOn.split('T')[0].split('-')[2]+"/"+shipping.soUpdatedOn.split('T')[0].split('-')[1]+"/"+shipping.soUpdatedOn.split('T')[0].split('-')[0]}
+                    </div>
 
                   <div className="rTableCell">
                     <div className="status success-bg">
