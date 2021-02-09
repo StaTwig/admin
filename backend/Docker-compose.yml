@@ -1,0 +1,24 @@
+services:
+  address:
+    build: './address_service'
+    image: 'address_service1.0'
+    container_name: 'address_service'
+    ports:
+      - "3001:3000"
+  traefik:
+    image: "traefik:v2.4"
+    container_name: "traefik"
+    restart: unless-stopped
+    command:
+      - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - ./config/traefik.yml:/traefik.yml
+      - ./letsencrypt/acme.json:/acme.json
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
