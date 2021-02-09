@@ -708,9 +708,9 @@ exports.addProductsToInventory = [
            );
          }
           const inventory = await InventoryModel.findOne({
-            id: warehouse.inventoryId,
+            id: warehouse.warehouseInventory,
           });
-
+          if(!inventory) return apiResponse.ErrorResponse(res, 'Cannot find inventory to this employee warehouse');
           await utility.asyncForEach(products, async product => {
             inventory.inventoryDetails.push({
               productId: product.productId,
@@ -753,15 +753,20 @@ exports.addProductsToInventory = [
               };
               atoms.push(atom);
             }
-
-               AtomModel.insertMany(atoms).then(async (res, err) =>  {
+              try {
+                await AtomModel.insertMany(atoms);
+                await inventory.save();
+              }catch(err) {
+                console.log('err', err);
+              }
+               /*AtomModel.insertMany(atoms).then(async (res, err) =>  {
                 if(err) {
                  // return apiResponse.ErrorResponse(res, 'Duplicate SerialNumber');
                   console.log('Duplicate SerialNumber');
                 }else {
                   await inventory.save();
                 }
-              });
+              });*/
 
           });
 
@@ -964,7 +969,7 @@ exports.getInventoryDetails = [
     const employee = await EmployeeModel.findOne({ id: req.user.id });
     const warehouse = await WarehouseModel.findOne({ id: employee.warehouseId })
     if(warehouse) {
-      const inventory = await InventoryModel.findOne({ id: warehouse.inventoryId });
+      const inventory = await InventoryModel.findOne({ id: warehouse.warehouseInventory });
       let inventoryDetails = []
       await utility.asyncForEach(inventory.inventoryDetails, async inventoryDetail => {
         const product = await ProductModel.findOne({ id: inventoryDetail.productId });
