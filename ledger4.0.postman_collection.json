@@ -665,6 +665,81 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "shipmentService",
+			"item": [
+				{
+					"name": "Create Shipment API",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItMTIzNCIsImlhdCI6MTYxMjgwNzAwOCwiZXhwIjoxNjEyODE0MjA4fQ.io1FcxnyXnIjN0euFCC8g7SCqUPtq1Ccs0NxSdXBx94",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \n      \"airWayBillNo\":\"Bill1234\",\n      \"shippingOrderId\":\"so-1d90kkwev81m\",\n      \"label\": {\n        \"labelId\": \"uuid1234567899\",\n        \"labelType\": \"QR_2DBAR\"\n      },\n      \"externalShipmentId\": \"HYDROS123456ORP\",\n      \"supplier\": {\n        \"id\": \"emp-1f8ukke4uhh\",\n        \"locationId\": \"war-1234\"\n        \n      },\n      \"receiver\": {\n        \"id\": \"emp-18gpp1kcckke5ju1e\",\n        \"locationId\": \"war-123\"\n      },\n      \"shippingDate\": \"2021-01-01T18:30:00.000Z\",\n      \"expectedDeliveryDate\": \"2021-02-09T18:30:00.000Z\",\n      \"actualDeliveryDate\": \"2021-02-09T18:30:00.000Z\",\n      \"status\": \"CREATED\",\n      \"transactionIds\": [\n        \"tx_id 1\",\n        \"tx_id 2\",\n        \"tx_id 3\"\n      ],\n      \"products\": [\n        {\n          \"productId\": \"prod-9bhkk6yiutx\",\n          \"productQuantity\": 345,\n          \"productName\":\"SPV\",\n          \"manufacturer\":\"Bharath Biotech\",\n          \"labelId\":\"label1234\"\n        }\n      ],\n \"poId\": \"po1-1yokkig2ts6\"\n}   "
+						},
+						"url": {
+							"raw": "http://localhost:3002/shipmentmanagement/api/shipment/createShipment",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"shipmentmanagement",
+								"api",
+								"shipment",
+								"createShipment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fetchShipments",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItMTIzNCIsImlhdCI6MTYxMjgxNjg3MSwiZXhwIjoxNjEyODI0MDcxfQ.-PzEJV9tnh8_lOZsqS9cn6z2joKlChOOytF-NDkJEOs",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:3002/shipmentmanagement/api/shipment/fetchShipments",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3002",
+							"path": [
+								"shipmentmanagement",
+								"api",
+								"shipment",
+								"fetchShipments"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
