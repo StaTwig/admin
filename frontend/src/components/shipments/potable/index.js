@@ -121,17 +121,24 @@ const PoTable = props => {
               <div key={index}>
                 <div className="rTableRow">
                   <div className="rTableCell">
-                    <div className="combine-data">
-                      {purchase.supplierOrgName}
-                    </div>
+                      <div className="d-flex flex-column">
+                     <div className="text-primary font-weight-bold"> {purchase.supplierOrgName} </div>
+                     <div className="sub text-primary  font-weight-bold"> {purchase.suppplierOrgID} </div>
+                   </div>
                   </div>
-                  <div className="rTableCell">{purchase.purchaseOrderID}</div>
+                  <div className="rTableCell">{purchase.externalId}</div>
                   <div className="rTableCell">
-                    {
-                      purchase.customerOrgName
-                    }
+                  <div className="d-flex flex-column">
+                    <div>{purchase.customerOrgName}</div>
+                    <div className="sub"> {purchase.customerOrgID} </div>
+                       </div>
                   </div>
-                  <div className="rTableCell">{purchase.customerCountryName}</div>
+                  <div className="rTableCell">
+                  <div className="d-flex flex-column">
+                 <div>{purchase.customerCountryName}</div>
+                 <div className="sub">{purchase.customerCountryID}</div>
+                 </div>
+                    </div>
                   <div className="rTableCell">
                     <div className= {`status ${statusStyle}`}>{purchase.status}</div>
                   </div>

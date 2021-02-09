@@ -26,7 +26,6 @@ const ProductsTable = props => {
               />
             </div>
             <div className="rTableCell">
-              <div className="form-group">
                 <input
                   type="text"
                   className="form-control"
@@ -34,11 +33,9 @@ const ProductsTable = props => {
                   placeholder="Product Name"
                   value={product.name}
                 />
-              </div>
             </div>
 
             <div className="rTableCell">
-              <div className="form-group">
                 <input
                   type="text"
                   className="form-control"
@@ -46,10 +43,8 @@ const ProductsTable = props => {
                   placeholder="Manufacturer"
                   value={product.manufacturer}
                 />
-              </div>
             </div>
             <div className="rTableCell">
-              <div className="form-group">
                 <input
                   type="number"
                   min="0"
@@ -67,10 +62,8 @@ const ProductsTable = props => {
                   value={quantity}
                   onChange={item => onQuantityChange(item, index)}
                 />
-              </div>
             </div>
             <div className="rTableCell">
-            <div className="form-group">
             <input
               type="text"
               className="form-control"
@@ -80,7 +73,6 @@ const ProductsTable = props => {
               onChange={e => setOrderAmount(e.target.value)}
               value={orderAmount}
             />
-          </div>
           </div>
 
           </div>

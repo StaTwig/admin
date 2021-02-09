@@ -31,10 +31,10 @@ const CreateShippingOrder = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      const result = await getWarehouseByOrgId(props.purchaseOrder.customerOrgID);
-     const ids = result.map( item => item.id);
+      const result = await getWarehouseByOrgId(props.purchaseOrder.suppplierOrgID);
+     const ids = result.data.map( item => item.id);
       setWareHouseIds(ids);
-      setWareHouses(result);
+      setWareHouses(result.data);
      
     }
     fetchData();
@@ -163,7 +163,7 @@ else {
         </div>
       </div>
       <button
-        className="btn btn-orange fontSize20 font-bold mr-2 date-alignment" onClick={onCreateShippingOrder}
+        className="btn btn-orange fontSize20 font-bold mr-2 float-right" onClick={onCreateShippingOrder}
 
       >
         <img src={Order} width="14" height="14" className="mr-2" />

@@ -25,7 +25,7 @@ const VerifyInventory = props => {
   };
   useEffect(() => {
     let total = 0;
-    reviewInventories.forEach(inventory => total +=inventory.quantity);
+    reviewInventories.forEach(inventory => total +=parseInt(inventory.quantity));
     setTotalQuantity(total);
   }, [])
   const onAssign = async () => {
