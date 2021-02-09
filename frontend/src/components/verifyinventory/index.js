@@ -32,7 +32,7 @@ const VerifyInventory = props => {
     dispatch(turnOn());
     const postData = reviewInventories.map(inventory => {
       return {
-        productId: inventory.productName.split('-')[1] + '-' + inventory.productName.split('-')[2],
+        productId: inventory.productId,
         batchNumber: inventory.batchNumber,
         mfgDate: inventory.manufacturingDate,
         expDate: inventory.expiryDate,

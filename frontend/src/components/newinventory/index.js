@@ -28,7 +28,7 @@ const NewInventory = props => {
       dispatch(turnOn());
         const result = await getProducts();
         const productsArray = result.map(
-          product => `${product.name}-${product.id}`,
+          product => product.name,
         );
         setProducts(result);
         setBlankInventory({ ...blankInventory, products: productsArray });
@@ -37,6 +37,7 @@ const NewInventory = props => {
         }else {
           setInventoryState(editInventories);
         }
+
       dispatch(turnOff());
       }
 
@@ -51,6 +52,7 @@ const NewInventory = props => {
   const [ inventoryState, setInventoryState ] = useState([]);
   const [menu, setMenu] = useState(false);
   const [openExcel, setOpenExcel] = useState(false);
+  const [ grandTotal, setGrandTotal ] = useState(0);
   const [blankInventory, setBlankInventory] = useState({
     productName: 'Select Product',
     manufacturer: 'Select Product',
@@ -162,17 +164,20 @@ const NewInventory = props => {
     const updatedInventoryState = [...inventoryState];
     updatedInventoryState[index][key] = value;
     const product = products.find(
-      p =>
-        `${p.name}-${p.id}` === updatedInventoryState[index]['productName'],
+      p => p.name === updatedInventoryState[index]['productName'],
     );
-    updatedInventoryState[index]['manufacturer'] = product.manufacturer;
+    updatedInventoryState[index]['manufacturer'] = product?.manufacturer;
+    updatedInventoryState[index]['productId'] = product?.id;
+    let total = 0;
+    updatedInventoryState.forEach(inv => total += parseInt(inv.quantity)  )
     setInventoryState(updatedInventoryState);
+    setGrandTotal(total);
   };
 
   return (
     <div className="Newinventory">
       <div className="d-flex justify-content-between mb-5">
-        <h1 className="breadcrumb">ADD INVENTORY</h1>
+        <h1 className="breadcrumb">ADD PRODUCTS TO INVENTORY</h1>
         <div className="d-flex flex-column align-items-center">
           <button className="btn-primary btn" onClick={() => setMenu(!menu)}>
             <div className="d-flex  align-items-center">
@@ -223,7 +228,7 @@ const NewInventory = props => {
       <hr />
       <div className="d-flex justify-content-between">
         <div className="total">Grand Total</div>
-        <span className="value">{}</span>
+        <span className="value">{grandTotal}</span>
 
         <button className="btn-primary btn" onClick={onProceedToReview}>
           Proceed To Review
