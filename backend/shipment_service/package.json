@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node shipment_order_server.js",
-    "dev": "nodemon shipment_order_server.js",
+    "start": "node shipment_server.js",
+    "dev": "nodemon shipment_server.js",
     "test": "nyc _mocha --timeout 10000 --exit --report lcovonly -- -R spec",
     "lint": "eslint --fix --config .eslintrc.json \"**/*.js\""
   },
