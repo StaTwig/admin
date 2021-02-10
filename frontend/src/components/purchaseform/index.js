@@ -60,8 +60,8 @@ const PurchaseForm = props => {
       const result = await getProducts();
       setProducts(result);
       const orgs = await getOrganisations();
-      setOrganisations(orgs);
-      const ids = orgs.map(org => org.id);
+      setOrganisations(orgs.data);
+      const ids = orgs.data.map(org => org.id);
       setOrgIds(ids);
     }
     fetchData();
@@ -174,8 +174,8 @@ const PurchaseForm = props => {
   const onCustomerOrgChange = async item => {
     setCustomerOrgId(item);
     const wareshouseList = await getWarehouseByOrgId(item);
-    setWarehouses(wareshouseList);
-    const warehouseIds = wareshouseList.map(warehouse => warehouse.id);
+    setWarehouses(wareshouseList.data);
+    const warehouseIds = wareshouseList.data.map(warehouse => warehouse.id);
     setCustomerLocationIds(warehouseIds);
   };
 
