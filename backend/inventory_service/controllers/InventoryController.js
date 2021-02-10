@@ -988,12 +988,9 @@ exports.getInventoryDetails = [
       let inventoryDetails = []
       await utility.asyncForEach(inventory.inventoryDetails, async inventoryDetail => {
         const product = await ProductModel.findOne({ id: inventoryDetail.productId });
-        const atom = await AtomModel.findOne({ productId: inventoryDetail.productId });
         const inventoryDetailClone = {...inventoryDetail};
         inventoryDetailClone['productName'] = product.name;
         inventoryDetailClone['manufacturer'] = product.manufacturer;
-        inventoryDetailClone['batchNumber'] = atom.batchNumbers[0];
-        inventoryDetailClone['expDate'] = atom.attributeSet.expDate;
         inventoryDetails.push(inventoryDetailClone);
       })
 

@@ -18,8 +18,7 @@ const Inventory = props => {
   const headers = {
     coloumn1: 'Product Type',
     coloumn2: 'Manufacturer',
-    coloumn3: 'Expiry Date',
-    coloumn4: 'Date Added',
+    coloumn4: 'Quantity',
 
     img1: <img src={Package} width="16" height="16" />,
     img2: <img src={user} width="16" height="16" />,
@@ -30,10 +29,7 @@ const Inventory = props => {
   const tableHeaders = {
     coloumn1: 'Product Name',
     coloumn2: 'Manufacturer',
-    coloumn3: 'Batch Number',
-    coloumn4: 'Quantity',
-    coloumn5: 'Serial Number',
-    coloumn6: 'Exp Date',
+    coloumn3: 'Quantity',
   };
   const [inventoryNearExpiration, setInventoryNearExpiration] = useState('');
   const [inventoryExpired, setInventoryExpired] = useState('');
