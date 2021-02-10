@@ -185,6 +185,7 @@ const PurchaseForm = props => {
     const productRow = {
       ...productRowsClone[index],
       externalId: product.externalId,
+      productId: product.id,
       name: product.name,
       manufacturer: product.manufacturer,
     };
