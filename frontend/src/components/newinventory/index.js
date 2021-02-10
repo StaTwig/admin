@@ -161,7 +161,7 @@ const NewInventory = props => {
     setInventoryState([...inventoryState, blankInventory ]);
   };
   const handleInventoryChange = (index, key, value) => {
-    const updatedInventoryState = [...inventoryState];
+    const updatedInventoryState = JSON.parse(JSON.stringify(inventoryState));
     updatedInventoryState[index][key] = value;
     const product = products.find(
       p => p.name === updatedInventoryState[index]['productName'],
