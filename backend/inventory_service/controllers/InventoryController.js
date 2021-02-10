@@ -1379,3 +1379,42 @@ exports.getBatchDetailsByBatchNumber = [
     }
   },
 ];
+
+exports.getProductListCounts = [
+  auth,
+  async (req, res) => {
+    try {
+      const { warehouseId } = req.user;
+            console.log("1",warehouseId)
+      const InventoryId = await WarehouseModel.find({"id":warehouseId})
+            console.log("2",InventoryId[0])
+            const val = InventoryId[0].warehouseInventory
+            console.log("val",val)
+      const productList = await InventoryModel.find({"id":val});
+      //console.log("test",JSON.parse(JSON.stringify(productList[0].inventoryDetails)))
+            const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails))
+        console.log("list",list)
+            var productArray = [];
+            for (j=0;j<list.length;j++)
+                   {
+                        var productId = list[j].productId;
+                           console.log("productId",productId)
+                        const product = await ProductModel.find({"id": productId})
+                           console.log("pd",product[0].name)
+                        var product1 = {productName: product[0].name, productId: product[0].id, quantity: list[j].quantity};
+                        console.log("final",product1)
+                           productArray.push(product1)
+                   }
+      return apiResponse.successResponseWithData(
+        res,
+        productArray
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
