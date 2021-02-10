@@ -35,7 +35,7 @@ const Table = props => {
               <div className="rTableCell">{inventory.manufacturer}</div>
               <div className="rTableCell">{inventory.batchNumber}</div>
              <div className="rTableCell">{inventory.quantity}</div>
-          <div className="rTableCell">{inventory.expDate}</div>
+          <div className="rTableCell"> {inventory.expDate.split('T')[0].split('-')[1]+"/"+inventory.expDate.split('T')[0].split('-')[0]}</div>
           <div className="rTableCell"><button className="btn btn-outline-info fontSize200 expand" 
               onClick = {()=>{
                         props.history.push(
