@@ -2,6 +2,7 @@ const EmployeeModel = require('../models/EmployeeModel');
 const WarehouseModel = require('../models/WarehouseModel');
 const ConsumerModel = require('../models/ConsumerModel');
 const InventoryModel = require('../models/InventoryModel');
+const OrganisationModel = require('../models/OrganisationModel');
 const { body, validationResult } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
 const uniqid = require('uniqid');
@@ -719,7 +720,7 @@ exports.userInfo = [
   auth,
   (req, res) => {
     try {
-      EmployeeModel.findOne({ emailId: req.user.emailId }).then(user => {
+      EmployeeModel.findOne({ emailId: req.user.emailId }).then(async user => {
         if (user) {
           logger.log(
             'info',
@@ -736,7 +737,9 @@ exports.userInfo = [
             accountStatus,
             role,
             photoId,
+            postalAddress
           } = user;
+          const org = await OrganisationModel.findOne({ id: organisationId }, 'name' );
           let user_data = {
             firstName,
             lastName,
@@ -744,10 +747,11 @@ exports.userInfo = [
             phoneNumber,
             walletAddress,
             affiliatedOrganisations,
-            organisationId,
+            organisation: `${org.name}/${organisationId}`,
             accountStatus,
             role,
             photoId,
+            location: postalAddress
           };
           logger.log(
             'info',
@@ -787,17 +791,18 @@ exports.updateProfile = [
         firstName,
         lastName,
         phoneNumber,
-        organisationId,
-        warehouseId
+        warehouseId,
+        organisation
       } = req.body;
+      const organisationId = organisation.split('/')[1];
+      const organisationName = organisation.split('/')[0];
       employee.firstName = firstName;
       employee.lastName = lastName;
       employee.phoneNumber = phoneNumber;
       employee.organisationId = organisationId;
       employee.warehouseId = warehouseId;
-
       await employee.save();
-      return apiResponse.successResponse(res, 'Employee Profile update Success');
+      return apiResponse.successResponseWithData(res, 'Employee Profile update Success');
     } catch (err) {
       logger.log(
         'error',
