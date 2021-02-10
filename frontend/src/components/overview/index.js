@@ -19,13 +19,13 @@ import './style.scss';
       <div className="full-width-ribben">
         <div className="row no-gutters">
           <div className="col">
-            <div className="panel">
+            <div className="panel">     
               <div className="picture truck-bg">
                 <img src={totalshipments} alt="truck" />
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Shipments</div>
-                <div className="count1">{props.shipmentsCount.totalShipments.thisYear}<small className="dayStatus ml-1">This Year</small></div>
+                <div className="count1">24<small className="dayStatus ml-1">This Year</small></div>
               </div>
             </div>
           </div>
@@ -37,7 +37,7 @@ import './style.scss';
 
               <div className="d-flex flex-column">
                 <div className="title">Total Inventory Added</div>
-                <div className="count2" >{ props.inventoriesCount.counts.inventoryAdded.total}<small className="dayStatus ml-1">ThisYear</small></div>
+                <div className="count2" >32,000<small className="dayStatus ml-1">ThisYear</small></div>
               </div>
             </div>
 
@@ -49,11 +49,11 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Current Shipment in Transit</div>
-                <div className="count3">{props.shipmentsCount.currentShipments.thisMonth}<small className="dayStatus ml-1">Last 1 Month</small></div>
+                <div className="count3">6<small className="dayStatus ml-1">Last 1 Month</small></div>
               </div>
             </div>
 
-          </div>
+          </div>       
           <div className="col">
             <div className="panel">
               <div className="picture truck-bg">
@@ -61,7 +61,7 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Shipments</div>
-                <div className="count4">{props.shipmentsCount.totalShipments.thisWeek}<small className="dayStatus ml-1">Last 1 Week</small></div>
+                <div className="count4">5<small className="dayStatus ml-1">Last 1 Week</small></div>
               </div>
             </div>
 
@@ -73,7 +73,7 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Shipments Delayed</div>
-                <div className="count5">0 <small className="dayStatus">Today</small></div>
+                <div className="count5">2 <small className="dayStatus">Today</small></div>
               </div>
             </div>
           </div>
@@ -137,3 +137,9 @@ import './style.scss';
 };
 
 export default Overview;
+
+/*
+ {props.shipmentsCount.totalShipments.thisYear}
+            { props.inventoriesCount.counts.inventoryAdded.total}
+            {props.shipmentsCount.currentShipments.thisMonth}
+             {props.shipmentsCount.totalShipments.thisWeek} */
