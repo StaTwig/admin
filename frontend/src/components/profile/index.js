@@ -352,16 +352,16 @@ class Profile extends React.Component {
                         <li>Account Status</li>
                       </ul>
                       <ul>
-                        {this.props.user.firstName ? <li>{this.props.user.firstName}</li> : <li>N/A</li>}
-                        { this.props.user.lastName? <li>{this.props.user.lastName}</li> : <li>N/A</li>}
-                        {this.props.user.role ? <li>{this.props.user.role}</li> : <li>N/A</li>}
-                        {this.props.user.organisation ? <li>{this.props.user.organisation}</li> : <li>N/A</li>}
-                        {this.props.user.warehouseId ? <li>{this.props.user.warehouseId}</li> : <li>N/A</li>}
+                        {this.state.firstName ? <li>{this.state.firstName}</li> : <li>N/A</li>}
+                        { this.state.lastName? <li>{this.state.lastName}</li> : <li>N/A</li>}
+                        {this.state.role ? <li>{this.state.role}</li> : <li>N/A</li>}
+                        {this.state.organisation ? <li>{this.state.organisation}</li> : <li>N/A</li>}
+                        {this.state.warehouseId ? <li>{this.state.warehouseId}</li> : <li>N/A</li>}
                         {this.props.user.walletAddress ? <li>{this.props.user.walletAddress}</li> : <li>N/A</li>}
-                        {this.props.user.location ? <li>{this.props.user.location} </li> : <li>N/A</li>}
+                        {this.state.location ? <li>{this.state.location} </li> : <li>N/A</li>}
                         {this.props.user.emailId ? <li>{this.props.user.emailId}</li> : <li>N/A</li>}
-                        {this.props.user.phoneNumber ? <li>{this.props.user.phoneNumber}</li> : <li>N/A</li>}
-                        {this.props.user.accountStatus ? <li>{this.props.user.accountStatus}</li> : <li>Pending</li>}
+                        {this.state.phoneNumber ? <li>{this.state.phoneNumber}</li> : <li>N/A</li>}
+                        {this.props.user.accountStatus? <li>{this.props.user.accountStatus}</li> : <li>Pending</li>}
                       </ul>
                     </div>
                   )}
