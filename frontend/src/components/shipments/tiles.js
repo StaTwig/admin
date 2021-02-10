@@ -7,18 +7,18 @@ import CurrentShipment from '../../assets/icons/CurrentShipmentInTransit2.svg';
 import './style.scss';
 
 const Tiles = props => {
-  const [totalShipments, setTotalShipments] = useState('');
-  const [totalShipmentsSent, setTotalShipmentsSent] = useState('');
-  const [totalShipmentsReceived, setTotalShipmentsReceived] = useState('');
-  const [currentShipmentTransit, setCurrentShipmentTransit] = useState('');
+  const [totalShipments, setTotalShipments] = useState('2');
+  const [totalShipmentsSent, setTotalShipmentsSent] = useState('13');
+  const [totalShipmentsReceived, setTotalShipmentsReceived] = useState('11');
+  const [currentShipmentTransit, setCurrentShipmentTransit] = useState('6');
   useEffect(
     () => {
-      setTotalShipments(props.shipmentsCount.totalShipments.total);
-      setTotalShipmentsSent(props.shipmentsCount.totalShipmentsSent.total);
-      setTotalShipmentsReceived(
+      //setTotalShipments(props.shipmentsCount.totalShipments.total);
+     // setTotalShipmentsSent(props.shipmentsCount.totalShipmentsSent.total);
+     /* setTotalShipmentsReceived(
         props.shipmentsCount.totalShipmentsReceived.total,
       );
-      setCurrentShipmentTransit(props.shipmentsCount.currentShipments.total);
+      setCurrentShipmentTransit(props.shipmentsCount.currentShipments.total);*/
     },
     [props.shipmentsCount],
   );
@@ -37,12 +37,14 @@ const Tiles = props => {
                 className="tab-item"
                 onMouseLeave={() =>
                   setTotalShipmentsSent(
-                    props.shipmentsCount.totalShipmentsSent.total,
+                   // props.shipmentsCount.totalShipmentsSent.total,
+                   100
                   )
                 }
                 onMouseEnter={() =>
                   setTotalShipmentsSent(
-                    props.shipmentsCount.totalShipmentsSent.thisYear,
+                    //props.shipmentsCount.totalShipmentsSent.thisYear,
+                    100
                   )
                 }
               >
@@ -52,12 +54,14 @@ const Tiles = props => {
                 className="tab-item "
                 onMouseLeave={() =>
                   setTotalShipmentsSent(
-                    props.shipmentsCount.totalShipmentsSent.total,
+                    //props.shipmentsCount.totalShipmentsSent.total,
+                    50
                   )
                 }
                 onMouseEnter={() =>
                   setTotalShipmentsSent(
-                    props.shipmentsCount.totalShipmentsSent.thisMonth,
+                    //props.shipmentsCount.totalShipmentsSent.thisMonth,
+                    50
                   )
                 }
               >
@@ -67,12 +71,14 @@ const Tiles = props => {
                 className="tab-item "
                 onMouseLeave={() =>
                   setTotalShipmentsSent(
-                    props.shipmentsCount.totalShipmentsSent.total,
+                   // props.shipmentsCount.totalShipmentsSent.total,
+                   30
                   )
                 }
                 onMouseEnter={() =>
                   setTotalShipmentsSent(
-                    props.shipmentsCount.totalShipmentsSent.thisWeek,
+                    //props.shipmentsCount.totalShipmentsSent.thisWeek,
+                    30
                   )
                 }
               >
@@ -82,12 +88,13 @@ const Tiles = props => {
                 className="tab-item "
                 onMouseLeave={() =>
                   setTotalShipmentsSent(
-                    props.shipmentsCount.totalShipmentsSent.total,
+                    //props.shipmentsCount.totalShipmentsSent.total,
+                    20
                   )
                 }
                 onMouseEnter={() =>
                   setTotalShipmentsSent(
-                    props.shipmentsCount.totalShipmentsSent.today,
+                  20 // props.shipmentsCount.totalShipmentsSent.today,
                   )
                 }
               >
@@ -110,12 +117,14 @@ const Tiles = props => {
                 className="tab-item active"
                 onMouseLeave={() =>
                   setTotalShipmentsReceived(
-                    props.shipmentsCount.totalShipmentsReceived.total,
+                    //props.shipmentsCount.totalShipmentsReceived.total,
+                    100
                   )
                 }
                 onMouseEnter={() =>
                   setTotalShipmentsReceived(
-                    props.shipmentsCount.totalShipmentsReceived.thisYear,
+                   // props.shipmentsCount.totalShipmentsReceived.thisYear,
+                   100
                   )
                 }
               >
@@ -125,12 +134,14 @@ const Tiles = props => {
                 className="tab-item"
                 onMouseLeave={() =>
                   setTotalShipmentsReceived(
-                    props.shipmentsCount.totalShipmentsReceived.total,
+                   // props.shipmentsCount.totalShipmentsReceived.total,
+                   80
                   )
                 }
                 onMouseEnter={() =>
                   setTotalShipmentsReceived(
-                    props.shipmentsCount.totalShipmentsReceived.thisMonth,
+                   // props.shipmentsCount.totalShipmentsReceived.thisMonth,
+                   80
                   )
                 }
               >
@@ -140,12 +151,14 @@ const Tiles = props => {
                 className="tab-item"
                 onMouseLeave={() =>
                   setTotalShipmentsReceived(
-                    props.shipmentsCount.totalShipmentsReceived.total,
+                    //props.shipmentsCount.totalShipmentsReceived.total,
+                    60
                   )
                 }
                 onMouseEnter={() =>
                   setTotalShipmentsReceived(
-                    props.shipmentsCount.totalShipmentsReceived.thisWeek,
+                    //props.shipmentsCount.totalShipmentsReceived.thisWeek,
+                    60
                   )
                 }
               >
@@ -155,12 +168,14 @@ const Tiles = props => {
                 className="tab-item"
                 onMouseLeave={() =>
                   setTotalShipmentsReceived(
-                    props.shipmentsCount.totalShipmentsReceived.total,
+                   // props.shipmentsCount.totalShipmentsReceived.total,
+                   40
                   )
                 }
                 onMouseEnter={() =>
                   setTotalShipmentsReceived(
-                    props.shipmentsCount.totalShipmentsReceived.today,
+                   // props.shipmentsCount.totalShipmentsReceived.today,
+                   40
                   )
                 }
               >
@@ -185,12 +200,14 @@ const Tiles = props => {
                 className="tab-item active"
                 onMouseLeave={() =>
                   setCurrentShipmentTransit(
-                    props.shipmentsCount.currentShipments.total,
+                   // props.shipmentsCount.currentShipments.total,
+                   50
                   )
                 }
                 onMouseEnter={() =>
                   setCurrentShipmentTransit(
-                    props.shipmentsCount.currentShipments.thisYear,
+                    //props.shipmentsCount.currentShipments.thisYear,
+                    50
                   )
                 }
               >
@@ -200,12 +217,14 @@ const Tiles = props => {
                 className="tab-item"
                 onMouseLeave={() =>
                   setCurrentShipmentTransit(
-                    props.shipmentsCount.currentShipments.total,
+                    //props.shipmentsCount.currentShipments.total,
+                    50
                   )
                 }
                 onMouseEnter={() =>
                   setCurrentShipmentTransit(
-                    props.shipmentsCount.currentShipments.thisMonth,
+                   // props.shipmentsCount.currentShipments.thisMonth,
+                   50
                   )
                 }
               >
@@ -215,12 +234,14 @@ const Tiles = props => {
                 className="tab-item"
                 onMouseLeave={() =>
                   setCurrentShipmentTransit(
-                    props.shipmentsCount.currentShipments.total,
+                   // props.shipmentsCount.currentShipments.total,
+                   40
                   )
                 }
                 onMouseEnter={() =>
                   setCurrentShipmentTransit(
-                    props.shipmentsCount.currentShipments.thisWeek,
+                   // props.shipmentsCount.currentShipments.thisWeek,
+                   40
                   )
                 }
               >
@@ -230,12 +251,14 @@ const Tiles = props => {
                 className="tab-item"
                 onMouseLeave={() =>
                   setCurrentShipmentTransit(
-                    props.shipmentsCount.currentShipments.total,
+                    //props.shipmentsCount.currentShipments.total,
+                    30
                   )
                 }
                 onMouseEnter={() =>
                   setCurrentShipmentTransit(
-                    props.shipmentsCount.currentShipments.today,
+                   // props.shipmentsCount.currentShipments.today,
+                   30
                   )
                 }
               >
@@ -257,11 +280,13 @@ const Tiles = props => {
               <div
                 className="tab-item active"
                 onMouseLeave={() =>
-                  setTotalShipments(props.shipmentsCount.totalShipments.total)
+                 setTotalShipments(
+                   //props.shipmentsCount.totalShipments.total
+                   50)
                 }
                 onMouseEnter={() =>
                   setTotalShipments(
-                    props.shipmentsCount.totalShipments.thisYear,
+                  50 // props.shipmentsCount.totalShipments.thisYear,
                   )
                 }
               >
@@ -270,11 +295,13 @@ const Tiles = props => {
               <div
                 className="tab-item"
                 onMouseLeave={() =>
-                  setTotalShipments(props.shipmentsCount.totalShipments.total)
+                  setTotalShipments(
+                    40//props.shipmentsCount.totalShipments.total
+                    )
                 }
                 onMouseEnter={() =>
                   setTotalShipments(
-                    props.shipmentsCount.totalShipments.thisMonth,
+                   40// props.shipmentsCount.totalShipments.thisMonth,
                   )
                 }
               >
@@ -283,11 +310,11 @@ const Tiles = props => {
               <div
                 className="tab-item"
                 onMouseLeave={() =>
-                  setTotalShipments(props.shipmentsCount.totalShipments.total)
+                  30//setTotalShipments(props.shipmentsCount.totalShipments.total)
                 }
                 onMouseEnter={() =>
                   setTotalShipments(
-                    props.shipmentsCount.totalShipments.thisWeek,
+                   30// props.shipmentsCount.totalShipments.thisWeek,
                   )
                 }
               >
@@ -296,10 +323,12 @@ const Tiles = props => {
               <div
                 className="tab-item"
                 onMouseLeave={() =>
-                  setTotalShipments(props.shipmentsCount.totalShipments.total)
+                 30// setTotalShipments(props.shipmentsCount.totalShipments.total)
                 }
                 onMouseEnter={() =>
-                  setTotalShipments(props.shipmentsCount.totalShipments.today)
+                  setTotalShipments(
+                   30// props.shipmentsCount.totalShipments.today
+                    )
                 }
               >
                 Today

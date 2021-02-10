@@ -46,17 +46,16 @@ const Inventory = props => {
   const products = Object.keys(props.inventoriesCount.dict);
   useEffect(() => {
       setInventoriesCount(
-        props.inventoriesCount.counts.inventoryAdded.total,
+        11 // props.inventoriesCount.counts.inventoryAdded.total,
       );
       setCurrentInventoriesCount(
-        props.inventoriesCount.counts.currentInventory.total,
+        32000// props.inventoriesCount.counts.currentInventory.total,
       );
       setInventoryNearExpiration(
-        props.inventoriesCount.counts.vaccinesNearExpiration
-          .total,
+        3000 //  props.inventoriesCount.counts.vaccinesNearExpiration .total,
       );
       setInventoryExpired(
-        props.inventoriesCount.counts.vaccinesExpired.thisYear,
+      1000 // props.inventoriesCount.counts.vaccinesExpired.thisYear,
       )
     }
   , [props.inventoriesCount])
@@ -89,12 +88,12 @@ const Inventory = props => {
                   className="tab-item active"
                   onMouseLeave={() =>
                     setInventoriesCount(
-                      props.inventoriesCount.counts.inventoryAdded.total,
+                     200// props.inventoriesCount.counts.inventoryAdded.total,
                     )
                   }
                   onMouseEnter={() =>
                     setInventoriesCount(
-                      props.inventoriesCount.counts.inventoryAdded.thisYear,
+                     200// props.inventoriesCount.counts.inventoryAdded.thisYear,
                     )
                   }
                 >
@@ -104,12 +103,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoriesCount(
-                      props.inventoriesCount.counts.inventoryAdded.total,
+                      150//props.inventoriesCount.counts.inventoryAdded.total,
                     )
                   }
                   onMouseEnter={() =>
                     setInventoriesCount(
-                      props.inventoriesCount.counts.inventoryAdded.thisMonth,
+                     150 //props.inventoriesCount.counts.inventoryAdded.thisMonth,
                     )
                   }
                 >
@@ -119,12 +118,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoriesCount(
-                      props.inventoriesCount.counts.inventoryAdded.total,
+                     100// props.inventoriesCount.counts.inventoryAdded.total,
                     )
                   }
                   onMouseEnter={() =>
                     setInventoriesCount(
-                      props.inventoriesCount.counts.inventoryAdded.thisWeek,
+                      100//props.inventoriesCount.counts.inventoryAdded.thisWeek,
                     )
                   }
                 >
@@ -134,12 +133,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoriesCount(
-                      props.inventoriesCount.counts.inventoryAdded.total,
+                      50//props.inventoriesCount.counts.inventoryAdded.total,
                     )
                   }
                   onMouseEnter={() =>
                     setInventoriesCount(
-                      props.inventoriesCount.counts.inventoryAdded.today,
+                     50// props.inventoriesCount.counts.inventoryAdded.today,
                     )
                   }
                 >
@@ -162,12 +161,12 @@ const Inventory = props => {
                   className="tab-item active"
                   onMouseLeave={() =>
                     setCurrentInventoriesCount(
-                      props.inventoriesCount.counts.currentInventory.total,
+                      200//props.inventoriesCount.counts.currentInventory.total,
                     )
                   }
                   onMouseEnter={() =>
                     setCurrentInventoriesCount(
-                      props.inventoriesCount.counts.currentInventory.thisYear,
+                     200 //props.inventoriesCount.counts.currentInventory.thisYear,
                     )
                   }
                 >
@@ -177,12 +176,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setCurrentInventoriesCount(
-                      props.inventoriesCount.counts.currentInventory.total,
+                     150// props.inventoriesCount.counts.currentInventory.total,
                     )
                   }
                   onMouseEnter={() =>
                     setCurrentInventoriesCount(
-                      props.inventoriesCount.counts.currentInventory.thisMonth,
+                     150// props.inventoriesCount.counts.currentInventory.thisMonth,
                     )
                   }
                 >
@@ -192,12 +191,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setCurrentInventoriesCount(
-                      props.inventoriesCount.counts.currentInventory.total,
+                     100// props.inventoriesCount.counts.currentInventory.total,
                     )
                   }
                   onMouseEnter={() =>
                     setCurrentInventoriesCount(
-                      props.inventoriesCount.counts.currentInventory.thisWeek,
+                      100//props.inventoriesCount.counts.currentInventory.thisWeek,
                     )
                   }
                 >
@@ -207,12 +206,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setCurrentInventoriesCount(
-                      props.inventoriesCount.counts.currentInventory.total,
+                     80// props.inventoriesCount.counts.currentInventory.total,
                     )
                   }
                   onMouseEnter={() =>
                     setCurrentInventoriesCount(
-                      props.inventoriesCount.counts.currentInventory.today,
+                     80 //props.inventoriesCount.counts.currentInventory.today,
                     )
                   }
                 >
@@ -235,14 +234,15 @@ const Inventory = props => {
                   className="tab-item active"
                   onMouseLeave={() =>
                     setInventoryNearExpiration(
-                      props.inventoriesCount.counts.vaccinesNearExpiration
-                        .total,
+                     //props.inventoriesCount.counts.vaccinesNearExpiration.total,
+                     80
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryNearExpiration(
-                      props.inventoriesCount.counts.vaccinesNearExpiration
-                        .thisYear,
+                    //  props.inventoriesCount.counts.vaccinesNearExpiration.thisYear,
+                      80
+                       
                     )
                   }
                 >
@@ -252,14 +252,15 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoryNearExpiration(
-                      props.inventoriesCount.counts.vaccinesNearExpiration
-                        .total,
+                     // props.inventoriesCount.counts.vaccinesNearExpiration.total,
+                     50
+                      
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryNearExpiration(
-                      props.inventoriesCount.counts.vaccinesNearExpiration
-                        .thisMonth,
+                     // props.inventoriesCount.counts.vaccinesNearExpiration.thisMonth,
+                      50
                     )
                   }
                 >
@@ -269,14 +270,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoryNearExpiration(
-                      props.inventoriesCount.counts.vaccinesNearExpiration
-                        .total,
+                     30// props.inventoriesCount.counts.vaccinesNearExpiration.total,
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryNearExpiration(
-                      props.inventoriesCount.counts.vaccinesNearExpiration
-                        .thisWeek,
+                     30// props.inventoriesCount.counts.vaccinesNearExpiration.thisWeek,
                     )
                   }
                 >
@@ -286,14 +285,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoryNearExpiration(
-                      props.inventoriesCount.counts.vaccinesNearExpiration
-                        .total,
+                    20 // props.inventoriesCount.counts.vaccinesNearExpiration.total,
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryNearExpiration(
-                      props.inventoriesCount.counts.vaccinesNearExpiration
-                        .today,
+                     20// props.inventoriesCount.counts.vaccinesNearExpiration.today,
                     )
                   }
                 >
@@ -318,12 +315,12 @@ const Inventory = props => {
                   className="tab-item active"
                   onMouseLeave={() =>
                     setInventoryExpired(
-                      props.inventoriesCount.counts.vaccinesExpired.total,
+              60//props.inventoriesCount.counts.vaccinesExpired.total,
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryExpired(
-                      props.inventoriesCount.counts.vaccinesExpired.thisYear,
+                     60// props.inventoriesCount.counts.vaccinesExpired.thisYear,
                     )
                   }
                 >
@@ -333,12 +330,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoryExpired(
-                      props.inventoriesCount.counts.vaccinesExpired.total,
+                    50 // props.inventoriesCount.counts.vaccinesExpired.total,
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryExpired(
-                      props.inventoriesCount.counts.vaccinesExpired.thisMonth,
+                     50// props.inventoriesCount.counts.vaccinesExpired.thisMonth,
                     )
                   }
                 >
@@ -348,12 +345,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoryExpired(
-                      props.inventoriesCount.counts.vaccinesExpired.total,
+                    40 // props.inventoriesCount.counts.vaccinesExpired.total,
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryExpired(
-                      props.inventoriesCount.counts.vaccinesExpired.thisWeek,
+                    40 // props.inventoriesCount.counts.vaccinesExpired.thisWeek,
                     )
                   }
                 >
@@ -363,12 +360,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoryExpired(
-                      props.inventoriesCount.counts.vaccinesExpired.total,
+                     40 //props.inventoriesCount.counts.vaccinesExpired.total,
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryExpired(
-                      props.inventoriesCount.counts.vaccinesExpired.today,
+                   40 //  props.inventoriesCount.counts.vaccinesExpired.today,
                     )
                   }
                 >
