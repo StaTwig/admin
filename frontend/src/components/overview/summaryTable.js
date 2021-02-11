@@ -18,13 +18,13 @@ const SummaryTable = props => {
        </div> 
        </div>  : 
       <div className="summaryTable">
-        <div className="rowData">
+        <div className="rowData mr-4">
           <div className="headline ml-4">Customer</div>
           {shipments.map((shipment, index) => (
             index < 5 ?
             <div className="combine-data" key={index}>
               <img className="round-sign" src={profile.profile_picture} width="15" />
-              <a>{shipment.receiver.id}</a>
+              <a>{shipment.receiver.id.split('-')[1]}</a>
             </div> : null
           ))}
         </div>
