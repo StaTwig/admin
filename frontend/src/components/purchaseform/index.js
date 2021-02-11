@@ -334,15 +334,18 @@ const PurchaseForm = props => {
         </div>
       </div>
 
+      <div className="d-flex flex-row justify-content-between">
+        
       <button
         className="btn btn-white shadow-radius font-bold"
         onClick={addAnotherProduct}
       >
         +<span> Add Another Product</span>
       </button>
-
-      <div className="row float-right">
+      
        
+          <div className="text text-success">{message}</div>
+      <div className="text text-danger">{poError}</div>
         {menu ? (
           <div class="menu5">
             <button
@@ -365,7 +368,8 @@ const PurchaseForm = props => {
             />
           </Modal>
         )}
-        <button className="btn btn-yellow review mr-5" onClick={onProceed}>
+        <div className="d-flex flex-row">
+        <button className="btn btn-yellow review  mr-5" onClick={onProceed}>
           Create PO
         </button>
 
@@ -433,10 +437,9 @@ const PurchaseForm = props => {
             disabled={!cashfreeData.appId}
           />
         </form>
+        </div>
       </div>
 
-      <div className="text text-success">{message}</div>
-      <div className="text text-danger">{poError}</div>
     </div>
   );
 };

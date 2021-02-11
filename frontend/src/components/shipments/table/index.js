@@ -8,25 +8,30 @@ const Table = props => {
   const { loadMore, onLoadMore } = props;
   return (
     <div className="table">
-      {props.shipments.length === 0 ? (
-        <img src={EmptyShipments} height="300" width="300" />
-      ) : (
+    
+    
+    
         <div className="rTable">
           <div className="rTableHeading">
-            <div className="rTableHead">Client</div>
+            <div className="rTableHead">Customer</div>
             <div className="rTableHead">Shipment ID</div>
-            <div className="rTableHead">Product Name</div>
+            <div className="rTableHead d-flex flex-column"><div>Purchase</div><div>Order ID</div></div>
+            <div className="rTableHead d-flex flex-column">
+              <div>Prouduct</div>
+              <div>Name</div>
+            </div>
             <div className="rTableHead">
               <span>Quantity</span>
             </div>
             <div className="rTableHead">
-              <span>Shipment Date</span>
+              <span>Supplier</span>
+            </div>
+            <div className="rTableHead d-flex flex-column">
+              <div>Customer</div>
+              <div>Location</div>
             </div>
             <div className="rTableHead">
-              <span>Delivery To</span>
-            </div>
-            <div className="rTableHead">
-              <span>Delivery Location</span>
+              <span>Delivery Date</span>
             </div>
             <div className="rTableHead">
               <span>Status</span>
@@ -38,7 +43,7 @@ const Table = props => {
           <div className="overflow">
             {props.shipments.map((shipment, index) => {
             let statusStyle = 'secondary-bg';
-            if (shipment.status === 'Shipped') {
+            if (shipment.status === 'CREATED') {
               statusStyle = 'success-bg';
             } else if (shipment.status === 'Received') {
               statusStyle = 'info-bg';
@@ -48,20 +53,23 @@ const Table = props => {
             return (
               <div className="rTableRow" key={index}>
                 <div className="rTableCell">
-                  <div className="combine-data">{shipment.client}</div>
+                  <div className="combine-data">{shipment.receiver.id}</div>
                 </div>
-                <div className="rTableCell">{shipment.shipmentId}</div>
+                <div className="rTableCell">{shipment.id}</div>
 
+                <div className="rTableCell">
+                  {shipment.poId}
+                </div>
                 <div className="rTableCell">
                   {shipment.products[0].productName}
                 </div>
-                <div className="rTableCell">
-                  {shipment.products[0].quantity}
-                </div>
-                <div className="rTableCell">{shipment.shipmentDate}</div>
+                <div className="rTableCell">50000</div>
 
-                <div className="rTableCell">{shipment.deliveryTo}</div>
-                <div className="rTableCell">{shipment.deliveryLocation}</div>
+                <div className="rTableCell">{shipment.supplier.id}</div>
+                <div className="rTableCell">{shipment.receiver.locationId}</div>
+                <div className="rTableCell">
+                {shipment.actualDeliveryDate.split('T')[0].split('-')[2]+"/"+shipment.actualDeliveryDate.split('T')[0].split('-')[1]+"/"+shipment.actualDeliveryDate.split('T')[0].split('-')[0]}
+                </div>
                 <div className="rTableCell">
                 <div className={`status ${statusStyle}`}>
                       {shipment.status}
@@ -96,3 +104,5 @@ const Table = props => {
 };
 
 export default Table;
+
+/*//{shipment.products[0].quantity}*/
