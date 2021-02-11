@@ -22,13 +22,13 @@ export const getShipments = (skip = 0, limit = 5) => {
         `${config().shipmentsUrl}?skip=${skip}&limit=${limit}`,
       );
       dispatch(setShipments(result.data));
-      dispatch(setShipmentsCount(result.data));
+     // dispatch(setShipmentsCount(result.data));
       dispatch(turnOff());
       return result.data.data.length;
     } catch (e) {
       dispatch(turnOff());
       dispatch(resetShipments(e.response));
-      dispatch(resetShipmentsCount(e.response));
+     // dispatch(resetShipmentsCount(e.response));
     }
   };
 };
