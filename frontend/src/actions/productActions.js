@@ -28,6 +28,16 @@ export const getOrganisations = async () => {
   }
 };
 
+export const getProductList = async () => {
+  try {
+    const result = await axios.get(config().productListUrl);
+    return result.data;
+    debugger;
+  } catch (e) {
+    return [];
+  }
+};
+
 export const getWarehouseByOrgId = async (id) => {
   try {
     const result = await axios.get(config().getWarehouseByOrgId+id);

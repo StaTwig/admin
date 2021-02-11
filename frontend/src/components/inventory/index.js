@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import './style.scss';
 import Table from '../../shared/table';
 import TableFilter from '../../shared/advanceTableFilter';
+import {getProductList} from '../../actions/productActions';
 import TotalInventoryAdded from '../../assets/icons/TotalInventoryAddedcopy.svg';
 import currentinventory from '../../assets/icons/CurrentInventory.svg';
 import Expiration from '../../assets/icons/TotalVaccinenearExpiration.svg';
@@ -35,12 +36,16 @@ const Inventory = props => {
   const [inventoryExpired, setInventoryExpired] = useState('');
   const [inventoriesCount, setInventoriesCount] = useState('');
   const [currentInventoriesCount, setCurrentInventoriesCount] = useState('');
+  const [productsList,setProductsList] = useState([]);
 
   const colors = ["#ffbcc4", "#c1e3f2", "#ffc18c", "#ffef83",
         "#d4e7ff", "#e0b0ff", "#F1EFCE", "#D7FAF1", "#F2B6AF" ];
 
   const products = Object.keys(props.inventoriesCount.dict);
   useEffect(() => {
+    async function fetchData() {
+      const result = await getProductList();
+      setProductsList(result.message);
       setInventoriesCount(
         11 // props.inventoriesCount.counts.inventoryAdded.total,
       );
@@ -53,9 +58,10 @@ const Inventory = props => {
       setInventoryExpired(
       1000 // props.inventoriesCount.counts.vaccinesExpired.thisYear,
       )
+     
     }
-  , [props.inventoriesCount])
-
+    fetchData();
+  }, [props.inventoriesCount]);
 
 
   return (
@@ -390,15 +396,16 @@ const Inventory = props => {
                 </Link>
               </div>
               <div className="row overflow">
-                {products.map((product, index) => (
+                {productsList.map((product, index) => (
                   <div className="col-sm-6" key={index}>
                     <div className="d-flex card flex-column align-items-center">
-                    <div className="round-sign" style={{backgroundColor: colors[index]}}>{product}</div>
-                      <p className="product">{product}</p>
-                      <h3>Qty : {props.inventoriesCount.dict[product]}</h3>
+                    <div className="round-sign" style={{backgroundColor: colors[index]}}>{product.productName}</div>
+                      <p className="product">{product.productId}</p>
+                      <h3>Qty : {product.quantity}</h3>
                     </div>
                   </div>
                 ))}
+                
               </div>
             </div>
           </div>
