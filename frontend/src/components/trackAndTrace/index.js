@@ -29,7 +29,7 @@ const trackAndTrace = (props) => {
       <StatusBar />
       <div className="ribben-space ">
         <h5 className="heading ml-3">Latest Transactions</h5>
-        <Table {...props} />
+      
       </div>
     </div >
   );
@@ -37,3 +37,4 @@ const trackAndTrace = (props) => {
 
 export default trackAndTrace;
 
+/*   <Table {...props} /> */
