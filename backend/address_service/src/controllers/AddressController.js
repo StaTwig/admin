@@ -1,4 +1,6 @@
 const apiResponse = require("../utils/apiResponse")
+const Organisation = require("../models/organisationModel")
+const Warehouse = require("../models/warehouseModel")
 
 /**
  * LOGGING
@@ -9,14 +11,23 @@ const apiResponse = require("../utils/apiResponse")
 exports.addressesOfOrg = [
     async(req,res)=>{
         try{
-            res.json({status:"OK shown"})
-
+            await Organisation.find({id:req.query.orgId}).then(orgs=>{
+               return apiResponse.successResponseWithData(res,"Organisations Addresses",orgs)
+            })
         } catch{
-            // logger.log(
-            //     "error",
-            //     "<<<<< ProductService < ProductController < getProducts : error (catch block)"
-            //   );
-              return apiResponse.ErrorResponse(res, err);
+            return apiResponse.ErrorResponse(res, err);
+        }
+    }
+]
+
+exports.addressesOfOrgWarehouses = [
+    async(req,res)=>{
+        try{
+            await Warehouse.find({organisationId:req.query.orgId}).then(warehouses=>{
+               return apiResponse.successResponseWithData(res,"Warehouses Addresses",warehouses)
+            })
+        } catch{
+            return apiResponse.ErrorResponse(res, err);
         }
     }
 ]
