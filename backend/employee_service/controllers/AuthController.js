@@ -81,11 +81,11 @@ exports.register = [
           'Name should only consists of letters',
         );
       }
-      EmployeeModel.collection.dropIndexes(function(){
+     /* EmployeeModel.collection.dropIndexes(function(){
         EmployeeModel.collection.reIndex(function(finished){
                  console.log("finished re indexing")
                })
-             })
+             })*/
       // EmployeeModel.createIndexes();
       // Extract the validation errors from a request.
       const errors = validationResult(req);
