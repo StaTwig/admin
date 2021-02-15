@@ -1,5 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react';
 import mapboxgl from '!mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css'
 import './Map.css';
 
 mapboxgl.accessToken =
@@ -20,7 +21,7 @@ const Map = () => {
       center: [lng, lat],
       zoom: zoom
     });
-
+    new mapboxgl.Marker().setLngLat([12.550343, 55.665957]).addTo(map);
     // Add navigation control (the +/- zoom buttons)
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
