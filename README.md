@@ -9,7 +9,7 @@ Affiliation Service --> Manages Affiliation and affliates of Organisations and e
 
 Intergation Service --> Mangaes Intergation of Users and organisations 
 
-RBCA Service --> Role based authentication Service
+RBA Service --> Role based authentication Service
 
 Employee Management Service --> Manages Employees in Organisations, offices and warehouses 
 
