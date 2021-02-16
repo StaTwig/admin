@@ -148,7 +148,6 @@ export const addInventoriesFromExcel = async data => {
     const result = await axios.post(url, data, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
-    debugger;
     return result;
   } catch (e) {
     return e.response;
@@ -162,6 +161,17 @@ export const getSerialNumbersByBatchNumber = async id => {
     return result.data.data;
   } catch (e) {
     return e.response;
+  }
+};
+
+export const getProductDetailsByWarehouseId = async id => {
+  try {
+    //const url = 'http://54.164.66.73:3007/inventorymanagement/api/inventory/getProductDetailsByWarehouseId?warehouseId='+id;
+    const url = config().getProductDetailsByWarehouseIdUrl + id;
+    const result = await axios.get(url);
+    return result.data.data;
+  } catch (e) {
+    return {};
   }
 };
 

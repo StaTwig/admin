@@ -3,11 +3,6 @@ import searchingIcon from '../../../assets/icons/searching@2x.png';
 import './style.scss';
 
 const Tabs = props => {
-  const onSeach = () => {
-   props.setDashVisible(true);
-   props.setContent(true);
-  };
-
  return (
     <div className="dashboardtabs">
       <ul className="nav nav-pills mb-2">
@@ -21,12 +16,12 @@ const Tabs = props => {
           <div className="search-form">
           <input
             type="text"
-            // value={search}
-            //onChange={onSearchChange}
+            value={props.warehouseText}
+            onChange={props.onWarehouseChange}
             placeholder={props.visible?"Enter Shipment ID":"Enter Warehouse ID"}
             className="form-control search-field"
           />
-          <img src={searchingIcon} onClick = {onSeach} alt="searching" />
+          <img src={searchingIcon} onClick = {props.onSearchClick} alt="searching" />
         </div>
 
         </li>
