@@ -14,11 +14,11 @@ import Waiting from "../../assets/icons/waiting.png";
 import logo from "../../assets/brands/VaccineLedgerlogo.svg";
 const FormPage = (props) => {
 const [organisations, setOrganisations] = useState([]);
-const [organisation, setOrganisation] = useState('Organisation');
   useEffect(() => {
     async function fetchData() {
       const orgs = await getOrganisations();
-      setOrganisations(orgs.data);
+      const orgIds = orgs.map(org => org.organisationId);
+      setOrganisations(orgIds);
     }
     fetchData();
   }, []);
@@ -41,67 +41,66 @@ const [organisation, setOrganisation] = useState('Organisation');
           </div>
           <div className="col-sm-6 col-lg-5">
             <div className="card">
-              {/* after clicking on sign up button render this component in the place of 52-104
+              { props.adminAwaiting ?
+                <><img alt="" src={Waiting} height="150" width="150" class="align-self-center mt-5 mb-4" />
+              <div class="font-weight-bold align-self-center mb-5 approve"> Waiting for Admin's Approval...</div></>
               
-                <img alt="" src={Waiting} height="150" width="150" class="align-self-center mt-5 mb-4"/>
-              <div class="font-weight-bold align-self-center mb-5 approve"> Waiting for Admin's Approval...</div>
-              
-              
-              
-              */}
-              <div className="card-body">
-                <div className="login-form">
-              <div className="card-title">Signup</div>
+              :
+                  <div className="card-body">
+                  <div className="login-form">
+                  <div className="card-title">Signup</div>
                   <div className="form-group">
-                    <img alt="" src={User} className="icon imgs" />
-                    <input type="text"
-                      className="form-control"
-                      value={props.firstName}
-                      onChange={props.onfirstNameChange}
-                      placeholder="First-Name" />
+                  <img alt="" src={User} className="icon imgs" />
+                  <input type="text"
+                  className="form-control"
+                  value={props.firstName}
+                  onChange={props.onfirstNameChange}
+                  placeholder="First-Name" />
                   </div>
                   <div className="form-group">
-                    <img alt="" src={User} className="icon imgs" />
-                    <input type="text"
-                      className="form-control"
-                      value={props.lastName}
-                      onChange={props.onlastNameChange}
-                      placeholder="last-Name" />
+                  <img alt="" src={User} className="icon imgs" />
+                  <input type="text"
+                  className="form-control"
+                  value={props.lastName}
+                  onChange={props.onlastNameChange}
+                  placeholder="last-Name" />
                   </div>
                   <div className="form-group">
-                    <img alt="" src={Mail} className="icon imgs" />
-                    <input type="email"
-                      className="form-control"
-                      value={props.email}
-                      onChange={props.onEmailChange}
-                      placeholder="Email ID/Mobile Number" />
+                  <img alt="" src={Mail} className="icon imgs" />
+                  <input type="email"
+                  className="form-control"
+                  value={props.email}
+                  onChange={props.onEmailChange}
+                  placeholder="Email ID/Mobile Number" />
                   </div>
                   <div className="form-group">
-                    <img alt="" src={org} className="icon imgs" />
-                    <div className="form-control">
-                    <DropdownButton
-                      name={organisation}
-                      onSelect={item => {
-                        setOrganisation(item);
-                      }}
-                      groups={organisations}
-                      className="text"
-                    />
+                  <img alt="" src={org} className="icon imgs" />
+                  <div className="form-control">
+                  <DropdownButton
+                  name={props.organisationId}
+                  onSelect={item => {
+                  props.onOrganisationChange(item);
+              }}
+                  groups={organisations}
+                  className="text"
+                  />
                   </div>
                   </div>
-                  {
-                    props.errorMessage && <div className="alert alert-danger">{props.errorMessage}</div>
-                  }
+              {
+                  props.errorMessage && <div className="alert alert-danger">{props.errorMessage}</div>
+              }
                   <div className="text-center mt-2">
-                    <button type="button" className="btn btn-primary" onClick={props.onSignup}>
-                      SIGNUP
-                    </button>
+                  <button type="button" className="btn btn-primary" onClick={props.onSignup}>
+                  SIGNUP
+                  </button>
                   </div>
                   <div className="signup-link text-center mt-2">
-                    Already have an Account? <Link to="/login">Login</Link>
+                  Already have an Account? <Link to="/login">Login</Link>
                   </div>
-                </div>
-              </div>
+                  </div>
+                  </div>
+              }
+
              
             </div>
           </div>

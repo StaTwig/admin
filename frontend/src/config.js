@@ -25,8 +25,9 @@ export function config() {
   const confs = {
     local: {
       loginUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/login`,
+      sendOtpUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/register`,
-      verifyOtpUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/verify-otp`,
+      verifyOtpUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/updateProfile`,
@@ -70,8 +71,9 @@ export function config() {
     },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
+      sendOtpUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/register`,
-      verifyOtpUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/verify-otp`,
+      verifyOtpUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/updateProfile`,
@@ -115,8 +117,9 @@ export function config() {
     },
     stable: {
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
+      sendOtpUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/register`,
-      verifyOtpUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/verify-otp`,
+      verifyOtpUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/updateProfile`,
@@ -160,8 +163,9 @@ export function config() {
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
+      sendOtpUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/register`,
-      verifyOtpUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/verify-otp`,
+      verifyOtpUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/updateProfile`,
@@ -205,8 +209,9 @@ export function config() {
     },
     demo: {
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
+      sendOtpUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/register`,
-      verifyOtpUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/verify-otp`,
+      verifyOtpUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/updateProfile`,
@@ -250,8 +255,9 @@ export function config() {
     },
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
+      sendOtpUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/register`,
-      verifyOtpUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/verify-otp`,
+      verifyOtpUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${PROD_SERVER_URL}/api/auth/getAllUsers`,
       updateProfileUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/updateProfile`,
@@ -295,7 +301,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || 'test'; // change prod to test, local,stable, dev for respective environments
+  const environment = process.env.ENVIRONMENT || 'local'; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
   return conf;
 }

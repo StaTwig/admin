@@ -9,13 +9,10 @@ import logo from '../../assets/brands/VaccineLedgerlogo.svg';
 import eye from '../../assets/icons/eye.png';
 
 const FormLoginPage = (props) => {
-  const { password, email, onEmailChange, onPasswordChange, errorMessage, onLogin } = props;
-  const [passwordType, setPasswordType] = useState(true);
-
-  
+  const { email, onEmailChange, errorMessage, onSendOtp } = props;
   const onkeydown = (event) => {
     if (event.keyCode  === 13) {
-      onLogin();
+        onSendOtp();
     }
    }
   return (
@@ -51,7 +48,7 @@ const FormLoginPage = (props) => {
                     errorMessage && <div className="alert alert-danger">{errorMessage}</div>
                   }
                   <div className="text-center mt-5">
-                    <button type="button" className="btn btn-primary" onClick={onLogin}>
+                    <button type="button" className="btn btn-primary" onClick={onSendOtp}>
                       SEND OTP
                     </button>
                   </div>

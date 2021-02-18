@@ -7,8 +7,7 @@ import logo from '../../assets/brands/VaccineLedgerlogo.svg';
 import '../login/style.scss';
 
 const FormVerifyPage = (props) => {
-  const { otp, onOtpChange, onVerifyOtp,  errorMessage, email, onEmailChange} = props;
-  const [passwordType, setPasswordType] = useState(true);
+  const { otp, onOtpChange, onVerifyOtp,  errorMessage, onResendOtp } = props;
   return (
     <div className="login-wrapper">
       <div className="container">
@@ -25,13 +24,13 @@ const FormVerifyPage = (props) => {
                 <div className="login-form">
                   <div className="card-title mb-5">Enter OTP</div>
                   <div className="form-group mb-5">
-                    <input type={passwordType ? 'password' : 'text'} className="form-control"
+                    <input type='text' className="form-control"
                       value={otp}
                       onChange={onOtpChange} />
 
                   </div>
               <div className="font-weight-bold text-center mb-2">Didn't receive the OTP?</div>
-              <div className="text-center mb-5 resend">RESEND CODE</div>
+              <div className="text-center mb-5 resend" onClick={onResendOtp}>RESEND CODE</div>
               <div></div>
 
                   {

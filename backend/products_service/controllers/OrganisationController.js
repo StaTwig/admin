@@ -5,7 +5,6 @@ const auth = require('../middlewares/jwt');
 const apiResponse = require('../helpers/apiResponse');
 
 exports.getOrganisations = [
-  auth,
   async (req, res) => {
     try {
       const organisations = await OrganisationModel.find({});

@@ -1,21 +1,22 @@
 import React, { useState, useCallback } from 'react';
 import Signup from '../../components/signUp';
-import {authenticateUser} from '../../actions/userActions';
+import {registerUser} from '../../actions/userActions';
 import MobileHeader from '../../shared/header/mobileHeader';
 import logo from '../../assets/brands/VACCINELEDGER.png';
-import { Link } from 'react-router-dom';
 
 const SignupContainer = (props) => {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [ organisationId, setOrganisationId ] = useState('Organisation');
+  const [ adminAwaiting, setAdminAwaiting ] = useState(false);
   const onSignup =  useCallback(async () => {
-    const data = {firstName,lastName,emailId:email, password};
-    const result = await authenticateUser(data);
+    const data = {firstName,lastName,emailId:email, organisationId };
+    console.log(data);
+    const result = await registerUser(data);
     if(result.status === 200) {
-      props.history.push('/verify');
+        setAdminAwaiting(true)
     }else if(result.status === 500) {
       setErrorMessage(result.data.message);
     }
@@ -36,15 +37,17 @@ const SignupContainer = (props) => {
 
       <Signup
         email={email}
-        password={password}
         firstName={firstName}
         lastName={lastName}
         onSignup={onSignup}
+        adminAwaiting={adminAwaiting}
         onfirstNameChange={e => setFirstName(e.target.value)}
         errorMessage={errorMessage}
         onEmailChange={e => setEmail(e.target.value)}
         onPasswordChange={e => setPassword(e.target.value)}
         onlastNameChange={e => setLastName(e.target.value)}
+        onOrganisationChange={ id => setOrganisationId(id)}
+        organisationId={organisationId}
       />
     </div>
   );
