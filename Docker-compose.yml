@@ -23,7 +23,6 @@ services:
       - "traefik.http.routers.employee-secure.entrypoints=websecure"
       - "traefik.http.routers.employee-secure.rule=Host(`admin.vaccineledger.com`) && PathPrefix(`/api/employee_service/`)"
       - "traefik.http.routers.employee-secure.service=employee"
-
   traefik:
     image: "traefik:v2.4"
     container_name: "traefik"
