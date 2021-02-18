@@ -1,0 +1,40 @@
+services:
+  address:
+    build: './backend/address_service'
+    image: 'address_service1.0'
+    container_name: 'address_service'
+    ports:
+      - "3000:3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.address-secure.entrypoints=websecure"
+      - "traefik.http.routers.address-secure.rule=Host(`admin.vaccineledger.com`) && PathPrefix(`/api/address_service/`)"
+      - "traefik.http.routers.address-secure.service=address"      
+  employee:
+    build: './backend/employee_service'
+    image: 'employee_service1.0'
+    container_name: 'employee_service'
+    ports:
+      - "3001:3001"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.employee-secure.entrypoints=websecure"
+      - "traefik.http.routers.employee-secure.rule=Host(`admin.vaccineledger.com`) && PathPrefix(`/api/employee_service/`)"
+      - "traefik.http.routers.employee-secure.service=employee"
+
+  traefik:
+    image: "traefik:v2.4"
+    container_name: "traefik"
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./traefik_config/traefik.toml:/traefik.toml
+      - ./traefik_config/acme.json:/acme.json
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+networks:
+  proxy:
+    external: true            
