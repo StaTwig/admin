@@ -16,44 +16,30 @@ const FormVerifyPage = (props) => {
           <div className="col-sm-6 col-lg-6">
             <div className="form-content">
               <img className="logo" src={logo} />
-              <h1>Welcome,</h1>
-              <p>Verify to continue</p>
+              <h1>Welcome</h1>
             </div>
           </div>
           <div className="col-sm-6 col-lg-5">
             <div className="card">
               <div className="card-body">
                 <div className="login-form">
-                  <div className="card-title">Verify</div>
-                  <div className="form-group">
-                    <img alt="" src={mail} className="icon" />
-                    <input type='text' className="form-control"
-                      value={email}
-                      onChange={onEmailChange}
-                      placeholder="email" />
-                  </div>
-                  <div className="form-group">
-                    <img alt="" src={Key} className="icon" />
+                  <div className="card-title mb-5">Enter OTP</div>
+                  <div className="form-group mb-5">
                     <input type={passwordType ? 'password' : 'text'} className="form-control"
                       value={otp}
-                      onChange={onOtpChange}
-                      placeholder="otp" />
-                      <img
-                      className="showpassword"
-                      alt=""
-                      src={` ${ passwordType ? hide : eye}`}
-                      onClick={() => setPasswordType(!passwordType)}
-                    />
+                      onChange={onOtpChange} />
 
                   </div>
-
+              <div className="font-weight-bold text-center mb-2">Didn't receive the OTP?</div>
+              <div className="text-center mb-5 resend">RESEND CODE</div>
+              <div></div>
 
                   {
                     errorMessage && <div className="alert alert-danger">{errorMessage}</div>
                   }
                   <div className="text-center">
                     <button type="button" className="btn btn-primary" onClick={onVerifyOtp}>
-                      Verify
+                      LOGIN
                     </button>
                   </div>
                 </div>
