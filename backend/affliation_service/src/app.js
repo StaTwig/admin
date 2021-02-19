@@ -41,8 +41,7 @@ app.use(cors())
  * Routes
  */
 
-app.use("/", router);
-// app.use("/productmanagement/api/", apiRouter);
+app.use("/api/affliation_service", router);
 
 // throw 404 if URL not found
 app.all("*", function(req, res) {

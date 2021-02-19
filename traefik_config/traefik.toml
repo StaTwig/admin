@@ -1,13 +1,14 @@
 [entryPoints]
   [entryPoints.web]
     address = ":80"
-  #   [entryPoints.web.http.redirections.entryPoint]
-  #     to = "websecure"
-  #     scheme = "https"
+    [entryPoints.web.http.redirections.entryPoint]
+      to = "websecure"
+      scheme = "https"
 
-  # [entryPoints.websecure]
-  #   address = ":443"
-
+  [entryPoints.websecure]
+    address = ":443"
+# [log]
+#   level = INFO
 [api]
   dashboard = true
   insecure = true
@@ -22,5 +23,5 @@
   network = "proxy"
   exposedByDefault = false
 
-# [providers.file]
-#   filename = "traefik_dynamic.toml"
+[providers.file]
+  filename = "traefik_dynamic.toml"

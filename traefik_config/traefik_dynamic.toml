@@ -4,7 +4,8 @@
   ]
 
 [http.routers.api]
-  rule = "Host(`admin.vaccineledger.com`) && PathPrefix(`/admin`)"
+  # rule = "Host(`admin.vaccineledger.com`) && PathPrefix(`/admin`)"
+  rule = "PathPrefix(`/admin)"
   entrypoints = ["websecure"]
   middlewares = ["simpleAuth"]
   service = "api@internal"
