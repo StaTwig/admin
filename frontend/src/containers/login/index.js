@@ -5,28 +5,32 @@ import MobileHeader from '../../shared/header/mobileHeader';
 import logo from '../../assets/brands/VACCINELEDGER.png';
 import { Link } from 'react-router-dom';
 import Login from '../../components/login';
-import { loginUser, setCurrentUser } from '../../actions/userActions';
+import { sendOtp, setCurrentUser } from '../../actions/userActions';
+import { turnOn, turnOff } from '../../actions/spinnerActions';
 import setAuthToken from '../../utils/setAuthToken';
 
 const LoginContainer = props => {
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [password, setPassword] = useState('');
   const dispatch = useDispatch();
 
-  const onLogin = useCallback(async () => {
-    const data = { emailId:email, password };
-    const result = await loginUser(data);
+  const onSendOtp = useCallback(async () => {
+      dispatch(turnOn());
+    const data = { emailId:email };
+    const result = await sendOtp(data);
     if (result.status === 200) {
       // Set auth token auth
-      const token = result.data.data.token;
+     /* const token = result.data.data.token;
       setAuthToken(token);
       // Decode token and get user info and exp
       const decoded = jwt_decode(token);
       // Set user and isAuthenticated
       localStorage.setItem('theLedgerToken', token);
-      dispatch(setCurrentUser(decoded));
-      props.history.push('/overview');
+      dispatch(setCurrentUser(decoded));*/
+      props.history.push(`/verify?emailId=${email}`);
+    }else if(result.status === 500) {
+        const err = result.data.message.response;
+        setErrorMessage(err);
     }else if(result.status === 401) {
       const err = result.data.message;
       setErrorMessage(err);
@@ -34,6 +38,7 @@ const LoginContainer = props => {
       const err = result.data.data[0];
       setErrorMessage(err.msg);
     }
+      dispatch(turnOff());
   });
   const onkeydown = (event) => {
     if (event.keyCode  === 13) {
@@ -52,10 +57,8 @@ const LoginContainer = props => {
 </nav>
  <Login
         errorMessage={errorMessage}
-        onLogin={onLogin}
+        onSendOtp={onSendOtp}
         onEmailChange={e => setEmail(e.target.value)}
-        onPasswordChange={e => setPassword(e.target.value)}
-     
       />
     </div>
 

@@ -81,18 +81,28 @@ background-color: $white;
     }
   }
 
-
+.approve{
+  font-size: 24px;
+}
+.resend{
+  font-size: 14px;
+}
   .card{
        border: none;
        box-shadow: 0px 3px 25px #00000029;
     
   }
 
+  .cardHeight{
+    height:400px;
+ 
+}
+
   .login-form {
     display: flex;
     flex-direction: column;
     .card-title {
-      font-size: 33px;
+      font-size: 25px;
       font-weight: bold;
       text-align: center;
     }
@@ -101,8 +111,8 @@ background-color: $white;
 
     .form-group {
       position: relative;
-      margin-bottom: 2rem;;
-      img {
+      margin-bottom: 2rem;
+      .imgs {
         width: 18px;
         height: 18px;
         position: absolute;
@@ -127,6 +137,13 @@ background-color: $white;
         font-size: 20px;
         padding-left: 2rem;
         outline: none;
+        
+    .custom-dropdown .btn-custom-dropdown {
+      font-size: 19px;
+      @media (max-width: 1250px) {
+        font-size: 19px;
+      }
+    }
       }
     }
 

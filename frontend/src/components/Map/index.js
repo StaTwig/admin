@@ -6,7 +6,7 @@ import './Map.css';
 mapboxgl.accessToken =
   'pk.eyJ1IjoidGhyaW5ldGhyYSIsImEiOiJja2wzdDAwMWYwN3JuMm5uMTQxcjQyb2w2In0.XfGU-QlqlhgTpjm2I_Ye9Q';
 
-const Map = () => {
+const Map = (props) => {
   const mapContainerRef = useRef(null);
 
   const [lng, setLng] = useState(5);
@@ -21,7 +21,11 @@ const Map = () => {
       center: [lng, lat],
       zoom: zoom
     });
-    new mapboxgl.Marker().setLngLat([12.550343, 55.665957]).addTo(map);
+    if(props?.warehouseLocation) {
+      const coords = [props.warehouseLocation.latitude, props.warehouseLocation.longitude];
+      new mapboxgl.Marker().setLngLat(coords).addTo(map);
+    }
+
     // Add navigation control (the +/- zoom buttons)
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
@@ -33,7 +37,7 @@ const Map = () => {
 
     // Clean up on unmount
     return () => map.remove();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [props.warehouseLocation]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>

@@ -25,8 +25,9 @@ export function config() {
   const confs = {
     local: {
       loginUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/login`,
+      sendOtpUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/register`,
-      verifyOtpUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/verify-otp`,
+      verifyOtpUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/updateProfile`,
@@ -49,6 +50,7 @@ export function config() {
       addInventoryUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/addNewInventory`,
       shipmentsSearch: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchShipments?key=`,
       inventorySearch: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`,
+      getProductDetailsByWarehouseIdUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getProductDetailsByWarehouseId?warhouseId=`,
       createPurchaseOrderUrl: `${LOCAL_SERVER_URL_PO}/pomanagement/api/po/createPurchaseOrder`,
       productListUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getProductListCounts`,
       addPOsFromExcelUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/addPOsFromExcel`,
@@ -69,8 +71,9 @@ export function config() {
     },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
+      sendOtpUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/register`,
-      verifyOtpUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/verify-otp`,
+      verifyOtpUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/updateProfile`,
@@ -94,6 +97,7 @@ export function config() {
       addInventoryUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/addNewInventory`,
       shipmentsSearch: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/fetchShipments?key=`,
       inventorySearch: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`,
+      getProductDetailsByWarehouseIdUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getProductDetailsByWarehouseId?warhouseId=`,
       createPurchaseOrderUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/createPurchaseOrder`,
       addPOsFromExcelUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/addPOsFromExcel`,
       changePOStatus: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/changePOStatus`,
@@ -113,8 +117,9 @@ export function config() {
     },
     stable: {
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
+      sendOtpUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/register`,
-      verifyOtpUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/verify-otp`,
+      verifyOtpUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/updateProfile`,
@@ -143,6 +148,7 @@ export function config() {
       getSerialNumbersByBatchNumber: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
       getInventoryDetailsUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetails`,
       getInventoryByBatchNumber:`${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getBatchDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
+      getProductDetailsByWarehouseIdUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getProductDetailsByWarehouseId?warhouseId=`,
       trackShipment: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
       poDetailsByShipmentId:`${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
@@ -157,8 +163,9 @@ export function config() {
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
+      sendOtpUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/register`,
-      verifyOtpUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/verify-otp`,
+      verifyOtpUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/updateProfile`,
@@ -185,6 +192,7 @@ export function config() {
       addInventoriesFromExcel: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/addInventoriesFromExcel`,
       addInventoryUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/addNewInventory`,
       productListUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getProductListCounts`,
+      getProductDetailsByWarehouseIdUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getProductDetailsByWarehouseId?warhouseId=`,
       trackShipment: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
       poDetailsByShipmentId:`${TEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${TEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
@@ -201,8 +209,9 @@ export function config() {
     },
     demo: {
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
+      sendOtpUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/register`,
-      verifyOtpUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/verify-otp`,
+      verifyOtpUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/updateProfile`,
@@ -228,6 +237,7 @@ export function config() {
       addProductsToInventory: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/addProductsToInventory`,
       addInventoriesFromExcel: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/addInventoriesFromExcel`,
       addInventoryUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/addNewInventory`,
+      getProductDetailsByWarehouseIdUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getProductDetailsByWarehouseId?warhouseId=`,
       productListUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getProductListCounts`,
       trackShipment: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
       poDetailsByShipmentId:`${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
@@ -245,8 +255,9 @@ export function config() {
     },
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
+      sendOtpUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/register`,
-      verifyOtpUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/verify-otp`,
+      verifyOtpUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${PROD_SERVER_URL}/api/auth/getAllUsers`,
       updateProfileUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/updateProfile`,
@@ -275,6 +286,7 @@ export function config() {
       addProductsToInventory: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/addProductsToInventory`,
       productListUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getProductListCounts`,
       addInventoriesFromExcel: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/addInventoriesFromExcel`,
+      getProductDetailsByWarehouseIdUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getProductDetailsByWarehouseId?warhouseId=`,
       trackShipment: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
       poDetailsByShipmentId:`${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
@@ -289,7 +301,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || 'test'; // change prod to test, local,stable, dev for respective environments
+  const environment = process.env.ENVIRONMENT || 'local'; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
   return conf;
 }

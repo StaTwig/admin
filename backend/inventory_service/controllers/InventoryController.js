@@ -1382,29 +1382,59 @@ exports.getProductListCounts = [
   async (req, res) => {
     try {
       const { warehouseId } = req.user;
-            console.log("1",warehouseId)
       const InventoryId = await WarehouseModel.find({"id":warehouseId})
-            console.log("2",InventoryId[0])
-            const val = InventoryId[0].warehouseInventory
-            console.log("val",val)
+      const val = InventoryId[0].warehouseInventory
       const productList = await InventoryModel.find({"id":val});
-      //console.log("test",JSON.parse(JSON.stringify(productList[0].inventoryDetails)))
-            const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails))
-        console.log("list",list)
+      const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails))
             var productArray = [];
             for (j=0;j<list.length;j++)
                    {
                         var productId = list[j].productId;
-                           console.log("productId",productId)
                         const product = await ProductModel.find({"id": productId})
-                           console.log("pd",product[0].name)
                         var product1 = {productName: product[0].name, productId: product[0].id, quantity: list[j].quantity};
-                        console.log("final",product1)
-                           productArray.push(product1)
+                        productArray.push(product1)
                    }
       return apiResponse.successResponseWithData(
         res,
         productArray
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+
+exports.getProductDetailsByWarehouseId = [
+  auth,
+  async (req, res) => {
+    try {
+      const { warehouseId } = req.query;
+      const warehouseDetails = await WarehouseModel.find({"id":warehouseId})
+      const val = warehouseDetails[0].warehouseInventory
+      const productList = await InventoryModel.find({"id":val});
+      const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails))
+      var productArray = [];
+      for (j=0;j<list.length;j++)
+                   {
+                        var productId = list[j].productId;
+                        const product = await ProductModel.find({"id": productId})
+                        var product1 = {productName: product[0].name, productId: product[0].id,manufacturer:product[0].manufacturer,quantity: list[j].quantity};
+                        productArray.push(product1)
+                   }
+      var warehouse = {"warehouseCountryId":warehouseDetails[0].country.id,"warehouseCountryName":warehouseDetails[0].country.name,"warehouseId":warehouseDetails[0].id,
+      "warehouseName":warehouseDetails[0].title,"warehouseAddress":warehouseDetails[0].postalAddress,"warehouseLocation":warehouseDetails[0].location}
+	    
+      return apiResponse.successResponseWithData(
+        res,"Fetch success",
+	{
+	warehouse,
+        productArray
+	}
       );
     } catch (err) {
       logger.log(

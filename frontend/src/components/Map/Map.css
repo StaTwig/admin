@@ -1,12 +1,12 @@
 .map-container {
     position: absolute !important;
-    top: 17em;
+    top: 225px;
     bottom: 0;
     left: 0;
     right: 0;
 }
 .sidebarStyle {
-    /* display: inline-block;
+    display: inline-block;
     position: absolute;
     top: 0;
     left: 0;
@@ -15,5 +15,5 @@
     color: #FFFFFF;
     z-index: 1 !important;
     padding: 6px;
-    font-weight: bold; */
+    font-weight: bold;
 }

@@ -9,13 +9,10 @@ import logo from '../../assets/brands/VaccineLedgerlogo.svg';
 import eye from '../../assets/icons/eye.png';
 
 const FormLoginPage = (props) => {
-  const { password, email, onEmailChange, onPasswordChange, errorMessage, onLogin } = props;
-  const [passwordType, setPasswordType] = useState(true);
-
-  
+  const { email, onEmailChange, errorMessage, onSendOtp } = props;
   const onkeydown = (event) => {
     if (event.keyCode  === 13) {
-      onLogin();
+        onSendOtp();
     }
    }
   return (
@@ -37,42 +34,22 @@ const FormLoginPage = (props) => {
           <div className="col-sm-6 col-lg-5">
             <div className="card">
               <div className="card-body">
-                <div className="login-form">
-                  <div className="card-title">Login</div>
-                  <div className="form-group">
-                    <img alt="" src={User} className="icon" />
+                <div className="login-form mt-2">
+                  <div className="card-title mb-4">Login</div>
+                  <div className="form-group mt-5 ">
+                    <img alt="" src={User} className="icon imgs" />
                     <input type="email" className="form-control"
                       value={email}
                       onChange={onEmailChange}
-                      placeholder="Email" />
-                  </div>
-                  <div className="form-group">
-                    <img alt="" src={Key} className="icon" />
-                    <input type={passwordType ? 'password' : 'text'} className="form-control"
-                      value={password}
-                      onChange={onPasswordChange}
-                      placeholder="Password" 
-                 
-                      />
-                   
-                    <img
-                      className="showpassword"
-                      alt=""
-                      src={` ${ passwordType ? hide : eye}`}
-                      onClick={() => setPasswordType(!passwordType)}
-                    />
-                  </div>
-                  <Link to="/forgotPassword" className="forgot-link">Forgot Password?</Link>
-                  <div className="checkbox-group mb-2">
-                    <input type="checkbox" className="mr-1" /> <span>Remember me</span>
+                      placeholder="Email ID/Mobile Number" />
                   </div>
 
                   {
                     errorMessage && <div className="alert alert-danger">{errorMessage}</div>
                   }
-                  <div className="text-center">
-                    <button type="button" className="btn btn-primary" onClick={onLogin}>
-                      Login
+                  <div className="text-center mt-5">
+                    <button type="button" className="btn btn-primary" onClick={onSendOtp}>
+                      SEND OTP
                     </button>
                   </div>
                   <div className="signup-link text-center mt-2">Don't have an account? <Link to="/signup">Signup</Link></div>
@@ -87,4 +64,10 @@ const FormLoginPage = (props) => {
 };
 
 export default FormLoginPage;
+
+
+/* <Link to="/forgotPassword" className="forgot-link">Forgot Password?</Link>
+                  <div className="checkbox-group mb-2">
+                    <input type="checkbox" className="mr-1" /> <span>Remember me</span>
+                  </div> */
 

@@ -44,6 +44,10 @@ exports.register = [
     .isLength({ min: 1 })
     .trim()
     .withMessage('name must be specified.'),
+  body('organisationId')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Organisation must be specified.'),
   body('emailId')
     .isLength({ min: 1 })
     .trim()
@@ -61,10 +65,6 @@ exports.register = [
         }
       });
     }),
-  body('password')
-    .isLength({ min: 6 })
-    .trim()
-    .withMessage('Password must be 6 characters or greater.'),
   // Process request after validation and sanitization.
   async (req, res) => {
     try {
@@ -81,12 +81,12 @@ exports.register = [
           'Name should only consists of letters',
         );
       }
-     /* EmployeeModel.collection.dropIndexes(function(){
+      EmployeeModel.collection.dropIndexes(function(){
         EmployeeModel.collection.reIndex(function(finished){
                  console.log("finished re indexing")
                })
-             })*/
-      // EmployeeModel.createIndexes();
+             })
+       //EmployeeModel.createIndexes();
       // Extract the validation errors from a request.
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -108,24 +108,24 @@ exports.register = [
         );
       } else {
         //hash input password
-        bcrypt.hash(req.body.password, 10, function(err, hash) {
           // generate OTP for confirmation
           logger.log(
             'info',
             '<<<<< UserService < AuthController < register : Generating Hash for Input Password',
           );
-          let otp = utility.randomNumber(4);
+
           // Create User object with escaped and trimmed data
-          var user = new EmployeeModel({
+          const user = new EmployeeModel({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             emailId: req.body.emailId,
-            password: hash,
-            confirmOTP: otp,
+            organisationId: req.body.organisationId,
             id: uniqid('emp-'),
           });
+          await user.save()
+        return apiResponse.successResponse(res, 'User registered Success');
           // Html email body
-          let html = EmailContent({
+         /* let html = EmailContent({
             name: req.body.name,
             origin: req.headers.origin,
             otp,
@@ -172,8 +172,7 @@ exports.register = [
                 '<<<<< UserService < AuthController < register : Error in catch block 1',
               );
               return apiResponse.ErrorResponse(res, err);
-            });
-        });
+            });*/
       }
     } catch (err) {
       //throw error in json response with status 500.
@@ -194,20 +193,15 @@ exports.register = [
  *
  * @returns {Object}
  */
-exports.login = [
+exports.sendOtp = [
   body('emailId')
     .isLength({ min: 1 })
     .trim()
     .withMessage('Email must be specified.')
     .isEmail()
     .withMessage('Email must be a valid email address.'),
-  body('password')
-    .isLength({ min: 1 })
-    .trim()
-    .withMessage('Password must be specified.'),
   sanitizeBody('emailId').escape(),
-  sanitizeBody('password').escape(),
-  (req, res) => {
+  async (req, res) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -221,100 +215,71 @@ exports.login = [
           errors.array(),
         );
       } else {
-        EmployeeModel.findOne({ emailId: req.body.emailId }).then(user => {
-          if (user) {
-            //Compare given password with db's hash.
+        const user = await EmployeeModel.findOne({ emailId: req.body.emailId });
+        if(user) {
+          if (user.accountStatus === 'ACTIVE') {
             logger.log(
-              'info',
-              '<<<<< UserService < AuthController < login : Comparing entered password with existing password',
+                'info',
+                '<<<<< UserService < AuthController < login : user is active',
             );
-            bcrypt.compare(req.body.password, user.password, function(
-              err,
-              same,
-            ) {
-              if (same) {
-                logger.log(
-                  'info',
-                  '<<<<< UserService < AuthController < login : passwords are matching',
-                );
-                //Check account confirmation.
-                if (user.isConfirmed) {
-                  logger.log(
-                    'info',
-                    '<<<<< UserService < AuthController < login : account confirmation done',
+            let otp = utility.randomNumber(4);
+            await EmployeeModel.update({emailId: req.body.emailId }, { otp });
+             let html = EmailContent({
+            name: user.firstName,
+            origin: req.headers.origin,
+            otp,
+          });
+          // Send confirmation email
+            try {
+              await mailer
+                  .send(
+                      constants.confirmEmails.from,
+                      user.emailId,
+                      constants.confirmEmails.subject,
+                      html,
                   );
-                  // Check User's account active or not.
-                  if (user.accountStatus) {
-                    logger.log(
-                      'info',
-                      '<<<<< UserService < AuthController < login : user is active',
-                    );
-                    let userData = {
-                      id: user.id,
-                      firstName: user.firstName,
-                      emailId: user.emailId,
-                      role: user.role,
-                      warehouseId:user.warehouseId,
-                    };
-                    //Prepare JWT token for authentication
-                    const jwtPayload = userData;
-                    const jwtData = {
-                      expiresIn: process.env.JWT_TIMEOUT_DURATION,
-                    };
-                    const secret = process.env.JWT_SECRET;
-                    //Generated JWT token with Payload and secret.
-                    userData.token = jwt.sign(jwtPayload, secret, jwtData);
-                    logger.log(
-                      'info',
-                      '<<<<< UserService < AuthController < login : user login success',
-                    );
-                    return apiResponse.successResponseWithData(
-                      res,
-                      'Login Success.',
-                      userData,
-                    );
-                  } else {
-                    logger.log(
-                      'warn',
-                      '<<<<< UserService < AuthController < login : account is not active',
-                    );
-                    return apiResponse.unauthorizedResponse(
-                      res,
-                      'Account is not active. Please contact admin.',
-                    );
-                  }
-                } else {
-                  console.log(
-                    'warn',
-                    '<<<<< UserService < AuthController < login : account is not confirmed',
-                  );
-                  return apiResponse.unauthorizedResponse(
-                    res,
-                    'Account is not confirmed. Please confirm your account.',
-                  );
-                }
-              } else {
-                logger.log(
-                  'warn',
-                  '<<<<< UserService < AuthController < login : entered email or passwords is wrong',
-                );
-                return apiResponse.unauthorizedResponse(
+              return apiResponse.successResponseWithData(
                   res,
-                  'Email or Password wrong.',
-                );
-              }
-            });
+                  'OTP Sent Success.',
+                  otp,
+              );
+            }catch(err) {
+              return apiResponse.ErrorResponse(res, err);
+            }
+
+           /* let userData = {
+              id: user.id,
+              firstName: user.firstName,
+              emailId: user.emailId,
+              role: user.role,
+              warehouseId:user.warehouseId,
+            };
+            //Prepare JWT token for authentication
+            const jwtPayload = userData;
+            const jwtData = {
+              expiresIn: process.env.JWT_TIMEOUT_DURATION,
+            };
+            const secret = process.env.JWT_SECRET;
+            //Generated JWT token with Payload and secret.
+            userData.token = jwt.sign(jwtPayload, secret, jwtData);
+            logger.log(
+                'info',
+                '<<<<< UserService < AuthController < login : user login success',
+            );*/
+
           } else {
             logger.log(
-              'warn',
-              '<<<<< UserService < AuthController < login : entered email or passwords is wrong again',
+                'warn',
+                '<<<<< UserService < AuthController < login : account is not approved.',
             );
             return apiResponse.unauthorizedResponse(
-              res,
-              'Email or Password wrong.',
+                res,
+                'Account is not Approved. Please contact admin.',
             );
           }
-        });
+        } else {
+          return apiResponse.ErrorResponse(res, 'User not registered');
+        }
       }
     } catch (err) {
       logger.log(
@@ -334,7 +299,7 @@ exports.login = [
  *
  * @returns {Object}
  */
-exports.verifyConfirm = [
+exports.verifyOtp = [
   body('emailId')
     .isLength({ min: 1 })
     .trim()
@@ -345,7 +310,7 @@ exports.verifyConfirm = [
     .isLength({ min: 1 })
     .trim()
     .withMessage('OTP must be specified.'),
-  (req, res) => {
+  async (req, res) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -360,362 +325,37 @@ exports.verifyConfirm = [
         );
       } else {
         var query = { emailId: req.body.emailId };
-        EmployeeModel.findOne(query).then(async user => {
-          if (user) {
-            logger.log(
+        const user = await EmployeeModel.findOne(query);
+        if (user && user.otp == req.body.otp) {
+          await EmployeeModel.update(query, { otp: null });
+          let userData = {
+            id: user.id,
+            firstName: user.firstName,
+            emailId: user.emailId,
+            role: user.role,
+            warehouseId:user.warehouseId,
+          };
+          //Prepare JWT token for authentication
+          const jwtPayload = userData;
+          const jwtData = {
+            expiresIn: process.env.JWT_TIMEOUT_DURATION,
+          };
+          const secret = process.env.JWT_SECRET;
+          //Generated JWT token with Payload and secret.
+          userData.token = jwt.sign(jwtPayload, secret, jwtData);
+          logger.log(
               'info',
-              '<<<<< UserService < AuthController < verifyConfirm : user exist',
-            );
-            //Check already confirm or not.
-            if (!user.isConfirmed) {
-              logger.log(
-                'info',
-                '<<<<< UserService < AuthController < verifyConfirm : user not confirmed',
-              );
-              //Check account confirmation.
-              if (user.confirmOTP == req.body.otp) {
-                const response = await axios.get(
-                  `${blockchain_service_url}/createUserAddress`,
-                );
-                const walletAddress = response.data.items;
-                const userData = {
-                  walletAddress,
-                };
-                logger.log(
-                  'info',
-                  '<<<<< UserService < AuthController < verifyConfirm : granting permission to user',
-                );
-                await axios.post(
-                  `${blockchain_service_url}/grantPermission`,
-                  userData,
-                ); //Granting permissons to the user
-
-                logger.log(
-                  'info',
-                  '<<<<< UserService < AuthController < verifyConfirm : granted permission to user',
-                );
-
-                //Update user as confirmed
-                EmployeeModel.findOneAndUpdate(query, {
-                  isConfirmed: true,
-                  confirmOTP: null,
-                  walletAddress,
-                }).catch(err => {
-                  logger.log(
-                    'error',
-                    '<<<<< UserService < AuthController < verifyConfirm : Error while updating user as confirmed',
-                  );
-                  return apiResponse.ErrorResponse(res, err);
-                });
-                logger.log(
-                  'info',
-                  '<<<<< UserService < AuthController < verifyConfirm : Confirming Account successfully',
-                );
-                //Create Inventory and Warehouse
-                return apiResponse.successResponse(
-                  res,
-                  'Account confirmed success.',
-                );
-              } else {
-                logger.log(
-                  'warn',
-                  '<<<<< UserService < AuthController < verifyConfirm : otp does not match',
-                );
-                return apiResponse.unauthorizedResponse(
-                  res,
-                  'Otp does not match',
-                );
-              }
-            } else {
-              logger.log(
-                'warn',
-                '<<<<< UserService < AuthController < verifyConfirm : account is already confirmed',
-              );
-              return apiResponse.unauthorizedResponse(
-                res,
-                'Account already confirmed.',
-              );
-            }
-          } else {
-            logger.log(
-              'warn',
-              '<<<<< UserService < AuthController < verifyConfirm : specified email not found',
-            );
-            return apiResponse.unauthorizedResponse(
-              res,
-              'Specified email not found.',
-            );
-          }
-        });
+              '<<<<< UserService < AuthController < login : user login success',
+          );
+          return apiResponse.successResponseWithData(res, 'Login Success', userData);
+        } else {
+          return apiResponse.ErrorResponse(res, `Otp doesn't match`);
+        }
       }
     } catch (err) {
       logger.log(
         'error',
         '<<<<< UserService < AuthController < verifyConfirm : Error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-
-/**
- * Resend Confirm otp.
- *
- * @param {string}      email
- *
- * @returns {Object}
- */
-exports.resendConfirmOtp = [
-  body('emailId')
-    .isLength({ min: 1 })
-    .trim()
-    .withMessage('Email must be specified.')
-    .isEmail()
-    .withMessage('Email must be a valid email address.'),
-  sanitizeBody('email').escape(),
-  (req, res) => {
-    try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        logger.log(
-          'error',
-          '<<<<< UserService < AuthController < resendConfirmOtp : validation error',
-        );
-        return apiResponse.validationErrorWithData(
-          res,
-          'Validation Error.',
-          errors.array(),
-        );
-      } else {
-        var query = { emailId: req.body.emailId };
-        EmployeeModel.findOne(query).then(user => {
-          if (user) {
-            logger.log(
-              'info',
-              '<<<<< UserService < AuthController < resendConfirmOtp : user exist',
-            );
-            //Check already confirm or not.
-            if (!user.isConfirmed) {
-              logger.log(
-                'info',
-                '<<<<< UserService < AuthController < resendConfirmOtp : user not confirmed, generating OTP',
-              );
-              // Generate otp
-              let otp = utility.randomNumber(4);
-              // Html email body
-              let html =
-                '<p>Please Confirm your Account.</p><p>OTP: ' + otp + '</p>';
-              // Send confirmation email
-              mailer
-                .send(
-                  constants.confirmEmails.from,
-                  req.body.emailId,
-                  'Confirm Account',
-                  html,
-                )
-                .then(function() {
-                  user.isConfirmed = 0;
-                  user.confirmOTP = otp;
-                  // Save user.
-                  user.save(function(err) {
-                    if (err) {
-                      logger.log(
-                        'info',
-                        '<<<<< UserService < AuthController < resendConfirmOtp : Error while saving user',
-                      );
-                      return apiResponse.ErrorResponse(res, err);
-                    }
-                    logger.log(
-                      'info',
-                      '<<<<< UserService < AuthController < resendConfirmOtp : otp sent successfully',
-                    );
-                    return apiResponse.successResponse(
-                      res,
-                      'Confirm otp sent.',
-                    );
-                  });
-                });
-            } else {
-              logger.log(
-                'warn',
-                '<<<<< UserService < AuthController < resendConfirmOtp : account already confirmed',
-              );
-              return apiResponse.unauthorizedResponse(
-                res,
-                'Account already confirmed.',
-              );
-            }
-          } else {
-            logger.log(
-              'warn',
-              '<<<<< UserService < AuthController < resendConfirmOtp : specified email not found',
-            );
-            return apiResponse.unauthorizedResponse(
-              res,
-              'Specified email not found.',
-            );
-          }
-        });
-      }
-    } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< UserService < AuthController < resendConfirmOtp : error(catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-
-/**
- * User forgotPassword.
- *
- 
- * @param {string}      email
-   
- 
- *
- * @returns {Object}
- */
-exports.forgotPassword = [
-  //validate fields
-  body('emailId')
-    .isLength({ min: 1 })
-    .trim()
-    .withMessage('Email must be specified.')
-    .isEmail()
-    .withMessage('Email must be a valid email address.'),
-  //sanitize fields
-  sanitizeBody('emailId').escape(),
-  (req, res) => {
-    try {
-      // Extract the validation errors from a request.
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        logger.log(
-          'warn',
-          '<<<<< UserService < AuthController < forgotPassword : validation error',
-        );
-        // Display sanitized values/errors messages.
-        return apiResponse.validationErrorWithData(
-          res,
-          'Validation Error.',
-          errors.array(),
-        );
-      } else {
-        return EmployeeModel.findOne({ emailId: req.body.emailId }).then(
-          user => {
-            if (user) {
-              logger.log(
-                'info',
-                '<<<<< UserService < AuthController < forgotPassword : user exist',
-              );
-              let newPassword = req.body.emailId + utility.randomNumber(10);
-              //hash input password
-              bcrypt.hash(newPassword, 10, function(err, hash) {
-                // Html email body
-                let html = '<p>your new password is </p>' + newPassword;
-                // Send confirmation email
-                mailer
-                  .send(
-                    constants.confirmEmails.from,
-                    req.body.emailId,
-                    'ForgotPassword',
-                    html,
-                  )
-                  .then(function() {
-                    // Save user.
-
-                    user.password = hash;
-                    user.save(function(err) {
-                      if (err) {
-                        logger.log(
-                          'error',
-                          '<<<<< UserService < AuthController < forgotPassword : error while saving user',
-                        );
-                        return apiResponse.ErrorResponse(res, err);
-                      } else {
-                        logger.log(
-                          'info',
-                          '<<<<< UserService < AuthController < forgotPassword : password sent successfully to registered email',
-                        );
-                        return res.send(
-                          'Password has been sent successfully to RegisteredEmail',
-                        );
-                      }
-                    });
-                  })
-                  .catch(err => {
-                    logger.log(
-                      'error',
-                      '<<<<< UserService < AuthController < forgotPassword : error (catch block 1)',
-                    );
-                    return apiResponse.ErrorResponse(res, err);
-                  });
-              });
-            }
-          },
-        );
-      }
-    } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< UserService < AuthController < forgotPassword : error (catch block 2)',
-      );
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-
-/**
- * User resetPassword.
- *
- 
- * @param {string}      password
-   @param {string}      newPassword
- 
- *
- * @returns {Object}
- */
-exports.resetPassword = [
-  //validate fields
-  body('password')
-    .isLength({ min: 6 })
-    .trim()
-    .withMessage('Password must be 6 characters or greater.'),
-  body('newPassword')
-    .isLength({ min: 6 })
-    .trim()
-    .withMessage('Password must be 6 characters or greater.'),
-  //sanitize the fields
-  sanitizeBody('password').escape(),
-  sanitizeBody('newPassword').escape(),
-  (req, res) => {
-    try {
-      // Extract the validation errors from a request.
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        logger.log(
-          'warn',
-          '<<<<< UserService < AuthController < resetPassword : validation error',
-        );
-        // Display sanitized values/errors messages.
-        return apiResponse.validationErrorWithData(
-          res,
-          'Validation Error.',
-          errors.array(),
-        );
-      } else {
-        logger.log(
-          'info',
-          '<<<<< UserService < AuthController < resetPassword : password reset successfully',
-        );
-        res.json('password has been reset successfully');
-      }
-    } catch (err) {
-      logger.log(
-        'info',
-        '<<<<< UserService < AuthController < resetPassword : error (catch block)',
       );
       return apiResponse.ErrorResponse(res, err);
     }

@@ -6,11 +6,8 @@ var upload = multer({ dest: "uploads/" });
 var router = express.Router();
 
 router.post("/register", AuthController.register);
-router.post("/login", AuthController.login);
-router.post("/verify-otp", AuthController.verifyConfirm);
-router.post("/resend-verify-otp", AuthController.resendConfirmOtp);
-router.post("/forgotPassword", AuthController.forgotPassword);
-router.post("/resetPassword", AuthController.resetPassword);
+router.post("/sendOtp", AuthController.sendOtp);
+router.post("/verifyOtp", AuthController.verifyOtp);
 router.get("/userInfo", AuthController.userInfo);
 router.get("/getAllUsers", AuthController.getAllUsers);
 router.post("/updateProfile", AuthController.updateProfile);

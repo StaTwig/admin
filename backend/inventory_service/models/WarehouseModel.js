@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var WarehouseSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
+    title: { type: String, default: 'WarehouseTitle' },
     organisationId: {
       type: String,
       required: true,
