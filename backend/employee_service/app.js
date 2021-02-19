@@ -13,7 +13,7 @@ const openApiDocumentation = require('./openApiDocumentation');
 // DB connection
 const MONGODB_URL = process.env.MONGODB_URL;
 const mongoose = require("mongoose");
-mongoose.connect(MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true }).then(() => {
+mongoose.connect(MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify:false, useCreateIndex:true}).then(() => {
 	//don't show the log when it is test
 	if(process.env.NODE_ENV !== "test") {
 		console.log("Connected to %s", MONGODB_URL);
@@ -45,7 +45,7 @@ app.use(cors());
 
 //Route Prefixes
 app.use("/", indexRouter);
-app.use("/usermanagement/api/", apiRouter);
+app.use("/employee_service/api/", apiRouter);
 app.use('/images', express.static(__dirname+'/uploads/'));
 
 // throw 404 if URL not found

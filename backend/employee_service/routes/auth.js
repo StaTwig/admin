@@ -19,4 +19,5 @@ router.post("/upload", upload.single("profile"), AuthController.uploadImage);
 router.get("/createAddress", AuthController.createUserAddress);
 router.post("/assignProductConsumer", AuthController.assignProductConsumer);
 router.post("/addWarehouse", AuthController.addWarehouse);
+router.get("/getApprovals", AuthController.getApprovals)
 module.exports = router;

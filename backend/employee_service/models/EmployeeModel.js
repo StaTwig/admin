@@ -17,7 +17,7 @@ var EmployeeSchema = new mongoose.Schema({
   },
   accountStatus: {
     type: String,
-    default: 'ACTIVE',
+    default: 'NOTAPPROVED',
   },
   confirmOTP: {
     type: String,
