@@ -18,7 +18,10 @@ const UserDetails = (props) => {
           <a
             href="#"
             className="text-reset text-decoration-none"
-            onClick={() => setVisible(!visible)}
+            onClick={() => {
+              setVisible(!visible);
+              props.setShowModals(true);
+            }}
           >
             Activate user
           </a>
@@ -27,7 +30,10 @@ const UserDetails = (props) => {
           <a
             href="#"
             className=" text-reset text-decoration-none"
-            onClick={() => setVisible(!visible)}
+            onClick={() => {
+              setVisible(!visible);
+              props.setShowModals(true);
+            }}
           >
             Unaffiliate User
           </a>
