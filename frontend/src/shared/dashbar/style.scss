@@ -21,12 +21,16 @@
    img{
      float: right;
    }
+   .dashsearch{
+    width:270px;
+   }
     .searchpanel {
       box-shadow: 0px 3px 6px $grey;
       border-radius: 12px;
       background: transparent linear-gradient(180deg, #0093E9 0%, #0053A8 100%) 0% 0% no-repeat padding-box;
       flex-basis: auto;
       padding: 20px 20px 10px 20px;
+
       
       ul {
         padding: 0;

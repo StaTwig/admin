@@ -14,7 +14,10 @@ const EnterWareHouse = props => {
         <button
           type="button"
           className="close"
-          onClick={() => props.setDashVisible(false)}
+          onClick={() => {
+            props.setDashVisible(false)
+            props.setDashBarData({})
+          }}
         >
           <img src={CloseIcon} alt="Close" with="30" height="30" />
         </button>
