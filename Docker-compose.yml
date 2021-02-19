@@ -24,7 +24,7 @@ services:
   affliate:
     build: './backend/affliation_service'
     image: 'affliation_service1.0'
-    container_name: 'address_service'
+    container_name: 'affliate_service'
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
