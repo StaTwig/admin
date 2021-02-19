@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "653cbfe7-f5b8-450c-b5e4-a1bbde7ba0cb",
+		"_postman_id": "20cffec6-3a74-41b4-bc9b-71db1606a764",
 		"name": "ledger4.0",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -99,10 +99,6 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "http://localhost:3010/productmanagement/api/organisation/getOrganisations",
 							"protocol": "http",
@@ -131,10 +127,6 @@
 								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUaHJpbmV0aHJhIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwiaWF0IjoxNjExODg5MTEwLCJleHAiOjE2MTE4OTYzMTB9.M4MJ0ckbCRWB3RghQAA8646inS940mFrpEb93JyYUOA"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "http://localhost:3010/productmanagement/api/organisation/warehouses?id=org-12345",
 							"protocol": "http",
@@ -164,7 +156,7 @@
 			"name": "employeeService",
 			"item": [
 				{
-					"name": "http://localhost:3001/usermanagement/api/auth/register",
+					"name": "Register",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -183,7 +175,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"firstName\": \"Thrinethra\",\n\t\"lastName\": \"Siddani\",\n\t\"emailId\": \"thrinethra@statwig.com\",\n\t\"password\": \"apsd2002\"\n\n}"
+							"raw": "{\"firstName\":\"THRINETHRA\",\"lastName\":\"SIDDANI\",\"emailId\":\"mytu3nu@gmail.com\",\"organisationId\":\"Bharat Biotech\"}"
 						},
 						"url": {
 							"raw": "http://localhost:3001/usermanagement/api/auth/register",
@@ -204,7 +196,7 @@
 					"response": []
 				},
 				{
-					"name": "http://localhost:3001/usermanagement/api/auth/verify-otp",
+					"name": "SendOtp",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -223,10 +215,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"emailId\": \"thrinethra@statwig.com\",\n\t\"otp\": \"5742\"\n}"
+							"raw": "{\"emailId\":\"mytu3nu@gmail.com\"}"
 						},
 						"url": {
-							"raw": "http://localhost:3001/usermanagement/api/auth/verify-otp",
+							"raw": "http://localhost:3001/usermanagement/api/auth/sendOtp",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -236,7 +228,7 @@
 								"usermanagement",
 								"api",
 								"auth",
-								"verify-otp"
+								"sendOtp"
 							]
 						},
 						"description": "verify otp"
@@ -244,7 +236,7 @@
 					"response": []
 				},
 				{
-					"name": "http://localhost:3001/usermanagement/api/auth/login",
+					"name": "VerifyOtp",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -263,10 +255,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"emailId\":\"thrinethra@statwig.com\",\n\t\"password\": \"apsd2002\"\n\t\n}"
+							"raw": "{\"emailId\":\"mytu3nu@gmail.com\",\"otp\":\"11111\"}"
 						},
 						"url": {
-							"raw": "http://localhost:3001/usermanagement/api/auth/login",
+							"raw": "http://localhost:3001/usermanagement/api/auth/verifyOtp",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -276,7 +268,7 @@
 								"usermanagement",
 								"api",
 								"auth",
-								"login"
+								"verifyOtp"
 							]
 						},
 						"description": "login"
@@ -284,7 +276,7 @@
 					"response": []
 				},
 				{
-					"name": "http://localhost:3001/usermanagement/api/auth/userInfo",
+					"name": "UserInfo",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -326,7 +318,7 @@
 					"response": []
 				},
 				{
-					"name": "http://localhost:3001/usermanagement/api/auth/updateProfile",
+					"name": "UpdateProfile",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -455,10 +447,6 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "http://localhost:3007/inventorymanagement/api/inventory/getInventoryDetails",
 							"protocol": "http",
@@ -573,10 +561,6 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "http://localhost:3013/shippingordermanagement/api/shipping/getShippingOrders",
 							"protocol": "http",
@@ -605,10 +589,6 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "http://localhost:3013/shippingordermanagement/api/shipping/getShippingOrderIds",
 							"protocol": "http",
@@ -637,10 +617,6 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "http://localhost:3013/shippingordermanagement/api/shipping/viewShippingOrder?soId=so-1betkkvl0vk9",
 							"protocol": "http",
@@ -718,10 +694,6 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "http://localhost:3002/shipmentmanagement/api/shipment/fetchShipments",
 							"protocol": "http",
