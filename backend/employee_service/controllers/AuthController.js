@@ -55,7 +55,7 @@ exports.register = [
     .isEmail()
     .withMessage('Email must be a valid email address.')
     .custom(value => {
-      return EmployeeModel.findOne({ emailId: value }).then(user => {
+      return EmployeeModel.findOne({ emailId: value.toLowerCase() }).then(user => {
         if (user) {
           logger.log(
             'info',
@@ -81,11 +81,11 @@ exports.register = [
           'Name should only consists of letters',
         );
       }
-      EmployeeModel.collection.dropIndexes(function(){
+      /*EmployeeModel.collection.dropIndexes(function(){
         EmployeeModel.collection.reIndex(function(finished){
                  console.log("finished re indexing")
                })
-             })
+             })*/
        //EmployeeModel.createIndexes();
       // Extract the validation errors from a request.
       const errors = validationResult(req);
@@ -215,7 +215,8 @@ exports.sendOtp = [
           errors.array(),
         );
       } else {
-        const user = await EmployeeModel.findOne({ emailId: req.body.emailId });
+        const emailId = req.body.emailId.toLowerCase();
+        const user = await EmployeeModel.findOne({ emailId });
         if(user) {
           if (user.accountStatus === 'ACTIVE') {
             logger.log(
@@ -223,7 +224,7 @@ exports.sendOtp = [
                 '<<<<< UserService < AuthController < login : user is active',
             );
             let otp = utility.randomNumber(4);
-            await EmployeeModel.update({emailId: req.body.emailId }, { otp });
+            await EmployeeModel.update({emailId }, { otp });
              let html = EmailContent({
             name: user.firstName,
             origin: req.headers.origin,
@@ -324,7 +325,8 @@ exports.verifyOtp = [
           errors.array(),
         );
       } else {
-        var query = { emailId: req.body.emailId };
+        const emailId = req.body.emailId.toLowerCase();
+        var query = { emailId };
         const user = await EmployeeModel.findOne(query);
         if (user && user.otp == req.body.otp) {
           await EmployeeModel.update(query, { otp: null });
