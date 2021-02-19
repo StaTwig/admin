@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const Address = (props) => {
   const [visible, setVisible] = useState(false);
   return (
-    <div className="container-fluid ml-4 mr-3">
+    <div className="container-fluid ml-5 mr-3">
       <div className="rowDash pr-4">
         <div className="dashboard">
           <h1 className="breadcrumb dash">MANAGE ADDRESS</h1>
