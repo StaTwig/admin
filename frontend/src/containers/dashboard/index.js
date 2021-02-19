@@ -5,7 +5,7 @@ import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
 import './style.scss';
 import DashBar from '../../shared/dashbar/index';
-import { getProductDetailsByWarehouseId } from '../../actions/inventoryActions';
+import { getProductDetailsByWarehouseId} from '../../actions/inventoryActions';
 import { turnOn, turnOff } from '../../actions/spinnerActions';
 const DashBoardContainer = props => {
   const [dashVisible, setDashVisible] = useState(false);
@@ -19,6 +19,13 @@ const DashBoardContainer = props => {
     setDashBarData(result);
     setDashVisible(true);
     setContent(true);
+    dispatch(turnOff());
+  }
+
+  const onSearchWareHouse = async (warehouseId) => {
+    dispatch(turnOn());
+    const result = await getProductDetailsByWarehouseId(warehouseId);
+    setDashBarData(result);
     dispatch(turnOff());
   }
   return (
@@ -40,10 +47,12 @@ const DashBoardContainer = props => {
         {dashVisible && (
           <DashBar
             {...props}
+            onSearchWareHouse={onSearchWareHouse}
             setDashVisible={setDashVisible}
             content={content}
             setContent={setContent}
             dashBarData={dashBarData}
+            setDashBarData={setDashBarData}
           />
         )}
       </div>

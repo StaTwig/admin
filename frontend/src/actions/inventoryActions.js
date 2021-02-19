@@ -54,6 +54,46 @@ export const getInventoryDetails = () => {
   }
 };
 
+export const getRegions = async () => {
+  try {
+    const result = await axios.get(config().getRegionsUrl);
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
+
+export const getCountryByRegion = async (id) => {
+  try {
+    const result = await axios.get(config().getCountryByRegionUrl+id);
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
+
+export const getWareHousesByCountry = async (id) => {
+  try {
+    const result = await axios.get(config().getWareHousesByCountryUrl+id);
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
+
+
+export const getWarehouseByOrgId = async (id) => {
+  try {
+    const result = await axios.get(config().getWarehouseByOrgId+id);
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
 export const getInventoriesById = query => {
   try {
     return async dispatch => {
@@ -164,11 +204,12 @@ export const getSerialNumbersByBatchNumber = async id => {
   }
 };
 
-export const getProductDetailsByWarehouseId = async id => {
+
+export const getProductDetailsByWarehouseId = async (id) => {
   try {
     //const url = 'http://54.164.66.73:3007/inventorymanagement/api/inventory/getProductDetailsByWarehouseId?warehouseId='+id;
-    const url = config().getProductDetailsByWarehouseIdUrl + id;
-    const result = await axios.get(url);
+    const result = await axios.get(config().getProductDetailsByWarehouseIdUrl+id);
+    debugger;
     return result.data.data;
   } catch (e) {
     return {};
