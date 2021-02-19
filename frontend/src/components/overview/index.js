@@ -11,7 +11,7 @@ const DashBoard = (props) => {
   const [showModal, setShowModal] = useState(false);
   const closeModal = () => setShowModal(false);
   return (
-    <div className="container-fluid pl-4">
+    <div className="container-fluid pl-5">
       {showModal && (
         <Modal
           close={closeModal}
