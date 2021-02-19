@@ -20,7 +20,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.address.entrypoints=web"
-      - "traefik.http.routers.address.rule=PathPrefix(`/api/address_service`)"
+      - "traefik.http.routers.address.rule=Host(`admin.vaccineledger.com`) && PathPrefix(`/api/address_service`)"
   affliate:
     build: './backend/affliation_service'
     image: 'affliation_service1.0'
@@ -29,7 +29,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.affliate.entrypoints=web"
-      - "traefik.http.routers.affliate.rule=PathPrefix(`/api/affliation_service`)"  
+      - "traefik.http.routers.affliate.rule=Host(`admin.vaccineledger.com`) && PathPrefix(`/api/affliation_service`)"  
   rbac:
     build: './backend/rbac_service'
     image: 'rbac_service1.0'
@@ -38,7 +38,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.rbac.entrypoints=web"
-      - "traefik.http.routers.rbac.rule=PathPrefix(`/api/rbac_service`)"               
+      - "traefik.http.routers.rbac.rule=Host(`admin.vaccineledger.com`) && PathPrefix(`/api/rbac_service`)"               
   employee:
     build: './backend/employee_service'
     image: 'employee_service1.0'
@@ -46,7 +46,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.employee.entrypoints=web"
-      - "traefik.http.routers.employee.rule=PathPrefix(`/api/employee_service`)"
+      - "traefik.http.routers.employee.rule=Host(`admin.vaccineledger.com`) && PathPrefix(`/api/employee_service`)"
 networks:
   default:
     external:
