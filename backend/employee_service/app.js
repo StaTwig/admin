@@ -7,8 +7,6 @@ const indexRouter = require("./routes/index");
 const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
 const cors = require("cors");
-const swaggerUi = require('swagger-ui-express');
-const openApiDocumentation = require('./openApiDocumentation');
 
 // DB connection
 const MONGODB_URL = process.env.MONGODB_URL;
@@ -37,15 +35,13 @@ if(process.env.NODE_ENV !== "test") {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocumentation));
 
 //To allow cross-origin requests
 app.use(cors());
 
 //Route Prefixes
 app.use("/", indexRouter);
-app.use("/employee_service/api/", apiRouter);
+app.use("/employee_service/api", apiRouter);
 app.use('/images', express.static(__dirname+'/uploads/'));
 
 // throw 404 if URL not found

@@ -4,7 +4,6 @@ const ConsumerModel = require("../models/ConsumerModel");
 const InventoryModel = require("../models/InventoryModel");
 const OrganisationModel = require("../models/OrganisationModel");
 const { body, validationResult } = require("express-validator");
-// const { sanitizeBody } = require("express-validator");
 const uniqid = require("uniqid");
 
 //helper file to prepare responses.
@@ -1121,45 +1120,3 @@ exports.addWarehouse = [
     }
   },
 ];
-
-exports.getApprovals = [
-  auth,
-  async (req,res) =>{
-    try {
-      // const { authorization } = req.headers;
-      checkToken(req, res, async result => {
-        if (result.success) {
-          const { organisationId } = req.user;
-          await EmployeeModel.find({
-            $and: [
-              { 'accountStatus': "NOTAPPROVED"},
-              { 'organisationId': organisationId },
-            ],
-          })
-            .then(employees => {
-              return apiResponse.successResponseWithData(
-                res,
-                'Users Not verified',
-                employees,
-              );
-            })
-            .catch(err => {
-              return apiResponse.ErrorResponse(res, err);
-            });
-        } else {
-          logger.log(
-            'warn',
-            '<<<<< EmployeeService < AuthController < getApprovals : refuted token',
-          );
-          res.status(403).json('Auth failed');
-        }
-      });
-    } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< EmployeeService < AuthController < getApprovals : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
-    }
-  }
-]

@@ -7,4 +7,8 @@ exports.constants = {
     from: `${process.env.EMAIL_SMTP_USERNAME}`,
     subject: 'Account Verification - One Time Password for your Login on VaccineLedger'
   },
+  appovalEmail: {
+    from: `${process.env.EMAIL_SMTP_USERNAME}`,
+    subject: 'Account Approved - Login into VaccineLedger'
+  },
 };
