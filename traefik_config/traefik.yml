@@ -5,12 +5,11 @@ log:
 api:
   insecure: true
   dashboard: true
+  debug: true
 
 entryPoints:
   web:
     address: ":80"
-  websecure:
-    address: ":443"
   webapi:
     address: ":9000"  
 
