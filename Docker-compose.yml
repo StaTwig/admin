@@ -25,7 +25,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.frontend.entrypoints=web"
-      - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.frontend.rule=Path(`/`) || PathPrefix(`/dist`)"
       # - "traefik.http.routers.whoami.tls.certresolver=lets-encr"
   address:
     build: './backend/address_service'
