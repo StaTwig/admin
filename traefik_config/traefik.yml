@@ -10,9 +10,7 @@ api:
 entryPoints:
   web:
     address: ":80"
-  webapi:
-    address: ":9000"  
-
+    
 providers:
   docker:
     endpoint: "unix:///var/run/docker.sock"
