@@ -13,11 +13,11 @@ services:
       - "./traefik_config/traefik.yml:/traefik.yml:ro"
       - ./traefik_config/acme.json:/acme.json
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    labels: 
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-      - "traefik.http.routers.redirect-https.rule=hostregexp(`{host:.+}`)"
-      - "traefik.http.routers.redirect-https.entrypoints=web"
-      - "traefik.http.routers.redirect-https.middlewares=redirect-to-https"    
+    # labels: 
+    #   - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+    #   - "traefik.http.routers.redirect-https.rule=hostregexp(`{host:.+}`)"
+    #   - "traefik.http.routers.redirect-https.entrypoints=web"
+    #   - "traefik.http.routers.redirect-https.middlewares=redirect-to-https"    
   frontend:
     build: './frontend'
     image: 'frontend1.0'
@@ -25,7 +25,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
-      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.entrypoints=web"
       - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
       - "traefik.http.routers.whoami.tls.certresolver=lets-encr"
   address:
