@@ -55,22 +55,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.employee.entrypoints=web"
-      - "traefik.http.routers.employee.rule=Host(`admin.vaccineledger.com`) && PathPrefix(`/api/employee_service`)"
-    environment: 
-      MONGODB_URL=mongodb://StaTwig:StaTwig2020@db.vaccineledger.com:27017/development
-      LOGZ_LEVEL='info'
-      LOGZ_NAME='winston_logzio'
-      LOGZ_TOKEN='KqhemFAnVcNnIYErrIVtTPTupVJzlvvV'
-      LOGZ_HOST='listener.logz.io'
-      JWT_SECRET=abcdefghijklmnopqrstuvwxyz1234567890
-      JWT_TIMEOUT_DURATION="2 hours"
-      EMAIL_SMTP_HOST=smtp.gmail.com
-      EMAIL_SMTP_PORT=587
-      EMAIL_SMTP_USERNAME=info@babyboo.in
-      EMAIL_SMTP_PASSWORD=NetStar2019
-      EMAIL_SMTP_SECURE=false
-      URL='http://15.206.159.129:3008/blockchainmanagement'
-  
+      - "traefik.http.routers.employee.rule=Host(`admin.vaccineledger.com`) && PathPrefix(`/api/employee_service`)"  
 networks:
   default:
     external:
