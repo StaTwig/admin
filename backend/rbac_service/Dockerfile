@@ -1,11 +1,11 @@
 FROM node:current-alpine3.10
 
-COPY . /src
-
 WORKDIR /src
+
+COPY . /src
 
 RUN npm install
 
-EXPOSE 3000
+EXPOSE 3004
 
 CMD npm start

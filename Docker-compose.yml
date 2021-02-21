@@ -60,8 +60,8 @@ services:
     container_name: 'employee_service'
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.employee.entrypoints=webapi"
       - "traefik.docker.network=proxy"
+      - "traefik.http.routers.employee.entrypoints=webapi"
       - "traefik.http.routers.employee.rule=PathPrefix(`/api/employee_service`)"  
 networks:
   default:
