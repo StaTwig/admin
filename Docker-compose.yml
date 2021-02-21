@@ -20,7 +20,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.frontend.entrypoints=web"
-      - "traefik.http.routers.frontend.rule=PathPrefix(`/`)"
+      - "traefik.http.routers.frontend.rule=Path(`/`)"
   address:
     build: './backend/address_service'
     image: 'address_service1.0'
@@ -29,7 +29,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.address.entrypoints=web"
-      - "traefik.http.routers.address.rule=Host(`admin.vaccineledger.com`) && PathPrefix(`/api/address_service`)"
+      - "traefik.http.routers.address.rule=PathPrefix(`/api/address_service`)"
   affliate:
     build: './backend/affliation_service'
     image: 'affliation_service1.0'

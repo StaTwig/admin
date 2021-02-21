@@ -9,7 +9,7 @@ COPY . /app/
 RUN yarn
 # RUN npm install
 # RUN npm install react-scripts@3.0.1 -g --silent 
-# RUN npm run build 
+RUN npm run build 
 # RUN npm prune --production
 #prepare nginx
 FROM nginx:1.19-alpine
