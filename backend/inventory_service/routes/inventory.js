@@ -28,6 +28,10 @@ router.get("/getInventoryDetailsByBatchNumber", InventoryController.getInventory
 router.get("/getBatchDetailsByBatchNumber",InventoryController.getBatchDetailsByBatchNumber);
 router.get("/getProductListCounts",InventoryController.getProductListCounts);
 router.get("/getProductDetailsByWarehouseId",InventoryController.getProductDetailsByWarehouseId);
+router.get("/getEmployeeDetailsByWarehouseId",InventoryController.getEmployeeDetailsByWarehouseId);
+router.get("/getWarehouseDetailsByCountry",InventoryController.getWarehouseDetailsByCountry);
+router.get("/getCountryDetailsByRegion",InventoryController.getCountryDetailsByRegion);
+router.get("/getRegions",InventoryController.getRegions);
 router.get("/trackProduct", InventoryController.trackProduct);
 
 router.post("/addProductsToInventory", InventoryController.addProductsToInventory);
