@@ -8,6 +8,7 @@ const utility = require('../helpers/utility');
 const auth = require('../middlewares/jwt');
 const InventoryModel = require('../models/InventoryModel');
 const WarehouseModel = require('../models/WarehouseModel');
+const RegionModel = require('../models/RegionModel');
 const EmployeeModel = require('../models/EmployeeModel');
 const AtomModel = require('../models/AtomModel');
 const ProductModel = require('../models/ProductModel');
@@ -1445,3 +1446,99 @@ exports.getProductDetailsByWarehouseId = [
     }
   },
 ];
+
+
+exports.getEmployeeDetailsByWarehouseId = [
+  auth,
+  async (req, res) => {
+    try {
+      const { warehouseId } = req.query;
+      const warehouseDetails = await WarehouseModel.find({"id":warehouseId})
+      const employees = warehouseDetails[0].supervisors
+      return apiResponse.successResponseWithData(
+        res,"Fetch success",
+        employees
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getCountryDetailsByRegion = [
+  auth,
+  async (req, res) => {
+    try {
+      const { region } = req.query;
+      const regionDetails = await RegionModel.find({"name":region})
+	console.log(regionDetails[0].country)
+     // var countryArray = [];
+      /*for (j=0;j<regionDetails.length;j++)
+                   {
+                        var countryName = countryDetails[j].country;
+                        countryArray.push(countryName)
+                   } */
+
+      return apiResponse.successResponseWithData(
+        res,"Fetch success",
+	      {"countries": regionDetails[0].country}
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getRegions = [
+  auth,
+  async (req, res) => {
+    try {
+      const regions = await RegionModel.find({});
+      return apiResponse.successResponseWithData(
+        res,
+        'Regions',
+        regions,
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getWarehouseDetailsByCountry = [
+  auth,
+  async (req, res) => {
+    try {
+      const { country } = req.query;
+      const warehouseDetails = await WarehouseModel.find({"country.name":country})
+      
+      var warehouseArray = [];
+      for (j=0;j<warehouseDetails.length;j++)
+                   {
+                        var warehouseId = warehouseDetails[j].id;
+                        warehouseArray.push(warehouseId)
+                   }
+
+      return apiResponse.successResponseWithData(
+        res,"Fetch success",
+        warehouseArray
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+
