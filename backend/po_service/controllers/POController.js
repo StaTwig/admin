@@ -95,7 +95,7 @@ exports.purchaseOrderStatistics = [
                   for (j=0;j<allPos[i].products.length;j++)
                    {
                         var productId = allPos[i].products[j].productId;
-                        const product = await wrapper.findOneRecord(ProductModel,{"id": "prod-9bhkk6yiutx"})
+                        const product = await wrapper.findOneRecord(ProductModel,{"id": productId})
                         var product1 = {productID : allPos[i].products[j].productId,quantity: allPos[i].products[j].quantity,
                         productName:product.name,manufacturer:product.manufacturer }
                         productArray.push(product1)
