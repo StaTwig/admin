@@ -17,7 +17,7 @@ const [organisations, setOrganisations] = useState([]);
   useEffect(() => {
     async function fetchData() {
       const orgs = await getOrganisations();
-      const orgIds = orgs.map(org => org.organisationId);
+      const orgIds = orgs.map(org => org.id);
       setOrganisations(orgIds);
     }
     fetchData();

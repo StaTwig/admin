@@ -60,8 +60,8 @@ const PurchaseForm = props => {
       const result = await getProducts();
       setProducts(result);
       const orgs = await getOrganisations();
-      setOrganisations(orgs.data);
-      const ids = orgs.data.map(org => org.id);
+      setOrganisations(orgs);
+      const ids = orgs.map(org => org.id);
       setOrgIds(ids);
     }
     fetchData();

@@ -372,32 +372,6 @@ exports.createPurchaseOrder = [
   auth,
   async (req, res) => {
     try {
-      /* req.body
-       {
-         "externalId": "po1234", //User enters
-         "creationDate": "2021-01-28T18:30:00.000Z", //Date should be in ISO Format from UI
-         "lastUpdatedOn": "2021-01-28T18:30:00.000Z", //Date should be in ISO Format from UI
-         "supplier": {
-           "supplierOrganisation": "organx12345", // use id from Organisation object
-           "supplierIncharge": "emp-1f8ukke4uhhy" // use primaryContactId
-         },
-         "customer": {
-           "customerOrganisation": "org-11111", //use id from customer organisation dropdown
-           "customerIncharge": "emp-18gpp20egkkf54n59", //use primaryContactId
-           "shippingAddress": {
-            "shippingAddressId": "war-1234", //use id from customer location id dorpdown
-            "shipmentReceiverId": "emp-18gpp1kcckke7vrwh" // use supervisors[0] from cuostmer location id dropdown
-
-           }
-         },
-         "products": [
-            {
-              "productId": "prod-9bhkk6yiutx", // use id from products
-              "productQuantity": 1000,
-            }
-          ],
-       }
-       */
       const { externalId, creationDate, supplier, customer, products, lastUpdatedOn } = req.body;
       const { createdBy, lastUpdatedBy } = req.user.id;
       const purchaseOrder = new RecordModel({
@@ -427,215 +401,74 @@ exports.addPOsFromExcel = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
-        if (result.success) {
-          const permission_request = {
-            result: result,
-            permissionRequired: 'createPO',
-          };
-          checkPermissions(permission_request, async permissionResult => {
-            if (permissionResult.success) {
-              try {
-                const dir = `uploads`;
-                if (!fs.existsSync(dir)) {
-                  fs.mkdirSync(dir);
-                }
-                await moveFile(
+        const permission_request = {
+          role: req.user.role,
+          permissionRequired: 'createPO',
+        };
+        checkPermissions(permission_request, async permissionResult => {
+          if (permissionResult.success) {
+            try {
+              const dir = `uploads`;
+              if (!fs.existsSync(dir)) {
+                fs.mkdirSync(dir);
+              }
+              await moveFile(
                   req.file.path,
                   `${dir}/${req.file.originalname}`,
-                );
-                const workbook = XLSX.readFile(
+              );
+              const workbook = XLSX.readFile(
                   `${dir}/${req.file.originalname}`,
-                );
-                const sheet_name_list = workbook.SheetNames;
-                const data = XLSX.utils.sheet_to_json(
-                  workbook.Sheets[sheet_name_list[1]],
+              );
+              const sheet_name_list = workbook.SheetNames;
+              const data = XLSX.utils.sheet_to_json(
+                  workbook.Sheets[sheet_name_list[0]],
                   { dateNF: 'dd/mm/yyyy;@', cellDates: true, raw: false },
-                );
+              );
+              const { createdBy, lastUpdatedBy } = req.user.id;
+              let poDataArray = [];
+              poDataArray = data.map(po => {
+                return {
+                  id: uniqid('po-'),
+                  externalId: po['ExternalId'],
+                  "creationDate": new Date().toISOString(),
+                  "lastUpdatedOn": new Date().toISOString(),
+                  "supplier": {
+                    "supplierOrganisation": po['Supplier Organisation'],
+                    "supplierIncharge": po['Supplier Incharge']
+                  },
+                  "customer": {
+                    "customerOrganisation": po['Customer Organisation'],
+                    "customerIncharge": po['Customer Incharge'],
+                    "shippingAddress": {
+                      "shippingAddressId": po['Shipping Address Id'],
+                      "shipmentReceiverId": po['Shipment Receiver Id']
 
-                let poDataArray = [];
-                await utility.asyncForEach(data, async item => {
-                  const receiverDetails = await UserModel.findOne({
-                    name: item['Country Name'],
-                  });
-                  const senderDetails = await UserModel.findOne({
-                    name: item['Vendor Name'],
-                  });
-                  let productName = item['Material Description'].split(',')[0];
-                  productName = productName.includes('BCG')
-                    ? 'BCG'
-                    : productName;
-                  const productManufacturer = `${productName}-${
-                    item['Vendor Name']
-                    }`;
-                  if (receiverDetails && senderDetails) {
-                    const poData = {
-                      client: item['Vendor Name'],
-                      orderID: `PO${item['UNICEf PO Number']}`,
-                      clientId: item['Vendor'],
-                      date: item['Document Date'],
-                      destination: item['Country Name'],
-                      products: [
-                        { [productManufacturer]: item['Order Quantity'] },
-                      ],
-                      receiver: {
-                        address: receiverDetails.address,
-                        name: receiverDetails.name,
-                        email: receiverDetails.email,
-                      },
-                      sendpoto: {
-                        address: senderDetails.address,
-                        name: senderDetails.name,
-                        email: senderDetails.email,
-                      },
-                      ipCode: item['IP Code'],
-                      ipName: item['IP Name'],
-                      incoterms: item['Incoterms'],
-                      incoterms2: item['Incoterms (Part 2)'],
-                      material: item['Material'],
-                      matrialDescription: item['Material Description'],
-                      quantity: item['Order Quantity'],
-                      unit: item['Order Unit'],
-                      poItem: item['PO Item#'],
-                      plant: item['Plant'],
-                      vendor: item['Vendor'],
-                      vendorName: item['Vendor Name'],
-                      reference: item['Your Reference'],
-                    };
-                    poDataArray.push(poData);
-                  }
-                });
-                logger.log(
-                  'info',
-                  '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : published to blockchain',
-                );
-                console.log(poDataArray);
-                let duplciatePOFound = false;
-                utility.asyncForEach(poDataArray, async (item, index) => {
-                  if(duplciatePOFound) return;
-                  const { address } = req.user;
-                  const {
-                    client,
-                    clientId,
-                    date,
-                    destination,
-                    incoterms,
-                    incoterms2,
-                    ipCode,
-                    ipName,
-                    material,
-                    materialDescription,
-                    orderID,
-                    plant,
-                    poItem,
-                    products,
-                    quantity,
-                    reference,
-                    unit,
-                    vendor,
-                    vendorName,
-                  } = item;
-                  const userData = {
-                    stream: po_stream_name,
-                    key: item.orderID,
-                    address,
-                    data: item,
-
-                  };
-                  duplicatePO = await POModel.findOne({ orderID });
-
-                  if(duplicatePO) {
-                    const newNotification = new NotificationModel({
-                      owner: req.user.address,
-                      message: `Your POs from excel is failed to add due to duplicate PO ID ${orderID}`,
-                    });
-                    //await newNotification.save();
-                     wrapper.insertOneRecord(NotificationModel, newNotification, function(error,response){
-		     })
-		     return;
-                  }
-                  const response = await axios.post(
-                    `${blockchain_service_url}/publish`,
-                    userData,
-                  );
-                  /*const newPO = {
-                    orderID,
-                    sender: item.sendpoto.address,
-                    receiver: item.receiver.address,
-                    client,
-                    clientId,
-                    date,
-                    destination,
-                    incoterms,
-                    incoterms2,
-                    ipCode,
-                    ipName,
-                    material,
-                    materialDescription,
-                    plant,
-                    poItem,
-                    products,
-                    quantity,
-                    reference,
-                    unit,
-                    vendor,
-                    vendorName,
-                    txnId: response.data.transactionId,
-                    status: 'Accepted'
-                  };
-*/
-		 const newPO = {
-                        id : orderID,
-                        createdBy: req.user.address,
-                        poStatus: "Accepted",
-			potransactionIds: response.data.transactionId,
-			"supplier":
-			    {
-				    "supplierOrganization": "ORG1",
-				    "supplierIncharge": item.sendpoto.address,
-			    },
-			 products,
-			 creationDate : date,
-			"customer": {
-				    "customer_organization": "ORG2",
-				    "customer_incharge": item.receiver.address,
-				    "shipping_address": {
-				    "shipping_address_id": destination,
-				    "shipment_receiver_id": clientId,
-			    }
-			  },
                     }
-		 //await newPO.save();
-	          wrapper.insertOneRecord(POModel, newPO, function(error,response){
-                      })
- 
-                  if(index === poDataArray.length-1) {
-                    const newNotification = {
-                      owner: req.user.address,
-                      message: `Your POs from excel is added successfully`,
-                    };
-                    //await newNotification.save();
-		     wrapper.insertOneRecord(NotificationModel, newNotification, function(error,response){
-                        })
-
-                  }
-                });
-                return apiResponse.successResponseWithData(
+                  },
+                  "products": [
+                    {
+                      "productId": po['Product'],
+                      "productQuantity": 100
+                    }
+                  ],
+                  createdBy,
+                  lastUpdatedBy
+                }
+              });
+              await RecordModel.insertMany(poDataArray);
+              return apiResponse.successResponseWithData(
                   res,
                   'Upload Result',
-                );
-              } catch (e) {
-                return apiResponse.ErrorResponse(res, 'Error from Blockchain');
+                  poDataArray
+              );
+            } catch (e) {
+              return apiResponse.ErrorResponse(res, 'Error from Blockchain');
 
-              }
-            } else {
-              res.json('Sorry! User does not have enough Permissions');
             }
-          });
-        } else {
-          return apiResponse.ErrorResponse(res, 'User not authenticated');
-        }
-      });
+          } else {
+            res.json('Sorry! User does not have enough Permissions');
+          }
+        });
     } catch (e) {
       return apiResponse.ErrorResponse(res, err);
     }
