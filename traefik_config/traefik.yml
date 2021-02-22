@@ -10,17 +10,20 @@ api:
 entryPoints:
   web:
     address: ":80"
+  websecure:
+    address: ":443"  
     
 providers:
   docker:
     endpoint: "unix:///var/run/docker.sock"
     exposedByDefault: false
-# certificatesResolvers:
-#   lets-encr:
-#     acme:
-#       #caServer: https://acme-staging-v02.api.letsencrypt.org/directory
-#       storage: acme.json
-#       email: ashwini@statwig.com
-#       httpChallenge:
-#         entryPoint: web
+
+certificatesResolvers:
+  lets-encr:
+    acme:
+      #caServer: https://acme-staging-v02.api.letsencrypt.org/directory
+      storage: acme.json
+      email: ashwini@statwig.com
+      httpChallenge:
+        entryPoint: web
          
