@@ -1,7 +1,6 @@
 const express = require("express");
-const RbacRouter = require("./rbacTesting")
+const RbacController = require("../controllers/RbacController");
 const app = express();
-
-app.use("/rbac", RbacRouter);
-
+app.get("/getPermissions", RbacController.getPermissions);
+app.post("/addPermissions", RbacController.addPermissions);
 module.exports = app;

@@ -3,7 +3,6 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 require("dotenv").config();
-const indexRouter = require("./routes/index");
 const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
 const cors = require("cors");
@@ -40,8 +39,7 @@ app.use(cookieParser());
 app.use(cors());
 
 //Route Prefixes
-app.use("/", indexRouter);
-app.use("/employee_service/api", apiRouter);
+app.use("/api/employee_service", apiRouter);
 app.use('/images', express.static(__dirname+'/uploads/'));
 
 // throw 404 if URL not found
