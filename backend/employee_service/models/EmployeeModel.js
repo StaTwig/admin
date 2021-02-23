@@ -6,10 +6,8 @@ var EmployeeSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  password:String,
   walletAddress: {
     type: String,
-    required: false,
     default: 'wallet12345address',
   },
   accountStatus: {
