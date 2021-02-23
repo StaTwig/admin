@@ -295,32 +295,32 @@ exports.verifyOtp = [
         const user = await EmployeeModel.findOne(query);
         if (user && user.otp == req.body.otp) {
           await EmployeeModel.update(query, { otp: null });
-          const org = OrganisationModel.findOne(
-            { id: user.organisationId},
-            "name"
-          )
-          let userData = {
-            id: user.id,
-            firstName: user.firstName,
-            emailId: user.emailId,
-            role: user.role,
-            warehouseId: user.warehouseId,
-            organisationId: user.organisationId,
-            organisation:org.name
-          };
-          //Prepare JWT token for authentication
-          const jwtPayload = userData;
-          const jwtData = {
-            expiresIn: process.env.JWT_TIMEOUT_DURATION,
-          };
-          const secret = process.env.JWT_SECRET;
-          //Generated JWT token with Payload and secret.
-          userData.token = jwt.sign(jwtPayload, secret, jwtData);
-          // logger.log(
-          //     'info',
-          //     '<<<<< UserService < AuthController < login : user login success',
-          // );
-          return apiResponse.successResponseWithData(res, 'Login Success', userData);
+          OrganisationModel.findOne({ id: user.organisationId}).select("name").then(OrgName=>{
+            let userData = {
+              id: user.id,
+              firstName: user.firstName,
+              emailId: user.emailId,
+              role: user.role,
+              warehouseId: user.warehouseId,
+              organisationId: user.organisationId,
+              organisation:OrgName
+            };
+            //Prepare JWT token for authentication
+            const jwtPayload = userData;
+            const jwtData = {
+              expiresIn: process.env.JWT_TIMEOUT_DURATION,
+            };
+            const secret = process.env.JWT_SECRET;
+            //Generated JWT token with Payload and secret.
+            userData.token = jwt.sign(jwtPayload, secret, jwtData);
+            // logger.log(
+            //     'info',
+            //     '<<<<< UserService < AuthController < login : user login success',
+            // );
+            return apiResponse.successResponseWithData(res, 'Login Success', userData);
+          }).catch(err=>{
+            return apiResponse.ErrorResponse(res, err);
+          })
         } else {
           return apiResponse.ErrorResponse(res, `Otp doesn't match`);
         }

@@ -79,10 +79,10 @@ exports.getApprovals = [
                   const userData = {
                     walletAddress,
                   };
-                  logger.log(
-                    "info",
-                    "<<<<< EmployeeService < Approval Controller < accepet Approval : granting permission to user"
-                  );
+                  // logger.log(
+                  //   "info",
+                  //   "<<<<< EmployeeService < Approval Controller < accepet Approval : granting permission to user"
+                  // );
                   axios.post(
                     `${blockchain_service_url}/grantPermission`,
                     userData
@@ -93,27 +93,27 @@ exports.getApprovals = [
                     "<<<<< EmployeeService < Approval Controller < accept Approval : granted permission to user"
                   );
                   EmployeeModel.findOneAndUpdate({'id':id},{$set: { accountStatus:"ACTIVE" , isConfirmed: true , walletAddress}},{ "new": true}).exec().then(emp=>{
-                    // let emailBody = RequestApproved({
-                    //   name: emp.firstName,
-                    //   organisation,
-                    // });
+                    let emailBody = RequestApproved({
+                      name: emp.firstName,
+                      organisation,
+                    });
                     // Send confirmation email
-                    // try {
-                    //   mailer
-                    //   .send(
-                    //     constants.appovalEmail.from,
-                    //     emp.emailId,
-                    //     constants.appovalEmail.subject,
-                    //     emailBody
-                    //   )
-                    // }
-                    // catch(mailerr){
-                    //   console.log(mailerr)
-                    // }
+                    try {
+                      mailer
+                      .send(
+                        constants.appovalEmail.from,
+                        emp.emailId,
+                        constants.appovalEmail.subject,
+                        emailBody
+                      )
+                    }
+                    catch(mailerr){
+                      console.log(mailerr)
+                    }
                     return apiResponse.successResponseWithData(
                       res,
                       `User Verified`,
-                      emp,
+                      emp
                     );
                   })
                   })   
@@ -148,7 +148,7 @@ exports.getApprovals = [
       try {
         checkToken(req, res, async result => {
           if (result.success) {
-            const { organisationId } = req.user;
+            const { organisationId, organisation} = req.user;
             const { id } = req.query;
             await EmployeeModel.findOne({
               $and: [
@@ -162,25 +162,20 @@ exports.getApprovals = [
                 {
                 EmployeeModel.findOneAndUpdate({id},{$set:{accountStatus:"REJECTED"}},{"new": true}).exec().then(emp=>{
                   console.log("REJECTED")
-                  // let emailBody = RejectedApproval({
-                  //   name: emp.firstName,
-                  //   organisation,
-                  // })
-                  // try{mailer
-                  //   .send(
-                  //     constants.appovalEmail.from,
-                  //     emp.emailId,
-                  //     constants.appovalEmail.subject,
-                  //     emailBody
-                  //   )}
-                  //   catch(err){
-                  //     console.log(err)
-                  //   }
-                return apiResponse.successResponseWithData(
-                  res,
-                  'User Rejected',
-                  emp,
-                );
+                  let emailBody = RejectedApproval({
+                    name: emp.firstName,
+                    organisation,
+                  })
+                  try{
+                    mailer.send(
+                      constants.appovalEmail.from,
+                      emp.emailId,
+                      constants.appovalEmail.subject,
+                      emailBody)
+                    console.log("MAIL SENDING")  
+                  }
+                  catch(err){console.log(err)}
+                return apiResponse.successResponseWithData(res,'User Rejected',emp);
               }).catch(err => {
                 return apiResponse.ErrorResponse(res, err);
               });

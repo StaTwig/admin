@@ -19,7 +19,7 @@ const RejectedApproval = ({ name,organisation }) => {
                   <p>Contact the Admin of the Organisation to know about your request Rejection</p>
                   <span style="margin-bottom:15px"></span>
                   <span style="margin-bottom:15px"></span>
-                  Continue to Login : <a href="http://test.vaccineledger.com/login"</a>
+                  <a href="http://test.vaccineledger.com/login">Continue</a>
                   <span style="margin-bottom:15px"></span>
                   <h2>What is VaccineLedger?</h2>
                   <p>VaccineLedger is a Blockchain based platform, to track and trace vaccine's journey across the suplly chain.</p>
