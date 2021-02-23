@@ -39,19 +39,19 @@ export const getInventories = (skip = 0, limit = 5) => {
 };
 
 export const getInventoryDetails = () => {
-  try {
     return async dispatch => {
       dispatch(turnOn());
-      const result = await axios.get(`${config().getInventoryDetailsUrl}`);
-      dispatch(setInventoryDetails(result.data));
-      dispatch(turnOff());
+      try {
+        const result = await axios.get(`${config().getInventoryDetailsUrl}`);
+        debugger;
+        dispatch(setInventoryDetails(result.data));
+        dispatch(turnOff());
+      }catch(e) {
+        dispatch(turnOff());
+        dispatch(resetInventoryDetails());
+      }
+
     };
-  } catch (e) {
-    return dispatch => {
-      dispatch(turnOff());
-      dispatch(resetInventoryDetails());
-    };
-  }
 };
 
 export const getRegions = async () => {
