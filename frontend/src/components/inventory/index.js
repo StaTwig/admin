@@ -396,7 +396,7 @@ const Inventory = props => {
                 </Link>
               </div>
               <div className="row overflow">
-                {productsList.map((product, index) => (
+                {productsList?.map((product, index) => (
                   <div className="col-sm-6" key={index}>
                     <div className="d-flex card flex-column align-items-center">
                     <div className="round-sign" style={{backgroundColor: colors[index]}}>{product.productName}</div>

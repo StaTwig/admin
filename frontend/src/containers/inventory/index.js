@@ -24,7 +24,7 @@ const InventoryContainer = props => {
     });
   useEffect(() => {
     dispatch(resetInventories());
-    dispatch(getInventories(0, 5));
+   // dispatch(getInventories(0, 5));
     dispatch(getInventoryDetails());
   }, []);
 
