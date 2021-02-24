@@ -52,5 +52,7 @@ var EmployeeSchema = new mongoose.Schema({
     required: false,
     default: 'gachibowli, hyderabad, india, earth',
   },
-});
+},
+{ timestamps: true },
+);
 module.exports = mongoose.model('Employee', EmployeeSchema);
