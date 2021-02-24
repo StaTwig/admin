@@ -5,11 +5,8 @@ const XLSX = require('xlsx');
 const axios = require('axios');
 const uniqid = require('uniqid');
 
-const UserModel = require('../models/UserModel');
 const POModel = require('../models/POModel');
 const ShipmentModel = require('../models/ShipmentModel');
-const InventoryModel = require('../models/InventoryModel');
-const NotificationModel = require('../models/NotificationModel');
 const RecordModel = require('../models/RecordModel');
 const OrganisationModel = require('../models/OrganisationModel');
 const ProductModel = require('../models/ProductModel');
