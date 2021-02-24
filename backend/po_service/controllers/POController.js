@@ -5,11 +5,8 @@ const XLSX = require('xlsx');
 const axios = require('axios');
 const uniqid = require('uniqid');
 
-const UserModel = require('../models/UserModel');
 const POModel = require('../models/POModel');
 const ShipmentModel = require('../models/ShipmentModel');
-const InventoryModel = require('../models/InventoryModel');
-const NotificationModel = require('../models/NotificationModel');
 const RecordModel = require('../models/RecordModel');
 const OrganisationModel = require('../models/OrganisationModel');
 const ProductModel = require('../models/ProductModel');
@@ -20,7 +17,7 @@ const utility = require('../helpers/utility');
 const auth = require('../middlewares/jwt');
 const checkToken = require('../middlewares/middleware').checkToken;
 const checkPermissions = require('../middlewares/rbac_middleware')
-  .checkPermissions;
+    .checkPermissions;
 const dotenv = require('dotenv').config();
 const wrapper = require('../models/DBWrapper')
 
@@ -41,18 +38,18 @@ exports.purchaseOrderStatistics = [
       checkToken(req, res, async result => {
         if (result.success) {
           logger.log(
-            'info',
-            '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : token verified successfully, querying data by publisher',
+              'info',
+              '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : token verified successfully, querying data by publisher',
           );
           const permission_request = {
             role: req.user.role,
             permissionRequired: 'viewPO',
           };
-           checkPermissions(permission_request, async permissionResult => {
+          checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
               const { address, role } = req.user;
               const { skip, limit } = req.query;
-               const poTableArray = [];
+              const poTableArray = [];
 
               var supplierPOs = await wrapper.findRecordsAndSort(RecordModel,{"supplier.supplierIncharge":address},skip,limit);
               var customerPos = await wrapper.findRecordsAndSort(RecordModel,{"customer.customerIncharge":address},skip,limit);
@@ -79,46 +76,46 @@ exports.purchaseOrderStatistics = [
               });
 
 
-               allPos = poItemsSupplier.concat(poItemsCustomer,poItemsCreator)
+              allPos = poItemsSupplier.concat(poItemsCustomer,poItemsCreator)
 
-                if(role === 'powerUser') {
-                  allPos = await wrapper.findAllRecords(RecordModel,skip,limit);
-                }
+              if(role === 'powerUser') {
+                allPos = await wrapper.findAllRecords(RecordModel,skip,limit);
+              }
 
-                 for (i=0; i< allPos.length;i++)
+              for (i=0; i< allPos.length;i++)
+              {
+                const productArray = [];
+                const supplier = await wrapper.findOneRecord(OrganisationModel,{"id":allPos[i].supplier.supplierOrganisation})
+                const customer = await wrapper.findOneRecord(OrganisationModel,{"id":allPos[i].customer.customerOrganisation})
+                const product = await wrapper.findOneRecord(ProductModel,{"id":allPos[i].products[0].productId})
+                const deliveryLocation =  await wrapper.findOneRecord(WarehouseModel,{"id":allPos[i].customer.shippingAddress.shippingAddressId})
+                for (j=0;j<allPos[i].products.length;j++)
                 {
-                  const productArray = [];
-                  const supplier = await wrapper.findOneRecord(OrganisationModel,{"id":allPos[i].supplier.supplierOrganisation})
-                  const customer = await wrapper.findOneRecord(OrganisationModel,{"id":allPos[i].customer.customerOrganisation})
-                  const product = await wrapper.findOneRecord(ProductModel,{"id":allPos[i].products[0].productId})
-                  const deliveryLocation =  await wrapper.findOneRecord(WarehouseModel,{"id":allPos[i].customer.shippingAddress.shippingAddressId})
-                  for (j=0;j<allPos[i].products.length;j++)
-                   {
-                        var productId = allPos[i].products[j].productId;
-                        const product = await wrapper.findOneRecord(ProductModel,{"id": productId})
-                        var product1 = {productID : allPos[i].products[j].productId,quantity: allPos[i].products[j].quantity,
-                        productName:product.name,manufacturer:product.manufacturer }
-                        productArray.push(product1)
-                   }
-                   poItems = {
-                             suppplierOrgID:allPos[i].supplier.supplierOrganisation,
-                             supplierOrgName:supplier.name,
-                             purchaseOrderID : allPos[i].id,
-                             externalId: allPos[i].externalId,
-                             customerOrgID:allPos[i].customer.customerOrganisation,
-                             customerOrgName: customer.name,
-                             customerCountryName: customer.country.name,
-                             customerCountryID: customer.country.id,
-                             products: productArray,
-                             deliveryLocationId: allPos[i].customer.shippingAddress.shippingAddressId,
-                             deliveryLocation: deliveryLocation.postalAddress,
-                             status: allPos[i].poStatus
-                     }
-                            poTableArray.push(poItems)
-                        }
+                  var productId = allPos[i].products[j].productId;
+                  const product = await wrapper.findOneRecord(ProductModel,{"id": productId})
+                  var product1 = {productID : allPos[i].products[j].productId,productQuantity: allPos[i].products[j].productQuantity,
+                    productName:product.name,manufacturer:product.manufacturer }
+                  productArray.push(product1)
+                }
+                poItems = {
+                  suppplierOrgID:allPos[i].supplier.supplierOrganisation,
+                  supplierOrgName:supplier.name,
+                  purchaseOrderID : allPos[i].id,
+                  externalId: allPos[i].externalId,
+                  customerOrgID:allPos[i].customer.customerOrganisation,
+                  customerOrgName: customer.name,
+                  customerCountryName: customer.country.name,
+                  customerCountryID: customer.country.id,
+                  products: productArray,
+                  deliveryLocationId: allPos[i].customer.shippingAddress.shippingAddressId,
+                  deliveryLocation: deliveryLocation.postalAddress,
+                  status: allPos[i].poStatus
+                }
+                poTableArray.push(poItems)
+              }
               logger.log(
-                'info',
-                '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : queried data by publisher',
+                  'info',
+                  '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : queried data by publisher',
               );
               res.json({ data: poTableArray });
             } else {
@@ -127,16 +124,16 @@ exports.purchaseOrderStatistics = [
           });
         } else {
           logger.log(
-            'warn',
-            '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : refuted token',
+              'warn',
+              '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : refuted token',
           );
           res.status(403).json(result);
         }
       });
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : error (catch block)',
+          'error',
+          '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : error (catch block)',
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -152,8 +149,8 @@ exports.fetchAllPurchaseOrdersBC = [
       checkToken(req, res, async result => {
         if (result.success) {
           logger.log(
-            'info',
-            '<<<<< ShipmentService < ShipmentController < fetchAllPurchaseOrders : token verified successfully, querying all stream keys',
+              'info',
+              '<<<<< ShipmentService < ShipmentController < fetchAllPurchaseOrders : token verified successfully, querying all stream keys',
           );
           const permission_request = {
             result: result,
@@ -162,12 +159,12 @@ exports.fetchAllPurchaseOrdersBC = [
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
               const response = await axios.get(
-                `${blockchain_service_url}/queryAllStreamKeys?stream=${po_stream_name}`,
+                  `${blockchain_service_url}/queryAllStreamKeys?stream=${po_stream_name}`,
               );
               const items = response.data.items;
               logger.log(
-                'info',
-                '<<<<< ShipmentService < ShipmentController < fetchAllPurchaseOrders : queried all stream keys',
+                  'info',
+                  '<<<<< ShipmentService < ShipmentController < fetchAllPurchaseOrders : queried all stream keys',
               );
               res.json({ data: items });
             } else {
@@ -176,16 +173,16 @@ exports.fetchAllPurchaseOrdersBC = [
           });
         } else {
           logger.log(
-            'warn',
-            '<<<<< ShipmentService < ShipmentController < fetchAllPurchaseOrders : refuted token',
+              'warn',
+              '<<<<< ShipmentService < ShipmentController < fetchAllPurchaseOrders : refuted token',
           );
           res.status(403).json(result);
         }
       });
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< ShipmentService < ShipmentController < fetchAllPurchaseOrders : error(catch block)',
+          'error',
+          '<<<<< ShipmentService < ShipmentController < fetchAllPurchaseOrders : error(catch block)',
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -200,8 +197,8 @@ exports.fetchPublisherPurchaseOrders = [
       checkToken(req, res, async result => {
         if (result.success) {
           logger.log(
-            'info',
-            '<<<<< ShipmentService < ShipmentController < fetchPublisherPurchaseOrders : token verified successfully, querying all publisher keys',
+              'info',
+              '<<<<< ShipmentService < ShipmentController < fetchPublisherPurchaseOrders : token verified successfully, querying all publisher keys',
           );
           const permission_request = {
             result: result,
@@ -215,17 +212,17 @@ exports.fetchPublisherPurchaseOrders = [
                 status: 'Accepted',
               });*/
 
-	     const acceptedPOs = await wrapper.findRecordsAndSort(POModel,{receiver: address,status: 'Accepted'});
+              const acceptedPOs = await wrapper.findRecordsAndSort(POModel,{receiver: address,status: 'Accepted'});
 
               logger.log(
-                'info',
-                '<<<<< ShipmentService < ShipmentController < fetchPublisherPurchaseOrders : queried all publisher keys',
+                  'info',
+                  '<<<<< ShipmentService < ShipmentController < fetchPublisherPurchaseOrders : queried all publisher keys',
               );
               const poIds = acceptedPOs.map(po => po.orderID);
               apiResponse.successResponseWithData(
-                res,
-                'Purchase Orders',
-                poIds,
+                  res,
+                  'Purchase Orders',
+                  poIds,
               );
             } else {
               res.json('Sorry! User does not have enough Permissions');
@@ -233,16 +230,16 @@ exports.fetchPublisherPurchaseOrders = [
           });
         } else {
           logger.log(
-            'warn',
-            '<<<<< ShipmentService < ShipmentController < fetchPublisherPurchaseOrders : refuted token',
+              'warn',
+              '<<<<< ShipmentService < ShipmentController < fetchPublisherPurchaseOrders : refuted token',
           );
           res.status(403).json(result);
         }
       });
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< ShipmentService < ShipmentController < fetchPublisherPurchaseOrders : error (catch block)',
+          'error',
+          '<<<<< ShipmentService < ShipmentController < fetchPublisherPurchaseOrders : error (catch block)',
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -257,8 +254,8 @@ exports.fetchPurchaseOrderBC = [
       checkToken(req, res, async result => {
         if (result.success) {
           logger.log(
-            'info',
-            '<<<<< ShipmentService < ShipmentController < fetchPurchaseOrder : token verified successfully, querying data by key',
+              'info',
+              '<<<<< ShipmentService < ShipmentController < fetchPurchaseOrder : token verified successfully, querying data by key',
           );
 
           const permission_request = {
@@ -269,17 +266,17 @@ exports.fetchPurchaseOrderBC = [
             if (permissionResult.success) {
               const { key } = req.query;
               const response = await axios.get(
-                `${blockchain_service_url}/queryDataByKey?stream=${po_stream_name}&key=${key}`,
+                  `${blockchain_service_url}/queryDataByKey?stream=${po_stream_name}&key=${key}`,
               );
               const items = response.data.items;
               logger.log(
-                'info',
-                '<<<<< ShipmentService < ShipmentController < fetchPurchaseOrder : queried data by key',
+                  'info',
+                  '<<<<< ShipmentService < ShipmentController < fetchPurchaseOrder : queried data by key',
               );
               return apiResponse.successResponseWithData(
-                res,
-                'Purchase Order Info',
-                items,
+                  res,
+                  'Purchase Order Info',
+                  items,
               );
             } else {
               res.json('Sorry! User does not have enough Permissions');
@@ -287,16 +284,16 @@ exports.fetchPurchaseOrderBC = [
           });
         } else {
           logger.log(
-            'warn',
-            '<<<<< ShipmentService < ShipmentController < fetchPurchaseOrder : refuted token',
+              'warn',
+              '<<<<< ShipmentService < ShipmentController < fetchPurchaseOrder : refuted token',
           );
           res.status(403).json(result);
         }
       });
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< ShipmentService < ShipmentController < fetchPurchaseOrder : error (catch block)',
+          'error',
+          '<<<<< ShipmentService < ShipmentController < fetchPurchaseOrder : error (catch block)',
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -310,8 +307,8 @@ exports.changePOStatus = [
       checkToken(req, res, async result => {
         if (result.success) {
           logger.log(
-            'info',
-            '<<<<< POStatus < ShipmentController < changePOStatus : token verified successfully',
+              'info',
+              '<<<<< POStatus < ShipmentController < changePOStatus : token verified successfully',
           );
 
           const permission_request = {
@@ -324,25 +321,25 @@ exports.changePOStatus = [
                 const { address } = req.user;
                 const { orderID, status } = req.body;
                 const po = await RecordModel.findOne({ id : orderID });
-		  console.log("test",po,po.customer.customer_incharge,address)
+                console.log("test",po,po.customer.customer_incharge,address)
                 if (po && po.customer.customer_incharge === address) {
                   //await POModel.update({ orderID }, { status });
-	           wrapper.updateRecord(RecordModel,{ id : orderID }, { poStatus : status })
+                  wrapper.updateRecord(RecordModel,{ id : orderID }, { poStatus : status })
                   return apiResponse.successResponseWithData(
-                    res,
-                    'PO Status',
-                    'Success',
+                      res,
+                      'PO Status',
+                      'Success',
                   );
                 } else {
                   return apiResponse.ErrorResponse(
-                    res,
-                    'You are not authorised to change the status',
+                      res,
+                      'You are not authorised to change the status',
                   );
                 }
 
                 logger.log(
-                  'info',
-                  '<<<<< POStatus < ShipmentController < changePOStatus : Changed Successfully',
+                    'info',
+                    '<<<<< POStatus < ShipmentController < changePOStatus : Changed Successfully',
                 );
               } catch (e) {
                 return apiResponse.ErrorResponse(res, 'Error from Blockchain');
@@ -353,16 +350,16 @@ exports.changePOStatus = [
           });
         } else {
           logger.log(
-            'warn',
-            '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : refuted token',
+              'warn',
+              '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : refuted token',
           );
           return apiResponse.ErrorResponse(res, result);
         }
       });
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : error (catch block)',
+          'error',
+          '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : error (catch block)',
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -389,8 +386,8 @@ exports.createPurchaseOrder = [
       return apiResponse.successResponseWithData(res, 'Created PO Success', result.id);
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : error (catch block)',
+          'error',
+          '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : error (catch block)',
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -401,74 +398,74 @@ exports.addPOsFromExcel = [
   auth,
   async (req, res) => {
     try {
-        const permission_request = {
-          role: req.user.role,
-          permissionRequired: 'createPO',
-        };
-        checkPermissions(permission_request, async permissionResult => {
-          if (permissionResult.success) {
-            try {
-              const dir = `uploads`;
-              if (!fs.existsSync(dir)) {
-                fs.mkdirSync(dir);
-              }
-              await moveFile(
-                  req.file.path,
-                  `${dir}/${req.file.originalname}`,
-              );
-              const workbook = XLSX.readFile(
-                  `${dir}/${req.file.originalname}`,
-              );
-              const sheet_name_list = workbook.SheetNames;
-              const data = XLSX.utils.sheet_to_json(
-                  workbook.Sheets[sheet_name_list[0]],
-                  { dateNF: 'dd/mm/yyyy;@', cellDates: true, raw: false },
-              );
-              const { createdBy, lastUpdatedBy } = req.user.id;
-              let poDataArray = [];
-              poDataArray = data.map(po => {
-                return {
-                  id: uniqid('po-'),
-                  externalId: po['External Id'],
-                  "creationDate": new Date().toISOString(),
-                  "lastUpdatedOn": new Date().toISOString(),
-                  "supplier": {
-                    "supplierOrganisation": po['Supplier Organisation'],
-                    "supplierIncharge": po['Supplier Incharge']
-                  },
-                  "customer": {
-                    "customerOrganisation": po['Customer Organisation'],
-                    "customerIncharge": po['Customer Incharge'],
-                    "shippingAddress": {
-                      "shippingAddressId": po['Shipping Address Id'],
-                      "shipmentReceiverId": po['Shipment Receiver Id']
-
-                    }
-                  },
-                  "products": [
-                    {
-                      "productId": po['Product'],
-                      "quantity": 100
-                    }
-                  ],
-                  createdBy,
-                  lastUpdatedBy
-                }
-              });
-              await RecordModel.insertMany(poDataArray);
-              return apiResponse.successResponseWithData(
-                  res,
-                  'Upload Result',
-                  poDataArray
-              );
-            } catch (e) {
-              return apiResponse.ErrorResponse(res, 'Error from Blockchain');
-
+      const permission_request = {
+        role: req.user.role,
+        permissionRequired: 'createPO',
+      };
+      checkPermissions(permission_request, async permissionResult => {
+        if (permissionResult.success) {
+          try {
+            const dir = `uploads`;
+            if (!fs.existsSync(dir)) {
+              fs.mkdirSync(dir);
             }
-          } else {
-            res.json('Sorry! User does not have enough Permissions');
+            await moveFile(
+                req.file.path,
+                `${dir}/${req.file.originalname}`,
+            );
+            const workbook = XLSX.readFile(
+                `${dir}/${req.file.originalname}`,
+            );
+            const sheet_name_list = workbook.SheetNames;
+            const data = XLSX.utils.sheet_to_json(
+                workbook.Sheets[sheet_name_list[0]],
+                { dateNF: 'dd/mm/yyyy;@', cellDates: true, raw: false },
+            );
+            const { createdBy, lastUpdatedBy } = req.user.id;
+            let poDataArray = [];
+            poDataArray = data.map(po => {
+              return {
+                id: uniqid('po-'),
+                externalId: po['External Id'],
+                "creationDate": new Date().toISOString(),
+                "lastUpdatedOn": new Date().toISOString(),
+                "supplier": {
+                  "supplierOrganisation": po['Supplier Organisation'],
+                  "supplierIncharge": po['Supplier Incharge']
+                },
+                "customer": {
+                  "customerOrganisation": po['Customer Organisation'],
+                  "customerIncharge": po['Customer Incharge'],
+                  "shippingAddress": {
+                    "shippingAddressId": po['Shipping Address Id'],
+                    "shipmentReceiverId": po['Shipment Receiver Id']
+
+                  }
+                },
+                "products": [
+                  {
+                    "productId": po['Product'],
+                    "productQuantity": po['Quantity']
+                  }
+                ],
+                createdBy,
+                lastUpdatedBy
+              }
+            });
+            await RecordModel.insertMany(poDataArray);
+            return apiResponse.successResponseWithData(
+                res,
+                'Upload Result',
+                poDataArray
+            );
+          } catch (e) {
+            return apiResponse.ErrorResponse(res, 'Error from Blockchain');
+
           }
-        });
+        } else {
+          res.json('Sorry! User does not have enough Permissions');
+        }
+      });
     } catch (e) {
       return apiResponse.ErrorResponse(res, err);
     }
@@ -481,9 +478,9 @@ exports.success = [
       const data = req.body;
       const { phone, payuMoneyId, amount, productinfo } = data;
       // This check is important as sometimes payumoney is sending multiple success responses
-        const redirectUrl ='http://localhost:3000/shipments'
+      const redirectUrl ='http://localhost:3000/shipments'
 
-        return res.redirect(redirectUrl);
+      return res.redirect(redirectUrl);
     } catch (err) {
       //throw error in json response with status 500.
     }
