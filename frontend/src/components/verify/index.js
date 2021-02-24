@@ -7,7 +7,8 @@ import logo from '../../assets/brands/VaccineLedgerlogo.svg';
 import '../login/style.scss';
 
 const FormVerifyPage = (props) => {
-  const { otp, onOtpChange, onVerifyOtp,  errorMessage, onResendOtp } = props;
+  const { otp1, onOtpChange1, otp2, onOtpChange2,otp3,onOtpChange3,otp4, onOtpChange4,
+    onVerifyOtp,  errorMessage, onResendOtp} = props;
   return (
     <div className="login-wrapper">
       <div className="container">
@@ -23,10 +24,22 @@ const FormVerifyPage = (props) => {
               <div className="card-body">
                 <div className="login-form">
                   <div className="card-title mb-5">Enter OTP</div>
-                  <div className="form-group mb-5">
-                    <input type='text' className="form-control"
-                      value={otp}
-                      onChange={onOtpChange} />
+                  <div className="form-groupverify mb-5">
+                    <input type='text' className="form-controlverify mr-3"  maxlength="1"
+                      value={otp1}
+                      onChange={onOtpChange1} />
+                          <input type='text' className="form-controlverify mr-3"  maxlength="1"
+                      value={otp2}
+                      onChange={onOtpChange2} />
+
+<input type='text' className="form-controlverify mr-3"
+                      value={otp3}
+                      onChange={onOtpChange3} />
+
+<input type='text' className="form-controlverify mr-3"
+                      value={otp4}
+                      onChange={onOtpChange4} />
+
 
                   </div>
               <div className="font-weight-bold text-center mb-2">Didn't receive the OTP?</div>

@@ -9,7 +9,11 @@ import setAuthToken from "../../utils/setAuthToken";
 
 const VerifyContainer = props => {
   const [email, setEmail] = useState('');
-  const [otp, setOtp] = useState('');
+  const [otp1, setOtp1] = useState('');
+  const [otp2, setOtp2] = useState('');
+  const [otp3, setOtp3] = useState('');
+  const [otp4, setOtp4] = useState('');
+  let otp = otp1+otp2+otp3+otp4
   const [errorMessage, setErrorMessage] = useState('');
   const dispatch = useDispatch();
   const verifyOTP = useCallback(async () => {
@@ -60,10 +64,16 @@ const VerifyContainer = props => {
     <div className="container-fluid p-0">
       <Verify
         email={email}
-        otp={otp}
+        otp1={otp1}
+        otp2={otp2}
+        otp3={otp3}
+        otp4={otp4}
         errorMessage={errorMessage}
         onEmailChange={e => setEmail(e.target.value)}
-        onOtpChange={e => setOtp(e.target.value)}
+        onOtpChange1={e => setOtp1(e.target.value)}
+        onOtpChange2={e => setOtp2(e.target.value)}
+        onOtpChange3={e => setOtp3(e.target.value)}
+        onOtpChange4={e => setOtp4(e.target.value)}
         onVerifyOtp={verifyOTP}
         onResendOtp={resendOtp}
       />

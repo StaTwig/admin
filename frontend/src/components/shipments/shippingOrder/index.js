@@ -19,7 +19,7 @@ const ShippingOrderTable = props => {
     async function fetchData() {
       const result = await getShippingOrders();
       debugger;
-      setShippingOrders(result);
+      setShippingOrders(result.reverse());
     }
     fetchData();
   }, []);
