@@ -429,7 +429,7 @@ exports.addPOsFromExcel = [
               poDataArray = data.map(po => {
                 return {
                   id: uniqid('po-'),
-                  externalId: po['ExternalId'],
+                  externalId: po['External Id'],
                   "creationDate": new Date().toISOString(),
                   "lastUpdatedOn": new Date().toISOString(),
                   "supplier": {
@@ -448,7 +448,7 @@ exports.addPOsFromExcel = [
                   "products": [
                     {
                       "productId": po['Product'],
-                      "productQuantity": 100
+                      "quantity": 100
                     }
                   ],
                   createdBy,
