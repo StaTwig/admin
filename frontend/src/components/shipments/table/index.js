@@ -63,7 +63,7 @@ const Table = props => {
                 <div className="rTableCell">
                   {shipment.products[0].productName}
                 </div>
-                <div className="rTableCell">50000</div>
+                <div className="rTableCell">{shipment.products[0].productQuantity}</div>
 
                 <div className="rTableCell">{shipment.supplier.id}</div>
                 <div className="rTableCell">{shipment.receiver.locationId}</div>

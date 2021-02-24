@@ -96,7 +96,7 @@ exports.purchaseOrderStatistics = [
                    {
                         var productId = allPos[i].products[j].productId;
                         const product = await wrapper.findOneRecord(ProductModel,{"id": "prod-9bhkk6yiutx"})
-                        var product1 = {productID : allPos[i].products[j].productId,quantity: allPos[i].products[j].quantity,
+                        var product1 = {productID : allPos[i].products[j].productId,productQuantity: allPos[i].products[j].productQuantity,
                         productName:product.name,manufacturer:product.manufacturer }
                         productArray.push(product1)
                    }
@@ -448,7 +448,7 @@ exports.addPOsFromExcel = [
                   "products": [
                     {
                       "productId": po['Product'],
-                      "quantity": 100
+                      "productQuantity": 100
                     }
                   ],
                   createdBy,
