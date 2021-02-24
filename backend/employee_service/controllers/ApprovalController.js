@@ -62,7 +62,7 @@ exports.getApprovals = [
         checkToken(req, res, async result => {
           if (result.success) {
             const { organisation } = req.user;
-            const { id } =req.query;
+            const { id , role } =req.query;
             EmployeeModel.findOne({
               $and: [
                 { 'accountStatus': "NOTAPPROVED"},
@@ -92,7 +92,7 @@ exports.getApprovals = [
                     "info",
                     "<<<<< EmployeeService < Approval Controller < accept Approval : granted permission to user"
                   );
-                  EmployeeModel.findOneAndUpdate({'id':id},{$set: { accountStatus:"ACTIVE" , isConfirmed: true , walletAddress}},{ "new": true}).exec().then(emp=>{
+                  EmployeeModel.findOneAndUpdate({'id':id},{$set: { accountStatus:"ACTIVE" , isConfirmed: true , walletAddress , role}},{ "new": true}).exec().then(emp=>{
                     let emailBody = RequestApproved({
                       name: emp.firstName,
                       organisation,
