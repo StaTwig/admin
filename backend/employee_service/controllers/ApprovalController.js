@@ -37,18 +37,18 @@ exports.getApprovals = [
                 return apiResponse.ErrorResponse(res, err);
               });
           } else {
-            logger.log(
-              'warn',
-              '<<<<< EmployeeService < ApprovalController < getApprovals : refuted token',
-            );
+            // logger.log(
+            //   'warn',
+            //   '<<<<< EmployeeService < ApprovalController < getApprovals : refuted token',
+            // );
             res.status(403).json('Auth failed');
           }
         });
       } catch (err) {
-        logger.log(
-          'error',
-          '<<<<< EmployeeService < ApprovalController < getApprovals : error (catch block)',
-        );
+        // logger.log(
+        //   'error',
+        //   '<<<<< EmployeeService < ApprovalController < getApprovals : error (catch block)',
+        // );
         return apiResponse.ErrorResponse(res, err);
       }
     }
@@ -88,10 +88,10 @@ exports.getApprovals = [
                     userData
                   ).then(()=>console.log("posted")) 
                   //Granting permissons to the user
-                  logger.log(
-                    "info",
-                    "<<<<< EmployeeService < Approval Controller < accept Approval : granted permission to user"
-                  );
+                  // logger.log(
+                  //   "info",
+                  //   "<<<<< EmployeeService < Approval Controller < accept Approval : granted permission to user"
+                  // );
                   EmployeeModel.findOneAndUpdate({'id':id},{$set: { accountStatus:"ACTIVE" , isConfirmed: true , walletAddress , role}},{ "new": true}).exec().then(emp=>{
                     let emailBody = RequestApproved({
                       name: emp.firstName,
@@ -125,18 +125,18 @@ exports.getApprovals = [
                 return apiResponse.ErrorResponse(res, err);
               });
           } else {
-            logger.log(
-              'warn',
-              '<<<<< EmployeeService < ApprovalController < Accept Approval : refuted token',
-            );
+            // logger.log(
+            //   'warn',
+            //   '<<<<< EmployeeService < ApprovalController < Accept Approval : refuted token',
+            // );
             res.status(403).json('Auth failed');
           }
         });
       } catch (err) {
-        logger.log(
-          'error',
-          '<<<<< EmployeeService < ApprovalController < Accept Approval : error (catch block)',
-        );
+        // logger.log(
+        //   'error',
+        //   '<<<<< EmployeeService < ApprovalController < Accept Approval : error (catch block)',
+        // );
         return apiResponse.ErrorResponse(res, err);
       }
     }
@@ -188,18 +188,18 @@ exports.getApprovals = [
                 return apiResponse.ErrorResponse(res, err);
               });
           } else {
-            logger.log(
-              'warn',
-              '<<<<< EmployeeService < ApprovalController < reject Approvals : refuted token',
-            );
+            // logger.log(
+            //   'warn',
+            //   '<<<<< EmployeeService < ApprovalController < reject Approvals : refuted token',
+            // );
             res.status(403).json('Auth failed');
           }
         });
       } catch (err) {
-        logger.log(
-          'error',
-          '<<<<< EmployeeService < ApprovalController < reject Approvals : error (catch block)',
-        );
+        // logger.log(
+        //   'error',
+        //   '<<<<< EmployeeService < ApprovalController < reject Approvals : error (catch block)',
+        // );
         return apiResponse.ErrorResponse(res, err);
       }
     }
