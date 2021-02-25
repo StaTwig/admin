@@ -108,10 +108,28 @@ background-color: $white;
     }
 
    
+    .form-groupverify {
+      position: relative;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-direction: row;
+       .form-controlverify {
+        border: none;
+        border-bottom: 1px solid #D6D6D6;
+        width:25%;
+        border-radius: 0;
+        font-size: 20px;
+        padding-left: 2rem;
+        outline: none;
+      }
+    }
 
     .form-group {
       position: relative;
       margin-bottom: 2rem;
+      display: flex;
+      flex-direction: row;
+     
       .imgs {
         width: 18px;
         height: 18px;
