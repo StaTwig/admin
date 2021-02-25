@@ -14,8 +14,9 @@ import {
   getOrganisations,
   getWarehouseByOrgId,
 } from '../../actions/productActions';
+import AlertModal from './alertModal';
 
-const PurchaseForm = props => {
+const PurchaseForm = (props) => {
   const editPo = useSelector(state => {
     return state.editPo;
   });
@@ -34,6 +35,8 @@ const PurchaseForm = props => {
   const [customerOrgId, setCustomerOrgId] = useState('Select Organisation ID');
   const [products, setProducts] = useState([]);
   const [cashfreeData, setCashfreeData] = useState({});
+  const [ modalProps, setModalProps ] = useState({});
+  const[openCreatedPo,setOpenCreatedPo]= useState(false);
 
   const defaultProduct = {
     productId: 'Select',
@@ -51,9 +54,12 @@ const PurchaseForm = props => {
   const [poError, setPoError] = useState();
   const [openExcel, setOpenExcel] = useState(false);
   const [ orderAmount , setOrderAmount ] = useState('');
+
+
   const closeExcelModal = () => {
     setOpenExcel(false);
   };
+
 
   useEffect(() => {
     async function fetchData() {
@@ -100,6 +106,11 @@ const PurchaseForm = props => {
     return error;
   };
   const dispatch = useDispatch();
+  
+  const closeModal =  () => {
+    window.location.reload();
+    props.history.push('/shipments')
+  }
 
   const onProceed = async () => {
     /*if (checkValidationErrors(poFields)) {
@@ -165,9 +176,20 @@ const PurchaseForm = props => {
     const result = await createPO(data);
     if (result.status === 200) {
       await onCashfreeClick();
+      setOpenCreatedPo(true);
       setMessage(result.data.message);
-    } else {
-      setPoError('Failed to create po');
+      setModalProps({
+        message: 'Created Successfully!',
+        type: 'Success'
+      })
+    }
+else {
+  setOpenCreatedPo(true);
+      setMessage(result.data.message)
+      setModalProps({
+        message: result.data.message,
+        type: 'Failure'
+      })
     }
   };
 
@@ -342,10 +364,6 @@ const PurchaseForm = props => {
       >
         +<span> Add Another Product</span>
       </button>
-      
-       
-          <div className="text text-success">{message}</div>
-      <div className="text text-danger">{poError}</div>
         {menu ? (
           <div class="menu5">
             <button
@@ -368,6 +386,21 @@ const PurchaseForm = props => {
             />
           </Modal>
         )}
+
+        
+        
+      {openCreatedPo && (
+        <Modal
+          close={() => closeModal()}
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+          <AlertModal
+            onHide={closeModal}
+            {...modalProps}
+            {...props}
+          />
+        </Modal>
+      )}
         <div className="d-flex flex-row">
         <button className="btn btn-yellow review  mr-5" onClick={onProceed}>
           Create PO
