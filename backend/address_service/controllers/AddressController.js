@@ -1,7 +1,8 @@
 const apiResponse = require("../utils/apiResponse")
 const Organisation = require("../models/organisationModel")
 const Warehouse = require("../models/warehouseModel")
-
+const auth = require("../middlewares/jwt")
+const checkToken = require("../middlewares/middleware").checkToken;
 /**
  * LOGGING
  */
@@ -9,6 +10,7 @@ const Warehouse = require("../models/warehouseModel")
 // const logger = init.getLog()
 
 exports.addressesOfOrg = [
+    auth,
     async(req,res)=>{
         try{
             await Organisation.find({id:req.user.organisationId}).then(orgs=>{
@@ -23,6 +25,7 @@ exports.addressesOfOrg = [
 ]
 
 exports.addressesOfOrgWarehouses = [
+    auth,
     async(req,res)=>{
         try{
             await Warehouse.find({organisationId:req.user.organisationId}).then(warehouses=>{
@@ -37,6 +40,7 @@ exports.addressesOfOrgWarehouses = [
 ]
 
 exports.updateAddressOrg = [
+    auth,
     async(req,res)=>{
         try{
             await Organisation.findOneAndUpdate({id:req.user.organisationId},{ postalAddress: req.body.address},{new: true}).then(org=>{
@@ -51,6 +55,7 @@ exports.updateAddressOrg = [
 ]
 
 exports.updateWarehouseAddress = [
+    auth,
     async(req,res)=>{
         try{
             await Warehouse.findOneAndUpdate({id:req.query.warehouseId}, req.body.WarehouseAddress,{new: true}).then(warehouse=>{
@@ -65,6 +70,7 @@ exports.updateWarehouseAddress = [
 ]
 
 exports.AddWarehouse = [
+    auth,
     async(req,res)=>{
         try{
 
@@ -76,6 +82,7 @@ exports.AddWarehouse = [
 ]
 
 exports.AddOffice = [
+    auth,
     async(req,res)=>{
         try{
         } catch(err){
