@@ -5,36 +5,68 @@ import './style.scss';
 
 const PoDetails = (props) => {
   return (
-    Object.keys(props.poCard).length === 0 || (!props.poCard.poDetails) ? <div className="row panel">N/A</div> :
+    Object.keys(props.shipments).length === 0 || (!props.shipments.poDetails) ? <div className="row panel">N/A</div> :
       <div className="col panel commonpanle">
-        <div className="d-flex flex-row  ">
-          <ul className="mr-3 elemens">
-            <li className="mb-1 text-secondary">Unicef PO ID</li>
-            <li className="mb-1 text-secondary">Vendor Name</li>
-            <li className="mb-1 text-secondary">Vendor ID</li>
-            {props.menu == true ? <li className="mb-1 text-secondary">Po Item#</li> : null}
-            {props.menu == true ? <li className="mb-1 text-secondary">Shipped From</li> : null}
-            {props.menu == true ? <li className="mb-1 text-secondary">To Location ID</li> : null}
-            {props.menu == true ? <li className="mb-1 text-secondary">To Location</li> : null}
-            {props.menu == true ? <li className="mb-1 text-secondary">Material ID</li> : null}
-            {props.menu == true ? <li className="mb-1 text-secondary">Product Name</li> : null}
-            {props.menu == true ? <li className="text-secondary">Quantity</li> : null}
+        <div className="d-flex flex-row potext mb-4">
+            <div className=" text-secondary mr-3">Purchase Order ID</div>  
+            <div>{props.shipments.poDetails[0].id}</div>
+      </div>
+      <div className="poheads potext mb-4">Supplier Details:</div>
+      <div className="d-flex flex-row potext mb-4">
+        <div className="d-flex flex-column mr-4 text-secondary">
+            <div className="mb-3">Organisation ID</div> 
+            <div className="mb-3">Organisation Name</div>  
+            <div>Supplier Location</div>   
+      </div>
+      <div className="d-flex flex-column">
+            <div className="mb-3">{props.shipments.poDetails[0].supplier.supplierOrganisation}</div>
+            <div className="mb-3">N/A</div>  
+            <div>N/A</div>   
+      </div>
+     
+      </div>
 
-          </ul>
-          <ul className="elemens">
-            <li className="mb-1">{props.poCard.poDetails.orderID}</li>
-            <li className="mb-1">{props.poCard.poDetails.vendorName}</li>
-            <li className="mb-1">{props.poCard.poDetails.vendor}</li>
-            {props.menu == true ? <li className="mb-1">{props.poCard.poDetails.poItem}</li> : null}
-            {props.menu == true ? <li className="mb-1">{props.poCard.poDetails.incoterms2}</li> : null}
-            {props.menu == true ? <li className="mb-1">{props.poCard.poDetails.plant}</li> : null}
-            {props.menu == true ? <li className="mb-1">{props.poCard.poDetails.destination}</li> : null}
-            {props.menu == true ? <li className="mb-1">{props.poCard.poDetails.material}</li> : null}
-            {props.menu == true ? <li className="mb-1">{Object.keys(props.poCard.poDetails.products[0])[0].split('-')[0]}</li> : null}
-            {props.menu == true ? <li>{props.poCard.poDetails.quantity}</li> : null}
-          </ul>
-
+      <div className="poheads potext mb-4">Customer Details:</div>
+      <div className="d-flex flex-row potext mb-4">
+        <div className="d-flex flex-column mr-4 text-secondary">
+            <div className="mb-3">Organisation ID</div> 
+            <div className="mb-3">Delivery Location ID</div>  
+            <div>Delivery Location</div>   
+      </div>
+      <div className="d-flex flex-column">
+            <div className="mb-3">{props.shipments.poDetails[0].customer.customerOrganisation}</div>
+            <div className="mb-3">N/A</div>  
+            <div>N/A</div>   
+      </div>
+     
+      </div>
+      <div className="poheads potext mb-4">Product Details:</div>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col" className=" potext text-secondary">Product ID</th>
+            <th scope="col " className=" potext text-secondary">Product Name</th>
+            <th scope="col" className=" potext text-secondary">Manufacturer</th>
+             <th scope="col" className=" potext text-secondary">Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+        {props.shipments.poDetails[0].products.map(product => <tr>
+          <td><small>{product.productId}</small></td>
+          <td><small>N/A</small></td>
+          <td><small>N/A</small></td>
+          <td><small>{product.productQuantity}</small></td>
+        </tr>)}
+         
+     </tbody>
+      </table>
+      <div className="d-flex justify-content-end mt-2">
+        <div className="d-flex flex-column">
+          <div className=" potext text-secondary">Total Quantity</div>
+          <div className="text-info font-weight-bold">{props.shipments.poDetails[0].products[0].productQuantity}</div>
         </div>
+      </div>
+
         <div className="arrow float-right" onClick={() => props.setMenu(!props.menu)}><img src={props.menu ?Down:traceDrop} alt="actions" height="7" width="12" /></div>
 
       </div>

@@ -27,9 +27,9 @@ const Tracing = props => {
   const [highLight, setHighLight] = useState(false);
   const [productHighLight, setProductHighLight] = useState(false);
   const [openPurchase, setOpenPurchase] = useState(false);
-  const tracking = props.shipments;
-  const productCard = props.productDetails;
-  const poCard = props.poDetails;
+  const tracking = props.trackData;
+  //const productCard = props.productDetails;
+  //const poCard = props.poDetails;
   const closeModal = () => {
     setOpenPurchase(false);
   }
@@ -52,14 +52,14 @@ const Tracing = props => {
       <div className="row">
         <div className="col-sm-4">
           <h6 className="heading mb-3">SHIPMENT SUMMARY</h6>
-          <ShipmentSummary shipments={tracking} poCard={poCard} />
+          <ShipmentSummary shipments={tracking} />
           <h6 className="heading mt-3 mb-3">PURCHASE ORDER DETAILS</h6>
-          <PoDetails menu={menu} poCard={poCard} setMenu={setMenu} />
+          <PoDetails menu={menu} shipments={tracking} setMenu={setMenu} />
           <h6 className="heading mt-3 mb-3">SHIPMENT DETAILS</h6>
-          <ShipmentDetails poCard={poCard} setMenuShip={setMenuShip} menuShip={menuShip} shipments={tracking} highLight={highLight} setHighLight={setHighLight} />
+          <ShipmentDetails  shipments={tracking} setMenuShip={setMenuShip} menuShip={menuShip} highLight={highLight} setHighLight={setHighLight} />
 
           <h6 className="heading mt-3 mb-3">PRODUCT LIST</h6>
-          <ProductList productCard={productCard} productHighLight={productHighLight} setProductHighLight={setProductHighLight} menuProduct={menuProduct} setMenuProduct={setMenuProduct} />
+         <ProductList  shipments = {tracking} productHighLight={productHighLight} setProductHighLight={setProductHighLight} menuProduct={menuProduct} setMenuProduct={setMenuProduct} />
 
         </div>
         <div className="col-sm-8">
@@ -100,30 +100,30 @@ const Tracing = props => {
             </Modal>
           )}
           <h6 className="heading mb-5">CHAIN OF CUSTODY</h6>
-          {Object.keys(props.shipments).length === 0 ? <div>N/A</div> :
+          {Object.keys(tracking).length === 0 ? <div>N/A</div> :
             <div className="row mb-3 mt-2">
               <div className="picture ml-3"><img src={currentinventory} alt="truck" height="15" width="15" /></div>
               <div className="d-flex flex-column mr-2">
                 <div className="chain text-secondary">Shipment Number</div>
-                <div className="chain"><strong>{props.shipments.shipmentDetails.shipmentNumber}</strong></div>
+                <div className="chain"><strong>{tracking.shipmentDetails[0].id}</strong></div>
               </div>
               <div className="d-flex flex-column  ml-5 mr-3">
                 <div className="dot bg-secondary mt-2 mb-5"></div>
                 <div className="dot bg-info"></div>
               </div>
               <div className="col">
-                <div className="chain"><strong>{props.shipments.shipmentDetails.supplierLocation}</strong></div>
-                <div className="chainhead mb-4">{props.shipments.shipmentDetails.supplierLocation}</div>
-                <div className="chain"><strong>{props.shipments.shipmentDetails.deliveryLocation}</strong></div>
-                <div className="chainhead">{props.shipments.shipmentDetails.deliveryLocation}</div>
+                <div className="chain"><strong>MUMBAI</strong></div>
+                <div className="chainhead mb-4">Bharat Biotech</div>
+                <div className="chain"><strong>DELHI</strong></div>
+                <div className="chainhead">Gensys PVT</div>
               </div>
             </div>
           }
           <PoChainOfCustody poChain={poChain} setPoChain={setPoChain} shipments={tracking}
-            setOpenPurchase={setOpenPurchase} poCard={poCard} />
+            setOpenPurchase={setOpenPurchase} />
           <ChainOfCustody chain={chain} setChain={setChain} shipments={tracking}
             setHighLight={setHighLight} setMenuShip={setMenuShip} setMenuProduct={setMenuProduct}
-            setProductHighLight={setProductHighLight} poCard={poCard} />
+            setProductHighLight={setProductHighLight}/>
         </div>
       </div>
     </div>

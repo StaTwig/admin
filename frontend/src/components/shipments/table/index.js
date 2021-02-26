@@ -82,7 +82,7 @@ const Table = props => {
                       const data = props.shipments[index];
                       dispatch(setTracingShipments(data));
                       props.history.push(
-                        `/tracing/${props.shipments[index].shipmentId}`,
+                        `/tracing/${props.shipments[index].id}`,
                       );
                     }}
                   >
