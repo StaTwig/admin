@@ -31,7 +31,7 @@ const NewShipment = props => {
   const [estimateDeliveryDate, setEstimateDeliveryDate] = useState('');
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [quantity, setQuantity] = useState('');
+  const [productQuantity, setProductQuantity] = useState('');
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [openShipmentFail, setOpenShipmentFail] = useState(false);
   const [shipmentError, setShipmentError] = useState('');
@@ -136,7 +136,7 @@ const NewShipment = props => {
   };
   const handleQuantityChange = (value, i) => {
     const soDetailsClone = { ...shippingOrderDetails };
-    soDetailsClone.products[i].quantity = value;
+    soDetailsClone.products[i].productQuantity = value;
     setShippingOrderDetails(soDetailsClone);
   };
 
@@ -333,7 +333,7 @@ const NewShipment = props => {
 
       <div className="d-flex justify-content-between">
         <div className="total">Grand Total</div>
-        <div className="value">{quantity}</div>
+        <div className="value">{productQuantity}</div>
         <div className="d-flex ">
           <button className="btn btn-primary mr-2 " onClick={onAssign}>
             {' '}

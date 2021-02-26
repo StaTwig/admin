@@ -27,13 +27,15 @@ router.get("/getGroupedInventoryDetails", InventoryController.getGroupedInventor
 router.get("/getInventoryDetailsByBatchNumber", InventoryController.getInventoryDetailsByBatchNumber);
 router.get("/getBatchDetailsByBatchNumber",InventoryController.getBatchDetailsByBatchNumber);
 router.get("/getProductListCounts",InventoryController.getProductListCounts);
-router.get("/getProductDetailsByWarehouseId",InventoryController.getProductDetailsByWarehouseId);
 router.get("/getEmployeeDetailsByWarehouseId",InventoryController.getEmployeeDetailsByWarehouseId);
-router.get("/getWarehouseDetailsByCountry",InventoryController.getWarehouseDetailsByCountry);
-router.get("/getCountryDetailsByRegion",InventoryController.getCountryDetailsByRegion);
-router.get("/getRegions",InventoryController.getRegions);
-router.get("/trackProduct", InventoryController.trackProduct);
 
+router.get("/getWarehouseDetailsByRegion",InventoryController.getWarehouseDetailsByRegion);
+router.get("/getWarehouseDetailsByCountry",InventoryController.getWarehouseDetailsByCountry);
+router.get("/getProductDetailsByWarehouseId",InventoryController.getProductDetailsByWarehouseId);
+
+router.get("/getRegions",InventoryController.getRegions);
+router.get("/getCountryDetailsByRegion",InventoryController.getCountryDetailsByRegion);
+router.get("/trackProduct", InventoryController.trackProduct);
 router.post("/addProductsToInventory", InventoryController.addProductsToInventory);
 router.post("/updateInventories", InventoryController.updateInventories);
 router.post("/insertInventories", InventoryController.insertInventories);

@@ -41,7 +41,7 @@ const PurchaseForm = (props) => {
   const defaultProduct = {
     productId: 'Select',
     productName: '',
-    quantity: '',
+    productQuantity: '',
     manufacturer: '',
     externalId: 'Select'
   };
@@ -83,7 +83,7 @@ const PurchaseForm = (props) => {
     'materialId',
     'product',
     'manufacturer',
-    'quantity',
+    'productQuantity',
   ];
 
   const checkValidationErrors = validations => {
@@ -151,7 +151,7 @@ const PurchaseForm = (props) => {
     );
     const selectedProducts = productRows.map(prod => ({
       productId: prod.productId,
-      quantity: prod.quantity,
+      productQuantity: prod.productQuantity,
     }));
     const data = {
       externalId: externalPoId,
@@ -219,7 +219,7 @@ else {
     const productRowsClone = [...productRows];
     const productRow = {
       ...productRowsClone[index],
-      quantity: e.target.value,
+      productQuantity: e.target.value,
     };
     setOrderAmount(parseInt(e.target.value) * 10);
     productRowsClone[index] = productRow;
