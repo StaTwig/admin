@@ -6,6 +6,6 @@ COPY . /src
 
 RUN npm install
 
-EXPOSE 3003
+EXPOSE 3002
 
 CMD npm start
