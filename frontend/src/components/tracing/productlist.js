@@ -5,26 +5,30 @@ import './style.scss'
 
 const ProductList = (props) => {
     return (
-        Object.keys(props.productCard).length === 0 ? <div className="row panel justify-content-between">N/A</div> :
+        Object.keys(props.shipments).length === 0 ? <div className="row panel justify-content-between">N/A</div> :
             <div className={props.productHighLight ? "col panel commonpanle highlight " : "col panel commonpanle "}>
-                {props.productCard.productDetails.map((txn, index) => <div className="d-flex flex-row " key={index}>
+                <div className="d-flex flex-row " >
                     <ul className="mr-3 elemens">
+                    <li className="mb-1 text-secondary">Product ID</li>
                         <li className="mb-1 text-secondary">Product Name</li>
+                        <li className="mb-1 text-secondary">Manufacturer</li>
                         <li className="mb-1 text-secondary">Quantity</li>
-                        <li className="mb-1 text-secondary">Mfg Date</li>
+                        {props.menuProduct == true ? <li className="mb-1 text-secondary">Mfg Date</li> : null}
                         {props.menuProduct == true ? <li className="mb-1 text-secondary">Exp Date</li> : null}
                         {props.menuProduct == true ? <li className="mb-1 text-secondary">Batch No</li> : null}
-                        {props.menuProduct == true ? <li className="mb-1 text-secondary">Serial No Range</li> : null}
+                        {props.menuProduct == true ? <li className="mb-1 text-secondary">Serial No</li> : null}
                     </ul>
                     <ul className="elemens">
-                        <li className="mb-1">{txn.productName}</li>
-                        <li className="mb-1">{txn.quantity}</li>
-                        <li className="mb-1">{txn.manufacturingDate}</li>
-                        {props.menuProduct == true ? <li className="mb-1">{txn.expiryDate}</li> : null}
-                        {props.menuProduct == true ? <li className="mb-1">{txn._id.batchNumber}</li> : null}
-                        {props.menuProduct == true ? <li className="mb-1">{txn.serialNumberFirst}-{txn.serialNumberLast}</li> : null}
+                        <li className="mb-1"></li>
+                        <li className="mb-1"></li>
+                        <li className="mb-1"></li>
+                        <li className="mb-1"></li>
+                        {props.menuProduct == true ? <li className="mb-1"></li> : null}
+                        {props.menuProduct == true ? <li className="mb-1"></li> : null}
+                        {props.menuProduct == true ? <li className="mb-1"></li> : null}
+                        {props.menuProduct == true ? <li className="mb-1"></li> : null}
                     </ul>
-                    <div></div></div>)}
+                    <div></div></div>
                 <div className="arrow float-right" onClick={() => {
                     props.setMenuProduct(!props.menuProduct)
                     props.setProductHighLight(false);

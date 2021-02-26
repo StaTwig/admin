@@ -11,20 +11,20 @@ const PoChainOfCustody = (props) => {
         <div></div>
         <div className="big-dot bg-info ml-4"></div>
         <div className="col">
-          <div className="color mb-3">{props.shipments.poStatus}</div>
+          <div className="color mb-3">ACCEPTED</div>
           <div className="col panel chain chainpanle">
             <div className="row justify-content-between">
               <div className="col">
-                <div><strong>Purchase order {props.shipments.poStatus}</strong></div>
-                <div>By: <strong>{props.shipments.poTxns[0].vendorName}</strong></div>
+                <div><strong>Purchase order ACCEPTED</strong></div>
+                <div>By: <strong>PO1234</strong></div>
               </div>
               <div className="col">
                 <div className="emp"></div>
-                <div>Unicef Po ID : <strong>{props.shipments.poTxns[0].orderID}</strong></div>
+                <div>Unicef Po ID : <strong>PO1234</strong></div>
                 <div></div>
               </div>
               <div className="d-flex flex-column mr-5">
-                <div>{props.shipments.poTxns[0].date}</div>
+                <div>12/12/2022</div>
                 <div></div>
                 <div></div>
               </div>

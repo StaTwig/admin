@@ -11,23 +11,22 @@ const ShipmentDetails = (props) => {
           <div className="d-flex flex-row  ">
           <ul className="mr-3 elemens">
             <li className="mb-1 text-secondary">Shipment ID</li>
-            <li className="mb-1 text-secondary">Vendor Name</li>
-           {props.menuShip== true ? <li className="mb-1 text-secondary">Date</li> : null}
-           {props.menuShip== true ? <li className="mb-1 text-secondary">Expected Delivery</li> : null}
-           {props.menuShip== true ? <li className="mb-1 text-secondary">Shipped From</li> : null}
-           {props.menuShip== true ? <li className="mb-1 text-secondary">To Location ID</li> : null}
-           {props.menuShip== true ? <li className="mb-1 text-secondary">To Location</li> : null}
-           {props.menuShip== true ? <li className=" text-secondary">Transaction ID</li> : null}
+           <li className="mb-1 text-secondary">Label Type</li>
+           <h6 className="poheads potext mt-3 mb-3">Delivery Details:</h6>
+           <li className="mb-1 text-secondary">Air Way Bill</li>
+           <li className="mb-1 text-secondary">Label Code</li>
+           <li className="mb-1 text-secondary">Shipment Date</li> 
+           <li className="mb-1 text-secondary">Estimate Delivery Date</li>
           </ul>
            <ul className="elemens">
-            <li  className="mb-1">{props.shipments.shipmentTxns[0].shipmentId}</li>
-            <li  className="mb-1">{props.shipments.poTxns[0].vendorName}</li>
-            {props.menuShip== true ? <li  className="mb-1">{props.shipments.shipmentTxns[0].shipmentDate}</li> : null}
-           {props.menuShip== true ? <li  className="mb-1">{props.shipments.shipmentTxns[0].estimateDeliveryDate}</li> : null}
-           {props.menuShip== true ? <li  className="mb-1">{props.shipments.shipmentTxns[0].supplierLocation}</li> : null}
-           {props.menuShip== true ? <li  className="mb-1">5678</li> : null}
-           {props.menuShip== true ? <li  className="mb-1">{props.shipments.shipmentTxns[0].deliveryLocation}</li> : null}
-           {props.menuShip== true ? <a className="d-flex flex-row"><li className="txn">{props.poCard.txnId}</li><img src={Verifiedpic} className="mt-1" width="10" height="10"/></a> : null}
+            <li  className="mb-1">{props.shipments.shipmentDetails[0].id}</li>
+            <li  className="mb-1">{props.shipments.shipmentDetails[0].label.labelType}</li>
+            <h6 className="poheads potext mt-3 mb-3 text-white">Delivery Details:</h6>
+            <li  className="mb-1">{props.shipments.shipmentDetails[0].airWayBillNo}</li>
+            <li  className="mb-1">{props.shipments.shipmentDetails[0].label.labelId}</li>
+            <li  className="mb-1">{props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[2]+"/"+props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[1]+"/"+props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[0]} </li>
+            <li  className="mb-1">{props.shipments.shipmentDetails[0].expectedDeliveryDate.split('T')[0].split('-')[2]+"/"+props.shipments.shipmentDetails[0].expectedDeliveryDate.split('T')[0].split('-')[1]+"/"+props.shipments.shipmentDetails[0].expectedDeliveryDate.split('T')[0].split('-')[0]}</li>
+           
            </ul>
            <div>
            
