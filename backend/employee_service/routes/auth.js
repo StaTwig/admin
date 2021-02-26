@@ -10,6 +10,7 @@ router.post("/sendOtp", AuthController.sendOtp);
 router.post("/verifyOtp", AuthController.verifyOtp);
 router.get("/userInfo", AuthController.userInfo);
 router.get("/getAllUsers", AuthController.getAllUsers);
+router.get("/getOrgUsers", AuthController.getOrgUsers);
 router.post("/updateProfile", AuthController.updateProfile);
 router.post("/upload", upload.single("profile"), AuthController.uploadImage);
 router.get("/createAddress", AuthController.createUserAddress);

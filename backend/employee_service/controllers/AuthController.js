@@ -552,6 +552,32 @@ exports.getAllUsers = [
   },
 ];
 
+exports.getOrgUsers = [
+  auth,
+  async (req, res) => {
+    try {
+      const users = await EmployeeModel.find({organisationId:req.user.organisationId});
+      const confirmedUsers = users.filter((user) => user.walletAddress !== "");
+      // logger.log(
+      //   "info",
+      //   "<<<<< UserService < AuthController < getAllUsers : retrieved users successfully"
+      // );
+      return apiResponse.successResponseWithData(
+        res,
+        "Organisation Users Retrieved Success",
+        confirmedUsers
+      );
+    } catch (err) {
+      // logger.log(
+      //   "error",
+      //   "<<<<< UserService < AuthController < getAllUsers : error(catch block)"
+      // );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+
 exports.assignProductConsumer = [
   auth,
   async (req, res) => {
