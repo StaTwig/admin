@@ -4,25 +4,19 @@ const Warehouse = require("../models/warehouseModel")
 const AffliationModel = require("../models/affliationModel")
 const EmployeeModel = require("../models/employeeModel")
 const auth = require("../middlewares/jwt")
-
-/**
- * LOGGING
- */
-// const init = require("../utils/logging")
-// const logger = init.getLog()
+const checkToken = require("../middlewares/middleware").checkToken;
 
 exports.pendingRequests = [
     auth,
     async(req,res)=>{
         try {
-            // const { authorization } = req.headers;
             checkToken(req, res, async result => {
               if (result.success) {
                 const { organisationId } = req.user;
                 await AffliationModel.find({
                   $and: [
                     { 'status': "PENDING"},
-                    { 'to.organisationId': organisationId },
+                    { 'to.organisationId': organisationId }
                   ],
                 })
                   .then(employees => {
@@ -36,18 +30,10 @@ exports.pendingRequests = [
                     return apiResponse.ErrorResponse(res, err);
                   });
               } else {
-                // logger.log(
-                //   'warn',
-                //   '<<<<< AffliationService < Affliate Controller < pending Requests : refuted token',
-                // );
                 res.status(403).json('Auth failed');
               }
             });
           } catch (err) {
-            // logger.log(
-            //   'error',
-            //   '<<<<< AffliationService < Affliate Controller < pending Requests: catch block)',
-            // );
             return apiResponse.ErrorResponse(res, err);
           }
     }
@@ -72,18 +58,10 @@ exports.sentRequests = [
                   return apiResponse.ErrorResponse(res, err);
                 });
             } else {
-              // logger.log(
-              //   'warn',
-              //   '<<<<< AffliationService < Affliate Controller < Sent Requests : refuted token',
-              // );
               res.status(403).json('Auth failed');
             }
           });
         } catch (err) {
-          // logger.log(
-          //   'error',
-          //   '<<<<< AffliationService < Affliate Controller < Sent Requests: catch block)',
-          // );
           return apiResponse.ErrorResponse(res, err);
         }
   }

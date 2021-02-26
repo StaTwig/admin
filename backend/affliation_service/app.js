@@ -9,7 +9,8 @@ const path = require("path")
 const fs = require("fs")
 const router = require("./routes/indexRouter")
 const mongoose = require("mongoose")
-require('dotenv').config({path: __dirname + '/.env'})
+// require('dotenv').config({path: __dirname + '/.env'})
+require('dotenv').config()
 /**
  * Intialization
  */
