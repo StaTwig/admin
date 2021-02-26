@@ -1,8 +1,9 @@
 const apiResponse = require("../utils/apiResponse")
 const Organisation = require("../models/organisationModel")
 const Warehouse = require("../models/warehouseModel")
-const AffliationModel = require("../models/affliationModel");
-const auth = require("../middlewares/jwt");
+const AffliationModel = require("../models/affliationModel")
+const EmployeeModel = require("../models/employeeModel")
+const auth = require("../middlewares/jwt")
 
 /**
  * LOGGING
@@ -35,18 +36,18 @@ exports.pendingRequests = [
                     return apiResponse.ErrorResponse(res, err);
                   });
               } else {
-                logger.log(
-                  'warn',
-                  '<<<<< AffliationService < Affliate Controller < pending Requests : refuted token',
-                );
+                // logger.log(
+                //   'warn',
+                //   '<<<<< AffliationService < Affliate Controller < pending Requests : refuted token',
+                // );
                 res.status(403).json('Auth failed');
               }
             });
           } catch (err) {
-            logger.log(
-              'error',
-              '<<<<< AffliationService < Affliate Controller < pending Requests: catch block)',
-            );
+            // logger.log(
+            //   'error',
+            //   '<<<<< AffliationService < Affliate Controller < pending Requests: catch block)',
+            // );
             return apiResponse.ErrorResponse(res, err);
           }
     }
@@ -71,18 +72,18 @@ exports.sentRequests = [
                   return apiResponse.ErrorResponse(res, err);
                 });
             } else {
-              logger.log(
-                'warn',
-                '<<<<< AffliationService < Affliate Controller < Sent Requests : refuted token',
-              );
+              // logger.log(
+              //   'warn',
+              //   '<<<<< AffliationService < Affliate Controller < Sent Requests : refuted token',
+              // );
               res.status(403).json('Auth failed');
             }
           });
         } catch (err) {
-          logger.log(
-            'error',
-            '<<<<< AffliationService < Affliate Controller < Sent Requests: catch block)',
-          );
+          // logger.log(
+          //   'error',
+          //   '<<<<< AffliationService < Affliate Controller < Sent Requests: catch block)',
+          // );
           return apiResponse.ErrorResponse(res, err);
         }
   }
@@ -91,8 +92,12 @@ exports.sentRequests = [
 exports.affliatedOrgs = [
     async(req,res)=>{
         try{
-            await Warehouse.find({organisationId:req.query.orgId}).then(warehouses=>{
-               return apiResponse.successResponseWithData(res,"Warehouses Addresses",warehouses)
+            await EmployeeModel.find({id:req.user.id}).select("affiliatedOrganisations").then(orgs=>{
+              Organisation.find({id:{$in: orgs}}).then(Organisations=>{
+                return apiResponse.successResponseWithData(res,"Affliated Organisations Details",Organisations)
+              }).catch(err=>{
+                return apiResponse.ErrorResponse(res, err)
+            })
             }).catch(err=>{
                 return apiResponse.ErrorResponse(res, err)
             })
@@ -102,7 +107,7 @@ exports.affliatedOrgs = [
     }
 ]
 
-exports.updateAddressOrg = [
+exports.acceptAffliate = [
     async(req,res)=>{
         try{
             await Organisation.findOneAndUpdate({id:req.query.orgId},{ postalAddress: req.body.address},{new: true}).then(org=>{
@@ -116,7 +121,7 @@ exports.updateAddressOrg = [
     }
 ]
 
-exports.updateWarehouseAddress = [
+exports.rejectAffliate = [
     async(req,res)=>{
         try{
             await Warehouse.findOneAndUpdate({id:req.query.warehouseId}, req.body.WarehouseAddress,{new: true}).then(warehouse=>{
@@ -128,4 +133,18 @@ exports.updateWarehouseAddress = [
             return apiResponse.ErrorResponse(res, err);
         }
     }
+]
+
+exports.unAffliate = [
+  async(req,res)=>{
+      try{
+          await Warehouse.findOneAndUpdate({id:req.query.warehouseId}, req.body.WarehouseAddress,{new: true}).then(warehouse=>{
+              return apiResponse.successResponseWithData(res,"Warehouse Address Updated" , warehouse)
+          }).catch(err=>{
+              return apiResponse.ErrorResponse(res, err)
+          })
+      } catch(err){
+          return apiResponse.ErrorResponse(res, err);
+      }
+  }
 ]

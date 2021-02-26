@@ -1,5 +1,5 @@
 const express = require("express");
-const { pendingRequests, sentRequests, affliatedOrgs} = require("../controllers/AffliationController");
+const { pendingRequests, sentRequests, affliatedOrgs, acceptAffliate,rejectAffliate,unAffliate} = require("../controllers/AffliationController");
 
 const router = express.Router();
 
@@ -10,8 +10,8 @@ res.json({ status: "OK" });
 router.get("/fetchPendingRequests", pendingRequests) // /fetchPendingRequests
 router.get("/fetchSentRequests", sentRequests) // /fetchSentRequests
 router.get("/fetchAffiliates", affliatedOrgs) // /fetchAffiliates
-// router.get("api/affliation_service/acceptRequest", accept) // /fetchWarehouses?orgId=123
-// router.get("api/affliation_service/rejectRequest", reject) // /fetchWarehouses?orgId=123
-// router.get("api/affliation_service/unAffiliate", unaffliate) // /fetchWarehouses?orgId=123
+router.get("/acceptAffliate", acceptAffliate) // /fetchWarehouses?orgId=123
+router.get("/rejectAffliate", rejectAffliate) // /fetchWarehouses?orgId=123
+router.get("/unAffiliate", unAffliate) // /fetchWarehouses?orgId=123
 
 module.exports = router;

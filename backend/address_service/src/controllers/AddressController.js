@@ -11,7 +11,7 @@ const Warehouse = require("../models/warehouseModel")
 exports.addressesOfOrg = [
     async(req,res)=>{
         try{
-            await Organisation.find({id:req.query.orgId}).then(orgs=>{
+            await Organisation.find({id:req.user.organisationId}).then(orgs=>{
                return apiResponse.successResponseWithData(res,"Organisations Addresses",orgs)
             }).catch(err=>{
                 return apiResponse.ErrorResponse(res, err)
@@ -25,7 +25,7 @@ exports.addressesOfOrg = [
 exports.addressesOfOrgWarehouses = [
     async(req,res)=>{
         try{
-            await Warehouse.find({organisationId:req.query.orgId}).then(warehouses=>{
+            await Warehouse.find({organisationId:req.user.organisationId}).then(warehouses=>{
                return apiResponse.successResponseWithData(res,"Warehouses Addresses",warehouses)
             }).catch(err=>{
                 return apiResponse.ErrorResponse(res, err)
@@ -39,7 +39,7 @@ exports.addressesOfOrgWarehouses = [
 exports.updateAddressOrg = [
     async(req,res)=>{
         try{
-            await Organisation.findOneAndUpdate({id:req.query.orgId},{ postalAddress: req.body.address},{new: true}).then(org=>{
+            await Organisation.findOneAndUpdate({id:req.user.organisationId},{ postalAddress: req.body.address},{new: true}).then(org=>{
                 return apiResponse.successResponseWithData(res,"Organisation Address Updated" , org)
             }).catch(err=>{
                 return apiResponse.ErrorResponse(res, err)
@@ -58,6 +58,26 @@ exports.updateWarehouseAddress = [
             }).catch(err=>{
                 return apiResponse.ErrorResponse(res, err)
             })
+        } catch(err){
+            return apiResponse.ErrorResponse(res, err);
+        }
+    }
+]
+
+exports.AddWarehouse = [
+    async(req,res)=>{
+        try{
+
+            }
+            catch(err){
+            return apiResponse.ErrorResponse(res, err);
+        }
+    }
+]
+
+exports.AddOffice = [
+    async(req,res)=>{
+        try{
         } catch(err){
             return apiResponse.ErrorResponse(res, err);
         }
