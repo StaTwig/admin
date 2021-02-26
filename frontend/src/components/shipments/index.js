@@ -165,6 +165,7 @@ const ShipmentAnalytic = props => {
               setEditMode={() => setEditMode(true)}
               users={users}
               user={user}
+              {...props}
             />
           )}
         </Modal>

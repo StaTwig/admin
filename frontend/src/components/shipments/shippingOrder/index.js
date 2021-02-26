@@ -7,11 +7,12 @@ import './style.scss';
 const ShippingOrderTable = props => {
   const [showShippingModal, setShowShippingModal] = useState(false);
   const [shippingOrders, setShippingOrders] = useState([]);
+  const[singleShippingOrder,setSingleShippingOrder] = useState({})
   const closeModal = () => {
     setShowShippingModal(false);
   };
-
-  const openModal = () => {
+  const openModal = shipping => {
+    setSingleShippingOrder(shipping)
     setShowShippingModal(true);
   };
 
@@ -103,7 +104,7 @@ const ShippingOrderTable = props => {
                       buttonclassName="btn-orange"
                     >
                       <ViewShippingModal
-                        singleShippingOrder={shipping}
+                        singleShippingOrder={singleShippingOrder}
                         {...props}
                       />
                     </Modal>
