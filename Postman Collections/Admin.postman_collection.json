@@ -1,0 +1,534 @@
+{
+	"info": {
+		"_postman_id": "3dfb7c83-7205-43d1-b43e-7be9e5545625",
+		"name": "Admin",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "fetchOrganisations",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/address_service/fetchOrganisations",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"address_service",
+						"fetchOrganisations"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateOrganisation",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"address\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/address_service/updateOrganisation",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"address_service",
+						"updateOrganisation"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fetchWarehouses",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:3000/api/address_service/fetchWarehouses",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"address_service",
+						"fetchWarehouses"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update Warehouse",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"address\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/api/address_service/updateWarehouse?warehouseId=war-123",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"address_service",
+						"updateWarehouse"
+					],
+					"query": [
+						{
+							"key": "warehouseId",
+							"value": "war-123"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Approvals",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC01eXQ1aGJmbWtsaHI5cndsIiwiZmlyc3ROYW1lIjoicmF2aSIsImVtYWlsSWQiOiJ0ZXN0cmF2aUBnbWFpbC5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJOQSIsIm9yZ2FuaXNhdGlvbklkIjoiQVAxMDAxIiwiaWF0IjoxNjE0MDkzMDI3LCJleHAiOjE2MTQxMDAyMjd9.aEdSGc2vm0-vUI2EM8c7Px8_dvtHNeEP0a9gvtYzLEc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://admin.vaccineledger.com/api/employee_service/getApprovals",
+					"protocol": "http",
+					"host": [
+						"admin",
+						"vaccineledger",
+						"com"
+					],
+					"path": [
+						"api",
+						"employee_service",
+						"getApprovals"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Accept Approvals",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJOQSIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb24iOnsiX2lkIjoiNjAxODMzMjYyMzI5OTg3NGY0YWM3NTM1IiwibmFtZSI6IkJoYXJhdCJ9LCJpYXQiOjE2MTQxODk2MDIsImV4cCI6MTYxNDE5NjgwMn0.BPToTa_74KDMEhPn6ofn3t5Va_Uq_Yqy05zCWXIgIKc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://admin.vaccineledger.com/api/employee_service/accpetApproval?id=emp-18gpp8rrkljqnvbd&role=powerUser",
+					"protocol": "http",
+					"host": [
+						"admin",
+						"vaccineledger",
+						"com"
+					],
+					"path": [
+						"api",
+						"employee_service",
+						"accpetApproval"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "emp-18gpp8rrkljqnvbd"
+						},
+						{
+							"key": "role",
+							"value": "powerUser"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reject Approval",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC01eXQ1aGJmbWtsaHI5cndsIiwiZmlyc3ROYW1lIjoicmF2aSIsImVtYWlsSWQiOiJ0ZXN0cmF2aUBnbWFpbC5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJOQSIsIm9yZ2FuaXNhdGlvbklkIjoiQVAxMDAxIiwiaWF0IjoxNjE0MDkzMDI3LCJleHAiOjE2MTQxMDAyMjd9.aEdSGc2vm0-vUI2EM8c7Px8_dvtHNeEP0a9gvtYzLEc",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3003/api/employee_service/rejecApproval?id=emp-5yt5hbr8klhv2tnh",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"api",
+						"employee_service",
+						"rejecApproval"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "emp-5yt5hbr8klhv2tnh"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login by send OTP",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"emailId\":\"ravilochan2000@gmail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3003/api/employee_service/auth/sendOtp",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"api",
+						"employee_service",
+						"auth",
+						"sendOtp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Login by verify OTP",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"emailId\":\"thrinethra@statwig.com\",\n    \"otp\":\"1234\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://admin.vaccineledger.com/api/employee_service/auth/verifyOtp",
+					"protocol": "http",
+					"host": [
+						"admin",
+						"vaccineledger",
+						"com"
+					],
+					"path": [
+						"api",
+						"employee_service",
+						"auth",
+						"verifyOtp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\":\"test emp 2\",\n    \"lastName\":\"test\",\n    \"organisationId\":\"AP1001\",\n    \"emailId\":\"test2@gmail.com\"\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3003/api/employee_service/auth/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"api",
+						"employee_service",
+						"auth",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update profile",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"firstName\":\"test emp 2\",\n    \"lastName\":\"test\",\n    \"organisation\":\"orgID/Name\",\n    \"emailId\":\"test2@gmail.com\"\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3003/api/employee_service/auth/updateProfile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"api",
+						"employee_service",
+						"auth",
+						"updateProfile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Admin User Info",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3003/api/employee_service/auth/userInfo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"api",
+						"employee_service",
+						"auth",
+						"userInfo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Manage Users - Get all Users of Organisation (Admin) Copy",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3003/api/employee_service/auth/getOrgUsers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"api",
+						"employee_service",
+						"auth",
+						"getOrgUsers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Manage Users - GetAllUsers of all Organisations",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3003/api/employee_service/auth/getAllUsers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"api",
+						"employee_service",
+						"auth",
+						"getAllUsers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getPermissions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://admin.vaccineledger.com/api/rbac_service/getPermissions",
+					"protocol": "http",
+					"host": [
+						"admin",
+						"vaccineledger",
+						"com"
+					],
+					"path": [
+						"api",
+						"rbac_service",
+						"getPermissions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add role RBAC",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"permissions\":\"\",\n    \"role\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://admin.vaccineledger.com/api/rbac_service/addPermissions",
+					"protocol": "http",
+					"host": [
+						"admin",
+						"vaccineledger",
+						"com"
+					],
+					"path": [
+						"api",
+						"rbac_service",
+						"addPermissions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fetchPendingRequests",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://admin.vaccineledger.com/api/affliation_service/fetchPendingRequests",
+					"protocol": "http",
+					"host": [
+						"admin",
+						"vaccineledger",
+						"com"
+					],
+					"path": [
+						"api",
+						"affliation_service",
+						"fetchPendingRequests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fetchSentRequests",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://admin.vaccineledger.com/api/affliation_service/fetchSentRequests",
+					"protocol": "http",
+					"host": [
+						"admin",
+						"vaccineledger",
+						"com"
+					],
+					"path": [
+						"api",
+						"affliation_service",
+						"fetchSentRequests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fetchAffiliates",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://admin.vaccineledger.com/api/affliation_service/fetchAffiliates",
+					"protocol": "http",
+					"host": [
+						"admin",
+						"vaccineledger",
+						"com"
+					],
+					"path": [
+						"api",
+						"affliation_service",
+						"fetchAffiliates"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
