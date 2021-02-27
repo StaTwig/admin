@@ -22,6 +22,7 @@ const Map = (props) => {
       zoom: zoom
     });
     if(props?.warehouseLocation) {
+      const coords2 = [78.34414505675409, 17.443938689337784]
       const coords = [props.warehouseLocation.latitude, props.warehouseLocation.longitude];
       new mapboxgl.Marker().setLngLat(coords).addTo(map);
     }

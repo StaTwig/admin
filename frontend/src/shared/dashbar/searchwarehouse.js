@@ -41,7 +41,7 @@ import './style.scss'
                 <button type="button" className="close" onClick={() =>
                     {
                         props.setDashVisible(false)
-                        props.setDashBarData({})
+                        //props.setDashBarData({})
                     }
                 }>
                     <img src={CloseIcon} alt="Close" with="30" height="30" />
