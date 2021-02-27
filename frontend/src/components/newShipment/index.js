@@ -38,9 +38,15 @@ const NewShipment = props => {
 
   useEffect(() => {
     async function fetchData() {
+      const { search } = props.location;
+
       const result = await getShippingOrderIds();
       const ids = result.map(so => so.id);
       setShippingOrderIds(ids);
+      if(search) {
+        const shippingId = search.split('=')[1];
+        handleSOChange(shippingId);
+      }
     }
     fetchData();
   }, []);
