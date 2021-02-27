@@ -19,7 +19,7 @@ const RequestApproved = ({ name,organisation }) => {
                   <p>By logging in & verifying your email just once, you can use all of our services!</p>
                   <span style="margin-bottom:15px"></span>
                   <span style="margin-bottom:15px"></span>
-                  Continue to Login : <a href="http://test.vaccineledger.com/login"</a>
+                  Continue to <a href="http://test.vaccineledger.com/login">Login</a>
                   <span style="margin-bottom:15px"></span>
                   <h2>What is VaccineLedger?</h2>
                   <p>VaccineLedger is a Blockchain based platform, to track and trace vaccine's journey across the suplly chain.</p>

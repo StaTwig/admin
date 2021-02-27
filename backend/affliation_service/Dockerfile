@@ -1,8 +1,8 @@
 FROM node:current-alpine3.10
 
-COPY . /src
-
 WORKDIR /src
+
+COPY . /src
 
 RUN npm install
 

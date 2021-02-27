@@ -4,16 +4,11 @@
   "private": true,
   "scripts": {
     "start": "node user_server.js",
-    "dev": "nodemon user_server.js",
-    "test": "nyc _mocha --timeout 10000 --exit --report lcovonly -- -R spec",
-    "lint": "eslint --fix --config .eslintrc.json \"**/*.js\"",
-    "sample": "npx supervisor index.js"
+    "dev": "nodemon user_server.js"
   },
   "dependencies": {
     "axios": "^0.21.1",
     "base64-img": "^1.0.1",
-    "bcrypt": "^5.0.0",
-    "codacy-coverage": "^3.2.0",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -21,7 +16,6 @@
     "express-jwt": "^5.3.1",
     "express-validator": "^6.2.0",
     "jsonwebtoken": "^8.5.1",
-    "moment": "^2.24.0",
     "mongoose": "^5.11.15",
     "morgan": "~1.9.0",
     "multer": "^1.4.2",
@@ -30,10 +24,6 @@
     "winston-logzio": "^5.1.2"
   },
   "devDependencies": {
-    "chai-http": "^4.3.0",
-    "eslint": "^6.5.1",
-    "mocha": "^6.2.2",
-    "nodemon": "^1.19.4",
-    "nyc": "^14.1.1"
+    "nodemon": "^1.19.4"
   }
 }
