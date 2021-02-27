@@ -60,7 +60,7 @@ const ViewShippingModal = (props) => {
           <h3 className="text-info">{totalQuantity}</h3>
         </div>
       </div>
-      <Link to="/newshipment">
+      <Link to={`/newshipment?shippingId=${singleShippingOrder.id}`}>
       <button
         className="btn btn-orange fontSize20 font-bold mr-2  mt-3 float-right">
         <img src={Order} width="14" height="14" className="mr-2" />
