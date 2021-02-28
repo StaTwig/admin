@@ -24,15 +24,17 @@ Docker -->  Docker Compose
 
 2) Git pull -- Enter github deatils if prompted
 
-3) ```
+3) Build the images
+```
 sudo docker-compose -f Docker-compose.yml build
 ```
 Builds all the docker containers as images and caches ,the old ones
 
-4) ```
+4) 
+```
 sudo docker-compse -f Docker-compose.yml up -d
 ```
-This is for running all services in as a daemon process
+Running all services in as a daemon process
 
 5) If wanted to see the logs(console) 
 ```
