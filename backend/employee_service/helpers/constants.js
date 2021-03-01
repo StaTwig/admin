@@ -11,4 +11,12 @@ exports.constants = {
     from: `${process.env.EMAIL_SMTP_USERNAME}`,
     subject: 'Account Approved - Login into VaccineLedger'
   },
+  rejectEmail: {
+    from: `${process.env.EMAIL_SMTP_USERNAME}`,
+    subject: 'Account Rejected - Contact Admin'
+  },
+  addUser: {
+    from: `${process.env.EMAIL_SMTP_USERNAME}`,
+    subject: 'You are requested to Join Vaccine Ledger - Login with this email'
+  },
 };

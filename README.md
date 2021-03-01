@@ -17,4 +17,36 @@ Configuration Service --> setup of Configuration of Statledger
 
 
 ## CI/CD
-Docker -> -> Docker Compose
+Docker -->  Docker Compose
+
+## Deployment :
+1) Login to server
+
+2) Git pull -- Enter github deatils if prompted
+
+3) Build the images
+```
+sudo docker-compose -f Docker-compose.yml build
+```
+Builds all the docker containers as images and caches ,the old ones
+
+4) 
+```
+sudo docker-compse -f Docker-compose.yml up -d
+```
+Running all services in as a daemon process
+
+5) If wanted to see the logs(console) 
+```
+sudo docker-compse -f Docker-compose.yml up 
+```
+to exit 
+```
+Ctrl + c
+```
+This will exit all running docker images
+
+6) To properlly stop all services 
+```
+sudo docker-compse -f Docker-compose.yml down
+```

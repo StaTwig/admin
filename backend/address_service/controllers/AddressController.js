@@ -1,13 +1,10 @@
 const apiResponse = require("../utils/apiResponse")
 const Organisation = require("../models/organisationModel")
 const Warehouse = require("../models/warehouseModel")
+const Inventory = require("../models/inventoryModel")
 const auth = require("../middlewares/jwt")
-const checkToken = require("../middlewares/middleware").checkToken;
-/**
- * LOGGING
- */
-// const init = require("../utils/logging")
-// const logger = init.getLog()
+const { customAlphabet } = require("nanoid")
+const nanoid = customAlphabet('1234567890abcdef', 10)
 
 exports.addressesOfOrg = [
     auth,
@@ -71,20 +68,79 @@ exports.updateWarehouseAddress = [
 
 exports.AddWarehouse = [
     auth,
-    async(req,res)=>{
-        try{
-
-            }
-            catch(err){
-            return apiResponse.ErrorResponse(res, err);
-        }
+    async (req, res) => {
+    try {
+      const inventoryId = 'inv-'+nanoid();
+      const inventoryResult = new Inventory({ id: inventoryId });
+      await inventoryResult.save();
+      const {
+        organisationId,
+        postalAddress,
+        title,
+        region,
+        country,
+        location,
+        supervisors,
+        employees,
+      } = req.body;
+      const warehouseId = 'war-'+nanoid()
+      const warehouse = new Warehouse({
+        id: warehouseId,
+        title,
+        organisationId,
+        postalAddress,
+        region,
+        country,
+        location,
+        supervisors,
+        employees,
+        warehouseInventory: inventoryResult.id,
+      });
+      await warehouse.save();
+      return apiResponse.successResponseWithData(
+        res,
+        'Warehouse added success',
+        warehouse,
+      );
+    }catch(err) {
+      return apiResponse.ErrorResponse(res, err);
     }
-]
+    },
+  ];
+  
 
 exports.AddOffice = [
     auth,
     async(req,res)=>{
         try{
+            const {
+                organisationId,
+                title,
+                postalAddress,
+                region,
+                country,
+                location,
+                supervisors,
+                employees,
+              } = req.body;
+              const officeId = 'office-'+nanoid()
+              const office = new Warehouse({
+                id: officeId,
+                title,
+                organisationId,
+                postalAddress,
+                region,
+                country,
+                location,
+                supervisors,
+                employees,
+              });
+              await office.save();
+              return apiResponse.successResponseWithData(
+                res,
+                'Office added success',
+                office,
+              ); 
         } catch(err){
             return apiResponse.ErrorResponse(res, err);
         }
