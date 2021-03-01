@@ -20,8 +20,8 @@ const PoDetails = (props) => {
       </div>
       <div className="d-flex flex-column">
             <div className="mb-3">{props.shipments.poDetails[0].supplier.supplierOrganisation}</div>
-            <div className="mb-3">N/A</div>  
-            <div>N/A</div>   
+            <div className="mb-3">Bharat-Bio</div>  
+            <div>Mumbai</div>   
       </div>
      
       </div>
@@ -35,8 +35,8 @@ const PoDetails = (props) => {
       </div>
       <div className="d-flex flex-column">
             <div className="mb-3">{props.shipments.poDetails[0].customer.customerOrganisation}</div>
-            <div className="mb-3">N/A</div>  
-            <div>N/A</div>   
+            <div className="mb-3">LO-847</div>  
+            <div>Delhi</div>   
       </div>
      
       </div>
@@ -53,8 +53,8 @@ const PoDetails = (props) => {
         <tbody>
         {props.shipments.poDetails[0].products.map(product => <tr>
           <td><small>{product.productId}</small></td>
-          <td><small>N/A</small></td>
-          <td><small>N/A</small></td>
+          <td><small>OPV</small></td>
+          <td><small>Bharat</small></td>
           <td><small>{product.productQuantity}</small></td>
         </tr>)}
          
