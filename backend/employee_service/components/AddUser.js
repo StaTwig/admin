@@ -1,4 +1,4 @@
-const RequestApproved = ({ name,organisation }) => {
+const AddUser = ({ name,organisation }) => {
     return `<head>
           <title>VaccineLedger</title>
           <style>
@@ -32,5 +32,5 @@ const RequestApproved = ({ name,organisation }) => {
       </body>`;
   };
   
-  module.exports = RequestApproved;
+  module.exports = AddUser;
   

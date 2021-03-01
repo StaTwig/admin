@@ -42,7 +42,7 @@ const OrganisationSchema = new mongoose.Schema(
       default: ['user_id 1', 'user_id 2'],
     },
     warehouseEmployees: {
-      type: String,
+      type: Array,
       default: ['em12345', 'em12346', 'em12347'],
     },
   },

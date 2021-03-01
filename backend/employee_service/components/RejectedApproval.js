@@ -14,8 +14,8 @@ const RejectedApproval = ({ name,organisation }) => {
               </div>
               <div class="email-body">
                   <h4>Dear ${name},</h4>
-                  <h2>Welcome to VaccineLedger!</h2>
-                  <p>Admin has Appproved your Rejected to join Vaccine Ledger on organisation $${organisation}</p>
+                  <h2>We are sorry to say that : </h2>
+                  <p>The Admin of ${organisation} has REJECTED your approval to join Vaccine Ledger on behalf of organisation ${organisation}</p>
                   <p>Contact the Admin of the Organisation to know about your request Rejection</p>
                   <span style="margin-bottom:15px"></span>
                   <span style="margin-bottom:15px"></span>
