@@ -28,7 +28,7 @@ const TracingContainer = props => {
       <div className="d-flex">
         <Sidebar {...props} />
         <div className="content">
-          <Tracing trackData={trackData}/>
+          <Tracing trackData={trackData} {...props}/>
         </div>
       </div>
     </div>

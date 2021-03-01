@@ -30,6 +30,7 @@ const Tracing = props => {
   const tracking = props.trackData;
   //const productCard = props.productDetails;
   //const poCard = props.poDetails;
+
   const closeModal = () => {
     setOpenPurchase(false);
   }
@@ -87,6 +88,14 @@ const Tracing = props => {
                 </div>
               </div><Chart /> </div>
           </div>
+          <button 
+          className="btn btn-outline-* fontSize200 enlargeTemperature float-right" 
+          onClick = {() =>
+              window.location.href = `//iot.vaccineledger.com/${tracking.shipmentDetails[0].id}`
+            } 
+          >
+            SHOW MORE
+            </button>
           {openPurchase && (
             <Modal
               title="Purchase Order Details"
