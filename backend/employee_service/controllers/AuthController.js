@@ -204,6 +204,12 @@ exports.sendOtp = [
   async (req, res) => {
     try {
       const errors = validationResult(req);
+     /* EmployeeModel.collection.dropIndexes(function(){
+        EmployeeModel.collection.reIndex(function(finished){
+                 console.log("finished re indexing")
+               })
+             })*/
+      //EmployeeModel.createIndexes();
       if (!errors.isEmpty()) {
         logger.log(
           'info',
