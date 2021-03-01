@@ -6,20 +6,31 @@
 	},
 	"item": [
 		{
-			"name": "fetchOrganisations",
+			"name": "fetchOrganisation",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb24iOnsiX2lkIjoiNjAxODMzMjYyMzI5OTg3NGY0YWM3NTM1IiwibmFtZSI6IkJoYXJhdCJ9LCJpYXQiOjE2MTQ1NTYyMTksImV4cCI6MTYxNDU2MzQxOX0.xFmeL_N1skaIKvZWwFfFxbF1V7pb110f4ye-SZH4eqU",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/api/address_service/fetchOrganisations",
+					"raw": "admin.vaccineledger.com/api/address_service/fetchOrganisation",
 					"host": [
-						"localhost"
+						"admin",
+						"vaccineledger",
+						"com"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"address_service",
-						"fetchOrganisations"
+						"fetchOrganisation"
 					]
 				}
 			},
@@ -57,14 +68,25 @@
 		{
 			"name": "fetchWarehouses",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb24iOnsiX2lkIjoiNjAxODMzMjYyMzI5OTg3NGY0YWM3NTM1IiwibmFtZSI6IkJoYXJhdCJ9LCJpYXQiOjE2MTQ1NTYyMTksImV4cCI6MTYxNDU2MzQxOX0.xFmeL_N1skaIKvZWwFfFxbF1V7pb110f4ye-SZH4eqU",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "localhost:3000/api/address_service/fetchWarehouses",
+					"raw": "admin.vaccineledger.com/api/address_service/fetchWarehouses",
 					"host": [
-						"localhost"
+						"admin",
+						"vaccineledger",
+						"com"
 					],
-					"port": "3000",
 					"path": [
 						"api",
 						"address_service",
@@ -467,6 +489,16 @@
 		{
 			"name": "fetchPendingRequests",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb24iOnsiX2lkIjoiNjAxODMzMjYyMzI5OTg3NGY0YWM3NTM1IiwibmFtZSI6IkJoYXJhdCJ9LCJpYXQiOjE2MTQzNzAxMjIsImV4cCI6MTYxNDM3NzMyMn0.T1nndXHHbAue7b9e5uIB_3lcM4L-IHo9k6CpuWJkPUo",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -509,7 +541,7 @@
 			"response": []
 		},
 		{
-			"name": "fetchAffiliates",
+			"name": "fetchAffliates of loggedin user",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -525,6 +557,319 @@
 						"api",
 						"affliation_service",
 						"fetchAffiliates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fetchAffiliates of Organisation",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb24iOnsiX2lkIjoiNjAxODMzMjYyMzI5OTg3NGY0YWM3NTM1IiwibmFtZSI6IkJoYXJhdCJ9LCJpYXQiOjE2MTQ1NzUwMzIsImV4cCI6MTYxNDU4MjIzMn0.YFeg3EnX7BYe7r9TGMaUZAcR3TeGnz4KdGNM7kbRrxg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3002/api/affliation_service/fetchAllAffiliates",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"api",
+						"affliation_service",
+						"fetchAllAffiliates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Accept Affliate",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb24iOnsiX2lkIjoiNjAxODMzMjYyMzI5OTg3NGY0YWM3NTM1IiwibmFtZSI6IkJoYXJhdCJ9LCJpYXQiOjE2MTQ1NzUwMzIsImV4cCI6MTYxNDU4MjIzMn0.YFeg3EnX7BYe7r9TGMaUZAcR3TeGnz4KdGNM7kbRrxg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3002/api/affliation_service/acceptAffliate?affId=aff-1234",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"api",
+						"affliation_service",
+						"acceptAffliate"
+					],
+					"query": [
+						{
+							"key": "affId",
+							"value": "aff-1234"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reject Affliate",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb24iOnsiX2lkIjoiNjAxODMzMjYyMzI5OTg3NGY0YWM3NTM1IiwibmFtZSI6IkJoYXJhdCJ9LCJpYXQiOjE2MTQ1NzUwMzIsImV4cCI6MTYxNDU4MjIzMn0.YFeg3EnX7BYe7r9TGMaUZAcR3TeGnz4KdGNM7kbRrxg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3002/api/affliation_service/rejectAffliate?affId=aff-1234",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"api",
+						"affliation_service",
+						"rejectAffliate"
+					],
+					"query": [
+						{
+							"key": "affId",
+							"value": "aff-1234"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Unaffliate",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb24iOnsiX2lkIjoiNjAxODMzMjYyMzI5OTg3NGY0YWM3NTM1IiwibmFtZSI6IkJoYXJhdCJ9LCJpYXQiOjE2MTQ1NzUwMzIsImV4cCI6MTYxNDU4MjIzMn0.YFeg3EnX7BYe7r9TGMaUZAcR3TeGnz4KdGNM7kbRrxg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://admin.vaccineledger.com/api/affliation_service/unAffiliate?orgId=org-1234",
+					"protocol": "http",
+					"host": [
+						"admin",
+						"vaccineledger",
+						"com"
+					],
+					"path": [
+						"api",
+						"affliation_service",
+						"unAffiliate"
+					],
+					"query": [
+						{
+							"key": "orgId",
+							"value": "org-1234"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add affliate",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb24iOnsiX2lkIjoiNjAxODMzMjYyMzI5OTg3NGY0YWM3NTM1IiwibmFtZSI6IkJoYXJhdCJ9LCJpYXQiOjE2MTQ1NzUwMzIsImV4cCI6MTYxNDU4MjIzMn0.YFeg3EnX7BYe7r9TGMaUZAcR3TeGnz4KdGNM7kbRrxg",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"from\":{\n            \"name\":\"String\",\n            \"id\":\"String\",\n            \"organisationId\":\"String\",\n            \"organisation\":\"String\",\n            \"warehouseId\":\"String\",\n            \"emailId\":\"String\",\n            \"phone\":\"String\",\n            \"walletAddress\":\"String\",\n            \"photoUrl\":\"String\"\n        },\n        \"to\":{\n            \"name\":\"String\",\n            \"id\":\"String\",\n            \"organisationId\":\"String\",\n            \"organisation\":\"String\",\n            \"warehouseId\":\"String\",\n            \"emailId\":\"String\",\n            \"phone\":\"String\",\n            \"walletAddress\":\"String\",\n            \"photoUrl\":\"String\"\n        }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3002/api/affliation_service/addAffliate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"api",
+						"affliation_service",
+						"addAffliate"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addOffice - Add a New Office ( Warehouse with no inventory )",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb24iOnsiX2lkIjoiNjAxODMzMjYyMzI5OTg3NGY0YWM3NTM1IiwibmFtZSI6IkJoYXJhdCJ9LCJpYXQiOjE2MTQ1NTYyMTksImV4cCI6MTYxNDU2MzQxOX0.xFmeL_N1skaIKvZWwFfFxbF1V7pb110f4ye-SZH4eqU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"title\": \"HOP1_S2_S1_IP_BREWERY\",\n  \"organizationId\": \"organization_id\",\n  \"postalAddress\": \"JNIBF, Gachibowli, Hyderabad, Telanagana, India\",\n  \"region\": {\n    \"regionId\": \"reg123\",\n    \"regionName\": \"Earth Prime\"\n  },\n  \"country\": {\n    \"countryId\": \"001\",\n    \"countryName\": \"India\"\n  },\n  \"location\": {\n    \"longitude\": 12.12323453534,\n    \"latitude\": 13.123435345435,\n    \"geohash\": \"1231nejf923453\"\n  },\n  \"supervisors\": [\n    \"user_id 1\",\n    \"user_id 2\"\n  ],\n  \"employeess\": [\n    \"em12345\",\n    \"em12346\",\n    \"em12347\"\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://admin.vaccineledger.com/api/address_service/addOffice",
+					"protocol": "http",
+					"host": [
+						"admin",
+						"vaccineledger",
+						"com"
+					],
+					"path": [
+						"api",
+						"address_service",
+						"addOffice"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addWarehouse",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb24iOnsiX2lkIjoiNjAxODMzMjYyMzI5OTg3NGY0YWM3NTM1IiwibmFtZSI6IkJoYXJhdCJ9LCJpYXQiOjE2MTQ1NTYyMTksImV4cCI6MTYxNDU2MzQxOX0.xFmeL_N1skaIKvZWwFfFxbF1V7pb110f4ye-SZH4eqU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"title\": \"Warehouse\",\n  \"organizationId\": \"organization_id\",\n  \"postalAddress\": \"JNIBF, Gachibowli, Hyderabad, Telanagana, India\",\n  \"region\": {\n    \"regionId\": \"reg123\",\n    \"regionName\": \"Earth Prime\"\n  },\n  \"country\": {\n    \"countryId\": \"001\",\n    \"countryName\": \"India\"\n  },\n  \"location\": {\n    \"longitude\": 12.12323453534,\n    \"latitude\": 13.123435345435,\n    \"geohash\": \"1231nejf923453\"\n  },\n  \"supervisors\": [\n    \"user_id 1\",\n    \"user_id 2\"\n  ],\n  \"employeess\": [\n    \"em12345\",\n    \"em12346\",\n    \"em12347\"\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://admin.vaccineledger.com/api/address_service/addWarehouse",
+					"protocol": "http",
+					"host": [
+						"admin",
+						"vaccineledger",
+						"com"
+					],
+					"path": [
+						"api",
+						"address_service",
+						"addWarehouse"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "addUser",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb24iOnsiX2lkIjoiNjAxODMzMjYyMzI5OTg3NGY0YWM3NTM1IiwibmFtZSI6IkJoYXJhdCJ9LCJpYXQiOjE2MTQ1NTYyMTksImV4cCI6MTYxNDU2MzQxOX0.xFmeL_N1skaIKvZWwFfFxbF1V7pb110f4ye-SZH4eqU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"firstName\": \"Warehouse\",\n  \"lastName\": \"organization_id\",\n  \"emailId\": \"J@gmail.com\",\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://admin.vaccineledger.com/api/employee_service/addUser",
+					"protocol": "http",
+					"host": [
+						"admin",
+						"vaccineledger",
+						"com"
+					],
+					"path": [
+						"api",
+						"employee_service",
+						"addUser"
 					]
 				}
 			},
