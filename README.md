@@ -19,6 +19,11 @@ Configuration Service --> setup of Configuration of Statledger
 ## CI/CD
 Docker -->  Docker Compose
 
+[] Docker-compose.yml file has all the docker service configuration , Traefik routing rules and Loadbalancing
+[] Deploy folder is a File provider configuration setup for traefik if using Node instances without docker ( NOT CURRENTLY USING )
+[] All static configuration of Traefik is present in traefik_config folder , "traefik.yml" file ( CURRENTLY USING )
+
+
 ## Deployment :
 1) Login to server
 
