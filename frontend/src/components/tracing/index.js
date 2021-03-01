@@ -91,7 +91,7 @@ const Tracing = props => {
           <button 
           className="btn btn-outline-* fontSize200 enlargeTemperature float-right" 
           onClick = {() =>
-              window.location.href = `//iot.vaccineledger.com/${tracking.shipmentDetails[0].id}`
+            window.open(`//iot.vaccineledger.com/${tracking.shipmentDetails[0].id}`, '_blank') 
             } 
           >
             SHOW MORE
