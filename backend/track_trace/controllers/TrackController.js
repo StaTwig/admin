@@ -311,7 +311,7 @@ exports.track = [
             shipments: shipment_array,
         });
     });
-  } else if (trackingNumber.includes("SH") || trackingNumber.includes("ZP") ) {
+  } else if (trackingNumber.includes("SH") || trackingNumber.includes("zp") ) {
      var poDetails,shipmentDetails,shippingOrderDetails,shippingOrderId;
      ShipmentModel.find({
      "id": trackingNumber
