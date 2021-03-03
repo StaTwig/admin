@@ -19,7 +19,7 @@ const EditRow = props => {
           <input
             className="form-field"
             placeholder="Product ID"
-            value={product.productId}
+            value={product.productID}
             disabled={true}
           />
         </div>

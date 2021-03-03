@@ -7,7 +7,7 @@ import './style.scss';
 import { config } from '../../config';
 const axios = require('axios');
 import { getUserInfoUpdated, updateProfile, getUserInfo } from '../../actions/userActions';
-import { getOrganisations, getWarehouseByOrgId } from '../../actions/productActions';
+import { getOrganisationsProfile, getWarehouseByOrgId } from '../../actions/productActions';
 
 class Profile extends React.Component {
   constructor(props) {
@@ -80,7 +80,7 @@ class Profile extends React.Component {
     }
   }
   async onOrganisation() {
-    const orgResponse = await getOrganisations();
+    const orgResponse = await getOrganisationsProfile();
     if (orgResponse.status === 1) {
       const organisationResult = orgResponse.data.map((txn) => (txn.name + "/" + txn.id))
       this.setState({ orgs: organisationResult })

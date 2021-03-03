@@ -27,7 +27,7 @@ const CreateShippingOrder = (props) => {
     props.history.push('/shipments')
   }
   let totalQuantity = 0;
-  props.purchaseOrder.products.forEach(product => totalQuantity += parseInt(product.quantity));
+  props.purchaseOrder.products.forEach(product => totalQuantity += parseInt(product.productQuantity));
 
   useEffect(() => {
     async function fetchData() {
@@ -42,7 +42,7 @@ const CreateShippingOrder = (props) => {
   
 const onQuantityChange = (e,index) => {
 const productsClone = [...products];
-productsClone[index].quantity = e.target.value;
+productsClone[index].productQuantity = e.target.value;
 setProducts(productsClone);
   
 }
@@ -133,7 +133,7 @@ else {
               className="form-controler"
               name="quantity"
               placeholder="quantity"
-              value={product.quantity}
+              value={product.productQuantity}
               onChange={e => onQuantityChange(e,i)}
 
             /></td>
