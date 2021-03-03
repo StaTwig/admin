@@ -39,11 +39,21 @@
 		{
 			"name": "updateOrganisation",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0NzY3NDA0LCJleHAiOjE2MTQ3NzQ2MDR9.khVOBVZJMxvoOG4JvBBbdBCvH9N25mc73jYlYk94ZiM",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"address\":\"\"\n}",
+					"raw": "{\n    \"address\":{\n        \"postalAddress\":\"T-Hub, IIIT, Gachibowli, Hyderabad, Telangana, India\",\n        \"region\": {\n        \"regionId\": \"reg123\",\n        \"regionName\": \"Earth Prime\"\n      },\n    \"country\": {\n        \"countryId\": \"001\", \n        \"countryName\": \"India\"\n    },\n    \"location\": {\n        \"longitude\": 12.12323453534,\n        \"latitude\": 13.123435345435,\n        \"geohash\": \"1231nejf923453\"\n      }\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -51,11 +61,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/api/address_service/updateOrganisation",
+					"raw": "localhost:3001/api/address_service/updateOrganisation",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "3001",
 					"path": [
 						"api",
 						"address_service",
@@ -73,7 +83,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb24iOnsiX2lkIjoiNjAxODMzMjYyMzI5OTg3NGY0YWM3NTM1IiwibmFtZSI6IkJoYXJhdCJ9LCJpYXQiOjE2MTQ1NTYyMTksImV4cCI6MTYxNDU2MzQxOX0.xFmeL_N1skaIKvZWwFfFxbF1V7pb110f4ye-SZH4eqU",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0NzY3NDA0LCJleHAiOjE2MTQ3NzQ2MDR9.khVOBVZJMxvoOG4JvBBbdBCvH9N25mc73jYlYk94ZiM",
 							"type": "string"
 						}
 					]
@@ -99,11 +109,21 @@
 		{
 			"name": "update Warehouse",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0NzY3NDA0LCJleHAiOjE2MTQ3NzQ2MDR9.khVOBVZJMxvoOG4JvBBbdBCvH9N25mc73jYlYk94ZiM",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"address\":\"\"\n}",
+					"raw": "{\n    \"WarehouseAddress\":{\n        \"postalAddress\":\"T-Hub,Telangana, India\",\n        \"region\": {\n        \"regionId\": \"reg123\",\n        \"regionName\": \"Earth\"\n      },\n    \"country\": {\n        \"countryId\": \"001\",\n        \"countryName\": \"India\"\n    },\n    \"location\": {\n        \"longitude\": 12.12323453534,\n        \"latitude\": 13.123435345435,\n        \"geohash\": \"1231nejf923453\"\n      }\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -111,11 +131,11 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:3000/api/address_service/updateWarehouse?warehouseId=war-123",
+					"raw": "localhost:3001/api/address_service/updateWarehouse?warehouseId=war-1234",
 					"host": [
 						"localhost"
 					],
-					"port": "3000",
+					"port": "3001",
 					"path": [
 						"api",
 						"address_service",
@@ -124,7 +144,7 @@
 					"query": [
 						{
 							"key": "warehouseId",
-							"value": "war-123"
+							"value": "war-1234"
 						}
 					]
 				}
@@ -139,7 +159,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC01eXQ1aGJmbWtsaHI5cndsIiwiZmlyc3ROYW1lIjoicmF2aSIsImVtYWlsSWQiOiJ0ZXN0cmF2aUBnbWFpbC5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJOQSIsIm9yZ2FuaXNhdGlvbklkIjoiQVAxMDAxIiwiaWF0IjoxNjE0MDkzMDI3LCJleHAiOjE2MTQxMDAyMjd9.aEdSGc2vm0-vUI2EM8c7Px8_dvtHNeEP0a9gvtYzLEc",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0NzY3NDA0LCJleHAiOjE2MTQ3NzQ2MDR9.khVOBVZJMxvoOG4JvBBbdBCvH9N25mc73jYlYk94ZiM",
 							"type": "string"
 						}
 					]
@@ -243,7 +263,7 @@
 			"response": []
 		},
 		{
-			"name": "Login by send OTP",
+			"name": "send OTP",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -306,13 +326,26 @@
 			"response": []
 		},
 		{
-			"name": "Register",
+			"name": "get Org Users - Users of loggedIn admin Org",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
-				"method": "POST",
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0Nzc3NTQ0LCJleHAiOjE2MTQ3ODQ3NDR9.xgjlo-eGWOVPd3A1UUPF4MR24e1SZRgOs5EspClNF-8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"firstName\":\"test emp 2\",\n    \"lastName\":\"test\",\n    \"organisationId\":\"AP1001\",\n    \"emailId\":\"test2@gmail.com\"\n\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -320,7 +353,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3003/api/employee_service/auth/register",
+					"raw": "http://localhost:3003/api/employee_service/auth/getOrgUsers",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -330,7 +363,101 @@
 						"api",
 						"employee_service",
 						"auth",
-						"register"
+						"getOrgUsers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get Users by orgId",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0Nzc3NTQ0LCJleHAiOjE2MTQ3ODQ3NDR9.xgjlo-eGWOVPd3A1UUPF4MR24e1SZRgOs5EspClNF-8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3003/api/employee_service/auth/getUsers?orgId=BB1001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"api",
+						"employee_service",
+						"auth",
+						"getUsers"
+					],
+					"query": [
+						{
+							"key": "orgId",
+							"value": "BB1001"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get All Users - from all confirmed users in system",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0Nzc3NTQ0LCJleHAiOjE2MTQ3ODQ3NDR9.xgjlo-eGWOVPd3A1UUPF4MR24e1SZRgOs5EspClNF-8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3003/api/employee_service/auth/getAllUsers",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"api",
+						"employee_service",
+						"auth",
+						"getAllUsers"
 					]
 				}
 			},
@@ -339,6 +466,16 @@
 		{
 			"name": "Update profile",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0Nzc3NTQ0LCJleHAiOjE2MTQ3ODQ3NDR9.xgjlo-eGWOVPd3A1UUPF4MR24e1SZRgOs5EspClNF-8",
+							"type": "string"
+						}
+					]
+				},
 				"method": "POST",
 				"header": [],
 				"body": {
@@ -362,6 +499,47 @@
 						"employee_service",
 						"auth",
 						"updateProfile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload Image",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0Nzc3NTQ0LCJleHAiOjE2MTQ3ODQ3NDR9.xgjlo-eGWOVPd3A1UUPF4MR24e1SZRgOs5EspClNF-8",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"file\":\"\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3003/api/employee_service/auth/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"api",
+						"employee_service",
+						"auth",
+						"upload"
 					]
 				}
 			},
@@ -494,7 +672,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb24iOnsiX2lkIjoiNjAxODMzMjYyMzI5OTg3NGY0YWM3NTM1IiwibmFtZSI6IkJoYXJhdCJ9LCJpYXQiOjE2MTQzNzAxMjIsImV4cCI6MTYxNDM3NzMyMn0.T1nndXHHbAue7b9e5uIB_3lcM4L-IHo9k6CpuWJkPUo",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0NzY3NDA0LCJleHAiOjE2MTQ3NzQ2MDR9.khVOBVZJMxvoOG4JvBBbdBCvH9N25mc73jYlYk94ZiM",
 							"type": "string"
 						}
 					]
@@ -521,6 +699,16 @@
 		{
 			"name": "fetchSentRequests",
 			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0NzY3NDA0LCJleHAiOjE2MTQ3NzQ2MDR9.khVOBVZJMxvoOG4JvBBbdBCvH9N25mc73jYlYk94ZiM",
+							"type": "string"
+						}
+					]
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
@@ -713,7 +901,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb24iOnsiX2lkIjoiNjAxODMzMjYyMzI5OTg3NGY0YWM3NTM1IiwibmFtZSI6IkJoYXJhdCJ9LCJpYXQiOjE2MTQ1NzUwMzIsImV4cCI6MTYxNDU4MjIzMn0.YFeg3EnX7BYe7r9TGMaUZAcR3TeGnz4KdGNM7kbRrxg",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0NzY3NDA0LCJleHAiOjE2MTQ3NzQ2MDR9.khVOBVZJMxvoOG4JvBBbdBCvH9N25mc73jYlYk94ZiM",
 							"type": "string"
 						}
 					]
@@ -753,47 +941,6 @@
 			"response": []
 		},
 		{
-			"name": "addOffice - Add a New Office ( Warehouse with no inventory )",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb24iOnsiX2lkIjoiNjAxODMzMjYyMzI5OTg3NGY0YWM3NTM1IiwibmFtZSI6IkJoYXJhdCJ9LCJpYXQiOjE2MTQ1NTYyMTksImV4cCI6MTYxNDU2MzQxOX0.xFmeL_N1skaIKvZWwFfFxbF1V7pb110f4ye-SZH4eqU",
-							"type": "string"
-						}
-					]
-				},
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n  \"title\": \"HOP1_S2_S1_IP_BREWERY\",\n  \"organizationId\": \"organization_id\",\n  \"postalAddress\": \"JNIBF, Gachibowli, Hyderabad, Telanagana, India\",\n  \"region\": {\n    \"regionId\": \"reg123\",\n    \"regionName\": \"Earth Prime\"\n  },\n  \"country\": {\n    \"countryId\": \"001\",\n    \"countryName\": \"India\"\n  },\n  \"location\": {\n    \"longitude\": 12.12323453534,\n    \"latitude\": 13.123435345435,\n    \"geohash\": \"1231nejf923453\"\n  },\n  \"supervisors\": [\n    \"user_id 1\",\n    \"user_id 2\"\n  ],\n  \"employeess\": [\n    \"em12345\",\n    \"em12346\",\n    \"em12347\"\n  ]\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://admin.vaccineledger.com/api/address_service/addOffice",
-					"protocol": "http",
-					"host": [
-						"admin",
-						"vaccineledger",
-						"com"
-					],
-					"path": [
-						"api",
-						"address_service",
-						"addOffice"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "addWarehouse",
 			"request": {
 				"auth": {
@@ -811,6 +958,47 @@
 				"body": {
 					"mode": "raw",
 					"raw": "{\n  \"title\": \"Warehouse\",\n  \"organizationId\": \"organization_id\",\n  \"postalAddress\": \"JNIBF, Gachibowli, Hyderabad, Telanagana, India\",\n  \"region\": {\n    \"regionId\": \"reg123\",\n    \"regionName\": \"Earth Prime\"\n  },\n  \"country\": {\n    \"countryId\": \"001\",\n    \"countryName\": \"India\"\n  },\n  \"location\": {\n    \"longitude\": 12.12323453534,\n    \"latitude\": 13.123435345435,\n    \"geohash\": \"1231nejf923453\"\n  },\n  \"supervisors\": [\n    \"user_id 1\",\n    \"user_id 2\"\n  ],\n  \"employeess\": [\n    \"em12345\",\n    \"em12346\",\n    \"em12347\"\n  ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://admin.vaccineledger.com/api/address_service/addWarehouse",
+					"protocol": "http",
+					"host": [
+						"admin",
+						"vaccineledger",
+						"com"
+					],
+					"path": [
+						"api",
+						"address_service",
+						"addWarehouse"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add Office",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0NzY3NDA0LCJleHAiOjE2MTQ3NzQ2MDR9.khVOBVZJMxvoOG4JvBBbdBCvH9N25mc73jYlYk94ZiM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"title\": \"Sales office\",\n  \"organizationId\": \"organization_id\",\n  \"postalAddress\": \"JNIBF, Gachibowli, Hyderabad, Telanagana, India\",\n  \"region\": {\n    \"regionId\": \"reg123\",\n    \"regionName\": \"Earth Prime\"\n  },\n  \"country\": {\n    \"countryId\": \"001\",\n    \"countryName\": \"India\"\n  },\n  \"location\": {\n    \"longitude\": 12.12323453534,\n    \"latitude\": 13.123435345435,\n    \"geohash\": \"1231nejf923453\"\n  },\n  \"supervisors\": [\n    \"user_id 1\",\n    \"user_id 2\"\n  ],\n  \"employeess\": [\n    \"em12345\",\n    \"em12346\",\n    \"em12347\"\n  ]\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -870,6 +1058,90 @@
 						"api",
 						"employee_service",
 						"addUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "activate User",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0NzY3NDA0LCJleHAiOjE2MTQ3NzQ2MDR9.khVOBVZJMxvoOG4JvBBbdBCvH9N25mc73jYlYk94ZiM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://admin.vaccineledger.com/api/employee_service/activateUser?id=emp-1234&role=powerUser",
+					"protocol": "http",
+					"host": [
+						"admin",
+						"vaccineledger",
+						"com"
+					],
+					"path": [
+						"api",
+						"employee_service",
+						"activateUser"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "emp-1234"
+						},
+						{
+							"key": "role",
+							"value": "powerUser"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deactivate User",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0NzY3NDA0LCJleHAiOjE2MTQ3NzQ2MDR9.khVOBVZJMxvoOG4JvBBbdBCvH9N25mc73jYlYk94ZiM",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3003/api/employee_service/deactivateUser?id=emp-1234",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"api",
+						"employee_service",
+						"deactivateUser"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "emp-1234"
+						},
+						{
+							"key": "",
+							"value": "",
+							"disabled": true
+						}
 					]
 				}
 			},

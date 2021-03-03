@@ -59,3 +59,4 @@
 ::1 - GET /api/affliation_service/addAffliate HTTP/1.1 404 39 - 31.304 ms
 ::1 - GET /api/affliation_service/addAffliate HTTP/1.1 404 39 - 10.222 ms
 ::1 - POST /api/affliation_service/addAffliate HTTP/1.1 200 973 - 287.838 ms
+::1 - POST /api/affliation_service/addAffliate HTTP/1.1 500 343 - 30041.575 ms
