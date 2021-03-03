@@ -13,6 +13,8 @@ const Role = (props) => {
     description,
     listPermission,
     name,
+    handleBlur,
+    handleChange,
   } = props;
 
   const dcolor = i % 2 === 0 ? "bg-light" : "bg-white";
@@ -30,8 +32,10 @@ const Role = (props) => {
             name={name}
             id={`${name}${i}`}
             value={value}
+            onBlur={handleBlur}
             onChange={(e) => {
               setSelectedValue(e.currentTarget.value);
+              handleChange(e);
             }}
           />
           <label className="form-check-label" for={`${name}${i}`}>

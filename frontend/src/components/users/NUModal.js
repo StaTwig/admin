@@ -88,6 +88,8 @@ const NUModal = (props) => {
                   value={permission.role}
                   listPermission={permission.permissions}
                   name="role"
+                  handleBlur={handleBlur}
+                  handleChange={handleChange}
                 />
               ))}
               {errors.role && touched.role && (
