@@ -15,7 +15,7 @@ const RequestApproved = ({ name,organisation }) => {
               <div class="email-body">
                   <h4>Hi ${name},</h4>
                   <h2>Welcome to VaccineLedger!</h2>
-                  <p>Admin has Appproved your Reuqest to join Vaccine Ledger on organisation ${organisation}</p>
+                  <p>Admin has Appproved your Request to join Vaccine Ledger on organisation ${organisation}</p>
                   <p>By logging in & verifying your email just once, you can use all of our services!</p>
                   <span style="margin-bottom:15px"></span>
                   <span style="margin-bottom:15px"></span>

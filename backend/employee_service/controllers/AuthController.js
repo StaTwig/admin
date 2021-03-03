@@ -121,16 +121,16 @@ exports.verifyOtp = [
         return apiResponse.validationErrorWithData(
           res,
           'Validation Error.',
-          errors.array(),
+          errors.array()
         );
       } else {
         const emailId = req.body.emailId.toLowerCase();
         var query = { emailId };
         const user = await EmployeeModel.findOne(query);
         if (user && user.otp == req.body.otp) {
-          if(user.role == "powerUser" || "admin")
+          if(user.role == "powerUser" || user.role == "admin")
           {
-          await EmployeeModel.update(query, { otp: null });
+          EmployeeModel.updateOne(query, { otp: null });
           OrganisationModel.findOne({ id: user.organisationId}).select("name").then(OrgName=>{
             let userData = {
               id: user.id,
@@ -152,7 +152,7 @@ exports.verifyOtp = [
             return apiResponse.successResponseWithData(res, 'Login Success', userData);
           }).catch(err=>{
             return apiResponse.ErrorResponse(res, err);
-          })
+          });
         }
         else{
           return apiResponse.ErrorResponse(res, `User dosen't have enough Permission for Admin Model`);

@@ -78,7 +78,7 @@ exports.getApprovals = [
                   EmployeeModel.findOneAndUpdate({'id':id},{$set: { accountStatus:"ACTIVE" , isConfirmed: true , walletAddress , role}},{ "new": true}).exec().then(emp=>{
                     let emailBody = RequestApproved({
                       name: emp.firstName,
-                      organisationName,
+                      organisation:organisationName,
                     });
                     // Send confirmation email
                     try {
@@ -139,7 +139,7 @@ exports.getApprovals = [
                   console.log("REJECTED")
                   let emailBody = RejectedApproval({
                     name: emp.firstName,
-                    organisationName,
+                    organisation:organisationName,
                   })
                   try{
                     mailer.send(
@@ -182,13 +182,16 @@ exports.getApprovals = [
             const firstName = email.split("@")[0];
             const user = new EmployeeModel({
               firstName: firstName,
-              lastName: "",
+              lastName: firstName,
               emailId: email,
               organisationId: organisationId,
+              role: req.body.role,
+              accountStatus:"ACTIVE",
+              isConfirmed:true,
               id: uniqid('emp-'),
             });
             await user.save()
-            let emailBody = AddUserEmail({firstName,organisationName});
+            let emailBody = AddUserEmail({name:firstName,organisation:organisationName});
             try{
                     mailer.send(
                       constants.addUser.from,
@@ -220,7 +223,7 @@ exports.getApprovals = [
               .then(employee => {
                 if(employee)
                 {
-                  if(employee.isConfirmed && accountStatus == "ACTIVE"){
+                  if(employee.isConfirmed && employee.accountStatus == "ACTIVE"){
                     return apiResponse.successResponseWithData(res," User is already Active",employee)
                   }
                   else{
@@ -238,7 +241,7 @@ exports.getApprovals = [
                     EmployeeModel.findOneAndUpdate({'id':id},{$set: { accountStatus:"ACTIVE" , isConfirmed: true , walletAddress , role}},{ "new": true}).exec().then(emp=>{
                       let emailBody = RequestApproved({
                         name: emp.firstName,
-                        organisationName,
+                        organisation:organisationName,
                       });
                       // Send confirmation email
                       try {
@@ -255,7 +258,7 @@ exports.getApprovals = [
                       }
                       return apiResponse.successResponseWithData(
                         res,
-                        `User Verified`,
+                        `User Activated`,
                         emp
                       );
                     })
