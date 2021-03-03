@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from "react";
 import Signup from "../../components/signUp";
 import MobileHeader from "../../shared/header/mobileHeader";
-import logo from "../../assets/brands/VACCINELEDGER.png";
+import logo from "../../assets/aicons/AdminLogo.png";
 import { Link } from "react-router-dom";
 
 const SignupContainer = (props) => {

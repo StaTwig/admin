@@ -23,6 +23,10 @@
     }
   }
 }
+.w-15 {
+  width: 15%;
+  text-align: center;
+}
 .userPic {
   margin-right: 0.5rem;
   img {
@@ -78,6 +82,7 @@
   text-overflow: ellipsis;
   max-width: 75%;
   padding: 0 10px;
+  align-self: center;
 }
 .btn-view {
   width: 80px;

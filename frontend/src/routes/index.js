@@ -21,18 +21,19 @@ import NoMatch from "../components/NoMatch";
 import "./style.scss";
 const routes = (
   <Switch>
-    <Route exact path="/" component={Home} />
-    <Route path="/overview" component={DashBoard} />
-    <Route path="/address" component={Address} />
-    <Route path="/newaddress" component={NewAddress} />
-    <Route path="/users" component={Users} />
-    <Route path="/affiliate" component={Affiliate} />
+    <Route exact path="/" component={Login} />
+    <Route path="/overview" component={requireAuth(DashBoard)} />
+    <Route path="/address" component={requireAuth(Address)} />
+    <Route path="/newaddress" component={requireAuth(NewAddress)} />
+    <Route path="/editaddress/:address" component={requireAuth(NewAddress)} />
+    <Route path="/users" component={requireAuth(Users)} />
+    <Route path="/affiliate" component={requireAuth(Affiliate)} />
     <Route path="/login" component={Login} />
     <Route path="/verify" component={Verify} />
     <Route path="/signup" component={Signup} />
     <Route path="/forgotPassword" component={ForgotPassword} />
     <Route path="/resetPassword" component={resetPasswordPage} />
-    <Route path="/profile" component={Profile} />
+    <Route path="/profile" component={requireAuth(Profile)} />
     <Route component={NoMatch} />
   </Switch>
 );

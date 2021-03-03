@@ -6,6 +6,8 @@ import jwt_decode from "jwt-decode";
 
 import App from "./App";
 import configureStore, { history } from "./configureStore";
+import { setCurrentUser, logoutUser } from "./actions/userActions";
+import setAuthToken from "./utils/setAuthToken";
 
 const store = configureStore();
 const render = () => {
@@ -18,6 +20,26 @@ const render = () => {
     document.getElementById("react-root")
   );
 };
+
+setAuthToken();
+// Check for token
+if (localStorage.theLedgerAdminToken) {
+  // Set auth token auth
+  setAuthToken(localStorage.theLedgerAdminToken);
+  // Decode token and get user info and exp
+  const decoded = jwt_decode(localStorage.theLedgerAdminToken);
+  // Set user and isAuthenticated
+  store.dispatch(setCurrentUser(decoded));
+
+  // Check for expired token
+  const currenTime = Date.now() / 1000;
+  if (decoded.exp < currenTime) {
+    // Logout user
+    store.dispatch(logoutUser());
+    // Redirect to login
+    window.location.href = "/";
+  }
+}
 
 render();
 

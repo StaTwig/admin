@@ -3,6 +3,16 @@ import Role from "./role";
 
 const NUModal = (props) => {
   const [selectedValue, setSelectedValue] = useState(-1);
+  const { permissions, onHide, onSuccess, data, setData } = props;
+  const setRole = (role) => {
+    setSelectedValue(role);
+    setData({ ...data, ...{ role: role } });
+  };
+
+  const setEmail = (email) => {
+    setData({ ...data, ...{ email: email } });
+  };
+
   return (
     <div className="p-0">
       <p
@@ -18,81 +28,36 @@ const NUModal = (props) => {
             type="text"
             className="form-control "
             placeholder="Enter the email"
+            readOnly={data?.ref != undefined ? true : false}
+            defaultValue={data?.ref}
+            onChange={setEmail}
           />
         </div>
       </div>
       <div className="p-1">
-        <Role
-          title="Power Users"
-          description="Power Users Description"
-          selectedValue={selectedValue}
-          setSelectedValue={setSelectedValue}
-          i="0"
-          value="1"
-        />
-        <Role
-          title="Admin"
-          description="Admin Description"
-          selectedValue={selectedValue}
-          setSelectedValue={setSelectedValue}
-          i="1"
-          value="2"
-        />
-        <Role
-          title="Affiliate"
-          description="Affiliate Description"
-          selectedValue={selectedValue}
-          setSelectedValue={setSelectedValue}
-          i="2"
-          value="3"
-        />
-        <Role
-          title="Sales Employee (Sr)"
-          description="Sales Employee Description"
-          selectedValue={selectedValue}
-          setSelectedValue={setSelectedValue}
-          i="3"
-          value="4"
-        />
-        <Role
-          title="Sales Employee (Jr)"
-          description="Sales Employee Description"
-          selectedValue={selectedValue}
-          setSelectedValue={setSelectedValue}
-          i="4"
-          value="5"
-        />
-        <Role
-          title="Warehouse Employee (Jr)"
-          description="Warehouse Employee Description"
-          selectedValue={selectedValue}
-          setSelectedValue={setSelectedValue}
-          i="5"
-          value="6"
-        />
-        <Role
-          title="Warehouse Employee (Jr)"
-          description="Warehouse Employee Description"
-          selectedValue={selectedValue}
-          setSelectedValue={setSelectedValue}
-          i="6"
-          value="7"
-        />
-        <Role
-          title="Warehouse Viewer"
-          description="Warehouse Viewer Description"
-          selectedValue={selectedValue}
-          setSelectedValue={setSelectedValue}
-          i="7"
-          value="8"
-        />
+        {permissions.map((permission, index) => (
+          <Role
+            key={index}
+            title={permission.role}
+            description={permission.role + " Description"}
+            selectedValue={selectedValue}
+            setSelectedValue={setRole}
+            i={index}
+            value={permission.role}
+            listPermission={permission.permissions}
+          />
+        ))}
       </div>
       <div className="d-flex w-100 divider"></div>
       <div className="d-flex flex-row-reverse p-3">
-        <button type="button" className="ml-3 btn btn-orange">
+        <button
+          type="button"
+          onClick={onSuccess}
+          className="ml-3 btn btn-orange"
+        >
           {props.buttonText}
         </button>
-        <button type="button" className="btn btn-outline-dark">
+        <button type="button" onClick={onHide} className="btn btn-outline-dark">
           CANCEL
         </button>
       </div>

@@ -6,11 +6,21 @@ import NUModal from "./NUModal";
 import SuccessPopUp from "../../shared/PopUp/successPopUp";
 
 const Users = (props) => {
-  const [visible, setVisible] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [showModals, setShowModals] = useState(false);
+  const [data, setData] = useState([]);
   const closeModal = () => setShowModal(false);
   const closeModals = () => setShowModals(false);
+  const [visible, setVisible] = useState(false);
+  const {
+    usersList,
+    activateUser,
+    deactivateUser,
+    setShowModals,
+    showModals,
+    permissions,
+    addUser,
+  } = props;
+
   return (
     <div className="container-fluid pl-5 pr-3">
       {showModal && (
@@ -20,7 +30,17 @@ const Users = (props) => {
           size="modal-lg" //for other size's use `modal-lg, modal-md, modal-sm`
           buttonclassName="btn-orange"
         >
-          <NUModal onHide={closeModal} buttonText="ADD USER" />
+          <NUModal
+            data={data}
+            permissions={permissions}
+            onSuccess={() => {
+              addUser(data);
+              closeModal();
+            }}
+            setData={setData}
+            onHide={closeModal}
+            buttonText="ADD USER"
+          />
         </Modal>
       )}
       {showModals && (
@@ -56,17 +76,25 @@ const Users = (props) => {
           <div className="mt-4">
             <div className="ml-4 txtColor d-flex flex-row justify-content-between">
               <span className="w-20">Name</span>
-              <span className="w-10">Role</span>
-              <span className="w-20">Affiliated Organisation</span>
-              <span className="w-10">Wallet address</span>
+              <span className="w-15">Role</span>
+              {/* <span className="w-20">Affiliated Organisation</span> */}
+              <span className="w-20">Wallet address</span>
               <span className="w-20">Email/Mobile</span>
-              <span className="w-10">Account status</span>
-              <span className="w-10">&nbsp;</span>
+              <span className="w-15">Account status</span>
+              <span className="w-20">&nbsp;</span>
             </div>
-            <UserDetails setShowModals={setShowModals} />
-            <UserDetails setShowModals={setShowModals} />
-            <UserDetails setShowModals={setShowModals} />
-            <UserDetails setShowModals={setShowModals} />
+            {usersList.map((row, index) => (
+              <UserDetails
+                key={index}
+                user={row}
+                rindex={index}
+                setShowModals={setShowModals}
+                setVisible={setVisible}
+                visible={visible}
+                activateUser={activateUser}
+                deactivateUser={deactivateUser}
+              />
+            ))}
           </div>
         </div>
       </div>

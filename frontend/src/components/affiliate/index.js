@@ -8,11 +8,21 @@ import AffiliateOrganisation from "./affiliateorganisation";
 import ReceivedRecentRequests from "./receivedrecentrequests";
 import Modal from "../../shared/modal";
 import NUModal from "../users/NUModal";
+import NoRecordsFound from "../NoRecordsFound";
 
 const Affiliate = (props) => {
   const [tabIndex, setTabIndex] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const closeModal = () => setShowModal(false);
+  const {
+    recentRequestsSent,
+    affilatedPendingReq,
+    affiliatedOrgs,
+    unaffiliatedOrg,
+    acceptAffliate,
+    rejectAffliate,
+  } = props;
+
   return (
     <div className="ml-5">
       {showModal && (
@@ -25,64 +35,59 @@ const Affiliate = (props) => {
           <NUModal onHide={closeModal} buttonText="ASSIGN" />
         </Modal>
       )}
-      <div className="affiliate pl-3">
+      <div className="affiliate">
         <h1 className="breadcrumb dash mb-3">AFFILIATED ORGANISATION</h1>
         <div>
           <Tabs {...props} tabIndex={tabIndex} setTabIndex={setTabIndex} />
         </div>
       </div>
-      <div className="panel mt-3 ml-3 mr-5 p-2">
+      <div className="panel affiliate">
         {tabIndex == 1 && (
           <>
-            <AffiliateOrganisation />
-            <AffiliateOrganisation />
-            <AffiliateOrganisation />
-            <AffiliateOrganisation />
-            <AffiliateOrganisation />
-            <AffiliateOrganisation />
-            <AffiliateOrganisation />
-            <AffiliateOrganisation />
-            <AffiliateOrganisation />
-            <AffiliateOrganisation />
+            {affiliatedOrgs.map((row, index) => (
+              <AffiliateOrganisation
+                unaffiliatedOrg={unaffiliatedOrg}
+                org={row}
+                key={index}
+                index={index}
+              />
+            ))}
+            {affiliatedOrgs.length == 0 && <NoRecordsFound />}
           </>
         )}
         {tabIndex == 2 && (
           <>
-            <ReceivedRecentRequests setShowModal={setShowModal} />
-            <ReceivedRecentRequests setShowModal={setShowModal} />
-            <ReceivedRecentRequests setShowModal={setShowModal} />
-            <ReceivedRecentRequests setShowModal={setShowModal} />
-            <ReceivedRecentRequests setShowModal={setShowModal} />
-            <ReceivedRecentRequests setShowModal={setShowModal} />
-            <ReceivedRecentRequests setShowModal={setShowModal} />
-            <ReceivedRecentRequests setShowModal={setShowModal} />
-            <ReceivedRecentRequests setShowModal={setShowModal} />
-            <ReceivedRecentRequests setShowModal={setShowModal} />
-            <ReceivedRecentRequests setShowModal={setShowModal} />
-            <ReceivedRecentRequests setShowModal={setShowModal} />
-            <ReceivedRecentRequests setShowModal={setShowModal} />
-            <ReceivedRecentRequests setShowModal={setShowModal} />
+            {affilatedPendingReq.map((row, index) => (
+              <ReceivedRecentRequests
+                pendingRow={row}
+                key={index}
+                index={index}
+                acceptAffliate={acceptAffliate}
+                rejectAffliate={rejectAffliate}
+              />
+            ))}
+            {affilatedPendingReq.length == 0 && <NoRecordsFound />}
           </>
         )}
         {tabIndex == 3 && (
           <div>
-            <div className="ml-4 txtColor d-flex flex-row justify-content-between">
-              <span className="w-25">Name</span>
-              <span className="w-25">Organisation</span>
-              <span className="w-25">Email</span>
-              <span className="w-25">Date</span>
-              <span className="w-25">Wallet address</span>
-            </div>
-            <Recentrequests />
-            <Recentrequests />
-            <Recentrequests />
-            <Recentrequests />
-            <Recentrequests />
-            <Recentrequests />
-            <Recentrequests />
-            <Recentrequests />
-            <Recentrequests />
-            <Recentrequests />
+            {recentRequestsSent.length > 0 && (
+              <div className="ml-4 txtColor d-flex flex-row justify-content-between">
+                <span className="w-25">Name</span>
+                <span className="w-25">Organisation</span>
+                <span className="w-25">Email</span>
+                <span className="w-25">Date</span>
+                <span className="w-25">Wallet address</span>
+              </div>
+            )}
+            {recentRequestsSent.map((row, index) => (
+              <Recentrequests
+                reqSent={row}
+                unaffiliatedOrg={unaffiliatedOrg}
+                key={index}
+              />
+            ))}
+            {recentRequestsSent.length == 0 && <NoRecordsFound />}
           </div>
         )}
         {tabIndex == 4 && (

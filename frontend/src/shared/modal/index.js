@@ -28,6 +28,7 @@ const Modal = (props) => {
               <div className="modal-footer">
                 <button
                   type="button"
+                  onClick={props?.onSuccess}
                   className={`btn-orange btn-lg fontSize20 font-weight-bold ${props.buttonClass}`}
                 >
                   {props.buttonName}
