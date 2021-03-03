@@ -22,7 +22,7 @@ const OrganisationSchema = new mongoose.Schema(
       },
     },
     location: {
-      type: String,
+      type: Object,
       required: false,
       default: {
         longitude: 12.12323453534,

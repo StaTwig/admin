@@ -5,15 +5,12 @@ var upload = multer({ dest: "uploads/" });
 
 var router = express.Router();
 
-router.post("/register", AuthController.register);
 router.post("/sendOtp", AuthController.sendOtp);
 router.post("/verifyOtp", AuthController.verifyOtp);
 router.get("/userInfo", AuthController.userInfo);
 router.get("/getAllUsers", AuthController.getAllUsers);
 router.get("/getOrgUsers", AuthController.getOrgUsers);
+router.get("/getUsers" , AuthController.getUsers);
 router.post("/updateProfile", AuthController.updateProfile);
 router.post("/upload", upload.single("profile"), AuthController.uploadImage);
-router.get("/createAddress", AuthController.createUserAddress);
-router.post("/assignProductConsumer", AuthController.assignProductConsumer);
-router.post("/addWarehouse", AuthController.addWarehouse);
 module.exports = router;

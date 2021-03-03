@@ -48,7 +48,7 @@ var WarehouseSchema = new mongoose.Schema(
    warehouseInventory: {
       type: String,
      required: true,
-     unique: true
+     default:"No Inventory"
    },
   },
   { timestamps: true },

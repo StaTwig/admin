@@ -6,12 +6,12 @@ const auth = require("../middlewares/jwt")
 const { customAlphabet } = require("nanoid")
 const nanoid = customAlphabet('1234567890abcdef', 10)
 
-exports.addressesOfOrg = [
+exports.addressOfOrg = [
     auth,
     async(req,res)=>{
         try{
-            await Organisation.find({id:req.user.organisationId}).then(orgs=>{
-               return apiResponse.successResponseWithData(res,"Organisations Addresses",orgs)
+            await Organisation.find({id:req.user.organisationId}).then(org=>{
+               return apiResponse.successResponseWithData(res,"Organisations Addresses",org)
             }).catch(err=>{
                 return apiResponse.ErrorResponse(res, err)
             })
@@ -40,7 +40,7 @@ exports.updateAddressOrg = [
     auth,
     async(req,res)=>{
         try{
-            await Organisation.findOneAndUpdate({id:req.user.organisationId},{ postalAddress: req.body.address},{new: true}).then(org=>{
+            await Organisation.findOneAndUpdate({id:req.user.organisationId},req.body.address,{new: true}).then(org=>{
                 return apiResponse.successResponseWithData(res,"Organisation Address Updated" , org)
             }).catch(err=>{
                 return apiResponse.ErrorResponse(res, err)

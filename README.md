@@ -3,9 +3,9 @@ Admin Website of StatLedger
 
 The Backend is a collection of Microservices, Each Service is maintained as a Express NodeJS Server App in each seperate folder.
 ## MicroServices in consideration :
-Address Service --> Manages Addresses of Organisations , Warehouses and Offices
+Address Service → Manages Addresses of Organisations , Warehouses and Offices
 
-Affiliation Service --> Manages Affiliation and affliates of Organisations and employees 
+Affiliation Service 	→ Manages Affiliation and affliates of Organisations and employees 
 
 Intergation Service --> Mangaes Intergation of Users and organisations 
 
@@ -18,6 +18,13 @@ Configuration Service --> setup of Configuration of Statledger
 
 ## CI/CD
 Docker -->  Docker Compose
+
+- [x] Docker-compose.yml file has all the docker service configuration , Traefik routing rules and Loadbalancing.
+
+- [x] Deploy folder is a File provider configuration setup for traefik if using Node instances without docker ( NOT CURRENTLY USING )
+
+- [x] All static configuration of Traefik is present in traefik_config folder , "traefik.yml" file ( CURRENTLY USING )
+
 
 ## Deployment :
 1) Login to server
