@@ -10,7 +10,7 @@ const NUModal = (props) => {
   };
 
   const setEmail = (email) => {
-    setData({ ...data, ...{ email: email } });
+    setData({ ...data, ...{ emailId: email } });
   };
 
   return (
