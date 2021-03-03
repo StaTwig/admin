@@ -6,7 +6,7 @@ app.use("/auth", authRouter);
 app.get("/getApprovals", getApprovals);
 app.get("/accpetApproval", acceptApproval); // /approveApproval?id=123
 app.get("/rejecApproval", rejectApproval); // /rejectApproval?id=123
-app.get("/addUser" , addUser);
+app.post("/addUser" , addUser);
 app.get("/activateUser" ,activateUser); // /activateUser?id=123
 app.get("/deactivateUser" ,deactivateUser); // /deactivateUser?id=123
 app.get("/" , (req,res)=> res.json({ status: "OK"}))
