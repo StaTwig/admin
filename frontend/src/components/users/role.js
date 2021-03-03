@@ -12,6 +12,7 @@ const Role = (props) => {
     title,
     description,
     listPermission,
+    name,
   } = props;
 
   const dcolor = i % 2 === 0 ? "bg-light" : "bg-white";
@@ -26,14 +27,14 @@ const Role = (props) => {
           <input
             className="form-check-input"
             type="radio"
-            name="Radios"
-            id={`Radios${i}`}
+            name={name}
+            id={`${name}${i}`}
             value={value}
             onChange={(e) => {
               setSelectedValue(e.currentTarget.value);
             }}
           />
-          <label className="form-check-label" for={`Radios${i}`}>
+          <label className="form-check-label" for={`${name}${i}`}>
             {title}
           </label>
         </div>

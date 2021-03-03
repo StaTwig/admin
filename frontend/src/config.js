@@ -88,7 +88,7 @@ export function config() {
       activateOrgUserUrl: `${TEST_SERVER_URL}/api/employee_service/activateUser`,
       deactivateOrgUserUrl: `${TEST_SERVER_URL}/api/employee_service/deactivateUser`,
       getOrgUsersUrl: `${TEST_SERVER_URL}/api/employee_service/auth/getOrgUsers`,
-      addOrgUserUrl: `${TEST_SERVER_URL}/api/employee_service/auth/addOrgUser`,
+      addOrgUserUrl: `${TEST_SERVER_URL}/api/employee_service/addUser`,
       recentRequestsSentUrl: `${TEST_SERVER_URL}/api/affliation_service/fetchSentRequests`,
       userInfoUrl: `${TEST_SERVER_URL}/api/employee_service/auth/userInfo`,
       pendingAffiliatedReqUrl: `${TEST_SERVER_URL}/api/affliation_service/fetchPendingRequests`,

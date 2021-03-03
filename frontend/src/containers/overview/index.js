@@ -10,6 +10,7 @@ import {
   verifyOrgUser,
   rejectOrgUser,
   getRecentReqSent,
+  addOrgUser,
 } from "../../actions/organisationActions";
 
 const DashBoardContainer = (props) => {
@@ -36,9 +37,11 @@ const DashBoardContainer = (props) => {
   });
 
   const acceptApproval = async (data) => {
-    const result = await verifyOrgUser(data);
+    let result;
+    if (data?.emailId) result = await addOrgUser(data);
+    else result = await verifyOrgUser(data);
     if (result.status === 200) {
-      requestsPending.splice(data.rindex, 1);
+      if (data?.rindex) requestsPending.splice(data.rindex, 1);
       setMessage(result.data.data.message);
     } else {
       setError(result.data.data.message);
