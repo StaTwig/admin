@@ -15,7 +15,7 @@ const EditTable = props => {
           </div>
           <div className="rTableHead">Manufacturer</div>
           <div className="rTableHead">Quantity</div>
-          <div className="rTableHead">Lable ID</div>
+          <div className="rTableHead">Label ID</div>
         </div>
         <div >
          <EditRow {...props} />

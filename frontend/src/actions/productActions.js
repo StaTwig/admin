@@ -46,3 +46,12 @@ export const getWarehouseByOrgId = async (id) => {
     return [];
   }
 };
+
+export const getOrganisationsProfile = async () => {
+  try {
+    const result = await axios.get(config().getOrganisations);
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};

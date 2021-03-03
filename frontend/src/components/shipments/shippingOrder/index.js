@@ -72,7 +72,7 @@ const ShippingOrderTable = props => {
                     </div>
                   </div>
                   <div className="rTableCell ">
-                    <div className="ml-1">{shipping.products[0].quantity}</div>
+                    <div className="ml-1">{shipping.products[0].productQuantity}</div>
                   </div>
                   <div className="rTableCell">
                     {shipping.products[0].manufacturer}

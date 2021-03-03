@@ -12,7 +12,7 @@ const ViewShippingModal = (props) => {
   } = props;
 
   let totalQuantity = 0;
-  singleShippingOrder.products.forEach(product => totalQuantity += parseInt(product.quantity));
+  singleShippingOrder.products.forEach(product => totalQuantity += parseInt(product.productQuantity));
   const month = new Date().getMonth() + 1;
   const todayDate =
   new Date().getDate() + '/' + month + '/' + new Date().getFullYear();
@@ -47,7 +47,7 @@ const ViewShippingModal = (props) => {
             <td>{product.productID}</td>
           <td>{product.productName}</td>
           <td>{product.manufacturer}</td>
-          <td>{product.quantity}</td>
+          <td>{product.productQuantity}</td>
      
           </tr>
         )}
