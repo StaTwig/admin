@@ -78,7 +78,7 @@ exports.getApprovals = [
                   EmployeeModel.findOneAndUpdate({'id':id},{$set: { accountStatus:"ACTIVE" , isConfirmed: true , walletAddress , role}},{ "new": true}).exec().then(emp=>{
                     let emailBody = RequestApproved({
                       name: emp.firstName,
-                      organisationName,
+                      organisation:organisationName,
                     });
                     // Send confirmation email
                     try {
@@ -139,7 +139,7 @@ exports.getApprovals = [
                   console.log("REJECTED")
                   let emailBody = RejectedApproval({
                     name: emp.firstName,
-                    organisationName,
+                    organisation:organisationName,
                   })
                   try{
                     mailer.send(
@@ -241,7 +241,7 @@ exports.getApprovals = [
                     EmployeeModel.findOneAndUpdate({'id':id},{$set: { accountStatus:"ACTIVE" , isConfirmed: true , walletAddress , role}},{ "new": true}).exec().then(emp=>{
                       let emailBody = RequestApproved({
                         name: emp.firstName,
-                        organisationName,
+                        organisation:organisationName,
                       });
                       // Send confirmation email
                       try {
