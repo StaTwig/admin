@@ -7,7 +7,7 @@ import './style.scss';
 import { config } from '../../config';
 const axios = require('axios');
 import { getUserInfoUpdated, updateProfile, getUserInfo } from '../../actions/userActions';
-import { getOrganisationsProfile, getWarehouseByOrgId } from '../../actions/productActions';
+import { getWarehouseByOrgId } from '../../actions/productActions';
 
 class Profile extends React.Component {
   constructor(props) {
@@ -70,23 +70,15 @@ class Profile extends React.Component {
     } else {
       //error
     }
-  }
-
-  async onWareHouse(item) {
+    const item = this.state.organisation.split('/')[1]
     const wareHouseResponse = await getWarehouseByOrgId(item);
     if (wareHouseResponse.status === 1) {
       const wareHouseIdResult = wareHouseResponse.data.map((txn) => txn.id)
       this.setState({ wareIds: wareHouseIdResult })
     }
-  }
-  async onOrganisation() {
-    const orgResponse = await getOrganisationsProfile();
-    if (orgResponse.status === 1) {
-      const organisationResult = orgResponse.data.map((txn) => (txn.name + "/" + txn.id))
-      this.setState({ orgs: organisationResult })
 
-    }
   }
+  
   onCancel() {
     const {
       prof,
@@ -251,16 +243,11 @@ class Profile extends React.Component {
                     </div>
                     <div className="form-group">
                       <label htmlFor="shipmentId">Organisation</label>
-                      <div className="form-control">
-                        <DropdownButton
-                          name={organisation?organisation:"Select Organisation"}
-                          onSelect={item => {
-                            this.setState({ organisation: item })
-                            this.onWareHouse(item.split('/')[1])
-                          }}
-                          groups={orgs}
-                        />
-                      </div>
+                      <input
+                        className="form-control wallet"
+                        disabled
+                        value={this.state.organisation}
+                       />
                     </div>
                     <div className="form-group">
                       <label htmlFor="shipmentId">Warehouse ID</label>
