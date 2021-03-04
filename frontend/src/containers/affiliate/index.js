@@ -8,7 +8,7 @@ import {
   getRecentReqSent,
   getAffilatedPendingReq,
   getAffilatedOrgs,
-  unaffiliatedOrg,
+  unaffiliateOrg,
   acceptAffiliate,
   rejectAffiliate,
 } from "../../actions/organisationActions";
@@ -37,7 +37,7 @@ const AffiliateContainer = (props) => {
   });
 
   const unaffiliatedOrgs = async (data) => {
-    const result = await unaffiliatedOrg(data);
+    const result = await unaffiliateOrg(data);
     if (result.status === 200) {
       affiliatedOrgs.splice(data.rindex, 1);
       setMessage(result.data.data.message);

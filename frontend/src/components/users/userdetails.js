@@ -1,17 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 import "./style.scss";
 import Popover from "react-popover";
 
 const UserDetails = (props) => {
-  const {
-    user,
-    setVisible,
-    setShowModals,
-    visible,
-    activateUser,
-    deactivateUser,
-  } = props;
+  const [visible, setVisible] = useState(false);
+  const { user, activateUser, deactivateUser, unaffiliate } = props;
+
+  useEffect(() => {
+    setVisible(false);
+  }, []);
 
   const [status, setStatus] = useState(user?.accountStatus);
   const changeStatus = (status) => {
@@ -24,7 +22,7 @@ const UserDetails = (props) => {
     preferPlace: "above",
     tipSize: 7,
     place: "left",
-    // onOuterAction: () => this.togglePopover(false),
+    onOuterAction: () => setVisible(false),
     body: [
       <div className="m-3" key="b">
         <p className="txtColor mb-0">
@@ -32,11 +30,21 @@ const UserDetails = (props) => {
             href="#"
             className="text-reset text-decoration-none"
             onClick={() => {
+              if (status == "ACTIVE") {
+                deactivateUser({ id: user?.id, index: user?.ridex });
+                changeStatus("REJECTED");
+              } else {
+                activateUser({
+                  id: user?.id,
+                  role: user?.role,
+                  index: user?.ridex,
+                });
+                changeStatus("ACTIVE");
+              }
               setVisible(false);
-              setShowModals(true);
             }}
           >
-            Activate user
+            {status == "ACTIVE" ? "Deactivate" : "Activate"} user
           </a>
         </p>
         <p className="txtColor mt-2 pt-2 border-top mb-0">
@@ -44,8 +52,8 @@ const UserDetails = (props) => {
             href="#"
             className=" text-reset text-decoration-none"
             onClick={() => {
+              unaffiliate({ id: user?.id });
               setVisible(false);
-              setShowModals(true);
             }}
           >
             Unaffiliate User
@@ -74,7 +82,7 @@ const UserDetails = (props) => {
         <span className="txtWrapu w-20">{user?.emailId}</span>
         <span className="txtWrapu w-15">{status}</span>
         <div className="w-20">
-          <button
+          {/* <button
             type="button"
             onClick={() => {
               if (status == "ACTIVE") {
@@ -92,12 +100,12 @@ const UserDetails = (props) => {
             className="btn btn-view w-auto"
           >
             {status == "ACTIVE" ? "Deactivate" : "Activate"}
-          </button>
-          {/* <button type="button" className="btn btn-view">
-            View
           </button> */}
+          <button type="button" className="btn btn-view">
+            View
+          </button>
 
-          {/* <Popover className="bg-light rounded shadow" {...popoverProps}>
+          <Popover className="bg-light rounded shadow" {...popoverProps}>
             <a
               href="#"
               className="ml-2"
@@ -108,7 +116,7 @@ const UserDetails = (props) => {
             >
               <i className="fa fa-ellipsis-v"></i>
             </a>
-          </Popover> */}
+          </Popover>
         </div>
       </div>
     </div>

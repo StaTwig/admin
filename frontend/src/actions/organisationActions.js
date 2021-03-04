@@ -109,10 +109,21 @@ export const rejectOrgUser = async (data) => {
   }
 };
 
-export const unaffiliatedOrg = async (data) => {
+export const unaffiliateUser = async (data) => {
   try {
     const result = await axios.get(
-      `${config().unaffiliatedOrgUrl}?orgId=${data.id}`
+      `${config().unaffiliateUserUrl}?id=${data.id}`
+    );
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+export const unaffiliateOrg = async (data) => {
+  try {
+    const result = await axios.get(
+      `${config().unaffiliateOrgUrl}?orgId=${data.id}`
     );
     return result;
   } catch (e) {

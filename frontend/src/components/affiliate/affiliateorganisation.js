@@ -14,7 +14,6 @@ const AffiliateOrganisation = (props) => {
           ></div>
           <div className="text-left">
             <h5 className="text-primary mb-0">{org?.name}</h5>
-            <span className="Manufacturer">-</span>
           </div>
         </div>
         <div className="d-flex w-20 flex-column">
@@ -51,7 +50,9 @@ const AffiliateOrganisation = (props) => {
         </div>
         <div className="w-20">
           <button
-            onClick={() => unaffiliatedOrg({ id: org?.id, rindex: index })}
+            onClick={() =>
+              unaffiliatedOrg({ orgId: org?.organisationId, rindex: index })
+            }
             type="button"
             className="btn btn-outline-dark"
           >

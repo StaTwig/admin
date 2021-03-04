@@ -3,22 +3,19 @@ import "leaflet/dist/leaflet.css";
 import UserDetails from "./userdetails";
 import Modal from "../../shared/modal";
 import NUModal from "./NUModal";
-import SuccessPopUp from "../../shared/PopUp/successPopUp";
 
 const Users = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState([]);
   const closeModal = () => setShowModal(false);
-  const closeModals = () => setShowModals(false);
-  const [visible, setVisible] = useState(false);
   const {
     usersList,
     activateUser,
     deactivateUser,
     setShowModals,
-    showModals,
     permissions,
     addUser,
+    unaffiliate,
   } = props;
 
   return (
@@ -40,19 +37,6 @@ const Users = (props) => {
             setData={setData}
             onHide={closeModal}
             buttonText="ADD USER"
-          />
-        </Modal>
-      )}
-      {showModals && (
-        <Modal
-          close={closeModals}
-          // title="ADD NEW USER"
-          // size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
-          buttonclassName="btn-orange"
-        >
-          <SuccessPopUp
-            onHide={closeModals}
-            message="This User has been Deactivated successfully!"
           />
         </Modal>
       )}
@@ -89,10 +73,9 @@ const Users = (props) => {
                 user={row}
                 rindex={index}
                 setShowModals={setShowModals}
-                setVisible={setVisible}
-                visible={visible}
                 activateUser={activateUser}
                 deactivateUser={deactivateUser}
+                unaffiliate={unaffiliate}
               />
             ))}
           </div>
