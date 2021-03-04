@@ -69,7 +69,7 @@ exports.sentRequests = [
   }
 ]
 
-exports.affliatedOrgs = [
+exports.affiliateOrg = [
   auth,
     async(req,res)=>{
         try{
@@ -94,7 +94,7 @@ exports.affliatedOrgs = [
     }
 ]
 
-exports.allAffliatedOrgs = [
+exports.allAffiliateOrgs = [
   auth,
     async(req,res)=>{
         try{
@@ -124,7 +124,7 @@ exports.allAffliatedOrgs = [
     }
 ]
 
-exports.acceptAffliate = [
+exports.acceptAffiliate = [
   auth,
     async(req,res)=>{
         try{
@@ -167,7 +167,7 @@ exports.acceptAffliate = [
     }
 ]
 
-exports.rejectAffliate = [
+exports.rejectAffiliate = [
     auth,
     async(req,res)=>{
         try{
@@ -201,21 +201,15 @@ exports.rejectAffliate = [
     }
 ]
 
-exports.unAffliate = [
+exports.unAffiliate = [
   auth,
   async(req,res)=>{
       try{
-        const { id } = req.user;
-        const { orgId } = req.query;
-        await EmployeeModel.findOneAndUpdate({id:id},{
-          $pull: { affiliatedOrganisations: orgId},
-        },
-        {
-          new: true,
-        }).then(employee=>{
+        const { id } = req.query;
+        await EmployeeModel.findOneAndUpdate({id:id},{'$set': { 'affiliatedOrganisations':[]}},{ new:true}).then(employee=>{
           return apiResponse.successResponseWithData(
             res,
-            'UnAffliated Organisation',
+            'UnAffliated Employee',
             employee,
           );
         }).catch(err=>{
@@ -227,7 +221,29 @@ exports.unAffliate = [
   }
 ]
 
-exports.Affliate = [
+exports.unAffiliateOrg = [
+  auth,
+  async(req,res)=>{
+      try{
+        const { organisationId } = req.user;
+        const { orgId } = req.query;
+        await EmployeeModel.updateMany({organisationId:organisationId},{$pull:{affiliatedOrganisations: orgId}}).then(affliatedOrgs=>{
+          if(affliatedOrgs.ok){
+          return apiResponse.successResponse(res,`Organisation UnAffliated ${affliatedOrgs.nModified} records Updated`)
+          }
+          else{
+            return apiResponse.ErrorResponse(res, "Update Status NOT OK")
+          }
+        }).catch(err=>{
+          return apiResponse.ErrorResponse(res, err);
+        })
+      } catch(err){
+          return apiResponse.ErrorResponse(res, err);
+      }
+  }
+]
+
+exports.affiliate = [
   auth,
   async(req,res)=>{
       try{

@@ -1,5 +1,5 @@
 const express = require("express");
-const { pendingRequests, sentRequests, affliatedOrgs, acceptAffliate,rejectAffliate,unAffliate,Affliate,allAffliatedOrgs } = require("../controllers/AffliationController");
+const { pendingRequests, sentRequests, affiliateOrg, acceptAffiliate,rejectAffiliate,unAffiliate,affiliate,allAffiliateOrgs,unAffiliateOrg} = require("../controllers/AffliationController");
 
 const router = express.Router();
 
@@ -9,11 +9,12 @@ res.json({ status: "OK" });
 
 router.get("/fetchPendingRequests", pendingRequests) // /fetchPendingRequests
 router.get("/fetchSentRequests", sentRequests) // /fetchSentRequests
-router.get("/fetchAffiliates", affliatedOrgs) // /fetchAffiliates
-router.get("/fetchAllAffiliates", allAffliatedOrgs) // /fetchAffiliates
-router.get("/acceptAffliate", acceptAffliate) // /fetchWarehouses?orgId=123
-router.get("/rejectAffliate", rejectAffliate) // /fetchWarehouses?orgId=123
-router.get("/unAffiliate", unAffliate) // /fetchWarehouses?orgId=123
-router.post("/addAffliate" , Affliate) // /addAffliate
+router.get("/fetchAffiliates", affiliateOrg) // /fetchAffiliates
+router.get("/fetchAllAffiliates", allAffiliateOrgs) // /fetchAffiliates
+router.get("/acceptAffiliate", acceptAffiliate) // /fetchWarehouses?orgId=123
+router.get("/rejectAffiliate", rejectAffiliate) // /fetchWarehouses?orgId=123
+router.get("/unAffiliate", unAffiliate) // /fetchWarehouses?id=123
+router.get("/unAffiliateOrg", unAffiliateOrg) // /fetchWarehouses?orgId=123
+router.post("/addAffiliate" , affiliate) // /addAffliate
 
 module.exports = router;
