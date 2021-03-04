@@ -11,6 +11,10 @@ const Role = (props) => {
     value,
     title,
     description,
+    listPermission,
+    name,
+    handleBlur,
+    handleChange,
   } = props;
 
   const dcolor = i % 2 === 0 ? "bg-light" : "bg-white";
@@ -25,14 +29,16 @@ const Role = (props) => {
           <input
             className="form-check-input"
             type="radio"
-            name="Radios"
-            id={`Radios${i}`}
+            name={name}
+            id={`${name}${i}`}
             value={value}
+            onBlur={handleBlur}
             onChange={(e) => {
               setSelectedValue(e.currentTarget.value);
+              handleChange(e);
             }}
           />
-          <label className="form-check-label" for={`Radios${i}`}>
+          <label className="form-check-label" for={`${name}${i}`}>
             {title}
           </label>
         </div>
@@ -44,7 +50,7 @@ const Role = (props) => {
             <i
               className="shadow"
               style={{ color: "#ccc" }}
-              class="fa fa-info-circle"
+              className="fa fa-info-circle"
             ></i>
           </span>
         </div>
@@ -54,7 +60,14 @@ const Role = (props) => {
           selectedValue != value ? " d-none" : " bg-light mb-2"
         }`}
       >
-        <Permission
+        {listPermission.map((permissionType, index) => (
+          <Permission
+            key={index}
+            permissionTitle={permissionType}
+            permissionDescription="Description"
+          />
+        ))}
+        {/* <Permission
           permissionTitle="Add Users"
           permissionDescription="Description"
         />
@@ -85,7 +98,7 @@ const Role = (props) => {
         <Permission
           permissionTitle="Manage Addresses(Add or Remove)"
           permissionDescription="Description"
-        />
+        /> */}
       </div>
     </div>
   );

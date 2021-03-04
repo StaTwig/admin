@@ -8,7 +8,7 @@ import logo from "../../assets/aicons/AdminLogo.png";
 import searchingIcon from "../../assets/icons/searching@2x.png";
 import bellIcon from "../../assets/icons/bellwhite.png";
 import dropdownIcon from "../../assets/icons/drop-down.png";
-import dummyImage from "../../assets/brands/user-image/Image73.png";
+import { getUserInfo, logoutUser } from "../../actions/userActions";
 
 const Header = (props) => {
   const [menu, setMenu] = useState(false);
@@ -18,7 +18,6 @@ const Header = (props) => {
   const [showNotifications, setShowNotifications] = useState(false);
 
   function onSearchChange(e) {
-    console.log(e.target.value);
     setSearch(e.target.value);
   }
 
@@ -27,7 +26,13 @@ const Header = (props) => {
   };
 
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getUserInfo());
+  }, []);
 
+  const profile = useSelector((state) => {
+    return state.user;
+  });
   const clearNotification = async (notification) => {};
 
   return (
@@ -44,7 +49,7 @@ const Header = (props) => {
         />
       </div>
       <div className="actions">
-        <div className="search-form">
+        <div className="search-form d-none">
           <input
             type="text"
             // value={search}
@@ -97,14 +102,16 @@ const Header = (props) => {
           </div>
           <div className="divider" />
           <div className="userName">
-            <p className="cname">Organisation</p>
-            <p className="uname">name</p>
+            <p className="cname">{profile?.organisation}</p>
+            <p className="uname">
+              {profile?.firstName + " " + profile?.lastName}
+            </p>
           </div>
 
           <div className="userPic">
             <img
-              src={dummyImage}
-              alt="Jhon Name"
+              src={profile?.photoId}
+              alt={profile?.firstName + " " + profile?.lastName}
               className="rounded rounded-circle"
             />
           </div>
@@ -121,16 +128,16 @@ const Header = (props) => {
             {
               <React.Fragment>
                 <div className="slider-item-text">
-                  <p>Name</p>
-                  <p>Organisation</p>
+                  <p>{profile?.firstName + " " + profile?.lastName}</p>
+                  <p>{profile?.organisation}</p>
                 </div>
-                <Link className="slider-item border-top-0" to="/profile">
+                {/* <Link className="slider-item border-top-0" to="/profile">
                   My profile
                 </Link>
                 <div className="slider-item">Settings</div>
-                <div className="slider-item">Change Password</div>
+                <div className="slider-item">Change Password</div> */}
                 <div
-                  className="slider-item"
+                  className="slider-item border-top-0"
                   onClick={() => dispatch(logoutUser())}
                 >
                   Logout

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "leaflet/dist/leaflet.css";
 import "./style.scss";
 import DropdownButton from "../../shared/dropdownButtonGroup";
-import dummyimage from "../../assets/brands/user-image/Image73.png";
 
 const SentRequests = (props) => {
   return (

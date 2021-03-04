@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import "leaflet/dist/leaflet.css";
 import AddressDetails from "./addressdetails";
 import { Link } from "react-router-dom";
+import NoRecordsFound from "../NoRecordsFound";
 
 const Address = (props) => {
-  const [visible, setVisible] = useState(false);
+  const { addresses } = props;
   return (
     <div className="container-fluid ml-5 mr-3">
       <div className="rowDash pr-4">
@@ -20,14 +21,12 @@ const Address = (props) => {
           </button>
         </div>
       </div>
-      <div className="d-flex row">
-        <AddressDetails />
-        <AddressDetails />
-        <AddressDetails />
-        <AddressDetails />
-        <AddressDetails />
-        <AddressDetails />
-        <AddressDetails />
+      <div className={`d-flex row ${addresses.length == 0 ? "w-100" : ""}`}>
+        {addresses.map((address, index) => (
+          <AddressDetails address={address} key={index} />
+        ))}
+
+        {addresses.length == 0 && <NoRecordsFound dClass="w-100" />}
       </div>
     </div>
   );

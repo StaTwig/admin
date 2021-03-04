@@ -1,46 +1,370 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "leaflet/dist/leaflet.css";
 import AddressField from "./addressfield";
+import { Formik } from "formik";
+import FailedPopUp from "../../shared/PopUp/failedPopUp";
+import SuccessPopUp from "../../shared/PopUp/successPopUp";
+import {
+  getAddressByLatLong,
+  addAddress,
+  getWareHouses,
+} from "../../actions/organisationActions";
+import Modal from "../../shared/modal";
+import { turnOn, turnOff } from "../../actions/spinnerActions";
+import { useSelector, useDispatch } from "react-redux";
 
 const NewAddress = (props) => {
-  const [visible, setVisible] = useState(false);
+  // const editAddress = JSON.parse(props.match.params.address);
+
+  let editAddress;
+  const dispatch = useDispatch();
+  const [showModal, setShowModal] = useState(false);
+  const [showModals, setShowModals] = useState(false);
+  const [addr, setAdd] = useState([]);
+  const [message, setMessage] = useState(
+    "Location service is disabled. Enter address manually!!!"
+  );
+  const [address, setAddress] = useState({});
+  const [pos, setPos] = useState({});
+  const closeModal = () => setShowModal(false);
+  const closeModals = () => setShowModals(false);
+
+  const addArr = useSelector((state) => {
+    return state.organisation.addresses;
+  });
+
+  useEffect(() => {
+    dispatch(getWareHouses());
+  }, []);
+
+  const getGeoLocation = async () => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          setPos(position);
+          dispatch(turnOn());
+          const result = await getAddressByLatLong(position);
+          dispatch(turnOff());
+          if (result.status === 200) {
+            setAddress(result);
+          } else {
+            setShowModal(true);
+          }
+        },
+        (error) => {
+          setAddress({
+            Response: {
+              MetaInfo: {
+                Timestamp: "2021-03-02T11:57:07.638+0000",
+              },
+              View: [
+                {
+                  _type: "SearchResultsViewType",
+                  ViewId: 0,
+                  Result: [
+                    {
+                      Relevance: 1.0,
+                      Distance: -117.8,
+                      Direction: 159.6,
+                      MatchLevel: "district",
+                      MatchQuality: {
+                        Country: 1.0,
+                        State: 1.0,
+                        County: 1.0,
+                        City: 1.0,
+                        District: 1.0,
+                        Subdistrict: 1.0,
+                        PostalCode: 1.0,
+                      },
+                      Location: {
+                        LocationId: "NT_WcqybDDKRDSvjdm6Erj2vD",
+                        LocationType: "area",
+                        DisplayPosition: {
+                          Latitude: 12.84606,
+                          Longitude: 77.68448,
+                        },
+                        MapView: {
+                          TopLeft: {
+                            Latitude: 12.85869,
+                            Longitude: 77.68214,
+                          },
+                          BottomRight: {
+                            Latitude: 12.84473,
+                            Longitude: 77.69534,
+                          },
+                        },
+                        Address: {
+                          Label:
+                            "Shanthipura, Electronic City, Bengaluru, KA, India",
+                          Country: "IND",
+                          State: "KA",
+                          County: "Bengaluru",
+                          City: "Bengaluru",
+                          District: "Electronic City",
+                          Subdistrict: "Shanthipura",
+                          PostalCode: "560100",
+                          AdditionalData: [
+                            {
+                              value: "India",
+                              key: "CountryName",
+                            },
+                            {
+                              value: "Karnataka",
+                              key: "StateName",
+                            },
+                            {
+                              value: "Bengaluru",
+                              key: "CountyName",
+                            },
+                          ],
+                        },
+                        MapReference: {
+                          ReferenceId: "832005539",
+                          MapId: "RRAM20150",
+                          MapVersion: "Q1/2020",
+                          MapReleaseDate: "2021-02-05",
+                          SideOfStreet: "neither",
+                          CountryId: "22806254",
+                          StateId: "22798588",
+                          CountyId: "22799633",
+                          CityId: "22803543",
+                          DistrictId: "27429989",
+                        },
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          });
+
+          setAddress(address?.Response.View[0].Result[0].Location.Address);
+
+          setShowModal(true);
+        }
+      );
+    } else {
+      setShowModal(true);
+    }
+  };
+
+  const saveAddress = async (data) => {
+    data.postitions = pos;
+    data.id = editAddress?.id;
+    dispatch(turnOn());
+    const result = await addAddress(data);
+    if (result.status == 200) {
+      props.history.push(`/address`);
+      setMessage(result.data.data.message);
+    }
+    dispatch(turnOff());
+  };
+
+  if (addArr && addr?.length == 0) {
+    editAddress = addArr.filter(
+      (row) => row.id == JSON.parse(props.match.params.address)
+    );
+    setAdd(editAddress[0].postalAddress?.split(", "));
+  }
+
   return (
-    <div className="container-fluid ml-3 mr-3">
+    <div className="container-fluid pl-5 pr-3">
+      {showModal && (
+        <Modal
+          close={closeModal}
+          // size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+          buttonclassName="btn-orange"
+        >
+          <FailedPopUp onHide={closeModal} message={message} />
+        </Modal>
+      )}
+      {showModals && (
+        <Modal
+          close={closeModals}
+          // size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+          buttonclassName="btn-orange"
+        >
+          <SuccessPopUp onHide={closeModals} message={message} />
+        </Modal>
+      )}
       <div className="rowDash pr-4">
         <div className="dashboard">
           <h1 className="breadcrumb dash">ADD NEW ADDRESS</h1>
         </div>
       </div>
-      <div className="d-flex row">
+      <div className="d-flex row pl-3">
         <div className="card w-100 rounded border border-white shadow bg-white m-4 p-3">
           <div className="card-body d-flex flex-row justify-content-between">
             <div className="w-50">
-              <form className="mb-3">
-                <AddressField label="Address Type" refe="addresstype" />
-                <AddressField label="Pincode" refe="pincode" />
-                <AddressField
-                  label="Flat, House No, Building, Company"
-                  refe="flatno"
-                />
-                <AddressField
-                  label="Area, Colony, Street, District, Sector, Village"
-                  refe="area"
-                />
-                <AddressField label="Landmark" refe="landmark" />
-                <AddressField label="Town/ City" refe="town" />
-                <AddressField label="State/ Province/ Region" refe="state" />
-                <AddressField label="Country" refe="country" />
-                <div className="pt-5">
-                  <button type="button" className="btn btn-warning ">
-                    <i className="fa fa-plus txt pr-2" aria-hidden="true"></i>
-                    <span className="txt">Add New Address</span>
-                  </button>
-                </div>
-              </form>
+              <Formik
+                enableReinitialize={true}
+                initialValues={{
+                  title: editAddress ? editAddress?.title : "Warehouse",
+                  flatno: addr?.length ? addr[0] : "",
+                  pincode: address?.PostalCode,
+                  area: address?.Subdistrict
+                    ? address?.Subdistrict
+                    : addr?.length
+                    ? addr[1]
+                    : "",
+                  landmark: addr?.length ? addr[2] : "",
+                  town: address?.City
+                    ? address?.City
+                    : addr?.length
+                    ? addr[3]
+                    : "",
+                  state: address?.AdditionalData?.length
+                    ? address?.AdditionalData?.filter(
+                        (row) => row.key == "StateName"
+                      )[0].value
+                    : addr?.length
+                    ? addr[4]
+                    : "",
+                  country: address?.AdditionalData?.length
+                    ? address?.AdditionalData?.filter(
+                        (row) => row.key == "CountryName"
+                      )[0].value
+                    : addr?.length
+                    ? addr[5]
+                    : "",
+                }}
+                validate={(values) => {
+                  const errors = {};
+                  if (!values.title) {
+                    errors.title = "Required";
+                  }
+                  if (!values.pincode) {
+                    errors.pincode = "Required";
+                  }
+                  if (!values.flatno) {
+                    errors.flatno = "Required";
+                  }
+                  if (!values.area) {
+                    errors.area = "Required";
+                  }
+                  if (!values.landmark) {
+                    errors.landmark = "Required";
+                  }
+                  if (!values.town) {
+                    errors.town = "Required";
+                  }
+                  if (!values.state) {
+                    errors.state = "Required";
+                  }
+                  if (!values.country) {
+                    errors.country = "Required";
+                  }
+                  return errors;
+                }}
+                onSubmit={(values, { setSubmitting }) => {
+                  setSubmitting(false);
+                  saveAddress(values);
+                }}
+              >
+                {({
+                  values,
+                  errors,
+                  touched,
+                  handleChange,
+                  handleBlur,
+                  handleSubmit,
+                  isSubmitting,
+                  setFieldValue,
+                  dirty,
+                }) => (
+                  <form onSubmit={handleSubmit} className="mb-3">
+                    <AddressField
+                      error={errors.title}
+                      touched={touched.title}
+                      label="Address Title"
+                      refe="title"
+                      handleChange={handleChange}
+                      handleBlur={handleBlur}
+                      value={values.title}
+                    />
+                    <AddressField
+                      error={errors.pincode}
+                      touched={touched.pincode}
+                      label="Pincode"
+                      refe="pincode"
+                      handleChange={handleChange}
+                      handleBlur={handleBlur}
+                      value={values.pincode}
+                    />
+                    <AddressField
+                      error={errors.flatno}
+                      touched={touched.flatno}
+                      label="Flat, House No, Building, Company"
+                      refe="flatno"
+                      handleChange={handleChange}
+                      handleBlur={handleBlur}
+                      value={values.flatno}
+                    />
+                    <AddressField
+                      error={errors.area}
+                      touched={touched.area}
+                      label="Area, Colony, Street, District, Sector, Village"
+                      refe="area"
+                      handleChange={handleChange}
+                      handleBlur={handleBlur}
+                      value={values.area}
+                    />
+                    <AddressField
+                      error={errors.landmark}
+                      touched={touched.landmark}
+                      label="Landmark"
+                      refe="landmark"
+                      handleChange={handleChange}
+                      handleBlur={handleBlur}
+                      value={values.landmark}
+                    />
+                    <AddressField
+                      error={errors.town}
+                      touched={touched.town}
+                      label="Town/ City"
+                      refe="town"
+                      handleChange={handleChange}
+                      handleBlur={handleBlur}
+                      value={values.town}
+                    />
+                    <AddressField
+                      error={errors.state}
+                      touched={touched.state}
+                      label="State/ Province/ Region"
+                      refe="state"
+                      handleChange={handleChange}
+                      handleBlur={handleBlur}
+                      value={values.state}
+                    />
+                    <AddressField
+                      error={errors.country}
+                      touched={touched.country}
+                      label="Country"
+                      refe="country"
+                      handleChange={handleChange}
+                      handleBlur={handleBlur}
+                      value={values.country}
+                    />
+                    <div className="pt-5">
+                      <button type="submit" className="btn btn-warning ">
+                        <i
+                          className="fa fa-plus txt pr-2"
+                          aria-hidden="true"
+                        ></i>
+                        <span className="txt">Add New Address</span>
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </Formik>
             </div>
             <div className="w-50 ml-5 d-flex flex-row justify-content-between">
               <div className="pt-1 w-50 d-flex flex-row-reverse">
-                <button type="button" className="btn btn-primary btn-sm">
+                <button
+                  onClick={getGeoLocation}
+                  type="button"
+                  className="btn btn-primary btn-sm"
+                >
                   <span className="txt">Use my current location</span>
                 </button>
               </div>
