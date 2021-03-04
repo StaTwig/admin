@@ -130,29 +130,32 @@ exports.verifyOtp = [
         if (user && user.otp == req.body.otp) {
           if(user.role == "powerUser" || user.role == "admin")
           {
-          EmployeeModel.updateOne(query, { otp: null });
-          OrganisationModel.findOne({ id: user.organisationId}).select("name").then(OrgName=>{
-            let userData = {
-              id: user.id,
-              firstName: user.firstName,
-              emailId: user.emailId,
-              role: user.role,
-              warehouseId: user.warehouseId,
-              organisationId: user.organisationId,
-              organisationName:OrgName.name
-            };
-            //Prepare JWT token for authentication
-            const jwtPayload = userData;
-            const jwtData = {
-              expiresIn: process.env.JWT_TIMEOUT_DURATION,
-            };
-            const secret = process.env.JWT_SECRET;
-            //Generated JWT token with Payload and secret.
-            userData.token = jwt.sign(jwtPayload, secret, jwtData);
-            return apiResponse.successResponseWithData(res, 'Login Success', userData);
+          EmployeeModel.updateOne(query,{ otp: null }).then(()=>{
+            OrganisationModel.findOne({ id: user.organisationId}).select("name").then(OrgName=>{
+              let userData = {
+                id: user.id,
+                firstName: user.firstName,
+                emailId: user.emailId,
+                role: user.role,
+                warehouseId: user.warehouseId,
+                organisationId: user.organisationId,
+                organisationName:OrgName.name
+              };
+              //Prepare JWT token for authentication
+              const jwtPayload = userData;
+              const jwtData = {
+                expiresIn: process.env.JWT_TIMEOUT_DURATION,
+              };
+              const secret = process.env.JWT_SECRET;
+              //Generated JWT token with Payload and secret.
+              userData.token = jwt.sign(jwtPayload, secret, jwtData);
+              return apiResponse.successResponseWithData(res, 'Login Success', userData);
+            }).catch(err=>{
+              return apiResponse.ErrorResponse(res, err);
+            });
           }).catch(err=>{
-            return apiResponse.ErrorResponse(res, err);
-          });
+            return apiResponse.ErrorResponse(res,err);
+          })
         }
         else{
           return apiResponse.ErrorResponse(res, `User dosen't have enough Permission for Admin Model`);

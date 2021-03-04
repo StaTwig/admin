@@ -60,3 +60,16 @@
 ::1 - GET /api/affliation_service/addAffliate HTTP/1.1 404 39 - 10.222 ms
 ::1 - POST /api/affliation_service/addAffliate HTTP/1.1 200 973 - 287.838 ms
 ::1 - POST /api/affliation_service/addAffliate HTTP/1.1 500 343 - 30041.575 ms
+::1 - GET /api/affliation_service/unAffiliateOrg?orgId=org-1234 HTTP/1.1 404 39 - 6.628 ms
+::1 - GET /api/affliation_service/unAffiliateOrg?orgId=org-1234 HTTP/1.1 401 1643 - 13.530 ms
+::1 - GET /api/affliation_service/unAffiliateOrg?orgId=org-1234 HTTP/1.1 200 88 - 269.121 ms
+::1 - GET /api/affliation_service/unAffiliateOrg?orgId=org-1234 HTTP/1.1 200 88 - 263.278 ms
+::1 - GET /api/affliation_service/unAffiliateOrg?orgId=org-1234 HTTP/1.1 200 88 - 252.547 ms
+::1 - GET /api/affliation_service/unAffiliateOrg?orgId=org-1234 HTTP/1.1 200 86 - 273.988 ms
+::1 - GET /api/affliation_service/unAffiliateOrg?orgId=org-1234 HTTP/1.1 200 86 - 852.550 ms
+::1 - GET /api/affliation_service/unAffiliateOrg?orgId=org-1test HTTP/1.1 200 86 - 263.861 ms
+::1 - GET /api/affliation_service/unAffiliateOrg?orgId=org-1test HTTP/1.1 200 88 - 265.202 ms
+::1 - GET /api/affliation_service/unAffiliateOrg?orgId=org-1test HTTP/1.1 200 70 - 264.959 ms
+::1 - GET /api/affliation_service/unAffiliate?id=emp-eewk2iklkjoesi HTTP/1.1 200 81 - 257.530 ms
+::1 - GET /api/affliation_service/unAffiliate?id=emp-eewk2iklkjoesi HTTP/1.1 200 6569 - 317.456 ms
+::1 - GET /api/affliation_service/unAffiliate?id=emp-eewk2iklkjoesi HTTP/1.1 200 6559 - 271.231 ms
