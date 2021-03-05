@@ -18,7 +18,6 @@ const ExcelPopUp = props => {
     formData.append('excel', excel);
     dispatch(turnOn());
     const result = await addPOsFromExcel(formData);
-    debugger;
     if (result && result.status === 200) {
       console.log('success add PO');
       props.setOpenPOExcel(false);

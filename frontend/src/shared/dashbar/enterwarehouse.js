@@ -16,7 +16,7 @@ const EnterWareHouse = props => {
           className="close"
           onClick={() => {
             props.setDashVisible(false)
-            props.setDashBarData({})
+            //props.setDashBarData({})
           }}
         >
           <img src={CloseIcon} alt="Close" with="30" height="30" />

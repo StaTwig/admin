@@ -6,6 +6,7 @@ const auth = require("../middlewares/jwt");
 
 const InventoryModel = require('../models/InventoryModel');
 const ShipmentModel = require('../models/ShipmentModel');
+const ShippingOrderModel = require ('../models/ShippingOrderModel')
 const POModel = require('../models/POModel');
 const RecordModel = require('../models/RecordModel');
 const AtomModel = require('../models/AtomModel');
@@ -292,7 +293,7 @@ exports.track = [
       );
 
     if (trackingNumber.includes("po") || trackingNumber.includes("PO") ) {
-    var type = "poNumber"; 
+    var type = "poNumber";
     var shipment_array = [];
     RecordModel.findOne({
         id: trackingNumber
@@ -300,37 +301,32 @@ exports.track = [
             var arr = JSON.parse(JSON.stringify(user)).shipments.length
             var val  = JSON.parse(JSON.stringify(user)).shipments
             shipment_array.push(val)
-	    var poDetails = {"id":user.id,"supplier":user.supplier,"customer":user.customer,"date":user.creationDate,"craetedBy":user.createdBy,"status":user.poStatus}
-	    logger.log(
+            var poDetails = {"id":user.id,"supplier":user.supplier,"customer":user.customer,"date":user.creationDate,"craetedBy":user.createdBy,"status":user.poStatus}
+            logger.log(
             'info',
             '<<<<< ShipmentService < ShipmentController < trackShipment : tracked PO, queried data by transaction hash',
         );
         res.json({
-	    poDetails: poDetails,
+            poDetails: poDetails,
             shipments: shipment_array,
         });
     });
-  } else if (trackingNumber.includes("SHP")) {
-     var shipment_array = [];
-     RecordModel.find({
-     "shipments.shipment_id": trackingNumber
+  } else if (trackingNumber.includes("SH") || trackingNumber.includes("zp") ) {
+     var poDetails,shipmentDetails,shippingOrderDetails,shippingOrderId;
+     ShipmentModel.find({
+     "id": trackingNumber
     }).then(async user => {
-      var poID = user[0].id;
-       RecordModel.find({
-       id: poID
-    }).then(async user => { 
-	    var arr = JSON.parse(JSON.stringify(user)).length
-            var poDetails = {"id":user[0].id,"supplier":user[0].supplier,"customer":user[0].customer,"date":user[0].creationDate,"createdBy":user[0].createdBy,"status":user[0].poStatus}
-	    for (i = 0; i < arr; i++){
-	    var val = JSON.parse(JSON.stringify(user))[i].shipments
-	    shipment_array.push(val)
-	    }
-    	 res.json({
-	    poDetails: poDetails,
-	    shipments: shipment_array
+      shipmentDetails = user;
+      shippingOrderId = JSON.parse(JSON.stringify(user[0])).shippingOrderId;
+      poId = JSON.parse(JSON.stringify(user[0])).poId;
+       shippingOrderDetails = await ShippingOrderModel.find({id: shippingOrderId})
+       poDetails = await RecordModel.find({id: poId})
+            res.json({
+            shipmentDetails: shipmentDetails,
+            shippingOrderDetails: shippingOrderDetails,
+            poDetails: poDetails
         });
-      })
-    })
+        });
   } else {
   var type = "serialNumber";
   var shipment_array = [];
@@ -338,7 +334,7 @@ exports.track = [
         id: trackingNumber
     }).then(async user => {
          console.log(user.shipmentIds[0])
-	var shipmentIds = user.shipmentIds
+        var shipmentIds = user.shipmentIds
         RecordModel.find({
        "shipments.shipment_id": shipmentIds[0]
     }).then(async user => {
@@ -349,7 +345,7 @@ exports.track = [
             shipment_array.push(val)
             }
          res.json({
-	    inventoryDetails: user,
+            inventoryDetails: user,
             poDetails: poDetails,
             shipments: shipment_array
         });
@@ -370,5 +366,3 @@ exports.track = [
     }
   },
 ];
-
-

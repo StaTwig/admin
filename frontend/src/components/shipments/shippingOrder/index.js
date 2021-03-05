@@ -19,7 +19,6 @@ const ShippingOrderTable = props => {
   useEffect(() => {
     async function fetchData() {
       const result = await getShippingOrders();
-      debugger;
       setShippingOrders(result.reverse());
     }
     fetchData();

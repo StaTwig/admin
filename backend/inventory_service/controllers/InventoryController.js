@@ -1429,13 +1429,13 @@ exports.getProductDetailsByWarehouseId = [
                    }
       var warehouse = {"warehouseCountryId":warehouseDetails[0].country.id,"warehouseCountryName":warehouseDetails[0].country.name,"warehouseId":warehouseDetails[0].id,
       "warehouseName":warehouseDetails[0].title,"warehouseAddress":warehouseDetails[0].postalAddress,"warehouseLocation":warehouseDetails[0].location}
-	    
+
       return apiResponse.successResponseWithData(
         res,"Fetch success",
-	{
-	warehouse,
+        {
+        warehouse,
         productArray
-	}
+        }
       );
     } catch (err) {
       logger.log(
@@ -1475,7 +1475,7 @@ exports.getCountryDetailsByRegion = [
     try {
       const { region } = req.query;
       const regionDetails = await RegionModel.find({"name":region})
-	console.log(regionDetails[0].country)
+        console.log(regionDetails[0].country)
      // var countryArray = [];
       /*for (j=0;j<regionDetails.length;j++)
                    {
@@ -1485,7 +1485,7 @@ exports.getCountryDetailsByRegion = [
 
       return apiResponse.successResponseWithData(
         res,"Fetch success",
-	      {"countries": regionDetails[0].country}
+              {"countries": regionDetails[0].country}
       );
     } catch (err) {
       logger.log(
@@ -1513,17 +1513,17 @@ exports.getRegions = [
   },
 ];
 
-exports.getWarehouseDetailsByCountry = [
+exports.getWarehouseDetailsByRegion = [
   auth,
   async (req, res) => {
     try {
-      const { country } = req.query;
-      const warehouseDetails = await WarehouseModel.find({"country.name":country})
-      
+      const { region } = req.query;
+      const warehouseDetails = await WarehouseModel.find({"region.name":region})
+
       var warehouseArray = [];
       for (j=0;j<warehouseDetails.length;j++)
                    {
-                        var warehouseId = warehouseDetails[j].id;
+                        var warehouseId = warehouseDetails[j];
                         warehouseArray.push(warehouseId)
                    }
 
@@ -1541,4 +1541,30 @@ exports.getWarehouseDetailsByCountry = [
   },
 ];
 
+exports.getWarehouseDetailsByCountry = [
+  auth,
+  async (req, res) => {
+    try {
+      const { country } = req.query;
+      const warehouseDetails = await WarehouseModel.find({"country.name":country})
 
+      var warehouseArray = [];
+      for (j=0;j<warehouseDetails.length;j++)
+                   {
+                        var warehouseId = warehouseDetails[j];
+                        warehouseArray.push(warehouseId)
+                   }
+
+      return apiResponse.successResponseWithData(
+        res,"Fetch success",
+        warehouseArray
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
