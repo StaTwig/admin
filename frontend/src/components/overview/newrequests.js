@@ -54,12 +54,11 @@ const NewRequests = (props) => {
             type="button"
             className="btn rounded btn-outline-success mr-3 pl-2 pr-2"
             onClick={() => {
+              console.log(requestRow);
+
               setData({
                 id: requestRow?.id,
-                ref:
-                  requestRow?.phoneNumber == ""
-                    ? requestRow?.emailId
-                    : requestRow?.phoneNumber,
+                ref: requestRow?.emailId,
                 rindex: rindex,
               });
               setTitle("ASSIGN USER ROLE");
