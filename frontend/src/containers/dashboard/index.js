@@ -53,6 +53,7 @@ const DashBoardContainer = props => {
             setContent={setContent}
             dashBarData={dashBarData}
             setDashBarData={setDashBarData}
+            onWarehouseSelect={onSearchClick}
           />
         )}
       </div>

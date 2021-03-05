@@ -5,14 +5,12 @@ import {
     getRegions,
     getCountryByRegion,
     getWareHousesByCountry,
+    getWareHousesByRegion,
     getProductDetailsByWarehouseId
 } from '../../actions/inventoryActions';
 import CloseIcon from '../../assets/icons/cross.svg';
 import DropdownButton from '../dropdownButtonGroup';
 import './style.scss'
-import {Link} from "react-router-dom";
-import {turnOff, turnOn} from "../../actions/spinnerActions";
-
    const SearchWareHouse = props => {
        const dispatch = useDispatch();
     const [region,setRegion]= useState('Select Region')
@@ -39,6 +37,28 @@ import {turnOff, turnOn} from "../../actions/spinnerActions";
         }
     }
 
+    const onRegionChange = async item => {
+        setRegion(item)
+        onCountries(item);
+        const regionResult = await getWareHousesByRegion(item);
+        if (regionResult.status === 1) {
+            setWareHouses(regionResult.data);
+            const warehouseList = regionResult.data.map(w => w.id);
+            setWareHouseIds(warehouseList);
+        }
+    }
+
+    const onCountryChange = async item => {
+        setRegion(item)
+        onCountries(item);
+        const regionResult = await getWareHousesByCountry(item);
+        if (regionResult.status === 1) {
+            setWareHouses(regionResult.data);
+            const warehouseList = regionResult.data.map(w => w.id);
+            setWareHouseIds(warehouseList);
+        }
+    }
+
     const onWarehouses = async (item) => {
         const warehousesResult = await getWareHousesByCountry(item);
      if (warehousesResult.status === 1) {
@@ -48,11 +68,7 @@ import {turnOff, turnOn} from "../../actions/spinnerActions";
      }
  }
        const onSearchWareHouse = async (warehouseId) => {
-           dispatch(turnOn());
-           const result = await getProductDetailsByWarehouseId(warehouseId);
-           setProducts(result.productArray);
-           setWarehouse(result.warehouse);
-           dispatch(turnOff());
+            props.onWarehouseSelect(warehouseId);
        }
     return (
         <div className="dashbar">
@@ -72,12 +88,7 @@ import {turnOff, turnOn} from "../../actions/spinnerActions";
                     <div className="form-control ml-5">
                         <DropdownButton
                             name={region}
-                            onSelect={item =>
-                                {
-                                setRegion(item)
-                                onCountries(item)
-                                }
-                            }
+                            onSelect={onRegionChange}
                             groups={regions}
                         />
                     </div>
@@ -111,8 +122,8 @@ import {turnOff, turnOn} from "../../actions/spinnerActions";
                     </div>
                 </div>
             </div>
-            <div className=" panel  mb-4 searchwarehouse dashsearch address searchpanel">
-            <div className="d-flex flex-row ">
+            {warehouses.length > 0 && <div className=" panel  mb-4 searchwarehouse dashsearch address searchpanel">
+                {warehouses.map(w => <div className="d-flex flex-row " onClick={() =>props.onWarehouseSelect(w.id)}>
                     <ul className="mr-3">
                         <li className="mb-2 text-secondary">Country ID</li>
                         <li className="mb-2 text-secondary">Country</li>
@@ -120,31 +131,13 @@ import {turnOff, turnOn} from "../../actions/spinnerActions";
                         <li className="mb-1 text-secondary">Warehouse Name</li>
                     </ul>
                     <ul>
-                        <li className="mb-2">{warehouse?.warehouseCountryId}</li>
-                        <li className="mb-2">{warehouse?.warehouseCountryName}</li>
-                        <li className="mb-2">{warehouse?.warehouseId}</li>
-                        <li className="mb-1">{warehouse?.warehouseName}</li>
+                        <li className="mb-2">{w.country.id}</li>
+                        <li className="mb-2">{w.country.name}</li>
+                        <li className="mb-2">{w.id}</li>
+                        <li className="mb-1">{w.title}</li>
                     </ul>
-            </div>
-                <div className="panel address searchpanel prodpanel d-flex flex-column">
-                    {products?.map(product => <div className="mb-1 subprod">
-                        <div className="text-primary" key={product.productId}>
-                            <strong>{product.productName}</strong>
-                        </div>
-                        <div className="d-flex flex-row mb-1">
-                            <div className="mr-3 text-secondary">Manufacture : {product.manufacturer}</div>
-                            <div className="text-secondary">
-                                Quantity : <span className="text-info">{product.quantity}</span>
-                            </div>
-                        </div>
-                        <Link to="/productlist/all">
-                            <button className="btn btn-outline-info fontSize200 sho mb-2 mt-1">
-                                SHOW MORE
-                            </button>
-                        </Link>
-                    </div>)}
-                </div>
-            </div>
+                </div>)}
+            </div>}
 
         </div>
     )
