@@ -68,7 +68,7 @@ const NewAddress = (props) => {
     dispatch(turnOn());
     const result = await addAddress(data);
     if (result.status == 200) {
-      // props.history.push(`/address`);
+      props.history.push(`/address`);
       setMessage(result.data.data.message);
     }
     dispatch(turnOff());
