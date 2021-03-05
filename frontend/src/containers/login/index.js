@@ -42,7 +42,7 @@ const LoginContainer = props => {
   });
   const onkeydown = (event) => {
     if (event.keyCode  === 13) {
-      onLogin();
+      onSendOtp();
     }
    }
 

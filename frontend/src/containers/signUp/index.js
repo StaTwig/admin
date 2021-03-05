@@ -25,9 +25,14 @@ const SignupContainer = (props) => {
       setErrorMessage(err.msg);
     }
   });
+  const onkeydown = (event) => {
+    if (event.keyCode  === 13) {
+      onSignup();
+    }
+   }
 
   return (
-    <div className="container-fluid p-0">
+    <div className="container-fluid p-0" tabIndex="-1" onKeyDown={onkeydown}>
  <MobileHeader {...props} />
    <nav className="navbar sticky-top navbar-expand-lg">
         <a className="navbar-brand" href="#">
