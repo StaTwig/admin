@@ -19,6 +19,8 @@ const DashBoard = (props) => {
     acceptApproval,
     rejectApproval,
     recentRequestsSent,
+    organisationsList,
+    sendAffiliate,
   } = props;
 
   return (
@@ -81,7 +83,10 @@ const DashBoard = (props) => {
         <div className="panel w-50 mt-3">
           <div>
             <h5 className="sub-header">Send Request</h5>
-            <SentRequests />
+            <SentRequests
+              sendAffiliate={sendAffiliate}
+              organisationsList={organisationsList}
+            />
           </div>
           <div className="mt-4">
             <h5 className="sub-header">Recent Requests Sent</h5>

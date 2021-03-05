@@ -63,9 +63,10 @@ const UserContainer = (props) => {
     dispatch(turnOn());
     const result = await addOrgUser(data);
     if (result.status === 200) {
-      setMessage(result.data.data.message);
+      setMessage(result.message);
+      props.history.push(`/users`);
     } else {
-      setError(result.data.data.message);
+      setError(result.message);
     }
     dispatch(turnOff());
   };

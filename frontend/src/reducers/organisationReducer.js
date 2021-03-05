@@ -7,6 +7,7 @@ import {
   SET_ORGANISATION_REQ_SENT,
   SET_AFFILATED_PENDING_REQ,
   SET_AFFILATED_ORGS,
+  SET_ORGANISATIONS,
 } from "../constants/organisationConstants";
 
 export const initialState = {
@@ -17,6 +18,7 @@ export const initialState = {
   requestsSent: [],
   affilatedPendingReq: [],
   affiliatedOrgs: [],
+  list: [],
 };
 
 export const organisationReducer = (state = initialState, action) => {
@@ -41,6 +43,8 @@ export const organisationReducer = (state = initialState, action) => {
       };
     case SET_AFFILATED_ORGS:
       return { ...state, affiliatedOrgs: action.payload.data };
+    case SET_ORGANISATIONS:
+      return { ...state, list: action.payload.data };
     case GET_FAILURE:
       return initialState;
     default:

@@ -76,6 +76,7 @@ const Users = (props) => {
                 activateUser={activateUser}
                 deactivateUser={deactivateUser}
                 unaffiliate={unaffiliate}
+                permissions={permissions}
               />
             ))}
           </div>

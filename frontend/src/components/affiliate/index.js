@@ -21,6 +21,8 @@ const Affiliate = (props) => {
     unaffiliatedOrg,
     acceptAffliate,
     rejectAffliate,
+    organisationsList,
+    sendAffiliate,
   } = props;
 
   return (
@@ -92,7 +94,11 @@ const Affiliate = (props) => {
         )}
         {tabIndex == 4 && (
           <div className="w-50">
-            <Sentrequests disableShadow={true} />
+            <Sentrequests
+              organisationsList={organisationsList}
+              sendAffiliate={sendAffiliate}
+              disableShadow={true}
+            />
           </div>
         )}
       </div>
