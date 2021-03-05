@@ -10,9 +10,9 @@ const AddressDetails = (props) => {
     <div className="card flex-row add-width justify-content-between rounded border border-white shadow bg-white m-3 p-3">
       <div className="d-flex flex-row justify-content-between w-50">
         <div>
-          <h5 className="text-primary">Head Office</h5>
+          <h5 className="text-primary">{address.title}</h5>
           <p className=" mb-0">
-            {address.region.name + ", " + address.country.name}
+            {address.region.regionName + ", " + address.country.countryName}
             <span className="row justify-content-md-center">&nbsp;</span>
           </p>
           <p className="txtColor pt-0">{address.postalAddress}</p>
