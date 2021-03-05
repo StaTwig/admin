@@ -15,6 +15,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 const NewAddress = (props) => {
   // const editAddress = JSON.parse(props.match.params.address);
+  console.log(props.user);
 
   let editAddress;
   const dispatch = useDispatch();
@@ -52,94 +53,6 @@ const NewAddress = (props) => {
           }
         },
         (error) => {
-          setAddress({
-            Response: {
-              MetaInfo: {
-                Timestamp: "2021-03-02T11:57:07.638+0000",
-              },
-              View: [
-                {
-                  _type: "SearchResultsViewType",
-                  ViewId: 0,
-                  Result: [
-                    {
-                      Relevance: 1.0,
-                      Distance: -117.8,
-                      Direction: 159.6,
-                      MatchLevel: "district",
-                      MatchQuality: {
-                        Country: 1.0,
-                        State: 1.0,
-                        County: 1.0,
-                        City: 1.0,
-                        District: 1.0,
-                        Subdistrict: 1.0,
-                        PostalCode: 1.0,
-                      },
-                      Location: {
-                        LocationId: "NT_WcqybDDKRDSvjdm6Erj2vD",
-                        LocationType: "area",
-                        DisplayPosition: {
-                          Latitude: 12.84606,
-                          Longitude: 77.68448,
-                        },
-                        MapView: {
-                          TopLeft: {
-                            Latitude: 12.85869,
-                            Longitude: 77.68214,
-                          },
-                          BottomRight: {
-                            Latitude: 12.84473,
-                            Longitude: 77.69534,
-                          },
-                        },
-                        Address: {
-                          Label:
-                            "Shanthipura, Electronic City, Bengaluru, KA, India",
-                          Country: "IND",
-                          State: "KA",
-                          County: "Bengaluru",
-                          City: "Bengaluru",
-                          District: "Electronic City",
-                          Subdistrict: "Shanthipura",
-                          PostalCode: "560100",
-                          AdditionalData: [
-                            {
-                              value: "India",
-                              key: "CountryName",
-                            },
-                            {
-                              value: "Karnataka",
-                              key: "StateName",
-                            },
-                            {
-                              value: "Bengaluru",
-                              key: "CountyName",
-                            },
-                          ],
-                        },
-                        MapReference: {
-                          ReferenceId: "832005539",
-                          MapId: "RRAM20150",
-                          MapVersion: "Q1/2020",
-                          MapReleaseDate: "2021-02-05",
-                          SideOfStreet: "neither",
-                          CountryId: "22806254",
-                          StateId: "22798588",
-                          CountyId: "22799633",
-                          CityId: "22803543",
-                          DistrictId: "27429989",
-                        },
-                      },
-                    },
-                  ],
-                },
-              ],
-            },
-          });
-
-          setAddress(address?.Response.View[0].Result[0].Location.Address);
-
           setShowModal(true);
         }
       );
@@ -151,20 +64,21 @@ const NewAddress = (props) => {
   const saveAddress = async (data) => {
     data.postitions = pos;
     data.id = editAddress?.id;
+    data.organisationId = props.user.organisationId;
     dispatch(turnOn());
     const result = await addAddress(data);
     if (result.status == 200) {
-      props.history.push(`/address`);
+      // props.history.push(`/address`);
       setMessage(result.data.data.message);
     }
     dispatch(turnOff());
   };
 
-  if (addArr && addr?.length == 0) {
+  if (addArr && addr?.length == 0 && props.match.params.address) {
     editAddress = addArr.filter(
       (row) => row.id == JSON.parse(props.match.params.address)
     );
-    setAdd(editAddress[0].postalAddress?.split(", "));
+    if (editAddress?.length) setAdd(editAddress[0].postalAddress?.split(", "));
   }
 
   return (
