@@ -15,7 +15,6 @@ import { useSelector, useDispatch } from "react-redux";
 
 const NewAddress = (props) => {
   // const editAddress = JSON.parse(props.match.params.address);
-  console.log(props.user);
 
   let editAddress;
   const dispatch = useDispatch();
@@ -63,7 +62,9 @@ const NewAddress = (props) => {
 
   const saveAddress = async (data) => {
     data.postitions = pos;
-    data.id = editAddress?.id;
+    data.id = props.match.params.address
+      ? JSON.parse(props.match.params.address)
+      : "";
     data.organisationId = props.user.organisationId;
     dispatch(turnOn());
     const result = await addAddress(data);
