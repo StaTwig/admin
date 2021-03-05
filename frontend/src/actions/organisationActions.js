@@ -9,6 +9,7 @@ import {
   SET_ORGANISATION_REQ_SENT,
   SET_AFFILATED_PENDING_REQ,
   SET_AFFILATED_ORGS,
+  SET_ORGANISATIONS,
 } from "../constants/organisationConstants";
 import { turnOn, turnOff } from "./spinnerActions";
 
@@ -55,6 +56,23 @@ export const getWareHouses = () => {
       const result = await axios.get(config().getWareHousesUrl);
       dispatch({
         type: SET_ORGANISATION_ADDRESSES,
+        payload: result.data,
+      });
+      dispatch(turnOff());
+      return result.data.data.length;
+    };
+  } catch (e) {
+    throw Error(e.message);
+  }
+};
+
+export const getAllOrganisations = () => {
+  try {
+    return async (dispatch) => {
+      dispatch(turnOn());
+      const result = await axios.get(config().getAllOrgUrl);
+      dispatch({
+        type: SET_ORGANISATIONS,
         payload: result.data,
       });
       dispatch(turnOff());
@@ -146,6 +164,41 @@ export const rejectAffiliate = async (data) => {
   try {
     const result = await axios.get(
       `${config().rejectAffiliateUrl}?affId=${data.id}`
+    );
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+export const addAffiliate = async (data) => {
+  try {
+    const reqData = {
+      from: {
+        name: "String",
+        id: "String",
+        organisationId: "String",
+        organisation: "String",
+        warehouseId: "String",
+        emailId: "String",
+        phone: "String",
+        walletAddress: "String",
+        photoUrl: "String",
+      },
+      to: {
+        name: "String",
+        id: "String",
+        organisationId: "String",
+        organisation: "String",
+        warehouseId: "String",
+        emailId: "String",
+        phone: "String",
+        walletAddress: "String",
+        photoUrl: "String",
+      },
+    };
+    const result = await axios.get(
+      `${config().addAffiliateUrl}?affId=${data.id}`
     );
     return result;
   } catch (e) {

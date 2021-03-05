@@ -1,23 +1,24 @@
-import React, { useState, useRef } from 'react';
-import parse from 'html-react-parser';
-import useOnclickOutside from 'react-cool-onclickoutside';
+import React, { useState, useRef } from "react";
+import parse from "html-react-parser";
+import useOnclickOutside from "react-cool-onclickoutside";
 
-import upDownArrow from '../../assets/icons/up-and-down-blue.svg';
-import './style.scss';
+import upDownArrow from "../../assets/icons/up-and-down-blue.svg";
+import "./style.scss";
 
-const dropdownButtonGroup = props => {
+const dropdownButtonGroup = (props) => {
   const [menu, setMenu] = useState(false);
-  const { groups, name, onSelect } = props;
+  const { groups, name, namer, onSelect } = props;
 
   const ref = useRef();
   useOnclickOutside(ref, () => {
     setMenu(false);
   });
-  const useParse = name && name.includes('<');
+  const useParse = name && name.includes("<");
   return (
     <div className="custom-dropdown">
       <button
-        className={`btn-custom-dropdown ${menu && 'active'}`}
+        className={`btn-custom-dropdown ${menu && "active"}`}
+        name={namer}
         role="button"
         onClick={() => setMenu(!menu)}
       >
@@ -38,7 +39,7 @@ const dropdownButtonGroup = props => {
                       onSelect(item);
                     }}
                   >
-                    {parse(item)}
+                    {parse(item.name)}
                   </span>
                   {index + 1 < groups.length && <hr />}
                 </React.Fragment>

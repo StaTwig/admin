@@ -11,6 +11,8 @@ import {
   unaffiliateOrg,
   acceptAffiliate,
   rejectAffiliate,
+  getAllOrganisations,
+  addAffiliate,
 } from "../../actions/organisationActions";
 
 const AffiliateContainer = (props) => {
@@ -22,6 +24,7 @@ const AffiliateContainer = (props) => {
     dispatch(getRecentReqSent());
     dispatch(getAffilatedPendingReq());
     dispatch(getAffilatedOrgs());
+    dispatch(getAllOrganisations());
   }, []);
 
   const recentRequestsSent = useSelector((state) => {
@@ -34,6 +37,10 @@ const AffiliateContainer = (props) => {
 
   const affiliatedOrgs = useSelector((state) => {
     return state.organisation.affiliatedOrgs;
+  });
+
+  const organisationsList = useSelector((state) => {
+    return state.organisation.list;
   });
 
   const unaffiliatedOrgs = async (data) => {
@@ -66,6 +73,17 @@ const AffiliateContainer = (props) => {
     }
   };
 
+  const sendAffiliate = async (data) => {
+    data.user = props.user;
+    const result = await addAffiliate(data);
+    if (result.status === 200) {
+      affilatedPendingReq.splice(data.rindex, 1);
+      setMessage(result.data.data.message);
+    } else {
+      setError(result.data.data.message);
+    }
+  };
+
   return (
     <div className="container-fluid p-0">
       <Header {...props} />
@@ -82,6 +100,8 @@ const AffiliateContainer = (props) => {
             unaffiliatedOrg={unaffiliatedOrgs}
             acceptAffliate={acceptAffliate}
             rejectAffliate={rejectAffliate}
+            organisationsList={organisationsList}
+            sendAffiliate={sendAffiliate}
           />
         </div>
       </div>

@@ -11,6 +11,8 @@ import {
   rejectOrgUser,
   getRecentReqSent,
   addOrgUser,
+  getAllOrganisations,
+  addAffiliate,
 } from "../../actions/organisationActions";
 
 const DashBoardContainer = (props) => {
@@ -22,6 +24,7 @@ const DashBoardContainer = (props) => {
     dispatch(getRequestsPending());
     dispatch(getPermissions());
     dispatch(getRecentReqSent());
+    dispatch(getAllOrganisations());
   }, []);
 
   const requestsPending = useSelector((state) => {
@@ -34,6 +37,10 @@ const DashBoardContainer = (props) => {
 
   const recentRequestsSent = useSelector((state) => {
     return state.organisation.requestsSent;
+  });
+
+  const organisationsList = useSelector((state) => {
+    return state.organisation.list;
   });
 
   const acceptApproval = async (data) => {
@@ -58,6 +65,17 @@ const DashBoardContainer = (props) => {
     }
   };
 
+  const sendAffiliate = async (data) => {
+    data.user = props.user;
+    const result = await addAffiliate(data);
+    if (result.status === 200) {
+      affilatedPendingReq.splice(data.rindex, 1);
+      setMessage(result.data.data.message);
+    } else {
+      setError(result.data.data.message);
+    }
+  };
+
   return (
     <div className="container-fluid p-0">
       <Header {...props} />
@@ -73,6 +91,8 @@ const DashBoardContainer = (props) => {
             acceptApproval={acceptApproval}
             rejectApproval={rejectApproval}
             recentRequestsSent={recentRequestsSent}
+            organisationsList={organisationsList}
+            sendAffiliate={sendAffiliate}
           />
         </div>
       </div>
