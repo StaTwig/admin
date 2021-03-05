@@ -17,7 +17,7 @@ const NUModal = (props) => {
   return (
     <div className="p-0">
       <Formik
-        initialValues={{ email: "", role: "" }}
+        initialValues={{ email: data?.ref, role: "" }}
         validate={(values) => {
           const errors = {};
           if (!values.email) {
@@ -66,7 +66,6 @@ const NUModal = (props) => {
                   }`}
                   placeholder="Enter the email"
                   readOnly={data?.ref != undefined ? true : false}
-                  defaultValue={data?.ref}
                   onChange={(e) => {
                     setEmail(e);
                     handleChange(e);
