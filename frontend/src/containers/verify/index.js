@@ -60,8 +60,14 @@ const VerifyContainer = props => {
     }
     dispatch(turnOff());
   });
+  const onkeydown = (event) => {
+    if (event.keyCode  === 13) {
+      verifyOTP();
+    }
+   }
+
   return (
-    <div className="container-fluid p-0">
+    <div className="container-fluid p-0" tabIndex="-1" onKeyDown={onkeydown}>
       <Verify
         email={email}
         otp1={otp1}

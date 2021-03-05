@@ -98,8 +98,7 @@ const Table = props => {
               </button>
           )}
         </div>
-        )}
-      </div>
+    </div>
   );
 };
 

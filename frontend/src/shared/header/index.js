@@ -46,6 +46,13 @@ const Header = props => {
     setNotifications(response.data);
   }
 
+  const onkeydown = (event) => {
+    if (event.keyCode  === 13) {
+      onSeach();
+    }
+   }
+
+
   return (
     <div className="header">
       <div className="branding">
@@ -60,7 +67,7 @@ const Header = props => {
         />
       </div>
       <div className="actions">
-        <div className="search-form">
+        <div className="search-form" tabIndex="-1" onKeyDown={onkeydown}>
           <input
             type="text"
             // value={search}
