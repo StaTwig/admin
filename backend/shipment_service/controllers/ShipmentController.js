@@ -4,6 +4,7 @@ const apiResponse = require('../helpers/apiResponse');
 const auth = require('../middlewares/jwt');
 const checkToken = require('../middlewares/middleware').checkToken;
 const ShipmentModel = require('../models/ShipmentModel');
+const RecordModel = require('../models/RecordModel');
 const ShippingOrderModel = require('../models/ShippingOrderModel');
 const init = require('../logging/init');
 const logger = init.getLog();
@@ -14,6 +15,20 @@ exports.createShipment = [
     try {
       const data = req.body;
       data.id = 'SH' + nanoid(10);
+      const po = await RecordModel.findOne({ id: data.poId});
+      let quantityMismatch = false;
+      po.products.every(product => {
+        data.products.every(p => {
+          if(parseInt(p.productQuantity) < parseInt(product.productQuantity) ) {
+            quantityMismatch = true;
+            return false;
+          }
+        })
+      })
+      if(quantityMismatch) {
+        po.poStatus = 'PARTIALLYFULFILLED';
+        await po.save();
+      }
       const shipment = new ShipmentModel(data);
       const result = await shipment.save();
       await ShippingOrderModel.findOneAndUpdate(

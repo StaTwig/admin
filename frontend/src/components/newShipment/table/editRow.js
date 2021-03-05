@@ -49,7 +49,7 @@ const EditRow = props => {
           <input
             className="form-field"
             placeholder="Quantity"
-            value={product.quantity}
+            value={product.productQuantity}
             onChange={e => handleQuantityChange(e.target.value, index)}
           />
         </div>

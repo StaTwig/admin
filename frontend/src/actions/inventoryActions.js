@@ -81,6 +81,18 @@ export const getWareHousesByCountry = async (id) => {
     return [];
   }
 };
+export const getWareHousesByRegion = async (id) => {
+  try {
+    debugger;
+    const urlobj = config();
+    const url = urlobj.getWareHousesByRegionUrl+id;
+    debugger;
+    const result = await axios.get(url);
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
 
 
 

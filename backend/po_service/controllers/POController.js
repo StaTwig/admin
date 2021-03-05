@@ -369,6 +369,12 @@ exports.createPurchaseOrder = [
   auth,
   async (req, res) => {
     try {
+      //Use this code for reindex
+     /*  RecordModel.collection.dropIndexes(function(){
+         RecordModel.collection.reIndex(function(finished){
+                 console.log("finished re indexing")
+               })
+             })*/
       const { externalId, creationDate, supplier, customer, products, lastUpdatedOn } = req.body;
       const { createdBy, lastUpdatedBy } = req.user.id;
       const purchaseOrder = new RecordModel({

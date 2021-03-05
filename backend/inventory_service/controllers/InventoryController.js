@@ -1415,8 +1415,8 @@ exports.getProductDetailsByWarehouseId = [
   async (req, res) => {
     try {
       const { warehouseId } = req.query;
-      const warehouseDetails = await WarehouseModel.find({"id":warehouseId})
-      const val = warehouseDetails[0].warehouseInventory
+      const warehouseDetails = await WarehouseModel.findOne({"id":warehouseId})
+      const val = warehouseDetails.warehouseInventory
       const productList = await InventoryModel.find({"id":val});
       const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails))
       var productArray = [];
@@ -1427,8 +1427,8 @@ exports.getProductDetailsByWarehouseId = [
                         var product1 = {productName: product[0].name, productId: product[0].id,manufacturer:product[0].manufacturer,quantity: list[j].quantity};
                         productArray.push(product1)
                    }
-      var warehouse = {"warehouseCountryId":warehouseDetails[0].country.id,"warehouseCountryName":warehouseDetails[0].country.name,"warehouseId":warehouseDetails[0].id,
-      "warehouseName":warehouseDetails[0].title,"warehouseAddress":warehouseDetails[0].postalAddress,"warehouseLocation":warehouseDetails[0].location}
+      var warehouse = {"warehouseCountryId":warehouseDetails.country.id,"warehouseCountryName":warehouseDetails.country.name,"warehouseId":warehouseDetails.id,
+      "warehouseName":warehouseDetails.title,"warehouseAddress":warehouseDetails.postalAddress,"warehouseLocation":warehouseDetails.location}
 
       return apiResponse.successResponseWithData(
         res,"Fetch success",
