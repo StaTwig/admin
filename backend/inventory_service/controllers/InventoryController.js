@@ -697,9 +697,13 @@ exports.addProductsToInventory = [
           }
           let serialNumbersRange = true
          for(let i=0; i< products.length; i++) {
-            if(products[i].serialNumbersRange.split('-').length < 2) {
-              serialNumbersRange = false;
-              break;
+           if (products[i].serialNumbersRange.split('-').length < 2) {
+             let snoref = Date.now();
+             products[i].serialNumbersRange =
+               "DSL" + (parseInt(snoref) - parseInt(products[i].quantity - 1)) +
+               "-DSL" + snoref;
+              // serialNumbersRange = false;
+              // break;
             }
          }
          if(!serialNumbersRange) {
