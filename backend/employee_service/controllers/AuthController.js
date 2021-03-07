@@ -113,14 +113,38 @@ exports.register = [
             'info',
             '<<<<< UserService < AuthController < register : Generating Hash for Input Password',
           );
+        
+          var organisationId = req.body.organisationId;
+          var employeeId = uniqid('emp-');
+          var employeeStatus = 'NOTAPPROVED';
+            
+          //create organisation if doesn't exists 
+          if (req.body.organisationName?.length) {
+            const organisationName = req.body.organisationName;
+            const organisation = await OrganisationModel.findOne({ name: organisationName });
+            if (organisation) {
+              organisationId = organisation.id;
+            }
+            else {
+              employeeStatus = 'ACTIVE';
+              organisationId = uniqid('org-');
+              const org = new OrganisationModel({
+                primaryContactId: employeeId,
+                name: organisationName,
+                id: organisationId,
+              });
+              await org.save();
+            }
+          }
 
           // Create User object with escaped and trimmed data
           const user = new EmployeeModel({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
             emailId: req.body.emailId,
-            organisationId: req.body.organisationId,
-            id: uniqid('emp-'),
+            organisationId: organisationId,
+            id: employeeId,
+            accountStatus: employeeStatus
           });
           await user.save()
         return apiResponse.successResponse(res, 'User registered Success');
