@@ -1,28 +1,15 @@
 @import "../../assets/styles/global.scss";
 
-.rowDash {
-  width: 100%;
-  align-items: flex-end;
-  justify-content: space-between;
-  flex-direction: row;
-  display: flex;
-  .txt {
-    color: #ffffff;
-  }
-  .dashboard {
-    padding-right: 3rem;
-    padding-left: 1rem;
+.dashboard {
+  padding-right: 1rem;
+  padding-left: 2rem;
 
-    @media (max-width: $md) {
-      padding-right: 10px;
-      padding-left: 10px;
-    }
-
-    .dash {
-      margin-bottom: 0.2rem;
-    }
+  @media (max-width: $md) {
+    padding-right: 10px;
+    padding-left: 10px;
   }
 }
+
 .userPic {
   margin-right: 0.5rem;
   img {
@@ -38,7 +25,7 @@
   color: blue;
 }
 .dropdownLabel {
-  font-size: x-large;
+  font-size: larger;
 }
 .d-grid {
   display: grid;

@@ -19,7 +19,7 @@ const Users = (props) => {
   } = props;
 
   return (
-    <div className="container-fluid pl-5 pr-3">
+    <div className="users">
       {showModal && (
         <Modal
           close={closeModal}
@@ -40,10 +40,8 @@ const Users = (props) => {
           />
         </Modal>
       )}
-      <div className="rowDash">
-        <div className="dashboard">
-          <h1 className="breadcrumb dash">MANAGE USERS</h1>
-        </div>
+      <div className="d-flex pl-2 justify-content-between">
+        <h1 className="breadcrumb dash">MANAGE USERS</h1>
         <div className="pr-4">
           <button
             type="button"

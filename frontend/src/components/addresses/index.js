@@ -7,11 +7,9 @@ import NoRecordsFound from "../NoRecordsFound";
 const Address = (props) => {
   const { addresses } = props;
   return (
-    <div className="container-fluid ml-5 mr-3">
-      <div className="rowDash pr-4">
-        <div className="dashboard">
-          <h1 className="breadcrumb dash">MANAGE ADDRESS</h1>
-        </div>
+    <div className="address">
+      <div className="d-flex pl-2 justify-content-between">
+        <h1 className="breadcrumb dash">MANAGE ADDRESS</h1>
         {addresses.length < 5 && (
           <div>
             <button type="button" className="btn btn-warning ">

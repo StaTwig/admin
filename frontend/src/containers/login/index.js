@@ -38,11 +38,11 @@ const LoginContainer = (props) => {
       // Set user and isAuthenticated
       localStorage.setItem('theLedgerAdminToken', token);
       dispatch(setCurrentUser(decoded));*/
-      localStorage.setItem(
-        "name",
-        result.data.data.firstName + " " + result.data.data.lastName
-      );
-      localStorage.setItem("organisation", result.data.data.organisation);
+      // localStorage.setItem(
+      //   "name",
+      //   result.data.data.firstName + " " + result.data.data.lastName
+      // );
+      // localStorage.setItem("organisation", result.data.data.organisation);
       props.history.push(`/verify?emailId=${email}`);
     } else if (result.status === 500) {
       const err = result.data.message;

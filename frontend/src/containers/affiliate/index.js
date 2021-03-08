@@ -13,6 +13,7 @@ import {
   rejectAffiliate,
   getAllOrganisations,
   addAffiliate,
+  getOrgActiveUsers,
 } from "../../actions/organisationActions";
 
 const AffiliateContainer = (props) => {
@@ -25,6 +26,7 @@ const AffiliateContainer = (props) => {
     dispatch(getAffilatedPendingReq());
     dispatch(getAffilatedOrgs());
     dispatch(getAllOrganisations());
+    dispatch(getOrgActiveUsers());
   }, []);
 
   const recentRequestsSent = useSelector((state) => {
@@ -41,6 +43,10 @@ const AffiliateContainer = (props) => {
 
   const organisationsList = useSelector((state) => {
     return state.organisation.list;
+  });
+
+  const usersList = useSelector((state) => {
+    return state.organisation.users;
   });
 
   const unaffiliatedOrgs = async (data) => {
@@ -74,10 +80,8 @@ const AffiliateContainer = (props) => {
   };
 
   const sendAffiliate = async (data) => {
-    data.user = props.user;
     const result = await addAffiliate(data);
     if (result.status === 200) {
-      affilatedPendingReq.splice(data.rindex, 1);
       setMessage(result.data.data.message);
     } else {
       setError(result.data.data.message);
@@ -102,6 +106,7 @@ const AffiliateContainer = (props) => {
             rejectAffliate={rejectAffliate}
             organisationsList={organisationsList}
             sendAffiliate={sendAffiliate}
+            users={usersList}
           />
         </div>
       </div>

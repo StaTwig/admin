@@ -48,7 +48,17 @@ exports.sentRequests = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           const { organisationId } = req.user;
-          await AffliationModel.find({ "from.organisationId": organisationId })
+          await EmployeeModel.aggregate([
+            { $match: { organisationId: organisationId } },
+            {
+              $lookup: {
+                from: "organisations",
+                localField: "id",
+                foreignField: "affiliations.employee_id",
+                as: "orgs",
+              },
+            },
+          ])
             .then((affliations) => {
               return apiResponse.successResponseWithData(
                 res,
@@ -298,20 +308,33 @@ exports.unAffiliateOrg = [
 exports.affiliate = [
   auth,
   async (req, res) => {
+    const dateTimeNow = new Date();
     try {
-      const affId = "aff-" + nanoid();
-      const affliation = new AffliationModel({
-        id: affId,
-        from: req.body.from,
-        to: req.body.to,
-      });
-      await affliation
-        .save()
-        .then((affliation) => {
+      const { employee, org } = req.body;
+      Organisation.updateOne(
+        { id: org, "affiliations.employee_id": { $ne: employee } },
+        {
+          $push: {
+            affiliations: {
+              employee_id: employee,
+              request_date: dateTimeNow,
+              request_status: "PENDING",
+              last_updated_on: dateTimeNow,
+            },
+          },
+        },
+        {
+          new: true,
+        }
+      )
+        .then((orgResponse) => {
+          let res_message = "Affliation Request Sent";
+          if (orgResponse.nModified == 0)
+            res_message = "User already affliated to the organisation";
           return apiResponse.successResponseWithData(
             res,
-            "Affliation Request Sent",
-            affliation
+            res_message,
+            orgResponse
           );
         })
         .catch((err) => {

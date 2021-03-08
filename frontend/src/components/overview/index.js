@@ -21,6 +21,7 @@ const DashBoard = (props) => {
     recentRequestsSent,
     organisationsList,
     sendAffiliate,
+    users,
   } = props;
 
   return (
@@ -86,6 +87,7 @@ const DashBoard = (props) => {
             <SentRequests
               sendAffiliate={sendAffiliate}
               organisationsList={organisationsList}
+              users={users}
             />
           </div>
           <div className="mt-4">

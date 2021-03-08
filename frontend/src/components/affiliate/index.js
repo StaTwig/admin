@@ -23,6 +23,7 @@ const Affiliate = (props) => {
     rejectAffliate,
     organisationsList,
     sendAffiliate,
+    users,
   } = props;
 
   return (
@@ -97,6 +98,7 @@ const Affiliate = (props) => {
             <Sentrequests
               organisationsList={organisationsList}
               sendAffiliate={sendAffiliate}
+              users={users}
               disableShadow={true}
             />
           </div>
