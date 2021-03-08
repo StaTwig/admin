@@ -119,7 +119,7 @@ exports.register = [
           var employeeStatus = 'NOTAPPROVED';
             
           //create organisation if doesn't exists 
-          if (req.body.organisationName?.length) {
+          if (req.body.organisationName) {
             const organisationName = req.body.organisationName;
             const organisation = await OrganisationModel.findOne({ name: organisationName });
             if (organisation) {
