@@ -36,7 +36,7 @@ const VerifyInventory = props => {
         batchNumber: inventory.batchNumber,
         mfgDate: inventory.manufacturingDate,
         expDate: inventory.expiryDate,
-        quantity: inventory.quantity,
+        quantity: parseInt(inventory.quantity),
         serialNumbersRange: inventory.serialNumber
       }
     });
