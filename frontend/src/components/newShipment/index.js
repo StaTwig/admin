@@ -31,16 +31,22 @@ const NewShipment = props => {
   const [estimateDeliveryDate, setEstimateDeliveryDate] = useState('');
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [quantity, setQuantity] = useState('');
+  const [productQuantity, setProductQuantity] = useState('');
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [openShipmentFail, setOpenShipmentFail] = useState(false);
   const [shipmentError, setShipmentError] = useState('');
 
   useEffect(() => {
     async function fetchData() {
+      const { search } = props.location;
+
       const result = await getShippingOrderIds();
       const ids = result.map(so => so.id);
       setShippingOrderIds(ids);
+      if(search) {
+        const shippingId = search.split('=')[1];
+        handleSOChange(shippingId);
+      }
     }
     fetchData();
   }, []);
@@ -109,9 +115,9 @@ const NewShipment = props => {
             shippingOrderDetails.customerDetails.shippingAddress
               .shippingAddressId,
         },
-        shippingDate: shipmentDate.toISOString(),
-        expectedDeliveryDate: estimateDeliveryDate.toISOString(),
-        actualDeliveryDate: estimateDeliveryDate.toISOString(),
+        shippingDate: new Date(shipmentDate.getTime() - (shipmentDate.getTimezoneOffset() * 60000)).toISOString(),
+        expectedDeliveryDate: new Date(estimateDeliveryDate.getTime() - (estimateDeliveryDate.getTimezoneOffset() * 60000)).toISOString(),
+        actualDeliveryDate: new Date(estimateDeliveryDate.getTime() - (estimateDeliveryDate.getTimezoneOffset() * 60000)).toISOString(),
         status: 'CREATED',
         products: shippingOrderDetails.products,
         poId: shippingOrderDetails.purchaseOrderId,
@@ -136,7 +142,7 @@ const NewShipment = props => {
   };
   const handleQuantityChange = (value, i) => {
     const soDetailsClone = { ...shippingOrderDetails };
-    soDetailsClone.products[i].quantity = value;
+    soDetailsClone.products[i].productQuantity = value;
     setShippingOrderDetails(soDetailsClone);
   };
 
@@ -339,7 +345,7 @@ const NewShipment = props => {
 
       <div className="d-flex justify-content-between">
         <div className="total">Grand Total</div>
-        <div className="value">{quantity}</div>
+        <div className="value">{productQuantity}</div>
         <div className="d-flex ">
           <button className="btn btn-primary mr-2 " onClick={onAssign}>
             {' '}
