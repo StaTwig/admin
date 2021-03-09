@@ -32,7 +32,15 @@ const EditRow = props => {
         />
       </div>
       <div className="rTableCell">
-        <label>{manufacturer}</label>
+        <div className="form-group">
+          <input
+            type="text"
+            className="form-field"
+            placeholder="Manufacturer"
+            value={manufacturer}
+            disabled
+          />
+        </div>
       </div>
       <div className="rTableCell">
         <div className="form-group">
@@ -69,6 +77,10 @@ const EditRow = props => {
                 ? new Date(Date.parse(manufacturingDate))
                 : manufacturingDate
             }
+            onKeyDown={e =>
+              (e.keyCode != 8) &&
+               e.preventDefault()
+             }
             dateFormat="MM/yyyy"
             placeholderText="Enter Mfg Date"
             showMonthYearPicker
@@ -86,6 +98,10 @@ const EditRow = props => {
             selected={
               expiryDate ? new Date(Date.parse(expiryDate)) : expiryDate
             }
+            onKeyDown={e =>
+              (e.keyCode != 8) &&
+               e.preventDefault()
+             }
             showMonthYearPicker
             showFullMonthYearPicker
           />

@@ -26,17 +26,17 @@ const SideBar = ({
   const { url } = match;
   return (
     <div className="sidebar">
-      <ul>
-        <li className={(url === '/overview') ? 'active' : ''}>
+      <ul >
+        <li className={(url === '/overview') ? 'active' : 'inactive'}>
           <Link to="/overview">
             <img src={(url === '/overview') ? HomeSelectedIcon : HomeIcon} alt="Overview" />
             <span>Overview</span>
           </Link>
         </li>
-        <li className={(url === '/dashboard')  ? 'active' : ''}>
-          <Link to="/dashboard">
-            <img src={(url === '/dashboard')  ? DashboardSelectedIcon : DashboardIcon} alt="Shippment" />
-            <span>Dashboard</span>
+        <li className={(url === '/inventory'|| url === '/newinventory'|| url === '/addproduct'|| url === '/productlist/all') ? 'active' : ''}>
+          <Link to="/inventory">
+            <img src={(url === '/inventory' || url === '/newinventory' || url === '/addproduct'|| url === '/productlist/all') ? InventorySelectedIcon : InventoryIcon} alt="Inventory" />
+            <span>Inventory</span>
           </Link>
         </li>
         <li className={(url === '/shipments' || url === '/newshipment'|| url === '/transactionHistory') ? 'active' : ''}>
@@ -45,22 +45,16 @@ const SideBar = ({
             <span>Shipment</span>
           </Link>
         </li>
-        <li className={(url === '/inventory'|| url === '/newinventory') ? 'active' : ''}>
-          <Link to="/inventory">
-            <img src={(url === '/inventory' || url === '/newinventory') ? InventorySelectedIcon : InventoryIcon} alt="Inventory" />
-            <span>Inventory</span>
+        <li className={(url === '/dashboard')  ? 'active' : ''}>
+          <Link to="/dashboard">
+            <img src={(url === '/dashboard')  ? DashboardSelectedIcon : DashboardIcon} alt="Shippment" />
+            <span>Dashboard</span>
           </Link>
         </li>
-        <li className={(url === '/trackAndTrace') ? 'active' : ''}>
+         <li className={(url === '/trackAndTrace') ? 'active' : ''}>
           <Link to="/trackAndTrace">
             <img src={(url === '/trackAndTrace') ? trackSelectedIcon : trackIcon} alt="Track & Trace" />
             <span>Track & Trace</span>
-          </Link>
-        </li>
-        <li className={(url === '/network') ? 'active' : ''} >
-          <Link to="/network">
-            <img src={(url === '/network') ? NetworkSelectedIcon : NetworkIcon} alt="Network" />
-            <span>Network</span>
           </Link>
         </li>
         <li className={(url === '/qrcode') ? 'active' : ''} >
@@ -69,6 +63,13 @@ const SideBar = ({
             <span>Utilities</span>
           </Link>
         </li>
+        <li className={(url === '/network') ? 'active' : ''} >
+          <Link to="/network">
+            <img src={(url === '/network') ? NetworkSelectedIcon : NetworkIcon} alt="Network" />
+            <span>Network</span>
+          </Link>
+        </li>
+      
       </ul>
       <Footer />
     </div>

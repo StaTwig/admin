@@ -17,9 +17,10 @@ import Status from '../../assets/icons/Status.svg';
 
 const Inventory = props => {
   const headers = {
-    coloumn1: 'Product Type',
+    coloumn1: 'Product Name',
     coloumn2: 'Manufacturer',
-    coloumn4: 'Quantity',
+    coloumn3: 'Batch Number',
+    coloumn4: 'Transaction Date',
 
     img1: <img src={Package} width="16" height="16" />,
     img2: <img src={user} width="16" height="16" />,
