@@ -1,6 +1,8 @@
 const RecordModel = require('../models/RecordModel');
 const AtomModel = require('../models/AtomModel');
 const ShipmentModel = require('../models/ShipmentModel');
+const InventoryModel = require('../models/InventoryModel');
+
 const OrganisationModel = require('../models/OrganisationModel');
 const WarehouseModel = require('../models/WarehouseModel');
 //this helper file to prepare responses.
@@ -16,7 +18,7 @@ const uniqid = require('uniqid');
 const init = require('../logging/init');
 const logger = init.getLog();
 
-exports.getAnalytics = [
+exports.getShipmentAnalytics = [
   auth,
   async (req, res) => {
     try {
@@ -83,7 +85,7 @@ exports.getAnalytics = [
       console.log("Products Expired this Year : ", expiredThisYear);
 
       const totalShipmentsSent = await ShipmentModel.count({
-        status: "SHIPPED" | "RECEIVED" | "LOST" | "DAMAGED"
+        status: { $in : ["SHIPPED", "RECEIVED", "LOST", "DAMAGED"]} 
       });
       console.log("Total Shipments Sent", totalShipmentsSent);
 
@@ -92,35 +94,34 @@ exports.getAnalytics = [
       });
       console.log("Total Shipments Received", totalShipmentsReceived);
 
-      const totalProductsSent = await ShipmentModel.find(
-        { status: "SHIPPED" },
+      const totalProductsSent = await ShipmentModel.count(
+        { status: "SHIPPED" }
       );
       console.log("Total Products Sent", totalProductsSent);
 
-      const totalProductsReceived = await ShipmentModel.find(
+      const totalProductsReceived = await ShipmentModel.count(
         { status: "RECEIVED" },
       );
       console.log("Total Products Received", totalProductsReceived);
 
-      const totalShipmentsInTransit = await ShipmentModel.find(
-        { status: "RECEIVED" },
+      const totalShipmentsInTransit = await ShipmentModel.count(
+        { status: "SHIPPED" },
       );
-      console.log("Total Products Received", totalShipmentsInTransit);
+      console.log("Total Shipments in Transit", totalShipmentsInTransit);
 
-      const totalShipmentsWithDelayInTransit = await ShipmentModel.find(
-        { status: "RECEIVED" },
+      const totalShipmentsWithDelayInTransit = await ShipmentModel.count(
+        { status: "SHIPPED" }, { $where: "this.expectedDeliveryDate < date.setDate(date.getDate())"}
       );
-      console.log("Total Products Received", totalShipmentsWithDelayInTransit);
+      // .$where('this.expectedDeliveryDate < date.setDate(date.getDate())'
+      // ).exec(callback);
 
-      const totalProductsInInventory = await ShipmentModel.find(
-        { status: "RECEIVED" },
-      );
-      console.log("Total Products Received", totalProductsInInventory);
+      console.log("Total Shipments in Transit with Delay", totalShipmentsWithDelayInTransit);
 
-      const totalProductsAddedToInventory = await ShipmentModel.find(
-        { status: "RECEIVED" },
-      );
-      console.log("Total Products Received", totalProductsAddedToInventory);
+      const totalProductsInInventory = await InventoryModel.count();
+      console.log("Total Products in Inventory", totalProductsInInventory);
+
+      const totalProductsAddedToInventory = await InventoryModel.count();
+      console.log("Total Products Added to Inventory", totalProductsAddedToInventory);
 
     res = "thisYearShipmentSent";
       return apiResponse.successResponseWithData(
