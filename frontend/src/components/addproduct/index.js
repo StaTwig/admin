@@ -71,7 +71,7 @@ const AddProduct = props => {
       <div className="card">
         <div className="card-body">
           <div className="d-flex flex-row justify-content-between">
-            <div className="d-flex flex-column">
+            <div className="col mr-5">
               <div className="form-group">
                 <label htmlFor="shipmentId"> Product Name</label>
                 <input
@@ -138,13 +138,14 @@ const AddProduct = props => {
                 />
               </div>
             </div>
-            <div className="d-flex flex-column">
+            <div className="col ml-5">
               <h6 className="font-weight-bold mb-4">Product Image</h6>
               <div className="d-flex flex-column upload">
                 <img src={uploadBlue} name="photo" width="50" height="50" className="mt-3" />
-               <label class="btn btn-primary"> <span>ADD IMAGE</span> <input type='file' class="select" onChange={setFile}/> </label>
+
+               <label class="btn-primary btn browse">ADD IMAGE<input type='file' class="select" onChange={setFile}/> </label>
                <div>or</div>
-               <label class="btn btn-primary"> <span>BROWSE FILES</span> <input type='file'  class="select" onChange={setExcelFile}/> </label>
+               <label class="btn-primary btn browse">BROWSE FILES<input type='file'  class="select" onChange={setExcelFile}/> </label>
               </div>
             </div>
            <div></div>
@@ -154,7 +155,7 @@ const AddProduct = props => {
             <div />
             <div>
               {' '}
-              <button className="btn btn-outline-primary mr-4" onClick={() => props.history.push('/productlist')}>cancel</button>
+              <button className="btn btn-outline-primary mr-4" onClick={() => props.history.push('/productlist')}>CANCEL</button>
               <button className="btn btn-orange fontSize20 font-bold mr-4 product" onClick={addProduct}>
                 <img src={Add} width="14" height="14" className="mr-2" />
                 <span>Add New Product</span>

@@ -157,9 +157,8 @@ const PoTable = props => {
         </div>
       </div>
       {loadMore && (
-        <button className="btn btn-success" onClick={onLoadMore}>
-          Load More
-        </button>
+         <button className=" btn-primary btn mr-2" onClick={onLoadMore}>Load More</button>
+
       )}
     </div>
   );

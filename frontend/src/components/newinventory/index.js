@@ -55,7 +55,7 @@ const NewInventory = props => {
   const [ grandTotal, setGrandTotal ] = useState(0);
   const [blankInventory, setBlankInventory] = useState({
     productName: 'Select Product',
-    manufacturer: 'Select Product',
+    manufacturer: '',
     quantity: '',
     manufacturingDate: '',
     expiryDate: '',
@@ -131,8 +131,7 @@ const NewInventory = props => {
         let validationVariable = inventory[validations[i]];
         if (
           validationVariable.length < 1 ||
-          validationVariable == 'Select Product' ||
-          validationVariable == 'Select Manufacturer'
+          validationVariable == 'Select Product'
         ) {
           setInventoryError(validations[i]);
           setOpenFailInventory(true);

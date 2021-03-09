@@ -18,6 +18,7 @@ const ExcelPopUp = props => {
     formData.append('excel', excel);
     dispatch(turnOn());
     const result = await addPOsFromExcel(formData);
+    debugger;
     if (result && result.status === 200) {
       console.log('success add PO');
       props.setOpenPOExcel(false);
@@ -26,7 +27,7 @@ const ExcelPopUp = props => {
   };
   return (
     <div className="excelpopup col">
-      <div className="d-flex flex-column upload mb-5">
+      <div className="d-flex flex-column upload mb-5 ml-5">
         <img
           src={uploadBlue}
           name="photo"
@@ -36,7 +37,7 @@ const ExcelPopUp = props => {
         />
         <div>"Drag and drop" your Excel file here</div>
         <div>or</div>
-        <input type="file" className="mb-3" onChange={setExcelFile} />
+        <input type="file" className="mb-3 excelSpace" onChange={setExcelFile} />
       </div>
       <div className="row justify-content-between">
         <div />

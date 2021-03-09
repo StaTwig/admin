@@ -9,7 +9,7 @@ const EditTable = props => {
     <div className="table editTable">
       <div className="rTable">
         <div className="rTableHeading">
-          <div className="rTableHead"> Product Name</div>
+          <div className="rTableHead"> Product</div>
           <div className="rTableHead">
             <span>Manufacturer</span>
           </div>

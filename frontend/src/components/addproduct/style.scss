@@ -18,6 +18,14 @@
     .custom-dropdown .btn-custom-dropdown{
       font-size:14px;
       align-items: center;
+      padding-left: 0;
+      @media (min-width: $xl) {
+        font-size:15px;
+      }
+    }
+    .browse{
+      display: flex;
+      align-items: center;
     }
     .upload{
       height:200px;
@@ -40,9 +48,10 @@
       align-items: center;
   
       label {
-        color:#000000;
+        color: #707070;
         text-align: center;
         font-size: 14px;
+        margin-bottom:0px;
        
     }
    .date{
@@ -54,19 +63,21 @@
         background: transparent;
         border-bottom: 2px solid #d6d6d6;
         border-radius: 0;
-        color: #707070;
+        color:#000000;
         flex-basis: 55%;
         flex-grow: inherit;
         font-size: 14px;
+     
       }
        
   
       @media (min-width: $xl) {
         label {
-          font-size: 16px;
+          font-size: 15px;
           flex-basis: 100%;
           flex-grow: inherit;
           text-align: left;
+          margin-bottom:0px;
         } 
   
     
@@ -78,7 +89,7 @@
           color: $black;
           flex-basis: 100%;
           flex-grow: inherit;
-          font-size: 14px;
+          font-size: 15px;
          
           
         }
