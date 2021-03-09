@@ -271,8 +271,7 @@ exports.sendOtp = [
                   );
               return apiResponse.successResponseWithData(
                   res,
-                  'OTP Sent Success.',
-                  otp,
+                  'OTP Sent Success.'
               );
             }catch(err) {
               return apiResponse.ErrorResponse(res, err);

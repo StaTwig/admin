@@ -29,7 +29,7 @@ const LoginContainer = props => {
       dispatch(setCurrentUser(decoded));*/
       props.history.push(`/verify?emailId=${email}`);
     }else if(result.status === 500) {
-        const err = result.data.message.response;
+        const err = result.data.message;
         setErrorMessage(err);
     }else if(result.status === 401) {
       const err = result.data.message;
