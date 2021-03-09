@@ -76,7 +76,7 @@ exports.getShippingOrders = [
       const { warehouseId } = req.user;
       const shippingOrders = await ShippingOrderModel.find({
         'soAssignedTo.warehouseId': warehouseId,
-      });
+      }).sort({createdAt: -1});
       return apiResponse.successResponseWithData(
         res,
         'Shipping Orders',

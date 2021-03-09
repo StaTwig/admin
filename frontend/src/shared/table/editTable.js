@@ -22,6 +22,9 @@ const EditTable = props => {
           <div className="rTableHead">
             <span>Serial Numbers</span>
           </div>
+            <div className="rTableHead">
+            <span></span>
+          </div>
         </div>
         <div >
           {props.inventories.map((inventory, index) => <EditRow key={index} {...props} {...inventory} idx={index} />)}

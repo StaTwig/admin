@@ -29,7 +29,7 @@ ShipmentSchema = new mongoose.Schema(
     transactionIds: [String],
     products: [
       {
-        productId: String,
+        productID: String,
         productName: String,
         manufacturer: String,
         productQuantity: Number,
