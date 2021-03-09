@@ -173,6 +173,14 @@ const NewInventory = props => {
     setGrandTotal(total);
   };
 
+  const onRemoveRow=(index) => {
+    const inventoryStateClone = JSON.parse(JSON.stringify(inventoryState));
+    inventoryStateClone.splice(index,1);
+    setInventoryState(inventoryStateClone);
+    let total = 0;
+    inventoryStateClone.forEach(inv => total += parseInt(inv.quantity)  )
+    setGrandTotal(total);
+  }
   return (
     <div className="Newinventory">
       <div className="d-flex justify-content-between mb-5">
@@ -214,6 +222,7 @@ const NewInventory = props => {
       <EditTable
         inventories={inventoryState}
         handleInventoryChange={handleInventoryChange}
+        onRemoveRow={onRemoveRow}
       />
 
       <div className="d-flex justify-content-between">

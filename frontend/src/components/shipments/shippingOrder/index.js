@@ -19,7 +19,7 @@ const ShippingOrderTable = props => {
   useEffect(() => {
     async function fetchData() {
       const result = await getShippingOrders();
-      setShippingOrders(result.reverse());
+      setShippingOrders(result);
     }
     fetchData();
   }, []);

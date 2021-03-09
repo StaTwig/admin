@@ -132,6 +132,8 @@ const EditRow = props => {
             }
           />
         </div>
+      </div><div className="rTableCell">
+       <button onClick={() => props.onRemoveRow(idx)}>X</button>
       </div>
     </div>
   );
