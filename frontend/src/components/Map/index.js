@@ -15,13 +15,19 @@ const Map = (props) => {
 
   // Initialize map when component mounts
   useEffect(() => {
-    const map = new mapboxgl.Map({
+    let map = new mapboxgl.Map({
       container: mapContainerRef.current,
       style: 'mapbox://styles/mapbox/streets-v11',
       center: [lng, lat],
-      zoom: zoom
+      zoom:  zoom
     });
     if(props?.warehouseLocation) {
+      map = new mapboxgl.Map({
+        container: mapContainerRef.current,
+        style: 'mapbox://styles/mapbox/streets-v11',
+        center: [ props.warehouseLocation.latitude, props.warehouseLocation.longitude],
+        zoom: 10
+      });
       const coords = [props.warehouseLocation.latitude, props.warehouseLocation.longitude];
       new mapboxgl.Marker().setLngLat(coords).addTo(map);
     }
