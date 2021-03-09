@@ -43,21 +43,26 @@ const VerifyContainer = props => {
   });
   const resendOtp = useCallback(async () => {
     dispatch(turnOn());
-    const data = { emailId:email };
-    const result = await sendOtp(data);
-    if (result.status === 200) {
-      const err = result.data.message;
-      setErrorMessage(err);
-    }else if(result.status === 500) {
-      const err = result.data.message.response;
-      setErrorMessage(err);
-    }else if(result.status === 401) {
-      const err = result.data.message;
-      setErrorMessage(err);
-    } else {
-      const err = result.data.data[0];
-      setErrorMessage(err.msg);
+    const params = props.location.search.split('emailId=');
+    if(params.length > 1) {
+      const emailId = params[1];
+      const data = { emailId };
+      const result = await sendOtp(data);
+      if (result.status === 200) {
+        const err = result.data.message;
+        setErrorMessage(err);
+      }else if(result.status === 500) {
+        const err = result.data.message.response;
+        setErrorMessage(err);
+      }else if(result.status === 401) {
+        const err = result.data.message;
+        setErrorMessage(err);
+      } else {
+        const err = result.data.data[0];
+        setErrorMessage(err.msg);
+      }
     }
+
     dispatch(turnOff());
   });
   const onkeydown = (event) => {
