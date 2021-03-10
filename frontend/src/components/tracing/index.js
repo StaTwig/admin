@@ -121,10 +121,10 @@ const Tracing = props => {
                 <div className="dot bg-info"></div>
               </div>
               <div className="col">
-                <div className="chain"><strong>MUMBAI</strong></div>
-                <div className="chainhead mb-4">Bharat Biotech</div>
-                <div className="chain"><strong>DELHI</strong></div>
-                <div className="chainhead">Gensys PVT</div>
+                <div className="chain"><strong>{tracking.fromLocation}</strong></div>
+                <div className="chainhead mb-4">{tracking.supplierOrgName}</div>
+                <div className="chain"><strong>{tracking.toLocation}</strong></div>
+                <div className="chainhead">{tracking.customerOrgName}</div>
               </div>
             </div>
           }

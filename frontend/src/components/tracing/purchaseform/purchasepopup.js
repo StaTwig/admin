@@ -1,104 +1,80 @@
-import React from 'react';
-import ProductsTable from './products';
+import React, { useState } from 'react';
 import './style.scss';
 
-const PurchasePopUp = (props) => {
-const tableHeader = ['Material ID', 'Manufacturer','Product Name', 'Quantity'];
-const productData = props.shipments;
-return (
-    <div className="purchaseform">
-        <p className="date-alignment">Date: {props.shipments.poTxns[props.shipments.poTxns.length-1].date}</p>
-      <div className="d-flex justify-content-between">
-      <div className="input-group">
-          <label className="reference">Send PO To</label>
-          <input
-            disabled
-            type="text"
-            className="form-control"
-            value={props.shipments.poTxns[props.shipments.poTxns.length-1].sendpoto.name}
-          />
+const PurchasePopUp  = props => {
+  let totalQuantity = 0;
+ props.shipments.poDetails[0].products.forEach(product => totalQuantity += parseInt(product.productQuantity));
+  return (
+    <div className="PO">
+      <p className="date-alignment mr-5">Date:{props.shipments.poDetails[0].creationDate.split('T')[0].split('-')[2]+"/"+props.shipments.poDetails[0].creationDate.split('T')[0].split('-')[1]+"/"+props.shipments.poDetails[0].creationDate.split('T')[0].split('-')[0]}</p>
+      <div className="row">
+        <div className="col">
+          <div className="input-group">
+            <label className="reference custom1">External PO ID: </label>
+            <p >{props.shipments.poDetails[0].externalId}<span class="badge badge-success ml-5">Success</span></p>
+         
+          </div>
+          <div className="input-group text-primary font-weight-bold mb-2 ">Supplier Details: </div>
+          <div className="input-group">
+            <label className="reference custom2">Organisation ID : </label>
+            <p>{props.shipments.supplierOrgId}</p>
+          </div>
+          <div className="input-group">
+            <label className="reference custom3">Organisation Name : </label>
+            <p>{props.shipments.supplierOrgName}</p>
+          </div>
         </div>
-         <div className="input-group">
-          <label className="reference">Supplier Organisation Id</label>
-          <input
-            disabled
-            type="text"
-            className="form-control"
-            value={props.shipments.poTxns[props.shipments.poTxns.length-1].vendor}
-          />
+        <div className="col">
+          <div className="input-group text-primary font-weight-bold mb-3">Customer Details</div>
+          <div className="input-group">
+            <label className="reference custom2">Organisation ID : </label>
+            <p>{props.shipments.customerOrgId}</p>
+          </div>
+          <div className="input-group">
+            <label className="reference custom3">Delivery Location ID : </label>
+            <p>{props.shipments.poDetails[0].customer.shippingAddress.shippingAddressId}</p>
+          </div>
+          <div className="input-group">
+            <label className="reference custom4">Delivery Location : </label>
+            <p>{props.shipments.toLocation}</p>
+          </div>
         </div>
-      </div>
-      <div className="d-flex justify-content-between">
-
-      <div className="input-group">
-      <label className="reference">Purchase Order ID</label>
-          <input
-            disabled
-            type="text"
-            className="form-control"
-            value={props.shipments.poTxns[props.shipments.poTxns.length-1].orderID}
-          />
-        </div>
-       <div className="input-group">
-          <label className="reference">Supplier Organisation Name</label>
-          <input
-            disabled
-            type="text"
-            className="form-control"
-            value={props.shipments.poTxns[props.shipments.poTxns.length-1].vendorName}
-          />
-        </div>
-      </div>
-      <div className="d-flex justify-content-between">
-      <div className="input-group">
-          <label className="reference">PO Item#</label>
-          <input
-            disabled
-            type="text"
-            className="form-control"
-            value={props.shipments.poTxns[props.shipments.poTxns.length-1].poItem}
-          />
-        </div>
-        <div className="input-group">
-          <label className="reference">Customer Location ID</label>
-          <input
-            disabled
-            type="text"
-            className="form-control"
-            value={props.shipments.poTxns[props.shipments.poTxns.length-1].plant}
-          />
-        </div>
-      </div>
-      <div className="d-flex justify-content-between">
-        <div className="input-group">
-          <label className="reference">Shipped From</label>
-          <input
-            disabled
-            type="text"
-            className="form-control"
-            value={props.shipments.shipmentTxns[props.shipments.shipmentTxns.length-1].supplierLocation}
-          />
-        </div>
-        <div className="input-group">
-          <label className="reference">Customer Delivery Location</label>
-          <input
-            disabled
-            type="text"
-            className="form-control"
-            value={props.shipments.poTxns[props.shipments.poTxns.length-1].destination}
-          />
-        </div>
-      </div>
-      <ProductsTable
-        tableHeader={tableHeader}
-        productData = {productData}
-     
-      />
-      
       </div>
 
-      
+      <table className="table poModalTable">
+        <thead>
+          <tr>
+            <th scope="col" />
+            <th scope="col" class="text-secondary">Product ID</th>
+            <th scope="col " class="text-secondary">Product Name</th>
+            <th scope="col" class="text-secondary">Manufacturer</th>
+             <th scope="col" class="text-secondary">Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+          {props.shipments.poDetails[0].products.map(product => <tr>
+          <th scope="row">
+            <div className="square-box" />
+          </th>
+          <td>{product.productId}</td>
+          <td>...</td>
+          <td>..........</td>
+          <td>{product.productQuantity}</td>
+        </tr>)}
+
+        </tbody>
+      </table>
+      <hr />
+      <div className="d-flex  justify-content-end">
+        <div className="d-flex flex-column mr-5 mt-3">
+          <span>Total Quantity</span>
+          <h3 className="text-info">{totalQuantity}</h3>
+        </div>
+      </div>
+
+    </div>
   );
 };
 
-export default PurchasePopUp;
+export default PurchasePopUp ;
+

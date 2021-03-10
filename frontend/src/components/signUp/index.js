@@ -63,7 +63,7 @@ const [organisations, setOrganisations] = useState([]);
                   className="form-control"
                   value={props.lastName}
                   onChange={props.onlastNameChange}
-                  placeholder="last-Name" />
+                  placeholder="Last-Name" />
                   </div>
                   <div className="form-group">
                   <img alt="" src={Mail} className="icon imgs" />

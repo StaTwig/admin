@@ -5,31 +5,31 @@ import Down from '../../assets/icons/up.png';
 
 const ChainOfCustody = (props) => {
   const[op, setOp] = useState('');
-  let index=1;
   return (
-    Object.keys(props.shipments).length === 0 ? <div className="row panel justify-content-between">N/A</div> :
+    Object.keys(props.shipments).length === 0 || (!props.shipments.shipmentChainOfCustody)? <div className="row panel justify-content-between">N/A</div> :
     <div>
+  {props.shipments.shipmentChainOfCustody.map((custody,index) =>(
   <div className="row  mb-3">
         <div></div>
         <div className="big-dot bg-info ml-4"></div>
         <div className="col">
-          <div className="color mb-3">SENT</div>
+          <div className="color mb-3">{custody.shipmentStatus}</div>
           <div className="col panel  chain chainpanle series">
             <div className="row justify-content-between">
               <div className="col">
-                <div><strong>Shipment SENT</strong></div>
-                <div>By: <strong>Bharat</strong></div>
-                <div>From: Bharat</div>
+             <div><strong>Shipment  {custody.shipmentStatus}</strong></div>
+                <div>By: <strong>{props.shipments.supplierOrgName}</strong></div>
+                <div>From: <strong>{props.shipments.fromLocation}</strong></div>
 
               </div>
               <div className="col">
                 <div className="emp"></div>
-                <div>Unicef Po ID : <strong>PO1234</strong></div>
-                <div >Shipment ID : <strong>ZP012100U02046</strong></div>
+                <div>Unicef Po ID : <strong>{props.shipments.poDetails[0].externalId}</strong></div>
+              <div >Shipment ID : <strong>{custody.shipmentId}</strong></div>
               </div>
               <div className="d-flex flex-column mr-5">
                 <div className="emp"></div>
-                <div >26/02/2021</div>
+                <div >{custody.dateTime.split('T')[0].split('-')[2]+"/"+custody.dateTime.split('T')[0].split('-')[1]+"/"+custody.dateTime.split('T')[0].split('-')[0]}</div>
                 <div></div>
               </div>
             </div>
@@ -60,108 +60,8 @@ const ChainOfCustody = (props) => {
       </div>
         </div>
       </div>
-      <div className="row  mb-3">
-        <div></div>
-        <div className="big-dot bg-info ml-4"></div>
-        <div className="col">
-          <div className="color mb-3">IN TRANSIT</div>
-          <div className="col panel  chain chainpanle series">
-            <div className="row justify-content-between">
-              <div className="col">
-                <div><strong>Shipment In-Transit</strong></div>
-                <div>By: <strong>Bharat</strong></div>
-                <div>From: Bharat</div>
-
-              </div>
-              <div className="col">
-                <div className="emp"></div>
-                <div>Unicef Po ID : <strong>PO1234</strong></div>
-                <div >Shipment ID : <strong>ZP012100U02046</strong></div>
-              </div>
-              <div className="d-flex flex-column mr-5">
-                <div className="emp"></div>
-                <div >26/02/2021</div>
-                <div></div>
-              </div>
-            </div>
-            { op === index ? <div className="d-flex flex-row mt-4">
-              <button className="btn btn-main-blue dir mr-2"
-                onClick={() => {
-                  props.setHighLight(true)
-                  props.setMenuShip(true)
-                }}>View Shipment</button>
-              <button className="btn btn-orange dir"
-                onClick={() => {
-                  props.setProductHighLight(true)
-                  props.setMenuProduct(true)
-                }}>View Product List</button>
-            </div> : null}
-            { op === index ? <div className="arrow float-right" 
-            onClick={() => {
-              setOp('')}
-          }>
-              <img src={Down} alt="actions" height="7" width="12"  /></div>
-          :
-          <div className="arrow float-right" 
-            onClick={() => {
-              setOp(index)}
-          }>
-              <img src={traceDrop} alt="actions" height="7" width="12"  /></div>
-          }
-      </div>
-        </div>
-      </div>
-      <div className="row  mb-3">
-        <div></div>
-        <div className="big-dot bg-info ml-4"></div>
-        <div className="col">
-          <div className="color mb-3">RECEIVED</div>
-          <div className="col panel  chain chainpanle series">
-            <div className="row justify-content-between">
-              <div className="col">
-                <div><strong>Shipment Received</strong></div>
-                <div>By: <strong>Bharat</strong></div>
-                <div>From: Bharat</div>
-
-              </div>
-              <div className="col">
-                <div className="emp"></div>
-                <div>Unicef Po ID : <strong>PO1234</strong></div>
-                <div >Shipment ID : <strong>ZP012100U02046 </strong></div>
-              </div>
-              <div className="d-flex flex-column mr-5">
-                <div className="emp"></div>
-                <div >26/02/2021</div>
-                <div></div>
-              </div>
-            </div>
-            { op === index ? <div className="d-flex flex-row mt-4">
-              <button className="btn btn-main-blue dir mr-2"
-                onClick={() => {
-                  props.setHighLight(true)
-                  props.setMenuShip(true)
-                }}>View Shipment</button>
-              <button className="btn btn-orange dir"
-                onClick={() => {
-                  props.setProductHighLight(true)
-                  props.setMenuProduct(true)
-                }}>View Product List</button>
-            </div> : null}
-            { op === index ? <div className="arrow float-right" 
-            onClick={() => {
-              setOp('')}
-          }>
-              <img src={Down} alt="actions" height="7" width="12"  /></div>
-          :
-          <div className="arrow float-right" 
-            onClick={() => {
-              setOp(index)}
-          }>
-              <img src={traceDrop} alt="actions" height="7" width="12"  /></div>
-          }
-      </div>
-        </div>
-      </div>
+    
+  ))}
       </div>
 
   )
