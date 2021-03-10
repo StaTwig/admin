@@ -77,10 +77,10 @@ const Affiliate = (props) => {
             {recentRequestsSent.length > 0 && (
               <div className="ml-4 txtColor d-flex flex-row justify-content-between">
                 <span className="w-25">Name</span>
-                <span className="w-25">Organisation</span>
-                <span className="w-25">Email</span>
-                <span className="w-25">Date</span>
-                <span className="w-25">Wallet address</span>
+                <span className="w-25 text-center">Organisation</span>
+                <span className="w-25 text-center">Email</span>
+                <span className="w-25 text-center">Date</span>
+                <span className="w-25 text-center">Wallet address</span>
               </div>
             )}
             {recentRequestsSent.map((row, index) => (
@@ -94,13 +94,15 @@ const Affiliate = (props) => {
           </div>
         )}
         {tabIndex == 4 && (
-          <div className="w-50">
-            <Sentrequests
-              organisationsList={organisationsList}
-              sendAffiliate={sendAffiliate}
-              users={users}
-              disableShadow={true}
-            />
+          <div className="bg-white">
+            <div className="w-50">
+              <Sentrequests
+                organisationsList={organisationsList}
+                sendAffiliate={sendAffiliate}
+                users={users}
+                disableShadow={true}
+              />
+            </div>
           </div>
         )}
       </div>

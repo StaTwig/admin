@@ -96,10 +96,25 @@ const DashBoardContainer = (props) => {
   const sendAffiliate = async (data) => {
     const result = await addAffiliate(data);
     if (result.status === 200) {
-      if (result.data.nModified > 0)
-        rRequestsSent.push(
-          usersList.filter((user) => user.id == data.employee)[0]
+      if (result.data.data.nModified) {
+        const user_arr = usersList.filter((user) => user.id == data.employee);
+        const org_arr = organisationsList.filter(
+          (organisation) => organisation.id == data.org
         );
+
+        if (user_arr.length && org_arr.length) {
+          rRequestsSent.push({
+            affiliations: {
+              employee_id: data.employee,
+              request_date: new Date(),
+              request_status: "PENDING",
+              last_updated_on: new Date(),
+            },
+            name: org_arr[0].name,
+            user: user_arr[0],
+          });
+        }
+      }
       setMessage(result.data.message);
       setTimeout(() => {
         setMessage("");

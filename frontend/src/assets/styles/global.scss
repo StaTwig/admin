@@ -5,6 +5,7 @@
 body {
   background-color: $softGrey;
   font-family: $roboto;
+  font-size: 0.9rem;
 }
 
 .breadcrumb {
@@ -39,7 +40,9 @@ body {
 }
 
 .btn-primary {
-  background: transparent linear-gradient(109deg, $primaryBlue 0%, $skyBlue 100%) 0% 0% no-repeat padding-box;
+  background: transparent
+    linear-gradient(109deg, $primaryBlue 0%, $skyBlue 100%) 0% 0% no-repeat
+    padding-box;
   box-shadow: 0px 3px 6px $grey;
   border-radius: 10px;
   border-width: 0;

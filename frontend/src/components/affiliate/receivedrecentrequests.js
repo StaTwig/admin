@@ -12,7 +12,7 @@ const ReceivedRecentRequests = (props) => {
           <div className=" rounded mr-2" style={{ width: 40, height: 40 }}>
             <div className="userPic rounded">
               <img
-                src={pendingRow?.to.photoUrl}
+                src={pendingRow?.user.photoId}
                 alt="User"
                 className="rounded"
               />
@@ -20,13 +20,13 @@ const ReceivedRecentRequests = (props) => {
           </div>
           <div className="pl-1 w-100">
             <div className="d-flex txtWrapQ">
-              <h5 className="text-primary mb-0 txtWrapQ">
-                {pendingRow?.to.name}
-              </h5>
+              <span className="text-primary mb-0 txtWrapQ">
+                {pendingRow?.user.firstName + " " + pendingRow?.user.lastName}
+              </span>
             </div>
             <div className="txtWrapQ">
               <span className="txtColor txtWrapQ">
-                {pendingRow?.to.walletAddress}
+                {pendingRow?.user.walletAddress}
               </span>
             </div>
           </div>
@@ -34,12 +34,12 @@ const ReceivedRecentRequests = (props) => {
         <div className="d-flex w-30 pl-1 flex-column text-left">
           <div className="pb-2 d-flex pr-2">
             <span className="txtColor width30">Email: </span>
-            <span className="txtWrapQ width70">{pendingRow?.to.emailId}</span>
+            <span className="txtWrapQ width70">{pendingRow?.user.emailId}</span>
           </div>
           <div className="pb-2 d-flex pr-2">
             <span className="txtColor width30">Organisation: </span>
             <span className="txtWrapQ width70">
-              {pendingRow?.to.organisation}
+              {pendingRow?.user.org.name}
             </span>
           </div>
         </div>
@@ -47,7 +47,7 @@ const ReceivedRecentRequests = (props) => {
           <div className="pb-2 d-flex pr-2">
             <span className="txtColor">Date: </span>
             <span className="txtWrapQ">
-              &nbsp;{formatDate(pendingRow?.createdAt)}
+              &nbsp;{formatDate(pendingRow?.affiliations.request_date)}
             </span>
           </div>
         </div>
@@ -56,7 +56,10 @@ const ReceivedRecentRequests = (props) => {
             type="button"
             className="btn rounded btn-outline-success mr-3 "
             onClick={() =>
-              acceptAffliate({ id: pendingRow?.id, rIndex: index })
+              acceptAffliate({
+                id: pendingRow?.affiliations.employee_id,
+                rIndex: index,
+              })
             }
           >
             Accept request
@@ -65,7 +68,10 @@ const ReceivedRecentRequests = (props) => {
             type="button"
             className="btn rounded btn-outline-danger"
             onClick={() =>
-              rejectAffliate({ id: pendingRow?.id, rIndex: index })
+              rejectAffliate({
+                id: pendingRow?.affiliations.employee_id,
+                rIndex: index,
+              })
             }
           >
             Reject request

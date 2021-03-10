@@ -57,13 +57,13 @@ const Users = (props) => {
         <div className="panel mr-3 mt-3">
           <div className="mt-4">
             <div className="ml-4 txtColor d-flex flex-row justify-content-between">
-              <span className="w-20">Name</span>
-              <span className="w-15">Role</span>
-              {/* <span className="w-20">Affiliated Organisation</span> */}
-              <span className="w-20">Wallet address</span>
-              <span className="w-20">Email/Mobile</span>
-              <span className="w-15">Account status</span>
-              <span className="w-20">&nbsp;</span>
+              <span className="text-center w-15">Name</span>
+              <span className="text-center w-20">Role</span>
+              <span className="text-center w-15">Affiliated Organisation</span>
+              <span className="text-center w-15">Wallet address</span>
+              <span className="text-center w-15">Email/Mobile</span>
+              <span className="text-center w-10">Account status</span>
+              <span className="text-center w-10">&nbsp;</span>
             </div>
             {usersList.map((row, index) => (
               <UserDetails
@@ -75,6 +75,12 @@ const Users = (props) => {
                 deactivateUser={deactivateUser}
                 unaffiliate={unaffiliate}
                 permissions={permissions}
+                permission={
+                  permissions.length
+                    ? permissions.filter((row) => row.role == row.role)[0]
+                        .permissions
+                    : []
+                }
               />
             ))}
           </div>

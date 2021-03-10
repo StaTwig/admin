@@ -140,9 +140,7 @@ export const unaffiliateUser = async (data) => {
 
 export const unaffiliateOrg = async (data) => {
   try {
-    const result = await axios.get(
-      `${config().unaffiliateOrgUrl}?orgId=${data.id}`
-    );
+    const result = await axios.post(config().unaffiliateOrgUrl, data);
     return result;
   } catch (e) {
     return e.response;
@@ -152,7 +150,7 @@ export const unaffiliateOrg = async (data) => {
 export const acceptAffiliate = async (data) => {
   try {
     const result = await axios.get(
-      `${config().acceptAffiliateUrl}?affId=${data.id}`
+      `${config().acceptAffiliateUrl}?employee_id=${data.id}`
     );
     return result;
   } catch (e) {
@@ -163,7 +161,7 @@ export const acceptAffiliate = async (data) => {
 export const rejectAffiliate = async (data) => {
   try {
     const result = await axios.get(
-      `${config().rejectAffiliateUrl}?affId=${data.id}`
+      `${config().rejectAffiliateUrl}?employee_id=${data.id}`
     );
     return result;
   } catch (e) {

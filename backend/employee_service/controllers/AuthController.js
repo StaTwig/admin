@@ -1,10 +1,8 @@
 const EmployeeModel = require("../models/EmployeeModel");
-const WarehouseModel = require("../models/WarehouseModel");
-const ConsumerModel = require("../models/ConsumerModel");
-const InventoryModel = require("../models/InventoryModel");
 const OrganisationModel = require("../models/OrganisationModel");
 const { check, validationResult } = require("express-validator");
 const uniqid = require("uniqid");
+const mongoose = require("mongoose");
 
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
@@ -323,14 +321,44 @@ exports.getOrgUsers = [
   auth,
   async (req, res) => {
     try {
-      const users = await EmployeeModel.find({
-        organisationId: req.user.organisationId,
-      });
-      const confirmedUsers = users.filter((user) => user.walletAddress !== "");
+      const users = await EmployeeModel.aggregate([
+        {
+          $match: {
+            organisationId: req.user.organisationId,
+            accountStatus: { $ne: "NOTAPPROVED" },
+          },
+        },
+        {
+          $lookup: {
+            from: "organisations",
+            localField: "id",
+            foreignField: "affiliations.employee_id",
+            as: "orgs",
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            id: 1,
+            walletAddress: 1,
+            accountStatus: 1,
+            firstName: 1,
+            lastName: 1,
+            photoId: 1,
+            phoneNumber: 1,
+            role: 1,
+            emailId: 1,
+            orgs: {
+              name: 1,
+            },
+          },
+        },
+      ]);
+
       return apiResponse.successResponseWithData(
         res,
-        "Organisation Users Retrieved Success",
-        confirmedUsers
+        "Organisation Users",
+        users
       );
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
@@ -364,10 +392,10 @@ exports.getOrgActiveUsers = [
       const users = await EmployeeModel.find({
         organisationId: req.user.organisationId,
         accountStatus: "ACTIVE",
-      });
+      }).select("firstName lastName emailId id");
       return apiResponse.successResponseWithData(
         res,
-        "Organisation active users retrieved",
+        "Organisation active users",
         users
       );
     } catch (err) {

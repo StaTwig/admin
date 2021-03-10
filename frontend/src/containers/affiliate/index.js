@@ -50,12 +50,24 @@ const AffiliateContainer = (props) => {
   });
 
   const unaffiliatedOrgs = async (data) => {
-    const result = await unaffiliateOrg(data);
+    let empArr = [];
+    let orgId = "";
+    data.orgs.forEach((row) => {
+      empArr.push(row.affiliations.employee_id);
+      orgId = row.user.org.id;
+    });
+    const result = await unaffiliateOrg({ emp: empArr, orgId: orgId });
     if (result.status === 200) {
       affiliatedOrgs.splice(data.rindex, 1);
-      setMessage(result.data.data.message);
+      setMessage(result.data.message);
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
     } else {
-      setError(result.data.data.message);
+      setError(result.data.message);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
     }
   };
 
@@ -63,9 +75,15 @@ const AffiliateContainer = (props) => {
     const result = await acceptAffiliate(data);
     if (result.status === 200) {
       affilatedPendingReq.splice(data.rindex, 1);
-      setMessage(result.data.data.message);
+      setMessage(result.data.message);
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
     } else {
-      setError(result.data.data.message);
+      setError(result.data.message);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
     }
   };
 
@@ -73,18 +91,30 @@ const AffiliateContainer = (props) => {
     const result = await rejectAffiliate(data);
     if (result.status === 200) {
       affilatedPendingReq.splice(data.rindex, 1);
-      setMessage(result.data.data.message);
+      setMessage(result.data.message);
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
     } else {
-      setError(result.data.data.message);
+      setError(result.data.message);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
     }
   };
 
   const sendAffiliate = async (data) => {
     const result = await addAffiliate(data);
     if (result.status === 200) {
-      setMessage(result.data.data.message);
+      setMessage(result.data.message);
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
     } else {
-      setError(result.data.data.message);
+      setError(result.data.message);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
     }
   };
 
