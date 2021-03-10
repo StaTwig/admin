@@ -46,7 +46,7 @@ const NewAddress = (props) => {
           const result = await getAddressByLatLong(position);
           dispatch(turnOff());
           if (result.status === 200) {
-            setAddress(result);
+            await setAddress(result);
           } else {
             setShowModal(true);
           }
