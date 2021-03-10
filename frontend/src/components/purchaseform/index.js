@@ -39,11 +39,11 @@ const PurchaseForm = (props) => {
   const[openCreatedPo,setOpenCreatedPo]= useState(false);
 
   const defaultProduct = {
-    productId: 'Select',
+    productId: 'Select ',
     productName: '',
     quantity: '',
     manufacturer: '',
-    externalId: 'Select'
+    externalId: 'Select Product ID'
   };
   const [productRows, setProductRows] = useState([defaultProduct]);
   const [message, setMessage] = useState('');
