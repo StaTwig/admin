@@ -13,21 +13,17 @@ import {
   addOrgUser,
   getAllOrganisations,
   addAffiliate,
+  getOrgActiveUsers,
 } from "../../actions/organisationActions";
 
 const DashBoardContainer = (props) => {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [requestsPending, setRequestsPending] = useState([]);
+  const [recentRequestsSent, setRecentRequestsSent] = useState([]);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getRequestsPending());
-    dispatch(getPermissions());
-    dispatch(getRecentReqSent());
-    dispatch(getAllOrganisations());
-  }, []);
-
-  const requestsPending = useSelector((state) => {
+  const reqPending = useSelector((state) => {
     return state.organisation.requestPending;
   });
 
@@ -35,7 +31,7 @@ const DashBoardContainer = (props) => {
     return state.organisation.permissions;
   });
 
-  const recentRequestsSent = useSelector((state) => {
+  const rRequestsSent = useSelector((state) => {
     return state.organisation.requestsSent;
   });
 
@@ -43,36 +39,91 @@ const DashBoardContainer = (props) => {
     return state.organisation.list;
   });
 
+  const usersList = useSelector((state) => {
+    return state.organisation.users;
+  });
+
+  useEffect(() => {
+    dispatch(getRequestsPending());
+    dispatch(getPermissions());
+    dispatch(getRecentReqSent());
+    dispatch(getAllOrganisations());
+    dispatch(getOrgActiveUsers());
+  }, []);
+
+  useEffect(() => {
+    setRequestsPending(reqPending);
+  }, [reqPending, setRequestsPending]);
+
+  useEffect(() => {
+    setRecentRequestsSent(rRequestsSent);
+  }, [rRequestsSent, setRecentRequestsSent]);
+
   const acceptApproval = async (data) => {
     let result;
     if (data?.emailId) result = await addOrgUser(data);
     else result = await verifyOrgUser(data);
-    if (result.status === 200) {
-      if (data?.rindex) requestsPending.splice(data.rindex, 1);
-      setMessage(result.data.data.message);
+    if (result.status == 200) {
+      if (data.rindex) reqPending.splice(data.rindex, 1);
+      setMessage(result.data.message);
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
     } else {
-      setError(result.data.data.message);
+      setError(result.data.message);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
     }
   };
 
   const rejectApproval = async (data) => {
     const result = await rejectOrgUser(data);
     if (result.status === 200) {
-      requestsPending.splice(data.rindex, 1);
-      setMessage(result.data.data.message);
+      reqPending.splice(data.rindex, 1);
+      setMessage(result.data.message);
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
     } else {
-      setError(result.data.data.message);
+      setError(result.data.message);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
     }
   };
 
   const sendAffiliate = async (data) => {
-    data.user = props.user;
     const result = await addAffiliate(data);
     if (result.status === 200) {
-      affilatedPendingReq.splice(data.rindex, 1);
-      setMessage(result.data.data.message);
+      if (result.data.data.nModified) {
+        const user_arr = usersList.filter((user) => user.id == data.employee);
+        const org_arr = organisationsList.filter(
+          (organisation) => organisation.id == data.org
+        );
+
+        if (user_arr.length && org_arr.length) {
+          rRequestsSent.push({
+            affiliations: {
+              employee_id: data.employee,
+              request_date: new Date(),
+              request_status: "PENDING",
+              last_updated_on: new Date(),
+            },
+            name: org_arr[0].name,
+            user: user_arr[0],
+          });
+        }
+      }
+      setMessage(result.data.message);
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
     } else {
-      setError(result.data.data.message);
+      setError(result.data.message);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
     }
   };
 
@@ -93,6 +144,7 @@ const DashBoardContainer = (props) => {
             recentRequestsSent={recentRequestsSent}
             organisationsList={organisationsList}
             sendAffiliate={sendAffiliate}
+            users={usersList}
           />
         </div>
       </div>

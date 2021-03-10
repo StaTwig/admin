@@ -13,7 +13,7 @@
     border: none;
     display: flex;
     justify-content: space-between;
-    color:#707070;
+    color: #707070;
     flex-basis: 100%;
     outline: none;
     align-items: center;
@@ -26,7 +26,7 @@
   }
 
   .dropdown-menu {
-    height:200px;
+    height: 200px;
     overflow: auto;
 
     box-shadow: 0px 3px 10px $grey;
@@ -34,7 +34,7 @@
     border: none;
     padding: 0.5rem;
     .dropdown-item {
-      padding: 0;
+      padding: 0.2rem 0;
       clear: both;
       font-size: 14px;
       cursor: pointer;

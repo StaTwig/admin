@@ -1,10 +1,8 @@
 const EmployeeModel = require("../models/EmployeeModel");
-const WarehouseModel = require("../models/WarehouseModel");
-const ConsumerModel = require("../models/ConsumerModel");
-const InventoryModel = require("../models/InventoryModel");
 const OrganisationModel = require("../models/OrganisationModel");
-const { check, validationResult} = require("express-validator");
+const { check, validationResult } = require("express-validator");
 const uniqid = require("uniqid");
+const mongoose = require("mongoose");
 
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
@@ -22,11 +20,10 @@ const stream_name = process.env.INV_STREAM;
 const checkToken = require("../middlewares/middleware").checkToken;
 const EmailContent = require("../components/EmailContent");
 
-
 exports.sendOtp = [
-  check('emailId')
+  check("emailId")
     .isLength({ min: 1 })
-    .withMessage('Email must be specified.')
+    .withMessage("Email must be specified.")
     .isEmail(),
   async (req, res) => {
     try {
@@ -34,40 +31,38 @@ exports.sendOtp = [
       if (!errors.isEmpty()) {
         return apiResponse.validationErrorWithData(
           res,
-          'Validation Error.',
-          errors.array(),
+          "Validation Error.",
+          errors.array()
         );
       } else {
         const emailId = req.body.emailId.toLowerCase();
         const user = await EmployeeModel.findOne({ emailId });
-        if(user) {
-          if (user.accountStatus === 'ACTIVE') {
+        if (user) {
+          if (user.accountStatus === "ACTIVE") {
             let otp = utility.randomNumber(4);
-            await EmployeeModel.updateOne({emailId },{ otp });
-             let html = EmailContent({
-            name: user.firstName,
-            origin: req.headers.origin,
-            otp,
-          });
-          // Send confirmation email
+            await EmployeeModel.updateOne({ emailId }, { otp });
+            let html = EmailContent({
+              name: user.firstName,
+              origin: req.headers.origin,
+              otp,
+            });
+            // Send confirmation email
             try {
-              await mailer
-                  .send(
-                      constants.confirmEmails.from,
-                      user.emailId,
-                      constants.confirmEmails.subject,
-                      html,
-                  );
-              return apiResponse.successResponseWithData(
-                  res,
-                  'OTP Sent Success.',
-                  otp,
+              await mailer.send(
+                constants.confirmEmails.from,
+                user.emailId,
+                constants.confirmEmails.subject,
+                html
               );
-            }catch(err) {
+              return apiResponse.successResponseWithData(
+                res,
+                "OTP Sent Success."
+              );
+            } catch (err) {
               return apiResponse.ErrorResponse(res, err);
             }
 
-           /* let userData = {
+            /* let userData = {
               id: user.id,
               firstName: user.firstName,
               emailId: user.emailId,
@@ -86,41 +81,43 @@ exports.sendOtp = [
                 'info',
                 '<<<<< UserService < AuthController < login : user login success',
             );*/
-
           } else {
             return apiResponse.unauthorizedResponse(
-                res,
-                'Account is not Approved. Please contact admin.',
+              res,
+              "Account is not Approved. Please contact admin."
             );
           }
         } else {
-          return apiResponse.ErrorResponse(res, 'User not registered');
+          return apiResponse.ErrorResponse(res, "User not registered");
         }
       }
     } catch (err) {
-      return apiResponse.ErrorResponse(res, 'Email already registered. Check Email for verifying the account');
+      return apiResponse.ErrorResponse(
+        res,
+        "Email already registered. Check Email for verifying the account"
+      );
     }
   },
 ];
 
 exports.verifyOtp = [
-  check('emailId')
+  check("emailId")
     .isLength({ min: 1 })
     .trim()
-    .withMessage('Email must be specified.')
+    .withMessage("Email must be specified.")
     .isEmail()
-    .withMessage('Email must be a valid email address.'),
-  check('otp')
+    .withMessage("Email must be a valid email address."),
+  check("otp")
     .isLength({ min: 1 })
     .trim()
-    .withMessage('OTP must be specified.'),
+    .withMessage("OTP must be specified."),
   async (req, res) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return apiResponse.validationErrorWithData(
           res,
-          'Validation Error.',
+          "Validation Error.",
           errors.array()
         );
       } else {
@@ -128,39 +125,49 @@ exports.verifyOtp = [
         var query = { emailId };
         const user = await EmployeeModel.findOne(query);
         if (user && user.otp == req.body.otp) {
-          if(user.role == "powerUser" || user.role == "admin")
-          {
-          EmployeeModel.updateOne(query,{ otp: null }).then(()=>{
-            OrganisationModel.findOne({ id: user.organisationId}).select("name").then(OrgName=>{
-              let userData = {
-                id: user.id,
-                firstName: user.firstName,
-                emailId: user.emailId,
-                role: user.role,
-                warehouseId: user.warehouseId,
-                organisationId: user.organisationId,
-                organisationName:OrgName.name
-              };
-              //Prepare JWT token for authentication
-              const jwtPayload = userData;
-              const jwtData = {
-                expiresIn: process.env.JWT_TIMEOUT_DURATION,
-              };
-              const secret = process.env.JWT_SECRET;
-              //Generated JWT token with Payload and secret.
-              userData.token = jwt.sign(jwtPayload, secret, jwtData);
-              return apiResponse.successResponseWithData(res, 'Login Success', userData);
-            }).catch(err=>{
-              return apiResponse.ErrorResponse(res, err);
-            });
-          }).catch(err=>{
-            return apiResponse.ErrorResponse(res,err);
-          })
-        }
-        else{
-          return apiResponse.ErrorResponse(res, `User dosen't have enough Permission for Admin Model`);
-        }
-      } else {
+          if (user.role == "powerUser" || user.role == "admin") {
+            EmployeeModel.updateOne(query, { otp: null })
+              .then(() => {
+                OrganisationModel.findOne({ id: user.organisationId })
+                  .select("name")
+                  .then((OrgName) => {
+                    let userData = {
+                      id: user.id,
+                      firstName: user.firstName,
+                      emailId: user.emailId,
+                      role: user.role,
+                      warehouseId: user.warehouseId,
+                      organisationId: user.organisationId,
+                      organisationName: OrgName.name,
+                    };
+                    //Prepare JWT token for authentication
+                    const jwtPayload = userData;
+                    const jwtData = {
+                      expiresIn: process.env.JWT_TIMEOUT_DURATION,
+                    };
+                    const secret = process.env.JWT_SECRET;
+                    //Generated JWT token with Payload and secret.
+                    userData.token = jwt.sign(jwtPayload, secret, jwtData);
+                    return apiResponse.successResponseWithData(
+                      res,
+                      "Login Success",
+                      userData
+                    );
+                  })
+                  .catch((err) => {
+                    return apiResponse.ErrorResponse(res, err);
+                  });
+              })
+              .catch((err) => {
+                return apiResponse.ErrorResponse(res, err);
+              });
+          } else {
+            return apiResponse.ErrorResponse(
+              res,
+              `User dosen't have enough Permission for Admin Model`
+            );
+          }
+        } else {
           return apiResponse.ErrorResponse(res, `Otp doesn't match`);
         }
       }
@@ -314,12 +321,44 @@ exports.getOrgUsers = [
   auth,
   async (req, res) => {
     try {
-      const users = await EmployeeModel.find({organisationId:req.user.organisationId});
-      const confirmedUsers = users.filter((user) => user.walletAddress !== "");
+      const users = await EmployeeModel.aggregate([
+        {
+          $match: {
+            organisationId: req.user.organisationId,
+            accountStatus: { $ne: "NOTAPPROVED" },
+          },
+        },
+        {
+          $lookup: {
+            from: "organisations",
+            localField: "id",
+            foreignField: "affiliations.employee_id",
+            as: "orgs",
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            id: 1,
+            walletAddress: 1,
+            accountStatus: 1,
+            firstName: 1,
+            lastName: 1,
+            photoId: 1,
+            phoneNumber: 1,
+            role: 1,
+            emailId: 1,
+            orgs: {
+              name: 1,
+            },
+          },
+        },
+      ]);
+
       return apiResponse.successResponseWithData(
         res,
-        "Organisation Users Retrieved Success",
-        confirmedUsers
+        "Organisation Users",
+        users
       );
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
@@ -331,7 +370,9 @@ exports.getUsers = [
   auth,
   async (req, res) => {
     try {
-      const users = await EmployeeModel.find({organisationId:req.query.orgId});
+      const users = await EmployeeModel.find({
+        organisationId: req.query.orgId,
+      });
       const confirmedUsers = users.filter((user) => user.walletAddress !== "");
       return apiResponse.successResponseWithData(
         res,
@@ -344,3 +385,21 @@ exports.getUsers = [
   },
 ];
 
+exports.getOrgActiveUsers = [
+  auth,
+  async (req, res) => {
+    try {
+      const users = await EmployeeModel.find({
+        organisationId: req.user.organisationId,
+        accountStatus: "ACTIVE",
+      }).select("firstName lastName emailId id");
+      return apiResponse.successResponseWithData(
+        res,
+        "Organisation active users",
+        users
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];

@@ -23,7 +23,7 @@ const SideBar = ({ match, location }) => {
               src={url === "/overview" ? HomeSelectedIcon : HomeIcon}
               alt="Overview"
             />
-            <span className="pt-2">Overview</span>
+            <span className="pt-2 text-center">Overview</span>
           </Link>
         </li>
         <li
@@ -40,7 +40,11 @@ const SideBar = ({ match, location }) => {
               }
               alt="Manage address"
             />
-            <span className="pt-2">Manage address</span>
+            <span className="pt-2 text-center">
+              Manage
+              <br />
+              address
+            </span>
           </Link>
         </li>
         <li className={url === "/users" || url === "/addusers" ? "active" : ""}>
@@ -53,7 +57,11 @@ const SideBar = ({ match, location }) => {
               }
               alt="Manage users"
             />
-            <span className="pt-2">Manage Users</span>
+            <span className="pt-2 text-center">
+              Manage
+              <br />
+              Users
+            </span>
           </Link>
         </li>
         <li className={url === "/affiliate" ? "active" : ""}>
@@ -66,7 +74,11 @@ const SideBar = ({ match, location }) => {
               }
               alt="Affiliate Organisation"
             />
-            <span className="pt-2">Affiliate Organisation</span>
+            <span className="pt-2 text-center">
+              Affiliate
+              <br />
+              Organisation
+            </span>
           </Link>
         </li>
       </ul>

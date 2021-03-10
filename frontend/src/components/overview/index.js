@@ -21,6 +21,7 @@ const DashBoard = (props) => {
     recentRequestsSent,
     organisationsList,
     sendAffiliate,
+    users,
   } = props;
 
   return (
@@ -86,16 +87,17 @@ const DashBoard = (props) => {
             <SentRequests
               sendAffiliate={sendAffiliate}
               organisationsList={organisationsList}
+              users={users}
             />
           </div>
           <div className="mt-4">
             <h5 className="sub-header">Recent Requests Sent</h5>
             <div className="ml-4 txtColor d-flex flex-row justify-content-between">
               <span className="w-25">Name</span>
-              <span className="w-25">Organisation</span>
-              <span className="w-25">Email</span>
-              <span className="w-25">Date</span>
-              <span className="w-25">Wallet address</span>
+              <span className="w-25 text-center">Organisation</span>
+              <span className="w-25 text-center">Email</span>
+              <span className="w-25 text-center">Date</span>
+              <span className="w-25 text-center">Wallet address</span>
             </div>
             {recentRequestsSent.map((row, index) => (
               <RecentRequests reqSent={row} key={index} />

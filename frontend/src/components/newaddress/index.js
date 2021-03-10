@@ -46,7 +46,7 @@ const NewAddress = (props) => {
           const result = await getAddressByLatLong(position);
           dispatch(turnOff());
           if (result.status === 200) {
-            setAddress(result);
+            await setAddress(result);
           } else {
             setShowModal(true);
           }
@@ -83,7 +83,7 @@ const NewAddress = (props) => {
   }
 
   return (
-    <div className="container-fluid pl-5 pr-3">
+    <div className="address">
       {showModal && (
         <Modal
           close={closeModal}
@@ -102,12 +102,8 @@ const NewAddress = (props) => {
           <SuccessPopUp onHide={closeModals} message={message} />
         </Modal>
       )}
-      <div className="rowDash pr-4">
-        <div className="dashboard">
-          <h1 className="breadcrumb dash">ADD NEW ADDRESS</h1>
-        </div>
-      </div>
-      <div className="d-flex row pl-3">
+      <h1 className="breadcrumb dash pl-2">ADD NEW ADDRESS</h1>
+      <div className="d-flex row ">
         <div className="card w-100 rounded border border-white shadow bg-white m-4 p-3">
           <div className="card-body d-flex flex-row justify-content-between">
             <div className="w-50">

@@ -1,55 +1,18 @@
 @import "../../assets/styles/global.scss";
 
-.rowDash {
-  width: 100%;
-  align-items: flex-end;
-  justify-content: space-between;
-  flex-direction: row;
-  display: flex;
-  .txt {
-    color: #ffffff;
-  }
-  .dashboard {
-    padding-right: 3rem;
-    padding-left: 1rem;
-
-    @media (max-width: $md) {
-      padding-right: 10px;
-      padding-left: 10px;
-    }
-
-    .dash {
-      margin-bottom: 0.2rem;
-    }
-  }
+.users {
+  padding-left: 2rem;
+  padding-right: 1rem;
 }
 .w-15 {
   width: 15%;
   text-align: center;
 }
-.userPic {
-  margin-right: 0.5rem;
-  img {
-    width: 30px;
-    height: 30px;
-  }
-}
 .Popover-tipShape {
   fill: rgb(164, 194, 194);
 }
-.r-10 {
-  right: 10px;
-}
-.sub-header {
-  margin-left: 1em;
-  color: blue;
-}
 .dropdownLabel {
-  font-size: x-large;
-}
-.d-grid {
-  display: grid;
-  justify-items: flex-end;
+  font-size: larger;
 }
 .w-10 {
   align-self: center;
@@ -57,8 +20,8 @@
   width: 10%;
 }
 .w-20 {
-  align-self: center;
-  text-align: center;
+  // align-self: center;
+  // text-align: center;
   width: 20%;
 }
 .w-30 {
@@ -72,17 +35,13 @@
 .txtColor {
   color: $lightGrey;
 }
-.orangeBtn {
-  background-color: #ff8c00;
-  color: #ffffff;
-}
 .txtWrapu {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 75%;
   padding: 0 10px;
-  align-self: center;
+  // align-self: center;
 }
 .btn-view {
   width: 80px;
@@ -92,13 +51,4 @@
   box-shadow: 0px 3px 6px #00000029;
   border-radius: 10px;
   opacity: 1;
-}
-.leaflet-container {
-  border-top: 3px solid #d6d6d6;
-  bottom: 0;
-  top: 198px;
-  position: fixed;
-  left: 95px;
-  z-index: 9;
-  width: 100%;
 }

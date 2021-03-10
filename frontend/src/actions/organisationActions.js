@@ -140,9 +140,7 @@ export const unaffiliateUser = async (data) => {
 
 export const unaffiliateOrg = async (data) => {
   try {
-    const result = await axios.get(
-      `${config().unaffiliateOrgUrl}?orgId=${data.id}`
-    );
+    const result = await axios.post(config().unaffiliateOrgUrl, data);
     return result;
   } catch (e) {
     return e.response;
@@ -152,7 +150,7 @@ export const unaffiliateOrg = async (data) => {
 export const acceptAffiliate = async (data) => {
   try {
     const result = await axios.get(
-      `${config().acceptAffiliateUrl}?affId=${data.id}`
+      `${config().acceptAffiliateUrl}?employee_id=${data.id}`
     );
     return result;
   } catch (e) {
@@ -163,7 +161,7 @@ export const acceptAffiliate = async (data) => {
 export const rejectAffiliate = async (data) => {
   try {
     const result = await axios.get(
-      `${config().rejectAffiliateUrl}?affId=${data.id}`
+      `${config().rejectAffiliateUrl}?employee_id=${data.id}`
     );
     return result;
   } catch (e) {
@@ -173,33 +171,7 @@ export const rejectAffiliate = async (data) => {
 
 export const addAffiliate = async (data) => {
   try {
-    const reqData = {
-      from: {
-        name: "String",
-        id: "String",
-        organisationId: "String",
-        organisation: "String",
-        warehouseId: "String",
-        emailId: "String",
-        phone: "String",
-        walletAddress: "String",
-        photoUrl: "String",
-      },
-      to: {
-        name: "String",
-        id: "String",
-        organisationId: "String",
-        organisation: "String",
-        warehouseId: "String",
-        emailId: "String",
-        phone: "String",
-        walletAddress: "String",
-        photoUrl: "String",
-      },
-    };
-    const result = await axios.get(
-      `${config().addAffiliateUrl}?affId=${data.id}`
-    );
+    const result = await axios.post(config().addAffiliateUrl, data);
     return result;
   } catch (e) {
     return e.response;
@@ -228,6 +200,23 @@ export const getOrgUsers = () => {
     return async (dispatch) => {
       dispatch(turnOn());
       const result = await axios.get(config().getOrgUsersUrl);
+      dispatch({
+        type: SET_ORGANISATION_USERS,
+        payload: result.data,
+      });
+      dispatch(turnOff());
+      return result.data.data.length;
+    };
+  } catch (e) {
+    throw Error(e.message);
+  }
+};
+
+export const getOrgActiveUsers = () => {
+  try {
+    return async (dispatch) => {
+      dispatch(turnOn());
+      const result = await axios.get(config().getOrgActiveUsers);
       dispatch({
         type: SET_ORGANISATION_USERS,
         payload: result.data,

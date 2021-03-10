@@ -7,7 +7,7 @@ import "./style.scss";
 
 const dropdownButtonGroup = (props) => {
   const [menu, setMenu] = useState(false);
-  const { groups, name, namer, onSelect } = props;
+  const { groups, name, namer, onSelect, error } = props;
 
   const ref = useRef();
   useOnclickOutside(ref, () => {
@@ -15,8 +15,11 @@ const dropdownButtonGroup = (props) => {
   });
   const useParse = name && name.includes("<");
   return (
-    <div className="custom-dropdown">
+    <div
+      className={`custom-dropdown form-control ${error ? "border-danger" : ""}`}
+    >
       <button
+        type="button"
         className={`btn-custom-dropdown ${menu && "active"}`}
         name={namer}
         role="button"
@@ -35,11 +38,19 @@ const dropdownButtonGroup = (props) => {
                   <span
                     className="dropdown-item"
                     onClick={() => {
+                      item.namer = namer;
                       setMenu(false);
                       onSelect(item);
                     }}
                   >
-                    {parse(item.name)}
+                    {namer == "employee"
+                      ? item.firstName +
+                        " " +
+                        item.lastName +
+                        " (" +
+                        item.emailId +
+                        ")"
+                      : item.name}
                   </span>
                   {index + 1 < groups.length && <hr />}
                 </React.Fragment>

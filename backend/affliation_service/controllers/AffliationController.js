@@ -1,7 +1,5 @@
 const apiResponse = require("../utils/apiResponse");
 const Organisation = require("../models/organisationModel");
-const Warehouse = require("../models/warehouseModel");
-const AffliationModel = require("../models/affliationModel");
 const EmployeeModel = require("../models/employeeModel");
 const auth = require("../middlewares/jwt");
 const { customAlphabet } = require("nanoid");
@@ -15,12 +13,74 @@ exports.pendingRequests = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           const { organisationId } = req.user;
-          await AffliationModel.find({
-            $and: [
-              { status: "PENDING" },
-              { "to.organisationId": organisationId },
-            ],
-          })
+          await Organisation.aggregate([
+            {
+              $match: {
+                id: organisationId,
+                "affiliations.request_status": "PENDING",
+              },
+            },
+            { $unwind: "$affiliations" },
+            {
+              $lookup: {
+                from: "employees",
+                let: { employee: "$affiliations" },
+                pipeline: [
+                  {
+                    $match: {
+                      $expr: {
+                        $and: [
+                          { $eq: ["$id", "$$employee.employee_id"] },
+                          { $eq: ["$$employee.request_status", "PENDING"] },
+                        ],
+                      },
+                    },
+                  },
+                ],
+                as: "user",
+              },
+            },
+            {
+              $unwind: {
+                path: "$user",
+                includeArrayIndex: "arrayIndex",
+              },
+            },
+            {
+              $lookup: {
+                from: "organisations",
+                localField: "user.organisationId",
+                foreignField: "id",
+                as: "user.org",
+              },
+            },
+            {
+              $unwind: {
+                path: "$user.org",
+                includeArrayIndex: "arrayIndex",
+              },
+            },
+            {
+              $project: {
+                _id: 0,
+                affiliations: 1,
+                name: 1,
+                user: {
+                  walletAddress: 1,
+                  firstName: 1,
+                  lastName: 1,
+                  photoId: 1,
+                  emailId: 1,
+                  org: {
+                    name: 1,
+                  },
+                },
+              },
+            },
+            {
+              $sort: { "affiliations.request_date": -1 },
+            },
+          ])
             .then((affliations) => {
               return apiResponse.successResponseWithData(
                 res,
@@ -48,7 +108,52 @@ exports.sentRequests = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           const { organisationId } = req.user;
-          await AffliationModel.find({ "from.organisationId": organisationId })
+          await Organisation.aggregate([
+            { $match: { organisationId: { $ne: organisationId } } },
+            { $unwind: "$affiliations" },
+            {
+              $lookup: {
+                from: "employees",
+                let: { employee: "$affiliations" },
+                pipeline: [
+                  {
+                    $match: {
+                      $expr: {
+                        $and: [
+                          { $eq: ["$id", "$$employee.employee_id"] },
+                          { $eq: ["$organisationId", organisationId] },
+                        ],
+                      },
+                    },
+                  },
+                ],
+                as: "user",
+              },
+            },
+            {
+              $project: {
+                _id: 0,
+                affiliations: 1,
+                name: 1,
+                user: {
+                  walletAddress: 1,
+                  firstName: 1,
+                  lastName: 1,
+                  photoId: 1,
+                  emailId: 1,
+                },
+              },
+            },
+            {
+              $unwind: {
+                path: "$user",
+                includeArrayIndex: "arrayIndex",
+              },
+            },
+            {
+              $sort: { "affiliations.request_date": -1 },
+            },
+          ])
             .then((affliations) => {
               return apiResponse.successResponseWithData(
                 res,
@@ -73,29 +178,88 @@ exports.affiliateOrg = [
   auth,
   async (req, res) => {
     try {
-      await EmployeeModel.findOne({ id: req.user.id })
-        .select("affiliatedOrganisations")
-        .then((orgs) => {
-          const orgArray = orgs.affiliatedOrganisations;
-          if (orgArray.length > 0) {
-            Organisation.find({ id: { $in: orgArray } })
-              .then((Organisations) => {
-                console.log("aff-orgs" + Organisations);
-                return apiResponse.successResponseWithData(
-                  res,
-                  "Affliated Organisations Details",
-                  Organisations
-                );
-              })
-              .catch((err) => {
-                return apiResponse.ErrorResponse(res, err);
-              });
-          } else {
-            return apiResponse.notFoundResponse(
-              res,
-              " No Affiliated Organisations Found"
-            );
-          }
+      const { organisationId } = req.user;
+      await Organisation.aggregate([
+        {
+          $match: {
+            id: organisationId,
+            $or: [
+              { "affiliations.request_status": "APPROVED" },
+              { "affiliations.request_status": "PENDING" },
+            ],
+          },
+        },
+        { $unwind: "$affiliations" },
+        {
+          $lookup: {
+            from: "employees",
+            let: { employee: "$affiliations" },
+            pipeline: [
+              {
+                $match: {
+                  $expr: { $eq: ["$id", "$$employee.employee_id"] },
+                },
+              },
+            ],
+            as: "user",
+          },
+        },
+        {
+          $unwind: {
+            path: "$user",
+            includeArrayIndex: "arrayIndex",
+          },
+        },
+        {
+          $lookup: {
+            from: "organisations",
+            localField: "user.organisationId",
+            foreignField: "id",
+            as: "user.org",
+          },
+        },
+        {
+          $unwind: {
+            path: "$user.org",
+            includeArrayIndex: "arrayIndex",
+          },
+        },
+        {
+          $project: {
+            _id: 0,
+            affiliations: 1,
+            user: {
+              walletAddress: 1,
+              firstName: 1,
+              lastName: 1,
+              photoId: 1,
+              emailId: 1,
+              org: {
+                id: 1,
+                name: 1,
+                postalAddress: 1,
+              },
+            },
+          },
+        },
+        {
+          $sort: { "affiliations.request_date": -1 },
+        },
+        {
+          $group: {
+            _id: "$user.org.name",
+            user: { $first: "$user" },
+            affiliations: { $push: "$$ROOT" },
+            // orgs: { $push: "$$ROOT" },
+          },
+        },
+      ])
+        .then((affliations) => {
+          return apiResponse.successResponseWithData(
+            res,
+            "Affliated Organisations Details",
+            affliations
+          );
         })
         .catch((err) => {
           return apiResponse.ErrorResponse(res, err);
@@ -155,38 +319,32 @@ exports.acceptAffiliate = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           const { organisationId } = req.user;
-          const { affId } = req.query;
-          await AffliationModel.findOneAndUpdate(
+          const { employee_id } = req.query;
+          await Organisation.updateOne(
             {
               $and: [
-                { status: "PENDING" },
-                { id: affId },
-                { "to.organisationId": organisationId },
+                { id: organisationId },
+                { "affiliations.request_status": "PENDING" },
+                { "affiliations.employee_id": employee_id },
               ],
             },
-            { status: "APPROVED" },
-            { new: true }
+            {
+              $set: {
+                "affiliations.$.request_status": "APPROVED",
+                "affiliations.$.last_updated_on": new Date(),
+              },
+            }
           )
-            .then((exist) => {
-              EmployeeModel.findOneAndUpdate(
-                { id: exist.to.id },
-                {
-                  $push: { affiliatedOrganisations: exist.from.id },
-                },
-                {
-                  new: true,
-                }
-              )
-                .then((employee) => {
-                  return apiResponse.successResponseWithData(
-                    res,
-                    "Pending Requests",
-                    employee
-                  );
-                })
-                .catch((err) => {
-                  return apiResponse.ErrorResponse(res, err);
-                });
+            .then((resUpdate) => {
+              let res_message = "Affiliation request approved";
+              if (resUpdate.nModified == 0)
+                res_message =
+                  "Affiliation request not approved. Refresh the page and try again!!!";
+              return apiResponse.successResponseWithData(
+                res,
+                res_message,
+                resUpdate
+              );
             })
             .catch((err) => {
               return apiResponse.ErrorResponse(res, err);
@@ -208,23 +366,31 @@ exports.rejectAffiliate = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           const { organisationId } = req.user;
-          const { affId } = req.query;
-          await AffliationModel.findOneAndUpdate(
+          const { employee_id } = req.query;
+          await Organisation.updateOne(
             {
               $and: [
-                { status: "PENDING" },
-                { id: affId },
-                { "to.organisationId": organisationId },
+                { id: organisationId },
+                { "affiliations.request_status": "PENDING" },
+                { "affiliations.employee_id": employee_id },
               ],
             },
-            { status: "REJECTED" },
-            { new: true }
+            {
+              $set: {
+                "affiliations.$.request_status": "REJECTED",
+                "affiliations.$.last_updated_on": new Date(),
+              },
+            }
           )
-            .then((exist) => {
+            .then((resUpdate) => {
+              let res_message = "Affiliation request rejected";
+              if (resUpdate.nModified == 0)
+                res_message =
+                  "Affiliation request not rejected. Refresh the page and try again!!!";
               return apiResponse.successResponseWithData(
                 res,
-                "Affilate Request Rejected",
-                exist
+                res_message,
+                resUpdate
               );
             })
             .catch((err) => {
@@ -245,15 +411,21 @@ exports.unAffiliate = [
   async (req, res) => {
     try {
       const { id } = req.query;
-      await EmployeeModel.findOneAndUpdate(
-        { id: id },
-        { $set: { affiliatedOrganisations: [] } },
-        { new: true }
+      await Organisation.update(
+        {},
+        {
+          $pull: {
+            affiliations: {
+              employee_id: id,
+            },
+          },
+        },
+        { multi: true }
       )
         .then((employee) => {
           return apiResponse.successResponseWithData(
             res,
-            "UnAffliated Employee",
+            "UnAffliated employee",
             employee
           );
         })
@@ -271,19 +443,23 @@ exports.unAffiliateOrg = [
   async (req, res) => {
     try {
       const { organisationId } = req.user;
-      const { orgId } = req.query;
-      await EmployeeModel.updateMany(
-        { organisationId: organisationId },
-        { $pull: { affiliatedOrganisations: orgId } }
+      const { orgId, emp } = req.body;
+      await Organisation.updateOne(
+        { id: organisationId },
+        {
+          $pull: {
+            affiliations: {
+              employee_id: { $in: emp },
+              request_status: "APPROVED",
+            },
+          },
+        }
       )
         .then((affliatedOrgs) => {
           if (affliatedOrgs.ok) {
-            return apiResponse.successResponse(
-              res,
-              `Organisation UnAffliated ${affliatedOrgs.nModified} records Updated`
-            );
+            return apiResponse.successResponse(res, `Organisation unaffliated`);
           } else {
-            return apiResponse.ErrorResponse(res, "Update Status NOT OK");
+            return apiResponse.ErrorResponse(res, "Please try again");
           }
         })
         .catch((err) => {
@@ -298,20 +474,33 @@ exports.unAffiliateOrg = [
 exports.affiliate = [
   auth,
   async (req, res) => {
+    const dateTimeNow = new Date();
     try {
-      const affId = "aff-" + nanoid();
-      const affliation = new AffliationModel({
-        id: affId,
-        from: req.body.from,
-        to: req.body.to,
-      });
-      await affliation
-        .save()
-        .then((affliation) => {
+      const { employee, org } = req.body;
+      Organisation.updateOne(
+        { id: org, "affiliations.employee_id": { $ne: employee } },
+        {
+          $push: {
+            affiliations: {
+              employee_id: employee,
+              request_date: dateTimeNow,
+              request_status: "PENDING",
+              last_updated_on: dateTimeNow,
+            },
+          },
+        },
+        {
+          new: true,
+        }
+      )
+        .then((orgResponse) => {
+          let res_message = "Affliation Request Sent";
+          if (orgResponse.nModified == 0)
+            res_message = "User already affliated to the organisation";
           return apiResponse.successResponseWithData(
             res,
-            "Affliation Request Sent",
-            affliation
+            res_message,
+            orgResponse
           );
         })
         .catch((err) => {

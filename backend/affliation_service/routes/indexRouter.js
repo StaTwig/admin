@@ -25,7 +25,7 @@ router.get("/fetchAllAffiliates", allAffiliateOrgs); // /fetchAffiliates
 router.get("/acceptAffiliate", acceptAffiliate); // /fetchWarehouses?orgId=123
 router.get("/rejectAffiliate", rejectAffiliate); // /fetchWarehouses?orgId=123
 router.get("/unAffiliate", unAffiliate); // /fetchWarehouses?id=123
-router.get("/unAffiliateOrg", unAffiliateOrg); // /fetchWarehouses?orgId=123
+router.post("/unAffiliateOrg", unAffiliateOrg); // /fetchWarehouses?orgId=123
 router.get("/getAllOrg", getAllOrg); // /getAllOrg
 router.post("/addAffiliate", affiliate); // /addAffliate
 

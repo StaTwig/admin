@@ -102,7 +102,7 @@ const Header = (props) => {
           </div>
           <div className="divider" />
           <div className="userName">
-            <p className="cname">{profile?.organisation}</p>
+            <p className="cname">{profile?.organisation?.split("/")[0]}</p>
             <p className="uname">
               {profile?.firstName + " " + profile?.lastName}
             </p>
@@ -129,7 +129,7 @@ const Header = (props) => {
               <React.Fragment>
                 <div className="slider-item-text">
                   <p>{profile?.firstName + " " + profile?.lastName}</p>
-                  <p>{profile?.organisation}</p>
+                  <p>{profile?.organisation?.split("/")[0]}</p>
                 </div>
                 {/* <Link className="slider-item border-top-0" to="/profile">
                   My profile

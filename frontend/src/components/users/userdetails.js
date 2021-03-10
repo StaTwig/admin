@@ -5,13 +5,16 @@ import Popover from "react-popover";
 
 const UserDetails = (props) => {
   const [visible, setVisible] = useState(false);
-  const { user, activateUser, deactivateUser, unaffiliate } = props;
+  const [display, setDisplay] = useState(false);
+  const { user, activateUser, deactivateUser, unaffiliate, permission } = props;
+
+  const [status, setStatus] = useState("");
 
   useEffect(() => {
     setVisible(false);
-  }, []);
+    setStatus(user?.accountStatus);
+  }, [setStatus, setVisible, user]);
 
-  const [status, setStatus] = useState(user?.accountStatus);
   const changeStatus = (status) => {
     user.accountStatus = status;
     setStatus(status);
@@ -47,18 +50,21 @@ const UserDetails = (props) => {
             {status == "ACTIVE" ? "Deactivate" : "Activate"} user
           </a>
         </p>
-        <p className="txtColor mt-2 pt-2 border-top mb-0">
-          <a
-            href="#"
-            className=" text-reset text-decoration-none"
-            onClick={() => {
-              unaffiliate({ id: user?.id });
-              setVisible(false);
-            }}
-          >
-            Unaffiliate User
-          </a>
-        </p>
+        {user?.orgs?.length > 0 && (
+          <p className="txtColor mt-2 pt-2 border-top mb-0">
+            <a
+              href="#"
+              className=" text-reset text-decoration-none"
+              onClick={() => {
+                unaffiliate({ id: user?.id });
+                setVisible(false);
+                user.orgs = [];
+              }}
+            >
+              Unaffiliate User
+            </a>
+          </p>
+        )}
       </div>,
     ],
   };
@@ -66,22 +72,63 @@ const UserDetails = (props) => {
   return (
     <div className="card rounded bg-white border border-white mt-1 ml-1 p-1 mb-3">
       <div className="card-body d-flex flex-row justify-content-between">
-        <div className="userPic w-20 rounded d-flex flex-row">
+        <div className="userPic w-15 text-center rounded d-flex flex-row">
           <img src={user?.photoId} alt="User" className="rounded mr-1" />
           <h6 className="text-primary pt-1 txtWrapu">
             {user?.firstName + " " + user?.lastName}
           </h6>
         </div>
-        <span className="txtWrapu w-15">{user?.role}</span>
-        {/* <span className="txtWrapu w-20">ABC LTD | ABC LTD | ABC LTD</span> */}
-        <span className="txtWrapu w-20 text-decoration-underline">
+        <span
+          className={`w-20 ${
+            display ? `text-left` : ` align-self-center txtWrapu text-center`
+          } `}
+        >
+          <span className="">{user?.role}</span>
+          {display && (
+            <div className="pt-3">
+              {permission?.map((per) => (
+                <span className="d-block"> {per} </span>
+              ))}
+            </div>
+          )}
+        </span>
+        <span
+          className={`txtWrapu text-center w-15 ${
+            display ? ` ` : ` align-self-center`
+          } `}
+        >
+          {user?.orgs?.length
+            ? user.orgs.map((row, index) => (index > 0 ? " | " : "") + row.name)
+            : "-"}
+        </span>
+        <span
+          className={`txtWrapu w-15 text-center text-decoration-underline ${
+            display ? ` ` : ` align-self-center`
+          } `}
+        >
           <a href="#" className="text-decoration-underline">
             {user?.walletAddress}
           </a>
         </span>
-        <span className="txtWrapu w-20">{user?.emailId}</span>
-        <span className="txtWrapu w-15">{status}</span>
-        <div className="w-20">
+        <span
+          className={`txtWrapu text-center w-15 ${
+            display ? ` ` : ` align-self-center`
+          } `}
+        >
+          {user?.emailId}
+        </span>
+        <span
+          className={`txtWrapu text-center  w-10 ${
+            display ? `align-self-start` : ` align-self-center`
+          } `}
+        >
+          {status}
+        </span>
+        <div
+          className={`w-10  ${
+            display ? `align-self-start` : ` align-self-center`
+          } `}
+        >
           {/* <button
             type="button"
             onClick={() => {
@@ -101,8 +148,12 @@ const UserDetails = (props) => {
           >
             {status == "ACTIVE" ? "Deactivate" : "Activate"}
           </button> */}
-          <button type="button" className="btn btn-view">
-            View
+          <button
+            type="button"
+            className="btn btn-view"
+            onClick={() => setDisplay(!display)}
+          >
+            {display ? "Back" : "View"}
           </button>
 
           <Popover className="bg-light rounded shadow" {...popoverProps}>
