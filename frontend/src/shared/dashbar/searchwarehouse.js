@@ -122,8 +122,10 @@ import './style.scss'
                     </div>
                 </div>
             </div>
-            {warehouses.length > 0 && <div className=" panel  mb-4 searchwarehouse dashsearch address searchpanel">
-                {warehouses.map(w => <div className="d-flex flex-row " onClick={() =>props.onWarehouseSelect(w.id)}>
+                <div className="mainsearchwarehouse">
+                {warehouses.length > 0 && warehouses.map(w => 
+                 <div className=" panel  mb-4 searchwarehouse dashsearch address searchpanel" onClick={() =>props.onWarehouseSelect(w.id)}>
+                <div className="d-flex flex-row " >
                     <ul className="mr-3">
                         <li className="mb-2 text-secondary">Country ID</li>
                         <li className="mb-2 text-secondary">Country</li>
@@ -136,8 +138,10 @@ import './style.scss'
                         <li className="mb-2">{w.id}</li>
                         <li className="mb-1">{w.title}</li>
                     </ul>
+                </div>
                 </div>)}
-            </div>}
+                </div>
+            
 
         </div>
     )

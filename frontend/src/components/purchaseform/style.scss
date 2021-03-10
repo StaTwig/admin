@@ -64,7 +64,7 @@
       background: transparent;
       border-bottom: 2px solid #d6d6d6;
       border-radius: 0;
-      // color: #A8A8A8;
+      color: #A8A8A8;
       flex-basis: 67%;
       flex-grow: inherit;
       font-size: 14px;
@@ -114,6 +114,14 @@
 }
 
 .productTable {
+  .form-control {
+    font-size: 14px;
+    color: black;
+    @media (max-width: 1250px) {
+      font-size: 13px;
+    }
+  }
+
   .square-box {
     width: 20px;
     height: 20px;
@@ -158,6 +166,7 @@
 
         .custom-dropdown .btn-custom-dropdown {
           font-size: 14px;
+          color: black;
           @media (max-width: 1250px) {
             font-size: 13px;
           }
