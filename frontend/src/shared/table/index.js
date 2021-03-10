@@ -14,12 +14,6 @@ const Table = props => {
             <span>Quantity</span>
           </div>
           <div className="rTableHead">
-            <span>Batch Number</span>
-          </div>
-          <div className="rTableHead">
-            <span>Transaction Date</span>
-          </div>
-          <div className="rTableHead">
             <span></span>
           </div>
 
@@ -38,8 +32,6 @@ const Table = props => {
                     </div>
               <div className="rTableCell">{inventory.manufacturer}</div>
              <div className="rTableCell">{inventory.quantity}</div>
-             <div className="rTableCell">SR-12345</div>
-             <div className="rTableCell">09/03/2021</div>
           <div className="rTableCell"><button className="btn btn-outline-info fontSize200 expand"
               onClick = {()=>{
                         props.history.push(

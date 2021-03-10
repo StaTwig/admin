@@ -46,7 +46,8 @@ const AdvanceTableFilter = (props) => {
             </div>
           </div>
         </div>
-        <span className="divider" />
+        {props.data.img4? <span className="divider" />: null}
+        {props.data.img4? 
         <div className="box col">
           <div className="filter-item">
               <div className="icon mr-2">
@@ -57,7 +58,7 @@ const AdvanceTableFilter = (props) => {
               <img src={updownarrow} width="9" height="9" />
             </div>
           </div>
-        </div>
+        </div>: null}
         {props.data.img5? <span className="divider" /> : null}
         {props.data.img5? 
           <div className="box col">
