@@ -427,42 +427,63 @@ exports.addPOsFromExcel = [
                 workbook.Sheets[sheet_name_list[0]],
                 { dateNF: 'dd/mm/yyyy;@', cellDates: true, raw: false },
             );
-            const { createdBy, lastUpdatedBy } = req.user.id;
-            let poDataArray = [];
-            poDataArray = data.map(po => {
-              return {
-                id: uniqid('po-'),
-                externalId: po['External Id'],
-                "creationDate": new Date().toISOString(),
-                "lastUpdatedOn": new Date().toISOString(),
-                "supplier": {
-                  "supplierOrganisation": po['Supplier Organisation'],
-                  "supplierIncharge": po['Supplier Incharge']
-                },
-                "customer": {
-                  "customerOrganisation": po['Customer Organisation'],
-                  "customerIncharge": po['Customer Incharge'],
-                  "shippingAddress": {
-                    "shippingAddressId": po['Shipping Address Id'],
-                    "shipmentReceiverId": po['Shipment Receiver Id']
+            // const { createdBy, lastUpdatedBy } = req.user.id;
+            // let poDataArray = [];
+            // poDataArray = data.map(po => {
+            //   return {
+            //     id: uniqid('po-'),
+            //     externalId: po['External Id'],
+            //     "creationDate": new Date().toISOString(),
+            //     "lastUpdatedOn": new Date().toISOString(),
+            //     "supplier": {
+            //       "supplierOrganisation": po['Supplier Organisation'],
+            //       "supplierIncharge": po['Supplier Incharge']
+            //     },
+            //     "customer": {
+            //       "customerOrganisation": po['Customer Organisation'],
+            //       "customerIncharge": po['Customer Incharge'],
+            //       "shippingAddress": {
+            //         "shippingAddressId": po['Shipping Address Id'],
+            //         "shipmentReceiverId": po['Shipment Receiver Id']
 
-                  }
-                },
-                "products": [
-                  {
-                    "productId": po['Product'],
-                    "productQuantity": po['Quantity']
-                  }
-                ],
-                createdBy,
-                lastUpdatedBy
+            //       }
+            //     },
+            //     "products": [
+            //       {
+            //         "productId": po['Product'],
+            //         "productQuantity": po['Quantity']
+            //       }
+            //     ],
+            //     createdBy,
+            //     lastUpdatedBy
+            //   }
+            // });
+            // await RecordModel.insertMany(poDataArray);
+            let poModelArray = []
+            poModelArray = data.map(po=>{
+              return {
+                "orderID" : po['UNICEf PO Number'],
+                "poItem" : po['PO Item#'],
+                "vendor" : po['vendor'],
+                "vendorName" : po['Vendor Name'],
+                "date" : po['Document Date'],
+                "reference" : po['Your Reference'],
+                "incoterms" : po['Incoterms'],
+                "incoterms2" : po['Incoterms (Part 2)'],
+                "material" : po['Material'],
+                "materialDescription" : po['Material Description'],
+                "plant" : po['plant'],
+                "quantity" : po["Order Quantity"],
+                "unit" : po['Order Unit'],
+                "ipCode" : po['IP Code'],
+                "ipName" : po['IP Name'],
               }
             });
-            await RecordModel.insertMany(poDataArray);
+            await POModel.insertMany(poModelArray);
             return apiResponse.successResponseWithData(
                 res,
                 'Upload Result',
-                poDataArray
+                poModelArray
             );
           } catch (e) {
             return apiResponse.ErrorResponse(res, 'Error from Blockchain');
