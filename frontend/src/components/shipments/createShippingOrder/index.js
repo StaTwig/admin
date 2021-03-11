@@ -132,7 +132,7 @@ else {
               type="text"
               className="form-controler"
               name="quantity"
-              placeholder="quantity"
+              placeholder="Quantity"
               value={product.productQuantity}
               onChange={e => onQuantityChange(e,i)}
 

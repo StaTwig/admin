@@ -291,7 +291,7 @@ else {
               type="text"
               className="form-control"
               name="Organisation Name"
-              placeholder="Enter Organisation Name"
+              placeholder="Organisation Name"
               value={organisationName}
             />
           </div>
@@ -332,7 +332,7 @@ else {
               type="text"
               className="form-control"
               name="Delivery Location"
-              placeholder="Enter Delivery Location"
+              placeholder="Delivery Location"
               value={customerLocationName}
             />
           </div>
