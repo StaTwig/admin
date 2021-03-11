@@ -164,7 +164,9 @@ exports.receiveShipment = [
     auth,
     async (req, res) => {
         try {
-            const data = req.body;
+            const shipmentId = req.query.shipmentId;
+            const data = await ShipmentModel.findOne({id: shipmentId})
+
             const po = await RecordModel.findOne({
                 id: data.poId
             });
