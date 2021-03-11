@@ -1,7 +1,7 @@
 module.exports = {
   apps : [{
-    name: 'User Service',
-    script: 'user_server.js',
+    name: 'Analytics Service',
+    script: 'analytics_server.js',
 
     // Options reference: https://pm2.keymetrics.io/docs/usage/application-declaration/
     args: 'one two',

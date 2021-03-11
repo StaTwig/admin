@@ -80,6 +80,12 @@
       #middlewares = ["shipmentorder-stripprefix"]
       #If the rule matches, forward to the shipmentorder management service (declared below)
       service = "shipmentorder-management"
+    [http.routers.analytics-management]
+      rule = "Host(`vaccineledger.com`) && PathPrefix(`/analyticsmanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["analytics-stripprefix"]
+      #If the rule matches, forward to the analytics management service (declared below)
+      service = "analytics-management"
 
   [http.middlewares]
     [http.middlewares.test-stripprefix.stripPrefix]
@@ -111,6 +117,8 @@
       prefixes = ["/pomanagement", "/pomanagement/"]
     [http.middlewares.shipmentorder-stripprefix.stripPrefix]
       prefixes = ["/shipmentordermanagement", "/shipmentordermanagement/"]
+    [http.middlewares.analytics-stripprefix.stripPrefix]
+      prefixes = ["/analyticsmanagement", "/analyticsmanagement/"]
 
   [http.services]
     # Define how to reach an existing service on our infrastructure
@@ -154,3 +162,6 @@
     [http.services.shipmentorder-management.loadBalancer]
       [[http.services.shipmentorder-management.loadBalancer.servers]]
         url = "http://127.0.0.1:3013/"
+    [http.services.analytics-management.loadBalancer]
+      [[http.services.analytics-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3015/"
