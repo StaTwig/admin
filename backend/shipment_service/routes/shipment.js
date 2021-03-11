@@ -16,6 +16,7 @@ const upload = multer({ storage: Storage });
 const router = express.Router();
 
 router.post("/createShipment", ShipmentController.createShipment); // /createShipment => POST data of Shipment
+router.post("/receiveShipment", ShipmentController.receiveShipment); // /receiveShipment => Shipment ID
 router.get("/fetchShipments", ShipmentController.fetchShipments); // /fetchShipments => Takes warehouseId from req.user header 
 router.get("/viewShipment", ShipmentController.Shipment); // /viewShipment?ShipmentId=SH7TUC_VZIKD
 

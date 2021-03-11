@@ -2,14 +2,13 @@ const mongoose = require('mongoose');
 
 const InventorySchema = new mongoose.Schema(
   {
-    manufacturingDate: { type: String },
-    expiryDate: { type: String },
-    serialNumber: { type: String, unique: true },
-    owner: { type: String },
-    transactionIds: {type: Array },
-    productName: { type: String },
+    id: { type: String, required: true, unique: true },
+    inventoryDetails: {
+      type: Array,
+      default: [
+      ],
+    },
   },
   { timestamps: true },
 );
 module.exports = mongoose.model('Inventory', InventorySchema);
-
