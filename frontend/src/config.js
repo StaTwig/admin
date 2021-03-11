@@ -36,7 +36,7 @@ export function config() {
       getShippingOrdersUrl:`${LOCAL_SERVER_URL_SHIPPINGORDER}/shippingordermanagement/api/shipping/getShippingOrders`,
       getShippingOrderIdsUrl:`${LOCAL_SERVER_URL_SHIPPINGORDER}/shippingordermanagement/api/shipping/getShippingOrderIds`,
       viewShippingOrderUrl:`${LOCAL_SERVER_URL_SHIPPINGORDER}/shippingordermanagement/api/shipping/viewShippingOrder?soId=`,
-      shipmentsUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchShipments?skip=0&limit=5`,
+      shipmentsUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchShipments`,
       getProducts: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/getProducts`,
       generateCodes: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/generateCodes`,
       getManufacturers: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/getManufacturers`,
@@ -85,7 +85,7 @@ export function config() {
       getShippingOrdersUrl:`${DEV_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrders`,
       getShippingOrderIdsUrl:`${DEV_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrderIds`,
       viewShippingOrderUrl:`${DEV_SERVER_URL}/shippingordermanagement/api/shipping/viewShippingOrder?soId=`,
-      shipmentsUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/fetchShipments?skip=0&limit=5`,
+      shipmentsUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/fetchShipments`,
       getProducts: `${DEV_SERVER_URL}/productmanagement/api/products/getProducts`,
       generateCodes: `${DEV_SERVER_URL}/productmanagement/api/products/generateCodes`,
       getManufacturers: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/getManufacturers`,
@@ -130,7 +130,7 @@ export function config() {
       getAllUsersUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/updateProfile`,
       upload: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/upload`,
-      shipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchShipments?skip=0&limit=5`,
+      shipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchShipments`,
       getProducts: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/getProducts`,
       generateCodes: `${STABLE_SERVER_URL_SHIPMENT}/productmanagement/api/products/generateCodes`,
       getManufacturers: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/getManufacturers`,
@@ -179,7 +179,7 @@ export function config() {
       getAllUsersUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${TEST_SERVER_URL}/usermanagement/api/auth/upload`,
-      shipmentsUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchShipments?skip=0&limit=5`,
+      shipmentsUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchShipments`,
       getManufacturers: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/getManufacturers`,
       createShippingOrderUrl:`${TEST_SERVER_URL}/shippingordermanagement/api/shipping/createShippingOrder`,
       getShippingOrdersUrl:`${TEST_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrders`,
@@ -233,7 +233,7 @@ export function config() {
       getShippingOrdersUrl:`${DEMO_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrders`,
       getShippingOrderIdsUrl:`${DEMO_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrderIds`,
       viewShippingOrderUrl:`${DEMO_SERVER_URL}/shippingordermanagement/api/shipping/viewShippingOrder?soId=`,
-      shipmentsUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipment/fetchShipments?skip=0&limit=5`,
+      shipmentsUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipment/fetchShipments`,
       getManufacturers: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/getManufacturers`,
       createShipmentUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipment/createShipment`,
       shipmentsSearch: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/fetchShipments?key=`,
@@ -278,7 +278,7 @@ export function config() {
       getAllUsersUrl: `${PROD_SERVER_URL}/api/auth/getAllUsers`,
       updateProfileUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${PROD_SERVER_URL}/usermanagement/api/auth/upload`,
-      shipmentsUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/fetchShipments?skip=0&limit=5`,
+      shipmentsUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/fetchShipments`,
       createShippingOrderUrl:`${PROD_SERVER_URL}/shippingordermanagement/api/shipping/createShippingOrder`,
       getShippingOrdersUrl:`${PROD_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrders`,
       getShippingOrderIdsUrl:`${PROD_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrderIds`,
@@ -320,7 +320,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || 'test'; // change prod to test, local,stable, dev for respective environments
+  const environment = process.env.ENVIRONMENT || 'local'; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
   return conf;
 }

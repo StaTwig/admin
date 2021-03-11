@@ -236,33 +236,32 @@ exports.fetchShipments = [
     auth,
     async (req, res) => {
         try {
-            const {
-                authorization
-            } = req.headers;
+            const { skip, limit } = req.query
             checkToken(req, res, async result => {
                 if (result.success) {
                     const {
                         warehouseId
                     } = req.user;
-                    await ShipmentModel.find({
+                    try {
+                        const shipments = await ShipmentModel.find({
                             $or: [{
-                                    'supplier.locationId': warehouseId
-                                },
+                                'supplier.locationId': warehouseId
+                            },
                                 {
                                     'receiver.locationId': warehouseId
                                 },
                             ],
-                        }).sort({createdAt: -1})
-                        .then(shipments => {
-                            return apiResponse.successResponseWithData(
-                                res,
-                                'Shipments Table',
-                                shipments,
-                            );
-                        })
-                        .catch(err => {
-                            return apiResponse.ErrorResponse(res, err);
-                        });
+                        }).sort({createdAt: -1}).skip(parseInt(skip))
+                            .limit(parseInt(limit));
+                        return apiResponse.successResponseWithData(
+                            res,
+                            'Shipments Table',
+                            shipments,
+                        );
+                    }catch(err) {
+                        return apiResponse.ErrorResponse(res, err);
+                    }
+
                 } else {
                     logger.log(
                         'warn',
