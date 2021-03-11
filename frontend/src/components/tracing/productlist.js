@@ -5,30 +5,26 @@ import './style.scss'
 
 const ProductList = (props) => {
     return (
-        Object.keys(props.shipments).length === 0 ? <div className="row panel justify-content-between">N/A</div> :
+        Object.keys(props.shipments).length === 0 ||  (!props.shipments.poDetails) ? <div className="row panel justify-content-between">N/A</div> :
             <div className={props.productHighLight ? "col panel commonpanle highlight " : "col panel commonpanle "}>
+                {props.shipments.shipmentDetails[0].products.map((product,index) =>(
                 <div className="d-flex flex-row " >
                     <ul className="mr-3 elemens">
                     <li className="mb-1 text-secondary">Product ID</li>
                         <li className="mb-1 text-secondary">Product Name</li>
                         <li className="mb-1 text-secondary">Manufacturer</li>
                         <li className="mb-1 text-secondary">Quantity</li>
-                        {props.menuProduct == true ? <li className="mb-1 text-secondary">Mfg Date</li> : null}
-                        {props.menuProduct == true ? <li className="mb-1 text-secondary">Exp Date</li> : null}
-                        {props.menuProduct == true ? <li className="mb-1 text-secondary">Batch No</li> : null}
-                        {props.menuProduct == true ? <li className="mb-1 text-secondary">Serial No</li> : null}
+                        <li className="mb-1 text-secondary">Label ID</li>
                     </ul>
                     <ul className="elemens">
-                        <li className="mb-1">Prod-9bhkk6huyt</li>
-                        <li className="mb-1">OPV</li>
-                        <li className="mb-1">Bharat</li>
-                        <li className="mb-1">80,000</li>
-                        {props.menuProduct == true ? <li className="mb-1">12/2020</li> : null}
-                        {props.menuProduct == true ? <li className="mb-1">02/2022</li> : null}
-                        {props.menuProduct == true ? <li className="mb-1">BR-76654</li> : null}
-                        {props.menuProduct == true ? <li className="mb-1">SR12-SR90</li> : null}
-                    </ul>
-                    <div></div></div>
+                        <li className="mb-1">{product._id}</li>
+                        <li className="mb-1">{product.productName}</li>
+                        <li className="mb-1">{product.manufacturer}</li>
+                        <li className="mb-1">{product.productQuantity}</li>
+                        <li className="mb-1">{product.labelId}</li>
+                   </ul>
+                    <div></div>
+                    </div>))}
                 <div className="arrow float-right" onClick={() => {
                     props.setMenuProduct(!props.menuProduct)
                     props.setProductHighLight(false);
