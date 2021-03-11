@@ -5,7 +5,6 @@ var upload = multer({ dest: "uploads/" });
 
 var router = express.Router();
 
-router.get("/getInventoryAnalytics", AnalyticsController.getInventoryAnalytics);
-router.get("/getShipmentAnalytics", AnalyticsController.getShipmentAnalytics);
+router.get("/getAnalytics", AnalyticsController.getAnalytics);
 
 module.exports = router;

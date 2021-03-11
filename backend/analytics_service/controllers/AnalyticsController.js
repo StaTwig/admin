@@ -18,150 +18,146 @@ const uniqid = require('uniqid');
 const init = require('../logging/init');
 const logger = init.getLog();
 
-exports.getShipmentAnalytics = [
+exports.getAnalytics = [
   auth,
   async (req, res) => {
     try {
-      console.log("Now Date", Date.now());
-      const now = Date.now();
-      // const one_year = now.getFullYear() + 1;
-      // const { warehouseId } = req.user;
-      console.log("Here1");
 
+      var data = {}
       const totalProductsAdded = await AtomModel.count();
-      console.log("Total Products Added", totalProductsAdded);
-      console.log("Here2");
+      data.totalProductsAdded = totalProductsAdded;
 
-      var date = new Date(); 
-      date.setDate(date.getDate() + 7); 
-      console.log(date);
+      var today = new Date(); 
+      var nextWeek = new Date();
+      nextWeek.setDate(today.getDate() + 7)
 
       const expiringThisWeek = await AtomModel.count({
         "attributeSet.expDate" :  {
-          $gte: date.setDate(date.getDate()), 
-          $lt: date.setDate(date.getDate() + 7) 
+          $gte: today.toISOString(),
+          $lt: nextWeek.toISOString() 
         }
       });
-      console.log("Products Expiring this Week : ", expiringThisWeek);
+      data.expiringThisWeek  =expiringThisWeek;
+
+
+      var nextMonth = new Date();
+      nextMonth.setDate(today.getDate() + 30)
 
       const expiringThisMonth = await AtomModel.count({
         "attributeSet.expDate" :  {
-          $gte: date.setDate(date.getDate()), 
-          $lt: date.setDate(date.getDate() + 30) 
+          $gte: today.toISOString(), 
+          $lt: nextMonth.toISOString() 
         }
       });
-      console.log("Products Expiring this Month : ", expiringThisMonth);
+      data.expiringThisMonth = expiringThisMonth;
+
+      var nextYear = new Date();
+      nextYear.setDate(today.getDate() + 365)
 
       const expiringThisYear = await AtomModel.count({
         "attributeSet.expDate" :  {
-          $gte: date.setDate(date.getDate()), 
-          $lt: date.setDate(date.getDate() + 365) 
+          $gte: today.toISOString(),
+          $lt: nextYear.toISOString() 
         }
       });
-      console.log("Products Expiring this Year : ", expiringThisYear);
+      data.expiringThisYear = expiringThisYear;
+
+      var lastWeek = new Date();
+      lastWeek.setDate(today.getDate() - 7)
 
       const expiredThisWeek = await AtomModel.count({
         "attributeSet.expDate" :  {
-          $gte: date.setDate(date.getDate()), 
-          $lt: date.setDate(date.getDate() - 7) 
+          $lt: today.toISOString(), 
+          $gte: lastWeek.toISOString() 
         }
       });
-      console.log("Products Expired this Week : ", expiredThisWeek);
+      data.expiredThisWeek = expiredThisWeek;
+
+      var lastMonth = new Date();
+      lastMonth.setDate(today.getDate() - 30)
 
       const expiredThisMonth = await AtomModel.count({
         "attributeSet.expDate" :  {
-          $gte: date.setDate(date.getDate()), 
-          $lt: date.setDate(date.getDate() - 30) 
+          $lt: today.toISOString(), 
+          $gte: lastMonth.toISOString()  
         }
       });
-      console.log("Products Expired this Month : ", expiredThisMonth);
+      data.expiredThisMonth = expiredThisMonth;
+
+      var lastYear = new Date();
+      lastYear.setDate(today.getDate() -365 )
 
       const expiredThisYear = await AtomModel.count({
         "attributeSet.expDate" :  {
-          $gte: date.setDate(date.getDate()), 
-          $lt: date.setDate(date.getDate() - 365) 
+          $lt: today.toISOString(), 
+          $gte: lastYear.toISOString() 
         }
       });
-      console.log("Products Expired this Year : ", expiredThisYear);
+      data.expiredThisYear = expiredThisYear;
 
       const totalShipmentsSent = await ShipmentModel.count({
         status: { $in : ["SHIPPED", "RECEIVED", "LOST", "DAMAGED"]} 
       });
-      console.log("Total Shipments Sent", totalShipmentsSent);
+      data.totalShipmentsSent = totalShipmentsSent;
 
-      const totalShipmentsReceived = await ShipmentModel.count({
-        status: "RECEIVED"
-      });
-      console.log("Total Shipments Received", totalShipmentsReceived);
+      const totalShipmentsReceived = await ShipmentModel.count(
+        { status: "RECEIVED" });
+      
+      data.totalShipmentsReceived = totalShipmentsReceived;
 
-      const totalProductsSent = await ShipmentModel.count(
-        { status: "SHIPPED" }
+      const totalProductsSent = await ShipmentModel.aggregate(
+        [{$match: {status: "SHIPPED"}}, 
+        {
+          $group: {
+            _id: "$status", 
+            total: {$sum: {$size: "$products"}}
+          }
+        }]
       );
-      console.log("Total Products Sent", totalProductsSent);
+      data.totalProductsSent = totalProductsSent.total;
 
-      const totalProductsReceived = await ShipmentModel.count(
-        { status: "RECEIVED" },
+      const totalProductsReceived = await ShipmentModel.aggregate(
+        [{$match: {status: "RECEIVED"}}, 
+        {
+          $group: {
+            _id: "$status", 
+            total: {$sum: {$size: "$products"}}
+          }
+        }]
       );
-      console.log("Total Products Received", totalProductsReceived);
+      data.totalProductsReceived = totalProductsReceived.total;
 
       const totalShipmentsInTransit = await ShipmentModel.count(
         { status: "SHIPPED" },
       );
-      console.log("Total Shipments in Transit", totalShipmentsInTransit);
+      data.totalShipmentsInTransit = totalShipmentsInTransit;
 
       const totalShipmentsWithDelayInTransit = await ShipmentModel.count(
-        { status: "SHIPPED" }, { $where: "this.expectedDeliveryDate < date.setDate(date.getDate())"}
-      );
-      // .$where('this.expectedDeliveryDate < date.setDate(date.getDate())'
-      // ).exec(callback);
-
-      console.log("Total Shipments in Transit with Delay", totalShipmentsWithDelayInTransit);
+       { $and: [
+         {status: "SHIPPED"},
+         {expectedDeliveryDate: {$lt: new Date().toISOString()}}
+        ]
+       });
+      data.totalShipmentsWithDelayInTransit = totalShipmentsWithDelayInTransit;
 
       const totalProductsInInventory = await InventoryModel.count();
-      console.log("Total Products in Inventory", totalProductsInInventory);
+      data.totalProductsInInventory = totalProductsInInventory;
 
       const totalProductsAddedToInventory = await InventoryModel.count();
-      console.log("Total Products Added to Inventory", totalProductsAddedToInventory);
+      data.totalProductsAddedToInventory = totalProductsAddedToInventory;
 
-    res = "thisYearShipmentSent";
+      console.log("Response", data);
       return apiResponse.successResponseWithData(
         res,
-        'Shipping Orders',
-        totalProductsAdded,
+        'Analytics',
+        data,
       );
     } catch (err) {
       logger.log(
         'error',
         '<<<<< AnalyticsService < AnalyticsController < fetchAllShippingOrders : error (catch block)',
       );
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-
-exports.getInventoryAnalytics = [
-  auth,
-  async (req, res) => {
-    try {
-      console.log("Now Date", Date.now());
-      const { warehouseId } = req.user;
-      const thisYearShipmentSent = await ShipmentModel.find({
-        created_at: {
-          $gte: ISODate("2020-02-11T10:34:27.458+00:00"),
-          $lt: ISODate("2021-02-12T10:34:27.458+00:00")
-      }
-    });
-    console.log("This Year Shipment Count : ", Object.keys(thisYearShipmentSent).length);
-      return apiResponse.successResponseWithData(
-        res,
-        'Shipping Orders',
-        shippingOrders,
-      );
-    } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
-      );
+      console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
   },
