@@ -29,7 +29,7 @@ ShipmentSchema = new mongoose.Schema(
     transactionIds: [String],
     products: [
       {
-        productID: String,
+        productId: String,
         productName: String,
         manufacturer: String,
         productQuantity: Number,
@@ -41,4 +41,3 @@ ShipmentSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model("Shipment", ShipmentSchema);
-
