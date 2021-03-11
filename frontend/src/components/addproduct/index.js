@@ -89,7 +89,7 @@ const AddProduct = props => {
                   <DropdownButton
                     name={manufacturer}
                     onSelect={item => setManufacturer(item)}
-                    groups={manufacturers}
+                    groups={[]}
                   />
                 </div>
               </div>

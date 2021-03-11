@@ -374,8 +374,8 @@ const NewShipment = props => {
           />
         </Modal>
       )}
-      {message && <div className="alert alert-success">{message}</div>}
-      {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+      {message && <div className="alert alert-success d-flex justify-content-center mt-3">{message}</div>}
+      {errorMessage && <div className="alert alert-danger d-flex justify-content-center mt-3">{errorMessage}</div>}
     </div>
   );
 };

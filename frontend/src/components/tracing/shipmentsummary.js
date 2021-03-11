@@ -22,7 +22,7 @@ const ShipmentSummary = (props) => {
             <li className="mb-1">BR-101</li>
             <li className="mb-1">  {props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[2]+"/"+props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[1]+"/"+props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[0]} </li>
         <a className="d-flex flex-row"><li className="txn">
-          {props.shipments.shipmentDetails[0].txnIds[0]?props.shipments.shipmentDetails[0].txnIds[0]:"16tu9866srfe33553..."}
+          {props.shipments.shipmentDetails[0].transactionIds[0]?props.shipments.shipmentDetails[0].transactionIds[0]:"16tu9866srfe33553..."}
             </li><img src={Verifiedpic} className="mt-1" width="10" height="10"/></a>
             </ul>
             <div>

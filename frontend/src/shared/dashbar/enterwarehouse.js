@@ -59,7 +59,7 @@ const EnterWareHouse = props => {
         </Link>
       </div>
 
-      <div className="panel address searchpanel prodpanel d-flex flex-column">
+      <div className="panel address searchpanel prodpanel d-flex flex-column inventoryDashboard">
         {productArray?.map(product => <div className="mb-1 subprod">
           <div className="text-primary" key={product.productId}>
             <strong>{product.productName}</strong>
