@@ -62,8 +62,8 @@ const FormLoginPage = (props) => {
                       <form onSubmit={handleSubmit}>
                         <div className="form-group m-5 mb-0 ">
                           <label htmlFor="email">
-                            <img alt="" src={User} className="icon imgs" />
-                            <span className="ml-4 text-muted">
+                            <img alt="" src={User} className="icon imgs mb-1" />
+                            <span className="ml-1 text-muted">
                               Email ID/Mobile Number
                             </span>
                           </label>
