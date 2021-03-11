@@ -57,8 +57,8 @@ const PurchasePopUp  = props => {
             <div className="square-box" />
           </th>
           <td>{product.productId}</td>
-          <td>...</td>
-          <td>..........</td>
+          <td></td>
+          <td></td>
           <td>{product.productQuantity}</td>
         </tr>)}
 
