@@ -250,7 +250,7 @@ exports.fetchShipments = [
                                     'receiver.locationId': warehouseId
                                 },
                             ],
-                        })
+                        }).sort({createdAt: -1})
                         .then(shipments => {
                             return apiResponse.successResponseWithData(
                                 res,
