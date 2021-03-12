@@ -29,11 +29,11 @@ elif [ "$1" == "DEMO" ];
    then
       ./pre-deploy-demo.sh
 
-elif [ "$1" == "PROD"];
+elif [ "$1" == "PROD" ];
    then
       ./pre-deploy-prod.sh
 
-elif [ "$1" == "ABINBEV"];
+elif [ "$1" == "ABINBEV" ];
    then
       ./pre-deploy-abinbev.sh
 
