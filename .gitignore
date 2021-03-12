@@ -133,3 +133,4 @@ sketch
 ./backend/user_service/.env
 ./backend/log_service/.env
 ./backend/transaction_service/.env
+pre-deploy*.sh
