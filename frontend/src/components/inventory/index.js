@@ -4,6 +4,9 @@ import { Link } from 'react-router-dom';
 import './style.scss';
 import Table from '../../shared/table';
 import TableFilter from '../../shared/advanceTableFilter';
+import {
+  getAnalytics
+} from '../../actions/analyticsAction';
 import {getProductList} from '../../actions/productActions';
 import TotalInventoryAdded from '../../assets/icons/TotalInventoryAddedcopy.svg';
 import currentinventory from '../../assets/icons/CurrentInventory.svg';
@@ -41,27 +44,31 @@ const Inventory = props => {
   const colors = ["#ffbcc4", "#c1e3f2", "#ffc18c", "#ffef83",
         "#d4e7ff", "#e0b0ff", "#F1EFCE", "#D7FAF1", "#F2B6AF" ];
 
-  const products = Object.keys(props.inventoriesCount.dict);
-  useEffect(() => {
+        const [inventoryAnalytics,setInventoryAnalytics]= useState({})
+
+    
+     useEffect(() => {
     async function fetchData() {
       const result = await getProductList();
       setProductsList(result.message);
+      const resultAnalytics = await getAnalytics();
+      setInventoryAnalytics(resultAnalytics.data);
       setInventoriesCount(
-        11 // props.inventoriesCount.counts.inventoryAdded.total,
+        resultAnalytics.data.totalProductsAddedToInventory
       );
       setCurrentInventoriesCount(
-        32000// props.inventoriesCount.counts.currentInventory.total,
+        resultAnalytics.data.totalProductsInInventory
       );
       setInventoryNearExpiration(
-        3000 //  props.inventoriesCount.counts.vaccinesNearExpiration .total,
+        resultAnalytics.data.expiringThisYear
       );
       setInventoryExpired(
-      1000 // props.inventoriesCount.counts.vaccinesExpired.thisYear,
+        resultAnalytics.data.expiredThisYear
       )
      
     }
     fetchData();
-  }, [props.inventoriesCount]);
+  }, []);
 
 
   return (
@@ -90,12 +97,12 @@ const Inventory = props => {
                   className="tab-item active"
                   onMouseLeave={() =>
                     setInventoriesCount(
-                     200// props.inventoriesCount.counts.inventoryAdded.total,
+                      inventoryAnalytics.totalProductsAddedToInventory
                     )
                   }
                   onMouseEnter={() =>
                     setInventoriesCount(
-                     200// props.inventoriesCount.counts.inventoryAdded.thisYear,
+                      inventoryAnalytics.totalProductsAddedToInventory
                     )
                   }
                 >
@@ -105,12 +112,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoriesCount(
-                      150//props.inventoriesCount.counts.inventoryAdded.total,
+                      inventoryAnalytics.totalProductsAddedToInventory
                     )
                   }
                   onMouseEnter={() =>
                     setInventoriesCount(
-                     150 //props.inventoriesCount.counts.inventoryAdded.thisMonth,
+                      inventoryAnalytics.totalProductsAddedToInventory
                     )
                   }
                 >
@@ -120,12 +127,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoriesCount(
-                     100// props.inventoriesCount.counts.inventoryAdded.total,
+                      inventoryAnalytics.totalProductsAddedToInventory
                     )
                   }
                   onMouseEnter={() =>
                     setInventoriesCount(
-                      100//props.inventoriesCount.counts.inventoryAdded.thisWeek,
+                      inventoryAnalytics.totalProductsAddedToInventory
                     )
                   }
                 >
@@ -135,12 +142,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoriesCount(
-                      50//props.inventoriesCount.counts.inventoryAdded.total,
+                      inventoryAnalytics.totalProductsAddedToInventory
                     )
                   }
                   onMouseEnter={() =>
                     setInventoriesCount(
-                     50// props.inventoriesCount.counts.inventoryAdded.today,
+                      inventoryAnalytics.totalProductsAddedToInventory
                     )
                   }
                 >
@@ -163,12 +170,12 @@ const Inventory = props => {
                   className="tab-item active"
                   onMouseLeave={() =>
                     setCurrentInventoriesCount(
-                      200//props.inventoriesCount.counts.currentInventory.total,
+                      inventoryAnalytics.totalProductsInInventory
                     )
                   }
                   onMouseEnter={() =>
                     setCurrentInventoriesCount(
-                     200 //props.inventoriesCount.counts.currentInventory.thisYear,
+                      inventoryAnalytics.totalProductsInInventory
                     )
                   }
                 >
@@ -178,12 +185,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setCurrentInventoriesCount(
-                     150// props.inventoriesCount.counts.currentInventory.total,
+                      inventoryAnalytics.totalProductsInInventory
                     )
                   }
                   onMouseEnter={() =>
                     setCurrentInventoriesCount(
-                     150// props.inventoriesCount.counts.currentInventory.thisMonth,
+                      inventoryAnalytics.totalProductsInInventory
                     )
                   }
                 >
@@ -193,12 +200,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setCurrentInventoriesCount(
-                     100// props.inventoriesCount.counts.currentInventory.total,
+                      inventoryAnalytics.totalProductsInInventory
                     )
                   }
                   onMouseEnter={() =>
                     setCurrentInventoriesCount(
-                      100//props.inventoriesCount.counts.currentInventory.thisWeek,
+                      inventoryAnalytics.totalProductsInInventory
                     )
                   }
                 >
@@ -208,12 +215,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setCurrentInventoriesCount(
-                     80// props.inventoriesCount.counts.currentInventory.total,
+                      inventoryAnalytics.totalProductsInInventory
                     )
                   }
                   onMouseEnter={() =>
                     setCurrentInventoriesCount(
-                     80 //props.inventoriesCount.counts.currentInventory.today,
+                      inventoryAnalytics.totalProductsInInventory
                     )
                   }
                 >
@@ -236,15 +243,12 @@ const Inventory = props => {
                   className="tab-item active"
                   onMouseLeave={() =>
                     setInventoryNearExpiration(
-                     //props.inventoriesCount.counts.vaccinesNearExpiration.total,
-                     80
+                      inventoryAnalytics.expiringThisYear
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryNearExpiration(
-                    //  props.inventoriesCount.counts.vaccinesNearExpiration.thisYear,
-                      80
-                       
+                      inventoryAnalytics.expiringThisYear
                     )
                   }
                 >
@@ -254,15 +258,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoryNearExpiration(
-                     // props.inventoriesCount.counts.vaccinesNearExpiration.total,
-                     50
-                      
+                      inventoryAnalytics.expiringThisYear
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryNearExpiration(
-                     // props.inventoriesCount.counts.vaccinesNearExpiration.thisMonth,
-                      50
+                      inventoryAnalytics.expiringThisMonth
                     )
                   }
                 >
@@ -272,12 +273,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoryNearExpiration(
-                     30// props.inventoriesCount.counts.vaccinesNearExpiration.total,
-                    )
+                      inventoryAnalytics.expiringThisYear)
+                    
                   }
                   onMouseEnter={() =>
                     setInventoryNearExpiration(
-                     30// props.inventoriesCount.counts.vaccinesNearExpiration.thisWeek,
+                      inventoryAnalytics.expiringThisWeek
                     )
                   }
                 >
@@ -287,12 +288,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoryNearExpiration(
-                    20 // props.inventoriesCount.counts.vaccinesNearExpiration.total,
+                      inventoryAnalytics.expiringThisYear
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryNearExpiration(
-                     20// props.inventoriesCount.counts.vaccinesNearExpiration.today,
+                    "N/A"
                     )
                   }
                 >
@@ -317,12 +318,12 @@ const Inventory = props => {
                   className="tab-item active"
                   onMouseLeave={() =>
                     setInventoryExpired(
-              60//props.inventoriesCount.counts.vaccinesExpired.total,
+                      inventoryAnalytics.expiredThisYear
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryExpired(
-                     60// props.inventoriesCount.counts.vaccinesExpired.thisYear,
+                      inventoryAnalytics.expiredThisYear
                     )
                   }
                 >
@@ -332,12 +333,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoryExpired(
-                    50 // props.inventoriesCount.counts.vaccinesExpired.total,
+                      inventoryAnalytics.expiredThisYear
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryExpired(
-                     50// props.inventoriesCount.counts.vaccinesExpired.thisMonth,
+                      inventoryAnalytics.expiredThisMonth
                     )
                   }
                 >
@@ -347,12 +348,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoryExpired(
-                    40 // props.inventoriesCount.counts.vaccinesExpired.total,
+                      inventoryAnalytics.expiredThisYear
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryExpired(
-                    40 // props.inventoriesCount.counts.vaccinesExpired.thisWeek,
+                      inventoryAnalytics.expiredThisWeek
                     )
                   }
                 >
@@ -362,12 +363,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoryExpired(
-                     40 //props.inventoriesCount.counts.vaccinesExpired.total,
+                      inventoryAnalytics.expiringThisYear
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryExpired(
-                   40 //  props.inventoriesCount.counts.vaccinesExpired.today,
+                "N/A"
                     )
                   }
                 >

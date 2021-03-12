@@ -8,6 +8,7 @@ export const LOCAL_SERVER_URL_INVENTORY = 'http://localhost:3007';
 export const LOCAL_SERVER_URL_PO = 'http://localhost:3012';
 export const LOCAL_SERVER_URL_TRACKANDTRACE = 'http://localhost:3005';
 export const LOCAL_SERVER_URL_NOTIFICATION = 'http://localhost:3006';
+export const LOCAL_SERVER_URL_ANALYTICS = 'http://localhost:3015';
 export const LOCAL_SERVER_URL_PRODUCTS = 'http://localhost:3010';
 export const STABLE_SERVER_URL_USER = 'http://54.164.66.73:3001';
 export const STABLE_SERVER_URL_SHIPMENT = 'http://54.164.66.73:3002';
@@ -32,6 +33,7 @@ export function config() {
       getAllUsersUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/updateProfile`,
       upload: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/upload`,
+      getAnalyticsUrl:`${LOCAL_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getAnalytics`,
       createShippingOrderUrl:`${LOCAL_SERVER_URL_SHIPPINGORDER}/shippingordermanagement/api/shipping/createShippingOrder`,
       getShippingOrdersUrl:`${LOCAL_SERVER_URL_SHIPPINGORDER}/shippingordermanagement/api/shipping/getShippingOrders`,
       getShippingOrderIdsUrl:`${LOCAL_SERVER_URL_SHIPPINGORDER}/shippingordermanagement/api/shipping/getShippingOrderIds`,
@@ -81,6 +83,7 @@ export function config() {
       getAllUsersUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${DEV_SERVER_URL}/usermanagement/api/auth/upload`,
+      getAnalyticsUrl:`${DEV_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       createShippingOrderUrl:`${DEV_SERVER_URL}/shippingordermanagement/api/shipping/createShippingOrder`,
       getShippingOrdersUrl:`${DEV_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrders`,
       getShippingOrderIdsUrl:`${DEV_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrderIds`,
@@ -130,6 +133,7 @@ export function config() {
       getAllUsersUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/updateProfile`,
       upload: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/upload`,
+      getAnalyticsUrl:`${STABLE_SERVER_URL_USER}/analyticsmanagement/api/analytics/getAnalytics`,
       shipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchShipments`,
       getProducts: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/getProducts`,
       generateCodes: `${STABLE_SERVER_URL_SHIPMENT}/productmanagement/api/products/generateCodes`,
@@ -179,6 +183,7 @@ export function config() {
       getAllUsersUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${TEST_SERVER_URL}/usermanagement/api/auth/upload`,
+      getAnalyticsUrl:`${TEST_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       shipmentsUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchShipments`,
       getManufacturers: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/getManufacturers`,
       createShippingOrderUrl:`${TEST_SERVER_URL}/shippingordermanagement/api/shipping/createShippingOrder`,
@@ -229,6 +234,7 @@ export function config() {
       getAllUsersUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${DEMO_SERVER_URL}/usermanagement/api/auth/upload`,
+      getAnalyticsUrl:`${DEMO_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       createShippingOrderUrl:`${DEMO_SERVER_URL}/shippingordermanagement/api/shipping/createShippingOrder`,
       getShippingOrdersUrl:`${DEMO_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrders`,
       getShippingOrderIdsUrl:`${DEMO_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrderIds`,
@@ -278,6 +284,7 @@ export function config() {
       getAllUsersUrl: `${PROD_SERVER_URL}/api/auth/getAllUsers`,
       updateProfileUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${PROD_SERVER_URL}/usermanagement/api/auth/upload`,
+      getAnalyticsUrl:`${PROD_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       shipmentsUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/fetchShipments`,
       createShippingOrderUrl:`${PROD_SERVER_URL}/shippingordermanagement/api/shipping/createShippingOrder`,
       getShippingOrdersUrl:`${PROD_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrders`,

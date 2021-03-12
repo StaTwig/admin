@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import {
   Link
 } from "react-router-dom";
+import {
+  getAnalytics
+} from '../../actions/analyticsAction';
 import ChartsPage from '../doughnut'
 import SummaryTable from './summaryTable';
 import totalshipments from "../../assets/icons/TotalShipmentsCompleted.svg";
@@ -13,6 +16,15 @@ import shipmentsdelayed from "../../assets/icons/TotalShipmentsDelayed.svg";
 import './style.scss';
 
   const Overview = props => {
+    const [overviewAnalytics,setOverViewAnalytics]= useState({})
+    useEffect(() => {
+      async function fetchData() {
+        const result = await getAnalytics();
+        setOverViewAnalytics(result.data);
+      }
+      fetchData();
+    }, []);
+
  return (
     <div className="overview">
       <h1 className="breadcrumb">OVERVIEW</h1>
@@ -25,7 +37,7 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Shipments</div>
-                <div className="count1">24<small className="dayStatus ml-1">This Year</small></div>
+                <div className="count1">{overviewAnalytics.totalShipmentsSent}<small className="dayStatus ml-1">This Year</small></div>
               </div>
             </div>
           </div>
@@ -37,7 +49,7 @@ import './style.scss';
 
               <div className="d-flex flex-column">
                 <div className="title">Total Inventory Added</div>
-                <div className="count2" >42,000<small className="dayStatus ml-1">ThisYear</small></div>
+                <div className="count2" >{overviewAnalytics.totalProductsAddedToInventory}<small className="dayStatus ml-1">ThisYear</small></div>
               </div>
             </div>
 
@@ -49,7 +61,7 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Current Shipment in Transit</div>
-                <div className="count3">6<small className="dayStatus ml-1">Last 1 Month</small></div>
+                <div className="count3">{overviewAnalytics.totalShipmentsInTransit}<small className="dayStatus ml-1">Last 1 Month</small></div>
               </div>
             </div>
 
@@ -61,7 +73,7 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Shipments</div>
-                <div className="count4">50<small className="dayStatus ml-1">Last 1 Week</small></div>
+                <div className="count4">{overviewAnalytics.totalShipmentsSent}<small className="dayStatus ml-1">Last 1 Week</small></div>
               </div>
             </div>
 
@@ -73,7 +85,7 @@ import './style.scss';
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Shipments Delayed</div>
-                <div className="count5">10 <small className="dayStatus">Today</small></div>
+                <div className="count5">{overviewAnalytics.totalShipmentsWithDelayInTransit} <small className="dayStatus">Today</small></div>
               </div>
             </div>
           </div>
@@ -96,7 +108,7 @@ import './style.scss';
               <div id="chartjs-render-monitor" ><ChartsPage {...props}/></div>
               <div className="total">
                 Total Current Inventory
-              <div className="value">42,000</div>
+              <div className="value">{overviewAnalytics.totalProductsAddedToInventory}</div>
               </div>
 
             </div>
