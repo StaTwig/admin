@@ -33,6 +33,10 @@ elif [ "$1" == "PROD"];
    then
       ./pre-deploy-prod.sh
 
+elif [ "$1" == "ABINBEV"];
+   then
+      ./predeploy-abinbev.sh
+
 else
    ./pre-deploy.sh
 
@@ -53,7 +57,7 @@ elif [ "$1" == "PROD" ] && [ "$2" == "SERVICESII" ]
 
 fi
 
-if ([ "$1" == "PROD" ] || [ "$1" == "TEST" ] || [ "$1" == "DEMO" ]) && ([ "$2" == "SERVICESI" ] || [ "$2" == "SERVICESII" ] || [ "$2" == "ALL" ]);
+if ([ "$1" == "PROD" ] || [ "$1" == "TEST" ] || [ "$1" == "DEMO" ] || [ "$1" == "ABINBEV" ]) && ([ "$2" == "SERVICESI" ] || [ "$2" == "SERVICESII" ] || [ "$2" == "ALL" ]);
    then
       cd -P .
       for dir in ./*/
@@ -81,7 +85,7 @@ echo $(pwd)
 echo "Building frontend"
 cd frontend
 : <<'END'
-if ([ "$1" == "PROD" ] || [ "$1" == "TEST" ]) && ([ "$2" == "FRONTEND" ] || [ "$2" == "ALL" ]);
+if ([ "$1" == "PROD" ] || [ "$1" == "TEST" ] || [ "$1" == "ABINBEV" ]) && ([ "$2" == "FRONTEND" ] || [ "$2" == "ALL" ]);
    then
       echo "Building frontend in $1 mode....."
       sudo systemctl stop nginx
@@ -135,6 +139,10 @@ if ([ "$2" == "GATEWAY" ] || [ "$2" == "ALL" ]);
             echo "Starting traefik in DEMO mode ......"
             traefik --configFile=traefik-cloud-demo-api.yml &
             
+      elif [ "$1" == "ABINBEV" ]
+         then
+            echo "Starting traefik in DEMO mode ......"
+            traefik --configFile=traefik-abinbev-demo-api.yml &
       
       fi
 
