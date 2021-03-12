@@ -94,6 +94,23 @@ const NewShipment = props => {
   const onAssign = async () => {
     let error = false;
     // dates.forEach(date => { if(!error) dateValidation(date) }); TODO Add validations
+    setErrorMessage('');
+    if(shippingOrderId === "Select Shipping Order ID") {
+      setErrorMessage('Shipping Order Id cannot be empty');
+      return;
+    }
+    if(!airWayBillNo) {
+      setErrorMessage('Airway Bill No cannot be empty');
+      return;
+    }
+    if(!shipmentDate) {
+      setErrorMessage('Shipment date cannot be empty');
+      return;
+    }
+    if(!estimateDeliveryDate) {
+      setErrorMessage('Estimate date cannot be empty');
+      return;
+    }
     if (!error) {
       const data = {
         airWayBillNo,
@@ -297,6 +314,7 @@ const NewShipment = props => {
                   (e.keyCode != 8) &&
                    e.preventDefault()
                  }
+                minDate={new Date()}
                 placeholderText="Enter Shipment Date"
                 onChange={onChange}
                 showYearDropdown
@@ -319,6 +337,7 @@ const NewShipment = props => {
                     ? new Date(Date.parse(estimateDeliveryDate))
                     : estimateDeliveryDate
                 }
+                minDate={new Date()}
                 onKeyDown={e =>
                  (e.keyCode != 8) &&
                   e.preventDefault()
