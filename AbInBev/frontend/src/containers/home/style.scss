@@ -1,0 +1,16 @@
+@import "../../assets/styles/global.scss";
+
+.Homecontainer {
+  width: auto;
+  color: $white;
+  .bg-image {
+    background-image: url(../../assets/bg.jpg);
+    height: 100vh;
+  }
+  .centered {
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

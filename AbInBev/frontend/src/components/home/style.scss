@@ -1,0 +1,34 @@
+@import "../../assets/styles/global.scss";
+
+.home {
+  .blockC {
+    padding: 1rem 0rem 0rem 1rem;
+    background: rgba(0, 0, 0, 0.6);
+    border-radius: 1rem;
+    .btn-active {
+      background-color: #fdbd0f;
+    }
+    .btn {
+      background: #9d526a 0% 0% no-repeat padding-box;
+      border-radius: 27px;
+      color: $white;
+      padding: 0 3rem;
+    }
+    .btn-red {
+      background: #a20134 0% 0% no-repeat padding-box;
+    }
+    .footer-logo {
+      margin-top: 8rem;
+      margin-bottom: 1rem;
+    }
+  }
+  .containerC {
+    background-color: $white;
+    text-align: center;
+    border: 0;
+  }
+}
+
+.alignCenter {
+  padding: 9rem 20rem 0rem 19rem;
+}
