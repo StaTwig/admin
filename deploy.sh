@@ -3,7 +3,7 @@
 #Chekcing arguments
 if [ $# -eq 0 ];
   then
-    echo "Please choose the mode: PROD TEST LOCAL"
+    echo "Please choose the mode: PROD TEST LOCAL ABINBEV"
     echo "Followed by the sercices: FRONTEND GATEWAY SERVICESI SERVICESII ALL"
     echo "SERVICESI - shipping_service	 inventory_service	track_trace		user_service products_service"
     echo "SERVICESII - blockchain_service	log_service alert_service notification_service rbac_service"
@@ -35,7 +35,7 @@ elif [ "$1" == "PROD"];
 
 elif [ "$1" == "ABINBEV"];
    then
-      ./predeploy-abinbev.sh
+      ./pre-deploy-abinbev.sh
 
 else
    ./pre-deploy.sh
@@ -141,8 +141,8 @@ if ([ "$2" == "GATEWAY" ] || [ "$2" == "ALL" ]);
             
       elif [ "$1" == "ABINBEV" ]
          then
-            echo "Starting traefik in DEMO mode ......"
-            traefik --configFile=traefik-abinbev-demo-api.yml &
+            echo "Starting traefik in ABINBEV mode ......"
+            traefik --configFile=traefik-cloud-abinbev-api.yml &
       
       fi
 

@@ -18,4 +18,4 @@ log:
 providers:
     # Enable the file provider to define routers / middlewares / services in file
     file:
-        filename: ./config-demo-abinbev-api.toml
+        filename: ./config-abinbev-cloud-api.toml
