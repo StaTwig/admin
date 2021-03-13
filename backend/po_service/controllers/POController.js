@@ -431,27 +431,27 @@ exports.addPOsFromExcel = [
             let poDataArray = [];
             poDataArray = data.map(po => {
               return {
-                id: uniqid('po-'),
-                externalId: po['External Id'],
-                "creationDate": new Date().toISOString(),
+                id: po['PO Item#'],
+                externalId: po['UNICEf PO Number'],
+                "creationDate": po['Document Date'],
                 "lastUpdatedOn": new Date().toISOString(),
                 "supplier": {
-                  "supplierOrganisation": po['Supplier Organisation'],
-                  "supplierIncharge": po['Supplier Incharge']
+                  "supplierOrganisation": po['Vendor'],
+                  // "supplierIncharge": po['Supplier Incharge']
                 },
                 "customer": {
-                  "customerOrganisation": po['Customer Organisation'],
-                  "customerIncharge": po['Customer Incharge'],
-                  "shippingAddress": {
-                    "shippingAddressId": po['Shipping Address Id'],
-                    "shipmentReceiverId": po['Shipment Receiver Id']
+                  "customerOrganisation": po['IP Code'],
+                  // "customerIncharge": po['Customer Incharge'],
+                  // "shippingAddress": {
+                  //   "shippingAddressId": po['Shipping Address Id'],
+                  //   "shipmentReceiverId": po['Shipment Receiver Id']
 
-                  }
+                  // }
                 },
                 "products": [
                   {
-                    "productId": po['Product'],
-                    "productQuantity": po['Quantity']
+                    "productId": po['Material'],
+                    "productQuantity": po['Order Quantity']
                   }
                 ],
                 createdBy,
