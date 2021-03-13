@@ -18,8 +18,8 @@ const ShipmentSummary = (props) => {
             <ul className="elemens">
            <li className="mb-1">{props.shipments.shipmentDetails[0].id}</li>
             <li className="mb-1">{props.shipments.shipmentDetails[0].poId}</li>
-            <li className="mb-1">{props.shipments.shipmentDetails[0].supplier.locationId}</li>
-            <li className="mb-1">BR-101</li>
+            <li className="mb-1">{props.shipments.fromLocation}</li>
+            <li className="mb-1">{props.shipments.toLocation}</li>
             <li className="mb-1">  {props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[2]+"/"+props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[1]+"/"+props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[0]} </li>
         <a className="d-flex flex-row"><li className="txn">
           {props.shipments.shipmentDetails[0].transactionIds[0]?props.shipments.shipmentDetails[0].transactionIds[0]:"16tu9866srfe33553..."}

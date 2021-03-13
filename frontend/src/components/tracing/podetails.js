@@ -21,8 +21,8 @@ const PoDetails = (props) => {
       </div>
       <div className="d-flex flex-column">
             <div className="mb-3">{props.shipments.poDetails[0].supplier.supplierOrganisation}</div>
-            <div className="mb-3  mt-1">Bharat-Bio</div>  
-            <div className="mt-1">Mumbai</div>   
+            <div className="mb-3  mt-1">{props.shipments.supplierOrgName}</div>  
+            <div className="mt-1">{props.shipments.fromLocation}</div>   
       </div>
      
       </div>
@@ -36,8 +36,8 @@ const PoDetails = (props) => {
       </div>
       <div className="d-flex flex-column">
             <div className="mb-3">{props.shipments.poDetails[0].customer.customerOrganisation}</div>
-            <div className="mb-3 mt-1">LO-847</div>  
-            <div className="mt-1">Delhi</div>   
+            <div className="mb-3 mt-1">{props.shipments.customerOrgName}</div>  
+            <div className="mt-1">{props.shipments.toLocation}</div>   
       </div>
      
       </div>
@@ -54,8 +54,8 @@ const PoDetails = (props) => {
         <tbody>
         {props.shipments.poDetails[0].products.map(product => <tr>
           <td className=" potexttable">{product.productId}</td>
-          <td className=" potexttable">OPV</td>
-          <td className=" potexttable">Bharat</td>
+          <td className=" potexttable">N/A</td>
+          <td className=" potexttable">N/A</td>
           <td className=" potexttable">{product.productQuantity}</td>
         </tr>)}
          

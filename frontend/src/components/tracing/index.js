@@ -15,18 +15,20 @@ import Serial from './serial';
 import './style.scss';
 import ChainOfCustody from './chainofcustody';
 import PoChainOfCustody from './pochainofcustody';
+import SoChainOfCustody from './sochainofcustody';
 import Modal from '../../shared/modal';
 import PurchasePopUp from './purchaseform/purchasepopup'
+import ViewShippingModal from './shippingorder/shippingpopup'
 
 const Tracing = props => {
   const [menu, setMenu] = useState(false);
   const [menuShip, setMenuShip] = useState(false);
   const [menuProduct, setMenuProduct] = useState(false);
   const [chain, setChain] = useState(false);
-  const [poChain, setPoChain] = useState(false);
   const [highLight, setHighLight] = useState(false);
   const [productHighLight, setProductHighLight] = useState(false);
   const [openPurchase, setOpenPurchase] = useState(false);
+  const [openShipping, setOpenShipping] = useState(false);
   const tracking = props.trackData;
   //const productCard = props.productDetails;
   //const poCard = props.poDetails;
@@ -35,6 +37,9 @@ const Tracing = props => {
     setOpenPurchase(false);
   }
 
+  const closeModalShipping = () => {
+    setOpenShipping(false);
+  }
   return (
     <div className="tracing">
       <div className="row justify-content-between">
@@ -108,6 +113,17 @@ const Tracing = props => {
               />
             </Modal>
           )}
+           {openShipping && (
+            <Modal
+              title="Shipping Order Details"
+              close={() => closeModalShipping()}
+              size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
+            >
+              <ViewShippingModal
+                shipments={tracking}
+/>
+            </Modal>
+          )}
           <h6 className="heading mb-5">CHAIN OF CUSTODY</h6>
           {Object.keys(tracking).length === 0 ? <div>N/A</div> :
             <div className="row mb-3 mt-2">
@@ -128,8 +144,10 @@ const Tracing = props => {
               </div>
             </div>
           }
-          <PoChainOfCustody poChain={poChain} setPoChain={setPoChain} shipments={tracking}
+          <PoChainOfCustody shipments={tracking}
             setOpenPurchase={setOpenPurchase} />
+               <SoChainOfCustody  shipments={tracking}
+            setOpenShipping={setOpenShipping} />
           <ChainOfCustody chain={chain} setChain={setChain} shipments={tracking}
             setHighLight={setHighLight} setMenuShip={setMenuShip} setMenuProduct={setMenuProduct}
             setProductHighLight={setProductHighLight}/>
