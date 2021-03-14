@@ -14,6 +14,9 @@ const RecordModel = require('../models/RecordModel');
 const ShippingOrderModel = require('../models/ShippingOrderModel');
 const WarehouseModel = require('../models/WarehouseModel')
 const InventoryModel = require('../models/InventoryModel')
+const EmployeeModel = require('../models/EmployeeModel')
+const ConfigurationModel = require('../models/ConfigurationModel')
+const OrganisationModel = require('../models/OrganisationModel')
 
 const init = require('../logging/init');
 const logger = init.getLog();
@@ -96,60 +99,90 @@ exports.createShipment = [
         try {
             const data = req.body;
             data.id = 'SH' + nanoid(10);
-            const po = await RecordModel.findOne({
-                id: data.poId
-            });
-            let quantityMismatch = false;
-            po.products.every(product => {
-                data.products.every(p => {
-                    if (parseInt(p.productQuantity) < parseInt(product.productQuantity)) {
-                        quantityMismatch = true;
-                        return false;
-                    }
-                })
-            })
-            if (quantityMismatch) {
-                po.poStatus = 'TRANSIT&PARTIALLYFULFILLED';
-            } else {
-                po.poStatus = 'TRANSIT&FULLYFULFILLED';
-            }
-            await po.save();
+	    const empData = await EmployeeModel.findOne({emailId: req.user.emailId});
+	    const orgId = empData.organisationId;
+	    const orgData = await OrganisationModel.findOne({id: orgId});
+	    const confId = orgData.configuration_id;
+	    const confData = await ConfigurationModel.findOne({id: confId});
+            const process = confData.process;
 
-            const suppWarehouseDetails = await WarehouseModel.findOne({
-                id: data.supplier.locationId
-            })
-            var suppInventoryId = suppWarehouseDetails.warehouseInventory;
-            const suppInventoryDetails = await InventoryModel.findOne({
-                id: suppInventoryId
-            })
+	    const soID = data.shippingOrderId;
+            const poID = data.poId;
 
-            const recvWarehouseDetails = await WarehouseModel.findOne({
-                id: data.receiver.locationId
-            })
-            var recvInventoryId = recvWarehouseDetails.warehouseInventory;
-            const recvInventoryDetails = await InventoryModel.findOne({
-                id: recvInventoryId
-            })
+            var flag = "Y";
 
-            data.products.every(p => {
-                inventoryUpdate(p.productId, p.productQuantity, suppInventoryId, recvInventoryId, data.poId, "CREATED")
-                poUpdate(p.productId, p.productQuantity, data.poId, "CREATED")
-            })
-
-            const shipment = new ShipmentModel(data);
-            const result = await shipment.save();
-            await ShippingOrderModel.findOneAndUpdate({
-                id: data.shippingOrderId
-            }, {
-                $push: {
-                    shipmentIds: result.id
+            if (data.shippingOrderId === null || data.poId === null) {
+                if (process == true) {
+                    flag = "YS"
+                } else {
+                    flag = "N"
                 }
-            }, );
-            return apiResponse.successResponseWithData(
-                res,
-                'Shipment Created',
-                result,
-            );
+            }
+            if (flag == "Y") {
+                const po = await RecordModel.findOne({
+                    id: data.poId
+                });
+                let quantityMismatch = false;
+                po.products.every(product => {
+                    data.products.every(p => {
+                        if (parseInt(p.productQuantity) < parseInt(product.productQuantity)) {
+                            quantityMismatch = true;
+                            return false;
+                        }
+                    })
+                })
+                if (quantityMismatch) {
+                    po.poStatus = 'TRANSIT&PARTIALLYFULFILLED';
+                } else {
+                    po.poStatus = 'TRANSIT&FULLYFULFILLED';
+                }
+                await po.save();
+                await ShippingOrderModel.findOneAndUpdate({
+                    id: data.shippingOrderId
+                }, {
+                    $push: {
+                        shipmentIds: data.id
+                    }
+                }, );
+            }
+
+            if (flag != "N") {
+
+                const suppWarehouseDetails = await WarehouseModel.findOne({
+                    id: data.supplier.locationId
+                })
+                var suppInventoryId = suppWarehouseDetails.warehouseInventory;
+                const suppInventoryDetails = await InventoryModel.findOne({
+                    id: suppInventoryId
+                })
+
+                const recvWarehouseDetails = await WarehouseModel.findOne({
+                    id: data.receiver.locationId
+                })
+                var recvInventoryId = recvWarehouseDetails.warehouseInventory;
+                const recvInventoryDetails = await InventoryModel.findOne({
+                    id: recvInventoryId
+                })
+
+                data.products.every(p => {
+                    inventoryUpdate(p.productId, p.productQuantity, suppInventoryId, recvInventoryId, data.poId, "CREATED")
+                    if (flag == "Y")
+                        poUpdate(p.productId, p.productQuantity, data.poId, "CREATED")
+                })
+
+                const shipment = new ShipmentModel(data);
+                const result = await shipment.save();
+                return apiResponse.successResponseWithData(
+                    res,
+                    'Shipment Created',
+                    result,
+                );
+            } else {
+                return apiResponse.successResponse(
+                    res,
+                    'Cannot create a Shipment without SO and PO',
+                );
+            }
         } catch (err) {
             logger.log(
                 'error',
@@ -165,14 +198,16 @@ exports.receiveShipment = [
     async (req, res) => {
         try {
             const shipmentId = req.query.shipmentId;
-            const data = await ShipmentModel.findOne({id: shipmentId})
+            const data = await ShipmentModel.findOne({
+                id: shipmentId
+            })
 
             const po = await RecordModel.findOne({
                 id: data.poId
             });
             let quantityMismatch = false;
             po.products.every(product => {
-            	data.products.every(p => {
+                data.products.every(p => {
                     if (parseInt(p.productQuantity) < parseInt(product.productQuantity)) {
                         quantityMismatch = true;
                         return false;
