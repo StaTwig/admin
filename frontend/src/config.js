@@ -28,6 +28,7 @@ export function config() {
       loginUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/login`,
       sendOtpUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/register`,
+      checkUserUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/check`,
       verifyOtpUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getAllUsers`,
@@ -78,6 +79,7 @@ export function config() {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/register`,
+      checkUserUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/check`,
       verifyOtpUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
@@ -128,6 +130,7 @@ export function config() {
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
       sendOtpUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/register`,
+      checkUserUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/check`,
       verifyOtpUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getAllUsers`,
@@ -178,6 +181,7 @@ export function config() {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/register`,
+      checkUserUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/check`,
       verifyOtpUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
@@ -229,6 +233,7 @@ export function config() {
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/register`,
+      checkUserUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/check`,
       verifyOtpUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
@@ -279,6 +284,7 @@ export function config() {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/register`,
+      checkUserUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/check`,
       verifyOtpUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${PROD_SERVER_URL}/api/auth/getAllUsers`,
@@ -327,7 +333,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || 'local'; // change prod to test, local,stable, dev for respective environments
+  const environment = process.env.ENVIRONMENT || 'test'; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
   return conf;
 }

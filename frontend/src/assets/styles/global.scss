@@ -107,3 +107,7 @@ table.table td {
   padding-top: 1.1rem;
   padding-bottom: 0.5rem;
 }
+
+.form-control:focus {
+  box-shadow: none;
+}

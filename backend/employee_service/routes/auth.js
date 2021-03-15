@@ -5,6 +5,7 @@ var upload = multer({ dest: "uploads/" });
 
 var router = express.Router();
 
+router.post("/check", AuthController.checkEmail);
 router.post("/register", AuthController.register);
 router.post("/sendOtp", AuthController.sendOtp);
 router.post("/verifyOtp", AuthController.verifyOtp);

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import parse from 'html-react-parser';
 import useOnclickOutside from 'react-cool-onclickoutside';
 
@@ -7,38 +7,42 @@ import './style.scss';
 
 const dropdownButtonGroup = props => {
   const [menu, setMenu] = useState(false);
-  const { groups, name, onSelect } = props;
+  const { groups, name, onSelect, isText, value, changeFn, placeholder, dClass } = props;
 
   const ref = useRef();
   useOnclickOutside(ref, () => {
     setMenu(false);
   });
+
   const useParse = name && name.includes('<');
   return (
     <div className="custom-dropdown">
-      <button
-        className={`btn-custom-dropdown ${menu && 'active'}`}
-        role="button"
-        onClick={() => setMenu(!menu)}
-      >
-        {!useParse && <span>{name}</span>}
-        {useParse && <span>{parse(name)}</span>}
-        <img src={upDownArrow} alt="downarrow" width="9" height="9" />
-      </button>
-      {menu && (
-        <div ref={ref} className="dropdown-menu show transform-group">
+      {isText ? <input className="btn-custom-dropdown form-control" onBlur={() => setTimeout(() => { setMenu(false) }, 500)} onKeyDown={(e) => (e.keyCode == 27 || e.keyCode == 13) && setMenu(false)} onChange={(e) => changeFn(e.target.value)} value={value} type="text" onFocus={() => groups.length && setMenu(true)} placeholder={placeholder} onClick={() => groups.length && setMenu(true)} /> :
+        <button
+          className={`btn-custom-dropdown ${menu && 'active'}`}
+          role="button"
+          type="button"
+          onClick={() => setMenu(!menu)}
+        >
+          {!useParse && <span>{name}</span>}
+          {useParse && <span>{parse(name)}</span>}
+          <img src={upDownArrow} alt="downarrow" width="9" height="9" />
+        </button>
+      }
+      {menu && groups.length > 0 && (
+        <div ref={ref} className={`dropdown-menu show transform-group ${dClass}`}>
           {groups &&
             groups.map((item, index) => {
               return (
                 <React.Fragment key={index}>
                   <span
-                    className="dropdown-item"
+                    className="dropdown-item p-1"
                     onClick={() => {
-                      setMenu(false);
                       onSelect(item);
+                      setMenu(false);
                     }}
                   >
-                    {parse(item)}
+                    {item?.name ? item?.name : parse(item)}
                   </span>
                   {index + 1 < groups.length && <hr />}
                 </React.Fragment>

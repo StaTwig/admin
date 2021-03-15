@@ -25,7 +25,7 @@ const FormVerifyPage = (props) => {
               <div className="card-body">
                 <div className="login-form">
                   <div className="card-title mb-5">Enter OTP</div>
-                  <div className="form-groupverify mb-5">
+                  <div className="form-groupverify pl-5 pr-5 mb-5">
                     <input 
                       id="1"
                       type='text'
@@ -69,7 +69,7 @@ const FormVerifyPage = (props) => {
 
                   </div>
                   <div className="font-weight-bold text-center mb-2">Didn't receive the OTP?</div>
-                  <div className="text-center mb-5 resend" onClick={onResendOtp}>RESEND CODE</div>
+                  <div className="cursorP text-center mb-5 resend" onClick={onResendOtp}>RESEND CODE</div>
                   <div></div>
 
                   {
