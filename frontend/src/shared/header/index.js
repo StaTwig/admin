@@ -78,7 +78,7 @@ const Header = props => {
           <img src={searchingIcon} onClick={onSeach} alt="searching" />
         </div>
         <div className="user-info">
-          <div className="notifications">
+          {/* <div className="notifications">
             <div className="bellicon-wrap" onClick={() => setShowNotifications(!showNotifications)}>
               <img src={bellIcon} alt="notification" />
               {notifications.length > 0 && <span className="badge badge-light">{notifications.length }</span> }
@@ -105,7 +105,7 @@ const Header = props => {
                 </React.Fragment>
               </div>
             )}
-          </div>
+          </div> */}
           <div className="divider" />
           <div className="userName">
             <p className="cname">{profile.organisation}</p>
