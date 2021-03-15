@@ -72,7 +72,10 @@ const ChartsPage = (props) => {
 
   return (
     <MDBContainer>
-      <Doughnut data={doughnut}/>
+      <Doughnut 
+      id="doughnut-chart" height="200px"
+      data={doughnut}
+      />
     </MDBContainer>
   );
 };
