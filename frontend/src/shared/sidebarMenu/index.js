@@ -48,7 +48,7 @@ const SideBar = ({
         <li className={(url === '/dashboard')  ? 'active' : ''}>
           <Link to="/dashboard">
             <img src={(url === '/dashboard')  ? NetworkSelectedIcon : NetworkIcon} alt="Shippment" />
-            <span>Dashboard</span>
+            <span>Network</span>
           </Link>
         </li>
          <li className={(url === '/trackAndTrace') ? 'active' : ''}>
