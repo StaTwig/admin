@@ -4,8 +4,15 @@
 
 body {
   background-color: $softGrey;
-  font-family: $roboto;
+  font-family: $opensans;
   font-size: 0.9rem;
+}
+.font-openSans {
+  font-family: $opensans;
+}
+
+.font-HelveticaNeue {
+  font-family: $opensans;
 }
 
 .breadcrumb {

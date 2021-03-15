@@ -1,15 +1,14 @@
 import React from "react";
 
 import { Link } from "react-router-dom";
-import Footer from "../footer";
-import HomeIcon from "../../assets/aicons/home.png";
-import HomeSelectedIcon from "../../assets/aicons/home-selected.png";
-import UserIcon from "../../assets/aicons/ManageUsers.png";
-import UserSelectedIcon from "../../assets/aicons/ManageUsers-selected.png";
-import AddressIcon from "../../assets/aicons/ManageAddress.png";
-import AddressSelectedIcon from "../../assets/aicons/ManageAddress-selected.png";
-import AffiliatedOrganisationIcon from "../../assets/aicons/AffiliatedOrganisation.png";
-import AffiliatedOrganisationSelectedIcon from "../../assets/aicons/AffiliatedOrganisation-selected.png";
+import HomeIcon from "../../assets/home.png";
+import HomeSelectedIcon from "../../assets/home-selected.png";
+import UserIcon from "../../assets/ManageUsers.png";
+import UserSelectedIcon from "../../assets/ManageUsers-selected.png";
+import AddressIcon from "../../assets/ManageAddress.png";
+import AddressSelectedIcon from "../../assets/ManageAddress-selected.png";
+import AffiliatedOrganisationIcon from "../../assets/AffiliatedOrganisation.png";
+import AffiliatedOrganisationSelectedIcon from "../../assets/AffiliatedOrganisation-selected.png";
 import "./style.scss";
 
 const SideBar = ({ match, location }) => {
@@ -82,7 +81,7 @@ const SideBar = ({ match, location }) => {
           </Link>
         </li>
       </ul>
-      <Footer />
+      {/* <Footer />*/}
     </div>
   );
 };
