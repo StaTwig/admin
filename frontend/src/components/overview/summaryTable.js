@@ -56,7 +56,7 @@ const SummaryTable = (props) => {
             )}
           </div>
           <div className="rowData">
-            <div className="headline">Supplier</div>
+            <div className="headline">From</div>
             {shipments.map((shipment, index) =>
               index < 5 ? (
                 <div className="combine-data" key={index}>
@@ -69,7 +69,7 @@ const SummaryTable = (props) => {
           </div>
 
           <div className="rowData mr-4">
-            <div className="headline ml-4">Customer</div>
+            <div className="headline ml-4">To</div>
             {shipments.map((shipment, index) =>
               index < 5 ? (
                 <div className="combine-data" key={index}>
@@ -115,7 +115,7 @@ const SummaryTable = (props) => {
                   </div>
                 </div>
                 <div className="d-flex">
-                  <div className="mr-3">Supplier</div>
+                  <div className="mr-3">From</div>
                   <div className="font-weight-bold">{shipment.supplier.id}</div>
                 </div>
                 <div className="d-flex">
