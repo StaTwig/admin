@@ -106,11 +106,7 @@ import './style.scss';
             <div className="card-body">
 
               <div id="chartjs-render-monitor" ><ChartsPage {...props}/></div>
-              <div className="total">
-                Total Current Inventory
-              <div className="value">{overviewAnalytics.totalProductsAddedToInventory}</div>
-              </div>
-
+              
             </div>
             <div className="card-footer">
               <div className="d-flex align-items-center justify-content-center">
