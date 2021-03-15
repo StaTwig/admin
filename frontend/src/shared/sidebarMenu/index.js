@@ -48,7 +48,7 @@ const SideBar = ({
         <li className={(url === '/dashboard')  ? 'active' : ''}>
           <Link to="/dashboard">
             <img src={(url === '/dashboard')  ? DashboardSelectedIcon : DashboardIcon} alt="Shippment" />
-            <span>Dashboard</span>
+            <span>Network</span>
           </Link>
         </li>
          <li className={(url === '/trackAndTrace') ? 'active' : ''}>
@@ -63,12 +63,12 @@ const SideBar = ({
             <span>Utilities</span>
           </Link>
         </li>
-        <li className={(url === '/network') ? 'active' : ''} >
+        {/* <li className={(url === '/network') ? 'active' : ''} >
           <Link to="/network">
             <img src={(url === '/network') ? NetworkSelectedIcon : NetworkIcon} alt="Network" />
             <span>Network</span>
           </Link>
-        </li>
+        </li> */}
       
       </ul>
       <Footer />
