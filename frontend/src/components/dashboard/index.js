@@ -13,7 +13,7 @@ const DashBoard = props => {
   return (
     <div>
       <div className="dashboard">
-        <h1 className="breadcrumb dash">YOUR NETWORK</h1>
+        <h1 className="breadcrumb dash">YOUR NETWORK </h1>
         <div>
           <Tabs
             {...props}

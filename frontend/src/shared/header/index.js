@@ -71,7 +71,7 @@ const Header = props => {
           <input
             type="text"
             // value={search}
-            placeholder="Search"
+            placeholder="Search by PO ID/Shipment ID/ Product ID"
             onChange={onSearchChange}
             className="form-control search-field"
           />
@@ -138,9 +138,7 @@ const Header = props => {
                 <Link className="slider-item border-top-0" to="/profile">
                   My profile
                 </Link>
-                {/* <div className="slider-item">Settings</div>
-                <div className="slider-item">Change Password</div> */}
-                <div
+               <div
                   className="slider-item"
                   onClick={() => dispatch(logoutUser())}
                 >

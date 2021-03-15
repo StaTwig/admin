@@ -47,7 +47,7 @@ const SideBar = ({
         </li>
         <li className={(url === '/dashboard')  ? 'active' : ''}>
           <Link to="/dashboard">
-            <img src={(url === '/dashboard')  ? DashboardSelectedIcon : DashboardIcon} alt="Shippment" />
+            <img src={(url === '/dashboard')  ? NetworkSelectedIcon : NetworkIcon} alt="Shippment" />
             <span>Network</span>
           </Link>
         </li>
@@ -63,13 +63,7 @@ const SideBar = ({
             <span>Utilities</span>
           </Link>
         </li>
-        {/* <li className={(url === '/network') ? 'active' : ''} >
-          <Link to="/network">
-            <img src={(url === '/network') ? NetworkSelectedIcon : NetworkIcon} alt="Network" />
-            <span>Network</span>
-          </Link>
-        </li> */}
-      
+        
       </ul>
       <Footer />
     </div>
