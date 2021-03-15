@@ -42,6 +42,10 @@ const VerifyContainer = props => {
 
   });
   const resendOtp = useCallback(async () => {
+    setOtp1('');
+    setOtp2('');
+    setOtp3('');
+    setOtp4('');
     dispatch(turnOn());
     const params = props.location.search.split('emailId=');
     if(params.length > 1) {
