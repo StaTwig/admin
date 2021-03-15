@@ -71,7 +71,7 @@ const Header = props => {
           <input
             type="text"
             // value={search}
-            placeholder="Search"
+            placeholder="Search by PO ID/Shipment ID/ Product ID"
             onChange={onSearchChange}
             className="form-control search-field"
           />
