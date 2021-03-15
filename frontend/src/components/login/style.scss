@@ -106,8 +106,12 @@ background-color: $white;
       font-weight: bold;
       text-align: center;
     }
+    
+    .cursorP{
+      color: '#0056b3';
+      cursor: pointer;
+    };
 
-   
     .form-groupverify {
       position: relative;
       margin-bottom: 2rem;

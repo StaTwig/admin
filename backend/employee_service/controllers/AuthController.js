@@ -25,6 +25,97 @@ const checkToken = require('../middlewares/middleware').checkToken;
 const init = require('../logging/init');
 const logger = init.getLog();
 const EmailContent = require('../components/EmailContent');
+
+/**
+ * Uniques email check
+ *
+ * @param {string}      email
+ *
+ * @returns {Object}
+ */
+exports.checkEmail = [
+  // Validate fields.
+  body('firstName')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('name must be specified.'),
+  body('lastName')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('name must be specified.'),
+  body('organisationId')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Organisation must be specified.'),
+  body('emailId')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Email must be specified.')
+    .isEmail()
+    .withMessage('Email must be a valid email address.')
+    .custom(value => {
+      return EmployeeModel.findOne({ emailId: value.toLowerCase() }).then(user => {
+        if (user) {
+          logger.log(
+            'info',
+            '<<<<< UserService < AuthController < register : Entered email is already present in EmployeeModel',
+          );
+          return Promise.reject('E-mail already in use');
+        }
+      });
+    }),
+  // Process request after validation and sanitization.
+  async (req, res) => {
+    try {
+      if (
+        !req.body.firstName.match('[A-Za-z]') ||
+        !req.body.lastName.match('[A-Za-z]')
+      ) {
+        logger.log(
+          'warn',
+          '<<<<< UserService < AuthController < register : Name should only consist of letters',
+        );
+        return apiResponse.ErrorResponse(
+          res,
+          'Name should only consists of letters',
+        );
+      }
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        // Display sanitized values/errors messages.
+        logger.log(
+          'error',
+          '<<<<< UserService < AuthController < register : Validation error',
+        );
+        return apiResponse.validationErrorWithData(
+          res,
+          'Validation Error.',
+          errors.array(),
+        );
+      }
+      if (!mailer.validateEmail(req.body.emailId)) {
+        return apiResponse.ErrorResponse(
+          res,
+          'Your email id is not eligible to register.',
+        );
+      } else {
+        return apiResponse.successResponseWithData(
+          res,
+          'Continue',
+          [],
+        );
+      }
+    } catch (err) {
+      //throw error in json response with status 500.
+      logger.log(
+        'error',
+        '<<<<< UserService < AuthController < register : Error in catch block 2',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
 /**
  * User registration.
  *
@@ -115,6 +206,7 @@ exports.register = [
           );
         
           var organisationId = req.body.organisationId;
+          var warehouseId = 'NA';
           var employeeId = uniqid('emp-');
           var employeeStatus = 'NOTAPPROVED';
             
@@ -126,14 +218,47 @@ exports.register = [
               organisationId = organisation.id;
             }
             else {
-              employeeStatus = 'ACTIVE';
+              // employeeStatus = 'ACTIVE';
+              // const centralOrg = await OrganisationModel.findOne({ type: 'CENTRAL_AUTHORITY' });
+              // if (centralOrg) {
+              //   if (centralOrg.configuration_id) {
+                  
+              //   }
+              // }
+              const address = req.body?.address ? req.body.address : 'JNIBF, Gachibowli, Hyderabad, Telanagana, India';
+              const country = req.body?.country ? req.body.country : 'India';
               organisationId = uniqid('org-');
               const org = new OrganisationModel({
                 primaryContactId: employeeId,
                 name: organisationName,
                 id: organisationId,
+                type: req.body?.type ? req.body.type : 'SUPPLIER',
+                status: 'NOTVERIFIED',
+                postalAddress: address,
+                country: {
+                  countryId: '001',
+                  countryName: country
+                }
               });
               await org.save();
+
+              const inventoryId = uniqid('inv-');
+              const inventoryResult = new InventoryModel({ id: inventoryId });
+              await inventoryResult.save();
+
+              warehouseId = uniqid('war-');
+              const warehouse = new WarehouseModel({
+                title: 'Office',
+                id: warehouseId,
+                warehouseInventory: inventoryId,
+                organisationId: organisationId,
+                postalAddress: address,
+                country: {
+                  countryId: '001',
+                  countryName: country
+                }
+              });
+              await warehouse.save();
             }
           }
 
@@ -144,7 +269,8 @@ exports.register = [
             emailId: req.body.emailId,
             organisationId: organisationId,
             id: employeeId,
-            accountStatus: employeeStatus
+            accountStatus: employeeStatus,
+            warehouseId: warehouseId
           });
           await user.save()
         return apiResponse.successResponse(res, 'User registered Success');

@@ -7,7 +7,7 @@ const apiResponse = require('../helpers/apiResponse');
 exports.getOrganisations = [
   async (req, res) => {
     try {
-      const organisations = await OrganisationModel.find({});
+      const organisations = await OrganisationModel.find({$or: [{status: 'ACTIVE'}, {status: {$exists: false}}]});
       return apiResponse.successResponseWithData(
         res,
         'Organisations',

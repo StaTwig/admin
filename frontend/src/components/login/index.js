@@ -36,7 +36,7 @@ const FormLoginPage = (props) => {
               <div className="card-body">
                 <div className="login-form mt-2">
                   <div className="card-title mb-4">Login</div>
-                  <div className="form-group mt-5 ">
+                  <div className="form-group mt-5 ml-5 mr-5">
                     <img alt="" src={User} className="icon imgs" />
                     <input type="email" className="form-control"
                       value={email}

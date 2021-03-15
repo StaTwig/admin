@@ -20,6 +20,15 @@ export const verifyOtp = async (data) => {
   }
 };
 
+export const checkUser = async data => {
+  try {
+    const result = await axios.post(config().checkUserUrl, data );
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
 export const registerUser = async data => {
   try {
     const result = await axios.post(config().registerUrl, data );
