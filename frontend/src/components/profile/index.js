@@ -6,8 +6,10 @@ import Pen from '../../assets/icons/pen.svg';
 import './style.scss';
 import { config } from '../../config';
 const axios = require('axios');
-import { getUserInfoUpdated, updateProfile, getUserInfo } from '../../actions/userActions';
+import { getUserInfoUpdated, updateProfile, getUserInfo, setCurrentUser } from '../../actions/userActions';
 import { getWarehouseByOrgId } from '../../actions/productActions';
+import setAuthToken from "../../utils/setAuthToken";
+import jwt_decode from 'jwt-decode';
 
 class Profile extends React.Component {
   constructor(props) {
@@ -144,6 +146,14 @@ class Profile extends React.Component {
     if (result.status === 200) {
       this.setState({ message: result.data.message, editMode: false });
       const dispatch = useDispatch();
+      if (result.data.data.isRefresh) {
+        localStorage.removeItem('theLedgerToken');
+        const token = result.data.data.token;
+        setAuthToken(token);
+        const decoded = jwt_decode(token);
+        localStorage.setItem('theLedgerToken', token);
+        dispatch(setCurrentUser(decoded));
+      }
       dispatch(getUserInfo());
       history.push('/profile');
     } else {
