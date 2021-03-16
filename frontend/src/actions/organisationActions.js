@@ -94,6 +94,15 @@ export const activateOrgUser = async (data) => {
   }
 };
 
+export const updateOrg = async (data) => {
+  try {
+    const result = await axios.post(config().updateOrgUrl, data);
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
 export const deactivateOrgUser = async (data) => {
   try {
     const result = await axios.get(
@@ -202,6 +211,23 @@ export const getOrgUsers = () => {
       const result = await axios.get(config().getOrgUsersUrl);
       dispatch({
         type: SET_ORGANISATION_USERS,
+        payload: result.data,
+      });
+      dispatch(turnOff());
+      return result.data.data.length;
+    };
+  } catch (e) {
+    throw Error(e.message);
+  }
+};
+
+export const getOrgs = () => {
+  try {
+    return async (dispatch) => {
+      dispatch(turnOn());
+      const result = await axios.get(config().getOrgUrl);
+      dispatch({
+        type: SET_ORGANISATIONS,
         payload: result.data,
       });
       dispatch(turnOff());

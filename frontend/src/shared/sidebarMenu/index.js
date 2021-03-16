@@ -12,7 +12,7 @@ import AffiliatedOrganisationIcon from "../../assets/aicons/AffiliatedOrganisati
 import AffiliatedOrganisationSelectedIcon from "../../assets/aicons/AffiliatedOrganisation-selected.png";
 import "./style.scss";
 
-const SideBar = ({ match, location }) => {
+const SideBar = ({ match, location, user }) => {
   const { url } = match;
   return (
     <div className="sidebar">
@@ -81,6 +81,25 @@ const SideBar = ({ match, location }) => {
             </span>
           </Link>
         </li>
+        {user.type == "CENTRAL_AUTHORITY" && (
+          <li className={url === "/organisation" ? "active" : ""}>
+            <Link to="/organisation">
+              <img
+                src={
+                  url === "/organisation"
+                    ? AffiliatedOrganisationSelectedIcon
+                    : AffiliatedOrganisationIcon
+                }
+                alt="Organisation"
+              />
+              <span className="pt-2 text-center">
+                Manage
+                <br />
+                Organisation
+              </span>
+            </Link>
+          </li>
+        )}
       </ul>
       <Footer />
     </div>

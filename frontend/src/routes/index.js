@@ -7,6 +7,7 @@ import Profile from "../containers/profile";
 import DashBoard from "../containers/overview";
 import Address from "../containers/addresses";
 import Users from "../containers/users";
+import Organisations from "../containers/organisation";
 import Affiliate from "../containers/affiliate";
 import NewAddress from "../containers/newaddress";
 import requireAuth from "../components/hocs/requireAuth";
@@ -27,6 +28,7 @@ const routes = (
     <Route path="/newaddress" component={requireAuth(NewAddress)} />
     <Route path="/editaddress/:address" component={requireAuth(NewAddress)} />
     <Route path="/users" component={requireAuth(Users)} />
+    <Route path="/organisation" component={requireAuth(Organisations)} />
     <Route path="/affiliate" component={requireAuth(Affiliate)} />
     <Route path="/login" component={Login} />
     <Route path="/verify" component={Verify} />
