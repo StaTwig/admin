@@ -22,6 +22,7 @@ router.get("/viewShipment", ShipmentController.Shipment); // /viewShipment?Shipm
 
 router.get("/viewPoShipments", ShipmentController.fetch_po_Shipments); // /viewPoShipments?poId=po1234565
 router.get("/fetchAllShipments", ShipmentController.fetchAllShipments); // /fetchAllShipments ==> Gives all shipments in the ledger
+router.get("/fetchShipmentsByQRCode", ShipmentController.fetchShipmentsByQRCode); //Give all shipment details mapped to the QR label code
 router.post("/updateShipmentStatus", ShipmentController.updateStatus); // /updateShipmentStatus?id=123
 
 module.exports = router;

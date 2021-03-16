@@ -304,27 +304,18 @@ exports.fetchShipmentsByQRCode = [
                 if (result.success) {
                     const {
                         QRcode
-                    } = req.params;
-                        console.log("QR",QRcode)
-                    //const s = await ShipmentModel.find({id:"SH4QW0NxP2oe" })
-                        const s = await ShipmentModel.find({"label.labelId":878});
-                        console.log("s",s)
-                        /*.then(shipments => {
+                    } = req.body;
+                        const s = await ShipmentModel.find({"label.labelId": QRcode})
+                        .then(shipments => {
                             return apiResponse.successResponseWithData(
                                 res,
-                                'Shipments Table',
+                                'Shipment Details',
                                 shipments,
                             );
-                        })*/
-                        //.catch(err => {
-                         //   return apiResponse.ErrorResponse(res, err);
-                        //});
-
-                  return apiResponse.successResponseWithData(
-                                res,
-                                'Shipments Table',
-                                s,
-                            );
+                        })
+                        .catch(err => {
+                            return apiResponse.ErrorResponse(res, err);
+                        });
                     } else {
                     logger.log(
                         'warn',
