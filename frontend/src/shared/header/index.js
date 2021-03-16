@@ -72,6 +72,8 @@ const Header = props => {
             type="text"
             // value={search}
             placeholder="Search by PO ID/Shipment ID/ Product ID"
+            onFocus={(e) => e.target.placeholder = ''}
+            onBlur={(e) => e.target.placeholder = 'Search by PO ID/Shipment ID/ Product ID'}
             onChange={onSearchChange}
             className="form-control search-field"
           />
