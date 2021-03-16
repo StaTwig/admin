@@ -304,7 +304,7 @@ exports.fetchShipmentsByQRCode = [
                 if (result.success) {
                     const {
                         QRcode
-                    } = req.body;
+                    } = req.query;
                         const s = await ShipmentModel.find({"label.labelId": QRcode})
                         .then(shipments => {
                             return apiResponse.successResponseWithData(
