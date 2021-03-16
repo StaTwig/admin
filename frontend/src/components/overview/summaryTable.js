@@ -40,7 +40,7 @@ const SummaryTable = (props) => {
             {shipments.map((shipment, index) =>
               index < 5 ? (
                 <div className="combine-data" key={index}>
-                  <div>Inbound</div>
+                   <div>{profile.warehouseId==shipment.supplier.locationId?"Outbound":"Inbound"}</div>
                 </div>
               ) : null
             )}
@@ -84,8 +84,8 @@ const SummaryTable = (props) => {
               index < 5 ? (
                 <div className="combine-data" key={index}>
                   <div className="status" target={shipment.status}>
-                    {shipment.status}
-                  </div>
+                     {shipment.status=="CREATED"?"SHIPPED ":"DELIVERED"}
+                </div>
                 </div>
               ) : null
             )}
