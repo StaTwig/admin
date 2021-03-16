@@ -28,16 +28,9 @@ var ProductSchema = new mongoose.Schema(
       required: false,
       default: "organization_id 1",
     },
-    characteristicSet: [
-      {
-        "temperature_max": 97.8,
-        "temperature_min": -4.5,
-        "humidity_max": 56.3,
-        "humidity_min": 23.1,
-        "pressure_max": 2,
-        "pressure_min": 1
-      }
-    ],
+    characteristicSet: {
+      type: Object
+    }
   },
   { timestamps: true },
 );
