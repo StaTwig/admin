@@ -9,6 +9,7 @@ import logo from '../../assets/brands/VACCINELEDGER.png';
 import searchingIcon from '../../assets/icons/searching@2x.png';
 import bellIcon from '../../assets/icons/bellwhite.png';
 import dropdownIcon from '../../assets/icons/drop-down.png';
+import user from '../../assets/icons/user.svg';
 import { getNotifications, deleteNotification } from '../../actions/notificationActions';
 import { turnOff, turnOn } from "../../actions/spinnerActions";
 
@@ -110,15 +111,15 @@ const Header = props => {
           </div> */}
           <div className="divider" />
           <div className="userName">
-            <p className="cname">{profile.organisation}</p>
+            <p className="cname">{profile?.organisation?.split('/')[0]}</p>
             <p className="uname">{profile.firstName}</p>
           </div>
 
           <div className="userPic">
             <img
-              src={profile.profile_picture}
+              src={profile.profile_picture ? profile.profile_picture : user}
               alt=""
-              className="rounded rounded-circle"
+              className={`rounded rounded-circle ${profile.profile_picture ? `` :`img-thumbnail bg-transparent border-0`}`}
             />
           </div>
           <div className="userActions">
@@ -135,7 +136,7 @@ const Header = props => {
               <React.Fragment>
                 <div className="slider-item-text">
                   <p>{profile.name}</p>
-                  <p>{profile.organisation}</p>
+                  <p>{profile?.organisation?.split('/')[0]}</p>
                 </div>
                 <Link className="slider-item border-top-0" to="/profile">
                   My profile

@@ -607,7 +607,27 @@ exports.updateProfile = [
       employee.organisationId = organisationId;
       employee.warehouseId = warehouseId;
       await employee.save();
-      return apiResponse.successResponseWithData(res, 'Employee Profile update Success');
+
+      const returnData = {isRefresh: false};
+      if (warehouseId !== req.user.warehouseId) {
+        let userData = {
+          id: employee.id,
+          firstName: firstName,
+          emailId: employee.emailId,
+          role: employee.role,
+          warehouseId: warehouseId,
+        };
+        //Prepare JWT token for authentication
+        const jwtPayload = userData;
+        const jwtData = {
+          expiresIn: process.env.JWT_TIMEOUT_DURATION,
+        };
+        const secret = process.env.JWT_SECRET;
+        //Generated JWT token with Payload and secret.
+        returnData.isRefresh = true;
+        returnData.token = jwt.sign(jwtPayload, secret, jwtData);
+      }
+      return apiResponse.successResponseWithData(res, 'Employee Profile update Success', returnData);
     } catch (err) {
       logger.log(
         'error',

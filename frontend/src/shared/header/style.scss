@@ -75,7 +75,8 @@
     .search-form {
       width: 350px;
       position: absolute;
-      right: 23rem;
+      // right: 23rem;
+      right: 18rem;
       left: unset;
       display: block;
 
@@ -94,7 +95,7 @@
         background: #ffffff 0% 0% no-repeat padding-box;
         box-shadow: 0px 1px 3px #00000065;
         border-radius: 8px;
-        opacity: 0.75;
+        // opacity: 0.75;
       }
     }
 
@@ -141,9 +142,12 @@
         }
       }
       .divider {
-        margin-right: 1rem;
-        border: 1px solid #fff;
-        height: 35px;
+        // margin-right: 1rem;
+        margin-right: 2rem;
+        // border: 1px solid #fff;
+        border: 0.5px solid #fff;
+        // height: 35px;
+        height: 45px;
         @media screen and (max-width: 768px){
           display: none;
         }
