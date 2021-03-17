@@ -129,8 +129,8 @@ const NewInventory = props => {
       for (let i = 0; i < validations.length; i++) {
         let validationVariable = inventory[validations[i]];
         if (
-          validationVariable.length < 1 ||
-          validationVariable == 'Select Product'
+          (validationVariable.length < 1 ||
+          validationVariable == 'Select Product') && (validations[i] != 'manufacturingDate' && validations[i] != 'expiryDate' && validations[i] != 'batchNumber')
         ) {
           setInventoryError(validations[i]);
           setOpenFailInventory(true);
@@ -224,14 +224,17 @@ const NewInventory = props => {
 
       <div className="d-flex justify-content-between">
         <button
-          className="btn btn-white shadow-radius font-bold"
+          className="btn btn-white bg-white shadow-radius mt-3 font-bold"
           onClick={onAddAnotherProduct}
         >
           +<span> Add Another Product</span>
         </button>
       </div>
       <hr />
-      <div className="d-flex justify-content-between">
+      <div className="d-flex flex-row-reverse justify-content-between">
+        {/* <div className="total">Grand Total</div>
+        <span className="value">{grandTotal}</span> */}
+
         <button className="btn-primary btn" onClick={onProceedToReview}>
           Proceed To Review
         </button>

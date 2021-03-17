@@ -209,6 +209,7 @@ exports.register = [
           var warehouseId = 'NA';
           var employeeId = uniqid('emp-');
           var employeeStatus = 'NOTAPPROVED';
+          let addr = '';
             
           //create organisation if doesn't exists 
           if (req.body.organisationName) {
@@ -225,16 +226,17 @@ exports.register = [
                   
               //   }
               // }
-              const address = req.body?.address ? req.body.address : 'JNIBF, Gachibowli, Hyderabad, Telanagana, India';
-              const country = req.body?.country ? req.body.country : 'India';
+              const country = req.body?.address?.country ? req.body.address?.country : 'India';
+              const address = req.body?.address ? req.body.address : {};
+              addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
               organisationId = uniqid('org-');
               const org = new OrganisationModel({
                 primaryContactId: employeeId,
                 name: organisationName,
                 id: organisationId,
-                type: req.body?.type ? req.body.type : 'SUPPLIER',
+                type: req.body?.type ? req.body.type : 'CUSTOMER_SUPPLIER',
                 status: 'NOTVERIFIED',
-                postalAddress: address,
+                postalAddress: addr,
                 country: {
                   countryId: '001',
                   countryName: country
@@ -252,7 +254,16 @@ exports.register = [
                 id: warehouseId,
                 warehouseInventory: inventoryId,
                 organisationId: organisationId,
-                postalAddress: address,
+                // postalAddress: address,
+                warehouseAddress: {
+                  firstLine: address.line1,
+                  secondLine: "",
+                  city: address.city,
+                  state: address.state,
+                  country: address.country,
+                  landmark: "",
+                  zipCode: address.pincode
+                },
                 country: {
                   countryId: '001',
                   countryName: country
@@ -269,6 +280,7 @@ exports.register = [
             emailId: req.body.emailId,
             organisationId: organisationId,
             id: employeeId,
+            postalAddress: addr,
             accountStatus: employeeStatus,
             warehouseId: warehouseId
           });

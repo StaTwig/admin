@@ -14,10 +14,10 @@ const InventoryPopUp = ({successMessage, errorMessage, onHide}) => {
           {errorMessage && 'Failure'}
         </div>
         <div className="data">
-          {successMessage && 'Your Inventory has been'}
+          {successMessage && 'Successfully '}
         </div>
         <div className="data mb-4">
-          {successMessage &&  'added Successfully!'}
+          {successMessage &&  'added to inventory!'}
           {errorMessage &&  errorMessage}
         </div>
         <button className="btn-primary btn" onClick={onHide}>OK</button>

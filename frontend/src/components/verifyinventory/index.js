@@ -20,7 +20,7 @@ const VerifyInventory = props => {
   const [ successMessage, setSuccessMessage ] = useState('');
   const [ errorMessage, setErrorMessage ] = useState('');
   const closeModal = () => {
-    props.history.push('/inventory');
+    props.history.push('/productlist/all');
   };
   const onAssign = async () => {
     dispatch(turnOn());
@@ -57,9 +57,9 @@ const VerifyInventory = props => {
     <div className="verifyinventory">
       <div className="d-flex flex-row justify-content-between">
         <h1 className="breadcrumb">REVIEW INVENTORY</h1>
-        <button type="button" className="btn btn-outline-info">
+        {/* <button type="button" className="btn btn-outline-info">
           Export
-        </button>
+        </button> */}
       </div>
       <div className="card">
         <div className="card-body">
