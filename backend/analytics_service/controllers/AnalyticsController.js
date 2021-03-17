@@ -2,6 +2,9 @@ const RecordModel = require('../models/RecordModel');
 const AtomModel = require('../models/AtomModel');
 const ShipmentModel = require('../models/ShipmentModel');
 const InventoryModel = require('../models/InventoryModel');
+const ProductModel = require('../models/ProductModel');
+const POModel = require('../models/POModel');
+const ShippingOrderModel = require('../models/ShippingOrderModel');
 
 const OrganisationModel = require('../models/OrganisationModel');
 const WarehouseModel = require('../models/WarehouseModel');
@@ -23,9 +26,10 @@ exports.getAnalytics = [
   async (req, res) => {
     try {
 
+      const {inventoryId, supplier, receiver} = req.body;
       var data = {}
-      const totalProductsAdded = await AtomModel.count();
-      data.totalProductsAdded = totalProductsAdded;
+      // const totalProductsAdded = await AtomModel.count();
+      // data.totalProductsAdded = totalProductsAdded;
 
       var today = new Date(); 
       var nextWeek = new Date();
@@ -114,7 +118,7 @@ exports.getAnalytics = [
           }
         }]
       );
-      data.totalProductsSent = totalProductsSent.total;
+      data.totalProductsSent = totalProductsSent[0].total;
 
       const totalProductsReceived = await ShipmentModel.aggregate(
         [{$match: {status: "RECEIVED"}}, 
@@ -125,13 +129,13 @@ exports.getAnalytics = [
           }
         }]
       );
-      data.totalProductsReceived = totalProductsReceived.total;
+      data.totalProductsReceived = totalProductsReceived[0].total;
 
       const totalShipmentsInTransit = await ShipmentModel.count(
         { status: "SHIPPED" },
       );
       data.totalShipmentsInTransit = totalShipmentsInTransit;
-
+      
       const totalShipmentsWithDelayInTransit = await ShipmentModel.count(
        { $and: [
          {status: "SHIPPED"},
@@ -145,6 +149,117 @@ exports.getAnalytics = [
 
       const totalProductsAddedToInventory = await InventoryModel.count();
       data.totalProductsAddedToInventory = totalProductsAddedToInventory;
+
+      const productTypes = await InventoryModel.aggregate(
+        [{$match: {id: inventoryId}}, 
+        {
+          $group: {
+            _id: "$id", 
+            total: {$sum: {$size: "$inventoryDetails"}}
+          }
+        }]
+      );
+      const numProductTypes = productTypes[0].total;
+      data.numProductTypes = numProductTypes;
+      // console.log("Number of product types in Inventory ", numProductTypes);
+
+      const numOutgoingShipments = await ShipmentModel.count(
+        { $and : [
+          {"supplier.id": supplier},
+          { status: { $in : [ "SHIPPED", "RECEIVED" ]} }
+        ]
+      } );
+      data.numOutgoingShipments = numOutgoingShipments;
+      // console.log("Number of Outgoing shipments ", numOutgoingShipments);
+
+
+      const numIncomingShipments = await ShipmentModel.count(
+        { $and : [
+          {"receiver.id": receiver},
+          { status: { $in : [ "SHIPPED" ]} }
+        ]
+      } );
+      data.numIncomingShipments = numIncomingShipments;
+      // console.log("Number of Incoming shipments ", numIncomingShipments);
+
+      const totalProductCount = await ProductModel.distinct('type');
+      // console.log("Total Product Count = ", totalProductCount.length);
+      var stockOut =  numProductTypes - totalProductCount.length;
+      data.stockOut = stockOut;
+      // console.log("Products with zero Inventory (stockOut) ", stockOut);
+
+      const expiredProducts = await AtomModel.count({
+        "attributeSet.expDate" :  {
+          $lt: today.toISOString(), 
+        }
+      });
+      // console.log("Expired Products ", expiredProducts);
+      data.expiredProducts = expiredProducts;
+
+      const numPO = await POModel.count();
+      const numSO = await ShippingOrderModel.count();
+      var pendingOrders = numPO + numSO;
+      // console.log("Pending Orders ", pendingOrders);
+      data.pendingOrders = pendingOrders;
+
+      const batchExpired = await AtomModel.aggregate(
+        [ { $match: { 
+            "attributeSet.expDate" :  {
+              $lt: today.toISOString(), 
+              }
+            }
+          }, 
+        {
+          $group: {
+            _id: "$status", 
+            total: {$sum: {$size: "$batchNumbers"}}
+          }
+        }]
+      );
+      // console.log("Batches Expired ", batchExpired[0].total);
+      data.batchExpired = batchExpired[0].total;
+
+      var nearExpirationTime = new Date();
+      nearExpirationTime.setDate(today.getDate() + 90)
+
+      const batchNearExpiration = await AtomModel.aggregate(
+        [ { $match: { 
+          "attributeSet.expDate" :  {
+            $gte: today.toISOString(), 
+            $lt: nearExpirationTime.toISOString() 
+            }
+          }
+        }, 
+      {
+        $group: {
+          _id: "$status", 
+          total: {$sum: {$size: "$batchNumbers"}}
+        }
+      }]
+    );
+      // console.log("Batches Near Expiration ", batchNearExpiration[0].total);
+      data.batchNearExpiration = batchNearExpiration[0].total;
+
+      const alertsInboundShipments = await ShipmentModel.count(
+        { $and : [
+          {"receiver.id": receiver},
+          { status: { $in : [ "DAMAGED" ]} }
+        ]
+      } );
+        // console.log("Number of Alerts Inbound shipments ", alertsInboundShipments);
+        data.alertsInboundShipments = alertsInboundShipments;
+
+
+      const alertsOutboundShipments = await ShipmentModel.count(
+        { $and : [
+          {"supplier.id": supplier},
+          { status: { $in : [ "DAMAGED"]} }
+        ]
+      } );
+        // console.log("Number of Alerts Outbound shipments ", alertsOutboundShipments);
+        data.alertsOutboundShipments = alertsOutboundShipments;
+        data.averageOrderProcessingTime = "NA"
+        data.inventoryToOrderRatio = "NA"
 
       console.log("Response", data);
       return apiResponse.successResponseWithData(
