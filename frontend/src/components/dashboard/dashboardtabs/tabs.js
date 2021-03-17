@@ -18,7 +18,7 @@ const Tabs = props => {
             type="text"
             value={props.warehouseText}
             onChange={props.onWarehouseChange}
-            placeholder={props.visible?"Enter Shipment ID":"Enter Warehouse ID"}
+            placeholder={props.visible?"Enter Shipment ID":"Enter Location ID"}
             className="form-control search-field"
           />
           <img src={searchingIcon} onClick = {props.onSearchClick} alt="searching" />
@@ -29,7 +29,7 @@ const Tabs = props => {
         <button className=" btn-primary btn warehouse" onClick = {()=>{
           props.setContent(false)
           props.setDashVisible(true);
-        }} >Search Warehouse</button>
+        }} >Search Location</button>
         </li>
 
       </ul>
@@ -40,4 +40,3 @@ const Tabs = props => {
 
 
 export default Tabs;
-
