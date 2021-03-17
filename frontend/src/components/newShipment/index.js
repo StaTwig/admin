@@ -363,8 +363,7 @@ const NewShipment = props => {
       <hr />
 
       <div className="d-flex justify-content-between">
-        <div className="total">Grand Total</div>
-        <div className="value">{productQuantity}</div>
+       <div className="value">{productQuantity}</div>
         <div className="d-flex ">
           <button className="btn btn-primary mr-2 " onClick={onAssign}>
             {' '}
@@ -400,3 +399,4 @@ const NewShipment = props => {
 };
 
 export default NewShipment;
+

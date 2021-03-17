@@ -17,7 +17,7 @@ import './style.scss'
     const [regions,setRegions]= useState([])
     const [country,setCountry] = useState('Select Country')
     const [countries,setCountries] = useState([])
-    const [warehouseId,setWareHouseId]=useState('Select Warehouse')
+    const [warehouseId,setWareHouseId]=useState('Select Location')
     const [warehouses,setWareHouses]=useState([]);
     const [warehouseIds,setWareHouseIds]=useState([]);
     const [ products, setProducts ] = useState([]);
@@ -98,7 +98,7 @@ import './style.scss'
                     <div className="form-control">
                         <DropdownButton
                             name={country}
-                            onSelect={item => 
+                            onSelect={item =>
                                 {
                                 setCountry(item)
                                 onWarehouses(item)
@@ -109,7 +109,7 @@ import './style.scss'
                     </div>
                 </div>
                 <div className="form-group mb-4">
-                    <label htmlFor="shipmentId" className="mt-2">Warehouse</label>
+                    <label htmlFor="shipmentId" className="mt-2">Location</label>
                     <div className="form-control ml-4">
                         <DropdownButton
                             name={warehouseId}
@@ -123,7 +123,7 @@ import './style.scss'
                 </div>
             </div>
                 <div className="mainsearchwarehouse">
-                {warehouses.length > 0 && warehouses.map(w => 
+                {warehouses.length > 0 && warehouses.map(w =>
                  <div className=" panel  mb-4 searchwarehouse dashsearch address searchpanel" onClick={() =>props.onWarehouseSelect(w.id)}>
                 <div className="d-flex flex-row " >
                     <ul className="mr-3">
@@ -141,7 +141,7 @@ import './style.scss'
                 </div>
                 </div>)}
                 </div>
-            
+
 
         </div>
     )

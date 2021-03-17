@@ -52,7 +52,6 @@ const NewInventory = props => {
   const [ inventoryState, setInventoryState ] = useState([]);
   const [menu, setMenu] = useState(false);
   const [openExcel, setOpenExcel] = useState(false);
-  const [ grandTotal, setGrandTotal ] = useState(0);
   const [blankInventory, setBlankInventory] = useState({
     productName: 'Select Product',
     manufacturer: '',
@@ -170,7 +169,6 @@ const NewInventory = props => {
     let total = 0;
     updatedInventoryState.forEach(inv => total += parseInt(inv.quantity)  )
     setInventoryState(updatedInventoryState);
-    setGrandTotal(total);
   };
 
   const onRemoveRow=(index) => {
@@ -179,7 +177,6 @@ const NewInventory = props => {
     setInventoryState(inventoryStateClone);
     let total = 0;
     inventoryStateClone.forEach(inv => total += parseInt(inv.quantity)  )
-    setGrandTotal(total);
   }
   return (
     <div className="Newinventory">
@@ -235,13 +232,10 @@ const NewInventory = props => {
       </div>
       <hr />
       <div className="d-flex justify-content-between">
-        <div className="total">Grand Total</div>
-        <span className="value">{grandTotal}</span>
-
         <button className="btn-primary btn" onClick={onProceedToReview}>
           Proceed To Review
         </button>
-      </div>
+     </div>
       {openCreatedInventory && (
         <Modal
           close={() => closeModal()}
@@ -277,11 +271,11 @@ export default NewInventory;
         </button>*/
 
 /* <div className="d-flex flex-column">
-      <div className="text-primary font-weight-bold">Import Inventory from Excel </div><input type='file'  class="select" onChange={setExcelFile}/> 
+      <div className="text-primary font-weight-bold">Import Inventory from Excel </div><input type='file'  class="select" onChange={setExcelFile}/>
       <button
         className="btn-primary btn  w-50 mt-2"
         onClick={uploadExcel}
       >
-       <img src={uploadBlue} width="14" height="14" className="mr-2" /> <span>Upload</span>  
+       <img src={uploadBlue} width="14" height="14" className="mr-2" /> <span>Upload</span>
       </button>
       </div>*/
