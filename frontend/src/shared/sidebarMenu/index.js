@@ -33,6 +33,14 @@ const SideBar = ({
             <span>Overview</span>
           </Link>
         </li>
+
+<li className={(url === '/shipments' || url === '/newshipment'|| url === '/transactionHistory') ? 'active' : ''}>
+          <Link to="/shipments">
+            <img src={(url === '/shipments' || url === '/newshipment'|| url === '/transactionHistory')  ? shipSelectedIcon : shipIcon} alt="Shippment" />
+            <span>OrderManagement</span>
+          </Link>
+        </li>
+
         <li className={(url === '/inventory'|| url === '/newinventory'|| url === '/addproduct'|| url === '/productlist/all') ? 'active' : ''}>
           <Link to="/inventory">
             <img src={(url === '/inventory' || url === '/newinventory' || url === '/addproduct'|| url === '/productlist/all') ? InventorySelectedIcon : InventoryIcon} alt="Inventory" />
@@ -63,7 +71,7 @@ const SideBar = ({
             <span>Utilities</span>
           </Link>
         </li>
-        
+
       </ul>
       <Footer />
     </div>
