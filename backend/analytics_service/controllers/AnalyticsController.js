@@ -26,11 +26,11 @@ exports.getAnalytics = [
   async (req, res) => {
     try {
 
-      const {inventoryId, supplier, receiver} = req.body;
+      const {id: warehouseId } = req.user;
       var data = {}
-      // const totalProductsAdded = await AtomModel.count();
-      // data.totalProductsAdded = totalProductsAdded;
-
+      const totalProductsAdded = await AtomModel.count();
+      data.totalProductsAdded = totalProductsAdded;
+      
       var today = new Date(); 
       var nextWeek = new Date();
       nextWeek.setDate(today.getDate() + 7)
@@ -151,7 +151,7 @@ exports.getAnalytics = [
       data.totalProductsAddedToInventory = totalProductsAddedToInventory;
 
       const productTypes = await InventoryModel.aggregate(
-        [{$match: {id: inventoryId}}, 
+        [{$match: {id: 'inv-bh-1'}}, 
         {
           $group: {
             _id: "$id", 
@@ -165,17 +165,16 @@ exports.getAnalytics = [
 
       const numOutgoingShipments = await ShipmentModel.count(
         { $and : [
-          {"supplier.id": supplier},
+          {"supplier.id": warehouseId},
           { status: { $in : [ "SHIPPED", "RECEIVED" ]} }
         ]
       } );
       data.numOutgoingShipments = numOutgoingShipments;
       // console.log("Number of Outgoing shipments ", numOutgoingShipments);
 
-
       const numIncomingShipments = await ShipmentModel.count(
         { $and : [
-          {"receiver.id": receiver},
+          {"receiver.id": warehouseId},
           { status: { $in : [ "SHIPPED" ]} }
         ]
       } );
@@ -242,7 +241,7 @@ exports.getAnalytics = [
 
       const alertsInboundShipments = await ShipmentModel.count(
         { $and : [
-          {"receiver.id": receiver},
+          {"receiver.id": warehouseId},
           { status: { $in : [ "DAMAGED" ]} }
         ]
       } );
@@ -252,14 +251,57 @@ exports.getAnalytics = [
 
       const alertsOutboundShipments = await ShipmentModel.count(
         { $and : [
-          {"supplier.id": supplier},
+          {"supplier.id": warehouseId},
           { status: { $in : [ "DAMAGED"]} }
         ]
       } );
         // console.log("Number of Alerts Outbound shipments ", alertsOutboundShipments);
         data.alertsOutboundShipments = alertsOutboundShipments;
-        data.averageOrderProcessingTime = "NA"
-        data.inventoryToOrderRatio = "NA"
+
+        const inventorySupplier = await ShipmentModel.count(
+          {"supplier.id": warehouseId});
+        const orderReceiver = await ShipmentModel.count(
+          {"receiver.id": warehouseId});
+        var inventoryToOrderRatio = 0;
+        if(orderReceiver !== 0){
+          inventoryToOrderRatio = inventorySupplier/orderReceiver;
+        }
+        data.inventoryToOrderRatio = inventoryToOrderRatio;
+  
+        const records = await RecordModel.find();
+        const shipments = await ShipmentModel.find();
+  
+        var count = 0;
+        var sum = 0;
+        console.log("Records : ", records.length);
+        for(var i=0;  i<records.length; i++){
+          for(var j=0; j<shipments.length; j++){
+            if(records[i].id === shipments[j].poId){
+              count++;
+              var shipmentCreationTime = shipments[j].createdAt; 
+              var poCreationTime = records[i].createdAt;
+              console.log(shipmentCreationTime);
+              sum = sum + ( shipmentCreationTime - poCreationTime)
+            }
+          }
+        }
+        var totalmilliseconds = 0;
+        if(count !== 0){
+          totalmilliseconds = sum/count;
+        }
+  
+        var seconds = totalmilliseconds/1000;
+        var numdays = Math.floor(seconds / 86400);
+  
+        var numhours = Math.floor((seconds % 86400) / 3600);
+        
+        var numminutes = Math.floor(((seconds % 86400) % 3600) / 60);
+        
+        var numseconds = ((seconds % 86400) % 3600) % 60;
+        console.log(numdays + "days " + numhours + "hrs " + numminutes + "min " + numseconds + "sec")
+        var averageOrderProcessingTime = numdays + "days " + numhours + "hrs " + numminutes + "min"
+  
+        data.averageOrderProcessingTime = averageOrderProcessingTime
 
       console.log("Response", data);
       return apiResponse.successResponseWithData(
