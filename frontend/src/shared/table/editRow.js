@@ -21,9 +21,25 @@ const EditRow = props => {
     idx,
   } = props;
 
+  const numbersOnly = (e) => {
+    // Handle paste
+    if (e.type === 'paste') {
+      key = event.clipboardData.getData('text/plain');
+    } else {
+      // Handle key press
+      var key = e.keyCode || e.which;
+      key = String.fromCharCode(key);
+    }
+    var regex = /[0-9]/;
+    if( !regex.test(key) ) {
+      e.returnValue = false;
+      if(e.preventDefault) e.preventDefault();
+    }
+  }
+
   return (
-    <div className="rTableRow">
-      <div className="rTableCell">
+    <div className="d-flex inp-grp justify-content-between mb-3 flex-row bg-white">
+      <div className="w-15 pt-3 pb-3 border-right">
         <div className="square-box" />
         <DropdownButton
           name={productName}
@@ -31,32 +47,23 @@ const EditRow = props => {
           groups={products}
         />
       </div>
-      <div className="rTableCell">
-        <div className="form-group">
+      <div className="w-15 pt-3 pb-3 border-right">
+        <div className="">
           <input
             type="text"
-            className="form-field"
+            className="form-control"
             placeholder="Manufacturer"
             value={manufacturer}
             disabled
           />
         </div>
       </div>
-      <div className="rTableCell">
-        <div className="form-group">
+      <div className="w-10 pt-3 pb-3 border-right">
+        <div className="">
           <input
-            type="number"
-            min="0"
-            onKeyDown={e =>
-              (e.keyCode === 69 ||
-                e.keyCode === 190 ||
-                e.keyCode === 189 ||
-                e.keyCode === 187 ||
-                e.keyCode === 40 ||
-                e.keyCode === 38) &&
-              e.preventDefault()
-            }
-            className="form-field"
+            type="text"
+            onKeyPress={numbersOnly}
+            className="form-control"
             placeholder="Enter Quantity"
             value={quantity}
             onChange={e =>
@@ -65,10 +72,10 @@ const EditRow = props => {
           />
         </div>
       </div>
-      <div className="rTableCell">
-        <div className="input-group">
+      <div className="w-10 pt-3 pb-3 border-right">
+        <div className="">
           <DatePicker
-            className="form-field"
+            className="form-control"
             onChange={date =>
               handleInventoryChange(idx, 'manufacturingDate', date)
             }
@@ -88,10 +95,10 @@ const EditRow = props => {
           />
         </div>
       </div>
-      <div className="rTableCell">
-        <div className="input-group">
+      <div className="w-10 pt-3 pb-3 border-right">
+        <div className="">
           <DatePicker
-            className="form-field"
+            className="form-control"
             placeholderText="Enter Exp Date"
             dateFormat="MM/yyyy"
             onChange={date => handleInventoryChange(idx, 'expiryDate', date)}
@@ -107,11 +114,11 @@ const EditRow = props => {
           />
         </div>
       </div>
-      <div className="rTableCell">
-        <div className="form-group">
+      <div className="w-10 pt-3 pb-3 border-right">
+        <div className="">
           <input
             type="text"
-            className="form-field"
+            className="form-control"
             placeholder="Enter Batch Number"
             value={batchNumber}
             onChange={e =>
@@ -120,11 +127,11 @@ const EditRow = props => {
           />
         </div>
       </div>
-      <div className="rTableCell">
-        <div className="input-group">
+      <div className="w-15 pt-3 pb-3 ">
+        <div className="">
           <input
             type="text"
-            className="form-field"
+            className="form-control"
             placeholder="Enter Serial Numbers"
             value={serialNumber}
             onChange={e =>
@@ -132,8 +139,9 @@ const EditRow = props => {
             }
           />
         </div>
-      </div><div className="rTableCell">
-       <button onClick={() => props.onRemoveRow(idx)}>X</button>
+      </div>
+      <div className="pl-1 pt-4 bg-light">
+        <span className=" border cursorP border-danger text-danger pl-2 pr-2 pt-1 pb-1 rounded-circle" onClick={() => props.onRemoveRow(idx)}>x</span>
       </div>
     </div>
   );

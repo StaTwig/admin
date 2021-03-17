@@ -19,10 +19,16 @@ const SignupContainer = (props) => {
   const onSignup = useCallback(async (values) => {
     let data = { firstName, lastName, emailId: email, organisationId: organisation.id };
     if (isNewOrg) {
-      data.organisationName = organisation.name;
-      data.address = values.line1+', '+values.city+', '+values.state+', '+values.pincode;
-      data.country = values.country;
-      data.type = values.type;
+      // data.organisationName = organisation.name;
+      data.organisationName = values.name;
+      data.address = {
+        line1: values.line1,
+        city:  values.city,
+        state: values.state,
+        pincode: values.pincode,
+        country: values.country
+      }
+      // data.type = 'CUSTOMER_SUPPLIER';
       data.organisationId = 0;
     }
     
@@ -64,8 +70,7 @@ const SignupContainer = (props) => {
   }
   
   const closeModal = () => {
-    setOpenCreatedInventory(false);
-    props.history.push('/inventory');
+    setShowModal(false);
   };
 
   return (

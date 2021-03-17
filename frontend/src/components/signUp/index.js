@@ -24,20 +24,26 @@ const [organisationsArr, setOrganisationsArr] = useState([]);
       const orgs = await getOrganisations();
       // const orgIds = orgs.map(org => org.id);
       // setOrganisations(orgIds);
+      orgs.push({ id: 'Other', name: 'Other' });
       setOrganisations(orgs);
       setOrganisationsArr(orgs);
     }
     fetchData();
   }, []);
 
-  const changeFn = (value) => {
+  const changeFn = (value, e) => {
     setValue(value);
     let orgs = organisationsArr.filter(org => org.name.toLowerCase().includes(value.toLowerCase()));
+    // orgs.push({ id: 0, name: 'Other' });
     setOrganisations(orgs);
-    if (organisationsArr.filter(org => org.name.toLowerCase() == value.toLowerCase()).length)
+    if (organisationsArr.filter(org => org.name.toLowerCase() == value.toLowerCase()).length && value != 'Other')
       props.onOrgChange(false);
-    else
+    else {
       props.onOrgChange(true);
+      if (e) {
+        setValue('Other');
+      }
+    }
     
     props.onOrganisationChange({id: 0, name: value});
   }
@@ -152,19 +158,21 @@ const [organisationsArr, setOrganisationsArr] = useState([]);
                   name={props.organisation.organisationId}
                   value={value}
                   isText={true}
-                  placeholder='Select organisation/type new'
+                  // placeholder='Select organisation/type new'
+                  placeholder='Organisation'
                   onSelect={item => {
                     setFieldValue('org', item.name);
                     props.onOrganisationChange(item);
                     let orgs = organisationsArr.filter(org => org.name.toLowerCase() == item.name.toLowerCase());
-                    if (orgs.length)
+                    if (orgs.length && item.name != 'Other')
                       props.onOrgChange(false);
                     else
                       props.onOrgChange(true);
                     setValue(item.name);
                   }}
                   groups={organisations}
-                  changeFn={(v) => { setFieldValue('org', v); changeFn(v); }}
+                  changeFn={(v, e = '') => { console.log(v);
+                   setFieldValue('org', v); changeFn(v, e); }}
                   dClass="ml-4"
                   className="text"
                   />

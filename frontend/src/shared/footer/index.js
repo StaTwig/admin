@@ -8,7 +8,7 @@ const Footer = () => {
     <footer>
       <p>Version 2.0</p>
       <div className="footer-branding">
-        <img src={statwigLogo} alt="statwig logo" width="80px"/>
+        <img src={statwigLogo} className="" alt="statwig logo" width="80px"/>
       </div>
     </footer>
   )

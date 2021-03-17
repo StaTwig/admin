@@ -4,6 +4,7 @@ import AddressField from "./addressfield";
 import FailedPopUp from "../../shared/PopUp/failedPopUp";
 import Modal from "../../shared/modal";
 import { useDispatch } from "react-redux";
+import CloseIcon from '../../assets/icons/cross.svg';
 import DropdownButton from '../../shared/dropdownButtonGroup';
 
 const OrganisationPopUp = (props) => {
@@ -57,11 +58,18 @@ const OrganisationPopUp = (props) => {
           <FailedPopUp onHide={closeModal} message={message} />
         </Modal>
       )}
-      <div className="d-flex flex-column">
-        <div className="alert mt-3 p-0 pl-3" >
-            Almost there! 
-        </div>
-        <div className="text-info pl-3">Add organisation location to continue</div>
+          <div className="d-flex flex-row justify-content-between">
+              <div className="flex-column">
+                <div className="alert mt-3 p-0 pl-3" >
+                    Almost there! 
+                </div>
+                <div className="text-info pl-3">Add organisation details to continue</div>
+              </div>
+              <div>
+                  <button type="button" className="close" onClick={() => props.onHide()}>
+                  <img src={CloseIcon} alt="Close" with="40" height="40" />
+                </button>
+              </div>
         {/* <div className="pt-1 ">
             <button
                 onClick={getGeoLocation}
@@ -78,7 +86,8 @@ const OrganisationPopUp = (props) => {
               <Formik
                 enableReinitialize={true}
                 initialValues={{
-                  type: "",
+                //   type: "",
+                  name: "",
                   line1: address?.Subdistrict
                     ? address?.Subdistrict
                     : "",
@@ -99,8 +108,11 @@ const OrganisationPopUp = (props) => {
                 }}
                 validate={(values) => {
                   const errors = {};
-                  if (!values.type) {
-                    errors.type = "Required";
+                //   if (!values.type) {
+                //     errors.type = "Required";
+                //   }
+                  if (!values.name) {
+                    errors.name = "Required";
                   }
                   if (!values.pincode) {
                     errors.pincode = "Required";
@@ -136,7 +148,7 @@ const OrganisationPopUp = (props) => {
                   dirty,
                 }) => (
                   <form onSubmit={handleSubmit} className="mb-3">
-                    <div className="form-group row">
+                    {/* <div className="form-group row">
                         <label htmlFor="type" className="col-sm-5 txtColor col-form-label">
                             Organisation type *
                         </label>
@@ -156,15 +168,15 @@ const OrganisationPopUp = (props) => {
                                 <span className="error-msg text-danger">{errors.type}</span>
                             )}
                         </div>
-                    </div>
+                    </div> */}
                     <AddressField
-                      error={errors.pincode}
-                      touched={touched.pincode}
-                      label="Pincode"
-                      refe="pincode"
+                      error={errors.name}
+                      touched={touched.name}
+                      label="Organisation Name"
+                      refe="name"
                       handleChange={handleChange}
                       handleBlur={handleBlur}
-                      value={values.pincode}
+                      value={values.name}
                     />
                     <AddressField
                       error={errors.line1}
@@ -178,7 +190,7 @@ const OrganisationPopUp = (props) => {
                     <AddressField
                       error={errors.city}
                       touched={touched.city}
-                      label="Town/ City"
+                      label="City/ Town"
                       refe="city"
                       handleChange={handleChange}
                       handleBlur={handleBlur}
@@ -187,7 +199,7 @@ const OrganisationPopUp = (props) => {
                     <AddressField
                       error={errors.state}
                       touched={touched.state}
-                      label="State/ Province/ Region"
+                      label="State"
                       refe="state"
                       handleChange={handleChange}
                       handleBlur={handleBlur}
@@ -201,6 +213,15 @@ const OrganisationPopUp = (props) => {
                       handleChange={handleChange}
                       handleBlur={handleBlur}
                       value={values.country}
+                    />
+                    <AddressField
+                      error={errors.pincode}
+                      touched={touched.pincode}
+                      label="Pincode"
+                      refe="pincode"
+                      handleChange={handleChange}
+                      handleBlur={handleBlur}
+                      value={values.pincode}
                     />
                     <div className="pt-5 d-flex flex-row-reverse">
                       <button type="submit" className="btn btn-primary ">

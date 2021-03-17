@@ -108,6 +108,6 @@ table.table td {
   padding-bottom: 0.5rem;
 }
 
-.form-control:focus {
+.form-control:focus, .form-field:focus {
   box-shadow: none;
 }
