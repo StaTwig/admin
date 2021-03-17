@@ -50,13 +50,7 @@ const SideBar = ({
         <li className={(url === '/shipments' || url === '/newshipment'|| url === '/transactionHistory') ? 'active' : ''}>
           <Link to="/shipments">
             <img src={(url === '/shipments' || url === '/newshipment'|| url === '/transactionHistory')  ? shipSelectedIcon : shipIcon} alt="Shippment" />
-            <span>Shipment</span>
-          </Link>
-        </li>
-        <li className={(url === '/dashboard')  ? 'active' : ''}>
-          <Link to="/dashboard">
-            <img src={(url === '/dashboard')  ? NetworkSelectedIcon : NetworkIcon} alt="Shippment" />
-            <span>Network</span>
+            <span>Shipments</span>
           </Link>
         </li>
          <li className={(url === '/trackAndTrace') ? 'active' : ''}>
@@ -65,13 +59,12 @@ const SideBar = ({
             <span>Track & Trace</span>
           </Link>
         </li>
-        <li className={(url === '/qrcode') ? 'active' : ''} >
-          <Link to="/qrcode">
-            <img src={(url === '/qrcode') ? UtilitiesSelected : UtilitiesIcon} alt="Network" />
-            <span>Utilities</span>
+        <li className={(url === '/dashboard')  ? 'active' : ''}>
+          <Link to="/dashboard">
+            <img src={(url === '/dashboard')  ? NetworkSelectedIcon : NetworkIcon} alt="Shippment" />
+            <span>Network</span>
           </Link>
         </li>
-
       </ul>
       <Footer />
     </div>
