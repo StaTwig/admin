@@ -197,11 +197,28 @@ exports.receiveShipment = [
     auth,
     async (req, res) => {
         try {
-            const shipmentId = req.query.shipmentId;
-            const data = await ShipmentModel.findOne({
-                id: shipmentId
-            })
+            const data = req.body;
+            const empData = await EmployeeModel.findOne({emailId: req.user.emailId});
+            const orgId = empData.organisationId;
+            const orgData = await OrganisationModel.findOne({id: orgId});
+            const confId = orgData.configuration_id;
+            const confData = await ConfigurationModel.findOne({id: confId});
+            const process = confData.process;
 
+            const soID = data.shippingOrderId;
+            const poID = data.poId;
+
+            var flag = "Y";
+
+            if (data.shippingOrderId === null || data.poId === null) {
+                if (process == true) {
+                    flag = "YS"
+                } else {
+                    flag = "N"
+                }
+            }
+
+            if (flag == "Y") {
             const po = await RecordModel.findOne({
                 id: data.poId
             });
@@ -222,6 +239,9 @@ exports.receiveShipment = [
                 po.poStatus = 'FULLYFULFILLED';
                 await po.save();
             }
+        }
+
+            if (flag != "N") {
 
             const suppWarehouseDetails = await WarehouseModel.findOne({
                 id: data.supplier.locationId
@@ -242,6 +262,7 @@ exports.receiveShipment = [
 
             products.every(p => {
                 inventoryUpdate(p.productId, p.productQuantity, suppInventoryId, recvInventoryId, data.poId, "RECEIVED")
+                if (flag == "Y")
                 poUpdate(p.productId, p.productQuantity, data.poId, "RECEIVED")
             })
 
@@ -251,12 +272,17 @@ exports.receiveShipment = [
                 status: "RECEIVED"
             }, );
 
-
             return apiResponse.successResponseWithData(
                 res,
                 'Shipment Received',
                 products
             );
+          } else {
+                return apiResponse.successResponse(
+                    res,
+                    'Cannot receive  a Shipment without SO and PO',
+                );
+            }
         } catch (err) {
             logger.log(
                 'error',
@@ -266,6 +292,48 @@ exports.receiveShipment = [
         }
     },
 ];
+
+exports.fetchShipmentsByQRCode = [
+    auth,
+    async (req, res) => {
+        try {
+            const {
+                authorization
+            } = req.headers;
+            checkToken(req, res, async result => {
+                if (result.success) {
+                    const {
+                        QRcode
+                    } = req.query;
+                        const s = await ShipmentModel.find({"label.labelId": QRcode})
+                        .then(shipments => {
+                            return apiResponse.successResponseWithData(
+                                res,
+                                'Shipment Details',
+                                shipments,
+                            );
+                        })
+                        .catch(err => {
+                            return apiResponse.ErrorResponse(res, err);
+                        });
+                    } else {
+                    logger.log(
+                        'warn',
+                        '<<<<< ShipmentService < ShipmentController < modifyShipment : refuted token',
+                    );
+                    res.status(403).json('Auth failed');
+                }
+            });
+        } catch (err) {
+            logger.log(
+                'error',
+                '<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)',
+            );
+            return apiResponse.ErrorResponse(res, err);
+        }
+    },
+];
+
 
 exports.fetchShipments = [
     auth,
