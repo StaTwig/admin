@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import Pen from '../../assets/icons/pen.svg';
+import Pen from '../../assets/icons/pen1.svg';
 import {
   addProductsToInventory,
   resetReviewInventories
@@ -20,7 +20,7 @@ const VerifyInventory = props => {
   const [ successMessage, setSuccessMessage ] = useState('');
   const [ errorMessage, setErrorMessage ] = useState('');
   const closeModal = () => {
-    props.history.push('/productlist/all');
+    props.history.push('/inventory');
   };
   const onAssign = async () => {
     dispatch(turnOn());
@@ -63,64 +63,64 @@ const VerifyInventory = props => {
       </div>
       <div className="card">
         <div className="card-body">
-          <h5 className="head">Description Of Goods </h5>
+          <h5 className="head ml-3">Description Of Goods </h5>
           {reviewInventories.map(reviewInventory => (
-            <div className="d-flex flex-row justify-content-between">
+            <div className="d-flex text-muted flex-row justify-content-between">
               <ul>
-                <li className="bold">Product Name</li>
+                <li className="opacityHalf">Product Name</li>
                 <li>{reviewInventory.productName}</li>
               </ul>
               <ul>
-                <li className="bold">Manufacturer</li>
+                <li className="opacityHalf">Manufacturer</li>
                 <li>{reviewInventory.manufacturer}</li>
               </ul>
               <ul>
-                <li className="bold">Quantity</li>
+                <li className="opacityHalf">Quantity</li>
                 <li>{reviewInventory.quantity}</li>
               </ul>
               <ul>
-                <li className="bold">Manufacturer Date</li>
+                <li className="opacityHalf">Manufacturer Date</li>
                 <li>
-                  {`0${new Date(
+                  {reviewInventory.manufacturingDate ? `0${new Date(
                     Date.parse(reviewInventory.manufacturingDate),
                   ).getMonth() + 1}`.slice(-2) +
                     '/' +
                     new Date(
                       Date.parse(reviewInventory.manufacturingDate),
-                    ).getFullYear()}
+                    ).getFullYear() : ''}
                 </li>
               </ul>
               <ul>
-                <li className="bold">Expiry Date</li>
+                <li className="opacityHalf">Expiry Date</li>
                 <li>
-                  {`0${new Date(
+                  {reviewInventory.expiryDate ? `0${new Date(
                     Date.parse(reviewInventory.expiryDate),
                   ).getMonth() + 1}`.slice(-2) +
                     '/' +
                     new Date(
                       Date.parse(reviewInventory.expiryDate),
-                    ).getFullYear()}
+                    ).getFullYear() : ''}
                 </li>
               </ul>
               <ul>
-                <li className="bold">Batch Number</li>
+                <li className="opacityHalf">Batch Number</li>
                 <li>{reviewInventory.batchNumber}</li>
               </ul>
               <ul>
-                <li className="bold"> Serial Numbers Range</li>
+                <li className="opacityHalf"> Serial Numbers Range</li>
                 <li>{reviewInventory.serialNumber}</li>
               </ul>
             </div>
           ))}
           <hr />
-          <div className="d-flex justify-content-between">
-            <div className="d-flex flex-row">
-              <button className="btn-primary btn mr-2" onClick={onEdit}>
-                <img src={Pen} width="15" height="15" className="mr-3" />
-                <span>EDIT</span>
-              </button>
+          <div className="">
+            <div className="d-flex flex-row-reverse">
               <button className="btn-primary btn" onClick={onAssign}>
                 ADD INVENTORY
+              </button>
+              <button className="btn-outline-dark btn mr-2" onClick={onEdit}>
+                <img src={Pen} width="15" height="15" className="mr-3" />
+                <span>EDIT</span>
               </button>
 
               {openCreatedInventory && (
