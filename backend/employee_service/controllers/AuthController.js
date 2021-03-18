@@ -226,15 +226,15 @@ exports.register = [
                   
               //   }
               // }
-              const country = req.body?.address?.country ? req.body.address?.country : 'India';
-              const address = req.body?.address ? req.body.address : {};
+              const country = req.body.address.country ? req.body.address.country : 'India';
+              const address = req.body.address ? req.body.address : {};
               addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
               organisationId = uniqid('org-');
               const org = new OrganisationModel({
                 primaryContactId: employeeId,
                 name: organisationName,
                 id: organisationId,
-                type: req.body?.type ? req.body.type : 'CUSTOMER_SUPPLIER',
+                type: req.body.type ? req.body.type : 'CUSTOMER_SUPPLIER',
                 status: 'NOTVERIFIED',
                 postalAddress: addr,
                 country: {
@@ -556,6 +556,8 @@ exports.userInfo = [
             postalAddress
           } = user;
           const org = await OrganisationModel.findOne({ id: organisationId }, 'name' );
+          const warehouse = await WarehouseModel.findOne({ id: warehouseId });  
+          console.log(warehouse);        
           let user_data = {
             firstName,
             lastName,
@@ -568,7 +570,11 @@ exports.userInfo = [
             accountStatus,
             role,
             photoId,
-            location: postalAddress
+            location: postalAddress,
+            warehouseAddress_country: warehouse.warehouseAddress.country,
+            warehouseAddress_zipcode: warehouse.warehouseAddress.zipCode,
+            warehouseAddress_city: warehouse.warehouseAddress.city,
+            warehouseAddress_firstline: warehouse.warehouseAddress.firstLine
           };
           logger.log(
             'info',

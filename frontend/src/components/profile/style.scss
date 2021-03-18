@@ -1,5 +1,94 @@
 @import '../../assets/styles/global.scss';
 
+.location-cards{
+  padding-left: 0%;
+}
+
+.edit-button{
+  height: 5vh !important;
+}
+
+.role{
+  font-size: 16px;  
+  color: #707070;
+}
+
+.name{
+  font-size: 35px;
+  font-weight: bold;
+  padding-bottom: 3vh;
+}
+
+.row-list{
+  font-size: 16px;
+  padding-bottom: 1vh;
+}
+
+.location{
+  color: #707070;
+  font-size: 16px;
+  font-weight: bold;
+  padding-top: 3vh;
+  padding-bottom: 2vh;
+}
+
+.custom-card { 
+  width: 22vw;
+  height: auto;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  .card-title {
+    padding: 0;    
+    font-size: 16px;
+    font-weight: 500;
+    color: #0093E9;
+    margin-bottom: 0%;
+    padding-bottom: 0%;
+  }
+  .card-header,
+  .card-footer {
+    padding: 0;    
+    background-color: transparent;
+    border: none;
+    padding-bottom: 0%;
+  }
+  @media screen and (max-width: $sm) {
+    margin: 0;
+  }
+  @media (min-width: $lg) {
+    height: 220px;
+  }
+
+  @media (min-width: $xl) {
+    height: 220px;
+  }
+
+  .card-body {
+    padding: 0;    
+    display: flex;
+    flex-direction: column;
+    padding-top: 0% !important;
+    .total {
+        font-size: 14px;
+        font-weight: bold;
+        padding-bottom: 2vh;        
+    }
+    .full-address {
+        width: 30vh;
+        font-size: 14px;
+        color: #707070;
+        padding-bottom: 2vh;
+    }  
+    .pin-code {
+      width: 30vh;
+      font-size: 14px;
+      color: #707070;
+      padding-bottom: 2vh;      
+  }      
+  }
+}
 
 .profile {
   padding-right: 3rem;

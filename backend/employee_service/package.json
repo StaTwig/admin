@@ -10,7 +10,7 @@
     "sample": "npx supervisor index.js"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "base64-img": "^1.0.4",
     "bcrypt": "^3.0.6",
     "codacy-coverage": "^3.4.0",
@@ -25,12 +25,12 @@
     "md5": "^2.2.1",
     "mocha-lcov-reporter": "^1.3.0",
     "moment": "^2.24.0",
-    "mongoose": "^5.7.6",
+    "mongoose": "^5.12.0",
     "morgan": "~1.9.0",
     "multer": "^1.4.2",
     "nodemailer": "^6.3.1",
     "npx": "^10.2.2",
-    "pm2": "^4.2.3",
+    "pm2": "^4.5.5",
     "swagger": "^0.7.5",
     "swagger-ui-express": "^4.1.5",
     "uniqid": "^5.2.0",

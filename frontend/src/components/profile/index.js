@@ -3,13 +3,14 @@ import ProfilePic from '../../assets/brands/user-image/Image73@2x.png';
 import { useDispatch } from 'react-redux';
 import DropdownButton from '../../shared/dropdownButtonGroup';
 import Pen from '../../assets/icons/pen.svg';
+import Mail from '../../assets/icons/mail.svg';
+import Briefcase from '../../assets/icons/briefcase.svg';
+import Telephone from '../../assets/icons/telephone.svg';
 import './style.scss';
 import { config } from '../../config';
 const axios = require('axios');
-import { getUserInfoUpdated, updateProfile, getUserInfo, setCurrentUser } from '../../actions/userActions';
+import { getUserInfoUpdated, updateProfile, getUserInfo } from '../../actions/userActions';
 import { getWarehouseByOrgId } from '../../actions/productActions';
-import setAuthToken from "../../utils/setAuthToken";
-import jwt_decode from 'jwt-decode';
 
 class Profile extends React.Component {
   constructor(props) {
@@ -31,7 +32,11 @@ class Profile extends React.Component {
       message: '',
       location: '',
       orgs: [],
-      wareIds: []
+      wareIds: [],
+      warehouseAddress_country: '',
+      warehouseAddress_city: '',
+      warehouseAddress_firstline: '',
+      warehouseAddress_zipcode: ''
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -54,7 +59,13 @@ class Profile extends React.Component {
         status,
         role,
         location,
+        warehouseAddress_country,
+        warehouseAddress_city,
+        warehouseAddress_firstline,
+        warehouseAddress_zipcode
       } = response.data.data;
+      console.log('Data');
+      console.log(response.data.data);
       this.setState({
         profile_picture,
         email,
@@ -67,7 +78,12 @@ class Profile extends React.Component {
         status,
         role,
         profileData: response.data.data,
-        location
+        location,
+        warehouseAddress_country,
+        warehouseAddress_city,
+        warehouseAddress_firstline,
+        warehouseAddress_zipcode,
+
       });
     } else {
       //error
@@ -93,6 +109,10 @@ class Profile extends React.Component {
       warehouseId,
       status,
       location,
+      warehouseAddress_country,
+      warehouseAddress_city,
+      warehouseAddress_firstline,
+      warehouseAddress_zipcode
     } = this.state.profileData;
 
     this.setState({
@@ -107,6 +127,10 @@ class Profile extends React.Component {
      lastName,
       status,
       location,
+      warehouseAddress_country,
+      warehouseAddress_city,
+      warehouseAddress_firstline,
+      warehouseAddress_zipcode
     });
   }
 
@@ -139,29 +163,19 @@ class Profile extends React.Component {
   }
 
   async onSubmit() {
-    const { firstName,lastName, organisation, warehouseId, phoneNumber, location } = this.state;
-    const data = { firstName,lastName, organisation, warehouseId, phoneNumber, location };
+    const { firstName,lastName, organisation, warehouseId, phoneNumber, location, warehouseAddress_country, warehouseAddress_city, warehouseAddress_firstline, warehouseAddress_zipcode} = this.state;
+    const data = { firstName,lastName, organisation, warehouseId, phoneNumber, location,  warehouseAddress_country, warehouseAddress_city, warehouseAddress_firstline, warehouseAddress_zipcode };
     const result = await updateProfile(data);
 
     if (result.status === 200) {
       this.setState({ message: result.data.message, editMode: false });
       const dispatch = useDispatch();
-      if (result.data.data.isRefresh) {
-        localStorage.removeItem('theLedgerToken');
-        const token = result.data.data.token;
-        setAuthToken(token);
-        const decoded = jwt_decode(token);
-        localStorage.setItem('theLedgerToken', token);
-        dispatch(setCurrentUser(decoded));
-      }
       dispatch(getUserInfo());
       history.push('/profile');
     } else {
       this.setState({ message: 'Error while updating please try again.' });
     }
   }
-
-
 
   render() {
     const {
@@ -179,7 +193,11 @@ class Profile extends React.Component {
       location,
       orgs,
       wareIds,
-      profile_picture
+      profile_picture,
+      warehouseAddress_country,
+      warehouseAddress_city,
+      warehouseAddress_firstline,
+      warehouseAddress_zipcode
     } = this.state;
 
     return (
@@ -241,17 +259,6 @@ class Profile extends React.Component {
 
                     </div>
                     <div className="form-group">
-                      <label htmlFor="shipmentId">Role</label>
-                      <input
-                        className="form-control wallet"
-                        disabled
-                        value={this.props.user.role}
-                        onChange={e => this.setState({ role: e.target.value })}
-
-                      />
-
-                    </div>
-                    <div className="form-group">
                       <label htmlFor="shipmentId">Organisation</label>
                       <input
                         className="form-control wallet"
@@ -260,45 +267,7 @@ class Profile extends React.Component {
                        />
                     </div>
                     <div className="form-group">
-                      <label htmlFor="shipmentId">Warehouse ID</label>
-                      <div className="form-control">
-                        <DropdownButton
-                          name={warehouseId?warehouseId:"Select  Warehouse ID"}
-                          onSelect={item => this.setState({ warehouseId: item })}
-                          groups={wareIds.length==0?["Organisation needs to be Selected"]:wareIds}
-                        />
-                      </div>
-                    </div>
-                  
-                    <div className="form-group">
-                      <label htmlFor="shipmentId">Wallet Address</label>
-                      <input
-                        className="form-control wallet"
-                        disabled
-                        value={this.props.user.walletAddress}
-                        onChange={e =>
-                          this.setState({ walletAddress: e.target.value })
-                        }
-                      />
-
-
-                    </div>
-                    <div className="form-group">
-                      <label htmlFor="shipmentId">Location</label>
-
-                      <input
-                        className="form-control"
-                        placeholder="Enter Location"
-                        value={location}
-                        onChange={e =>
-                          this.setState({ location: e.target.value })
-                        }
-                      />
-
-
-                    </div>
-                    <div className="form-group">
-                      <label htmlFor="shipmentId">Email ID</label>
+                      <label htmlFor="shipmentId">Email</label>
                       <input
                         className="form-control wallet"
                         disabled
@@ -320,46 +289,99 @@ class Profile extends React.Component {
 
 
                     </div>
-                    <div className="form-group">
-                      <label htmlFor="shipmentId">Account Status</label>
-                      <input
-                        className="form-control wallet"
-                        disabled
-                        value={this.props.user.accountStatus}
-                      />
-
+                    <div className="col">
+                        <div className="row location">
+                          MY LOCATIONS
+                        </div>
                     </div>
+                    <div className="col">
+                      <div className="row">
+                        <div className="col-sm-12 col-lg-7 col-xl-7 location-cards">  
+                        <div className="custom-card">
+                          <div className="card-header">
+                            <div className="d-flex align-items-center justify-content-between">
+                              <h5 className="card-title font-weight-bold">HEAD OFFICE</h5>
+                              {/* <button
+                                className="btn-primary btn edit-button"
+                              >
+                                <img src={Pen} width="15" height="15" className="mr-2" />
+                                <span>EDIT</span>
+                              </button> */}
+                            </div>
+                          </div>
+                          <div className="card-body">
+                            <input className="total" value={this.state.warehouseAddress_country} onChange={e => this.setState({ warehouseAddress_country: e.target.value })}/>
+                              
+                            <input className="full-address" value={this.state.warehouseAddress_firstline} onChange={e => this.setState({ warehouseAddress_firstline: e.target.value })}/>
+                            <input className="pin-code" value={this.state.warehouseAddress_zipcode} onChange={e => this.setState({ warehouseAddress_zipcode: e.target.value })}/>                                                                            
+                          </div>                        
+                        </div>    
+                      </div> 
+                      </div>
+                    </div>                   
 
 
                   </div>
 
 
                 ) : (
-                    <div className="row">
-                      <ul>
-                        <li>First Name</li>
-                        <li>Last Name</li>
-                        <li>Role</li>
-                        <li>Organisation</li>
-                        <li>Warehouse ID</li>
-                        <li>Wallet Address</li>
-                        <li>Location</li>
-                        <li>Email ID</li>
-                        <li>Phone</li>
-                        <li>Account Status</li>
-                      </ul>
-                      <ul>
-                        {this.state.firstName ? <li>{this.state.firstName}</li> : <li>N/A</li>}
-                        { this.state.lastName? <li>{this.state.lastName}</li> : <li>N/A</li>}
-                        {this.state.role ? <li>{this.state.role}</li> : <li>N/A</li>}
-                        {this.state.organisation ? <li>{this.state.organisation}</li> : <li>N/A</li>}
-                        {this.state.warehouseId ? <li>{this.state.warehouseId}</li> : <li>N/A</li>}
-                        {this.props.user.walletAddress ? <li>{this.props.user.walletAddress}</li> : <li>N/A</li>}
-                        {this.state.location ? <li>{this.state.location} </li> : <li>N/A</li>}
-                        {this.props.user.emailId ? <li>{this.props.user.emailId}</li> : <li>N/A</li>}
-                        {this.state.phoneNumber ? <li>{this.state.phoneNumber}</li> : <li>N/A</li>}
-                        {this.props.user.accountStatus? <li>{this.props.user.accountStatus}</li> : <li>Pending</li>}
-                      </ul>
+                  <div>
+                      <div className="col">
+                        <div className="row role">
+                          {this.state.role ? <span>{this.state.role}</span> : <span>N/A</span>}
+                        </div>
+                        <div className="row name">
+                          {this.state.firstName ? <span>{this.state.firstName}   </span> : <span>N/A</span>}{this.state.lastName ? <span>{this.state.lastName}</span> : <span>N/A</span>}
+                        </div>   
+                        <div className="row row-list">
+                          <img src={Briefcase} width="20" height="20" className="mr-3" />
+                          {this.state.organisation ? <span>{this.state.organisation}</span> : <span>N/A</span>}
+                        </div>   
+                        <div className="row row-list">
+                          <img src={Mail} width="20" height="20" className="mr-3" />
+                          {this.props.user.emailId ? <span>{this.props.user.emailId}</span> : <span>N/A</span>}
+                        </div>   
+                        <div className="row row-list">
+                          <img src={Telephone} width="20" height="20" className="mr-3" />
+                          {this.state.phoneNumber ? <span>{this.state.phoneNumber}</span> : <span>N/A</span>}
+                        </div>                                                                                                               
+                      </div>
+                      <div className="col">
+                        <div className="row location">
+                          MY LOCATIONS
+                        </div>
+                      </div>
+                      <div className="col">
+                        <div className="row">
+                        <div className="col-sm-12 col-lg-7 col-xl-7 location-cards">  
+                          <div className="custom-card">
+                            <div className="card-header">
+                              <div className="d-flex align-items-center justify-content-between">
+                                <h5 className="card-title font-weight-bold">HEAD OFFICE</h5>
+                                {/* <button
+                                  className="btn-primary btn edit-button"
+                                >
+                                  <img src={Pen} width="15" height="15" className="mr-2" />
+                                  <span>EDIT</span>
+                                </button> */}
+                              </div>
+                            </div>
+                            <div className="card-body">
+                              <div className="total">
+                              {this.state.warehouseAddress_country ? <span>{this.state.warehouseAddress_country}</span> : <span>N/A</span>}
+                              </div>
+                              <div className="full-address">
+                              {/* 50 /b/, Takshila Apt, Mahakali Caves Road, Chakala, Andheri (west) Mumbai, Maharashtra, */}
+                              {this.state.warehouseAddress_firstline ? <span>{this.state.warehouseAddress_firstline}</span> : <span>N/A</span>}
+                              </div>  
+                              <div className="pin-code">
+                              {this.state.warehouseAddress_zipcode ? <span>{this.state.warehouseAddress_zipcode}</span> : <span>N/A</span>}
+                              </div>                                                  
+                            </div>                        
+                          </div>    
+                        </div>                             
+                        </div>
+                      </div>                      
                     </div>
                   )}
               </div>
@@ -400,10 +422,3 @@ class Profile extends React.Component {
 }
 
 export default Profile;
-
-
-
-
-
-
-
