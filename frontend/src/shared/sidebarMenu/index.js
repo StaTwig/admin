@@ -18,6 +18,7 @@ import trackSelectedIcon from '../../assets/icons/Track_Traceselected.png';
 import NetworkSelectedIcon from '../../assets/icons/NetworkSelected.svg';
 import UtilitiesSelected from '../../assets/icons/utilitieswhite.png';
 import UtilitiesIcon from '../../assets/icons/utilitiesblue.png';
+import OrderSelectedIcon from '../../assets/icons/OrderSelected.png';
 import './style.scss'
 const SideBar = ({
   match,
@@ -36,8 +37,8 @@ const SideBar = ({
 
 <li className={(url === '/shipments' || url === '/newshipment'|| url === '/transactionHistory') ? 'active' : ''}>
           <Link to="/shipments">
-            <img src={(url === '/shipments' || url === '/newshipment'|| url === '/transactionHistory')  ? shipSelectedIcon : shipIcon} alt="Shippment" />
-            <span>OrderManagement</span>
+            <img src={(url === '/shipments' || url === '/newshipment'|| url === '/transactionHistory')  ? OrderSelectedIcon : OrderSelectedIcon} alt="Shippment" />
+            <span>Orders</span>
           </Link>
         </li>
 
