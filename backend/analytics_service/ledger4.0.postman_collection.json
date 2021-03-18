@@ -588,7 +588,7 @@
 						"header": [
 							{
 								"key": "Authorization",
-								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2MjN4dGtsejh0N25qIiwiZmlyc3ROYW1lIjoiTW9oaXQiLCJlbWFpbElkIjoibW9oaXRAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJOQSIsImlhdCI6MTYxNTQ4MTQ2OCwiZXhwIjoxNjE1NDg4NjY4fQ.l2xVP09MmYgCkdpnmYS835bJkvymqHGNdvS5Eox7e0U",
+								"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2MjN4dGtsejh0N25qIiwiZmlyc3ROYW1lIjoiTW9oaXQiLCJlbWFpbElkIjoibW9oaXRAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJOQSIsImlhdCI6MTYxNjAxMjM3NCwiZXhwIjoxNjE2MDE5NTc0fQ.CPw60THUm9JgYufQohLqD0pX-9ZUBK9wmtwbCc2yFkM",
 								"type": "text"
 							}
 						],
