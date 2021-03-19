@@ -556,6 +556,8 @@ exports.userInfo = [
             postalAddress
           } = user;
           const org = await OrganisationModel.findOne({ id: organisationId }, 'name' );
+          const warehouse = await WarehouseModel.findOne({ id: warehouseId });  
+          console.log(warehouse);        
           let user_data = {
             firstName,
             lastName,
@@ -568,7 +570,11 @@ exports.userInfo = [
             accountStatus,
             role,
             photoId,
-            location: postalAddress
+            location: postalAddress,
+            warehouseAddress_country: warehouse.warehouseAddress.country,
+            warehouseAddress_zipcode: warehouse.warehouseAddress.zipCode,
+            warehouseAddress_city: warehouse.warehouseAddress.city,
+            warehouseAddress_firstline: warehouse.warehouseAddress.firstLine
           };
           logger.log(
             'info',
