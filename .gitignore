@@ -134,3 +134,5 @@ sketch
 ./backend/log_service/.env
 ./backend/transaction_service/.env
 pre-deploy*.sh
+**/package-lock.json
+**/yarn.lock
