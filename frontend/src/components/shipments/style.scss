@@ -21,6 +21,10 @@
     
       .ribben-space {
         margin-top: 6.5rem;
+        .address{
+          word-wrap: break-word; 
+          word-break: break-word
+        }
       }
 
     .panel {

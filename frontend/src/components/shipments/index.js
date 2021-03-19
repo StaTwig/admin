@@ -6,7 +6,7 @@ import PoTable from './potable';
 import ShippingOrderTable from './shippingOrder'
 import Tabs from '../../shared/tabs';
 import Tiles from './tiles';
-import Add from '../../assets/icons/add.svg';
+import Add from '../../assets/icons/createshipment.png';
 import Order from '../../assets/icons/order.svg';
 import TableFilter from '../../shared/advanceTableFilter';
 import Modal from '../../shared/modal';
@@ -81,7 +81,7 @@ const ShipmentAnalytic = props => {
           </button> */}
           <Link to="/newshipment">
             <button className="btn btn-yellow fontSize20 font-bold">
-              <img src={Add} width="14" height="14" className="mr-2" />
+              <img src={Add} width="20" height="17" className="mr-2 mb-1" />
               <span>Create Shipment</span>
             </button>
           </Link>
