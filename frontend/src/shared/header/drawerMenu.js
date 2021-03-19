@@ -15,6 +15,9 @@ import InventorySelectedIcon from '../../assets/icons/Inventoryselected.png';
 import trackSelectedIcon from '../../assets/icons/Track_Traceselected.png';
 import NetworkSelectedIcon from '../../assets/icons/NetworkSelected.svg';
 import searchingIcon from "../../assets/icons/searching@2x.png";
+import OrderSelectedIcon from '../../assets/icons/orderSelected.png';
+import OrderIcon from '../../assets/icons/Orders.png';
+
 import './menu-style.scss'
 const DrawerMenu = ({
   match,
@@ -38,6 +41,13 @@ const DrawerMenu = ({
             <span>Overview</span>
           </Link>
         </li>
+        <li className={(url === '/shipments' || url === '/newshipment'|| url === '/transactionHistory') ? 'active' : ''}>
+          <Link to="/shipments">
+            <img src={(url === '/shipments' || url === '/newshipment'|| url === '/transactionHistory')  ? OrderSelectedIcon : OrderIcon} alt="Shippment" />
+            <span>Orders</span>
+          </Link>
+        </li>
+
         <li className={(url === '/shipments' || url === '/newshipment') ? 'active' : ''}>
           <Link to="/shipments">
             <img src={(url === '/shipments' || url === '/newshipment')  ? shipSelectedIcon : shipIcon} alt="Shippment" />
