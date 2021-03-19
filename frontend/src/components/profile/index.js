@@ -264,6 +264,7 @@ class Profile extends React.Component {
                         className="form-control wallet"
                         disabled
                         value={this.state.organisation}
+                        style={{textAlign:'left'}}
                        />
                     </div>
                     <div className="form-group">
@@ -272,6 +273,7 @@ class Profile extends React.Component {
                         className="form-control wallet"
                         disabled
                         value={this.props.user.emailId}
+                        style={{textAlign:'left'}}
                         onChange={e =>
                           this.setState({ email: e.target.value })
                         }
