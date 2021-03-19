@@ -310,10 +310,9 @@ class Profile extends React.Component {
                             </div>
                           </div>
                           <div className="card-body">
-                            <input className="total" value={this.state.warehouseAddress_country} onChange={e => this.setState({ warehouseAddress_country: e.target.value })}/>
-                              
-                            <input className="full-address" value={this.state.warehouseAddress_firstline} onChange={e => this.setState({ warehouseAddress_firstline: e.target.value })}/>
-                            <input className="pin-code" value={this.state.warehouseAddress_zipcode} onChange={e => this.setState({ warehouseAddress_zipcode: e.target.value })}/>                                                                            
+                            <input className="total-input" value={this.state.warehouseAddress_country} onChange={e => this.setState({ warehouseAddress_country: e.target.value })} placeholder="Country"/>
+                            <input className="full-address-input" value={this.state.warehouseAddress_firstline} onChange={e => this.setState({ warehouseAddress_firstline: e.target.value })} placeholder="Address"/>
+                            <input className="pin-code-input" value={this.state.warehouseAddress_zipcode} onChange={e => this.setState({ warehouseAddress_zipcode: e.target.value })} placeholder="Zipcode"/>                                                                            
                           </div>                        
                         </div>    
                       </div> 
@@ -331,11 +330,11 @@ class Profile extends React.Component {
                           {this.state.role ? <span>{this.state.role}</span> : <span>N/A</span>}
                         </div>
                         <div className="row name">
-                          {this.state.firstName ? <span>{this.state.firstName}   </span> : <span>N/A</span>}{this.state.lastName ? <span>{this.state.lastName}</span> : <span>N/A</span>}
+                          {this.state.firstName ? <span>{this.state.firstName}</span> : <span>N/A</span>}&nbsp;{this.state.lastName ? <span>{this.state.lastName}</span> : <span>N/A</span>}
                         </div>   
                         <div className="row row-list">
                           <img src={Briefcase} width="20" height="20" className="mr-3" />
-                          {this.state.organisation ? <span>{this.state.organisation}</span> : <span>N/A</span>}
+                          {this.state.organisation ? <span>{this.state.organisation.split('/')[1]}</span> : <span>N/A</span>}
                         </div>   
                         <div className="row row-list">
                           <img src={Mail} width="20" height="20" className="mr-3" />
@@ -375,7 +374,7 @@ class Profile extends React.Component {
                               {this.state.warehouseAddress_firstline ? <span>{this.state.warehouseAddress_firstline}</span> : <span>N/A</span>}
                               </div>  
                               <div className="pin-code">
-                              {this.state.warehouseAddress_zipcode ? <span>{this.state.warehouseAddress_zipcode}</span> : <span>N/A</span>}
+                              Zipcode : {this.state.warehouseAddress_zipcode ? <span>{this.state.warehouseAddress_zipcode}</span> : <span>N/A</span>}
                               </div>                                                  
                             </div>                        
                           </div>    

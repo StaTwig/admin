@@ -14,6 +14,7 @@
 }
 
 .name{
+  white-space: pre-wrap;
   font-size: 35px;
   font-weight: bold;
   padding-bottom: 3vh;
@@ -75,18 +76,41 @@
         font-weight: bold;
         padding-bottom: 2vh;        
     }
+    .total-input {
+      font-size: 14px;
+      font-weight: bold;
+      padding-bottom: 2vh;
+      margin-bottom: 2vh;     
+      border: 0vh;           
+  }    
     .full-address {
         width: 30vh;
         font-size: 14px;
         color: #707070;
         padding-bottom: 2vh;
     }  
+    .full-address-input {
+      width: 30vh;
+      font-size: 14px;
+      color: #707070;
+      padding-bottom: 2vh;
+      margin-bottom: 2vh;   
+      border: 0vh;    
+  }      
     .pin-code {
       width: 30vh;
       font-size: 14px;
       color: #707070;
       padding-bottom: 2vh;      
-  }      
+  }   
+  .pin-code-input {
+    width: 30vh;
+    font-size: 14px;
+    color: #707070;
+    padding-bottom: 2vh;    
+    margin-bottom: 2vh;    
+    border: 0vh;          
+}       
   }
 }
 
@@ -141,6 +165,7 @@
   }
   .wallet{
     border-bottom:none;
+    text-align: left;
     
   }
 }
