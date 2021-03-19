@@ -411,34 +411,34 @@ exports.fetchShipments = [
                                     path: "$receiver.org",
                                 },
                             },
-                            {
-                                $project: {
-                                    _id: 0,
-                                    id: 1,
-                                    status: 1,
-                                    shippingDate: 1,
-                                    supplier: {
-                                        locationId: 1,
-                                        org: {
-                                            name: 1,
-                                        },
-                                        warehouse: {
-                                            postalAddress: 1,
-                                            warehouseAddress: 1
-                                        }
-                                    },
-                                    receiver: {
-                                        locationId: 1,
-                                        org: {
-                                            name: 1,
-                                        },
-                                        warehouse: {
-                                            postalAddress: 1,
-                                            warehouseAddress: 1
-                                        }
-                                    },
-                                },
-                            },
+                            // {
+                            //     $project: {
+                            //         _id: 0,
+                            //         id: 1,
+                            //         status: 1,
+                            //         shippingDate: 1,
+                            //         supplier: {
+                            //             locationId: 1,
+                            //             org: {
+                            //                 name: 1,
+                            //             },
+                            //             warehouse: {
+                            //                 postalAddress: 1,
+                            //                 warehouseAddress: 1
+                            //             }
+                            //         },
+                            //         receiver: {
+                            //             locationId: 1,
+                            //             org: {
+                            //                 name: 1,
+                            //             },
+                            //             warehouse: {
+                            //                 postalAddress: 1,
+                            //                 warehouseAddress: 1
+                            //             }
+                            //         },
+                            //     },
+                            // },
                         ]).sort({createdAt: -1}).skip(parseInt(skip))
                             .limit(parseInt(limit));;
                         // const shipments = await ShipmentModel.find({

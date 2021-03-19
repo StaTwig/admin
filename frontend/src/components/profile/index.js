@@ -299,7 +299,7 @@ class Profile extends React.Component {
                     <div className="col">
                       <div className="row">
                         <div className="col-sm-12 col-lg-7 col-xl-7 location-cards">  
-                        <div className="custom-card">
+                        <div className="custom-card p-3">
                           <div className="card-header">
                             <div className="d-flex align-items-center justify-content-between">
                               <h5 className="card-title font-weight-bold">HEAD OFFICE</h5>
@@ -355,7 +355,7 @@ class Profile extends React.Component {
                       <div className="col">
                         <div className="row">
                         <div className="col-sm-12 col-lg-7 col-xl-7 location-cards">  
-                          <div className="custom-card">
+                          <div className="custom-card p-3">
                             <div className="card-header">
                               <div className="d-flex align-items-center justify-content-between">
                                 <h5 className="card-title font-weight-bold">HEAD OFFICE</h5>
