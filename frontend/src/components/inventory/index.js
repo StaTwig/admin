@@ -381,12 +381,12 @@ const Inventory = props => {
         </div>
       </div>
       <div className="full-width-ribben">
-        <TableFilter data={headers} />
+        <TableFilter data={headers} fb="60%" />
       </div>
       <div className="ribben-space">
         <div className="row no-gutter">
         <div className="col-sm-12 col-xl-9 rTableHeader">
-            <Table data={tableHeaders} {...props} loadMore={props.loadMore} onLoadMore={props.onLoadMore} />
+            <Table data={tableHeaders} {...props} colors={colors} loadMore={props.loadMore} onLoadMore={props.onLoadMore} />
           </div>
           <div className="col-sm-12 col-xl-3">
             <div className="list-container">

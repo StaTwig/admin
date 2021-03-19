@@ -3,11 +3,11 @@ import React from 'react';
 import './style.scss';
 
 const Table = props => {
-  const { loadMore, onLoadMore } = props;
+  const { loadMore, onLoadMore, colors } = props;
   return (
     <div className="table">
       <div className="rTable">
-        <div className="rTableHeading">
+        {/* <div className="rTableHeading">
           <div className="rTableHead">Product</div>
           <div className="rTableHead">Manufacturer</div>
           <div className="rTableHead">
@@ -17,17 +17,17 @@ const Table = props => {
             <span></span>
           </div>
 
-        </div>
+        </div> */}
         <div className="overflow">
 
           {props.inventoryDetails.map((inventory, index) => (
             <div className="rTableRow" key={index}>
                 <div className="rTableCell">
-                    <div className="d-flex flex-column ">
+                    <div className="d-flex flex-column txtBlue ">
                       <div>{inventory.productName}</div>
-                      <div className="sub">
+                      {/* <div className="sub">
                         {inventory.productId}
-                      </div>
+                      </div> */}
                     </div>
                     </div>
               <div className="rTableCell">{inventory.manufacturer}</div>
@@ -44,9 +44,9 @@ const Table = props => {
           ))}
         </div>
         </div>
-        {loadMore && (
+        {/* {loadMore && (
            <button className=" btn-primary btn mr-2 float-left" onClick={onLoadMore}>Load More</button>
-        )}
+        )} */}
     </div>
   );
 };

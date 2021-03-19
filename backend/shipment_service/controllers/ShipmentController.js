@@ -346,16 +346,111 @@ exports.fetchShipments = [
                         warehouseId
                     } = req.user;
                     try {
-                        const shipments = await ShipmentModel.find({
-                            $or: [{
-                                'supplier.locationId': warehouseId
-                            },
-                                {
-                                    'receiver.locationId': warehouseId
+                         const shipments = await ShipmentModel.aggregate([
+                            {
+                                $match: {
+                                    $or: [
+                                        {
+                                            'supplier.locationId': warehouseId
+                                        },
+                                        {
+                                            'receiver.locationId': warehouseId
+                                        },
+                                    ],
                                 },
-                            ],
-                        }).sort({createdAt: -1}).skip(parseInt(skip))
-                            .limit(parseInt(limit));
+                            },
+                            {
+                                $lookup: {
+                                    from: "warehouses",
+                                    localField: "supplier.locationId",
+                                    foreignField: "id",
+                                    as: "supplier.warehouse",
+                                },
+                            },
+                            {
+                                $unwind: {
+                                    path: "$supplier.warehouse",
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: "organisations",
+                                    localField: "supplier.warehouse.organisationId",
+                                    foreignField: "id",
+                                    as: "supplier.org",
+                                },
+                            },
+                            {
+                                $unwind: {
+                                    path: "$supplier.org",
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: "warehouses",
+                                    localField: "receiver.locationId",
+                                    foreignField: "id",
+                                    as: "receiver.warehouse",
+                                },
+                            },
+                            {
+                                $unwind: {
+                                    path: "$receiver.warehouse",
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: "organisations",
+                                    localField: "receiver.warehouse.organisationId",
+                                    foreignField: "id",
+                                    as: "receiver.org",
+                                },
+                            },
+                            {
+                                $unwind: {
+                                    path: "$receiver.org",
+                                },
+                            },
+                            {
+                                $project: {
+                                    _id: 0,
+                                    id: 1,
+                                    status: 1,
+                                    shippingDate: 1,
+                                    supplier: {
+                                        locationId: 1,
+                                        org: {
+                                            name: 1,
+                                        },
+                                        warehouse: {
+                                            postalAddress: 1,
+                                            warehouseAddress: 1
+                                        }
+                                    },
+                                    receiver: {
+                                        locationId: 1,
+                                        org: {
+                                            name: 1,
+                                        },
+                                        warehouse: {
+                                            postalAddress: 1,
+                                            warehouseAddress: 1
+                                        }
+                                    },
+                                },
+                            },
+                        ]).sort({createdAt: -1}).skip(parseInt(skip))
+                            .limit(parseInt(limit));;
+                        // const shipments = await ShipmentModel.find({
+                        //     $or: [{
+                        //         'supplier.locationId': warehouseId
+                        //     },
+                        //         {
+                        //             'receiver.locationId': warehouseId
+                        //         },
+                        //     ],
+                        // }).sort({createdAt: -1}).skip(parseInt(skip))
+                        //     .limit(parseInt(limit));
                         return apiResponse.successResponseWithData(
                             res,
                             'Shipments Table',

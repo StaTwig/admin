@@ -20,7 +20,11 @@
       }
     
       .ribben-space {
-        margin-top: 8rem;
+        margin-top: 6.5rem;
+        .address{
+          word-wrap: break-word; 
+          word-break: break-word
+        }
       }
 
     .panel {
@@ -77,12 +81,21 @@
           }                                       
     
           &.sent-bg {
-            background: #d4ebf2;
+            background: #fff2e5;
           }
     
           &.recived-bg {
-            background: #fff2e5;
+            background: #d4ebf2;
             
+          }
+
+          &.inbound-alert-bg{
+            background-color: #0A69C5;
+            opacity: 0.13;
+          }
+
+          &.outbound-alert-bg{
+            background-color: #35BFCC96;
           }
     
           &.transit-bg {
@@ -143,11 +156,19 @@
         }
     
         .sent-text {
-          color: #0093E9;
+          color: #FA7923;
         }
     
         .recived-text {
-          color: #FA7923;
+          color: #0093E9;
+        }
+
+        .outbound-text{
+          color: #2BA3AE;
+        }
+
+        .inbound-text{
+          color: #0159EA;
         }
     
         .transit-text {

@@ -8,8 +8,28 @@
       padding-right: 10px;
       padding-left: 10px;
     }
+  .userpanel{
+    padding: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .profileIconRound{
+      background-color: #FABCC4;
+      font-size: 0.625rem;
+      width: 30px;
+      height: 30px;
+      box-shadow: 0px 3px 6px #00000029;
+      border-radius: 50%;
+      justify-content: center;
+      align-items: center;
+      margin-right: 11px;
+      display: flex;
+    }
+  }  
 
-
+  .formContainer{
+    border-radius: 0.313rem;
+  }
 
   .form-group,
   .input-group {
@@ -92,6 +112,9 @@
   }
   .headsup{
     font-size: 14px;
+    font-weight: 700;
+    padding-top:1.25rem;
+    padding-bottom: 0.625rem; 
   }
   .total{
     color: $OBBlue;

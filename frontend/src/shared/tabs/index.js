@@ -6,15 +6,11 @@ const Tabs = props => {
     <div className="tabs">
       <ul className="nav nav-pills">
         <li className={ props.visible === "one" ? "nav-item-active":"nav-item"} onClick = {() => props.setvisible('one')}>
-          <a className={props.visible === "one" ?  "nav-link":"nav-link text-secondary"}>Purchase Orders</a>
+          <a className={props.visible === "one" ?  "nav-link":"nav-link text-secondary"}>Inbound</a>
         </li>
         <li className= { props.visible === "two"? "nav-item-active " : "nav-item"} onClick = {() => props.setvisible('two')}>
-          <a className={props.visible === "two"? "nav-link" : "nav-link text-secondary"}>Shipping Orders</a>
+          <a className={props.visible === "two"? "nav-link" : "nav-link text-secondary"}>Outbound</a>
         </li>
-        <li className= { props.visible === "three"? "nav-item-active " : "nav-item"} onClick = {() => props.setvisible('three')}>
-          <a className={props.visible === "three"? "nav-link" : "nav-link text-secondary"}>Shipments</a>
-        </li>
-      
       </ul>
     </div>
   );

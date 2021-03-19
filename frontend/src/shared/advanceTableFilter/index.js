@@ -10,7 +10,7 @@ const AdvanceTableFilter = (props) => {
   return (
     <div className="filter">
       <div className="d-flex justify-content-between">
-        <div className="row" style={{ flexBasis: '70%' }}>
+        <div className="row" style={{ flexBasis: props.fb }}>
         <div className="box col">
           <div className="filter-item">
               <div className="icon mr-2">

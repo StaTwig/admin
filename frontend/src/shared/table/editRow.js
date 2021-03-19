@@ -21,6 +21,8 @@ const EditRow = props => {
     idx,
   } = props;
 
+  const [addMore, setAddMore] = useState(false);
+
   const numbersOnly = (e) => {
     // Handle paste
     if (e.type === 'paste') {
@@ -38,8 +40,8 @@ const EditRow = props => {
   }
 
   return (
-    <div className="d-flex inp-grp justify-content-between mb-3 flex-row bg-white">
-      <div className="w-15 pt-3 pb-3 border-right">
+    <div className="d-flex inp-grp  mb-3 flex-row">
+      <div className={`${addMore ? `w-15` : `w-20`} pt-1 pb-1 border-right bg-white`}>
         <div className="square-box" />
         <DropdownButton
           name={productName}
@@ -47,7 +49,7 @@ const EditRow = props => {
           groups={products}
         />
       </div>
-      <div className="w-15 pt-3 pb-3 border-right">
+      <div className={`${addMore ? `w-15` : `w-20`} mt-1 mb-1 border-right`}>
         <div className="">
           <input
             type="text"
@@ -58,7 +60,7 @@ const EditRow = props => {
           />
         </div>
       </div>
-      <div className="w-10 pt-3 pb-3 border-right">
+      <div className={`${addMore ? `w-10` : `w-20`} mt-1 mb-1 border-right`}>
         <div className="">
           <input
             type="text"
@@ -72,77 +74,92 @@ const EditRow = props => {
           />
         </div>
       </div>
-      <div className="w-10 pt-3 pb-3 border-right">
-        <div className="">
-          <DatePicker
-            className="form-control"
-            onChange={date =>
-              handleInventoryChange(idx, 'manufacturingDate', date)
-            }
-            selected={
-              manufacturingDate
-                ? new Date(Date.parse(manufacturingDate))
-                : manufacturingDate
-            }
-            onKeyDown={e =>
-              (e.keyCode != 8) &&
-               e.preventDefault()
-             }
-            dateFormat="MM/yyyy"
-            placeholderText="Enter Mfg Date"
-            showMonthYearPicker
-            showFullMonthYearPicker
-          />
+      {addMore && (
+        <>
+        <div className="w-10 mt-1 mb-1 border-right">
+          <div className="">
+            <DatePicker
+              className="form-control"
+              onChange={date =>
+                handleInventoryChange(idx, 'manufacturingDate', date)
+              }
+              selected={
+                manufacturingDate
+                  ? new Date(Date.parse(manufacturingDate))
+                  : manufacturingDate
+              }
+              onKeyDown={e =>
+                (e.keyCode != 8) &&
+                e.preventDefault()
+              }
+              dateFormat="MM/yyyy"
+              placeholderText="Enter Mfg Date"
+              showMonthYearPicker
+              showFullMonthYearPicker
+            />
+          </div>
         </div>
-      </div>
-      <div className="w-10 pt-3 pb-3 border-right">
-        <div className="">
-          <DatePicker
-            className="form-control"
-            placeholderText="Enter Exp Date"
-            dateFormat="MM/yyyy"
-            onChange={date => handleInventoryChange(idx, 'expiryDate', date)}
-            selected={
-              expiryDate ? new Date(Date.parse(expiryDate)) : expiryDate
-            }
-            onKeyDown={e =>
-              (e.keyCode != 8) &&
-               e.preventDefault()
-             }
-            showMonthYearPicker
-            showFullMonthYearPicker
-          />
+        <div className="w-10 mt-1 mb-1 border-right">
+          <div className="">
+            <DatePicker
+              className="form-control"
+              placeholderText="Enter Exp Date"
+              dateFormat="MM/yyyy"
+              onChange={date => handleInventoryChange(idx, 'expiryDate', date)}
+              selected={
+                expiryDate ? new Date(Date.parse(expiryDate)) : expiryDate
+              }
+              onKeyDown={e =>
+                (e.keyCode != 8) &&
+                e.preventDefault()
+              }
+              showMonthYearPicker
+              showFullMonthYearPicker
+            />
+          </div>
         </div>
-      </div>
-      <div className="w-10 pt-3 pb-3 border-right">
-        <div className="">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Enter Batch Number"
-            value={batchNumber}
-            onChange={e =>
-              handleInventoryChange(idx, 'batchNumber', e.target.value)
-            }
-          />
+        <div className="w-10 mt-1 mb-1 border-right">
+          <div className="">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Enter Batch Number"
+              value={batchNumber}
+              onChange={e =>
+                handleInventoryChange(idx, 'batchNumber', e.target.value)
+              }
+            />
+          </div>
         </div>
-      </div>
-      <div className="w-15 pt-3 pb-3 ">
-        <div className="">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Enter Serial Numbers"
-            value={serialNumber}
-            onChange={e =>
-              handleInventoryChange(idx, 'serialNumber', e.target.value)
-            }
-          />
+        <div className="w-15 mt-1 mb-1 ">
+          <div className="">
+            <input
+              type="text"
+              className="form-control"
+              placeholder="Enter Serial Numbers"
+              value={serialNumber}
+              onChange={e =>
+                handleInventoryChange(idx, 'serialNumber', e.target.value)
+              }
+            />
+          </div>
         </div>
+        </>
+      )}
+      <div className="ml-2 bg-light align-self-center">
+        <span className=" border cursorP border-danger text-danger pl-1 pr-1 rounded-circle" onClick={() => props.onRemoveRow(idx)}>x</span>
       </div>
-      <div className="pl-1 pt-4 bg-light">
-        <span className=" border cursorP border-danger text-danger pl-2 pr-2 pt-1 pb-1 rounded-circle" onClick={() => props.onRemoveRow(idx)}>x</span>
-      </div>
+      {!addMore && 
+        <div className="ml-2 mt-1 mb-1 ">
+        <button type="button" onClick={() => { setAddMore(true); props.setVisible(true);}} className="btn text-white btn-warning ">
+            <i
+              className="fa fa-plus txt pr-2"
+              aria-hidden="true"
+            ></i>
+            <span className="txt">Add More Details</span>
+          </button>
+        </div>
+      }
     </div>
   );
 };
