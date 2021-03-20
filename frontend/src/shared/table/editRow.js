@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import DropdownButton from '../dropdownButtonGroup';
 import calenderBlue from '../../assets/icons/calendar-blue.svg';
 import downArrow from '../../assets/icons/up-and-down-dark.svg';
+import Delete from '../../assets/icons/Delete.png';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -147,7 +148,7 @@ const EditRow = props => {
         </>
       )}
       <div className="ml-2 bg-light align-self-center">
-        <span className=" border cursorP border-danger text-danger pl-1 pr-1 rounded-circle" onClick={() => props.onRemoveRow(idx)}>x</span>
+        <span onClick={() => props.onRemoveRow(idx)}><img className="border-none cursorP shadow p-1 rounded-circle" height="25" src={Delete} /></span>
       </div>
       {!addMore && 
         <div className="ml-2 mt-1 mb-1 ">

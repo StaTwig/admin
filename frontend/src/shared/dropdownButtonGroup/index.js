@@ -7,7 +7,7 @@ import './style.scss';
 
 const dropdownButtonGroup = props => {
   const [menu, setMenu] = useState(false);
-  const { groups, name, onSelect, isText, value, changeFn, placeholder, dClass } = props;
+  const { groups, name, onSelect, isText, value, changeFn, placeholder, dClass, disabled } = props;
 
   const ref = useRef();
   useOnclickOutside(ref, () => {
@@ -22,10 +22,10 @@ const dropdownButtonGroup = props => {
           className={`btn-custom-dropdown ${menu && 'active'}`}
           role="button"
           type="button"
+          disabled={disabled}
           onClick={() => setMenu(!menu)}
         >
-          {!useParse && <span>{name}</span>}
-          {useParse && <span>{parse(name)}</span>}
+          <span className={`${name?.length > 30 && 'textNeg'}`}>{useParse ? parse(name) : name}</span>
           <img src={upDownArrow} alt="downarrow" width="9" height="9" />
         </button>
       }
@@ -42,7 +42,11 @@ const dropdownButtonGroup = props => {
                       setMenu(false);
                     }}
                   >
-                    {item?.name ? item?.name : parse(item)}
+                    {item?.warehouseInventory
+                      ? item?.warehouseAddress
+                        ? (item?.warehouseAddress?.firstLine + ', ' + item?.warehouseAddress?.city)
+                        : item.postalAddress 
+                      : (item?.name ? item?.name : parse(item))}
                   </span>
                   {index + 1 < groups.length && <hr />}
                 </React.Fragment>

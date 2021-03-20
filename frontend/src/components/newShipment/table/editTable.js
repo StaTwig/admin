@@ -6,9 +6,14 @@ const EditTable = props => {
 
   
  return (
-    <div className="table editTable">
-      <div className="rTable">
-        <div className="rTableHeading">
+    <div className="table  productTable mt-2">
+     <div className="rTable">
+       <div class="rTableHeading">
+          <div class="rTableHead text-left pro">Product Name</div>
+          <div class="rTableHead pro">Manufacturer</div>
+          <div class="rTableHead pro">Quantity</div>
+        </div>
+        {/* <div className="rTableHeading">
           <div className="rTableHead"> Product ID</div>
           <div className="rTableHead">
             <span>Product Name</span>
@@ -16,7 +21,7 @@ const EditTable = props => {
           <div className="rTableHead">Manufacturer</div>
           <div className="rTableHead">Quantity</div>
           <div className="rTableHead">Label ID</div>
-        </div>
+        </div> */}
         <div >
          <EditRow {...props} />
         </div>
