@@ -128,9 +128,8 @@ const NewInventory = props => {
       if (error) return error;
       for (let i = 0; i < validations.length; i++) {
         let validationVariable = inventory[validations[i]];
-        if (
-          (validationVariable.length < 1 ||
-          validationVariable == 'Select Product') && (validations[i] == 'manufacturer' && validations[i] == 'productName' && validations[i] == 'quantity')
+        if (validationVariable.length < 1 ||
+          validationVariable == 'Select Product' || validations[i] == 'manufacturer' || validations[i] == 'productName' || validations[i] == 'quantity'
         ) {
           setInventoryError(validations[i]);
           setOpenFailInventory(true);

@@ -13,59 +13,79 @@ const EditRow = props => {
 
 
   return (
-    <div className="rTableRow">
-      <div className="rTableCell">
-        <div className="form-group">
-          <input
-            className="form-field"
-            placeholder="Product ID"
-            value={product.productID}
-            disabled={true}
-          />
+    <div class="rTableRow">
+      <div class="rTableCell ml-1 p-2">
+        <div class="userpanel p-0">
+          {/* <div class="profileIconRound recived-bg">OPV</div> */}
+
+          <div class="d-flex flex-column">
+            <div class="title recived-text">{product.productName}</div>
+          </div>
         </div>
       </div>
-      <div className="rTableCell">
-        <div className="form-group">
+      <div class="rTableCell justify-content-center p-2">{product.manufacturer}</div>
+      <div class="rTableCell justify-content-center p-2"><div className="form-group">
           <input
-            className="form-field"
-            placeholder="Product Name"
-            value={product.productName}
-            disabled={true}
-          />
-        </div>
-      </div>
-      <div className="rTableCell">
-        <div className="form-group">
-          <input
-            className="form-field"
-            placeholder="Manufacturer"
-            value={product.manufacturer}
-            disabled={true}
-          />
-        </div>
-      </div>
-      <div className="rTableCell">
-        <div className="form-group">
-          <input
-            className="form-field"
+            className="form-control text-center"
             placeholder="Quantity"
             value={product.productQuantity}
             onChange={e => handleQuantityChange(e.target.value, index)}
           />
-        </div>
-      </div>
-      <div className="rTableCell">
-        <div className="form-group">
-          <input
-            className="form-field"
-            placeholder="Label Id"
-            value={product.labelId}
-            onChange={e => handleLabelIdChange(e.target.value, index)}
-
-          />
-        </div>
-      </div>
+        </div></div>
     </div>
+    // <div className="rTableRow">
+    //   <div className="rTableCell">
+    //     <div className="form-group">
+    //       <input
+    //         className="form-field"
+    //         placeholder="Product ID"
+    //         value={product.productID}
+    //         disabled={true}
+    //       />
+    //     </div>
+    //   </div>
+    //   <div className="rTableCell">
+    //     <div className="form-group">
+    //       <input
+    //         className="form-field"
+    //         placeholder="Product Name"
+    //         value={product.productName}
+    //         disabled={true}
+    //       />
+    //     </div>
+    //   </div>
+    //   <div className="rTableCell">
+    //     <div className="form-group">
+    //       <input
+    //         className="form-field"
+    //         placeholder="Manufacturer"
+    //         value={product.manufacturer}
+    //         disabled={true}
+    //       />
+    //     </div>
+    //   </div>
+    //   <div className="rTableCell">
+    //     <div className="form-group">
+    //       <input
+    //         className="form-field"
+    //         placeholder="Quantity"
+    //         value={product.productQuantity}
+    //         onChange={e => handleQuantityChange(e.target.value, index)}
+    //       />
+    //     </div>
+    //   </div>
+    //   <div className="rTableCell">
+    //     <div className="form-group">
+    //       <input
+    //         className="form-field"
+    //         placeholder="Label Id"
+    //         value={product.labelId}
+    //         onChange={e => handleLabelIdChange(e.target.value, index)}
+
+    //       />
+    //     </div>
+    //   </div>
+    // </div>
 
 
   );
