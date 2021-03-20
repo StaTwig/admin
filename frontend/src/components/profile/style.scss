@@ -2,36 +2,6 @@
 
 .location-cards{
   padding-left: 0%;
-}
-
-.edit-button{
-  height: 5vh !important;
-}
-
-.role{
-  font-size: 16px;  
-  color: #707070;
-}
-
-.name{
-  white-space: pre-wrap;
-  font-size: 35px;
-  font-weight: bold;
-  padding-bottom: 3vh;
-}
-
-.row-list{
-  font-size: 16px;
-  padding-bottom: 1vh;
-}
-
-.location{
-  color: #707070;
-  font-size: 16px;
-  font-weight: bold;
-  padding-top: 3vh;
-  padding-bottom: 2vh;
-}
 
 .custom-card { 
   width: 22vw;
@@ -112,6 +82,36 @@
     border: 0vh;          
 }       
   }
+}
+}
+
+.edit-button{
+  height: 5vh !important;
+}
+
+.role{
+  font-size: 16px;  
+  color: #707070;
+}
+
+.name{
+  white-space: pre-wrap;
+  font-size: 35px;
+  font-weight: bold;
+  padding-bottom: 3vh;
+}
+
+.row-list{
+  font-size: 16px;
+  padding-bottom: 1vh;
+}
+
+.location{
+  color: #707070;
+  font-size: 16px;
+  font-weight: bold;
+  padding-top: 3vh;
+  padding-bottom: 2vh;
 }
 
 .profile {
