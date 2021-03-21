@@ -20,6 +20,7 @@ const checkPermissions = require('../middlewares/rbac_middleware')
 const axios = require('axios');
 
 const fs = require('fs');
+const uniqid = require('uniqid');
 const blockchain_service_url = process.env.URL;
 const product_service_url = process.env.PRODUCT_URL;
 
@@ -695,17 +696,22 @@ exports.addProductsToInventory = [
               'Employee not assigned to any organisation',
             );
           }
-          let serialNumbersRange = true
-         for(let i=0; i< products.length; i++) {
-           if (products[i].serialNumbersRange.split('-').length < 2) {
-             let snoref = Date.now();
+          let serialNumbersRange = true;
+          let alpha = [...Array(26)].map((_, y) => String.fromCharCode(y + 65)).join('');
+          for (let i = 0; i < products.length; i++) {
+            if (products[i].serialNumbersRange.split('-').length < 2) {
+              let snoref = Date.now();
+              let rApha = '';
+              for (let i = 0; i < 4; i++)
+                rApha += alpha.charAt(Math.floor(Math.random() * alpha.length));
+              
              products[i].serialNumbersRange =
-               "DSL" + (parseInt(snoref) - parseInt(products[i].quantity - 1)) +
-               "-DSL" + snoref;
+               "DSL" + rApha + (parseInt(snoref) - parseInt(products[i].quantity - 1)) +
+               "-DSL" + rApha + snoref;
               // serialNumbersRange = false;
               // break;
             }
-         }
+          }
          if(!serialNumbersRange) {
            return apiResponse.ErrorResponse(
              res,
@@ -721,10 +727,9 @@ exports.addProductsToInventory = [
             const serialNumbers = product.serialNumbersRange.split('-');
             const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
             const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
-
             const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
             for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
-              const atom = `${serialNumberText}${i}`
+              const atom = `${serialNumberText+uniqid.time()}${i}`
 
               atoms.push(atom);
             }
@@ -746,7 +751,7 @@ exports.addProductsToInventory = [
 
             for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
               const atom = {
-                id: `${serialNumberText}${i}`,
+                id: `${serialNumberText+uniqid.time()}${i}`,
                 label: {
                   labelId: '',
                   labelType: '',
