@@ -36,15 +36,7 @@
 }        }
 
 
-.status {
-                                padding: 10px;
-                                width: 80px;
-                                border-radius: 5px;
-                                display: inline-block;
-                                text-align: center;
-                        }
-
-                        .success-bg {
+ .status[target=RECEIVED]{
                                 background: #28a745 0% 0% no-repeat padding-box;
                                 color: #ffffff;
                                 padding: 3px 10px;
@@ -52,12 +44,13 @@
                         }
 
 
-                        .primary-bg {
+                        .status[target=CREATED]  {
                                 background: #007bff 0% 0% no-repeat padding-box;
                                 padding: 3px 10px;
                                 border-radius: 7px;
                                 color: #ffffff;
                         }
+
       .round-sign {
         border-radius: 4px;
         margin-right: 15px;
