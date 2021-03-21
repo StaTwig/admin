@@ -67,9 +67,18 @@ const checkProduct = await InventoryModel.find({"$and":[{"id":recvId},{"inventor
     }
         else{
                 const s = await InventoryModel.update(
-   { "id":"inv-5e6d154kmarh3ye" },
-   { $addToSet: { "inventoryDetails": {"productId" : "prod-9bhkk6yiutkjhkjb","quantity" : 1000} } }
+   { "id":recvId },
+   { $addToSet: { "inventoryDetails": {"productId" : id,"quantity" : quantity} } }
 )
+   const suppUpdateRecvTransit = await InventoryModel.update({
+            'id': suppId,
+            "inventoryDetails.productId": id
+        }, {
+            $inc: {
+                "inventoryDetails.$.quantityInTransit": -quantity
+            }
+        })
+    
         }
     //next("Success")
 };
