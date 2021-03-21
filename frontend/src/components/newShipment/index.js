@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import Add from '../../assets/icons/createshipment.png';
 import EditTable from "./table/editTable";
 import "./style.scss";
 import { createShipment } from "../../actions/shipmentActions";
@@ -318,7 +319,7 @@ const NewShipment = (props) => {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="organizationName">Organisation Name</label>
+                      <label htmlFor="organizationName">Organisation Name*</label>
                       <div className="form-control">
                         <DropdownButton
                           name={senderOrganisation[0]}
@@ -332,7 +333,7 @@ const NewShipment = (props) => {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="orgLocation">Organization Location</label>
+                      <label htmlFor="orgLocation">Organization Location*</label>
                       <div className="form-control">
                         <DropdownButton
                           name={senderOrgLoc}
@@ -361,7 +362,7 @@ const NewShipment = (props) => {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="organizationName">Organisation Name</label>
+                      <label htmlFor="organizationName">Organisation Name*</label>
                       <div className="form-control">
                         <DropdownButton
                           name={receiverOrgId}
@@ -384,7 +385,7 @@ const NewShipment = (props) => {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="delLocation">Delivery Location</label>
+                      <label htmlFor="delLocation">Delivery Location*</label>
                       <div className="form-control">
                         <DropdownButton
                           name={receiverOrgLoc}
@@ -413,7 +414,7 @@ const NewShipment = (props) => {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="organizationName">Airway Bill</label>
+                      <label htmlFor="organizationName">Airway Bill*</label>
                       <input
                         type="text"
                         className="form-control"
@@ -423,7 +424,7 @@ const NewShipment = (props) => {
                         onChange={handleChange}
                         value={values.airWayBillNo}
                       />
-                      
+
                       {errors.airWayBillNo && touched.airWayBillNo && (
                         <span className="error-msg text-danger">{errors.airWayBillNo}</span>
                       )}
@@ -432,7 +433,7 @@ const NewShipment = (props) => {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="delLocation">Shipment Date</label>
+                      <label htmlFor="delLocation">Shipment Date*</label>
                       <div className="form-control">
                         <DatePicker
                           className="date"
@@ -443,8 +444,9 @@ const NewShipment = (props) => {
                           }
                           onKeyDown={(e) => e.keyCode != 8 && e.preventDefault()}
                           minDate={new Date()}
-                          placeholderText="Enter Shipment Date"
-                          onChange={(date) => {
+                  placeholderText="Enter Shipment Date"
+      //        <img src={Date} width="20" height="17" className="mr-2 mb-1" />
+                            onChange={(date) => {
                             setFieldValue('shipmentDate', date);
                             // setShipmentDate(date);
                           }}
@@ -464,7 +466,7 @@ const NewShipment = (props) => {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="Label code">Label Code</label>
+                      <label htmlFor="Label code">Label Code*</label>
                       <input
                         type="text"
                         className="form-control"
@@ -487,6 +489,7 @@ const NewShipment = (props) => {
                         <DatePicker
                           className="date"
                           placeholderText="Enter Delivery Date"
+
                           onChange={(date) => {
                             setFieldValue('estimateDeliveryDate', date);
                             // setEstimateDeliveryDate(date);
@@ -537,7 +540,7 @@ const NewShipment = (props) => {
 
                     <div class="rTableHead pro">Quantity</div>
                   </div>
-                  
+
                 </div>
               </div> */}
             </div>
@@ -545,17 +548,18 @@ const NewShipment = (props) => {
             <div className="d-flex justify-content-between">
               <div className="value">{productQuantity}</div>
               <div className="d-flex">
-                <button type="button" class="btn btn-white shadow-radius font-bold mr-2">
+                <button type="button" class="btn btn-white shadow-radius font-bold mr-2"onClick={() => props.history.push('/shipments')}>
                   Cancel
                 </button>
 
                 <button className="btn btn-primary mr-2 mb-1" >
                   {" "}
+<img src={Add} width="20" height="17" className="mr-2 mb-1" />
                   Create Shipment
                 </button>
               </div>
             </div>
-          
+
           </form>
         )}
       </Formik>
