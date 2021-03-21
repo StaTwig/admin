@@ -2,7 +2,10 @@ import React from "react";
 import logo from "../../assets/ABInBev.png";
 
 const Login = (props) => {
-  const { setSteps, steps } = props;
+  const {
+    setSteps,
+    setContinueClick
+  } = props;
   return (
     <div className="loginScreen">
       <div className="align-center pb-5 pt-5">
@@ -15,7 +18,10 @@ const Login = (props) => {
           <label htmlFor="username" className="userNameLabel">Username/ Mobile No.</label>
           <input name="username" className="form-control username" />
           <button
-            onClick={() => setContinueClick(true)}
+            onClick={() => {
+              setContinueClick(true);
+              setSteps(3);
+            }}
             className={`width100 btn mt-4`}
             type="button"
           >

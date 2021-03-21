@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import Selection from "./selection";
 import Login from "./login";
-import backarrow from "../../assets/backarrow.png";
+import VerifyPassword from './verifyPassword';
+import SignUp from './signUp';
 import "./style.scss";
 
 const Home = (props) => {
@@ -26,7 +26,9 @@ const Home = (props) => {
               setSteps={setSteps}
             />
           )}
-          {steps == 2 && <Login setSteps={setSteps} steps={steps} />}
+          {steps == 2 && <Login setSteps={setSteps} setContinueClick={setContinueClick} steps={steps} />}
+          {steps == 3 && <VerifyPassword setSteps={setSteps} setContinueClick={setContinueClick} steps={steps} buttonActive={buttonActive} setButtonActive={setButtonActive} />}
+          {steps == 4 && <SignUp setSteps={setSteps} setContinueClick={setContinueClick}  />}
         </div>
       </div>
     </div>
