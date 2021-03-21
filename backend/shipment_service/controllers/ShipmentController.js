@@ -23,6 +23,7 @@ const logger = init.getLog();
 
 const inventoryUpdate = async (id, quantity, suppId, recvId, poId, shipmentStatus, next) => {
     if (shipmentStatus == "CREATED") {
+            
         const suppUpdate = await InventoryModel.update({
             'id': suppId,
             "inventoryDetails.productId": id
@@ -31,6 +32,7 @@ const inventoryUpdate = async (id, quantity, suppId, recvId, poId, shipmentStatu
                 "inventoryDetails.$.quantity": -quantity
             }
         })
+            
         const suppUpdateTransit = await InventoryModel.update({
             'id': suppId,
             "inventoryDetails.productId": id
@@ -39,8 +41,13 @@ const inventoryUpdate = async (id, quantity, suppId, recvId, poId, shipmentStatu
                 "inventoryDetails.$.quantityInTransit": quantity
             }
         })
+             
+
     }
-    if (shipmentStatus == "RECEIVED") {
+
+const checkProduct = await InventoryModel.find({"$and":[{"id":recvId},{"inventoryDetails.productId":id}]})
+    if (shipmentStatus == "RECEIVED" && checkProduct != "") {
+            
         const recvUpdate = await InventoryModel.update({
             'id': recvId,
             "inventoryDetails.productId": id
@@ -58,6 +65,21 @@ const inventoryUpdate = async (id, quantity, suppId, recvId, poId, shipmentStatu
             }
         })
     }
+        else{
+                const s = await InventoryModel.update(
+   { "id":recvId },
+   { $addToSet: { "inventoryDetails": {"productId" : id,"quantity" : quantity} } }
+)
+   const suppUpdateRecvTransit = await InventoryModel.update({
+            'id': suppId,
+            "inventoryDetails.productId": id
+        }, {
+            $inc: {
+                "inventoryDetails.$.quantityInTransit": -quantity
+            }
+        })
+    
+        }
     //next("Success")
 };
 
@@ -99,16 +121,15 @@ exports.createShipment = [
         try {
             const data = req.body;
             data.id = 'SH' + nanoid(10);
-	    const empData = await EmployeeModel.findOne({emailId: req.user.emailId});
-	    const orgId = empData.organisationId;
-	    const orgData = await OrganisationModel.findOne({id: orgId});
-	    const confId = orgData.configuration_id;
-	    const confData = await ConfigurationModel.findOne({id: confId});
+            const empData = await EmployeeModel.findOne({emailId: req.user.emailId});
+            const orgId = empData.organisationId;
+            const orgData = await OrganisationModel.findOne({id: orgId});
+            const confId = orgData.configuration_id;
+            const confData = await ConfigurationModel.findOne({id: confId});
             const process = confData.process;
 
-	    const soID = data.shippingOrderId;
+            const soID = data.shippingOrderId;
             const poID = data.poId;
-
             var flag = "Y";
 
             if (data.shippingOrderId === null || data.poId === null) {
@@ -118,6 +139,7 @@ exports.createShipment = [
                     flag = "N"
                 }
             }
+
             if (flag == "Y") {
                 const po = await RecordModel.findOne({
                     id: data.poId
@@ -147,7 +169,6 @@ exports.createShipment = [
             }
 
             if (flag != "N") {
-
                 const suppWarehouseDetails = await WarehouseModel.findOne({
                     id: data.supplier.locationId
                 })
@@ -155,7 +176,6 @@ exports.createShipment = [
                 const suppInventoryDetails = await InventoryModel.findOne({
                     id: suppInventoryId
                 })
-
                 const recvWarehouseDetails = await WarehouseModel.findOne({
                     id: data.receiver.locationId
                 })
@@ -165,13 +185,15 @@ exports.createShipment = [
                 })
 
                 data.products.every(p => {
-                    inventoryUpdate(p.productId, p.productQuantity, suppInventoryId, recvInventoryId, data.poId, "CREATED")
+                        
+                    inventoryUpdate(p.productID, p.productQuantity, suppInventoryId, recvInventoryId, data.poId, "CREATED")
                     if (flag == "Y")
                         poUpdate(p.productId, p.productQuantity, data.poId, "CREATED")
                 })
 
                 const shipment = new ShipmentModel(data);
                 const result = await shipment.save();
+
                 return apiResponse.successResponseWithData(
                     res,
                     'Shipment Created',
@@ -198,24 +220,13 @@ exports.receiveShipment = [
     async (req, res) => {
         try {
             const data = req.body;
-            const empData = await EmployeeModel.findOne({emailId: req.user.emailId});
-            const orgId = empData.organisationId;
-            const orgData = await OrganisationModel.findOne({id: orgId});
-            const confId = orgData.configuration_id;
-            const confData = await ConfigurationModel.findOne({id: confId});
-            const process = confData.process;
 
             const soID = data.shippingOrderId;
             const poID = data.poId;
 
             var flag = "Y";
-
             if (data.shippingOrderId === null || data.poId === null) {
-                if (process == true) {
-                    flag = "YS"
-                } else {
-                    flag = "N"
-                }
+                   flag = "YS"
             }
 
             if (flag == "Y") {
@@ -261,7 +272,8 @@ exports.receiveShipment = [
             var products = data.products;
 
             products.every(p => {
-                inventoryUpdate(p.productId, p.productQuantity, suppInventoryId, recvInventoryId, data.poId, "RECEIVED")
+
+                inventoryUpdate(p.productID, p.productQuantity, suppInventoryId, recvInventoryId, data.poId, "RECEIVED")
                 if (flag == "Y")
                 poUpdate(p.productId, p.productQuantity, data.poId, "RECEIVED")
             })
