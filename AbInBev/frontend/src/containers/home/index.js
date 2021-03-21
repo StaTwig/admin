@@ -18,9 +18,7 @@ const HomeContainer = (props) => {
   return (
     <div className="Homecontainer">
       <div className="bg-image">
-        <div className="centered">
           <Home />
-        </div>
       </div>
     </div>
   );

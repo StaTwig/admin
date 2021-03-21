@@ -4,13 +4,10 @@
   width: auto;
   color: $white;
   .bg-image {
-    background-image: url(../../assets/bg.jpg);
-    height: 100vh;
-  }
-  .centered {
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    background: url(/dist/54c59914d3821593d724fc8006bc9639.jpg) no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
   }
 }
