@@ -1,30 +1,37 @@
 import React from "react";
+import logo from "../../assets/ABInBev.png";
 
 const Login = (props) => {
-  const { setSteps, steps } = props;
+  const {
+    setSteps,
+    setContinueClick
+  } = props;
   return (
-    <div className="alignCenter">
-      <div className="row justify-content-center">
-        <h2 className="bold">Welcome Back!</h2>
+    <div className="loginScreen">
+      <div className="align-center pb-5 pt-5">
+        <h2 className="titleSubHeading">Welcome Back!</h2>
+        <span className="titleSubHeading"><span className="titleHeading">Login</span> to continue.</span>
       </div>
-      <div className="pb-4 row justify-content-center">
-        <h6>Login to continue</h6>
-      </div>
-      <div className="row justify-content-center">
+
+      <div className="loginUserBlock justify-content-center">
         <div className="form-group">
-          <label htmlFor="username">Username/ Mobile No.</label>
-          <input name="username" className="form-control rounded" />
+          <label htmlFor="username" className="userNameLabel">Username/ Mobile No.</label>
+          <input name="username" className="form-control username" />
+          <button
+            onClick={() => {
+              setContinueClick(true);
+              setSteps(3);
+            }}
+            className={`width100 btn mt-4`}
+            type="button"
+          >
+            Send OTP
+          </button>
+          <p className="signUpDesc align-center mt-3 ">Don't have an account? <b>Sign Up</b></p>
         </div>
       </div>
-      <div className=" pt-5 justify-content-center">
-        <button
-          onClick={() => setContinueClick(true)}
-          className={`btn `}
-          type="button"
-        >
-          Send OTP
-        </button>
-        <p className="mb-0 pt-1">Don't have an account? Sign Up</p>
+      <div className="col text-center footer-logo">
+        <img src={logo} width={60} />
       </div>
     </div>
   );

@@ -1,6 +1,8 @@
 import React from "react";
 import admin from "../../assets/admin.png";
 import userIcon from "../../assets/user.png";
+import logo from "../../assets/ABInBev.png";
+import "./style.scss";
 
 const Selection = (props) => {
   const {
@@ -11,34 +13,34 @@ const Selection = (props) => {
     setSteps,
   } = props;
   return (
-    <div className="alignCenter">
-      <div className="row justify-content-center">
-        <h2 className="bold">Welcome</h2>
+    <div className="selectUserSection">
+      <div className="align-center pb-5 pt-5">
+        <h2 className="titleHeading">Welcome</h2>
+        <span className="titleSubHeading">Select Your Role</span>
       </div>
-      <div className="pb-4 row justify-content-center">
-        <h6>Select Your Role</h6>
-      </div>
-      <div className="row justify-content-center">
+      <div >
         <button
           onClick={() => setButtonActive(1)}
-          className={`mr-5 cursorP rounded pt-3 pb-3 pl-5 pr-5 col containerC ${
+          className={`cursorP selectionUserContainer mr-selectUser ${
             buttonActive == 1 ? "btn-active" : ""
           }`}
         >
           <img src={admin} width={60} />
           <p className="pt-3 mb-0 text-dark"> Admin</p>
         </button>
+
         <button
           onClick={() => setButtonActive(2)}
-          className={`col cursorP rounded ml-5 pt-3 pb-3 pl-5 pr-5 containerC ${
+          className={`cursorP selectionUserContainer ml-selectUser ${
             buttonActive == 2 ? "btn-active" : ""
           }`}
         >
           <img src={userIcon} width={60} />
           <p className="pt-3 mb-0 text-dark"> User</p>
         </button>
+
       </div>
-      <div className="row pt-5 justify-content-center">
+      <div className="align-center pt-5">
         <button
           onClick={() => {
             setContinueClick(true);
@@ -49,6 +51,9 @@ const Selection = (props) => {
         >
           Continue
         </button>
+      </div>
+      <div className="col text-center footer-logo">
+        <img src={logo} width={60} />
       </div>
     </div>
   );

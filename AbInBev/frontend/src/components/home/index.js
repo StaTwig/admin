@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import Selection from "./selection";
 import Login from "./login";
-import logo from "../../assets/ABInBev.png";
-import backarrow from "../../assets/backarrow.png";
+import VerifyPassword from './verifyPassword';
+import SignUp from './signUp';
 import "./style.scss";
 
 const Home = (props) => {
@@ -13,24 +12,23 @@ const Home = (props) => {
 
   return (
     <div className="home">
-      <div className="d-block blockC">
-        <div>
-          <img src={backarrow} width={20} />
-        </div>
-        {steps == 1 && (
-          <Selection
-            setContinueClick={setContinueClick}
-            setButtonActive={setButtonActive}
-            buttonActive={buttonActive}
-            continueClick={continueClick}
-            setSteps={setSteps}
-          />
-        )}
-        {steps == 2 && <Login setSteps={setSteps} steps={steps} />}
-        <div className="row justify-content-center">
-          <div className="col text-center footer-logo">
-            <img src={logo} width={60} />
-          </div>
+      <div className="container centered">
+        <div className="selectUser centered">
+          {/* <div>
+            <img src={backarrow} width={20} />
+          </div> */}
+          {steps == 1 && (
+            <Selection
+              setContinueClick={setContinueClick}
+              setButtonActive={setButtonActive}
+              buttonActive={buttonActive}
+              continueClick={continueClick}
+              setSteps={setSteps}
+            />
+          )}
+          {steps == 2 && <Login setSteps={setSteps} setContinueClick={setContinueClick} steps={steps} />}
+          {steps == 3 && <VerifyPassword setSteps={setSteps} setContinueClick={setContinueClick} steps={steps} buttonActive={buttonActive} setButtonActive={setButtonActive} />}
+          {steps == 4 && <SignUp setSteps={setSteps} setContinueClick={setContinueClick}  />}
         </div>
       </div>
     </div>
