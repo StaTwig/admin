@@ -34,46 +34,30 @@
           font-size: 11px;
 
 }        }
-     .status[target=CREATED] {
-                                color: white;
-                                background-color: #3CB049;
-                                border: none;
-                                padding: 3px 10px;
-                                text-align: center;
-                                text-decoration: none;
+
+
+.status {
+                                padding: 10px;
+                                width: 80px;
+                                border-radius: 5px;
                                 display: inline-block;
-                                margin: 4px 2px;
-                                cursor: pointer;
-                                border-radius: 10px;
+                                text-align: center;
                         }
-                        .status[target="In Transit"] {
-                                color: white;
-                                background-color: #FFB100;
-                                border: none;
+
+                        .success-bg {
+                                background: #28a745 0% 0% no-repeat padding-box;
+                                color: #ffffff;
                                 padding: 3px 10px;
-                                text-align: center;
-                                text-decoration: none;
-                                display: inline-block;
-                                margin: 4px 2px;
-                                cursor: pointer;
-                                border-radius: 10px;
-                        }
-                        .status[target=Received] {
-                                color: white;
-                                background-color: #0093E9;
-                                border: none;
-                                padding: 3px 10px;
-                                text-align: center;
-                                text-decoration: none;
-                                display: inline-block;
-                                margin: 4px 2px;
-                                cursor: pointer;
-                                border-radius: 10px;
+                                border-radius: 7px;
                         }
 
 
-     
-
+                        .primary-bg {
+                                background: #007bff 0% 0% no-repeat padding-box;
+                                padding: 3px 10px;
+                                border-radius: 7px;
+                                color: #ffffff;
+                        }
       .round-sign {
         border-radius: 4px;
         margin-right: 15px;
@@ -89,79 +73,6 @@
     display: none;
   }
 
-  
-
-
-//   .rTable {
-  //     display: flex;
-  //     flex-direction: column;
-  //     width: 100%;
-
-  //     .rTableHeading {
-  //       display: flex;
-  //       justify-content: space-between;
-  //     }
-
-  //     .rTableBody {
-  //       display: flex;
-  //       justify-content: space-between;
-  //     }
-
-  //     .rTableRow {
-  //       display: flex;
-  //       justify-content: space-between;
-  //       margin-bottom: 15px;
-  //     }
-
-  //     .rTableFoot {
-  //       display: table-footer-group;
-  //       font-weight: bold;
-  //       background-color: #ddd;
-  //     }
-
-  //     .rTableHead {
-  //       color: #707070;
-  //       font-weight: 400;
-  //     }
-
-  //     .rTableCell,
-  //     .rTableHead {
-  //       flex: 1;
-  //       padding: 3px 5px;
-  //       align-self: center;
-  //       font-size: 14px;
-  //       text-align: center;
-  //     }
-
-  //     .rTableCell {
-  //       color: $black;
-  //       font-weight: 400;
-  //       a {
-  //         color: $black;
-  //         font-weight: 400;
-  //       }
-  //     }
-
-  //     .combine-record-td {
-  //         flex-basis: 5%;
-  //         font-size: 12px;
-  //     }
-
-  //     .combine-data {
-  //       display: flex;
-  //       align-items: center;
-  //       a {
-  //         color: #0093e9;
-  //         word-wrap: none;
-  //         word-break: normal;
-  //       }
-
-  //       .round-sign {
-  //         border-radius: 4px;
-  //         margin-right: 5px;
-  //       }
-  //     }
-  //   }
 }
 
 .sm-only {

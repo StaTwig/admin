@@ -112,7 +112,7 @@ const Header = props => {
           <div className="divider" />
           <div className="userName">
             <p className="cname">{profile?.organisation?.split('/')[0]}</p>
-            <p className="uname">{profile.firstName}</p>
+            <p className="uname">{profile.warehouseAddress_city}</p>
           </div>
 
           <div className="userPic">
