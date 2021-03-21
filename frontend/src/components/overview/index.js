@@ -16,6 +16,9 @@ import shipmentsdelayed from "../../assets/icons/TotalShipmentsDelayed.svg";
 import './style.scss';
 
   const Overview = props => {
+
+const [visible, setvisible] = useState('one');
+const [shpmnts, setShpmnts] = useState([]);
     const [overviewAnalytics,setOverViewAnalytics]= useState({})
     useEffect(() => {
       async function fetchData() {
@@ -25,13 +28,23 @@ import './style.scss';
       fetchData();
     }, []);
 
+
+const setData = (v, a = '') => {
+    setvisible(v);
+    let rtnArr = v == 'two' ? props.shipments.filter(row => props.user.warehouseId == row.supplier.locationId) : props.shipments.filter(row => props.user.warehouseId != row.supplier.locationId);
+    if (a != '')
+      rtnArr = rtnArr.filter(row => row?.shipmentAlerts?.length > 0);
+    setShpmnts(rtnArr);
+  }
+
+
  return (
     <div className="overview">
       <h1 className="breadcrumb">OVERVIEW</h1>
       <div className="full-width-ribben">
         <div className="row no-gutters">
           <div className="col">
-            <div className="panel">     
+            <div className="panel">
               <div className="picture truck-bg">
                 <img src={totalshipments} alt="truck" />
               </div>
@@ -65,7 +78,7 @@ import './style.scss';
               </div>
             </div>
 
-          </div>       
+          </div>
           <div className="col">
             <div className="panel">
               <div className="picture truck-bg">
@@ -106,7 +119,7 @@ import './style.scss';
             <div className="card-body">
 
               <div id="chartjs-render-monitor" ><ChartsPage {...props}/></div>
-              
+
             </div>
             <div className="card-footer">
               <div className="d-flex align-items-center justify-content-center">
@@ -128,7 +141,7 @@ import './style.scss';
               </div>
             </div>
             <div className="card-body">
-              <SummaryTable {...props}/>
+              <SummaryTable {...props}setvisible={setData} visible={visible}/>
               </div>
             <div className="card-footer">
               <div className="d-flex align-items-center justify-content-center">
