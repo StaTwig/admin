@@ -2,12 +2,26 @@ import React from "react";
 import { useSelector } from "react-redux";
 import EmptyShipments from "../../assets/icons/EmptyShipments.png";
 import "./table-style.scss";
+import alertShip from "../../assets/icons/alert.png";
 
 const SummaryTable = (props) => {
   const profile = useSelector((state) => {
     return state.user;
   });
   const { shipments } = props;
+  console.log({ shipments });
+  let supplierAddress, receiverAddress;
+  let statusStyle, status;
+  {
+    shipments.map((shipment, index) => {
+      statusStyle = "primary-bg";
+      status = "Shipped";
+      if (shipment.status === "RECEIVED") {
+        statusStyle = "success-bg";
+        status = "Delivered";
+      }
+    });
+  }
   return (
     <React.Fragment>
       {shipments.length === 0 ? (
@@ -40,7 +54,11 @@ const SummaryTable = (props) => {
             {shipments.map((shipment, index) =>
               index < 5 ? (
                 <div className="combine-data" key={index}>
-                   <div>{profile.warehouseId==shipment.supplier.locationId?"Outbound":"Inbound"}</div>
+                  <div>
+                    {profile.warehouseId == shipment.supplier.locationId
+                      ? "Outbound"
+                      : "Inbound"}
+                  </div>
                 </div>
               ) : null
             )}
@@ -51,6 +69,14 @@ const SummaryTable = (props) => {
               index < 5 ? (
                 <div className="combine-data" key={index}>
                   <div>{shipment.id}</div>
+                  {shipment?.shipmentAlerts?.length > 0 && (
+                    <span
+                      style={{ backgroundColor: "#EAEAEA", marginLeft: 5 }}
+                      className="rounded p-1"
+                    >
+                      <img style={{ height: 15 }} src={alertShip} />
+                    </span>
+                  )}
                 </div>
               ) : null
             )}
@@ -60,8 +86,8 @@ const SummaryTable = (props) => {
             {shipments.map((shipment, index) =>
               index < 5 ? (
                 <div className="combine-data" key={index}>
-                  <div>
-                    <a>{shipment.supplier.id.split("-")[1]}</a>
+                  <div className="rTableCell">
+                    <p className="mb-0 bold">{shipment.supplier.org.name}</p>
                   </div>
                 </div>
               ) : null
@@ -73,7 +99,9 @@ const SummaryTable = (props) => {
             {shipments.map((shipment, index) =>
               index < 5 ? (
                 <div className="combine-data" key={index}>
-                  <a>{shipment.receiver.id.split("-")[1]}</a>
+                  <div className="rTableCell">
+                    <p className="mb-0 bold">{shipment.receiver.org.name}</p>
+                  </div>
                 </div>
               ) : null
             )}
@@ -83,9 +111,9 @@ const SummaryTable = (props) => {
             {shipments.map((shipment, index) =>
               index < 5 ? (
                 <div className="combine-data" key={index}>
-                  <div className="status" target={shipment.status}>
-                     {shipment.status=="CREATED"?"SHIPPED ":"DELIVERED"}
-                </div>
+                  <div className={`status primary-bg ${statusStyle}`}>
+                    {status}
+                  </div>
                 </div>
               ) : null
             )}
@@ -98,7 +126,9 @@ const SummaryTable = (props) => {
             index < 5 ? (
               <div key={index} className="col-sm-12 col-md-6 mb-3">
                 <div className="combine-data mb-3">
-                  <a>{shipment.receiver.id}</a>
+                  <div className="rTableCell">
+                    <p className="mb-0 bold">{shipment.receiver.org.name}</p>
+                  </div>
                 </div>
                 <div className="d-flex">
                   <div className="mr-3">Shipment ID</div>
@@ -116,7 +146,9 @@ const SummaryTable = (props) => {
                 </div>
                 <div className="d-flex">
                   <div className="mr-3">From</div>
-                  <div className="font-weight-bold">{shipment.supplier.id}</div>
+                  <div className="rTableCell">
+                    <p className="mb-0 bold">{shipment.supplier.org.name}</p>
+                  </div>
                 </div>
                 <div className="d-flex">
                   <div className="mr-3">Type</div>
@@ -125,9 +157,9 @@ const SummaryTable = (props) => {
                 <div className="d-flex">
                   <div className="mr-3">Status</div>
                   <div className="font-weight-bold">
-                    <span className="badge badge-pill badge-success p-2">
-                      {shipment.status}
-                    </span>
+                    <div className={`status primary-bg ${statusStyle}`}>
+                      {status}{" "}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -138,5 +170,4 @@ const SummaryTable = (props) => {
     </React.Fragment>
   );
 };
-
 export default SummaryTable;
