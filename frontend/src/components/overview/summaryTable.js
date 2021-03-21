@@ -148,8 +148,8 @@ const SummaryTable = (props) => {
                 <div className="d-flex">
                   <div className="mr-3">Status</div>
                   <div className="font-weight-bold">
-                    <div className={`status primary-bg ${statusStyle}`}>
-                      {status}{" "}
+                    <div className="status" target={shipment.status}>
+                    {shipment.status=="CREATED"?"Shipped":"Delivered"}
                     </div>
                   </div>
                 </div>
