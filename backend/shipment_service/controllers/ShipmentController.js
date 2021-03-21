@@ -23,7 +23,7 @@ const logger = init.getLog();
 
 const inventoryUpdate = async (id, quantity, suppId, recvId, poId, shipmentStatus, next) => {
     if (shipmentStatus == "CREATED") {
-            console.log("top",id, quantity, suppId, recvId, poId, shipmentStatus)
+            
         const suppUpdate = await InventoryModel.update({
             'id': suppId,
             "inventoryDetails.productId": id
@@ -32,7 +32,7 @@ const inventoryUpdate = async (id, quantity, suppId, recvId, poId, shipmentStatu
                 "inventoryDetails.$.quantity": -quantity
             }
         })
-            console.log("suppUpdate",suppUpdate)
+            
         const suppUpdateTransit = await InventoryModel.update({
             'id': suppId,
             "inventoryDetails.productId": id
@@ -41,13 +41,13 @@ const inventoryUpdate = async (id, quantity, suppId, recvId, poId, shipmentStatu
                 "inventoryDetails.$.quantityInTransit": quantity
             }
         })
-             console.log("suppUpdateTransit",suppUpdateTransit)
+             
 
     }
 
 const checkProduct = await InventoryModel.find({"$and":[{"id":recvId},{"inventoryDetails.productId":id}]})
     if (shipmentStatus == "RECEIVED" && checkProduct != "") {
-            console.log("top",id, quantity, suppId, recvId, poId, shipmentStatus)
+            
         const recvUpdate = await InventoryModel.update({
             'id': recvId,
             "inventoryDetails.productId": id
@@ -185,7 +185,7 @@ exports.createShipment = [
                 })
 
                 data.products.every(p => {
-                        console.log("bfore sending",p.productID, p.productQuantity, suppInventoryId, recvInventoryId, data.poId)
+                        
                     inventoryUpdate(p.productID, p.productQuantity, suppInventoryId, recvInventoryId, data.poId, "CREATED")
                     if (flag == "Y")
                         poUpdate(p.productId, p.productQuantity, data.poId, "CREATED")
