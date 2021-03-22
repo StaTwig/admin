@@ -11,17 +11,7 @@ const SummaryTable = (props) => {
   const { shipments } = props;
   console.log({ shipments });
   let supplierAddress, receiverAddress;
-  let statusStyle, status;
-  {
-    shipments.map((shipment, index) => {
-      statusStyle = "primary-bg";
-      status = "Shipped";
-      if (shipment.status === "RECEIVED") {
-        statusStyle = "success-bg";
-        status = "Delivered";
-      }
-    });
-  }
+  
   return (
     <React.Fragment>
       {shipments.length === 0 ? (
@@ -111,8 +101,9 @@ const SummaryTable = (props) => {
             {shipments.map((shipment, index) =>
               index < 5 ? (
                 <div className="combine-data" key={index}>
-                  <div className={`status primary-bg ${statusStyle}`}>
-                    {status}
+                   <div className="status" target={shipment.status}>
+
+                   {shipment.status=="CREATED"?"Shipped":"Delivered"}
                   </div>
                 </div>
               ) : null
@@ -157,8 +148,8 @@ const SummaryTable = (props) => {
                 <div className="d-flex">
                   <div className="mr-3">Status</div>
                   <div className="font-weight-bold">
-                    <div className={`status primary-bg ${statusStyle}`}>
-                      {status}{" "}
+                    <div className="status" target={shipment.status}>
+                    {shipment.status=="CREATED"?"Shipped":"Delivered"}
                     </div>
                   </div>
                 </div>
