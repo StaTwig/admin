@@ -81,10 +81,10 @@ const NewInventory = props => {
     'productName',
     'manufacturer',
     'quantity',
-    'manufacturingDate',
-    'expiryDate',
-    'batchNumber',
-    'serialNumber',
+    // 'manufacturingDate',
+    // 'expiryDate',
+    // 'batchNumber',
+    // 'serialNumber',
   ];
 
   const month = new Date().getMonth() + 1;
@@ -129,7 +129,7 @@ const NewInventory = props => {
       for (let i = 0; i < validations.length; i++) {
         let validationVariable = inventory[validations[i]];
         if (validationVariable.length < 1 ||
-          validationVariable == 'Select Product' || validations[i] == 'manufacturer' || validations[i] == 'productName' || validations[i] == 'quantity'
+          validationVariable == 'Select Product'
         ) {
           setInventoryError(validations[i]);
           setOpenFailInventory(true);
