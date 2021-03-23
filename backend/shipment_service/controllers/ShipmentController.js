@@ -17,6 +17,7 @@ const InventoryModel = require('../models/InventoryModel')
 const EmployeeModel = require('../models/EmployeeModel')
 const ConfigurationModel = require('../models/ConfigurationModel')
 const OrganisationModel = require('../models/OrganisationModel')
+const CounterModel = require('../models/CounterModel')
 
 const init = require('../logging/init');
 const logger = init.getLog();
@@ -116,8 +117,19 @@ exports.createShipment = [
     auth,
     async (req, res) => {
         try {
-            const data = req.body;
-            data.id = 'SH' + nanoid(10);
+	    const data = req.body;
+	    const incrementCounter = await CounterModel.update({
+                  'counters.name': "shipmentId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+            const shipmentCounter = await CounterModel.findOne({'counters.name':"shipmentId"})
+            const shipmentId = shipmentCounter.counters[0].format + shipmentCounter.counters[0].value;
+            data.id = shipmentId;
+
             const empData = await EmployeeModel.findOne({emailId: req.user.emailId});
             const orgId = empData.organisationId;
             const orgData = await OrganisationModel.findOne({id: orgId});
