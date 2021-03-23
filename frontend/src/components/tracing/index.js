@@ -46,8 +46,7 @@ const Tracing = props => {
         <h1 className="breadcrumb">Track & Trace</h1>
         <div className="row">
           <button className="btn btn-orange fontSize20 font-bold mr-5" >
-            <img src={returnPo} width="14" height="14" className="mr-2" />
-            <span className="chain">Return Order</span>
+            <span className="chain">Update Status</span>
           </button>
           <button className="btn btn-main-blue fontSize20 font-bold ">
             <img src={returnShipment} width="14" height="14" className="mr-2" />
@@ -59,8 +58,6 @@ const Tracing = props => {
         <div className="col-sm-4">
           <h6 className="heading mb-3">SHIPMENT SUMMARY</h6>
           <ShipmentSummary shipments={tracking} />
-          <h6 className="heading mt-3 mb-3">PURCHASE ORDER DETAILS</h6>
-          <PoDetails menu={menu} shipments={tracking} setMenu={setMenu} />
           <h6 className="heading mt-3 mb-3">SHIPMENT DETAILS</h6>
           <ShipmentDetails  shipments={tracking} setMenuShip={setMenuShip} menuShip={menuShip} highLight={highLight} setHighLight={setHighLight} />
 
@@ -93,26 +90,14 @@ const Tracing = props => {
                 </div>
               </div><Chart /> </div>
           </div>
-          <button 
-          className="btn btn-outline-* fontSize200 enlargeTemperature float-right" 
+          <button
+          className="btn btn-outline-* fontSize200 enlargeTemperature float-right"
           onClick = {() =>
             window.open(`//iot.vaccineledger.com/dashboard/db/${tracking.shipmentDetails[0].id}?orgId=1`, '_blank')
-            } 
+            }
           >
             SHOW MORE
             </button>
-          {openPurchase && (
-            <Modal
-              title="Purchase Order Details"
-              close={() => closeModal()}
-              size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
-            >
-              <PurchasePopUp
-                shipments={tracking}
-
-              />
-            </Modal>
-          )}
            {openShipping && (
             <Modal
               title="Shipping Order Details"
