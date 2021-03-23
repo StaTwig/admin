@@ -214,7 +214,7 @@ exports.register = [
           //create organisation if doesn't exists 
           if (req.body.organisationName) {
             const organisationName = req.body.organisationName;
-            const organisation = await OrganisationModel.findOne({ name: organisationName });
+            const organisation = await OrganisationModel.findOne({ name : { $regex : organisationName , $options : 'i'}});
             if (organisation) {
               organisationId = organisation.id;
             }
@@ -230,6 +230,7 @@ exports.register = [
               const address = req.body?.address ? req.body.address : {};
               addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
               organisationId = uniqid('org-');
+              warehouseId = uniqid('war-');
               const org = new OrganisationModel({
                 primaryContactId: employeeId,
                 name: organisationName,
@@ -237,10 +238,13 @@ exports.register = [
                 type: req.body?.type ? req.body.type : 'CUSTOMER_SUPPLIER',
                 status: 'NOTVERIFIED',
                 postalAddress: addr,
+                warehouses: [warehouseId],
+                warehouseEmployees: [employeeId],
                 country: {
                   countryId: '001',
                   countryName: country
-                }
+                },
+                configuration_id: 'CONF001'
               });
               await org.save();
 
@@ -248,7 +252,6 @@ exports.register = [
               const inventoryResult = new InventoryModel({ id: inventoryId });
               await inventoryResult.save();
 
-              warehouseId = uniqid('war-');
               const warehouse = new WarehouseModel({
                 title: 'Office',
                 id: warehouseId,
