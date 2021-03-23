@@ -22,6 +22,7 @@ const DashBoard = (props) => {
     organisationsList,
     sendAffiliate,
     users,
+    addresses,
   } = props;
 
   return (
@@ -36,6 +37,7 @@ const DashBoard = (props) => {
           <NUModal
             data={data}
             permissions={permissions}
+            addresses={addresses}
             onSuccess={() => {
               acceptApproval(data);
               closeModal();

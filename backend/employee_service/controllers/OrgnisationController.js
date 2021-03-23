@@ -1,4 +1,5 @@
 const OrganisationModel = require("../models/OrganisationModel");
+const EmployeeModel = require("../models/EmployeeModel");
 const { check, validationResult } = require("express-validator");
 const uniqid = require("uniqid");
 const mongoose = require("mongoose");
@@ -45,7 +46,7 @@ exports.updateOrg = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           const { id, status } = req.body;
-          await OrganisationModel.updateOne(
+          await OrganisationModel.findOneAndUpdate(
             {
               id: id,
             },
@@ -55,18 +56,21 @@ exports.updateOrg = [
               },
             }
           )
-            .then((resUpdate) => {
+            .then(async (org) => {
               let res_message = "Organisation updated!!";
-              if (resUpdate.nModified == 0)
-                res_message =
-                  "Organisation not updated. Refresh the page and try again!!!";
-              return apiResponse.successResponseWithData(
-                res,
-                res_message,
-                resUpdate
+              await EmployeeModel.updateOne(
+                { id: org.primaryContactId },
+                {
+                  $set: {
+                    accountStatus: status,
+                  },
+                }
               );
+              return apiResponse.successResponseWithData(res, res_message);
             })
             .catch((err) => {
+              console.log(err);
+
               return apiResponse.ErrorResponse(res, err);
             });
         } else {

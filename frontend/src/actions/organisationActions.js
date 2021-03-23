@@ -117,7 +117,9 @@ export const deactivateOrgUser = async (data) => {
 export const verifyOrgUser = async (data) => {
   try {
     const result = await axios.get(
-      `${config().verifyOrgUserUrl}?id=${data.id}&role=${data.role}`
+      `${config().verifyOrgUserUrl}?id=${data.id}&role=${
+        data.role
+      }&warehouseId=${data.warehouse}`
     );
     return result;
   } catch (e) {
@@ -303,14 +305,23 @@ export const addAddress = async (data) => {
     const reqData = {
       title: data.title,
       organisationId: data.organisationId,
-      postalAddress: [
-        data.flatno,
-        data.area,
-        data.landmark,
-        data.town,
-        data.state,
-        data.country,
-      ].join(", "),
+      // postalAddress: [
+      //   data.flatno,
+      //   data.area,
+      //   data.landmark,
+      //   data.town,
+      //   data.state,
+      //   data.country,
+      // ].join(", "),
+      warehouseAddress: {
+        firstLine: data.area,
+        secondLine: "",
+        city: data.town,
+        state: data.state,
+        country: data.country,
+        landmark: data.landmark,
+        zipCode: data.pincode,
+      },
       country: {
         countryId: "001",
         countryName: data.country,
