@@ -34,6 +34,7 @@ var OrganisationSchema = new mongoose.Schema(
     logoId: String,
     type: String,
     status: String,
+    configuration_id: String,
     warehouses: {
       type: Array,
       default: ['ware123', 'ware234'],
