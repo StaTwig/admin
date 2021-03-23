@@ -10,18 +10,16 @@ const ProductList = (props) => {
                 {props.shipments.shipmentDetails[0].products.map((product,index) =>(
                 <div className="d-flex flex-row " >
                     <ul className="mr-3 elemens">
-                    <li className="mb-1 text-secondary">Product ID</li>
                         <li className="mb-1 text-secondary">Product Name</li>
                         <li className="mb-1 text-secondary">Manufacturer</li>
                         <li className="mb-1 text-secondary">Quantity</li>
                         <li className="mb-1 text-secondary">Label ID</li>
                     </ul>
                     <ul className="elemens">
-                        <li className="mb-1">{product._id}</li>
                         <li className="mb-1">{product.productName}</li>
                         <li className="mb-1">{product.manufacturer}</li>
                         <li className="mb-1">{product.productQuantity}</li>
-                        <li className="mb-1">{product.labelId}</li>
+                        <li className="mb-1">{props.shipments.shipmentDetails[0].label.labelId}</li>
                    </ul>
                     <div></div>
                     </div>))}
