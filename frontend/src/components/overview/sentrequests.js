@@ -16,8 +16,6 @@ const SentRequests = (props) => {
       }}
       enableReinitialize
       validate={(values) => {
-        console.log(values);
-
         const errors = {};
         if (!values.employee) {
           errors.employee = "Required";

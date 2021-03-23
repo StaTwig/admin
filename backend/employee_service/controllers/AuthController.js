@@ -200,7 +200,7 @@ exports.userInfo = [
             } = user;
             const org = await OrganisationModel.findOne(
               { id: organisationId },
-              "name"
+              "name type"
             );
             let user_data = {
               firstName,
@@ -210,6 +210,7 @@ exports.userInfo = [
               walletAddress,
               affiliatedOrganisations,
               organisation: `${org.name}/${organisationId}`,
+              type: `${org.type}`,
               warehouseId,
               accountStatus,
               role,

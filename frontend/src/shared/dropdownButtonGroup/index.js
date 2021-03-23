@@ -50,6 +50,8 @@ const dropdownButtonGroup = (props) => {
                         " (" +
                         item.emailId +
                         ")"
+                      : item.title
+                      ? item.title
                       : item.name}
                   </span>
                   {index + 1 < groups.length && <hr />}

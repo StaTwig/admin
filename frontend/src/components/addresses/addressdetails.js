@@ -15,8 +15,14 @@ const AddressDetails = (props) => {
             {address.region.regionName + ", " + address.country.countryName}
             <span className="row justify-content-md-center">&nbsp;</span>
           </p>
-          <p className="txtColor pt-0">{address.postalAddress}</p>
-          <p className="txtColor">Zip code: 400016</p>
+          <p className="txtColor pt-0">
+            {address?.warehouseAddress?.firstLine +
+              ", " +
+              address?.warehouseAddress?.city}
+          </p>
+          <p className="txtColor">
+            Zip code: {address?.warehouseAddress?.zipCode}
+          </p>
         </div>
       </div>
       <div className="w-50 float-right">

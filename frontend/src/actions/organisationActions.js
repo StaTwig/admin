@@ -94,6 +94,15 @@ export const activateOrgUser = async (data) => {
   }
 };
 
+export const updateOrg = async (data) => {
+  try {
+    const result = await axios.post(config().updateOrgUrl, data);
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
 export const deactivateOrgUser = async (data) => {
   try {
     const result = await axios.get(
@@ -108,7 +117,9 @@ export const deactivateOrgUser = async (data) => {
 export const verifyOrgUser = async (data) => {
   try {
     const result = await axios.get(
-      `${config().verifyOrgUserUrl}?id=${data.id}&role=${data.role}`
+      `${config().verifyOrgUserUrl}?id=${data.id}&role=${
+        data.role
+      }&warehouseId=${data.warehouse}`
     );
     return result;
   } catch (e) {
@@ -212,6 +223,23 @@ export const getOrgUsers = () => {
   }
 };
 
+export const getOrgs = () => {
+  try {
+    return async (dispatch) => {
+      dispatch(turnOn());
+      const result = await axios.get(config().getOrgUrl);
+      dispatch({
+        type: SET_ORGANISATIONS,
+        payload: result.data,
+      });
+      dispatch(turnOff());
+      return result.data.data.length;
+    };
+  } catch (e) {
+    throw Error(e.message);
+  }
+};
+
 export const getOrgActiveUsers = () => {
   try {
     return async (dispatch) => {
@@ -277,14 +305,23 @@ export const addAddress = async (data) => {
     const reqData = {
       title: data.title,
       organisationId: data.organisationId,
-      postalAddress: [
-        data.flatno,
-        data.area,
-        data.landmark,
-        data.town,
-        data.state,
-        data.country,
-      ].join(", "),
+      // postalAddress: [
+      //   data.flatno,
+      //   data.area,
+      //   data.landmark,
+      //   data.town,
+      //   data.state,
+      //   data.country,
+      // ].join(", "),
+      warehouseAddress: {
+        firstLine: data.area,
+        secondLine: "",
+        city: data.town,
+        state: data.state,
+        country: data.country,
+        landmark: data.landmark,
+        zipCode: data.pincode,
+      },
       country: {
         countryId: "001",
         countryName: data.country,

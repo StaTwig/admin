@@ -20,7 +20,7 @@ const NewAddress = (props) => {
   const dispatch = useDispatch();
   const [showModal, setShowModal] = useState(false);
   const [showModals, setShowModals] = useState(false);
-  const [addr, setAdd] = useState([]);
+  const [addr, setAdd] = useState({});
   const [message, setMessage] = useState(
     "Location service is disabled. Enter address manually!!!"
   );
@@ -79,8 +79,17 @@ const NewAddress = (props) => {
     editAddress = addArr.filter(
       (row) => row.id == JSON.parse(props.match.params.address)
     );
-    if (editAddress?.length) setAdd(editAddress[0].postalAddress?.split(", "));
+    if (editAddress?.length) setAdd(editAddress[0]);
   }
+
+  useEffect(() => {
+    if (addArr && addr?.length == 0 && props.match.params.address) {
+      editAddress = addArr.filter(
+        (row) => row.id == JSON.parse(props.match.params.address)
+      );
+      if (editAddress?.length) setAdd(editAddress[0]);
+    }
+  });
 
   return (
     <div className="address">
@@ -110,33 +119,37 @@ const NewAddress = (props) => {
               <Formik
                 enableReinitialize={true}
                 initialValues={{
-                  title: editAddress ? editAddress?.title : "Warehouse",
-                  flatno: addr?.length ? addr[0] : "",
-                  pincode: address?.PostalCode,
+                  title: addr?.length ? addr?.title : "Warehouse",
+                  // flatno: addr?.length ? addr[0] : "",
+                  pincode: address?.PostalCode
+                    ? address?.PostalCode
+                    : addr?.length
+                    ? addr?.warehouseAddress?.pinCode
+                    : "",
                   area: address?.Subdistrict
                     ? address?.Subdistrict
                     : addr?.length
-                    ? addr[1]
+                    ? addr?.warehouseAddress?.firstLine
                     : "",
-                  landmark: addr?.length ? addr[2] : "",
+                  // landmark: addr?.length ? addr[2] : "",
                   town: address?.City
                     ? address?.City
                     : addr?.length
-                    ? addr[3]
+                    ? addr?.warehouseAddress?.city
                     : "",
                   state: address?.AdditionalData?.length
                     ? address?.AdditionalData?.filter(
                         (row) => row.key == "StateName"
                       )[0].value
                     : addr?.length
-                    ? addr[4]
+                    ? addr?.warehouseAddress?.state
                     : "",
                   country: address?.AdditionalData?.length
                     ? address?.AdditionalData?.filter(
                         (row) => row.key == "CountryName"
                       )[0].value
                     : addr?.length
-                    ? addr[5]
+                    ? addr?.warehouseAddress?.country
                     : "",
                 }}
                 validate={(values) => {
@@ -147,15 +160,15 @@ const NewAddress = (props) => {
                   if (!values.pincode) {
                     errors.pincode = "Required";
                   }
-                  if (!values.flatno) {
-                    errors.flatno = "Required";
-                  }
+                  // if (!values.flatno) {
+                  //   errors.flatno = "Required";
+                  // }
                   if (!values.area) {
                     errors.area = "Required";
                   }
-                  if (!values.landmark) {
-                    errors.landmark = "Required";
-                  }
+                  // if (!values.landmark) {
+                  //   errors.landmark = "Required";
+                  // }
                   if (!values.town) {
                     errors.town = "Required";
                   }
@@ -193,34 +206,25 @@ const NewAddress = (props) => {
                       handleBlur={handleBlur}
                       value={values.title}
                     />
-                    <AddressField
-                      error={errors.pincode}
-                      touched={touched.pincode}
-                      label="Pincode"
-                      refe="pincode"
-                      handleChange={handleChange}
-                      handleBlur={handleBlur}
-                      value={values.pincode}
-                    />
-                    <AddressField
+                    {/* <AddressField
                       error={errors.flatno}
                       touched={touched.flatno}
-                      label="Flat, House No, Building, Company"
+                      label="Address line"
                       refe="flatno"
                       handleChange={handleChange}
                       handleBlur={handleBlur}
                       value={values.flatno}
-                    />
+                    /> */}
                     <AddressField
                       error={errors.area}
                       touched={touched.area}
-                      label="Area, Colony, Street, District, Sector, Village"
+                      label="Address line"
                       refe="area"
                       handleChange={handleChange}
                       handleBlur={handleBlur}
                       value={values.area}
                     />
-                    <AddressField
+                    {/* <AddressField
                       error={errors.landmark}
                       touched={touched.landmark}
                       label="Landmark"
@@ -228,11 +232,11 @@ const NewAddress = (props) => {
                       handleChange={handleChange}
                       handleBlur={handleBlur}
                       value={values.landmark}
-                    />
+                    /> */}
                     <AddressField
                       error={errors.town}
                       touched={touched.town}
-                      label="Town/ City"
+                      label="City/ Town"
                       refe="town"
                       handleChange={handleChange}
                       handleBlur={handleBlur}
@@ -241,7 +245,7 @@ const NewAddress = (props) => {
                     <AddressField
                       error={errors.state}
                       touched={touched.state}
-                      label="State/ Province/ Region"
+                      label="State"
                       refe="state"
                       handleChange={handleChange}
                       handleBlur={handleBlur}
@@ -255,6 +259,15 @@ const NewAddress = (props) => {
                       handleChange={handleChange}
                       handleBlur={handleBlur}
                       value={values.country}
+                    />
+                    <AddressField
+                      error={errors.pincode}
+                      touched={touched.pincode}
+                      label="Pincode"
+                      refe="pincode"
+                      handleChange={handleChange}
+                      handleBlur={handleBlur}
+                      value={values.pincode}
                     />
                     <div className="pt-5">
                       <button type="submit" className="btn btn-warning ">

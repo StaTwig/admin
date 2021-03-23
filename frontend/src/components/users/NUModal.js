@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import Role from "./role";
 import { Formik } from "formik";
+import DropdownButton from "../../shared/dropdownButtonGroup";
 
 const NUModal = (props) => {
   const [selectedValue, setSelectedValue] = useState(-1);
-  const { permissions, onHide, onSuccess, data, setData } = props;
+  const [wh, setWH] = useState("Select a warehouse");
+  const { permissions, onHide, onSuccess, data, setData, addresses } = props;
   const setRole = (role) => {
     setSelectedValue(role);
     setData({ ...data, ...{ role: role } });
@@ -14,12 +16,19 @@ const NUModal = (props) => {
     setData({ ...data, ...{ emailId: event.target.value } });
   };
 
+  const setWarehouse = (name, id) => {
+    setWH(name);
+    setData({ ...data, ...{ warehouse: id } });
+  };
+
   return (
     <div className="p-0">
       <Formik
-        initialValues={{ email: data?.ref, role: "" }}
+        initialValues={{ email: data?.ref, role: "", warehouse: "" }}
         validate={(values) => {
           const errors = {};
+          console.log(values);
+
           if (!values.email) {
             errors.email = "Required";
           } else if (
@@ -29,6 +38,9 @@ const NUModal = (props) => {
           }
           if (!values.role) {
             errors.role = "Required";
+          }
+          if (!values.warehouse) {
+            errors.warehouse = "Required";
           }
           return errors;
         }}
@@ -45,6 +57,7 @@ const NUModal = (props) => {
           handleBlur,
           handleSubmit,
           isSubmitting,
+          setFieldValue,
           /* and other goodies */
         }) => (
           <form onSubmit={handleSubmit}>
@@ -94,6 +107,23 @@ const NUModal = (props) => {
               {errors.role && touched.role && (
                 <span className="pl-3 error-msg text-danger">
                   {errors.role}
+                </span>
+              )}
+            </div>
+            <div className="p-4 d-flex flex-column">
+              <div className="input-group">
+                <DropdownButton
+                  groups={addresses}
+                  onSelect={(data) => {
+                    setWarehouse(data.title, data.id);
+                    setFieldValue("warehouse", data.id);
+                  }}
+                  name={wh}
+                />
+              </div>
+              {errors.warehouse && touched.warehouse && (
+                <span className="pl-3 error-msg text-danger">
+                  {errors.warehouse}
                 </span>
               )}
             </div>

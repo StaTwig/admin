@@ -27,8 +27,6 @@ const LoginContainer = (props) => {
     dispatch(turnOn());
     const data = { emailId: email };
     const result = await sendOtp(data);
-    console.log(result);
-
     if (result.status === 200) {
       // Set auth token auth
       /* const token = result.data.data.token;

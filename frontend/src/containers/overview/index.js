@@ -14,6 +14,7 @@ import {
   getAllOrganisations,
   addAffiliate,
   getOrgActiveUsers,
+  getWareHouses,
 } from "../../actions/organisationActions";
 
 const DashBoardContainer = (props) => {
@@ -22,6 +23,10 @@ const DashBoardContainer = (props) => {
   const [requestsPending, setRequestsPending] = useState([]);
   const [recentRequestsSent, setRecentRequestsSent] = useState([]);
   const dispatch = useDispatch();
+
+  const addresses = useSelector((state) => {
+    return state.organisation.addresses;
+  });
 
   const reqPending = useSelector((state) => {
     return state.organisation.requestPending;
@@ -49,6 +54,7 @@ const DashBoardContainer = (props) => {
     dispatch(getRecentReqSent());
     dispatch(getAllOrganisations());
     dispatch(getOrgActiveUsers());
+    dispatch(getWareHouses());
   }, []);
 
   useEffect(() => {
@@ -145,6 +151,7 @@ const DashBoardContainer = (props) => {
             organisationsList={organisationsList}
             sendAffiliate={sendAffiliate}
             users={usersList}
+            addresses={addresses}
           />
         </div>
       </div>
