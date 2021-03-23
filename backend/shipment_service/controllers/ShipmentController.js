@@ -23,7 +23,7 @@ const logger = init.getLog();
 
 const inventoryUpdate = async (id, quantity, suppId, recvId, poId, shipmentStatus, next) => {
     if (shipmentStatus == "CREATED") {
-            
+
         const suppUpdate = await InventoryModel.update({
             'id': suppId,
             "inventoryDetails.productId": id
@@ -32,7 +32,7 @@ const inventoryUpdate = async (id, quantity, suppId, recvId, poId, shipmentStatu
                 "inventoryDetails.$.quantity": -quantity
             }
         })
-            
+
         const suppUpdateTransit = await InventoryModel.update({
             'id': suppId,
             "inventoryDetails.productId": id
@@ -41,13 +41,10 @@ const inventoryUpdate = async (id, quantity, suppId, recvId, poId, shipmentStatu
                 "inventoryDetails.$.quantityInTransit": quantity
             }
         })
-             
-
     }
 
 const checkProduct = await InventoryModel.find({"$and":[{"id":recvId},{"inventoryDetails.productId":id}]})
     if (shipmentStatus == "RECEIVED" && checkProduct != "") {
-            
         const recvUpdate = await InventoryModel.update({
             'id': recvId,
             "inventoryDetails.productId": id
@@ -65,7 +62,7 @@ const checkProduct = await InventoryModel.find({"$and":[{"id":recvId},{"inventor
             }
         })
     }
-        else{
+        else if (shipmentStatus == "RECEIVED" && checkProduct == "") {
                 const s = await InventoryModel.update(
    { "id":recvId },
    { $addToSet: { "inventoryDetails": {"productId" : id,"quantity" : quantity} } }
@@ -78,9 +75,9 @@ const checkProduct = await InventoryModel.find({"$and":[{"id":recvId},{"inventor
                 "inventoryDetails.$.quantityInTransit": -quantity
             }
         })
-    
+
         }
-    //next("Success")
+   // next("Success")
 };
 
 const poUpdate = async (id, quantity, poId, shipmentStatus, next) => {
@@ -183,13 +180,14 @@ exports.createShipment = [
                 const recvInventoryDetails = await InventoryModel.findOne({
                     id: recvInventoryId
                 })
-
-                data.products.every(p => {
-                        
-                    inventoryUpdate(p.productID, p.productQuantity, suppInventoryId, recvInventoryId, data.poId, "CREATED")
+                    var products = data.products;
+                    for ( count=0; count < products.length; count++)
+                    {
+                    inventoryUpdate(products[count].productID, products[count].productQuantity, suppInventoryId, recvInventoryId, data.poId, "CREATED")
                     if (flag == "Y")
-                        poUpdate(p.productId, p.productQuantity, data.poId, "CREATED")
-                })
+                       poUpdate(p.productId, p.productQuantity, data.poId, "CREATED")
+
+                    }
 
                 const shipment = new ShipmentModel(data);
                 const result = await shipment.save();
@@ -270,13 +268,12 @@ exports.receiveShipment = [
                 id: recvInventoryId
             })
             var products = data.products;
-
-            products.every(p => {
-
-                inventoryUpdate(p.productID, p.productQuantity, suppInventoryId, recvInventoryId, data.poId, "RECEIVED")
-                if (flag == "Y")
-                poUpdate(p.productId, p.productQuantity, data.poId, "RECEIVED")
-            })
+              for ( count=0; count < products.length; count++)
+                 {
+                    inventoryUpdate(products[count].productID, products[count].productQuantity, suppInventoryId, recvInventoryId, data.poId, "RECEIVED")
+                    if (flag == "Y")
+                       poUpdate(p.productId, p.productQuantity, data.poId, "RECEIVED")
+                 }
 
             await ShipmentModel.findOneAndUpdate({
                 id: data.id
