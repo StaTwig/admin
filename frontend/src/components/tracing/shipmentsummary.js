@@ -9,30 +9,24 @@ const ShipmentSummary = (props) => {
           <div className="d-flex flex-row  ">
           <ul className="mr-3 elemens">
             <li className="mb-1 text-secondary">Shipment ID</li>
-            <li className="mb-1 text-secondary">PO ID</li>
-            <li className="mb-1 text-secondary">Shipped From</li>
-            <li className="mb-1 text-secondary">Shipped To</li>
             <li className="mb-1 text-secondary">Shipment Date</li>
-            <li className="text-secondary">Transaction ID</li>
+            <li className="mb-1 text-secondary">From</li>
+            <li className="mb-1 text-secondary">To</li>
             </ul>
             <ul className="elemens">
            <li className="mb-1">{props.shipments.shipmentDetails[0].id}</li>
-            <li className="mb-1">{props.shipments.shipmentDetails[0].poId}</li>
-            <li className="mb-1">{props.shipments.fromLocation}</li>
-            <li className="mb-1">{props.shipments.toLocation}</li>
-            <li className="mb-1">  {props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[2]+"/"+props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[1]+"/"+props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[0]} </li>
-        <a className="d-flex flex-row"><li className="txn">
-          {props.shipments.shipmentDetails[0].transactionIds[0]?props.shipments.shipmentDetails[0].transactionIds[0]:"16tu9866srfe33553..."}
-            </li><img src={Verifiedpic} className="mt-1" width="10" height="10"/></a>
+             <li className="mb-1">  {props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[2]+"/"+props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[1]+"/"+props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[0]} </li>
+            <li className="mb-1">{props.shipments.supplierOrgName}.,{props.shipments.fromLocation}</li>
+            <li className="mb-1">{props.shipments.customerOrgName}.,{props.shipments.toLocation}</li>
             </ul>
             <div>
                 <span className="badge badge-pill badge-warning text-white">
                <small>{props.shipments.shipmentDetails[0].status}</small>
                 </span>
               </div>
-        </div> 
-        </div> 
-    ) 
+        </div>
+        </div>
+    )
 }
 
 export default ShipmentSummary;
