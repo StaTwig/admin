@@ -91,7 +91,7 @@ padding:10,
 
   return (
     <MDBContainer>
-      <Doughnut id="doughnut-chart" height="300px" data={doughnut} />
+      <Doughnut id="doughnut-chart" height="300px" data={doughnut}  options={option} />
     </MDBContainer>
   );
 };
