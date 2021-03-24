@@ -117,8 +117,8 @@ exports.createShipment = [
     auth,
     async (req, res) => {
         try {
-	    const data = req.body;
-	    const incrementCounter = await CounterModel.update({
+            const data = req.body;
+            const incrementCounter = await CounterModel.update({
                   'counters.name': "shipmentId"
                },{
                     $inc: {
@@ -197,7 +197,7 @@ exports.createShipment = [
                     {
                     inventoryUpdate(products[count].productID, products[count].productQuantity, suppInventoryId, recvInventoryId, data.poId, "CREATED")
                     if (flag == "Y")
-                       poUpdate(p.productId, p.productQuantity, data.poId, "CREATED")
+                       poUpdate(products[count].productId, products[count].productQuantity, data.poId, "CREATED")
 
                     }
 
@@ -284,7 +284,7 @@ exports.receiveShipment = [
                  {
                     inventoryUpdate(products[count].productID, products[count].productQuantity, suppInventoryId, recvInventoryId, data.poId, "RECEIVED")
                     if (flag == "Y")
-                       poUpdate(p.productId, p.productQuantity, data.poId, "RECEIVED")
+                       poUpdate(products[count].productId, products[count].productQuantity, data.poId, "RECEIVED")
                  }
 
             await ShipmentModel.findOneAndUpdate({
