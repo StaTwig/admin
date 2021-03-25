@@ -115,13 +115,13 @@ const poUpdate = async (id, quantity, poId, shipmentStatus, next) => {
 
 const userShipments = async ( mode, warehouseId, skip, limit, callback) => {
 
-    const queryField = "$match: {" + mode + ".locationId:" + warehouseId + "},";
+        var matchCondition = {};
+        var criteria = mode + ".locationId";
+        matchCondition[criteria] = warehouseId
 
-    const shipments = await  ShipmentModel.aggregate([{
-                //$match: {
-                  //  queryField : warehouseId
-               // },
-            $queryField
+        const shipments = await  ShipmentModel.aggregate([{
+                $match:
+                   matchCondition
             },
             {
                 $lookup: {
@@ -179,10 +179,10 @@ const userShipments = async ( mode, warehouseId, skip, limit, callback) => {
             createdAt: -1
         }).skip(parseInt(skip))
         .limit(parseInt(limit));
-        console.log("33222",shipments)
-    callback(undefined, shipments)
 
+        callback(undefined, shipments)
 }
+
 
 
 exports.createShipment = [
@@ -441,15 +441,11 @@ async (req, res) => {
                     const {
                         warehouseId
                     } = req.user;
-                     var inboundShipments, outboundShipments;
+                    var inboundShipments, outboundShipments;
                         try {
-
-                    const s = await userShipments("supplier", warehouseId, skip, limit, (error, data) => {
+                    const supplier = await userShipments("supplier", warehouseId, skip, limit, (error, data) => {
                         outboundShipments = data;
-                            console.log("1",outboundShipments)
                     })
-                  console.log("2",outboundShipments)
-
                     const receiver = await userShipments("receiver", warehouseId, skip, limit, (error, data) => {
                             inboundShipments = data;
                     })
@@ -479,9 +475,10 @@ async (req, res) => {
         '<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)',
     );
     return apiResponse.ErrorResponse(res, err);
-}
-},
+        }
+    },
 ];
+
 
 
 exports.Shipment = [
