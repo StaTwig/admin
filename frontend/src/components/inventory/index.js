@@ -44,26 +44,33 @@ const Inventory = props => {
   const colors = ["#ffbcc4", "#c1e3f2", "#ffc18c", "#ffef83",
         "#d4e7ff", "#e0b0ff", "#F1EFCE", "#D7FAF1", "#F2B6AF" ];
 
-        const [inventoryAnalytics,setInventoryAnalytics]= useState({})
-
+  const [inventoryAnalytics,setInventoryAnalytics]= useState({})
+        useEffect(() => {
+          async function fetchData() {
+            const result = await getAnalytics();
+            setInventoryAnalytics(result.data.inventory);
+          }
+          fetchData();
+        }, []);
+    
     
      useEffect(() => {
     async function fetchData() {
       const result = await getProductList();
       setProductsList(result.message);
       const resultAnalytics = await getAnalytics();
-      setInventoryAnalytics(resultAnalytics.data);
+      setInventoryAnalytics(resultAnalytics.data.inventory);
       setInventoriesCount(
-        resultAnalytics.data.totalProductsAddedToInventory
+        resultAnalytics.data.inventory.totalProductsAddedToInventory
       );
       setCurrentInventoriesCount(
-        resultAnalytics.data.totalProductsInInventory
+        resultAnalytics.data.inventory.totalProductsInInventory
       );
       setInventoryNearExpiration(
-        resultAnalytics.data.expiringThisYear
+        resultAnalytics.data.inventoryexpiringThisYear
       );
       setInventoryExpired(
-        resultAnalytics.data.expiredThisYear
+        resultAnalytics.data.inventory.expiredThisYear
       )
      
     }
@@ -97,12 +104,12 @@ const Inventory = props => {
                   className="tab-item active"
                   onMouseLeave={() =>
                     setInventoriesCount(
-                      inventoryAnalytics.totalProductsAddedToInventory
+                       inventoryAnalytics.totalProductsInInventory 
                     )
-                  }
+                    }
                   onMouseEnter={() =>
                     setInventoriesCount(
-                      inventoryAnalytics.totalProductsAddedToInventory
+                      inventoryAnalytics.totalProductsInInventory
                     )
                   }
                 >
@@ -112,12 +119,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoriesCount(
-                      inventoryAnalytics.totalProductsAddedToInventory
+                      inventoryAnalytics.totalProductsInInventory
                     )
                   }
                   onMouseEnter={() =>
                     setInventoriesCount(
-                      inventoryAnalytics.totalProductsAddedToInventory
+                      inventoryAnalytics.totalProductsInInventory
                     )
                   }
                 >
@@ -127,12 +134,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoriesCount(
-                      inventoryAnalytics.totalProductsAddedToInventory
+                      inventoryAnalytics.totalProductsInInventory
                     )
                   }
                   onMouseEnter={() =>
                     setInventoriesCount(
-                      inventoryAnalytics.totalProductsAddedToInventory
+                      inventoryAnalytics.totalProductsInInventory
                     )
                   }
                 >
@@ -142,12 +149,12 @@ const Inventory = props => {
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoriesCount(
-                      inventoryAnalytics.totalProductsAddedToInventory
+                      inventoryAnalytics.totalProductsInInventory
                     )
                   }
                   onMouseEnter={() =>
                     setInventoriesCount(
-                      inventoryAnalytics.totalProductsAddedToInventory
+                      inventoryAnalytics.totalProductsInInventory
                     )
                   }
                 >
@@ -293,7 +300,7 @@ const Inventory = props => {
                   }
                   onMouseEnter={() =>
                     setInventoryNearExpiration(
-                    "N/A"
+                      inventoryAnalytics.expiringToday
                     )
                   }
                 >
@@ -368,7 +375,7 @@ const Inventory = props => {
                   }
                   onMouseEnter={() =>
                     setInventoryExpired(
-                "N/A"
+                      inventoryAnalytics.expiredToday
                     )
                   }
                 >

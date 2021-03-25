@@ -1,8 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sent from '../../assets/icons/Sent1.svg';
 import Received from '../../assets/icons/Received1.svg';
 
 import './style.scss';
+import {
+  getAnalytics
+} from '../../actions/analyticsAction';
+
+
 
 const Tiles = props => {
   const outbounds = props.shipments.filter(row => props.user.warehouseId == row.supplier.locationId);
@@ -12,6 +17,16 @@ const Tiles = props => {
   useEffect(() => {
 
   }, []);
+
+  const [shipmentAnalytics,setShipmentAnalytics]= useState({})
+  useEffect(() => {
+  async function fetchData() {
+    const result = await getAnalytics();
+    setShipmentAnalytics(result.data.shipment);
+  }
+  fetchData();
+}, []);
+
   
   return (
     <div className="row mb-4">
@@ -22,7 +37,7 @@ const Tiles = props => {
           </div>
           <div className="d-flex flex-column">
             <div className="title recived-text">Inbound Shipments</div>
-            <div className="recived-text count">{inbounds.length}</div>
+            <div className="recived-text count">{shipmentAnalytics.inboundShipments}</div>
           </div>
         </div>
       </div>
@@ -33,7 +48,7 @@ const Tiles = props => {
           </div>
           <div className="d-flex flex-column">
             <div className="title sent-text ">Outbound Shipments</div>
-            <div className="sent-text count">{outbounds.length}</div>
+            <div className="sent-text count">{shipmentAnalytics.outboundShipments}</div>
           </div>
         </div>
       </div>
@@ -44,7 +59,7 @@ const Tiles = props => {
           </div>
           <div className="d-flex flex-column">
             <div className="title inbound-text">Inbound Alert</div>
-            <div className="inbound-text count">{inboundAlerts?.length || 0}</div>
+            <div className="inbound-text count">{shipmentAnalytics.inboundAlerts}</div>
           </div>
         </div>
       </div>
@@ -55,7 +70,7 @@ const Tiles = props => {
           </div>
           <div className="d-flex flex-column">
             <div className="title outbound-text ">Outbound Alert</div>
-            <div className="outbound-text count">{outboundAlerts?.length || 0}</div>
+            <div className="outbound-text count">{shipmentAnalytics.outboundAlerts}</div>
           </div>
         </div>
       </div>
