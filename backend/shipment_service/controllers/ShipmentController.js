@@ -441,7 +441,7 @@ async (req, res) => {
                     const {
                         warehouseId
                     } = req.user;
-                    var inboundShipments, outboundShipments;
+                    var shipments, inboundShipments, outboundShipments;
                         try {
                     const supplier = await userShipments("supplier", warehouseId, skip, limit, (error, data) => {
                         outboundShipments = data;
@@ -449,10 +449,12 @@ async (req, res) => {
                     const receiver = await userShipments("receiver", warehouseId, skip, limit, (error, data) => {
                             inboundShipments = data;
                     })
+                    shipments = outboundShipments.concat(inboundShipments);
                     return apiResponse.successResponseWithData(
                         res,
                         'Shipments Table',
                         ({
+                            shipments,
                             inboundShipments,
                             outboundShipments
                         })
