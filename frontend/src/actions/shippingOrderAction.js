@@ -55,3 +55,12 @@ export const getAllOrganisations = async () => {
     return [];
   }
 };
+
+export const getProductsByInventoryId = async (id) => {
+  try {
+    const result = await axios.get(config().getProductsByInventoryUrl+id);
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};

@@ -5,8 +5,8 @@ import Received from '../../assets/icons/Received1.svg';
 import './style.scss';
 
 const Tiles = props => {
-  const outbounds = props.shipments.filter(row => props.user.warehouseId == row.supplier.locationId);
-  const inbounds = props.shipments.filter(row => props.user.warehouseId != row.supplier.locationId);
+  const outbounds = props.shipments?.outboundShipments;
+  const inbounds = props.shipments?.inboundShipments;
   const outboundAlerts = outbounds?.shipmentAlerts;
   const inboundAlerts = inbounds?.shipmentAlerts;
   useEffect(() => {
@@ -22,7 +22,7 @@ const Tiles = props => {
           </div>
           <div className="d-flex flex-column">
             <div className="title recived-text">Inbound Shipments</div>
-            <div className="recived-text count">{inbounds.length}</div>
+            <div className="recived-text count">{inbounds?.length}</div>
           </div>
         </div>
       </div>
@@ -33,12 +33,12 @@ const Tiles = props => {
           </div>
           <div className="d-flex flex-column">
             <div className="title sent-text ">Outbound Shipments</div>
-            <div className="sent-text count">{outbounds.length}</div>
+            <div className="sent-text count">{outbounds?.length}</div>
           </div>
         </div>
       </div>
       <div className="col">
-        <div onClick={() => props.setData('one', 'a')} className="panel cursorP">
+        <div onClick={() => props.setData('one', true)} className="panel cursorP">
           <div className="picture inbound-alert-bg">
             
           </div>
@@ -49,7 +49,7 @@ const Tiles = props => {
         </div>
       </div>
       <div className="col">
-        <div onClick={() => props.setData('two', 'a')} className="panel cursorP">
+        <div onClick={() => props.setData('two', true)} className="panel cursorP">
           <div className="picture outbound-alert-bg">
             
           </div>

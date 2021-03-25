@@ -41,7 +41,7 @@ const EditRow = props => {
   }
 
   return (
-    <div className="d-flex inp-grp  mb-3 flex-row">
+    <div className="d-flex inp-grp mb-3 flex-row">
       <div className={`${addMore ? `w-15` : `w-20`} pt-1 pb-1 border-right bg-white`}>
         <div className="square-box" />
         <DropdownButton

@@ -9,7 +9,8 @@ import {
   getShippingOrderIds,
   getShippingOrderById,
   getWarehouseByOrgId,
-  getAllOrganisations
+  getAllOrganisations,
+  getProductsByInventoryId
 } from "../../actions/shippingOrderAction";
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import DatePicker from "react-datepicker";
@@ -18,7 +19,6 @@ import ShipmentPopUp from "./shipmentPopUp";
 import ShipmentFailPopUp from "./shipmentFailPopUp";
 import Modal from "../../shared/modal";
 import { Formik } from "formik";
-import { getProducts } from '../../actions/poActions';
 
 const NewShipment = (props) => {
   const [shippingOrderIds, setShippingOrderIds] = useState([]);
@@ -27,7 +27,8 @@ const NewShipment = (props) => {
   const [senderWarehouses, setSenderWarehouses] = useState([]);
   const [receiverWarehouses, setReceiverWarehouses] = useState([]);
   const [disabled, setDisabled] = useState(false);
-  const [products, setProducts] = useState("");
+  const [products, setProducts] = useState([]);
+  const [addProducts, setAddProducts] = useState([]);
   const dispatch = useDispatch();
   const [shippingOrderId, setShippingOrderId] = useState(
     "Select Shipping Order ID"
@@ -72,12 +73,6 @@ const NewShipment = (props) => {
       const warehouses = await getWarehouseByOrgId(orgSplit[1]);
       setSenderWarehouses(warehouses.data);
 
-       const prds = await getProducts();
-        const productsArray = prds.map(
-          product => product.name,
-        );
-        setProducts(prds);
-
       if (search) {
         const shippingId = search.split("=")[1];
         handleSOChange(shippingId);
@@ -100,6 +95,16 @@ const NewShipment = (props) => {
     try {
       const warehouse = await getWarehouseByOrgId(value);
       setReceiverWarehouses(warehouse.data);
+    }
+    catch (err) {
+      setErrorMessage(err);
+    }
+  }
+
+  const onWarehouseChange = async (value) => {
+    try {
+      const prods = await getProductsByInventoryId(value);
+      setProducts(prods.data);
     }
     catch (err) {
       setErrorMessage(err);
@@ -139,16 +144,16 @@ const NewShipment = (props) => {
   const onAssign = async (values) => {
     let error = false;
     // dates.forEach(date => { if (!error) dateValidation(date) });
-    const { airWayBillNo, shippingOrderId, labelCode, shipmentDate, estimateDeliveryDate } = values;
-    shippingOrderDetails.products.forEach((p) => {
+    const { airWayBillNo, shippingOrderId, labelCode, shipmentDate, estimateDeliveryDate, toOrgLoc, fromOrgLoc, products } = values;
+    products.forEach((p) => {
       if (p.productQuanty < 1)
         error = true;
-    })
+    });
 
     if (!error) {
       const data = {
         airWayBillNo,
-        shippingOrderId,
+        shippingOrderId: shippingOrderId ? shippingOrderId : null,
         label: {
           labelId: labelCode,
           labelType: "QR_2DBAR",
@@ -156,15 +161,11 @@ const NewShipment = (props) => {
         externalShipmentId: "",
         supplier: {
           id: user.id,
-          locationId: shippingOrderDetails.supplierDetails.locationId,
+          locationId: fromOrgLoc,
         },
         receiver: {
-          id:
-            shippingOrderDetails.customerDetails.shippingAddress
-              .shipmentReceiverId,
-          locationId:
-            shippingOrderDetails.customerDetails.shippingAddress
-              .shippingAddressId,
+          id: null,
+          locationId: toOrgLoc,
         },
         shippingDate: new Date(
           shipmentDate.getTime() - shipmentDate.getTimezoneOffset() * 60000
@@ -178,8 +179,8 @@ const NewShipment = (props) => {
           estimateDeliveryDate.getTimezoneOffset() * 60000
         ).toISOString(),
         status: "CREATED",
-        products: shippingOrderDetails.products,
-        poId: shippingOrderDetails.purchaseOrderId,
+        products: products,
+        poId: shippingOrderDetails.purchaseOrderId ? shippingOrderDetails.purchaseOrderId : null,
       };
 
       dispatch(turnOn());
@@ -224,7 +225,7 @@ const NewShipment = (props) => {
     <div className="NewShipment">
       <h1 className="breadcrumb">CREATE SHIPMENT</h1>
       <Formik
-        enableReinitialize={true}
+        // enableReinitialize={true}
         initialValues={{
           shippingOrderId: "",
           fromOrg: senderOrganisation[0],
@@ -235,21 +236,22 @@ const NewShipment = (props) => {
           labelCode: "",
           shipmentDate: "",
           estimateDeliveryDate: "",
+          products: []
         }}
         validate={(values) => {
           const errors = {};
-          // if (!values.fromOrg) {
-          //   errors.fromOrg = "Required";
-          // }
-          // if (!values.fromOrgLoc) {
-          //   errors.fromOrgLoc = "Required";
-          // }
-          // if (!values.toOrg) {
-          //   errors.toOrg = "Required";
-          // }
-          // if (!values.toOrgLoc) {
-          //   errors.toOrgLoc = "Required";
-          // }
+          if (!values.fromOrg) {
+            errors.fromOrg = "Required";
+          }
+          if (!values.fromOrgLoc) {
+            errors.fromOrgLoc = "Required";
+          }
+          if (!values.toOrg) {
+            errors.toOrg = "Required";
+          }
+          if (!values.toOrgLoc) {
+            errors.toOrgLoc = "Required";
+          }
           if (!values.airWayBillNo) {
             errors.airWayBillNo = "Required";
           }
@@ -259,8 +261,11 @@ const NewShipment = (props) => {
           if (!values.shipmentDate) {
             errors.shipmentDate = "Required";
           }
-          if (!values.estimateDeliveryDate) {
-            errors.estimateDeliveryDate = "Required";
+          // if (!values.estimateDeliveryDate) {
+          //   errors.estimateDeliveryDate = "Required";
+          // }
+          if (values.products.length == 0) {
+            errors.products = "Required";
           }
           return errors;
         }}
@@ -298,10 +303,21 @@ const NewShipment = (props) => {
                           setReceiverOrgLoc(result.customerDetails.deliveryLocation);
                           setReceiverOrgId(result.customerDetails.customerOrgName);
                           setShippingOrderDetails(result);
+                          
                           dispatch(turnOff());
                           setDisabled(true);
                           let warehouse = senderWarehouses.filter(w => w.id == result.supplierDetails.locationId);
+                          console.log(warehouse);
+                          
+                          setFieldValue('fromOrg', senderOrganisation[0]);
+                          setFieldValue('fromOrgLoc', result.supplierDetails.locationId);
+                          setFieldValue('toOrg', result.customerDetails.customerOrganisation);
+                          setFieldValue('toOrgLoc', result.customerDetails.shippingAddress.shippingAddressId);
                           setSenderOrgLoc(warehouse[0].postalAddress);
+                          if (result.products.length > 0)
+                            setFieldValue('products', result.products);
+                          else
+                            setFieldValue('products', []);
                         }}
                         groups={shippingOrderIds}
                       />
@@ -339,8 +355,12 @@ const NewShipment = (props) => {
                           name={senderOrgLoc}
                           disabled={disabled}
                           onSelect={(v) => {
+                            onWarehouseChange(v.warehouseInventory);
+                            setFieldValue('fromOrg', senderOrganisation[0]);
                             setSenderOrgLoc(v?.warehouseAddress ? (v?.warehouseAddress?.firstLine + ', ' + v?.warehouseAddress?.city) : v.postalAddress);
                             setFieldValue('fromOrgLoc', v.id);
+                            setFieldValue('products', []);
+                            setAddProducts(prod => []);
                           }}
                           groups={senderWarehouses}
                         />
@@ -519,18 +539,74 @@ const NewShipment = (props) => {
 
             <div className="row mb-3">
               <label htmlFor="productDetails" className="headsup">
-                Product Details
+                Product Details*
               </label>
-              {shippingOrderDetails?.products?.map((product, i) => (
+              {shippingOrderDetails?.products?.length > 0 && (
                 <EditTable
-                  product={product}
-                  handleQuantityChange={(v) => {
+                  product={shippingOrderDetails?.products}
+                  handleQuantityChange={(v, i) => {
                     handleQuantityChange(v, i);
                   }}
+                  enableDelete={false}
+                  onRemoveRow={(index) => {}}
                   handleLabelIdChange={handleLabelIdChange}
-                  index={i}
                 />
-              ))}
+              )}
+              {products?.length > 0 && (
+                <>
+                <EditTable
+                  product={addProducts}
+                  products={products}
+                  handleQuantityChange={(v, i) => {
+                    let newArr = [...addProducts];
+                    newArr[i].productQuantity = v;
+                    setFieldValue('products', newArr.map(row => ({"productID": row._id,"productQuantity": row.productQuantity,"productName": row.productName,"manufacturer": row.manufacturer,"quantity": row.quantity})));
+                    setAddProducts(prod => [...newArr]);
+                  }}
+                  enableDelete={true}
+                  onRemoveRow={(index) => {
+                    const prodIndex = products.findIndex(p => p._id === addProducts[index]._id);
+                    let newArray = [...products];
+                    newArray[prodIndex] = { ...newArray[prodIndex], isSelected: false };
+                    setProducts(prod => [...newArray]);
+
+                    addProducts.splice(index, 1);
+                    let newArr = [...addProducts];
+                    if (newArr.length > 0)
+                      setFieldValue('products', newArr.map(row => ({"productID": row._id,"productQuantity": row.productQuantity,"productName": row.productName,"manufacturer": row.manufacturer,"quantity": row.quantity})));
+                    else
+                      setFieldValue('products', []);
+                    setAddProducts(prod => [...newArr]);
+
+                  }}
+                  handleProductChange={(index, item) => {
+                    addProducts.splice(index, 1);
+                    let newArr = [...addProducts];
+                    newArr.push(item);
+                    setFieldValue('products', newArr.map(row => ({"productID": row._id,"productQuantity": row.productQuantity,"productName": row.productName,"manufacturer": row.manufacturer,"quantity": row.quantity})));
+                    setAddProducts(prod => [...newArr]);
+
+                    const prodIndex = products.findIndex(p => p._id === item._id);
+                    let newArray = [...products];
+                    newArray[prodIndex] = { ...newArray[prodIndex], isSelected: true };
+                    setProducts(prod => [...newArray]);
+                  }}
+                  handleLabelIdChange={handleLabelIdChange}
+                />
+                <div className="d-flex justify-content-between">
+                  <button
+                    type="button"
+                    className="btn btn-white bg-white shadow-radius mt-3 font-bold"
+                    onClick={() => {
+                      let newArr = { productName: '', manufacturer: '', productQuantity: '' };
+                      setAddProducts(prod => [...prod, newArr]);
+                    }}
+                  >
+                    +<span> Add Another Product</span>
+                  </button>
+                </div>
+                </>
+                )}
               {/* <div class="table productTable mt-2">
                 <div class="rTable">
                   <div class="rTableHeading">
@@ -544,7 +620,9 @@ const NewShipment = (props) => {
                 </div>
               </div> */}
             </div>
-
+            {errors.products && touched.products && (
+              <span className="error-msg text-danger">{errors.products}</span>
+            )}
             <div className="d-flex justify-content-between">
               <div className="value">{productQuantity}</div>
               <div className="d-flex">

@@ -18,7 +18,7 @@ const AdvanceTableFilter = (props) => {
               </div>
               <div className="filterTitle">{props.data.coloumn1}</div>
             <div className="filterAction">
-              <img src={updownarrow} width="9" height="9" />
+              {/* <img src={updownarrow} width="9" height="9" /> */}
             </div>
           </div>
         </div>
@@ -30,7 +30,7 @@ const AdvanceTableFilter = (props) => {
               </div>
               <div className="filterTitle">{props.data.coloumn2}</div>
             <div className="filterAction">
-              <img src={updownarrow} width="9" height="9" />
+              {/* <img src={updownarrow} width="9" height="9" /> */}
             </div>
           </div>
         </div>
@@ -42,7 +42,7 @@ const AdvanceTableFilter = (props) => {
               </div>
               <div className="filterTitle">{props.data.coloumn3}</div>
             <div className="filterAction">
-              <img src={updownarrow} width="9" height="9" />
+              {/* <img src={updownarrow} width="9" height="9" /> */}
             </div>
           </div>
         </div>
@@ -55,7 +55,7 @@ const AdvanceTableFilter = (props) => {
               </div>
               <div className="filterTitle">{props.data.coloumn4}</div>
             <div className="filterAction">
-              <img src={updownarrow} width="9" height="9" />
+              {/* <img src={updownarrow} width="9" height="9" /> */}
             </div>
           </div>
         </div>: null}
@@ -68,13 +68,13 @@ const AdvanceTableFilter = (props) => {
                 </div>
                 <div className="filterTitle">{props.data.coloumn5}</div>
               <div className="filterAction">
-                <img src={updownarrow} width="9" height="9" />
+                {/* <img src={updownarrow} width="9" height="9" /> */}
               </div>
             </div>
           </div> : null}
         </div>
         <div className="">
-        <div className="box col">
+        {/* <div className="box col">
           <button className="btn btn-md btn-blue mr-2">
             <div className="d-flex align-items-center">
               <img src={FilterIcon} width="16" height="16" className="mr-3" />
@@ -89,7 +89,7 @@ const AdvanceTableFilter = (props) => {
               <img src={dropdownIcon} width="16" height="16" className="ml-3" />
             </div>
           </button>
-        </div>
+        </div> */}
         </div>
         
       </div>

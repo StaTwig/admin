@@ -23,24 +23,27 @@ import ExcelPopUp from './ExcelPopup';
 
 const ShipmentAnalytic = props => {
   const [visible, setvisible] = useState('one');
-  const [skip, setSkip] = useState(5);
+  const [skip, setSkip] = useState(0);
   const [limit, setLimit] = useState(5);
   const [loadMore, setLoadMore] = useState(true);
   const [shpmnts, setShpmnts] = useState([]);
+  const [alerts, setAlerts] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(resetShipments());
     dispatch(getAllUsers());
   }, []);
-
-  const onLoadMore = async () => {
-    const newSkip = skip + 5;
-    setSkip(newSkip);
-    const results = await dispatch(getShipments(skip, limit));
-    if (results === 0) {
+  
+  const onLoadMore = async (isInc, isReset = false) => {
+    const newSkip = isInc ? skip + 5 : skip - 5;
+    setSkip(isReset ? 0 : newSkip);
+    const results = await dispatch(getShipments(isReset ? 0 : newSkip, limit));
+    props.setShipments(results);
+    if (results.length === 0) {
       setLoadMore(false);
     }
+    setData(visible)
   };
   
   const headers = {
@@ -57,12 +60,23 @@ const ShipmentAnalytic = props => {
     img5: <img src={Status} width="16" height="16" />,
   };
 
-  const setData = (v, a = '') => {
+  const setData = (v, a = false) => {
     setvisible(v);
-    let rtnArr = v == 'two' ? props.shipments.filter(row => props.user.warehouseId == row.supplier.locationId) : props.shipments.filter(row => props.user.warehouseId != row.supplier.locationId);
-    if (a != '')
+    setAlerts(a);
+    // if(skip > 0)
+    //   onLoadMore(true, true);
+    
+    // let rtnArr = v == 'two' ? shpmnt.filter(row => props.user.warehouseId == row.supplier.locationId) : shpmnt.filter(row => props.user.warehouseId != row.supplier.locationId);
+    // if (a != '')
+    //   rtnArr = rtnArr.filter(row => row?.shipmentAlerts?.length > 0);
+    // setShpmnts(rtnArr);
+  }
+
+  const sendData = () => {
+    let rtnArr = visible == 'two' ? props.shipments?.outboundShipments : props.shipments?.inboundShipments;
+    if (alerts)
       rtnArr = rtnArr.filter(row => row?.shipmentAlerts?.length > 0);
-    setShpmnts(rtnArr);
+    return rtnArr ? rtnArr : [];
   }
 
   return (
@@ -89,13 +103,13 @@ const ShipmentAnalytic = props => {
       </div>
       <Tiles {...props} setData={setData} />
       <div className="mt-4">
-        <Tabs {...props} setvisible={setData} visible={visible} />
+        <Tabs {...props} setvisible={setvisible} visible={visible} />
       </div>
       <div className="full-width-ribben mt-4">
         <TableFilter data={headers} fb="74%"/>
       </div>
       <div className="ribben-space">
-        <Table {...props} loadMore={loadMore} shpmnts={shpmnts.length ? shpmnts : props.shipments.filter(row => props.user.warehouseId != row.supplier.locationId)} onLoadMore={onLoadMore}/>
+        <Table {...props} skip={skip} loadMore={loadMore} shpmnts={sendData} onLoadMore={onLoadMore}/>
       </div>
     </div>
   );
