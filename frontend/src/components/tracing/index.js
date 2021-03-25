@@ -33,7 +33,7 @@ const Tracing = (props) => {
   const tracking = props.trackData;
   //const productCard = props.productDetails;
   //const poCard = props.poDetails;
-  const ship = useSelector((state) => state.ShipmentDetails);
+  
 
   const closeModal = () => {
     setOpenPurchase(false);
