@@ -113,6 +113,78 @@ const poUpdate = async (id, quantity, poId, shipmentStatus, next) => {
     //next("Success")
 };
 
+const userShipments = async ( mode, warehouseId, skip, limit, callback) => {
+
+        var matchCondition = {};
+        var criteria = mode + ".locationId";
+        matchCondition[criteria] = warehouseId
+
+        const shipments = await  ShipmentModel.aggregate([{
+                $match:
+                   matchCondition
+            },
+            {
+                $lookup: {
+                    from: "warehouses",
+                    localField: "supplier.locationId",
+                    foreignField: "id",
+                    as: "supplier.warehouse",
+                },
+            },
+            {
+                $unwind: {
+                    path: "$supplier.warehouse",
+                },
+            },
+            {
+                $lookup: {
+                    from: "organisations",
+                    localField: "supplier.warehouse.organisationId",
+                    foreignField: "id",
+                    as: "supplier.org",
+                },
+            },
+            {
+                $unwind: {
+                    path: "$supplier.org",
+                },
+            },
+            {
+                $lookup: {
+                    from: "warehouses",
+                    localField: "receiver.locationId",
+                    foreignField: "id",
+                    as: "receiver.warehouse",
+                },
+            },
+            {
+                $unwind: {
+                    path: "$receiver.warehouse",
+                },
+            },
+            {
+                $lookup: {
+                    from: "organisations",
+                    localField: "receiver.warehouse.organisationId",
+                    foreignField: "id",
+                    as: "receiver.org",
+                },
+            },
+            {
+                $unwind: {
+                    path: "$receiver.org",
+                },
+            },
+        ]).sort({
+            createdAt: -1
+        }).skip(parseInt(skip))
+        .limit(parseInt(limit));
+
+        callback(undefined, shipments)
+}
+
+
+
 exports.createShipment = [
     auth,
     async (req, res) => {
@@ -357,147 +429,59 @@ exports.fetchShipmentsByQRCode = [
 
 
 exports.fetchShipments = [
-    auth,
-    async (req, res) => {
-        try {
-            const { skip, limit } = req.query
-            checkToken(req, res, async result => {
+auth,
+async (req, res) => {
+    try {
+        const {
+            skip,
+            limit
+        } = req.query
+        checkToken(req, res, async result => {
                 if (result.success) {
                     const {
                         warehouseId
                     } = req.user;
-                    try {
-                         const shipments = await ShipmentModel.aggregate([
-                            {
-                                $match: {
-                                    $or: [
-                                        {
-                                            'supplier.locationId': warehouseId
-                                        },
-                                        {
-                                            'receiver.locationId': warehouseId
-                                        },
-                                    ],
-                                },
-                            },
-                            {
-                                $lookup: {
-                                    from: "warehouses",
-                                    localField: "supplier.locationId",
-                                    foreignField: "id",
-                                    as: "supplier.warehouse",
-                                },
-                            },
-                            {
-                                $unwind: {
-                                    path: "$supplier.warehouse",
-                                },
-                            },
-                            {
-                                $lookup: {
-                                    from: "organisations",
-                                    localField: "supplier.warehouse.organisationId",
-                                    foreignField: "id",
-                                    as: "supplier.org",
-                                },
-                            },
-                            {
-                                $unwind: {
-                                    path: "$supplier.org",
-                                },
-                            },
-                            {
-                                $lookup: {
-                                    from: "warehouses",
-                                    localField: "receiver.locationId",
-                                    foreignField: "id",
-                                    as: "receiver.warehouse",
-                                },
-                            },
-                            {
-                                $unwind: {
-                                    path: "$receiver.warehouse",
-                                },
-                            },
-                            {
-                                $lookup: {
-                                    from: "organisations",
-                                    localField: "receiver.warehouse.organisationId",
-                                    foreignField: "id",
-                                    as: "receiver.org",
-                                },
-                            },
-                            {
-                                $unwind: {
-                                    path: "$receiver.org",
-                                },
-                            },
-                            // {
-                            //     $project: {
-                            //         _id: 0,
-                            //         id: 1,
-                            //         status: 1,
-                            //         shippingDate: 1,
-                            //         supplier: {
-                            //             locationId: 1,
-                            //             org: {
-                            //                 name: 1,
-                            //             },
-                            //             warehouse: {
-                            //                 postalAddress: 1,
-                            //                 warehouseAddress: 1
-                            //             }
-                            //         },
-                            //         receiver: {
-                            //             locationId: 1,
-                            //             org: {
-                            //                 name: 1,
-                            //             },
-                            //             warehouse: {
-                            //                 postalAddress: 1,
-                            //                 warehouseAddress: 1
-                            //             }
-                            //         },
-                            //     },
-                            // },
-                        ]).sort({createdAt: -1}).skip(parseInt(skip))
-                            .limit(parseInt(limit));;
-                        // const shipments = await ShipmentModel.find({
-                        //     $or: [{
-                        //         'supplier.locationId': warehouseId
-                        //     },
-                        //         {
-                        //             'receiver.locationId': warehouseId
-                        //         },
-                        //     ],
-                        // }).sort({createdAt: -1}).skip(parseInt(skip))
-                        //     .limit(parseInt(limit));
-                        return apiResponse.successResponseWithData(
-                            res,
-                            'Shipments Table',
+                    var shipments, inboundShipments, outboundShipments;
+                        try {
+                    const supplier = await userShipments("supplier", warehouseId, skip, limit, (error, data) => {
+                        outboundShipments = data;
+                    })
+                    const receiver = await userShipments("receiver", warehouseId, skip, limit, (error, data) => {
+                            inboundShipments = data;
+                    })
+                    shipments = outboundShipments.concat(inboundShipments);
+                    return apiResponse.successResponseWithData(
+                        res,
+                        'Shipments Table',
+                        ({
                             shipments,
-                        );
-                    }catch(err) {
-                        return apiResponse.ErrorResponse(res, err);
-                    }
-
-                } else {
-                    logger.log(
-                        'warn',
-                        '<<<<< ShipmentService < ShipmentController < modifyShipment : refuted token',
+                            inboundShipments,
+                            outboundShipments
+                        })
                     );
-                    res.status(403).json('Auth failed');
+                } catch (err) {
+                    return apiResponse.ErrorResponse(res, err);
                 }
-            });
-        } catch (err) {
-            logger.log(
-                'error',
-                '<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)',
-            );
-            return apiResponse.ErrorResponse(res, err);
+
+            } else {
+                logger.log(
+                    'warn',
+                    '<<<<< ShipmentService < ShipmentController < modifyShipment : refuted token',
+                );
+                res.status(403).json('Auth failed');
+            }
+        });
+} catch (err) {
+    logger.log(
+        'error',
+        '<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)',
+    );
+    return apiResponse.ErrorResponse(res, err);
         }
     },
 ];
+
+
 
 exports.Shipment = [
     auth,
