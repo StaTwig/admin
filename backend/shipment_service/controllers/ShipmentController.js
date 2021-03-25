@@ -453,11 +453,10 @@ async (req, res) => {
                     return apiResponse.successResponseWithData(
                         res,
                         'Shipments Table',
-                        ({
                             shipments,
                             inboundShipments,
                             outboundShipments
-                        })
+
                     );
                 } catch (err) {
                     return apiResponse.ErrorResponse(res, err);
