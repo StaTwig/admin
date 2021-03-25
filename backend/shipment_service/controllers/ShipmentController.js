@@ -450,7 +450,7 @@ async (req, res) => {
                             inboundShipments = data;
                     })
                     shipments = outboundShipments.concat(inboundShipments);
-                    return apiResponse.successResponseWithData(
+                    return apiResponse.successResponseWithMultipleData(
                         res,
                         'Shipments Table',
                             shipments,
