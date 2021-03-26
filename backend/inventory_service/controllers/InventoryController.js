@@ -736,11 +736,30 @@ exports.addProductsToInventory = [
           })
           const dupSerialFound = await AtomModel.findOne({id: { $in: atoms}});
           if(dupSerialFound) return apiResponse.ErrorResponse(res, 'Duplicate Serial Numbers found');
-          await utility.asyncForEach(products, async product => {
-            inventory.inventoryDetails.push({
-              productId: product.productId,
-              quantity: product.quantity,
+
+
+	  //This code handles the insertion of duplicate products and aggregates the counts
+	    await utility.asyncForEach(products, async product => {
+            const inventoryId = warehouse.warehouseInventory;
+            const checkProduct = await InventoryModel.find({"$and":[{"id":inventoryId},{"inventoryDetails.productId":product.productId}]})
+            if ( checkProduct != "")
+            {
+            const exist_quantity = await InventoryModel.find( { "id":inventoryId },{ "inventoryDetails": {"$elemMatch":{"productId": product.productId}}})
+            const new_quantity = exist_quantity[0].inventoryDetails[0].quantity + product.quantity;
+
+                 const update = await InventoryModel.updateOne( { "id":inventoryId ,"inventoryDetails.productId": product.productId},
+                 { "$set": { "inventoryDetails.$.quantity" : new_quantity } }
+                 )
+
+            }
+            else {
+              inventory.inventoryDetails.push({
+                productId: product.productId,
+                quantity: product.quantity,
             });
+                          }
+
+
 
             const serialNumbers = product.serialNumbersRange.split('-');
             const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
