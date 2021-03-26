@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import ViewShipment from '../../components/viewshipment';
+import ViewShipment from '../../components/viewShipment';
 import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
 import { useDispatch, useSelector } from 'react-redux';
 import { getViewShipment } from '../../actions/shipmentActions';
 
-const NewShipmentContainer = props => {
+const ViewShipmentContainer = props => {
   const dispatch = useDispatch();
   const [shipment, setShipment] = useState([]);
   const { id } = props.match.params;
@@ -34,4 +34,4 @@ const NewShipmentContainer = props => {
   );
 };
 
-export default NewShipmentContainer;
+export default ViewShipmentContainer;

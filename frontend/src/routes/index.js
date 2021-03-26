@@ -7,7 +7,7 @@ import LandingPage from '../containers/landingpage';
 import OverView from '../containers/overview';
 import Shipment from '../containers/shipments';
 import NewShipment from '../containers/newshipment';
-import ViewShipment from '../containers/viewshipment';
+import ViewShipment from '../containers/viewShipment';
 import VerifyShipment from '../containers/verifyshipment';
 import VerifyInventory from '../containers/verifyinventory';
 import Inventory from '../containers/inventory';
