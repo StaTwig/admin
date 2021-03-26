@@ -146,6 +146,14 @@ export const setReviewShipments = data => {
   };
 };
 
+export const UpdateTrackingStatus = data => {
+  return {
+    type: UPDATE_STATUS,
+    payload: data,
+  };
+};
+
+
 export const setVisibleShipments = (index, visible) => {
   return {
     type: SET_VISIBLE_SHIPMENT,

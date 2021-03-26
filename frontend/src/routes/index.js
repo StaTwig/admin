@@ -28,10 +28,10 @@ import AddProduct from '../containers/addproduct';
 import Signup from '../containers/signUp';
 import ForgotPassword from '../containers/forgotPassword';
 import resetPasswordPage from '../containers/resetPassword';
-
 import Home from '../containers/home';
-
+import UpdateStatus from  '../containers/updateStatus';
 import NoMatch from '../components/NoMatch';
+
 
 import './style.scss';
 const routes = (
@@ -62,7 +62,9 @@ const routes = (
     <Route path="/producttracing" component={requireAuth(ProductTracing)} />
     <Route path="/network" component={requireAuth(Network)} />
     <Route path="/transactionHistory" component={requireAuth(TransactionHistory)} />
+    <Route path="/updateStatus" component={requireAuth(UpdateStatus)} />
     <Route component={NoMatch} />
+
   </Switch>
 );
 
