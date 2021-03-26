@@ -23,7 +23,7 @@ const Inventory = props => {
     coloumn1: 'Product Name',
     coloumn2: 'Manufacturer',
     coloumn3: 'Quantity',
-   
+
 
     img1: <img src={Package} width="16" height="16" />,
     img2: <img src={user} width="16" height="16" />,
@@ -52,8 +52,8 @@ const Inventory = props => {
           }
           fetchData();
         }, []);
-    
-    
+
+
      useEffect(() => {
     async function fetchData() {
       const result = await getProductList();
@@ -72,7 +72,7 @@ const Inventory = props => {
       setInventoryExpired(
         resultAnalytics.data.inventory.expiredThisYear
       )
-     
+
     }
     fetchData();
   }, []);
@@ -98,13 +98,13 @@ const Inventory = props => {
               <img src={TotalInventoryAdded} alt="truck" />
             </div>
             <div className="d-flex flex-column">
-              <div className="title truck-text">Inventory Added</div>
+              <div className="title truck-text">Total Product Category</div>
               <div className="tab-container">
                 <div
                   className="tab-item active"
                   onMouseLeave={() =>
                     setInventoriesCount(
-                       inventoryAnalytics.totalProductsInInventory 
+                       inventoryAnalytics.totalProductsInInventory
                     )
                     }
                   onMouseEnter={() =>
@@ -171,7 +171,7 @@ const Inventory = props => {
               <img src={currentinventory} alt="truck" />
             </div>
             <div className="d-flex flex-column">
-              <div className="title sent-text">Total Inventory</div>
+              <div className="title sent-text">Product Out Of Stock</div>
               <div className="tab-container">
                 <div
                   className="tab-item active"
@@ -244,7 +244,7 @@ const Inventory = props => {
               <img src={Expiration} alt="truck" />
             </div>
             <div className="d-flex flex-column">
-              <div className="title recived-text">Vaccines near Expiration</div>
+              <div className="title recived-text">Batch near Expiration</div>
               <div className="tab-container">
                 <div
                   className="tab-item active"
@@ -281,7 +281,7 @@ const Inventory = props => {
                   onMouseLeave={() =>
                     setInventoryNearExpiration(
                       inventoryAnalytics.expiringThisYear)
-                    
+
                   }
                   onMouseEnter={() =>
                     setInventoryNearExpiration(
@@ -319,7 +319,7 @@ const Inventory = props => {
               <img src={TotalVaccineExpired} alt="truck" />
             </div>
             <div className="d-flex flex-column">
-              <div className="title transit-text">Vaccine Expired</div>
+              <div className="title transit-text">Batch Expired</div>
               <div className="tab-container">
                 <div
                   className="tab-item active"
@@ -414,6 +414,7 @@ const Inventory = props => {
                     </div>
                   </div>
                 ))}
+
               </div>
             </div>
           </div>
