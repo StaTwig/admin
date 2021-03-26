@@ -49,7 +49,7 @@ const setData = (v, a = '') => {
                 <img src={totalshipments} alt="truck" />
               </div>
               <div className="d-flex flex-column">
-                <div className="title">Total Shipments</div>
+                <div className="title">Total Outbound Shipments</div>
                 <div className="count1">{overviewAnalytics.totalShipmentsSentLastYear}<small className="dayStatus ml-1">This Year</small></div>
               </div>
             </div>
@@ -61,7 +61,7 @@ const setData = (v, a = '') => {
               </div>
 
               <div className="d-flex flex-column">
-                <div className="title">Total Inventory Added</div>
+                <div className="title">Total Inbound Shipments</div>
                 <div className="count2" >{overviewAnalytics.totalProductsAddedToInventory}<small className="dayStatus ml-1">ThisYear</small></div>
               </div>
             </div>
@@ -73,7 +73,7 @@ const setData = (v, a = '') => {
                 <img className= "currentintransit" src={currentshipment} alt="truck" />
               </div>
               <div className="d-flex flex-column">
-                <div className="title">Current Shipment in Transit</div>
+                <div className="title">Total Product Category</div>
                 <div className="count3">{overviewAnalytics.totalShipmentsInTransitLastMonth}<small className="dayStatus ml-1">Last 1 Month</small></div>
               </div>
             </div>
@@ -85,7 +85,7 @@ const setData = (v, a = '') => {
                 <img src={Totalshipments} alt="truck" />
               </div>
               <div className="d-flex flex-column">
-                <div className="title">Total Shipments</div>
+                <div className="title">Average Order Processing Time</div>
                 <div className="count4">{overviewAnalytics.totalShipmentsSentLastWeek}<small className="dayStatus ml-1">Last 1 Week</small></div>
               </div>
             </div>
@@ -97,7 +97,7 @@ const setData = (v, a = '') => {
                 <img src={shipmentsdelayed} alt="truck" />
               </div>
               <div className="d-flex flex-column">
-                <div className="title">Total Shipments Delayed</div>
+                <div className="title">Pending Orders</div>
                 <div className="count5">{overviewAnalytics.totalShipmentsWithDelayInTransit} <small className="dayStatus">Today</small></div>
               </div>
             </div>
