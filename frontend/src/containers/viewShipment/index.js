@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ViewShipment from '../../components/viewshipment';
+import ViewShipment from '../../components/viewShipment';
 import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
 import { useDispatch, useSelector } from 'react-redux';
