@@ -7,7 +7,8 @@ export const inventoryReducer = (state = initialState, action) => {
     case GET_INVENTORIES_SUCCESS:
       const inventories = action.payload.data;
       return [
-        ...state, ...inventories
+        // ...state, ...inventories
+        ...inventories
       ];
     case GET_INVENTORIES_FAILURE:
       return initialState
