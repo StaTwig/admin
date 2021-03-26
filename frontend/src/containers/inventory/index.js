@@ -8,7 +8,7 @@ import {getInventories, resetInventories, getInventoryDetails} from "../../actio
 const InventoryContainer = props => {
   const dispatch = useDispatch();
 
-  const [skip, setSkip] = useState(5);
+  const [skip, setSkip] = useState(0);
   const [limit, setLimit] = useState(5);
   const [loadMore, setLoadMore] = useState(true);
 
@@ -24,30 +24,37 @@ const InventoryContainer = props => {
     });
   useEffect(() => {
     dispatch(resetInventories());
-   // dispatch(getInventories(0, 5));
-    dispatch(getInventoryDetails());
+    dispatch(getInventories(0, 5));
+    // dispatch(getInventoryDetails());
   }, []);
 
 
-  const onLoadMore = async () => {
-    const newSkip = skip + 5;
+  // const onLoadMore = async () => {
+  //   const newSkip = skip + 5;
+  //   setSkip(newSkip);
+  //   const results = await dispatch(getInventories(skip, limit));
+  //   if (results === 0) {
+  //     setLoadMore(false);
+  //   }
+  // };
+
+  const onLoadMore = async (isInc) => {
+    const newSkip = isInc ? skip + 5 : skip - 5;
     setSkip(newSkip);
-    const results = await dispatch(getInventories(skip, limit));
-    if (results === 0) {
-      setLoadMore(false);
-    }
+    dispatch(getInventories(newSkip, limit));
   };
+
   return (
-            <div className="container-fluid p-0">
-                  <Header {...props} />
-                  <div className="d-flex">
-                        <Sidebar {...props} />
-                        <div className="content">
-                              <Inventory  inventories={inventories} inventoriesCount={inventoriesCount}  loadMore={loadMore} inventoryDetails={inventoryDetails} onLoadMore={onLoadMore} {...props}/>
-                        </div>
-                  </div>
-            </div>
-      );
+    <div className="container-fluid p-0">
+      <Header {...props} />
+      <div className="d-flex">
+        <Sidebar {...props} />
+        <div className="content">
+          <Inventory skip={skip} inventories={inventories} inventoriesCount={inventoriesCount} loadMore={loadMore} inventoryDetails={inventories} onLoadMore={onLoadMore} {...props} />
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default InventoryContainer;

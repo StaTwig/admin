@@ -406,14 +406,14 @@ const Inventory = props => {
               <div className="row overflow">
                 {productsList?.map((product, index) => (
                   <div className="col-sm-6" key={index}>
-                    <div className="d-flex card flex-column align-items-center">
-                    <div className="round-sign" style={{backgroundColor: colors[index]}}>{product.productName}</div>
-                      <p className="product">{product.productId}</p>
+                    <div className="d-flex card flex-column align-items-center"  style={{backgroundColor: colors[index]}}>
+                    <div className="round-sign">{product.productName}</div>
+                      <p className="product">&nbsp;</p>
+                      {/* <p className="product">{product.productName}</p> */}
                       <h3>Qty : {product.quantity}</h3>
                     </div>
                   </div>
                 ))}
-                
               </div>
             </div>
           </div>
