@@ -152,6 +152,12 @@ export const UpdateTrackingStatus = data => {
     payload: data,
   };
 };
+export const receiveShipment = data => {
+  return {
+    type: RECEIVE_SHIPMENT,
+    payload: data,
+  };
+};
 
 
 export const setVisibleShipments = (index, visible) => {
