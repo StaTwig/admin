@@ -1,22 +1,11 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import location from '../../assets/icons/CurrentLocationWhite.svg';
-import { getViewShipment } from '../../actions/shipmentActions';
 import './style.scss';
 
 const ViewShipment = props => {
-  const [shipment, setShipment] = useState([]);
-  const { id } = props.match.params;
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    (async () => {
-      const results = await dispatch(getViewShipment(id));
-      setShipment(results);
-    })();
-  }, []);
+  const { shipment, id } = props;
 
   let statusStyle = 'bg-primary';
   let status = 'Shipped';
@@ -55,12 +44,12 @@ const ViewShipment = props => {
         </div>
       </div>
       <div className="mt-4">
-        <div className="d-flex flex-row bg-white shadow rounded p-3 m-3">
+        <div className="d-flex flex-row bg-white shadow  p-3 m-3">
           <div className="w-50 flex-row d-flex pl-4">
             <span className="w-50">Shipment ID</span>
             <div className="w-50">
               <span className="font-weight-bold text-dark">{shipment.id}</span>
-              <span className={`ml-2 p-1 status rounded text-white secondary-bg ${statusStyle}`}>
+              <span className={`ml-2 p-1 status pl-2 plr-2 rounded text-white secondary-bg ${statusStyle}`}>
                 {status}
                 </span>
               </div>
@@ -70,7 +59,7 @@ const ViewShipment = props => {
             <span className="w-50 font-weight-bold text-dark">{shipmentDate}</span>
           </div>
         </div>
-        <div className="d-flex flex-row bg-white shadow rounded p-3 m-3">
+        <div className="d-flex flex-row bg-white shadow  p-3 m-3">
           <div className="w-50 flex-column d-flex pl-4">
             <span className="p-1 font-weight-bold text-primary">FROM</span>
             <div>
@@ -98,7 +87,7 @@ const ViewShipment = props => {
             </div>
           </div>
         </div>
-        <div className="d-flex flex-row bg-white shadow rounded  p-3 m-3">
+        <div className="d-flex flex-row bg-white shadow   p-3 m-3">
           <div className="w-50 flex-column d-flex pl-4">
             <span className="p-1 font-weight-bold text-primary">Delivery details</span>
             <div>
@@ -130,7 +119,7 @@ const ViewShipment = props => {
           <span className="p-1 font-weight-bold text-info">Product details</span>
           <div className="row">
             {shipment?.products?.map((product, index) => 
-              <div key={index} className={`bg-white ${index > 0 ? 'ml-4' : ''} shadow rounded p-3 w-25`}>
+              <div key={index} className={`bg-white ${index > 0 ? 'ml-4' : ''} shadow  p-3 w-25`}>
                 <span className="p-1 font-weight-normal text-primary">{product.productName}</span>
                 {/* <div className="d-flex mt-2 flex-row p-1">
                   <span className="w-50">Product name</span>

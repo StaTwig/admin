@@ -118,7 +118,6 @@ export const createShipment = async data => {
     return async dispatch => {
       try {
         const result = await axios.get(config().viewShipmentUrl + id);
-        console.log(result.data.data);
         return result.data.data;
       } catch (e) {
         return e.response;
