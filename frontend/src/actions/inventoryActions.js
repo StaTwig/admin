@@ -38,11 +38,11 @@ export const getInventories = (skip = 0, limit = 5) => {
 
 };
 
-export const getInventoryDetails = () => {
+export const getInventoryDetails = (skip = 0, limit = 5) => {
     return async dispatch => {
       dispatch(turnOn());
       try {
-        const result = await axios.get(`${config().getInventoryDetailsUrl}`);
+        const result = await axios.get(`${config().getInventoryDetailsUrl}?skip=${skip}&limit=${limit}`);
         dispatch(setInventoryDetails(result.data));
         dispatch(turnOff());
       }catch(e) {

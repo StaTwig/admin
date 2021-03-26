@@ -1596,3 +1596,38 @@ exports.getWarehouseDetailsByCountry = [
     }
   },
 ];
+
+
+
+exports.getInventory = [
+  auth,
+  async(req, res) => {
+    try {
+      const { skip, limit } = req.query;
+      const { warehouseId } = req.user;
+      const warehouse = await WarehouseModel.findOne({ id: warehouseId })
+      if(warehouse) {
+        const inventory = await InventoryModel.aggregate([
+          { $match: { id: warehouse.warehouseInventory } },
+          { $unwind: "$inventoryDetails" },
+          {
+            $lookup: {
+                from: "products",
+                localField: "inventoryDetails.productId",
+                foreignField: "id",
+                as: "products",
+            },
+          },
+          { $unwind: "$products" },
+        ]).sort({ createdAt: -1 })
+                .skip(parseInt(skip))
+                .limit(parseInt(limit));
+        return apiResponse.successResponseWithData(res, 'Inventory Details', inventory);
+      }else {
+        return apiResponse.ErrorResponse(res, 'Cannot find warehouse for this employee')
+      }
+    } catch (err) {
+        return apiResponse.ErrorResponse(res, err);
+    }
+  }
+]
