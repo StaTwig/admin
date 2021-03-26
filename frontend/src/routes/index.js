@@ -20,6 +20,7 @@ import Network from '../containers/network';
 import Profile from '../containers/profile';
 import AdminProfile from '../containers/adminprofile';
 import DashBoard from '../containers/dashboard';
+import Orders from '../containers/orders';
 import requireAuth from '../components/hocs/requireAuth';
 import QrCode from '../containers/qrcode';
 import TransactionHistory from '../containers/transactionHistory'
@@ -62,6 +63,7 @@ const routes = (
     <Route path="/producttracing" component={requireAuth(ProductTracing)} />
     <Route path="/network" component={requireAuth(Network)} />
     <Route path="/transactionHistory" component={requireAuth(TransactionHistory)} />
+    <Route path="/orders" component={requireAuth(Orders)} />
     <Route path="/updateStatus" component={requireAuth(UpdateStatus)} />
     <Route component={NoMatch} />
 
