@@ -27,13 +27,90 @@ exports.getAnalytics = [
     try {
 
       const {id: warehouseId } = req.user;
+      var overview = {}
+      var inventory = {}
+      var shipment = {}
       var data = {}
-      const totalProductsAdded = await AtomModel.count();
-      data.totalProductsAdded = totalProductsAdded;
-      
+
       var today = new Date(); 
+      var lastWeek = new Date();
+      lastWeek.setDate(today.getDate() - 7);
+      var lastMonth = new Date();
+      lastMonth.setDate(today.getDate() - 30);
+      var lastYear = new Date();
+      lastYear.setDate(today.getDate() -365 );
+
+
+      const totalShipmentsSentLastYear = await ShipmentModel.count(
+        { $and : [
+          {"supplier.id": warehouseId},
+          { status: { $in : ["SHIPPED", "RECEIVED", "LOST", "DAMAGED"]} },
+          { shippingDate :  {
+              $lte: today.toISOString(), 
+              $gte: lastYear.toISOString() 
+            }
+          }
+        ]
+      } 
+      );
+      overview.totalShipmentsSentLastYear = totalShipmentsSentLastYear;
+
+
+      const totalProductsAddedToInventory = await InventoryModel.count();
+      overview.totalProductsAddedToInventory = totalProductsAddedToInventory;
+
+      const totalShipmentsInTransitLastMonth = await ShipmentModel.count(
+        { $and : [
+          {"supplier.id": warehouseId},
+          { status: { $in : ["SHIPPED"]} },
+          { shippingDate :  {
+              $lte: today.toISOString(), 
+              $gte: lastMonth.toISOString() 
+            }
+          }
+        ]
+      } 
+      );
+      overview.totalShipmentsInTransitLastMonth = totalShipmentsInTransitLastMonth;
+
+      const totalShipmentsSentLastWeek = await ShipmentModel.count(
+        { $and : [
+          {"supplier.id": warehouseId},
+          { status: { $in : ["SHIPPED", "RECEIVED", "LOST", "DAMAGED"]} },
+          { shippingDate :  {
+              $lte: today.toISOString(), 
+              $gte: lastWeek.toISOString() 
+            }
+          }
+        ]
+      } 
+      );
+      overview.totalShipmentsSentLastWeek = totalShipmentsSentLastWeek;
+
+      const totalShipmentsWithDelayInTransit = await ShipmentModel.count(
+        { $and: [
+          { status: { $in : ["SHIPPED"]} },
+          {"supplier.id": warehouseId},
+          {expectedDeliveryDate: {$lt: new Date().toISOString()}}
+         ]
+        });
+       overview.totalShipmentsWithDelayInTransit = totalShipmentsWithDelayInTransit;
+
+       const totalProductsInInventory = await InventoryModel.count();
+       inventory.totalProductsInInventory = totalProductsInInventory;
+ 
+      //  const totalProductsAddedToInventory = await InventoryModel.count();
+      //  inventory.totalProductsAddedToInventory = totalProductsAddedToInventory; 
+
       var nextWeek = new Date();
       nextWeek.setDate(today.getDate() + 7)
+ 
+      const expiringToday = await AtomModel.count({
+        "attributeSet.expDate" :  {
+          $eq: today.toISOString(),
+        }
+      });
+      inventory.expiringToday  = expiringToday;
 
       const expiringThisWeek = await AtomModel.count({
         "attributeSet.expDate" :  {
@@ -41,8 +118,7 @@ exports.getAnalytics = [
           $lt: nextWeek.toISOString() 
         }
       });
-      data.expiringThisWeek  =expiringThisWeek;
-
+      inventory.expiringThisWeek  =expiringThisWeek;
 
       var nextMonth = new Date();
       nextMonth.setDate(today.getDate() + 30)
@@ -53,7 +129,7 @@ exports.getAnalytics = [
           $lt: nextMonth.toISOString() 
         }
       });
-      data.expiringThisMonth = expiringThisMonth;
+      inventory.expiringThisMonth = expiringThisMonth;
 
       var nextYear = new Date();
       nextYear.setDate(today.getDate() + 365)
@@ -64,10 +140,9 @@ exports.getAnalytics = [
           $lt: nextYear.toISOString() 
         }
       });
-      data.expiringThisYear = expiringThisYear;
+      inventory.expiringThisYear = expiringThisYear;
 
-      var lastWeek = new Date();
-      lastWeek.setDate(today.getDate() - 7)
+      inventory.expiredToday  = expiringToday;
 
       const expiredThisWeek = await AtomModel.count({
         "attributeSet.expDate" :  {
@@ -75,10 +150,7 @@ exports.getAnalytics = [
           $gte: lastWeek.toISOString() 
         }
       });
-      data.expiredThisWeek = expiredThisWeek;
-
-      var lastMonth = new Date();
-      lastMonth.setDate(today.getDate() - 30)
+      inventory.expiredThisWeek = expiredThisWeek;
 
       const expiredThisMonth = await AtomModel.count({
         "attributeSet.expDate" :  {
@@ -86,10 +158,7 @@ exports.getAnalytics = [
           $gte: lastMonth.toISOString()  
         }
       });
-      data.expiredThisMonth = expiredThisMonth;
-
-      var lastYear = new Date();
-      lastYear.setDate(today.getDate() -365 )
+      inventory.expiredThisMonth = expiredThisMonth;
 
       const expiredThisYear = await AtomModel.count({
         "attributeSet.expDate" :  {
@@ -97,12 +166,91 @@ exports.getAnalytics = [
           $gte: lastYear.toISOString() 
         }
       });
-      data.expiredThisYear = expiredThisYear;
+      inventory.expiredThisYear = expiredThisYear;
 
-      const totalShipmentsSent = await ShipmentModel.count({
-        status: { $in : ["SHIPPED", "RECEIVED", "LOST", "DAMAGED"]} 
-      });
+      const inboundShipments = await ShipmentModel.count(
+        { $and : [
+          {"receiver.id": warehouseId},
+          { status: { $in : [ "SHIPPED" ]} }
+        ]
+      } );
+      shipment.inboundShipments = inboundShipments;
+      // console.log("Number of Incoming shipments ", numIncomingShipments);
+
+      const outboundShipments = await ShipmentModel.count(
+        { $and : [
+          {"supplier.id": warehouseId},
+          { status: { $in : [ "SHIPPED", "RECEIVED" ]} }
+        ]
+      } );
+      shipment.outboundShipments = outboundShipments;
+      // console.log("Number of Outgoing shipments ", numOutgoingShipments);
+
+      const inboundAlerts = await ShipmentModel.count(
+        { $and : [
+          {"receiver.id": warehouseId},
+          { status: { $in : [ "DAMAGED" ]} }
+        ]
+      } );
+        // console.log("Number of Alerts Inbound shipments ", alertsInboundShipments);
+        shipment.inboundAlerts = inboundAlerts;
+
+
+      const outboundAlerts = await ShipmentModel.count(
+        { $and : [
+          {"supplier.id": warehouseId},
+          { status: { $in : [ "DAMAGED"]} }
+        ]
+      } );
+        // console.log("Number of Alerts Outbound shipments ", alertsOutboundShipments);
+        shipment.outboundAlerts = outboundAlerts;
+
+      data.overview = overview;
+      data.inventory = inventory;
+      data.shipment = shipment;
+
+      const totalShipmentsSent = await ShipmentModel.count(
+        { $and : [
+          {"supplier.id": warehouseId},
+          { status: { $in : ["SHIPPED", "RECEIVED", "LOST", "DAMAGED"]} },
+          { shippingDate :  {
+              $lte: today.toISOString(), 
+              $gte: lastYear.toISOString() 
+            }
+          }
+        ]
+      } 
+      );
       data.totalShipmentsSent = totalShipmentsSent;
+
+      // const totalShipmentsSentLastYear = await ShipmentModel.count(
+      //   { $and : [
+      //     {"supplier.id": warehouseId},
+      //     { status: { $in : ["SHIPPED", "RECEIVED", "LOST", "DAMAGED"]} },
+      //     { shippingDate :  {
+      //         $lte: today.toISOString(), 
+      //         $gte: lastYear.toISOString() 
+      //       }
+      //     }
+      //   ]
+      // } 
+      // );
+      // data.totalShipmentsSentLastYear = totalShipmentsSentLastYear;
+
+      // const totalShipmentsSentLastWeek = await ShipmentModel.count(
+      //   { $and : [
+      //     {"supplier.id": warehouseId},
+      //     { status: { $in : ["SHIPPED", "RECEIVED", "LOST", "DAMAGED"]} },
+      //     { shippingDate :  {
+      //         $lte: today.toISOString(), 
+      //         $gte: lastWeek.toISOString() 
+      //       }
+      //     }
+      //   ]
+      // } 
+      // );
+      // data.totalShipmentsSentLastWeek = totalShipmentsSentLastWeek;
+
 
       const totalShipmentsReceived = await ShipmentModel.count(
         { status: "RECEIVED" });
@@ -131,24 +279,15 @@ exports.getAnalytics = [
       );
       data.totalProductsReceived = totalProductsReceived[0].total;
 
-      const totalShipmentsInTransit = await ShipmentModel.count(
-        { status: "SHIPPED" },
-      );
-      data.totalShipmentsInTransit = totalShipmentsInTransit;
       
-      const totalShipmentsWithDelayInTransit = await ShipmentModel.count(
-       { $and: [
-         {status: "SHIPPED"},
-         {expectedDeliveryDate: {$lt: new Date().toISOString()}}
-        ]
-       });
-      data.totalShipmentsWithDelayInTransit = totalShipmentsWithDelayInTransit;
-
-      const totalProductsInInventory = await InventoryModel.count();
-      data.totalProductsInInventory = totalProductsInInventory;
-
-      const totalProductsAddedToInventory = await InventoryModel.count();
-      data.totalProductsAddedToInventory = totalProductsAddedToInventory;
+      // const totalShipmentsWithDelayInTransit = await ShipmentModel.count(
+      //  { $and: [
+      //    { status: { $in : ["SHIPPED"]} },
+      //    {"supplier.id": warehouseId},
+      //    {expectedDeliveryDate: {$lt: new Date().toISOString()}}
+      //   ]
+      //  });
+      // data.totalShipmentsWithDelayInTransit = totalShipmentsWithDelayInTransit;
 
       const productTypes = await InventoryModel.aggregate(
         [{$match: {id: 'inv-bh-1'}}, 
@@ -163,23 +302,6 @@ exports.getAnalytics = [
       data.numProductTypes = numProductTypes;
       // console.log("Number of product types in Inventory ", numProductTypes);
 
-      const numOutgoingShipments = await ShipmentModel.count(
-        { $and : [
-          {"supplier.id": warehouseId},
-          { status: { $in : [ "SHIPPED", "RECEIVED" ]} }
-        ]
-      } );
-      data.numOutgoingShipments = numOutgoingShipments;
-      // console.log("Number of Outgoing shipments ", numOutgoingShipments);
-
-      const numIncomingShipments = await ShipmentModel.count(
-        { $and : [
-          {"receiver.id": warehouseId},
-          { status: { $in : [ "SHIPPED" ]} }
-        ]
-      } );
-      data.numIncomingShipments = numIncomingShipments;
-      // console.log("Number of Incoming shipments ", numIncomingShipments);
 
       const totalProductCount = await ProductModel.distinct('type');
       // console.log("Total Product Count = ", totalProductCount.length);
@@ -239,24 +361,6 @@ exports.getAnalytics = [
       // console.log("Batches Near Expiration ", batchNearExpiration[0].total);
       data.batchNearExpiration = batchNearExpiration[0].total;
 
-      const alertsInboundShipments = await ShipmentModel.count(
-        { $and : [
-          {"receiver.id": warehouseId},
-          { status: { $in : [ "DAMAGED" ]} }
-        ]
-      } );
-        // console.log("Number of Alerts Inbound shipments ", alertsInboundShipments);
-        data.alertsInboundShipments = alertsInboundShipments;
-
-
-      const alertsOutboundShipments = await ShipmentModel.count(
-        { $and : [
-          {"supplier.id": warehouseId},
-          { status: { $in : [ "DAMAGED"]} }
-        ]
-      } );
-        // console.log("Number of Alerts Outbound shipments ", alertsOutboundShipments);
-        data.alertsOutboundShipments = alertsOutboundShipments;
 
         const inventorySupplier = await ShipmentModel.count(
           {"supplier.id": warehouseId});
@@ -319,4 +423,3 @@ exports.getAnalytics = [
     }
   },
 ];
-

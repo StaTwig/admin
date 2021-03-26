@@ -23,7 +23,7 @@ const [shpmnts, setShpmnts] = useState([]);
     useEffect(() => {
       async function fetchData() {
         const result = await getAnalytics();
-        setOverViewAnalytics(result.data);
+        setOverViewAnalytics(result.data.overview);
       }
       fetchData();
     }, []);
@@ -50,7 +50,7 @@ const setData = (v, a = '') => {
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Shipments</div>
-                <div className="count1">{overviewAnalytics.totalShipmentsSent}<small className="dayStatus ml-1">This Year</small></div>
+                <div className="count1">{overviewAnalytics.totalShipmentsSentLastYear}<small className="dayStatus ml-1">This Year</small></div>
               </div>
             </div>
           </div>
@@ -74,7 +74,7 @@ const setData = (v, a = '') => {
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Current Shipment in Transit</div>
-                <div className="count3">{overviewAnalytics.totalShipmentsInTransit}<small className="dayStatus ml-1">Last 1 Month</small></div>
+                <div className="count3">{overviewAnalytics.totalShipmentsInTransitLastMonth}<small className="dayStatus ml-1">Last 1 Month</small></div>
               </div>
             </div>
 
@@ -86,7 +86,7 @@ const setData = (v, a = '') => {
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Shipments</div>
-                <div className="count4">{overviewAnalytics.totalShipmentsSent}<small className="dayStatus ml-1">Last 1 Week</small></div>
+                <div className="count4">{overviewAnalytics.totalShipmentsSentLastWeek}<small className="dayStatus ml-1">Last 1 Week</small></div>
               </div>
             </div>
 
