@@ -4,10 +4,14 @@ import { useDispatch } from 'react-redux';
 import EmptyShipments from '../../../assets/icons/EmptyShipments.png';
 import alert from '../../../assets/icons/alert.png';
 import location from '../../../assets/icons/CurrentLocationWhite.svg';
+import previous from '../../../assets/icons/previous.png';
+import next from '../../../assets/icons/next.png';
+import { Link } from 'react-router-dom';
 
 const Table = props => {
   const dispatch = useDispatch();
-  const { loadMore, onLoadMore } = props;
+  const { loadMore, onLoadMore, skip, shpmnts } = props;
+  const shipments = shpmnts();
   return (
     <div className="table">
         <div className="rTable">
@@ -29,9 +33,9 @@ const Table = props => {
               <span />
             </div>
           </div> */}
-          <div className="overflow">
-            {props.shpmnts.length == 0 && <div className="rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none">No records found</div>}
-            {props.shpmnts.map((shipment, index) => {
+          <div className="">
+            {shipments.length == 0 && <div className="rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none">No records found</div>}
+            {shipments.map((shipment, index) => {
               let statusStyle = 'bg-primary';
               let status = 'Shipped';
               if (shipment.status === 'RECEIVED') {
@@ -73,10 +77,10 @@ const Table = props => {
                   <button
                     class="button btn-primary text-light pl-3 pr-3 pt-1 pb-1"
                     onClick={() => {
-                      const data = props.shpmnts[index];
+                      const data = shipments[index];
                       dispatch(setTracingShipments(data));
                       props.history.push(
-                        `/tracing/${props.shpmnts[index].id}`,
+                        `/tracing/${shipments[index].id}`,
                       );
                     }}
                   >
@@ -85,15 +89,21 @@ const Table = props => {
                   </button>
                 </div>
                 <div className="rTableCell">
-                  <button
+                  <Link to={`/viewshipment/${shipment.id}`} 
                     class="button pl-3 pr-3 pt-1 pb-1"
-                    onClick={() => { }}
                   >
                     View
-                  </button>
+                  </Link>
                 </div>
               </div>
-            )})}
+              )
+            })}
+          {shipments?.length > 0 && (
+            <div className="d-flex flex-row-reverse">
+              <img style={{ padding: 1, height: 30, cursor: 'pointer' }} onClick={() => shipments.length > 4 && onLoadMore(true)} src={next} />
+              <img style={{ padding: 1, height: 30, cursor: 'pointer' }} onClick={() => skip > 0 && onLoadMore(false)} src={previous} />
+            </div>
+          )}
           </div>
         </div>
         {/* {loadMore && (

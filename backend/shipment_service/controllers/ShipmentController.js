@@ -491,14 +491,70 @@ exports.Shipment = [
             } = req.headers;
             checkToken(req, res, async result => {
                 if (result.success) {
-                    await ShipmentModel.findOne({
-                            id: req.query.shipmentId
-                        })
+                    await ShipmentModel.aggregate(
+                        [
+                            {
+                                $match: { id: req.query.shipmentId }
+                                
+                            },
+                            {
+                                $lookup: {
+                                    from: "warehouses",
+                                    localField: "supplier.locationId",
+                                    foreignField: "id",
+                                    as: "supplier.warehouse",
+                                },
+                            },
+                            {
+                                $unwind: {
+                                    path: "$supplier.warehouse",
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: "organisations",
+                                    localField: "supplier.warehouse.organisationId",
+                                    foreignField: "id",
+                                    as: "supplier.org",
+                                },
+                            },
+                            {
+                                $unwind: {
+                                    path: "$supplier.org",
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: "warehouses",
+                                    localField: "receiver.locationId",
+                                    foreignField: "id",
+                                    as: "receiver.warehouse",
+                                },
+                            },
+                            {
+                                $unwind: {
+                                    path: "$receiver.warehouse",
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: "organisations",
+                                    localField: "receiver.warehouse.organisationId",
+                                    foreignField: "id",
+                                    as: "receiver.org",
+                                },
+                            },
+                            {
+                                $unwind: {
+                                    path: "$receiver.org",
+                                },
+                            },
+                        ])
                         .then(shipment => {
                             return apiResponse.successResponseWithData(
                                 res,
                                 'Shipment',
-                                shipment,
+                                shipment.length ? shipment[0] : [],
                             );
                         })
                         .catch(err => {
@@ -642,3 +698,41 @@ exports.updateStatus = [
         }
     },
 ];
+
+exports.getProductsByInventory = [
+  auth,
+  async(req, res) => {
+    try {
+        const { invId } = req.query;
+        const inventories = await InventoryModel.aggregate([
+            { $match: { id: invId } },
+            { $unwind: "$inventoryDetails" },
+            {
+                $lookup: {
+                    from: "products",
+                    localField: "inventoryDetails.productId",
+                    foreignField: "id",
+                    as: "products",
+                },
+            },
+            { $unwind: "$products" },
+            {
+                $group: {
+                    _id: '$inventoryDetails.productId',
+                    productName: {$first: "$products.name"},
+                    manufacturer: {$first: "$products.manufacturer"},
+                    productQuantity: { $sum: '$inventoryDetails.quantity' },
+                    quantity: { $sum: '$inventoryDetails.quantity' },
+                },
+            },
+            {
+                $match: { "productQuantity": { $gt: 0 } }
+            }
+        ]);
+
+        return apiResponse.successResponseWithData(res, 'Products by inventory ', inventories);
+    } catch (err) {
+        return apiResponse.ErrorResponse(res, err);
+    }
+  }
+]

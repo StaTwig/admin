@@ -24,7 +24,7 @@ export const getShipments = (skip = 0, limit = 5) => {
       dispatch(setShipments(result.data));
      // dispatch(setShipmentsCount(result.data));
       dispatch(turnOff());
-      return result.data.data.length;
+      return result.data;
     } catch (e) {
       dispatch(turnOff());
       dispatch(resetShipments(e.response));
@@ -112,6 +112,17 @@ export const createShipment = async data => {
   } catch (e) {
     return e.response;
   }
+};
+
+  export const getViewShipment = (id) => {
+    return async dispatch => {
+      try {
+        const result = await axios.get(config().viewShipmentUrl + id);
+        return result.data.data;
+      } catch (e) {
+        return e.response;
+      }
+  };
 };
 
 const setShipments = data => {

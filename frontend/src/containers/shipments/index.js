@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Shipment from '../../components/shipments';
 import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
@@ -7,16 +7,21 @@ import { getShipments, resetShipments } from '../../actions/shipmentActions';
 
 const ShipmentContainer = props => {
   const dispatch = useDispatch();
+  const [shipments, setShipments] = useState([]);
 
-  const shipments = useSelector(state => {
-    return state.shipments;
-  });
+  // const shipments = useSelector(state => {
+  //   return state.shipments;
+  // });
+  
   const shipmentsCount = useSelector(state => {
     return state.shipmentsCount;
   });
   useEffect(() => {
-    dispatch(getShipments());
-    return () => dispatch(resetShipments());
+    (async () => {
+      const results = await dispatch(getShipments());
+      setShipments(results);
+      return () => dispatch(resetShipments());
+    })();
   }, []);
 
   return (
@@ -27,6 +32,7 @@ const ShipmentContainer = props => {
         <div className="content">
           <Shipment
             shipments={shipments}
+            setShipments={setShipments}
             shipmentsCount={shipmentsCount}
             {...props}
           />

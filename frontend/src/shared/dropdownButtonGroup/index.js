@@ -46,7 +46,7 @@ const dropdownButtonGroup = props => {
                       ? item?.warehouseAddress
                         ? (item?.warehouseAddress?.firstLine + ', ' + item?.warehouseAddress?.city)
                         : item.postalAddress 
-                      : (item?.name ? item?.name : parse(item))}
+                      : (item?.name ? item?.name : (item?.productName ? item?.productName : parse(item)))}
                   </span>
                   {index + 1 < groups.length && <hr />}
                 </React.Fragment>
