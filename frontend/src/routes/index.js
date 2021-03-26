@@ -31,6 +31,7 @@ import ForgotPassword from '../containers/forgotPassword';
 import resetPasswordPage from '../containers/resetPassword';
 import Home from '../containers/home';
 import UpdateStatus from  '../containers/updateStatus';
+import ReceiveShipment from  '../containers/receiveShipment';
 import NoMatch from '../components/NoMatch';
 
 
@@ -65,6 +66,7 @@ const routes = (
     <Route path="/transactionHistory" component={requireAuth(TransactionHistory)} />
     <Route path="/orders" component={requireAuth(Orders)} />
     <Route path="/updateStatus" component={requireAuth(UpdateStatus)} />
+    <Route path="/receiveShipment" component={requireAuth(ReceiveShipment)} />
     <Route component={NoMatch} />
 
   </Switch>
