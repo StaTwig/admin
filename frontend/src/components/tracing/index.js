@@ -21,6 +21,7 @@ import PurchasePopUp from "./purchaseform/purchasepopup";
 import ViewShippingModal from "./shippingorder/shippingpopup";
 import { Link } from 'react-router-dom';
 import { updateStatus } from "../../actions/shipmentActions";
+import { receiveShipment } from "../../actions/shipmentActions";
 const Tracing = (props) => {
   const [menu, setMenu] = useState(false);
   const [menuShip, setMenuShip] = useState(false);
@@ -52,10 +53,12 @@ const Tracing = (props) => {
               <span className="chain">Update Status</span>
             </button>
           </Link>
+          <Link to="/receiveShipment">
           <button className="btn btn-main-blue fontSize20 font-bold ">
             <img src={returnShipment} width="14" height="14" className="mr-2" />
             <span className="chain">Receive Shipment</span>
           </button>
+          </Link>
         </div>
       </div>
       <div className="row">
