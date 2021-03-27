@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { receiveShipment } from "../../actions/shipmentActions";
 import Modal from "../../shared/modal";
-import returnShipment from "../../assets/icons/returnShipment.svg";
+import returnShipment from '../../assets/icons/returnShipment.svg';
 import "./style.scss";
 
 const ReceiveShipment = (props) => {
@@ -45,7 +45,7 @@ const ReceiveShipment = (props) => {
               <input
                 name="id"
                 type="text"
-                className="form-control"
+ className="form-control"
                 onChange={(e) => setshipmentId(e.target.value)}
                 size="40"
                 value={shipmentId}
@@ -53,8 +53,8 @@ const ReceiveShipment = (props) => {
             </div>
           </div>
           <div className="panel commonpanle">
-            <div className="form-group">
-              <label className="mb-1 text-secondary">BillNo.,</label>
+             <div className="form-group">
+             <label className="mb-1 text-secondary">BillNo.,</label>
               <input
                 type="text"
                 className="form-control"
@@ -63,41 +63,36 @@ const ReceiveShipment = (props) => {
                 size="40"
                 value={billNo}
               />
-            </div>
+          </div>
           </div>
         </div>
-        <div className="d-flex">
-          <div className="button">
+          <div className="d-flex" >
+<div className="button">
             <button
               className="btn btn-outline-primary mr-4"
               onClick={() => props.history.push("/tracing")}
             >
               Cancel
-            </button>
-          </div>
-          <div className="button1">
+            </button></div>
+<div className="button1">
             <button
               className="btn btn-secondary btn fontSize20 font-bold "
               onClick={receiveShipment}
             >
-              <img
-                src={returnShipment}
-                width="14"
-                height="14"
-                className="mr-2"
-              />
-              <span>Receive Shipment</span>
+        <img src={returnShipment} width="14" height="14" className="mr-2" />
+            <span>Receive Shipment</span>
             </button>
           </div>
           {openUpdatedStatus && (
-            <ModalIVE SHIPMENT
+            <Modal
               close={() => closeModal()}
               size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
             ></Modal>
           )}
         </div>
       </div>
-    </div>
+</div>
+
   );
 };
 export default ReceiveShipment;
