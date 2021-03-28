@@ -5,7 +5,7 @@ import './style.scss';
 import Table from '../../shared/table';
 import TableFilter from '../../shared/advanceTableFilter';
 import {
-  getAnalytics
+  getInventoryAnalytics
 } from '../../actions/analyticsAction';
 import {getProductList} from '../../actions/productActions';
 import TotalInventoryAdded from '../../assets/icons/TotalInventoryAddedcopy.svg';
@@ -37,6 +37,9 @@ const Inventory = props => {
   };
   const [inventoryNearExpiration, setInventoryNearExpiration] = useState('');
   const [inventoryExpired, setInventoryExpired] = useState('');
+  const [productCategory, setProductCategory] = useState('');
+  const [stockOut, setStockOut] = useState('');
+
   const [inventoriesCount, setInventoriesCount] = useState('');
   const [currentInventoriesCount, setCurrentInventoriesCount] = useState('');
   const [productsList,setProductsList] = useState([]);
@@ -47,7 +50,7 @@ const Inventory = props => {
   const [inventoryAnalytics,setInventoryAnalytics]= useState({})
         useEffect(() => {
           async function fetchData() {
-            const result = await getAnalytics();
+            const result = await getInventoryAnalytics();
             setInventoryAnalytics(result.data.inventory);
           }
           fetchData();
@@ -58,7 +61,7 @@ const Inventory = props => {
     async function fetchData() {
       const result = await getProductList();
       setProductsList(result.message);
-      const resultAnalytics = await getAnalytics();
+      const resultAnalytics = await getInventoryAnalytics();
       setInventoryAnalytics(resultAnalytics.data.inventory);
       setInventoriesCount(
         resultAnalytics.data.inventory.totalProductsAddedToInventory
@@ -67,10 +70,16 @@ const Inventory = props => {
         resultAnalytics.data.inventory.totalProductsInInventory
       );
       setInventoryNearExpiration(
-        resultAnalytics.data.inventoryexpiringThisYear
+        resultAnalytics.data.inventory.batchExpiringInSixMonths
       );
       setInventoryExpired(
-        resultAnalytics.data.inventory.expiredThisYear
+        resultAnalytics.data.inventory.batchExpiredLastYear
+      );
+      setProductCategory(
+        resultAnalytics.data.inventory.totalProductCategory
+      )
+      setStockOut(
+        resultAnalytics.data.inventory.stockOut
       )
 
     }
@@ -100,66 +109,7 @@ const Inventory = props => {
             <div className="d-flex flex-column">
               <div className="title truck-text">Total Product Category</div>
               <div className="tab-container">
-                <div
-                  className="tab-item active"
-                  onMouseLeave={() =>
-                    setInventoriesCount(
-                       inventoryAnalytics.totalProductsInInventory
-                    )
-                    }
-                  onMouseEnter={() =>
-                    setInventoriesCount(
-                      inventoryAnalytics.totalProductsInInventory
-                    )
-                  }
-                >
-                  This Year
-                </div>
-                <div
-                  className="tab-item"
-                  onMouseLeave={() =>
-                    setInventoriesCount(
-                      inventoryAnalytics.totalProductsInInventory
-                    )
-                  }
-                  onMouseEnter={() =>
-                    setInventoriesCount(
-                      inventoryAnalytics.totalProductsInInventory
-                    )
-                  }
-                >
-                  This Month
-                </div>
-                <div
-                  className="tab-item"
-                  onMouseLeave={() =>
-                    setInventoriesCount(
-                      inventoryAnalytics.totalProductsInInventory
-                    )
-                  }
-                  onMouseEnter={() =>
-                    setInventoriesCount(
-                      inventoryAnalytics.totalProductsInInventory
-                    )
-                  }
-                >
-                  This Week
-                </div>
-                <div
-                  className="tab-item"
-                  onMouseLeave={() =>
-                    setInventoriesCount(
-                      inventoryAnalytics.totalProductsInInventory
-                    )
-                  }
-                  onMouseEnter={() =>
-                    setInventoriesCount(
-                      inventoryAnalytics.totalProductsInInventory
-                    )
-                  }
-                >
-                  Today
-                </div>
+                  {inventoryAnalytics.totalProductCategory}
               </div>
               <div className="truck-text count">{inventoriesCount}</div>
             </div>
@@ -173,66 +123,7 @@ const Inventory = props => {
             <div className="d-flex flex-column">
               <div className="title sent-text">Product Out Of Stock</div>
               <div className="tab-container">
-                <div
-                  className="tab-item active"
-                  onMouseLeave={() =>
-                    setCurrentInventoriesCount(
-                      inventoryAnalytics.totalProductsInInventory
-                    )
-                  }
-                  onMouseEnter={() =>
-                    setCurrentInventoriesCount(
-                      inventoryAnalytics.totalProductsInInventory
-                    )
-                  }
-                >
-                  This Year
-                </div>
-                <div
-                  className="tab-item"
-                  onMouseLeave={() =>
-                    setCurrentInventoriesCount(
-                      inventoryAnalytics.totalProductsInInventory
-                    )
-                  }
-                  onMouseEnter={() =>
-                    setCurrentInventoriesCount(
-                      inventoryAnalytics.totalProductsInInventory
-                    )
-                  }
-                >
-                  This Month
-                </div>
-                <div
-                  className="tab-item"
-                  onMouseLeave={() =>
-                    setCurrentInventoriesCount(
-                      inventoryAnalytics.totalProductsInInventory
-                    )
-                  }
-                  onMouseEnter={() =>
-                    setCurrentInventoriesCount(
-                      inventoryAnalytics.totalProductsInInventory
-                    )
-                  }
-                >
-                  This Week
-                </div>
-                <div
-                  className="tab-item"
-                  onMouseLeave={() =>
-                    setCurrentInventoriesCount(
-                      inventoryAnalytics.totalProductsInInventory
-                    )
-                  }
-                  onMouseEnter={() =>
-                    setCurrentInventoriesCount(
-                      inventoryAnalytics.totalProductsInInventory
-                    )
-                  }
-                >
-                  Today
-                </div>
+                {inventoryAnalytics.stockOut}
               </div>
               <div className="sent-text count">{currentInventoriesCount}</div>
             </div>
@@ -250,61 +141,61 @@ const Inventory = props => {
                   className="tab-item active"
                   onMouseLeave={() =>
                     setInventoryNearExpiration(
-                      inventoryAnalytics.expiringThisYear
+                      inventoryAnalytics.batchExpiringInSixMonths
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryNearExpiration(
-                      inventoryAnalytics.expiringThisYear
+                      inventoryAnalytics.batchExpiringInSixMonths
                     )
                   }
                 >
-                  This Year
+                  6 MONTHS
                 </div>
                 <div
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoryNearExpiration(
-                      inventoryAnalytics.expiringThisYear
+                      inventoryAnalytics.batchExpiringInSixMonths
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryNearExpiration(
-                      inventoryAnalytics.expiringThisMonth
+                      inventoryAnalytics.batchExpiringInThreeMonths
                     )
                   }
                 >
-                  This Month
+                  3 MONTHS
                 </div>
                 <div
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoryNearExpiration(
-                      inventoryAnalytics.expiringThisYear)
-
+                      inventoryAnalytics.batchExpiringInSixMonths
+                      )
                   }
                   onMouseEnter={() =>
                     setInventoryNearExpiration(
-                      inventoryAnalytics.expiringThisWeek
+                      inventoryAnalytics.batchExpiringThisMonth
                     )
                   }
                 >
-                  This Week
+                  THIS MONTH
                 </div>
                 <div
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoryNearExpiration(
-                      inventoryAnalytics.expiringThisYear
+                      inventoryAnalytics.batchExpiringInSixMonths
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryNearExpiration(
-                      inventoryAnalytics.expiringToday
+                      inventoryAnalytics.batchExpiringThisWeek
                     )
                   }
                 >
-                  Today
+                  THIS WEEK
                 </div>
               </div>
               <div className="recived-text count">
@@ -325,61 +216,61 @@ const Inventory = props => {
                   className="tab-item active"
                   onMouseLeave={() =>
                     setInventoryExpired(
-                      inventoryAnalytics.expiredThisYear
+                      inventoryAnalytics.batchExpiredLastYear
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryExpired(
-                      inventoryAnalytics.expiredThisYear
+                      inventoryAnalytics.batchExpiredLastYear
                     )
                   }
                 >
-                  This Year
+                  THIS YEAR
                 </div>
                 <div
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoryExpired(
-                      inventoryAnalytics.expiredThisYear
+                      inventoryAnalytics.batchExpiredLastYear
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryExpired(
-                      inventoryAnalytics.expiredThisMonth
+                      inventoryAnalytics.batchExpiredLastMonth
                     )
                   }
                 >
-                  This Month
+                  THIS MONTH
                 </div>
                 <div
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoryExpired(
-                      inventoryAnalytics.expiredThisYear
+                      inventoryAnalytics.batchExpiredLastYear
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryExpired(
-                      inventoryAnalytics.expiredThisWeek
+                      inventoryAnalytics.batchExpiredLastWeek
                     )
                   }
                 >
-                  This Week
+                  THIS WEEK
                 </div>
                 <div
                   className="tab-item"
                   onMouseLeave={() =>
                     setInventoryExpired(
-                      inventoryAnalytics.expiringThisYear
+                      inventoryAnalytics.batchExpiredLastYear
                     )
                   }
                   onMouseEnter={() =>
                     setInventoryExpired(
-                      inventoryAnalytics.expiredToday
+                      inventoryAnalytics.batchExpiredToday
                     )
                   }
                 >
-                  Today
+                  TODAY
                 </div>
               </div>
               <div className="transit-text count">{inventoryExpired}</div>

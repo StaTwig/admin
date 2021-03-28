@@ -423,3 +423,401 @@ exports.getAnalytics = [
     }
   },
 ];
+
+
+exports.getOverviewAnalytics = [
+  auth,
+  async (req, res) => {
+    try {
+
+      const {id: warehouseId } = req.user;
+      var overview = {}
+      var data = {}
+
+      var today = new Date(); 
+      var lastMonth = new Date();
+      lastMonth.setDate(today.getDate() - 30);
+
+      const outboundShipments = await ShipmentModel.count(
+        { $and : [
+          {"supplier.id": warehouseId},
+          { status: { $in : [ "SHIPPED", "RECEIVED" ]} }
+        ]
+      } );
+      overview.outboundShipments = outboundShipments;
+      // console.log("Number of Outgoing shipments ", numOutgoingShipments);
+
+      const inboundShipments = await ShipmentModel.count(
+        { $and : [
+          {"receiver.id": warehouseId},
+          { status: { $in : [ "SHIPPED" ]} }
+        ]
+      } );
+      overview.inboundShipments = inboundShipments;
+      // console.log("Number of Incoming shipments ", numIncomingShipments);
+
+      const totalProductCategory = await ProductModel.distinct('type');
+      overview.totalProductCategory = totalProductCategory.length;
+
+      const records = await RecordModel.find();
+      const shipments = await ShipmentModel.find(
+        { 
+          createdAt :  {
+            $gte: today.toISOString(), 
+            $lte: lastMonth.toISOString() 
+            }
+          }
+      );
+
+      var count = 0;
+      var sum = 0;
+      console.log("Records : ", records.length);
+      for(var i=0;  i<records.length; i++){
+        for(var j=0; j<shipments.length; j++){
+          if(records[i].id === shipments[j].poId){
+            count++;
+            var shipmentCreationTime = shipments[j].createdAt; 
+            var poCreationTime = records[i].createdAt;
+            console.log(shipmentCreationTime);
+            sum = sum + ( shipmentCreationTime - poCreationTime)
+          }
+        }
+      }
+      var totalmilliseconds = 0;
+      if(count !== 0){
+        totalmilliseconds = sum/count;
+      }
+
+      var seconds = totalmilliseconds/1000;
+      var numdays = Math.floor(seconds / 86400);
+
+      var numhours = Math.floor((seconds % 86400) / 3600);
+      
+      var numminutes = Math.floor(((seconds % 86400) % 3600) / 60);
+      
+      var numseconds = ((seconds % 86400) % 3600) % 60;
+      console.log(numdays + "days " + numhours + "hrs " + numminutes + "min " + numseconds + "sec")
+      var averageOrderProcessingTime = numdays + "d " + numhours + "h " + numminutes + "m"
+
+      overview.averageOrderProcessingTime = averageOrderProcessingTime
+
+      const numPO = await POModel.count();
+      const numSO = await ShippingOrderModel.count();
+      var pendingOrders = numPO + numSO;
+      // console.log("Pending Orders ", pendingOrders);
+      overview.pendingOrders = pendingOrders; 
+      
+      data.overview = overview;
+
+      console.log("Response", data);
+      return apiResponse.successResponseWithData(
+        res,
+        'Analytics',
+        data,
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< AnalyticsService < AnalyticsController < fetchAllShippingOrders : error (catch block)',
+      );
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+
+exports.getInventoryAnalytics = [
+  auth,
+  async (req, res) => {
+    try {
+
+      const {id: warehouseId } = req.user;
+      var inventory = {}
+      var data = {}
+
+      const totalProductCategory = await ProductModel.distinct('type');
+      inventory.totalProductCategory = totalProductCategory.length;
+
+      const stockOut = await InventoryModel.count({
+        "inventoryDetails.quantity": { $eq: 0 }
+      });
+
+      inventory.stockOut = stockOut;
+      // console.log("Products with zero Inventory (stockOut) ", stockOut);
+
+
+      var today = new Date(); 
+      var nextWeek = new Date();
+      nextWeek.setDate(today.getDate() + 7);
+
+      const batchExpiringThisWeek = await AtomModel.aggregate(
+        [ { $match: { 
+          "attributeSet.expDate" :  {
+            $gte: today.toISOString(), 
+            $lt: nextWeek.toISOString() 
+            }
+          }
+        }, 
+      {
+        $group: {
+          _id: "$status", 
+          total: {$sum: {$size: "$batchNumbers"}}
+        }
+      }]
+    );
+      console.log("Batches Near Expiration ", batchExpiringThisWeek);
+      inventory.batchExpiringThisWeek = 0
+      if(batchExpiringThisWeek.length !== 0){
+        inventory.batchExpiringThisWeek = batchExpiringThisWeek[0].total;
+      }
+
+      var nextMonth = new Date();
+      nextMonth.setDate(today.getDate() + 30);
+
+      const batchExpiringThisMonth = await AtomModel.aggregate(
+        [ { $match: { 
+          "attributeSet.expDate" :  {
+            $gte: today.toISOString(), 
+            $lt: nextMonth.toISOString() 
+            }
+          }
+        }, 
+      {
+        $group: {
+          _id: "$status", 
+          total: {$sum: {$size: "$batchNumbers"}}
+        }
+      }]
+    );
+      // console.log("Batches Near Expiration ", batchNearExpiration[0].total);
+      inventory.batchExpiringThisMonth = 0
+      if(batchExpiringThisMonth.length !== 0){
+        inventory.batchExpiringThisMonth = batchExpiringThisMonth[0].total;
+      }
+
+
+      var nextThreeMonths = new Date();
+      nextThreeMonths.setDate(today.getDate() + 90 );
+
+      const batchExpiringInThreeMonths = await AtomModel.aggregate(
+        [ { $match: { 
+          "attributeSet.expDate" :  {
+            $gte: today.toISOString(), 
+            $lt: nextThreeMonths.toISOString() 
+            }
+          }
+        }, 
+      {
+        $group: {
+          _id: "$status", 
+          total: {$sum: {$size: "$batchNumbers"}}
+        }
+      }]
+    );
+      // console.log("Batches Near Expiration ", batchNearExpiration[0].total);
+      inventory.batchExpiringInThreeMonths = 0
+      if(batchExpiringInThreeMonths.length !== 0){
+        inventory.batchExpiringInThreeMonths = batchExpiringInThreeMonths[0].total;
+      }
+      
+      var nextSixMonths = new Date();
+      nextSixMonths.setDate(today.getDate() + 180 );
+
+      const batchExpiringInSixMonths = await AtomModel.aggregate(
+        [ { $match: { 
+          "attributeSet.expDate" :  {
+            $gte: today.toISOString(), 
+            $lt: nextSixMonths.toISOString() 
+            }
+          }
+        }, 
+      {
+        $group: {
+          _id: "$status", 
+          total: {$sum: {$size: "$batchNumbers"}}
+        }
+      }]
+    );
+      // console.log("Batches Near Expiration ", batchNearExpiration[0].total);
+      inventory.batchExpiringInSixMonths = 0
+      if(batchExpiringInSixMonths.length !== 0){
+        inventory.batchExpiringInSixMonths = batchExpiringInSixMonths[0].total;
+      }
+      
+      const batchExpiredToday = await AtomModel.aggregate(
+        [ { $match: { 
+            "attributeSet.expDate" :  {
+              $eq: today.toISOString(), 
+              }
+            }
+          }, 
+        {
+          $group: {
+            _id: "$status", 
+            total: {$sum: {$size: "$batchNumbers"}}
+          }
+        }]
+      );
+      // console.log("Batches Expired ", batchExpired[0].total);
+      inventory.batchExpiredToday = 0
+      if(batchExpiredToday.length !== 0){
+        inventory.batchExpiredToday = batchExpiredToday[0].total;
+      }
+      
+      var lastWeek = new Date();
+      lastWeek.setDate(today.getDate() - 7);
+
+      const batchExpiredLastWeek = await AtomModel.aggregate(
+        [ { $match: { 
+            "attributeSet.expDate" :  {
+              $lte: today.toISOString(), 
+              $gte: lastWeek.toISOString()
+              }
+            }
+          }, 
+        {
+          $group: {
+            _id: "$status", 
+            total: {$sum: {$size: "$batchNumbers"}}
+          }
+        }]
+      );
+      // console.log("Batches Expired ", batchExpired[0].total);
+      inventory.batchExpiredLastWeek = 0
+      if(batchExpiredLastWeek.length !== 0){
+        inventory.batchExpiredLastWeek = batchExpiredLastWeek[0].total;
+      }
+
+      var lastMonth = new Date();
+      lastMonth.setDate(today.getDate() - 30);
+
+      const batchExpiredLastMonth = await AtomModel.aggregate(
+        [ { $match: { 
+            "attributeSet.expDate" :  {
+              $lte: today.toISOString(), 
+              $gte: lastMonth.toISOString()
+              }
+            }
+          }, 
+        {
+          $group: {
+            _id: "$status", 
+            total: {$sum: {$size: "$batchNumbers"}}
+          }
+        }]
+      );
+      // console.log("Batches Expired ", batchExpired[0].total);
+      inventory.batchExpiredLastMonth = 0
+      if(batchExpiredLastMonth.length !== 0){
+        inventory.batchExpiredLastMonth = batchExpiredLastMonth[0].total;
+      }
+
+      var lastYear = new Date();
+      lastYear.setDate(today.getDate() -365 );
+
+      const batchExpiredLastYear = await AtomModel.aggregate(
+        [ { $match: { 
+            "attributeSet.expDate" :  {
+              $lte: today.toISOString(), 
+              $gte: lastYear.toISOString()
+              }
+            }
+          }, 
+        {
+          $group: {
+            _id: "$status", 
+            total: {$sum: {$size: "$batchNumbers"}}
+          }
+        }]
+      );
+      // console.log("Batches Expired ", batchExpired[0].total);
+      inventory.batchExpiredLastYear = 0
+      if(batchExpiredLastYear.length !== 0){
+        inventory.batchExpiredLastYear = batchExpiredLastYear[0].total;
+      }
+
+      data.inventory = inventory;
+
+      console.log("Response", data);
+      return apiResponse.successResponseWithData(
+        res,
+        'Analytics',
+        data,
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< AnalyticsService < AnalyticsController < fetchAllShippingOrders : error (catch block)',
+      );
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+
+exports.getShipmentAnalytics = [
+  auth,
+  async (req, res) => {
+    try {
+
+      const {id: warehouseId } = req.user;
+      var shipment = {}
+      var data = {}
+
+      const inboundShipments = await ShipmentModel.count(
+        { $and : [
+          {"receiver.id": warehouseId},
+          { status: { $in : [ "SHIPPED" ]} }
+        ]
+      } );
+      shipment.inboundShipments = inboundShipments;
+      // console.log("Number of Incoming shipments ", numIncomingShipments);
+
+      const outboundShipments = await ShipmentModel.count(
+        { $and : [
+          {"supplier.id": warehouseId},
+          { status: { $in : [ "SHIPPED", "RECEIVED" ]} }
+        ]
+      } );
+      shipment.outboundShipments = outboundShipments;
+      // console.log("Number of Outgoing shipments ", numOutgoingShipments);
+
+      const inboundAlerts = await ShipmentModel.count(
+        { $and : [
+          {"receiver.id": warehouseId},
+          { status: { $in : [ "DAMAGED" ]} }
+        ]
+      } );
+        // console.log("Number of Alerts Inbound shipments ", alertsInboundShipments);
+        shipment.inboundAlerts = inboundAlerts;
+
+
+      const outboundAlerts = await ShipmentModel.count(
+        { $and : [
+          {"supplier.id": warehouseId},
+          { status: { $in : [ "DAMAGED"]} }
+        ]
+      } );
+        // console.log("Number of Alerts Outbound shipments ", alertsOutboundShipments);
+        shipment.outboundAlerts = outboundAlerts;
+
+      data.shipment = shipment;
+
+      console.log("Response", data);
+      return apiResponse.successResponseWithData(
+        res,
+        'Analytics',
+        data,
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< AnalyticsService < AnalyticsController < fetchAllShippingOrders : error (catch block)',
+      );
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
