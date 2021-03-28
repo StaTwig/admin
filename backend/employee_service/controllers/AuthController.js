@@ -506,6 +506,7 @@ exports.verifyOtp = [
             emailId: user.emailId,
             role: user.role,
             warehouseId:user.warehouseId,
+	    organisationId:user.organisationId,
           };
           //Prepare JWT token for authentication
           const jwtPayload = userData;
