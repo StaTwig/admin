@@ -23,7 +23,7 @@ const CounterModel = require('../models/CounterModel')
 
 const init = require('../logging/init');
 const logger = init.getLog();
-const shipmentUrl = process.env.SHIPMENT_URL;
+const imageUrl = process.env.IMAGE_URL;
 
 const inventoryUpdate = async (id, quantity, suppId, recvId, poId, shipmentStatus, next) => {
     if (shipmentStatus == "CREATED") {
@@ -799,7 +799,7 @@ exports.fetchImage = async function (req, res) {
 
            for (i=0;i<imageArray.length;i++)
             {
-             const s =  shipmentUrl  + "/images/" + imageArray[i];
+             const s =  imageUrl  + "/images/" + imageArray[i];
              resArray.push(s)
             }
         return res.send({
