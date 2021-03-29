@@ -21,6 +21,10 @@ ShipmentSchema = new mongoose.Schema(
       locationId: String,
       location: String,
     },
+     imageDetails: {
+      type: Array,
+      default: []
+    },
     airWayBillNo: String,
     shippingDate: String,
     expectedDeliveryDate: String,
