@@ -1,0 +1,15 @@
+entryPoints:
+  http:
+    address: ":9000"
+  web:
+    address: ":80"
+
+api:
+  insecure: true
+  dashboard: true
+  debug: true
+
+providers:
+  file:
+    filename: all-VL-prod.yaml
+    watch: true
