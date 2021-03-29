@@ -318,8 +318,8 @@ exports.receiveShipment = [
                         var receivedQuantity = reqProduct.productQuantity;
                         var quantityDifference = actuallyShippedQuantity - receivedQuantity;
                         var rejectionRate = (quantityDifference/actuallyShippedQuantity)*100;
-                        products.quantityDelivered = receivedQuantity;
-                        products.rejectionRate = rejectionRate;
+                        (shipmentInfo.products[product]).quantityDelivered = receivedQuantity;
+                        (shipmentInfo.products[product]).rejectionRate = rejectionRate;
                     }    
                 })
             });
