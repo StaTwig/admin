@@ -38,7 +38,7 @@ const userPurchaseOrders = async ( mode,orgMode, organisationId, skip, limit, ca
         var  poDetails = [];
 
             poDetails = await RecordModel.aggregate([{
-        	$match: matchCondition
+                $match: matchCondition
             },
             {
                 $lookup: {
@@ -65,12 +65,27 @@ const userPurchaseOrders = async ( mode,orgMode, organisationId, skip, limit, ca
                 $unwind: {
                     path: "$customer.organisation",
                 },
-            }]).sort({
+            },
+            {
+                $lookup: {
+                    from: "warehouses",
+                    localField: "customer.shippingAddress.shippingAddressId",
+                    foreignField: "id",
+                    as: "customer.warehouse",
+                },
+            },
+            {
+                $unwind: {
+                    path: "$customer.warehouse",
+                },
+            },
+            ]).sort({
             createdAt: -1
         }).skip(parseInt(skip))
         .limit(parseInt(limit));
         callback(undefined, poDetails)
 }
+
 
 
 exports.fetchPurchaseOrders = [
