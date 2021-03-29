@@ -29,3 +29,10 @@ up-AB-test:
 .PHONY: up-AB-prod
 up-AB-prod:
 	sudo docker-compose -f Docker-compose-AB-prod.yml up -d
+
+.PHONY : down
+down:
+	sudo docker-compose -f Docker-compose-AB-prod.yml down
+	sudo docker-compose -f Docker-compose-AB-test.yml down
+	sudo docker-compose -f Docker-compose-VL-prod.yml down
+	sudo docker-compose -f Docker-compose-VL-test.yml down
