@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
 import SuccessPopup from "./successPopup";
 import FailPopup from "./failPopup";
-import { UpdateTrackingStatus } from "../../actions/shipmentActions";
+import { updateTrackingStatus } from "../../actions/shipmentActions";
 import Modal from "../../shared/modal";
 import "./style.scss";
 import { Formik } from "formik";
@@ -43,7 +43,7 @@ const UpdateStatus = (props) => {
         isAlertTrue: alerttrue,
       },
     };
-   const result = await UpdateTrackingStatus(data);
+   const result = await updateTrackingStatus(data);
     console.log("1", result);
 
     if (result.status === 200) {
