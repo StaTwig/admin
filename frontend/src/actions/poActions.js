@@ -122,6 +122,21 @@ export const getPOs = (skip = 0, limit = 5) => {
   };
 };
 
+export const getOrder = (id) => {
+  return async dispatch => {
+    try {
+      dispatch(turnOn());
+      const result = await axios.get(
+        `${config().fetchPurchaseOrderUrl}?poId=${id}&skip=0&limit=1`,
+      );
+      dispatch(turnOff());
+      return result.data.data;
+    } catch (e) {
+      dispatch(turnOff());
+    }
+  };
+};
+
 const setPurchaseOrders = data => {
   return {
     type: SET_POS,

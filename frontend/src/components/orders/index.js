@@ -78,7 +78,7 @@ const Orders = props => {
         <TableFilter data={headers} fb="74%"/>
       </div>
       <div className="ribben-space">
-        <Table {...props} skip={skip} loadMore={loadMore} ordrs={sendData} onLoadMore={onLoadMore}/>
+        <Table {...props} skip={skip} loadMore={loadMore} ordrs={sendData} visible={visible} onLoadMore={onLoadMore}/>
       </div>
     </div>
   );

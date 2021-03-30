@@ -11,10 +11,8 @@ import { formatDate } from '../../../utils/dateHelper';
 
 const Table = props => {
   const dispatch = useDispatch();
-  const { loadMore, onLoadMore, skip, ordrs } = props;
+  const { loadMore, onLoadMore, skip, ordrs, visible } = props;
   const orders = ordrs();
-  console.log(orders);
-  
   return (
     <div className="table">
         <div className="rTable">
@@ -26,7 +24,7 @@ const Table = props => {
                 statusStyle = 'bg-success';
                 status = 'Delivered';
               }
-              const { customer, products } = order; 
+              const { customer, products } = order;
               return (
               <div key={index} className="rTableRow pt-2 pb-2 shadow-none">
                 <div className="rTableCell">
@@ -42,7 +40,7 @@ const Table = props => {
                   {formatDate(order.creationDate)}
                 </div>
                   <div className="rTableCell"><p className="mb-0 bold address mb-0 text-muted">{order.id}</p></div>
-                  <div className="rTableCell"><p className="mb-0 bold mb-0 address text-muted">{products[0]?.productId+(products.lenth > 1 ? ' + '+products.lenth+' more' : '')}</p></div>
+                  <div className="rTableCell"><p className="mb-0 bold mb-0 address text-muted">{products[0]?.name+(products.length > 1 ? ' + '+(products.length-1)+' more' : '')}</p></div>
                 <div className="rTableCell d-flex flex-column">
                     <span>{customer.shippingAddress.shippingAddressId}</span>
                   <span className="text-muted">{customer.shippingAddress.shippingAddressId}</span>
@@ -53,7 +51,7 @@ const Table = props => {
                 </div>
                 </div>
                 <div className="rTableCell">
-                  <Link to={`/vieworder/${order.id}`} 
+                  <Link to={`/vieworder/${order.id}/${visible}`} 
                     className="button pl-3 pr-3 pt-1 pb-1"
                   >
                     View

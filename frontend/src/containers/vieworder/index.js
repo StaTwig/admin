@@ -3,19 +3,19 @@ import ViewOrder from '../../components/vieworder';
 import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
 import { useDispatch, useSelector } from 'react-redux';
-import { getViewShipment } from '../../actions/shipmentActions';
+import { getOrder } from '../../actions/poActions';
 
 const ViewOrderContainer = props => {
   const dispatch = useDispatch();
-  const [shipment, setShipment] = useState([]);
-  // const { id } = props.match.params;
+  const [order, setOrder] = useState([]);
+  const { id, type } = props.match.params;
   
-  // useEffect(() => {
-  //   (async () => {
-  //     const results = await dispatch(getViewShipment(id));
-  //     setShipment(results);
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      const results = await dispatch(getOrder(id));
+      setOrder(type == 'one' ? results.inboundPOs[0] : results.outboundPOs[0]);
+    })();
+  }, []);
 
   return (
     <div className="container-fluid p-0">
@@ -24,8 +24,8 @@ const ViewOrderContainer = props => {
         <Sidebar {...props} />
         <div className="content">
           <ViewOrder
-            // shipment={shipment}
-            // id={id}
+            order={order}
+            id={id}
             {...props}
           />
         </div>
