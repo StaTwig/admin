@@ -472,8 +472,14 @@ async (req, res) => {
                     const receiver = await userShipments("receiver", warehouseId, skip, limit, (error, data) => {
                             inboundShipments = data;
                     })
-                    shipments = outboundShipments.concat(inboundShipments);
-                    return apiResponse.successResponseWithMultipleData(
+
+		    const shipments = await ShipmentModel.find({ $or: [{"supplier.locationId": warehouseId},{"receiver.locationId":warehouseId}] }).sort({
+                    createdAt: -1
+                    })
+		    .skip(parseInt(skip))
+                    .limit(parseInt(limit));
+                    
+		    return apiResponse.successResponseWithMultipleData(
                         res,
                         'Shipments Table',
                             shipments,
