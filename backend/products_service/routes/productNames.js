@@ -16,6 +16,7 @@ const ProductController = require("../controllers/ProductController");
 const router = express.Router();
 
 router.get("/getProducts", ProductController.getProducts);
+router.get("/getProductsByCategory", ProductController.getProductsByCategory);
 router.get("/generateCodes", ProductController.generateCodes);
 router.get("/productInfo", ProductController.getProductInfo);
 

@@ -51,6 +51,26 @@ export const getProducts = async () => {
   }
 };
 
+export const createOrder = async data => {
+  try {
+    console.log(config().createOrderUrl);
+    
+    const result = await axios.post(config().createOrderUrl, data);
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+export const getProductsByCategory = async (id) => {
+  try {
+    const result = await axios.get(config().getProductsByCategoryUrl+id);
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
 export const getManufacturers = async () => {
   try {
     const result = await axios.get(config().getManufacturers);

@@ -88,6 +88,53 @@ exports.getProducts = [
   },
 ];
 
+exports.getProductsByCategory = [
+  auth,
+  async (req, res) => {
+    try {
+      checkToken(req, res, async (result) => {
+        if (result.success) {
+          logger.log(
+            "info",
+            "<<<<< ProductService < ProductController < getProductsByCategory : token verifed successfully"
+          );
+          permission_request = {
+            role: req.user.role,
+            permissionRequired: "viewProductList",
+          };
+          checkPermissions(permission_request, async (permissionResult) => {
+            if (permissionResult.success) {
+              const products = await ProductModel.find({type: req.query.type});
+              return apiResponse.successResponseWithData(
+                res,
+                "Products",
+                products
+              );
+            } else {
+              return apiResponse.unauthorizedResponse(
+                res,
+                "Sorry! User does not have enough Permissions"
+              );
+            }
+          });
+        } else {
+          logger.log(
+            "warn",
+            "<<<<< ProductService < ProductController < getProductsByCategory : user is not authenticated"
+          );
+          return apiResponse.unauthorizedResponse(res, "Auth failed");
+        }
+      });
+    } catch (err) {
+      logger.log(
+        "error",
+        "<<<<< ProductService < ProductController < getProductsByCategory : error (catch block)"
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
 exports.getProductInfo = [
   auth,
   async (req, res) => {

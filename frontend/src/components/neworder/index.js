@@ -7,7 +7,6 @@ import { createShipment } from "../../actions/shipmentActions";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
 import {
   getWarehouseByOrgId,
-  getProductsByInventoryId,
   getAllOrganisations,
 } from "../../actions/shippingOrderAction";
 // import {
@@ -22,7 +21,7 @@ import ShipmentPopUp from "./shipmentPopUp";
 import ShipmentFailPopUp from "./shipmentFailPopUp";
 import Modal from "../../shared/modal";
 import { Formik } from "formik";
-import { getProducts } from '../../actions/poActions';
+import { getProducts, getProductsByCategory, createOrder } from '../../actions/poActions';
 
 const NewOrder = (props) => {
   const [shippingOrderIds, setShippingOrderIds] = useState([]);
@@ -33,7 +32,7 @@ const NewOrder = (props) => {
   const [disabled, setDisabled] = useState(false);
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState([]);
-  const [addProducts, setAddProducts] = useState([{"productId": "","productQuantity": "","name": "","manufacturer": "","type": ""}]);
+  const [addProducts, setAddProducts] = useState([{"productId": "","quantity": "","name": "","manufacturer": "","type": ""}]);
   const dispatch = useDispatch();
   const [shippingOrderId, setShippingOrderId] = useState(
     "Select Shipping Order ID"
@@ -51,22 +50,25 @@ const NewOrder = (props) => {
     "Select Delivery Location"
   );
   const user = useSelector((state) => state.user);
-  const [shippingOrderDetails, setShippingOrderDetails] = useState({});
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [productQuantity, setProductQuantity] = useState("");
-  const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
-  const [openShipmentFail, setOpenShipmentFail] = useState(false);
-  const [shipmentError, setShipmentError] = useState("");
+  const [quantity, setquantity] = useState("");
+  const [openOrder, setOpenOrder] = useState(false);
+  const [failedPop, setFailedPop] = useState(false);
+  const [shipmentError, setOrderError] = useState("");
 
   useEffect(() => {
     async function fetchData() {
       const orgSplit = user.organisation?.split('/');
+      console.log(orgSplit);
+      
       setSenderOrganisation(orgSplit);
 
       const orgs = await getAllOrganisations();
-      const organisations = orgs.data.filter((org) => org.id != orgSplit[1]);
-      setAllOrganisations(organisations);
+      if (orgSplit?.length > 0) {
+        const organisations = orgs.data.filter((org) => org.id != orgSplit[1]);
+        setAllOrganisations(organisations);
+      }
 
       // const warehouses = await getWarehouseByOrgId(orgSplit[1]);
       // setSenderWarehouses(warehouses.data);
@@ -76,20 +78,18 @@ const NewOrder = (props) => {
         product => product.type,
       );
       setCategory(categoryArray.filter((value, index, self) => self.indexOf(value) === index));
-      console.log(categoryArray.filter((value, index, self) => self.indexOf(value) === index));
-      
     }
 
     fetchData();
   }, []);
 
   const closeModal = () => {
-    setOpenCreatedInventory(false);
+    setOpenOrder(false);
     props.history.push("/orders");
   };
 
   const closeModalFail = () => {
-    setOpenShipmentFail(false);
+    setFailedPop(false);
   };
 
   const onOrgChange = async (value) => {
@@ -102,21 +102,24 @@ const NewOrder = (props) => {
     }
   }
 
-  const onCategoryChange = async (index, value) => {
+  const onCategoryChange = async (index, value, setFieldValue) => {
     try {
-      const warehouse = await getWarehouseByOrgId(value);
-      setReceiverWarehouses(warehouse.data);
+      const warehouse = await getProductsByCategory(value);
+      let newArr = [...addProducts];
+      newArr[index]['type'] = value;
+      setAddProducts(prod => [...newArr]);
+      setProducts(warehouse.data);
     }
     catch (err) {
       setErrorMessage(err);
     }
   }
 
-  const onProductChange = (index, item) => {
+  const onProductChange = (index, item, setFieldValue) => {
     addProducts.splice(index, 1);
     let newArr = [...addProducts];
     newArr.push(item);
-    setFieldValue('products', newArr.map(row => ({"productId": row._id,"productQuantity": row?.productQuantity ? row?.productQuantity : 0,"name": row.name,"manufacturer": row.manufacturer})));
+    setFieldValue('products', newArr.map(row => ({"productId": row._id,"quantity": row?.quantity ? row?.quantity : 0,"name": row.name,"manufacturer": row.manufacturer})));
     setAddProducts(prod => [...newArr]);
 
     const prodIndex = products.findIndex(p => p._id === item._id);
@@ -125,7 +128,7 @@ const NewOrder = (props) => {
     setProducts(prod => [...newArray]);
   }
 
-  const onRemoveProduct = (index) => {
+  const onRemoveProduct = (index, setFieldValue) => {
     const prodIndex = products.findIndex(p => p._id === addProducts[index]._id);
     let newArray = [...products];
     newArray[prodIndex] = { ...newArray[prodIndex], isSelected: false };
@@ -133,75 +136,66 @@ const NewOrder = (props) => {
     addProducts.splice(index, 1);
     let newArr = [...addProducts];
     if (newArr.length > 0)
-      setFieldValue('products', newArr.map(row => ({"productId": row._id,"productQuantity": row?.productQuantity,"name": row.name,"manufacturer": row.manufacturer})));
+      setFieldValue('products', newArr.map(row => ({"productId": row._id,"quantity": row?.quantity,"name": row.name,"manufacturer": row.manufacturer})));
     else
       setFieldValue('products', []);
     setAddProducts(prod => [...newArr]);
   }
 
-  const onQuantityChange = (v, i) => {
+  const onQuantityChange = (v, i, setFieldValue) => {
     let newArr = [...addProducts];
-    newArr[i].productQuantity = v;
-    setFieldValue('products', newArr.map(row => ({"productId": row._id,"productQuantity": row.productQuantity,"name": row.name,"manufacturer": row.manufacturer})));
+    newArr[i].quantity = v;
+    setFieldValue('products', newArr.map(row => ({"productId": row._id,"quantity": row.quantity,"name": row.name,"manufacturer": row.manufacturer})));
     setAddProducts(prod => [...newArr]);
   }
 
   const onAssign = async (values) => {
     let error = false;
-    const { fromOrg, toOrg, toOrgLoc, fromOrgLoc, products } = values;
+    const { fromOrg, toOrg, toOrgLoc, products } = values;
     products.forEach((p) => {
-      if (p.productQuantity < 1)
+      if (p.quantity < 1)
         error = true;
     });
 
+    console.log(error);
+    
+
     if (!error) {
       const data = {
-        airWayBillNo,
-        shippingOrderId: shippingOrderId ? shippingOrderId : null,
-        label: {
-          labelId: labelCode,
-          labelType: "QR_2DBAR",
-        },
-        externalShipmentId: "",
+        externalId: "",
         supplier: {
-          id: user.id,
-          locationId: fromOrgLoc,
+          supplierIncharge: user.id,
+          supplierOrganisation: senderOrganisation[1],
         },
-        receiver: {
-          id: null,
-          locationId: toOrgLoc,
+        customer: {
+          customerIncharge: null,
+          customerOrganisation: toOrg,
+          shippingAddress: {
+            shippingAddressId: toOrgLoc,
+            shipmentReceiverId: null
+          }
         },
-        shippingDate: new Date(
-          shipmentDate.getTime() - shipmentDate.getTimezoneOffset() * 60000
-        ).toISOString(),
-        expectedDeliveryDate: new Date(
-          estimateDeliveryDate.getTime() -
-          estimateDeliveryDate.getTimezoneOffset() * 60000
-        ).toISOString(),
-        actualDeliveryDate: new Date(
-          estimateDeliveryDate.getTime() -
-          estimateDeliveryDate.getTimezoneOffset() * 60000
-        ).toISOString(),
-        status: "CREATED",
+        lastUpdatedOn: new Date().toISOString(),
+        creationDate: new Date().toISOString(),
+        poStatus: "CREATED",
         products: products,
-        poId: shippingOrderDetails.purchaseOrderId ? shippingOrderDetails.purchaseOrderId : null,
       };
 
       dispatch(turnOn());
-      const result = await createShipment(data);
+      const result = await createOrder(data);
       dispatch(turnOff());
-      // console.log("data", result);
-      if (result?.id) {
-        setMessage("Created Shipment Success");
-        setOpenCreatedInventory(true);
+      if (result.status === 200) {
+        props.history.push('/orders');
+        // setMessage("Created order");
+        //setOpenOrder(true);
       } else {
-        setOpenShipmentFail(true);
-        setErrorMessage("Create Shipment Failed");
+        setFailedPop(true);
+        setErrorMessage("Not able to create order. Try again!");
       }
     }
     else {
-      setShipmentError("Check product quantity");
-      setOpenShipmentFail(true);
+      setOrderError("Check product quantity");
+      setFailedPop(true);
     }
   };
 
@@ -230,8 +224,6 @@ const NewOrder = (props) => {
           if (values.products.length == 0) {
             errors.products = "Required";
           }
-          console.log(values, errors);
-          
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
@@ -260,9 +252,9 @@ const NewOrder = (props) => {
                   product={addProducts}
                   products={products}
                   category={category}
-                  handleQuantityChange={onQuantityChange}
-                  onRemoveRow={onRemoveProduct}
-                  handleProductChange={onProductChange}
+                  handleQuantityChange={(v, i) => onQuantityChange(v, i, setFieldValue)}
+                  onRemoveRow={(index) => onRemoveProduct(index, setFieldValue)}
+                  handleProductChange={(index, item) => onProductChange(index, item, setFieldValue)}
                   handleCategoryChange={onCategoryChange}
                 />
                 <div className="d-flex justify-content-between">
@@ -270,7 +262,7 @@ const NewOrder = (props) => {
                     type="button"
                     className="btn btn-white bg-white shadow-radius mt-3 font-bold"
                     onClick={() => {
-                      let newArr = { productId: '', name: '', manufacturer: '', productQuantity: '', type: '' };
+                      let newArr = { productId: '', name: '', manufacturer: '', quantity: '', type: '' };
                       setAddProducts(prod => [...prod, newArr]);
                     }}
                   >
@@ -379,7 +371,7 @@ const NewOrder = (props) => {
             </div>
 
             <div className="d-flex justify-content-between">
-              <div className="value">{productQuantity}</div>
+              <div className="value">{quantity}</div>
               <div className="d-flex">
                 <button type="button" class="btn btn-white shadow-radius font-bold mr-2"onClick={() => props.history.push('/orders')}>
                   Cancel
@@ -395,7 +387,7 @@ const NewOrder = (props) => {
           </form>
         )}
       </Formik>
-      {openCreatedInventory && (
+      {openOrder && (
         <Modal
           close={() => closeModal()}
           size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
@@ -406,7 +398,7 @@ const NewOrder = (props) => {
         </Modal>
       )}
 
-      {openShipmentFail && (
+      {failedPop && (
         <Modal
           close={() => closeModalFail()}
           size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`

@@ -28,6 +28,7 @@ router.post(
 router.post("/createPurchaseOrder", POController.createPurchaseOrder);
 router.post("/changePOStatus", POController.changePOStatus);
 router.post("/success", POController.success);
+router.post("/createOrder", POController.createOrder);
 
 module.exports = router;
 
