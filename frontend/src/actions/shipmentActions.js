@@ -146,9 +146,19 @@ export const setReviewShipments = data => {
   };
 };
 
-export const UpdateTrackingStatus = data => {
+export const updateTrackingStatus = async data => {
+try {
+    debugger;
+    const result = await axios.post(config().updateTrackingStatusUrl, data);
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+export const receiveShipment = data => {
   return {
-    type: UPDATE_STATUS,
+    type: RECEIVE_SHIPMENT,
     payload: data,
   };
 };

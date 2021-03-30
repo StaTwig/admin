@@ -395,6 +395,8 @@ exports.sendOtp = [
                 '<<<<< UserService < AuthController < login : user is active',
             );
             let otp = utility.randomNumber(4);
+            if (emailId === process.env.EMAIL_APPSTORE)
+              otp = process.env.OTP_APPSTORE;
             await EmployeeModel.update({emailId }, { otp });
              let html = EmailContent({
             name: user.firstName,
@@ -506,6 +508,7 @@ exports.verifyOtp = [
             emailId: user.emailId,
             role: user.role,
             warehouseId:user.warehouseId,
+	    organisationId:user.organisationId,
           };
           //Prepare JWT token for authentication
           const jwtPayload = userData;

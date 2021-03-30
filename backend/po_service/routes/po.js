@@ -14,7 +14,7 @@ const Storage = multer.diskStorage({
 const upload = multer({ storage: Storage });
 
 const router = express.Router();
-router.get("/purchaseOrderStatistics", POController.purchaseOrderStatistics);
+router.get("/fetchPurchaseOrders", POController.fetchPurchaseOrders);
 router.get("/fetchPublisherPurchaseOrders", POController.fetchPublisherPurchaseOrders);
 router.get("/fetchPurchaseOrderBC", POController.fetchPurchaseOrderBC);
 router.get("/fetchAllPurchaseOrdersBC",POController.fetchAllPurchaseOrdersBC);

@@ -4,7 +4,7 @@ import Received from '../../assets/icons/Received1.svg';
 
 import './style.scss';
 import {
-  getAnalytics
+  getShipmentAnalytics
 } from '../../actions/analyticsAction';
 
 
@@ -21,7 +21,7 @@ const Tiles = props => {
   const [shipmentAnalytics,setShipmentAnalytics]= useState({})
   useEffect(() => {
   async function fetchData() {
-    const result = await getAnalytics();
+    const result = await getShipmentAnalytics();
     setShipmentAnalytics(result.data.shipment);
   }
   fetchData();

@@ -33,6 +33,7 @@ import ForgotPassword from '../containers/forgotPassword';
 import resetPasswordPage from '../containers/resetPassword';
 import Home from '../containers/home';
 import UpdateStatus from  '../containers/updateStatus';
+import ReceiveShipment from  '../containers/receiveShipment';
 import NoMatch from '../components/NoMatch';
 
 import './style.scss';
@@ -68,6 +69,7 @@ const routes = (
     <Route path="/neworder" component={requireAuth(NewOrder)} />
     <Route path="/vieworder/:id" component={requireAuth(ViewOrder)} />
     <Route path="/updateStatus" component={requireAuth(UpdateStatus)} />
+    <Route path="/receiveShipment" component={requireAuth(ReceiveShipment)} />
     <Route component={NoMatch} />
 
   </Switch>
