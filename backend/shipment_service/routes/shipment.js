@@ -18,7 +18,7 @@ const router = express.Router();
 router.post("/createShipment", ShipmentController.createShipment); // /createShipment => POST data of Shipment
 router.post("/receiveShipment", ShipmentController.receiveShipment); // /receiveShipment => Shipment ID
 router.get("/fetchShipments", ShipmentController.fetchShipments); // /fetchShipments => Takes warehouseId from req.user header 
-router.get("/viewShipment", ShipmentController.Shipment); // /viewShipment?ShipmentId=SH7TUC_VZIKD
+router.get("/viewShipment", ShipmentController.viewShipment); // /viewShipment?ShipmentId=SH7TUC_VZIKD
 
 router.get("/viewPoShipments", ShipmentController.fetch_po_Shipments); // /viewPoShipments?poId=po1234565
 router.get("/fetchAllShipments", ShipmentController.fetchAllShipments); // /fetchAllShipments ==> Gives all shipments in the ledger

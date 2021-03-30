@@ -306,6 +306,26 @@ exports.receiveShipment = [
             const soID = data.shippingOrderId;
             const poID = data.poId;
 
+            const shipmentID = data.id;
+            const shipmentInfo = await ShipmentModel.find({id: shipmentID});
+
+            const receivedProducts = data.products;
+            var products = shipmentInfo.products;
+            products.forEach(product => {
+                receivedProducts.forEach(reqProduct => {
+                    if(product.productId === reqProduct.productID){
+                        var actuallyShippedQuantity = product.productQuantity;
+                        var receivedQuantity = reqProduct.productQuantity;
+                        var quantityDifference = actuallyShippedQuantity - receivedQuantity;
+                        var rejectionRate = (quantityDifference/actuallyShippedQuantity)*100;
+                        (shipmentInfo.products[product]).quantityDelivered = receivedQuantity;
+                        (shipmentInfo.products[product]).rejectionRate = rejectionRate;
+                    }    
+                })
+            });
+            await shipmentInfo.save();
+
+            
             var flag = "Y";
             if (data.shippingOrderId === null || data.poId === null) {
                    flag = "YS"
@@ -482,7 +502,7 @@ async (req, res) => {
 
 
 
-exports.Shipment = [
+exports.viewShipment = [
     auth,
     async (req, res) => {
         try {
