@@ -1,0 +1,118 @@
+@import "../../assets/styles/colors.scss";
+
+.mainButtonFilter{
+  background: #E5E0E9 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #54265E2E;
+  border-radius: 30px;
+  color: #707070;
+  opacity: 1;
+  margin-bottom: 50px;
+  .active{
+    background: #54265E 0% 0% no-repeat padding-box;
+    border-radius: 30px !important;
+    color: $white;
+    font-weight: 500;
+    min-width: 80px;
+    outline:none !important;
+  }
+  a{
+    outline:none; 
+    padding: 8px 20px;
+  }
+  a:focus{
+    outline:none !important;
+  }
+}
+
+.productList{
+  color: #707070;
+  .transactionListDate{
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .transactionListContainer{
+    margin-top: 15px;
+  }
+  .productContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .productItem{
+    flex-grow: 1;
+    height: 100px;
+  }
+  .productItem + .productItem{
+    margin-left: 2%;
+  }
+  .productIcon{
+    width: 55px;
+    height: 55px;
+    margin-right: 10px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .productStatus{
+    font-weight: bold;
+    color: #000;
+  }
+  .productQuantity{
+    font-weight: bold;
+    color: #000;
+  }
+  .statusbadge{
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;   
+  }
+  .transitBadge{
+    background: #FDAB0F;
+  }
+  .sentBadge{
+    background: #FF6A6A;
+  }
+  .addedBadge{
+    background: #20BECB;
+  }
+  .receivedBadge{
+    background: #3CB76C;
+  }
+  .inTransit{
+    background: #FFEED7 0% 0% no-repeat padding-box;   
+  }
+  .sent{
+    background: #FFE6E6 0% 0% no-repeat padding-box;    
+  }
+  .received{
+    background: #EAFFE2 0% 0% no-repeat padding-box;
+  }
+  .added{
+    background: #C9FBFF 0% 0% no-repeat padding-box;
+  }
+  .iconGroup{
+    display: flex;
+    justify-content: left;
+    align-items: flex-start;
+    line-height: 20px;
+    .transactionTitle{
+      font-size: 14px;
+      color: #000;
+      font-weight: bold;
+    }
+    .transactionDate{
+      color: #414141 !important;
+      font-size: 10px;
+      font-weight: lighter;
+      margin-bottom: 10px;
+    }
+    .icon-thumbnail-img {
+      width: 27px;
+      height: 20px;
+  }
+  }
+}
+
+
