@@ -51,7 +51,7 @@ const Table = props => {
                 </div>
                 </div>
                 <div className="rTableCell">
-                  <Link to={`/vieworder/${order.id}/${visible}`} 
+                  <Link to={`/vieworder/${order.id}`} 
                     className="button pl-3 pr-3 pt-1 pb-1"
                   >
                     View

@@ -67,7 +67,7 @@ const routes = (
     <Route path="/transactionHistory" component={requireAuth(TransactionHistory)} />
     <Route path="/orders" component={requireAuth(Orders)} />
     <Route path="/neworder" component={requireAuth(NewOrder)} />
-    <Route path="/vieworder/:id/:type" component={requireAuth(ViewOrder)} />
+    <Route path="/vieworder/:id" component={requireAuth(ViewOrder)} />
     <Route path="/updateStatus" component={requireAuth(UpdateStatus)} />
     <Route path="/receiveShipment" component={requireAuth(ReceiveShipment)} />
     <Route component={NoMatch} />

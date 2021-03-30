@@ -8,12 +8,12 @@ import { getOrder } from '../../actions/poActions';
 const ViewOrderContainer = props => {
   const dispatch = useDispatch();
   const [order, setOrder] = useState([]);
-  const { id, type } = props.match.params;
+  const { id } = props.match.params;
   
   useEffect(() => {
     (async () => {
       const results = await dispatch(getOrder(id));
-      setOrder(type == 'one' ? results.inboundPOs[0] : results.outboundPOs[0]);
+      setOrder(results.poDetails[0]);
     })();
   }, []);
 
