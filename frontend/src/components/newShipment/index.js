@@ -146,7 +146,7 @@ const NewShipment = (props) => {
     // dates.forEach(date => { if (!error) dateValidation(date) });
     const { airWayBillNo, shippingOrderId, labelCode, shipmentDate, estimateDeliveryDate, toOrgLoc, fromOrgLoc, products } = values;
     products.forEach((p) => {
-      if (p.productQuanty < 1)
+      if (p.productQuantity < 1)
         error = true;
     });
 

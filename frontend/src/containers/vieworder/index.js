@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import Orders from '../../components/orders';
+import ViewOrder from '../../components/vieworder';
 import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
 import { useDispatch, useSelector } from 'react-redux';
-import { getPOs, changePOStatus, resetPOs} from '../../actions/poActions';
+import { getOrder } from '../../actions/poActions';
 
-const OrdersContainer = props => {
-  const [orders, setOrders] = useState([]);
+const ViewOrderContainer = props => {
   const dispatch = useDispatch();
-
-  // const orders = useSelector(state => state.pos);  
-
+  const [order, setOrder] = useState([]);
+  const { id } = props.match.params;
+  
   useEffect(() => {
     (async () => {
-      const result = await dispatch(getPOs());
-      setOrders(result);
-      
-      return () => dispatch(resetPOs());
+      const results = await dispatch(getOrder(id));
+      setOrder(results.poDetails[0]);
     })();
   }, []);
 
@@ -26,9 +23,9 @@ const OrdersContainer = props => {
       <div className="d-flex">
         <Sidebar {...props} />
         <div className="content">
-          <Orders
-            orders={orders}
-            setOrders={setOrders}
+          <ViewOrder
+            order={order}
+            id={id}
             {...props}
           />
         </div>
@@ -37,4 +34,4 @@ const OrdersContainer = props => {
   );
 };
 
-export default OrdersContainer;
+export default ViewOrderContainer;

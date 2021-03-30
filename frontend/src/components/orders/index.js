@@ -12,31 +12,23 @@ import calender from '../../assets/icons/calendar.svg';
 import Status from '../../assets/icons/Status.svg';
 import Order from '../../assets/icons/Orders.png';
 import truck from '../../assets/icons/truckthree.svg';
-import { useDispatch } from 'react-redux';
-import { getShipments, resetShipments } from '../../actions/shipmentActions';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPOs, resetPOs } from '../../actions/poActions';
 
 const Orders = props => {
   const [visible, setvisible] = useState('one');
   const [skip, setSkip] = useState(0);
   const [limit, setLimit] = useState(5);
   const [loadMore, setLoadMore] = useState(true);
-  const [shpmnts, setShpmnts] = useState([]);
   const [alerts, setAlerts] = useState(false);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(resetShipments());
-  }, []);
   
   const onLoadMore = async (isInc, isReset = false) => {
     const newSkip = isInc ? skip + 5 : skip - 5;
     setSkip(isReset ? 0 : newSkip);
-    const results = await dispatch(getShipments(isReset ? 0 : newSkip, limit));
-    props.setShipments(results);
-    if (results.length === 0) {
-      setLoadMore(false);
-    }
-    setData(visible)
+    const results = await dispatch(getPOs(isReset ? 0 : newSkip, limit));
+    props.setOrders(results);
+    setData(visible);
   };
   
   const headers = {
@@ -59,23 +51,23 @@ const Orders = props => {
   }
 
   const sendData = () => {
-    let rtnArr = visible == 'two' ? props.shipments?.outboundShipments : props.shipments?.inboundShipments;
+    let rtnArr = visible == 'two' ? props.orders?.outboundPOs : props.orders?.inboundPOs;
     if (alerts)
       rtnArr = rtnArr.filter(row => row?.shipmentAlerts?.length > 0);
     return rtnArr ? rtnArr : [];
   }
 
   return (
-    <div className="shipment">
+    <div className="orders">
       <div className="d-flex justify-content-between">
         <h1 className="breadcrumb">ORDERS</h1>
         <div className="d-flex">
-          {/* <Link to="/newshipment">
+          <Link to="/neworder">
             <button className="btn btn-yellow fontSize20 font-bold">
               <img src={OrderIcon} width="20" height="17" className="mr-2 mb-1" />
               <span>Create Order</span>
             </button>
-          </Link> */}
+          </Link>
         </div>
       </div>
       <Tiles {...props} setData={setData} />
@@ -86,7 +78,7 @@ const Orders = props => {
         <TableFilter data={headers} fb="74%"/>
       </div>
       <div className="ribben-space">
-        <Table {...props} skip={skip} loadMore={loadMore} shpmnts={sendData} onLoadMore={onLoadMore}/>
+        <Table {...props} skip={skip} loadMore={loadMore} ordrs={sendData} visible={visible} onLoadMore={onLoadMore}/>
       </div>
     </div>
   );

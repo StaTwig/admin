@@ -51,6 +51,26 @@ export const getProducts = async () => {
   }
 };
 
+export const createOrder = async data => {
+  try {
+    console.log(config().createOrderUrl);
+    
+    const result = await axios.post(config().createOrderUrl, data);
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+export const getProductsByCategory = async (id) => {
+  try {
+    const result = await axios.get(config().getProductsByCategoryUrl+id);
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
 export const getManufacturers = async () => {
   try {
     const result = await axios.get(config().getManufacturers);
@@ -85,22 +105,36 @@ export const addMultipleProducts = async data => {
 };
 
 export const getPOs = (skip = 0, limit = 5) => {
-  try {
-    return async dispatch => {
+  return async dispatch => {
+    try {
       dispatch(turnOn());
       const result = await axios.get(
-        `${
-          config().getPOsUrl
-        }?skip=${skip}&limit=${limit}`,
+        `${config().fetchPurchaseOrderUrl}?skip=${skip}&limit=${limit}`,
       );
-     // const result = await axios.get('http://54.164.66.73:3012/pomanagement/api/po/purchaseOrderStatistics');
-      dispatch(setPurchaseOrders(result.data.data));
+      
+      // dispatch(setReviewPos(result.data));
       dispatch(turnOff());
-      return result;
-    };
-  } catch (e) {
-    return [];
-  }
+      return result.data.data;
+    } catch (e) {
+      dispatch(turnOff());
+      dispatch(resetPOs(e.response));
+    }
+  };
+};
+
+export const getOrder = (id) => {
+  return async dispatch => {
+    try {
+      dispatch(turnOn());
+      const result = await axios.get(
+        `${config().fetchPurchaseOrderUrl}?poId=${id}&skip=0&limit=1`,
+      );
+      dispatch(turnOff());
+      return result.data.data;
+    } catch (e) {
+      dispatch(turnOff());
+    }
+  };
 };
 
 const setPurchaseOrders = data => {

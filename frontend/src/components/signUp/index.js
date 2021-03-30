@@ -141,7 +141,7 @@ const [organisationsArr, setOrganisationsArr] = useState([]);
                   </div>
                   <div className="form-group flex-column">
                   <img alt="" src={Mail} className="icon imgs" />
-                  <input type="email"
+                  <input type="text"
                   className="form-control"
                   name="email"
                   value={props.email}

@@ -1,6 +1,6 @@
 @import '../../../assets/styles/global.scss';
 
-.shipment {
+.orders {
   .overflow{
     height: 400px;
     overflow: auto;
@@ -51,6 +51,7 @@
       background-color: #ddd;
     }
 
+
     .rTableCell,
     .rTableHead {
       flex: 1;
@@ -69,6 +70,10 @@
         color: $black;
         font-weight: 400;
       }
+
+    .text-primary{
+      word-wrap: break-word;
+    }
     }
 
     .combine-data {

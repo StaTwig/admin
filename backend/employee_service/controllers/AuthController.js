@@ -3,7 +3,7 @@ const WarehouseModel = require('../models/WarehouseModel');
 const ConsumerModel = require('../models/ConsumerModel');
 const InventoryModel = require('../models/InventoryModel');
 const OrganisationModel = require('../models/OrganisationModel');
-const { body, validationResult } = require('express-validator');
+const { body, validationResult, oneOf, check } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
 const uniqid = require('uniqid');
 
@@ -143,18 +143,27 @@ exports.register = [
     .isLength({ min: 1 })
     .trim()
     .withMessage('Email must be specified.')
-    .isEmail()
-    .withMessage('Email must be a valid email address.')
-    .custom(value => {
-      return EmployeeModel.findOne({ emailId: value.toLowerCase() }).then(user => {
+    // .isEmail()
+    // .withMessage('Email must be a valid email address.')
+    .custom(async(value) => {
+        const emailId = value.toLowerCase().replace(' ','');
+        let user;
+        let phone = '';
+        if (emailId.indexOf('@') > -1)
+          user = await EmployeeModel.findOne({ emailId });
+        else {
+          phone = emailId.indexOf('+91') === 0 ? emailId : '+91'+emailId;
+          user = await EmployeeModel.findOne({ phoneNumber: phone });
+        }
+      // return EmployeeModel.findOne({ emailId: value.toLowerCase() }).then(user => {
         if (user) {
           logger.log(
             'info',
             '<<<<< UserService < AuthController < register : Entered email is already present in EmployeeModel',
           );
-          return Promise.reject('E-mail already in use');
+          return Promise.reject('E-mail/Mobile already in use');
         }
-      });
+      // });
     }),
   // Process request after validation and sanitization.
   async (req, res) => {
@@ -276,11 +285,17 @@ exports.register = [
             }
           }
 
+        const emailId = req.body.emailId.toLowerCase().replace(' ','');
+        let phone = '';
+        if (emailId.indexOf('@') === -1)
+          phone = emailId.indexOf('+91') === 0 ? emailId : '+91'+emailId;
+        
           // Create User object with escaped and trimmed data
           const user = new EmployeeModel({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
-            emailId: req.body.emailId,
+            emailId: phone ? '' : req.body.emailId,
+            phoneNumber: phone,
             organisationId: organisationId,
             id: employeeId,
             postalAddress: addr,
@@ -360,11 +375,12 @@ exports.register = [
  */
 exports.sendOtp = [
   body('emailId')
-    .isLength({ min: 1 })
+    .isLength({ min: 10 })
     .trim()
-    .withMessage('Email must be specified.')
-    .isEmail()
-    .withMessage('Email must be a valid email address.'),
+    .withMessage('Email/Mobile must be specified.')
+  //   .isEmail()
+  // .withMessage('Email must be a valid email address.')
+  ,
   sanitizeBody('emailId').escape(),
   async (req, res) => {
     try {
@@ -387,7 +403,14 @@ exports.sendOtp = [
         );
       } else {
         const emailId = req.body.emailId.toLowerCase();
-        const user = await EmployeeModel.findOne({ emailId });
+        let user;
+        let phone = '';
+        if (emailId.indexOf('@') > -1)
+          user = await EmployeeModel.findOne({ emailId });
+        else {
+          phone = emailId.indexOf('+91') === 0 ? emailId : '+91'+emailId;
+          user = await EmployeeModel.findOne({ phoneNumber: phone });
+        }
         if(user) {
           if (user.accountStatus === 'ACTIVE') {
             logger.log(
@@ -395,30 +418,55 @@ exports.sendOtp = [
                 '<<<<< UserService < AuthController < login : user is active',
             );
             let otp = utility.randomNumber(4);
-            if (emailId === process.env.EMAIL_APPSTORE)
+            if (user.emailId === process.env.EMAIL_APPSTORE)
               otp = process.env.OTP_APPSTORE;
-            await EmployeeModel.update({emailId }, { otp });
-             let html = EmailContent({
-            name: user.firstName,
-            origin: req.headers.origin,
-            otp,
-          });
-          // Send confirmation email
-            try {
-              await mailer
-                  .send(
-                      constants.confirmEmails.from,
-                      user.emailId,
-                      constants.confirmEmails.subject,
-                      html,
-                  );
-              return apiResponse.successResponseWithData(
+            
+            await EmployeeModel.updateOne({id: user.id }, { otp });
+            
+            axios.post(process.env.OTP_ENDPOINT, {
+              subject : "OTP request for Vaccine Ledger",
+              email : user.emailId,
+              phone : user.phoneNumber ? user.phoneNumber : '',
+              otp : otp.toString(),
+              message : "Please Send the OTP",
+              source : process.env.SOURCE
+            })
+              .then((response) => {
+              if (response.status === 200) {
+                return apiResponse.successResponseWithData(
                   res,
-                  'OTP Sent Success.'
-              );
-            }catch(err) {
-              return apiResponse.ErrorResponse(res, err);
-            }
+                  'OTP Sent Success.',
+                  { email: user.emailId }
+                );
+              }
+              else {
+                return apiResponse.ErrorResponse(res, response.statusText);
+              }
+            }, (error) => {
+                console.log(error);
+            });
+            
+          //   let html = EmailContent({
+          //     name: user.firstName,
+          //     origin: req.headers.origin,
+          //     otp,
+          //   });
+          // // Send confirmation email
+          //   try {
+          //     await mailer
+          //         .send(
+          //             constants.confirmEmails.from,
+          //             user.emailId,
+          //             constants.confirmEmails.subject,
+          //             html,
+          //         );
+          //     return apiResponse.successResponseWithData(
+          //         res,
+          //         'OTP Sent Success.'
+          //     );
+          //   }catch(err) {
+          //     return apiResponse.ErrorResponse(res, err);
+          //   }
 
            /* let userData = {
               id: user.id,
@@ -476,10 +524,10 @@ exports.verifyOtp = [
   body('emailId')
     .isLength({ min: 1 })
     .trim()
-    .withMessage('Email must be specified.')
-    .isEmail()
-    .withMessage('Email must be a valid email address.'),
-  body('otp')
+    .withMessage('Email/Mobile must be specified.')
+    // .isEmail()
+    // .withMessage('Email must be a valid email address.'),
+  ,body('otp')
     .isLength({ min: 1 })
     .trim()
     .withMessage('OTP must be specified.'),
@@ -499,6 +547,11 @@ exports.verifyOtp = [
       } else {
         const emailId = req.body.emailId.toLowerCase();
         var query = { emailId };
+        if (emailId.indexOf('@') === -1) {
+          let phone = emailId.indexOf('+91') === 0 ? emailId : '+91' + emailId;
+          query = { phoneNumber: phone };
+        }
+        
         const user = await EmployeeModel.findOne(query);
         if (user && user.otp == req.body.otp) {
           await EmployeeModel.update(query, { otp: null });
@@ -508,7 +561,7 @@ exports.verifyOtp = [
             emailId: user.emailId,
             role: user.role,
             warehouseId:user.warehouseId,
-	    organisationId:user.organisationId,
+	          organisationId:user.organisationId,
           };
           //Prepare JWT token for authentication
           const jwtPayload = userData;

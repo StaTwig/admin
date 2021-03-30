@@ -11,6 +11,7 @@ const RecordModel = require('../models/RecordModel');
 const OrganisationModel = require('../models/OrganisationModel');
 const ProductModel = require('../models/ProductModel');
 const WarehouseModel = require('../models/WarehouseModel');
+const CounterModel = require('../models/CounterModel')
 //this helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
 const utility = require('../helpers/utility');
@@ -529,6 +530,47 @@ exports.success = [
       return res.redirect(redirectUrl);
     } catch (err) {
       //throw error in json response with status 500.
+    }
+  },
+];
+
+
+exports.createOrder = [
+  auth,
+  async (req, res) => {
+    try {
+      const incrementCounter = await CounterModel.update({
+        'counters.name': "poId"
+      }, {
+        $inc: {
+          "counters.$.value": 1
+        }
+      });
+
+      const poCounter = await CounterModel.findOne({'counters.name':"poId"})
+      const poId = poCounter.counters[5].format + poCounter.counters[5].value;
+      
+      const { externalId, supplier, customer, products, creationDate, lastUpdatedOn } = req.body;
+      const { createdBy, lastUpdatedBy } = req.user.id;
+      const purchaseOrder = new RecordModel({
+        id: poId,
+        externalId,
+        creationDate,
+        supplier,
+        customer,
+        products,
+        lastUpdatedOn,
+        createdBy,
+        lastUpdatedBy
+      });
+      const result = await purchaseOrder.save();
+      return apiResponse.successResponseWithData(res, 'Created order');
+    } catch (err) {
+      logger.log(
+          'error',
+          '<<<<< POService < POController < createOrder : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
     }
   },
 ];
