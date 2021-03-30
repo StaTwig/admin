@@ -33,12 +33,7 @@ const logger = init.getLog();
 
 const userPurchaseOrders = async ( mode,orgMode, organisationId, skip, limit, callback) => {
         var matchCondition = {};
-
-	if (orgMode != "")
         var criteria = mode + "." + orgMode;
-        else
-        var criteria = mode;
-
         matchCondition[criteria] = organisationId;
         var  poDetails = [];
 
@@ -84,14 +79,6 @@ const userPurchaseOrders = async ( mode,orgMode, organisationId, skip, limit, ca
                     path: "$customer.warehouse",
                 },
             },
-	    {
-                $lookup: {
-                    from: "products",
-                    localField: "products.productId",
-                    foreignField: "id",
-                    as: "productDetails",
-                },
-            },
             ]).sort({
             createdAt: -1
         }).skip(parseInt(skip))
@@ -119,35 +106,21 @@ exports.fetchPurchaseOrders = [
             if (permissionResult.success) {
 
               const { organisationId, role } = req.user;
-	      const { skip, limit, poId } = req.query;
-	      var inboundPOs, outboundPOs, poDetails;
+              const { skip, limit } = req.query;
 
                     try {
-		    if ( poId != null)
-                    {
-                    const POs = await userPurchaseOrders("id", "", poId, skip, limit, (error, data) => {
-                     	   poDetails = data ;
-                       })
-                     }
-		    else
-		    {
                     const supplierPOs = await userPurchaseOrders("supplier","supplierOrganisation", organisationId, skip, limit, (error, data) => {
-                           inboundPOs = data;
-                        })
+                        inboundPOs = data;
+                    })
 
                     const customerPOs = await userPurchaseOrders("customer","customerOrganisation", organisationId, skip, limit, (error, data) => {
-                           outboundPOs = data ;
-                       })
-		    }
+                      outboundPOs = data ;
+                    })
 
                     return apiResponse.successResponseWithData(
                         res,
                         'Shipments Table',
-                         {
-			   "inboundPOs":inboundPOs,
-			  "outboundPOs":outboundPOs,
-		          "poDetails":poDetails
-			 }
+                         {"inboundPOs":inboundPOs,"outboundPOs":outboundPOs}
 
                     );
                 } catch (err) {
