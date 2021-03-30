@@ -7,6 +7,7 @@ import LandingPage from '../containers/landingpage';
 import OverView from '../containers/overview';
 import Shipment from '../containers/shipments';
 import NewShipment from '../containers/newshipment';
+import NewOrder from '../containers/neworder';
 import ViewShipment from '../containers/viewShipment';
 import VerifyShipment from '../containers/verifyshipment';
 import VerifyInventory from '../containers/verifyinventory';
@@ -24,6 +25,7 @@ import Orders from '../containers/orders';
 import requireAuth from '../components/hocs/requireAuth';
 import QrCode from '../containers/qrcode';
 import TransactionHistory from '../containers/transactionHistory'
+import ViewOrder from '../containers/vieworder';
 
 import AddProduct from '../containers/addproduct';
 import Signup from '../containers/signUp';
@@ -32,7 +34,6 @@ import resetPasswordPage from '../containers/resetPassword';
 import Home from '../containers/home';
 import UpdateStatus from  '../containers/updateStatus';
 import NoMatch from '../components/NoMatch';
-
 
 import './style.scss';
 const routes = (
@@ -64,6 +65,8 @@ const routes = (
     <Route path="/network" component={requireAuth(Network)} />
     <Route path="/transactionHistory" component={requireAuth(TransactionHistory)} />
     <Route path="/orders" component={requireAuth(Orders)} />
+    <Route path="/neworder" component={requireAuth(NewOrder)} />
+    <Route path="/vieworder/:id" component={requireAuth(ViewOrder)} />
     <Route path="/updateStatus" component={requireAuth(UpdateStatus)} />
     <Route component={NoMatch} />
 

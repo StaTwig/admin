@@ -3,21 +3,20 @@ import Orders from '../../components/orders';
 import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
 import { useDispatch, useSelector } from 'react-redux';
-import { getShipments, resetShipments } from '../../actions/shipmentActions';
+import { getPOs, changePOStatus, resetPOs} from '../../actions/poActions';
 
 const OrdersContainer = props => {
-  const dispatch = useDispatch();
   const [orders, setOrders] = useState([]);
+  const dispatch = useDispatch();
 
-  // const shipments = useSelector(state => {
-  //   return state.shipments;
-  // });
-  
+  // const orders = useSelector(state => state.pos);  
+
   useEffect(() => {
     (async () => {
-      const results = await dispatch(getShipments());
-      setOrders(results);
-      return () => dispatch(resetShipments());
+      const result = await dispatch(getPOs());
+      setOrders(result);
+      
+      return () => dispatch(resetPOs());
     })();
   }, []);
 
@@ -29,7 +28,7 @@ const OrdersContainer = props => {
         <div className="content">
           <Orders
             orders={orders}
-            setShipments={setOrders}
+            setOrders={setOrders}
             {...props}
           />
         </div>

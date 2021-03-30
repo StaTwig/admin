@@ -5,7 +5,10 @@ export const initialState = [];
 export const poReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_POS:
-      return [...state, ...action.payload];
+      return [
+        // ...state, ...action.payload
+        ...action.payload.data
+      ];
     case RESET_POS:
       return initialState;
 
