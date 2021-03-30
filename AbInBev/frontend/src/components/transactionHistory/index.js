@@ -1,10 +1,8 @@
 import React from "react";
 import "./style.scss";
 import inTransitIcon from "../../assets/intransit.png";
-import attachIcon from "../../assets/attach.png";
-import receivedIcon from "../../assets/received.png";
-import sentIcon from "../../assets/sent.png";
 import SideBar from "../../components/sidebar";
+import filterIcon from "../../assets/icons/funnel.svg"
 
 const TransactionHistory = (props) => {
   return (
@@ -230,8 +228,44 @@ const TransactionHistory = (props) => {
                 </div>
               </div>
             </div>
-            <div className="col-md-3 rightSideMenu pt-3 px-2">
-              
+            <div className="col-md-3 rightSideMenu pt-4 px-2">
+              <div className="filterSection">
+                <div className="filterHeader">
+                  <img src={filterIcon} className="filterIcon"/> FILTERS
+                </div>
+
+                <div class="btn-group filterButton mt-4">
+                  <a href="#!" class="btn ">Brewery</a>
+                  <a href="#!" class="btn active">Vendor</a>
+                </div>
+
+                <label className="filterSubHeading mt-2">Time Period</label>
+                <div class="btn-group filterButton mt-2">
+                  <a href="#!" class="btn active">Today</a>
+                  <a href="#!" class="btn">Monthly</a>
+                  <a href="#!" class="btn">Quarterly</a>
+                  <a href="#!" class="btn">Yearly</a>
+                </div>
+
+                <label className="filterSubHeading mt-2">District</label>
+                <select className="filterSelect mt-2">
+                  <option>Select district</option>
+                </select>
+
+                <label className="filterSubHeading mt-2">Vendor</label>
+                <div class="btn-group filterButton mt-2">
+                  <a href="#!" class="btn active">All</a>
+                  <a href="#!" class="btn">S1</a>
+                  <a href="#!" class="btn">S2</a>
+                </div>
+
+                <label className="filterSubHeading mt-2">Select Vendor</label>
+                <select className="filterSelect mt-2">
+                  <option>Select Vendor</option>
+                </select>
+
+                <button className="btn SearchButton mt-4">Search</button>
+              </div>  
             </div>
           </div> 
         </main>
