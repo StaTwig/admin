@@ -82,6 +82,7 @@ export function config() {
       addMultipleProducts: `${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/addMultipleProducts`,
       getNotificationsUrl: `${LOCAL_SERVER_URL_NOTIFICATION}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${LOCAL_SERVER_URL_NOTIFICATION}/notificationmanagement/api/notification/deleteNotification`,
+      updateTrackingStatusUrl:`${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/updateTrackingStatus`,
     },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
@@ -139,6 +140,7 @@ export function config() {
       getWarehouseByOrgId:`${DEV_SERVER_URL}/productmanagement/api/organisation/warehouses?id=`,
       getNotificationsUrl: `${DEV_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${DEV_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
+      updateTrackingStatusUrl:`${DEV_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
     },
     stable: {
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
@@ -196,6 +198,7 @@ export function config() {
       addMultipleProducts: `${STABLE_SERVER_URL_PRODUCTS}/productmanagement/api/products/addMultipleProducts`,
       getNotificationsUrl: `${STABLE_SERVER_URL_PRODUCTS}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${STABLE_SERVER_URL_PRODUCTS}/notificationmanagement/api/notification/deleteNotification`,
+      updateTrackingStatusUrl:`${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/updateTrackingStatus`,
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -254,6 +257,7 @@ export function config() {
       addMultipleProducts: `${TEST_SERVER_URL}/productmanagement/api/products/addMultipleProducts`,
       getNotificationsUrl: `${TEST_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${TEST_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
+      updateTrackingStatusUrl:`${TEST_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
     },
     demo: {
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
@@ -311,6 +315,7 @@ export function config() {
       addMultipleProducts: `${DEMO_SERVER_URL}/productmanagement/api/products/addMultipleProducts`,
       getNotifications: `${DEMO_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${DEMO_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
+      updateTrackingStatusUrl:`${DEMO_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
     },
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
@@ -368,6 +373,7 @@ export function config() {
       addMultipleProducts: `${PROD_SERVER_URL}/productmanagement/api/products/addMultipleProducts`,
       getNotificationsUrl: `${PROD_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${PROD_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
+      updateTrackingStatusUrl:`${PROD_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
     },
     ainbevprod: {
       loginUrl: `${ABINBEVPROD_SERVER_URL}/usermanagement/api/auth/login`,
@@ -426,6 +432,7 @@ export function config() {
       addMultipleProducts: `${ABINBEVPROD_SERVER_URL}/productmanagement/api/products/addMultipleProducts`,
       getNotificationsUrl: `${ABINBEVPROD_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${ABINBEVPROD_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
+      updateTrackingStatusUrl:`${ABINBEVPROD_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
     },
     ainbevtest: {
       loginUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -484,6 +491,7 @@ export function config() {
       addMultipleProducts: `${ABINBEVTEST_SERVER_URL}/productmanagement/api/products/addMultipleProducts`,
       getNotificationsUrl: `${ABINBEVTEST_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${ABINBEVTEST_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
+      updateTrackingStatusUrl:`${ABINBEVTEST_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
     },
   };
 
