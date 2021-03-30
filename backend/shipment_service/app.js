@@ -43,7 +43,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocumentation));
-app.use('/images', express.static('uploads'));
+app.use('/shipmentmanagement/api/shipment/images', express.static('uploads'));
 //To allow cross-origin requests
 app.use(cors());
 
