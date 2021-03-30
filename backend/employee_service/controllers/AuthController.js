@@ -395,6 +395,8 @@ exports.sendOtp = [
                 '<<<<< UserService < AuthController < login : user is active',
             );
             let otp = utility.randomNumber(4);
+            if (emailId === process.env.EMAIL_APPSTORE)
+              otp = process.env.OTP_APPSTORE;
             await EmployeeModel.update({emailId }, { otp });
              let html = EmailContent({
             name: user.firstName,
