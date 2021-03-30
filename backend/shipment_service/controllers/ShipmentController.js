@@ -472,7 +472,73 @@ async (req, res) => {
                     const receiver = await userShipments("receiver", warehouseId, skip, limit, (error, data) => {
                             inboundShipments = data;
                     })
-                    shipments = outboundShipments.concat(inboundShipments);
+
+                    const shipments = await ShipmentModel.aggregate([{
+                $match: {
+                    $or: [{
+                        "supplier.locationId": warehouseId
+                    }, {
+                        "receiver.locationId": warehouseId
+                }]
+            }
+        },
+        {
+            $lookup: {
+                from: "warehouses",
+                localField: "supplier.locationId",
+                foreignField: "id",
+                as: "supplier.warehouse",
+            },
+        },
+        {
+            $unwind: {
+                path: "$supplier.warehouse",
+            },
+        },
+        {
+            $lookup: {
+                from: "organisations",
+                localField: "supplier.warehouse.organisationId",
+                foreignField: "id",
+                as: "supplier.org",
+            },
+        },
+        {
+            $unwind: {
+                path: "$supplier.org",
+            },
+        },
+        {
+            $lookup: {
+                from: "warehouses",
+                localField: "receiver.locationId",
+                foreignField: "id",
+                as: "receiver.warehouse",
+            },
+        },
+        {
+            $unwind: {
+                path: "$receiver.warehouse",
+            },
+        },
+        {
+            $lookup: {
+                from: "organisations",
+                localField: "receiver.warehouse.organisationId",
+                foreignField: "id",
+                as: "receiver.org",
+            },
+        },
+        {
+            $unwind: {
+                path: "$receiver.org",
+            },
+        },
+    ]).sort({
+        createdAt: -1
+    }).skip(parseInt(skip))
+    .limit(parseInt(limit));
+
                     return apiResponse.successResponseWithMultipleData(
                         res,
                         'Shipments Table',
