@@ -799,7 +799,7 @@ exports.fetchImage = async function (req, res) {
 
            for (i=0;i<imageArray.length;i++)
             {
-             const s =  imageUrl  + "/images/" + imageArray[i];
+             const s =  "/images/" + imageArray[i];
              resArray.push(s)
             }
         return res.send({
