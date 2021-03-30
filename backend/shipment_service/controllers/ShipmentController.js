@@ -7,6 +7,8 @@ const {
     nanoid
 } = require('nanoid');
 const apiResponse = require('../helpers/apiResponse');
+const fs = require("fs");
+const moveFile = require("move-file");
 const auth = require('../middlewares/jwt');
 const checkToken = require('../middlewares/middleware').checkToken;
 const ShipmentModel = require('../models/ShipmentModel');
@@ -21,6 +23,7 @@ const CounterModel = require('../models/CounterModel')
 
 const init = require('../logging/init');
 const logger = init.getLog();
+const imageUrl = process.env.IMAGE_URL;
 
 const inventoryUpdate = async (id, quantity, suppId, recvId, poId, shipmentStatus, next) => {
     if (shipmentStatus == "CREATED") {
@@ -756,3 +759,77 @@ exports.getProductsByInventory = [
     }
   }
 ]
+
+exports.uploadImage = async function (req, res) {
+  checkToken(req, res, async (result) => {
+    if (result.success) {
+          const { data } = result;
+          const Id = req.query.id;
+
+           const incrementCounter = await CounterModel.update({
+                  'counters.name': "shipmentImage"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+            const poCounter = await CounterModel.find({ "counters.name":"shipmentImage" },{"counters.name.$":1})
+            const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]))
+      try {
+            const filename = Id + "-" + t.format + t.value + ".png";
+            let dir = `uploads`;
+
+            await moveFile(req.file.path, `${dir}/${filename}`);
+            const update = await ShipmentModel.updateOne(
+            { id: Id },
+            { $push: { imageDetails: filename } }
+           )
+           return res.send({
+           success: true,
+           data: "Image uploaded successfullly.!", filename
+         })
+    } catch (e) {
+           console.log("Error in image upload", e);
+           res.status(403).json(e);
+         }
+    } else {
+      res.json(result);
+    }
+  });
+};
+
+
+exports.fetchImage = async function (req, res) {
+  checkToken(req, res, async (result) => {
+    if (result.success) {
+          const { data } = result;
+          const Id = req.query.id;
+          var imageArray = [];
+          const update = await ShipmentModel.find(
+           { id: Id },
+           { imageDetails: 1 }
+         ).then((result)=>{
+          imageArray = result[0].imageDetails;
+        }).catch((e)=>{
+            console.log("Err",e)
+        })
+
+         var resArray = [];
+
+           for (i=0;i<imageArray.length;i++)
+            {
+             const s =  "/images/" + imageArray[i];
+             resArray.push(s)
+            }
+        return res.send({
+      success: true,
+           data:  resArray
+    })
+
+    } else {
+      res.json(result);
+    }
+  });
+};
+

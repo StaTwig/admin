@@ -4,10 +4,10 @@ const ShipmentController = require("../controllers/ShipmentController");
 
 const Storage = multer.diskStorage({
   destination(req, file, callback) {
-    callback(null, "./images");
+    callback(null, "./uploads");
   },
   filename(req, file, callback) {
-    callback(null, `${Date.now()}`);
+    callback(null, file.originalname);
   },
 });
 
@@ -25,5 +25,9 @@ router.get("/fetchAllShipments", ShipmentController.fetchAllShipments); // /fetc
 router.get("/fetchShipmentsByQRCode", ShipmentController.fetchShipmentsByQRCode); //Give all shipment details mapped to the QR label code
 router.post("/updateShipmentStatus", ShipmentController.updateStatus); // /updateShipmentStatus?id=123
 router.get("/getProductsByInventory", ShipmentController.getProductsByInventory);
+
+
+router.post("/uploadImage",upload.single('photo'),ShipmentController.uploadImage);
+router.get("/fetchImage",ShipmentController.fetchImage);
 
 module.exports = router;
