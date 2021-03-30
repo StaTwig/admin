@@ -1,10 +1,22 @@
-import React from "react";
+import React, { useEffect, useState }  from "react";
+import { useDispatch } from 'react-redux';
 import "./style.scss";
 import inTransitIcon from "../../assets/intransit.png";
 import SideBar from "../../components/sidebar";
 import filterIcon from "../../assets/icons/funnel.svg"
+import { getTransactions } from '../../actions/transactionAction';
+import Moment from 'react-moment';
 
 const TransactionHistory = (props) => {
+  const dispatch = useDispatch();
+  const [transactions, setTransactions] = useState([]);
+  useEffect(() => {
+    (async () => {
+      const results = await dispatch(getTransactions());
+      setTransactions(results.data);
+      console.log(results);
+    })();
+  }, []);
   return (
     <div className="container-fluid">
       <div className="row">
@@ -31,201 +43,70 @@ const TransactionHistory = (props) => {
               </div>
 
               <div className="productList">
-                <span className="transactionListDate">December 12, 2021</span>
-                <div className="transactionListContainer">
-                  <div className="productContainer">
-                    <div className="productItem ">
-                      <div className="iconGroup">
-                        <div className="productIcon inTransit">
-                          <img
-                            src={inTransitIcon}
-                            class="icon-thumbnail-img"
-                            alt=""
-                          />  
+              {transactions.map((transaction, index) => 
+                <div>
+                  <span className="transactionListDate">
+                    <Moment format="MMM Do, YYYY">
+                      {transaction.shippingDate}
+                    </Moment>
+                  </span>
+                  <div className="transactionListContainer">
+                    <div className="productContainer">
+                      <div className="productItem ">
+                        <div className="iconGroup">
+                          <div className="productIcon inTransit">
+                            <img
+                              src={inTransitIcon}
+                              class="icon-thumbnail-img"
+                              alt=""
+                            />  
+                          </div>
+                          <div>
+                            <span className="transactionTitle">{transaction.receiver.org.name}</span><br/>
+                            <span className="transactionDate">
+                                <Moment format="MMMM Do YYYY, h:mm a">
+                                  {transaction.shippingDate}
+                                </Moment>
+                              </span>
+                          </div>
+                          
                         </div>
-                        <div>
-                          <span className="transactionTitle">Suvarna Durga Bottles Pvt. Ltd.</span><br/>
-                          <span className="transactionDate">02/12/2019, 02:12PM</span>
+                      </div>
+                      <div className="productItem">
+                      {transaction.receiver.warehouse.warehouseAddress.city, transaction.receiver.warehouse.warehouseAddress.state }
+                      </div>
+                      <div className="productItem">
+                      {transaction.status === 'RECEIVED' &&
+                        <div className="productStatus">
+                          <span class="statusbadge receivedBadge"></span> Received
                         </div>
-                        
+                      }
+                      {transaction.status === 'SENT' &&
+                        <div className="productStatus">
+                          <span class="statusbadge sentBadge"></span> Sent
+                        </div>
+                      }
+                      {transaction.status === 'INTRANSIT' &&
+                        <div className="productStatus">
+                          <span class="statusbadge transitBadge"></span> In Transit
+                        </div>
+                      }
+                      {transaction.status === 'CREATED' &&
+                        <div className="productStatus">
+                          <span class="statusbadge addedBadge"></span> Added
+                        </div>
+                      }   
+                      </div>
+                      <div className="productItem">
+                        123456.jpg
+                      </div>
+                      <div className="productItem productQuantity">
+                        {transaction.products.reduce((a,v) =>  a = a + v.productQuantity , 0 )}
                       </div>
                     </div>
-                    <div className="productItem">
-                      Chintalakunta, Hyderabad
-                    </div>
-                    <div className="productItem">
-                      <div className="productStatus"><span class="statusbadge transitBadge"></span> Received</div> 
-                    </div>
-                    <div className="productItem">
-                      123456.jpg
-                    </div>
-                    <div className="productItem productQuantity">
-                      9548
-                    </div>
                   </div>
-
-                  <div className="productContainer">
-                    <div className="productItem ">
-                      <div className="iconGroup">
-                        <div className="productIcon added">
-                          <img
-                            src={inTransitIcon}
-                            class="icon-thumbnail-img"
-                            alt=""
-                          />  
-                        </div>
-                        <div>
-                          <span className="transactionTitle">Suvarna Durga Bottles Pvt. Ltd.</span><br/>
-                          <span className="transactionDate">02/12/2019, 02:12PM</span>
-                        </div>
-                        
-                      </div>
-                    </div>
-                    <div className="productItem">
-                      Chintalakunta, Hyderabad
-                    </div>
-                    <div className="productItem">
-                      <div className="productStatus"><span class="statusbadge addedBadge"></span> Added</div> 
-                    </div>
-                    <div className="productItem">
-                      123456.jpg
-                    </div>
-                    <div className="productItem productQuantity">
-                      9548
-                    </div>
-                  </div>
-
-                  <div className="productContainer">
-                    <div className="productItem ">
-                      <div className="iconGroup">
-                        <div className="productIcon sent">
-                          <img
-                            src={inTransitIcon}
-                            class="icon-thumbnail-img"
-                            alt=""
-                          />  
-                        </div>
-                        <div>
-                          <span className="transactionTitle">Suvarna Durga Bottles Pvt. Ltd.</span><br/>
-                          <span className="transactionDate">02/12/2019, 02:12PM</span>
-                        </div>
-                        
-                      </div>
-                    </div>
-                    <div className="productItem">
-                      Chintalakunta, Hyderabad
-                    </div>
-                    <div className="productItem">
-                      <div className="productStatus"><span class="statusbadge sentBadge"></span> Sent</div> 
-                    </div>
-                    <div className="productItem">
-                      123456.jpg
-                    </div>
-                    <div className="productItem productQuantity">
-                      9548
-                    </div>
-                  </div>
-
                 </div>
-              </div>
-
-              <div className="productList">
-                <span className="transactionListDate">December 12, 2021</span>
-                <div className="transactionListContainer">
-                  <div className="productContainer">
-                    <div className="productItem ">
-                      <div className="iconGroup">
-                        <div className="productIcon inTransit">
-                          <img
-                            src={inTransitIcon}
-                            class="icon-thumbnail-img"
-                            alt=""
-                          />  
-                        </div>
-                        <div>
-                          <span className="transactionTitle">Suvarna Durga Bottles Pvt. Ltd.</span><br/>
-                          <span className="transactionDate">02/12/2019, 02:12PM</span>
-                        </div>
-                        
-                      </div>
-                    </div>
-                    <div className="productItem">
-                      Chintalakunta, Hyderabad
-                    </div>
-                    <div className="productItem">
-                      <div className="productStatus"><span class="statusbadge transitBadge"></span> Received</div> 
-                    </div>
-                    <div className="productItem">
-                      123456.jpg
-                    </div>
-                    <div className="productItem productQuantity">
-                      9548
-                    </div>
-                  </div>
-
-                  <div className="productContainer">
-                    <div className="productItem ">
-                      <div className="iconGroup">
-                        <div className="productIcon added">
-                          <img
-                            src={inTransitIcon}
-                            class="icon-thumbnail-img"
-                            alt=""
-                          />  
-                        </div>
-                        <div>
-                          <span className="transactionTitle">Suvarna Durga Bottles Pvt. Ltd.</span><br/>
-                          <span className="transactionDate">02/12/2019, 02:12PM</span>
-                        </div>
-                        
-                      </div>
-                    </div>
-                    <div className="productItem">
-                      Chintalakunta, Hyderabad
-                    </div>
-                    <div className="productItem">
-                      <div className="productStatus"><span class="statusbadge addedBadge"></span> Added</div> 
-                    </div>
-                    <div className="productItem">
-                      123456.jpg
-                    </div>
-                    <div className="productItem productQuantity">
-                      9548
-                    </div>
-                  </div>
-
-                  <div className="productContainer">
-                    <div className="productItem ">
-                      <div className="iconGroup">
-                        <div className="productIcon sent">
-                          <img
-                            src={inTransitIcon}
-                            class="icon-thumbnail-img"
-                            alt=""
-                          />  
-                        </div>
-                        <div>
-                          <span className="transactionTitle">Suvarna Durga Bottles Pvt. Ltd.</span><br/>
-                          <span className="transactionDate">02/12/2019, 02:12PM</span>
-                        </div>
-                        
-                      </div>
-                    </div>
-                    <div className="productItem">
-                      Chintalakunta, Hyderabad
-                    </div>
-                    <div className="productItem">
-                      <div className="productStatus"><span class="statusbadge sentBadge"></span> Sent</div> 
-                    </div>
-                    <div className="productItem">
-                      123456.jpg
-                    </div>
-                    <div className="productItem productQuantity">
-                      9548
-                    </div>
-                  </div>
-
-                </div>
+                )}
               </div>
             </div>
             <div className="col-md-3 rightSideMenu pt-4 px-2">
