@@ -36,7 +36,11 @@
     font-weight: bold;
     text-align: center;
   }
-
+  .table .rTable .rTableCell {
+      color: $black;
+      text-align: left;
+      font-weight: 400;
+ }
   .list-container {
     h4 {
       color: $OBBlue;
