@@ -1,0 +1,49 @@
+http:
+  routers:
+    webFrontend:
+      entryPoints:
+        - web
+      rule: "Host(`admin.abinbev.statledger.io`) && PathPrefix(`/`)"
+      service: frontend
+    apiAddress:
+      entryPoints:
+        - http
+      rule: "Host(`admin.abinbev.statledger.io`) && PathPrefix(`/api/address_service`)"
+      service: address
+    apiAffiation:
+      entryPoints:
+        - http    
+      rule: "Host(`admin.abinbev.statledger.io`) && PathPrefix(`/api/affliation_service`)"
+      service: affliation
+    apiEmployee:
+      entryPoints:
+        - http    
+      rule: "Host(`admin.abinbev.statledger.io`) && PathPrefix(`/api/employee_service`)"
+      service: employee
+    apiRbac:
+      entryPoints:
+        - http    
+      rule: "Host(`admin.abinbev.statledger.io`) && PathPrefix(`/api/rbac_service`)"
+      service: rbac 
+
+  services:
+    frontend:
+      loadBalancer:
+        servers:
+          - url : "http://localhost:3000"
+    apiAddress:
+      loadBalancer:
+        servers:
+          - url : "http://localhost:3001"
+    apiAffiation:
+      loadBalancer:
+        servers:
+          - url : "http://localhost:3002"
+    apiEmployee:
+      loadBalancer:
+        servers:
+          - url : "http://localhost:3003"
+    apiRbac:
+      loadBalancer:
+        servers:
+          - url : "http://localhost:3004"                        
