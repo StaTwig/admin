@@ -43,7 +43,7 @@ const Orders = props => {
     img2: <img src={calender} width="16" height="16" />,
     img3: <img src={Order} width="16" height="16" />,
     img4: <img src={Package} width="16" height="16" />,
-    img5: <img src={Totalshipments} width="16" height="16" />,
+    img5: <img src={Totalshipments} width="18" height="18" />,
   };
 
   const setData = (v, a = false) => {
