@@ -53,18 +53,30 @@ exports.checkEmail = [
     .isLength({ min: 1 })
     .trim()
     .withMessage('Email must be specified.')
-    .isEmail()
-    .withMessage('Email must be a valid email address.')
-    .custom(value => {
-      return EmployeeModel.findOne({ emailId: value.toLowerCase() }).then(user => {
+    // .isEmail()
+    // .withMessage('Email must be a valid email address.')
+    .custom(async value => {
+      const emailId = value.toLowerCase().replace(' ', '');
+      let user;
+      let phone = '';
+      if (!emailId.replace('+91', '').match(phoneRgex) && !emailId.match(emailRegex))
+        return Promise.reject('E-mail/Mobile not in valid');
+      
+      if (emailId.indexOf('@') > -1)          
+        user = await EmployeeModel.findOne({ emailId });
+      else {
+        phone = emailId.indexOf('+91') === 0 ? emailId : '+91' + emailId;
+        user = await EmployeeModel.findOne({ phoneNumber: phone });
+      }
+      // return EmployeeModel.findOne({ emailId: value.toLowerCase() }).then(user => {
         if (user) {
           logger.log(
             'info',
             '<<<<< UserService < AuthController < register : Entered email is already present in EmployeeModel',
           );
-          return Promise.reject('E-mail already in use');
+          return Promise.reject('Account already in use');
         }
-      });
+      // });
     }),
   // Process request after validation and sanitization.
   async (req, res) => {
