@@ -13,4 +13,10 @@
     .shadow{
       border-radius: 1rem;
     }
+    .btn-outline-primary:hover, .btn-outline-primary:active{
+      background-color: transparent !important;
+    }
+    .col{
+      text-align: left;
+    }
 }

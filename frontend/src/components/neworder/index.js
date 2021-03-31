@@ -200,7 +200,7 @@ const NewOrder = (props) => {
   };
 
   return (
-    <div className="NewShipment">
+    <div className="NewOrder m-3">
       <h1 className="breadcrumb">CREATE ORDER</h1>
       <Formik
         // enableReinitialize={true}
@@ -242,11 +242,11 @@ const NewOrder = (props) => {
           setFieldValue,
           dirty,
         }) => (
-          <form onSubmit={handleSubmit} className="mb-3">
+          <form onSubmit={handleSubmit} className="">
             
             <div className="row mb-3">
               <label htmlFor="productDetails" className="headsup">
-                Product Details*
+                Product Details
               </label>
                 <EditTable
                   product={addProducts}
@@ -260,7 +260,7 @@ const NewOrder = (props) => {
                 <div className="d-flex justify-content-between">
                   <button
                     type="button"
-                    className="btn btn-white bg-white shadow-radius mt-3 font-bold"
+                    className="btn btn-white bg-white shadow-radius font-bold"
                     onClick={() => {
                       let newArr = { productId: '', name: '', manufacturer: '', quantity: '', type: '' };
                       setAddProducts(prod => [...prod, newArr]);
@@ -275,7 +275,7 @@ const NewOrder = (props) => {
             )}
 
             <div className="row mb-3">
-              <div className="col bg-white formContainer low mr-3">
+              <div className="col bg-white shadow formContainer low p-3">
                 <label htmlFor="client" className="headsup">
                   From
                 </label>
@@ -288,7 +288,7 @@ const NewOrder = (props) => {
                           name={senderOrganisation[0]}
                           disabled={true}
                           onSelect={() => { }}
-                          groups={senderOrganisation}
+                          groups={[senderOrganisation[0]]}
                         />
                       </div>
                     </div>
@@ -307,7 +307,7 @@ const NewOrder = (props) => {
             </div>
 
             <div className="row mb-3">
-              <div className="col bg-white formContainer low mr-3">
+              <div className="col bg-white formContainer shadow low p-3">
                 <label htmlFor="client" className="headsup">
                   To
                 </label>
@@ -370,7 +370,7 @@ const NewOrder = (props) => {
               </div>
             </div>
 
-            <div className="d-flex justify-content-between">
+            <div className="d-flex pt-4 justify-content-between">
               <div className="value">{quantity}</div>
               <div className="d-flex">
                 <button type="button" class="btn btn-white shadow-radius font-bold mr-2"onClick={() => props.history.push('/orders')}>

@@ -2,7 +2,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import location from '../../assets/icons/CurrentLocationWhite.svg';
+import back from '../../assets/icons/back.png';
 import './style.scss';
+import { formatDate } from '../../utils/dateHelper';
 
 const ViewShipment = props => {
   const { shipment, id } = props;
@@ -14,11 +16,9 @@ const ViewShipment = props => {
     status = 'Delivered';
   }
 
-  const shipmentDate = 
-    shipment?.shippingDate?.split('T')[0].split('-')[2] + "/" + shipment?.shippingDate?.split('T')[0].split('-')[1] + "/" + shipment?.shippingDate?.split('T')[0].split('-')[0];
+  const shipmentDate = shipment?.shippingDate?.length == 10 ? shipment?.shippingDate : formatDate(shipment?.shippingDate);
   
-  const deliveryDate = 
-    shipment?.actualDeliveryDate?.split('T')[0].split('-')[2] + "/" + shipment?.actualDeliveryDate?.split('T')[0].split('-')[1] + "/" + shipment?.actualDeliveryDate?.split('T')[0].split('-')[0];
+  const deliveryDate = shipment?.actualDeliveryDate?.length == 10 ? shipment?.actualDeliveryDate : formatDate(shipment?.actualDeliveryDate);
 
   return (
     <div className="viewshipment text-muted">
@@ -26,7 +26,7 @@ const ViewShipment = props => {
         <h1 className="breadcrumb">VIEW SHIPMENT</h1>
         <div className="d-flex">
           <Link to={`/shipments`}>
-           <button className="btn btn-outline-primary mr-2" >Back to shipments</button>
+           <button className="btn btn-outline-primary mr-2" ><img src={back} height="17" className="mr-2 mb-1" />Back to shipments</button>
           </Link>
           <Link to={`/tracing/${id}`}>
             <button
@@ -37,7 +37,7 @@ const ViewShipment = props => {
                 // props.history.push(`/tracing/${id}`);
               }}>
               
-               <img style={{ padding: 1, height: 15}} src={location} />
+               <img style={{ padding: 1, height: 19}} src={location} />
               <span className="pl-1">Track</span>
             </button>
           </Link>
@@ -61,7 +61,7 @@ const ViewShipment = props => {
         </div>
         <div className="d-flex flex-row bg-white shadow  p-3 m-3">
           <div className="w-50 flex-column d-flex pl-4">
-            <span className="p-1 font-weight-bold text-primary">FROM</span>
+            <span className="p-1 font-weight-bold text-primary">From</span>
             <div>
               <div className=" d-flex flex-row p-1">
                 <span className="w-50">Organisation Name</span>
@@ -74,7 +74,7 @@ const ViewShipment = props => {
             </div>
           </div>
           <div className="w-50 flex-column d-flex pl-4">
-            <span className="p-1 font-weight-bold text-primary">TO</span>
+            <span className="p-1 font-weight-bold text-primary">To</span>
             <div>
               <div className=" d-flex flex-row p-1">
                 <span className="w-50">Organisation Name</span>
@@ -89,7 +89,7 @@ const ViewShipment = props => {
         </div>
         <div className="d-flex flex-row bg-white shadow   p-3 m-3">
           <div className="w-50 flex-column d-flex pl-4">
-            <span className="p-1 font-weight-bold text-primary">Delivery details</span>
+            <span className="p-1 font-weight-bold text-primary">Delivery Details</span>
             <div>
               <div className=" d-flex flex-row p-1">
                 <span className="w-50">Airway Bill</span>
@@ -116,11 +116,11 @@ const ViewShipment = props => {
           </div>
         </div>
         <div className=" p-3 m-3">
-          <span className="p-1 font-weight-bold text-info">Product details</span>
-          <div className="row">
+          <span className="p-1 font-weight-bold text-info">Product Details</span>
+          <div className="row mt-3">
             {shipment?.products?.map((product, index) => 
               <div key={index} className={`bg-white ${index > 0 ? 'ml-4' : ''} shadow  p-3 w-25`}>
-                <span className="p-1 font-weight-normal text-primary">{product.productName}</span>
+                <span className="p-1 font-weight-normal font-weight-bold text-primary">{product.productName}</span>
                 {/* <div className="d-flex mt-2 flex-row p-1">
                   <span className="w-50">Product name</span>
                   <span className="w-50 font-weight-bold text-dark">{product.productName}</span>

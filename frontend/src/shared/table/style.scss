@@ -45,11 +45,12 @@
       align-self: center;
       font-size: 12px;
       font-weight: bold;
-      text-align: center;
       color: #707070;
     }
 
-
+    .rTableHead {
+      text-align: center;
+    }
     
     .rTableCell {
       color: $black;

@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import EmptyShipments from "../../assets/icons/EmptyShipments.png";
 import "./table-style.scss";
 import alertShip from "../../assets/icons/alert.png";
+import { formatDate } from "../../utils/dateHelper";
 
 const SummaryTable = (props) => {
   const profile = useSelector((state) => {
@@ -23,18 +24,19 @@ const SummaryTable = (props) => {
       ) : (
         <div className="summaryTable">
           <div className="rowData">
-            <div className="headline">Shipping Date</div>
+            <div className="headline">Shipment ID</div>
             {shipments.map((shipment, index) =>
               index < 5 ? (
                 <div className="combine-data" key={index}>
-                  <div>
-                    {" "}
-                    {shipment.shippingDate.split("T")[0].split("-")[2] +
-                      "/" +
-                      shipment.shippingDate.split("T")[0].split("-")[1] +
-                      "/" +
-                      shipment.shippingDate.split("T")[0].split("-")[0]}
-                  </div>
+                  <div>{shipment.id}</div>
+                  {shipment?.shipmentAlerts?.length > 0 && (
+                    <span
+                      style={{ backgroundColor: "#EAEAEA", marginLeft: 5 }}
+                      className="rounded p-1"
+                    >
+                      <img style={{ height: 15 }} src={alertShip} />
+                    </span>
+                  )}
                 </div>
               ) : null
             )}
@@ -54,19 +56,13 @@ const SummaryTable = (props) => {
             )}
           </div>
           <div className="rowData">
-            <div className="headline">Shipment ID</div>
+            <div className="headline">Shipping Date</div>
             {shipments.map((shipment, index) =>
               index < 5 ? (
                 <div className="combine-data" key={index}>
-                  <div>{shipment.id}</div>
-                  {shipment?.shipmentAlerts?.length > 0 && (
-                    <span
-                      style={{ backgroundColor: "#EAEAEA", marginLeft: 5 }}
-                      className="rounded p-1"
-                    >
-                      <img style={{ height: 15 }} src={alertShip} />
-                    </span>
-                  )}
+                  <div>
+                    {shipment.shippingDate.length == 10 ? shipment.shippingDate : formatDate(shipment.shippingDate)}
+                  </div>
                 </div>
               ) : null
             )}

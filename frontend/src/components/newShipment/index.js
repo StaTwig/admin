@@ -288,7 +288,7 @@ const NewShipment = (props) => {
           <form onSubmit={handleSubmit} className="mb-3">
             <div className="row mb-3">
               <div className="col bg-white formContainer low mr-3">
-                <div className="col-md-6 com-sm-12">
+                <div className="col-md-6 com-sm-12 mt-3">
                   <div className="form-group">
                     <label htmlFor="orderID">Order ID</label>
                     <div className="form-control">
@@ -314,8 +314,11 @@ const NewShipment = (props) => {
                           setFieldValue('toOrg', result.customerDetails.customerOrganisation);
                           setFieldValue('toOrgLoc', result.customerDetails.shippingAddress.shippingAddressId);
                           setSenderOrgLoc(warehouse[0].postalAddress);
-                          if (result.products.length > 0)
+                          if (result.products.length > 0) {
+                            setProducts([]);
+                            setAddProducts([]);
                             setFieldValue('products', result.products);
+                          }
                           else
                             setFieldValue('products', []);
                         }}
@@ -361,6 +364,8 @@ const NewShipment = (props) => {
                             setFieldValue('fromOrgLoc', v.id);
                             setFieldValue('products', []);
                             setAddProducts(prod => []);
+                            let newArr = { productName: '', manufacturer: '', productQuantity: '' };
+                              setAddProducts(prod => [...prod, newArr]);
                           }}
                           groups={senderWarehouses}
                         />
@@ -539,7 +544,7 @@ const NewShipment = (props) => {
 
             <div className="row mb-3">
               <label htmlFor="productDetails" className="headsup">
-                Product Details*
+                Product Details
               </label>
               {shippingOrderDetails?.products?.length > 0 && (
                 <EditTable
@@ -630,10 +635,9 @@ const NewShipment = (props) => {
                   Cancel
                 </button>
 
-                <button className="btn btn-primary mr-2 mb-1" >
-                  {" "}
-<img src={Add} width="20" height="17" className="mr-2 mb-1" />
-                  Create Shipment
+                <button className="btn btn-yellow fontSize20 font-bold">
+                  <img src={Add} width="20" height="17" className="mr-2 mb-1" />
+                  <span>Create Shipment</span>
                 </button>
               </div>
             </div>

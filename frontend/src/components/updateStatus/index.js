@@ -44,8 +44,6 @@ const UpdateStatus = (props) => {
       },
     };
    const result = await updateTrackingStatus(data);
-    console.log("1", result);
-
     if (result.status === 200) {
       setOpenUpdatedStatus(true);
       console.log("2", result);
@@ -67,7 +65,7 @@ const UpdateStatus = (props) => {
     <div className="updateStatus">
       <div className="d-flex justify-content-between">
         <h1 className="breadcrumb">UPDATE STATUS</h1>
-        <div className="d-flex">
+        {/* <div className="d-flex">
           <button className="btn btn-primary font-weight-bold">
             <img
               src={uploadWhite}
@@ -77,7 +75,7 @@ const UpdateStatus = (props) => {
             />
             <span>Upload</span>
           </button>
-        </div>
+        </div> */}
       </div>
       <Formik
         enableReinitialize={true}
@@ -124,13 +122,13 @@ const UpdateStatus = (props) => {
           dirty,
         }) => (
           <form onSubmit={handleSubmit} className="mb-3">
-            <div className="card">
+            <div className="card bg-light border-0">
               <div className="card-body">
-                <div className="d-flex flex-row justify-content-between">
-                  <div className="col mr-3">
+                <div className="row justify-content-between">
+                  <div className="col ">
                     <div className="panel commonpanle">
                       <div className="form-group">
-                        <label className="mb-1 text-secondary">ShipmentID</label>
+                        <label className="mt-2 text-secondary">Shipment ID</label>
                         <input
                           type="text"
                           className="form-control"
@@ -146,12 +144,13 @@ const UpdateStatus = (props) => {
                         )}
                       </div>
                     </div>
-                    <div className="panel commonpanle">
-                      <h6 className="poheads potext mt-3 mb-3">
+                      <h6 className="poheads potext m-3">
                         Account Holder Details
                       </h6>
+                    <div className="panel commonpanle">
+                      
                       <div className="form-group">
-                        <label className="mb-1 text-secondary">UserName*</label>
+                        <label className="mb-1 text-secondary">User Name*</label>
                         <input
                           type="text"
                           className="form-control"
@@ -209,11 +208,64 @@ const UpdateStatus = (props) => {
                           )}
                       </div>
                     </div>
+                    
+                    <h6 className="poheads potext m-3">Comment*</h6>
                     <div className="panel commonpanle">
-                      <label className="mb-1 text-secondary">
-                        is Alert True?
-                      </label>
-                      <input
+                      <div className="form-group">
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="comments"
+                          style={{flexBasis: '100%'}}
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          placeholder="Enter comments here..."
+                          value={values.comments}
+                        />
+                          {/* <textarea
+                            className="form-control"
+                            name="comments"
+                            style={{flexBasis: '100%'}}
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            placeholder="Enter comments here..."
+                            value={values.comments}
+                          ></textarea> */}
+                        {errors.comments && touched.comments && (
+                          <span className="error-msg text-danger">
+                            {errors.comments}
+                          </span>
+                        )}
+                      </div>
+                      <div className="row justify-content-end">
+                      <span className="col row col-6 justify-content-end text-secondary">
+                        Should send an alert?
+                      </span>
+                      <div className="col col-2 ml-2 custom-control custom-radio">
+                        <input 
+                          type="radio" 
+                          className="custom-control-input" 
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          value="True" 
+                          id="yesradio" 
+                          name="alerttrue" 
+                        />
+                        <label className="custom-control-label" for="yesradio">Yes</label>
+                      </div>
+                      <div className="col col-1 pl-2 custom-control custom-radio">
+                        <input 
+                          type="radio" 
+                          className="custom-control-input" 
+                          onBlur={handleBlur}
+                          onChange={handleChange}
+                          value="False" 
+                          id="noradio" 
+                          name="alerttrue" 
+                        />
+                        <label className="custom-control-label" for="noradio">No</label>
+                      </div>
+                      {/* <input
                         type="radio"
                         name="alerttrue"
                         placeholder="YES"
@@ -229,31 +281,29 @@ const UpdateStatus = (props) => {
                         onChange={handleChange}
                         value="False"
                       />
-                      <label className="mb-1">No</label>
+                      <label className="mb-1">No</label> */}
                       {errors.alerttrue && touched.alerttrue && (
                         <span className="error-msg text-danger">
                           {errors.alerttrue}
                         </span>
                       )}
-                      <h6 className="poheads potext mt-3 mb-3">Comment*</h6>
-                      <input
-                        type="text"
-                        className="form-control"
-                        name="comments"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value={values.comments}
-                      />
-                      {errors.comments && touched.comments && (
-                        <span className="error-msg text-danger">
-                          {errors.comments}
-                        </span>
-                      )}
+                      </div>
                     </div>
                   </div>
-                  <div className="col ml-5">
-                    <h6 className="font-weight-bold mb-4">Upload Image</h6>
-                    <div className="d-flex flex-column upload">
+                  <div className="col ">
+                    <div className="row">
+                      <h6 className="col font-weight-bold mb-4">Upload Image</h6>
+                      <button className="col col-3 btn btn-primary font-weight-bold">
+                        <img
+                          src={uploadWhite}
+                          width="20"
+                          height="17"
+                          className="mr-2 mb-1"
+                        />
+                        <span>Upload</span>
+                      </button>
+                    </div>
+                    <div className="d-flex flex-column upload bg-white col-9 p-5">
                       <img
                         src={uploadBlue}
                         name="photo"
@@ -276,13 +326,10 @@ const UpdateStatus = (props) => {
                       </label>
                     </div>
                   </div>
-                  <div></div>
-                </div>
+                 </div>
 
-                <div className="d-flex flex-row justify-content-between">
-                  <div />
+                <div className="d-flex flex-row-reverse justify-content-between">
                   <div>
-                    {" "}
                     <button
                       className="btn btn-outline-primary mr-4"
                       onClick={() => props.history.push("/shipments")}

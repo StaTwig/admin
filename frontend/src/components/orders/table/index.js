@@ -9,6 +9,8 @@ import user from '../../../assets/icons/user.svg';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../../../utils/dateHelper';
 
+import './style.scss';
+
 const Table = props => {
   const dispatch = useDispatch();
   const { loadMore, onLoadMore, skip, ordrs, visible } = props;
@@ -19,20 +21,20 @@ const Table = props => {
           <div className="">
             {orders.map((order, index) => {
               let statusStyle = 'bg-primary';
-              let status = 'Shipped';
+              let status = order.poStatus;
               if (order.poStatus === 'RECEIVED') {
                 statusStyle = 'bg-success';
                 status = 'Delivered';
               }
-              const { customer, products } = order;
+              const { customer, products, supplier } = order;
               return (
               <div key={index} className="rTableRow pt-2 pb-2 shadow-none">
                 <div className="rTableCell">
                   <div className="userPic text-center rounded d-flex flex-row">
                     <img src={user} width="30" height="20" alt="User" className="rounded mr-1 align-self-center" />
                     <div className="flex-column d-flex">
-                      <span className="text-primary bold">{customer.organisation.name}</span>
-                      <p className="address mb-0 text-primary">{customer.organisation.id}</p>
+                      <span className="text-primary bold">{visible == 'one' ? customer.organisation.name : supplier.organisation.name}</span>
+                      <p className="address mb-0 text-primary">{visible == 'one' ? customer.organisation.id : supplier.organisation.id}</p>
                   </div>
                   </div>
                 </div>

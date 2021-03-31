@@ -2,8 +2,8 @@
 
 
 .NewShipment {
-  padding-right: 3rem;
-    padding-left: 3rem;
+  padding-right: 2rem;
+    padding-left: 4rem;
     @media (max-width: $md) {
       padding-right: 10px;
       padding-left: 10px;
@@ -51,9 +51,9 @@
     }
 
     label {
-      color: #707070;
+      // color: #707070;
       text-align: center;
-      font-size: 13.5px;
+      font-size: 15px;
       margin-bottom:0px;
     }
      .date{
@@ -68,7 +68,7 @@
       color: $black;
       flex-basis: 55%;
       flex-grow: inherit;
-      font-size: 13.5px;
+      font-size: 15px;
     }
 
     @media (min-width: $xl) {
@@ -109,9 +109,11 @@
 
   .low{
     padding-bottom:5px;
+    box-shadow: 0px 3px 6px #00000029;
+    border-radius: 10px;
   }
   .headsup{
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
     padding-top:1.25rem;
     padding-bottom: 0.625rem; 

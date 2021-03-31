@@ -15,21 +15,19 @@ import shipmentsdelayed from "../../assets/icons/TotalShipmentsDelayed.svg";
 
 import './style.scss';
 
-  const Overview = props => {
+const Overview = props => {
+  const [visible, setvisible] = useState('one');
+  const [shpmnts, setShpmnts] = useState([]);
+  const [overviewAnalytics, setOverViewAnalytics] = useState({});
+  useEffect(() => {
+    async function fetchData() {
+      const result = await getOverviewAnalytics();
+      setOverViewAnalytics(result.data.overview);
+    }
+    fetchData();
+  }, []);
 
-const [visible, setvisible] = useState('one');
-const [shpmnts, setShpmnts] = useState([]);
-    const [overviewAnalytics,setOverViewAnalytics]= useState({})
-    useEffect(() => {
-      async function fetchData() {
-        const result = await getOverviewAnalytics();
-        setOverViewAnalytics(result.data.overview);
-      }
-      fetchData();
-    }, []);
-
-
-const setData = (v, a = '') => {
+  const setData = (v, a = '') => {
     setvisible(v);
     let rtnArr = v == 'two' ? props.shipments.filter(row => props.user.warehouseId == row.supplier.locationId) : props.shipments.filter(row => props.user.warehouseId != row.supplier.locationId);
     if (a != '')
@@ -141,7 +139,7 @@ const setData = (v, a = '') => {
               </div>
             </div>
             <div className="card-body">
-              <SummaryTable {...props}setvisible={setData} visible={visible}/>
+              <SummaryTable {...props} setvisible={setData} visible={visible}/>
               </div>
             <div className="card-footer">
               <div className="d-flex align-items-center justify-content-center">

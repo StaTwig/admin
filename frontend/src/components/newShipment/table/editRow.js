@@ -33,42 +33,45 @@ const EditRow = props => {
   
 
   return (
-    <div class="trow ">
-      <div class="w-25  pl-4 tcell p-2">
-        <div class=" p-0">
-          {/* <div class="profileIconRound recived-bg">OPV</div> */}
+    <div className="row ml-3 mr-1">
+      <div class="trow row mr-1 col">
+        <div class="col pl-4 tcell p-2">
+          <div class=" p-0">
+            {/* <div class="profileIconRound recived-bg">OPV</div> */}
 
-          <div class="d-flex flex-column">
-            <div class="title recived-text">{prod.productName}</div>
-            {prod.productName == '' &&
-              <DropdownButton
-                name="Select product"
-                onSelect={item => { handleProductChange(index, item) }}
-                groups={products.filter(p => !p?.isSelected)}
-              />
-            }
+            <div class="d-flex flex-column">
+              <div class="title recived-text">
+              {enableDelete ? 
+                <DropdownButton
+                  name={prod.productName == '' ? "Select product" : prod.productName}
+                  onSelect={item => { handleProductChange(index, item) }}
+                  groups={products}
+                  // groups={products.filter(p => !p?.isSelected)}
+                /> : prod.productName
+              }</div>
+            </div>
+          </div>
+        </div>
+        <div class="col tcell text-center justify-content-center p-2">{prod.manufacturer}</div>
+        <div class="col tcell text-center justify-content-center p-2">
+          <div className="">
+            <input
+              className="form-control text-center"
+              placeholder="Quantity"
+              onKeyPress={numbersOnly}
+              value={prod.productQuantity}
+              onChange={e => handleQuantityChange(e.target.value, index)}
+            />
           </div>
         </div>
       </div>
-      <div class="w-30 tcell text-center justify-content-center p-2">{prod.manufacturer}</div>
-      <div class="w-30 tcell text-center justify-content-center p-2">
-        <div className="">
-          <input
-            className="form-control text-center"
-            placeholder="Quantity"
-            onKeyPress={numbersOnly}
-            value={prod.productQuantity}
-            onChange={e => handleQuantityChange(e.target.value, index)}
-          />
-        </div>
+        {enableDelete && props.product.length > 1 &&
+          <div className="m-3 bg-light">
+            <span onClick={() => onRemoveRow(index)}><img className="border-none cursorP shadow p-1 rounded-circle" height="25" src={Delete} /></span>
+          </div>
+        }
       </div>
-      {enableDelete &&
-        <div className=" ml-2 bg-light align-self-center">
-          <span onClick={() => onRemoveRow(index)}><img className="border-none cursorP shadow p-1 rounded-circle" height="25" src={Delete} /></span>
-        </div>
-      }
-    </div>
-    // <div className="rTableRow">
+    // <div className="rTableRow"
     //   <div className="rTableCell">
     //     <div className="form-group">
     //       <input

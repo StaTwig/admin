@@ -4,16 +4,16 @@ import './style.scss';
 
 const EditTable = props => {  
  return (
-    <div className="table productTable mt-2">
+    <div className="table productTable mb-0 mt-2">
      <div className="d-flex flex-column">
-       <div className="d-flex flex-row  mb-3">
-         <div className="w-25 theader text-center pro">Product Category*</div>
-         <div className="w-30 theader text-center pro">Product*</div>
-         <div className="w-25 theader text-center pro">Manufacturer</div>
-         <div className="w-30 theader text-center pro">Quantity*</div>
-         <div className=" ml-2 bg-light align-self-center ">&nbsp;</div>
+       <div className="row  mb-3">
+         <div className="col theader text-center pro">Product Category*</div>
+         <div className="col theader text-center pro">Product*</div>
+         <div className="col theader text-center pro">Manufacturer</div>
+         <div className="col theader text-center pro">Quantity*</div>
+         <div className="ml-2 bg-light align-self-center ">&nbsp;</div>
         </div>
-        <div >
+        <div className="">
           {props.product.map((product, index) => (
             <EditRow
               key={index}

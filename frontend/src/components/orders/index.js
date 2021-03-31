@@ -32,7 +32,7 @@ const Orders = props => {
   };
   
   const headers = {
-    coloumn1: 'To',
+    coloumn1: visible == 'one' ? 'To' : 'From',
     coloumn2: 'Order Date',
     coloumn3: 'Order ID',
     coloumn4: 'Product',
