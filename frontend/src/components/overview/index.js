@@ -12,7 +12,7 @@ import totalinventory from "../../assets/icons/TotalInventoryAdded.svg";
 import currentshipment from "../../assets/icons/CurrentShipmentInTransit.svg";
 import Totalshipments from "../../assets/icons/TotalShipments.svg";
 import shipmentsdelayed from "../../assets/icons/TotalShipmentsDelayed.svg";
-
+import TotalInventoryAdded from '../../assets/icons/TotalInventoryAddedcopy.svg';
 import './style.scss';
 
   const Overview = props => {
@@ -57,8 +57,8 @@ const setData = (v, a = '') => {
           <div className="col">
             <div className="panel">
               <div className="picture truck-bg">
-                <img src={totalinventory} alt="truck" />
-              </div>
+              <img className= "currentintransit" src={currentshipment} alt="truck" />
+                 </div>
 
               <div className="d-flex flex-column">
                 <div className="title">Total Inbound Shipments</div>
@@ -70,7 +70,7 @@ const setData = (v, a = '') => {
           <div className="col">
             <div className="panel">
               <div className="picture truck-bg">
-                <img className= "currentintransit" src={currentshipment} alt="truck" />
+              <img src={TotalInventoryAdded} alt="truck" />
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Product Category</div>
