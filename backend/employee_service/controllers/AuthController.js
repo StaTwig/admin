@@ -25,6 +25,8 @@ const checkToken = require('../middlewares/middleware').checkToken;
 const init = require('../logging/init');
 const logger = init.getLog();
 const EmailContent = require('../components/EmailContent');
+const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const phoneRgex = /^\d{10}$/;
 
 /**
  * Uniques email check
@@ -146,15 +148,19 @@ exports.register = [
     // .isEmail()
     // .withMessage('Email must be a valid email address.')
     .custom(async(value) => {
-        const emailId = value.toLowerCase().replace(' ','');
-        let user;
-        let phone = '';
-        if (emailId.indexOf('@') > -1)
-          user = await EmployeeModel.findOne({ emailId });
-        else {
-          phone = emailId.indexOf('+91') === 0 ? emailId : '+91'+emailId;
-          user = await EmployeeModel.findOne({ phoneNumber: phone });
-        }
+      const emailId = value.toLowerCase().replace(' ', '');
+      let user;
+      let phone = '';
+      if (!emailId.replace('+91', '').match(phoneRgex) && !emailId.match(emailRegex))
+        return Promise.reject('E-mail/Mobile not in valid');
+      
+      if (emailId.indexOf('@') > -1)          
+        user = await EmployeeModel.findOne({ emailId });
+      else {
+        phone = emailId.indexOf('+91') === 0 ? emailId : '+91' + emailId;
+        user = await EmployeeModel.findOne({ phoneNumber: phone });
+      }
+      
       // return EmployeeModel.findOne({ emailId: value.toLowerCase() }).then(user => {
         if (user) {
           logger.log(

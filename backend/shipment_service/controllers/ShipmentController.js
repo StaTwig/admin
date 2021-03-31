@@ -310,7 +310,7 @@ exports.receiveShipment = [
             const poID = data.poId;
 
             const shipmentID = data.id;
-            const shipmentInfo = await ShipmentModel.find({id: shipmentID});
+            const shipmentInfo = await ShipmentModel.findOne({id: shipmentID});
 
             const receivedProducts = data.products;
             var products = shipmentInfo.products;
