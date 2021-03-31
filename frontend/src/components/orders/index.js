@@ -14,6 +14,7 @@ import Order from '../../assets/icons/Orders.png';
 import truck from '../../assets/icons/truckthree.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPOs, resetPOs } from '../../actions/poActions';
+import Totalshipments from "../../assets/icons/TotalShipments.svg";
 
 const Orders = props => {
   const [visible, setvisible] = useState('one');
@@ -42,7 +43,7 @@ const Orders = props => {
     img2: <img src={calender} width="16" height="16" />,
     img3: <img src={Order} width="16" height="16" />,
     img4: <img src={Package} width="16" height="16" />,
-    img5: <img src={truck} width="16" height="16" />,
+    img5: <img src={Totalshipments} width="16" height="16" />,
   };
 
   const setData = (v, a = false) => {
