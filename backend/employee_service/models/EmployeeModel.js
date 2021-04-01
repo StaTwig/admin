@@ -52,6 +52,27 @@ var EmployeeSchema = new mongoose.Schema({
     required: false,
     default: 'gachibowli, hyderabad, india, earth',
   },
+  userDocuments: {
+      type: Array,
+      default: []
+      /*items: {
+        type: Object,
+        properties: {
+        idType: {
+          type: String
+        },
+        idNumber: {
+          type: Number
+        },
+        approvalStatus: {
+          type: String
+        },
+        imageDetails: {
+          type: Array
+        }
+      }
+    }*/
+ },
 }, { timestamps: true }
 );
 module.exports = mongoose.model('Employee', EmployeeSchema);

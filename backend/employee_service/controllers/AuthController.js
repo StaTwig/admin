@@ -3,6 +3,7 @@ const WarehouseModel = require('../models/WarehouseModel');
 const ConsumerModel = require('../models/ConsumerModel');
 const InventoryModel = require('../models/InventoryModel');
 const OrganisationModel = require('../models/OrganisationModel');
+const CounterModel = require('../models/CounterModel');
 const { body, validationResult, oneOf, check } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
 const uniqid = require('uniqid');
@@ -18,6 +19,8 @@ var base64Img = require('base64-img');
 const auth = require('../middlewares/jwt');
 const axios = require('axios');
 const dotenv = require('dotenv').config();
+const fs = require("fs");
+const moveFile = require("move-file");
 const blockchain_service_url = process.env.URL;
 const stream_name = process.env.INV_STREAM;
 
@@ -253,8 +256,8 @@ exports.register = [
                   
               //   }
               // }
-              const country = req.body?.address?.country ? req.body.address?.country : 'India';
-              const address = req.body?.address ? req.body.address : {};
+              const country = 'India';
+              const address = req.body.address;
               addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
               organisationId = uniqid('org-');
               warehouseId = uniqid('war-');
@@ -262,7 +265,7 @@ exports.register = [
                 primaryContactId: employeeId,
                 name: organisationName,
                 id: organisationId,
-                type: req.body?.type ? req.body.type : 'CUSTOMER_SUPPLIER',
+                type: 'CUSTOMER_SUPPLIER',
                 status: 'NOTVERIFIED',
                 postalAddress: addr,
                 warehouses: [warehouseId],
@@ -1019,3 +1022,137 @@ exports.addWarehouse = [
 
   },
 ];
+
+exports.uploadImage = async function(req, res) {
+    checkToken(req, res, async (result) => {
+        if (result.success) {
+            const {
+                data
+            } = result;
+            const id = req.query.id;
+            const {
+                type,
+                imageSide
+            } = req.query;
+            const incrementCounter = await CounterModel.update({
+                'counters.name': "employeeImage"
+            }, {
+                $inc: {
+                    "counters.$.value": 1
+                }
+            })
+
+            const poCounter = await CounterModel.find({
+                "counters.name": "employeeImage"
+            }, {
+                "counters.name.$": 1
+            })
+            const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]))
+            try {
+                const filename = id + "-" + type + imageSide + "-" + t.format + t.value + ".png";
+                let dir = `uploads`;
+                const findRecord = await EmployeeModel.findOne({
+                    $and: [{
+                        "userDocuments.idNumber": parseInt(id)
+                    }, {
+                        "userDocuments.idType": type
+                    }]
+                });
+
+                if (findRecord != null) {
+
+                    await moveFile(req.file.path, `${dir}/${filename}`);
+
+                    const update = await EmployeeModel.updateOne({
+                        $and: [{
+                            "userDocuments.idNumber": parseInt(id)
+                        }, {
+                            "userDocuments.idType": type
+                        }]
+                    }, {
+                        "$push": {
+                            "userDocuments.$.imageDetails": filename
+                        }
+                    })
+                    return res.send({
+                        success: true,
+                        data: "Image uploaded successfullly.!",
+                        filename
+                    })
+                } else {
+                    fs.unlink(req.file.path, (err) => {
+                        if (err) {
+                            console.error(err)
+                            return
+                        }
+                    })
+                    return res.send({
+                        success: false,
+                        data: "ID number and type not found.!"
+                    })
+                }
+            } catch (e) {
+                console.log("Error in image upload", e);
+                res.status(403).json(e);
+            }
+        } else {
+            res.json(result);
+        }
+    });
+};
+
+exports.fetchImage = async function(req, res) {
+    checkToken(req, res, async (result) => {
+        if (result.success) {
+            const {
+                data
+            } = result;
+            const {
+                id,
+                type
+            } = req.query;
+            var imageArray = [];
+
+            const findRecord = await EmployeeModel.findOne({
+                $and: [{
+                    "userDocuments.idNumber": parseInt(id)
+                }, {
+                    "userDocuments.idType": type
+                }]
+            });
+
+            if (findRecord != null) {
+
+                const update = await EmployeeModel.find({
+                    "userDocuments.idNumber": parseInt(id)
+                }, {
+                    "userDocuments.$.idType": type
+                }).then((result) => {
+                    imageArray = result[0].userDocuments[0].imageDetails;
+                }).catch((e) => {
+                    console.log("Err", e)
+                })
+
+                var resArray = [];
+
+                for (i = 0; i < imageArray.length; i++) {
+                    const s = "/images/" + imageArray[i];
+                    resArray.push(s)
+                }
+            } else {
+                return res.send({
+                    success: false,
+                    data: "Matching ID number and type not found.!"
+                })
+
+            }
+            return res.send({
+                success: true,
+                data: resArray
+            })
+
+        } else {
+            res.json(result);
+        }
+    });
+};

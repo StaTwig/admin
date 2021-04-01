@@ -1,7 +1,17 @@
 var express = require("express");
 const AuthController = require("../controllers/AuthController");
 var multer = require("multer");
-var upload = multer({ dest: "uploads/" });
+
+const Storage = multer.diskStorage({
+  destination(req, file, callback) {
+    callback(null, "./uploads");
+  },
+  filename(req, file, callback) {
+    callback(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: Storage });
 
 var router = express.Router();
 
@@ -17,4 +27,8 @@ router.post("/upload", upload.single("profile"), AuthController.uploadImage);
 router.get("/createAddress", AuthController.createUserAddress);
 router.post("/assignProductConsumer", AuthController.assignProductConsumer);
 router.post("/addWarehouse", AuthController.addWarehouse);
+
+router.post("/uploadImage",upload.single('photo'),AuthController.uploadImage);
+router.get("/fetchImage",AuthController.fetchImage);
+
 module.exports = router;
