@@ -18,11 +18,11 @@
           margin-right: 3rem;
         }
       }
-    
+
       .ribben-space {
         margin-top: 6.5rem;
         .address{
-          word-wrap: break-word; 
+          word-wrap: break-word;
           word-break: break-word
         }
       }
@@ -35,26 +35,26 @@
         margin-top: 20px;
         display: flex;
         align-items: flex-start;
-    
+
         & > .d-flex {
           margin-top: 15px;
         }
-    
+
         @media screen and (max-width: 768px) {
           border-right: none;
           justify-content: flex-start;
         }
-    
+
         @media (max-width: $lg) {
           &:nth-child(2) {
             margin-right: 0;
           }
         }
-    
+
         &:last-child {
           margin-right: 0;
         }
-    
+
         .picture {
           width: 40px;
           height: 40px;
@@ -64,45 +64,48 @@
           align-items: center;
           margin-right: 13px;
           display: flex;
-          
-    
+
+
           @media (min-width: $xl) {
             width: 60px;
             height: 60px;
           }
-    
+
           img {
             width: 40px;
             height: 18px;
           }
-    
+
           &.truck-bg {
             background:  #e8f4f8;
-          }                                       
-    
+          }
+
           &.sent-bg {
             background: #fff2e5;
           }
-    
+
           &.recived-bg {
             background: #d4ebf2;
-            
+
           }
 
-          &.inbound-alert-bg{
+       img{
+width: 20px;
+            height: 18px;
+
+ &.inbound-alert-bg{
             background-color: #0A69C5;
-            opacity: 0.13;
           }
 
           &.outbound-alert-bg{
             background-color: #35BFCC96;
           }
-    
+    }
           &.transit-bg {
             background: $C0Blue;
           }
         }
-    
+
         .tab-container {
           display: flex;
           justify-content: space-between;
@@ -115,14 +118,14 @@
 
           .tab-item:hover {
             border-bottom: 2px solid black;
-            color:	rgb(0,0,0);
+            color:      rgb(0,0,0);
             font-size: 10px;
-            
+
           }
-           
-          
+
+
         }
-    
+
         .title {
           font-size: 14px;
           line-height: 9px;
@@ -133,32 +136,32 @@
             font-size: 14px;
           }
         }
-    
+
         .count {
           font-size: 26px;
           margin-top: 12px;
           font-weight: bold;
         }
-    
+
         .dayStatus {
           font-size: 9px;
           align-self: flex-end;
           color: $black;
         }
-    
+
         &:after {
           border: 1px solid $lightGrey;
           height: 50px;
         }
-    
+
         .truck-text {
         color: #2BA3AE;;
         }
-    
+
         .sent-text {
           color: #FA7923;
         }
-    
+
         .recived-text {
           color: #0093E9;
         }
@@ -170,7 +173,7 @@
         .inbound-text{
           color: #0159EA;
         }
-    
+
         .transit-text {
           color: $deepBlue;
         }
