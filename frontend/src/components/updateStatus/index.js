@@ -127,8 +127,8 @@ const UpdateStatus = (props) => {
                 <div className="row justify-content-between">
                   <div className="col ">
                     <div className="panel commonpanle">
-                      <div className="form-group">
-                        <label className="mt-2 text-secondary">Shipment ID</label>
+                      <div className={`form-group ${errors.shipmentId && touched.shipmentId && `mb-0`}`}>
+                        <label className="mt-3 text-secondary">Shipment ID</label>
                         <input
                           type="text"
                           className="form-control"
@@ -137,12 +137,12 @@ const UpdateStatus = (props) => {
                           onChange={handleChange}
                           value={values.shipmentId}
                         />
-                        {errors.shipmentId && touched.shipmentId && (
-                          <span className="error-msg text-danger">
-                            {errors.shipmentId}
-                          </span>
-                        )}
                       </div>
+                      {errors.shipmentId && touched.shipmentId && (
+                        <span className="error-msg text-danger row justify-content-end col-8">
+                          {errors.shipmentId}
+                        </span>
+                      )}
                     </div>
                       <h6 className="poheads potext m-3">
                         Account Holder Details
@@ -188,7 +188,7 @@ const UpdateStatus = (props) => {
                           readonly
                         />
                       </div>
-                      <div className="form-group">
+                      <div className="form-group mb-0">
                         <label className="mb-1 text-secondary">
                           Update Status Location*
                         </label>
@@ -200,18 +200,18 @@ const UpdateStatus = (props) => {
                           onChange={handleChange}
                           value={values.updateStatusLocation}
                         />
+                      </div>
                         {errors.updateStatusLocation &&
                           touched.updateStatusLocation && (
-                            <span className="error-msg text-danger">
+                            <span className="error-msg text-danger row justify-content-end col-8">
                               {errors.updateStatusLocation}
                             </span>
-                          )}
-                      </div>
+                        )}
                     </div>
                     
                     <h6 className="poheads potext m-3">Comment*</h6>
                     <div className="panel commonpanle">
-                      <div className="form-group">
+                      <div className="form-group mb-0">
                         <input
                           type="text"
                           className="form-control"
@@ -231,63 +231,64 @@ const UpdateStatus = (props) => {
                             placeholder="Enter comments here..."
                             value={values.comments}
                           ></textarea> */}
+                        
+                      </div>
                         {errors.comments && touched.comments && (
                           <span className="error-msg text-danger">
                             {errors.comments}
                           </span>
                         )}
-                      </div>
-                      <div className="row justify-content-end">
-                      <span className="col row col-6 justify-content-end text-secondary">
-                        Should send an alert?
-                      </span>
-                      <div className="col col-2 ml-2 custom-control custom-radio">
-                        <input 
-                          type="radio" 
-                          className="custom-control-input" 
+                      <div className="row mt-3 justify-content-end">
+                        <span className="col row col-6 justify-content-end text-secondary">
+                          Should send an alert?
+                        </span>
+                        <div className="col col-2 ml-2 custom-control custom-radio">
+                          <input 
+                            type="radio" 
+                            className="custom-control-input" 
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value="True" 
+                            id="yesradio" 
+                            name="alerttrue" 
+                          />
+                          <label className="custom-control-label" for="yesradio">Yes</label>
+                        </div>
+                        <div className="col col-1 pl-2 custom-control custom-radio">
+                          <input 
+                            type="radio" 
+                            className="custom-control-input" 
+                            onBlur={handleBlur}
+                            onChange={handleChange}
+                            value="False" 
+                            id="noradio" 
+                            name="alerttrue" 
+                          />
+                          <label className="custom-control-label" for="noradio">No</label>
+                        </div>
+                        {/* <input
+                          type="radio"
+                          name="alerttrue"
+                          placeholder="YES"
                           onBlur={handleBlur}
                           onChange={handleChange}
-                          value="True" 
-                          id="yesradio" 
-                          name="alerttrue" 
+                          value="True"
                         />
-                        <label className="custom-control-label" for="yesradio">Yes</label>
-                      </div>
-                      <div className="col col-1 pl-2 custom-control custom-radio">
-                        <input 
-                          type="radio" 
-                          className="custom-control-input" 
+                        <label className="mb-1">Yes</label>
+                        <input
+                          type="radio"
+                          name="alerttrue"
                           onBlur={handleBlur}
                           onChange={handleChange}
-                          value="False" 
-                          id="noradio" 
-                          name="alerttrue" 
+                          value="False"
                         />
-                        <label className="custom-control-label" for="noradio">No</label>
+                        <label className="mb-1">No</label> */}
                       </div>
-                      {/* <input
-                        type="radio"
-                        name="alerttrue"
-                        placeholder="YES"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value="True"
-                      />
-                      <label className="mb-1">Yes</label>
-                      <input
-                        type="radio"
-                        name="alerttrue"
-                        onBlur={handleBlur}
-                        onChange={handleChange}
-                        value="False"
-                      />
-                      <label className="mb-1">No</label> */}
                       {errors.alerttrue && touched.alerttrue && (
-                        <span className="error-msg text-danger">
+                        <span className="error-msg text-danger row justify-content-end col-8">
                           {errors.alerttrue}
                         </span>
                       )}
-                      </div>
                     </div>
                   </div>
                   <div className="col ">
