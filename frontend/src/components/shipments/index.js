@@ -20,7 +20,8 @@ import { getAllUsers } from '../../actions/userActions';
 import PurchaseFormReview from '../../components/verifyPO/purchaseFormReview';
 import { getShipments, resetShipments } from '../../actions/shipmentActions';
 import ExcelPopUp from './ExcelPopup';
-
+import Received from '../../assets/icons/Received1.svg';
+import Sent from '../../assets/icons/Sent.png';
 const ShipmentAnalytic = props => {
   const [visible, setvisible] = useState('one');
   const [skip, setSkip] = useState(0);
@@ -34,7 +35,7 @@ const ShipmentAnalytic = props => {
     dispatch(resetShipments());
     dispatch(getAllUsers());
   }, []);
-  
+
   const onLoadMore = async (isInc, isReset = false) => {
     const newSkip = isInc ? skip + 5 : skip - 5;
     setSkip(isReset ? 0 : newSkip);
@@ -45,7 +46,7 @@ const ShipmentAnalytic = props => {
     }
     setData(visible)
   };
-  
+
   const headers = {
     coloumn1: 'Shipment ID',
     coloumn2: 'Shipment Date',
@@ -55,8 +56,8 @@ const ShipmentAnalytic = props => {
 
     img1: <img src={mon} width="16" height="16" />,
     img2: <img src={calender} width="16" height="16" />,
-    img3: <img src={Package} width="16" height="16" />,
-    img4: <img src={Package} width="16" height="16" />,
+    img3: <img src={Received} width="16" height="16" />,
+    img4: <img src={Sent} width="16" height="16" />,
     img5: <img src={Status} width="16" height="16" />,
   };
 
@@ -65,7 +66,7 @@ const ShipmentAnalytic = props => {
     setAlerts(a);
     // if(skip > 0)
     //   onLoadMore(true, true);
-    
+
     // let rtnArr = v == 'two' ? shpmnt.filter(row => props.user.warehouseId == row.supplier.locationId) : shpmnt.filter(row => props.user.warehouseId != row.supplier.locationId);
     // if (a != '')
     //   rtnArr = rtnArr.filter(row => row?.shipmentAlerts?.length > 0);

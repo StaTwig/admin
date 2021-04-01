@@ -4,7 +4,7 @@ import './style.scss';
 import Table from './table';
 import Tabs from './tabs';
 import Tiles from './tiles';
-import OrderIcon from '../../assets/icons/order.svg';
+import OrderIcon from '../../assets/icons/order1.png';
 import TableFilter from '../../shared/advanceTableFilter';
 import mon from '../../assets/icons/brand.svg';
 import Package from '../../assets/icons/package.svg';
@@ -14,6 +14,7 @@ import Order from '../../assets/icons/Orders.png';
 import truck from '../../assets/icons/truckthree.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPOs, resetPOs } from '../../actions/poActions';
+import Totalshipments from "../../assets/icons/TotalShipments.svg";
 
 const Orders = props => {
   const [visible, setvisible] = useState('one');
@@ -42,7 +43,7 @@ const Orders = props => {
     img2: <img src={calender} width="16" height="16" />,
     img3: <img src={Order} width="16" height="16" />,
     img4: <img src={Package} width="16" height="16" />,
-    img5: <img src={truck} width="16" height="16" />,
+    img5: <img src={Totalshipments} width="18" height="18" />,
   };
 
   const setData = (v, a = false) => {

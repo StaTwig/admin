@@ -51,6 +51,7 @@
       margin-bottom: 0.75rem;
       font-size: 17px;
       font-weight: 500;
+      color:#4D4F5C;
     }
     .card-header,
     .card-footer {
@@ -153,6 +154,24 @@
         background: $white;
       }
     }
+      
+    .time {
+width: 52px;
+      height: 52px;
+background-color: white;
+ box-shadow: 0px 3px 6px #00000029;
+      border-radius: 50%;
+      justify-content: center;
+      align-items: center;
+      margin-right: 11px;
+      display: flex;
+ @media (min-width: $xl) {
+        display: flex;
+width: 60px;
+        height: 60px;
+      }
+    }
+
 
     .title {
       font-size: 9px;

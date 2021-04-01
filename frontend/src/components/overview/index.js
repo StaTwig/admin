@@ -12,6 +12,8 @@ import totalinventory from "../../assets/icons/TotalInventoryAdded.svg";
 import currentshipment from "../../assets/icons/CurrentShipmentInTransit.svg";
 import Totalshipments from "../../assets/icons/TotalShipments.svg";
 import shipmentsdelayed from "../../assets/icons/TotalShipmentsDelayed.svg";
+import TotalInventoryAdded from '../../assets/icons/TotalInventoryAddedcopy.svg';
+import AverageOrderProcessingTime from  '../../assets/icons/Average_Order_Processing_Time.png';
 
 import './style.scss';
 
@@ -55,8 +57,8 @@ const Overview = props => {
           <div className="col">
             <div className="panel">
               <div className="picture truck-bg">
-                <img src={totalinventory} alt="truck" />
-              </div>
+              <img className= "currentintransit" src={currentshipment} alt="truck" />
+                 </div>
 
               <div className="d-flex flex-column">
                 <div className="title">Total Inbound Shipments</div>
@@ -68,7 +70,7 @@ const Overview = props => {
           <div className="col">
             <div className="panel">
               <div className="picture truck-bg">
-                <img className= "currentintransit" src={currentshipment} alt="truck" />
+              <img src={TotalInventoryAdded} alt="truck" />
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Product Category</div>
@@ -79,8 +81,8 @@ const Overview = props => {
           </div>
           <div className="col">
             <div className="panel">
-              <div className="picture truck-bg">
-                <img src={Totalshipments} alt="truck" />
+              <div className="time truck-bg">
+                <img src={AverageOrderProcessingTime} width="25px" alt="truck" />
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Average Order Processing Time</div>

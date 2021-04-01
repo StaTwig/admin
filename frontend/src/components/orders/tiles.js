@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Sent from '../../assets/icons/Received.svg';
 import Received from '../../assets/icons/Sent.svg';
-import Delayed from '../../assets/icons/ShipmentsDelayed.svg';
+import Rejected from '../../assets/icons/Total_Orders_Rejected.png';
 import Current from '../../assets/icons/ShipmentInTransit.svg';
 import './style.scss';
 
@@ -44,7 +44,7 @@ const Tiles = props => {
       <div className="col">
         <div onClick={() => props.setData('two', true)} className="panel cursorP">
           <div className="picture outbound-alert-bg">
-            <img src={Delayed} alt="truck" />
+            <img src={Rejected} alt="truck" />
           </div>
           <div className="d-flex flex-column">
             <div className="title outbound-text ">Total Orders Rejected</div>
