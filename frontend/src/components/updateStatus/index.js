@@ -13,6 +13,7 @@ const UpdateStatus = (props) => {
   const profile = useSelector((state) => {
     return state.user;
   });
+  const {id} = props.match.params;
   const [shipmentId, setShipmentId] = useState([]);
   const [comments, setComments] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -80,7 +81,7 @@ const UpdateStatus = (props) => {
       <Formik
         enableReinitialize={true}
         initialValues={{
-          shipmentId: "",
+          shipmentId: id,
           firstName: profile.firstName,
           organisationName: profile.organisation,
           organisationLocation: profile.location,
@@ -285,7 +286,7 @@ const UpdateStatus = (props) => {
                         <label className="mb-1">No</label> */}
                       </div>
                       {errors.alerttrue && touched.alerttrue && (
-                        <span className="error-msg text-danger row justify-content-end col-8">
+                        <span className="error-msg text-danger row justify-content-end col-12">
                           {errors.alerttrue}
                         </span>
                       )}
@@ -332,8 +333,9 @@ const UpdateStatus = (props) => {
                 <div className="d-flex flex-row-reverse justify-content-between">
                   <div>
                     <button
+                      type="button"
                       className="btn btn-outline-primary mr-4"
-                      onClick={() => props.history.push("/shipments")}
+                      onClick={() => props.history.push(`/tracing/${id}`)}
                     >
                       CANCEL
                     </button>

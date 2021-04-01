@@ -34,6 +34,7 @@ const Tracing = (props) => {
   const tracking = props.trackData;
   //const productCard = props.productDetails;
   //const poCard = props.poDetails;
+  const {id} = props.match.params;
   
 
   const closeModal = () => {
@@ -48,7 +49,7 @@ const Tracing = (props) => {
       <div className="row justify-content-between">
         <h1 className="breadcrumb">Track & Trace</h1>
         <div className="row">
-          <Link to="/updatestatus">
+          <Link to={`/updatestatus/${id}`}>
             <button className="btn btn-orange fontSize20 font-bold mr-5">
               <span className="chain">Update Status</span>
             </button>
