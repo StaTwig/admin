@@ -1,16 +1,16 @@
 import React from "react";
 import logo from "../../assets/ABInBev.png";
-import HomeIcon from "../../assets/Icons/home.svg";
-import HomeSelectedIcon from "../../assets/Icons/home_selected.svg";
-import DashboardIcon from "../../assets/Icons/dashboard.svg";
-import DashboardSelectedIcon from "../../assets/Icons/dashboard_selected.svg";
-import TransactionIconSelected from "../../assets/Icons/transaction_selected.svg";
-import TransactionIcon from "../../assets/Icons/transaction.svg";
-import ManageIcon from "../../assets/Icons/manage.svg";
-import Logout from "../../assets/Icons/logout.svg";
-import InventoryIconSelected from "../../assets/Icons/inventory_selected.svg";
-import InventoryIcon from "../../assets/Icons/inventory.svg";
-import rightArrow from "../../assets/Icons/rightarrow.svg";
+import HomeIcon from "../../assets/icons/home.svg";
+import HomeSelectedIcon from "../../assets/icons/home_selected.svg";
+import DashboardIcon from "../../assets/icons/dashboard.svg";
+import DashboardSelectedIcon from "../../assets/icons/dashboard_selected.svg";
+import TransactionIconSelected from "../../assets/icons/transaction_selected.svg";
+import TransactionIcon from "../../assets/icons/transaction.svg";
+import ManageIcon from "../../assets/icons/manage.svg";
+import Logout from "../../assets/icons/logout.svg";
+import InventoryIconSelected from "../../assets/icons/inventory_selected.svg";
+import InventoryIcon from "../../assets/icons/inventory.svg";
+import rightArrow from "../../assets/icons/rightarrow.svg";
 
 const Sidebar = (props) => {
   const { history } = props;
