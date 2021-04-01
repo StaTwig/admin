@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Sent from '../../assets/icons/Sent1.svg';
 import Received from '../../assets/icons/Received1.svg';
+import InboundAlert from '../../assets/icons/Inbound_Alert.png';
+import OutboundAlert from '../../assets/icons/Outbound_alert.png';
 
 import './style.scss';
 import {
@@ -27,7 +29,7 @@ const Tiles = props => {
   fetchData();
 }, []);
 
-  
+
   return (
     <div className="row mb-4">
       <div className="col">
@@ -55,8 +57,9 @@ const Tiles = props => {
       <div className="col">
         <div onClick={() => props.setData('one', true)} className="panel cursorP">
           <div className="picture inbound-alert-bg">
-            
+             <img src={InboundAlert} alt="truck" />
           </div>
+
           <div className="d-flex flex-column">
             <div className="title inbound-text">Inbound Alert</div>
             <div className="inbound-text count">{shipmentAnalytics.inboundAlerts}</div>
@@ -66,7 +69,7 @@ const Tiles = props => {
       <div className="col">
         <div onClick={() => props.setData('two', true)} className="panel cursorP">
           <div className="picture outbound-alert-bg">
-            
+            <img src={OutboundAlert} alt="truck" />
           </div>
           <div className="d-flex flex-column">
             <div className="title outbound-text ">Outbound Alert</div>
