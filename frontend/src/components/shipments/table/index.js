@@ -7,6 +7,7 @@ import location from '../../../assets/icons/CurrentLocationWhite.svg';
 import previous from '../../../assets/icons/previous.png';
 import next from '../../../assets/icons/next.png';
 import { Link } from 'react-router-dom';
+import './style.scss';
 
 const Table = props => {
   const dispatch = useDispatch();
@@ -68,7 +69,7 @@ const Table = props => {
                 </div>
                 <div className="rTableCell"><p className="mb-0 bold">{shipment.supplier.org.name}</p><p className="address mb-0 text-muted">{supplierAddress}</p></div>
                 <div className="rTableCell"><p className="mb-0 bold">{shipment.receiver.org.name}</p><p className="mb-0 address text-muted">{receiverAddress}</p></div>
-                <div className="rTableCell">
+                <div className="rTableCell text-center">
                 <div className={`status secondary-bg ${statusStyle}`}>
                     {status}
                 </div>
@@ -85,7 +86,7 @@ const Table = props => {
                     }}
                   >
                     <img style={{ padding: 1, height: 15}} src={location} />
-                    <span className="pl-1">Track</span>
+                    <span className="pl-1 text-white">Track</span>
                   </button>
                 </div>
                 <div className="rTableCell">

@@ -22,6 +22,7 @@
     flex-basis: 70%;
     img {
       width: 198px;
+      object-fit: contain;
     }
     @media (min-width: $xl) {
       flex-basis: 75%;

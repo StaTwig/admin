@@ -22,14 +22,14 @@ const dropdownButtonGroup = props => {
           className={`btn-custom-dropdown ${menu && 'active'}`}
           role="button"
           type="button"
-          disabled={disabled}
+          // disabled={disabled}
           onClick={() => setMenu(!menu)}
         >
           <span className={`${name?.length > 30 && 'textNeg'}`}>{useParse ? parse(name) : name}</span>
           <img src={upDownArrow} alt="downarrow" width="9" height="9" />
         </button>
       }
-      {menu && groups.length > 0 && (
+      {menu && !disabled && groups.length > 0 && (
         <div ref={ref} className={`dropdown-menu show transform-group ${dClass}`}>
           {groups &&
             groups.map((item, index) => {

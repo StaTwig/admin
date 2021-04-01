@@ -32,7 +32,7 @@ const Orders = props => {
   };
   
   const headers = {
-    coloumn1: 'To',
+    coloumn1: visible == 'one' ? 'To' : 'From',
     coloumn2: 'Order Date',
     coloumn3: 'Order ID',
     coloumn4: 'Product',
@@ -75,7 +75,7 @@ const Orders = props => {
         <Tabs {...props} setvisible={setvisible} visible={visible} />
       </div>
       <div className="full-width-ribben mt-4">
-        <TableFilter data={headers} fb="74%"/>
+        <TableFilter data={headers} fb="73%"/>
       </div>
       <div className="ribben-space">
         <Table {...props} skip={skip} loadMore={loadMore} ordrs={sendData} visible={visible} onLoadMore={onLoadMore}/>

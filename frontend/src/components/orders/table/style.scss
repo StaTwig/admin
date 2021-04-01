@@ -32,19 +32,6 @@
       box-shadow: 0px 3px 10px #00000029;
     }
 
-    .rTableRow:hover{
-      background:$primaryBlue;
-      cursor:pointer;
-
-      .combine-data{
-        color: black;
-        text-align: center;
-        align-items: center;
-        font-weight: bold;
-      }
-   
-    }
-
     .rTableFoot {
       display: table-footer-group;
       font-weight: bold;
@@ -60,12 +47,16 @@
       font-size: 12px;
       color: #707070;
       font-weight: bold;
-      text-align: center;
     }
 
+    .rTableHead {
+      text-align: center;
+    }
+    
     .rTableCell {
       color: $black;
-        font-weight: 400;
+      text-align: left;
+      font-weight: 400;
       a {
         color: $black;
         font-weight: 400;
@@ -73,6 +64,7 @@
 
     .text-primary{
       word-wrap: break-word;
+      text-align: left;
     }
     }
 
