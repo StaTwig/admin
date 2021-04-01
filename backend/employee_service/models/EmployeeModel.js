@@ -55,23 +55,6 @@ var EmployeeSchema = new mongoose.Schema({
   userDocuments: {
       type: Array,
       default: []
-      /*items: {
-        type: Object,
-        properties: {
-        idType: {
-          type: String
-        },
-        idNumber: {
-          type: Number
-        },
-        approvalStatus: {
-          type: String
-        },
-        imageDetails: {
-          type: Array
-        }
-      }
-    }*/
  },
 }, { timestamps: true }
 );
