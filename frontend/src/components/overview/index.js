@@ -84,7 +84,7 @@ const setData = (v, a = '') => {
           <div className="col">
             <div className="panel">
               <div className="time truck-bg">
-                <img src={AverageOrderProcessingTime} alt="truck" />
+                <img src={AverageOrderProcessingTime} width="25px" alt="truck" />
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Average Order Processing Time</div>
