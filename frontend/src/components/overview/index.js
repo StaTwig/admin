@@ -140,7 +140,7 @@ const Overview = props => {
                 </Link>
               </div>
             </div>
-            <div className="card-body">
+            <div className="card-body" style={{padding:0}}>
               <SummaryTable {...props} setvisible={setData} visible={visible}/>
               </div>
             <div className="card-footer">

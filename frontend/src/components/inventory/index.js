@@ -102,7 +102,7 @@ const Inventory = props => {
       </div>
       <div className="row mb-4">
         <div className="col">
-          <div className="panel">
+          <div className="panel" style={{height:'14vh'}}>
             <div className="picture truck-bg">
               <img src={TotalInventoryAdded} alt="truck" />
             </div>
@@ -111,12 +111,12 @@ const Inventory = props => {
               <div className="tab-container">
                   {inventoryAnalytics.totalProductCategory}
               </div>
-              <div className="truck-text count">{inventoriesCount}</div>
+              <div className="count truck-text">{inventoriesCount}</div>
             </div>
           </div>
         </div>
         <div className="col">
-          <div className="panel">
+          <div className="panel" style={{height:'14vh'}}>
             <div className="picture sent-bg">
               <img src={currentinventory} alt="truck" />
             </div>

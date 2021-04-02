@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Sent from '../../assets/icons/Received.svg';
-import Received from '../../assets/icons/Sent.svg';
-import Rejected from '../../assets/icons/Total_Orders_Rejected.png';
-import Current from '../../assets/icons/ShipmentInTransit.svg';
+import Sent from '../../assets/icons/TotalOrdersReceived.png';
+import Received from '../../assets/icons/TotalOrdersSent.png';
+import Rejected from '../../assets/icons/TotalOrdersRejected.png';
+import Current from '../../assets/icons/TotalOrdersPending.png';
 import './style.scss';
 
 const Tiles = props => {
@@ -11,7 +11,7 @@ const Tiles = props => {
       <div className="col">
         <div onClick={() => props.setData('one')} className="panel cursorP">
           <div className="picture recived-bg">
-            <img src={Received} alt="truck" />
+            <img src={Received} alt="truck"/>
           </div>
           <div className="d-flex flex-column">
             <div className="title recived-text">Total Oders Sent</div>

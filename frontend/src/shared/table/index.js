@@ -30,9 +30,9 @@ const Table = props => {
                     </div> */}
                 </div>
               </div>
-              <div className="rTableCell">{inventory.products.manufacturer}</div>
-              <div className="rTableCell">{inventory.inventoryDetails.quantity}</div>
-              <div className="rTableCell">
+              <div className="rTableCell" style={{position:"relative",left:'7%'}}>{inventory.products.manufacturer}</div>
+              <div className="rTableCell" style={{position:"relative",left:'12%',fontWeight:700}}>{inventory.inventoryDetails.quantity}</div>
+              <div className="rTableCell" style={{position:"relative",left:'14%'}}>
                 <button
                   className="btn btn-outline-info fontSize200 expand"
                   onClick={() => {
