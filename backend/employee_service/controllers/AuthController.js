@@ -256,10 +256,8 @@ exports.register = [
                   
               //   }
               // }
-              //const country = req.body?.address?.country ? req.body.address?.country : 'India';
-              //const address = req.body?.address ? req.body.address : {};
-		    const country="";
-		    const address ="";
+              const country = req.body?.address?.country ? req.body.address?.country : 'India';
+              const address = req.body?.address ? req.body.address : {};
               addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
               organisationId = uniqid('org-');
               warehouseId = uniqid('war-');
@@ -267,8 +265,7 @@ exports.register = [
                 primaryContactId: employeeId,
                 name: organisationName,
                 id: organisationId,
-//                type: req.body?.type ? req.body.type : 'CUSTOMER_SUPPLIER',
-		     type: "qw",
+                type: req.body?.type ? req.body.type : 'CUSTOMER_SUPPLIER',
                 status: 'NOTVERIFIED',
                 postalAddress: addr,
                 warehouses: [warehouseId],
