@@ -32,9 +32,11 @@ const Tracing = (props) => {
   const [openPurchase, setOpenPurchase] = useState(false);
   const [openShipping, setOpenShipping] = useState(false);
   const tracking = props.trackData;
+  // console.log(tracking);
   //const productCard = props.productDetails;
   //const poCard = props.poDetails;
   const {id} = props.match.params;
+  console.log(id);
   
 
   const closeModal = () => {
@@ -54,7 +56,7 @@ const Tracing = (props) => {
               <span className="chain">Update Status</span>
             </button>
           </Link>
-          <Link to="/receiveShipment">
+          <Link to={`/receiveShipment/${id}`}>
           <button className="btn btn-main-blue fontSize20 font-bold ">
             <img src={returnShipment} width="14" height="14" className="mr-2" />
             <span className="chain">Receive Shipment</span>

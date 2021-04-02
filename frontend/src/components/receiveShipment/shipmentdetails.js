@@ -10,30 +10,32 @@ const ShipmentDetails = (props) => {
         <div className=  { props.highLight ? "col panel commonpanle highlight" : "col panel commonpanle"}>
           <div className="d-flex flex-row  ">
           <ul className="mr-3 elemens">
+          <li className="mb-1 text-secondary">Shipment Date</li>
           <h6 className="poheads potext mt-3 mb-3">From</h6>
             <li className="mb-1 text-secondary">Organisation Name</li>
            <li className="mb-1 text-secondary">Organisation Location</li>
            <h6 className="poheads potext mt-3 mb-3">To</h6>
            <li className="mb-1 text-secondary">Organisation Name</li>
            <li className="mb-1 text-secondary">Organisation Location</li>
-           <h6 className="poheads potext mt-3 mb-3">Delivery Details:</h6>
+           {/* <h6 className="poheads potext mt-3 mb-3">Delivery Details:</h6>
            <li className="mb-1 text-secondary">Airway Bill</li>
            <li className="mb-1 text-secondary">Label Code</li>
            <li className="mb-1 text-secondary">Shipment Date</li>
-           <li className="mb-1 text-secondary">Estimate Delivery Date</li>
+           <li className="mb-1 text-secondary">Estimate Delivery Date</li> */}
           </ul>
            <ul className="elemens">
+           <li  className="mb-1">{props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[2]+"/"+props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[1]+"/"+props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[0]} </li>
            <h6 className="poheads potext mt-3 mb-3 text-white">From</h6>
             <li  className="mb-1">{props.shipments.supplierOrgName}</li>
             <li  className="mb-1">{props.shipments.fromLocation}</li>
             <h6 className="poheads potext mt-3 mb-3  text-white">To </h6>
             <li  className="mb-1">{props.shipments.customerOrgName}</li>
             <li  className="mb-1">{props.shipments.toLocation}</li>
-            <h6 className="poheads potext mt-3 mb-3 text-white">Delivery Details:</h6>
+            {/* <h6 className="poheads potext mt-3 mb-3 text-white">Delivery Details:</h6>
             <li  className="mb-1">{props.shipments.shipmentDetails[0].airWayBillNo}</li>
             <li  className="mb-1">{props.shipments.shipmentDetails[0].label.labelId}</li>
             <li  className="mb-1">{props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[2]+"/"+props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[1]+"/"+props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[0]} </li>
-            <li  className="mb-1">{props.shipments.shipmentDetails[0].expectedDeliveryDate.split('T')[0].split('-')[2]+"/"+props.shipments.shipmentDetails[0].expectedDeliveryDate.split('T')[0].split('-')[1]+"/"+props.shipments.shipmentDetails[0].expectedDeliveryDate.split('T')[0].split('-')[0]}</li>
+            <li  className="mb-1">{props.shipments.shipmentDetails[0].expectedDeliveryDate.split('T')[0].split('-')[2]+"/"+props.shipments.shipmentDetails[0].expectedDeliveryDate.split('T')[0].split('-')[1]+"/"+props.shipments.shipmentDetails[0].expectedDeliveryDate.split('T')[0].split('-')[0]}</li> */}
 
            </ul>
            <div>
