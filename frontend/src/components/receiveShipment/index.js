@@ -4,12 +4,10 @@ import { receiveShipment } from "../../actions/shipmentActions";
 import Modal from "../../shared/modal";
 import returnShipment from '../../assets/icons/returnShipment.svg';
 import "./style.scss";
-import ShipmentSummary from "../tracing/shipmentsummary";
 import ProductList from "../tracing/productlist";
-import ShipmentDetails from '../tracing/shipmentdetails';
+import ShipmentDetails from './shipmentdetails';
 import uploadBlue from "../../assets/icons/UploadBlue.svg";
 import uploadWhite from "../../assets/icons/UploadWhite.svg";
-import { Formik } from "formik";
 
 const ReceiveShipment = (props) => {
   console.log(props.trackData)
@@ -95,7 +93,7 @@ const ReceiveShipment = (props) => {
           </div>
           <div className="panel commonpanle">
              <div className="form-group">
-             <label className="mb-1 text-secondary">BillNo.,</label>
+             <label className="mb-1 text-secondary">Bill No</label>
               <input
                 type="text"
                 className="form-control"
@@ -112,7 +110,7 @@ const ReceiveShipment = (props) => {
           <div className="col-sm-4">
             {/* <h6 className="heading mb-3">SHIPMENT SUMMARY</h6> */}
             {/* <ShipmentSummary shipments={tracking} /> */}
-            <h6 className="heading mt-3 mb-3">Shipment Details</h6>
+            <h6 className="heading mt-3 mb-3 ml-3">Shipment Details</h6>
             <ShipmentDetails
               shipments={tracking}
               setMenuShip={setMenuShip}
@@ -121,7 +119,7 @@ const ReceiveShipment = (props) => {
               setHighLight={setHighLight}
             />
 
-            <h6 className="heading mt-3 mb-3">Product Details</h6>
+            <h6 className="heading mt-3 mb-3 ml-3">Product Details</h6>
             <ProductList
               shipments={tracking}
               productHighLight={productHighLight}
@@ -131,10 +129,10 @@ const ReceiveShipment = (props) => {
             />
           </div>
           <div className="col-sm-4">
-          <h6 className="heading mt-3 mb-3">Comments</h6>            
-            <div className="panel commonpanle" style={{height:'58%'}}>
+          <h6 className="heading mt-3 mb-3 ml-3">Comments</h6>            
+            <div className="panel commonpanle" style={{height:'48%'}}>
               <div className="form-group">
-                <input
+                <textarea
                   style={{fontSize:'16px'}}
                   type="text"
                   className="form-control"
@@ -144,34 +142,33 @@ const ReceiveShipment = (props) => {
                   placeholder="Enter Comment Here"
                 />              
               </div>
-              <button className="btn btn-main-blue fontSize20 font-bold" style={{position:'relative',top:'65%', left:'57%'}}>
+              <button className="btn btn-main-blue fontSize20 font-bold" style={{position:'absolute',top:'46%', left:'74%'}}>
                   {/* <img src={returnShipment} width="14" height="14" className="mr-2" /> */}
-                  <span className="chain">Comment</span>
+                  <span className="chain">Submit</span>
                 </button>                
             </div>               
 
           </div>
           <div className="col-sm-4">
             <div className="row justify-content-between">
-              <h6 className="heading mt-3 mb-3">Upload Image</h6>             
-                <button className="btn btn-primary font-weight-bold">
+              <h6 className="heading mt-3 mb-1 ml-4">Upload Image</h6>             
+                <button className="btn btn-primary font-weight-bold mb-0">
                   <img
                     src={uploadWhite}
                     width="35"
                     height="17"
-                    className="mb-1"
                   />
                   <span>Upload</span>
                 </button>
             </div>
-            <div className="upload bg-white panel commonpanle" style={{height:'58%'}}>
+            <div className="upload bg-white panel commonpanle" style={{height:'48%'}}>
               <div className="row" style={{margin:'auto',display:'table'}}>
                   <img
                     src={uploadBlue}
                     name="photo"
-                    width="120"
-                    height="120"
-                    className="mt-3"
+                    width="80"
+                    height="80"
+                    className="mt-1"
                     style={{margin:'auto',display:'table'}}
                   />
                   <label>
@@ -179,8 +176,8 @@ const ReceiveShipment = (props) => {
                     <input type="file" class="select" onChange={setFile} />{" "}
                   </label>                  
               </div>
-              <div className="row" style={{margin:'auto',display:'table',  position:'relative',top:'4%'}}>OR</div>
-              <div className="row" style={{margin:'auto',display:'table', position:'relative',top:'10%'}}>
+              <div className="row" style={{margin:'auto',display:'table'}}>OR</div>
+              <div className="row" style={{margin:'auto',display:'table', position:'relative',top:'3%'}}>
                 <label class="btn btn-primary" style={{margin:0}}>
                   Browse Files
                   <input

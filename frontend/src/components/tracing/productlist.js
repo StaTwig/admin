@@ -23,11 +23,11 @@ const ProductList = (props) => {
                    </ul>
                     <div></div>
                     </div>))}
-                <div className="arrow float-right" onClick={() => {
+                {/* <div className="arrow float-right" onClick={() => {
                     props.setMenuProduct(!props.menuProduct)
                     props.setProductHighLight(false);
                 }}><img src={props.menuProduct?Down:traceDrop} alt="actions" height="7" width="12"
-                    /></div>
+                    /></div> */}
             </div>
 
     )
