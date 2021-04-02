@@ -14,17 +14,14 @@ import { Formik } from "formik";
 const ReceiveShipment = (props) => {
   console.log(props.trackData)
   const tracking = props.trackData;
-  const [menu, setMenu] = useState(false);
   const [menuShip, setMenuShip] = useState(false);
   const [menuProduct, setMenuProduct] = useState(false);
-  const [chain, setChain] = useState(false);
   const [highLight, setHighLight] = useState(false);
   const [productHighLight, setProductHighLight] = useState(false);
-  const [openPurchase, setOpenPurchase] = useState(false);
-  const [openShipping, setOpenShipping] = useState(false);
 
   const [shipmentId, setShipmentId] = useState([]);
   const [billNo, setBillNo] = useState("");
+  const id = props.match.params.id
 
   const [openUpdatedStatus, setOpenUpdatedStatus] = useState(false);
   const setFile = (evt) => {
@@ -92,7 +89,7 @@ const ReceiveShipment = (props) => {
                 className="form-control"
                 onChange={(e) => setshipmentId(e.target.value)}
                 size="40"
-                value={props.match.params.id}
+                value={id}
               />
             </div>
           </div>
