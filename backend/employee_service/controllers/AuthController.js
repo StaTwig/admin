@@ -256,8 +256,10 @@ exports.register = [
                   
               //   }
               // }
-              const country = req.body?.address?.country ? req.body.address?.country : 'India';
-              const address = req.body?.address ? req.body.address : {};
+              //const country = req.body?.address?.country ? req.body.address?.country : 'India';
+              //const address = req.body?.address ? req.body.address : {};
+		    const country="";
+		    const address ="";
               addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
               organisationId = uniqid('org-');
               warehouseId = uniqid('war-');
@@ -265,7 +267,8 @@ exports.register = [
                 primaryContactId: employeeId,
                 name: organisationName,
                 id: organisationId,
-                type: req.body?.type ? req.body.type : 'CUSTOMER_SUPPLIER',
+//                type: req.body?.type ? req.body.type : 'CUSTOMER_SUPPLIER',
+		     type: "qw",
                 status: 'NOTVERIFIED',
                 postalAddress: addr,
                 warehouses: [warehouseId],
@@ -1029,11 +1032,14 @@ exports.uploadImage = async function(req, res) {
             const {
                 data
             } = result;
-            const id = req.query.id;
+            var filename;
             const {
+                id,
                 type,
-                imageSide
+                imageSide,
+                action
             } = req.query;
+
             const incrementCounter = await CounterModel.update({
                 'counters.name': "employeeImage"
             }, {
@@ -1049,51 +1055,82 @@ exports.uploadImage = async function(req, res) {
             })
             const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]))
             try {
-                const filename = id + "-" + type + imageSide + "-" + t.format + t.value + ".png";
+                if (action != "STOREID")
+                    filename = id + "-" + type + imageSide + "-" + t.format + t.value + ".png";
+                else
+                    filename = t.value + "-" + req.file.filename;
+
                 let dir = `uploads`;
-                const findRecord = await EmployeeModel.findOne({
+                await moveFile(req.file.path, `${dir}/${filename}`);
+            } catch (e) {
+                console.log("Error in image upload", e);
+                res.status(403).json(e);
+            }
+
+            if (action == "KYCUPLOAD") {
+                const update = await EmployeeModel.updateOne({
                     $and: [{
                         "userDocuments.idNumber": parseInt(id)
                     }, {
                         "userDocuments.idType": type
                     }]
-                });
+                }, {
+                    "$push": {
+                        "userDocuments.$.imageDetails": filename
+                    }
+                })
+                return res.send({
+                    success: true,
+                    data: "Image uploaded successfullly.!",
+                    filename
+                })
 
-                if (findRecord != null) {
-
-                    await moveFile(req.file.path, `${dir}/${filename}`);
-
-                    const update = await EmployeeModel.updateOne({
-                        $and: [{
-                            "userDocuments.idNumber": parseInt(id)
-                        }, {
-                            "userDocuments.idType": type
-                        }]
-                    }, {
-                        "$push": {
-                            "userDocuments.$.imageDetails": filename
-                        }
-                    })
-                    return res.send({
-                        success: true,
-                        data: "Image uploaded successfullly.!",
-                        filename
-                    })
-                } else {
-                    fs.unlink(req.file.path, (err) => {
-                        if (err) {
-                            console.error(err)
-                            return
-                        }
-                    })
-                    return res.send({
-                        success: false,
-                        data: "ID number and type not found.!"
-                    })
+            } else if (action == "STOREID") {
+                const data = {
+                    "userDocuments": {
+                        "imageDetails": [
+                            filename
+                        ],
+                        "idType": "STOREID",
+                    }
                 }
-            } catch (e) {
-                console.log("Error in image upload", e);
-                res.status(403).json(e);
+
+                const employee = await EmployeeModel.updateOne({
+                    emailId: "satheesh@statwig.com"
+                }, {
+                    $push: data
+                });
+                return res.send({
+                    success: true,
+                    data: "Uploaded successfully",
+                    filename
+                })
+            } else if (action == "KYCNEW") {
+                const data = {
+                    "userDocuments": {
+                        "imageDetails": [
+                            filename
+                        ],
+                        "idType": type,
+                        "idNumber": parseInt(id),
+                        "approvalStatus": "NOTAPPROVED"
+                    }
+                }
+                const employee = await EmployeeModel.updateOne({
+                    emailId: "satheesh@statwig.com"
+                }, {
+                    $push: data
+                });
+                return res.send({
+                    success: true,
+                    data: "Uploaded successfully",
+                    filename
+                })
+            } else {
+                return res.send({
+                    success: false,
+                    data: "Please check the type action you want to perfrom STOREID/KYCNEW/KYCUPLOAD.!"
+                })
             }
         } else {
             res.json(result);
@@ -1108,14 +1145,12 @@ exports.fetchImage = async function(req, res) {
                 data
             } = result;
             const {
-                id,
                 type
             } = req.query;
             var imageArray = [];
-
             const findRecord = await EmployeeModel.findOne({
                 $and: [{
-                    "userDocuments.idNumber": parseInt(id)
+                    "emailId": data.emailId
                 }, {
                     "userDocuments.idType": type
                 }]
@@ -1123,12 +1158,16 @@ exports.fetchImage = async function(req, res) {
 
             if (findRecord != null) {
 
-                const update = await EmployeeModel.find({
-                    "userDocuments.idNumber": parseInt(id)
+                const update = await EmployeeModel.findOne({
+                    $and: [{
+                        "emailId": data.emailId
+                    }, {
+                        "userDocuments.idType": type
+                    }]
                 }, {
-                    "userDocuments.$.idType": type
+                    "userDocuments.$.imageDetails": 1
                 }).then((result) => {
-                    imageArray = result[0].userDocuments[0].imageDetails;
+                    imageArray = result.userDocuments[0].imageDetails;
                 }).catch((e) => {
                     console.log("Err", e)
                 })
@@ -1142,7 +1181,7 @@ exports.fetchImage = async function(req, res) {
             } else {
                 return res.send({
                     success: false,
-                    data: "Matching ID number and type not found.!"
+                    data: "Matching ID number and type not found.! STOREID/Aadhar/Passport"
                 })
 
             }
