@@ -4,13 +4,13 @@ import './style.scss';
 import Table from './table';
 import Tabs from './tabs';
 import Tiles from './tiles';
-import OrderIcon from '../../assets/icons/order1.png';
+import OrderIcon from '../../assets/icons/order.svg';
 import TableFilter from '../../shared/advanceTableFilter';
 import mon from '../../assets/icons/brand.svg';
 import Package from '../../assets/icons/package.svg';
 import calender from '../../assets/icons/calendar.svg';
 import Status from '../../assets/icons/Status.svg';
-import Order from '../../assets/icons/Orders.png';
+import Order from '../../assets/icons/order1.png';
 import truck from '../../assets/icons/truckthree.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPOs, resetPOs } from '../../actions/poActions';
@@ -64,9 +64,9 @@ const Orders = props => {
         <h1 className="breadcrumb">ORDERS</h1>
         <div className="d-flex">
           <Link to="/neworder">
-            <button className="btn btn-yellow fontSize20 font-bold">
+            <button className="btn btn-orange fontSize20 font-bold">
               <img src={OrderIcon} width="20" height="17" className="mr-2 mb-1" />
-              <span>Create Order</span>
+              <span style={{color:'white'}}>Create New Order</span>
             </button>
           </Link>
         </div>
