@@ -3,6 +3,7 @@ const WarehouseModel = require('../models/WarehouseModel');
 const ConsumerModel = require('../models/ConsumerModel');
 const InventoryModel = require('../models/InventoryModel');
 const OrganisationModel = require('../models/OrganisationModel');
+const CounterModel = require('../models/CounterModel');
 const { body, validationResult, oneOf, check } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
 const uniqid = require('uniqid');
@@ -18,6 +19,8 @@ var base64Img = require('base64-img');
 const auth = require('../middlewares/jwt');
 const axios = require('axios');
 const dotenv = require('dotenv').config();
+const fs = require("fs");
+const moveFile = require("move-file");
 const blockchain_service_url = process.env.URL;
 const stream_name = process.env.INV_STREAM;
 
@@ -1019,3 +1022,173 @@ exports.addWarehouse = [
 
   },
 ];
+
+exports.uploadImage = async function(req, res) {
+    checkToken(req, res, async (result) => {
+        if (result.success) {
+            const {
+                data
+            } = result;
+            var filename;
+            const {
+                id,
+                type,
+                imageSide,
+                action
+            } = req.query;
+
+            const incrementCounter = await CounterModel.update({
+                'counters.name': "employeeImage"
+            }, {
+                $inc: {
+                    "counters.$.value": 1
+                }
+            })
+
+            const poCounter = await CounterModel.find({
+                "counters.name": "employeeImage"
+            }, {
+                "counters.name.$": 1
+            })
+            const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]))
+            try {
+                if (action != "STOREID")
+                    filename = id + "-" + type + imageSide + "-" + t.format + t.value + ".png";
+                else
+                    filename = t.value + "-" + req.file.filename;
+
+                let dir = `uploads`;
+                await moveFile(req.file.path, `${dir}/${filename}`);
+            } catch (e) {
+                console.log("Error in image upload", e);
+                res.status(403).json(e);
+            }
+
+            if (action == "KYCUPLOAD") {
+                const update = await EmployeeModel.updateOne({
+                    $and: [{
+                        "userDocuments.idNumber": parseInt(id)
+                    }, {
+                        "userDocuments.idType": type
+                    }]
+                }, {
+                    "$push": {
+                        "userDocuments.$.imageDetails": filename
+                    }
+                })
+                return res.send({
+                    success: true,
+                    data: "Image uploaded successfullly.!",
+                    filename
+                })
+
+            } else if (action == "STOREID") {
+                const data = {
+                    "userDocuments": {
+                        "imageDetails": [
+                            filename
+                        ],
+                        "idType": "STOREID",
+                    }
+                }
+
+                const employee = await EmployeeModel.updateOne({
+                    emailId: "satheesh@statwig.com"
+                }, {
+                    $push: data
+                });
+                return res.send({
+                    success: true,
+                    data: "Uploaded successfully",
+                    filename
+                })
+            } else if (action == "KYCNEW") {
+                const data = {
+                    "userDocuments": {
+                        "imageDetails": [
+                            filename
+                        ],
+                        "idType": type,
+                        "idNumber": parseInt(id),
+                        "approvalStatus": "NOTAPPROVED"
+                    }
+                }
+                const employee = await EmployeeModel.updateOne({
+                    emailId: "satheesh@statwig.com"
+                }, {
+                    $push: data
+                });
+                return res.send({
+                    success: true,
+                    data: "Uploaded successfully",
+                    filename
+                })
+            } else {
+                return res.send({
+                    success: false,
+                    data: "Please check the type action you want to perfrom STOREID/KYCNEW/KYCUPLOAD.!"
+                })
+            }
+        } else {
+            res.json(result);
+        }
+    });
+};
+
+exports.fetchImage = async function(req, res) {
+    checkToken(req, res, async (result) => {
+        if (result.success) {
+            const {
+                data
+            } = result;
+            const {
+                type
+            } = req.query;
+            var imageArray = [];
+            const findRecord = await EmployeeModel.findOne({
+                $and: [{
+                    "emailId": data.emailId
+                }, {
+                    "userDocuments.idType": type
+                }]
+            });
+
+            if (findRecord != null) {
+
+                const update = await EmployeeModel.findOne({
+                    $and: [{
+                        "emailId": data.emailId
+                    }, {
+                        "userDocuments.idType": type
+                    }]
+                }, {
+                    "userDocuments.$.imageDetails": 1
+                }).then((result) => {
+                    imageArray = result.userDocuments[0].imageDetails;
+                }).catch((e) => {
+                    console.log("Err", e)
+                })
+
+                var resArray = [];
+
+                for (i = 0; i < imageArray.length; i++) {
+                    const s = "/images/" + imageArray[i];
+                    resArray.push(s)
+                }
+            } else {
+                return res.send({
+                    success: false,
+                    data: "Matching ID number and type not found.! STOREID/Aadhar/Passport"
+                })
+
+            }
+            return res.send({
+                success: true,
+                data: resArray
+            })
+
+        } else {
+            res.json(result);
+        }
+    });
+};

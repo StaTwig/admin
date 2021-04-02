@@ -1,4 +1,5 @@
 const express = require("express");
+const fs = require("fs");
 const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
@@ -26,7 +27,10 @@ mongoose.connect(MONGODB_URL, { useNewUrlParser: true }).then(() => {
 		process.exit(1);
 	});
 const db = mongoose.connection;
-const dir = path.join(__dirname, '/uploads');
+const dir = `uploads`;
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir);
+}
 
 var app = express();
 
@@ -46,7 +50,7 @@ app.use(cors());
 //Route Prefixes
 app.use("/", indexRouter);
 app.use("/usermanagement/api/", apiRouter);
-app.use('/images', express.static(__dirname+'/uploads/'));
+app.use('/usermanagement/api/auth/images', express.static('uploads'));
 
 // throw 404 if URL not found
 app.all("*", function(req, res) {
