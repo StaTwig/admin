@@ -12,7 +12,7 @@ const EditRow = props => {
     category,
     handleProductChange,
     products,
-    handleCategoryChange
+    handleCategoryChange,
   } = props;
 
   const numbersOnly = (e) => {

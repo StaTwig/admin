@@ -6,27 +6,29 @@ import Tabs from './dashboardtabs/tabs';
 const DashBoard = props => {
   const [visible, setVisible] = useState(false);
   const [warehouseText, setWarehouseText] = useState('');
-  const onWarehouseChange = e => {
-    setWarehouseText(e.target.value);
+  const onWarehouseChange = v => {
+    setWarehouseText(v);
   };
+  const { warehouses } = props;
 
   return (
-    <div>
-      <div className="dashboard">
+    <div className="dashboard">
+      <div >
         <h1 className="breadcrumb dash">YOUR NETWORK </h1>
-        <div>
+      </div>
+      <div className="panel">
+        <Map warehouseLocation={props.warehouseLocation} />
+        <div className="">
           <Tabs
             {...props}
             visible={visible}
             setVisible={setVisible}
             warehouseText={warehouseText}
+            filteredWareHouses={warehouses?.filter(w => w.title.toLowerCase().includes(warehouseText.toLowerCase()))}
             onWarehouseChange={onWarehouseChange}
-            onSearchClick={() => props.onSearchClick(warehouseText)}
+            onSearchClick={(w) => props.onSearchClick(w)}
           />
         </div>
-      </div>
-      <div className="panel">
-        <Map warehouseLocation={props.warehouseLocation} />
       </div>
     </div>
   );

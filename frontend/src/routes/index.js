@@ -26,6 +26,7 @@ import requireAuth from '../components/hocs/requireAuth';
 import QrCode from '../containers/qrcode';
 import TransactionHistory from '../containers/transactionHistory'
 import ViewOrder from '../containers/vieworder';
+import ReviewOrder from '../containers/revieworder';
 
 import AddProduct from '../containers/addproduct';
 import Signup from '../containers/signUp';
@@ -68,6 +69,7 @@ const routes = (
     <Route path="/orders" component={requireAuth(Orders)} />
     <Route path="/neworder" component={requireAuth(NewOrder)} />
     <Route path="/vieworder/:id" component={requireAuth(ViewOrder)} />
+    <Route path="/revieworder" component={requireAuth(ReviewOrder)} />
     <Route path="/updateStatus/:id" component={requireAuth(UpdateStatus)} />
     <Route path="/receiveShipment/:id" component={requireAuth(ReceiveShipment)} />
     <Route component={NoMatch} />

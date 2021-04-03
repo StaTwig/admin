@@ -24,9 +24,22 @@
    .dashsearch{
     width:270px;
    }
+   .font-size-one{
+     font-size: 1rem;
+   }
+   .text-primary{
+     font-size: 0.8rem;
+   }
    .inventoryDashboard{
-    height:350px;
+    // height:350px;
     overflow:auto;
+   }
+   .custom-dropdown .btn-custom-dropdown{
+     justify-content: space-between !important;
+     span{
+       margin-right: 1rem;
+       font-size: 14px;
+     }
    }
 .mainsearchwarehouse{
   height:450px;

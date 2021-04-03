@@ -21,28 +21,20 @@ import ShipmentPopUp from "./shipmentPopUp";
 import ShipmentFailPopUp from "./shipmentFailPopUp";
 import Modal from "../../shared/modal";
 import { Formik } from "formik";
-import { getProducts, getProductsByCategory, createOrder } from '../../actions/poActions';
+import { getProducts, getProductsByCategory, createOrder, setReviewPos } from '../../actions/poActions';
 
 const NewOrder = (props) => {
-  const [shippingOrderIds, setShippingOrderIds] = useState([]);
+  const editPo = useSelector(state => {
+    return state?.reviewPo;
+  });
   const [senderOrganisation, setSenderOrganisation] = useState([]);
   const [allOrganisations, setAllOrganisations] = useState([]);
   const [receiverWarehouses, setReceiverWarehouses] = useState([]);
   const [orgID, setOrgID] = useState('');
-  const [disabled, setDisabled] = useState(false);
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState([]);
   const [addProducts, setAddProducts] = useState([{"productId": "","quantity": "","name": "","manufacturer": "","type": ""}]);
   const dispatch = useDispatch();
-  const [shippingOrderId, setShippingOrderId] = useState(
-    "Select Shipping Order ID"
-  );
-  const [senderOrgId, setSenderOrgId] = useState(
-    "Select Organisation Name"
-  );
-  const [senderOrgLoc, setSenderOrgLoc] = useState(
-    "Select Organisation Location"
-  );
   const [receiverOrgId, setReceiverOrgId] = useState(
     "Select Organisation Name"
   );
@@ -53,6 +45,7 @@ const NewOrder = (props) => {
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [quantity, setquantity] = useState("");
+  const [isReadOnly, setIsReadOnly] = useState(true);
   const [openOrder, setOpenOrder] = useState(false);
   const [failedPop, setFailedPop] = useState(false);
   const [shipmentError, setOrderError] = useState("");
@@ -66,7 +59,7 @@ const NewOrder = (props) => {
 
       const orgs = await getAllOrganisations();
       if (orgSplit?.length > 0) {
-        const organisations = orgs.data.filter((org) => org.id != orgSplit[1]);
+        const organisations = orgs.data.filter((org) => org.id != user.organisationId);
         setAllOrganisations(organisations);
       }
 
@@ -157,41 +150,40 @@ const NewOrder = (props) => {
         error = true;
     });
 
-    console.log(error);
-    
-
     if (!error) {
-      const data = {
-        externalId: "",
-        supplier: {
-          supplierIncharge: user.id,
-          supplierOrganisation: senderOrganisation[1],
-        },
-        customer: {
-          customerIncharge: null,
-          customerOrganisation: toOrg,
-          shippingAddress: {
-            shippingAddressId: toOrgLoc,
-            shipmentReceiverId: null
-          }
-        },
-        lastUpdatedOn: new Date().toISOString(),
-        creationDate: new Date().toISOString(),
-        poStatus: "CREATED",
-        products: products,
-      };
+      dispatch(setReviewPos(values));
+      props.history.push('/revieworder');
+      // const data = {
+      //   externalId: "",
+      //   supplier: {
+      //     supplierIncharge: user.id,
+      //     supplierOrganisation: senderOrganisation[1],
+      //   },
+      //   customer: {
+      //     customerIncharge: null,
+      //     customerOrganisation: toOrg,
+      //     shippingAddress: {
+      //       shippingAddressId: toOrgLoc,
+      //       shipmentReceiverId: null
+      //     }
+      //   },
+      //   lastUpdatedOn: new Date().toISOString(),
+      //   creationDate: new Date().toISOString(),
+      //   poStatus: "CREATED",
+      //   products: products,
+      // };
 
-      dispatch(turnOn());
-      const result = await createOrder(data);
-      dispatch(turnOff());
-      if (result.status === 200) {
-        props.history.push('/orders');
-        // setMessage("Created order");
-        //setOpenOrder(true);
-      } else {
-        setFailedPop(true);
-        setErrorMessage("Not able to create order. Try again!");
-      }
+      // dispatch(turnOn());
+      // const result = await createOrder(data);
+      // dispatch(turnOff());
+      // if (result.status === 200) {
+      //   props.history.push('/orders');
+      //   // setMessage("Created order");
+      //   //setOpenOrder(true);
+      // } else {
+      //   setFailedPop(true);
+      //   setErrorMessage("Not able to create order. Try again!");
+      // }
     }
     else {
       setOrderError("Check product quantity");
@@ -206,9 +198,9 @@ const NewOrder = (props) => {
         // enableReinitialize={true}
         initialValues={{
           fromOrg: senderOrganisation[0],
-          toOrg: "",
-          toOrgLoc: "",
-          products: []
+          toOrg:  '',
+          toOrgLoc: '',
+          products:  []
         }}
         validate={(values) => {
           const errors = {};
@@ -286,7 +278,6 @@ const NewOrder = (props) => {
                       <div className="form-control">
                         <DropdownButton
                           name={senderOrganisation[0]}
-                          disabled={true}
                           onSelect={() => { }}
                           groups={[senderOrganisation[0]]}
                         />
@@ -318,7 +309,6 @@ const NewOrder = (props) => {
                       <div className="form-control">
                         <DropdownButton
                           name={receiverOrgId}
-                          disabled={disabled}
                           onSelect={(v) => {
                             setReceiverOrgLoc("Select Delivery Location");
                             setFieldValue('toOrgLoc', '');
@@ -353,7 +343,6 @@ const NewOrder = (props) => {
                       <div className="form-control">
                         <DropdownButton
                           name={receiverOrgLoc}
-                          disabled={disabled}
                           onSelect={(v) => {
                             setReceiverOrgLoc(v?.warehouseAddress ? (v?.warehouseAddress?.firstLine + ', ' + v?.warehouseAddress?.city) : v.postalAddress);
                             setFieldValue('toOrgLoc', v.id);
