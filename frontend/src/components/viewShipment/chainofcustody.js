@@ -24,7 +24,7 @@ const ChainOfCustody = (props) => {
                 <div className="color mb-3">
                   {custody.shipmentStatus === "CREATED" ? "SHIPPED" : "UPDATED"}
                 </div>
-                <div className="col panel  chain chainpanle series">
+                <div className="col panel  chain chainpanle">
                   <div className="row justify-content-between">
                     <div className="col">
                                         <div>
