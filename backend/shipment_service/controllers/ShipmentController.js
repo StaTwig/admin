@@ -9,6 +9,7 @@ const {
 const apiResponse = require('../helpers/apiResponse');
 const fs = require("fs");
 const moveFile = require("move-file");
+const date = require('date-and-time');
 const auth = require('../middlewares/jwt');
 const checkToken = require('../middlewares/middleware').checkToken;
 const ShipmentModel = require('../models/ShipmentModel');
@@ -276,7 +277,14 @@ exports.createShipment = [
 
                     }
 
-                const shipment = new ShipmentModel(data);
+                const currDateTime = date.format( new Date(), 'DD/MM/YYYY HH:mm');
+                const updates = {
+                      "updatedOn": currDateTime,
+                      "status":"CREATED"
+                }
+                data.shipmentUpdates = updates;
+		    
+		const shipment = new ShipmentModel(data);
                 const result = await shipment.save();
 
                 return apiResponse.successResponseWithData(
@@ -381,12 +389,26 @@ exports.receiveShipment = [
                     if (flag == "Y")
                        poUpdate(products[count].productId, products[count].productQuantity, data.poId, "RECEIVED")
                  }
+	   
+            const currDateTime = date.format( new Date(), 'DD/MM/YYYY HH:mm');
+              const updates = {
+                      "updatedOn": currDateTime,
+                      "status":"RECEIVED"
+                }
+	   
+	     const updateData = await ShipmentModel.findOneAndUpdate(
+	     { id: req.body.id },
+	     {
+		      $push: { shipmentUpdates: updates },
+		      $set: {status :"RECEIVED" }
+	     })
+console.log("2121",updateData)
 
-            await ShipmentModel.findOneAndUpdate({
-                id: data.id
-            }, {
-                status: "RECEIVED"
-            }, );
+            //await ShipmentModel.findOneAndUpdate({
+              //  id: data.id
+            //}, {
+              //  status: "RECEIVED"
+            //}, );
 
             return apiResponse.successResponseWithData(
                 res,
@@ -899,3 +921,137 @@ exports.fetchImage = async function (req, res) {
   });
 };
 
+exports.updateTrackingStatus = [
+    auth,
+    async (req, res) => {
+        try {
+            const {
+                authorization
+            } = req.headers;
+            checkToken(req, res, async result => {
+                if (result.success) {
+                const data = req.body;
+                const currDateTime = date.format( new Date(), 'DD/MM/YYYY HH:mm');
+                data.shipmentUpdates.updatedOn = currDateTime;
+                data.shipmentUpdates.updatedBy = req.user.id;
+                data.shipmentUpdates.status = "UPDATED";
+
+                const update =  await ShipmentModel.update(
+                { id: req.body.id },
+                { $push: { shipmentUpdates: data.shipmentUpdates } }
+            );
+
+                return apiResponse.successResponse(
+                                res,
+                                'Status Updated',
+                            );
+
+                } else {
+                    logger.log(
+                        'warn',
+                        '<<<<< ShipmentService < ShipmentController < modifyShipment : refuted token',
+                    );
+                    res.status(403).json('Auth failed');
+                }
+            });
+        } catch (err) {
+            logger.log(
+                'error',
+                '<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)',
+            );
+            return apiResponse.ErrorResponse(res, err);
+        }
+    },
+];
+
+exports.chainOfCustody = [
+    auth,
+    async (req, res) => {
+        try {
+            const {
+                authorization
+            } = req.headers;
+            checkToken(req, res, async result => {
+                if (result.success) {
+                var chainOfCustody = [];
+               const shipments = await  ShipmentModel.aggregate([{
+                $match:
+                   { id: req.query.shipmentId }
+            },
+            {
+                $lookup: {
+                    from: "warehouses",
+                    localField: "supplier.locationId",
+                    foreignField: "id",
+                    as: "supplier.warehouse",
+                },
+            },
+            {
+                $unwind: {
+                    path: "$supplier.warehouse",
+                },
+            },
+            {
+                $lookup: {
+                    from: "organisations",
+                    localField: "supplier.warehouse.organisationId",
+                    foreignField: "id",
+                    as: "supplier.org",
+                },
+            },
+            {
+                $unwind: {
+                    path: "$supplier.org",
+                },
+            },
+            {
+                $lookup: {
+                    from: "warehouses",
+                    localField: "receiver.locationId",
+                    foreignField: "id",
+                    as: "receiver.warehouse",
+                },
+            },
+            {
+                $unwind: {
+                    path: "$receiver.warehouse",
+ },
+            },
+            {
+                $lookup: {
+                    from: "organisations",
+                    localField: "receiver.warehouse.organisationId",
+                    foreignField: "id",
+                    as: "receiver.org",
+                },
+            },
+            {
+                $unwind: {
+                    path: "$receiver.org",
+                },
+            },
+        ])
+
+                return apiResponse.successResponseWithData(
+                                res,
+                                'Status Updated',
+                        {"chainOfCustody":shipments}
+                            );
+
+                } else {
+                    logger.log(
+                        'warn',
+                        '<<<<< ShipmentService < ShipmentController < modifyShipment : refuted token',
+                    );
+                    res.status(403).json('Auth failed');
+                }
+            });
+        } catch (err) {
+            logger.log(
+                'error',
+                '<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)',
+);
+            return apiResponse.ErrorResponse(res, err);
+        }
+    },
+];
