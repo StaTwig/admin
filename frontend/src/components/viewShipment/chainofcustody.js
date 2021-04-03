@@ -38,7 +38,7 @@ const ChainOfCustody = (props) => {
                       <h6 className="poheads potext mt-3 mb-3">From</h6>
                       <div className=" d-flex flex-row p-1">
                         <span class="w-75  text-secondary" >Organisation Name{" "}</span>
-                        <span class"w-75">{props.shipments.supplierOrgName}</span>
+                        <span class="w-75">{props.shipments.supplierOrgName}</span>
                       </div>
                       <div className=" d-flex flex-row p-1">
                        <span class="w-75 text-secondary" >Organisation Location{" "}</span>
@@ -243,7 +243,7 @@ const ChainOfCustody = (props) => {
                            <span class="w-75 text-secondary" > Organisation Name{" "}</span>
                             <span class="w-75">{props.shipments.supplierOrgName}</span>
                           </div>
-                          <div>
+                          <div className=" d-flex flex-row p-1">
                             <span class="w-75 text-secondary" >Organisation Location{" "}</span>
                             <span class="w-75 " >{props.shipments.fromLocation}</span>
                           </div>
