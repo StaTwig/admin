@@ -44,7 +44,7 @@ const Tracing = (props) => {
   return (
     <div className="tracing">
       <div className="row justify-content-between">
-        <h1 className="breadcrumb">Track & Trace</h1>
+        <h1 className="breadcrumb">VIEW SHIPMENT</h1>
         <div className="row">
  <Link to={`/shipments`}>
            <button className="btn btn-outline-primary mr-2" ><img src={back} height="17" className="mr-2 mb-1" />Back to shipments</button>
