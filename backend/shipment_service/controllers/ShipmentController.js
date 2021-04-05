@@ -318,24 +318,38 @@ exports.receiveShipment = [
             const poID = data.poId;
 
             const shipmentID = data.id;
-            const shipmentInfo = await ShipmentModel.findOne({id: shipmentID});
+            
+            const shipmentInfo = await ShipmentModel.find({id: shipmentID});
+            
 
-            const receivedProducts = data.products;
-            var products = shipmentInfo.products;
-            products.forEach(product => {
-                receivedProducts.forEach(reqProduct => {
-                    if(product.productId === reqProduct.productID){
-                        var actuallyShippedQuantity = product.productQuantity;
-                        var receivedQuantity = reqProduct.productQuantity;
-                        var quantityDifference = actuallyShippedQuantity - receivedQuantity;
-                        var rejectionRate = (quantityDifference/actuallyShippedQuantity)*100;
-                        (shipmentInfo.products[product]).quantityDelivered = receivedQuantity;
-                        (shipmentInfo.products[product]).rejectionRate = rejectionRate;
-                    }    
-                })
-            });
-            await shipmentInfo.save();
-
+            var actuallyShippedQuantity = 0;
+            var productNumber=-1;
+            if(shipmentInfo !== null){
+                const receivedProducts = data.products;
+                var shipmentProducts = shipmentInfo[0].products;
+                
+                shipmentProducts.forEach(product => {
+                    productNumber  = productNumber + 1;
+                    receivedProducts.forEach(reqProduct => {
+                        
+                        if(product.productName === reqProduct.productName){
+                            actuallyShippedQuantity = product.productQuantity;
+                            
+                            var receivedQuantity = reqProduct.productQuantity;
+                            var quantityDifference = actuallyShippedQuantity - receivedQuantity;
+                            var rejectionRate = (quantityDifference/actuallyShippedQuantity)*100;
+                            
+                            (shipmentProducts[productNumber]).quantityDelivered = receivedQuantity;
+                            (shipmentProducts[productNumber]).rejectionRate = rejectionRate;
+                        }    
+                    })
+                });
+                
+                if(actuallyShippedQuantity !== 0){
+                    const updatedDocument =  await ShipmentModel.updateOne({id: shipmentID}, shipmentInfo);    
+                }
+                
+            }
             
             var flag = "Y";
             if (data.shippingOrderId === null || data.poId === null) {
