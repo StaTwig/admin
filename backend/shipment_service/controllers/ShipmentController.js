@@ -371,7 +371,6 @@ exports.receiveShipment = [
                     }
                 })
             })
-	    console.log("flag",quantityMismatch)
             if (quantityMismatch) {
                 po.poStatus = 'PARTIALLYFULFILLED';
                 await po.save();
@@ -1029,7 +1028,6 @@ exports.chainOfCustody = [
                         },
                     ]);
                 }                
-               console.log(poDetails)
 
                 const shipments = await  ShipmentModel.aggregate([{
                 $match:
