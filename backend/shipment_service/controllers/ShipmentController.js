@@ -988,7 +988,48 @@ exports.chainOfCustody = [
             checkToken(req, res, async result => {
                 if (result.success) {
                 var chainOfCustody = [];
-               const shipments = await  ShipmentModel.aggregate([{
+                var poDetails = "";
+                
+                const shipmentDetails = await  ShipmentModel.findOne({"id": req.query.shipmentId});
+                const poId = shipmentDetails.poId; 
+
+                if (poId != null) {
+                poDetails = await RecordModel.aggregate([{
+                            $match: {
+                                id: poId
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: "organisations",
+                                localField: "supplier.supplierOrganisation",
+                                foreignField: "id",
+                                as: "supplier.organisation",
+                            },
+                        },
+                        {
+                            $unwind: {
+                                path: "$supplier.organisation",
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: "organisations",
+                                localField: "customer.customerOrganisation",
+                                foreignField: "id",
+                                as: "customer.organisation",
+                            },
+                        },
+                        {
+                            $unwind: {
+                                path: "$customer.organisation",
+                            },
+                        },
+                    ]);
+                }                
+               
+
+                const shipments = await  ShipmentModel.aggregate([{
                 $match:
                    { id: req.query.shipmentId }
             },
@@ -1049,7 +1090,10 @@ exports.chainOfCustody = [
                 return apiResponse.successResponseWithData(
                                 res,
                                 'Status Updated',
-                        {"chainOfCustody":shipments}
+                                {
+                                    "poChainOfCustody":poDetails,
+                                    "shipmenChainOfCustody":shipments
+                                }
                             );
 
                 } else {
