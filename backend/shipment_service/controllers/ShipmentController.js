@@ -217,7 +217,8 @@ exports.createShipment = [
             const poID = data.poId;
             var flag = "Y";
 
-            if (data.shippingOrderId === null || data.poId === null) {
+            //if (data.shippingOrderId === null || data.poId === null) {
+	      if (data.poId === null) {
                 if (process == true) {
                     flag = "YS"
                 } else {
@@ -238,7 +239,8 @@ exports.createShipment = [
                         }
                     })
                 })
-                if (quantityMismatch) {
+                
+		if (quantityMismatch) {
                     po.poStatus = 'TRANSIT&PARTIALLYFULFILLED';
                 } else {
                     po.poStatus = 'TRANSIT&FULLYFULFILLED';
@@ -352,7 +354,7 @@ exports.receiveShipment = [
             }
             
             var flag = "Y";
-            if (data.shippingOrderId === null || data.poId === null) {
+            if ( data.poId === null ) {
                    flag = "YS"
             }
 
@@ -369,7 +371,7 @@ exports.receiveShipment = [
                     }
                 })
             })
-
+	    console.log("flag",quantityMismatch)
             if (quantityMismatch) {
                 po.poStatus = 'PARTIALLYFULFILLED';
                 await po.save();
@@ -992,8 +994,8 @@ exports.chainOfCustody = [
                 
                 const shipmentDetails = await  ShipmentModel.findOne({"id": req.query.shipmentId});
                 const poId = shipmentDetails.poId; 
-
-                if (poId != null) {
+                
+		if (poId != null) {
                 poDetails = await RecordModel.aggregate([{
                             $match: {
                                 id: poId
@@ -1027,7 +1029,7 @@ exports.chainOfCustody = [
                         },
                     ]);
                 }                
-               
+               console.log(poDetails)
 
                 const shipments = await  ShipmentModel.aggregate([{
                 $match:

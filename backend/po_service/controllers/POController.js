@@ -357,13 +357,13 @@ exports.changePOStatus = [
             result: result,
             permissionRequired: 'receivePO',
           };
-          checkPermissions(permission_request, async permissionResult => {
-            if (permissionResult.success) {
+          //checkPermissions(permission_request, async permissionResult => {
+            //if (permissionResult.success) {
               try {
                 const { address } = req.user;
                 const { orderID, status } = req.body;
                 const po = await RecordModel.findOne({ id : orderID });
-                if (po && po.customer.customer_incharge === address) {
+                //if (po && po.customer.customer_incharge === address) {
                   
                 const currDateTime = date.format( new Date(), 'DD/MM/YYYY HH:mm');
                 const updates = {
@@ -383,12 +383,12 @@ exports.changePOStatus = [
                       'PO Status',
                       'Success',
                   );
-                } else {
-                  return apiResponse.ErrorResponse(
-                      res,
-                      'You are not authorised to change the status',
-                  );
-                }
+                //} else {
+                  //return apiResponse.ErrorResponse(
+                    //  res,
+                     // 'You are not authorised to change the status',
+                 // );
+                //}
 
                 logger.log(
                     'info',
@@ -397,10 +397,10 @@ exports.changePOStatus = [
               } catch (e) {
                 return apiResponse.ErrorResponse(res, 'Error from Blockchain');
               }
-            } else {
-              res.json('Sorry! User does not have enough Permissions');
-            }
-          });
+            //} else {
+             // res.json('Sorry! User does not have enough Permissions');
+           // }
+         // });
         } else {
           logger.log(
               'warn',
