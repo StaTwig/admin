@@ -407,6 +407,7 @@ exports.receiveShipment = [
             const currDateTime = date.format( new Date(), 'DD/MM/YYYY HH:mm');
               const updates = {
                       "updatedOn": currDateTime,
+                      "updateComment": data.comment,
                       "status":"RECEIVED"
                 }
 	   
@@ -416,7 +417,6 @@ exports.receiveShipment = [
 		      $push: { shipmentUpdates: updates },
 		      $set: {status :"RECEIVED" }
 	     })
-console.log("2121",updateData)
 
             //await ShipmentModel.findOneAndUpdate({
               //  id: data.id
