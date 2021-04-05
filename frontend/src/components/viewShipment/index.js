@@ -1,149 +1,176 @@
-
-import React from 'react';
-import { Link } from 'react-router-dom';
-import location from '../../assets/icons/CurrentLocationWhite.svg';
+import React, { useState } from "react";
+import ShipmentSummary from "./shipmentsummary";
+import PoDetails from "./podetails";
+import ShipmentDetails from "./shipmentdetails";
+import ProductList from "./productlist";
+import Chart from "./temperature";
+import Map from "./map";
+import returnPo from "../../assets/icons/returnPo.svg";
+import returnShipment from "../../assets/icons/returnShipment.svg";
+import updownarrow from "../../assets/icons/up-and-down-white.svg";
+import currentinventory from "../../assets/icons/CurrentInventory.svg";
+import CurrentTemperature from "../../assets/icons/thermometer.svg";
 import back from '../../assets/icons/back.png';
-import './style.scss';
-import { formatDate } from '../../utils/dateHelper';
+import traceDrop from "../../assets/icons/traceDrop.png";
+import Serial from "./serial";
+import "./style.scss";
+import ChainOfCustody from "./chainofcustody";
+import Modal from "../../shared/modal";
+import { Link } from 'react-router-dom';
+import { updateStatus } from "../../actions/shipmentActions";
+import { receiveShipment } from "../../actions/shipmentActions";
+const Tracing = (props) => {
+  const [menu, setMenu] = useState(false);
+  const [menuShip, setMenuShip] = useState(false);
+  const [menuProduct, setMenuProduct] = useState(false);
+  const [chain, setChain] = useState(false);
+  const [highLight, setHighLight] = useState(false);
+  const [productHighLight, setProductHighLight] = useState(false);
+  const [openPurchase, setOpenPurchase] = useState(false);
+  const [openShipping, setOpenShipping] = useState(false);
+  const tracking = props.trackData;
+  //const productCard = props.productDetails;
+  //const poCard = props.poDetails;
+  const {id} = props.match.params;
 
-const ViewShipment = props => {
-  const { shipment, id } = props;
 
-  let statusStyle = 'bg-primary';
-  let status = 'Shipped';
-  if (shipment?.status === 'RECEIVED') {
-    statusStyle = 'bg-success';
-    status = 'Delivered';
-  }
+  const closeModal = () => {
+    setOpenPurchase(false);
+  };
 
-  const shipmentDate = shipment?.shippingDate?.length == 10 ? shipment?.shippingDate : formatDate(shipment?.shippingDate);
-  
-  const deliveryDate = shipment?.actualDeliveryDate?.length == 10 ? shipment?.actualDeliveryDate : formatDate(shipment?.actualDeliveryDate);
-
+  const closeModalShipping = () => {
+    setOpenShipping(false);
+  };
   return (
-    <div className="viewshipment text-muted">
-      <div className="d-flex justify-content-between">
+    <div className="tracing">
+      <div className="row justify-content-between">
         <h1 className="breadcrumb">VIEW SHIPMENT</h1>
-        <div className="d-flex">
-          <Link to={`/shipments`}>
+        <div className="row">
+ <Link to={`/shipments`}>
            <button className="btn btn-outline-primary mr-2" ><img src={back} height="17" className="mr-2 mb-1" />Back to shipments</button>
           </Link>
-          <Link to={`/tracing/${id}`}>
-            <button
-              class="button btn-primary text-light trackBtn"
-              onClick={() => {
-                // const data = shipments[index];
-                // dispatch(setTracingShipments(data));
-                // props.history.push(`/tracing/${id}`);
-              }}>
-              
-               <img style={{ padding: 1, height: 19}} src={location} />
-              <span className="pl-1">Track</span>
+          <Link to={`/updatestatus/${id}`}>
+            <button className="btn btn-orange fontSize20 font-bold mr-5">
+              <span className="chain">Update Status</span>
             </button>
+          </Link>
+          <Link to="/receiveShipment">
+          <button className="btn btn-main-blue fontSize20 font-bold ">
+            <img src={returnShipment} width="14" height="14" className="mr-2" />
+            <span className="chain">Receive Shipment</span>
+          </button>
           </Link>
         </div>
       </div>
-      <div className="mt-4">
-        <div className="d-flex flex-row bg-white shadow  p-3 m-3">
-          <div className="w-50 flex-row d-flex pl-4">
-            <span className="w-50">Shipment ID</span>
-            <div className="w-50">
-              <span className="font-weight-bold text-dark">{shipment.id}</span>
-              <span className={`ml-2 p-1 status pl-2 plr-2 rounded text-white secondary-bg ${statusStyle}`}>
-                {status}
-                </span>
-              </div>
-          </div>
-          <div className="w-50 flex-row d-flex pl-4">
-            <span className="w-50">Shipment Date</span>
-            <span className="w-50 font-weight-bold text-dark">{shipmentDate}</span>
-          </div>
+      <div className="row">
+        <div className="col-sm-4">
+          <h6 className="heading mb-3">SHIPMENT SUMMARY</h6>
+          <ShipmentSummary shipments={tracking} />
+          <h6 className="heading mt-3 mb-3">SHIPMENT DETAILS</h6>
+          <ShipmentDetails
+            shipments={tracking}
+            setMenuShip={setMenuShip}
+            menuShip={menuShip}
+            highLight={highLight}
+            setHighLight={setHighLight}
+          />
+
+          <h6 className="heading mt-3 mb-3">PRODUCT LIST</h6>
+          <ProductList
+            shipments={tracking}
+            productHighLight={productHighLight}
+            setProductHighLight={setProductHighLight}
+            menuProduct={menuProduct}
+            setMenuProduct={setMenuProduct}
+          />
         </div>
-        <div className="d-flex flex-row bg-white shadow  p-3 m-3">
-          <div className="w-50 flex-column d-flex pl-4">
-            <span className="p-1 font-weight-bold text-primary">From</span>
-            <div>
-              <div className=" d-flex flex-row p-1">
-                <span className="w-50">Organisation Name</span>
-                <span className="w-50 font-weight-bold text-dark">{shipment.supplier?.org.name}</span>
-              </div>
-              <div className=" d-flex flex-row p-1">
-                <span className="w-50">Organisation Location</span>
-                <span className="w-50 font-weight-bold text-dark">{shipment.supplier?.warehouse?.warehouseAddress?.city+", "+shipment.supplier?.warehouse?.warehouseAddress?.country}</span>
-              </div>
+        <div className="col-sm-8">
+          <div className="row mb-4">
+            <div className="panel col mr-1 geo commonpanle">
+              <p className="heading">Geographical Tracking</p> <Map />{" "}
             </div>
-          </div>
-          <div className="w-50 flex-column d-flex pl-4">
-            <span className="p-1 font-weight-bold text-primary">To</span>
-            <div>
-              <div className=" d-flex flex-row p-1">
-                <span className="w-50">Organisation Name</span>
-                <span className="w-50 font-weight-bold text-dark">{shipment.receiver?.org.name}</span>
-              </div>
-              <div className=" d-flex flex-row p-1">
-                <span className="w-50">Organisation Location</span>
-                <span className="w-50 font-weight-bold text-dark">{shipment.receiver?.warehouse?.warehouseAddress?.city+", "+shipment.receiver?.warehouse?.warehouseAddress?.country}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="d-flex flex-row bg-white shadow   p-3 m-3">
-          <div className="w-50 flex-column d-flex pl-4">
-            <span className="p-1 font-weight-bold text-primary">Delivery Details</span>
-            <div>
-              <div className=" d-flex flex-row p-1">
-                <span className="w-50">Airway Bill</span>
-                <span className="w-50 font-weight-bold text-dark">{shipment.airWayBillNo}</span>
-              </div>
-              <div className=" d-flex flex-row p-1">
-                <span className="w-50">Label Code</span>
-                <span className="w-50 font-weight-bold text-dark">{shipment?.label?.labelId}</span>
-              </div>
-            </div>
-          </div>
-          <div className="w-50 flex-column d-flex pl-4">
-            <span className="p-1 font-weight-bold text-primary">&nbsp;</span>
-            <div >
-              <div className=" d-flex flex-row p-1">
-                <span className="w-50">Shipment Date</span>
-                <span className="w-50 font-weight-bold text-dark">{shipmentDate}</span>
-              </div>
-              <div className=" d-flex flex-row p-1">
-                <span className="w-50">Estimated Delivery Date</span>
-                <span className="w-50 font-weight-bold text-dark">{deliveryDate}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className=" p-3 m-3">
-          <span className="p-1 font-weight-bold text-info">Product Details</span>
-          <div className="row mt-3">
-            {shipment?.products?.map((product, index) => 
-              <div key={index} className={`bg-white ${index > 0 ? 'ml-4' : ''} shadow  p-3 w-25`}>
-                <span className="p-1 font-weight-normal font-weight-bold text-primary">{product.productName}</span>
-                {/* <div className="d-flex mt-2 flex-row p-1">
-                  <span className="w-50">Product name</span>
-                  <span className="w-50 font-weight-bold text-dark">{product.productName}</span>
-                </div> */}
-                <div className="d-flex flex-row  p-1">
-                  <span className="w-50">Manufacturer</span>
-                  <span className="w-50 font-weight-bold text-dark">{product.manufacturer}</span>
+            <div className="panel commonpanle col">
+              <div className="d-flex justify-content-between">
+                <div class="row ml-3">
+                  <div className="arrow mr-2">
+                    <img src={CurrentTemperature} width="20" height="20" />
+                  </div>
+
+                  <div className="d-flex flex-column">
+                    <div className="info">Current temperature</div>
+                    <div className="info">3°C</div>
+                  </div>
                 </div>
-                <div className="d-flex flex-row  p-1">
-                  <span className="w-50">Quantity</span>
-                  <span className="w-50 font-weight-bold text-dark">{product.productQuantity}</span>
-                </div>
-                <div className="d-flex flex-row  p-1">
-                  <span className="w-50">Label ID</span>
-                  <span className="w-50 font-weight-bold text-dark">{product?.labelCode}</span>
+
+                <div className="d-flex flex-column">
+                  <div className="info">Last Upadated on</div>
+                  <div className="info">07:00 am</div>
                 </div>
               </div>
-            )}
+              <Chart />{" "}
+            </div>
           </div>
+          <button
+            className="btn btn-outline-* fontSize200 enlargeTemperature float-right"
+            onClick={() =>
+              window.open(
+                `//iot.vaccineledger.com/dashboard/db/${tracking.shipmentDetails[0].id}?orgId=1`,
+                "_blank"
+              )
+            }
+          >
+            SHOW MORE
+          </button>
+          <h6 className="heading mb-5">CHAIN OF CUSTODY</h6>
+          {Object.keys(tracking).length === 0 ? (
+            <div>N/A</div>
+          ) : (
+            <div className="row mb-3 mt-2">
+              <div className="picture ml-3">
+                <img
+                  src={currentinventory}
+                  alt="truck"
+                  height="15"
+                  width="15"
+                />
+              </div>
+              <div className="d-flex flex-column mr-2">
+                <div className="chain text-secondary">Shipment Number</div>
+                <div className="chain">
+                  <strong>{tracking.shipmentDetails[0].id}</strong>
+                </div>
+              </div>
+              <div className="d-flex flex-column  ml-5 mr-3">
+                <div className="dot bg-secondary mt-2 mb-5"></div>
+                <div className="dot bg-info"></div>
+              </div>
+              <div className="col">
+                <div className="chain">
+                  <strong>{tracking.fromLocation}</strong>
+                </div>
+                <div className="chainhead mb-4">{tracking.supplierOrgName}</div>
+                <div className="chain">
+                  <strong>{tracking.toLocation}</strong>
+                </div>
+                <div className="chainhead">{tracking.customerOrgName}</div>
+              </div>
+            </div>
+          )}
+          <ChainOfCustody
+            chain={chain}
+            setChain={setChain}
+            shipments={tracking}
+            setHighLight={setHighLight}
+            setMenuShip={setMenuShip}
+            setMenuProduct={setMenuProduct}
+            setProductHighLight={setProductHighLight}
+          />
         </div>
       </div>
     </div>
   );
 };
 
-export default ViewShipment;
+export default Tracing;
+
+/*  <svg width="100" height="100"><line x1="35" y1="35" x2="35" y2="0" stroke="black"/></svg>*/

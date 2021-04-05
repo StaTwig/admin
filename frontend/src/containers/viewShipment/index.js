@@ -4,18 +4,23 @@ import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
 import { useDispatch, useSelector } from 'react-redux';
 import { getViewShipment } from '../../actions/shipmentActions';
+import {trackProduct} from "../../actions/shipmentActions";
 
 const ViewShipmentContainer = props => {
-  const dispatch = useDispatch();
-  const [shipment, setShipment] = useState([]);
-  const { id } = props.match.params;
-  
-  useEffect(() => {
-    (async () => {
-      const results = await dispatch(getViewShipment(id));
-      setShipment(results);
-    })();
-  }, []);
+  const[trackData,setTrackData]=useState({});
+
+   useEffect(() => {
+    async function fetchData() {
+      const result = await trackProduct(props.match.params.id);
+       if (result.status==200)
+       {
+       setTrackData(result.data);
+       }else{
+         setTrackData({});
+       }
+}
+    fetchData();
+  },[]);
 
   return (
     <div className="container-fluid p-0">
@@ -23,15 +28,10 @@ const ViewShipmentContainer = props => {
       <div className="d-flex">
         <Sidebar {...props} />
         <div className="content">
-          <ViewShipment
-            shipment={shipment}
-            id={id}
-            {...props}
-          />
+          < ViewShipment trackData={trackData} {...props}/>
         </div>
       </div>
     </div>
   );
 };
-
 export default ViewShipmentContainer;
