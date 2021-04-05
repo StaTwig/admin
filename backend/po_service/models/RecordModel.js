@@ -22,6 +22,7 @@ var RecordSchema = new mongoose.Schema(
       default: [],
     },
     poStatus: { type: String, default: 'CREATED' },
+    poUpdates : { type: Array,default: []},
     lastUpdatedBy: { type: String },
     lastUpdatedOn: {
       type: String,
