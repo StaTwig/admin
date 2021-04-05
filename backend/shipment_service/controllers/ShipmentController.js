@@ -1092,7 +1092,7 @@ exports.chainOfCustody = [
                                 'Status Updated',
                                 {
                                     "poChainOfCustody":poDetails,
-                                    "shipmenChainOfCustody":shipments
+                                    "shipmentChainOfCustody":shipments
                                 }
                             );
 
