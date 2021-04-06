@@ -1010,7 +1010,10 @@ exports.getInventoryDetails = [
   auth,
   async(req, res) => {
   try {
-    const selectedWarehouseId = req.body.warehouseId;
+    var selectedWarehouseId;
+    if(req.body.warehouseId !== null){
+      selectedWarehouseId = req.body.warehouseId;
+    }
     const employee = await EmployeeModel.findOne({ id: req.user.id });
 
     var warehouse;
