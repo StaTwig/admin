@@ -22,18 +22,18 @@ const SoChainOfCustody = (props) => {
           <div className="col panel chain chainpanle">
             <div className="row justify-content-between">
               <div className="col">
-                <div><strong>{`Shipping Order ${custody.status}`}</strong></div>
+                <div><strong>{`Shippment ${custody.status}`}</strong></div>
               <div className="row">
                 <div className="col">
                 <div className="mb-1">From:</div>  
-                <div>Organisation Name : <strong>{shipmentData.supplier.warehouse.name}</strong></div>
+                <div>Organisation Name : <strong>{shipmentData.supplier.org.name}</strong></div>
                 <div className="mb-1">Organisation Location: <strong>{shipmentData.supplier.warehouse.postalAddress}</strong></div>
                 </div>
               </div>       
               <div className="row">
                 <div className="col">
                 <div className="mb-1">To:</div>
-                <div>Organisation Name : <strong>{shipmentData.receiver.warehouse.name}</strong></div>
+                <div>Organisation Name : <strong>{shipmentData.receiver.org.name}</strong></div>
                 <div className="mb-1">Organisation Location: <strong>{shipmentData.receiver.warehouse.postalAddress}</strong></div>
                 </div>
               </div>                    
@@ -45,6 +45,7 @@ const SoChainOfCustody = (props) => {
               </div>
               <div className="d-flex flex-column mr-5">
                 {/* <div>{custody.dateTime.split('T')[0].split('-')[2]+"/"+custody.dateTime.split('T')[0].split('-')[1]+"/"+custody.dateTime.split('T')[0].split('-')[0]}</div> */}
+                <div>{custody.updatedOn.split(' ')[0]}</div>
                 <div></div>
                 <div></div>
               </div>
@@ -70,9 +71,9 @@ const SoChainOfCustody = (props) => {
           <div className="col panel chain chainpanle">
             <div className="row justify-content-between">
               <div className="col">
-                <div><strong>{`Shipping Order ${custody.status}`}</strong></div>
-              <div>Warehouse ID : <strong>{shipmentData.supplier.warehouse.organisationId}</strong></div>
-              <div>Warehouse Location: <strong>{shipmentData.supplier.warehouse.postalAddress}</strong></div>
+                <div className="mb-1"><strong>{`Shippment ${custody.status}`}</strong></div>
+              <div className="mb-1">Warehouse ID : <strong>{shipmentData.supplier.warehouse.organisationId}</strong></div>
+              <div className="mb-1">Warehouse Location: <strong>{shipmentData.supplier.warehouse.postalAddress}</strong></div>
               </div>
               <div className="col">
                 <div className="emp"></div>
@@ -81,6 +82,7 @@ const SoChainOfCustody = (props) => {
               </div>
               <div className="d-flex flex-column mr-5">
                 {/* <div>{custody.dateTime.split('T')[0].split('-')[2]+"/"+custody.dateTime.split('T')[0].split('-')[1]+"/"+custody.dateTime.split('T')[0].split('-')[0]}</div> */}
+                <div>{custody.updatedOn.split(' ')[0]}</div>
                 <div></div>
                 <div></div>
               </div>
