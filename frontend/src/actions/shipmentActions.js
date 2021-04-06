@@ -57,6 +57,17 @@ export const trackProduct = async id => {
   }
 };
 
+export const chainOfCustody = async id => {
+  try {
+    const configObject = config();
+    const url = configObject.chainOfCustody + id;
+    const result = await axios.get(url);
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
 export const poDetailsByShipmentId = async id => {
   try {
     const configObject = config();

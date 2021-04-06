@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, setState } from "react";
 import ShipmentSummary from "./shipmentsummary";
 import PoDetails from "./podetails";
 import ShipmentDetails from "./shipmentdetails";
@@ -20,9 +20,11 @@ import Modal from "../../shared/modal";
 import PurchasePopUp from "./purchaseform/purchasepopup";
 import ViewShippingModal from "./shippingorder/shippingpopup";
 import { Link } from 'react-router-dom';
-import { updateStatus } from "../../actions/shipmentActions";
+import { chainOfCustody, updateStatus } from "../../actions/shipmentActions";
 import { receiveShipment } from "../../actions/shipmentActions";
 const Tracing = (props) => {
+  console.log('Props');
+  console.log(props);
   const [menu, setMenu] = useState(false);
   const [menuShip, setMenuShip] = useState(false);
   const [menuProduct, setMenuProduct] = useState(false);
@@ -33,11 +35,10 @@ const Tracing = (props) => {
   const [openShipping, setOpenShipping] = useState(false);
   const tracking = props.trackData;
   // console.log(tracking);
-  //const productCard = props.productDetails;
-  //const poCard = props.poDetails;
+  const productCard = props.productDetails;
+  const poCard = props.poDetails;
   const {id} = props.match.params;
   console.log(id);
-  
 
   const closeModal = () => {
     setOpenPurchase(false);
@@ -168,11 +169,11 @@ const Tracing = (props) => {
             </div>
           )}
           <PoChainOfCustody
-            shipments={tracking}
+            shipments={props.poChainOfCustodyData}
             setOpenPurchase={setOpenPurchase}
           />
           <SoChainOfCustody
-            shipments={tracking}
+            shipments={props.shippmentChainOfCustodyData}         
             setOpenShipping={setOpenShipping}
           />
           <ChainOfCustody
