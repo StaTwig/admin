@@ -5,11 +5,13 @@ import Down from '../../assets/icons/up.png';
 
 
 const SoChainOfCustody = (props) => {
+  // console.log('Shippment')
+  // console.log(props.shipments);
     const[op, setOp] = useState('');
   return (
-    Object.keys(props.shipments).length === 0 || (!props.shipments.soChainOfCustody)? <div className="row panel justify-content-between">N/A</div> :
+    Object.keys(props.shipments).length === 0 || (!props.shipments)? <div className="row panel justify-content-between">N/A</div> :
     <div>
-    {props.shipments.soChainOfCustody.map((custody,index) =>(
+    {props.shipments.map((custody,index) =>(
       <div className="row mb-3">
         <div></div>
         <div className="big-dot bg-info ml-4"></div>
@@ -19,16 +21,16 @@ const SoChainOfCustody = (props) => {
             <div className="row justify-content-between">
               <div className="col">
                 <div><strong>{`Shipping Order ${custody.status}`}</strong></div>
-              <div>Warehouse ID : <strong>{custody.warehouseId}</strong></div>
-              <div>Warehouse Location: <strong>{custody.warehouseLocation}</strong></div>
+              <div>Warehouse ID : <strong>{custody.supplier.warehouse.organisationId}</strong></div>
+              <div>Warehouse Location: <strong>{custody.supplier.warehouse.postalAddress}</strong></div>
               </div>
               <div className="col">
                 <div className="emp"></div>
-                <div>Shipping Order ID : <strong>{custody.shippingOrderId}</strong></div>
+                <div>Shipping Order ID : <strong>{custody.id}</strong></div>
                 <div></div>
               </div>
               <div className="d-flex flex-column mr-5">
-                <div>{custody.dateTime.split('T')[0].split('-')[2]+"/"+custody.dateTime.split('T')[0].split('-')[1]+"/"+custody.dateTime.split('T')[0].split('-')[0]}</div>
+                <div>{custody.createdAt.split('T')[0].split('-')[2]+"/"+custody.createdAt.split('T')[0].split('-')[1]+"/"+custody.createdAt.split('T')[0].split('-')[0]}</div>
                 <div></div>
                 <div></div>
               </div>
