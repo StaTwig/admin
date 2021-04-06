@@ -397,7 +397,7 @@ exports.changePOStatus = [
               } catch (e) {
                 return apiResponse.ErrorResponse(res, 'Error from Blockchain');
               }
-               else {
+              } else {
                res.json('Sorry! User does not have enough Permissions');
             }
           });
