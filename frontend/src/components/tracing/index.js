@@ -24,8 +24,7 @@ import { chainOfCustody, updateStatus } from "../../actions/shipmentActions";
 import { receiveShipment } from "../../actions/shipmentActions";
 const Tracing = (props) => {
   console.log('Props');
-  console.log(props);
-  const [menu, setMenu] = useState(false);
+  console.log(props);  const [menu, setMenu] = useState(false);
   const [menuShip, setMenuShip] = useState(false);
   const [menuProduct, setMenuProduct] = useState(false);
   const [chain, setChain] = useState(false);
@@ -34,6 +33,8 @@ const Tracing = (props) => {
   const [openPurchase, setOpenPurchase] = useState(false);
   const [openShipping, setOpenShipping] = useState(false);
   const tracking = props.trackData;
+  const shippmentChainOfCustodyData = props.shippmentChainOfCustodyData;
+  console.log(shippmentChainOfCustodyData)
   // console.log(tracking);
   const productCard = props.productDetails;
   const poCard = props.poDetails;
@@ -134,7 +135,7 @@ const Tracing = (props) => {
             </Modal>
           )}
           <h6 className="heading mb-5">CHAIN OF CUSTODY</h6>
-          {Object.keys(tracking).length === 0 ? (
+          {shippmentChainOfCustodyData.length === 0 ? (
             <div>N/A</div>
           ) : (
             <div className="row mb-3 mt-2">
@@ -149,7 +150,7 @@ const Tracing = (props) => {
               <div className="d-flex flex-column mr-2">
                 <div className="chain text-secondary">Shipment Number</div>
                 <div className="chain">
-                  <strong>{tracking.shipmentDetails[0].id}</strong>
+                  <strong>{shippmentChainOfCustodyData[0].id}</strong>
                 </div>
               </div>
               <div className="d-flex flex-column  ml-5 mr-3">
@@ -158,25 +159,25 @@ const Tracing = (props) => {
               </div>
               <div className="col">
                 <div className="chain">
-                  <strong>{tracking.fromLocation}</strong>
+                  <strong>{shippmentChainOfCustodyData[0].supplier.org.postalAddress}</strong>
                 </div>
-                <div className="chainhead mb-4">{tracking.supplierOrgName}</div>
+                <div className="chainhead mb-4">{shippmentChainOfCustodyData[0].supplier.org.name}</div>
                 <div className="chain">
-                  <strong>{tracking.toLocation}</strong>
+                  <strong>{shippmentChainOfCustodyData[0].receiver.org.postalAddress}</strong>
                 </div>
-                <div className="chainhead">{tracking.customerOrgName}</div>
+                <div className="chainhead">{shippmentChainOfCustodyData[0].receiver.org.name}</div>
               </div>
             </div>
           )}
-          <PoChainOfCustody
+          {/* <PoChainOfCustody
             shipments={props.poChainOfCustodyData}
             setOpenPurchase={setOpenPurchase}
-          />
+          /> */}
           <SoChainOfCustody
-            shipments={props.shippmentChainOfCustodyData}         
+            shipments={shippmentChainOfCustodyData}         
             setOpenShipping={setOpenShipping}
           />
-          <ChainOfCustody
+          {/* <ChainOfCustody
             chain={chain}
             setChain={setChain}
             shipments={tracking}
@@ -184,7 +185,7 @@ const Tracing = (props) => {
             setMenuShip={setMenuShip}
             setMenuProduct={setMenuProduct}
             setProductHighLight={setProductHighLight}
-          />
+          /> */}
         </div>
       </div>
     </div>
