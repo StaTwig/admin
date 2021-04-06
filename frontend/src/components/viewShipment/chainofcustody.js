@@ -46,7 +46,7 @@ const ChainOfCustody = (props) => {
                 <div className=" d-flex flex-row p-1">
                 <span class="w-75  text-secondary" > Organisation Name </span>  <span class="w-75">{shipmentData.receiver.org.name}</span></div>
                 <div className=" d-flex flex-row p-1">
-                <span class="w-75  text-secondary" > Organisation Location></span> <span class="w-75">{shipmentData.receiver.warehouse.postalAddress}</span></div>
+                <span class="w-75  text-secondary" > Organisation Location</span> <span class="w-75">{shipmentData.receiver.warehouse.postalAddress}</span></div>
                 </div>
               </div>
               </div>
