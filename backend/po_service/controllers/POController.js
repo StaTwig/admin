@@ -4,6 +4,7 @@ const moveFile = require('move-file');
 const XLSX = require('xlsx');
 const axios = require('axios');
 const uniqid = require('uniqid');
+const date = require('date-and-time');
 
 const POModel = require('../models/POModel');
 const ShipmentModel = require('../models/ShipmentModel');
@@ -362,11 +363,22 @@ exports.changePOStatus = [
                 const { address } = req.user;
                 const { orderID, status } = req.body;
                 const po = await RecordModel.findOne({ id : orderID });
-                console.log("test",po,po.customer.customer_incharge,address)
                 if (po && po.customer.customer_incharge === address) {
-                  //await POModel.update({ orderID }, { status });
-                  wrapper.updateRecord(RecordModel,{ id : orderID }, { poStatus : status })
-                  return apiResponse.successResponseWithData(
+                  
+                const currDateTime = date.format( new Date(), 'DD/MM/YYYY HH:mm');
+                const updates = {
+                     "updatedOn": currDateTime,
+                     "status":status
+                }
+
+                const updateData = await RecordModel.findOneAndUpdate(
+                { id: orderID },
+                {
+                      $push: { poUpdates: updates },
+                      $set: {poStatus :status }
+                })
+
+                return apiResponse.successResponseWithData(
                       res,
                       'PO Status',
                       'Success',
@@ -385,8 +397,8 @@ exports.changePOStatus = [
               } catch (e) {
                 return apiResponse.ErrorResponse(res, 'Error from Blockchain');
               }
-            } else {
-              res.json('Sorry! User does not have enough Permissions');
+               else {
+               res.json('Sorry! User does not have enough Permissions');
             }
           });
         } else {
@@ -563,6 +575,14 @@ exports.createOrder = [
         createdBy,
         lastUpdatedBy
       });
+
+      const currDateTime = date.format( new Date(), 'DD/MM/YYYY HH:mm');
+      const updates = {
+             "updatedOn": currDateTime,
+             "status":"CREATED"
+      }
+      purchaseOrder.poUpdates = updates;
+
       const result = await purchaseOrder.save();
       return apiResponse.successResponseWithData(res, 'Created order');
     } catch (err) {

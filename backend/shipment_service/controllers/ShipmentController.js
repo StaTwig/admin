@@ -217,7 +217,8 @@ exports.createShipment = [
             const poID = data.poId;
             var flag = "Y";
 
-            if (data.shippingOrderId === null || data.poId === null) {
+            //if (data.shippingOrderId === null || data.poId === null) {
+	      if (data.poId === null) {
                 if (process == true) {
                     flag = "YS"
                 } else {
@@ -238,7 +239,8 @@ exports.createShipment = [
                         }
                     })
                 })
-                if (quantityMismatch) {
+                
+		if (quantityMismatch) {
                     po.poStatus = 'TRANSIT&PARTIALLYFULFILLED';
                 } else {
                     po.poStatus = 'TRANSIT&FULLYFULFILLED';
@@ -352,7 +354,7 @@ exports.receiveShipment = [
             }
             
             var flag = "Y";
-            if (data.shippingOrderId === null || data.poId === null) {
+            if ( data.poId === null ) {
                    flag = "YS"
             }
 
@@ -369,7 +371,6 @@ exports.receiveShipment = [
                     }
                 })
             })
-
             if (quantityMismatch) {
                 po.poStatus = 'PARTIALLYFULFILLED';
                 await po.save();
@@ -407,6 +408,7 @@ exports.receiveShipment = [
             const currDateTime = date.format( new Date(), 'DD/MM/YYYY HH:mm');
               const updates = {
                       "updatedOn": currDateTime,
+                      "updateComment": data.comment,
                       "status":"RECEIVED"
                 }
 	   
@@ -416,7 +418,6 @@ exports.receiveShipment = [
 		      $push: { shipmentUpdates: updates },
 		      $set: {status :"RECEIVED" }
 	     })
-console.log("2121",updateData)
 
             //await ShipmentModel.findOneAndUpdate({
               //  id: data.id
@@ -988,7 +989,47 @@ exports.chainOfCustody = [
             checkToken(req, res, async result => {
                 if (result.success) {
                 var chainOfCustody = [];
-               const shipments = await  ShipmentModel.aggregate([{
+                var poDetails = "";
+                
+                const shipmentDetails = await  ShipmentModel.findOne({"id": req.query.shipmentId});
+                const poId = shipmentDetails.poId; 
+                
+		if (poId != null) {
+                poDetails = await RecordModel.aggregate([{
+                            $match: {
+                                id: poId
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: "organisations",
+                                localField: "supplier.supplierOrganisation",
+                                foreignField: "id",
+                                as: "supplier.organisation",
+                            },
+                        },
+                        {
+                            $unwind: {
+                                path: "$supplier.organisation",
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: "organisations",
+                                localField: "customer.customerOrganisation",
+                                foreignField: "id",
+                                as: "customer.organisation",
+                            },
+                        },
+                        {
+                            $unwind: {
+                                path: "$customer.organisation",
+                            },
+                        },
+                    ]);
+                }                
+
+                const shipments = await  ShipmentModel.aggregate([{
                 $match:
                    { id: req.query.shipmentId }
             },
@@ -1049,7 +1090,10 @@ exports.chainOfCustody = [
                 return apiResponse.successResponseWithData(
                                 res,
                                 'Status Updated',
-                        {"chainOfCustody":shipments}
+                                {
+                                    "poChainOfCustody":poDetails,
+                                    "shipmentChainOfCustody":shipments
+                                }
                             );
 
                 } else {
