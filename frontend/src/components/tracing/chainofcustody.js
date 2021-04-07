@@ -4,9 +4,11 @@ import traceDrop from '../../assets/icons/traceDrop.png';
 import Down from '../../assets/icons/up.png';
 
 const ChainOfCustody = (props) => {
+  // console.log('From chain of custody');
+  // console.log(props.shipments)
   const[op, setOp] = useState('');
   return (
-    Object.keys(props.shipments).length === 0 || (!props.shipments.shipmentChainOfCustody)? <div className="row panel justify-content-between">N/A</div> :
+    Object.keys(props.shipments).length === 0 ? <div className="row panel justify-content-between">N/A</div> :
     <div>
   {props.shipments.shipmentChainOfCustody.map((custody,index) =>(
   <div className="row  mb-3">

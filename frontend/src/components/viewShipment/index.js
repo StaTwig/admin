@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, setState } from "react";
 import ShipmentSummary from "./shipmentsummary";
 import PoDetails from "./podetails";
 import ShipmentDetails from "./shipmentdetails";
@@ -10,17 +10,17 @@ import returnShipment from "../../assets/icons/returnShipment.svg";
 import updownarrow from "../../assets/icons/up-and-down-white.svg";
 import currentinventory from "../../assets/icons/CurrentInventory.svg";
 import CurrentTemperature from "../../assets/icons/thermometer.svg";
-import back from '../../assets/icons/back.png';
 import traceDrop from "../../assets/icons/traceDrop.png";
 import Serial from "./serial";
 import "./style.scss";
 import ChainOfCustody from "./chainofcustody";
 import Modal from "../../shared/modal";
 import { Link } from 'react-router-dom';
-import { updateStatus } from "../../actions/shipmentActions";
+import { chainOfCustody, updateStatus } from "../../actions/shipmentActions";
 import { receiveShipment } from "../../actions/shipmentActions";
 const Tracing = (props) => {
-  const [menu, setMenu] = useState(false);
+  console.log('Props');
+  console.log(props);  const [menu, setMenu] = useState(false);
   const [menuShip, setMenuShip] = useState(false);
   const [menuProduct, setMenuProduct] = useState(false);
   const [chain, setChain] = useState(false);
@@ -29,10 +29,13 @@ const Tracing = (props) => {
   const [openPurchase, setOpenPurchase] = useState(false);
   const [openShipping, setOpenShipping] = useState(false);
   const tracking = props.trackData;
-  //const productCard = props.productDetails;
-  //const poCard = props.poDetails;
+  const shippmentChainOfCustodyData = props.shippmentChainOfCustodyData;
+  console.log(shippmentChainOfCustodyData)
+  // console.log(tracking);
+  const productCard = props.productDetails;
+  const poCard = props.poDetails;
   const {id} = props.match.params;
-
+  console.log(id);
 
   const closeModal = () => {
     setOpenPurchase(false);
@@ -44,17 +47,14 @@ const Tracing = (props) => {
   return (
     <div className="tracing">
       <div className="row justify-content-between">
-        <h1 className="breadcrumb">VIEW SHIPMENT</h1>
+        <h1 className="breadcrumb">Track & Trace</h1>
         <div className="row">
- <Link to={`/shipments`}>
-           <button className="btn btn-outline-primary mr-2" ><img src={back} height="17" className="mr-2 mb-1" />Back to shipments</button>
-          </Link>
           <Link to={`/updatestatus/${id}`}>
             <button className="btn btn-orange fontSize20 font-bold mr-5">
               <span className="chain">Update Status</span>
             </button>
           </Link>
-          <Link to="/receiveShipment">
+          <Link to={`/receiveShipment/${id}`}>
           <button className="btn btn-main-blue fontSize20 font-bold ">
             <img src={returnShipment} width="14" height="14" className="mr-2" />
             <span className="chain">Receive Shipment</span>
@@ -121,8 +121,17 @@ const Tracing = (props) => {
           >
             SHOW MORE
           </button>
+          {openShipping && (
+            <Modal
+              title="Shipping Order Details"
+              close={() => closeModalShipping()}
+              size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
+            >
+              <ViewShippingModal shipments={tracking} />
+            </Modal>
+          )}
           <h6 className="heading mb-5">CHAIN OF CUSTODY</h6>
-          {Object.keys(tracking).length === 0 ? (
+          {shippmentChainOfCustodyData.length === 0 ? (
             <div>N/A</div>
           ) : (
             <div className="row mb-3 mt-2">
@@ -137,7 +146,7 @@ const Tracing = (props) => {
               <div className="d-flex flex-column mr-2">
                 <div className="chain text-secondary">Shipment Number</div>
                 <div className="chain">
-                  <strong>{tracking.shipmentDetails[0].id}</strong>
+                  <strong>{shippmentChainOfCustodyData[0].id}</strong>
                 </div>
               </div>
               <div className="d-flex flex-column  ml-5 mr-3">
@@ -146,20 +155,21 @@ const Tracing = (props) => {
               </div>
               <div className="col">
                 <div className="chain">
-                  <strong>{tracking.fromLocation}</strong>
+                  <strong>{shippmentChainOfCustodyData[0].supplier.org.postalAddress}</strong>
                 </div>
-                <div className="chainhead mb-4">{tracking.supplierOrgName}</div>
+                <div className="chainhead mb-4">{shippmentChainOfCustodyData[0].supplier.org.name}</div>
                 <div className="chain">
-                  <strong>{tracking.toLocation}</strong>
+                  <strong>{shippmentChainOfCustodyData[0].receiver.org.postalAddress}</strong>
                 </div>
-                <div className="chainhead">{tracking.customerOrgName}</div>
+                <div className="chainhead">{shippmentChainOfCustodyData[0].receiver.org.name}</div>
               </div>
             </div>
           )}
-          <ChainOfCustody
-            chain={chain}
-            setChain={setChain}
-            shipments={tracking}
+         
+           <ChainOfCustody
+           // chain={chain}
+            //setChain={setChain}
+            shipments={shippmentChainOfCustodyData}
             setHighLight={setHighLight}
             setMenuShip={setMenuShip}
             setMenuProduct={setMenuProduct}
