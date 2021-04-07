@@ -5,7 +5,7 @@ import Login from "./login";
 import VerifyPassword from './verifyPassword';
 import SignUp from './signUp';
 import "./style.scss";
-import { sendOtp, verifyOtp } from "../../../../../frontend/src/actions/userActions";
+import { sendOtp, verifyOtp } from "../../actions/userActions";
 
 const Home = (props) => {
   const [buttonActive, setButtonActive] = useState(0);
