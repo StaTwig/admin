@@ -106,7 +106,6 @@ export const getShipmentsById = query => {
 
 export const createShipment = async data => {
   try {
-    debugger;
     const result = await axios.post(config().createShipmentUrl, data);
     return result.data.data;
   } catch (e) {
@@ -148,7 +147,6 @@ export const setReviewShipments = data => {
 
 export const updateTrackingStatus = async data => {
 try {
-    debugger;
     const result = await axios.post(config().updateTrackingStatusUrl, data);
     return result;
   } catch (e) {
@@ -209,7 +207,6 @@ const resetShipmentsCount = data => {
 export const addPOsFromExcel = async data => {
   try {
     const url = config().addPOsFromExcelUrl;
-    debugger;
     const result = await axios.post(url, data, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });

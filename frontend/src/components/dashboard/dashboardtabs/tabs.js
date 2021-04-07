@@ -3,16 +3,16 @@ import searchingIcon from '../../../assets/icons/searching@2x.png';
 import './style.scss';
 
 const Tabs = props => {
-  const { filteredWareHouses, visible, setVisible, warehouseText, onWarehouseChange, onSearchClick, setContent, setDashVisible } = props;
+  const { filteredWareHouses, visible, setVisible, warehouseText, setWarehouseText, onWarehouseChange, onSearchClick, setContent, setDashVisible, warehouseArr, setWarehouseArr, setDashBarData } = props;
   const [isClicked, setIsClicked] = useState(false);
 
  return (
     <div className="dashboardtabs">
       <ul className="nav nav-pills mb-2">
-        <li className={ visible ? "nav-item" : "nav-item-active"} onClick = {() => setVisible(false)}>
+       <li className={visible ? "nav-item" : "nav-item-active"} onClick={() => { if (warehouseArr.length > 0) setWarehouseArr([]); setWarehouseText(''); setDashVisible(false); setDashBarData({}); setVisible(false); }}>
           <a className={visible ? "nav-link text-secondary" : "nav-link"}>Storage Location</a>
         </li>
-        <li className= { visible ? "nav-item-active " : "nav-item"} onClick = {() => setVisible(true)}>
+       <li className={visible ? "nav-item-active " : "nav-item"} onClick={() => { if (warehouseArr.length > 0) setWarehouseArr([]); setWarehouseText(''); setDashVisible(false); setDashBarData({}); setVisible(true);}}>
           <a className={visible ? "nav-link" : "nav-link text-secondary"}>Shipment</a>
         </li>
         <li>
@@ -26,9 +26,9 @@ const Tabs = props => {
           />
           <img src={searchingIcon} onClick = {() => onSearchClick(warehouseText)} alt="searching" />
            {warehouseText != '' && !isClicked && 
-             <div className="bg-white m-1 p-2 position-absolute rounded" style={{width:250}}>
+             <div className="bg-white m-1 p-2 position-absolute rounded" style={{width:300}}>
                {filteredWareHouses?.map((warehouse, index) => (
-                 <p key={index} className="p-1 m-0 cursorP" onClick={() => { setIsClicked(true); onWarehouseChange(warehouse.title); onSearchClick(warehouse.id); }}>{warehouse.title}</p>
+                 <p key={index} className="p-1 m-0 cursorP" onClick={() => { setIsClicked(true); onWarehouseChange(visible ? warehouse.id : warehouse.title); onSearchClick(warehouse.id); }}>{visible ? warehouse.id : warehouse.title}</p>
                ))}
              </div>
            }
@@ -36,10 +36,12 @@ const Tabs = props => {
 
         </li>
         <li>
-        <button className=" btn-primary btn warehouse" onClick = {()=>{
-          setContent(false)
-          setDashVisible(true);
-        }} >Search Location</button>
+         {!visible &&
+           <button className=" btn-primary btn warehouse" onClick={() => {
+             setContent(false);
+             setDashVisible(true);
+           }} >Search Location</button>
+         }
         </li>
 
       </ul>

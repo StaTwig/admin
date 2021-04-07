@@ -32,7 +32,6 @@ export const getProductList = async () => {
   try {
     const result = await axios.get(config().productListUrl);
     return result.data;
-    debugger;
   } catch (e) {
     return [];
   }

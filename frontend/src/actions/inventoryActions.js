@@ -83,10 +83,8 @@ export const getWareHousesByCountry = async (id) => {
 };
 export const getWareHousesByRegion = async (id) => {
   try {
-    debugger;
     const urlobj = config();
     const url = urlobj.getWareHousesByRegionUrl+id;
-    debugger;
     const result = await axios.get(url);
     return result.data;
   } catch (e) {
@@ -234,5 +232,14 @@ export const getInventoryByBatchNumber = id => {
     };
   } catch (e) {
     return e.response;
+  }
+};
+
+export const getShipmentIds = async (id) => {
+  try {
+    const result = await axios.get(config().getShipmentIdsUrl);
+    return result.data.data;
+  } catch (e) {
+    return {};
   }
 };

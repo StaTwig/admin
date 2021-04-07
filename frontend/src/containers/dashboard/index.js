@@ -5,17 +5,20 @@ import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
 import './style.scss';
 import DashBar from '../../shared/dashbar/index';
-import { getProductDetailsByWarehouseId, getWarehouseByOrgId } from '../../actions/inventoryActions';
+import { getProductDetailsByWarehouseId, getWarehouseByOrgId, getShipmentIds } from '../../actions/inventoryActions';
 import { useSelector } from "react-redux";
 import { turnOn, turnOff } from '../../actions/spinnerActions';
+import { getViewShipment } from '../../actions/shipmentActions';
 
 const DashBoardContainer = props => {
   const [dashVisible, setDashVisible] = useState(false);
   const [content, setContent] = useState(true);
   const [ dashBarData, setDashBarData ] = useState({});
   const [ wareHouses, setWareHouses ] = useState([]);
+  const [ shipmentIds, setShipmentIds ] = useState([]);
   const [ warehouseArr, setWarehouseArr ] = useState([]);
   const dispatch = useDispatch();
+  const [visible, setVisible] = useState(false);
 
   const user = useSelector((state) => {
     return state.user;
@@ -25,23 +28,35 @@ const DashBoardContainer = props => {
     (async () => {
       const warehouse = await getWarehouseByOrgId(user?.organisationId);
       setWareHouses(warehouse.data);
+      const shipments = await getShipmentIds();
+      setShipmentIds(shipments);
     })();
   }, []);
 
   const onSearchClick = async (warehouseId) => {
     dispatch(turnOn());
-    const result = await getProductDetailsByWarehouseId(warehouseId);
-    if (result?.warehouse) {
+    let result;
+    if(!visible)
+      result = await getProductDetailsByWarehouseId(warehouseId);
+    else
+      result = await dispatch(getViewShipment(warehouseId));
+    setDashBarData(result);
+    
+    if (result?.warehouse || result?.id) {
       setDashVisible(true);
       setContent(true);
     }
-    setDashBarData(result);
     dispatch(turnOff());
   }
 
   const onSearchWareHouse = async (warehouseId) => {
     dispatch(turnOn());
-    const result = await getProductDetailsByWarehouseId(warehouseId);
+    let result;
+    if(!visible)
+      result = await getProductDetailsByWarehouseId(warehouseId);
+    else
+      result = await dispatch(getViewShipment(warehouseId));
+    
     setDashBarData(result);
     dispatch(turnOff());
   }
@@ -56,12 +71,18 @@ const DashBoardContainer = props => {
             {...props}
             dashVisible={dashVisible}
             setDashVisible={setDashVisible}
+            visible={visible}
+            setVisible={setVisible}
             content={content}
             setContent={setContent}
             onSearchClick={onSearchClick}
             warehouseLocation={dashBarData?.warehouse?.warehouseLocation}
             warehouseArr={warehouseArr}
+            shipment={dashBarData}
+            setWarehouseArr={setWarehouseArr}
+            setDashBarData={setDashBarData}
             warehouses={wareHouses}
+            shipmentIds={shipmentIds}
           />
         </div>
         {dashVisible && (
@@ -70,6 +91,8 @@ const DashBoardContainer = props => {
             onSearchWareHouse={onSearchWareHouse}
             setDashVisible={setDashVisible}
             content={content}
+            visible={visible}
+            setVisible={setVisible}
             setContent={setContent}
             dashBarData={dashBarData}
             setDashBarData={setDashBarData}
@@ -77,6 +100,7 @@ const DashBoardContainer = props => {
             warehouseArr={warehouseArr}
             setWarehouseArr={setWarehouseArr}
             warehouses={wareHouses}
+            shipmentIds={shipmentIds}
           />
         )}
       </div>

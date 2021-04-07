@@ -43,6 +43,7 @@ import './style.scss'
         const regionResult = await getWareHousesByRegion(item);
         if (regionResult.status === 1) {
             setWareHouses(regionResult.data);
+            props.setWarehouseArr(warehousesResult.data);
             const warehouseList = regionResult.data.map(w => w.id);
             setWareHouseIds(warehouseList);
         }
