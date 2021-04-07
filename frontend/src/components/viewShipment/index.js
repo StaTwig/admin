@@ -12,6 +12,8 @@ import currentinventory from "../../assets/icons/CurrentInventory.svg";
 import CurrentTemperature from "../../assets/icons/thermometer.svg";
 import traceDrop from "../../assets/icons/traceDrop.png";
 import Serial from "./serial";
+import back from '../../assets/icons/back.png';
+
 import "./style.scss";
 import ChainOfCustody from "./chainofcustody";
 import Modal from "../../shared/modal";
@@ -47,8 +49,12 @@ const Tracing = (props) => {
   return (
     <div className="tracing">
       <div className="row justify-content-between">
-        <h1 className="breadcrumb">Track & Trace</h1>
+        <h1 className="breadcrumb">VIEW SHIPMENT</h1>
         <div className="row">
+        <Link to={`/shipments`}>
+           <button className="btn btn-outline-primary mr-2" ><img src={back} height="17" className="mr-2 mb-1" />Back to         shipments</button>
+          </Link>
+
           <Link to={`/updatestatus/${id}`}>
             <button className="btn btn-orange fontSize20 font-bold mr-5">
               <span className="chain">Update Status</span>
@@ -170,6 +176,7 @@ const Tracing = (props) => {
            // chain={chain}
             //setChain={setChain}
             shipments={shippmentChainOfCustodyData}
+            imagesData={props.imagesData}
             setHighLight={setHighLight}
             setMenuShip={setMenuShip}
             setMenuProduct={setMenuProduct}
