@@ -5,9 +5,10 @@ import Login from "./login";
 import VerifyPassword from './verifyPassword';
 import SignUp from './signUp';
 import "./style.scss";
-import { sendOtp, verifyOtp } from "../../actions/userActions";
+import { sendOtp, verifyOtp, registerUser } from "../../actions/userActions";
 
 const Home = (props) => {
+  const [showSignUpCompletedMessage, setShowSignUpCompletedMessage] = useState(false);
   const [buttonActive, setButtonActive] = useState(0);
   const [steps, setSteps] = useState(1);
   const [continueClick, setContinueClick] = useState(false);
@@ -85,6 +86,20 @@ const Home = (props) => {
     }
   });
 
+  const onSignUpClick = useCallback(async (values) => {
+    let data = { firstName: values.firstName, lastName: values.lastName, emailId: values.mobile_email, organisationId: values.organisation };
+    const result = await registerUser(data);
+    if (result.status === 200) {
+      setShowSignUpCompletedMessage(true);
+    } else if (result.status === 500) {
+      setErrorMessage(result.data.message);
+    }
+    else {
+      const err = result.data.data[0];
+      setErrorMessage(err.msg);
+    }
+  });
+
   return (
     <div className="home">
       <div className="container centered">
@@ -112,7 +127,17 @@ const Home = (props) => {
             onOtpChange4={e => setOtp4(e.target.value)}
             onVerifyOtp={onVerifyOTP}
             onResendOtp={resendOtp} />}
-          {steps == 4 && <SignUp setSteps={setSteps} setContinueClick={setContinueClick} />}
+          {steps == 4 && (!showSignUpCompletedMessage && !errorMessage.length) && <SignUp setSteps={setSteps} setContinueClick={setContinueClick} onSignUpClick={onSignUpClick} />}
+          {steps == 4 && showSignUpCompletedMessage && <h4>Account waiting for approval by Admin.<a href="#" onClick={
+            () => {
+              setSteps(2);
+            }
+          } className="signUpLink">Log In</a> here</h4>}
+          {steps == 4 && errorMessage.length && <h4>{errorMessage}. <a href="#" onClick={
+            () => {
+              setSteps(2);
+            }
+          } className="signUpLink">Log In</a> here.</h4>}
         </div>
       </div>
     </div>

@@ -1,11 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
+
 import logo from "../../assets/ABInBev.png";
 
 const SignUp = (props) => {
   const {
     setSteps,
-    setContinueClick
+    setContinueClick,
+    onSignUpClick
   } = props;
+  const [values, setValues] = useState({ firstName: '', lastName: '', mobile_email: '', organisation: '' });
+
+  const handleChange = (property, e) => {
+    if (property === 'firstName') {
+      setValues({
+        ...values,
+        firstName: e.target.value
+      });
+    } else if (property === 'lastName') {
+      setValues({
+        ...values,
+        lastName: e.target.value
+      });
+    } else if (property === 'mobile_email') {
+      setValues({
+        ...values,
+        mobile_email: e.target.value
+      });
+    } else if (property === 'organisation') {
+      setValues({
+        ...values,
+        organisation: e.target.value
+      });
+    }
+  }
+
   return (
     <div className="signUpScreen">
       <div className="align-center pb-5 pt-5">
@@ -16,21 +44,24 @@ const SignUp = (props) => {
       <div className="loginUserBlock justify-content-center">
         <div className="form-group">
           <label htmlFor="firstName" className="userNameLabel mb-1">First Name</label>
-          <input name="firstName" className="form-control username mb-3" />
+          <input name="firstName" className="form-control username mb-3" value={values.firstName}
+            onChange={(e) => { handleChange('firstName', e); }} />
 
           <label htmlFor="lastName" className="userNameLabel mb-1">Last Name</label>
-          <input name="lastName" className="form-control username mb-3" />
+          <input name="lastName" className="form-control username mb-3" value={values.lastName}
+            onChange={(e) => { handleChange('lastName', e); }} />
 
           <label htmlFor="mobileemail" className="userNameLabel mb-1">Mobile No / Email ID</label>
-          <input name="mobileemail" className="form-control username mb-3" />
+          <input name="mobileemail" className="form-control username mb-3" value={values.mobile_email}
+            onChange={(e) => { handleChange('mobile_email', e); }} />
 
           <label htmlFor="organisation" className="organisationLabel mb-1">Organisation</label>
-          <input name="organisation" className="form-control organisation mb-3" />
+          <input name="organisation" className="form-control organisation mb-3" value={values.organisation}
+            onChange={(e) => { handleChange('organisation', e); }} />
 
           <button
             onClick={() => {
-              setContinueClick(true);
-              setSteps(3);
+              onSignUpClick(values);
             }}
             className={`width100 btn mt-4`}
             type="button"
