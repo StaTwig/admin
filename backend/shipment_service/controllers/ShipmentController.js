@@ -117,6 +117,19 @@ const poUpdate = async (id, quantity, poId, shipmentStatus, next) => {
     //next("Success")
 };
 
+const shipmentUpdate = async (id, quantity, shipmentId, shipmentStatus, next) => {
+
+        const shipmentUpdateDelivered = await ShipmentModel.update({
+            "id": shipmentId,
+            "products.productID": id
+        }, {
+            $inc: {
+                "products.$.productQuantityDelivered": quantity
+            }
+        })
+    //next("Success")
+};
+
 const userShipments = async ( mode, warehouseId, skip, limit, callback) => {
 
         var matchCondition = {};
@@ -401,6 +414,7 @@ exports.receiveShipment = [
               for ( count=0; count < products.length; count++)
                  {
                     inventoryUpdate(products[count].productID, products[count].productQuantity, suppInventoryId, recvInventoryId, data.poId, "RECEIVED")
+                    shipmentUpdate(products[count].productID, products[count].productQuantity, data.id, "RECEIVED")
                     if (flag == "Y")
                        poUpdate(products[count].productId, products[count].productQuantity, data.poId, "RECEIVED")
                  }
