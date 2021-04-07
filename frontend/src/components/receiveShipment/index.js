@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { receiveShipment } from "../../actions/shipmentActions";
+import { receiveShipment, uploadImage } from "../../actions/shipmentActions";
 import Modal from "../../shared/modal";
 import returnShipment from '../../assets/icons/returnShipment.svg';
 import "./style.scss";
@@ -19,6 +19,7 @@ const ReceiveShipment = (props) => {
 
   const [shipmentId, setShipmentId] = useState([]);
   const [billNo, setBillNo] = useState("");
+  const [photo, setPhoto] = useState(null);
   const id = props.match.params.id
 
   const [openUpdatedStatus, setOpenUpdatedStatus] = useState(false);
@@ -37,6 +38,26 @@ const ReceiveShipment = (props) => {
       setOpenUpdatedStatus(true);
       console.log("success add product");
     }
+  };
+
+  const uploadPhoto = () => {
+      const formData = new FormData();
+    
+      formData.append(
+        "photo",
+        photo,
+        photo.name
+      );
+
+      const result = uploadImage(id,formData);
+      console.log(result);
+      if (result.status == 1) {
+        console.log('After uploading image');
+        console.log(result);
+      } 
+      else{
+        console.log(result.status);
+      }     
   };
 
   const closeModal = () => {
@@ -152,7 +173,7 @@ const ReceiveShipment = (props) => {
           <div className="col-sm-4">
             <div className="row justify-content-between">
               <h6 className="heading mt-3 mb-1 ml-4">Upload Image</h6>             
-                <button className="btn btn-primary font-weight-bold mb-0">
+                <button className="btn btn-primary font-weight-bold mb-0" onClick={uploadPhoto}>
                   <img
                     src={uploadWhite}
                     width="35"
