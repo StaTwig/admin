@@ -25,6 +25,7 @@ ShipmentSchema = new mongoose.Schema(
       type: Array,
       default: []
     },
+    shipmentUpdates : { type: Array,default: []},
     airWayBillNo: String,
     shippingDate: String,
     expectedDeliveryDate: String,

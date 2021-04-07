@@ -57,6 +57,17 @@ export const trackProduct = async id => {
   }
 };
 
+export const chainOfCustody = async id => {
+  try {
+    const configObject = config();
+    const url = configObject.chainOfCustody + id;
+    const result = await axios.get(url);
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
 export const poDetailsByShipmentId = async id => {
   try {
     const configObject = config();
@@ -212,6 +223,41 @@ export const addPOsFromExcel = async data => {
     });
     return result;
   } catch (e) {
+    return e.response;
+  }
+};
+
+export const uploadImage = async (id, formData) =>{
+  try{
+    const configObject = config();
+    const url = configObject.uploadImage + id;
+    const result = await axios.post(url, formData);
+    return result;
+
+  //   const requestOptions = {
+  //     method: 'POST',
+  //     headers: new Headers({
+  //       'Authorization': 'bearer '+ localStorage.theLedgerToken , 
+  //       'Content-Type': 'application/x-www-form-urlencoded'
+  //     }),
+  //     body: formData,
+  // };
+  // const result = await fetch(url, requestOptions);
+  return result;  
+  }
+  catch (e){
+    return e.reponse;
+  }
+};
+
+export const fetchImage = async (id) => {
+  try{
+    const configObject = config();
+    const url = configObject.fetchImage + id;
+    const result = await axios.get(url);
+    return result;
+  }
+  catch(e){
     return e.response;
   }
 };

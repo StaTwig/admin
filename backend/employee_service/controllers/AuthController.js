@@ -315,7 +315,7 @@ exports.register = [
           const user = new EmployeeModel({
             firstName: req.body.firstName,
             lastName: req.body.lastName,
-            emailId: phone ? '' : req.body.emailId,
+            emailId: phone ? '' : req.body.emailId.toLowerCase(),
             phoneNumber: phone,
             organisationId: organisationId,
             id: employeeId,

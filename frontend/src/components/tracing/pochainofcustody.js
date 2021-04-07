@@ -6,28 +6,30 @@ import Down from '../../assets/icons/up.png';
 
 const PoChainOfCustody = (props) => {
   const[op, setOp] = useState('');
+  console.log('Shipments from poChainOfCustody');
+  console.log(props.shipments);
   return (
-    Object.keys(props.shipments).length === 0 || (!props.shipments.poChainOfCustody)? <div className="row panel justify-content-between">N/A</div> :
+    Object.keys(props.shipments).length === 0 || (!props.shipments)? <div className="row panel justify-content-between">N/A</div> :
     <div>
-    {props.shipments.poChainOfCustody.map((custody,index) =>(
+    {props.shipments.map((custody,index) =>(
       <div className="row mb-3">
         <div></div>
         <div className="big-dot bg-info ml-4"></div>
         <div className="col">
-          <div className="color mb-3">{custody.status}</div>
+          <div className="color mb-3">{custody.poStatus}</div>
           <div className="col panel chain chainpanle">
             <div className="row justify-content-between">
               <div className="col">
-                <div><strong>{`Purchase Order ${custody.status}`}</strong></div>
-              <div>By: <strong>{props.shipments.supplierOrgName}</strong></div>
+                <div><strong>{`Purchase Order ${custody.poStatus}`}</strong></div>
+              <div>By: <strong>{custody.supplier.organisation.name}</strong></div>
               </div>
               <div className="col">
                 <div className="emp"></div>
-                <div>Unicef Po ID : <strong>{props.shipments.poDetails[0].externalId}</strong></div>
+                <div>Unicef Po ID : <strong>{custody.externalId}</strong></div>
                 <div></div>
               </div>
               <div className="d-flex flex-column mr-5">
-                <div>{custody.dateTime.split('T')[0].split('-')[2]+"/"+custody.dateTime.split('T')[0].split('-')[1]+"/"+custody.dateTime.split('T')[0].split('-')[0]}</div>
+                <div>{custody.createdAt.split('T')[0].split('-')[2]+"/"+custody.createdAt.split('T')[0].split('-')[1]+"/"+custody.createdAt.split('T')[0].split('-')[0]}</div>
                 <div></div>
                 <div></div>
               </div>

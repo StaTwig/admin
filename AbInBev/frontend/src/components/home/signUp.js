@@ -23,6 +23,10 @@ const SignUp = (props) => {
 
           <label htmlFor="mobileemail" className="userNameLabel mb-1">Mobile No / Email ID</label>
           <input name="mobileemail" className="form-control username mb-3" />
+
+          <label htmlFor="organisation" className="organisationLabel mb-1">Organisation</label>
+          <input name="organisation" className="form-control organisation mb-3" />
+
           <button
             onClick={() => {
               setContinueClick(true);
@@ -33,7 +37,12 @@ const SignUp = (props) => {
           >
             GET STARTED
           </button>
-          <p className="signUpDesc align-center mt-3 ">Already have an account? <b>Log In</b></p>
+          <p className="signUpDesc align-center mt-3 ">Already have an account? <a href="#" onClick={
+            () => {
+              setContinueClick(true);
+              setSteps(2);
+            }
+          } className="signUpLink">Log In</a></p>
         </div>
       </div>
       <div className="col text-center footer-logo">

@@ -1010,8 +1010,18 @@ exports.getInventoryDetails = [
   auth,
   async(req, res) => {
   try {
+    var selectedWarehouseId = '';
+    if(req.body.warehouseId !== null){
+      selectedWarehouseId = req.body.warehouseId;
+    }
     const employee = await EmployeeModel.findOne({ id: req.user.id });
-    const warehouse = await WarehouseModel.findOne({ id: employee.warehouseId })
+
+    var warehouse;
+    if(selectedWarehouseId == '' || selectedWarehouseId == null){
+      warehouse = await WarehouseModel.findOne({ id: employee.warehouseId })
+    }else{
+      warehouse = await WarehouseModel.findOne({ id: selectedWarehouseId })
+    }
     if(warehouse) {
       const inventory = await InventoryModel.findOne({ id: warehouse.warehouseInventory });
       let inventoryDetails = []
