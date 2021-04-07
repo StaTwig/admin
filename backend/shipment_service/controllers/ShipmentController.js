@@ -118,7 +118,6 @@ const poUpdate = async (id, quantity, poId, shipmentStatus, next) => {
 };
 
 const shipmentUpdate = async (id, quantity, shipmentId, shipmentStatus, next) => {
-
         const shipmentUpdateDelivered = await ShipmentModel.update({
             "id": shipmentId,
             "products.productID": id
@@ -339,7 +338,7 @@ exports.receiveShipment = [
 
             var actuallyShippedQuantity = 0;
             var productNumber=-1;
-            if(shipmentInfo !== null){
+            /* if(shipmentInfo !== null){
                 const receivedProducts = data.products;
                 var shipmentProducts = shipmentInfo[0].products;
                 
@@ -364,7 +363,7 @@ exports.receiveShipment = [
                     const updatedDocument =  await ShipmentModel.updateOne({id: shipmentID}, shipmentInfo);    
                 }
                 
-            }
+            }*/
             
             var flag = "Y";
             if ( data.poId === null ) {
@@ -392,7 +391,6 @@ exports.receiveShipment = [
                 await po.save();
             }
         }
-
             if (flag != "N") {
 
             const suppWarehouseDetails = await WarehouseModel.findOne({
