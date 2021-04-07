@@ -1,15 +1,149 @@
-# How to run it:
-    npm i -g pm2
-    pm2 start index.js
+# Event Logger (Helper Utility)
 
-#How to see logs:
-pm2 log 0
+This is a utility helper which can be imported into any method and called with the event data in the schema defined below and the helper will validate the data to ensure it is in the right format and then will store it in the Events collection of the MongoDB. 
 
+## Steps to use
 
+1) Update the Mongo URL in the Config FILE | config.js or set "MONGODB_URL" as an env variable
+`let config = {`
+`    MONGODB_URL : "mongodb+srv://place_mongo_url_here"`
+`}`
 
-#References:
-https://www.freecodecamp.org/news/you-should-never-ever-run-directly-against-node-js-in-production-maybe-7fdfaed51ec6/
-https://nodesource.com/blog/running-your-node-js-app-with-systemd-part-1/
+**--------------------------------------------------------------------------------**
+`export MONGODB_URL = mongodb://place_mongo_url_here`
+2) Import the helper file
+`const logEvent = require('../event_logger/eventLogger.js');`
+3) Call the logEvent method
+`result = await logEvent(data)`
 
-
-kill -9 $(sudo lsof -t -i:9001)
+## Schema to Events
+    {
+      "title": "Root",
+      "type": "object",
+      "properties": {
+        "eventID": {
+          "type": "string"
+        },
+        "eventTime": {
+          "type": "string"
+        },
+        "eventType": {
+          "type": "object",
+          "properties": {
+            "primary": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "primary",
+            "description"
+          ]
+        },
+        "actor": {
+          "type": "object",
+          "properties": {
+            "actorid": {
+              "type": "string"
+            },
+            "actoruserid": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "actorid",
+            "actoruserid"
+          ]
+        },
+        "stackholders": {
+          "type": "object",
+          "properties": {
+            "ca": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "address": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "address"
+              ]
+            },
+            "actororg": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "address": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "address"
+              ]
+            },
+            "secondorg": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "address": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "id",
+                "name",
+                "address"
+              ]
+            }
+          },
+          "required": [
+            "ca",
+            "actororg",
+            "secondorg"
+          ]
+        },
+        "payload": {
+          "type": "object",
+          "properties": {
+            "data": {
+              "type": "object",
+              "properties": {},
+              "required": []
+            }
+          },
+          "required": [
+            "data"
+          ]
+        }
+      },
+      "required": [
+        "eventID",
+        "eventTime",
+        "eventType",
+        "actor",
+        "stackholders",
+        "payload"
+      ]
+    }
