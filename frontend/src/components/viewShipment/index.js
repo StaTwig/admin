@@ -176,6 +176,7 @@ const Tracing = (props) => {
            // chain={chain}
             //setChain={setChain}
             shipments={shippmentChainOfCustodyData}
+            imagesData={props.imagesData}
             setHighLight={setHighLight}
             setMenuShip={setMenuShip}
             setMenuProduct={setMenuProduct}

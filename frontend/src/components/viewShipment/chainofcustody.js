@@ -1,11 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./style.scss";
 import { useSelector } from "react-redux";
 import traceDrop from "../../assets/icons/traceDrop.png";
 import Down from "../../assets/icons/up.png";
+import { config } from "../../config";
 
 const ChainOfCustody = (props) => {
+  const configObject = config();
+  // const [imageUrl,setImageUrl] = useState(configObject.getImage);
+  const imageUrl = configObject.getImage;
+  const list = []
+
+  for (const [i, image] of props.imagesData.entries()) {
+    list.push(<img className="mr-3" height="150" width="150" src={imageUrl+image}></img>)
+    if(i==1)
+    break;
+  }
+
   const [op, setOp] = useState("");
+  console.log('From View Shipment');
+  console.log(props.imagesData);
 const shipmentData = props.shipments[0];
   const profile = useSelector((state) => {
     return state.user;
@@ -185,6 +199,8 @@ const shipmentData = props.shipments[0];
                             <h6 className="poheads potext mt-3 mb-3">
                               UploadedImage
                             </h6>
+                            {list}
+                       
                           </div>
                         </div>
 ) : null}
@@ -278,6 +294,7 @@ const shipmentData = props.shipments[0];
                             <h6 className="poheads potext mt-3 mb-3">
                               UploadedImage
                             </h6>
+                              {list}
                           </div>
                         </div>
                       ) : null}
