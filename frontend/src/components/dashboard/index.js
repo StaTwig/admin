@@ -9,7 +9,7 @@ const DashBoard = props => {
   const onWarehouseChange = v => {
     setWarehouseText(v);
   };
-  const { warehouses } = props;
+  const { warehouses, warehouseArr, warehouseLocation } = props;
 
   return (
     <div className="dashboard">
@@ -17,7 +17,7 @@ const DashBoard = props => {
         <h1 className="breadcrumb dash">YOUR NETWORK </h1>
       </div>
       <div className="panel">
-        <Map warehouseLocation={props.warehouseLocation} />
+        <Map warehouseArr={warehouseArr} warehouseLocation={warehouseLocation} />
         <div className="">
           <Tabs
             {...props}

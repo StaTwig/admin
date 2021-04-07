@@ -14,6 +14,7 @@ const DashBoardContainer = props => {
   const [content, setContent] = useState(true);
   const [ dashBarData, setDashBarData ] = useState({});
   const [ wareHouses, setWareHouses ] = useState([]);
+  const [ warehouseArr, setWarehouseArr ] = useState([]);
   const dispatch = useDispatch();
 
   const user = useSelector((state) => {
@@ -30,9 +31,11 @@ const DashBoardContainer = props => {
   const onSearchClick = async (warehouseId) => {
     dispatch(turnOn());
     const result = await getProductDetailsByWarehouseId(warehouseId);
+    if (result?.warehouse) {
+      setDashVisible(true);
+      setContent(true);
+    }
     setDashBarData(result);
-    setDashVisible(true);
-    setContent(true);
     dispatch(turnOff());
   }
 
@@ -42,7 +45,7 @@ const DashBoardContainer = props => {
     setDashBarData(result);
     dispatch(turnOff());
   }
-  
+
   return (
     <div className="container-fluid p-0">
       <Header {...props} />
@@ -57,6 +60,7 @@ const DashBoardContainer = props => {
             setContent={setContent}
             onSearchClick={onSearchClick}
             warehouseLocation={dashBarData?.warehouse?.warehouseLocation}
+            warehouseArr={warehouseArr}
             warehouses={wareHouses}
           />
         </div>
@@ -70,6 +74,8 @@ const DashBoardContainer = props => {
             dashBarData={dashBarData}
             setDashBarData={setDashBarData}
             onWarehouseSelect={onSearchClick}
+            warehouseArr={warehouseArr}
+            setWarehouseArr={setWarehouseArr}
             warehouses={wareHouses}
           />
         )}

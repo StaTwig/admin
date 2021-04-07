@@ -12,6 +12,7 @@ const Map = (props) => {
   const [lng, setLng] = useState(5);
   const [lat, setLat] = useState(34);
   const [zoom, setZoom] = useState(1.5);
+  const colors = ['#a8a8a8', '#0194e9', '#fa7924', '#ffab1c']
 
   // Initialize map when component mounts
   useEffect(() => {
@@ -24,12 +25,26 @@ const Map = (props) => {
     if(props?.warehouseLocation) {
       map = new mapboxgl.Map({
         container: mapContainerRef.current,
-        style: 'mapbox://styles/mapbox/streets-v11',
+        style: 'mapbox://styles/mapbox/light-v10',
         center: [ props.warehouseLocation.latitude, props.warehouseLocation.longitude],
         zoom: 10
       });
       const coords = [props.warehouseLocation.latitude, props.warehouseLocation.longitude];
       new mapboxgl.Marker().setLngLat(coords).addTo(map);
+    }
+    if (props?.warehouseArr.length > 0) {
+      props?.warehouseArr.forEach((w, i) => {
+        if (i === 0) {
+          map = new mapboxgl.Map({
+            container: mapContainerRef.current,
+            style: 'mapbox://styles/mapbox/light-v10',
+            center: [w.location.latitude, w.location.longitude],
+            zoom: 10
+          });
+        }
+        const coords = [w.location.latitude, w.location.longitude];
+        new mapboxgl.Marker({ color: colors[Math.floor(Math.random() * 3) + 1] }).setLngLat(coords).addTo(map);
+      });
     }
 
     // Add navigation control (the +/- zoom buttons)
@@ -43,7 +58,7 @@ const Map = (props) => {
 
     // Clean up on unmount
     return () => map.remove();
-  }, [props.warehouseLocation]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [props]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>

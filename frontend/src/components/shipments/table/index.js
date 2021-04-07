@@ -64,8 +64,7 @@ const Table = props => {
                     < span style={{ backgroundColor: '#EAEAEA', marginLeft: 5 }} className="rounded p-1"><img style={{ height: 15 }} src={alert} /></span>
                   }
                 </div>
-                <div className="rTableCell">
-                {shipment.shippingDate.split('T')[0].split('-')[2]+"/"+shipment.shippingDate.split('T')[0].split('-')[1]+"/"+shipment.shippingDate.split('T')[0].split('-')[0]}
+                <div className="rTableCell">{shipment.shippingDate.length == 10 ? shipment.shippingDate : formatDate(shipment.shippingDate)}
                 </div>
                 <div className="rTableCell"><p className="mb-0 bold">{shipment.supplier.org.name}</p><p className="address mb-0 text-muted">{supplierAddress}</p></div>
                 <div className="rTableCell"><p className="mb-0 bold">{shipment.receiver.org.name}</p><p className="mb-0 address text-muted">{receiverAddress}</p></div>

@@ -1,24 +1,29 @@
 
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import back from '../../assets/icons/back.png';
-import { formatDate } from '../../utils/dateHelper';
 import ViewTable from "./table/viewTable";
 import { useSelector, useDispatch } from "react-redux";
 import OrderIcon from '../../assets/icons/order.svg';
 import Pen from '../../assets/icons/pen1.svg';
 import ShipmentPopUp from "../neworder/shipmentPopUp";
+import ShipmentFailPopUp from "../neworder/shipmentFailPopUp";
 import './style.scss';
+import { turnOn, turnOff } from "../../actions/spinnerActions";
+import { createOrder, resetEditPos } from '../../actions/poActions';
 
 const ReviewOrder = props => {
   const order = useSelector(state => {
     return state?.reviewPo;
   });
+  
+  const user = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const [openOrder, setOpenOrder] = useState(false);
+  const [failedPop, setFailedPop] = useState(false);
 
-  const onAssign = async (values) => {
+  const onAssign = async () => {
     let error = false;
-    const { fromOrg, toOrg, toOrgLoc, products } = values;
+    const { fromOrg, fromOrgId, toOrg, toOrgLoc, products } = order;
     products.forEach((p) => {
       if (p.quantity < 1)
         error = true;
@@ -28,8 +33,8 @@ const ReviewOrder = props => {
       const data = {
         externalId: "",
         supplier: {
-          supplierIncharge: user.id,
-          supplierOrganisation: senderOrganisation[1],
+          supplierIncharge: null,
+          supplierOrganisation: fromOrg,
         },
         customer: {
           customerIncharge: null,
@@ -49,6 +54,7 @@ const ReviewOrder = props => {
       const result = await createOrder(data);
       dispatch(turnOff());
       if (result.status === 200) {
+        dispatch(resetEditPos({}));
         props.history.push('/orders');
       } else {
         setFailedPop(true);
@@ -79,11 +85,11 @@ const ReviewOrder = props => {
               <div className=" row p-1">
                 <div className="col row">
                   <span className="col-4">Organisation Name: </span>
-                  <span className="col text-dark font-weight-bold">{order.fromOrg}</span>
+                  <span className="col text-dark font-weight-bold">{order.fromOrgId}</span>
                 </div>
                 <div className="col row">
                   <span className="col-4">Organisation ID: </span>
-                  <span className="col font-weight-bold text-dark">{order.supplier?.organisation?.id}</span>
+                  <span className="col font-weight-bold text-dark">{order.fromOrg}</span>
                 </div>
               </div>
             </div>
@@ -96,7 +102,7 @@ const ReviewOrder = props => {
               <div className=" row p-1">
                 <div className="col row">
                   <span className="col-4">Organisation Name: </span>
-                  <span className="col text-dark font-weight-bold">{order.toOrg}</span>
+                  <span className="col text-dark font-weight-bold">{order.toOrgName}</span>
                 </div>
                 <div className="col row">
                   <span className="col-4">Organisation ID: </span>
@@ -105,7 +111,7 @@ const ReviewOrder = props => {
                 <div class="w-100"></div>
                 <div className="col row col-6 mt-2">
                   <span className="col-4">Delivery Location:</span>
-                  <span className="col ml-2 text-dark font-weight-bold">{order.toOrgLoc}</span>
+                  <span className="col ml-2 text-dark font-weight-bold">{order.toOrgLocName}</span>
                 </div>
               </div>
             </div>
@@ -113,10 +119,10 @@ const ReviewOrder = props => {
         </div>
         <div className="mt-4">
             <div className="d-flex flex-row-reverse">
-              <button className="btn btn-yellow fontSize20 font-bold">
-                  <img src={OrderIcon} width="20" height="17" className="mr-2 mb-1" />
-                  <span>Create Order</span>
-                </button>
+              <button onClick={onAssign} className="btn btn-yellow fontSize20 font-bold">
+                <img src={OrderIcon} width="20" height="17" className="mr-2 mb-1" />
+                <span>Create Order</span>
+              </button>
               <button className="btn-outline-primary btn mr-2" onClick={() => props.history.push('/neworder')}>
                 <img src={Pen} width="15" height="15" className="mr-3" />
                 <span>EDIT</span>
@@ -129,6 +135,17 @@ const ReviewOrder = props => {
                 >
                   <ShipmentPopUp
                     onHide={closeModal} //FailurePopUp
+                  />
+                </Modal>
+              )}
+              {failedPop && (
+                <Modal
+                  close={() => closeModalFail()}
+                  size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+                >
+                  <ShipmentFailPopUp
+                    onHide={closeModalFail} //FailurePopUp
+                    shipmentError={shipmentError}
                   />
                 </Modal>
               )}

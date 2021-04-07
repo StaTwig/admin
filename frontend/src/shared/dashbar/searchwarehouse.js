@@ -63,6 +63,7 @@ import './style.scss'
         const warehousesResult = await getWareHousesByCountry(item);
      if (warehousesResult.status === 1) {
          setWareHouses(warehousesResult.data);
+         props.setWarehouseArr(warehousesResult.data);
          const warehouseList = warehousesResult.data.map(w => w.id);
          setWareHouseIds(warehouseList);
      }

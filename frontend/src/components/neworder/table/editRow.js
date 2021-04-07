@@ -68,7 +68,7 @@ const EditRow = props => {
               className="form-control text-center"
               placeholder="Quantity"
               onKeyPress={numbersOnly}
-              value={prod.productQuantity}
+              value={prod.productQuantity ? prod.productQuantity : prod.quantity}
               onChange={e => handleQuantityChange(e.target.value, index)}
             />
           </div>
