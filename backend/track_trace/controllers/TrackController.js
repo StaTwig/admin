@@ -198,7 +198,7 @@ exports.track = [
                     });
                 });
             } else if (trackingNumber.includes("SH") || trackingNumber.includes("zp")) {
-                var poDetails, shipmentDetails, shippingOrderDetails, shippingOrderId;
+                 var poDetails, shipmentDetails, shippingOrderDetails, shippingOrderId;
                 var poCustodyDetails = [];
                 var soCustodayDetails = [];
                 var shipmentCustodyDetails = [];
@@ -214,6 +214,7 @@ exports.track = [
                         const product = await ProductModel.find({
                             "name": products[j].productName
                         })
+                            console.log("pro",product)
                         var product1 = {
                             productName: product[0].name,
                             manufacturer: product[0].manufacturer,
@@ -221,7 +222,6 @@ exports.track = [
                         }
                         productArray.push(product1)
                     }
-
                     var shipmentCustody = {
                         "shipmentStatus": shipmentDetails[0].status,
                         "poId": shipmentDetails[0].poId,
@@ -229,10 +229,9 @@ exports.track = [
                         "dateTime": shipmentDetails[0].updatedAt
                     }
                     shipmentCustodyDetails.push(shipmentCustody)
-
-                    shippingOrderId = JSON.parse(JSON.stringify(user[0])).shippingOrderId;
+                    //shippingOrderId = JSON.parse(JSON.stringify(user[0])).shippingOrderId;
                     poId = JSON.parse(JSON.stringify(user[0])).poId;
-                    shippingOrderDetails = await ShippingOrderModel.find({
+                    /*shippingOrderDetails = await ShippingOrderModel.find({
                         id: shippingOrderId
                     })
                     var shippingOrderCustody = {
@@ -243,8 +242,9 @@ exports.track = [
                         "dateTime": shippingOrderDetails[0].updatedAt
                     }
                     soCustodayDetails.push(shippingOrderCustody)
+                     console.log("soc",soCustodayDetails)*/
 
-                    poDetails = await RecordModel.find({
+                    /*poDetails = await RecordModel.find({
                         id: poId
                     })
                     var poCustody = {
@@ -253,35 +253,36 @@ exports.track = [
                         "dateTime": poDetails[0].updatedAt
                     }
                     poCustodyDetails.push(poCustody)
-
-                    var supplierOrganisationId = JSON.parse(JSON.stringify(poDetails[0])).supplier.supplierOrganisation;
-                    var customerOrganisationId = JSON.parse(JSON.stringify(poDetails[0])).customer.customerOrganisation;
-                    var supplierOrgDetails = await OrganisationModel.find({
+                    console.log("poc",poCustodyDetails)*/
+                    //var supplierOrganisationId = JSON.parse(JSON.stringify(poDetails[0])).supplier.supplierOrganisation;
+                    //var customerOrganisationId = JSON.parse(JSON.stringify(poDetails[0])).customer.customerOrganisation;
+                    /*var supplierOrgDetails = await OrganisationModel.find({
                         id: supplierOrganisationId
                     })
                     var customerOrgDetails = await OrganisationModel.find({
                         id: customerOrganisationId
                     })
+                        console.log("customerOrgDetails",customerOrgDetails)
                     var supplierOrgId = supplierOrgDetails[0].id
                     var supplierOrgName = supplierOrgDetails[0].name;
                     var supplierOrgCountry = supplierOrgDetails[0].country.name;
                     var customerOrgId = customerOrgDetails[0].id;
                     var customerOrgName = customerOrgDetails[0].name;
-                    var customerOrgCountry = customerOrgDetails[0].country.name;
-                    
-		    res.json({
+                    var customerOrgCountry = customerOrgDetails[0].country.name;*/
+                    //console.log("supplierOrgCountry",supplierOrgCountry)
+                    res.json({
                         shipmentDetails: shipmentDetails,
-                        shippingOrderDetails: shippingOrderDetails,
-                        poDetails: poDetails,
-                        poChainOfCustody: poCustodyDetails,
-                        soChainOfCustody: soCustodayDetails,
+                        //shippingOrderDetails: shippingOrderDetails,
+                        //poDetails: poDetails,
+                        //poChainOfCustody: poCustodyDetails,
+                        //soChainOfCustody: soCustodayDetails,
                         shipmentChainOfCustody: shipmentCustodyDetails,
-                        supplierOrgId: supplierOrgId,
-                        supplierOrgName: supplierOrgName,
-                        fromLocation: supplierOrgCountry,
-                        customerOrgId: customerOrgId,
-                        customerOrgName: customerOrgName,
-                        toLocation: customerOrgCountry,
+                        //supplierOrgId: supplierOrgId,
+                        //supplierOrgName: supplierOrgName,
+                        //fromLocation: supplierOrgCountry,
+                        //customerOrgId: customerOrgId,
+                        //customerOrgName: customerOrgName,
+                        //toLocation: customerOrgCountry,
                         productDetails: productArray
                     });
                 });
