@@ -108,7 +108,7 @@ const ReviewOrder = props => {
                   <span className="col-4">Organisation ID: </span>
                   <span className="col text-dark font-weight-bold">{order.toOrg}</span>
                 </div>
-                <div class="w-100"></div>
+                <div className="w-100"></div>
                 <div className="col row col-6 mt-2">
                   <span className="col-4">Delivery Location:</span>
                   <span className="col ml-2 text-dark font-weight-bold">{order.toOrgLocName}</span>

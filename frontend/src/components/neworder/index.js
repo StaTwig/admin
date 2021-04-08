@@ -373,7 +373,7 @@ const NewOrder = (props) => {
             <div className="d-flex pt-4 justify-content-between">
               <div className="value">{quantity}</div>
               <div className="d-flex">
-                <button type="button" class="btn btn-white shadow-radius font-bold mr-2"onClick={() => props.history.push('/orders')}>
+                <button type="button" className="btn btn-white shadow-radius font-bold mr-2"onClick={() => props.history.push('/orders')}>
                   Cancel
                 </button>
 
