@@ -27,8 +27,7 @@ const Sidebar = (props) => {
               history.location.pathname.includes("overview")
                 ? "gds-links bord-white"
                 : "gds-links"
-            }
-          >
+            }>
             <div className="gdsl-in">
               <img src={
                 history.location.pathname.includes("overview")
@@ -38,20 +37,20 @@ const Sidebar = (props) => {
               <div onClick={() => history.push("/overview")}>Overview</div>
             </div>
           </div>
+
           <div
             className={
-              history.location.pathname.includes("dashboard")
+              history.location.pathname.includes("analytics")
                 ? "gds-links bord-white"
                 : "gds-links"
-            }
-          >
+            }>
             <div className="gdsl-in">
               <img src={
-                history.location.pathname.includes("dashboard")
+                history.location.pathname.includes("analytics")
                 ? DashboardSelectedIcon
                 : DashboardIcon
-                } />
-              <div onClick={() => history.push("/overview")}>Dashboard</div>
+              } />
+              <div onClick={() => history.push("/analytics")}>Analytics</div>
             </div>
           </div>
 
