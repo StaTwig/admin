@@ -28,7 +28,7 @@ async function connectDB() {
 async function logEvent(data) {
     if (validate(data)==true) {
         let connection = await connectDB();
-        return await Event.findOne({ eventId: data.eventId }, function (err, foundEvent) {
+        return await Event.findOne({ eventID: data.eventID }, function (err, foundEvent) {
             if (err) console.log("Error is", err)
             if (foundEvent != null) {
                 err = {
