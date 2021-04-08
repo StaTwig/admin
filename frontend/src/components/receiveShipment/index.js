@@ -34,15 +34,20 @@ const ReceiveShipment = (props) => {
     // const data = { shipmentId, billNo };
     // let formData = new FormData();
 
-    // formData.append("shipmentId", shipmentId);
-    // formData.append("billNo", billNo);
+    // formData.append(shipmentDetails[0]);
+    // formData.append("billNo", billNo);  
     shipmentDetails[0].comment = comment;
+    shipmentDetails[0].imagesDetails = [];
+
     console.log('On Button Click');
     console.log(shipmentDetails[0]);
     const result = await receiveApi(shipmentDetails[0]);
     if (result.status == 1) {
       setOpenUpdatedStatus(true);
       console.log("success add product");
+    }
+    else{
+      console.log(result);
     }
   };
 

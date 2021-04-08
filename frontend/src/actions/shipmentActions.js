@@ -246,7 +246,6 @@ export const uploadImage = async (id, formData) =>{
   //     body: formData,
   // };
   // const result = await fetch(url, requestOptions);
-  return result;  
   }
   catch (e){
     return e.reponse;
@@ -265,11 +264,11 @@ export const fetchImage = async (id) => {
   }
 };
 
-export const receiveApi = async () => {
+export const receiveApi = async (formData) => {
   try{
     const configObject = config();
     const url = configObject.receiveApi;
-    const result = await axios.post(url);
+    const result = await axios.post(url,formData);
     return result;
   }
   catch(e){
