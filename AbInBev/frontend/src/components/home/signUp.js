@@ -9,6 +9,17 @@ const SignUp = (props) => {
     onSignUpClick
   } = props;
   const [values, setValues] = useState({ firstName: '', lastName: '', mobile_email: '', organisation: '' });
+  const [displayErrorMessage, setDisplayErrorMessage] = useState(false);
+  const [errorMessages, setErrorMessages] = useState([]);
+
+  const isValidEmail = (email) => {
+    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+  }
+
+  const isBlank = (str) => {
+    return (!str || /^\s*$/.test(str));
+  }
 
   const handleChange = (property, e) => {
     if (property === 'firstName') {
@@ -32,6 +43,29 @@ const SignUp = (props) => {
         organisation: e.target.value
       });
     }
+  }
+
+  const handleSignUpClick = () => {
+    let errorMessages = [];
+    if (!isValidEmail(values.mobile_email)) {
+      errorMessages.push('Invalid Email/Mobile number provided');
+    }
+    if (isBlank(values.firstName)) {
+      errorMessages.push('Invalid First name provided');
+    }
+    if (isBlank(values.lastName)) {
+      errorMessages.push('Invalid Last name provided');
+    }
+    if (isBlank(values.organisation)) {
+      errorMessages.push('Invalid organisation provided');
+    }
+    if (errorMessages.length) {
+      setErrorMessages(errorMessages);
+      setDisplayErrorMessage(true);
+    } else {
+      onSignUpClick(values);
+    }
+
   }
 
   return (
@@ -61,7 +95,7 @@ const SignUp = (props) => {
 
           <button
             onClick={() => {
-              onSignUpClick(values);
+              handleSignUpClick();
             }}
             className={`width100 btn mt-4`}
             type="button"
@@ -75,6 +109,22 @@ const SignUp = (props) => {
             }
           } className="signUpLink">Log In</a></p>
         </div>
+      </div>
+      <div className="loginUserBlock justify-content-center">
+        {
+          displayErrorMessage ?
+            <>
+              <ul className="error-messages">
+                {
+                  errorMessages.map((message, index) => (
+                    <li key="index">
+                      {message}
+                    </li>)
+                  )
+                }
+              </ul>
+            </> : ""
+        }
       </div>
       <div className="col text-center footer-logo">
         <img src={logo} width={60} />
