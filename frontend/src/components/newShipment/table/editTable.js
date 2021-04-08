@@ -6,12 +6,12 @@ const EditTable = props => {
  return (
     <div className="table productTable mt-2">
      <div className="d-flex flex-column">
-       <div class="row mb-3">
-         <div class="col theader text-left pro">Product Name*</div>
-         <div class="col theader text-center pro">Manufacturer</div>
-         <div class="col theader text-center pro">Quantity*</div>
+       <div className="row mb-3">
+         <div className="col theader text-left pro">Product Name*</div>
+         <div className="col theader text-center pro">Manufacturer</div>
+         <div className="col theader text-center pro">Quantity*</div>
          {props.enableDelete &&
-           <div class=" ml-2 bg-light align-self-center ">&nbsp;</div>
+           <div className=" ml-2 bg-light align-self-center ">&nbsp;</div>
          }
         </div>
         <div >

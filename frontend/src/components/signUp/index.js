@@ -67,8 +67,8 @@ const [organisationsArr, setOrganisationsArr] = useState([]);
           <div className="col-sm-6 col-lg-5">
             <div className="card">
               { props.adminAwaiting ?
-                <><img alt="" src={Waiting} height="150" width="150" class="align-self-center mt-5 mb-4" />
-              <div class="font-weight-bold align-self-center text-center ml-2 mr-2 mb-5 approve">Request is pending and you will receive an email/sms after approval</div></>
+                <><img alt="" src={Waiting} height="150" width="150" className="align-self-center mt-5 mb-4" />
+              <div className="font-weight-bold align-self-center text-center ml-2 mr-2 mb-5 approve">Request is pending and you will receive an email/sms after approval</div></>
               
               :
                 <div className="card-body">
