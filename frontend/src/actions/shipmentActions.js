@@ -264,3 +264,15 @@ export const fetchImage = async (id) => {
     return e.response;
   }
 };
+
+export const receiveApi = async () => {
+  try{
+    const configObject = config();
+    const url = configObject.receiveApi;
+    const result = await axios.post(url);
+    return result;
+  }
+  catch(e){
+    return e.response;
+  }
+}; 
