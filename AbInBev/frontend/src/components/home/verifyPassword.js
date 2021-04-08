@@ -20,7 +20,7 @@ const VerifyPassword = (props) => {
             id="1"
             type='text'
             className="otpInput mr-3"
-            maxlength="1"
+            maxLength="1"
             value={otp1}
             ref={input => input && input.focus()}
             onChange={onOtpChange1}
@@ -30,7 +30,7 @@ const VerifyPassword = (props) => {
             id="2"
             type='text'
             className="otpInput mr-3"
-            maxlength="1"
+            maxLength="1"
             value={otp2}
             ref={otp1.length === 1 ? input => input && input.focus() : null}
             onChange={onOtpChange2}
@@ -40,7 +40,7 @@ const VerifyPassword = (props) => {
             id="3"
             type='text'
             className="otpInput mr-3"
-            maxlength="1"
+            maxLength="1"
             value={otp3}
             ref={otp2.length === 1 ? input => input && input.focus() : null}
             onChange={onOtpChange3}
@@ -50,7 +50,7 @@ const VerifyPassword = (props) => {
             id="4"
             type='text'
             className="otpInput mr-3"
-            maxlength="1"
+            maxLength="1"
             value={otp4}
             ref={otp3.length === 1 ? input => input && input.focus() : null}
             onChange={onOtpChange4}
