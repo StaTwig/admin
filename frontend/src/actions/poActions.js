@@ -97,7 +97,6 @@ export const addMultipleProducts = async data => {
     const result = await axios.post(url, data, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
-    debugger;
     return result.data;
   } catch (e) {
     return e.response;

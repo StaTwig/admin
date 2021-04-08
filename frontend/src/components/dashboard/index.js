@@ -4,29 +4,35 @@ import Map from '../Map';
 import Tabs from './dashboardtabs/tabs';
 
 const DashBoard = props => {
-  const [visible, setVisible] = useState(false);
+  const { warehouses, warehouseArr, warehouseLocation, shipment, shipmentIds, visible } = props;
   const [warehouseText, setWarehouseText] = useState('');
-  const onWarehouseChange = e => {
-    setWarehouseText(e.target.value);
+  const [refArr, setRefArr] = useState([]);
+
+  const onWarehouseChange = v => {
+    setWarehouseText(v);
+    if(!visible)
+      setRefArr(warehouses?.filter(w => w.title.toLowerCase().includes(v.toLowerCase())));
+    else
+      setRefArr(shipmentIds?.filter(s => s.id.toLowerCase().includes(v.toLowerCase())));
   };
 
   return (
-    <div>
-      <div className="dashboard">
+    <div className="dashboard">
+      <div >
         <h1 className="breadcrumb dash">YOUR NETWORK </h1>
-        <div>
-          <Tabs
-            {...props}
-            visible={visible}
-            setVisible={setVisible}
-            warehouseText={warehouseText}
-            onWarehouseChange={onWarehouseChange}
-            onSearchClick={() => props.onSearchClick(warehouseText)}
-          />
-        </div>
       </div>
       <div className="panel">
-        <Map warehouseLocation={props.warehouseLocation} />
+        <Map shipment={shipment} visible={visible} warehouseArr={warehouseArr} warehouseLocation={warehouseLocation} />
+        <div className="">
+          <Tabs
+            {...props}
+            warehouseText={warehouseText}
+            setWarehouseText={setWarehouseText}
+            filteredWareHouses={refArr}
+            onWarehouseChange={onWarehouseChange}
+            onSearchClick={(w) => props.onSearchClick(w)}
+          />
+        </div>
       </div>
     </div>
   );

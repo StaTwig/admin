@@ -1125,3 +1125,43 @@ exports.chainOfCustody = [
         }
     },
 ];
+
+exports.fetchShipmentIds = [
+    auth,
+    async (req, res) => {
+        try {
+            checkToken(req, res, async result => {
+                if (result.success) {
+                    const {
+                        warehouseId
+                    } = req.user;
+                    await ShipmentModel.find({
+                        $or: [{
+                            "supplier.locationId": warehouseId
+                        }, {
+                            "receiver.locationId": warehouseId
+                            }]
+                    }, 'id')
+                        .then(shipments => {
+                            return apiResponse.successResponseWithData(
+                                res,
+                                'All Shipments',
+                                shipments,
+                            );
+                        })
+                        .catch(err => {
+                            return apiResponse.ErrorResponse(res, err);
+                        });
+                } else {
+                    logger.log(
+                        'warn', '<<<<< ShipmentService < ShipmentController < fetchShipmentIds : refuted token');
+                    res.status(403).json('Auth failed');
+                }
+            });
+        } catch (err) {
+            logger.log(
+                'error', '<<<<< ShipmentService < ShipmentController < fetchShipmentIds : error (catch block)');
+            return apiResponse.ErrorResponse(res, err);
+        }
+    },
+]

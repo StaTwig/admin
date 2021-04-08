@@ -43,6 +43,7 @@ import './style.scss'
         const regionResult = await getWareHousesByRegion(item);
         if (regionResult.status === 1) {
             setWareHouses(regionResult.data);
+            props.setWarehouseArr(warehousesResult.data);
             const warehouseList = regionResult.data.map(w => w.id);
             setWareHouseIds(warehouseList);
         }
@@ -63,6 +64,7 @@ import './style.scss'
         const warehousesResult = await getWareHousesByCountry(item);
      if (warehousesResult.status === 1) {
          setWareHouses(warehousesResult.data);
+         props.setWarehouseArr(warehousesResult.data);
          const warehouseList = warehousesResult.data.map(w => w.id);
          setWareHouseIds(warehouseList);
      }
@@ -83,9 +85,9 @@ import './style.scss'
                 </button>
             </div>
             <div className="d-flex flex-column mb-2 region">
-                <div className="form-group">
-                  <label htmlFor="shipmentId" className="mt-2">Region</label>
-                    <div className="form-control ml-5">
+                <div className="form-group row mr-1">
+                  <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">Region</label>
+                    <div className="form-control col">
                         <DropdownButton
                             name={region}
                             onSelect={onRegionChange}
@@ -93,9 +95,9 @@ import './style.scss'
                         />
                     </div>
                 </div>
-                <div className="form-group">
-                    <label htmlFor="shipmentId" className="mt-2 countr">Country</label>
-                    <div className="form-control">
+                <div className="form-group row mr-1">
+                    <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">Country</label>
+                    <div className="form-control col">
                         <DropdownButton
                             name={country}
                             onSelect={item =>
@@ -108,9 +110,9 @@ import './style.scss'
                         />
                     </div>
                 </div>
-                <div className="form-group mb-4">
-                    <label htmlFor="shipmentId" className="mt-2">Location</label>
-                    <div className="form-control ml-4">
+                <div className="form-group mb-4 row mr-1">
+                    <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">Location</label>
+                    <div className="form-control col">
                         <DropdownButton
                             name={warehouseId}
                             onSelect={item => {
