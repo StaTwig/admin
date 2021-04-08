@@ -198,7 +198,9 @@ exports.track = [
                     });
                 });
             } else if (trackingNumber.includes("SH") || trackingNumber.includes("zp")) {
-                 var poDetails, shipmentDetails, shippingOrderDetails, shippingOrderId;
+                 var  shippingOrderDetails, shippingOrderDetails,poDetails,poCustodyDetails,soCustodayDetails,supplierOrgId,supplierOrgName,supplierOrgCountry,customerOrgId,customerOrgName,customerOrgCountry = "";
+
+                                var poDetails, shipmentDetails, shippingOrderDetails, shippingOrderId;
                 var poCustodyDetails = [];
                 var soCustodayDetails = [];
                 var shipmentCustodyDetails = [];
@@ -229,9 +231,11 @@ exports.track = [
                         "dateTime": shipmentDetails[0].updatedAt
                     }
                     shipmentCustodyDetails.push(shipmentCustody)
-                    //shippingOrderId = JSON.parse(JSON.stringify(user[0])).shippingOrderId;
-                    poId = JSON.parse(JSON.stringify(user[0])).poId;
-                    /*shippingOrderDetails = await ShippingOrderModel.find({
+                    const shippingOrderId = JSON.parse(JSON.stringify(user[0])).shippingOrderId;
+                    const poId = JSON.parse(JSON.stringify(user[0])).poId;
+                    if ( shippingOrderId != null)
+                                        {
+                                        shippingOrderDetails = await ShippingOrderModel.find({
                         id: shippingOrderId
                     })
                     var shippingOrderCustody = {
@@ -242,9 +246,12 @@ exports.track = [
                         "dateTime": shippingOrderDetails[0].updatedAt
                     }
                     soCustodayDetails.push(shippingOrderCustody)
-                     console.log("soc",soCustodayDetails)*/
+                     console.log("soc",soCustodayDetails)
+                                        }
 
-                    /*poDetails = await RecordModel.find({
+                                        if ( poId != null)
+                                        {
+                    poDetails = await RecordModel.find({
                         id: poId
                     })
                     var poCustody = {
@@ -253,39 +260,40 @@ exports.track = [
                         "dateTime": poDetails[0].updatedAt
                     }
                     poCustodyDetails.push(poCustody)
-                    console.log("poc",poCustodyDetails)*/
-                    //var supplierOrganisationId = JSON.parse(JSON.stringify(poDetails[0])).supplier.supplierOrganisation;
-                    //var customerOrganisationId = JSON.parse(JSON.stringify(poDetails[0])).customer.customerOrganisation;
-                    /*var supplierOrgDetails = await OrganisationModel.find({
+                    console.log("poc",poCustodyDetails)
+                    var supplierOrganisationId = JSON.parse(JSON.stringify(poDetails[0])).supplier.supplierOrganisation;
+                    var customerOrganisationId = JSON.parse(JSON.stringify(poDetails[0])).customer.customerOrganisation;
+                    var supplierOrgDetails = await OrganisationModel.find({
                         id: supplierOrganisationId
                     })
                     var customerOrgDetails = await OrganisationModel.find({
                         id: customerOrganisationId
                     })
-                        console.log("customerOrgDetails",customerOrgDetails)
                     var supplierOrgId = supplierOrgDetails[0].id
                     var supplierOrgName = supplierOrgDetails[0].name;
                     var supplierOrgCountry = supplierOrgDetails[0].country.name;
                     var customerOrgId = customerOrgDetails[0].id;
                     var customerOrgName = customerOrgDetails[0].name;
-                    var customerOrgCountry = customerOrgDetails[0].country.name;*/
-                    //console.log("supplierOrgCountry",supplierOrgCountry)
+                    var customerOrgCountry = customerOrgDetails[0].country.name;
+                                        }
+
                     res.json({
                         shipmentDetails: shipmentDetails,
-                        //shippingOrderDetails: shippingOrderDetails,
-                        //poDetails: poDetails,
-                        //poChainOfCustody: poCustodyDetails,
-                        //soChainOfCustody: soCustodayDetails,
+                        shippingOrderDetails: shippingOrderDetails,
+                        poDetails: poDetails,
+                        poChainOfCustody: poCustodyDetails,
+                        soChainOfCustody: soCustodayDetails,
                         shipmentChainOfCustody: shipmentCustodyDetails,
-                        //supplierOrgId: supplierOrgId,
-                        //supplierOrgName: supplierOrgName,
-                        //fromLocation: supplierOrgCountry,
-                        //customerOrgId: customerOrgId,
-                        //customerOrgName: customerOrgName,
-                        //toLocation: customerOrgCountry,
+                        supplierOrgId: supplierOrgId,
+                        supplierOrgName: supplierOrgName,
+                        fromLocation: supplierOrgCountry,
+                        customerOrgId: customerOrgId,
+                        customerOrgName: customerOrgName,
+                        toLocation: customerOrgCountry,
                         productDetails: productArray
                     });
                 });
+
             } else {
                 var type = "serialNumber";
                 var shipment_array = [];
