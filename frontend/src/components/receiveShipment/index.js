@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { receiveShipment, uploadImage } from "../../actions/shipmentActions";
+import { receiveApi, uploadImage } from "../../actions/shipmentActions";
 import Modal from "../../shared/modal";
 import returnShipment from '../../assets/icons/returnShipment.svg';
 import "./style.scss";
@@ -8,9 +8,11 @@ import ProductList from "../tracing/productlist";
 import ShipmentDetails from './shipmentdetails';
 import uploadBlue from "../../assets/icons/UploadBlue.svg";
 import uploadWhite from "../../assets/icons/UploadWhite.svg";
+import { LOCAL_SERVER_URL_SHIPPINGORDER } from "../../config";
 
 const ReceiveShipment = (props) => {
-  console.log(props.trackData)
+  let shipmentDetails = props.trackData.shipmentDetails
+  console.log(shipmentDetails)
   const tracking = props.trackData;
   const [menuShip, setMenuShip] = useState(false);
   const [menuProduct, setMenuProduct] = useState(false);
@@ -20,6 +22,7 @@ const ReceiveShipment = (props) => {
   const [shipmentId, setShipmentId] = useState([]);
   const [billNo, setBillNo] = useState("");
   const [photo, setPhoto] = useState(null);
+  const [comment, setComment] = useState("");
   const id = props.match.params.id
 
   const [openUpdatedStatus, setOpenUpdatedStatus] = useState(false);
@@ -28,15 +31,23 @@ const ReceiveShipment = (props) => {
   };
 
   const receiveShipment = async () => {
-    const data = { shipmentId, billNo };
-    let formData = new FormData();
+    // const data = { shipmentId, billNo };
+    // let formData = new FormData();
 
-    formData.append("shipmentId", shipmentId);
-    formData.append("billNo", billNo);
-    const result = await addNewProduct(formData);
+    // formData.append(shipmentDetails[0]);
+    // formData.append("billNo", billNo);  
+    shipmentDetails[0].comment = comment;
+    shipmentDetails[0].imagesDetails = [];
+
+    console.log('On Button Click');
+    console.log(shipmentDetails[0]);
+    const result = await receiveApi(shipmentDetails[0]);
     if (result.status == 1) {
       setOpenUpdatedStatus(true);
       console.log("success add product");
+    }
+    else{
+      console.log(result);
     }
   };
 
@@ -158,7 +169,7 @@ const ReceiveShipment = (props) => {
                   type="text"
                   className="form-control"
                   name="Comment"
-                  onChange={(e) => console.log(e)}
+                  onChange={(e) => setComment(e)}
                   size="40"
                   placeholder="Enter Comment Here"
                 />              
