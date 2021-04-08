@@ -4,6 +4,7 @@
   "description": "A utility to log Events @ TheLedger",
   "main": "eventLogger.js",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "joi": "^17.4.0",
     "mongoose": "^5.12.3"
   },
