@@ -7,6 +7,7 @@ import location from '../../../assets/icons/CurrentLocationWhite.svg';
 import previous from '../../../assets/icons/previous.png';
 import next from '../../../assets/icons/next.png';
 import { Link } from 'react-router-dom';
+import { formatDate } from '../../../utils/dateHelper';
 import './style.scss';
 
 const Table = props => {
@@ -75,7 +76,7 @@ const Table = props => {
                 </div>
                 <div className="rTableCell">
                   <button
-                    class="button btn-primary text-light pl-3 pr-3 pt-1 pb-1"
+                    className="button btn-primary text-light pl-3 pr-3 pt-1 pb-1"
                     onClick={() => {
                       const data = shipments[index];
                       dispatch(setTracingShipments(data));
@@ -90,7 +91,7 @@ const Table = props => {
                 </div>
                 <div className="rTableCell">
                   <Link to={`/viewshipment/${shipment.id}`} 
-                    class="button pl-3 pr-3 pt-1 pb-1"
+                    className="button pl-3 pr-3 pt-1 pb-1"
                   >
                     View
                   </Link>

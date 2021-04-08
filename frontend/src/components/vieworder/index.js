@@ -71,7 +71,7 @@ const ViewOrder = props => {
                   <span className="col-4">Organisation ID: </span>
                   <span className="col text-dark font-weight-bold">{order.customer?.organisation?.id}</span>
                 </div>
-                <div class="w-100"></div>
+                <div className="w-100"></div>
                 <div className="col row col-6 mt-2">
                   <span className="col-4">Delivery Location:</span>
                   <span className="col ml-2 text-dark font-weight-bold">{order.warehouse?.warehouseAddress?.city+', '+order.warehouse?.warehouseAddress?.country}</span>

@@ -60,7 +60,7 @@ const EnterWareHouse = props => {
         <div className="d-flex flex-row justify-content-between prod mt-3 mb-2">
           <div className="font-size-one">Shipment Details</div>
           <button
-            class="button btn-primary d-flex text-light pl-3 pr-3 pt-2 pb-2"
+            className="button btn-primary d-flex text-light pl-3 pr-3 pt-2 pb-2"
             onClick={() => {
               props.history.push(
                 `/tracing/${dashBarData.id}`,
