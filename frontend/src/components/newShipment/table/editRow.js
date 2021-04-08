@@ -34,13 +34,13 @@ const EditRow = props => {
 
   return (
     <div className="row ml-3 mr-1">
-      <div class="trow row mr-1 col">
-        <div class="col pl-4 tcell p-2">
-          <div class=" p-0">
-            {/* <div class="profileIconRound recived-bg">OPV</div> */}
+      <div className="trow row mr-1 col">
+        <div className="col pl-4 tcell p-2">
+          <div className=" p-0">
+            {/* <div className="profileIconRound recived-bg">OPV</div> */}
 
-            <div class="d-flex flex-column">
-              <div class="title recived-text">
+            <div className="d-flex flex-column">
+              <div className="title recived-text">
               {enableDelete ? 
                 <DropdownButton
                   name={prod.productName == '' ? "Select product" : prod.productName}
@@ -52,8 +52,8 @@ const EditRow = props => {
             </div>
           </div>
         </div>
-        <div class="col tcell text-center justify-content-center p-2">{prod.manufacturer}</div>
-        <div class="col tcell text-center justify-content-center p-2">
+        <div className="col tcell text-center justify-content-center p-2">{prod.manufacturer}</div>
+        <div className="col tcell text-center justify-content-center p-2">
           <div className="">
             <input
               className="form-control text-center"

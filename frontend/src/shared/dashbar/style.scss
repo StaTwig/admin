@@ -14,6 +14,7 @@
   z-index: 9;
   top: 80px;
   right: 0;
+  width: 23vw;
   
  @media screen and (max-width: 768px) {
     display: none;
@@ -24,12 +25,25 @@
    .dashsearch{
     width:270px;
    }
+   .font-size-one{
+     font-size: 1rem;
+   }
+   .text-primary{
+     font-size: 0.8rem;
+   }
    .inventoryDashboard{
-    height:350px;
+    // height:350px;
     overflow:auto;
    }
+   .custom-dropdown .btn-custom-dropdown{
+     justify-content: space-between !important;
+     span{
+       margin-right: 1rem;
+       font-size: 14px;
+     }
+   }
 .mainsearchwarehouse{
-  height:450px;
+  // height:450px;
   overflow:auto;
 }
     .searchpanel {
@@ -55,6 +69,9 @@
       background: transparent linear-gradient(246deg, 	$white 0%, $white 100%) 0% 0% no-repeat padding-box;
       color:black;
       font-size: 11px;
+      & h6{
+        font-size: 0.8rem;
+      }
 }
 
 .prodpanel{

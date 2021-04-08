@@ -31,5 +31,6 @@ router.get("/chainOfCustody", ShipmentController.chainOfCustody);
 
 router.post("/uploadImage",upload.single('photo'),ShipmentController.uploadImage);
 router.get("/fetchImage",ShipmentController.fetchImage);
+router.get("/fetchShipmentIds",ShipmentController.fetchShipmentIds);
 
 module.exports = router;

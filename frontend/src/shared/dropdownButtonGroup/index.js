@@ -2,7 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import parse from 'html-react-parser';
 import useOnclickOutside from 'react-cool-onclickoutside';
 
-import upDownArrow from '../../assets/icons/up-and-down-blue.svg';
+// import upDownArrow from '../../assets/icons/up-and-down-blue.svg';
+import upDownArrow from '../../assets/icons/dropdown.svg';
 import './style.scss';
 
 const dropdownButtonGroup = props => {

@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { useSelector } from "react-redux";
 import mapboxgl from '!mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css'
 import './Map.css';
@@ -7,30 +8,178 @@ mapboxgl.accessToken =
   'pk.eyJ1IjoidGhyaW5ldGhyYSIsImEiOiJja2wzdDAwMWYwN3JuMm5uMTQxcjQyb2w2In0.XfGU-QlqlhgTpjm2I_Ye9Q';
 
 const Map = (props) => {
-  const mapContainerRef = useRef(null);
-
+  const mapContainerRef = useRef(null);  
   const [lng, setLng] = useState(5);
   const [lat, setLat] = useState(34);
   const [zoom, setZoom] = useState(1.5);
+  const colors = ['#a8a8a8', '#0194e9', '#fa7924', '#ffab1c'];
+  const { warehouseLocation, warehouseArr, visible, shipment } = props;
+  const markers = [];
+  let newMarker;
+  
+  const user = useSelector((state) => {
+    return state.user;
+  });
+
+  function toRad(Value) {
+    return Value * Math.PI / 180;
+  }
+
+  function radians_to_degrees(radians){
+    var pi = Math.PI;
+    return radians * (180/pi);
+  }
+
+  const midPoint = (lat1,lon1, lat2, lon2) => {
+    const dLon = toRad(lon2 - lon1);
+
+    //convert to radians
+    lat1 = toRad(lat1);
+    lat2 = toRad(lat2);
+    lon1 = toRad(lon1);
+
+    const Bx = Math.cos(lat2) * Math.cos(dLon);
+    const By = Math.cos(lat2) * Math.sin(dLon);
+    const lat3 = Math.atan2(Math.sin(lat1) + Math.sin(lat2), Math.sqrt((Math.cos(lat1) + Bx) * (Math.cos(lat1) + Bx) + By * By));
+    const lon3 = lon1 + Math.atan2(By, Math.cos(lat1) + Bx);
+
+    return {lat: radians_to_degrees(lat3), long: radians_to_degrees(lon3)};
+  }
 
   // Initialize map when component mounts
   useEffect(() => {
     let map = new mapboxgl.Map({
       container: mapContainerRef.current,
-      style: 'mapbox://styles/mapbox/streets-v11',
+      style: 'mapbox://styles/mapbox/light-v10',
       center: [lng, lat],
       zoom:  zoom
     });
-    if(props?.warehouseLocation) {
-      map = new mapboxgl.Map({
-        container: mapContainerRef.current,
-        style: 'mapbox://styles/mapbox/streets-v11',
-        center: [ props.warehouseLocation.latitude, props.warehouseLocation.longitude],
-        zoom: 10
-      });
-      const coords = [props.warehouseLocation.latitude, props.warehouseLocation.longitude];
-      new mapboxgl.Marker().setLngLat(coords).addTo(map);
+
+    if(warehouseLocation) {
+      // map = new mapboxgl.Map({
+      //   container: mapContainerRef.current,
+      //   style: 'mapbox://styles/mapbox/light-v10',
+      //   center: [ warehouseLocation.latitude, warehouseLocation.longitude],
+      //   zoom: 10
+      // });
+      setLng(warehouseLocation.longitude);
+      setLat(warehouseLocation.latitude);
+      const coords = [warehouseLocation.latitude, warehouseLocation.longitude];
+      newMarker = new mapboxgl.Marker().setLngLat(coords).addTo(map);
+      markers.push(newMarker);
     }
+
+    if (warehouseArr.length > 0) {
+      warehouseArr.forEach((w, i) => {
+        if (i === 0) {
+          // map = new mapboxgl.Map({
+          //   container: mapContainerRef.current,
+          //   style: 'mapbox://styles/mapbox/light-v10',
+          //   center: [w.location.latitude, w.location.longitude],
+          //   zoom: 10
+          // });
+          setLng(w.location.longitude);
+          setLat(w.location.latitude);
+        }
+        const coords = [w.location.latitude, w.location.longitude];
+        let color = colors[Math.floor(Math.random() * 3) + 1];
+        let options = { color: color };
+        if (warehouseLocation) {
+          options.color = colors[0];
+          if (warehouseLocation.latitude == w.location.latitude && warehouseLocation.longitude == w.location.longitude) {
+            options.color = colors[Math.floor(Math.random() * 3) + 1];
+            options.scale = 2;
+          }
+        }
+
+        newMarker = new mapboxgl.Marker(options).setLngLat(coords).addTo(map);
+        markers.push(newMarker);
+      });
+    }
+    
+    if (visible && shipment?.supplier !== undefined) {
+      var geojson = {
+        'type': 'FeatureCollection',
+        'features': [
+          {
+            'type': 'Feature',
+            'geometry': {
+              'type': 'LineString',
+              'properties': {},
+              'coordinates': [
+                [shipment?.receiver?.warehouse?.location?.latitude, shipment?.receiver?.warehouse?.location?.longitude],
+                [shipment?.supplier?.warehouse?.location?.latitude, shipment?.supplier?.warehouse?.location?.longitude]
+              ]
+            }
+          }
+        ]
+      };
+      
+      map.on('load', function () {
+        map.addSource('LineString', {
+          'type': 'geojson',
+          'data': geojson
+        });
+        
+        map.addLayer({
+          'id': 'LineString',
+          'type': 'line',
+          'source': 'LineString',
+          'layout': {
+            'line-join': 'round',
+            'line-cap': 'round'
+          },
+          'paint': {
+            'line-color': '#BF93E4',
+            'line-width': 5
+          }
+        });
+      });
+
+      newMarker = new mapboxgl.Marker()
+        .setLngLat([shipment?.receiver?.warehouse?.location?.latitude, shipment?.receiver?.warehouse?.location?.longitude])
+        .addTo(map);
+        markers.push(newMarker);
+      newMarker = new mapboxgl.Marker()
+        .setLngLat([shipment?.supplier?.warehouse?.location?.latitude, shipment?.supplier?.warehouse?.location?.longitude])
+        .addTo(map);
+      markers.push(newMarker);
+      
+      let popL = midPoint(shipment?.receiver?.warehouse?.location?.latitude, shipment?.receiver?.warehouse?.location?.longitude, shipment?.supplier?.warehouse?.location?.latitude, shipment?.supplier?.warehouse?.location?.longitude);
+      setLng(popL.long);
+      setLat(popL.lat);
+      new mapboxgl.Popup({ offset: 25, className: 'popUp', closeOnClick: false })
+          .setLngLat([popL.lat, popL.long])
+          .setHTML(
+            `<div class="pt-1 text-white pb-1 pl-2 pr-2">
+              <div class="row"><span class="col-5 disabled">Shipment ID:</span> <span class=" col-3 font-weight-bold">${shipment.id}</span></div>
+              <div class="row"> <span class="col-5 disabled text-decoration-underline"> ${user?.walletAddress}</span> </div>
+              <div class="row pt-1 pb-1">
+                <div class="col-1"> </div> 
+                <div class="col-2 disabled">From</div> 
+                <div class="col">
+                  <div class="font-weight-bold">${shipment.supplier.org.name} </div>
+                  <div class="disabled">${shipment.supplier?.warehouse?.warehouseAddress?.city}</div>
+                </div>
+              </div>
+              <div class="row pt-1 pb-1">
+                <div class="col-1"> </div>
+                <div class="col-2 disabled">To</div>
+                <div class="col">
+                  <div class="font-weight-bold">${shipment.receiver.org.name}</div>
+                  <div class="disabled">${shipment.receiver?.warehouse?.warehouseAddress?.city}</div>
+                </div>
+              </div>
+            </div>`)
+        .addTo(map);
+    }
+
+    // var fg = new mapboxgl.featureGroup(markers);
+    // map.fitBounds(fg.getBounds());
+    // console.log(fg.getBounds());
+
+    
+    
 
     // Add navigation control (the +/- zoom buttons)
     map.addControl(new mapboxgl.NavigationControl(), 'top-right');
@@ -43,7 +192,7 @@ const Map = (props) => {
 
     // Clean up on unmount
     return () => map.remove();
-  }, [props.warehouseLocation]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [props]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <div>

@@ -3,8 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import OrderIcon from '../../assets/icons/order.svg';
 import EditTable from "./table/editTable";
 import "./style.scss";
-import { createShipment } from "../../actions/shipmentActions";
-import { turnOn, turnOff } from "../../actions/spinnerActions";
 import {
   getWarehouseByOrgId,
   getAllOrganisations,
@@ -21,35 +19,30 @@ import ShipmentPopUp from "./shipmentPopUp";
 import ShipmentFailPopUp from "./shipmentFailPopUp";
 import Modal from "../../shared/modal";
 import { Formik } from "formik";
-import { getProducts, getProductsByCategory, createOrder } from '../../actions/poActions';
+import { getProducts, getProductsByCategory, setReviewPos } from '../../actions/poActions';
+
 
 const NewOrder = (props) => {
-  const [shippingOrderIds, setShippingOrderIds] = useState([]);
-  const [senderOrganisation, setSenderOrganisation] = useState([]);
+  const editPo = useSelector(state => {
+    return state?.reviewPo;
+  });
+  console.log(editPo);
+  
   const [allOrganisations, setAllOrganisations] = useState([]);
   const [receiverWarehouses, setReceiverWarehouses] = useState([]);
-  const [orgID, setOrgID] = useState('');
-  const [disabled, setDisabled] = useState(false);
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState([]);
-  const [addProducts, setAddProducts] = useState([{"productId": "","quantity": "","name": "","manufacturer": "","type": ""}]);
+  const [addProducts, setAddProducts] = useState(editPo !== null ? editPo.products : [{"productId": "","quantity": "","name": "","manufacturer": "","type": ""}]);
   const dispatch = useDispatch();
-  const [shippingOrderId, setShippingOrderId] = useState(
-    "Select Shipping Order ID"
-  );
   const [senderOrgId, setSenderOrgId] = useState(
-    "Select Organisation Name"
-  );
-  const [senderOrgLoc, setSenderOrgLoc] = useState(
-    "Select Organisation Location"
+    editPo !== null ? editPo.fromOrgId : "Select Organisation Name"
   );
   const [receiverOrgId, setReceiverOrgId] = useState(
-    "Select Organisation Name"
+    editPo !== null ? editPo.toOrgName : "Select Organisation Name"
   );
   const [receiverOrgLoc, setReceiverOrgLoc] = useState(
-    "Select Delivery Location"
+    editPo !== null ? editPo.toOrgLocName : "Select Delivery Location"
   );
-  const user = useSelector((state) => state.user);
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [quantity, setquantity] = useState("");
@@ -59,16 +52,16 @@ const NewOrder = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      const orgSplit = user.organisation?.split('/');
-      console.log(orgSplit);
+      // const orgSplit = user.organisation?.split('/');
+      // console.log(orgSplit);
       
-      setSenderOrganisation(orgSplit);
+      // setSenderOrganisation(orgSplit);
 
       const orgs = await getAllOrganisations();
-      if (orgSplit?.length > 0) {
-        const organisations = orgs.data.filter((org) => org.id != orgSplit[1]);
-        setAllOrganisations(organisations);
-      }
+      setAllOrganisations(orgs.data);
+      // if (orgSplit?.length > 0) {
+      //   const organisations = orgs.data.filter((org) => org.id != user.organisationId);
+      // }
 
       // const warehouses = await getWarehouseByOrgId(orgSplit[1]);
       // setSenderWarehouses(warehouses.data);
@@ -119,24 +112,24 @@ const NewOrder = (props) => {
     addProducts.splice(index, 1);
     let newArr = [...addProducts];
     newArr.push(item);
-    setFieldValue('products', newArr.map(row => ({"productId": row._id,"quantity": row?.quantity ? row?.quantity : 0,"name": row.name,"manufacturer": row.manufacturer})));
+    setFieldValue('products', newArr.map(row => ({"productId": row.id,"quantity": row?.quantity ? row?.quantity : 0,"name": row.name,"type": row.type,"manufacturer": row.manufacturer})));
     setAddProducts(prod => [...newArr]);
 
-    const prodIndex = products.findIndex(p => p._id === item._id);
+    const prodIndex = products.findIndex(p => p.id === item.id);
     let newArray = [...products];
     newArray[prodIndex] = { ...newArray[prodIndex], isSelected: true };
     setProducts(prod => [...newArray]);
   }
 
   const onRemoveProduct = (index, setFieldValue) => {
-    const prodIndex = products.findIndex(p => p._id === addProducts[index]._id);
+    const prodIndex = products.findIndex(p => p.id === addProducts[index].id);
     let newArray = [...products];
     newArray[prodIndex] = { ...newArray[prodIndex], isSelected: false };
     setProducts(prod => [...newArray]);
     addProducts.splice(index, 1);
     let newArr = [...addProducts];
     if (newArr.length > 0)
-      setFieldValue('products', newArr.map(row => ({"productId": row._id,"quantity": row?.quantity,"name": row.name,"manufacturer": row.manufacturer})));
+      setFieldValue('products', newArr.map(row => ({"productId": row.id,"quantity": row?.quantity,"name": row.name,"type": row.type,"manufacturer": row.manufacturer})));
     else
       setFieldValue('products', []);
     setAddProducts(prod => [...newArr]);
@@ -145,7 +138,7 @@ const NewOrder = (props) => {
   const onQuantityChange = (v, i, setFieldValue) => {
     let newArr = [...addProducts];
     newArr[i].quantity = v;
-    setFieldValue('products', newArr.map(row => ({"productId": row._id,"quantity": row.quantity,"name": row.name,"manufacturer": row.manufacturer})));
+    setFieldValue('products', newArr.map(row => ({"productId": row.id,"quantity": row.quantity,"name": row.name,"type": row.type,"manufacturer": row.manufacturer})));
     setAddProducts(prod => [...newArr]);
   }
 
@@ -157,41 +150,40 @@ const NewOrder = (props) => {
         error = true;
     });
 
-    console.log(error);
-    
-
     if (!error) {
-      const data = {
-        externalId: "",
-        supplier: {
-          supplierIncharge: user.id,
-          supplierOrganisation: senderOrganisation[1],
-        },
-        customer: {
-          customerIncharge: null,
-          customerOrganisation: toOrg,
-          shippingAddress: {
-            shippingAddressId: toOrgLoc,
-            shipmentReceiverId: null
-          }
-        },
-        lastUpdatedOn: new Date().toISOString(),
-        creationDate: new Date().toISOString(),
-        poStatus: "CREATED",
-        products: products,
-      };
+      dispatch(setReviewPos(values));
+      props.history.push('/revieworder');
+      // const data = {
+      //   externalId: "",
+      //   supplier: {
+      //     supplierIncharge: user.id,
+      //     supplierOrganisation: senderOrganisation[1],
+      //   },
+      //   customer: {
+      //     customerIncharge: null,
+      //     customerOrganisation: toOrg,
+      //     shippingAddress: {
+      //       shippingAddressId: toOrgLoc,
+      //       shipmentReceiverId: null
+      //     }
+      //   },
+      //   lastUpdatedOn: new Date().toISOString(),
+      //   creationDate: new Date().toISOString(),
+      //   poStatus: "CREATED",
+      //   products: products,
+      // };
 
-      dispatch(turnOn());
-      const result = await createOrder(data);
-      dispatch(turnOff());
-      if (result.status === 200) {
-        props.history.push('/orders');
-        // setMessage("Created order");
-        //setOpenOrder(true);
-      } else {
-        setFailedPop(true);
-        setErrorMessage("Not able to create order. Try again!");
-      }
+      // dispatch(turnOn());
+      // const result = await createOrder(data);
+      // dispatch(turnOff());
+      // if (result.status === 200) {
+      //   props.history.push('/orders');
+      //   // setMessage("Created order");
+      //   //setOpenOrder(true);
+      // } else {
+      //   setFailedPop(true);
+      //   setErrorMessage("Not able to create order. Try again!");
+      // }
     }
     else {
       setOrderError("Check product quantity");
@@ -205,10 +197,13 @@ const NewOrder = (props) => {
       <Formik
         // enableReinitialize={true}
         initialValues={{
-          fromOrg: senderOrganisation[0],
-          toOrg: "",
-          toOrgLoc: "",
-          products: []
+          fromOrg: editPo !== null ? editPo.fromOrg : '',
+          fromOrgId: editPo !== null ? editPo.fromOrgId : '',
+          toOrg:  editPo !== null ? editPo.toOrg : '',
+          toOrgName:  editPo !== null ? editPo.toOrgName : '',
+          toOrgLoc: editPo !== null ? editPo.toOrgLoc : '',
+          toOrgLocName: editPo !== null ? editPo.toOrgLocName : '',
+          products: editPo !== null ? editPo.products : []
         }}
         validate={(values) => {
           const errors = {};
@@ -285,11 +280,17 @@ const NewOrder = (props) => {
                       <label htmlFor="organizationName">Organisation Name*</label>
                       <div className="form-control">
                         <DropdownButton
-                          name={senderOrganisation[0]}
-                          disabled={true}
-                          onSelect={() => { }}
-                          groups={[senderOrganisation[0]]}
+                          name={senderOrgId}
+                          onSelect={(v) => {
+                            setSenderOrgId(v.name);
+                            setFieldValue('fromOrg', v.id);
+                            setFieldValue('fromOrgId', v.name);
+                          }}
+                          groups={allOrganisations}
                         />
+                        {errors.fromOrg && touched.fromOrg && (
+                          <span className="error-msg text-danger">{errors.fromOrg}</span>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -298,7 +299,7 @@ const NewOrder = (props) => {
                     <div className="form-group">
                       <label htmlFor="orgLocation">Organization ID*</label>
                       <div className="form-control border-0">
-                        {senderOrganisation[1]}
+                        {values.fromOrg}
                       </div>
                     </div>
                   </div>
@@ -318,17 +319,15 @@ const NewOrder = (props) => {
                       <div className="form-control">
                         <DropdownButton
                           name={receiverOrgId}
-                          disabled={disabled}
                           onSelect={(v) => {
                             setReceiverOrgLoc("Select Delivery Location");
                             setFieldValue('toOrgLoc', '');
                             setReceiverOrgId(v.name);
                             setFieldValue('toOrg', v.id);
-                            setFieldValue('fromOrg', senderOrganisation[0]);
+                            setFieldValue('toOrgName', v.name);
                             onOrgChange(v.id);
-                            setOrgID(v.id);
                           }}
-                          groups={allOrganisations}
+                          groups={allOrganisations.filter((org) => org.id != values.fromOrg)}
                         />
                         {errors.toOrg && touched.toOrg && (
                           <span className="error-msg text-danger">{errors.toOrg}</span>
@@ -341,7 +340,7 @@ const NewOrder = (props) => {
                     <div className="form-group">
                       <label htmlFor="delLocation">Organisation ID*</label>
                       <div className="form-control border-0">
-                        {orgID}
+                        {values.toOrg}
                       </div>
                     </div>
                   </div>
@@ -353,9 +352,10 @@ const NewOrder = (props) => {
                       <div className="form-control">
                         <DropdownButton
                           name={receiverOrgLoc}
-                          disabled={disabled}
                           onSelect={(v) => {
-                            setReceiverOrgLoc(v?.warehouseAddress ? (v?.warehouseAddress?.firstLine + ', ' + v?.warehouseAddress?.city) : v.postalAddress);
+                            let name = v?.warehouseAddress ? (v?.warehouseAddress?.firstLine + ', ' + v?.warehouseAddress?.city) : v.postalAddress;
+                            setReceiverOrgLoc(name);
+                            setFieldValue('toOrgLocName', name);
                             setFieldValue('toOrgLoc', v.id);
                           }}
                           groups={receiverWarehouses}
@@ -377,9 +377,9 @@ const NewOrder = (props) => {
                   Cancel
                 </button>
 
-                <button className="btn btn-yellow fontSize20 font-bold">
+                <button className="btn btn-primary fontSize20 font-bold">
                   <img src={OrderIcon} width="20" height="17" className="mr-2 mb-1" />
-                  <span>Create Order</span>
+                  <span>Review Order</span>
                 </button>
               </div>
             </div>

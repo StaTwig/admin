@@ -13,8 +13,6 @@ export const getNotifications = async () => {
 
 export const deleteNotification = async id => {
   try {
-    debugger;
-
     const result = await axios.post(config().deleteNotificationUrl, { id });
     return result.data;
   } catch (e) {

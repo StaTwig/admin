@@ -9,12 +9,10 @@ import TableFilter from '../../shared/advanceTableFilter';
 import mon from '../../assets/icons/brand.svg';
 import Package from '../../assets/icons/package.svg';
 import calender from '../../assets/icons/calendar.svg';
-import Status from '../../assets/icons/Status.svg';
-import Order from '../../assets/icons/order1.png';
-import truck from '../../assets/icons/truckthree.svg';
+import Order from '../../assets/icons/orders.svg';
+import Totalshipments from "../../assets/icons/TotalShipment.svg";
 import { useDispatch, useSelector } from 'react-redux';
 import { getPOs, resetPOs } from '../../actions/poActions';
-import Totalshipments from "../../assets/icons/TotalShipments.svg";
 
 const Orders = props => {
   const [visible, setvisible] = useState('one');
