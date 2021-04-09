@@ -170,10 +170,10 @@ const NewShipment = (props) => {
         shippingDate: new Date(
           shipmentDate.getTime() - shipmentDate.getTimezoneOffset() * 60000
         ).toISOString(),
-        expectedDeliveryDate: new Date(
+        expectedDeliveryDate: estimateDeliveryDate.length > 0 ? (new Date(
           estimateDeliveryDate.getTime() -
           estimateDeliveryDate.getTimezoneOffset() * 60000
-        ).toISOString(),
+        ).toISOString()) : '',
         actualDeliveryDate: new Date(
           estimateDeliveryDate.getTime() -
           estimateDeliveryDate.getTimezoneOffset() * 60000

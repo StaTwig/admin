@@ -19,14 +19,12 @@ import ShipmentPopUp from "./shipmentPopUp";
 import ShipmentFailPopUp from "./shipmentFailPopUp";
 import Modal from "../../shared/modal";
 import { Formik } from "formik";
-import { getProducts, getProductsByCategory, setReviewPos } from '../../actions/poActions';
-
+import { getProducts, getProductsByCategory, setReviewPos, resetReviewPos } from '../../actions/poActions';
 
 const NewOrder = (props) => {
   const editPo = useSelector(state => {
     return state?.reviewPo;
   });
-  console.log(editPo);
   
   const [allOrganisations, setAllOrganisations] = useState([]);
   const [receiverWarehouses, setReceiverWarehouses] = useState([]);
@@ -373,7 +371,7 @@ const NewOrder = (props) => {
             <div className="d-flex pt-4 justify-content-between">
               <div className="value">{quantity}</div>
               <div className="d-flex">
-                <button type="button" class="btn btn-white shadow-radius font-bold mr-2"onClick={() => props.history.push('/orders')}>
+                <button type="button" className="btn btn-white shadow-radius font-bold mr-2"onClick={() => props.history.push('/orders')}>
                   Cancel
                 </button>
 

@@ -9,7 +9,7 @@ import ShipmentPopUp from "../neworder/shipmentPopUp";
 import ShipmentFailPopUp from "../neworder/shipmentFailPopUp";
 import './style.scss';
 import { turnOn, turnOff } from "../../actions/spinnerActions";
-import { createOrder, resetEditPos } from '../../actions/poActions';
+import { createOrder, resetReviewPos } from '../../actions/poActions';
 
 const ReviewOrder = props => {
   const order = useSelector(state => {
@@ -54,7 +54,7 @@ const ReviewOrder = props => {
       const result = await createOrder(data);
       dispatch(turnOff());
       if (result.status === 200) {
-        dispatch(resetEditPos({}));
+        // dispatch(resetReviewPos({}));
         props.history.push('/orders');
       } else {
         setFailedPop(true);
@@ -108,7 +108,7 @@ const ReviewOrder = props => {
                   <span className="col-4">Organisation ID: </span>
                   <span className="col text-dark font-weight-bold">{order.toOrg}</span>
                 </div>
-                <div class="w-100"></div>
+                <div className="w-100"></div>
                 <div className="col row col-6 mt-2">
                   <span className="col-4">Delivery Location:</span>
                   <span className="col ml-2 text-dark font-weight-bold">{order.toOrgLocName}</span>
