@@ -2,8 +2,7 @@ const RbacModel = require('../models/RbacModel');
 
 const checkPermissions = async (request, next) => {
     const required_permission = request["permissionRequired"]
-    const role = request.result.data.role;
-    const rbacObject = await RbacModel.findOne({role: role})
+    const rbacObject = await RbacModel.findOne({role: request.role})
     if (rbacObject && rbacObject.permissions.indexOf(required_permission) > -1) {
         next({
             success: true,
