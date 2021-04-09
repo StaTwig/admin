@@ -2,6 +2,7 @@ import axios from 'axios';
 import { config } from '../config';
 import {
   SET_REVIEW_PO,
+  RESET_REVIEW_PO,
   SET_EDIT_PO,
   RESET_EDIT_PO,
   SET_POS,
@@ -142,9 +143,17 @@ const setPurchaseOrders = data => {
     payload: data,
   };
 };
+
 export const setReviewPos = data => {
   return {
     type: SET_REVIEW_PO,
+    payload: data,
+  };
+};
+
+export const resetReviewPos = data => {
+  return {
+    type: RESET_REVIEW_PO,
     payload: data,
   };
 };
