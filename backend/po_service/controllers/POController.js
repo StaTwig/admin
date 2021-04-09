@@ -114,7 +114,8 @@ exports.fetchPurchaseOrders = [
               '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : token verified successfully, querying data by publisher',
           );
           const permission_request = {
-            role: req.user.role,
+            //role: req.user.role,
+            result: result,
             permissionRequired: 'viewPO',
           };
           checkPermissions(permission_request, async permissionResult => {
