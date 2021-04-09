@@ -22,13 +22,25 @@ const VerifyPassword = (props) => {
     setOtp4('');
     onResendOtp(email);
   }
+  const handleOnOTP1Change = (e) => {
+    setOtp1(e.target.value);
+  }
+  const handleOnOTP2Change = (e) => {
+    setOtp2(e.target.value);
+  }
+  const handleOnOTP3Change = (e) => {
+    setOtp3(e.target.value);
+  }
+  const handleOnOTP4Change = (e) => {
+    setOtp4(e.target.value);
+  }
 
   const ref = useRef();
   return (
     <div className="verifyPasswordScreen">
       <div className="align-center pb-5 pt-5">
         <h2 className="verifyTitle">Verification Code</h2>
-        <span className="verifyTitleSubHeading">Please enter the Verification Code <br /> Sent to +91 9********9</span>
+        <span className="verifyTitleSubHeading">Please enter the Verification Code <br /> Sent to <b>"{email}"</b></span>
       </div>
       <div className="login-form">
         <div className="card-title mb-2">Enter OTP</div>
@@ -40,7 +52,7 @@ const VerifyPassword = (props) => {
             maxLength="1"
             value={otp1}
             ref={input => input && input.focus()}
-            onChange={setOtp1}
+            onChange={handleOnOTP1Change}
           />
 
           <input
@@ -50,7 +62,7 @@ const VerifyPassword = (props) => {
             maxLength="1"
             value={otp2}
             ref={otp1.length === 1 ? input => input && input.focus() : null}
-            onChange={setOtp2}
+            onChange={handleOnOTP2Change}
           />
 
           <input
@@ -60,7 +72,7 @@ const VerifyPassword = (props) => {
             maxLength="1"
             value={otp3}
             ref={otp2.length === 1 ? input => input && input.focus() : null}
-            onChange={setOtp3}
+            onChange={handleOnOTP3Change}
           />
 
           <input
@@ -70,7 +82,7 @@ const VerifyPassword = (props) => {
             maxLength="1"
             value={otp4}
             ref={otp3.length === 1 ? input => input && input.focus() : null}
-            onChange={setOtp4}
+            onChange={handleOnOTP4Change}
           />
         </div>
         <div>
@@ -84,8 +96,6 @@ const VerifyPassword = (props) => {
         <div className="text-center mt-5">
           <button type="button" className="btn btn-primary width100"
             onClick={() => {
-              setContinueClick(true);
-              setSteps(4);
               onVerifyOtpClick();
             }}
             className={`btn ${buttonActive > 0 ? `btn-red` : ``}`}
