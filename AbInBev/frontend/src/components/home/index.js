@@ -42,6 +42,8 @@ const Home = (props) => {
     const data = { emailId: email, otp };
     const result = await verifyOtp(data);
     if (result.status === 200) {
+      setContinueClick(true);
+      setSteps(4);
       const token = result.data.data.token;
       setAuthToken(token);
       const decoded = jwt_decode(token);
@@ -72,7 +74,7 @@ const Home = (props) => {
   });
 
   const onSignUpClick = useCallback(async (values) => {
-    let data = { firstName: values.firstName, lastName: values.lastName, emailId: values.mobile_email, organisationId: values.organisation };
+    let data = { firstName: values.firstName, lastName: values.lastName, emailId: values.mobile_email, organisationName: values.organisation, organisationId: 0 };
     const result = await registerUser(data);
     if (result.status === 200) {
       setSteps(5);
@@ -107,11 +109,14 @@ const Home = (props) => {
           {steps == 5 &&
             <>
               {
-                showSignUpCompletedMessage && <h4>Please wait while the Account Verified by Admin &nbsp; <a href="#" onClick={
-                  () => {
-                    setSteps(2);
-                  }
-                } className="signUpLink">Log In</a> &nbsp;here</h4>
+                showSignUpCompletedMessage &&
+                <>
+                  <h4>Please wait while your Account is Verified by Admin!</h4>
+                  &nbsp;
+                  <h4>
+                    <a href="#" onClick={() => { setSteps(2); }} className="signUpLink">Log In</a> &nbsp;here
+                  </h4>
+                </>
               }
             </>
           }
