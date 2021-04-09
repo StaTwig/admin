@@ -11,7 +11,8 @@ import uploadWhite from "../../assets/icons/UploadWhite.svg";
 import { LOCAL_SERVER_URL_SHIPPINGORDER } from "../../config";
 
 const ReceiveShipment = (props) => {
-  let shipmentDetails = props.trackData.shipmentDetails
+  let shipmentDetails = props.trackData.shipmentDetails;
+  console.log('Details')
   console.log(shipmentDetails)
   const tracking = props.trackData;
   const [menuShip, setMenuShip] = useState(false);
@@ -26,25 +27,67 @@ const ReceiveShipment = (props) => {
   const id = props.match.params.id
 
   const [openUpdatedStatus, setOpenUpdatedStatus] = useState(false);
+  const [receiveShipmentModal, setreceiveShipmentModal] = useState(false);
   const setFile = (evt) => {
     setPhoto(evt.target.files[0]);
   };
+  const defaultData =  
+  {
+    "label": {
+        "labelType": "QR_2DBAR",
+        "labelId": "123445"
+    },
+    "supplier": {
+        "id": "emp-1jpv5xx3kmkkck4e",
+        "locationId": "AP001"
+    },
+    "receiver": {
+        "id": "emp-18gpp20egkkf54n59",
+        "locationId": "AP002"
+    },
+    "transactionIds": [],
+    "_id": "60588f346570743b5f9ebbf7",
+    "airWayBillNo": "7464840",
+    "shippingOrderId": "so-1jpv8pdklqnvl7g",
+    "externalShipmentId": "",
+    "shippingDate": "2021-03-30T00:00:00.000Z",
+    "expectedDeliveryDate": "2021-04-03T00:00:00.000Z",
+    "actualDeliveryDate": "2021-04-03T00:00:00.000Z",
+    "status": "UPDATED",
+    "products": [
+        {
+            "_id": "60588f346570743b5f9ebbf8",
+            "productID": "prod-9bhkk6yiutx",
+            "productQuantity": 100,
+            "productName": "Biohib",
+            "manufacturer": "Bharath Biotech"
+        }
+    ],
+    "poId": "po-g7kn51ef6klnqk02v",
+    "id": "SHjXsVBDOmTz",
+    "createdAt": "2021-03-22T12:36:04.250Z",
+    "updatedAt": "2021-03-22T12:36:04.250Z",
+    "__v": 0,
+    "comment": "",
+    "imagesDetails": []
+}
 
   const receiveShipment = async () => {
-    // const data = { shipmentId, billNo };
+    const data = shipmentDetails?shipmentDetails[0]:defaultData;
     // let formData = new FormData();
 
     // formData.append(shipmentDetails[0]);
     // formData.append("billNo", billNo);  
-    shipmentDetails[0].comment = comment;
-    shipmentDetails[0].imagesDetails = [];
+    data.comment = comment;
+    data.imagesDetails = [];
 
     console.log('On Button Click');
-    console.log(shipmentDetails[0]);
-    const result = await receiveApi(shipmentDetails[0]);
-    if (result.status == 1) {
-      setOpenUpdatedStatus(true);
+    console.log(data);
+    const result = await receiveApi(data);
+    if (result.status == 200) {
+      // setOpenUpdatedStatus(true);
       console.log("success add product");
+      setreceiveShipmentModal(true);
     }
     else{
       console.log(result);
@@ -74,6 +117,11 @@ const ReceiveShipment = (props) => {
   const closeModal = () => {
     setOpenUpdatedStatus(false);
     props.history.push("/tracing");
+  };
+
+  const closeModalShipment = () => {
+    setreceiveShipmentModal(false);
+    props.history.push("/viewshipment/"+id);
   };
 
   return (
