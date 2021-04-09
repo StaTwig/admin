@@ -1,10 +1,25 @@
-import React from "react";
+import React, { useState, useCallback } from "react";
 import logo from "../../assets/ABInBev.png";
 import { Link } from 'react-router-dom';
 
 const Login = (props) => {
 
-  const { setSteps, setContinueClick, email, onEmailChange, errorMessage, onSendOtp } = props;
+  const { setSteps, setContinueClick, onSendOtp } = props;
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+  const [email, setEmail] = useState('');
+
+
+  const onSendOtpClick = () => {
+    if (!email || email.length < 1 || email === '') {
+      setShowErrorMessage(true);
+      setErrorMessage('Please provide valid Email/Phone');
+      return;
+    }
+    setShowErrorMessage(false);
+    setErrorMessage('');
+    onSendOtp(email);
+  }
 
   return (
     <div className="loginScreen">
@@ -17,12 +32,13 @@ const Login = (props) => {
         <div className="form-group">
           <label htmlFor="username" className="userNameLabel">Username/ Mobile No.</label>
           <input name="username" className="form-control username" value={email}
-            onChange={onEmailChange} />
+            onChange={e => setEmail(e.target.value)} />
+          {
+            showErrorMessage ? <h4 className="error-message">{errorMessage}</h4> : ""
+          }
           <button
             onClick={() => {
-              setContinueClick(true);
-              setSteps(3);
-              onSendOtp();
+              onSendOtpClick();
             }}
             className={`width100 btn mt-4`}
             type="button"

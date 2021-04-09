@@ -2,10 +2,27 @@ import React, { useState, useRef } from "react";
 import logo from "../../assets/ABInBev.png";
 
 const VerifyPassword = (props) => {
-  const { buttonActive,
-    setSteps,
-    setContinueClick, otp1, onOtpChange1, otp2, onOtpChange2, otp3, onOtpChange3, otp4, onOtpChange4,
-    onVerifyOtp, errorMessage, onResendOtp } = props;
+  const { buttonActive, setSteps, setContinueClick, onVerifyOtp, onResendOtp, email } = props;
+  const [otp1, setOtp1] = useState('');
+  const [otp2, setOtp2] = useState('');
+  const [otp3, setOtp3] = useState('');
+  const [otp4, setOtp4] = useState('');
+  let otp = otp1 + otp2 + otp3 + otp4;
+
+  const onVerifyOtpClick = () => {
+    if (otp.length < 4) {
+      return;
+    }
+    onVerifyOtp(otp, email);
+  }
+  const onResendOtpClick = () => {
+    setOtp1('');
+    setOtp2('');
+    setOtp3('');
+    setOtp4('');
+    onResendOtp(email);
+  }
+
   const ref = useRef();
   return (
     <div className="verifyPasswordScreen">
@@ -23,7 +40,7 @@ const VerifyPassword = (props) => {
             maxLength="1"
             value={otp1}
             ref={input => input && input.focus()}
-            onChange={onOtpChange1}
+            onChange={setOtp1}
           />
 
           <input
@@ -33,7 +50,7 @@ const VerifyPassword = (props) => {
             maxLength="1"
             value={otp2}
             ref={otp1.length === 1 ? input => input && input.focus() : null}
-            onChange={onOtpChange2}
+            onChange={setOtp2}
           />
 
           <input
@@ -43,7 +60,7 @@ const VerifyPassword = (props) => {
             maxLength="1"
             value={otp3}
             ref={otp2.length === 1 ? input => input && input.focus() : null}
-            onChange={onOtpChange3}
+            onChange={setOtp3}
           />
 
           <input
@@ -53,13 +70,13 @@ const VerifyPassword = (props) => {
             maxLength="1"
             value={otp4}
             ref={otp3.length === 1 ? input => input && input.focus() : null}
-            onChange={onOtpChange4}
+            onChange={setOtp4}
           />
         </div>
         <div>
           <p className="signUpDesc mt-1 mb-3 ">Didn’t get the code? <a href="#" onClick={
             () => {
-              onResendOtp();
+              onResendOtpClick();
             }
           } className="signUpLink">Resend OTP</a></p>
         </div>
@@ -69,7 +86,7 @@ const VerifyPassword = (props) => {
             onClick={() => {
               setContinueClick(true);
               setSteps(4);
-              onVerifyOtp();
+              onVerifyOtpClick();
             }}
             className={`btn ${buttonActive > 0 ? `btn-red` : ``}`}
             type="button">

@@ -65,6 +65,12 @@
   }
   .loginUserBlock{
     min-height: 213px;
+    .error-messages{
+      list-style: square;
+      margin-left: 20px;
+      padding: 10px;
+      color: #9c0333;
+    }
   }
   .signUpDesc{
     font-size: 12px;
@@ -79,6 +85,9 @@
     .username{
       width:330px;
       border-radius: 0.938rem;
+    }
+    .error-message{
+      color:#FFFFFF;
     }
   }
   .verifyPasswordScreen{
