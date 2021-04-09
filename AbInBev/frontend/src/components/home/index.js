@@ -72,7 +72,7 @@ const Home = (props) => {
   });
 
   const onSignUpClick = useCallback(async (values) => {
-    let data = { firstName: values.firstName, lastName: values.lastName, emailId: values.mobile_email, organisationId: values.organisation };
+    let data = { firstName: values.firstName, lastName: values.lastName, emailId: values.mobile_email, organisationName: values.organisation, organisationId: 0 };
     const result = await registerUser(data);
     if (result.status === 200) {
       setSteps(5);
