@@ -1,9 +1,9 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import back from '../../assets/icons/back.png';
 import './style.scss';
 import { formatDate } from '../../utils/dateHelper';
+import {changePOStatus} from '../../actions/poActions';
 
 const ViewOrder = props => {
   const { order, id } = props;
@@ -14,16 +14,37 @@ const ViewOrder = props => {
     statusStyle = 'bg-success';
     status = 'Delivered';
   }
+const onPOStatusChange = async status => {
+    const data = { poStatus: status, orderID: order.id };
+    const result = await changePOStatus(data);
+    if (result.status === 200) {
+      setAlertMessage('Success');
+      setShowAlertModal(true);
+      setShowModal(false);
+      dispatch(getPurchaseStats());
+    } else {
+      setShowAlertModal(true);
+      setAlertMessage('Fail');
+    }
+  };
 
   return (
     <div className="vieworder text-muted">
       <div className="d-flex justify-content-between">
         <h1 className="breadcrumb">VIEW ORDER</h1>
-        <div className="d-flex">
+
+{order.poStatus === 'RECEIVED' ? (
+  <div className="d-flex">
+ <button className="btn btn-success fontSize20 font-bold mr-4" onClick={() => onPOStatusChange('Accepted')} >Accept Order</button>
+ <button className="btn btn-orange fontSize20 font-bold mr-4"  onClick={() => onPOStatusChange('Rejected')} >Reject Order</button>
+<Link to={`/orders`}>
+            <button className="btn btn-outline-primary mr-2" ><img src={back} height="17" className="mr-2 mb-1" />Back to Orders</button>
+          </Link>
+        </div>):(<div className="d-flex">
           <Link to={`/orders`}>
             <button className="btn btn-outline-primary mr-2" ><img src={back} height="17" className="mr-2 mb-1" />Back to Orders</button>
           </Link>
-        </div>
+        </div>)}
       </div>
       <div className="mt-4">
         <div className="row bg-white shadow  p-3 m-3">
@@ -71,7 +92,7 @@ const ViewOrder = props => {
                   <span className="col-4">Organisation ID: </span>
                   <span className="col text-dark font-weight-bold">{order.customer?.organisation?.id}</span>
                 </div>
-                <div className="w-100"></div>
+                <div class="w-100"></div>
                 <div className="col row col-6 mt-2">
                   <span className="col-4">Delivery Location:</span>
                   <span className="col ml-2 text-dark font-weight-bold">{order.warehouse?.warehouseAddress?.city+', '+order.warehouse?.warehouseAddress?.country}</span>
@@ -83,7 +104,7 @@ const ViewOrder = props => {
         <div className=" p-3 m-3">
           <span className="p-1 text-info font-weight-bold">Product Details</span>
           <div className="row mt-3">
-            {order?.products?.map((product, index) => 
+            {order?.products?.map((product, index) =>
             <div className={`bg-white shadow ${index > 0 ? 'ml-4' : ''}  p-3`}>
               <span className="p-1 font-weight-normal text-primary font-weight-bold">{product.name}</span>
               <div className="row  p-1">
