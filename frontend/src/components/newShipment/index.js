@@ -150,6 +150,9 @@ const NewShipment = (props) => {
         error = true;
     });
 
+    console.log(estimateDeliveryDate);
+    
+
     if (!error) {
       const data = {
         airWayBillNo,
@@ -170,14 +173,14 @@ const NewShipment = (props) => {
         shippingDate: new Date(
           shipmentDate.getTime() - shipmentDate.getTimezoneOffset() * 60000
         ).toISOString(),
-        expectedDeliveryDate: estimateDeliveryDate.length > 0 ? (new Date(
+        expectedDeliveryDate: estimateDeliveryDate != '' ? (new Date(
           estimateDeliveryDate.getTime() -
           estimateDeliveryDate.getTimezoneOffset() * 60000
         ).toISOString()) : '',
-        actualDeliveryDate: new Date(
+        actualDeliveryDate: estimateDeliveryDate != '' ? (new Date(
           estimateDeliveryDate.getTime() -
           estimateDeliveryDate.getTimezoneOffset() * 60000
-        ).toISOString(),
+        ).toISOString()) : '',
         status: "CREATED",
         products: products,
         poId: shippingOrderDetails.purchaseOrderId ? shippingOrderDetails.purchaseOrderId : null,
