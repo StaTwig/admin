@@ -11,9 +11,17 @@ const ViewOrder = props => {
   let statusStyle = 'bg-primary';
   let status = order.poStatus;
   if (order.poStatus === 'RECEIVED') {
-    statusStyle = 'bg-success';
+    statusStyle = 'bg-info';
     status = 'Delivered';
   }
+else if (order.poStatus === 'Accepted') {
+    statusStyle = 'bg-success';
+    status = 'Accepted';
+  }else if (order.poStatus === 'Rejected') {
+    statusStyle = 'bg-warning';
+  }
+
+
 const onPOStatusChange = async status => {
     const data = { poStatus: status, orderID: order.id };
     const result = await changePOStatus(data);
@@ -35,8 +43,10 @@ const onPOStatusChange = async status => {
 
 {order.poStatus === 'RECEIVED' ? (
   <div className="d-flex">
- <button className="btn btn-success fontSize20 font-bold mr-4" onClick={() => onPOStatusChange('Accepted')} >Accept Order</button>
- <button className="btn btn-orange fontSize20 font-bold mr-4"  onClick={() => onPOStatusChange('Rejected')} >Reject Order</button>
+<Link to={`/orders`}>
+ <button className="btn btn-success fontSize20 font-bold mr-4" onClick={() => onPOStatusChange('Accepted')} >Accept Order</button></Link>
+<Link to={`/orders`}>
+ <button className="btn btn-orange fontSize20 font-bold mr-4"  onClick={() => onPOStatusChange('Rejected')} >Reject Order</button></Link>
 <Link to={`/orders`}>
             <button className="btn btn-outline-primary mr-2" ><img src={back} height="17" className="mr-2 mb-1" />Back to Orders</button>
           </Link>
