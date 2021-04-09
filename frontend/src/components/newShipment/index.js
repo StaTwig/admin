@@ -150,9 +150,6 @@ const NewShipment = (props) => {
         error = true;
     });
 
-    console.log(estimateDeliveryDate);
-    
-
     if (!error) {
       const data = {
         airWayBillNo,
