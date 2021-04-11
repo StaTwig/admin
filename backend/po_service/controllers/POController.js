@@ -362,21 +362,21 @@ exports.changePOStatus = [
             if (permissionResult.success) {
               try {
                 const { address } = req.user;
-                const { orderID, status } = req.body;
+                const { orderID } = req.body;
                 const po = await RecordModel.findOne({ id : orderID });
                 if (po && po.customer.customer_incharge === address) {
                   
                 const currDateTime = date.format( new Date(), 'DD/MM/YYYY HH:mm');
                 const updates = {
                      "updatedOn": currDateTime,
-                     "status":status
+                     "status":req.body.poStatus,
                 }
 
                 const updateData = await RecordModel.findOneAndUpdate(
                 { id: orderID },
                 {
                       $push: { poUpdates: updates },
-                      $set: {poStatus :status }
+                      $set: {poStatus :req.body.poStatus }
                 })
 
                 return apiResponse.successResponseWithData(
