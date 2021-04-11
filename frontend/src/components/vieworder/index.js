@@ -1,4 +1,4 @@
-import React ,{  useState }  from 'react';
+import React,{  useState } from 'react';
 import { Link } from 'react-router-dom';
 import back from '../../assets/icons/back.png';
 import './style.scss';
@@ -8,7 +8,6 @@ import {changePOStatus} from '../../actions/poActions';
 const ViewOrder = props => {
   const { order, id } = props;
  const [alertMessage, setAlertMessage] = useState({});
-
   let statusStyle = 'bg-primary';
   let status = order.poStatus;
   if (order.poStatus === 'RECEIVED') {
@@ -24,13 +23,12 @@ else if (order.poStatus === 'Accepted') {
 
 
 const onPOStatusChange = async status => {
-    const data = { poStatus: status, orderID: order.id };
+    const data = { status, orderID: order.id };
     const result = await changePOStatus(data);
     if (result.status === 200) {
       setAlertMessage('Success');
-      
-    } else {
-      
+ 
+} else {
       setAlertMessage('Fail');
     }
   };
