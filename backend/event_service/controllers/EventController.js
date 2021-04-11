@@ -16,25 +16,33 @@ const auth = require("../middlewares/jwt");
  */
 exports.getAllEvents = [
 	//auth,
-	function (req, res) {
+	async function (req, res) {
 		try {
-			EventModal.find({ id : req.params.id }, "_id eventID eventTime eventTypePrimary	eventTypeDesc actorId actorUserId caId caName caAddress actorOrgId actorOrgName actorOrgAddress secondaryOrgId secondaryOrgName secondaryOrgAddress	payloadData").then(
-				Events => {
-					if (Events.length > 0) {
-						return apiResponse.successResponseWithData(
-							res,
-							"Operation success",
-							Events
-						);
-					} else {
-						return apiResponse.successResponseWithData(
-							res,
-							"No Results Found",
-							[]
-						);
+			const resPerPage = 9; 
+			const page = req.query.page || 1; 
+			const totalRecords = await EventModal.count({...req.params})
+			EventModal.find({ ...req.params }, "_id eventID eventTime eventTypePrimary	eventTypeDesc actorId actorUserId caId caName caAddress actorOrgId actorOrgName actorOrgAddress secondaryOrgId secondaryOrgName secondaryOrgAddress	payloadData").skip((resPerPage * page) - resPerPage)
+				.limit(resPerPage).then(
+					Events => {
+						if (Events.length > 0) {
+							const finalData = {
+								totalRecords : totalRecords,
+								data : Events
+							}
+							return apiResponse.successResponseWithData(
+								res,
+								"Operation success",
+								finalData
+							);
+						} else {
+							return apiResponse.successResponseWithData(
+								res,
+								"No Results Found",
+								[]
+							);
+						}
 					}
-				}
-			);
+				);
 		} catch (err) {
 			return apiResponse.ErrorResponse(res, err);
 		}
@@ -54,8 +62,11 @@ exports.getEventById = [
 		.isLength({ min: 3 })
 		.trim(),
 	sanitizeBody("*").escape(),
-	function (req, res) {
+	async function (req, res) {
 		try {
+			const resPerPage = 9; 
+			const page = req.query.page || 1; 			
+			const totalRecords = await EventModal.count({...req.params})
 			console.log(req.params)
 			const errors = validationResult(req);
 			if (!errors.isEmpty()) {
@@ -65,23 +76,28 @@ exports.getEventById = [
 					errors.array()
 				);
 			} else {
-				EventModal.find({ ...req.params }, "_id eventID eventTime eventTypePrimary eventTypeDesc actorId actorUserId caId caName caAddress actorOrgId actorOrgName actorOrgAddress secondaryOrgId secondaryOrgName secondaryOrgAddress	payloadData").then(
-					Events => {
-						if (Events.length > 0) {
-							return apiResponse.successResponseWithData(
-								res,
-								"Operation success",
-								Events
-							);
-						} else {
-							return apiResponse.successResponseWithData(
-								res,
-								"No Results Found",
-								[]
-							);
+				EventModal.find({ ...req.params }, "_id eventID eventTime eventTypePrimary eventTypeDesc actorId actorUserId caId caName caAddress actorOrgId actorOrgName actorOrgAddress secondaryOrgId secondaryOrgName secondaryOrgAddress	payloadData").skip((resPerPage * page) - resPerPage)
+					.limit(resPerPage).then(
+						Events => {
+							if (Events.length > 0) {
+								const finalData = {
+									totalRecords : totalRecords,
+									data : Events
+								}
+								return apiResponse.successResponseWithData(
+									res,
+									"Operation success",
+									finalData
+								);
+							} else {
+								return apiResponse.successResponseWithData(
+									res,
+									"No Results Found",
+									[]
+								);
+							}
 						}
-					}
-				);
+					);
 			}
 		} catch (err) {
 			return apiResponse.ErrorResponse(res, err);
@@ -102,8 +118,11 @@ exports.getEventByActorId = [
 		.isLength({ min: 3 })
 		.trim(),
 	sanitizeBody("*").escape(),
-	function (req, res) {
+	async function (req, res) {
 		try {
+			const resPerPage = 9; 
+			const page = req.query.page || 1; 
+			const totalRecords = await EventModal.count({...req.params})
 			const errors = validationResult(req);
 			if (!errors.isEmpty()) {
 				return apiResponse.validationErrorWithData(
@@ -112,23 +131,28 @@ exports.getEventByActorId = [
 					errors.array()
 				);
 			} else {
-				EventModal.find({ ...req.params }, "_id eventID eventTime eventTypePrimary	eventTypeDesc actorId actorUserId caId caName caAddress actorOrgId actorOrgName actorOrgAddress secondaryOrgId secondaryOrgName secondaryOrgAddress	payloadData").then(
-					Events => {
-						if (Events.length > 0) {
-							return apiResponse.successResponseWithData(
-								res,
-								"Operation success",
-								Events
-							);
-						} else {
-							return apiResponse.successResponseWithData(
-								res,
-								"No Results Found",
-								[]
-							);
+				EventModal.find({ ...req.params }, "_id eventID eventTime eventTypePrimary	eventTypeDesc actorId actorUserId caId caName caAddress actorOrgId actorOrgName actorOrgAddress secondaryOrgId secondaryOrgName secondaryOrgAddress	payloadData").skip((resPerPage * page) - resPerPage)
+					.limit(resPerPage).then(
+						Events => {
+							if (Events.length > 0) {
+								const finalData = {
+									totalRecords : totalRecords,
+									data : Events
+								}
+								return apiResponse.successResponseWithData(
+									res,
+									"Operation success",
+									finalData
+								);
+							} else {
+								return apiResponse.successResponseWithData(
+									res,
+									"No Results Found",
+									[]
+								);
+							}
 						}
-					}
-				);
+					);
 			}
 		} catch (err) {
 			return apiResponse.ErrorResponse(res, err);
@@ -143,14 +167,17 @@ exports.getEventByActorId = [
  *
  * @returns {Object}
  */
- exports.getEventByCaId = [
+exports.getEventByCaId = [
 	// auth,
 	param("caId", "eventId must not be empty.")
 		.isLength({ min: 3 })
 		.trim(),
 	sanitizeBody("*").escape(),
-	function (req, res) {
+	async function (req, res) {
 		try {
+			const resPerPage = 9; 
+			const page = req.query.page || 1; 
+			const totalRecords = await EventModal.count({...req.params})
 			const errors = validationResult(req);
 			if (!errors.isEmpty()) {
 				return apiResponse.validationErrorWithData(
@@ -159,23 +186,28 @@ exports.getEventByActorId = [
 					errors.array()
 				);
 			} else {
-				EventModal.find({ ...req.params }, "_id eventID eventTime eventTypePrimary	eventTypeDesc actorId actorUserId caId caName caAddress actorOrgId actorOrgName actorOrgAddress secondaryOrgId secondaryOrgName secondaryOrgAddress	payloadData").then(
-					Events => {
-						if (Events.length > 0) {
-							return apiResponse.successResponseWithData(
-								res,
-								"Operation success",
-								Events
-							);
-						} else {
-							return apiResponse.successResponseWithData(
-								res,
-								"No Results Found",
-								[]
-							);
+				EventModal.find({ ...req.params }, "_id eventID eventTime eventTypePrimary	eventTypeDesc actorId actorUserId caId caName caAddress actorOrgId actorOrgName actorOrgAddress secondaryOrgId secondaryOrgName secondaryOrgAddress	payloadData").skip((resPerPage * page) - resPerPage)
+					.limit(resPerPage).then(
+						Events => {
+							if (Events.length > 0) {
+								const finalData = {
+									totalRecords : totalRecords,
+									data : Events
+								}
+								return apiResponse.successResponseWithData(
+									res,
+									"Operation success",
+									finalData
+								);
+							} else {
+								return apiResponse.successResponseWithData(
+									res,
+									"No Results Found",
+									[]
+								);
+							}
 						}
-					}
-				);
+					);
 			}
 		} catch (err) {
 			return apiResponse.ErrorResponse(res, err);
@@ -190,14 +222,17 @@ exports.getEventByActorId = [
  *
  * @returns {Object}
  */
- exports.getEventByActorOrgId = [
+exports.getEventByActorOrgId = [
 	// auth,
 	param("actorOrgId", "eventId must not be empty.")
 		.isLength({ min: 3 })
 		.trim(),
 	sanitizeBody("*").escape(),
-	function (req, res) {
+	async function (req, res) {
 		try {
+			const resPerPage = 9; 
+			const page = req.query.page || 1; 
+			const totalRecords = await EventModal.count({...req.params})
 			const errors = validationResult(req);
 			if (!errors.isEmpty()) {
 				return apiResponse.validationErrorWithData(
@@ -206,23 +241,28 @@ exports.getEventByActorId = [
 					errors.array()
 				);
 			} else {
-				EventModal.find({ ...req.params }, "_id eventID eventTime eventTypePrimary	eventTypeDesc actorId actorUserId caId caName caAddress actorOrgId actorOrgName actorOrgAddress secondaryOrgId secondaryOrgName secondaryOrgAddress	payloadData").then(
-					Events => {
-						if (Events.length > 0) {
-							return apiResponse.successResponseWithData(
-								res,
-								"Operation success",
-								Events
-							);
-						} else {
-							return apiResponse.successResponseWithData(
-								res,
-								"No Results Found",
-								[]
-							);
+				EventModal.find({ ...req.params }, "_id eventID eventTime eventTypePrimary	eventTypeDesc actorId actorUserId caId caName caAddress actorOrgId actorOrgName actorOrgAddress secondaryOrgId secondaryOrgName secondaryOrgAddress	payloadData").skip((resPerPage * page) - resPerPage)
+					.limit(resPerPage).then(
+						Events => {
+							if (Events.length > 0) {
+								const finalData = {
+									totalRecords : totalRecords,
+									data : Events
+								}
+								return apiResponse.successResponseWithData(
+									res,
+									"Operation success",
+									finalData
+								);
+							} else {
+								return apiResponse.successResponseWithData(
+									res,
+									"No Results Found",
+									[]
+								);
+							}
 						}
-					}
-				);
+					);
 			}
 		} catch (err) {
 			return apiResponse.ErrorResponse(res, err);
@@ -237,14 +277,17 @@ exports.getEventByActorId = [
  *
  * @returns {Object}
  */
- exports.getEventBySecondOrgId = [
+exports.getEventBySecondOrgId = [
 	// auth,
 	param("secondaryOrgId", "eventId must not be empty.")
 		.isLength({ min: 3 })
 		.trim(),
 	sanitizeBody("*").escape(),
-	function (req, res) {
+	async function (req, res) {
 		try {
+			const resPerPage = 9; 
+			const page = req.query.page || 1; 
+			const totalRecords = await EventModal.count({...req.params})
 			const errors = validationResult(req);
 			if (!errors.isEmpty()) {
 				return apiResponse.validationErrorWithData(
@@ -253,23 +296,28 @@ exports.getEventByActorId = [
 					errors.array()
 				);
 			} else {
-				EventModal.find({ ...req.params }, "_id eventID eventTime eventTypePrimary	eventTypeDesc actorId actorUserId caId caName caAddress actorOrgId actorOrgName actorOrgAddress secondaryOrgId secondaryOrgName secondaryOrgAddress	payloadData").then(
-					Events => {
-						if (Events.length > 0) {
-							return apiResponse.successResponseWithData(
-								res,
-								"Operation success",
-								Events
-							);
-						} else {
-							return apiResponse.successResponseWithData(
-								res,
-								"No Results Found",
-								[]
-							);
+				EventModal.find({ ...req.params }, "_id eventID eventTime eventTypePrimary	eventTypeDesc actorId actorUserId caId caName caAddress actorOrgId actorOrgName actorOrgAddress secondaryOrgId secondaryOrgName secondaryOrgAddress	payloadData").skip((resPerPage * page) - resPerPage)
+					.limit(resPerPage).then(
+						Events => {
+							if (Events.length > 0) {
+								const finalData = {
+									totalRecords : totalRecords,
+									data : Events
+								}
+								return apiResponse.successResponseWithData(
+									res,
+									"Operation success",
+									finalData
+								);
+							} else {
+								return apiResponse.successResponseWithData(
+									res,
+									"No Results Found",
+									[]
+								);
+							}
 						}
-					}
-				);
+					);
 			}
 		} catch (err) {
 			return apiResponse.ErrorResponse(res, err);
@@ -284,13 +332,13 @@ exports.getEventByActorId = [
  *
  * @returns {Object}
  */
- exports.deleteEventById = [
+exports.deleteEventById = [
 	auth,
 	body("eventId", "eventId must not be empty.")
 		.isLength({ min: 1 })
 		.trim(),
 	sanitizeBody("*").escape(),
-	function (req, res) {
+	async function (req, res) {
 		try {
 			const errors = validationResult(req);
 			if (!errors.isEmpty()) {
@@ -300,7 +348,7 @@ exports.getEventByActorId = [
 					errors.array()
 				);
 			} else {
-				EventModal.findByIdAndRemove(req.params['eventId'], function(err) {
+				EventModal.findByIdAndRemove(req.params['eventId'], async function (err) {
 					if (err) {
 						return apiResponse.ErrorResponse(res, err);
 					} else {
