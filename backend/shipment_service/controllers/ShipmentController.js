@@ -21,7 +21,7 @@ const EmployeeModel = require('../models/EmployeeModel')
 const ConfigurationModel = require('../models/ConfigurationModel')
 const OrganisationModel = require('../models/OrganisationModel')
 const CounterModel = require('../models/CounterModel')
-const logEvent = require('../../../utils/event_logger.js')
+const logEvent = require('../../../utils/event_logger')
 const init = require('../logging/init');
 const logger = init.getLog();
 const imageUrl = process.env.IMAGE_URL;
@@ -204,6 +204,7 @@ const userShipments = async ( mode, warehouseId, skip, limit, callback) => {
 exports.createShipment = [
     auth,
     async (req, res) => {
+        // console.log(req.user)
         try {
             const data = req.body;
             const incrementCounter = await CounterModel.update({
@@ -221,10 +222,12 @@ exports.createShipment = [
             const empData = await EmployeeModel.findOne({emailId: req.user.emailId});
             const orgId = empData.organisationId;
             const orgData = await OrganisationModel.findOne({id: orgId});
+            const address = orgData.postalAddress;
             const confId = orgData.configuration_id;
             const confData = await ConfigurationModel.findOne({id: confId});
             const process = confData.process;
-
+            const supplierOrgData = await OrganisationModel.findOne({id: req.body.supplier.id});
+            const receiverOrgData = await OrganisationModel.findOne({id: req.body.receiver.id});
             const soID = data.shippingOrderId;
             const poID = data.poId;
             var flag = "Y";
@@ -300,46 +303,46 @@ exports.createShipment = [
 		    
 		const shipment = new ShipmentModel(data);
                 const result = await shipment.save();
-                              //   event_data = {
-        //     "eventID": "ev0000"+  Math.random().toString(36).slice(2),
-        //     "eventTime": new Date().toISOString(),
-        //     "eventType": {
-        //         "primary": "CREATE",
-        //         "description": "SHIPMENT ALERTS"
-        //     },
-        //     "actor": {
-        //         "actorid": "userid1",
-        //         "actoruserid": "ashwini@statwig.com"
-        //     },
-        //     "stackholders": {
-        //         "ca": {
-        //             "id": "org001",
-        //             "name": "Statwig Pvt. Ltd.",
-        //             "address": "ca_address_object"
-        //         },
-        //         "actororg": {
-        //             "id": "org002",
-        //             "name": "Appollo Hospitals Jublihills",
-        //             "address": "actororg_address_object"
-        //         },
-        //         "secondorg": {
-        //             "id": "org003",
-        //             "name": "Med Plus Gachibowli",
-        //             "address": "secondorg_address_object"
-        //         }
-        //     },
-        //     "payload": {
-        //         "data": {
-        //             "abc": 123
-        //         }
-        //     }
-        // }
-        // async function compute(event_data) {
-        //     result = await logEvent(event_data)
-        //     return result
-        // }
+        event_data = {
+            "eventID": "ev0000"+  Math.random().toString(36).slice(2),
+            "eventTime": new Date().toISOString(),
+            "eventType": {
+                "primary": "CREATE",
+                "description": "SHIPMENT_CREATION"
+            },
+            "actor": {
+                "actorid": req.user.id,
+                "actoruserid": req.user.emailId
+            },
+            "stackholders": {
+                "ca": {
+                    "id": orgId,
+                    "name": req.user.organisationId,
+                    "address": address
+                },
+                "actororg": {
+                    "id": req.body.supplier.id,
+                    "name": supplierOrgData.name,
+                    "address": supplierOrgData.postalAddress
+                },
+                "secondorg": {
+                    "id": req.body.receiver.id,
+                    "name": receiverOrgData.name,
+                    "address": receiverOrgData.postalAddress
+                }
+            },
+            "payload": {
+                "data": {
+                    "data": data
+                }
+            }
+        }
+        async function compute(event_data) {
+            result = await logEvent(event_data)
+            return result
+        }
         
-        // compute(event_data).then((response) => console.log(response))
+        compute(event_data).then((response) => console.log(response))
                 return apiResponse.successResponseWithData(
                     res,
                     'Shipment Created',
