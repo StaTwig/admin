@@ -237,7 +237,19 @@ exports.register = [
 
         var organisationId = req.body.organisationId;
         var warehouseId = 'NA';
-        var employeeId = uniqid('emp-');
+
+        const incrementCounterEmp = await CounterModel.update({
+                  'counters.name': "employeeId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+        const empCounter = await CounterModel.findOne({'counters.name':"employeeId"},{"counters.name.$":1})
+        var employeeId = empCounter.counters[0].format + empCounter.counters[0].value;
+
+        //var employeeId = uniqid('emp-');
         var employeeStatus = 'NOTAPPROVED';
         let addr = '';
 
@@ -259,8 +271,30 @@ exports.register = [
             const country = req.body?.address?.country ? req.body.address?.country : 'India';
             const address = req.body?.address ? req.body.address : {};
             addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
-            organisationId = uniqid('org-');
-            warehouseId = uniqid('war-');
+            
+            const incrementCounterOrg = await CounterModel.update({
+                  'counters.name': "orgId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+            const orgCounter = await CounterModel.findOne({'counters.name':"orgId"},{"counters.name.$":1})
+            organisationId = orgCounter.counters[0].format + orgCounter.counters[0].value;
+
+            //organisationId = uniqid('org-');
+            const incrementCounterWarehouse = await CounterModel.update({
+                  'counters.name': "warehouseId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+            const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.name.$":1})
+            warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
+            //warehouseId = uniqid('war-');
             const org = new OrganisationModel({
               primaryContactId: employeeId,
               name: organisationName,
@@ -278,7 +312,18 @@ exports.register = [
             });
             await org.save();
 
-            const inventoryId = uniqid('inv-');
+            const incrementCounterInv = await CounterModel.update({
+                  'counters.name': "inventoryId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+            const invCounter = await CounterModel.findOne({'counters.name':"inventoryId"},{"counters.name.$":1})
+            const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
+
+            //const inventoryId = uniqid('inv-');
             const inventoryResult = new InventoryModel({ id: inventoryId });
             await inventoryResult.save();
 
@@ -985,7 +1030,18 @@ exports.addWarehouse = [
   auth,
   async (req, res) => {
     try {
-      const inventoryId = uniqid('inv-');
+      const incrementCounterInv = await CounterModel.update({
+                  'counters.name': "inventoryId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+      const invCounter = await CounterModel.findOne({'counters.name':"inventoryId"},{"counters.name.$":1})
+      const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
+
+      //const inventoryId = uniqid('inv-');
       const inventoryResult = new InventoryModel({ id: inventoryId });
       await inventoryResult.save();
       const {
@@ -997,7 +1053,19 @@ exports.addWarehouse = [
         supervisors,
         employees,
       } = req.body;
-      const warehouseId = uniqid('war-');
+
+      const incrementCounterWarehouse = await CounterModel.update({
+                  'counters.name': "warehouseId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+      const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.name.$":1})
+      const warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
+
+      //const warehouseId = uniqid('war-');
       const warehouse = new WarehouseModel({
         id: warehouseId,
         organisationId,
