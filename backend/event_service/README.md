@@ -5,19 +5,19 @@ This Service will return the events from DB and can be queried by Actor, ActorOr
 ## Endpoints
 
 ##### getAllEvents 
-`GET <IP:PORT>api/events/getAllEvents`
+`GET <IP:PORT>/eventmanagement/api/event/getAllEvents`
 ##### getEventByActorId 
-` GET <IP:PORT>api/events//getEventByActorId/:actorId/:eventTypePrimary/:eventTypeDesc`
+` GET <IP:PORT>/eventmanagement/api/event/getEventByActorId/:actorId/:eventTypePrimary/:eventTypeDesc`
 ##### getEventByCaId
-`GET <IP:PORT>api/events//getEventByCaId/:caId/:eventTypePrimary/:eventTypeDesc`
+`GET <IP:PORT>/eventmanagement/api/event/getEventByCaId/:caId/:eventTypePrimary/:eventTypeDesc`
 ##### getEventByEventId
-`GET <IP:PORT>api/events//getEventByEventId/:eventID/:eventTypePrimary/:eventTypeDesc`
+`GET <IP:PORT>/eventmanagement/api/event/getEventByEventId/:eventID/:eventTypePrimary/:eventTypeDesc`
 ##### getEventBySecondaryOrgId
-`GET <IP:PORT>api/events//getEventBySecondaryOrgId/:secondaryOrgId/:eventTypePrimary/:eventTypeDesc`
+`GET <IP:PORT>/eventmanagement/api/event/getEventBySecondaryOrgId/:secondaryOrgId/:eventTypePrimary/:eventTypeDesc`
 ###### getEventByActorOrgId
-`GET <IP:PORT>api/events//getEventByActorOrgId/:actorOrgId/:eventTypePrimary/:eventTypeDesc`
+`GET <IP:PORT>/eventmanagement/api/event/getEventByActorOrgId/:actorOrgId/:eventTypePrimary/:eventTypeDesc`
 ##### deleteEventById
-`DELETE <IP:PORT>api/events//deleteEventById/:eventId`
+`DELETE <IP:PORT>/eventmanagement/api/event/deleteEventById/:eventId`
 
 ## Note
 
