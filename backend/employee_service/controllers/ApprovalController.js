@@ -1,4 +1,5 @@
 const EmployeeModel = require("../models/EmployeeModel");
+const CounterModel = require("../models/CounterModel");
 const auth = require("../middlewares/jwt");
 const init = require("../logging/init");
 const logger = init.getLog();
@@ -202,6 +203,18 @@ exports.addUser = [
           const email = req.body.emailId;
           const warehouse = req.body.warehouse;
           const firstName = email.split("@")[0];
+          
+          const incrementCounterEmployee = await CounterModel.update({
+                  'counters.name': "employeeId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+          const employeeCounter = await CounterModel.findOne({'counters.name':"employeeId"},{"counters.name.$":1})
+          var employeeId = employeeCounter.counters[0].format + employeeCounter.counters[0].value;
+          
           const user = new EmployeeModel({
             firstName: firstName,
             lastName: firstName,
@@ -211,7 +224,8 @@ exports.addUser = [
             accountStatus: "ACTIVE",
             warehouseId: warehouse,
             isConfirmed: true,
-            id: uniqid("emp-"),
+            id : employeeId
+            //id: uniqid("emp-"),
           });
           await user.save();
           let emailBody = AddUserEmail({
