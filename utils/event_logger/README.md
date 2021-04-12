@@ -9,9 +9,10 @@ This is a utility helper which can be imported into any method and called with t
 `    MONGODB_URL : "mongodb+srv://place_mongo_url_here"`
 `}`
 
+**--------------------------------------------------------------------------------**
 `export MONGODB_URL = mongodb://place_mongo_url_here`
 2) Import the helper file
-`const logEvent = require('../event_logger/eventLogger.js');`
+`const logEvent = require('../utils/event_logger/eventLogger.js');`
 3) Call the logEvent method
 `result = await logEvent(data)`
 
