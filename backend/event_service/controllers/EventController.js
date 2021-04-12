@@ -8,6 +8,7 @@ const utility = require("../helpers/utility");
 const jwt = require("jsonwebtoken");
 const mailer = require("../helpers/mailer");
 const { constants } = require("../helpers/constants");
+require("dotenv").config();
 const auth = require("../middlewares/jwt");
 /**
  * getAllEvents.
