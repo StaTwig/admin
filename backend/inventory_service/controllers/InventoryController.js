@@ -13,7 +13,7 @@ const EmployeeModel = require('../models/EmployeeModel');
 const AtomModel = require('../models/AtomModel');
 const ProductModel = require('../models/ProductModel');
 const NotificationModel = require('../models/NotificationModel');
-
+const logEvent = require('../../../utils/event_logger')
 const checkToken = require('../middlewares/middleware').checkToken;
 const checkPermissions = require('../middlewares/rbac_middleware')
   .checkPermissions;
@@ -555,6 +555,46 @@ exports.updateInventories = [
       }
 
       await InventoryModel.bulkWrite(bulkArr);
+              //   event_data = {
+        //     "eventID": "ev0000"+  Math.random().toString(36).slice(2),
+        //     "eventTime": new Date().toISOString(),
+        //     "eventType": {
+        //         "primary": "CREATE",
+        //         "description": "SHIPMENT ALERTS"
+        //     },
+        //     "actor": {
+        //         "actorid": "userid1",
+        //         "actoruserid": "ashwini@statwig.com"
+        //     },
+        //     "stackholders": {
+        //         "ca": {
+        //             "id": "org001",
+        //             "name": "Statwig Pvt. Ltd.",
+        //             "address": "ca_address_object"
+        //         },
+        //         "actororg": {
+        //             "id": "org002",
+        //             "name": "Appollo Hospitals Jublihills",
+        //             "address": "actororg_address_object"
+        //         },
+        //         "secondorg": {
+        //             "id": "org003",
+        //             "name": "Med Plus Gachibowli",
+        //             "address": "secondorg_address_object"
+        //         }
+        //     },
+        //     "payload": {
+        //         "data": {
+        //             "abc": 123
+        //         }
+        //     }
+        // }
+        // async function compute(event_data) {
+        //     result = await logEvent(event_data)
+        //     return result
+        // }
+        
+        // compute(event_data).then((response) => console.log(response))
       apiResponse.successResponseWithData(res, 'Updated Success');
     } catch (e) {
       apiResponse.ErrorResponse(res, e);
@@ -652,6 +692,46 @@ exports.insertInventories = [
         }
       }
       recursiveFun();
+              //   event_data = {
+        //     "eventID": "ev0000"+  Math.random().toString(36).slice(2),
+        //     "eventTime": new Date().toISOString(),
+        //     "eventType": {
+        //         "primary": "CREATE",
+        //         "description": "SHIPMENT ALERTS"
+        //     },
+        //     "actor": {
+        //         "actorid": "userid1",
+        //         "actoruserid": "ashwini@statwig.com"
+        //     },
+        //     "stackholders": {
+        //         "ca": {
+        //             "id": "org001",
+        //             "name": "Statwig Pvt. Ltd.",
+        //             "address": "ca_address_object"
+        //         },
+        //         "actororg": {
+        //             "id": "org002",
+        //             "name": "Appollo Hospitals Jublihills",
+        //             "address": "actororg_address_object"
+        //         },
+        //         "secondorg": {
+        //             "id": "org003",
+        //             "name": "Med Plus Gachibowli",
+        //             "address": "secondorg_address_object"
+        //         }
+        //     },
+        //     "payload": {
+        //         "data": {
+        //             "abc": 123
+        //         }
+        //     }
+        // }
+        // async function compute(event_data) {
+        //     result = await logEvent(event_data)
+        //     return result
+        // }
+        
+        // compute(event_data).then((response) => console.log(response))
       apiResponse.successResponseWithData(res, 'Inserted Success');
     } catch (e) {
       apiResponse.ErrorResponse(res, e);
@@ -813,7 +893,46 @@ exports.addProductsToInventory = [
               });*/
 
           });
-
+        //   event_data = {
+        //     "eventID": "ev0000"+  Math.random().toString(36).slice(2),
+        //     "eventTime": new Date().toISOString(),
+        //     "eventType": {
+        //         "primary": "CREATE",
+        //         "description": "SHIPMENT ALERTS"
+        //     },
+        //     "actor": {
+        //         "actorid": "userid1",
+        //         "actoruserid": "ashwini@statwig.com"
+        //     },
+        //     "stackholders": {
+        //         "ca": {
+        //             "id": "org001",
+        //             "name": "Statwig Pvt. Ltd.",
+        //             "address": "ca_address_object"
+        //         },
+        //         "actororg": {
+        //             "id": "org002",
+        //             "name": "Appollo Hospitals Jublihills",
+        //             "address": "actororg_address_object"
+        //         },
+        //         "secondorg": {
+        //             "id": "org003",
+        //             "name": "Med Plus Gachibowli",
+        //             "address": "secondorg_address_object"
+        //         }
+        //     },
+        //     "payload": {
+        //         "data": {
+        //             "abc": 123
+        //         }
+        //     }
+        // }
+        // async function compute(event_data) {
+        //     result = await logEvent(event_data)
+        //     return result
+        // }
+        
+        // compute(event_data).then((response) => console.log(response))
           return apiResponse.successResponseWithData(res, 'Added products to the inventories')
         } else {
           res.json('Sorry! User does not have enough Permissions');
@@ -950,6 +1069,47 @@ exports.addInventoriesFromExcel = [
                   });
               }
               recursiveFun();
+            //   event_data = {
+            //     "eventID": "ev0000"+  Math.random().toString(36).slice(2),
+            //     "eventTime": new Date().toISOString(),
+            //     "eventType": {
+            //         "primary": "CREATE",
+            //         "description": "SHIPMENT ALERTS"
+            //     },
+            //     "actor": {
+            //         "actorid": "userid1",
+            //         "actoruserid": "ashwini@statwig.com"
+            //     },
+            //     "stackholders": {
+            //         "ca": {
+            //             "id": "org001",
+            //             "name": "Statwig Pvt. Ltd.",
+            //             "address": "ca_address_object"
+            //         },
+            //         "actororg": {
+            //             "id": "org002",
+            //             "name": "Appollo Hospitals Jublihills",
+            //             "address": "actororg_address_object"
+            //         },
+            //         "secondorg": {
+            //             "id": "org003",
+            //             "name": "Med Plus Gachibowli",
+            //             "address": "secondorg_address_object"
+            //         }
+            //     },
+            //     "payload": {
+            //         "data": {
+            //             "abc": 123
+            //         }
+            //     }
+            // }
+            // async function compute(event_data) {
+            //     result = await logEvent(event_data)
+            //     return result
+            // }
+            
+            // compute(event_data).then((response) => console.log(response))
+
               return apiResponse.successResponseWithData(res, 'Success', data);
             } else {
               return apiResponse.ErrorResponse(
