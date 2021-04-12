@@ -9,6 +9,6 @@ router.get("/getEventByCaId/:caId/:eventTypePrimary/:eventTypeDesc", EventContro
 router.get("/getEventByEventId/:eventID/:eventTypePrimary/:eventTypeDesc", EventController.getEventById);
 router.get("/getEventBySecondaryOrgId/:secondaryOrgId/:eventTypePrimary/:eventTypeDesc", EventController.getEventBySecondOrgId);
 router.get("/getEventByActorOrgId/:actorOrgId/:eventTypePrimary/:eventTypeDesc", EventController.getEventByActorOrgId);
-router.delete("/deleteEventById/:eventId", EventController.deleteEventById);
+router.delete("/deleteEventById/:eventID", EventController.deleteEventById);
 
 module.exports = router;

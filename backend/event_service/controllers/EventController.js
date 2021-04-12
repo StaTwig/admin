@@ -333,13 +333,14 @@ exports.getEventBySecondOrgId = [
  * @returns {Object}
  */
 exports.deleteEventById = [
-	auth,
-	body("eventId", "eventId must not be empty.")
+	//auth,
+	param("eventID", "eventId must not be empty.")
 		.isLength({ min: 1 })
 		.trim(),
 	sanitizeBody("*").escape(),
 	async function (req, res) {
 		try {
+			console.log(req.params)
 			const errors = validationResult(req);
 			if (!errors.isEmpty()) {
 				return apiResponse.validationErrorWithData(
@@ -348,7 +349,7 @@ exports.deleteEventById = [
 					errors.array()
 				);
 			} else {
-				EventModal.findByIdAndRemove(req.params['eventId'], async function (err) {
+				EventModal.remove({...req.params}, async function (err) {
 					if (err) {
 						return apiResponse.ErrorResponse(res, err);
 					} else {
@@ -360,6 +361,7 @@ exports.deleteEventById = [
 				});
 			}
 		} catch (err) {
+			console.log(err)
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
