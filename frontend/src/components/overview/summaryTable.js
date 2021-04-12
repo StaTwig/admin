@@ -3,11 +3,16 @@ import { useSelector } from "react-redux";
 import EmptyShipments from "../../assets/icons/EmptyShipments.png";
 import "./table-style.scss";
 import alertShip from "../../assets/icons/alert.png";
-import shippment from "../../assets/icons/Shippment.svg"
+
+
+import shippment from "../../assets/icons/TotalShipmentsCompleted.png"
+import inandoutbound from "../../assets/icons/TotalShipmentsCompleted.svg"
 import shippmentdate from "../../assets/icons/ShippingDate.svg"
 import sent from "../../assets/icons/Sent.svg"
 import received from "../../assets/icons/Received1.svg"
 import status from "../../assets/icons/Status.svg"
+
+
 import { formatDate } from "../../utils/dateHelper";
 
 const SummaryTable = (props) => {
@@ -31,8 +36,8 @@ const SummaryTable = (props) => {
           <div className="rowData">
             <div className="headline">
               <span style={{position:'relative',top:'25%'}}>
-                <img src={shippment} height='25' width='25' className="mr-3"></img>
-                Shipment ID                
+                <img src={shippment} height='17' width='25' className="mr-3"></img>
+                <b>Shipment ID</b>                
               </span>
             </div>
             {shipments.map((shipment, index) =>
@@ -54,8 +59,8 @@ const SummaryTable = (props) => {
           <div className="rowData">
             <div className="headline">
             <span style={{position:'relative',top:'25%'}}>
-              <img src={shippmentdate} height='20' width='20' className="mr-3"></img>
-                Type
+              <img src={inandoutbound} height='17' width='25' className="mr-3"></img>
+              <b>Type</b>
             </span>  
             </div>
             {shipments.map((shipment, index) =>
@@ -74,7 +79,7 @@ const SummaryTable = (props) => {
             <div className="headline">
             <span style={{position:'relative',top:'25%'}}>
             <img src={shippmentdate} height='20' width='20' className="mr-3"></img>
-              Shipping Date
+            <b>Shipping Date</b>
               </span> 
             </div>
              
@@ -92,7 +97,7 @@ const SummaryTable = (props) => {
             <div className="headline">
             <span style={{position:'relative',top:'25%'}}>
             <img src={received} height='20' width='20' className="mr-3"></img>
-              From
+            <b>From</b> 
             </span>
             </div>
             {shipments.map((shipment, index) =>
@@ -110,7 +115,7 @@ const SummaryTable = (props) => {
             <div className="headline">
             <span style={{position:'relative',top:'25%'}}>
               <img src={sent} height='20' width='20' className="mr-3"></img>
-                To
+              <b>To</b>
             </span>  
             </div>
             {shipments.map((shipment, index) =>
@@ -127,7 +132,7 @@ const SummaryTable = (props) => {
             <div className="headline">
             <span style={{position:'relative',top:'25%'}}>
             <img src={status} height='20' width='20' className="mr-3"></img>
-              Status
+            <b>Status</b>
             </span>  
             </div>
             {shipments.map((shipment, index) =>
