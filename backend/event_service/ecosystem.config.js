@@ -1,7 +1,7 @@
 module.exports = {
     apps : [{
       name: 'Event Service',
-      script: 'aa_server.js',
+      script: 'event_server.js',
   
       // Options reference: https://pm2.keymetrics.io/docs/usage/application-declaration/
       args: 'one two',
