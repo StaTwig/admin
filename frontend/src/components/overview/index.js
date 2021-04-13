@@ -13,7 +13,7 @@ import currentshipment from "../../assets/icons/CurrentShipmentInTransit.svg";
 import Totalshipments from "../../assets/icons/TotalShipments.svg";
 import shipmentsdelayed from "../../assets/icons/TotalShipmentsDelayed.svg";
 import TotalInventoryAdded from '../../assets/icons/TotalInventoryAddedcopy.svg';
-import AverageOrderProcessingTime from  '../../assets/icons/Average_Order_Processing_Time.png';
+import AverageOrderProcessingTime from  '../../assets/icons/Av_or_pr_ti.png';
 
 import './style.scss';
 
@@ -82,7 +82,7 @@ const Overview = props => {
           <div className="col">
             <div className="panel">
               <div className="time truck-bg">
-                <img src={AverageOrderProcessingTime} width="25px" alt="truck" />
+                <img src={AverageOrderProcessingTime} width="30px" alt="truck" />
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Average Order Processing Time</div>
