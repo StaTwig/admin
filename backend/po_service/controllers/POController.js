@@ -560,9 +560,9 @@ exports.createOrder = [
         }
       });
 
-      const poCounter = await CounterModel.findOne({'counters.name':"poId"})
-      const poId = poCounter.counters[5].format + poCounter.counters[5].value;
-      
+      const poCounter = await CounterModel.findOne({'counters.name':"poId"},{"counters.name.$":1})
+      const poId = poCounter.counters[0].format + poCounter.counters[0].value;
+
       const { externalId, supplier, customer, products, creationDate, lastUpdatedOn } = req.body;
       const { createdBy, lastUpdatedBy } = req.user.id;
       const purchaseOrder = new RecordModel({
