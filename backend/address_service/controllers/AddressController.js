@@ -2,6 +2,7 @@ const apiResponse = require("../utils/apiResponse");
 const Organisation = require("../models/organisationModel");
 const Warehouse = require("../models/warehouseModel");
 const Inventory = require("../models/inventoryModel");
+const CounterModel = require("../models/CounterModel");
 const auth = require("../middlewares/jwt");
 const { customAlphabet } = require("nanoid");
 const nanoid = customAlphabet("1234567890abcdef", 10);
@@ -102,7 +103,17 @@ exports.AddWarehouse = [
   auth,
   async (req, res) => {
     try {
-      const inventoryId = "inv-" + nanoid();
+      const incrementCounterInv = await CounterModel.update({
+                  'counters.name': "inventoryId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+      const invCounter = await CounterModel.findOne({'counters.name':"inventoryId"},{"counters.name.$":1})
+      const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
+      //const inventoryId = "inv-" + nanoid();
       const inventoryResult = new Inventory({ id: inventoryId });
       await inventoryResult.save();
       const {
@@ -116,7 +127,17 @@ exports.AddWarehouse = [
         employees,
         warehouseAddress,
       } = req.body;
-      const warehouseId = "war-" + nanoid();
+      const incrementCounterWarehouse = await CounterModel.update({
+                  'counters.name': "warehouseId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+      const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.name.$":1})
+      const warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
+      //const warehouseId = "war-" + nanoid();
       const warehouse = new Warehouse({
         id: warehouseId,
         title,
