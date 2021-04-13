@@ -4,7 +4,7 @@ import { receiveApi, uploadImage } from "../../actions/shipmentActions";
 import Modal from "../../shared/modal";
 import returnShipment from '../../assets/icons/returnShipment.svg';
 import "./style.scss";
-import ProductList from "../tracing/productlist";
+import ProductList from "./productlist";
 import ShipmentDetails from './shipmentdetails';
 import uploadBlue from "../../assets/icons/UploadBlue.svg";
 import uploadWhite from "../../assets/icons/UploadWhite.svg";
@@ -19,11 +19,13 @@ const ReceiveShipment = (props) => {
   const [menuProduct, setMenuProduct] = useState(false);
   const [highLight, setHighLight] = useState(false);
   const [productHighLight, setProductHighLight] = useState(false);
+  const [delivered, setDelivered] = useState(0);
 
   const [shipmentId, setShipmentId] = useState([]);
   const [billNo, setBillNo] = useState("");
   const [photo, setPhoto] = useState(null);
   const [comment, setComment] = useState("");
+  const [index, setIndex] = useState(0);
   const id = props.match.params.id
 
   const [openUpdatedStatus, setOpenUpdatedStatus] = useState(false);
@@ -73,13 +75,15 @@ const ReceiveShipment = (props) => {
 }
 
   const receiveShipment = async () => {
-    const data = shipmentDetails?shipmentDetails[0]:defaultData;
+    let data = shipmentDetails?shipmentDetails[0]:defaultData;
     // let formData = new FormData();
 
     // formData.append(shipmentDetails[0]);
     // formData.append("billNo", billNo);  
     data.comment = comment;
     data.imagesDetails = [];
+    console.log(delivered);
+    data.products[0].productQuantityDelivered=parseInt(delivered);
 
     console.log('On Button Click');
     console.log(data);
@@ -206,6 +210,8 @@ const ReceiveShipment = (props) => {
               setProductHighLight={setProductHighLight}
               menuProduct={menuProduct}
               setMenuProduct={setMenuProduct}
+              setDelivered={setDelivered}
+              setIndex={setIndex}
             />
           </div>
           <div className="col-sm-4">

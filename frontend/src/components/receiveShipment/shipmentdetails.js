@@ -24,13 +24,15 @@ const ShipmentDetails = (props) => {
            <li className="mb-1 text-secondary">Estimate Delivery Date</li> */}
           </ul>
            <ul className="elemens">
-           <li  className="mb-1">{props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[2]+"/"+props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[1]+"/"+props.shipments.shipmentDetails[0].shippingDate.split('T')[0].split('-')[0]} </li>
+           <li  className="mb-1">{props.shipments.shippingDate.split('T')[0].split('-')[2]+"/"+props.shipments.shippingDate.split('T')[0].split('-')[1]+"/"+props.shipments.shippingDate.split('T')[0].split('-')[0]} </li>
            <h6 className="poheads potext mt-3 mb-3 text-white">From</h6>
-            <li  className="mb-1">{props.shipments.supplierOrgName}</li>
-            <li  className="mb-1">{props.shipments.fromLocation}</li>
+            <br></br>
+            <li  className="mb-1">{props.shipments.supplier.org.name}</li>
+            <br></br>
+            <li  className="mb-1">{props.shipments.supplier.org.postalAddress}</li>
             <h6 className="poheads potext mt-3 mb-3  text-white">To </h6>
-            <li  className="mb-1">{props.shipments.customerOrgName}</li>
-            <li  className="mb-1">{props.shipments.toLocation}</li>
+            <li  className="mb-1">{props.shipments.receiver.org.name}</li>
+            <li  className="mb-1">{props.shipments.receiver.org.postalAddress}</li>
             {/* <h6 className="poheads potext mt-3 mb-3 text-white">Delivery Details:</h6>
             <li  className="mb-1">{props.shipments.shipmentDetails[0].airWayBillNo}</li>
             <li  className="mb-1">{props.shipments.shipmentDetails[0].label.labelId}</li>
