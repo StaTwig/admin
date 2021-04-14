@@ -1120,11 +1120,13 @@ exports.uploadImage = async function (req, res) {
       })
       const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]))
       try {
-        if (action != "STOREID")
-          filename = id + "-" + type + imageSide + "-" + t.format + t.value + ".png";
-        else
-          filename = t.value + "-" + req.file.filename;
-
+        if (action == "STOREID")
+	  filename = t.value + "-" + req.file.filename;
+        else if (action == "PROFILE")
+	  filename = "PROFILE" + "-" +  data.id + ".png"
+	else
+           filename = id + "-" + type + imageSide + "-" + t.format + t.value + ".png";	
+	
 	let dir = `/home/ubuntu/userimages`;
         await moveFile(req.file.path, `${dir}/${filename}`);
       } catch (e) {
@@ -1195,7 +1197,7 @@ exports.uploadImage = async function (req, res) {
         const employee = await EmployeeModel.updateOne({
           emailId: "satheesh@statwig.com"
         }, {
-          $push: data
+          $set: { "photoId": "/images/" + filename} 
         });
         return res.send({
           success: true,
