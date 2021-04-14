@@ -27,6 +27,7 @@ const product_service_url = process.env.PRODUCT_URL;
 const stream_name = process.env.STREAM;
 
 const init = require('../logging/init');
+const OrganisationModel = require('../models/OrganisationModel');
 const logger = init.getLog();
 
 exports.getTotalCount = [
@@ -620,8 +621,7 @@ exports.insertInventories = [
           } else {
             logger.log(
               'info',
-              `Insertion of inventories from mobile is completed. Time Taken to insert ${
-                inventories.length
+              `Insertion of inventories from mobile is completed. Time Taken to insert ${inventories.length
               } in seconds - `,
               (new Date() - start) / 1000,
             );
@@ -704,24 +704,24 @@ exports.addProductsToInventory = [
               let rApha = '';
               for (let i = 0; i < 4; i++)
                 rApha += alpha.charAt(Math.floor(Math.random() * alpha.length));
-              
-             products[i].serialNumbersRange =
-               "DSL" + rApha + (parseInt(snoref) - parseInt(products[i].quantity - 1)) +
-               "-DSL" + rApha + snoref;
+
+              products[i].serialNumbersRange =
+                "DSL" + rApha + (parseInt(snoref) - parseInt(products[i].quantity - 1)) +
+                "-DSL" + rApha + snoref;
               // serialNumbersRange = false;
               // break;
             }
           }
-         if(!serialNumbersRange) {
-           return apiResponse.ErrorResponse(
-             res,
-             `Product doesn't conatin valid serial numbers range`,
-           );
-         }
+          if (!serialNumbersRange) {
+            return apiResponse.ErrorResponse(
+              res,
+              `Product doesn't conatin valid serial numbers range`,
+            );
+          }
           const inventory = await InventoryModel.findOne({
             id: warehouse.warehouseInventory,
           });
-          if(!inventory) return apiResponse.ErrorResponse(res, 'Cannot find inventory to this employee warehouse');
+          if (!inventory) return apiResponse.ErrorResponse(res, 'Cannot find inventory to this employee warehouse');
           let atoms = [];
           products.forEach(product => {
             const serialNumbers = product.serialNumbersRange.split('-');
@@ -729,35 +729,34 @@ exports.addProductsToInventory = [
             const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
             const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
             for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
-              const atom = `${serialNumberText+uniqid.time()}${i}`
+              const atom = `${serialNumberText + uniqid.time()}${i}`
 
               atoms.push(atom);
             }
           })
-          const dupSerialFound = await AtomModel.findOne({id: { $in: atoms}});
-          if(dupSerialFound) return apiResponse.ErrorResponse(res, 'Duplicate Serial Numbers found');
+          const dupSerialFound = await AtomModel.findOne({ id: { $in: atoms } });
+          if (dupSerialFound) return apiResponse.ErrorResponse(res, 'Duplicate Serial Numbers found');
 
 
-	  //This code handles the insertion of duplicate products and aggregates the counts
-	    await utility.asyncForEach(products, async product => {
+          //This code handles the insertion of duplicate products and aggregates the counts
+          await utility.asyncForEach(products, async product => {
             const inventoryId = warehouse.warehouseInventory;
-            const checkProduct = await InventoryModel.find({"$and":[{"id":inventoryId},{"inventoryDetails.productId":product.productId}]})
-            if ( checkProduct != "")
-            {
-            const exist_quantity = await InventoryModel.find( { "id":inventoryId },{ "inventoryDetails": {"$elemMatch":{"productId": product.productId}}})
-            const new_quantity = exist_quantity[0].inventoryDetails[0].quantity + product.quantity;
+            const checkProduct = await InventoryModel.find({ "$and": [{ "id": inventoryId }, { "inventoryDetails.productId": product.productId }] })
+            if (checkProduct != "") {
+              const exist_quantity = await InventoryModel.find({ "id": inventoryId }, { "inventoryDetails": { "$elemMatch": { "productId": product.productId } } })
+              const new_quantity = exist_quantity[0].inventoryDetails[0].quantity + product.quantity;
 
-                 const update = await InventoryModel.updateOne( { "id":inventoryId ,"inventoryDetails.productId": product.productId},
-                 { "$set": { "inventoryDetails.$.quantity" : new_quantity } }
-                 )
+              const update = await InventoryModel.updateOne({ "id": inventoryId, "inventoryDetails.productId": product.productId },
+                { "$set": { "inventoryDetails.$.quantity": new_quantity } }
+              )
 
             }
             else {
               inventory.inventoryDetails.push({
                 productId: product.productId,
                 quantity: product.quantity,
-            });
-                          }
+              });
+            }
 
 
 
@@ -770,7 +769,7 @@ exports.addProductsToInventory = [
 
             for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
               const atom = {
-                id: `${serialNumberText+uniqid.time()}${i}`,
+                id: `${serialNumberText + uniqid.time()}${i}`,
                 label: {
                   labelId: '',
                   labelType: '',
@@ -797,20 +796,20 @@ exports.addProductsToInventory = [
               };
               atoms.push(atom);
             }
-              try {
-                await AtomModel.insertMany(atoms);
-                await inventory.save();
-              }catch(err) {
-                console.log('err', err);
-              }
-               /*AtomModel.insertMany(atoms).then(async (res, err) =>  {
-                if(err) {
-                 // return apiResponse.ErrorResponse(res, 'Duplicate SerialNumber');
-                  console.log('Duplicate SerialNumber');
-                }else {
-                  await inventory.save();
-                }
-              });*/
+            try {
+              await AtomModel.insertMany(atoms);
+              await inventory.save();
+            } catch (err) {
+              console.log('err', err);
+            }
+            /*AtomModel.insertMany(atoms).then(async (res, err) =>  {
+             if(err) {
+              // return apiResponse.ErrorResponse(res, 'Duplicate SerialNumber');
+               console.log('Duplicate SerialNumber');
+             }else {
+               await inventory.save();
+             }
+           });*/
 
           });
 
@@ -879,9 +878,8 @@ exports.addInventoriesFromExcel = [
                   console.log('Duplicate Inventory Found');
                   const newNotification = new NotificationModel({
                     owner: address,
-                    message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${
-                      inventoriesFound.serialNumber
-                    }`,
+                    message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${inventoriesFound.serialNumber
+                      }`,
                   });
                   await newNotification.save();
                   return;
@@ -923,7 +921,7 @@ exports.addInventoriesFromExcel = [
                           logger.log(
                             'info',
                             'Number of documents inserted into mongo: ' +
-                              res.length,
+                            res.length,
                           );
                       });
 
@@ -932,8 +930,7 @@ exports.addInventoriesFromExcel = [
                       } else {
                         logger.log(
                           'info',
-                          `Insertion of excel sheet data is completed. Time Taken to insert ${
-                            data.length
+                          `Insertion of excel sheet data is completed. Time Taken to insert ${data.length
                           } in seconds - `,
                           (new Date() - start) / 1000,
                         );
@@ -1008,38 +1005,38 @@ exports.trackProduct = [
 
 exports.getInventoryDetails = [
   auth,
-  async(req, res) => {
-  try {
-    var selectedWarehouseId = '';
-    if(req.body.warehouseId !== null){
-      selectedWarehouseId = req.body.warehouseId;
-    }
-    const employee = await EmployeeModel.findOne({ id: req.user.id });
+  async (req, res) => {
+    try {
+      var selectedWarehouseId = '';
+      if (req.body.warehouseId !== null) {
+        selectedWarehouseId = req.body.warehouseId;
+      }
+      const employee = await EmployeeModel.findOne({ id: req.user.id });
 
-    var warehouse;
-    if(selectedWarehouseId == '' || selectedWarehouseId == null){
-      warehouse = await WarehouseModel.findOne({ id: employee.warehouseId })
-    }else{
-      warehouse = await WarehouseModel.findOne({ id: selectedWarehouseId })
-    }
-    if(warehouse) {
-      const inventory = await InventoryModel.findOne({ id: warehouse.warehouseInventory });
-      let inventoryDetails = []
-      await utility.asyncForEach(inventory.inventoryDetails, async inventoryDetail => {
-        const product = await ProductModel.findOne({ id: inventoryDetail.productId });
-        const inventoryDetailClone = {...inventoryDetail};
-        inventoryDetailClone['productName'] = product.name;
-        inventoryDetailClone['manufacturer'] = product.manufacturer;
-        inventoryDetails.push(inventoryDetailClone);
-      })
+      var warehouse;
+      if (selectedWarehouseId == '' || selectedWarehouseId == null) {
+        warehouse = await WarehouseModel.findOne({ id: employee.warehouseId })
+      } else {
+        warehouse = await WarehouseModel.findOne({ id: selectedWarehouseId })
+      }
+      if (warehouse) {
+        const inventory = await InventoryModel.findOne({ id: warehouse.warehouseInventory });
+        let inventoryDetails = []
+        await utility.asyncForEach(inventory.inventoryDetails, async inventoryDetail => {
+          const product = await ProductModel.findOne({ id: inventoryDetail.productId });
+          const inventoryDetailClone = { ...inventoryDetail };
+          inventoryDetailClone['productName'] = product.name;
+          inventoryDetailClone['manufacturer'] = product.manufacturer;
+          inventoryDetails.push(inventoryDetailClone);
+        })
 
-      return apiResponse.successResponseWithData(res, 'Inventory Details', inventoryDetails);
-    }else {
-      return apiResponse.ErrorResponse(res, 'Cannot find warehouse for this employee')
+        return apiResponse.successResponseWithData(res, 'Inventory Details', inventoryDetails);
+      } else {
+        return apiResponse.ErrorResponse(res, 'Cannot find warehouse for this employee')
+      }
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err)
     }
-  }catch(err) {
-    return apiResponse.ErrorResponse(res, err)
-  }
 
   }
 ]
@@ -1421,18 +1418,17 @@ exports.getProductListCounts = [
   async (req, res) => {
     try {
       const { warehouseId } = req.user;
-      const InventoryId = await WarehouseModel.find({"id":warehouseId})
+      const InventoryId = await WarehouseModel.find({ "id": warehouseId })
       const val = InventoryId[0].warehouseInventory
-      const productList = await InventoryModel.find({"id":val});
+      const productList = await InventoryModel.find({ "id": val });
       const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails))
-            var productArray = [];
-            for (j=0;j<list.length;j++)
-                   {
-                        var productId = list[j].productId;
-                        const product = await ProductModel.find({"id": productId})
-                        var product1 = {productName: product[0].name, productId: product[0].id, quantity: list[j].quantity};
-                        productArray.push(product1)
-                   }
+      var productArray = [];
+      for (j = 0; j < list.length; j++) {
+        var productId = list[j].productId;
+        const product = await ProductModel.find({ "id": productId })
+        var product1 = { productName: product[0].name, productId: product[0].id, quantity: list[j].quantity };
+        productArray.push(product1)
+      }
       return apiResponse.successResponseWithData(
         res,
         productArray
@@ -1453,26 +1449,27 @@ exports.getProductDetailsByWarehouseId = [
   async (req, res) => {
     try {
       const { warehouseId } = req.query;
-      const warehouseDetails = await WarehouseModel.findOne({"id":warehouseId})
+      const warehouseDetails = await WarehouseModel.findOne({ "id": warehouseId })
       const val = warehouseDetails.warehouseInventory
-      const productList = await InventoryModel.find({"id":val});
+      const productList = await InventoryModel.find({ "id": val });
       const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails))
       var productArray = [];
-      for (j=0;j<list.length;j++)
-                   {
-                        var productId = list[j].productId;
-                        const product = await ProductModel.find({"id": productId})
-                        var product1 = {productName: product[0].name, productId: product[0].id,manufacturer:product[0].manufacturer,quantity: list[j].quantity};
-                        productArray.push(product1)
-                   }
-      var warehouse = {"warehouseCountryId":warehouseDetails.country.id,"warehouseCountryName":warehouseDetails.country.name,"warehouseId":warehouseDetails.id,
-      "warehouseName":warehouseDetails.title,"warehouseAddress":warehouseDetails.postalAddress,"warehouseLocation":warehouseDetails.location}
+      for (j = 0; j < list.length; j++) {
+        var productId = list[j].productId;
+        const product = await ProductModel.find({ "id": productId })
+        var product1 = { productName: product[0].name, productId: product[0].id, manufacturer: product[0].manufacturer, quantity: list[j].quantity };
+        productArray.push(product1)
+      }
+      var warehouse = {
+        "warehouseCountryId": warehouseDetails.country.id, "warehouseCountryName": warehouseDetails.country.name, "warehouseId": warehouseDetails.id,
+        "warehouseName": warehouseDetails.title, "warehouseAddress": warehouseDetails.postalAddress, "warehouseLocation": warehouseDetails.location
+      }
 
       return apiResponse.successResponseWithData(
-        res,"Fetch success",
+        res, "Fetch success",
         {
-        warehouse,
-        productArray
+          warehouse,
+          productArray
         }
       );
     } catch (err) {
@@ -1491,10 +1488,10 @@ exports.getEmployeeDetailsByWarehouseId = [
   async (req, res) => {
     try {
       const { warehouseId } = req.query;
-      const warehouseDetails = await WarehouseModel.find({"id":warehouseId})
+      const warehouseDetails = await WarehouseModel.find({ "id": warehouseId })
       const employees = warehouseDetails[0].supervisors
       return apiResponse.successResponseWithData(
-        res,"Fetch success",
+        res, "Fetch success",
         employees
       );
     } catch (err) {
@@ -1512,9 +1509,9 @@ exports.getCountryDetailsByRegion = [
   async (req, res) => {
     try {
       const { region } = req.query;
-      const regionDetails = await RegionModel.find({"name":region})
-        console.log(regionDetails[0].country)
-     // var countryArray = [];
+      const regionDetails = await RegionModel.find({ "name": region })
+      console.log(regionDetails[0].country)
+      // var countryArray = [];
       /*for (j=0;j<regionDetails.length;j++)
                    {
                         var countryName = countryDetails[j].country;
@@ -1522,8 +1519,8 @@ exports.getCountryDetailsByRegion = [
                    } */
 
       return apiResponse.successResponseWithData(
-        res,"Fetch success",
-              {"countries": regionDetails[0].country}
+        res, "Fetch success",
+        { "countries": regionDetails[0].country }
       );
     } catch (err) {
       logger.log(
@@ -1556,17 +1553,16 @@ exports.getWarehouseDetailsByRegion = [
   async (req, res) => {
     try {
       const { region } = req.query;
-      const warehouseDetails = await WarehouseModel.find({"region.name":region})
+      const warehouseDetails = await WarehouseModel.find({ "region.name": region })
 
       var warehouseArray = [];
-      for (j=0;j<warehouseDetails.length;j++)
-                   {
-                        var warehouseId = warehouseDetails[j];
-                        warehouseArray.push(warehouseId)
-                   }
+      for (j = 0; j < warehouseDetails.length; j++) {
+        var warehouseId = warehouseDetails[j];
+        warehouseArray.push(warehouseId)
+      }
 
       return apiResponse.successResponseWithData(
-        res,"Fetch success",
+        res, "Fetch success",
         warehouseArray
       );
     } catch (err) {
@@ -1584,17 +1580,16 @@ exports.getWarehouseDetailsByCountry = [
   async (req, res) => {
     try {
       const { country } = req.query;
-      const warehouseDetails = await WarehouseModel.find({"country.name":country})
+      const warehouseDetails = await WarehouseModel.find({ "country.name": country })
 
       var warehouseArray = [];
-      for (j=0;j<warehouseDetails.length;j++)
-                   {
-                        var warehouseId = warehouseDetails[j];
-                        warehouseArray.push(warehouseId)
-                   }
+      for (j = 0; j < warehouseDetails.length; j++) {
+        var warehouseId = warehouseDetails[j];
+        warehouseArray.push(warehouseId)
+      }
 
       return apiResponse.successResponseWithData(
-        res,"Fetch success",
+        res, "Fetch success",
         warehouseArray
       );
     } catch (err) {
@@ -1607,37 +1602,380 @@ exports.getWarehouseDetailsByCountry = [
   },
 ];
 
-
-
 exports.getInventory = [
   auth,
-  async(req, res) => {
+  async (req, res) => {
     try {
       const { skip, limit } = req.query;
       const { warehouseId } = req.user;
       const warehouse = await WarehouseModel.findOne({ id: warehouseId })
-      if(warehouse) {
+      if (warehouse) {
         const inventory = await InventoryModel.aggregate([
           { $match: { id: warehouse.warehouseInventory } },
           { $unwind: "$inventoryDetails" },
           {
             $lookup: {
-                from: "products",
-                localField: "inventoryDetails.productId",
-                foreignField: "id",
-                as: "products",
+              from: "products",
+              localField: "inventoryDetails.productId",
+              foreignField: "id",
+              as: "products",
             },
           },
           { $unwind: "$products" },
         ]).sort({ createdAt: -1 })
-                .skip(parseInt(skip))
-                .limit(parseInt(limit));
+          .skip(parseInt(skip))
+          .limit(parseInt(limit));
         return apiResponse.successResponseWithData(res, 'Inventory Details', inventory);
-      }else {
+      } else {
         return apiResponse.ErrorResponse(res, 'Cannot find warehouse for this employee')
       }
     } catch (err) {
-        return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err);
     }
   }
+];
+
+// return the list of the organisations with the list of warehouses with their respective inventory counts
+exports.getInventoryCountsOfThePlatform = [
+  auth,
+  async (req, res) => {
+    try {
+      const platformInventoryCount = await InventoryModel.aggregate([{ $unwind: "$inventoryDetails" }, {
+        $group: {
+          _id: null,
+          "platformInventory": {
+            $sum: "$inventoryDetails.quantity"
+          }
+        }
+      }]);
+      return apiResponse.successResponseWithData(
+        res,
+        platformInventoryCount
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< InventoryService < InventoryController < getInventoryCountsOfThePlatform : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+// return the list of warehouses with the inventory count of the specific organisation
+exports.getInventoryCountsByOrganisation = [
+  auth,
+  async (req, res) => {
+    try {
+      const organisationId = req.query.organisationId;
+      const orgDocument = await OrganisationModel.findOne({ id: organisationId });
+      let orgInventoryCount = 0;
+      if (orgDocument.warehouses && orgDocument.warehouses.length) {
+        await utility.asyncForEach(orgDocument.warehouses, async warehouse => {
+          let warehouseInventoryCount = await WarehouseModel.aggregate([
+            {
+              $match: {
+                'id': warehouse
+              }
+            },
+            {
+
+              $lookup: {
+                from: 'inventories',
+                localField: 'warehouseInventory',
+                foreignField: 'id',
+                as: 'inventory'
+              }
+            },
+            {
+              $unwind: {
+                path: '$inventory',
+              }
+            },
+            {
+              $project: {
+                id: 1,
+                title: 1,
+                inventoryDetails: '$inventory.inventoryDetails',
+              }
+            },
+            {
+              $unwind: {
+                path: '$inventoryDetails',
+              }
+            },
+            {
+              $group: {
+                _id: null,
+                warehouseInventory: {
+                  $sum: "$inventoryDetails.quantity"
+                }
+              }
+            }
+          ]);
+          if (warehouseInventoryCount && warehouseInventoryCount[0] && warehouseInventoryCount[0].warehouseInventory) {
+            orgInventoryCount = orgInventoryCount + warehouseInventoryCount[0].warehouseInventory;
+          }
+        });
+      }
+      return apiResponse.successResponseWithData(
+        res,
+        { orgInventoryCount: orgInventoryCount }
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< InventoryService < InventoryController < getInventoryCountsByOrganisation : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+//  return the total inventory of the specific warehouse
+exports.getInventoryCountsByWarehouse = [
+  auth,
+  async (req, res) => {
+    try {
+      const warehouseId = req.query.warehouseId;
+      const warehouseInventoryCount = await WarehouseModel.aggregate([
+        {
+          $match: {
+            'id': warehouseId
+          }
+        }, {
+          $lookup: {
+            from: 'inventories',
+            localField: 'warehouseInventory',
+            foreignField: 'id',
+            as: 'inventory'
+          }
+        }, {
+          $unwind: {
+            path: '$inventory',
+          }
+        }, {
+          $project: {
+            id: 1,
+            title: 1,
+            inventoryDetails: '$inventory.inventoryDetails',
+          }
+        }, {
+          $unwind: {
+            path: '$inventoryDetails',
+          }
+        }, {
+          $group: {
+            _id: null,
+            warehouseInventory: {
+              $sum: "$inventoryDetails.quantity"
+            }
+          }
+        }
+      ]);
+      return apiResponse.successResponseWithData(
+        res,
+        warehouseInventoryCount
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< InventoryService < InventoryController < getInventoryCountsByWarehouse : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+
+];
+
+async function getInventoryProductsByWarehouseID(warehouseId) {
+  const inventoryProductsByWarehouse = await WarehouseModel.aggregate([
+    {
+      $match: {
+        'id': warehouseId
+      }
+    },
+    {
+      $lookup: {
+        from: 'inventories',
+        localField: 'warehouseInventory',
+        foreignField: 'id',
+        as: 'inventory'
+      }
+    },
+    {
+      $unwind: {
+        path: '$inventory',
+      }
+    },
+    {
+      $project: {
+        id: 1,
+        title: 1,
+        inventoryDetails: '$inventory.inventoryDetails',
+      }
+    },
+    {
+      $unwind: {
+        path: '$inventoryDetails',
+      }
+    },
+    {
+      $lookup: {
+        from: 'products',
+        localField: 'inventoryDetails.productId',
+        foreignField: 'id',
+        as: 'productDetails'
+      }
+    },
+    {
+      $unwind: {
+        path: '$productDetails'
+      }
+    },
+    {
+      $replaceRoot: {
+        newRoot: {
+          $mergeObjects: ['$productDetails', '$inventoryDetails', '$$ROOT']
+        }
+      }
+    },
+    {
+      $project: {
+        inventoryDetails: 0,
+        productDetails: 0
+      }
+    },
+    {
+      $group: {
+        _id: '$id',
+        products: {
+          $addToSet: "$$ROOT"
+        }
+      }
+    }
+  ]);
+  return inventoryProductsByWarehouse;
+};
+
+// Total quantity as per the products for the warhouse
+exports.getInventoryProductsByWarehouse = [
+  auth,
+  async (req, res) => {
+    try {
+      const warehouseId = req.query.warehouseId;
+      const warehouseInventoryPerProduct = await getInventoryProductsByWarehouseID(warehouseId);
+      return apiResponse.successResponseWithData(
+        res,
+        warehouseInventoryPerProduct
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< InventoryService < InventoryController < getInventoryProductsByWarehouse : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+// total quantiy as per the products for the organisation
+exports.getInventoryProductsByOrganisation = [
+  auth,
+  async (req, res) => {
+    try {
+      const organisationId = req.query.organisationId;
+      const orgDocument = await OrganisationModel.findOne({ id: organisationId });
+      let orgInventoryPerProduct = [];
+      if (orgDocument.warehouses && orgDocument.warehouses.length) {
+        await utility.asyncForEach(orgDocument.warehouses, async warehouse => {
+          const _orgInventoryPerProduct = await getInventoryProductsByWarehouseID(warehouse);
+          if (_orgInventoryPerProduct && _orgInventoryPerProduct.length) {
+            orgInventoryPerProduct.push(_orgInventoryPerProduct[0]);
+          }
+        });
+      }
+      return apiResponse.successResponseWithData(
+        res,
+        orgInventoryPerProduct
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< InventoryService < InventoryController < getInventoryProductsByWarehouse : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+// total quantity as per the products for the ecosystem
+exports.getInventoryProductsByPlatform = [
+  auth,
+  async (req, res) => {
+    try {
+      const allProductsInPlatform = await InventoryModel.aggregate([
+        {
+          $unwind: {
+            path: '$inventoryDetails'
+          }
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: ['$productDetails', '$inventoryDetails', '$$ROOT']
+            }
+          }
+        },
+        {
+          $project: {
+            inventoryDetails: 0
+          }
+        },
+        {
+          $group: {
+            _id: '$productId',
+            quantity: {
+              $sum: '$quantity'
+            }
+          }
+        },
+        {
+          $lookup: {
+            from: 'products',
+            localField: '_id',
+            foreignField: 'id',
+            as: 'productDetails'
+          }
+        },
+        {
+          $unwind: {
+            path: '$productDetails'
+          }
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: ['$productDetails', '$$ROOT']
+            }
+          }
+        },
+        {
+          $project: {
+            productDetails: 0
+          }
+        }
+      ]);
+
+      return apiResponse.successResponseWithData(
+        res,
+        allProductsInPlatform
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< InventoryService < InventoryController < getInventoryProductsByWarehouse : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
 ]
