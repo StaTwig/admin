@@ -14,7 +14,6 @@ const indexRouter = require("./routes/index");
 const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
 const dir = `/home/ubuntu/shipmentimages`;
-//const dir = 'uploads';
 if (!fs.existsSync(dir)) {
   fs.mkdirSync(dir);
 }
@@ -45,7 +44,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocumentation));
 app.use('/shipmentmanagement/api/shipment/images', express.static(path.join('/home/ubuntu/','shipmentimages')));
-//app.use('/shipmentmanagement/api/shipment/images', express.static('uploads'));
 //To allow cross-origin requests
 app.use(cors());
 
