@@ -595,3 +595,26 @@ exports.createOrder = [
     }
   },
 ];
+
+exports.getOrderIds = [
+  auth,
+  async (req, res) => {
+    try {
+     
+      const {organisationId } = req.user;
+      const orderID = await RecordModel.find({$or:[{"supplier.supplierOrganisation":organisationId},{"receiver.receiverOrganisation":organisationId}]},'id');
+      
+      return apiResponse.successResponseWithData(
+        res,
+        'Order Ids',
+        orderID,
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
