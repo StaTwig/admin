@@ -268,8 +268,8 @@ exports.register = [
 
             //   }
             // }
-            const country = req.body?.address?.country ? req.body.address?.country : 'India';
-            const address = req.body?.address ? req.body.address : {};
+            const country = /* req.body?.address?.country ? req.body.address?.country : */'India';
+            const address = /* req.body?.address ? req.body.address : */ {};
             addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
             
             const incrementCounterOrg = await CounterModel.update({
@@ -299,7 +299,7 @@ exports.register = [
               primaryContactId: employeeId,
               name: organisationName,
               id: organisationId,
-              type: req.body?.type ? req.body.type : 'CUSTOMER_SUPPLIER',
+              type: /*req.body?.type ? req.body.type : */'CUSTOMER_SUPPLIER',
               status: 'NOTVERIFIED',
               postalAddress: addr,
               warehouses: [warehouseId],
@@ -837,7 +837,7 @@ exports.updatePassword = [
   },
 ];
 
-exports.uploadImage = [
+/*exports.uploadImage = [
   auth,
   (req, res) => {
     try {
@@ -881,7 +881,7 @@ exports.uploadImage = [
       return apiResponse.ErrorResponse(res, err);
     }
   },
-];
+];*/
 
 exports.createUserAddress = [
   async (req, res) => {
@@ -1125,7 +1125,7 @@ exports.uploadImage = async function (req, res) {
         else
           filename = t.value + "-" + req.file.filename;
 
-        let dir = `uploads`;
+	let dir = `/home/ubuntu/userimages`;
         await moveFile(req.file.path, `${dir}/${filename}`);
       } catch (e) {
         console.log("Error in image upload", e);
@@ -1191,6 +1191,17 @@ exports.uploadImage = async function (req, res) {
           data: "Uploaded successfully",
           filename
         })
+      } else if (action == "PROFILE") {
+        const employee = await EmployeeModel.updateOne({
+          emailId: "satheesh@statwig.com"
+        }, {
+          $push: data
+        });
+        return res.send({
+          success: true,
+          data: "Uploaded successfully",
+          filename
+        })
       } else {
         return res.send({
           success: false,
@@ -1220,7 +1231,6 @@ exports.fetchImage = async function (req, res) {
           "userDocuments.idType": type
         }]
       });
-
       if (findRecord != null) {
 
         const update = await EmployeeModel.findOne({
@@ -1238,7 +1248,6 @@ exports.fetchImage = async function (req, res) {
         })
 
         var resArray = [];
-
         for (i = 0; i < imageArray.length; i++) {
           const s = "/images/" + imageArray[i];
           resArray.push(s)
