@@ -745,6 +745,9 @@ exports.addProductsToInventory = [
     .withMessage('Products  must be specified.'),
   async (req, res) => {
     try {
+      console.log(req.user)
+      const email = req.user.emailId;
+      const user_id = req.user.id;
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         logger.log(
@@ -758,6 +761,7 @@ exports.addProductsToInventory = [
           errors.array(),
         );
       }
+      const payload = req.body 
 
       permission_request = {
         role: req.user.role,
@@ -893,46 +897,58 @@ exports.addProductsToInventory = [
               });*/
 
           });
-        //   event_data = {
-        //     "eventID": "ev0000"+  Math.random().toString(36).slice(2),
-        //     "eventTime": new Date().toISOString(),
-        //     "eventType": {
-        //         "primary": "CREATE",
-        //         "description": "SHIPMENT ALERTS"
-        //     },
-        //     "actor": {
-        //         "actorid": "userid1",
-        //         "actoruserid": "ashwini@statwig.com"
-        //     },
-        //     "stackholders": {
-        //         "ca": {
-        //             "id": "org001",
-        //             "name": "Statwig Pvt. Ltd.",
-        //             "address": "ca_address_object"
-        //         },
-        //         "actororg": {
-        //             "id": "org002",
-        //             "name": "Appollo Hospitals Jublihills",
-        //             "address": "actororg_address_object"
-        //         },
-        //         "secondorg": {
-        //             "id": "org003",
-        //             "name": "Med Plus Gachibowli",
-        //             "address": "secondorg_address_object"
-        //         }
-        //     },
-        //     "payload": {
-        //         "data": {
-        //             "abc": 123
-        //         }
-        //     }
-        // }
-        // async function compute(event_data) {
-        //     result = await logEvent(event_data)
-        //     return result
-        // }
-        
-        // compute(event_data).then((response) => console.log(response))
+          var datee = new Date();
+          datee = datee.toISOString();
+          var evid = Math.random().toString(36).slice(2);
+          let event_data = {
+            eventID: null,
+            eventTime: null,
+            eventType: {
+              primary: "CREATE",
+              description: "SHIPMENT_CREATION",
+            },
+            actor: {
+              actorid: null,
+              actoruserid: null,
+            },
+            stackholders: {
+              ca: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+              actororg: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+              secondorg: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+            },
+            payload: {
+              data: {
+                abc: 123,
+              },
+            },
+          };
+          event_data.eventID = "ev0000" + evid;
+          event_data.eventTime = datee;
+          event_data.eventType.primary = "ADD";
+          event_data.eventType.description = "PRODUCTS_TO_INVENTORY";
+          event_data.actor.actorid = user_id || "null";
+          event_data.actor.actoruserid = email || "null";
+          event_data.payload.data = payload;
+          console.log(event_data);
+          async function compute(event_data) {
+            result = await logEvent(event_data);
+            return result;
+          }
+          compute(event_data).then((response) => {
+            console.log(response);
+          });
           return apiResponse.successResponseWithData(res, 'Added products to the inventories')
         } else {
           res.json('Sorry! User does not have enough Permissions');
