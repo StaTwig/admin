@@ -39,7 +39,7 @@ const EditRow = props => {
             <div className="d-flex flex-column">
               <div className="title recived-text">
                 <DropdownButton
-                  name={prod.type ? prod.type : "Category"}
+                  name={prod.type ? prod.type : "Select Product Category"}
                   onSelect={item => { handleCategoryChange(index, item) }}
                   groups={category}
                 />
@@ -76,7 +76,7 @@ const EditRow = props => {
       </div>
       {props.product.length > 1 &&
         < div className=" m-3 bg-light">
-            <span onClick={() => onRemoveRow(index)}><img className="border-none cursorP shadow p-1 ml-2 rounded-circle" height="25" src={Delete} /></span>
+            <span onClick={() => onRemoveRow(index)}><img className="border-none cursorP shadow p-1 ml-2 rounded-circle" height="38" src={Delete} /></span>
           </div>
       }
     </div>

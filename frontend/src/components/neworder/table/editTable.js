@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import EditRow from './editRow';
 import mon from '../../../assets/icons/brand.svg';
 import Package from '../../../assets/icons/package.svg';
-import quantity from '../../../assets/icons/TotalInventoryAddedcopy.svg';
+import quantity from '../../../assets/icons/TotalInventoryAdded_2.png';
 import './style.scss';
 
 const EditTable = props => {  
