@@ -1,26 +1,26 @@
-const { body, validationResult } = require('express-validator');
-const moveFile = require('move-file');
-require('../utils/date');
-const XLSX = require('xlsx');
+const { body, validationResult } = require("express-validator");
+const moveFile = require("move-file");
+require("../utils/date");
+const XLSX = require("xlsx");
 //helper file to prepare responses.
-const apiResponse = require('../helpers/apiResponse');
-const utility = require('../helpers/utility');
-const auth = require('../middlewares/jwt');
-const InventoryModel = require('../models/InventoryModel');
-const WarehouseModel = require('../models/WarehouseModel');
-const RegionModel = require('../models/RegionModel');
-const EmployeeModel = require('../models/EmployeeModel');
-const AtomModel = require('../models/AtomModel');
-const ProductModel = require('../models/ProductModel');
-const NotificationModel = require('../models/NotificationModel');
-
-const checkToken = require('../middlewares/middleware').checkToken;
-const checkPermissions = require('../middlewares/rbac_middleware')
+const apiResponse = require("../helpers/apiResponse");
+const utility = require("../helpers/utility");
+const auth = require("../middlewares/jwt");
+const InventoryModel = require("../models/InventoryModel");
+const WarehouseModel = require("../models/WarehouseModel");
+const RegionModel = require("../models/RegionModel");
+const EmployeeModel = require("../models/EmployeeModel");
+const AtomModel = require("../models/AtomModel");
+const ProductModel = require("../models/ProductModel");
+const NotificationModel = require("../models/NotificationModel");
+const logEvent = require("../../../utils/event_logger");
+const checkToken = require("../middlewares/middleware").checkToken;
+const checkPermissions = require("../middlewares/rbac_middleware")
   .checkPermissions;
-const axios = require('axios');
+const axios = require("axios");
 
-const fs = require('fs');
-const uniqid = require('uniqid');
+const fs = require("fs");
+const uniqid = require("uniqid");
 const blockchain_service_url = process.env.URL;
 const product_service_url = process.env.PRODUCT_URL;
 
@@ -35,36 +35,36 @@ exports.getTotalCount = [
   async (req, res) => {
     try {
       const { authorization } = req.headers;
-      checkToken(req, res, async result => {
+      checkToken(req, res, async (result) => {
         if (result.success) {
           logger.log(
-            'info',
-            '<<<<< InventoryService < InventoryController < getTotalCount : token verifed successfully',
+            "info",
+            "<<<<< InventoryService < InventoryController < getTotalCount : token verifed successfully"
           );
 
           permission_request = {
             emailId: result,
-            permissionRequired: 'viewInventory',
+            permissionRequired: "viewInventory",
           };
-          checkPermissions(permission_request, permissionResult => {
+          checkPermissions(permission_request, (permissionResult) => {
             if (permissionResult.success) {
-              res.json('Total inventory count');
+              res.json("Total inventory count");
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              res.json("Sorry! User does not have enough Permissions");
             }
           });
         } else {
           logger.log(
-            'warn',
-            '<<<<< InventoryService < InventoryController < getTotalCount : refuted token',
+            "warn",
+            "<<<<< InventoryService < InventoryController < getTotalCount : refuted token"
           );
           res.status(403).json(result);
         }
       });
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< InventoryService < InventoryController < getTotalCount : error (catch block)',
+        "error",
+        "<<<<< InventoryService < InventoryController < getTotalCount : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -76,36 +76,36 @@ exports.getTotalCountOnHold = [
   async (req, res) => {
     try {
       const { authorization } = req.headers;
-      checkToken(req, res, async result => {
+      checkToken(req, res, async (result) => {
         if (result.success) {
           logger.log(
-            'info',
-            '<<<<< InventoryService < InventoryController < getTotalCountOnHold : token verified successfully',
+            "info",
+            "<<<<< InventoryService < InventoryController < getTotalCountOnHold : token verified successfully"
           );
 
           permission_request = {
             result: result,
-            permissionRequired: 'viewInventory',
+            permissionRequired: "viewInventory",
           };
-          checkPermissions(permission_request, permissionResult => {
+          checkPermissions(permission_request, (permissionResult) => {
             if (permissionResult.success) {
-              res.json('Total inventory count on Hold');
+              res.json("Total inventory count on Hold");
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              res.json("Sorry! User does not have enough Permissions");
             }
           });
         } else {
           logger.log(
-            'warn',
-            '<<<<< InventoryService < InventoryController < getTotalCountOnHold : refuted token',
+            "warn",
+            "<<<<< InventoryService < InventoryController < getTotalCountOnHold : refuted token"
           );
           res.status(403).json(result);
         }
       });
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< InventoryService < InventoryController < getTotalCountOnHold : error (catch block)',
+        "error",
+        "<<<<< InventoryService < InventoryController < getTotalCountOnHold : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -117,36 +117,36 @@ exports.getExpiringInventory = [
   async (req, res) => {
     try {
       const { authorization } = req.headers;
-      checkToken(req, res, async result => {
+      checkToken(req, res, async (result) => {
         if (result.success) {
           logger.log(
-            'info',
-            '<<<<< InventoryService < InventoryController < getExpiringInventory : token verified successfully',
+            "info",
+            "<<<<< InventoryService < InventoryController < getExpiringInventory : token verified successfully"
           );
 
           permission_request = {
             result: result,
-            permissionRequired: 'viewInventory',
+            permissionRequired: "viewInventory",
           };
-          checkPermissions(permission_request, permissionResult => {
+          checkPermissions(permission_request, (permissionResult) => {
             if (permissionResult.success) {
-              res.json('Total inventory count expiring');
+              res.json("Total inventory count expiring");
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              res.json("Sorry! User does not have enough Permissions");
             }
           });
         } else {
           logger.log(
-            'warn',
-            '<<<<< InventoryService < InventoryController < getExpiringInventory : refuted token',
+            "warn",
+            "<<<<< InventoryService < InventoryController < getExpiringInventory : refuted token"
           );
           res.status(403).json(result);
         }
       });
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< InventoryService < InventoryController < getExpiringInventory : error (catch block)',
+        "error",
+        "<<<<< InventoryService < InventoryController < getExpiringInventory : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -158,37 +158,37 @@ exports.getInventoryforProduct = [
   async (req, res) => {
     try {
       const { authorization } = req.headers;
-      checkToken(req, res, async result => {
+      checkToken(req, res, async (result) => {
         if (result.success) {
           logger.log(
-            'info',
-            '<<<<< InventoryService < InventoryController < getInventoryforProduct : token verified successfullly',
+            "info",
+            "<<<<< InventoryService < InventoryController < getInventoryforProduct : token verified successfullly"
           );
 
           permission_request = {
             result: result,
-            permissionRequired: 'viewInventory',
+            permissionRequired: "viewInventory",
           };
-          checkPermissions(permission_request, permissionResult => {
+          checkPermissions(permission_request, (permissionResult) => {
             if (permissionResult.success) {
               const { product_id } = result.data.key;
-              res.json('Inventory details for product');
+              res.json("Inventory details for product");
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              res.json("Sorry! User does not have enough Permissions");
             }
           });
         } else {
           logger.log(
-            'warn',
-            '<<<<< InventoryService < InventoryController < getInventoryforProduct : refuted token',
+            "warn",
+            "<<<<< InventoryService < InventoryController < getInventoryforProduct : refuted token"
           );
           res.status(403).json(result);
         }
       });
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< InventoryService < InventoryController < getInventoryforProduct : error (catch block)',
+        "error",
+        "<<<<< InventoryService < InventoryController < getInventoryforProduct : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -200,46 +200,46 @@ exports.getInventoryDetailsForProduct = [
   (req, res) => {
     try {
       const { authorization } = req.headers;
-      checkToken(req, res, async result => {
+      checkToken(req, res, async (result) => {
         if (result.success) {
           logger.log(
-            'info',
-            '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : token verified successfullly, querying data by key',
+            "info",
+            "<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : token verified successfullly, querying data by key"
           );
 
           permission_request = {
             result: result,
-            permissionRequired: 'viewInventory',
+            permissionRequired: "viewInventory",
           };
-          checkPermissions(permission_request, async permissionResult => {
+          checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
               const { key } = req.query;
               const response = await axios.get(
-                `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${key}`,
+                `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${key}`
               );
               const items = response.data.items;
-              logger.log('items', items);
+              logger.log("items", items);
               logger.log(
-                'info',
-                '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : queried data by key',
+                "info",
+                "<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : queried data by key"
               );
               res.json({ data: items });
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              res.json("Sorry! User does not have enough Permissions");
             }
           });
         } else {
           logger.log(
-            'warn',
-            '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : refuted token',
+            "warn",
+            "<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : refuted token"
           );
           res.status(403).json(result);
         }
       });
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : error (catch block)',
+        "error",
+        "<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -250,18 +250,18 @@ exports.getAllInventoryDetails = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
+      checkToken(req, res, async (result) => {
         if (result.success) {
           logger.log(
-            'info',
-            '<<<<< InventoryService < InventoryController < getAllInventoryDetails : token verified successfullly, querying data by publisher',
+            "info",
+            "<<<<< InventoryService < InventoryController < getAllInventoryDetails : token verified successfullly, querying data by publisher"
           );
 
           permission_request = {
             result: result,
-            permissionRequired: 'viewInventory',
+            permissionRequired: "viewInventory",
           };
-          checkPermissions(permission_request, async permissionResult => {
+          checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
               const { address } = req.user;
               const { skip, limit } = req.query;
@@ -296,35 +296,35 @@ exports.getAllInventoryDetails = [
                   headers: {
                     Authorization: req.headers.authorization,
                   },
-                },
+                }
               );
 
               const products_array = productNamesResponse.data.data.map(
-                product => product.productName,
+                (product) => product.productName
               );
 
               logger.log(
-                'info',
-                '<<<<< InventoryService < InventoryController < getAllInventoryDetails : queried and pushed data',
+                "info",
+                "<<<<< InventoryService < InventoryController < getAllInventoryDetails : queried and pushed data"
               );
               const nextYear = new Date(
-                new Date().setFullYear(new Date().getFullYear() + 1),
+                new Date().setFullYear(new Date().getFullYear() + 1)
               );
               nextYear.setMonth(0);
               nextYear.setUTCHours(0, 0, 0, 0);
               nextYear.setDate(1);
               const thisYear = new Date(
-                new Date().setFullYear(new Date().getFullYear()),
+                new Date().setFullYear(new Date().getFullYear())
               );
               thisYear.setMonth(0);
               thisYear.setDate(1);
               thisYear.setUTCHours(0, 0, 0, 0);
               const nextMonth = new Date(
-                new Date().setMonth(new Date().getMonth() + 1),
+                new Date().setMonth(new Date().getMonth() + 1)
               );
               nextMonth.setUTCHours(0, 0, 0, 0);
               const thisMonth = new Date(
-                new Date().setMonth(new Date().getMonth()),
+                new Date().setMonth(new Date().getMonth())
               );
               thisMonth.setUTCDate(1);
               thisMonth.setUTCHours(0, 0, 0, 0);
@@ -338,7 +338,7 @@ exports.getAllInventoryDetails = [
               const thisWeek = Date.monday();
               const nextWeek = Date.next().monday();
               const tomorrow = new Date(
-                new Date().setDate(new Date().getDate() + 1),
+                new Date().setDate(new Date().getDate() + 1)
               );
               tomorrow.setUTCHours(0, 0, 0, 0);
               const today = new Date();
@@ -433,9 +433,9 @@ exports.getAllInventoryDetails = [
                 { $match: { owner: address } },
                 {
                   $group: {
-                    _id: '$productName',
-                    productName: { $first: '$productName' },
-                    quantity: { $sum: '$quantity' },
+                    _id: "$productName",
+                    productName: { $first: "$productName" },
+                    quantity: { $sum: "$quantity" },
                   },
                 },
               ]);
@@ -491,21 +491,21 @@ exports.getAllInventoryDetails = [
                 },
               });
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              res.json("Sorry! User does not have enough Permissions");
             }
           });
         } else {
           logger.log(
-            'warn',
-            '<<<<< InventoryService < InventoryController < getAllInventoryDetails : refuted token',
+            "warn",
+            "<<<<< InventoryService < InventoryController < getAllInventoryDetails : refuted token"
           );
           res.status(403).json(result);
         }
       });
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< InventoryService < InventoryController < getAllInventoryDetails : error (catch block)',
+        "error",
+        "<<<<< InventoryService < InventoryController < getAllInventoryDetails : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -524,7 +524,7 @@ exports.updateInventories = [
         expiryDate,
         productName,
       } = data;
-      const serialNumbers = serialNumberRange.split('-');
+      const serialNumbers = serialNumberRange.split("-");
       const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
       const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
 
@@ -556,7 +556,47 @@ exports.updateInventories = [
       }
 
       await InventoryModel.bulkWrite(bulkArr);
-      apiResponse.successResponseWithData(res, 'Updated Success');
+      //   event_data = {
+      //     "eventID": "ev0000"+  Math.random().toString(36).slice(2),
+      //     "eventTime": new Date().toISOString(),
+      //     "eventType": {
+      //         "primary": "CREATE",
+      //         "description": "SHIPMENT ALERTS"
+      //     },
+      //     "actor": {
+      //         "actorid": "userid1",
+      //         "actoruserid": "ashwini@statwig.com"
+      //     },
+      //     "stackholders": {
+      //         "ca": {
+      //             "id": "org001",
+      //             "name": "Statwig Pvt. Ltd.",
+      //             "address": "ca_address_object"
+      //         },
+      //         "actororg": {
+      //             "id": "org002",
+      //             "name": "Appollo Hospitals Jublihills",
+      //             "address": "actororg_address_object"
+      //         },
+      //         "secondorg": {
+      //             "id": "org003",
+      //             "name": "Med Plus Gachibowli",
+      //             "address": "secondorg_address_object"
+      //         }
+      //     },
+      //     "payload": {
+      //         "data": {
+      //             "abc": 123
+      //         }
+      //     }
+      // }
+      // async function compute(event_data) {
+      //     result = await logEvent(event_data)
+      //     return result
+      // }
+
+      // compute(event_data).then((response) => console.log(response))
+      apiResponse.successResponseWithData(res, "Updated Success");
     } catch (e) {
       apiResponse.ErrorResponse(res, e);
     }
@@ -578,7 +618,7 @@ exports.insertInventories = [
         manufacturerName,
         batchNumber,
       } = data;
-      const serialNumbers = serialNumberRange.split('-');
+      const serialNumbers = serialNumberRange.split("-");
       const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
       const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
 
@@ -605,14 +645,14 @@ exports.insertInventories = [
       let skip = 0;
       let count = 0;
       const start = new Date();
-      logger.log('info', 'Inserting inventories data in chunks');
+      logger.log("info", "Inserting inventories data in chunks");
       async function recursiveFun() {
         skip = chunkSize * count;
         count++;
         limit = chunkSize * count;
-        logger.log('info', `skip ${skip}`);
+        logger.log("info", `skip ${skip}`);
 
-        logger.log('info', `limit ${limit}`);
+        logger.log("info", `limit ${limit}`);
         const chunkedData = inventories.slice(skip, limit);
         try {
           await InventoryModel.insertMany(chunkedData);
@@ -652,7 +692,47 @@ exports.insertInventories = [
         }
       }
       recursiveFun();
-      apiResponse.successResponseWithData(res, 'Inserted Success');
+      //   event_data = {
+      //     "eventID": "ev0000"+  Math.random().toString(36).slice(2),
+      //     "eventTime": new Date().toISOString(),
+      //     "eventType": {
+      //         "primary": "CREATE",
+      //         "description": "SHIPMENT ALERTS"
+      //     },
+      //     "actor": {
+      //         "actorid": "userid1",
+      //         "actoruserid": "ashwini@statwig.com"
+      //     },
+      //     "stackholders": {
+      //         "ca": {
+      //             "id": "org001",
+      //             "name": "Statwig Pvt. Ltd.",
+      //             "address": "ca_address_object"
+      //         },
+      //         "actororg": {
+      //             "id": "org002",
+      //             "name": "Appollo Hospitals Jublihills",
+      //             "address": "actororg_address_object"
+      //         },
+      //         "secondorg": {
+      //             "id": "org003",
+      //             "name": "Med Plus Gachibowli",
+      //             "address": "secondorg_address_object"
+      //         }
+      //     },
+      //     "payload": {
+      //         "data": {
+      //             "abc": 123
+      //         }
+      //     }
+      // }
+      // async function compute(event_data) {
+      //     result = await logEvent(event_data)
+      //     return result
+      // }
+
+      // compute(event_data).then((response) => console.log(response))
+      apiResponse.successResponseWithData(res, "Inserted Success");
     } catch (e) {
       apiResponse.ErrorResponse(res, e);
     }
@@ -660,30 +740,34 @@ exports.insertInventories = [
 ];
 exports.addProductsToInventory = [
   auth,
-  body('products')
+  body("products")
     .isLength({ min: 1 })
-    .withMessage('Products  must be specified.'),
+    .withMessage("Products  must be specified."),
   async (req, res) => {
     try {
+      console.log(req.user);
+      const email = req.user.emailId;
+      const user_id = req.user.id;
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         logger.log(
-          'error',
-          '<<<<< InventoryService < InventoryController < addMultipleInventories : Validation Error',
+          "error",
+          "<<<<< InventoryService < InventoryController < addMultipleInventories : Validation Error"
         );
         // Display sanitized values/errors messages.
         return apiResponse.validationErrorWithData(
           res,
-          'Validation Error.',
-          errors.array(),
+          "Validation Error.",
+          errors.array()
         );
       }
+      const payload = req.body;
 
       permission_request = {
         role: req.user.role,
-        permissionRequired: 'addInventory',
+        permissionRequired: "addInventory",
       };
-      checkPermissions(permission_request, async permissionResult => {
+      checkPermissions(permission_request, async (permissionResult) => {
         if (permissionResult.success) {
           const { products } = req.body;
           const { id } = req.user;
@@ -693,15 +777,17 @@ exports.addProductsToInventory = [
           if (!warehouse) {
             return apiResponse.ErrorResponse(
               res,
-              'Employee not assigned to any organisation',
+              "Employee not assigned to any organisation"
             );
           }
           let serialNumbersRange = true;
-          let alpha = [...Array(26)].map((_, y) => String.fromCharCode(y + 65)).join('');
+          let alpha = [...Array(26)]
+            .map((_, y) => String.fromCharCode(y + 65))
+            .join("");
           for (let i = 0; i < products.length; i++) {
-            if (products[i].serialNumbersRange.split('-').length < 2) {
+            if (products[i].serialNumbersRange.split("-").length < 2) {
               let snoref = Date.now();
-              let rApha = '';
+              let rApha = "";
               for (let i = 0; i < 4; i++)
                 rApha += alpha.charAt(Math.floor(Math.random() * alpha.length));
 
@@ -723,10 +809,14 @@ exports.addProductsToInventory = [
           });
           if (!inventory) return apiResponse.ErrorResponse(res, 'Cannot find inventory to this employee warehouse');
           let atoms = [];
-          products.forEach(product => {
-            const serialNumbers = product.serialNumbersRange.split('-');
-            const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
-            const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
+          products.forEach((product) => {
+            const serialNumbers = product.serialNumbersRange.split("-");
+            const serialNumbersFrom = parseInt(
+              serialNumbers[0].split(/(\d+)/)[1]
+            );
+            const serialNumbersTo = parseInt(
+              serialNumbers[1].split(/(\d+)/)[1]
+            );
             const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
             for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
               const atom = `${serialNumberText + uniqid.time()}${i}`
@@ -750,8 +840,8 @@ exports.addProductsToInventory = [
                 { "$set": { "inventoryDetails.$.quantity": new_quantity } }
               )
 
-            }
-            else {
+
+            } else {
               inventory.inventoryDetails.push({
                 productId: product.productId,
                 quantity: product.quantity,
@@ -760,9 +850,13 @@ exports.addProductsToInventory = [
 
 
 
-            const serialNumbers = product.serialNumbersRange.split('-');
-            const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
-            const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
+            const serialNumbers = product.serialNumbersRange.split("-");
+            const serialNumbersFrom = parseInt(
+              serialNumbers[0].split(/(\d+)/)[1]
+            );
+            const serialNumbersTo = parseInt(
+              serialNumbers[1].split(/(\d+)/)[1]
+            );
 
             const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
             let atoms = [];
@@ -771,28 +865,28 @@ exports.addProductsToInventory = [
               const atom = {
                 id: `${serialNumberText + uniqid.time()}${i}`,
                 label: {
-                  labelId: '',
-                  labelType: '',
+                  labelId: "",
+                  labelType: "",
                 },
                 productId: product.productId,
                 inventoryIds: [inventory.id],
-                lastInventoryId: '',
-                lastShipmentId: '',
+                lastInventoryId: "",
+                lastShipmentId: "",
                 poIds: [],
                 shipmentIds: [],
                 txIds: [],
                 batchNumbers: [product.batchNumber],
-                atomStatus: 'Healthy',
+                atomStatus: "Healthy",
                 attributeSet: {
                   mfgDate: product.mfgDate,
                   expDate: product.expDate,
                 },
                 eolInfo: {
-                  eolId: 'IDN29402-23423-23423',
-                  eolDate: '2021-03-31T18:30:00.000Z',
+                  eolId: "IDN29402-23423-23423",
+                  eolDate: "2021-03-31T18:30:00.000Z",
                   eolBy: id,
-                  eolUserInfo: '',
-                }
+                  eolUserInfo: "",
+                },
               };
               atoms.push(atom);
             }
@@ -812,16 +906,70 @@ exports.addProductsToInventory = [
            });*/
 
           });
-
-          return apiResponse.successResponseWithData(res, 'Added products to the inventories')
+          var datee = new Date();
+          datee = datee.toISOString();
+          var evid = Math.random().toString(36).slice(2);
+          let event_data = {
+            eventID: null,
+            eventTime: null,
+            eventType: {
+              primary: "CREATE",
+              description: "SHIPMENT_CREATION",
+            },
+            actor: {
+              actorid: null,
+              actoruserid: null,
+            },
+            stackholders: {
+              ca: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+              actororg: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+              secondorg: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+            },
+            payload: {
+              data: {
+                abc: 123,
+              },
+            },
+          };
+          event_data.eventID = "ev0000" + evid;
+          event_data.eventTime = datee;
+          event_data.eventType.primary = "ADD";
+          event_data.eventType.description = "PRODUCTS_TO_INVENTORY";
+          event_data.actor.actorid = user_id || "null";
+          event_data.actor.actoruserid = email || "null";
+          event_data.payload.data = payload;
+          console.log(event_data);
+          async function compute(event_data) {
+            result = await logEvent(event_data);
+            return result;
+          }
+          compute(event_data).then((response) => {
+            console.log(response);
+          });
+          return apiResponse.successResponseWithData(
+            res,
+            "Added products to the inventories"
+          );
         } else {
-          res.json('Sorry! User does not have enough Permissions');
+          res.json("Sorry! User does not have enough Permissions");
         }
       });
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< InventoryService < InventoryController < addMultipleInventories : error (catch block)',
+        "error",
+        "<<<<< InventoryService < InventoryController < addMultipleInventories : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -832,13 +980,13 @@ exports.addInventoriesFromExcel = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
+      checkToken(req, res, async (result) => {
         if (result.success) {
           permission_request = {
             result: result,
-            permissionRequired: 'addInventory',
+            permissionRequired: "addInventory",
           };
-          checkPermissions(permission_request, async permissionResult => {
+          checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
               const dir = `uploads`;
               if (!fs.existsSync(dir)) {
@@ -849,7 +997,7 @@ exports.addInventoriesFromExcel = [
               const sheet_name_list = workbook.SheetNames;
               const data = XLSX.utils.sheet_to_json(
                 workbook.Sheets[sheet_name_list[0]],
-                { dateNF: 'dd/mm/yyyy;@', cellDates: true, raw: false },
+                { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
               );
               const { address } = req.user;
               let start = new Date();
@@ -858,24 +1006,24 @@ exports.addInventoriesFromExcel = [
               let limit = chunkSize;
               let skip = 0;
 
-              logger.log('info', 'Inserting excel data in chunks');
+              logger.log("info", "Inserting excel data in chunks");
               async function recursiveFun() {
                 skip = chunkSize * count;
                 count++;
                 limit = chunkSize * count;
-                logger.log('info', `skip ${skip}`);
+                logger.log("info", `skip ${skip}`);
 
-                logger.log('info', `limit ${limit}`);
+                logger.log("info", `limit ${limit}`);
                 const chunkedData = data.slice(skip, limit);
                 let chunkUrls = [];
-                const serialNumbers = chunkedData.map(inventory => {
+                const serialNumbers = chunkedData.map((inventory) => {
                   return { serialNumber: inventory.serialNumber.trim() };
                 });
                 const inventoriesFound = await InventoryModel.findOne({
                   $or: serialNumbers,
                 });
                 if (inventoriesFound) {
-                  console.log('Duplicate Inventory Found');
+                  console.log("Duplicate Inventory Found");
                   const newNotification = new NotificationModel({
                     owner: address,
                     message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${inventoriesFound.serialNumber
@@ -884,7 +1032,7 @@ exports.addInventoriesFromExcel = [
                   await newNotification.save();
                   return;
                 }
-                chunkedData.forEach(inventory => {
+                chunkedData.forEach((inventory) => {
                   inventory.serialNumber = inventory.serialNumber.trim();
                   const userData = {
                     stream: stream_name,
@@ -894,7 +1042,7 @@ exports.addInventoriesFromExcel = [
                   };
                   const postRequest = axios.post(
                     `${blockchain_service_url}/publishExcelData`,
-                    userData,
+                    userData
                   );
                   chunkUrls.push(postRequest);
                 });
@@ -903,20 +1051,20 @@ exports.addInventoriesFromExcel = [
                   .then(
                     axios.spread(async (...responses) => {
                       const inventoryData = responses.map(
-                        response => response.data,
+                        (response) => response.data
                       );
                       logger.log(
-                        'info',
-                        `Inventory Data length' ${inventoryData.length}`,
+                        "info",
+                        `Inventory Data length' ${inventoryData.length}`
                       );
                       logger.log(
-                        'info',
+                        "info",
                         `Transaction Id,
-                        ${inventoryData[0].transactionId}`,
+                        ${inventoryData[0].transactionId}`
                       );
                       InventoryModel.insertMany(inventoryData, (err, res) => {
                         if (err) {
-                          logger.log('error', err.errmsg);
+                          logger.log("error", err.errmsg);
                         } else
                           logger.log(
                             'info',
@@ -940,23 +1088,64 @@ exports.addInventoriesFromExcel = [
                         });
                         await newNotification.save();
                       }
-                    }),
+                    })
                   )
-                  .catch(errors => {
+                  .catch((errors) => {
                     logger.log(errors);
                   });
               }
               recursiveFun();
-              return apiResponse.successResponseWithData(res, 'Success', data);
+              //   event_data = {
+              //     "eventID": "ev0000"+  Math.random().toString(36).slice(2),
+              //     "eventTime": new Date().toISOString(),
+              //     "eventType": {
+              //         "primary": "CREATE",
+              //         "description": "SHIPMENT ALERTS"
+              //     },
+              //     "actor": {
+              //         "actorid": "userid1",
+              //         "actoruserid": "ashwini@statwig.com"
+              //     },
+              //     "stackholders": {
+              //         "ca": {
+              //             "id": "org001",
+              //             "name": "Statwig Pvt. Ltd.",
+              //             "address": "ca_address_object"
+              //         },
+              //         "actororg": {
+              //             "id": "org002",
+              //             "name": "Appollo Hospitals Jublihills",
+              //             "address": "actororg_address_object"
+              //         },
+              //         "secondorg": {
+              //             "id": "org003",
+              //             "name": "Med Plus Gachibowli",
+              //             "address": "secondorg_address_object"
+              //         }
+              //     },
+              //     "payload": {
+              //         "data": {
+              //             "abc": 123
+              //         }
+              //     }
+              // }
+              // async function compute(event_data) {
+              //     result = await logEvent(event_data)
+              //     return result
+              // }
+
+              // compute(event_data).then((response) => console.log(response))
+
+              return apiResponse.successResponseWithData(res, "Success", data);
             } else {
               return apiResponse.ErrorResponse(
                 res,
-                'Sorry! User does not have enough Permissions',
+                "Sorry! User does not have enough Permissions"
               );
             }
           });
         } else {
-          return apiResponse.ErrorResponse(res, 'User not authenticated');
+          return apiResponse.ErrorResponse(res, "User not authenticated");
         }
       });
     } catch (e) {
@@ -971,37 +1160,36 @@ exports.trackProduct = [
     try {
       const { serialNumber } = req.query;
       logger.log(
-        'info',
-        '<<<<< ShipmentService < ShipmentController < trackProduct : tracking product, querying by transaction hash',
+        "info",
+        "<<<<< ShipmentService < ShipmentController < trackProduct : tracking product, querying by transaction hash"
       );
       InventoryModel.findOne({ serialNumber: serialNumber }).then(
-        async user => {
+        async (user) => {
           let txnIDs = user.transactionIds;
           let items_array = [];
-          await utility.asyncForEach(txnIDs, async txnId => {
+          await utility.asyncForEach(txnIDs, async (txnId) => {
             const response = await axios.get(
-              `${blockchain_service_url}/queryDataByRawTxHash?txid=${txnId}`,
+              `${blockchain_service_url}/queryDataByRawTxHash?txid=${txnId}`
             );
             const items = response.data.items;
             items_array.push(items);
           });
           logger.log(
-            'info',
-            '<<<<< ShipmentService < ShipmentController < trackProduct : tracked product, queried data by transaction hash',
+            "info",
+            "<<<<< ShipmentService < ShipmentController < trackProduct : tracked product, queried data by transaction hash"
           );
           res.json({ data: items_array });
-        },
+        }
       );
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< ShipmentService < ShipmentController < trackProduct : error (catch block)',
+        "error",
+        "<<<<< ShipmentService < ShipmentController < trackProduct : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
   },
 ];
-
 
 exports.getInventoryDetails = [
   auth,
@@ -1037,25 +1225,24 @@ exports.getInventoryDetails = [
     } catch (err) {
       return apiResponse.ErrorResponse(res, err)
     }
-
-  }
-]
+  },
+];
 exports.getGroupedInventoryDetails = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
+      checkToken(req, res, async (result) => {
         if (result.success) {
           logger.log(
-            'info',
-            '<<<<< InventoryService < InventoryController < getGroupedInventoryDetails : token verified successfullly, querying data by publisher',
+            "info",
+            "<<<<< InventoryService < InventoryController < getGroupedInventoryDetails : token verified successfullly, querying data by publisher"
           );
 
           permission_request = {
             result: result,
-            permissionRequired: 'viewInventory',
+            permissionRequired: "viewInventory",
           };
-          checkPermissions(permission_request, async permissionResult => {
+          checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
               const { address } = req.user;
               const { skip, limit } = req.query;
@@ -1064,15 +1251,15 @@ exports.getGroupedInventoryDetails = [
                 { $match: { owner: address } },
                 {
                   $group: {
-                    _id: { batchNumber: '$batchNumber' },
-                    batchNumber: { $first: '$batchNumber' },
-                    quantity: { $sum: '$quantity' },
-                    manufacturingDate: { $first: '$manufacturingDate' },
-                    expiryDate: { $first: '$expiryDate' },
-                    owner: { $first: '$owner' },
-                    productName: { $first: '$productName' },
-                    manufacturerName: { $first: '$manufacturerName' },
-                    createdAt: { $first: '$createdAt' },
+                    _id: { batchNumber: "$batchNumber" },
+                    batchNumber: { $first: "$batchNumber" },
+                    quantity: { $sum: "$quantity" },
+                    manufacturingDate: { $first: "$manufacturingDate" },
+                    expiryDate: { $first: "$expiryDate" },
+                    owner: { $first: "$owner" },
+                    productName: { $first: "$productName" },
+                    manufacturerName: { $first: "$manufacturerName" },
+                    createdAt: { $first: "$createdAt" },
                   },
                 },
               ])
@@ -1086,42 +1273,42 @@ exports.getGroupedInventoryDetails = [
                   headers: {
                     Authorization: req.headers.authorization,
                   },
-                },
+                }
               );
 
               const products_array = productNamesResponse.data.data.map(
-                product => product.productName,
+                (product) => product.productName
               );
 
               logger.log(
-                'info',
-                '<<<<< InventoryService < InventoryController < getAllInventoryDetails : queried and pushed data',
+                "info",
+                "<<<<< InventoryService < InventoryController < getAllInventoryDetails : queried and pushed data"
               );
               const nextYear = new Date(
-                new Date().setFullYear(new Date().getFullYear() + 1),
+                new Date().setFullYear(new Date().getFullYear() + 1)
               );
               nextYear.setMonth(0);
               nextYear.setUTCHours(0, 0, 0, 0);
               nextYear.setDate(1);
               const thisYear = new Date(
-                new Date().setFullYear(new Date().getFullYear()),
+                new Date().setFullYear(new Date().getFullYear())
               );
               thisYear.setMonth(0);
               thisYear.setDate(1);
               thisYear.setUTCHours(0, 0, 0, 0);
               const nextMonth = new Date(
-                new Date().setMonth(new Date().getMonth() + 1),
+                new Date().setMonth(new Date().getMonth() + 1)
               );
               nextMonth.setUTCHours(0, 0, 0, 0);
               const thisMonth = new Date(
-                new Date().setMonth(new Date().getMonth()),
+                new Date().setMonth(new Date().getMonth())
               );
               thisMonth.setUTCDate(1);
               thisMonth.setUTCHours(0, 0, 0, 0);
               const thisWeek = Date.monday();
               const nextWeek = Date.next().monday();
               const tomorrow = new Date(
-                new Date().setDate(new Date().getDate() + 1),
+                new Date().setDate(new Date().getDate() + 1)
               );
               tomorrow.setUTCHours(0, 0, 0, 0);
               const today = new Date();
@@ -1216,9 +1403,9 @@ exports.getGroupedInventoryDetails = [
                 { $match: { owner: address } },
                 {
                   $group: {
-                    _id: '$productName',
-                    productName: { $first: '$productName' },
-                    quantity: { $sum: '$quantity' },
+                    _id: "$productName",
+                    productName: { $first: "$productName" },
+                    quantity: { $sum: "$quantity" },
                   },
                 },
               ]);
@@ -1274,21 +1461,24 @@ exports.getGroupedInventoryDetails = [
                 },
               });
             } else {
-              apiResponse.ErrorResponse(res, `Sorry! User doens't have permissions`);
+              apiResponse.ErrorResponse(
+                res,
+                `Sorry! User doens't have permissions`
+              );
             }
           });
         } else {
           logger.log(
-            'warn',
-            '<<<<< InventoryService < InventoryController < getGroupedInventoryDetails : refused token',
+            "warn",
+            "<<<<< InventoryService < InventoryController < getGroupedInventoryDetails : refused token"
           );
           res.status(403).json(result);
         }
       });
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< InventoryService < InventoryController < getGroupedInventoryDetails : error (catch block)',
+        "error",
+        "<<<<< InventoryService < InventoryController < getGroupedInventoryDetails : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -1299,18 +1489,18 @@ exports.getInventoryDetailsByBatchNumber = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
+      checkToken(req, res, async (result) => {
         if (result.success) {
           logger.log(
-            'info',
-            '<<<<< InventoryService < InventoryController < getInventoryDetailsByBatchNumber : token verified successfullly, querying data by publisher',
+            "info",
+            "<<<<< InventoryService < InventoryController < getInventoryDetailsByBatchNumber : token verified successfullly, querying data by publisher"
           );
 
           permission_request = {
             result: result,
-            permissionRequired: 'viewInventory',
+            permissionRequired: "viewInventory",
           };
-          checkPermissions(permission_request, async permissionResult => {
+          checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
               const { address } = req.user;
               const { batchNumber, skip, limit } = req.query;
@@ -1327,21 +1517,21 @@ exports.getInventoryDetailsByBatchNumber = [
                 data: inventoryResult,
               });
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              res.json("Sorry! User does not have enough Permissions");
             }
           });
         } else {
           logger.log(
-            'warn',
-            '<<<<< InventoryService < InventoryController < getInventoryDetailsByBatchNumber : refuted token',
+            "warn",
+            "<<<<< InventoryService < InventoryController < getInventoryDetailsByBatchNumber : refuted token"
           );
           res.status(403).json(result);
         }
       });
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< InventoryService < InventoryController < getInventoryDetailsByBatchNumber : error (catch block)',
+        "error",
+        "<<<<< InventoryService < InventoryController < getInventoryDetailsByBatchNumber : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -1352,18 +1542,18 @@ exports.getBatchDetailsByBatchNumber = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
+      checkToken(req, res, async (result) => {
         if (result.success) {
           logger.log(
-            'info',
-            '<<<<< InventoryService < InventoryController < getBatchDetailsByBatchNumber : token verified successfullly, querying data by publisher',
+            "info",
+            "<<<<< InventoryService < InventoryController < getBatchDetailsByBatchNumber : token verified successfullly, querying data by publisher"
           );
 
           permission_request = {
             result: result,
-            permissionRequired: 'viewInventory',
+            permissionRequired: "viewInventory",
           };
-          checkPermissions(permission_request, async permissionResult => {
+          checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
               const { address } = req.user;
               const { skip, limit, batchNumber } = req.query;
@@ -1372,15 +1562,15 @@ exports.getBatchDetailsByBatchNumber = [
                 { $match: { owner: address, batchNumber: batchNumber } },
                 {
                   $group: {
-                    _id: { batchNumber: '$batchNumber' },
-                    batchNumber: { $first: '$batchNumber' },
-                    quantity: { $sum: '$quantity' },
-                    manufacturingDate: { $first: '$manufacturingDate' },
-                    expiryDate: { $first: '$expiryDate' },
-                    owner: { $first: '$owner' },
-                    productName: { $first: '$productName' },
-                    manufacturerName: { $first: '$manufacturerName' },
-                    createdAt: { $first: '$createdAt' },
+                    _id: { batchNumber: "$batchNumber" },
+                    batchNumber: { $first: "$batchNumber" },
+                    quantity: { $sum: "$quantity" },
+                    manufacturingDate: { $first: "$manufacturingDate" },
+                    expiryDate: { $first: "$expiryDate" },
+                    owner: { $first: "$owner" },
+                    productName: { $first: "$productName" },
+                    manufacturerName: { $first: "$manufacturerName" },
+                    createdAt: { $first: "$createdAt" },
                   },
                 },
               ])
@@ -1392,21 +1582,21 @@ exports.getBatchDetailsByBatchNumber = [
                 data: inventoryResult,
               });
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              res.json("Sorry! User does not have enough Permissions");
             }
           });
         } else {
           logger.log(
-            'warn',
-            '<<<<< InventoryService < InventoryController < getBatchDetailsByBatchNumber : refused token',
+            "warn",
+            "<<<<< InventoryService < InventoryController < getBatchDetailsByBatchNumber : refused token"
           );
           res.status(403).json(result);
         }
       });
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< InventoryService < InventoryController < getBatchDetailsByBatchNumber : error (catch block)',
+        "error",
+        "<<<<< InventoryService < InventoryController < getBatchDetailsByBatchNumber : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -1435,14 +1625,13 @@ exports.getProductListCounts = [
       );
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
+        "error",
+        "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
   },
 ];
-
 
 exports.getProductDetailsByWarehouseId = [
   auth,
@@ -1474,14 +1663,13 @@ exports.getProductDetailsByWarehouseId = [
       );
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
+        "error",
+        "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
   },
 ];
-
 
 exports.getEmployeeDetailsByWarehouseId = [
   auth,
@@ -1496,8 +1684,8 @@ exports.getEmployeeDetailsByWarehouseId = [
       );
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
+        "error",
+        "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -1524,8 +1712,8 @@ exports.getCountryDetailsByRegion = [
       );
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
+        "error",
+        "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -1537,11 +1725,7 @@ exports.getRegions = [
   async (req, res) => {
     try {
       const regions = await RegionModel.find({});
-      return apiResponse.successResponseWithData(
-        res,
-        'Regions',
-        regions,
-      );
+      return apiResponse.successResponseWithData(res, "Regions", regions);
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
     }
@@ -1567,8 +1751,8 @@ exports.getWarehouseDetailsByRegion = [
       );
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
+        "error",
+        "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -1594,8 +1778,8 @@ exports.getWarehouseDetailsByCountry = [
       );
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
+        "error",
+        "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
