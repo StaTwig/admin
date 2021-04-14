@@ -204,9 +204,10 @@ const userShipments = async ( mode, warehouseId, skip, limit, callback) => {
 exports.createShipment = [
     auth,
     async (req, res) => {
-        // console.log(req.user)
         try {
+            console.log(req.user)
             const data = req.body;
+            var i=0;
             const incrementCounter = await CounterModel.update({
                   'counters.name': "shipmentId"
                },{
@@ -214,24 +215,33 @@ exports.createShipment = [
                       "counters.$.value": 1
                   }
              })
-
+            //  let event_data = {}
             const shipmentCounter = await CounterModel.findOne({'counters.name':"shipmentId"})
             const shipmentId = shipmentCounter.counters[0].format + shipmentCounter.counters[0].value;
             data.id = shipmentId;
-
+             const email = req.user.emailId;
+             const user_id = req.user.id;
             const empData = await EmployeeModel.findOne({emailId: req.user.emailId});
             const orgId = empData.organisationId;
+            const orgName = empData.name;
             const orgData = await OrganisationModel.findOne({id: orgId});
             const address = orgData.postalAddress;
+            console.log(++i)
             const confId = orgData.configuration_id;
             const confData = await ConfigurationModel.findOne({id: confId});
             const process = confData.process;
-            const supplierOrgData = await OrganisationModel.findOne({id: req.body.supplier.id});
-            const receiverOrgData = await OrganisationModel.findOne({id: req.body.receiver.id});
+            const supplierID = req.body.supplier.id;
+            const supplierOrgData = await OrganisationModel.findOne({primaryContactId: req.body.supplier.id});
+            const receiverOrgData = await OrganisationModel.findOne({primaryContactId: req.body.receiver.id});
+            const supplierName = supplierOrgData.name;
+            const supplierAddress = supplierOrgData.postalAddress;
+            const receiverId = req.body.receiver.id;
+            const receiverName = receiverOrgData.name;
+            const receiverAddress = receiverOrgData.postalAddress;
             const soID = data.shippingOrderId;
             const poID = data.poId;
             var flag = "Y";
-
+            console.log(++i)
             //if (data.shippingOrderId === null || data.poId === null) {
 	      if (data.poId === null) {
                 if (process == true) {
@@ -254,7 +264,8 @@ exports.createShipment = [
                         }
                     })
                 })
-                
+                console.log(++i)
+
 		if (quantityMismatch) {
                     po.poStatus = 'TRANSIT&PARTIALLYFULFILLED';
                 } else {
@@ -269,6 +280,7 @@ exports.createShipment = [
                     }
                 }, );
             }
+            console.log(++i)
 
             if (flag != "N") {
                 const suppWarehouseDetails = await WarehouseModel.findOne({
@@ -293,61 +305,104 @@ exports.createShipment = [
                        poUpdate(products[count].productId, products[count].productQuantity, data.poId, "CREATED")
 
                     }
+                    console.log(++i)
 
                 const currDateTime = date.format( new Date(), 'DD/MM/YYYY HH:mm');
+
                 const updates = {
                       "updatedOn": currDateTime,
                       "status":"CREATED"
                 }
                 data.shipmentUpdates = updates;
-		    
-		const shipment = new ShipmentModel(data);
-                const result = await shipment.save();
-        event_data = {
-            "eventID": "ev0000"+  Math.random().toString(36).slice(2),
-            "eventTime": new Date().toISOString(),
-            "eventType": {
-                "primary": "CREATE",
-                "description": "SHIPMENT_CREATION"
-            },
-            "actor": {
-                "actorid": req.user.id,
-                "actoruserid": req.user.emailId
-            },
-            "stackholders": {
-                "ca": {
-                    "id": orgId,
-                    "name": req.user.organisationId,
-                    "address": address
+
+		    var datee = new Date()
+            datee = datee.toISOString();
+            var evid = Math.random().toString(36).slice(2);
+            console.log(++i)
+            let event_data = {
+                "eventID": null,
+                "eventTime": null,
+                "eventType": {
+                    "primary": "CREATE",
+                    "description": "SHIPMENT_CREATION"
                 },
-                "actororg": {
-                    "id": req.body.supplier.id,
-                    "name": supplierOrgData.name,
-                    "address": supplierOrgData.postalAddress
+                "actor": {
+                    "actorid": null,
+                    "actoruserid": null
                 },
-                "secondorg": {
-                    "id": req.body.receiver.id,
-                    "name": receiverOrgData.name,
-                    "address": receiverOrgData.postalAddress
-                }
-            },
-            "payload": {
-                "data": {
-                    "data": data
+                "stackholders": {
+                    "ca": {
+                        "id": null,
+                        "name": null,
+                        "address": null
+                    },
+                    "actororg": {
+                        "id": null,
+                        "name": null,
+                        "address": null
+                    },
+                    "secondorg": {
+                        "id": null,
+                        "name": null,
+                        "address": null
+                    }
+                },
+                "payload": {
+                    "data": {
+                        "abc": 123
+                    }
                 }
             }
-        }
+            console.log(++i)
+            event_data.eventID = evid;
+            console.log(++i)
+            event_data.eventTime = datee;
+            console.log(++i)
+            event_data.eventType.primary = "CREATE";
+            console.log(++i)
+            event_data.eventType.description = "SHIPMENT_CREATION";
+            console.log(++i)
+            event_data.actor.actorid = user_id || "null";
+            console.log(++i)
+            event_data.actor.actoruserid = email || "null";
+            console.log(++i)
+            event_data.stackholders.ca.id = orgId || "null";
+            console.log(++i)
+            event_data.stackholders.ca.name = orgName || "null";
+            console.log(++i)
+            event_data.stackholders.ca.address = address || "null";
+            console.log(++i)
+            event_data.stackholders.actororg.id = supplierID || "null";
+            console.log(++i)
+            event_data.stackholders.actororg.name = supplierName || "null";
+            console.log(++i)
+            event_data.stackholders.actororg.address = supplierAddress || "null";
+            console.log(++i)
+            event_data.stackholders.secondorg.id = receiverId || "null";
+            console.log(++i)
+            event_data.stackholders.secondorg.name = receiverName || "null"; 
+            console.log(++i)
+            event_data.stackholders.secondorg.address = receiverAddress || "null";
+            console.log(++i)
+            // event_data.payload.data = data;
+            console.log(event_data)
+		const shipment = new ShipmentModel(data);
+                const result = await shipment.save();
         async function compute(event_data) {
-            result = await logEvent(event_data)
-            return result
+            resultt = await logEvent(event_data)
+            return resultt
         }
-        
-        compute(event_data).then((response) => console.log(response))
-                return apiResponse.successResponseWithData(
-                    res,
-                    'Shipment Created',
-                    result,
-                );
+            console.log(result)
+        compute(event_data).then((response) => {
+            console.log(response)
+                    })
+
+            return apiResponse.successResponseWithData(
+                res,
+                'Shipment Created',
+                result,
+            );
+
             } else {
                 return apiResponse.successResponse(
                     res,
