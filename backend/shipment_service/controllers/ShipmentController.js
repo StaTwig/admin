@@ -226,7 +226,6 @@ exports.createShipment = [
             const orgName = empData.name;
             const orgData = await OrganisationModel.findOne({id: orgId});
             const address = orgData.postalAddress;
-            console.log(++i)
             const confId = orgData.configuration_id;
             const confData = await ConfigurationModel.findOne({id: confId});
             const process = confData.process;
@@ -241,7 +240,6 @@ exports.createShipment = [
             const soID = data.shippingOrderId;
             const poID = data.poId;
             var flag = "Y";
-            console.log(++i)
             //if (data.shippingOrderId === null || data.poId === null) {
 	      if (data.poId === null) {
                 if (process == true) {
@@ -264,8 +262,7 @@ exports.createShipment = [
                         }
                     })
                 })
-                console.log(++i)
-
+    
 		if (quantityMismatch) {
                     po.poStatus = 'TRANSIT&PARTIALLYFULFILLED';
                 } else {
@@ -280,7 +277,6 @@ exports.createShipment = [
                     }
                 }, );
             }
-            console.log(++i)
 
             if (flag != "N") {
                 const suppWarehouseDetails = await WarehouseModel.findOne({
@@ -305,8 +301,7 @@ exports.createShipment = [
                        poUpdate(products[count].productId, products[count].productQuantity, data.poId, "CREATED")
 
                     }
-                    console.log(++i)
-
+        
                 const currDateTime = date.format( new Date(), 'DD/MM/YYYY HH:mm');
 
                 const updates = {
@@ -318,7 +313,6 @@ exports.createShipment = [
 		    var datee = new Date()
             datee = datee.toISOString();
             var evid = Math.random().toString(36).slice(2);
-            console.log(++i)
             let event_data = {
                 "eventID": null,
                 "eventTime": null,
@@ -353,37 +347,21 @@ exports.createShipment = [
                     }
                 }
             }
-            console.log(++i)
             event_data.eventID = evid;
-            console.log(++i)
             event_data.eventTime = datee;
-            console.log(++i)
             event_data.eventType.primary = "CREATE";
-            console.log(++i)
             event_data.eventType.description = "SHIPMENT_CREATION";
-            console.log(++i)
             event_data.actor.actorid = user_id || "null";
-            console.log(++i)
             event_data.actor.actoruserid = email || "null";
-            console.log(++i)
             event_data.stackholders.ca.id = orgId || "null";
-            console.log(++i)
             event_data.stackholders.ca.name = orgName || "null";
-            console.log(++i)
             event_data.stackholders.ca.address = address || "null";
-            console.log(++i)
             event_data.stackholders.actororg.id = supplierID || "null";
-            console.log(++i)
             event_data.stackholders.actororg.name = supplierName || "null";
-            console.log(++i)
             event_data.stackholders.actororg.address = supplierAddress || "null";
-            console.log(++i)
             event_data.stackholders.secondorg.id = receiverId || "null";
-            console.log(++i)
             event_data.stackholders.secondorg.name = receiverName || "null"; 
-            console.log(++i)
             event_data.stackholders.secondorg.address = receiverAddress || "null";
-            console.log(++i)
             // event_data.payload.data = data;
             console.log(event_data)
 		const shipment = new ShipmentModel(data);
