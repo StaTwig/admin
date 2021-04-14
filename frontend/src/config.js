@@ -92,7 +92,8 @@ export function config() {
       getNotificationsUrl: `${LOCAL_SERVER_URL_NOTIFICATION}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${LOCAL_SERVER_URL_NOTIFICATION}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/updateTrackingStatus`,
-    },
+      
+          },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/sendOtp`,
