@@ -237,7 +237,19 @@ exports.register = [
 
         var organisationId = req.body.organisationId;
         var warehouseId = 'NA';
-        var employeeId = uniqid('emp-');
+
+        const incrementCounterEmp = await CounterModel.update({
+                  'counters.name': "employeeId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+        const empCounter = await CounterModel.findOne({'counters.name':"employeeId"},{"counters.name.$":1})
+        var employeeId = empCounter.counters[0].format + empCounter.counters[0].value;
+
+        //var employeeId = uniqid('emp-');
         var employeeStatus = 'NOTAPPROVED';
         let addr = '';
 
@@ -256,11 +268,33 @@ exports.register = [
 
             //   }
             // }
-            const country = req.body?.address?.country ? req.body.address?.country : 'India';
-            const address = req.body?.address ? req.body.address : {};
+            const country =  req.body?.address?.country ? req.body.address?.country : 'India';
+            const address =  req.body?.address ? req.body.address :  {};
             addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
-            organisationId = uniqid('org-');
-            warehouseId = uniqid('war-');
+            
+            const incrementCounterOrg = await CounterModel.update({
+                  'counters.name': "orgId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+            const orgCounter = await CounterModel.findOne({'counters.name':"orgId"},{"counters.name.$":1})
+            organisationId = orgCounter.counters[0].format + orgCounter.counters[0].value;
+
+            //organisationId = uniqid('org-');
+            const incrementCounterWarehouse = await CounterModel.update({
+                  'counters.name': "warehouseId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+            const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.name.$":1})
+            warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
+            //warehouseId = uniqid('war-');
             const org = new OrganisationModel({
               primaryContactId: employeeId,
               name: organisationName,
@@ -278,7 +312,18 @@ exports.register = [
             });
             await org.save();
 
-            const inventoryId = uniqid('inv-');
+            const incrementCounterInv = await CounterModel.update({
+                  'counters.name': "inventoryId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+            const invCounter = await CounterModel.findOne({'counters.name':"inventoryId"},{"counters.name.$":1})
+            const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
+
+            //const inventoryId = uniqid('inv-');
             const inventoryResult = new InventoryModel({ id: inventoryId });
             await inventoryResult.save();
 
@@ -792,7 +837,7 @@ exports.updatePassword = [
   },
 ];
 
-exports.uploadImage = [
+/*exports.uploadImage = [
   auth,
   (req, res) => {
     try {
@@ -836,7 +881,7 @@ exports.uploadImage = [
       return apiResponse.ErrorResponse(res, err);
     }
   },
-];
+];*/
 
 exports.createUserAddress = [
   async (req, res) => {
@@ -985,7 +1030,18 @@ exports.addWarehouse = [
   auth,
   async (req, res) => {
     try {
-      const inventoryId = uniqid('inv-');
+      const incrementCounterInv = await CounterModel.update({
+                  'counters.name': "inventoryId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+      const invCounter = await CounterModel.findOne({'counters.name':"inventoryId"},{"counters.name.$":1})
+      const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
+
+      //const inventoryId = uniqid('inv-');
       const inventoryResult = new InventoryModel({ id: inventoryId });
       await inventoryResult.save();
       const {
@@ -997,7 +1053,19 @@ exports.addWarehouse = [
         supervisors,
         employees,
       } = req.body;
-      const warehouseId = uniqid('war-');
+
+      const incrementCounterWarehouse = await CounterModel.update({
+                  'counters.name': "warehouseId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+      const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.name.$":1})
+      const warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
+
+      //const warehouseId = uniqid('war-');
       const warehouse = new WarehouseModel({
         id: warehouseId,
         organisationId,
@@ -1052,12 +1120,14 @@ exports.uploadImage = async function (req, res) {
       })
       const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]))
       try {
-        if (action != "STOREID")
-          filename = id + "-" + type + imageSide + "-" + t.format + t.value + ".png";
-        else
-          filename = t.value + "-" + req.file.filename;
-
-        let dir = `uploads`;
+        if (action == "STOREID")
+	  filename = t.value + "-" + req.file.filename;
+        else if (action == "PROFILE")
+	  filename = "PROFILE" + "-" +  data.id + ".png"
+	else
+           filename = id + "-" + type + imageSide + "-" + t.format + t.value + ".png";	
+	
+	let dir = `/home/ubuntu/userimages`;
         await moveFile(req.file.path, `${dir}/${filename}`);
       } catch (e) {
         console.log("Error in image upload", e);
@@ -1123,6 +1193,17 @@ exports.uploadImage = async function (req, res) {
           data: "Uploaded successfully",
           filename
         })
+      } else if (action == "PROFILE") {
+        const employee = await EmployeeModel.updateOne({
+          emailId: data.emailId
+        }, {
+          $set: { "photoId": "/images/" + filename} 
+        });
+        return res.send({
+          success: true,
+          data: "Uploaded successfully",
+          filename
+        })
       } else {
         return res.send({
           success: false,
@@ -1152,7 +1233,6 @@ exports.fetchImage = async function (req, res) {
           "userDocuments.idType": type
         }]
       });
-
       if (findRecord != null) {
 
         const update = await EmployeeModel.findOne({
@@ -1170,7 +1250,6 @@ exports.fetchImage = async function (req, res) {
         })
 
         var resArray = [];
-
         for (i = 0; i < imageArray.length; i++) {
           const s = "/images/" + imageArray[i];
           resArray.push(s)

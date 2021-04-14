@@ -16,7 +16,7 @@ const auth = require("../middlewares/jwt");
  * @returns {Object}
  */
 exports.getAllEvents = [
-	//auth,
+	auth,
 	async function (req, res) {
 		try {
 			const resPerPage = 9; 
@@ -58,7 +58,7 @@ exports.getAllEvents = [
  * @returns {Object}
  */
 exports.getEventById = [
-	// auth,
+	auth,
 	param("eventID", "eventId must not be empty.")
 		.isLength({ min: 3 })
 		.trim(),
@@ -114,7 +114,7 @@ exports.getEventById = [
  * @returns {Object}
  */
 exports.getEventByActorId = [
-	// auth,
+	auth,
 	param("actorId", "eventId must not be empty.")
 		.isLength({ min: 3 })
 		.trim(),
@@ -169,7 +169,7 @@ exports.getEventByActorId = [
  * @returns {Object}
  */
 exports.getEventByCaId = [
-	// auth,
+	auth,
 	param("caId", "eventId must not be empty.")
 		.isLength({ min: 3 })
 		.trim(),
@@ -224,7 +224,7 @@ exports.getEventByCaId = [
  * @returns {Object}
  */
 exports.getEventByActorOrgId = [
-	// auth,
+	auth,
 	param("actorOrgId", "eventId must not be empty.")
 		.isLength({ min: 3 })
 		.trim(),
@@ -279,7 +279,7 @@ exports.getEventByActorOrgId = [
  * @returns {Object}
  */
 exports.getEventBySecondOrgId = [
-	// auth,
+	auth,
 	param("secondaryOrgId", "eventId must not be empty.")
 		.isLength({ min: 3 })
 		.trim(),
@@ -334,7 +334,7 @@ exports.getEventBySecondOrgId = [
  * @returns {Object}
  */
 exports.deleteEventById = [
-	//auth,
+	auth,
 	param("eventID", "eventId must not be empty.")
 		.isLength({ min: 1 })
 		.trim(),
