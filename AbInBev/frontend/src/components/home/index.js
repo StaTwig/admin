@@ -3,8 +3,11 @@ import React, { useState, useCallback } from "react";
 import Selection from "./selection";
 import Login from "./login";
 import VerifyPassword from './verifyPassword';
+import setAuthToken from '../../utils/setAuthToken'
 import SignUp from './signUp';
 import "./style.scss";
+import jwt_decode from 'jwt-decode';
+
 import { sendOtp, verifyOtp, registerUser } from "../../actions/userActions";
 
 const Home = (props) => {
@@ -48,6 +51,7 @@ const Home = (props) => {
       setAuthToken(token);
       const decoded = jwt_decode(token);
       localStorage.setItem('theLedgerToken', token);
+      console.log(props)
       props.history.push(`/overview`);
     } else {
       const err = result.data.message;

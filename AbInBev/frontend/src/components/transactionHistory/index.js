@@ -35,11 +35,11 @@ const TransactionHistory = (props) => {
                 </div>
               </div>
               <div class="btn-group mainButtonFilter">
-                <a href="#!" class="btn active">All</a>
-                <a href="#!" class="btn">Sent</a>
-                <a href="#!" class="btn">Received</a>
-                <a href="#!" class="btn">In-Transit</a>
-                <a href="#!" class="btn">Added</a>
+                <a href="#0" class="btn active">All</a>
+                <a href="#1" class="btn">Sent</a>
+                <a href="#2" class="btn">Received</a>
+                <a href="#3" class="btn">In-Transit</a>
+                <a href="#4" class="btn">Added</a>
               </div>
 
               <div className="productList">
