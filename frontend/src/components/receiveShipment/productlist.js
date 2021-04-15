@@ -4,7 +4,8 @@ import Down from '../../assets/icons/up.png';
 import './style.scss'
 
 const ProductList = (props) => {
-    const [deliveredProductList, setDeliveredProductList] = useState(0);
+    const [deliveredProduct, setDeliveredProduct] = useState(0);
+    let deliveredProductList = [];
     return (
         Object.keys(props.shipments).length === 0? <div className="row panel justify-content-between">N/A</div> :
             <div>
@@ -15,8 +16,8 @@ const ProductList = (props) => {
                             <li className="mb-3" style={{fontSize:'4vh'}}>{product.productName}</li>
                             <li className="mb-1 text-secondary">Product Name</li>
                             <li className="mb-1 text-secondary">Manufacturer</li>
+                            <li className="mb-1 text-secondary">Quantity Sent</li>
                             <li className="mb-1 text-secondary">Quantity Received</li>
-                            <li className="mb-1 text-secondary">Quantity Delivered</li>
                             <li className="mb-1 text-secondary">Label ID</li>
                         </ul>
                         <ul className="elemens w-75">
@@ -25,6 +26,7 @@ const ProductList = (props) => {
                                 className="btn btn-outline-primary"
                                 onClick={() => 
                                     {
+                                        deliveredProductList.push(deliveredProduct);
                                         props.setDelivered(deliveredProductList);
                                         props.setIndex(index);
                                     }}
@@ -46,7 +48,7 @@ const ProductList = (props) => {
                             style={{height:'2vh',width:'10vw', fontSize:'2vh',marginTop:'0',marginBottom:'0'}}
                             className="form-control"
                             onChange={e =>
-                            setDeliveredProductList(e.target.value)
+                            setDeliveredProduct(e.target.value)
                             }
                         />
                             }

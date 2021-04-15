@@ -14,8 +14,8 @@ const ProductList = (props) => {
                         <ul className="mr-3 w-75 elemens">
                             <li className="mb-1 text-secondary">Product Name</li>
                             <li className="mb-1 text-secondary">Manufacturer</li>
+                            <li className="mb-1 text-secondary">Quantity Sent</li>
                             <li className="mb-1 text-secondary">Quantity Received</li>
-                            <li className="mb-1 text-secondary">Quantity Delivered</li>
                             <li className="mb-1 text-secondary">Label ID</li>
                         </ul>
                         <ul className="elemens w-75">
