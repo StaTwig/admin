@@ -54,7 +54,7 @@ const Orders = props => {
   }
 
   const sendData = () => {
-    let rtnArr = visible == 'two' ? props.orders?.outboundPOs : props.orders?.inboundPOs;
+    let rtnArr = visible == 'one' ? props.orders?.outboundPOs : props.orders?.inboundPOs;
     if (alerts)
       rtnArr = rtnArr.filter(row => row?.shipmentAlerts?.length > 0);
     return rtnArr ? rtnArr : [];
