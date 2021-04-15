@@ -14,7 +14,7 @@ const Tiles = props => {
             <img src={Received} alt="truck"/>
           </div>
           <div className="d-flex flex-column">
-            <div className="title recived-text">Total Orders Sent.</div>
+            <div className="title recived-text">Total Orders Sent</div>
             <div className="recived-text count">200</div>
           </div>
         </div>
@@ -25,7 +25,7 @@ const Tiles = props => {
             <img src={Sent} alt="truck" />
           </div>
           <div className="d-flex flex-column">
-            <div className="title sent-text ">Total Orders Received.</div>
+            <div className="title sent-text ">Total Orders Received</div>
             <div className="sent-text count">1200</div>
           </div>
         </div>
