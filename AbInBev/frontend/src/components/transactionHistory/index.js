@@ -10,10 +10,65 @@ import Moment from 'react-moment';
 const TransactionHistory = (props) => {
   const dispatch = useDispatch();
   const [transactions, setTransactions] = useState([]);
+  const [displayTransactions, setDisplayTransactions] = useState([]);
+  const [inBound, setinBound] = useState([]);
+  const [outBound, setoutBound] = useState([]);
+  const [buttonState0, setButtonActive] = useState("btn active");
+  const [buttonState1, setButtonActive1] = useState("btn");
+  const [buttonState2, setButtonActive2] = useState("btn");
+  const [buttonState3, setButtonActive3] = useState("btn");
+  const [buttonState4, setButtonActive4] = useState("btn");
+
+  function selectThis(a){
+    console.log(a);
+    if(a==="all"){
+      setButtonActive1("btn");
+      setButtonActive2("btn");
+      setButtonActive3("btn");
+      setButtonActive4("btn");
+      setButtonActive("btn active");
+      setDisplayTransactions(transactions);
+    }
+    if(a==="sent"){
+      setButtonActive("btn");
+      setButtonActive2("btn");
+      setButtonActive3("btn");
+      setButtonActive4("btn");
+      setButtonActive1("btn active");
+      setDisplayTransactions(outBound);
+    }
+    if(a==="received"){
+      setButtonActive1("btn");
+      setButtonActive("btn");
+      setButtonActive3("btn");
+      setButtonActive4("btn");
+      setButtonActive2("btn active");
+      setDisplayTransactions(inBound);
+    }
+    if(a==="transit"){
+      setButtonActive1("btn");
+      setButtonActive2("btn");
+      setButtonActive("btn");
+      setButtonActive4("btn");
+      setButtonActive3("btn active");
+      setDisplayTransactions([]);
+    }
+    if(a==="added"){
+      setButtonActive1("btn");
+      setButtonActive2("btn");
+      setButtonActive3("btn");
+      setButtonActive("btn");
+      setButtonActive4("btn active");
+      setDisplayTransactions(outBound);
+    }
+  }
   useEffect(() => {
     (async () => {
       const results = await dispatch(getTransactions());
+      setDisplayTransactions(results.data);
       setTransactions(results.data);
+      setinBound(results.inboundShipments)
+      setoutBound(results.outboundShipments)
       console.log(results);
     })();
   }, []);
@@ -35,15 +90,14 @@ const TransactionHistory = (props) => {
                 </div>
               </div>
               <div class="btn-group mainButtonFilter">
-                <a href="#0" class="btn active">All</a>
-                <a href="#1" class="btn">Sent</a>
-                <a href="#2" class="btn">Received</a>
-                <a href="#3" class="btn">In-Transit</a>
-                <a href="#4" class="btn">Added</a>
+                <a href="#0" class={buttonState0} onClick={ () =>  {setButtonActive("btn active"); selectThis("all");} }>All</a>
+                <a href="#1" class={buttonState1} onClick={ () => {setButtonActive1("btn active"); selectThis("sent");} }>Sent</a>
+                <a href="#2" class={buttonState2} onClick={ () => {setButtonActive2("btn active"); selectThis("received");} }>Received</a>
+                <a href="#3" class={buttonState3} onClick={ () => {setButtonActive3("btn active"); selectThis("transit");} }>In-Transit</a>
+                <a href="#4" class={buttonState4} onClick={ () => {setButtonActive4("btn active"); selectThis("added");} }>Added</a>
               </div>
-
               <div className="productList">
-              {transactions.map((transaction, index) => 
+              {displayTransactions.map((transaction, index) => 
                 <div>
                   <span className="transactionListDate">
                     <Moment format="MMM Do, YYYY">
@@ -142,7 +196,10 @@ const TransactionHistory = (props) => {
 
                 <label className="filterSubHeading mt-2">Select Vendor</label>
                 <select className="filterSelect mt-2">
-                  <option>Select Vendor</option>
+                <option>Select Vendor</option>
+                <option>Select Vendor</option>
+                <option>Select Vendor</option>
+                <option>Select Vendor</option>
                 </select>
 
                 <button className="btn SearchButton mt-4">Search</button>
