@@ -9,7 +9,7 @@ import ShipmentPopUp from "../neworder/shipmentPopUp";
 import ShipmentFailPopUp from "../neworder/shipmentFailPopUp";
 import './style.scss';
 import { turnOn, turnOff } from "../../actions/spinnerActions";
-import { createOrder, resetEditPos } from '../../actions/poActions';
+import { createOrder, resetReviewPos } from '../../actions/poActions';
 
 const ReviewOrder = props => {
   const order = useSelector(state => {
@@ -54,7 +54,7 @@ const ReviewOrder = props => {
       const result = await createOrder(data);
       dispatch(turnOff());
       if (result.status === 200) {
-        dispatch(resetEditPos({}));
+        // dispatch(resetReviewPos({}));
         props.history.push('/orders');
       } else {
         setFailedPop(true);
@@ -71,7 +71,8 @@ const ReviewOrder = props => {
       </div>
       <div className="mt-4">
         <div className=" p-3 m-3 bg-white shadow">
-          <span className="p-1 text-info font-weight-bold">Product Details</span>
+          
+          <span className="p-0 font-weight-bold" style={{color:"black"}}>Product Details</span>
           <div className="row mt-3">
             <ViewTable
               product={order?.products}
@@ -79,39 +80,39 @@ const ReviewOrder = props => {
           </div>
         </div>
         <div className="row bg-white shadow p-3 m-3">
-          <div className=" pl-4 col-12">
-            <span className="p-1 text-primary font-weight-bold">Order From</span>
+          <div className=" pl-1 col-12">
+            <span className="p-0 font-weight-bold" style={{color:"black"}}>Order From</span>
             <div>
-              <div className=" row p-1">
+              <div className=" row p-3">
                 <div className="col row">
                   <span className="col-4">Organisation Name: </span>
-                  <span className="col text-dark font-weight-bold">{order.fromOrgId}</span>
+                  <span className="col" style={{color: "black"}} >{order.fromOrgId}</span>
                 </div>
                 <div className="col row">
                   <span className="col-4">Organisation ID: </span>
-                  <span className="col font-weight-bold text-dark">{order.fromOrg}</span>
+                  <span className="col" style={{color: "black"}} >{order.fromOrg}</span>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div className="row bg-white shadow p-3 m-3">
-          <div className=" pl-4 col-12">
-            <span className="p-1 text-primary font-weight-bold">Order To</span>
+          <div className=" pl-1 col-12">
+            <span className="p-0  font-weight-bold" style={{color:"black"}}>Order To</span>
             <div>
-              <div className=" row p-1">
+              <div className=" row p-3">
                 <div className="col row">
                   <span className="col-4">Organisation Name: </span>
-                  <span className="col text-dark font-weight-bold">{order.toOrgName}</span>
+                  <span className="col" style={{color: "black"}} >{order.toOrgName}</span>
                 </div>
                 <div className="col row">
                   <span className="col-4">Organisation ID: </span>
-                  <span className="col text-dark font-weight-bold">{order.toOrg}</span>
+                  <span className="col" style={{color: "black"}} >{order.toOrg}</span>
                 </div>
-                <div class="w-100"></div>
+                <div className="w-100"></div>
                 <div className="col row col-6 mt-2">
                   <span className="col-4">Delivery Location:</span>
-                  <span className="col ml-2 text-dark font-weight-bold">{order.toOrgLocName}</span>
+                  <span className="col ml-2 " style={{color: "black"}} >{order.toOrgLocName}</span>
                 </div>
               </div>
             </div>

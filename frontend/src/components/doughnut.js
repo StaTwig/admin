@@ -69,14 +69,14 @@ const ChartsPage = (props) => {
   }, []);
   //const filteredInventoriesKeys = inventoriesKeys.filter(inventory => inventory !== 'tot_qty' && inventory !== 'tot_inv')
 const option = {
-  maintainAspectRatio: false,
-  responsive: false,
+  maintainAspectRatio: true,
+  responsive: true,
 layout: {
             padding: {
                 left: 0,
                 right: 0,
                 top:0,
-                bottom:30
+                bottom:0
             }
         },
   legend: {
@@ -91,7 +91,7 @@ padding:10,
 
   return (
     <MDBContainer>
-      <Doughnut id="doughnut-chart" height="300px" data={doughnut}  options={option} />
+      <Doughnut id="doughnut-chart" data={doughnut}  options={option} />
     </MDBContainer>
   );
 };

@@ -1,22 +1,29 @@
-# Event Logger (Helper Utility)
+# Event Service 
 
-This is a utility helper which can be imported into any method and called with the event data in the schema defined below and the helper will validate the data to ensure it is in the right format and then will store it in the Events collection of the MongoDB. 
+This Service will return the events from DB and can be queried by Actor, ActorOrdId, EventID and more.
 
-## Steps to use
+## Endpoints
 
-1) Update the Mongo URL in the Config FILE | config.js or set "MONGODB_URL" as an env variable
-`let config = {`
-`    MONGODB_URL : "mongodb+srv://place_mongo_url_here"`
-`}`
+##### getAllEvents 
+`GET <IP:PORT>/eventmanagement/api/event/getAllEvents`
+##### getEventByActorId 
+` GET <IP:PORT>/eventmanagement/api/event/getEventByActorId/:actorId/:eventTypePrimary/:eventTypeDesc`
+##### getEventByCaId
+`GET <IP:PORT>/eventmanagement/api/event/getEventByCaId/:caId/:eventTypePrimary/:eventTypeDesc`
+##### getEventByEventId
+`GET <IP:PORT>/eventmanagement/api/event/getEventByEventId/:eventID/:eventTypePrimary/:eventTypeDesc`
+##### getEventBySecondaryOrgId
+`GET <IP:PORT>/eventmanagement/api/event/getEventBySecondaryOrgId/:secondaryOrgId/:eventTypePrimary/:eventTypeDesc`
+###### getEventByActorOrgId
+`GET <IP:PORT>/eventmanagement/api/event/getEventByActorOrgId/:actorOrgId/:eventTypePrimary/:eventTypeDesc`
+##### deleteEventById
+`DELETE <IP:PORT>/eventmanagement/api/event/deleteEventById/:eventId`
 
-**--------------------------------------------------------------------------------**
-`export MONGODB_URL = mongodb://place_mongo_url_here`
-2) Import the helper file
-`const logEvent = require('../event_logger/eventLogger.js');`
-3) Call the logEvent method
-`result = await logEvent(data)`
+## Note
 
-## Schema to Events
+The 'eventTypePrimary' and 'eventTypeDesc' are optional params and can be passed for filtering
+
+## Schema returned by Events Service
     {
       "title": "Root",
       "type": "object",

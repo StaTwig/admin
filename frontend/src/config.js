@@ -92,7 +92,8 @@ export function config() {
       getNotificationsUrl: `${LOCAL_SERVER_URL_NOTIFICATION}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${LOCAL_SERVER_URL_NOTIFICATION}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/updateTrackingStatus`,
-    },
+      getOrderIds:`${LOCAL_SERVER_URL_PO}/pomanagement/api/po/getOrderIds`,   
+          },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/sendOtp`,
@@ -159,6 +160,7 @@ export function config() {
       getNotificationsUrl: `${DEV_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${DEV_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${DEV_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
+      getOrderIds:`${DEV_SERVER_URL}/pomanagement/api/po/getOrderIds`,
     },
     stable: {
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
@@ -226,6 +228,7 @@ export function config() {
       getNotificationsUrl: `${STABLE_SERVER_URL_PRODUCTS}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${STABLE_SERVER_URL_PRODUCTS}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/updateTrackingStatus`,
+      getOrderIds:`${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/getOrderIds`,
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -294,6 +297,7 @@ export function config() {
       getNotificationsUrl: `${TEST_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${TEST_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${TEST_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
+       getOrderIds:`${TEST_SERVER_URL}/pomanagement/api/po/getOrderIds`,
     },
     demo: {
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
@@ -361,6 +365,7 @@ export function config() {
       getNotifications: `${DEMO_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${DEMO_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${DEMO_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
+      getOrderIds:`${DEMO_SERVER_URL}/pomanagement/api/po/getOrderIds`,
     },
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
@@ -428,6 +433,7 @@ export function config() {
       getNotificationsUrl: `${PROD_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${PROD_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${PROD_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
+      getOrderIds:`${PROD_SERVER_URL}/pomanagement/api/po/getOrderIds`,
     },
     ainbevprod: {
       loginUrl: `${ABINBEVPROD_SERVER_URL}/usermanagement/api/auth/login`,
@@ -495,6 +501,7 @@ export function config() {
       getNotificationsUrl: `${ABINBEVPROD_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${ABINBEVPROD_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${ABINBEVPROD_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
+       getOrderIds:`${ABINBEVPROD_SERVER_URL}/pomanagement/api/po/getOrderIds`,
     },
     ainbevtest: {
       loginUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -562,6 +569,7 @@ export function config() {
       getNotificationsUrl: `${ABINBEVTEST_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${ABINBEVTEST_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${ABINBEVTEST_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
+      getOrderIds:`${ABINBEVTEST_SERVER_URL}/pomanagement/api/po/getOrderIds`,
     },
   };
 

@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 import { setTracingShipments, setVisibleShipments } from '../../../actions/shipmentActions';
 import { useDispatch} from 'react-redux';
 import Verifiedpic from '../../../assets/icons/Verifiedpic.png';
+import { formatDate } from "../../../utils/dateHelper";
 
 import './style.scss';
 
@@ -48,8 +49,7 @@ const Table = (props) => {
             
             </div>
               <div className="rTableCell">
-
-              {shipment.shippingDate.split('T')[0].split('-')[2]+"/"+shipment.shippingDate.split('T')[0].split('-')[1]+"/"+shipment.shippingDate.split('T')[0].split('-')[0]}</div>
+                {shipment.shippingDate.length == 10 ? shipment.shippingDate : formatDate(shipment.shippingDate)}</div>
           <div className="rTableCell">{ shipment.status === "CREATED" ? <span className="badge shipped">{shipment.status}</span>:null}
          {shipment.status === "Received" ? <span className="badge received text-center">{shipment.status}</span>:null}
           {shipment.status === "Sent" ? <span className="badge sent text-center">{shipment.status}</span>:null}

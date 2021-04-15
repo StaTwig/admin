@@ -32,7 +32,7 @@ const Table = props => {
               </div>
               <div className="rTableCell" style={{position:"relative",left:'7%'}}>{inventory.products.manufacturer}</div>
               <div className="rTableCell" style={{position:"relative",left:'12%',fontWeight:700}}>{inventory.inventoryDetails.quantity}</div>
-              <div className="rTableCell" style={{position:"relative",left:'14%'}}>
+              <div className="rTableCell" style={{position:"relative",left:'12%'}}>
                 <button
                   className="btn btn-outline-info fontSize200 expand"
                   onClick={() => {

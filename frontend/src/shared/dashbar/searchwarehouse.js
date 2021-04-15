@@ -43,7 +43,7 @@ import './style.scss'
         const regionResult = await getWareHousesByRegion(item);
         if (regionResult.status === 1) {
             setWareHouses(regionResult.data);
-            props.setWarehouseArr(warehousesResult.data);
+            props.setWarehouseArr(regionResult.data);
             const warehouseList = regionResult.data.map(w => w.id);
             setWareHouseIds(warehouseList);
         }
@@ -125,14 +125,14 @@ import './style.scss'
                 </div>
             </div>
                 <div className="mainsearchwarehouse">
-                {warehouses.length > 0 && warehouses.map(w =>
-                 <div className=" panel  mb-4 searchwarehouse dashsearch address searchpanel" onClick={() =>props.onWarehouseSelect(w.id)}>
+                {warehouses.length > 0 && warehouses.map((w, index) =>
+                <div key={index} className=" panel  mb-4 searchwarehouse dashsearch address searchpanel" onClick={() =>props.onWarehouseSelect(w.id)}>
                 <div className="d-flex flex-row " >
                     <ul className="mr-3">
                         <li className="mb-2 text-secondary">Country ID</li>
                         <li className="mb-2 text-secondary">Country</li>
-                        <li className="mb-2 text-secondary">Warehouse</li>
-                        <li className="mb-1 text-secondary">Warehouse Name</li>
+                        <li className="mb-2 text-secondary">Location</li>
+                        <li className="mb-1 text-secondary">Location Name</li>
                     </ul>
                     <ul>
                         <li className="mb-2">{w.country.id}</li>

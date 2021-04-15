@@ -8,6 +8,9 @@ import {
 import { turnOff, turnOn } from "../../actions/spinnerActions";
 import Modal from '../../shared/modal';
 import InventoryPopUp from './inventorypopup';
+import mon from '../../assets/icons/brand.svg';
+import Package from '../../assets/icons/package.svg';
+import qty from '../../assets/icons/TotalInventoryAddedcopy.svg';
 import './style.scss';
 
 const VerifyInventory = props => {
@@ -63,52 +66,38 @@ const VerifyInventory = props => {
       <div className="card">
         <div className="card-body">
           <h5 className="head ml-3">Description Of Goods </h5>
+          <div className="row  mt-3">
+            <span className="col-2 text-left"><img src={Package} width="16" height="16" /><span className="pl-1 text-muted">Product Name</span></span>
+            <span className="col-2 text-left"><img src={mon} width="16" height="16" /><span className="pl-1 text-muted">Manufacturer</span></span>
+            <span className="col text-left"><img src={qty} width="16" height="16" /><span className="pl-1 text-muted">Quantity</span></span>
+            <span className="col-2 text-left text-muted">Manufacturer Date</span>
+            <span className="col text-left text-muted">Expiry Date</span>
+            <span className="col text-left text-muted">Batch Number</span>
+            <span className="col-2 text-left text-muted">Serial Numbers Range</span>
+          </div>
           {reviewInventories.map(reviewInventory => (
-            <div className="d-flex text-muted flex-row justify-content-between">
-              <ul>
-                <li className="opacityHalf">Product Name</li>
-                <li>{reviewInventory.productName}</li>
-              </ul>
-              <ul>
-                <li className="opacityHalf">Manufacturer</li>
-                <li>{reviewInventory.manufacturer}</li>
-              </ul>
-              <ul>
-                <li className="opacityHalf">Quantity</li>
-                <li>{reviewInventory.quantity}</li>
-              </ul>
-              <ul>
-                <li className="opacityHalf">Manufacturer Date</li>
-                <li>
-                  {reviewInventory.manufacturingDate ? `0${new Date(
-                    Date.parse(reviewInventory.manufacturingDate),
-                  ).getMonth() + 1}`.slice(-2) +
-                    '/' +
-                    new Date(
-                      Date.parse(reviewInventory.manufacturingDate),
-                    ).getFullYear() : ''}
-                </li>
-              </ul>
-              <ul>
-                <li className="opacityHalf">Expiry Date</li>
-                <li>
-                  {reviewInventory.expiryDate ? `0${new Date(
-                    Date.parse(reviewInventory.expiryDate),
-                  ).getMonth() + 1}`.slice(-2) +
-                    '/' +
-                    new Date(
-                      Date.parse(reviewInventory.expiryDate),
-                    ).getFullYear() : ''}
-                </li>
-              </ul>
-              <ul>
-                <li className="opacityHalf">Batch Number</li>
-                <li>{reviewInventory.batchNumber}</li>
-              </ul>
-              <ul>
-                <li className="opacityHalf"> Serial Numbers Range</li>
-                <li>{reviewInventory.serialNumber}</li>
-              </ul>
+            <div className="row p-2">
+              <span className="col-2 text-left">{reviewInventory.productName}</span>
+              <span className="col-2 text-left">{reviewInventory.manufacturer}</span>
+              <span className="col text-left">{reviewInventory.quantity}</span>
+              <span className="col-2 text-left">{reviewInventory.manufacturingDate ? `0${new Date(
+                Date.parse(reviewInventory.manufacturingDate),
+              ).getMonth() + 1}`.slice(-2) +
+                '/' +
+                new Date(
+                  Date.parse(reviewInventory.manufacturingDate),
+                ).getFullYear() : ''}
+              </span>
+              <span className="col text-left">{reviewInventory.expiryDate ? `0${new Date(
+                Date.parse(reviewInventory.expiryDate),
+              ).getMonth() + 1}`.slice(-2) +
+                '/' +
+                new Date(
+                  Date.parse(reviewInventory.expiryDate),
+                ).getFullYear() : ''}
+               </span>
+              <span className="col text-left">{reviewInventory.batchNumber}</span>
+              <span className="col-2 text-left">{reviewInventory.serialNumber}</span>
             </div>
           ))}
           <hr />

@@ -114,7 +114,8 @@ exports.fetchPurchaseOrders = [
               '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : token verified successfully, querying data by publisher',
           );
           const permission_request = {
-            role: req.user.role,
+            //role: req.user.role,
+            result: result,
             permissionRequired: 'viewPO',
           };
           checkPermissions(permission_request, async permissionResult => {
@@ -559,9 +560,9 @@ exports.createOrder = [
         }
       });
 
-      const poCounter = await CounterModel.findOne({'counters.name':"poId"})
-      const poId = poCounter.counters[5].format + poCounter.counters[5].value;
-      
+      const poCounter = await CounterModel.findOne({'counters.name':"poId"},{"counters.name.$":1})
+      const poId = poCounter.counters[0].format + poCounter.counters[0].value;
+
       const { externalId, supplier, customer, products, creationDate, lastUpdatedOn } = req.body;
       const { createdBy, lastUpdatedBy } = req.user.id;
       const purchaseOrder = new RecordModel({
@@ -589,6 +590,29 @@ exports.createOrder = [
       logger.log(
           'error',
           '<<<<< POService < POController < createOrder : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getOrderIds = [
+  auth,
+  async (req, res) => {
+    try {
+     
+      const {organisationId } = req.user;
+      const orderID = await RecordModel.find({$or:[{"supplier.supplierOrganisation":organisationId},{"receiver.receiverOrganisation":organisationId}]},'id');
+      
+      return apiResponse.successResponseWithData(
+        res,
+        'Order Ids',
+        orderID,
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
       );
       return apiResponse.ErrorResponse(res, err);
     }

@@ -170,14 +170,14 @@ const NewShipment = (props) => {
         shippingDate: new Date(
           shipmentDate.getTime() - shipmentDate.getTimezoneOffset() * 60000
         ).toISOString(),
-        expectedDeliveryDate: new Date(
+        expectedDeliveryDate: estimateDeliveryDate != '' ? (new Date(
           estimateDeliveryDate.getTime() -
           estimateDeliveryDate.getTimezoneOffset() * 60000
-        ).toISOString(),
-        actualDeliveryDate: new Date(
+        ).toISOString()) : '',
+        actualDeliveryDate: estimateDeliveryDate != '' ? (new Date(
           estimateDeliveryDate.getTime() -
           estimateDeliveryDate.getTimezoneOffset() * 60000
-        ).toISOString(),
+        ).toISOString()) : '',
         status: "CREATED",
         products: products,
         poId: shippingOrderDetails.purchaseOrderId ? shippingOrderDetails.purchaseOrderId : null,

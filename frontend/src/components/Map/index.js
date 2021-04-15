@@ -56,12 +56,12 @@ const Map = (props) => {
     });
 
     if(warehouseLocation) {
-      // map = new mapboxgl.Map({
-      //   container: mapContainerRef.current,
-      //   style: 'mapbox://styles/mapbox/light-v10',
-      //   center: [ warehouseLocation.latitude, warehouseLocation.longitude],
-      //   zoom: 10
-      // });
+      map = new mapboxgl.Map({
+        container: mapContainerRef.current,
+        style: 'mapbox://styles/mapbox/light-v10',
+        center: [ warehouseLocation.latitude, warehouseLocation.longitude],
+        zoom: 10
+      });
       setLng(warehouseLocation.longitude);
       setLat(warehouseLocation.latitude);
       const coords = [warehouseLocation.latitude, warehouseLocation.longitude];
@@ -72,12 +72,12 @@ const Map = (props) => {
     if (warehouseArr.length > 0) {
       warehouseArr.forEach((w, i) => {
         if (i === 0) {
-          // map = new mapboxgl.Map({
-          //   container: mapContainerRef.current,
-          //   style: 'mapbox://styles/mapbox/light-v10',
-          //   center: [w.location.latitude, w.location.longitude],
-          //   zoom: 10
-          // });
+          map = new mapboxgl.Map({
+            container: mapContainerRef.current,
+            style: 'mapbox://styles/mapbox/light-v10',
+            center: [w.location.latitude, w.location.longitude],
+            zoom: 10
+          });
           setLng(w.location.longitude);
           setLat(w.location.latitude);
         }

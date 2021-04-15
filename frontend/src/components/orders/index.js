@@ -12,7 +12,7 @@ import calender from '../../assets/icons/calendar.svg';
 import Order from '../../assets/icons/orders.svg';
 import Totalshipments from "../../assets/icons/TotalShipment.svg";
 import { useDispatch, useSelector } from 'react-redux';
-import { getPOs, resetPOs } from '../../actions/poActions';
+import { getPOs, resetPOs, resetReviewPos } from '../../actions/poActions';
 
 const Orders = props => {
   const [visible, setvisible] = useState('one');
@@ -21,6 +21,10 @@ const Orders = props => {
   const [loadMore, setLoadMore] = useState(true);
   const [alerts, setAlerts] = useState(false);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(resetReviewPos({}));
+  },[])
   
   const onLoadMore = async (isInc, isReset = false) => {
     const newSkip = isInc ? skip + 5 : skip - 5;
@@ -50,7 +54,7 @@ const Orders = props => {
   }
 
   const sendData = () => {
-    let rtnArr = visible == 'two' ? props.orders?.outboundPOs : props.orders?.inboundPOs;
+    let rtnArr = visible == 'one' ? props.orders?.outboundPOs : props.orders?.inboundPOs;
     if (alerts)
       rtnArr = rtnArr.filter(row => row?.shipmentAlerts?.length > 0);
     return rtnArr ? rtnArr : [];

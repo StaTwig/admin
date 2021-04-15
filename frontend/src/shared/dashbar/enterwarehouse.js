@@ -44,8 +44,8 @@ const EnterWareHouse = props => {
             <ul className="mr-3">
               <li className="mb-1">Country ID</li>
               <li className="mb-1">Country</li>
-              <li className="mb-1">Warehouse</li>
-              <li className="mb-1">Warehouse Name</li>
+              <li className="mb-1">Location</li>
+              <li className="mb-1">Location Name</li>
             </ul>
             <ul>
               <li className="mb-1">{warehouse?.warehouseCountryId}&nbsp;</li>
@@ -129,7 +129,7 @@ const EnterWareHouse = props => {
       </div>
 
       <div className="panel address searchpanel prodpanel d-flex flex-column inventoryDashboard">
-        {productArray?.length > 0 ? productArray?.map(product =>
+        {productArray?.length > 0 ? productArray?.map((product, index) =>
           <Product product={product} index={index} key={index} />
         ) : 
         dashBarData?.products?.map((product, index) =>
