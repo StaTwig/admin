@@ -9,11 +9,13 @@ import ShipmentDetails from './shipmentdetails';
 import uploadBlue from "../../assets/icons/UploadBlue.svg";
 import uploadWhite from "../../assets/icons/UploadWhite.svg";
 import { LOCAL_SERVER_URL_SHIPPINGORDER } from "../../config";
+import SuccessPopup from './successPopup';
+import FailPopup from './failPopup';
 
 const ReceiveShipment = (props) => {
   let shipmentDetails = props.trackData.shipmentDetails;
   console.log('Details')
-  console.log(shipmentDetails)
+  console.log(props)
   const tracking = props.trackData;
   const [menuShip, setMenuShip] = useState(false);
   const [menuProduct, setMenuProduct] = useState(false);
@@ -75,7 +77,7 @@ const ReceiveShipment = (props) => {
 }
 
   const receiveShipment = async () => {
-    let data = shipmentDetails?shipmentDetails[0]:defaultData;
+    let data = tracking?tracking:defaultData;
     // let formData = new FormData();
 
     // formData.append(shipmentDetails[0]);
@@ -138,7 +140,7 @@ const ReceiveShipment = (props) => {
             <div>
               <button
                 className="btn btn-outline-primary mr-4"
-                onClick={() => props.history.push(`/tracing/${id}`)}
+                onClick={() => props.history.push(`/viewshipment/${id}`)}
               >
               Cancel
               </button>
@@ -147,6 +149,7 @@ const ReceiveShipment = (props) => {
               <button
                 className="btn-primary btn fontSize20 font-bold "
                 onClick={receiveShipment}
+                disabled={delivered==0}
               >
               <img src={returnShipment} width="14" height="14" className="mr-2"/>
               <span>Receive Shipment</span>
@@ -216,7 +219,7 @@ const ReceiveShipment = (props) => {
           </div>
           <div className="col-sm-4">
           <h6 className="heading mt-3 mb-3 ml-3">Comments</h6>            
-            <div className="panel commonpanle" style={{height:'48%'}}>
+            <div className="panel commonpanle" style={{height:'45%'}}>
               <div className="form-group">
                 <textarea
                   style={{fontSize:'16px'}}
@@ -227,27 +230,23 @@ const ReceiveShipment = (props) => {
                   size="40"
                   placeholder="Enter Comment Here"
                 />              
-              </div>
-              <button className="btn btn-main-blue fontSize20 font-bold" style={{position:'absolute',top:'46%', left:'74%'}}>
-                  {/* <img src={returnShipment} width="14" height="14" className="mr-2" /> */}
-                  <span className="chain">Submit</span>
-                </button>                
+              </div>           
             </div>               
 
           </div>
           <div className="col-sm-4">
             <div className="row justify-content-between">
               <h6 className="heading mt-3 mb-1 ml-4">Upload Image</h6>             
-                <button className="btn btn-primary font-weight-bold mb-0" onClick={uploadPhoto}>
+                <button className="btn btn-primary font-weight-bold mb-0" onClick={uploadPhoto} style={{height:'4vh',width:'9vw'}}>
                   <img
                     src={uploadWhite}
                     width="35"
                     height="17"
                   />
-                  <span>Upload</span>
+                  <span style={{fontSize:'15px'}}>Upload</span>
                 </button>
             </div>
-            <div className="upload bg-white panel commonpanle" style={{height:'48%'}}>
+            <div className="upload bg-white panel commonpanle" style={{height:'45%'}}>
               <div className="row" style={{margin:'auto',display:'table'}}>
                   <img
                     src={uploadBlue}
@@ -264,7 +263,7 @@ const ReceiveShipment = (props) => {
               </div>
               <div className="row" style={{margin:'auto',display:'table'}}>OR</div>
               <div className="row" style={{margin:'auto',display:'table', position:'relative',top:'3%'}}>
-                <label class="btn btn-primary" style={{margin:0}}>
+                <label class="btn btn-primary" style={{margin:0, height:'5vh'}}>
                   Browse Files
                   <input
                     type="file"
@@ -275,7 +274,27 @@ const ReceiveShipment = (props) => {
               </div>
             </div>
           </div>    
-        </div>      
+        </div>    
+        {receiveShipmentModal && (
+          <Modal
+            close={() => closeModalShipment()}
+            size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+          >
+            <SuccessPopup
+              onHide={closeModalShipment} //FailurePopUp
+            />
+          </Modal>
+        )}
+        {/* {openShipmentFail && (
+          <Modal
+            close={() => closeModalFail()}
+            size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+          >
+            <FailPopup
+              onHide={closeModalFail} //FailurePopUp
+            />
+          </Modal>
+        )}   */}
     </div>
 
   );
