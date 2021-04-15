@@ -37,8 +37,11 @@ router.get("/getInventoryCountsByWarehouse", InventoryController.getInventoryCou
 router.get("/getInventoryProductsByWarehouse", InventoryController.getInventoryProductsByWarehouse);
 router.get("/getInventoryProductsByOrganisation", InventoryController.getInventoryProductsByOrganisation);
 router.get("/getInventoryProductsByPlatform", InventoryController.getInventoryProductsByPlatform);
-
-router.get('/getUplaodedExcelData', InventoryController.getUplaodedExcelData)
+router.post(
+  '/uploadSalesData',
+  upload.single('excel'),
+  InventoryController.uploadSalesData,
+);
 
 router.get("/getWarehouseDetailsByRegion", InventoryController.getWarehouseDetailsByRegion);
 router.get("/getWarehouseDetailsByCountry", InventoryController.getWarehouseDetailsByCountry);

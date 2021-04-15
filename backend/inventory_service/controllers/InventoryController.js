@@ -2183,30 +2183,37 @@ function _spreadHeaders(inputObj) {
 
 }
 
-exports.getUplaodedExcelData = [
-  // auth,
+exports.uploadSalesData = [
+  auth,
   async (req, res) => {
     try {
-      var workbook = XLSX.readFile(`${__dirname}/../SalesData.xlsx`);
-      var sheet_name_list = workbook.SheetNames;
+      const dir = `uploads`;
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+      }
+      await moveFile(req.file.path, `${dir}/${req.file.originalname}`);
+      const workbook = XLSX.readFile(`${dir}/${req.file.originalname}`);
+      const sheet_name_list = workbook.SheetNames;
+      // console.log('file uploaded');
+      // console.log(`${dir}/${req.file.originalname}`)
+
       const sheetJSON = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]], { defval: "" });
       let rows = [];
       let aggregationRows = [];
-
-      // let headerRow1 = _spreadHeaders(sheetJSON[0]);
+      let headerRow1 = _spreadHeaders(sheetJSON[0]);
       let headerRow2 = _spreadHeaders(sheetJSON[1]);
       let headerRow3 = _spreadHeaders(sheetJSON[2]);
-      const spuriousColumns = ['__EMPTY_2', '__EMPTY_3', '__EMPTY_4', '__EMPTY_5', '__EMPTY_6'];
+
+      const spuriousColumns = ['__EMPTY', '__EMPTY_1', '__EMPTY_2', '__EMPTY_3', '__EMPTY_4', '__EMPTY_5', '__EMPTY_6'];
       sheetJSON.forEach((row, index) => {
         let _row = {};
-
         if (index > 2 && row['__EMPTY_1'].length) {
           let products = [];
           let rowKeys = Object.keys(row);
           rowKeys = rowKeys.filter(e => spuriousColumns.indexOf(e) === -1);
           rowKeys.forEach(rowKey => {
             let prod = {};
-            if (!rowKey.startsWith('__') || !rowKey.startsWith('t')) {
+            if (!rowKey.startsWith('__') && !rowKey.startsWith('t') && rowKey !== 'target') {
               prod['productName'] = headerRow2[rowKey];
               prod['productSubName'] = headerRow3[rowKey];
               prod['depot'] = row['__EMPTY_1'];
@@ -2219,6 +2226,7 @@ exports.getUplaodedExcelData = [
           });
           if (products.length) {
             _row.products = products;
+            _row.depot = row['__EMPTY_1'];
             rows.push(_row);
           }
         } else if (index > 2 && !row['__EMPTY_1'].length && row['__EMPTY'].length) {
@@ -2227,7 +2235,7 @@ exports.getUplaodedExcelData = [
           rowKeys = rowKeys.filter(e => spuriousColumns.indexOf(e) === -1);
           rowKeys.forEach(rowKey => {
             let prod = {};
-            if (!rowKey.startsWith('__') || !rowKey.startsWith('t')) {
+            if (!rowKey.startsWith('__') && !rowKey.startsWith('t') && rowKey !== 'target') {
               prod['productName'] = headerRow2[rowKey];
               prod['productSubName'] = headerRow3[rowKey];
               prod['isDistrictAggregate'] = true;
@@ -2241,23 +2249,19 @@ exports.getUplaodedExcelData = [
           });
           if (products.length) {
             _row.products = products;
-            _row.aggregationLevelName = row['__EMPTY'];
+            _row.aggregationDistrictName = row['__EMPTY'];
             aggregationRows.push(_row);
           }
         }
-
       });
 
-      let respObj = { productsDetails: rows, aggregationLevels: aggregationRows };
+      let respObj = { depots: rows, districtAggregations: aggregationRows };
       return apiResponse.successResponseWithData(
         res,
         respObj
       );
-    } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< InventoryService < InventoryController < getInventoryProductsByWarehouse : error (catch block)',
-      );
+
+    } catch (e) {
       return apiResponse.ErrorResponse(res, err);
     }
   },
