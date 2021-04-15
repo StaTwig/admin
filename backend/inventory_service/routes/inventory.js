@@ -38,6 +38,7 @@ router.get("/getInventoryProductsByWarehouse", InventoryController.getInventoryP
 router.get("/getInventoryProductsByOrganisation", InventoryController.getInventoryProductsByOrganisation);
 router.get("/getInventoryProductsByPlatform", InventoryController.getInventoryProductsByPlatform);
 
+router.get('/getUplaodedExcelData', InventoryController.getUplaodedExcelData)
 
 router.get("/getWarehouseDetailsByRegion", InventoryController.getWarehouseDetailsByRegion);
 router.get("/getWarehouseDetailsByCountry", InventoryController.getWarehouseDetailsByCountry);

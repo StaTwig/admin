@@ -19,8 +19,9 @@ const checkPermissions = require("../middlewares/rbac_middleware")
   .checkPermissions;
 const axios = require("axios");
 
-const fs = require("fs");
-const uniqid = require("uniqid");
+const fs = require('fs');
+const uniqid = require('uniqid');
+// const path = require('path');
 const blockchain_service_url = process.env.URL;
 const product_service_url = process.env.PRODUCT_URL;
 
@@ -2162,4 +2163,102 @@ exports.getInventoryProductsByPlatform = [
       return apiResponse.ErrorResponse(res, err);
     }
   },
-]
+];
+
+function _spreadHeaders(inputObj) {
+  let prevHeaderVal = '';
+  let keys = Object.keys(inputObj);
+  keys.forEach(key => {
+    if (key.startsWith('__') || key.startsWith('t')) {
+      return;
+    }
+    if (inputObj[key].length) {
+      prevHeaderVal = inputObj[key];
+    } else {
+      inputObj[key] = prevHeaderVal;
+    }
+
+  });
+  return inputObj;
+
+}
+
+exports.getUplaodedExcelData = [
+  // auth,
+  async (req, res) => {
+    try {
+      var workbook = XLSX.readFile(`${__dirname}/../SalesData.xlsx`);
+      var sheet_name_list = workbook.SheetNames;
+      const sheetJSON = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]], { defval: "" });
+      let rows = [];
+      let aggregationRows = [];
+
+      // let headerRow1 = _spreadHeaders(sheetJSON[0]);
+      let headerRow2 = _spreadHeaders(sheetJSON[1]);
+      let headerRow3 = _spreadHeaders(sheetJSON[2]);
+      const spuriousColumns = ['__EMPTY_2', '__EMPTY_3', '__EMPTY_4', '__EMPTY_5', '__EMPTY_6'];
+      sheetJSON.forEach((row, index) => {
+        let _row = {};
+
+        if (index > 2 && row['__EMPTY_1'].length) {
+          let products = [];
+          let rowKeys = Object.keys(row);
+          rowKeys = rowKeys.filter(e => spuriousColumns.indexOf(e) === -1);
+          rowKeys.forEach(rowKey => {
+            let prod = {};
+            if (!rowKey.startsWith('__') || !rowKey.startsWith('t')) {
+              prod['productName'] = headerRow2[rowKey];
+              prod['productSubName'] = headerRow3[rowKey];
+              prod['depot'] = row['__EMPTY_1'];
+              prod['quantity'] = row[rowKey];
+              prod['targetSales'] = row['t' + rowKey];
+            }
+            if (Object.keys(prod).length) {
+              products.push(prod);
+            }
+          });
+          if (products.length) {
+            _row.products = products;
+            rows.push(_row);
+          }
+        } else if (index > 2 && !row['__EMPTY_1'].length && row['__EMPTY'].length) {
+          let products = [];
+          let rowKeys = Object.keys(row);
+          rowKeys = rowKeys.filter(e => spuriousColumns.indexOf(e) === -1);
+          rowKeys.forEach(rowKey => {
+            let prod = {};
+            if (!rowKey.startsWith('__') || !rowKey.startsWith('t')) {
+              prod['productName'] = headerRow2[rowKey];
+              prod['productSubName'] = headerRow3[rowKey];
+              prod['isDistrictAggregate'] = true;
+              prod['districtName'] = row['__EMPTY'];
+              prod['quantity'] = row[rowKey];
+              prod['targetSales'] = row['t' + rowKey];
+            }
+            if (Object.keys(prod).length) {
+              products.push(prod);
+            }
+          });
+          if (products.length) {
+            _row.products = products;
+            _row.aggregationLevelName = row['__EMPTY'];
+            aggregationRows.push(_row);
+          }
+        }
+
+      });
+
+      let respObj = { productsDetails: rows, aggregationLevels: aggregationRows };
+      return apiResponse.successResponseWithData(
+        res,
+        respObj
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< InventoryService < InventoryController < getInventoryProductsByWarehouse : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
