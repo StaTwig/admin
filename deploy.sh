@@ -3,7 +3,7 @@
 #Chekcing arguments
 if [ $# -eq 0 ];
   then
-    echo "Please choose the mode: PROD TEST LOCAL ABINBEVPROD ABINBEVTEST"
+    echo "Please choose the mode: PROD TEST LOCAL ABINBEVPROD ABINBEVTEST FOODLEDGERTEST"
     echo "Followed by the sercices: FRONTEND GATEWAY SERVICESI SERVICESII ALL"
     echo "SERVICESI - shipping_service	 inventory_service	track_trace		user_service products_service"
     echo "SERVICESII - blockchain_service	log_service alert_service notification_service rbac_service"
@@ -41,10 +41,26 @@ elif [ "$1" == "ABINBEVTEST" ];
    then
       ./pre-deploy-abinbev-test.sh
 
+elif [ "$1" == "FOODLEDGERTSET" ];
+   then
+      ./pre-deploy-foodledger-test.sh
+
 else
    ./pre-deploy.sh
 
 fi
+
+# Installing the dependency in utils
+
+cd utils
+cd -P .
+for dir in ./*/
+   do cd -P "$dir" ||continue
+      printf %s\\n "$PWD" >&2
+      npm install && cd "$OLDPWD" || 
+   ! break; done || ! cd - >&2
+cd ..
+echo $(pwd)
 
 #starting backend services
 
@@ -61,7 +77,7 @@ elif [ "$1" == "PROD" ] && [ "$2" == "SERVICESII" ]
 
 fi
 
-if ([ "$1" == "PROD" ] || [ "$1" == "TEST" ] || [ "$1" == "DEMO" ] || [ "$1" == "ABINBEVPROD" ] || [ "$1" == "ABINBEVTEST" ]) && ([ "$2" == "SERVICESI" ] || [ "$2" == "SERVICESII" ] || [ "$2" == "ALL" ]);
+if ([ "$1" == "PROD" ] || [ "$1" == "TEST" ] || [ "$1" == "DEMO" ] || [ "$1" == "ABINBEVPROD" ] || [ "$1" == "ABINBEVTEST" ] || [ "$1" == "FOODLEDGERTEST" ]) && ([ "$2" == "SERVICESI" ] || [ "$2" == "SERVICESII" ] || [ "$2" == "ALL" ]);
    then
       cd -P .
       for dir in ./*/
@@ -152,6 +168,11 @@ if ([ "$2" == "GATEWAY" ] || [ "$2" == "ALL" ]);
          then
             echo "Starting traefik in ABINBEV TEST mode ....."
             traefik --configFile=traefik-cloud-abinbev-api-test.yml &
+      
+      elif [ "$1" == "FOODLEDGERTEST" ]
+         then
+            echo "Starting Traefik in FoodLedger Test mode ...."
+            traefik --confgFile=traefik-cloud-foodledger-api-test.yml &
       
       fi
 
