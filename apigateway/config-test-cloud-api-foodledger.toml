@@ -1,0 +1,178 @@
+# http routing section
+[http]
+  [http.routers]
+     # Define a connection between requests and services
+    [http.routers.to-whoami]
+      rule = "Host(`test.foodledger.statledger.io`) && PathPrefix(`/`)"
+      # If the rule matches, applies the middleware
+      #middlewares = ["test-stripprefix"]
+      # If the rule matches, forward to the whoami service (declared below)
+      service = "whoami"
+    [http.routers.user-management]
+      rule = "Host(`test.foodledger.statledger.io`) && PathPrefix(`/usermanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["user-stripprefix"]
+      #If the rule matches, forward to the user management service (declared below)
+      service = "user-management"
+    [http.routers.shipment-management]
+      rule = "Host(`test.foodledger.statledger.io`) && PathPrefix(`/shipmentmanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["shipment-stripprefix"]
+      #If the rule matches, forward to the user management service (declared below)
+      service = "shipment-management"
+    [http.routers.transaction-management]
+      rule = "Host(`test.foodledger.statledger.io`) && PathPrefix(`/transactionmanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["transaction-stripprefix"]
+      #If the rule matches, forward to the user management service (declared below)
+      service = "transaction-management"
+    [http.routers.alert-management]
+      rule = "Host(`test.foodledger.statledger.io`) && PathPrefix(`/alertmanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["alert-stripprefix"]
+      #If the rule matches, forward to the user management service (declared below)
+      service = "alert-management"
+    [http.routers.track-trace-management]
+      rule = "Host(`test.foodledger.statledger.io`) && PathPrefix(`/tracktracemanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["track-trace-stripprefix"]
+      #If the rule matches, forward to the user management service (declared below)
+      service = "track-trace-management"
+    [http.routers.notification-management]
+      rule = "Host(`test.foodledger.statledger.io`) && PathPrefix(`/notificationmanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["notification-stripprefix"]
+      #If the rule matches, forward to the user management service (declared below)
+      service = "notification-management"
+    [http.routers.inventory-management]
+      rule = "Host(`test.foodledger.statledger.io`) && PathPrefix(`/inventorymanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["inventory-stripprefix"]
+      #If the rule matches, forward to the user management service (declared below)
+      service = "inventory-management"
+    [http.routers.blockchain-management]
+      rule = "Host(`test.foodledger.statledger.io`) && PathPrefix(`/blockchainmanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["blockchain-stripprefix"]
+      #If the rule matches, forward to the user management service (declared below)
+      service = "blockchain-management"
+    [http.routers.products-management]
+      rule = "Host(`test.foodledger.statledger.io`) && PathPrefix(`/productmanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["products-stripprefix"]
+      #If the rule matches, forward to the user management service (declared below)
+      service = "products-management"
+    [http.routers.rbac-management]
+      rule = "Host(`test.foodledger.statledger.io`) && PathPrefix(`/rbacmanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["rbac-stripprefix"]
+      #If the rule matches, forward to the rbac management service (declared below)
+      service = "rbac-management"
+    [http.routers.po-management]
+      rule = "Host(`test.foodledger.statledger.io`) && PathPrefix(`/pomanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["po-stripprefix"]
+      #If the rule matches, forward to the rbac management service (declared below)
+      service = "po-management"
+    [http.routers.shippingorder-management]
+      rule = "Host(`test.foodledger.statledger.io`) && PathPrefix(`/shippingordermanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["shipmentorder-stripprefix"]
+      #If the rule matches, forward to the shipmentorder management service (declared below)
+      service = "shippingorder-management"
+    [http.routers.analytics-management]
+      rule = "Host(`test.foodledger.statledger.io`) && PathPrefix(`/analyticsmanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["analytics-stripprefix"]
+      #If the rule matches, forward to the analytics management service (declared below)
+      service = "analytics-management"
+    [http.routers.event-management]
+      rule = "Host(`test.foodledger.statledger.io`) && PathPrefix(`/eventmanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["event-stripprefix"]
+      #If the rule matches, forward to the event management service (declared below)
+      service = "event-management"
+
+  [http.middlewares]
+    [http.middlewares.test-stripprefix.stripPrefix]
+      prefixes = ["/", "/"]
+    # Define an authentication mechanism
+    [http.middlewares.test-user.basicAuth]
+      users = ["test:$apr1$H6uskkkW$IgXLP6ewTrSuBkTrqE8wj/"]
+    [http.middlewares.user-stripprefix.stripPrefix]
+      prefixes = ["/usermanagement", "/usermanagement/"]
+    [http.middlewares.shipment-stripprefix.stripPrefix]
+      prefixes = ["/shipmentmanagement", "/shipmentmanagement/"]
+    [http.middlewares.transaction-stripprefix.stripPrefix]
+      prefixes = ["/transactionmanagement", "/transactionmanagement/"]
+    [http.middlewares.alert-stripprefix.stripPrefix]
+      prefixes = ["/alertmanagement", "/alertmanagement/"]
+    [http.middlewares.track-trace-stripprefix.stripPrefix]
+      prefixes = ["/tracktracemanagement", "/tracktracemanagement/"]
+    [http.middlewares.notification-stripprefix.stripPrefix]
+      prefixes = ["/notificationmanagement", "/notificationmanagement/"]
+    [http.middlewares.inventory-stripprefix.stripPrefix]
+      prefixes = ["/inventorymanagement", "/inventorymanagement/"]
+    [http.middlewares.blockchain-stripprefix.stripPrefix]
+      prefixes = ["/blockchainmanagement", "/blockchainmanagement/"]
+    [http.middlewares.products-stripprefix.stripPrefix]
+      prefixes = ["/productmanagement", "/productmanagement/"]
+    [http.middlewares.rbac-stripprefix.stripPrefix]
+      prefixes = ["/rbacmanagement", "/rbacmanagement/"]
+    [http.middlewares.po-stripprefix.stripPrefix]
+      prefixes = ["/pomanagement", "/pomanagement/"]
+    [http.middlewares.shippingorder-stripprefix.stripPrefix]
+      prefixes = ["/shippingordermanagement", "/shippingordermanagement/"]
+    [http.middlewares.analytics-stripprefix.stripPrefix]
+      prefixes = ["/analyticsmanagement", "/analyticsmanagement/"]
+    [http.middlewares.event-stripprefix.stripPrefix]
+      prefixes = ["/eventmanagement", "/eventmanagement/"]
+
+  [http.services]
+    # Define how to reach an existing service on our infrastructure
+    [http.services.whoami.loadBalancer]
+      [[http.services.whoami.loadBalancer.servers]]
+        url = "http://127.0.0.1:2999/"
+    #Define how to reach user management service on our infrastructure
+    [http.services.user-management.loadBalancer]
+      [[http.services.user-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3001/"
+    [http.services.shipment-management.loadBalancer]
+      [[http.services.shipment-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3002/"
+    [http.services.transaction-management.loadBalancer]
+      [[http.services.transaction-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3003/"
+    [http.services.alert-management.loadBalancer]
+      [[http.services.alert-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3004/"
+    [http.services.track-trace-management.loadBalancer]
+      [[http.services.track-trace-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3005/"
+    [http.services.notification-management.loadBalancer]
+      [[http.services.notification-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3006/"
+    [http.services.inventory-management.loadBalancer]
+      [[http.services.inventory-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3007/"
+    [http.services.blockchain-management.loadBalancer]
+      [[http.services.blockchain-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3008/"
+    [http.services.products-management.loadBalancer]
+      [[http.services.products-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3010/"
+    [http.services.rbac-management.loadBalancer]
+      [[http.services.rbac-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3011/"
+    [http.services.po-management.loadBalancer]
+      [[http.services.po-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3012/"
+    [http.services.shippingorder-management.loadBalancer]
+      [[http.services.shippingorder-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3013/"
+    [http.services.analytics-management.loadBalancer]
+      [[http.services.analytics-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3015/"
+    [http.services.event-management.loadBalancer]
+      [[http.services.event-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3014/"
