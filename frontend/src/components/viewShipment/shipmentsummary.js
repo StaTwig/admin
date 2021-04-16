@@ -3,6 +3,12 @@ import Verifiedpic from '../../assets/icons/Verifiedpic.png';
 import './style.scss'
 
 const ShipmentSummary = (props) => {
+  let statusStyle = 'bg-primary';
+  let status = 'Shipped';
+  if (props.shipments.status === 'RECEIVED') {
+    statusStyle = 'bg-success';
+    status = 'Delivered';
+  }
    return(
         Object.keys(props.shipments).length === 0 ? <div className="row panel justify-content-between">N/A</div> :
         <div className="panel commonpanle">
@@ -20,8 +26,8 @@ const ShipmentSummary = (props) => {
             <li className="mb-1">{props.shipments.receiver.org.name}</li>
             </ul>
             <div>
-                <span className="badge badge-pill badge-warning text-white">
-               <small>{props.shipments.status}</small>
+                <span className={`badge-warning text-white badge badge-pill status secondary-bg ${statusStyle}`}>
+               <small>{status}</small>
                 </span>
               </div>
         </div>

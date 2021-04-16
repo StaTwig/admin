@@ -4,6 +4,7 @@ const apiResponse = require("../helpers/apiResponse");
 const fs = require("fs");
 const moveFile = require("move-file");
 const date = require("date-and-time");
+require("dotenv").config();
 const auth = require("../middlewares/jwt");
 const checkToken = require("../middlewares/middleware").checkToken;
 const ShipmentModel = require("../models/ShipmentModel");
@@ -19,6 +20,9 @@ const logEvent = require("../../../utils/event_logger");
 const init = require("../logging/init");
 const logger = init.getLog();
 const imageUrl = process.env.IMAGE_URL;
+const CENTRAL_AUTHORITY_ID=null
+const CENTRAL_AUTHORITY_NAME=null
+const CENTRAL_AUTHORITY_ADDRESS=null
 
 const inventoryUpdate = async (
   id,
@@ -163,76 +167,85 @@ const shipmentUpdate = async (
   //next("Success")
 };
 
-const userShipments = async (mode, warehouseId, skip, limit, callback) => {
-  var matchCondition = {};
-  var criteria = mode + ".locationId";
-  matchCondition[criteria] = warehouseId;
+const userShipments = async ( mode, warehouseId, skip, limit, callback) => {
 
-  const shipments = await ShipmentModel.aggregate([
-    {
-      $match: matchCondition,
-    },
-    {
-      $lookup: {
-        from: "warehouses",
-        localField: "supplier.locationId",
-        foreignField: "id",
-        as: "supplier.warehouse",
-      },
-    },
-    {
-      $unwind: {
-        path: "$supplier.warehouse",
-      },
-    },
-    {
-      $lookup: {
-        from: "organisations",
-        localField: "supplier.warehouse.organisationId",
-        foreignField: "id",
-        as: "supplier.org",
-      },
-    },
-    {
-      $unwind: {
-        path: "$supplier.org",
-      },
-    },
-    {
-      $lookup: {
-        from: "warehouses",
-        localField: "receiver.locationId",
-        foreignField: "id",
-        as: "receiver.warehouse",
-      },
-    },
-    {
-      $unwind: {
-        path: "$receiver.warehouse",
-      },
-    },
-    {
-      $lookup: {
-        from: "organisations",
-        localField: "receiver.warehouse.organisationId",
-        foreignField: "id",
-        as: "receiver.org",
-      },
-    },
-    {
-      $unwind: {
-        path: "$receiver.org",
-      },
-    },
-  ])
-    .sort({
-      createdAt: -1,
-    })
-    .skip(parseInt(skip))
-    .limit(parseInt(limit));
+       // var matchCondition = {};
+        //var criteria = mode + ".locationId";
+        //matchCondition[criteria] = warehouseId
 
-  callback(undefined, shipments);
-};
+	
+	var matchCondition = {};
+
+        if (mode != "id")
+        var criteria = mode + ".locationId";
+        else
+        var criteria = mode;
+
+        matchCondition[criteria] = warehouseId;
+
+        const shipments = await  ShipmentModel.aggregate([{
+                $match:
+                   matchCondition
+            },
+            {
+                $lookup: {
+                    from: "warehouses",
+                    localField: "supplier.locationId",
+                    foreignField: "id",
+                    as: "supplier.warehouse",
+                },
+            },
+            {
+                $unwind: {
+                    path: "$supplier.warehouse",
+                },
+            },
+            {
+                $lookup: {
+                    from: "organisations",
+                    localField: "supplier.warehouse.organisationId",
+                    foreignField: "id",
+                    as: "supplier.org",
+                },
+            },
+            {
+                $unwind: {
+                    path: "$supplier.org",
+                },
+            },
+            {
+                $lookup: {
+                    from: "warehouses",
+                    localField: "receiver.locationId",
+                    foreignField: "id",
+                    as: "receiver.warehouse",
+                },
+            },
+            {
+                $unwind: {
+                    path: "$receiver.warehouse",
+                },
+            },
+            {
+                $lookup: {
+                    from: "organisations",
+                    localField: "receiver.warehouse.organisationId",
+                    foreignField: "id",
+                    as: "receiver.org",
+                },
+            },
+            {
+                $unwind: {
+                    path: "$receiver.org",
+                },
+            },
+        ]).sort({
+            createdAt: -1
+        }).skip(parseInt(skip))
+
+        .limit(parseInt(limit));
+        callback(undefined, shipments)
+}
 
 exports.createShipment = [
   auth,
@@ -240,7 +253,7 @@ exports.createShipment = [
     try {
       console.log(req.user);
       const data = req.body;
-      // var i=0;
+      var i=0;
       const incrementCounter = await CounterModel.update(
         {
           "counters.name": "shipmentId",
@@ -265,18 +278,24 @@ exports.createShipment = [
       });
       const orgId = empData.organisationId;
       const orgName = empData.name;
+      console.log(++i);
       const orgData = await OrganisationModel.findOne({ id: orgId });
       const address = orgData.postalAddress;
       const confId = orgData.configuration_id;
       const confData = await ConfigurationModel.findOne({ id: confId });
       const process = confData.process;
+      console.log(++i);
       const supplierID = req.body.supplier.id;
       const supplierOrgData = await OrganisationModel.findOne({
-        primaryContactId: req.body.supplier.id,
+        id: req.body.supplier.id,
       });
+      console.log(++i);
+
       const receiverOrgData = await OrganisationModel.findOne({
-        primaryContactId: req.body.receiver.id,
+        id: req.body.receiver.id,
       });
+      console.log(++i);
+
       const supplierName = supplierOrgData.name;
       const supplierAddress = supplierOrgData.postalAddress;
       const receiverId = req.body.receiver.id;
@@ -316,16 +335,15 @@ exports.createShipment = [
           po.poStatus = "TRANSIT&FULLYFULFILLED";
         }
         await po.save();
-        await ShippingOrderModel.findOneAndUpdate(
-          {
-            id: data.shippingOrderId,
-          },
-          {
-            $push: {
-              shipmentIds: data.id,
-            },
-          }
-        );
+      	
+	await RecordModel.findOneAndUpdate({
+                    id: data.poId
+                }, {
+                    $push: {
+                        shipments: data.id
+                    }
+                }
+	);
       }
 
       if (flag != "N") {
@@ -367,6 +385,7 @@ exports.createShipment = [
         const updates = {
           updatedOn: currDateTime,
           status: "CREATED",
+	  "products": products
         };
         data.shipmentUpdates = updates;
 
@@ -413,17 +432,26 @@ exports.createShipment = [
         event_data.eventType.description = "SHIPMENT_CREATION";
         event_data.actor.actorid = user_id || "null";
         event_data.actor.actoruserid = email || "null";
-        event_data.stackholders.ca.id = supplierID || "null";
-        event_data.stackholders.ca.name = supplierName || "null";
-        event_data.stackholders.ca.address = supplierAddress || "null";
         event_data.stackholders.actororg.id = orgId  || "null";
         event_data.stackholders.actororg.name = orgName  || "null";
         event_data.stackholders.actororg.address = address  || "null";
+        event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+        event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+        event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
+        if(orgId === supplierID)
+        {        
         event_data.stackholders.secondorg.id = receiverId || "null";
         event_data.stackholders.secondorg.name = receiverName || "null";
         event_data.stackholders.secondorg.address = receiverAddress || "null";
+        }else{
+            event_data.stackholders.secondorg.id = supplierID || "null";
+            event_data.stackholders.secondorg.name = supplierName || "null";
+            event_data.stackholders.secondorg.address = supplierAddress || "null";
+        }
+        
         event_data.payload.data = data;
         console.log(event_data);
+
         const shipment = new ShipmentModel(data);
         const result = await shipment.save();
         async function compute(event_data) {
@@ -572,6 +600,7 @@ exports.receiveShipment = [
           updatedOn: currDateTime,
           updateComment: data.comment,
           status: "RECEIVED",
+	  "products":products
         };
 
         const updateData = await ShipmentModel.findOneAndUpdate(
@@ -1226,152 +1255,128 @@ exports.chainOfCustody = [
       const { authorization } = req.headers;
       checkToken(req, res, async (result) => {
         if (result.success) {
-          var chainOfCustody = [];
-          var poDetails = "";
+         var chainOfCustody = [];
+                var poDetails = "";
+           	const id = req.query.shipmentId;
+		if ( id.includes("PO"))
+		{
 
-          const shipmentDetails = await ShipmentModel.findOne({
-            id: req.query.shipmentId,
-          });
-          const poId = shipmentDetails.poId;
+		poDetails = await RecordModel.aggregate([{
+                            $match: {
+                                id: id
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: "organisations",
+                                localField: "supplier.supplierOrganisation",
+                                foreignField: "id",
+                                as: "supplier.organisation",
+                            },
+                        },
+                        {
+                            $unwind: {
+                                path: "$supplier.organisation",
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: "organisations",
+                                localField: "customer.customerOrganisation",
+                                foreignField: "id",
+                                as: "customer.organisation",
+                            },
+                        },
+                        {
+                            $unwind: {
+                                path: "$customer.organisation",
+                            },
+                        },
+                    ]);
+                
+			const shipmentIds = poDetails[0].shipments;
+			const shipments = [];
+			for ( i=0 ; i< shipmentIds.length;i++)
+			{
+		        const shipmentData = await userShipments("id", shipmentIds[i], 0, 100, (error, data) => {
+                         shipmentDetails = data;
+                        })
+				
+			shipments.push(shipmentDetails)
+			}
+		
+			return apiResponse.successResponseWithData(
+                                res,
+                                'Status Updated',
+                                {
+                                    "poChainOfCustody":poDetails,
+                                    "shipmentChainOfCustody":shipments
+                                }
+                            );
 
-          if (poId != null) {
-            poDetails = await RecordModel.aggregate([
-              {
-                $match: {
-                  id: poId,
-                },
-              },
-              {
-                $lookup: {
-                  from: "organisations",
-                  localField: "supplier.supplierOrganisation",
-                  foreignField: "id",
-                  as: "supplier.organisation",
-                },
-              },
-              {
-                $unwind: {
-                  path: "$supplier.organisation",
-                },
-              },
-              {
-                $lookup: {
-                  from: "organisations",
-                  localField: "customer.customerOrganisation",
-                  foreignField: "id",
-                  as: "customer.organisation",
-                },
-              },
-              {
-                $unwind: {
-                  path: "$customer.organisation",
-                },
-              },
-            ]);
-          }
 
-          const shipments = await ShipmentModel.aggregate([
-            {
-              $match: { id: req.query.shipmentId },
-            },
-            {
-              $lookup: {
-                from: "warehouses",
-                localField: "supplier.locationId",
-                foreignField: "id",
-                as: "supplier.warehouse",
-              },
-            },
-            {
-              $unwind: {
-                path: "$supplier.warehouse",
-              },
-            },
-            {
-              $lookup: {
-                from: "organisations",
-                localField: "supplier.warehouse.organisationId",
-                foreignField: "id",
-                as: "supplier.org",
-              },
-            },
-            {
-              $unwind: {
-                path: "$supplier.org",
-              },
-            },
-            {
-              $lookup: {
-                from: "warehouses",
-                localField: "receiver.locationId",
-                foreignField: "id",
-                as: "receiver.warehouse",
-              },
-            },
-            {
-              $unwind: {
-                path: "$receiver.warehouse",
-              },
-            },
-            {
-              $lookup: {
-                from: "organisations",
-                localField: "receiver.warehouse.organisationId",
-                foreignField: "id",
-                as: "receiver.org",
-              },
-            },
-            {
-              $unwind: {
-                path: "$receiver.org",
-              },
-            },
-          ]);
-          //   event_data = {
-          //     "eventID": "ev0000"+  Math.random().toString(36).slice(2),
-          //     "eventTime": new Date().toISOString(),
-          //     "eventType": {
-          //         "primary": "CREATE",
-          //         "description": "SHIPMENT ALERTS"
-          //     },
-          //     "actor": {
-          //         "actorid": "userid1",
-          //         "actoruserid": "ashwini@statwig.com"
-          //     },
-          //     "stackholders": {
-          //         "ca": {
-          //             "id": "org001",
-          //             "name": "Statwig Pvt. Ltd.",
-          //             "address": "ca_address_object"
-          //         },
-          //         "actororg": {
-          //             "id": "org002",
-          //             "name": "Appollo Hospitals Jublihills",
-          //             "address": "actororg_address_object"
-          //         },
-          //         "secondorg": {
-          //             "id": "org003",
-          //             "name": "Med Plus Gachibowli",
-          //             "address": "secondorg_address_object"
-          //         }
-          //     },
-          //     "payload": {
-          //         "data": {
-          //             "abc": 123
-          //         }
-          //     }
-          // }
-          // async function compute(event_data) {
-          //     result = await logEvent(event_data)
-          //     return result
-          // }
+		
+		}
 
-          // compute(event_data).then((response) => console.log(response))
-          return apiResponse.successResponseWithData(res, "Status Updated", {
-            poChainOfCustody: poDetails,
-            shipmentChainOfCustody: shipments,
-          });
-        } else {
+		else if ( id.includes("SH"))
+		{
+
+                const shipmentDetails = await  ShipmentModel.findOne({"id": req.query.shipmentId});
+
+                const poId = shipmentDetails.poId; 
+                
+		if (poId != null) {
+                poDetails = await RecordModel.aggregate([{
+                            $match: {
+                                id: poId
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: "organisations",
+                                localField: "supplier.supplierOrganisation",
+                                foreignField: "id",
+                                as: "supplier.organisation",
+                            },
+                        },
+                        {
+                            $unwind: {
+                                path: "$supplier.organisation",
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: "organisations",
+                                localField: "customer.customerOrganisation",
+                                foreignField: "id",
+                                as: "customer.organisation",
+                            },
+                        },
+                        {
+                            $unwind: {
+                                path: "$customer.organisation",
+                            },
+                        },
+                    ]);
+
+                }                
+
+
+	      const shipmentData = await userShipments("id", req.query.shipmentId, 0, 100, (error, data) => {
+                         shipments = data;
+                    })
+
+                return apiResponse.successResponseWithData(
+                                res,
+                                'Status Updated',
+                                {
+                                    "poChainOfCustody":poDetails,
+                                    "shipmentChainOfCustody":shipments
+                                }
+                            );
+	 }
+	
+	} else {
           logger.log(
             "warn",
             "<<<<< ShipmentService < ShipmentController < modifyShipment : refuted token"

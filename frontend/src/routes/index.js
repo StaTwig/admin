@@ -35,9 +35,11 @@ import resetPasswordPage from '../containers/resetPassword';
 import Home from '../containers/home';
 import UpdateStatus from  '../containers/updateStatus';
 import ReceiveShipment from  '../containers/receiveShipment';
+import AddLocation from '../containers/Addlocation';
 import NoMatch from '../components/NoMatch';
 
 import './style.scss';
+
 const routes = (
   <Switch>
     <Route exact path="/" component={Home} />
@@ -72,6 +74,7 @@ const routes = (
     <Route path="/revieworder" component={requireAuth(ReviewOrder)} />
     <Route path="/updateStatus/:id" component={requireAuth(UpdateStatus)} />
     <Route path="/receiveShipment/:id" component={requireAuth(ReceiveShipment)} />
+    <Route path="/Addlocation" component={requireAuth(AddLocation)} />
     <Route component={NoMatch} />
 
   </Switch>

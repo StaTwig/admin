@@ -22,16 +22,19 @@ const Table = props => {
             {orders.map((order, index) => {
               let statusStyle = 'bg-primary';
               let status = order.poStatus;
-              if (order.poStatus === 'RECEIVED') {
+              if (order.poStatus === 'CREATED') {
+                status = visible == 'one' ? 'Sent' : 'Received';
+              }
+              else if (order.poStatus === 'RECEIVED') {
                 statusStyle = 'bg-info';
                 status = 'Delivered';
               }
-else if (order.poStatus === 'Accepted') {
-    statusStyle = 'bg-success';
-    status = 'Accepted';
-  }else if (order.poStatus === 'Rejected') {
-    statusStyle = 'bg-warning';
-  }
+              else if (order.poStatus === 'Accepted') {
+                statusStyle = 'bg-success';
+                status = 'Accepted';
+              }else if (order.poStatus === 'Rejected') {
+                statusStyle = 'bg-warning';
+              }
 
               const { customer, products, supplier } = order;
               return (
@@ -40,8 +43,8 @@ else if (order.poStatus === 'Accepted') {
                   <div className="userPic text-center rounded d-flex flex-row">
                     <img src={user} width="30" height="20" alt="User" className="rounded mr-1 align-self-center" />
                     <div className="flex-column d-flex">
-                      <span className="text-primary bold">{visible == 'one' ? customer.organisation.name : supplier.organisation.name}</span>
-                      <p className="address mb-0 text-primary">{visible == 'one' ? customer.organisation.id : supplier.organisation.id}</p>
+                      <span className="text-primary bold">{visible == 'one' ? supplier.organisation.name : customer.organisation.name}</span>
+                      <p className="address mb-0 text-primary">{visible == 'one' ? supplier.organisation.id : customer.organisation.id}</p>
                   </div>
                   </div>
                 </div>
@@ -49,20 +52,20 @@ else if (order.poStatus === 'Accepted') {
                   {formatDate(order.creationDate)}
                 </div>
                   <div className="rTableCell"><p className="mb-0 bold address mb-0 text-muted">{order.id}</p></div>
-                  <div className="rTableCell"><p className="mb-0 bold mb-0 address text-muted">{products[0]?.name+(products.length > 1 ? ' + '+(products.length-1)+' more' : '')}</p></div>
-                <div className="rTableCell d-flex flex-column">
+                  <div className="rTableCell"><p className="mb-0 bold mb-0 address text-muted">{products[0]?.name+(products.length > 1 ? ' + '+(products.length-1)+' more' : '')}</p></div> 
+                <div className="rTableCell d-flex flex-column"> 
                   <span>{customer.warehouse?.warehouseAddress?.city}</span>
                   <span className="text-muted">{customer.shippingAddress.shippingAddressId}</span>
-                </div>
-                <div className="rTableCell">
+                </div> 
+                <div className="rTableCell"> 
+                
                 <div className={`status secondary-bg ${statusStyle}`}>
-                    {status}
+                  {status} 
                 </div>
                 </div>
                 <div className="rTableCell">
                   <Link to={`/vieworder/${order.id}`}
-                    className="button pl-3 pr-3 pt-1 pb-1"
-                  >
+                    className="button pl-3 pr-3 pt-1 pb-1">
                     View
                   </Link>
                 </div>

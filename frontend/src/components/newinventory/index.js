@@ -10,6 +10,7 @@ import uploadBlue from '../../assets/icons/UploadWhite.svg';
 import ExportIcon from '../../assets/icons/Export.svg';
 import dropdownIcon from '../../assets/icons/drop-down.svg';
 import review from '../../assets/icons/review.png';
+import ShipmentFailPopUp from "../neworder/shipmentFailPopUp";
 
 import {
   addMultipleInventories,
@@ -55,6 +56,7 @@ const NewInventory = props => {
 
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [openFailInventory, setOpenFailInventory] = useState(false);
+  const [openQuantityFailInventory, setOpenQuantityFailInventory] = useState(false);
   const [inventoryError, setInventoryError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [products, setProducts] = useState([]);
@@ -83,6 +85,10 @@ const NewInventory = props => {
   const closeModalFail = () => {
     setOpenFailInventory(false);
   };
+  const closeModalFail1 = () => {
+    setOpenQuantityFailInventory(false);
+  };
+  
 
   var numeric = { year: 'numeric', month: 'numeric' };
 
@@ -140,6 +146,7 @@ const NewInventory = props => {
       if (error) return error;
       for (let i = 0; i < validations.length; i++) {
         let validationVariable = inventory[validations[i]];
+
         if (validationVariable.length < 1 ||
           validationVariable == 'Select Product' || validationVariable == 'Select Category'
         ) {
@@ -149,10 +156,21 @@ const NewInventory = props => {
           break;
         }
       }
+      if(parseInt(inventory.quantity,10)<1)
+      {
+
+      
+        setInventoryError('Check Quantity ');
+        setOpenQuantityFailInventory(true);
+        error=true;
+      }
+    
+     
     });
     return error;
   };
   const onProceedToReview = () => {
+   
     if (checkValidationErrors(inventoryFields)) {
       return;
     } else if (expiryDateValidation(dateValidationFields)) {
@@ -284,6 +302,17 @@ const NewInventory = props => {
           <FailurePopUp
             onHide={closeModalFail} //FailurePopUp
             inventoryError={inventoryError}
+          />
+        </Modal>
+      )}
+       {openQuantityFailInventory && (
+        <Modal
+          close={() => closeModalFail1()}
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+         <ShipmentFailPopUp
+            onHide={closeModalFail1} //FailurePopUp
+            shipmentError={inventoryError}
           />
         </Modal>
       )}
