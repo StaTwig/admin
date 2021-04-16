@@ -4,6 +4,7 @@ const apiResponse = require("../helpers/apiResponse");
 const fs = require("fs");
 const moveFile = require("move-file");
 const date = require("date-and-time");
+require("dotenv").config();
 const auth = require("../middlewares/jwt");
 const checkToken = require("../middlewares/middleware").checkToken;
 const ShipmentModel = require("../models/ShipmentModel");
@@ -19,6 +20,9 @@ const logEvent = require("../../../utils/event_logger");
 const init = require("../logging/init");
 const logger = init.getLog();
 const imageUrl = process.env.IMAGE_URL;
+const CENTRAL_AUTHORITY_ID=null
+const CENTRAL_AUTHORITY_NAME=null
+const CENTRAL_AUTHORITY_ADDRESS=null
 
 const inventoryUpdate = async (
   id,
@@ -240,7 +244,7 @@ exports.createShipment = [
     try {
       console.log(req.user);
       const data = req.body;
-      // var i=0;
+      var i=0;
       const incrementCounter = await CounterModel.update(
         {
           "counters.name": "shipmentId",
@@ -265,18 +269,24 @@ exports.createShipment = [
       });
       const orgId = empData.organisationId;
       const orgName = empData.name;
+      console.log(++i);
       const orgData = await OrganisationModel.findOne({ id: orgId });
       const address = orgData.postalAddress;
       const confId = orgData.configuration_id;
       const confData = await ConfigurationModel.findOne({ id: confId });
       const process = confData.process;
+      console.log(++i);
       const supplierID = req.body.supplier.id;
       const supplierOrgData = await OrganisationModel.findOne({
-        primaryContactId: req.body.supplier.id,
+        id: req.body.supplier.id,
       });
+      console.log(++i);
+
       const receiverOrgData = await OrganisationModel.findOne({
-        primaryContactId: req.body.receiver.id,
+        id: req.body.receiver.id,
       });
+      console.log(++i);
+
       const supplierName = supplierOrgData.name;
       const supplierAddress = supplierOrgData.postalAddress;
       const receiverId = req.body.receiver.id;
@@ -413,17 +423,26 @@ exports.createShipment = [
         event_data.eventType.description = "SHIPMENT_CREATION";
         event_data.actor.actorid = user_id || "null";
         event_data.actor.actoruserid = email || "null";
-        event_data.stackholders.ca.id = supplierID || "null";
-        event_data.stackholders.ca.name = supplierName || "null";
-        event_data.stackholders.ca.address = supplierAddress || "null";
         event_data.stackholders.actororg.id = orgId  || "null";
         event_data.stackholders.actororg.name = orgName  || "null";
         event_data.stackholders.actororg.address = address  || "null";
+        event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+        event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+        event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
+        if(orgId === supplierID)
+        {        
         event_data.stackholders.secondorg.id = receiverId || "null";
         event_data.stackholders.secondorg.name = receiverName || "null";
         event_data.stackholders.secondorg.address = receiverAddress || "null";
+        }else{
+            event_data.stackholders.secondorg.id = supplierID || "null";
+            event_data.stackholders.secondorg.name = supplierName || "null";
+            event_data.stackholders.secondorg.address = supplierAddress || "null";
+        }
+        
         event_data.payload.data = data;
         console.log(event_data);
+
         const shipment = new ShipmentModel(data);
         const result = await shipment.save();
         async function compute(event_data) {
