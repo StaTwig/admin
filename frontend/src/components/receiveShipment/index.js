@@ -85,7 +85,7 @@ const ReceiveShipment = (props) => {
     data.comment = comment;
     data.imagesDetails = [];
     console.log(delivered);
-    data.products[0].productQuantityDelivered=parseInt(delivered);
+    data.products[0].productQuantity=parseInt(delivered);
 
     console.log('On Button Click');
     console.log(data);
