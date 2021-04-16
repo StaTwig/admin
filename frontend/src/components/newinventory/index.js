@@ -141,7 +141,6 @@ const NewInventory = props => {
     return error;
   };
   const checkValidationErrors = validations => {
-    console.log(inventoryState,"puneeththopudammunteapu");
     let error = false;
     inventoryState.forEach(inventory => {
       if (error) return error;
