@@ -44,10 +44,10 @@ const Track = (props) => {
             <Chart /></div>
           </div>
         </div>
-        <div className="col ml-3">
-          <div className="">
+        <div className="col row ml-3" >
+          <div className="col-12">
             <div className=" panel commonpanle  bg-light">
-              <h6 className="heading mb-4">CHAIN OF CUSTODY</h6>
+              <h6 className=" text-primary mb-4">CHAIN OF CUSTODY</h6>
               <div className="row orderTxt">
                 <div className="col-1">
                   <div className="picture recived-bg">
@@ -55,18 +55,20 @@ const Track = (props) => {
                   </div>
                 </div>
                 <div className="col ">
-                  <div className="mb-4">
+                  <div className="">
                     <div className="text-muted ">Order ID</div>
                     <div className="font-weight-bold ">PO89898988989898</div>
                   </div>
                  </div>
               </div>
-              <div>
-                <ChainOfCustody index="0" />
-                <ChainOfCustody index="3" />
-                <ChainOfCustody index="5" />
-                <LineTo borderColor="#a8a8a8" fromAnchor="bottom" toAnchor="top" from="recived-bg" to="big-dot" />
-                <LineTo borderColor="#a8a8a8" fromAnchor="4.35% 100%" toAnchor="top" from="container-3" to="dot-5" />
+              <div className="">
+                <ChainOfCustody index="0" pindex="1" container="0" />
+                <ChainOfCustody index="2" pindex="1" container="2" />
+                <ChainOfCustody index="4" pindex="2" container="3" />
+                <ChainOfCustody index="4" pindex="1" container="4" />
+                {/* <LineTo borderColor="#a8a8a8" fromAnchor="bottom" toAnchor="top" from="recived-bg" to="big-dot" />
+                <LineTo borderColor="#a8a8a8" fromAnchor="3% 100%" toAnchor="top" from="container-0" to="dot-2" />
+                <LineTo borderColor="#a8a8a8" fromAnchor="3% 100%" toAnchor="top" from="container-2" to="dot-4" /> */}
               </div>
 
             </div>

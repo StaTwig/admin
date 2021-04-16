@@ -6,16 +6,17 @@ import LineTo from 'react-lineto';
 
 const ChainOfCustody = (props) => {
   const [op, setOp] = useState('');
-  const {index} = props;
-  const [from, setFrom] = useState('container-'+(index-1));
-  const [to, setTo] = useState('dot-' + index);
-  console.log(from.toString(), to);
+  const {index,container, pindex} = props;
   
   return (
-     <div className={`row orderTxt ml-${index} mt-${index} mr-0 pl-3`}>
-        <div className={`big-dot dot-${index} bg-info`}></div>
-        <div className="text-primary pl-4 pb-1 row col-12 font-weight-bold">Appollo Hospitals</div>
-        <div className={`panel row ml-${index} container-${index} mr-0 col commonpanle`}>
+     <div className={`row orderTxt ml-${index} mr-0 pl-3`}>
+      <span className={`pt-${index} p-0 ${pindex == 1 && `border-primary border-left`}`} style={{height: '1rem'}}></span>
+      <div className={`pt-${index} p-0 col ${pindex > 1 && `border-primary border-left`} `}>
+        <div className="row dot-pad">
+          <div className={`big-dot dot-${container} bg-info`}></div>
+          <span className="text-primary pl-4 pb-1 row col-12 font-weight-bold">Appollo Hospitals</span>
+        </div>
+        <div className={`panel row ml-${index} container-${container} mr-0 col commonpanle`}>
           <div className="col-12 row justify-content-between">
             <div className={`${op === index && index !== 0 ? `col` : `col-10`}`}>
               <span className="font-weight-bold">Order Received</span>
@@ -56,7 +57,7 @@ const ChainOfCustody = (props) => {
           }
         {op === index && index !== 0 ?
           <>
-            <div className="arrow bg-primary float-right" onClick={() => { setOp(''); setFrom(''); setTo('');}}>
+            <div className="arrow bg-primary float-right" onClick={() => { setOp('');}}>
               <img src={Down} alt="actions" height="7" width="12" />
           </div>
           
@@ -64,15 +65,14 @@ const ChainOfCustody = (props) => {
           </>
         :
           <>
-            <div className="arrow float-right" onClick={() => { setOp(index); setFrom('container-0'); setTo('dot-1'); }}>
+            <div className="arrow float-right" onClick={() => { setOp(index);  }}>
               <img src={traceDrop} alt="actions" height="7" width="12" />
             </div>
           </>
         }
       </div>
-      {index > 0 && <LineTo borderColor="#a8a8a8" fromAnchor="4.35% 100%" toAnchor="top" from={from} to={to} />}
+    </div>
       </div>
-                
   )
 }
 
