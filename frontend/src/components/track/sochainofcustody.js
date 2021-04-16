@@ -2,16 +2,12 @@ import React, { useState } from 'react';
 import './style.scss';
 import traceDrop from '../../assets/icons/traceDrop.png';
 import Down from '../../assets/icons/up.png';
-import { formatDate, formatTime, formatTimeAMPM } from '../../utils/dateHelper';
-import LineTo from 'react-lineto';
+import { formatTimeAMPM } from '../../utils/dateHelper';
 import { Link } from 'react-router-dom';
 
 const SoChainOfCustody = (props) => {
   const { index, container, pindex, data, update, op, setOp, i, level, v, setV, len } = props;
   const [visible, setVisible] = useState(v);
-
-  console.log(i, len);
-  
   
   return (
   <>

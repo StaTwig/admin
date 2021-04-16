@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './style.scss';
 import traceDrop from '../../assets/icons/traceDrop.png';
 import Down from '../../assets/icons/up.png';
-import { formatDate, formatTime, formatTimeAMPM } from '../../utils/dateHelper';
+import { formatTimeAMPM } from '../../utils/dateHelper';
 import SoChainOfCustody from "./sochainofcustody";
 import { Link } from 'react-router-dom';
 

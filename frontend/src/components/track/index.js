@@ -3,11 +3,9 @@ import Chart from "./temperature";
 import Map from "./Map";
 import CurrentTemperature from "../../assets/icons/thermometer.svg";
 import PoChainOfCustody from "./pochainofcustody";
-import SoChainOfCustody from "./sochainofcustody";
 import Package from '../../assets/icons/package.svg';
 import back from '../../assets/icons/back.png';
 import searchingIcon from '../../assets/icons/searching@2x.png';
-import LineTo from 'react-lineto';
 import "./style.scss";
 
 const Track = (props) => {
@@ -45,7 +43,7 @@ const Track = (props) => {
           </div>
           <div className="panel commonpanle row shadow bg-white mb-4">
             <div className="row col-12">
-              <div class="col row ml-3">
+              <div className="col row ml-3">
                 <div className="arrow col-1 mr-2">
                   <img src={CurrentTemperature} width="20" height="20" />
                 </div>
