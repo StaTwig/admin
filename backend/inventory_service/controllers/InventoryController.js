@@ -29,6 +29,7 @@ const stream_name = process.env.STREAM;
 
 const init = require('../logging/init');
 const OrganisationModel = require('../models/OrganisationModel');
+const SalesDataModel = require("../models/SalesDataModel");
 const logger = init.getLog();
 
 exports.getTotalCount = [
@@ -2184,19 +2185,18 @@ function _spreadHeaders(inputObj) {
 }
 
 exports.uploadSalesData = [
-  auth,
+  // auth,
   async (req, res) => {
     try {
       const dir = `uploads`;
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir);
       }
+      const { collectedDate } = req.body;
+      const uploadedFileName = req.file.originalname;
       await moveFile(req.file.path, `${dir}/${req.file.originalname}`);
       const workbook = XLSX.readFile(`${dir}/${req.file.originalname}`);
       const sheet_name_list = workbook.SheetNames;
-      // console.log('file uploaded');
-      // console.log(`${dir}/${req.file.originalname}`)
-
       const sheetJSON = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]], { defval: "" });
       let rows = [];
       let aggregationRows = [];
@@ -2217,7 +2217,7 @@ exports.uploadSalesData = [
               prod['productName'] = headerRow2[rowKey];
               prod['productSubName'] = headerRow3[rowKey];
               prod['depot'] = row['__EMPTY_1'];
-              prod['quantity'] = row[rowKey];
+              prod['sales'] = row[rowKey];
               prod['targetSales'] = row['t' + rowKey];
             }
             if (Object.keys(prod).length) {
@@ -2240,7 +2240,7 @@ exports.uploadSalesData = [
               prod['productSubName'] = headerRow3[rowKey];
               prod['isDistrictAggregate'] = true;
               prod['districtName'] = row['__EMPTY'];
-              prod['quantity'] = row[rowKey];
+              prod['sales'] = row[rowKey];
               prod['targetSales'] = row['t' + rowKey];
             }
             if (Object.keys(prod).length) {
@@ -2249,19 +2249,27 @@ exports.uploadSalesData = [
           });
           if (products.length) {
             _row.products = products;
-            _row.aggregationDistrictName = row['__EMPTY'];
+            _row.districtName = row['__EMPTY'];
             aggregationRows.push(_row);
           }
         }
       });
 
       let respObj = { depots: rows, districtAggregations: aggregationRows };
+
+      const salesData = new SalesDataModel({
+        uploadedFileName: uploadedFileName,
+        dataCollectedDate: collectedDate,
+        depots: rows,
+        districtAggregations: aggregationRows
+      });
+      const responseObj = await salesData.save();
       return apiResponse.successResponseWithData(
         res,
-        respObj
+        responseObj
       );
 
-    } catch (e) {
+    } catch (err) {
       return apiResponse.ErrorResponse(res, err);
     }
   },
