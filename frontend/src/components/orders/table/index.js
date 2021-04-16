@@ -22,16 +22,19 @@ const Table = props => {
             {orders.map((order, index) => {
               let statusStyle = 'bg-primary';
               let status = order.poStatus;
-              if (order.poStatus === 'RECEIVED') {
+              if (order.poStatus === 'CREATED') {
+                status = visible == 'one' ? 'Sent' : 'Received';
+              }
+              else if (order.poStatus === 'RECEIVED') {
                 statusStyle = 'bg-info';
                 status = 'Delivered';
               }
-else if (order.poStatus === 'Accepted') {
-    statusStyle = 'bg-success';
-    status = 'Accepted';
-  }else if (order.poStatus === 'Rejected') {
-    statusStyle = 'bg-warning';
-  }
+              else if (order.poStatus === 'Accepted') {
+                statusStyle = 'bg-success';
+                status = 'Accepted';
+              }else if (order.poStatus === 'Rejected') {
+                statusStyle = 'bg-warning';
+              }
 
               const { customer, products, supplier } = order;
               return (
@@ -40,8 +43,8 @@ else if (order.poStatus === 'Accepted') {
                   <div className="userPic text-center rounded d-flex flex-row">
                     <img src={user} width="30" height="20" alt="User" className="rounded mr-1 align-self-center" />
                     <div className="flex-column d-flex">
-                      <span className="text-primary bold">{visible == 'one' ? customer.organisation.name : supplier.organisation.name}</span>
-                      <p className="address mb-0 text-primary">{visible == 'one' ? customer.organisation.id : supplier.organisation.id}</p>
+                      <span className="text-primary bold">{visible == 'one' ? supplier.organisation.name : customer.organisation.name}</span>
+                      <p className="address mb-0 text-primary">{visible == 'one' ? supplier.organisation.id : customer.organisation.id}</p>
                   </div>
                   </div>
                 </div>
