@@ -45,11 +45,11 @@ else if (order.poStatus === 'Accepted') {
                   </div>
                   </div>
                 </div>
-                <div className="rTableCell">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div className="rTableCell">
                   {formatDate(order.creationDate)}
-                </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
                   <div className="rTableCell"><p className="mb-0 bold address mb-0 text-muted">{order.id}</p></div>
-                  <div className="rTableCell"><p className="mb-0 bold mb-0 address text-muted">{products[0]?.name+(products.length > 1 ? ' + '+(products.length-1)+' more' : '')}</p></div> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div className="rTableCell"><p className="mb-0 bold mb-0 address text-muted">{products[0]?.name+(products.length > 1 ? ' + '+(products.length-1)+' more' : '')}</p></div> 
                 <div className="rTableCell d-flex flex-column"> 
                   <span>{customer.warehouse?.warehouseAddress?.city}</span>
                   <span className="text-muted">{customer.shippingAddress.shippingAddressId}</span>
@@ -60,7 +60,7 @@ else if (order.poStatus === 'Accepted') {
                   {status} 
                 </div>
                 </div>
-                <div className="rTableCell">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <div className="rTableCell">
                   <Link to={`/vieworder/${order.id}`}
                     className="button pl-3 pr-3 pt-1 pb-1">
                     View
