@@ -41,7 +41,7 @@ elif [ "$1" == "ABINBEVTEST" ];
    then
       ./pre-deploy-abinbev-test.sh
 
-elif [ "$1" == "FOODLEDGERTSET" ];
+elif [ "$1" == "FOODLEDGERTEST" ];
    then
       ./pre-deploy-foodledger-test.sh
 
