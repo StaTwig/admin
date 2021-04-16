@@ -172,7 +172,7 @@ if ([ "$2" == "GATEWAY" ] || [ "$2" == "ALL" ]);
       elif [ "$1" == "FOODLEDGERTEST" ]
          then
             echo "Starting Traefik in FoodLedger Test mode ...."
-            traefik --confgFile=traefik-cloud-foodledger-api-test.yml &
+            traefik --configFile=traefik-cloud-foodledger-api-test.yml &
       
       fi
 
