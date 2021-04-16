@@ -105,6 +105,43 @@
   .dot-pad{
     padding-left: 0.6rem;
   }
+
+  .noOutline{
+    &:focus{
+      outline-color: transparent !important;
+      outline-style: none;
+      outline-width: 0px;
+    }
+    .btn-outline-primary:hover{
+      background-color: transparent !important;
+    }
+  }
+
+  .search-form{
+    width: 35vw;
+    display: flex;
+
+    &:focus{
+      outline-color: transparent !important;
+      outline-style: none;
+      outline-width: 0px;
+    }
+
+
+    .search-field{
+      width: 20vw;
+      &::placeholder{
+        color: $primaryBlue;
+      }
+    }
+
+    .searchIcon{
+      width: 15px;
+      height: 15px;
+      margin-left: -20px;
+      margin-top: 10px;
+    }
+  }
   
   .arrow{
     width: 25px;

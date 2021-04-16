@@ -15,7 +15,7 @@ import Inventory from '../containers/inventory';
 import NewInventory from '../containers/newinventory';
 import ProductList  from '../containers/productList'
 import trackAndTrace from '../containers/trackAndTrace';
-import Track from '../containers/Track';
+import Track from '../containers/track';
 import Tracing from '../containers/tracing';
 import ProductTracing from '../containers/productTracing';
 import Network from '../containers/network';

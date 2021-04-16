@@ -2,52 +2,32 @@ import React, { useState,useEffect } from "react";
 import Track from '../../components/track';
 import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
-import {useDispatch, useSelector} from "react-redux";
-import {trackProduct} from "../../actions/shipmentActions";
-import { chainOfCustody, updateStatus } from "../../actions/shipmentActions";
+import {useDispatch} from "react-redux";
+import { chainOfCustody } from "../../actions/shipmentActions";
+import { turnOff, turnOn } from '../../actions/spinnerActions';
 
 const TrackContainer = props => {
-  //const dispatch = useDispatch();
-  const[trackData,setTrackData]=useState({});
+  const dispatch = useDispatch();
   const [poChainOfCustodyData, setPoChainOfCustodyData] = useState([]);
   const [shippmentChainOfCustodyData, setShippmentChainOfCustodyData] = useState([]);
   
-   useEffect(() => {
-    async function fetchData() {
-      const result = await trackProduct(props.match.params.id);
-       if (result.status==200)
-       {
-         console.log('Tracking data');
-         console.log(result.data);
-       setTrackData(result.data);
-       }else{
-         setTrackData({});
-       }
-}
-    fetchData();
-  },[]);
-  
-  useEffect(() => {
-    async function fetchData() {
-      const result = await chainOfCustody(props.match.params.id);
-       if (result.status==200)
-       {
-       console.log('Data From Response');
-       console.log(result.data.data);
-      //  setPoChainOfCustodyData(result.data.data['poChainOfCustody']);
-      //  poChainOfCustodyData = result.data.data['poChainOfCustody'];
-      setPoChainOfCustodyData(result.data.data['poChainOfCustody']);
-      setShippmentChainOfCustodyData(result.data.data['shipmentChainOfCustody']);
-       console.log('from variable')
-       console.log(poChainOfCustodyData);
-       console.log(shippmentChainOfCustodyData);
-       }else{
-         setPoChainOfCustodyData([]);
-         setShippmentChainOfCustodyData([]);
-       }
-}
-    fetchData();
-  },[]);
+  const searchData = async (id) => {
+    dispatch(turnOn());
+    const result = await chainOfCustody(id);
+    dispatch(turnOff());
+    if (result.status == 200) {
+      setPoChainOfCustodyData(result.data.data.poChainOfCustody);
+      setShippmentChainOfCustodyData(result.data.data.shipmentChainOfCustody);
+    }else{
+      setPoChainOfCustodyData([]);
+      setShippmentChainOfCustodyData([]);
+    }
+  }
+
+  const resetData = () => {
+    setPoChainOfCustodyData([]);
+    setShippmentChainOfCustodyData([]);
+  }
 
   return (
     <div className="container-fluid p-0">
@@ -55,7 +35,7 @@ const TrackContainer = props => {
       <div className="d-flex">
         <Sidebar {...props} />
         <div className="content">
-          <Track trackData={trackData} poChainOfCustodyData={poChainOfCustodyData} shippmentChainOfCustodyData={shippmentChainOfCustodyData} {...props}/>          
+          <Track searchData={searchData} resetData={resetData} poChainOfCustodyData={poChainOfCustodyData} shippmentChainOfCustodyData={shippmentChainOfCustodyData} {...props}/>          
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
 
 const style = {
-    width: '100%',
+    width: '95%',
     height: '90%',
     boxShadow: "0px 3px 10px #00000029",
     borderRadius: 10,
