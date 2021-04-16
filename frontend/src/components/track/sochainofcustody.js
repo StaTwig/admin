@@ -8,6 +8,9 @@ import { Link } from 'react-router-dom';
 const SoChainOfCustody = (props) => {
   const { index, container, pindex, data, update, op, setOp, i, level, v, setV, len } = props;
   const [visible, setVisible] = useState(v);
+
+  console.log(data.id, i, len);
+  
   
   return (
   <>
@@ -59,13 +62,13 @@ const SoChainOfCustody = (props) => {
                 </>
               }
               {visible && v ?
-                <div className="arrow bg-primary float-right" onClick={() => { setVisible(false); setOp(op-1); }}>
+                <div className="arrow bg-primary float-right" onClick={() => { setVisible(false); if(i == 0 && len > 1) setOp(op-1); }}>
                   <img src={Down} alt="actions" height="7" width="12" />
                 </div>
                 :
                 <div className="arrow float-right" onClick={() => {
                   setVisible(true);
-                  if(i > len-1) setOp(level + 1);
+                  if(i == 0 && len > 1) setOp(level + 1);
                   setV(true);
                 }}>
                   <img src={traceDrop} alt="actions" height="7" width="12" />
