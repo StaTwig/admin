@@ -144,7 +144,7 @@ const NewShipment = (props) => {
   const onAssign = async (values) => {
     let error = false;
     // dates.forEach(date => { if (!error) dateValidation(date) });
-    const { airWayBillNo, shippingOrderId, labelCode, shipmentDate, estimateDeliveryDate, toOrgLoc, fromOrgLoc, products } = values;
+    const { toOrg,airWayBillNo, shippingOrderId, labelCode, shipmentDate, estimateDeliveryDate, toOrgLoc, fromOrgLoc, products } = values;
     products.forEach((p) => {
       if (p.productQuantity < 1)
         error = true;
@@ -160,11 +160,11 @@ const NewShipment = (props) => {
         },
         externalShipmentId: "",
         supplier: {
-          id: user.id,
+          id: user.organisationId,
           locationId: fromOrgLoc,
         },
         receiver: {
-          id: null,
+          id: toOrg,
           locationId: toOrgLoc,
         },
         shippingDate: new Date(
