@@ -108,10 +108,8 @@ const Inventory = props => {
             </div>
             <div className="d-flex flex-column">
               <div className="title truck-text">Total Product Category</div>
-              <div className="tab-container">
-                  {inventoryAnalytics.totalProductCategory}
-              </div>
-              <div className="count truck-text">{inventoriesCount}</div>
+              
+              <div className="count truck-text">{inventoriesCount} {inventoryAnalytics.totalProductCategory}</div>
             </div>
           </div>
         </div>
@@ -122,15 +120,12 @@ const Inventory = props => {
             </div>
             <div className="d-flex flex-column">
               <div className="title sent-text">Product Out Of Stock</div>
-              <div className="tab-container">
-                {inventoryAnalytics.stockOut}
+              <div className="sent-text count">{currentInventoriesCount}{inventoryAnalytics.stockOut}</div>
               </div>
-              <div className="sent-text count">{currentInventoriesCount}</div>
-            </div>
-          </div>
-        </div>
-        <div className="col">
-          <div className="panel">
+              </div>       
+              </div>
+          <div className="col">
+          <div className="panel" style={{height:'14vh'}}>
             <div className="picture recived-bg">
               <img src={Expiration} alt="truck" />
             </div>
@@ -205,7 +200,7 @@ const Inventory = props => {
           </div>
         </div>
         <div className="col">
-          <div className="panel">
+          <div className="panel" style={{height:'14vh'}}>
             <div className="picture transit-bg">
               <img src={TotalVaccineExpired} alt="truck" />
             </div>
@@ -289,9 +284,9 @@ const Inventory = props => {
           <div className="col-sm-12 col-xl-3">
             <div className="list-container">
               <div className="d-flex justify-content-between align-items-center">
-                <h4>Product List</h4>
+                <h4><b>Product List</b></h4>
                 <Link to="/productlist/all">
-                  <button className="btn btn-link">View all</button>
+                  <button className="btn btn-link"><b>View all</b></button>
                 </Link>
               </div>
               <div className="row overflow">

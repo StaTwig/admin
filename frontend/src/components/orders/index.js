@@ -43,7 +43,7 @@ const Orders = props => {
 
     img1: <img src={mon} width="16" height="16" />,
     img2: <img src={calender} width="16" height="16" />,
-    img3: <img src={Order} width="16" height="16" />,
+    img3: <img src={Order} width="18" height="16" />,
     img4: <img src={Package} width="16" height="16" />,
     img5: <img src={Totalshipments} width="18" height="18" />,
   };
@@ -63,7 +63,7 @@ const Orders = props => {
   return (
     <div className="orders">
       <div className="d-flex justify-content-between">
-        <h1 className="breadcrumb">ORDERS</h1>
+        <h1 className="breadcrumb">YOUR ORDERS</h1>
         <div className="d-flex">
           <Link to="/neworder">
             <button className="btn btn-orange fontSize20 font-bold">

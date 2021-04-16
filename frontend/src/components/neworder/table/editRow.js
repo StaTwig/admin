@@ -52,16 +52,16 @@ const EditRow = props => {
             <div className="d-flex pt-1 flex-row justify-content-between">
               <div className="title col-6 recived-text">
                 <DropdownButton
-                  name={prod.name ? prod.name : "Product"}
+                  name={prod.name ? prod.name : "Product Name"}
                   onSelect={item => { handleProductChange(index, item) }}
                   groups={products}
                 />
               </div>
-              <div className="title recived-text">{prod.id}</div>
+              <div className="title recived-text">{prod.id ? prod.id : "Product ID"}</div>
             </div>
           </div>
         </div>
-        <div className="col tcell text-center justify-content-center p-2">{prod.manufacturer}&nbsp;</div>
+        <div className="col tcell text-center justify-content-center p-2">&nbsp;&nbsp;{prod.manufacturer ? prod.manufacturer : "Manufacturer"}</div>
         <div className="col tcell text-center justify-content-center p-2">
           <div className="">
             <input
@@ -74,10 +74,10 @@ const EditRow = props => {
           </div>
         </div>
       </div>
-      {props.product.length > 1 &&
-        < div className=" m-3 bg-light">
-            <span onClick={() => onRemoveRow(index)}><img className="border-none cursorP shadow p-1 ml-2 rounded-circle" height="38" src={Delete} /></span>
-          </div>
+      {props.product.length > 0 &&
+        <div className=" m-3 bg-light">
+          <span className="del-pad shadow border-none rounded-circle ml-2 " onClick={() => onRemoveRow(index)}><img className=" cursorP  p-1" height="30" src={Delete} /></span>
+        </div>
       }
     </div>
   );
