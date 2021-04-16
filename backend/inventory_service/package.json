@@ -26,6 +26,7 @@
     "morgan": "~1.9.0",
     "move-file": "^2.0.0",
     "multer": "^1.4.2",
+    "node-xlsx": "^0.16.1",
     "nodemailer": "^6.3.1",
     "npx": "^10.2.2",
     "pm2": "^4.2.3",
@@ -33,7 +34,7 @@
     "swagger-ui-express": "^4.1.6",
     "uniqid": "^5.3.0",
     "winston-logzio": "^5.1.2",
-    "xlsx": "^0.16.7"
+    "xlsx": "^0.16.9"
   },
   "devDependencies": {
     "chai": "^4.2.0",
