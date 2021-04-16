@@ -18,11 +18,11 @@ const Track = (props) => {
       <div className="row">
         <div className="col-6">
           <div className="row mb-4">
-            <div style={{minHeight: 400}} >
+            <div className="col" style={{minHeight: 400}} >
               <Map />
             </div>
           </div>
-          <div className="panel commonpanle row shadow position-absolute bg-white mb-4">
+          <div className="panel commonpanle row shadow bg-white mb-4">
             <div className="row col-12">
               <div class="col row ml-3">
                 <div className="arrow col-1 mr-2">
