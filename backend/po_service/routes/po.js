@@ -29,7 +29,7 @@ router.post("/createPurchaseOrder", POController.createPurchaseOrder);
 router.post("/changePOStatus", POController.changePOStatus);
 router.post("/success", POController.success);
 router.post("/createOrder", POController.createOrder);
-router.post("/getorderIds", POController.getOrderIds);
+router.get("/getOrderIds", POController.getOrderIds);
 
 module.exports = router;
 
