@@ -9,4 +9,4 @@ var AnalyticsSchema = new mongoose.Schema({
 	warehouseId: {type: String, required: true}
 }, { timestamps: true });
 
-module.exports = mongoose.model("Excel", AnalyticsSchema);
+module.exports = mongoose.model("Analytics", AnalyticsSchema);

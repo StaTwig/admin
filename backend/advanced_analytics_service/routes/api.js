@@ -3,6 +3,6 @@ var eventRouter = require("./analytics");
 
 var app = express();
 
-app.use("/event/", eventRouter);
+app.use("/anayltics", eventRouter);
 
 module.exports = app;

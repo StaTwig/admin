@@ -3,7 +3,7 @@ const AnalyticsController = require("../controllers/AnalyticsController");
 
 var router = express.Router();
 
-router.get("/getAllAnalyticss", AnalyticsController.getAllAnalyticss);
+router.get("/getAllAnalyticss", AnalyticsController.getAllAnalytics);
 router.get("/getAnalyticsByActorId/:actorId/:AnalyticsTypePrimary/:AnalyticsTypeDesc", AnalyticsController.getAnalyticsByActorId);
 router.get("/getAnalyticsByCaId/:caId/:AnalyticsTypePrimary/:AnalyticsTypeDesc", AnalyticsController.getAnalyticsByCaId);
 router.get("/getAnalyticsByAnalyticsId/:AnalyticsID/:AnalyticsTypePrimary/:AnalyticsTypeDesc", AnalyticsController.getAnalyticsById);

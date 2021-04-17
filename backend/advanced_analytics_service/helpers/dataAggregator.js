@@ -84,4 +84,4 @@ async function aggregateData(timeFrame){
    }
 }
 
-exports.dataAggregator = dataAggregator;
+exports.dataAggregator = aggregateData;

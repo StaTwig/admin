@@ -17,7 +17,68 @@ const auth = require("../middlewares/jwt");
  *
  * @returns {Object}
  */
-exports.getAllStats = [
+exports.getAllAnalytics = [
+	auth,
+	async function (req, res) {
+		try {
+			///Logic goes here
+		} catch (err) {
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
+
+exports.getAnalyticsByActorId = [
+	auth,
+	async function (req, res) {
+		try {
+			///Logic goes here
+		} catch (err) {
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
+exports.getAnalyticsByCaId = [
+	auth,
+	async function (req, res) {
+		try {
+			///Logic goes here
+		} catch (err) {
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
+exports.getAnalyticsById = [
+	auth,
+	async function (req, res) {
+		try {
+			///Logic goes here
+		} catch (err) {
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
+exports.getAnalyticsBySecondOrgId = [
+	auth,
+	async function (req, res) {
+		try {
+			///Logic goes here
+		} catch (err) {
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
+exports.getAnalyticsByActorOrgId = [
+	auth,
+	async function (req, res) {
+		try {
+			///Logic goes here
+		} catch (err) {
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
+exports.deleteAnalyticsById = [
 	auth,
 	async function (req, res) {
 		try {
