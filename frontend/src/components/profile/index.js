@@ -328,7 +328,7 @@ class Profile extends React.Component {
                         <div className="custom-card p-3">
                           <div className="card-header">
                             <div className="d-flex align-items-center justify-content-between">
-                              <h5 className="card-title font-weight-bold">HEAD OFFICE</h5>
+                              <h5 className="card-title font-weight-bold">WAREHOUSE ID:</h5>
                               {/* <button
                                 className="btn-primary btn edit-button"
                               >
@@ -362,7 +362,7 @@ class Profile extends React.Component {
                         </div>   
                         <div className="row row-list">
                           <img src={Briefcase} width="20" height="20" className="mr-3" />
-                          {this.state.organisation ? <span>{this.state.organisation.split('/')[1]}</span> : <span>N/A</span>}
+                          {this.state.organisation ? <span>{this.state.organisation.split('/')[0]}</span> : <span>N/A</span>}
                         </div>   
                         <div className="row row-list">
                           <img src={Mail} width="20" height="20" className="mr-3" />
@@ -384,7 +384,8 @@ class Profile extends React.Component {
                           <div className="custom-card p-3">
                             <div className="card-header">
                               <div className="d-flex align-items-center justify-content-between">
-                                <h5 className="card-title font-weight-bold">HEAD OFFICE</h5>
+                               <h5 className="card-title font-weight-bold">WAREHOUSE ID: </h5>
+                               
                                 {/* <button
                                   className="btn-primary btn edit-button"
                                 >
