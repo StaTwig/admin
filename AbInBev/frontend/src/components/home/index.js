@@ -8,6 +8,7 @@ import VerifyPassword from './verifyPassword';
 import SignUp from './signUp';
 import "./style.scss";
 import { sendOtp, verifyOtp, setCurrentUser, registerUser } from "../../actions/userActions";
+import { turnOff, turnOn } from '../../actions/spinnerActions';
 import setAuthToken from "../../utils/setAuthToken";
 
 const Home = (props) => {
@@ -22,15 +23,19 @@ const Home = (props) => {
   const onSendOtp = useCallback(async (email) => {
     setEmail(email);
     const data = { emailId: email };
+
+    dispatch(turnOn());
     const result = await sendOtp(data);
+    dispatch(turnOff());
+    
     if (result.status === 200) {
       setContinueClick(true);
       setSteps(3);
     } else if (result.status === 500) {
       const err = result.data.message;
       setErrorMessage(err);
+      return err;
     } else if (result.status === 401) {
-      console.log('step5');
       const err = result.data.message;
       setErrorMessage(err);
       // setContinueClick(true);
@@ -39,47 +44,58 @@ const Home = (props) => {
     } else {
       const err = result.data.data[0];
       setErrorMessage(err.msg);
+      return err;
     }
   });
 
   const onVerifyOTP = useCallback(async (otp, email) => {
     const data = { emailId: email, otp };
+    dispatch(turnOn());
     const result = await verifyOtp(data);
+    dispatch(turnOff());
     if (result.status === 200) {
       const token = result.data.data.token;
       setAuthToken(token);
-      const decoded = jwt_decode(token);
-      localStorage.setItem('theLedgerToken', token);
-      dispatch(setCurrentUser(decoded));
-      // props.history.push(`/overview`);
+      // const decoded = jwt_decode(token);
+      localStorage.setItem('theAbInBevToken', token);
+      // dispatch(setCurrentUser(decoded));
+      // props.history.push("/overview");
       window.location.href = '/overview';
     } else {
       const err = result.data.message;
       setErrorMessage(err);
+      return err;
     }
-
   });
+
   const resendOtp = useCallback(async (email) => {
     const data = { emailId: email };
+    dispatch(turnOn());
     const result = await sendOtp(data);
+    dispatch(turnOff());
     if (result.status === 200) {
       const err = result.data.message;
       setErrorMessage(err);
+      return err;
     } else if (result.status === 500) {
       const err = result.data.message.response;
       setErrorMessage(err);
+      return err;
     } else if (result.status === 401) {
       const err = result.data.message;
       setErrorMessage(err);
     } else {
       const err = result.data.data[0];
       setErrorMessage(err.msg);
+      return err;
     }
   });
 
   const onSignUpClick = useCallback(async (values) => {
     let data = { firstName: values.firstName, lastName: values.lastName, emailId: values.mobile_email, organisationName: values.organisation, organisationId: 0 };
+    dispatch(turnOn());
     const result = await registerUser(data);
+    dispatch(turnOff());
     if (result.status === 200) {
       setSteps(5);
       setShowSignUpCompletedMessage(true);
@@ -105,7 +121,7 @@ const Home = (props) => {
               setSteps={setSteps}
             />
           )}
-          {steps == 2 && <Login setSteps={setSteps} setContinueClick={setContinueClick} steps={steps} onSendOtp={onSendOtp} />}
+          {steps == 2 && <Login msg={errorMessage} setSteps={setSteps} setContinueClick={setContinueClick} steps={steps} onSendOtp={onSendOtp} />}
           {steps == 3 && <VerifyPassword setSteps={setSteps} setContinueClick={setContinueClick} steps={steps} buttonActive={buttonActive} setButtonActive={setButtonActive} email={email}
             onVerifyOtp={onVerifyOTP}
             onResendOtp={resendOtp} />}

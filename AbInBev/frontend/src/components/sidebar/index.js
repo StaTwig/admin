@@ -11,10 +11,18 @@ import Logout from "../../assets/icons/logout.svg";
 import InventoryIconSelected from "../../assets/icons/inventory_selected.svg";
 import InventoryIcon from "../../assets/icons/inventory.svg";
 import rightArrow from "../../assets/icons/rightarrow.svg";
+import { useSelector, useDispatch } from 'react-redux';
+import { logoutUser } from '../../actions/userActions';
 
 const Sidebar = (props) => {
   const { history } = props;
   history.location.pathname;
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => {
+    return state.user;
+  });
+
   return (
     <nav className="sidebar">
       <div className="abinBevLogo">
@@ -88,16 +96,16 @@ const Sidebar = (props) => {
               <div onClick={() => history.push("/inventory")}>Inventory</div>
             </div>
           </div>
-          <div className="gds-links">
+          {/* <div className="gds-links">
             <div className="gdsl-in">
               <img src={ManageIcon}/>
               <div>Manage Users</div>
             </div>
-          </div>
+          </div> */}
           <div className="gds-links">
             <div className="gdsl-in">
               <img src={Logout}/>
-              <div>Logout</div>
+              <div onClick={() => dispatch(logoutUser())}>Logout</div>
             </div>
           </div>
         </div>
@@ -105,7 +113,7 @@ const Sidebar = (props) => {
       <button className="btn btn-warning dahbtngo">
         <span className="whiteC"></span>
         <span className="grid jis">
-          <span>ABC Pvt Ltd.</span>
+          <span>{user?.firstName}</span>
           <span style={{ fontSize: "10px" }}>My Settings</span>
         </span>
         <span>
