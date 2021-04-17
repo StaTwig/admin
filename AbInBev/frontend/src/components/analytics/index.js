@@ -1,10 +1,12 @@
 import React from "react";
 import { AreaChart, Area, ResponsiveContainer, Tooltip } from "recharts";
+import BreweryView from "./breweryView";
 import "./style.scss";
 import bottlesIcon from "../../assets/becks_330ml.png";
 import DownArrow from "../../assets/down_arrow.png";
 import UpArrow from "../../assets/up_arrow.png";
 import SideBar from "../../components/sidebar";
+import filterIcon from "../../assets/icons/funnel.svg"
 
 const data = [
     {
@@ -60,6 +62,7 @@ const Analytics = (props) => {
             </div>
             <main role="main" className="col-md-9 ml-sm-auto col-lg-10">
               <div className="row">
+
                 <div className="col-md-9 mainContainer pt-3 px-4">
                   <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
                     <h1 className="h2">Analytics</h1>
@@ -109,7 +112,6 @@ const Analytics = (props) => {
                             <div className="chartAnalytics">
                                 <ResponsiveContainer width="100%" height={100}>
                                         <AreaChart
-                                            
                                             data={data}
                                             margin={{
                                                 top: 5,
@@ -132,7 +134,6 @@ const Analytics = (props) => {
                             <div className="chartAnalytics">
                                 <ResponsiveContainer width="100%" height={100}>
                                     <AreaChart
-                                        
                                         data={data}
                                         margin={{
                                             top: 5,
@@ -155,7 +156,6 @@ const Analytics = (props) => {
                             <div className="chartAnalytics">
                                 <ResponsiveContainer width="100%" height={100}>
                                     <AreaChart
-                                        
                                         data={data}
                                         margin={{
                                             top: 5,
@@ -193,7 +193,6 @@ const Analytics = (props) => {
                                 </div>
                                 <div className="profileName">
                                   <span className="profileTitle">Becks 330 ml</span>
-                                  <span>526025</span>
                                 </div>
                               </div>
                               
@@ -211,7 +210,6 @@ const Analytics = (props) => {
                                 </div>
                                 <div className="profileName">
                                   <span className="profileTitle">Becks 330 ml</span>
-                                  <span>526025</span>
                                 </div>
                               </div>
                               
@@ -229,7 +227,142 @@ const Analytics = (props) => {
                                 </div>
                                 <div className="profileName">
                                   <span className="profileTitle">Becks 330 ml</span>
-                                  <span>526025</span>
+                                </div>
+                              </div>
+                              
+                            </td>
+                            <td>333333</td>
+                            <td>333333</td>
+                            <td>333333</td>
+                            <td>333333</td>
+                          </tr>
+                          <tr>
+                            <td scope="row">
+                              <div className="tableProfileIconCard">
+                                <div className="profileIcon">
+                                  <img src={bottlesIcon} alt="" width="50" height="50" />
+                                </div>
+                                <div className="profileName">
+                                  <span className="profileTitle">Becks 330 ml</span>
+                                </div>
+                              </div>
+                              
+                            </td>
+                            <td>333333</td>
+                            <td>333333</td>
+                            <td>333333</td>
+                            <td>333333</td>
+                          </tr>
+                          <tr>
+                            <td scope="row">
+                              <div className="tableProfileIconCard">
+                                <div className="profileIcon">
+                                  <img src={bottlesIcon} alt="" width="50" height="50" />
+                                </div>
+                                <div className="profileName">
+                                  <span className="profileTitle">Becks 330 ml</span>
+                                </div>
+                              </div>
+                              
+                            </td>
+                            <td>333333</td>
+                            <td>333333</td>
+                            <td>333333</td>
+                            <td>333333</td>
+                          </tr>
+                          <tr>
+                            <td scope="row">
+                              <div className="tableProfileIconCard">
+                                <div className="profileIcon">
+                                  <img src={bottlesIcon} alt="" width="50" height="50" />
+                                </div>
+                                <div className="profileName">
+                                  <span className="profileTitle">Becks 330 ml</span>
+                                </div>
+                              </div>
+                              
+                            </td>
+                            <td>333333</td>
+                            <td>333333</td>
+                            <td>333333</td>
+                            <td>333333</td>
+                          </tr>
+                          <tr>
+                            <td scope="row">
+                              <div className="tableProfileIconCard">
+                                <div className="profileIcon">
+                                  <img src={bottlesIcon} alt="" width="50" height="50" />
+                                </div>
+                                <div className="profileName">
+                                  <span className="profileTitle">Becks 330 ml</span>
+                                </div>
+                              </div>
+                              
+                            </td>
+                            <td>333333</td>
+                            <td>333333</td>
+                            <td>333333</td>
+                            <td>333333</td>
+                          </tr>
+                          <tr>
+                            <td scope="row">
+                              <div className="tableProfileIconCard">
+                                <div className="profileIcon">
+                                  <img src={bottlesIcon} alt="" width="50" height="50" />
+                                </div>
+                                <div className="profileName">
+                                  <span className="profileTitle">Becks 330 ml</span>
+                                </div>
+                              </div>
+                              
+                            </td>
+                            <td>333333</td>
+                            <td>333333</td>
+                            <td>333333</td>
+                            <td>333333</td>
+                          </tr>
+                          <tr>
+                            <td scope="row">
+                              <div className="tableProfileIconCard">
+                                <div className="profileIcon">
+                                  <img src={bottlesIcon} alt="" width="50" height="50" />
+                                </div>
+                                <div className="profileName">
+                                  <span className="profileTitle">Becks 330 ml</span>
+                                </div>
+                              </div>
+                              
+                            </td>
+                            <td>333333</td>
+                            <td>333333</td>
+                            <td>333333</td>
+                            <td>333333</td>
+                          </tr>
+                          <tr>
+                            <td scope="row">
+                              <div className="tableProfileIconCard">
+                                <div className="profileIcon">
+                                  <img src={bottlesIcon} alt="" width="50" height="50" />
+                                </div>
+                                <div className="profileName">
+                                  <span className="profileTitle">Becks 330 ml</span>
+                                </div>
+                              </div>
+                              
+                            </td>
+                            <td>333333</td>
+                            <td>333333</td>
+                            <td>333333</td>
+                            <td>333333</td>
+                          </tr>
+                          <tr>
+                            <td scope="row">
+                              <div className="tableProfileIconCard">
+                                <div className="profileIcon">
+                                  <img src={bottlesIcon} alt="" width="50" height="50" />
+                                </div>
+                                <div className="profileName">
+                                  <span className="profileTitle">Becks 330 ml</span>
                                 </div>
                               </div>
                               
@@ -260,64 +393,45 @@ const Analytics = (props) => {
                         </tbody>
                       </table>
                     </div>
-              
+                  {/* brewery based on filter we need to enable*/}
+                  <BreweryView></BreweryView>                        
                 </div>
-                <div className="col-md-3 rightSideMenu pt-3 px-2">
-                  <div className="white-box">
-                    <h3 className="box-title">Order Quantity</h3>
-                    <div className="row pt-3">
-                        <div className="col-md-6 col-sm-6 col-xs-6  m-t-30">
-                          <div className="quantity">7650</div>
-                          <span className="quantityDesc"><b>1.5 %</b> than last year</span> 
-                        </div>
-                        <div className="col-md-6 col-sm-6 col-xs-6">
-                          <AreaChart
-                              width={100}
-                              height={30}
-                              data={data}
-                              margin={{
-                                top: 5,
-                                right: 0,
-                                left: 0,
-                                bottom: 5
-                              }}
-                            >
-                              <Area type="monotone" dataKey="uv" stroke="#F49C00" fill="#F49C00" />
-                              <Tooltip />
-                            </AreaChart>
-                        </div>
+                
+                <div className="col-md-3 rightSideMenu pt-4 px-2">
+                  <div className="filterSection">
+                    <div className="filterHeader mb-3">
+                      <img src={filterIcon} className="filterIcon"/> FILTERS
                     </div>
-                  </div>
-                  <div className="white-box">
-                    <h3 className="box-title">Avg. Order Value</h3>
-                    <div className="row pt-3">
-                        <div className="col-md-6 col-sm-6 col-xs-6  m-t-30">
-                          <div className="quantity">$306.20</div>
-                          <span className="quantityDesc"><b>1.3 %</b> than last year</span> 
-                        </div>
-                        <div className="col-md-6 col-sm-6 col-xs-6">
-                          <AreaChart
-                            width={100}
-                            height={30}
-                            data={data}
-                            margin={{
-                              top: 5,
-                              right: 0,
-                              left: 0,
-                              bottom: 5
-                            }}
-                          >
-                            <Area type="monotone" dataKey="uv" stroke="#A3ECCD" fill="#A3ECCD" />
-                            <Tooltip />
-                          </AreaChart>
-                        </div>
-                    </div>
-                  </div>
+                    <label class="radioButton" for="gv">
+                      <input className="radioInput" type="radio" name="radio" value="gv" id="gv" defaultChecked={true}/> Geographical View
+                    </label>
+                    <label class="radioButton" for="sv">
+                      <input className="radioInput" type="radio" name="radio" value="sv" id="sv" /> SKU View
+                    </label>
+                    <label class="radioButton" for="suv">
+                      <input className="radioInput" type="radio" name="radio" value="suv" id="suv" /> Supplier View
+                    </label>
+                    <label class="radioButton" for="bv">
+                      <input className="radioInput" type="radio" name="radio" value="bv" id="bv" /> Brewery View
+                    </label>
+
+                    <label className="filterSubHeading mt-3">Select SPM</label>
+                    <select className="filterSelect mt-2">
+                      <option>Select SPM</option>
+                    </select>
+
+                    <label className="filterSubHeading mt-3">Select State</label>
+                    <select className="filterSelect mt-2">
+                      <option>Select State</option>
+                      <option>Karnataka</option>
+                      <option>Telangana</option>
+                    </select>
+                  </div>  
                 </div>
               </div>
-              
             </main>
           </div>
+                                      
         </div>  
         );
 };
