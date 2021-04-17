@@ -5,7 +5,6 @@ import jwt_decode from 'jwt-decode';
 import Selection from "./selection";
 import Login from "./login";
 import VerifyPassword from './verifyPassword';
-import setAuthToken from '../../utils/setAuthToken'
 import SignUp from './signUp';
 import "./style.scss";
 import { sendOtp, verifyOtp, setCurrentUser, registerUser } from "../../actions/userActions";
