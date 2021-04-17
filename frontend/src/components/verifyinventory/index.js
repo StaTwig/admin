@@ -108,11 +108,11 @@ const VerifyInventory = props => {
           <div className="">
             <div className="d-flex flex-row-reverse">
               <button className="btn-primary btn" onClick={onAssign}>
-                ADD INVENTORY
+                <b>SAVE</b>
               </button>
               <button className="btn-outline-dark btn mr-2" onClick={onEdit}>
                 <img src={Pen} width="15" height="15" className="mr-3" />
-                <span>EDIT</span>
+                <span><b>EDIT</b></span>
               </button>
 
               {openCreatedInventory && (
