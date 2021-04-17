@@ -393,7 +393,7 @@ const Analytics = (props) => {
                         </tbody>
                       </table>
                     </div>
-                  {/* brewery based on filter we need to enable                           */}
+                  {/* brewery based on filter we need to enable*/}
                   <BreweryView></BreweryView>                        
                 </div>
                 
