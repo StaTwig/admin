@@ -27,7 +27,9 @@ router.post("/upload", upload.single("profile"), AuthController.uploadImage);
 router.get("/createAddress", AuthController.createUserAddress);
 router.post("/assignProductConsumer", AuthController.assignProductConsumer);
 router.post("/addWarehouse", AuthController.addWarehouse);
-
+router.get("/getAllRegisteredUsers", AuthController.getAllRegisteredUsers);
+router.get("/getAllUsersByOrganisation/:organisationId", AuthController.getAllUsersByOrganisation);
+router.get("/getAllUsersByWarehouse/:warehouseId", AuthController.getAllUsersByWarehouse);
 router.post("/uploadImage",upload.single('photo'),AuthController.uploadImage);
 router.get("/fetchImage",AuthController.fetchImage);
 

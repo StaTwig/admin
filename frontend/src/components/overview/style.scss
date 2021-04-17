@@ -102,7 +102,7 @@
     background: $eeGrey;
     padding: 1rem;
     display: flex;
-    justify-content: center;
+    justify-content: left;
     align-items: center;
     border-right: 1px solid $d6Grey;
     @media screen and (max-width: 768px) {
@@ -175,7 +175,7 @@ width: 60px;
 
     .title {
       font-size: 9px;
-      line-height: 12px;
+      line-height: 10px;
       font-weight: bold;
       color: #707070;
       @media (min-width: $xl) {

@@ -131,8 +131,8 @@ import './style.scss'
                     <ul className="mr-3">
                         <li className="mb-2 text-secondary">Country ID</li>
                         <li className="mb-2 text-secondary">Country</li>
-                        <li className="mb-2 text-secondary">Warehouse</li>
-                        <li className="mb-1 text-secondary">Warehouse Name</li>
+                        <li className="mb-2 text-secondary">Location</li>
+                        <li className="mb-1 text-secondary">Location Name</li>
                     </ul>
                     <ul>
                         <li className="mb-2">{w.country.id}</li>

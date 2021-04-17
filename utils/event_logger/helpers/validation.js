@@ -1,31 +1,31 @@
 const Joi = require('joi');
 
 const eventSchema = Joi.object().keys({
-  eventID: Joi.string().alphanum().min(1).max(25).required(),
+  eventID: Joi.string().min(1).max(50).required(),
   eventTime: Joi.string().required(),
   eventType: Joi.object().keys({
-    primary: Joi.string().alphanum().min(3).max(25).required(),
-    description: Joi.string().min(3).max(25).required(),
+    primary: Joi.string().min(3).max(50).required(),
+    description: Joi.string().min(3).max(50).required(),
   }),
   actor: Joi.object().keys({
-    actorid: Joi.string().alphanum().min(1).max(25).required(),
+    actorid: Joi.string().min(1).max(50).required(),
     actoruserid: Joi.string().email({ tlds: { allow: false } }),
   }),
   stackholders: Joi.object().keys({
     ca: Joi.object().keys({
-      id: Joi.string().alphanum().min(1).max(25).required(),
+      id: Joi.string().min(1).max(50).required(),
       name: Joi.string().min(1).max(50).required(),
-      address: Joi.string().min(1).max(25).required(),
+      address: Joi.string().min(1).max(100).required(),
     }),
     actororg: Joi.object().keys({
-      id: Joi.string().alphanum().min(1).max(25).required(),
+      id: Joi.string().min(1).max(50).required(),
       name: Joi.string().min(1).max(50).required(),
-      address: Joi.string().min(1).max(25).required(),
+      address: Joi.string().min(1).max(100).required(),
     }),
     secondorg: Joi.object().keys({
-      id: Joi.string().alphanum().min(1).max(25).required(),
+      id: Joi.string().min(1).max(50).required(),
       name: Joi.string().min(1).max(50).required(),
-      address: Joi.string().min(1).max(25).required(),
+      address: Joi.string().min(1).max(100).required(),
     })
   }),
   payload: Joi.object().keys({

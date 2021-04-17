@@ -64,21 +64,21 @@ exports.checkEmail = [
       let phone = '';
       if (!emailId.replace('+91', '').match(phoneRgex) && !emailId.match(emailRegex))
         return Promise.reject('E-mail/Mobile not in valid');
-      
-      if (emailId.indexOf('@') > -1)          
+
+      if (emailId.indexOf('@') > -1)
         user = await EmployeeModel.findOne({ emailId });
       else {
         phone = emailId.indexOf('+91') === 0 ? emailId : '+91' + emailId;
         user = await EmployeeModel.findOne({ phoneNumber: phone });
       }
       // return EmployeeModel.findOne({ emailId: value.toLowerCase() }).then(user => {
-        if (user) {
-          logger.log(
-            'info',
-            '<<<<< UserService < AuthController < register : Entered email is already present in EmployeeModel',
-          );
-          return Promise.reject('Account already in use');
-        }
+      if (user) {
+        logger.log(
+          'info',
+          '<<<<< UserService < AuthController < register : Entered email is already present in EmployeeModel',
+        );
+        return Promise.reject('Account already in use');
+      }
       // });
     }),
   // Process request after validation and sanitization.
@@ -162,28 +162,28 @@ exports.register = [
     .withMessage('Email must be specified.')
     // .isEmail()
     // .withMessage('Email must be a valid email address.')
-    .custom(async(value) => {
+    .custom(async (value) => {
       const emailId = value.toLowerCase().replace(' ', '');
       let user;
       let phone = '';
       if (!emailId.replace('+91', '').match(phoneRgex) && !emailId.match(emailRegex))
         return Promise.reject('E-mail/Mobile not in valid');
-      
-      if (emailId.indexOf('@') > -1)          
+
+      if (emailId.indexOf('@') > -1)
         user = await EmployeeModel.findOne({ emailId });
       else {
         phone = emailId.indexOf('+91') === 0 ? emailId : '+91' + emailId;
         user = await EmployeeModel.findOne({ phoneNumber: phone });
       }
-      
+
       // return EmployeeModel.findOne({ emailId: value.toLowerCase() }).then(user => {
-        if (user) {
-          logger.log(
-            'info',
-            '<<<<< UserService < AuthController < register : Entered email is already present in EmployeeModel',
-          );
-          return Promise.reject('E-mail/Mobile already in use');
-        }
+      if (user) {
+        logger.log(
+          'info',
+          '<<<<< UserService < AuthController < register : Entered email is already present in EmployeeModel',
+        );
+        return Promise.reject('E-mail/Mobile already in use');
+      }
       // });
     }),
   // Process request after validation and sanitization.
@@ -207,7 +207,7 @@ exports.register = [
                  console.log("finished re indexing")
                })
              })*/
-       //EmployeeModel.createIndexes();
+      //EmployeeModel.createIndexes();
       // Extract the validation errors from a request.
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
@@ -229,151 +229,196 @@ exports.register = [
         );
       } else {
         //hash input password
-          // generate OTP for confirmation
-          logger.log(
-            'info',
-            '<<<<< UserService < AuthController < register : Generating Hash for Input Password',
-          );
-        
-          var organisationId = req.body.organisationId;
-          var warehouseId = 'NA';
-          var employeeId = uniqid('emp-');
-          var employeeStatus = 'NOTAPPROVED';
-          let addr = '';
-            
-          //create organisation if doesn't exists 
-          if (req.body.organisationName) {
-            const organisationName = req.body.organisationName;
-            const organisation = await OrganisationModel.findOne({ name : { $regex : organisationName , $options : 'i'}});
-            if (organisation) {
-              organisationId = organisation.id;
-            }
-            else {
-              // employeeStatus = 'ACTIVE';
-              // const centralOrg = await OrganisationModel.findOne({ type: 'CENTRAL_AUTHORITY' });
-              // if (centralOrg) {
-              //   if (centralOrg.configuration_id) {
-                  
-              //   }
-              // }
-              const country = req.body?.address?.country ? req.body.address?.country : 'India';
-              const address = req.body?.address ? req.body.address : {};
-              addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
-              organisationId = uniqid('org-');
-              warehouseId = uniqid('war-');
-              const org = new OrganisationModel({
-                primaryContactId: employeeId,
-                name: organisationName,
-                id: organisationId,
-                type: req.body?.type ? req.body.type : 'CUSTOMER_SUPPLIER',
-                status: 'NOTVERIFIED',
-                postalAddress: addr,
-                warehouses: [warehouseId],
-                warehouseEmployees: [employeeId],
-                country: {
-                  countryId: '001',
-                  countryName: country
-                },
-                configuration_id: 'CONF001'
-              });
-              await org.save();
+        // generate OTP for confirmation
+        logger.log(
+          'info',
+          '<<<<< UserService < AuthController < register : Generating Hash for Input Password',
+        );
 
-              const inventoryId = uniqid('inv-');
-              const inventoryResult = new InventoryModel({ id: inventoryId });
-              await inventoryResult.save();
+        var organisationId = req.body.organisationId;
+        var warehouseId = 'NA';
 
-              const warehouse = new WarehouseModel({
-                title: 'Office',
-                id: warehouseId,
-                warehouseInventory: inventoryId,
-                organisationId: organisationId,
-                // postalAddress: address,
-                warehouseAddress: {
-                  firstLine: address.line1,
-                  secondLine: "",
-                  city: address.city,
-                  state: address.state,
-                  country: address.country,
-                  landmark: "",
-                  zipCode: address.pincode
-                },
-                country: {
-                  countryId: '001',
-                  countryName: country
-                }
-              });
-              await warehouse.save();
-            }
+        const incrementCounterEmp = await CounterModel.update({
+                  'counters.name': "employeeId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+        const empCounter = await CounterModel.findOne({'counters.name':"employeeId"},{"counters.name.$":1})
+        var employeeId = empCounter.counters[0].format + empCounter.counters[0].value;
+
+        //var employeeId = uniqid('emp-');
+        var employeeStatus = 'NOTAPPROVED';
+        let addr = '';
+
+        //create organisation if doesn't exists 
+        if (req.body.organisationName) {
+          const organisationName = req.body.organisationName;
+          const organisation = await OrganisationModel.findOne({ name: { $regex: organisationName, $options: 'i' } });
+          if (organisation) {
+            organisationId = organisation.id;
           }
+          else {
+            // employeeStatus = 'ACTIVE';
+            // const centralOrg = await OrganisationModel.findOne({ type: 'CENTRAL_AUTHORITY' });
+            // if (centralOrg) {
+            //   if (centralOrg.configuration_id) {
 
-        const emailId = req.body.emailId.toLowerCase().replace(' ','');
+            //   }
+            // }
+            const country =  req.body?.address?.country ? req.body.address?.country : 'India';
+            const address =  req.body?.address ? req.body.address :  {};
+            addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
+            
+            const incrementCounterOrg = await CounterModel.update({
+                  'counters.name': "orgId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+            const orgCounter = await CounterModel.findOne({'counters.name':"orgId"},{"counters.name.$":1})
+            organisationId = orgCounter.counters[0].format + orgCounter.counters[0].value;
+
+            //organisationId = uniqid('org-');
+            const incrementCounterWarehouse = await CounterModel.update({
+                  'counters.name': "warehouseId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+            const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.name.$":1})
+            warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
+            //warehouseId = uniqid('war-');
+            const org = new OrganisationModel({
+              primaryContactId: employeeId,
+              name: organisationName,
+              id: organisationId,
+              type: req.body?.type ? req.body.type : 'CUSTOMER_SUPPLIER',
+              status: 'NOTVERIFIED',
+              postalAddress: addr,
+              warehouses: [warehouseId],
+              warehouseEmployees: [employeeId],
+              country: {
+                countryId: '001',
+                countryName: country
+              },
+              configuration_id: 'CONF001'
+            });
+            await org.save();
+
+            const incrementCounterInv = await CounterModel.update({
+                  'counters.name': "inventoryId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+            const invCounter = await CounterModel.findOne({'counters.name':"inventoryId"},{"counters.name.$":1})
+            const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
+
+            //const inventoryId = uniqid('inv-');
+            const inventoryResult = new InventoryModel({ id: inventoryId });
+            await inventoryResult.save();
+
+            const warehouse = new WarehouseModel({
+              title: 'Office',
+              id: warehouseId,
+              warehouseInventory: inventoryId,
+              organisationId: organisationId,
+              // postalAddress: address,
+              warehouseAddress: {
+                firstLine: address.line1,
+                secondLine: "",
+                city: address.city,
+                state: address.state,
+                country: address.country,
+                landmark: "",
+                zipCode: address.pincode
+              },
+              country: {
+                countryId: '001',
+                countryName: country
+              }
+            });
+            await warehouse.save();
+          }
+        }
+
+        const emailId = req.body.emailId.toLowerCase().replace(' ', '');
         let phone = '';
         if (emailId.indexOf('@') === -1)
-          phone = emailId.indexOf('+91') === 0 ? emailId : '+91'+emailId;
-        
-          // Create User object with escaped and trimmed data
-          const user = new EmployeeModel({
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            emailId: phone ? '' : req.body.emailId.toLowerCase(),
-            phoneNumber: phone,
-            organisationId: organisationId,
-            id: employeeId,
-            postalAddress: addr,
-            accountStatus: employeeStatus,
-            warehouseId: warehouseId
-          });
-          await user.save()
+          phone = emailId.indexOf('+91') === 0 ? emailId : '+91' + emailId;
+
+        // Create User object with escaped and trimmed data
+        const user = new EmployeeModel({
+          firstName: req.body.firstName,
+          lastName: req.body.lastName,
+          emailId: phone ? '' : req.body.emailId.toLowerCase(),
+          phoneNumber: phone,
+          organisationId: organisationId,
+          id: employeeId,
+          postalAddress: addr,
+          accountStatus: employeeStatus,
+          warehouseId: warehouseId
+        });
+        await user.save()
         return apiResponse.successResponse(res, 'User registered Success');
-          // Html email body
-         /* let html = EmailContent({
-            name: req.body.name,
-            origin: req.headers.origin,
-            otp,
-          });
-          // Send confirmation email
-          mailer
-            .send(
-              constants.confirmEmails.from,
-              req.body.emailId,
-              constants.confirmEmails.subject,
-              html,
-            )
-            .then(function() {
-              // Save user.
-              user.save(function(err) {
-                if (err) {
-                  logger.log(
-                    'info',
-                    '<<<<< UserService < AuthController < register : Error while saving User',
-                  );
-                  return apiResponse.ErrorResponse(res, err);
-                }
-                let userData = {
-                  id: user.id,
-                  firstName: user.firstName,
-                  lastName: user.lastName,
-                  emailId: user.emailId,
-                  warehouseId:user.warehouseId,
-                };
-                logger.log(
-                  'info',
-                  '<<<<< UserService < AuthController < register : Successfully saving User',
-                );
-                return apiResponse.successResponseWithData(
-                  res,
-                  'Registration Success.',
-                  userData,
-                );
-              });
-            })
-            .catch(err => {
-              logger.log(
-                'error',
-                '<<<<< UserService < AuthController < register : Error in catch block 1',
-              );
-              return apiResponse.ErrorResponse(res, err);
-            });*/
+        // Html email body
+        /* let html = EmailContent({
+           name: req.body.name,
+           origin: req.headers.origin,
+           otp,
+         });
+         // Send confirmation email
+         mailer
+           .send(
+             constants.confirmEmails.from,
+             req.body.emailId,
+             constants.confirmEmails.subject,
+             html,
+           )
+           .then(function() {
+             // Save user.
+             user.save(function(err) {
+               if (err) {
+                 logger.log(
+                   'info',
+                   '<<<<< UserService < AuthController < register : Error while saving User',
+                 );
+                 return apiResponse.ErrorResponse(res, err);
+               }
+               let userData = {
+                 id: user.id,
+                 firstName: user.firstName,
+                 lastName: user.lastName,
+                 emailId: user.emailId,
+                 warehouseId:user.warehouseId,
+               };
+               logger.log(
+                 'info',
+                 '<<<<< UserService < AuthController < register : Successfully saving User',
+               );
+               return apiResponse.successResponseWithData(
+                 res,
+                 'Registration Success.',
+                 userData,
+               );
+             });
+           })
+           .catch(err => {
+             logger.log(
+               'error',
+               '<<<<< UserService < AuthController < register : Error in catch block 1',
+             );
+             return apiResponse.ErrorResponse(res, err);
+           });*/
       }
     } catch (err) {
       //throw error in json response with status 500.
@@ -406,11 +451,11 @@ exports.sendOtp = [
   async (req, res) => {
     try {
       const errors = validationResult(req);
-     /* EmployeeModel.collection.dropIndexes(function(){
-        EmployeeModel.collection.reIndex(function(finished){
-                 console.log("finished re indexing")
-               })
-             })*/
+      /* EmployeeModel.collection.dropIndexes(function(){
+         EmployeeModel.collection.reIndex(function(finished){
+                  console.log("finished re indexing")
+                })
+              })*/
       //EmployeeModel.createIndexes();
       if (!errors.isEmpty()) {
         logger.log(
@@ -429,94 +474,94 @@ exports.sendOtp = [
         if (emailId.indexOf('@') > -1)
           user = await EmployeeModel.findOne({ emailId });
         else {
-          phone = emailId.indexOf('+91') === 0 ? emailId : '+91'+emailId;
+          phone = emailId.indexOf('+91') === 0 ? emailId : '+91' + emailId;
           user = await EmployeeModel.findOne({ phoneNumber: phone });
         }
-        if(user) {
+        if (user) {
           if (user.accountStatus === 'ACTIVE') {
             logger.log(
-                'info',
-                '<<<<< UserService < AuthController < login : user is active',
+              'info',
+              '<<<<< UserService < AuthController < login : user is active',
             );
             let otp = utility.randomNumber(4);
             if (user.emailId === process.env.EMAIL_APPSTORE)
               otp = process.env.OTP_APPSTORE;
-            
-            await EmployeeModel.updateOne({id: user.id }, { otp });
-            
+
+            await EmployeeModel.updateOne({ id: user.id }, { otp });
+
             axios.post(process.env.OTP_ENDPOINT, {
-              subject : "OTP request for Vaccine Ledger",
-              email : user.emailId,
-              phone : user.phoneNumber ? user.phoneNumber : '',
-              otp : otp.toString(),
-              message : "Please Send the OTP",
-              source : process.env.SOURCE
+              subject: "OTP request for Vaccine Ledger",
+              email: user.emailId,
+              phone: user.phoneNumber ? user.phoneNumber : '',
+              otp: otp.toString(),
+              message: "Please Send the OTP",
+              source: process.env.SOURCE
             })
               .then((response) => {
-              if (response.status === 200) {
-                return apiResponse.successResponseWithData(
-                  res,
-                  'OTP Sent Success.',
-                  { email: user.emailId }
-                );
-              }
-              else {
-                return apiResponse.ErrorResponse(res, response.statusText);
-              }
-            }, (error) => {
+                if (response.status === 200) {
+                  return apiResponse.successResponseWithData(
+                    res,
+                    'OTP Sent Success.',
+                    { email: user.emailId }
+                  );
+                }
+                else {
+                  return apiResponse.ErrorResponse(res, response.statusText);
+                }
+              }, (error) => {
                 console.log(error);
-            });
-            
-          //   let html = EmailContent({
-          //     name: user.firstName,
-          //     origin: req.headers.origin,
-          //     otp,
-          //   });
-          // // Send confirmation email
-          //   try {
-          //     await mailer
-          //         .send(
-          //             constants.confirmEmails.from,
-          //             user.emailId,
-          //             constants.confirmEmails.subject,
-          //             html,
-          //         );
-          //     return apiResponse.successResponseWithData(
-          //         res,
-          //         'OTP Sent Success.'
-          //     );
-          //   }catch(err) {
-          //     return apiResponse.ErrorResponse(res, err);
-          //   }
+              });
 
-           /* let userData = {
-              id: user.id,
-              firstName: user.firstName,
-              emailId: user.emailId,
-              role: user.role,
-              warehouseId:user.warehouseId,
-            };
-            //Prepare JWT token for authentication
-            const jwtPayload = userData;
-            const jwtData = {
-              expiresIn: process.env.JWT_TIMEOUT_DURATION,
-            };
-            const secret = process.env.JWT_SECRET;
-            //Generated JWT token with Payload and secret.
-            userData.token = jwt.sign(jwtPayload, secret, jwtData);
-            logger.log(
-                'info',
-                '<<<<< UserService < AuthController < login : user login success',
-            );*/
+            //   let html = EmailContent({
+            //     name: user.firstName,
+            //     origin: req.headers.origin,
+            //     otp,
+            //   });
+            // // Send confirmation email
+            //   try {
+            //     await mailer
+            //         .send(
+            //             constants.confirmEmails.from,
+            //             user.emailId,
+            //             constants.confirmEmails.subject,
+            //             html,
+            //         );
+            //     return apiResponse.successResponseWithData(
+            //         res,
+            //         'OTP Sent Success.'
+            //     );
+            //   }catch(err) {
+            //     return apiResponse.ErrorResponse(res, err);
+            //   }
+
+            /* let userData = {
+               id: user.id,
+               firstName: user.firstName,
+               emailId: user.emailId,
+               role: user.role,
+               warehouseId:user.warehouseId,
+             };
+             //Prepare JWT token for authentication
+             const jwtPayload = userData;
+             const jwtData = {
+               expiresIn: process.env.JWT_TIMEOUT_DURATION,
+             };
+             const secret = process.env.JWT_SECRET;
+             //Generated JWT token with Payload and secret.
+             userData.token = jwt.sign(jwtPayload, secret, jwtData);
+             logger.log(
+                 'info',
+                 '<<<<< UserService < AuthController < login : user login success',
+             );*/
 
           } else {
             logger.log(
-                'warn',
-                '<<<<< UserService < AuthController < login : account is not approved.',
+              'warn',
+              '<<<<< UserService < AuthController < login : account is not approved.',
             );
             return apiResponse.unauthorizedResponse(
-                res,
-                'Account is not Approved. Please contact admin.',
+              res,
+              'Account is not Approved. Please contact admin.',
             );
           }
         } else {
@@ -546,9 +591,9 @@ exports.verifyOtp = [
     .isLength({ min: 1 })
     .trim()
     .withMessage('Email/Mobile must be specified.')
-    // .isEmail()
-    // .withMessage('Email must be a valid email address.'),
-  ,body('otp')
+  // .isEmail()
+  // .withMessage('Email must be a valid email address.'),
+  , body('otp')
     .isLength({ min: 1 })
     .trim()
     .withMessage('OTP must be specified.'),
@@ -572,7 +617,7 @@ exports.verifyOtp = [
           let phone = emailId.indexOf('+91') === 0 ? emailId : '+91' + emailId;
           query = { phoneNumber: phone };
         }
-        
+
         const user = await EmployeeModel.findOne(query);
         if (user && user.otp == req.body.otp) {
           await EmployeeModel.update(query, { otp: null });
@@ -581,8 +626,8 @@ exports.verifyOtp = [
             firstName: user.firstName,
             emailId: user.emailId,
             role: user.role,
-            warehouseId:user.warehouseId,
-	          organisationId:user.organisationId,
+            warehouseId: user.warehouseId,
+            organisationId: user.organisationId,
           };
           //Prepare JWT token for authentication
           const jwtPayload = userData;
@@ -593,8 +638,8 @@ exports.verifyOtp = [
           //Generated JWT token with Payload and secret.
           userData.token = jwt.sign(jwtPayload, secret, jwtData);
           logger.log(
-              'info',
-              '<<<<< UserService < AuthController < login : user login success',
+            'info',
+            '<<<<< UserService < AuthController < login : user login success',
           );
           return apiResponse.successResponseWithData(res, 'Login Success', userData);
         } else {
@@ -635,9 +680,9 @@ exports.userInfo = [
             photoId,
             postalAddress
           } = user;
-          const org = await OrganisationModel.findOne({ id: organisationId }, 'name' );
-          const warehouse = await WarehouseModel.findOne({ id: warehouseId });  
-          console.log(warehouse);        
+          const org = await OrganisationModel.findOne({ id: organisationId }, 'name');
+          const warehouse = await WarehouseModel.findOne({ id: warehouseId });
+          console.log(warehouse);
           let user_data = {
             firstName,
             lastName,
@@ -706,7 +751,7 @@ exports.updateProfile = [
       employee.warehouseId = warehouseId;
       await employee.save();
 
-      const returnData = {isRefresh: false};
+      const returnData = { isRefresh: false };
       if (warehouseId !== req.user.warehouseId) {
         let userData = {
           id: employee.id,
@@ -746,7 +791,7 @@ exports.updatePassword = [
             'info',
             '<<<<< UserService < AuthController < updatePassword : user exist',
           );
-          bcrypt.hash(req.body.password, 10, function(err, hash) {
+          bcrypt.hash(req.body.password, 10, function (err, hash) {
             var passwordNew = hash;
             if (req.body.password) {
               logger.log(
@@ -761,7 +806,7 @@ exports.updatePassword = [
                 user.password = passwordNew;
               }
             }
-            user.save(function(err) {
+            user.save(function (err) {
               if (err) {
                 logger.log(
                   'error',
@@ -792,7 +837,7 @@ exports.updatePassword = [
   },
 ];
 
-exports.uploadImage = [
+/*exports.uploadImage = [
   auth,
   (req, res) => {
     try {
@@ -802,12 +847,12 @@ exports.uploadImage = [
             'info',
             '<<<<< UserService < AuthController < uploadImage : user exist',
           );
-          base64Img.base64('uploads/' + req.file.filename, function(err, data) {
+          base64Img.base64('uploads/' + req.file.filename, function (err, data) {
             var base64ImgData = data;
             user.profile_picture = data;
             user.image_location = req.file.filename;
             // Save user.
-            user.save(function(err) {
+            user.save(function (err) {
               if (err) {
                 logger.log(
                   'error',
@@ -836,7 +881,7 @@ exports.uploadImage = [
       return apiResponse.ErrorResponse(res, err);
     }
   },
-];
+];*/
 
 exports.createUserAddress = [
   async (req, res) => {
@@ -984,211 +1029,532 @@ exports.assignProductConsumer = [
 exports.addWarehouse = [
   auth,
   async (req, res) => {
-  try {
-    const inventoryId = uniqid('inv-');
-    const inventoryResult = new InventoryModel({ id: inventoryId });
-    await inventoryResult.save();
-    const {
-      organisationId,
-      postalAddress,
-      region,
-      country,
-      location,
-      supervisors,
-      employees,
-    } = req.body;
-    const warehouseId = uniqid('war-');
-    const warehouse = new WarehouseModel({
-      id: warehouseId,
-      organisationId,
-      postalAddress,
-      region,
-      country,
-      location,
-      supervisors,
-      employees,
-      warehouseInventory: inventoryResult.id,
-    });
-    await warehouse.save();
-    return apiResponse.successResponseWithData(
-      res,
-      'Warehouse added success',
-      warehouse,
-    );
-  }catch(err) {
-    return apiResponse.ErrorResponse(res, err);
-  }
+    try {
+      const incrementCounterInv = await CounterModel.update({
+                  'counters.name': "inventoryId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+      const invCounter = await CounterModel.findOne({'counters.name':"inventoryId"},{"counters.name.$":1})
+      const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
+
+      //const inventoryId = uniqid('inv-');
+      const inventoryResult = new InventoryModel({ id: inventoryId });
+      await inventoryResult.save();
+      const {
+        organisationId,
+        postalAddress,
+        region,
+        country,
+        location,
+        supervisors,
+        employees,
+      } = req.body;
+
+      const incrementCounterWarehouse = await CounterModel.update({
+                  'counters.name': "warehouseId"
+               },{
+                    $inc: {
+                      "counters.$.value": 1
+                  }
+             })
+
+      const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.name.$":1})
+      const warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
+
+      //const warehouseId = uniqid('war-');
+      const warehouse = new WarehouseModel({
+        id: warehouseId,
+        organisationId,
+        postalAddress,
+        region,
+        country,
+        location,
+        supervisors,
+        employees,
+        warehouseInventory: inventoryResult.id,
+      });
+      await warehouse.save();
+      return apiResponse.successResponseWithData(
+        res,
+        'Warehouse added success',
+        warehouse,
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
 
 
   },
 ];
 
-exports.uploadImage = async function(req, res) {
-    checkToken(req, res, async (result) => {
-        if (result.success) {
-            const {
-                data
-            } = result;
-            var filename;
-            const {
-                id,
-                type,
-                imageSide,
-                action
-            } = req.query;
+exports.uploadImage = async function (req, res) {
+  checkToken(req, res, async (result) => {
+    if (result.success) {
+      const {
+        data
+      } = result;
+      var filename;
+      const {
+        id,
+        type,
+        imageSide,
+        action
+      } = req.query;
 
-            const incrementCounter = await CounterModel.update({
-                'counters.name': "employeeImage"
-            }, {
-                $inc: {
-                    "counters.$.value": 1
-                }
-            })
-
-            const poCounter = await CounterModel.find({
-                "counters.name": "employeeImage"
-            }, {
-                "counters.name.$": 1
-            })
-            const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]))
-            try {
-                if (action != "STOREID")
-                    filename = id + "-" + type + imageSide + "-" + t.format + t.value + ".png";
-                else
-                    filename = t.value + "-" + req.file.filename;
-
-                let dir = `uploads`;
-                await moveFile(req.file.path, `${dir}/${filename}`);
-            } catch (e) {
-                console.log("Error in image upload", e);
-                res.status(403).json(e);
-            }
-
-            if (action == "KYCUPLOAD") {
-                const update = await EmployeeModel.updateOne({
-                    $and: [{
-                        "userDocuments.idNumber": parseInt(id)
-                    }, {
-                        "userDocuments.idType": type
-                    }]
-                }, {
-                    "$push": {
-                        "userDocuments.$.imageDetails": filename
-                    }
-                })
-                return res.send({
-                    success: true,
-                    data: "Image uploaded successfullly.!",
-                    filename
-                })
-
-            } else if (action == "STOREID") {
-                const data = {
-                    "userDocuments": {
-                        "imageDetails": [
-                            filename
-                        ],
-                        "idType": "STOREID",
-                    }
-                }
-
-                const employee = await EmployeeModel.updateOne({
-                    emailId: "satheesh@statwig.com"
-                }, {
-                    $push: data
-                });
-                return res.send({
-                    success: true,
-                    data: "Uploaded successfully",
-                    filename
-                })
-            } else if (action == "KYCNEW") {
-                const data = {
-                    "userDocuments": {
-                        "imageDetails": [
-                            filename
-                        ],
-                        "idType": type,
-                        "idNumber": parseInt(id),
-                        "approvalStatus": "NOTAPPROVED"
-                    }
-                }
-                const employee = await EmployeeModel.updateOne({
-                    emailId: "satheesh@statwig.com"
-                }, {
-                    $push: data
-                });
-                return res.send({
-                    success: true,
-                    data: "Uploaded successfully",
-                    filename
-                })
-            } else {
-                return res.send({
-                    success: false,
-                    data: "Please check the type action you want to perfrom STOREID/KYCNEW/KYCUPLOAD.!"
-                })
-            }
-        } else {
-            res.json(result);
+      const incrementCounter = await CounterModel.update({
+        'counters.name': "employeeImage"
+      }, {
+        $inc: {
+          "counters.$.value": 1
         }
-    });
+      })
+
+      const poCounter = await CounterModel.find({
+        "counters.name": "employeeImage"
+      }, {
+        "counters.name.$": 1
+      })
+      const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]))
+      try {
+        if (action == "STOREID")
+	  filename = t.value + "-" + req.file.filename;
+        else if (action == "PROFILE")
+	  filename = "PROFILE" + "-" +  data.id + ".png"
+	else
+           filename = id + "-" + type + imageSide + "-" + t.format + t.value + ".png";	
+	
+	let dir = `/home/ubuntu/userimages`;
+        await moveFile(req.file.path, `${dir}/${filename}`);
+      } catch (e) {
+        console.log("Error in image upload", e);
+        res.status(403).json(e);
+      }
+
+      if (action == "KYCUPLOAD") {
+        const update = await EmployeeModel.updateOne({
+          $and: [{
+            "userDocuments.idNumber": parseInt(id)
+          }, {
+            "userDocuments.idType": type
+          }]
+        }, {
+          "$push": {
+            "userDocuments.$.imageDetails": filename
+          }
+        })
+        return res.send({
+          success: true,
+          data: "Image uploaded successfullly.!",
+          filename
+        })
+
+      } else if (action == "STOREID") {
+        const data = {
+          "userDocuments": {
+            "imageDetails": [
+              filename
+            ],
+            "idType": "STOREID",
+          }
+        }
+
+        const employee = await EmployeeModel.updateOne({
+          emailId: "satheesh@statwig.com"
+        }, {
+          $push: data
+        });
+        return res.send({
+          success: true,
+          data: "Uploaded successfully",
+          filename
+        })
+      } else if (action == "KYCNEW") {
+        const data = {
+          "userDocuments": {
+            "imageDetails": [
+              filename
+            ],
+            "idType": type,
+            "idNumber": parseInt(id),
+            "approvalStatus": "NOTAPPROVED"
+          }
+        }
+        const employee = await EmployeeModel.updateOne({
+          emailId: "satheesh@statwig.com"
+        }, {
+          $push: data
+        });
+        return res.send({
+          success: true,
+          data: "Uploaded successfully",
+          filename
+        })
+      } else if (action == "PROFILE") {
+        const employee = await EmployeeModel.updateOne({
+          emailId: data.emailId
+        }, {
+          $set: { "photoId": "/images/" + filename} 
+        });
+        return res.send({
+          success: true,
+          data: "Uploaded successfully",
+          filename
+        })
+      } else {
+        return res.send({
+          success: false,
+          data: "Please check the type action you want to perfrom STOREID/KYCNEW/KYCUPLOAD.!"
+        })
+      }
+    } else {
+      res.json(result);
+    }
+  });
 };
 
-exports.fetchImage = async function(req, res) {
-    checkToken(req, res, async (result) => {
-        if (result.success) {
-            const {
-                data
-            } = result;
-            const {
-                type
-            } = req.query;
-            var imageArray = [];
-            const findRecord = await EmployeeModel.findOne({
-                $and: [{
-                    "emailId": data.emailId
-                }, {
-                    "userDocuments.idType": type
-                }]
-            });
+exports.fetchImage = async function (req, res) {
+  checkToken(req, res, async (result) => {
+    if (result.success) {
+      const {
+        data
+      } = result;
+      const {
+        type
+      } = req.query;
+      var imageArray = [];
+      const findRecord = await EmployeeModel.findOne({
+        $and: [{
+          "emailId": data.emailId
+        }, {
+          "userDocuments.idType": type
+        }]
+      });
+      if (findRecord != null) {
 
-            if (findRecord != null) {
+        const update = await EmployeeModel.findOne({
+          $and: [{
+            "emailId": data.emailId
+          }, {
+            "userDocuments.idType": type
+          }]
+        }, {
+          "userDocuments.$.imageDetails": 1
+        }).then((result) => {
+          imageArray = result.userDocuments[0].imageDetails;
+        }).catch((e) => {
+          console.log("Err", e)
+        })
 
-                const update = await EmployeeModel.findOne({
-                    $and: [{
-                        "emailId": data.emailId
-                    }, {
-                        "userDocuments.idType": type
-                    }]
-                }, {
-                    "userDocuments.$.imageDetails": 1
-                }).then((result) => {
-                    imageArray = result.userDocuments[0].imageDetails;
-                }).catch((e) => {
-                    console.log("Err", e)
-                })
-
-                var resArray = [];
-
-                for (i = 0; i < imageArray.length; i++) {
-                    const s = "/images/" + imageArray[i];
-                    resArray.push(s)
-                }
-            } else {
-                return res.send({
-                    success: false,
-                    data: "Matching ID number and type not found.! STOREID/Aadhar/Passport"
-                })
-
-            }
-            return res.send({
-                success: true,
-                data: resArray
-            })
-
-        } else {
-            res.json(result);
+        var resArray = [];
+        for (i = 0; i < imageArray.length; i++) {
+          const s = "/images/" + imageArray[i];
+          resArray.push(s)
         }
-    });
+      } else {
+        return res.send({
+          success: false,
+          data: "Matching ID number and type not found.! STOREID/Aadhar/Passport"
+        })
+
+      }
+      return res.send({
+        success: true,
+        data: resArray
+      })
+
+    } else {
+      res.json(result);
+    }
+  });
 };
+
+exports.getAllRegisteredUsers = [
+  auth,
+  async (req, res) => {
+    try {
+      const resPerPage = 10; // results per page
+      const page = req.query.page || 1; // Page 
+      const totalRecords = await EmployeeModel.count({})
+      const users = await EmployeeModel.find({}).skip((resPerPage * page) - resPerPage)
+      .limit(resPerPage);;
+      const confirmedUsers = users.filter(user => user.walletAddress !== '');
+      if (confirmedUsers.length > 0) {
+        logger.log(
+          'info',
+          `<<<<< EmployeeService < AuthController < No of Employees : ${users.length}`,
+        );
+        var users_data = [];
+        for (var i in confirmedUsers) {
+          let {
+            firstName,
+            lastName,
+            emailId,
+            phoneNumber,
+            walletAddress,
+            affiliatedOrganisations,
+            organisationId,
+            warehouseId,
+            accountStatus,
+            role,
+            photoId,
+            postalAddress
+          } = confirmedUsers[i];
+          const org = await OrganisationModel.findOne({ id: organisationId }, 'name');
+          const warehouse = await WarehouseModel.findOne({ id: warehouseId });
+          users_data[i] = {
+            firstName,
+            lastName,
+            emailId,
+            phoneNumber,
+            walletAddress,
+            affiliatedOrganisations,
+            warehouseId,
+            accountStatus,
+            role,
+            photoId,
+            location: postalAddress,
+          };
+          if (org) {
+            users_data[i].organization = `${org.name}/${organisationId}`
+          }
+          else users_data[i].organization = null
+          if (warehouse && warehouse.warehouseAddress) {
+            users_data[i].warehouseAddress_country = warehouse.warehouseAddress.country,
+              users_data[i].warehouseAddress_zipcode = warehouse.warehouseAddress.zipCode,
+              users_data[i].warehouseAddress_city = warehouse.warehouseAddress.city,
+              users_data[i].warehouseAddress_firstline = warehouse.warehouseAddress.firstLine
+          }
+          else {
+            users_data[i].warehouseAddress_country = null,
+              users_data[i].warehouseAddress_zipcode = null,
+              users_data[i].warehouseAddress_city = null,
+              users_data[i].warehouseAddress_firstline = null
+          }
+        }
+        const finalData = {
+          totalRecords : totalRecords,
+          data : users_data
+        }
+        logger.log(
+          'info',
+          '<<<<< UserService < AuthController < userInfo : sending profile',
+        );
+        return apiResponse.successResponseWithData(
+          res,
+          'Sent Profile',
+          finalData,
+        );
+      }
+      else {
+        logger.log(
+          'error',
+          '<<<<< EmployeeService < AuthController < userInfo : error while sending user info',
+        );
+        return apiResponse.ErrorResponse(res, "No users found");
+      }
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< EmployeeService < AuthController < userInfo : error (catch block)',
+      );
+      console.log(err)
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getAllUsersByWarehouse = [
+  auth,
+  async (req, res) => {
+    try {
+      const resPerPage = 10; // results per page
+      const page = req.query.page || 1; // Page 
+      const totalRecords = await EmployeeModel.count({warehouseId: req.params.warehouseId})
+      const users = await EmployeeModel.find({warehouseId: req.params.warehouseId}).skip((resPerPage * page) - resPerPage)
+      .limit(resPerPage);;
+      const confirmedUsers = users.filter(user => user.walletAddress !== '');
+      const warehouse = await WarehouseModel.findOne({ id: req.params.warehouseId });
+      if (confirmedUsers.length > 0) {
+        logger.log(
+          'info',
+          `<<<<< EmployeeService < AuthController < No of Employees : ${users.length}`,
+        );
+        var users_data = [];
+        for (var i in confirmedUsers) {
+          let {
+            firstName,
+            lastName,
+            emailId,
+            phoneNumber,
+            walletAddress,
+            affiliatedOrganisations,
+            organisationId,
+            warehouseId,
+            accountStatus,
+            role,
+            photoId,
+            postalAddress
+          } = confirmedUsers[i];
+          const org = await OrganisationModel.findOne({ id: organisationId }, 'name');          
+          users_data[i] = {
+            firstName,
+            lastName,
+            emailId,
+            phoneNumber,
+            walletAddress,
+            affiliatedOrganisations,
+            warehouseId,
+            accountStatus,
+            role,
+            photoId,
+            location: postalAddress,
+          };
+          if (org) {
+            users_data[i].organization = `${org.name}/${organisationId}`
+          }
+          else users_data[i].organization = null
+          if (warehouse && warehouse.warehouseAddress) {
+            users_data[i].warehouseAddress_country = warehouse.warehouseAddress.country,
+              users_data[i].warehouseAddress_zipcode = warehouse.warehouseAddress.zipCode,
+              users_data[i].warehouseAddress_city = warehouse.warehouseAddress.city,
+              users_data[i].warehouseAddress_firstline = warehouse.warehouseAddress.firstLine
+          }
+          else {
+            users_data[i].warehouseAddress_country = null,
+              users_data[i].warehouseAddress_zipcode = null,
+              users_data[i].warehouseAddress_city = null,
+              users_data[i].warehouseAddress_firstline = null
+          }
+        }
+        const finalData = {
+          totalRecords : totalRecords,
+          data : users_data
+        }
+        logger.log(
+          'info',
+          '<<<<< EmployeeService < AuthController < userInfo : sending profile',
+        );
+        return apiResponse.successResponseWithData(
+          res,
+          'Sent Profile',
+          finalData,
+        );
+      }
+      else {
+        logger.log(
+          'error',
+          '<<<<< EmployeeService < AuthController < userInfo : error while sending user info',
+        );
+        return apiResponse.ErrorResponse(res, "No users found");
+      }
+    } catch (err) {
+      console.log(err)
+      logger.log(
+        'error',
+        '<<<<< EmployeeService < AuthController < userInfo : error (catch block)',
+      );
+      console.log(err)
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getAllUsersByOrganisation = [
+  auth,
+  async (req, res) => {
+    try {
+      const resPerPage = 10; // results per page
+      const page = req.query.page || 1; // Page 
+      const totalRecords = await EmployeeModel.count({ organisationId: req.params.organisationId })
+      const users = await EmployeeModel.find({ organisationId: req.params.organisationId }).skip((resPerPage * page) - resPerPage)
+      .limit(resPerPage);;
+      const confirmedUsers = users.filter(user => user.walletAddress !== '');      
+      const org = await OrganisationModel.findOne({ id: req.params.organisationId }, 'name');
+      if (confirmedUsers.length > 0) {
+        logger.log(
+          'info',
+          `<<<<< EmployeeService < AuthController < No of Employees : ${users.length}`,
+        );
+        var users_data = [];
+        for (var i in confirmedUsers) {
+          let {
+            firstName,
+            lastName,
+            emailId,
+            phoneNumber,
+            walletAddress,
+            affiliatedOrganisations,
+            organisationId,
+            warehouseId,
+            accountStatus,
+            role,
+            photoId,
+            postalAddress
+          } = confirmedUsers[i];
+          const warehouse = await WarehouseModel.findOne({ id: warehouseId });
+          users_data[i] = {
+            firstName,
+            lastName,
+            emailId,
+            phoneNumber,
+            walletAddress,
+            affiliatedOrganisations,
+            warehouseId,
+            accountStatus,
+            role,
+            photoId,
+            location: postalAddress,
+          };
+          if (org) {
+            users_data[i].organization = `${org.name}/${organisationId}`
+          }
+          else users_data[i].organization = null
+          if (warehouse && warehouse.warehouseAddress) {
+            users_data[i].warehouseAddress_country = warehouse.warehouseAddress.country,
+              users_data[i].warehouseAddress_zipcode = warehouse.warehouseAddress.zipCode,
+              users_data[i].warehouseAddress_city = warehouse.warehouseAddress.city,
+              users_data[i].warehouseAddress_firstline = warehouse.warehouseAddress.firstLine
+          }
+          else {
+            users_data[i].warehouseAddress_country = null,
+              users_data[i].warehouseAddress_zipcode = null,
+              users_data[i].warehouseAddress_city = null,
+              users_data[i].warehouseAddress_firstline = null
+          }
+        }
+        const finalData = {
+          totalRecords : totalRecords,
+          data : users_data
+        }
+        logger.log(
+          'info',
+          '<<<<< EmployeeService < AuthController < userInfo : sending profile',
+        );
+        return apiResponse.successResponseWithData(
+          res,
+          'Sent Profile',
+          finalData,
+        );
+      }
+      else {
+        logger.log(
+          'error',
+          '<<<<< EmployeeService < AuthController < userInfo : error while sending user info',
+        );
+        return apiResponse.ErrorResponse(res, "No users found");
+      }
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< EmployeeService < AuthController < userInfo : error (catch block)',
+      );
+      console.log(err)
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+

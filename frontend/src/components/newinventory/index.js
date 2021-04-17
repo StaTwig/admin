@@ -9,6 +9,8 @@ import FailurePopUp from './failurepopup';
 import uploadBlue from '../../assets/icons/UploadWhite.svg';
 import ExportIcon from '../../assets/icons/Export.svg';
 import dropdownIcon from '../../assets/icons/drop-down.svg';
+import review from '../../assets/icons/review.png';
+import ShipmentFailPopUp from "../neworder/shipmentFailPopUp";
 
 import {
   addMultipleInventories,
@@ -16,27 +18,35 @@ import {
   addInventoriesFromExcel,
 } from '../../actions/inventoryActions';
 import { turnOn, turnOff } from '../../actions/spinnerActions';
-import { getProducts } from '../../actions/poActions';
+import { getProducts, getProductsByCategory } from '../../actions/poActions';
 
 const NewInventory = props => {
   const editInventories = useSelector(state => {
     return state.reviewInventory;
   });
 
+  const [category, setCategory] = useState([]);
+
   useEffect(() => {
     async function fetchData() {
       dispatch(turnOn());
-        const result = await getProducts();
-        const productsArray = result.map(
-          product => product.name,
-        );
-        setProducts(result);
-        setBlankInventory({ ...blankInventory, products: productsArray });
-        if(editInventories.length === 0) {
-          setInventoryState([{ ...blankInventory, products: productsArray }])
-        }else {
-          setInventoryState(editInventories);
-        }
+      const result = await getProducts();
+      const productsArray = result.map(
+        product => product.name,
+      );
+      setProducts(result);
+      
+      const categoryArray = result.map(
+        product => product.type,
+      );
+      
+      setCategory(categoryArray.filter((value, index, self) => self.indexOf(value) === index));
+      setBlankInventory({ ...blankInventory, products: productsArray });
+      if(editInventories.length === 0) {
+        setInventoryState([{ ...blankInventory, products: productsArray }])
+      }else {
+        setInventoryState(editInventories);
+      }
 
       dispatch(turnOff());
       }
@@ -46,6 +56,7 @@ const NewInventory = props => {
 
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [openFailInventory, setOpenFailInventory] = useState(false);
+  const [openQuantityFailInventory, setOpenQuantityFailInventory] = useState(false);
   const [inventoryError, setInventoryError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [products, setProducts] = useState([]);
@@ -54,7 +65,9 @@ const NewInventory = props => {
   const [openExcel, setOpenExcel] = useState(false);
   const [blankInventory, setBlankInventory] = useState({
     productName: 'Select Product',
+    categories: 'Select Category',
     manufacturer: '',
+    productId: '',
     quantity: '',
     manufacturingDate: '',
     expiryDate: '',
@@ -72,12 +85,17 @@ const NewInventory = props => {
   const closeModalFail = () => {
     setOpenFailInventory(false);
   };
+  const closeModalFail1 = () => {
+    setOpenQuantityFailInventory(false);
+  };
+  
 
   var numeric = { year: 'numeric', month: 'numeric' };
 
   const dispatch = useDispatch();
 
   const inventoryFields = [
+    'categories',
     'productName',
     'manufacturer',
     'quantity',
@@ -128,8 +146,9 @@ const NewInventory = props => {
       if (error) return error;
       for (let i = 0; i < validations.length; i++) {
         let validationVariable = inventory[validations[i]];
+
         if (validationVariable.length < 1 ||
-          validationVariable == 'Select Product'
+          validationVariable == 'Select Product' || validationVariable == 'Select Category'
         ) {
           setInventoryError(validations[i]);
           setOpenFailInventory(true);
@@ -137,10 +156,21 @@ const NewInventory = props => {
           break;
         }
       }
+      if(parseInt(inventory.quantity,10)<1)
+      {
+
+      
+        setInventoryError('Check Quantity ');
+        setOpenQuantityFailInventory(true);
+        error=true;
+      }
+    
+     
     });
     return error;
   };
   const onProceedToReview = () => {
+   
     if (checkValidationErrors(inventoryFields)) {
       return;
     } else if (expiryDateValidation(dateValidationFields)) {
@@ -177,9 +207,21 @@ const NewInventory = props => {
     let total = 0;
     inventoryStateClone.forEach(inv => total += parseInt(inv.quantity)  )
   }
+
+  const onCategoryChange = async (index, value) => {
+    try {
+      const warehouse = await getProductsByCategory(value);
+      handleInventoryChange(index, 'categories', value);
+      setProducts(warehouse.data);
+    }
+    catch (err) {
+      setErrorMessage(err);
+    }
+  }
+
   return (
     <div className="Newinventory">
-      <div className="d-flex justify-content-between mb-5">
+      <div className="d-flex justify-content-between mb-3">
         <h1 className="breadcrumb">ADD PRODUCTS TO INVENTORY</h1>
         <div className="d-flex flex-column align-items-center">
           <button className="btn-primary btn" onClick={() => setMenu(!menu)}>
@@ -219,6 +261,9 @@ const NewInventory = props => {
         inventories={inventoryState}
         handleInventoryChange={handleInventoryChange}
         onRemoveRow={onRemoveRow}
+        category={category}
+        handleCategoryChange={onCategoryChange}
+        prods={products}
       />
 
       <div className="d-flex justify-content-between">
@@ -235,7 +280,7 @@ const NewInventory = props => {
         <span className="value">{grandTotal}</span> */}
 
         <button className="btn-primary btn" onClick={onProceedToReview}>
-          Proceed To Review
+          <img src={review} width="20" className="" /><span className="ml-1">Review</span>
         </button>
      </div>
       {openCreatedInventory && (
@@ -257,6 +302,17 @@ const NewInventory = props => {
           <FailurePopUp
             onHide={closeModalFail} //FailurePopUp
             inventoryError={inventoryError}
+          />
+        </Modal>
+      )}
+       {openQuantityFailInventory && (
+        <Modal
+          close={() => closeModalFail1()}
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+         <ShipmentFailPopUp
+            onHide={closeModalFail1} //FailurePopUp
+            shipmentError={inventoryError}
           />
         </Modal>
       )}

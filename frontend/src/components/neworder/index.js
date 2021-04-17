@@ -191,7 +191,7 @@ const NewOrder = (props) => {
 
   return (
     <div className="NewOrder m-3">
-      <h1 className="breadcrumb">CREATE ORDER</h1>
+      <h1 className="breadcrumb">CREATE NEW ORDER</h1>
       <Formik
         // enableReinitialize={true}
         initialValues={{
@@ -238,7 +238,7 @@ const NewOrder = (props) => {
           <form onSubmit={handleSubmit} className="">
             
             <div className="row mb-3">
-              <label htmlFor="productDetails" className="headsup">
+              <label htmlFor="productDetails" className="headsup1">
                 Product Details
               </label>
                 <EditTable
@@ -270,7 +270,7 @@ const NewOrder = (props) => {
             <div className="row mb-3">
               <div className="col bg-white shadow formContainer low p-3">
                 <label htmlFor="client" className="headsup">
-                  From
+                  Order From
                 </label>
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
@@ -308,7 +308,7 @@ const NewOrder = (props) => {
             <div className="row mb-3">
               <div className="col bg-white formContainer shadow low p-3">
                 <label htmlFor="client" className="headsup">
-                  To
+                Deliver To
                 </label>
                 <div className="row">
                   <div className="col-md-6 com-sm-12">

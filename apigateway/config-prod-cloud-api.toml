@@ -86,6 +86,12 @@
       #middlewares = ["analytics-stripprefix"]
       #If the rule matches, forward to the analytics management service (declared below)
       service = "analytics-management"
+    [http.routers.event-management]
+      rule = "Host(`api.vaccineledger.com`) && PathPrefix(`/eventmanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["event-stripprefix"]
+      #If the rule matches, forward to the event management service (declared below)
+      service = "event-management"
 
 
   [http.middlewares]
@@ -120,6 +126,8 @@
       prefixes = ["/shipmentordermanagement", "/shipmentordermanagement/"]
     [http.middlewares.analytics-stripprefix.stripPrefix]
       prefixes = ["/analyticsmanagement", "/analyticsmanagement/"]
+    [http.middlewares.event-stripprefix.stripPrefix]
+      prefixes = ["/eventmanagement", "/eventmanagement/"]
     
   [http.services]
     # Define how to reach an existing service on our infrastructure
@@ -165,4 +173,7 @@
         url = "http://127.0.0.1:3013/"
     [http.services.analytics-management.loadBalancer]
       [[http.services.analytics-management.loadBalancer.servers]]
-        url = "http://127.0.0.1:3013/"
+        url = "http://127.0.0.1:3015/"
+    [http.services.event-management.loadBalancer]
+      [[http.services.event-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3014/"

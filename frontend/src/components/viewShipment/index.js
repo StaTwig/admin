@@ -31,6 +31,7 @@ const Tracing = (props) => {
   const [openPurchase, setOpenPurchase] = useState(false);
   const [openShipping, setOpenShipping] = useState(false);
   const tracking = props.trackData;
+  const status = tracking.status;
   const shippmentChainOfCustodyData = props.shippmentChainOfCustodyData;
   console.log(shippmentChainOfCustodyData)
   // console.log(tracking);
@@ -52,18 +53,18 @@ const Tracing = (props) => {
         <h1 className="breadcrumb">VIEW SHIPMENT</h1>
         <div className="row">
         <Link to={`/shipments`}>
-           <button className="btn btn-outline-primary mr-2" ><img src={back} height="17" className="mr-2 mb-1" />Back to         shipments</button>
+           <button className="btn btn-outline-primary mr-2" ><img src={back} height="17" className="mr-2 mb-1" />Back to shipments</button>
           </Link>
 
-          <Link to={`/updatestatus/${id}`}>
-            <button className="btn btn-orange fontSize20 font-bold mr-5">
-              <span className="chain">Update Status</span>
+          <Link to={(status=="RECEIVED")?`/viewshipment/${id}`:`/updatestatus/${id}`}>
+            <button className="btn btn-orange fontSize20 font-bold mr-5 chain" disabled={status=="RECEIVED"}>
+              Update Status
             </button>
           </Link>
-          <Link to={`/receiveShipment/${id}`}>
-          <button className="btn btn-main-blue fontSize20 font-bold ">
-            <img src={returnShipment} width="14" height="14" className="mr-2" />
-            <span className="chain">Receive Shipment</span>
+          <Link to={(status=="RECEIVED")?`/viewshipment/${id}`:`/receiveShipment/${id}`}>
+          <button className="btn btn-main-blue fontSize20 font-bold chain" disabled={status=="RECEIVED"}>
+            <img src={returnShipment} width="14" height="14" className="mr-2" disabled={status=="RECEIVED"}/>
+            Receive Shipment
           </button>
           </Link>
         </div>
