@@ -6,7 +6,7 @@ require("dotenv").config();
 var indexRouter = require("./routes/index");
 var apiRouter = require("./routes/api");
 var apiResponse = require("./helpers/apiResponse");
-var { dataAggregator } = require("./helpers/dataAggregator");
+var {dataAggregator}= require("./helpers/dataAggregator");
 var cors = require("cors");
 var cron = require('node-cron');
 
