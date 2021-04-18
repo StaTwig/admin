@@ -4,9 +4,9 @@ import "./style.scss";
 import SideBar from "../../components/sidebar";
 import filterIcon from "../../assets/icons/funnel.svg"
 
-
-
 const Inventory = (props) => {
+  const { inventories } = props;
+
   return (
     <div className="container-fluid">
           <div className="row">
@@ -27,122 +27,28 @@ const Inventory = (props) => {
 
                   <div class="btn-group mainButtonFilter">
                     <a href="#!" class="btn active">Brewery</a>
-                    <span className="breweryTitle">Vendor</span>
+                    <a href="#!" class="btn">Vendor</a>
                   </div>
                   
                   <div className="inventoryDetails">
                       <table className="inventorytable">
                         <thead>
                           <tr>
-                            <th className="inventoryHeader">Brand <br/><span className="tableHeadersubtitle">Size</span></th>
+                            <th className="inventoryHeader">Brand {/*<br/><span className="tableHeadersubtitle">Size</span>*/}</th>
                             <th className="inventoryHeader">SKU<br/><span className="tableHeadersubtitle">Stock Code</span></th>
                             <th className="inventoryHeader">Stock Long Description</th>
                             <th className="inventoryHeader">Quantity</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td className="inventorydesc">Knock Out <br/><span className="inventorydescsubtitle">330</span></td>
-                            <td className="inventorydesc">Adonis 330ml <br/><span className="inventorydescsubtitle">52614</span></td>
-                            <td>NRB Old Patent Haywards 330ml</td>
-                            <td>330</td>
-                          </tr>
-                          <tr>
-                            <td className="inventorydesc">Knock Out <br/><span className="inventorydescsubtitle">330</span></td>
-                            <td className="inventorydesc">Adonis 330ml <br/><span className="inventorydescsubtitle">52614</span></td>
-                            <td>NRB Old Patent Haywards 330ml</td>
-                            <td>330</td>
-                          </tr>
-                          <tr>
-                            <td className="inventorydesc">Knock Out <br/><span className="inventorydescsubtitle">330</span></td>
-                            <td className="inventorydesc">Adonis 330ml <br/><span className="inventorydescsubtitle">52614</span></td>
-                            <td>NRB Old Patent Haywards 330ml</td>
-                            <td>330</td>
-                          </tr>
-                          <tr>
-                            <td className="inventorydesc">Knock Out <br/><span className="inventorydescsubtitle">330</span></td>
-                            <td className="inventorydesc">Adonis 330ml <br/><span className="inventorydescsubtitle">52614</span></td>
-                            <td>NRB Old Patent Haywards 330ml</td>
-                            <td>330</td>
-                          </tr>
-                          <tr>
-                            <td className="inventorydesc">Knock Out <br/><span className="inventorydescsubtitle">330</span></td>
-                            <td className="inventorydesc">Adonis 330ml <br/><span className="inventorydescsubtitle">52614</span></td>
-                            <td>NRB Old Patent Haywards 330ml</td>
-                            <td>330</td>
-                          </tr>
-                          <tr>
-                            <td className="inventorydesc">Knock Out <br/><span className="inventorydescsubtitle">330</span></td>
-                            <td className="inventorydesc">Adonis 330ml <br/><span className="inventorydescsubtitle">52614</span></td>
-                            <td>NRB Old Patent Haywards 330ml</td>
-                            <td>330</td>
-                          </tr>
-                          <tr>
-                            <td className="inventorydesc">Knock Out <br/><span className="inventorydescsubtitle">330</span></td>
-                            <td className="inventorydesc">Adonis 330ml <br/><span className="inventorydescsubtitle">52614</span></td>
-                            <td>NRB Old Patent Haywards 330ml</td>
-                            <td>330</td>
-                          </tr>
-                          <tr>
-                            <td className="inventorydesc">Knock Out <br/><span className="inventorydescsubtitle">330</span></td>
-                            <td className="inventorydesc">Adonis 330ml <br/><span className="inventorydescsubtitle">52614</span></td>
-                            <td>NRB Old Patent Haywards 330ml</td>
-                            <td>330</td>
-                          </tr>
-                          <tr>
-                            <td className="inventorydesc">Knock Out <br/><span className="inventorydescsubtitle">330</span></td>
-                            <td className="inventorydesc">Adonis 330ml <br/><span className="inventorydescsubtitle">52614</span></td>
-                            <td>NRB Old Patent Haywards 330ml</td>
-                            <td>330</td>
-                          </tr>
-                          <tr>
-                            <td className="inventorydesc">Knock Out <br/><span className="inventorydescsubtitle">330</span></td>
-                            <td className="inventorydesc">Adonis 330ml <br/><span className="inventorydescsubtitle">52614</span></td>
-                            <td>NRB Old Patent Haywards 330ml</td>
-                            <td>330</td>
-                          </tr>
-                          <tr>
-                            <td className="inventorydesc">Knock Out <br/><span className="inventorydescsubtitle">330</span></td>
-                            <td className="inventorydesc">Adonis 330ml <br/><span className="inventorydescsubtitle">52614</span></td>
-                            <td>NRB Old Patent Haywards 330ml</td>
-                            <td>330</td>
-                          </tr>
-                          <tr>
-                            <td className="inventorydesc">Knock Out <br/><span className="inventorydescsubtitle">330</span></td>
-                            <td className="inventorydesc">Adonis 330ml <br/><span className="inventorydescsubtitle">52614</span></td>
-                            <td>NRB Old Patent Haywards 330ml</td>
-                            <td>330</td>
-                          </tr>
-                          <tr>
-                            <td className="inventorydesc">Knock Out <br/><span className="inventorydescsubtitle">330</span></td>
-                            <td className="inventorydesc">Adonis 330ml <br/><span className="inventorydescsubtitle">52614</span></td>
-                            <td>NRB Old Patent Haywards 330ml</td>
-                            <td>330</td>
-                          </tr>
-                          <tr>
-                            <td className="inventorydesc">Knock Out <br/><span className="inventorydescsubtitle">330</span></td>
-                            <td className="inventorydesc">Adonis 330ml <br/><span className="inventorydescsubtitle">52614</span></td>
-                            <td>NRB Old Patent Haywards 330ml</td>
-                            <td>330</td>
-                          </tr>
-                          <tr>
-                            <td className="inventorydesc">Knock Out <br/><span className="inventorydescsubtitle">330</span></td>
-                            <td className="inventorydesc">Adonis 330ml <br/><span className="inventorydescsubtitle">52614</span></td>
-                            <td>NRB Old Patent Haywards 330ml</td>
-                            <td>330</td>
-                          </tr>
-                          <tr>
-                            <td className="inventorydesc">Knock Out <br/><span className="inventorydescsubtitle">330</span></td>
-                            <td className="inventorydesc">Adonis 330ml <br/><span className="inventorydescsubtitle">52614</span></td>
-                            <td>NRB Old Patent Haywards 330ml</td>
-                            <td>330</td>
-                          </tr>
-                          <tr>
-                            <td className="inventorydesc">Knock Out <br/><span className="inventorydescsubtitle">330</span></td>
-                            <td className="inventorydesc">Adonis 330ml <br/><span className="inventorydescsubtitle">52614</span></td>
-                            <td>NRB Old Patent Haywards 330ml</td>
-                            <td>330</td>
-                          </tr>
+                          {inventories.map((inventory, index) => 
+                            <tr key={index}>
+                              <td className="inventorydesc">{inventory.manufacturer} <br/><span className="inventorydescsubtitle">&nbsp;</span></td>
+                              <td className="inventorydesc">{inventory.name}<br /><span className="inventorydescsubtitle">{inventory.externalId}</span></td>
+                              <td>{inventory.shortName}</td>
+                              <td>{inventory.quantity}</td>
+                            </tr>
+                          )}
                         </tbody>
                       </table>
                     </div>
