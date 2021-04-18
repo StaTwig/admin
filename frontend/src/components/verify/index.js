@@ -13,6 +13,12 @@ const FormVerifyPage = (props) => {
   return (
     <div className="login-wrapper">
       <div className="container">
+        <div className="mobile-header">
+          <div className="branding">
+            <img src={logo} alt="vaccineledger" />
+          </div>
+        </div>
+
         <div className="row">
           <div className="col-sm-6 col-lg-6">
             <div className="form-content">
