@@ -277,7 +277,7 @@ export const receiveApi = async (formData) => {
 export const chainOfCustodyTrack = async id => {
   try {
     const configObject = config();
-    const url = 'http://54.164.66.73:3002/shipmentmanagement/api/shipment/chainOfCustody?shipmentId=PO10068';
+    const url = 'http://54.164.66.73:3002/shipmentmanagement/api/shipment/chainOfCustody?shipmentId='+id;
     const result = await axios.get(url);
     return result;
   } catch (e) {

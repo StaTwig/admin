@@ -3,7 +3,7 @@ import Track from '../../components/track';
 import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
 import {useDispatch} from "react-redux";
-import { chainOfCustody } from "../../actions/shipmentActions";
+import { chainOfCustody, chainOfCustodyTrack } from "../../actions/shipmentActions";
 import { turnOff, turnOn } from '../../actions/spinnerActions';
 
 const TrackContainer = props => {

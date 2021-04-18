@@ -74,7 +74,7 @@ const PoChainOfCustody = (props) => {
     </div>
     </div>
     {shippmentChainOfCustodyData.map((row, index) => {
-      return row[0].shipmentUpdates.map((r, i) => <SoChainOfCustody len={row[0].shipmentUpdates.length} i={i} v={visible} setV={setVisible} level={i+1} key={i} op={op} setOp={setOp} data={row[0]} update={r} index={3+i+1} pindex={data.shipments.length -1 == index ? 1 : data.shipments.length} container={2+i} />)
+      return row.shipmentUpdates.map((r, i) => <SoChainOfCustody len={row.shipmentUpdates.length} i={i} v={visible} setV={setVisible} level={i+1} key={i} op={op} setOp={setOp} data={row} update={r} index={3+i+1} pindex={shippmentChainOfCustodyData.length -1 == index ? 1 : shippmentChainOfCustodyData.length} container={2+i} />)
     })}
     </>
   )
