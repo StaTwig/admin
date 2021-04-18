@@ -11,11 +11,13 @@ import { config } from '../../config';
 const axios = require('axios');
 import { getUserInfoUpdated, updateProfile, getUserInfo } from '../../actions/userActions';
 import { getWarehouseByOrgId } from '../../actions/productActions';
-
+import PopUpLocation from './popuplocation';
+import Modal from '../../shared/modal' 
 class Profile extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      openModal:false,
       selectedFile: null,
       profile: null,
       editMode: false,
@@ -41,6 +43,7 @@ class Profile extends React.Component {
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onCancel = this.onCancel.bind(this);
+    this.closeModal = this.closeModal.bind(this);
   }
 
   async componentDidMount() {
@@ -96,7 +99,11 @@ class Profile extends React.Component {
     }
 
   }
-  
+  closeModal() {
+    console.log("Closed Model called");
+   this.setState({openModal:false});
+   // props.history.push("/Addlocation");
+ };
   onCancel() {
     const {
       prof,
@@ -288,13 +295,32 @@ class Profile extends React.Component {
                         value={phoneNumber}
                         onChange={e => this.setState({ phoneNumber: e.target.value })}
                       />
-
-
-                    </div>
+                   </div >
+                  
                     <div className="col">
+                    <div className="row">
                         <div className="row location">
-                          MY LOCATIONS
+                          <h5><b>MY LOCATIONS</b></h5>
                         </div>
+                        <div class="addloc1">
+                        {
+                          editMode && (
+                      <button className="btn btn-orange fontSize20 font-bold pl-10 pr-10" onClick={()=>{ 
+                        this.setState({openModal:true})
+                      } }>
+                      <span>+ Add </span>
+                      </button>
+                )}
+                     <div className="inventorypopup">
+              {this.state.openModal && (
+              <Modal class="modal-lg" style="min-width: 100%"
+               close={() => this.closeModal()}
+                 size="" //for other size's use `modal-lg, modal-md, modal-sm`
+                           >
+                              <PopUpLocation />
+             </Modal>
+      )}</div>
+ </div></div>
                     </div>
                     <div className="col">
                       <div className="row">
@@ -302,7 +328,7 @@ class Profile extends React.Component {
                         <div className="custom-card p-3">
                           <div className="card-header">
                             <div className="d-flex align-items-center justify-content-between">
-                              <h5 className="card-title font-weight-bold">HEAD OFFICE</h5>
+                              <h5 className="card-title font-weight-bold">WAREHOUSE ID:</h5>
                               {/* <button
                                 className="btn-primary btn edit-button"
                               >
@@ -336,7 +362,7 @@ class Profile extends React.Component {
                         </div>   
                         <div className="row row-list">
                           <img src={Briefcase} width="20" height="20" className="mr-3" />
-                          {this.state.organisation ? <span>{this.state.organisation.split('/')[1]}</span> : <span>N/A</span>}
+                          {this.state.organisation ? <span>{this.state.organisation.split('/')[0]}</span> : <span>N/A</span>}
                         </div>   
                         <div className="row row-list">
                           <img src={Mail} width="20" height="20" className="mr-3" />
@@ -358,7 +384,8 @@ class Profile extends React.Component {
                           <div className="custom-card p-3">
                             <div className="card-header">
                               <div className="d-flex align-items-center justify-content-between">
-                                <h5 className="card-title font-weight-bold">HEAD OFFICE</h5>
+                               <h5 className="card-title font-weight-bold">WAREHOUSE ID: </h5>
+                               
                                 {/* <button
                                   className="btn-primary btn edit-button"
                                 >

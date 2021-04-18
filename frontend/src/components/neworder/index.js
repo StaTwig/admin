@@ -191,7 +191,7 @@ const NewOrder = (props) => {
 
   return (
     <div className="NewOrder m-3">
-      <h1 className="breadcrumb">CREATE ORDER</h1>
+      <h1 className="breadcrumb">CREATE NEW ORDER</h1>
       <Formik
         // enableReinitialize={true}
         initialValues={{

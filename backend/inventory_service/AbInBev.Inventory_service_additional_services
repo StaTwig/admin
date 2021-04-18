@@ -154,6 +154,42 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "uploadSalesData",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "excel",
+							"type": "file",
+							"src": "/C:/Users/Shiva Kumar/Desktop/StaTwig/theledger/backend/inventory_service/SalesData.xlsx"
+						},
+						{
+							"key": "collectedDate",
+							"value": "16-04-2021",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "localhost:3007/inventorymanagement/api/inventory/uploadSalesData",
+					"host": [
+						"localhost"
+					],
+					"port": "3007",
+					"path": [
+						"inventorymanagement",
+						"api",
+						"inventory",
+						"uploadSalesData"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

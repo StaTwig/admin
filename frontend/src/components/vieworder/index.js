@@ -1,13 +1,17 @@
 import React,{  useState } from 'react';
 import { Link } from 'react-router-dom';
 import back from '../../assets/icons/back.png';
+import { useSelector } from "react-redux";
 import './style.scss';
 import { formatDate } from '../../utils/dateHelper';
 import {changePOStatus} from '../../actions/poActions';
 
 const ViewOrder = props => {
   const { order, id } = props;
- const [alertMessage, setAlertMessage] = useState({});
+  const [alertMessage, setAlertMessage] = useState({});
+  const user = useSelector((state) => {
+    return state.user;
+  });
   let statusStyle = 'bg-primary';
   let status = order.poStatus;
   if (order.poStatus === 'RECEIVED') {
@@ -31,14 +35,14 @@ const onPOStatusChange = async status => {
 } else {
       setAlertMessage('Fail');
     }
-  };
+};
 
   return (
     <div className="vieworder text-muted">
       <div className="d-flex justify-content-between">
         <h1 className="breadcrumb">VIEW ORDER</h1>
 
-{order.poStatus === 'RECEIVED' ? (
+{order?.supplier?.supplierOrganisation === user?.organisationId && order.poStatus === 'CREATED' ? (
   <div className="d-flex">
 <Link to={`/orders`}>
  <button className="btn btn-success fontSize20 font-bold mr-4" onClick={() => onPOStatusChange('Accepted')} >Accept Order</button></Link>

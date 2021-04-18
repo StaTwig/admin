@@ -201,6 +201,9 @@ body {
     font-size: 15px;
     color: #f59c00;
 }
+.gds-links:hover {
+    cursor: pointer;
+}
 
 .bord-white {
     border-left: 10px solid white;
@@ -520,6 +523,12 @@ body {
     }
 }
 .analyticsCard{
+    position: relative;
+    height: 248px;
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #54265E26;
+    border-radius: 25px;
+    overflow: hidden;
     .analyticsTitle{
         font: 12px;
         letter-spacing: 0.47px;
@@ -529,7 +538,7 @@ body {
     }
     .chartAnalytics{
         bottom: 0;
-        left: 0;
+        margin-top: 80px;
     }
     .analyticsPercentage{
         font-size: 20px;
@@ -549,17 +558,44 @@ body {
     .pink{
         color: #F85566;
     }
-    position: relative;
-    height: 248px;
-    background: #FFFFFF 0% 0% no-repeat padding-box;
-    box-shadow: 0px 3px 6px #54265E26;
-    border-radius: 25px;
+}
+/* width */
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    margin: 20px 10px;
+    background: #E3E0E0; 
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #B5B5B5; 
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555; 
 }
 .tableDetals{
+    height: 50vh;
+    margin-top: 20px;
+    overflow: auto;
+    
     table{
-        th{
-            font-weight: 600;
-            text-align: center;
+        background: #FFFFFF;
+        border-radius: 15px;
+        tbody{
+            min-height: 100vh;
+            overflow-y: auto;
+        }
+        tr{
+            border-bottom: 1px solid #E5E0E9; 
+        }
+        tr:last-child{
+            border: none;
         }
         td{
             vertical-align: middle;
@@ -567,15 +603,18 @@ body {
 
         }
     }
-    margin-top:20px;
     .tableProfileIconCard{
         display: flex;
-        align-items: flex-end;
+        align-items: center;
         justify-content: center;
     }
     .profileName{
         .profileTitle{
+            text-decoration: underline;
             font-weight: 600;
+        }
+        .profileTitle:hover {
+            cursor: pointer;
         }
         span{
             display: flex;
@@ -608,4 +647,107 @@ body {
         color: #7E84A3;    
         font-size: 10px;
     }
+}
+
+.radioButton {
+    .radioInput{
+        margin-right:5px;
+        /* remove standard background appearance */
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        /* create custom radiobutton appearance */
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        padding: 6px;
+        /* background-color only for content */
+        background-clip: content-box;
+        border: 1px solid #000000;
+        background-color: #FFFFFF;
+        border-radius: 50%;
+    }
+    .radioInput:checked {
+        outline:none;
+        background-color: #000000;
+        padding: 2px;
+    }
+    display: flex;
+    position: relative;
+    margin-bottom: 20px;
+    cursor: pointer;
+    color: #707070;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+
+  .breweryCard{
+    width:100%;
+    background: #FFFFFF;
+    box-shadow: 0px 3px 6px #54265E26;
+    border-radius: 15px;
+    padding:0px 30px 10px 30px;
+    margin: 20px 10px;
+    min-height: 340px;
+    .breweryTitle{
+        font-weight: 600;
+        font-size: 16px;
+        padding:30px 0px 10px 0px;
+    }
+    .brewerySubtitle{
+        font-weight: 500;
+        font-size: 12px !important;
+        padding:0px 0px 10px 0px;  
+    }
+    .breweryLocationText{
+        font-size: 12px;
+        font-weight: 500;
+        margin-bottom: 5px;
+        .breweryLoc{
+            font-size: 20px;
+            color:#A20134;
+        }         
+    }
+    .breweryPropertyText{
+        display: block;
+        font-size: 14px;
+        padding:15px 0px;
+    }
+    .breweryPropertyValue{
+        font-size: 16px;
+        font-weight: 600;
+    }
+    
+  }
+
+.progress {
+    height: 4px;
+    border-radius: 0;
+    background: #DDD;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+.progress.progress-line-primary {
+    background: rgba(156,39,176,.2);
+}
+
+.progress .progress-bar.progress-bar-primary {
+    background: #9c27b0!important;
+}
+
+.progress.progress-line-danger {
+    background: rgba(244,67,54,.2);
+}
+
+.progress .progress-bar.progress-bar-danger {
+    background: #f44336;
+}
+
+.progress.progress-line-warning {
+    background: rgba(255,152,0,.2);
+}
+.progress .progress-bar.progress-bar-warning {
+    background: #ff9800;
 }
