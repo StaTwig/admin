@@ -10,9 +10,9 @@ var { dataAggregator } = require("./helpers/dataAggregator");
 var cors = require("cors");
 var cron = require('node-cron');
 
-cron.schedule('*/15 * * * *', () => {
-	dataAggregator("month")
-});
+// cron.schedule('*/15 * * * *', () => {
+// 	dataAggregator("month")
+// });
 
 // DB connection
 var MONGODB_URL = process.env.MONGODB_URL;
@@ -47,7 +47,7 @@ app.use(cors());
 
 //Route Prefixes
 app.use("/", indexRouter);
-app.use("/eventmanagement/api/", apiRouter);
+app.use("/advancedanalytics/api/", apiRouter);
 
 // throw 404 if URL not found
 app.all("*", function(req, res) {

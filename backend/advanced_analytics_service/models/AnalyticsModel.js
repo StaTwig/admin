@@ -6,7 +6,8 @@ var AnalyticsSchema = new mongoose.Schema({
 	sales: {type: String, required: true},
 	target: {type: String, required: true},
     returns: {type: String, required: true},
-	warehouseId: {type: String, required: true}
+	warehouseId: {type: String, required: true},
+	warehouseName : {type: String, required: true}
 }, { timestamps: true });
 
-module.exports = mongoose.model("Excel", AnalyticsSchema);
+module.exports = mongoose.model("Analytic", AnalyticsSchema);

@@ -18,10 +18,35 @@ const auth = require("../middlewares/jwt");
  * @returns {Object}
  */
 exports.getAllStats = [
-	auth,
+	//auth,
 	async function (req, res) {
 		try {
-			///Logic goes here
+			const resPerPage = 9; 
+			const page = req.query.page || 1; 
+			const totalRecords = await AnalyticsModel.count({...req.params})
+			console.log(totalRecords)
+			AnalyticsModel.find({ ...req.params }).skip((resPerPage * page) - resPerPage)
+				.limit(resPerPage).then(
+					Analytics => {
+						if (Analytics.length > 0) {
+							const finalData = {
+								totalRecords : totalRecords,
+								data : Analytics
+							}
+							return apiResponse.successResponseWithData(
+								res,
+								"Operation success",
+								finalData
+							);
+						} else {
+							return apiResponse.successResponseWithData(
+								res,
+								"No Results Found",
+								[]
+							);
+						}
+					}
+				);
 		} catch (err) {
 			return apiResponse.ErrorResponse(res, err);
 		}

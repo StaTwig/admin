@@ -1,8 +1,8 @@
 var express = require("express");
-var eventRouter = require("./analytics");
+var analyticsRouter = require("./analytics");
 
 var app = express();
 
-app.use("/event/", eventRouter);
+app.use("/analytics", analyticsRouter);
 
 module.exports = app;

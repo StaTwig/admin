@@ -3,12 +3,19 @@ const AnalyticsController = require("../controllers/AnalyticsController");
 
 var router = express.Router();
 
-router.get("/getAllAnalyticss", AnalyticsController.getAllAnalyticss);
-router.get("/getAnalyticsByActorId/:actorId/:AnalyticsTypePrimary/:AnalyticsTypeDesc", AnalyticsController.getAnalyticsByActorId);
-router.get("/getAnalyticsByCaId/:caId/:AnalyticsTypePrimary/:AnalyticsTypeDesc", AnalyticsController.getAnalyticsByCaId);
-router.get("/getAnalyticsByAnalyticsId/:AnalyticsID/:AnalyticsTypePrimary/:AnalyticsTypeDesc", AnalyticsController.getAnalyticsById);
-router.get("/getAnalyticsBySecondaryOrgId/:secondaryOrgId/:AnalyticsTypePrimary/:AnalyticsTypeDesc", AnalyticsController.getAnalyticsBySecondOrgId);
-router.get("/getAnalyticsByActorOrgId/:actorOrgId/:AnalyticsTypePrimary/:AnalyticsTypeDesc", AnalyticsController.getAnalyticsByActorOrgId);
-router.delete("/deleteAnalyticsById/:AnalyticsID", AnalyticsController.deleteAnalyticsById);
+
+// getAllBrands [ { brandId } ]
+// getProductsById [ { sku , returnRate, productName, productDesc } ]
+// getInventoryBySku/:sku/:state [ { state, totalBottlePool } ]
+// getInventoryByBrand/:brand/:state/:skull:
+
+router.get("/getAllStats", AnalyticsController.getAllStats);
+router.get("/getStatsBySku/:productId/:warehouseId", AnalyticsController.getAllStats);
+router.get("/getStatsByBrewery/:warehouseId/:productId", AnalyticsController.getAllStats);
+//Implemented till here, below needs to be done
+router.get("/getSales/:state/:tenure", AnalyticsController.getAllStats);
+router.get("/getReturnedRate/:state/:tenure", AnalyticsController.getAllStats);
+router.get("/getTarget/:state/:tenure", AnalyticsController.getAllStats);
+router.delete("/getActualReturns/:state/:tenure", AnalyticsController.getAllStats);
 
 module.exports = router;
