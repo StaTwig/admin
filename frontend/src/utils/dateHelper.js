@@ -50,3 +50,27 @@ export const formatDate = (date) => {
 
   return [day, month, year].join("/");
 };
+
+export const formatTime = (d) => {
+  const date = new Date(d);
+  var hours = date.getHours();
+  var minutes = date.getMinutes();
+  var ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  var strTime = hours + ':' + minutes + '' + ampm;
+  return strTime;
+};
+
+export const formatTimeAMPM = (d) => {
+  const date = d.split(':');
+  var hours = parseInt(date[0]);
+  var minutes = parseInt(date[1]);
+  var ampm = hours >= 12 ? 'pm' : 'am';
+  hours = hours % 12;
+  hours = hours ? hours : 12;
+  minutes = minutes < 10 ? '0' + minutes : minutes;
+  var strTime = hours + ':' + minutes + '' + ampm;
+  return strTime;
+};
