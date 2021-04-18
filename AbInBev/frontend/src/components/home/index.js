@@ -57,11 +57,10 @@ const Home = (props) => {
     if (result.status === 200) {
       const token = result.data.data.token;
       setAuthToken(token);
-      // const decoded = jwt_decode(token);
+      const decoded = jwt_decode(token);
       localStorage.setItem('theAbInBevToken', token);
-      // dispatch(setCurrentUser(decoded));
-      // props.history.push("/overview");
-      window.location.href = '/overview';
+      dispatch(setCurrentUser(decoded));
+      props.history.push("/overview");
     } else {
       const err = result.data.message;
       setErrorMessage(err);
