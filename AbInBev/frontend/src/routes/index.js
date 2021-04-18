@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router";
+import requireAuth from '../components/hocs/requireAuth';
 import OverviewContainer from "../containers/overview";
 import AnalyticsContainer from "../containers/analytics";
 import TransactionHistoryContainer from "../containers/transactionHistory";
@@ -12,14 +13,13 @@ import "./style.scss";
 const routes = (
   <Switch>
     <Route exact path="/" component={Home} />
-    <Route exact path="/overview" component={OverviewContainer} />
-    <Route exact path="/analytics" component={AnalyticsContainer} />
+    <Route path="/overview" component={requireAuth(OverviewContainer)} />
+    <Route path="/analytics" component={requireAuth(AnalyticsContainer)} />
     <Route
-      exact
       path="/transactionHistory"
-      component={TransactionHistoryContainer}
+      component={requireAuth(TransactionHistoryContainer)}
     />
-    <Route exact path="/inventory" component={InventoryContainer} />
+    <Route path="/inventory" component={requireAuth(InventoryContainer)} />
     <Route component={NoMatch} />
   </Switch>
 );
