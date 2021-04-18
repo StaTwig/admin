@@ -12,7 +12,8 @@ const ShipmentPopUp = (props) => {
           Success!
         </div>
         <div className="data">
-          Your Shipment<span className="bold">{props.id}</span>has been
+          Your Shipment
+          <span className="bold">{props.id}</span>
         </div>
         <div className="data mb-4">
          Assigned Successfully!
