@@ -47,7 +47,7 @@ app.use(cors());
 
 //Route Prefixes
 app.use("/", indexRouter);
-app.use("/advancedanalytics/api/", apiRouter);
+app.use("/advancedanalytics/api", apiRouter);
 
 // throw 404 if URL not found
 app.all("*", function(req, res) {
