@@ -328,10 +328,7 @@ class Profile extends React.Component {
                         <div className="custom-card p-3">
                           <div className="card-header">
                             <div className="d-flex align-items-center justify-content-between">
-<<<<<<< frontend/src/components/profile/index.js
                               <h5 className="card-title font-weight-bold">WAREHOUSE ID: {warehouseId}</h5>
-=======
->>>>>>> frontend/src/components/profile/index.js
                               {/* <button
                                 className="btn-primary btn edit-button"
                               >
@@ -387,11 +384,7 @@ class Profile extends React.Component {
                           <div className="custom-card p-3">
                             <div className="card-header">
                               <div className="d-flex align-items-center justify-content-between">
-<<<<<<< frontend/src/components/profile/index.js
                                <h5 className="card-title font-weight-bold">WAREHOUSE ID: {warehouseId}</h5>
-=======
->>>>>>> frontend/src/components/profile/index.js
-                               
                                 {/* <button
                                   className="btn-primary btn edit-button"
                                 >
