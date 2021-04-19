@@ -13,10 +13,11 @@ const openApiDocumentation = require('./openApiDocumentation');
 const indexRouter = require("./routes/index");
 const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
-// const dir = `/home/ubuntu/shipmentimages`;
-// if (!fs.existsSync(dir)) {
-//   fs.mkdirSync(dir);
-// }
+const dir = `/home/ubuntu/shipmentimages`;
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir);
+}
+
 const app = express();
 
 // DB connection
