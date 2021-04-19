@@ -137,6 +137,15 @@ export const getOrder = (id) => {
   };
 };
 
+export const getOrderIds = async () => {
+  try {
+    const result = await axios.get(config().getOrderIds);
+    return result.data.data;
+  } catch (e) {
+    return [];
+  }
+};
+
 const setPurchaseOrders = data => {
   return {
     type: SET_POS,
