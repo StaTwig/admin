@@ -12,6 +12,7 @@ import {
   getAllOrganisations,
   getProductsByInventoryId
 } from "../../actions/shippingOrderAction";
+import { getOrderIds, getOrder } from "../../actions/poActions";
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -21,7 +22,7 @@ import Modal from "../../shared/modal";
 import { Formik } from "formik";
 
 const NewShipment = (props) => {
-  const [shippingOrderIds, setShippingOrderIds] = useState([]);
+  const [OrderIds, setOrderIds] = useState([]);
   const [senderOrganisation, setSenderOrganisation] = useState([]);
   const [allOrganisations, setAllOrganisations] = useState([]);
   const [senderWarehouses, setSenderWarehouses] = useState([]);
@@ -30,8 +31,8 @@ const NewShipment = (props) => {
   const [products, setProducts] = useState([]);
   const [addProducts, setAddProducts] = useState([]);
   const dispatch = useDispatch();
-  const [shippingOrderId, setShippingOrderId] = useState(
-    "Select Shipping Order ID"
+  const [OrderId, setOrderId] = useState(
+    "Select Order ID"
   );
   const [senderOrgId, setSenderOrgId] = useState(
     "Select Organisation Name"
@@ -46,7 +47,7 @@ const NewShipment = (props) => {
     "Select Delivery Location"
   );
   const user = useSelector((state) => state.user);
-  const [shippingOrderDetails, setShippingOrderDetails] = useState({});
+  const [OrderDetails, setOrderDetails] = useState({});
   const [po, setPo] = useState("");
   // const [shipmentDate, setShipmentDate] = useState("");
   // const [estimateDeliveryDate, setEstimateDeliveryDate] = useState("");
@@ -60,11 +61,22 @@ const [ modalProps, setModalProps ] = useState({});
   useEffect(() => {
     async function fetchData() {
       const { search } = props.location;
-      const result = await getShippingOrderIds();
+      // const result = await getShippingOrderIds();
+      const result = await getOrderIds();
+      // console.log('IDS');
+      // console.log(orderIds);
+      const data1 = await dispatch(getOrder('po-1jpv1enwklta6bf8'));
+      console.log('Data');
+      console.log(data1);
+      const data2 = await getShippingOrderById('so-1jpv1jsjkluz8yvs');
+      console.log('New Data');
+      console.log(data2);
       const ids = result.map((so) => so.id);
-      setShippingOrderIds(ids);
+      setOrderIds(ids);
 
       const orgs = await getAllOrganisations();
+      console.log('Organisation');
+      console.log(orgs);
       const orgSplit = user.organisation?.split('/');
       setSenderOrganisation([orgSplit[0]]);
       const organisations = orgs.data.filter((org) => org.id != orgSplit[1]);
@@ -144,7 +156,7 @@ const [ modalProps, setModalProps ] = useState({});
   const onAssign = async (values) => {
     let error = false;
     // dates.forEach(date => { if (!error) dateValidation(date) });
-    const { toOrg,airWayBillNo, shippingOrderId, labelCode, shipmentDate, estimateDeliveryDate, toOrgLoc, fromOrgLoc, products } = values;
+    const { toOrg,airWayBillNo, OrderId, labelCode, shipmentDate, estimateDeliveryDate, toOrgLoc, fromOrgLoc, products } = values;
     products.forEach((p) => {
       if (p.productQuantity < 1)
         error = true;
@@ -153,7 +165,7 @@ const [ modalProps, setModalProps ] = useState({});
     if (!error) {
       const data = {
         airWayBillNo,
-        shippingOrderId: shippingOrderId ? shippingOrderId : null,
+        poId: OrderId ?  OrderId : null,
         label: {
           labelId: labelCode,
           labelType: "QR_2DBAR",
@@ -180,15 +192,15 @@ const [ modalProps, setModalProps ] = useState({});
         ).toISOString()) : '',
         status: "CREATED",
         products: products,
-        poId: shippingOrderDetails.purchaseOrderId ? shippingOrderDetails.purchaseOrderId : null,
+        // poId: OrderDetails.purchaseOrderId ? OrderDetails.purchaseOrderId : null,
       };
 
       dispatch(turnOn());
       const result = await createShipment(data);
       dispatch(turnOff());
-      console.log("da", result);
-      if (result?.id ) {
-      //  setMessage("Created Shipment Success");
+      console.log("data", data);
+      if (result?.id) {
+        setMessage("Created Shipment Success");
         setOpenCreatedInventory(true);
 setModalProps({
         message: 'Created Successfully!',
@@ -208,23 +220,23 @@ setModalProps({
   };
 
   const handleSOChange = async (item) => {
-    setShippingOrderId(item);
+    setOrderId(item);
     dispatch(turnOn());
     const result = await getShippingOrderById(item);
-    setShippingOrderDetails(result);
+    setOrderDetails(result);
     dispatch(turnOff());
   };
 
   const handleQuantityChange = (value, i) => {
-    const soDetailsClone = { ...shippingOrderDetails };
+    const soDetailsClone = { ...OrderDetails };
     soDetailsClone.products[i].productQuantity = value;
-    setShippingOrderDetails(soDetailsClone);
+    setOrderDetails(soDetailsClone);
   };
 
   const handleLabelIdChange = (value, i) => {
-    const soDetailsClone = { ...shippingOrderDetails };
+    const soDetailsClone = { ...OrderDetails };
     soDetailsClone.products[i]["labelId"] = value;
-    setShippingOrderDetails(soDetailsClone);
+    setOrderDetails(soDetailsClone);
   };
 
   return (
@@ -233,7 +245,7 @@ setModalProps({
       <Formik
         // enableReinitialize={true}
         initialValues={{
-          shippingOrderId: "",
+          poId: "",
           fromOrg: senderOrganisation[0],
           fromOrgLoc: "",
           toOrg: "",
@@ -299,36 +311,53 @@ setModalProps({
                     <label htmlFor="orderID">Order ID</label>
                     <div className="form-control">
                       <DropdownButton
-                        name={shippingOrderId}
+                        name={OrderId}
                         onSelect={async(v) => {
-                          setFieldValue('shippingOrderId', v);
+                          setFieldValue('OrderId', v);
                           // handleSOChange(v);
-                          setShippingOrderId(v);
+                          setOrderId(v);
                           dispatch(turnOn());
-                          const result = await getShippingOrderById(v);
-                          setReceiverOrgLoc(result.customerDetails.deliveryLocation);
-                          setReceiverOrgId(result.customerDetails.customerOrgName);
-                          setShippingOrderDetails(result);
-
+                          const result = await dispatch(getOrder(v));
+                          console.log('Result');
+                          console.log(result);
+                          setReceiverOrgLoc(result.poDetails[0].customer.organisation.postalAddress);
+                          setReceiverOrgId(result.poDetails[0].customer.organisation.id);
+                          setOrderDetails(result.poDetails[0]);
+                          
                           dispatch(turnOff());
                           setDisabled(true);
-                          let warehouse = senderWarehouses.filter(w => w.id == result.supplierDetails.locationId);
+                          let warehouse = senderWarehouses.filter(
+                            w => {
+                              let supplierWarehouse = result.poDetails[0].supplier.organisation.warehouses;
+                              for(let i=0;i<supplierWarehouse.length;i++){
+                                return w.id == supplierWarehouse[i];
+                              }
+                          });
                           console.log(warehouse);
-
+                          console.log('Organisation');
+                          console.log(senderOrganisation);
                           setFieldValue('fromOrg', senderOrganisation[0]);
-                          setFieldValue('fromOrgLoc', result.supplierDetails.locationId);
-                          setFieldValue('toOrg', result.customerDetails.customerOrganisation);
-                          setFieldValue('toOrgLoc', result.customerDetails.shippingAddress.shippingAddressId);
-                          setSenderOrgLoc(warehouse[0].postalAddress);
-                          if (result.products.length > 0) {
+                          setFieldValue('fromOrgLoc', result.poDetails[0].supplier.organisation.id);
+                          setFieldValue('toOrg', result.poDetails[0].customer.organisation.name);
+                          setFieldValue('toOrgLoc', result.poDetails[0].customer.shippingAddress.shippingAddressId);
+                          // setSenderOrgLoc(warehouse[0].postalAddress);
+                          let products_temp = result.poDetails[0].products;
+                          for(let i=0;i<products_temp.length;i++)
+                          {
+                            products_temp[i].manufacturer = result.poDetails[0].productDetails[i].manufacturer;
+                            products_temp[i].productName = result.poDetails[0].productDetails[i].name;                            
+                          }
+                          console.log('Products');
+                          console.log(products_temp);
+                          if (result.poDetails[0].productDetails.length > 0) {
                             setProducts([]);
                             setAddProducts([]);
-                            setFieldValue('products', result.products);
+                            setFieldValue('products', products_temp);
                           }
                           else
                             setFieldValue('products', []);
                         }}
-                        groups={shippingOrderIds}
+                        groups={OrderIds}
                       />
                     </div>
                   </div>
@@ -552,9 +581,9 @@ setModalProps({
               <label htmlFor="productDetails" className="headsup">
                 Product Details
               </label>
-              {shippingOrderDetails?.products?.length > 0 && (
+              {OrderDetails?.products?.length > 0 && (
                 <EditTable
-                  product={shippingOrderDetails?.products}
+                  product={OrderDetails?.products}
                   handleQuantityChange={(v, i) => {
                     handleQuantityChange(v, i);
                   }}
