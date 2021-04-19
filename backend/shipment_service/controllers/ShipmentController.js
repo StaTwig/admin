@@ -1159,7 +1159,7 @@ exports.uploadImage = async function (req, res) {
       const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]));
       try {
         const filename = Id + "-" + t.format + t.value + ".png";
-        let dir = `uploads`;
+        let dir = `/home/ubuntu/shipmentimages`;
 
         await moveFile(req.file.path, `${dir}/${filename}`);
         const update = await ShipmentModel.updateOne(
@@ -1249,149 +1249,171 @@ exports.updateTrackingStatus = [
 ];
 
 exports.chainOfCustody = [
-  auth,
-  async (req, res) => {
-    try {
-      const { authorization } = req.headers;
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-         var chainOfCustody = [];
-                var poDetails = "";
-           	const id = req.query.shipmentId;
-		if ( id.includes("PO"))
-		{
+    auth,
+    async (req, res) => {
+        try {
+            const {
+                authorization
+            } = req.headers;
+            checkToken(req, res, async (result) => {
+                if (result.success) {
+                    var chainOfCustody = [];
+                    var poDetails = "";
+                    const id = req.query.shipmentId;
+                    if (id.includes("PO")) {
 
-		poDetails = await RecordModel.aggregate([{
-                            $match: {
-                                id: id
-                            }
-                        },
-                        {
-                            $lookup: {
-                                from: "organisations",
-                                localField: "supplier.supplierOrganisation",
-                                foreignField: "id",
-                                as: "supplier.organisation",
-                            },
-                        },
-                        {
-                            $unwind: {
-                                path: "$supplier.organisation",
-                            },
-                        },
-                        {
-                            $lookup: {
-                                from: "organisations",
-                                localField: "customer.customerOrganisation",
-                                foreignField: "id",
-                                as: "customer.organisation",
-                            },
-                        },
-                        {
-                            $unwind: {
-                                path: "$customer.organisation",
-                            },
-                        },
-                    ]);
-                
-			const shipmentIds = poDetails[0].shipments;
-			const shipments = [];
-			for ( i=0 ; i< shipmentIds.length;i++)
-			{
-		        const shipmentData = await userShipments("id", shipmentIds[i], 0, 100, (error, data) => {
-                         shipmentDetails = data;
-                        })
-				
-			shipments.push(shipmentDetails)
-			}
-		
-			return apiResponse.successResponseWithData(
-                                res,
-                                'Status Updated',
+                        const idCheck = await RecordModel.findOne({
+                            id: id
+                        });
+
+                        if (idCheck != null) {
+                            poDetails = await RecordModel.aggregate([{
+                                    $match: {
+                                        id: id
+                                    }
+                                },
                                 {
-                                    "poChainOfCustody":poDetails,
-                                    "shipmentChainOfCustody":shipments
+                                    $lookup: {
+                                        from: "organisations",
+                                        localField: "supplier.supplierOrganisation",
+                                        foreignField: "id",
+                                        as: "supplier.organisation",
+                                    },
+                                },
+                                {
+                                    $unwind: {
+                                        path: "$supplier.organisation",
+                                    },
+                                },
+                                {
+                                    $lookup: {
+                                        from: "organisations",
+                                        localField: "customer.customerOrganisation",
+                                        foreignField: "id",
+                                        as: "customer.organisation",
+                                    },
+                                },
+                                {
+                                    $unwind: {
+                                        path: "$customer.organisation",
+                                    },
+                                },
+                            ]);
+
+                            const shipmentIds = poDetails[0].shipments;
+                            var shipments = [];
+                            var shipmentDetails = [];
+
+                            for (i = 0; i < shipmentIds.length; i++) {
+                                const shipmentData = await userShipments("id", shipmentIds[i], 0, 100, (error, data) => {
+                                    data.map(shipmentData => {
+                                        shipmentDetails = shipmentData;
+                                    })
+                                })
+                                shipments.push(shipmentDetails)
+
+                            }
+
+                            return apiResponse.successResponseWithData(
+                                res,
+                                'Status Updated', {
+                                    "poChainOfCustody": poDetails,
+                                    "shipmentChainOfCustody": shipments
                                 }
+                            );
+                        } else {
+                            return apiResponse.validationErrorWithData(
+                                res,
+                                'ID does not exists, please try tracking existing IDs'
                             );
 
 
-		
-		}
+                        }
 
-		else if ( id.includes("SH"))
-		{
+                    } else if (id.includes("SH")) {
 
-                const shipmentDetails = await  ShipmentModel.findOne({"id": req.query.shipmentId});
+                        const shipmentDetails = await ShipmentModel.findOne({
+                            "id": req.query.shipmentId
+                        });
 
-                const poId = shipmentDetails.poId; 
-                
-		if (poId != null) {
-                poDetails = await RecordModel.aggregate([{
-                            $match: {
-                                id: poId
+
+                        if (shipmentDetails != null) {
+
+                            const poId = shipmentDetails.poId;
+
+                            if (poId != null) {
+                                poDetails = await RecordModel.aggregate([{
+                                        $match: {
+                                            id: poId
+                                        }
+                                    },
+                                    {
+                                        $lookup: {
+                                            from: "organisations",
+                                            localField: "supplier.supplierOrganisation",
+                                            foreignField: "id",
+                                            as: "supplier.organisation",
+                                        },
+                                    },
+                                    {
+                                        $unwind: {
+                                            path: "$supplier.organisation",
+                                        },
+                                    },
+                                    {
+                                        $lookup: {
+                                            from: "organisations",
+                                            localField: "customer.customerOrganisation",
+                                            foreignField: "id",
+                                            as: "customer.organisation",
+                                        },
+                                    },
+                                    {
+                                        $unwind: {
+                                            path: "$customer.organisation",
+                                        },
+                                    },
+                                ]);
+
                             }
-                        },
-                        {
-                            $lookup: {
-                                from: "organisations",
-                                localField: "supplier.supplierOrganisation",
-                                foreignField: "id",
-                                as: "supplier.organisation",
-                            },
-                        },
-                        {
-                            $unwind: {
-                                path: "$supplier.organisation",
-                            },
-                        },
-                        {
-                            $lookup: {
-                                from: "organisations",
-                                localField: "customer.customerOrganisation",
-                                foreignField: "id",
-                                as: "customer.organisation",
-                            },
-                        },
-                        {
-                            $unwind: {
-                                path: "$customer.organisation",
-                            },
-                        },
-                    ]);
-
-                }                
 
 
-	      const shipmentData = await userShipments("id", req.query.shipmentId, 0, 100, (error, data) => {
-                         shipments = data;
-                    })
+                            const shipmentData = await userShipments("id", req.query.shipmentId, 0, 100, (error, data) => {
+                                shipments = data;
+                            })
 
-                return apiResponse.successResponseWithData(
+                            return apiResponse.successResponseWithData(
                                 res,
-                                'Status Updated',
-                                {
-                                    "poChainOfCustody":poDetails,
-                                    "shipmentChainOfCustody":shipments
+                                'Status Updated', {
+                                    "poChainOfCustody": poDetails,
+                                    "shipmentChainOfCustody": shipments
                                 }
                             );
-	 }
-	
-	} else {
-          logger.log(
-            "warn",
-            "<<<<< ShipmentService < ShipmentController < modifyShipment : refuted token"
-          );
-          res.status(403).json("Auth failed");
+                        } else {
+                            return apiResponse.validationErrorWithData(
+                                res,
+                                'ID does not exists, please try tracking existing IDs'
+                            );
+
+                        }
+                    }
+
+                } else {
+                    logger.log(
+                        "warn",
+                        "<<<<< ShipmentService < ShipmentController < modifyShipment : refuted token"
+                    );
+                    res.status(403).json("Auth failed");
+                }
+            });
+        } catch (err) {
+            logger.log(
+                "error",
+                "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
+            );
+            return apiResponse.ErrorResponse(res, err);
         }
-      });
-    } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
-      );
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
+    },
 ];
 
 exports.fetchShipmentIds = [
