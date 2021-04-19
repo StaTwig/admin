@@ -56,7 +56,7 @@ const NewShipment = (props) => {
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [openShipmentFail, setOpenShipmentFail] = useState(false);
   const [shipmentError, setShipmentError] = useState("");
-
+const [ modalProps, setModalProps ] = useState({});
   useEffect(() => {
     async function fetchData() {
       const { search } = props.location;
@@ -186,10 +186,16 @@ const NewShipment = (props) => {
       dispatch(turnOn());
       const result = await createShipment(data);
       dispatch(turnOff());
-      // console.log("data", result);
-      if (result?.id) {
-        setMessage("Created Shipment Success");
+      console.log("da", result);
+      if (result?.id ) {
+      //  setMessage("Created Shipment Success");
         setOpenCreatedInventory(true);
+setModalProps({
+        message: 'Created Successfully!',
+        id: result?.id,
+        type: 'Success'
+      })
+
       } else {
         setOpenShipmentFail(true);
         setErrorMessage("Create Shipment Failed");
@@ -303,12 +309,12 @@ const NewShipment = (props) => {
                           setReceiverOrgLoc(result.customerDetails.deliveryLocation);
                           setReceiverOrgId(result.customerDetails.customerOrgName);
                           setShippingOrderDetails(result);
-                          
+
                           dispatch(turnOff());
                           setDisabled(true);
                           let warehouse = senderWarehouses.filter(w => w.id == result.supplierDetails.locationId);
                           console.log(warehouse);
-                          
+
                           setFieldValue('fromOrg', senderOrganisation[0]);
                           setFieldValue('fromOrgLoc', result.supplierDetails.locationId);
                           setFieldValue('toOrg', result.customerDetails.customerOrganisation);
@@ -652,6 +658,7 @@ const NewShipment = (props) => {
         >
           <ShipmentPopUp
             onHide={closeModal} //FailurePopUp
+ {...modalProps}
           />
         </Modal>
       )}
@@ -663,6 +670,7 @@ const NewShipment = (props) => {
         >
           <ShipmentFailPopUp
             onHide={closeModalFail} //FailurePopUp
+            {...modalProps}
             shipmentError={shipmentError}
           />
         </Modal>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Chart from "./temperature";
-import Map from "./Map";
+import Map from "./map";
 import CurrentTemperature from "../../assets/icons/thermometer.svg";
 import PoChainOfCustody from "./pochainofcustody";
 import Package from '../../assets/icons/package.svg';
