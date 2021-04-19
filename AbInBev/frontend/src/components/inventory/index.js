@@ -25,8 +25,8 @@ const Inventory = (props) => {
                     </div>
                   </div>
 
-                  <div class="btn-group mainButtonFilter">
-                    <a href="#!" class="btn active">Brewery</a>
+                  <div className="btn-group mainButtonFilter">
+                    <a href="#!" className="btn active">Brewery</a>
                     <span className="breweryTitle">Vendor</span>
                   </div>
                   
