@@ -14,15 +14,19 @@ const ViewOrder = props => {
   });
   let statusStyle = 'bg-primary';
   let status = order.poStatus;
-  if (order.poStatus === 'RECEIVED') {
+  if (order.poStatus === 'CREATED') {
+    status = 'one' ? 'Sent' : 'Received';
+  }
+ else if (order.poStatus === 'RECEIVED') {
     statusStyle = 'bg-info';
-    status = 'Delivered';
+    status = 'Sent';
   }
 else if (order.poStatus === 'Accepted') {
     statusStyle = 'bg-success';
     status = 'Accepted';
   }else if (order.poStatus === 'Rejected') {
     statusStyle = 'bg-warning';
+    status = 'Rejected';
   }
 
 
