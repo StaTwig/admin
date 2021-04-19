@@ -57,7 +57,7 @@ const UpdateStatus = (props) => {
 
   const closeModal = () => {
     setOpenUpdatedStatus(false);
-    props.history.push("/shipments");
+    props.history.push("/viewshipment/"+id);
   };
   const closeModalFail = () => {
     setOpenShipmentFail(false);

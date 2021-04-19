@@ -48,9 +48,9 @@ const EditRow = props => {
           </div>
         </div>
         <div className="col tcell text-center justify-content-center p-2">
-          <div className=" p-0">
+          <div className="">
             <div className="d-flex pt-1 flex-row justify-content-between">
-              <div className="title col-6 recived-text">
+              <div className="title recived-text">
                 <DropdownButton
                   name={prod.name ? prod.name : "Product Name"}
                   onSelect={item => { handleProductChange(index, item) }}

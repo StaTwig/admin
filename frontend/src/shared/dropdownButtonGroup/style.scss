@@ -13,11 +13,12 @@
     border: none;
     display: flex;
     justify-content: space-between;
-    // color:#707070;
+     color:#A8A8A8;
     flex-basis: 100%;
     outline: none;
     align-items: center;
     font-size: 12px;
+    
     background: transparent;
 
     &.active {
@@ -25,6 +26,7 @@
     }
     .textNeg{
       margin-top: -1.15rem;
+      
     }
   }
 
@@ -56,4 +58,5 @@
     right: -15px;
     will-change: transform;
   }
+ 
 }
