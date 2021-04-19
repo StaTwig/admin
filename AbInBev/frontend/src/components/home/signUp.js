@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import { Formik } from "formik";
 import logo from "../../assets/ABInBev.png";
 
 const SignUp = (props) => {
@@ -8,97 +8,107 @@ const SignUp = (props) => {
     setContinueClick,
     onSignUpClick
   } = props;
-  const [values, setValues] = useState({ firstName: '', lastName: '', mobile_email: '', organisation: '' });
-  const [displayErrorMessage, setDisplayErrorMessage] = useState(false);
-  const [errorMessages, setErrorMessages] = useState([]);
 
-  const isValidEmail = (email) => {
-    const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return re.test(String(email).toLowerCase());
-  }
-
-  const isBlank = (str) => {
-    return (!str || /^\s*$/.test(str));
-  }
-
-  const handleChange = (property, e) => {
-    if (property === 'firstName') {
-      setValues({
-        ...values,
-        firstName: e.target.value
-      });
-    } else if (property === 'lastName') {
-      setValues({
-        ...values,
-        lastName: e.target.value
-      });
-    } else if (property === 'mobile_email') {
-      setValues({
-        ...values,
-        mobile_email: e.target.value
-      });
-    } else if (property === 'organisation') {
-      setValues({
-        ...values,
-        organisation: e.target.value
-      });
-    }
-  }
-
-  const handleSignUpClick = () => {
-    let errorMessages = [];
-    if (!isValidEmail(values.mobile_email)) {
-      errorMessages.push('Invalid Email/Mobile number provided');
-    }
-    if (isBlank(values.firstName)) {
-      errorMessages.push('Invalid First name provided');
-    }
-    if (isBlank(values.lastName)) {
-      errorMessages.push('Invalid Last name provided');
-    }
-    if (isBlank(values.organisation)) {
-      errorMessages.push('Invalid organisation provided');
-    }
-    if (errorMessages.length) {
-      setErrorMessages(errorMessages);
-      setDisplayErrorMessage(true);
-    } else {
-      onSignUpClick(values);
-    }
-
-  }
-
+  const [responseError, SetResponseError] = useState('');
+  
   return (
     <div className="signUpScreen">
       <div className="align-center pb-5 pt-5">
         <h2 className="titleSubHeading">Welcome Back!</h2>
         <span className="titleSubHeading"><span className="titleHeading">Sign Up</span> to continue.</span>
       </div>
-
+      <Formik
+        initialValues={{
+          firstName: '', lastName: '', mobileemail: '', organisation: ''
+        }}
+        validate={(values) => {
+          const errors = {};
+          if (!values.firstName) {
+            errors.firstName = "Required";
+          }
+          if (!values.lastName) {
+            errors.lastName = "Required";
+          }
+          if (!values.mobileemail) {
+            errors.mobileemail = "Required";
+          }
+          if (!values.organisation) {
+            errors.organisation = "Required";
+          }
+          return errors;
+        }}
+        onSubmit={async (values, { setSubmitting }) => {
+          setSubmitting(false);
+          const result = await onSignUpClick(values);
+          
+          SetResponseError(result.msg);
+          
+        }}
+      >
+        {({
+          values,
+          errors,
+          touched,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          isSubmitting,
+          setFieldValue,
+          dirty,
+        }) => (
+          <form onSubmit={handleSubmit} className="">
       <div className="loginUserBlock justify-content-center">
         <div className="form-group">
           <label htmlFor="firstName" className="userNameLabel mb-1">First Name</label>
-          <input name="firstName" className="form-control username mb-3" value={values.firstName}
-            onChange={(e) => { handleChange('firstName', e); }} />
+          <input 
+            name="firstName" 
+            className={`form-control username ${errors.firstName ? `` : `mb-3`}`}
+            value={values.firstName}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+          {errors.firstName && touched.firstName && (
+            <div className="error-msg text-danger mb-3">{errors.firstName}</div>
+          )}
 
           <label htmlFor="lastName" className="userNameLabel mb-1">Last Name</label>
-          <input name="lastName" className="form-control username mb-3" value={values.lastName}
-            onChange={(e) => { handleChange('lastName', e); }} />
+          <input 
+            name="lastName" 
+            className={`form-control username ${errors.lastName  ? `` :  `mb-3`}`}
+            value={values.lastName}
+            onChange={handleChange}
+            onBlur={handleBlur} 
+          />
+          {errors.lastName && touched.lastName && (
+            <div className="error-msg text-danger mb-3">{errors.lastName}</div>
+          )}
 
           <label htmlFor="mobileemail" className="userNameLabel mb-1">Mobile No / Email ID</label>
-          <input name="mobileemail" className="form-control username mb-3" value={values.mobile_email}
-            onChange={(e) => { handleChange('mobile_email', e); }} />
+          <input 
+            name="mobileemail" 
+            className={`form-control username ${errors.mobileemail  ? `` :  `mb-3`}`}
+            value={values.mobileemail}
+            onChange={handleChange}
+            onBlur={handleBlur} 
+          />
+          {errors.mobileemail && touched.mobileemail && (
+            <div className="error-msg text-danger mb-3">{errors.mobileemail}</div>
+          )}
 
           <label htmlFor="organisation" className="organisationLabel mb-1">Organisation</label>
-          <input name="organisation" className="form-control organisation mb-3" value={values.organisation}
-            onChange={(e) => { handleChange('organisation', e); }} />
-
-          <button
-            onClick={() => {
-              handleSignUpClick();
-            }}
+          <input 
+            name="organisation" 
+            className={`form-control organisation ${errors.organisation  ? `` :  `mb-3`}`}
+            value={values.organisation}
+            onChange={handleChange}
+            onBlur={handleBlur} 
+          />
+          {errors.organisation && touched.organisation && (
+            <div className="error-msg text-danger mb-3">{errors.organisation}</div>
+          )}
+          {responseError && <div className="text-danger mt-2 mb-2">{responseError}</div>}
+          <button 
             className={`width100 btn mt-4`}
-            type="button"
           >
             GET STARTED
           </button>
@@ -110,7 +120,10 @@ const SignUp = (props) => {
           } className="signUpLink">Log In</a></p>
         </div>
       </div>
-      <div className="loginUserBlock justify-content-center">
+      </form>
+      )}
+      </Formik>
+      {/* <div className="loginUserBlock justify-content-center">
         {
           displayErrorMessage ?
             <>
@@ -125,7 +138,7 @@ const SignUp = (props) => {
               </ul>
             </> : ""
         }
-      </div>
+      </div> */}
       <div className="col text-center footer-logo">
         <img src={logo} width={60} />
       </div>
