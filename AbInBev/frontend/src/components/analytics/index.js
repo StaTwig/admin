@@ -1,6 +1,7 @@
 import React from "react";
 import { AreaChart, Area, ResponsiveContainer, Tooltip } from "recharts";
 import BreweryView from "./breweryView";
+import InventoryDashboard from "./inventoryDashboard";
 import "./style.scss";
 import bottlesIcon from "../../assets/becks_330ml.png";
 import DownArrow from "../../assets/down_arrow.png";
@@ -73,9 +74,9 @@ const Analytics = (props) => {
                     </div>
                   </div>
 
-                  <div class="btn-group mainButtonFilter">
-                    <a href="#!" class="btn active">State</a>
-                    <select class="btn selectState">
+                  <div className="btn-group mainButtonFilter">
+                    <a href="#!" className="btn active">State</a>
+                    <select className="btn selectState">
                         <option>Select state</option>
                         <option>Karnataka</option>
                     </select>
@@ -394,7 +395,10 @@ const Analytics = (props) => {
                       </table>
                     </div>
                   {/* brewery based on filter we need to enable*/}
-                  <BreweryView></BreweryView>                        
+                  <BreweryView></BreweryView>   
+
+                  {/* Inventory tab view, we need to enable based on filter selection of radio button or need to decide for separate routing for this Reports and Inventory*/}                        
+                  <InventoryDashboard></InventoryDashboard>                     
                 </div>
                 
                 <div className="col-md-3 rightSideMenu pt-4 px-2">
@@ -402,16 +406,16 @@ const Analytics = (props) => {
                     <div className="filterHeader mb-3">
                       <img src={filterIcon} className="filterIcon"/> FILTERS
                     </div>
-                    <label class="radioButton" for="gv">
+                    <label className="radioButton" for="gv">
                       <input className="radioInput" type="radio" name="radio" value="gv" id="gv" defaultChecked={true}/> Geographical View
                     </label>
-                    <label class="radioButton" for="sv">
+                    <label className="radioButton" for="sv">
                       <input className="radioInput" type="radio" name="radio" value="sv" id="sv" /> SKU View
                     </label>
-                    <label class="radioButton" for="suv">
+                    <label className="radioButton" for="suv">
                       <input className="radioInput" type="radio" name="radio" value="suv" id="suv" /> Supplier View
                     </label>
-                    <label class="radioButton" for="bv">
+                    <label className="radioButton" for="bv">
                       <input className="radioInput" type="radio" name="radio" value="bv" id="bv" /> Brewery View
                     </label>
 
