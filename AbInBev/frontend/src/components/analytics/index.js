@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import { AreaChart, Area, ResponsiveContainer, Tooltip } from "recharts";
 import BreweryView from "./breweryView";
+import GeographicalView from "./geographicalView";
 import "./style.scss";
 import bottlesIcon from "../../assets/becks_330ml.png";
 import DownArrow from "../../assets/down_arrow.png";
@@ -8,52 +9,9 @@ import UpArrow from "../../assets/up_arrow.png";
 import SideBar from "../../components/sidebar";
 import filterIcon from "../../assets/icons/funnel.svg"
 
-const data = [
-    {
-        name: "Page A",
-        uv: 4000,
-        pv: 2400,
-        amt: 2400
-    },
-    {
-        name: "Page B",
-        uv: 3000,
-        pv: 1398,
-        amt: 2210
-    },
-    {
-        name: "Page C",
-        uv: 2000,
-        pv: 9800,
-        amt: 2290
-    },
-    {
-        name: "Page D",
-        uv: 2780,
-        pv: 3908,
-        amt: 2000
-    },
-    {
-        name: "Page E",
-        uv: 1890,
-        pv: 4800,
-        amt: 2181
-    },
-    {
-        name: "Page F",
-        uv: 2390,
-        pv: 3800,
-        amt: 2500
-    },
-    {
-        name: "Page G",
-        uv: 3490,
-        pv: 4300,
-        amt: 2100
-    }
-];
-
 const Analytics = (props) => {
+  const { analytics } = props;
+  const [analyticType, setAnalyticType] = useState(1);
     return (
         <div className="container-fluid">
           <div className="row">
@@ -72,330 +30,9 @@ const Analytics = (props) => {
                       </svg>
                     </div>
                   </div>
-
-                  <div class="btn-group mainButtonFilter">
-                    <a href="#!" class="btn active">State</a>
-                    <select class="btn selectState">
-                        <option>Select state</option>
-                        <option>Karnataka</option>
-                    </select>
-                  </div>
-                  
-                  <div className="row">
-                      <div className="col-md-3 ">
-                            <div className="analyticsCard">
-                              <span className="analyticsTitle">Sales</span>
-                              <span className="analyticsPercentage yellow">82% <img className="arrowIcon" src={UpArrow} /></span>
-                              <div className="chartAnalytics">
-                                <ResponsiveContainer width="100%" height={100}>
-                                        <AreaChart
-                                            
-                                            data={data}
-                                            margin={{
-                                                top: 5,
-                                                right: 0,
-                                                left: 0,
-                                                bottom: 5
-                                            }}
-                                            >
-                                                <Area type="monotone" dataKey="uv" stroke="#F49C00" fill="#F49C00" />
-                                                <Tooltip />
-                                        </AreaChart>
-                                    </ResponsiveContainer>
-                              </div>
-                            </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="analyticsCard">
-                            <span className="analyticsTitle">Returns</span>
-                            <span className="analyticsPercentage">82%</span>
-                            <div className="chartAnalytics">
-                                <ResponsiveContainer width="100%" height={100}>
-                                        <AreaChart
-                                            data={data}
-                                            margin={{
-                                                top: 5,
-                                                right: 0,
-                                                left: 0,
-                                                bottom: 5
-                                            }}
-                                            >
-                                                <Area type="monotone" dataKey="uv" stroke="#C8F4E1" fill="#C8F4E1" />
-                                                <Tooltip />
-                                        </AreaChart>
-                                    </ResponsiveContainer>
-                              </div>
-                        </div>
-                      </div>
-                      <div className="col-md-3 ">
-                        <div className="analyticsCard">
-                            <span className="analyticsTitle">Target</span>
-                            <span className="analyticsPercentage pink">82% <img className="arrowIcon" src={DownArrow} /></span>
-                            <div className="chartAnalytics">
-                                <ResponsiveContainer width="100%" height={100}>
-                                    <AreaChart
-                                        data={data}
-                                        margin={{
-                                            top: 5,
-                                            right: 0,
-                                            left: 0,
-                                            bottom: 5
-                                        }}
-                                        >
-                                            <Area type="monotone" dataKey="uv" stroke="#F85566" fill="#F85566" />
-                                            <Tooltip />
-                                    </AreaChart>
-                                </ResponsiveContainer>
-                            </div>
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="analyticsCard">
-                            <span className="analyticsTitle">Actual Returns</span>
-                            <span className="analyticsPercentage blue">82%</span>
-                            <div className="chartAnalytics">
-                                <ResponsiveContainer width="100%" height={100}>
-                                    <AreaChart
-                                        data={data}
-                                        margin={{
-                                            top: 5,
-                                            right: 0,
-                                            left: 0,
-                                            bottom: 5
-                                        }}
-                                        >
-                                            <Area type="monotone" dataKey="uv" stroke="#20BECB" fill="#20BECB" />
-                                            <Tooltip />
-                                    </AreaChart>
-                                </ResponsiveContainer>
-                            </div>
-                        </div>
-                      </div>
-                  </div>
-
-                  <div className="tableDetals">
-                      <table className="table">
-                        <thead>
-                          <tr>
-                            <th scope="col">SKU</th>
-                            <th scope="col">Sales</th>
-                            <th scope="col">Return Bottles</th>
-                            <th scope="col">Traget</th>
-                            <th scope="col">Actual Return</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td scope="row">
-                              <div className="tableProfileIconCard">
-                                <div className="profileIcon">
-                                  <img src={bottlesIcon} alt="" width="50" height="50" />
-                                </div>
-                                <div className="profileName">
-                                  <span className="profileTitle">Becks 330 ml</span>
-                                </div>
-                              </div>
-                              
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                          </tr>
-                          <tr>
-                            <td scope="row">
-                              <div className="tableProfileIconCard">
-                                <div className="profileIcon">
-                                  <img src={bottlesIcon} alt="" width="50" height="50" />
-                                </div>
-                                <div className="profileName">
-                                  <span className="profileTitle">Becks 330 ml</span>
-                                </div>
-                              </div>
-                              
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                          </tr>
-                          <tr>
-                            <td scope="row">
-                              <div className="tableProfileIconCard">
-                                <div className="profileIcon">
-                                  <img src={bottlesIcon} alt="" width="50" height="50" />
-                                </div>
-                                <div className="profileName">
-                                  <span className="profileTitle">Becks 330 ml</span>
-                                </div>
-                              </div>
-                              
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                          </tr>
-                          <tr>
-                            <td scope="row">
-                              <div className="tableProfileIconCard">
-                                <div className="profileIcon">
-                                  <img src={bottlesIcon} alt="" width="50" height="50" />
-                                </div>
-                                <div className="profileName">
-                                  <span className="profileTitle">Becks 330 ml</span>
-                                </div>
-                              </div>
-                              
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                          </tr>
-                          <tr>
-                            <td scope="row">
-                              <div className="tableProfileIconCard">
-                                <div className="profileIcon">
-                                  <img src={bottlesIcon} alt="" width="50" height="50" />
-                                </div>
-                                <div className="profileName">
-                                  <span className="profileTitle">Becks 330 ml</span>
-                                </div>
-                              </div>
-                              
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                          </tr>
-                          <tr>
-                            <td scope="row">
-                              <div className="tableProfileIconCard">
-                                <div className="profileIcon">
-                                  <img src={bottlesIcon} alt="" width="50" height="50" />
-                                </div>
-                                <div className="profileName">
-                                  <span className="profileTitle">Becks 330 ml</span>
-                                </div>
-                              </div>
-                              
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                          </tr>
-                          <tr>
-                            <td scope="row">
-                              <div className="tableProfileIconCard">
-                                <div className="profileIcon">
-                                  <img src={bottlesIcon} alt="" width="50" height="50" />
-                                </div>
-                                <div className="profileName">
-                                  <span className="profileTitle">Becks 330 ml</span>
-                                </div>
-                              </div>
-                              
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                          </tr>
-                          <tr>
-                            <td scope="row">
-                              <div className="tableProfileIconCard">
-                                <div className="profileIcon">
-                                  <img src={bottlesIcon} alt="" width="50" height="50" />
-                                </div>
-                                <div className="profileName">
-                                  <span className="profileTitle">Becks 330 ml</span>
-                                </div>
-                              </div>
-                              
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                          </tr>
-                          <tr>
-                            <td scope="row">
-                              <div className="tableProfileIconCard">
-                                <div className="profileIcon">
-                                  <img src={bottlesIcon} alt="" width="50" height="50" />
-                                </div>
-                                <div className="profileName">
-                                  <span className="profileTitle">Becks 330 ml</span>
-                                </div>
-                              </div>
-                              
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                          </tr>
-                          <tr>
-                            <td scope="row">
-                              <div className="tableProfileIconCard">
-                                <div className="profileIcon">
-                                  <img src={bottlesIcon} alt="" width="50" height="50" />
-                                </div>
-                                <div className="profileName">
-                                  <span className="profileTitle">Becks 330 ml</span>
-                                </div>
-                              </div>
-                              
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                          </tr>
-                          <tr>
-                            <td scope="row">
-                              <div className="tableProfileIconCard">
-                                <div className="profileIcon">
-                                  <img src={bottlesIcon} alt="" width="50" height="50" />
-                                </div>
-                                <div className="profileName">
-                                  <span className="profileTitle">Becks 330 ml</span>
-                                </div>
-                              </div>
-                              
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                          </tr>
-                          <tr>
-                            <td scope="row">
-                              <div className="tableProfileIconCard">
-                                <div className="profileIcon">
-                                  <img src={bottlesIcon} alt="" width="50" height="50" />
-                                </div>
-                                <div className="profileName">
-                                  <span className="profileTitle">Becks 330 ml</span>
-                                  <span>526025</span>
-                                </div>
-                              </div>
-                              
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </div>
-                  {/* brewery based on filter we need to enable*/}
-                  <BreweryView></BreweryView>                        
-                </div>
+                  {analyticType == 1 && <GeographicalView analytics={analytics} />}
+                  {analyticType == 4 && <BreweryView analytics={analytics} />}
+                 </div>
                 
                 <div className="col-md-3 rightSideMenu pt-4 px-2">
                   <div className="filterSection">
@@ -403,16 +40,16 @@ const Analytics = (props) => {
                       <img src={filterIcon} className="filterIcon"/> FILTERS
                     </div>
                     <label class="radioButton" for="gv">
-                      <input className="radioInput" type="radio" name="radio" value="gv" id="gv" defaultChecked={true}/> Geographical View
+                      <input onClick={() => setAnalyticType(1)} className="radioInput" type="radio" name="radio" value="gv" id="gv" defaultChecked={true}/> Geographical View
                     </label>
                     <label class="radioButton" for="sv">
-                      <input className="radioInput" type="radio" name="radio" value="sv" id="sv" /> SKU View
+                      <input onClick={() => setAnalyticType(2)} className="radioInput" type="radio" name="radio" value="sv" id="sv" /> SKU View
                     </label>
                     <label class="radioButton" for="suv">
-                      <input className="radioInput" type="radio" name="radio" value="suv" id="suv" /> Supplier View
+                      <input onClick={() => setAnalyticType(3)} className="radioInput" type="radio" name="radio" value="suv" id="suv" /> Supplier View
                     </label>
                     <label class="radioButton" for="bv">
-                      <input className="radioInput" type="radio" name="radio" value="bv" id="bv" /> Brewery View
+                      <input onClick={() => setAnalyticType(4)} className="radioInput" type="radio" name="radio" value="bv" id="bv" /> Brewery View
                     </label>
 
                     <label className="filterSubHeading mt-3">Select SPM</label>
