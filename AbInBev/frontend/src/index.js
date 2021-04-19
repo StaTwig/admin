@@ -23,11 +23,11 @@ const render = () => {
 
 setAuthToken();
 // Check for token
-if (localStorage.theLedgerAdminToken) {
+if (localStorage.theAbInBevToken) {
   // Set auth token auth
-  setAuthToken(localStorage.theLedgerAdminToken);
+  setAuthToken(localStorage.theAbInBevToken);
   // Decode token and get user info and exp
-  const decoded = jwt_decode(localStorage.theLedgerAdminToken);
+  const decoded = jwt_decode(localStorage.theAbInBevToken);
   // Set user and isAuthenticated
   store.dispatch(setCurrentUser(decoded));
 

@@ -1,7 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import jwt_decode from 'jwt-decode';
-
+import MobileHeader from '../../shared/header/mobileHeader';
+import logo from '../../assets/brands/VACCINELEDGER.png';
 import Verify from '../../components/verify';
 import {sendOtp, setCurrentUser, verifyOtp} from '../../actions/userActions';
 import {turnOff, turnOn} from "../../actions/spinnerActions";
@@ -77,7 +78,13 @@ const VerifyContainer = props => {
 
   return (
     <div className="container-fluid p-0" tabIndex="-1" onKeyDown={onkeydown}>
-      <Verify
+<MobileHeader {...props} />
+   <nav className="navbar sticky-top navbar-expand-lg">
+        <a className="navbar-brand" href="#">
+          <img src={logo} width="230" height="30" alt="logo" onClick={() =>props.history.push('/#')} />
+        </a>
+</nav>
+<Verify
         email={email}
         otp1={otp1}
         otp2={otp2}
