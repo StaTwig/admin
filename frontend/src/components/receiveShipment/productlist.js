@@ -13,7 +13,7 @@ const ProductList = (props) => {
                  <div className={props.productHighLight ? "col panel commonpanle highlight " : "col panel commonpanle "}>
                     <div className="d-flex flex-row " >
                         <ul className="mr-2 w-75 elemens">
-                            <li className="mb-3" style={{fontSize:'4vh'}}>{product.productName}</li>
+                            <li className="mb-3 productheading" style={{fontSize:'3vh',color:"#0093E9", fontWeight:700}}>{product.productName}</li>
                             <li className="mb-1 text-secondary">Product Name</li>
                             <li className="mb-1 text-secondary">Manufacturer</li>
                             <li className="mb-1 text-secondary">Quantity Sent</li>

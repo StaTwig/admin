@@ -122,7 +122,7 @@ const ReceiveShipment = (props) => {
 
   const closeModal = () => {
     setOpenUpdatedStatus(false);
-    props.history.push("/tracing");
+    props.history.push("/viewshipment/"+id);
   };
 
   const closeModalShipment = () => {
@@ -220,14 +220,15 @@ const ReceiveShipment = (props) => {
           <div className="col-sm-4">
           <h6 className="heading mt-3 mb-3 ml-3">Comments</h6>            
             <div className="panel commonpanle" style={{height:'45%'}}>
-              <div className="form-group">
+              <div className="form-group" style={{width:"150%"}}>
                 <textarea
-                  style={{fontSize:'16px'}}
+                  style={{fontSize:'16px',resize:"none",borderBottom: "none"}}
                   type="text"
                   className="form-control"
                   name="Comment"
                   onChange={(e) => setComment(e)}
                   size="40"
+                  cols="120" rows="7"
                   placeholder="Enter Comment Here"
                 />              
               </div>           
