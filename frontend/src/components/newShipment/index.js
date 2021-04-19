@@ -198,15 +198,9 @@ const [ modalProps, setModalProps ] = useState({});
       dispatch(turnOn());
       const result = await createShipment(data);
       dispatch(turnOff());
-<<<<<<< HEAD
       console.log("data", data);
       if (result?.id) {
         setMessage("Created Shipment Success");
-=======
-      console.log("da", result);
-      if (result?.id ) {
-      //  setMessage("Created Shipment Success");
->>>>>>> 6e5e5781af992663872543e91347d5a43e6987fe
         setOpenCreatedInventory(true);
 setModalProps({
         message: 'Created Successfully!',
@@ -323,7 +317,6 @@ setModalProps({
                           // handleSOChange(v);
                           setOrderId(v);
                           dispatch(turnOn());
-<<<<<<< HEAD
                           const result = await dispatch(getOrder(v));
                           console.log('Result');
                           console.log(result);
@@ -331,13 +324,6 @@ setModalProps({
                           setReceiverOrgId(result.poDetails[0].customer.organisation.id);
                           setOrderDetails(result.poDetails[0]);
                           
-=======
-                          const result = await getShippingOrderById(v);
-                          setReceiverOrgLoc(result.customerDetails.deliveryLocation);
-                          setReceiverOrgId(result.customerDetails.customerOrgName);
-                          setShippingOrderDetails(result);
-
->>>>>>> 6e5e5781af992663872543e91347d5a43e6987fe
                           dispatch(turnOff());
                           setDisabled(true);
                           let warehouse = senderWarehouses.filter(
@@ -348,12 +334,8 @@ setModalProps({
                               }
                           });
                           console.log(warehouse);
-<<<<<<< HEAD
                           console.log('Organisation');
                           console.log(senderOrganisation);
-=======
-
->>>>>>> 6e5e5781af992663872543e91347d5a43e6987fe
                           setFieldValue('fromOrg', senderOrganisation[0]);
                           setFieldValue('fromOrgLoc', result.poDetails[0].supplier.organisation.id);
                           setFieldValue('toOrg', result.poDetails[0].customer.organisation.name);
