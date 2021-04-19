@@ -55,7 +55,7 @@ const Map = (props) => {
       zoom:  zoom
     });
 
-    if(warehouseLocation) {
+    if(warehouseLocation?.latitude) {
       map = new mapboxgl.Map({
         container: mapContainerRef.current,
         style: 'mapbox://styles/mapbox/light-v10',

@@ -56,9 +56,9 @@ const SideBar = ({
             <span>Shipments</span>
           </Link>
         </li>
-         <li className={(url === '/trackAndTrace') ? 'active' : ''}>
-          <Link to="/trackAndTrace">
-            <img src={(url === '/trackAndTrace') ? trackSelectedIcon : trackIcon} alt="Track & Trace" />
+         <li className={(url === '/track') ? 'active' : ''}>
+          <Link to="/track">
+            <img src={(url === '/track') ? trackSelectedIcon : trackIcon} alt="Track & Trace" />
             <span>Track & Trace</span>
           </Link>
         </li>
