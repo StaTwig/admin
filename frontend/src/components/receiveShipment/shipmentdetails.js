@@ -7,7 +7,7 @@ import './style.scss'
 const ShipmentDetails = (props) => {
     return (
     Object.keys(props.shipments).length === 0 ? <div className="row panel justify-content-between">N/A</div> :
-        <div className=  { props.highLight ? "col panel commonpanle highlight" : "col panel commonpanle"}>
+        <div className=  { props.highLight ? "col panel commonpanle highlight" : "col panel commonpanle"} style={{height:"45%"}}>
           <div className="d-flex flex-row  ">
           <ul className="mr-3 elemens w-50">
           <li className="mb-1 text-secondary">Shipment Date</li>
