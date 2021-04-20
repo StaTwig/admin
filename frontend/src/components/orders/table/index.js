@@ -15,6 +15,7 @@ const Table = props => {
   const dispatch = useDispatch();
   const { loadMore, onLoadMore, skip, ordrs, visible } = props;
   const orders = ordrs();
+
   return (
     <div className="table pr-1">
         <div className="rTable">
@@ -34,7 +35,9 @@ const Table = props => {
                 status = 'Accepted';
               }else if (order.poStatus === 'Rejected') {
                 statusStyle = 'bg-warning';
+                status = 'Rejected';
               }
+
 
               const { customer, products, supplier } = order;
               return (

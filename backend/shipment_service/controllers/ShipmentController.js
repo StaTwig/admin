@@ -1159,7 +1159,7 @@ exports.uploadImage = async function (req, res) {
       const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]));
       try {
         const filename = Id + "-" + t.format + t.value + ".png";
-        let dir = `uploads`;
+        let dir = `/home/ubuntu/shipmentimages`;
 
         await moveFile(req.file.path, `${dir}/${filename}`);
         const update = await ShipmentModel.updateOne(

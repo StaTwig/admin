@@ -27,20 +27,20 @@ const BreweryView = (props) => {
                         <h6 className="brewerySubtitle">Anheuser Busch Inbev India Ltd</h6> 
                         <p className="breweryLocationText"> <i className="fa fa-map-marker breweryLoc"></i> Mysuru, Karnataka</p>
 
-                        <span className="breweryPropertyText">Sales <span class="pull-right breweryPropertyValue">80,00,000</span></span>
+                        <span className="breweryPropertyText">Sales <span className="pull-right breweryPropertyValue">80,00,000</span></span>
                         <div className="progress progress-line-warning">
                             <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{width: "60%"}}>
                                 <span className="sr-only">20% Complete</span>
                             </div>
                         </div>
                 
-                        <span className="breweryPropertyText">Returns <span class="pull-right breweryPropertyValue">55,86,900</span></span>
+                        <span className="breweryPropertyText">Returns <span className="pull-right breweryPropertyValue">55,86,900</span></span>
                         <div className="progress progress-line-danger">
                             <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{width: "80%"}}>
                                 <span className="sr-only">80% Complete</span>
                             </div>
                         </div>
-                        <span className="breweryPropertyText">Return Rate <span class="pull-right breweryPropertyValue">82%</span></span>
+                        <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">82%</span></span>
                         <div className="progress progress-line-primary">
                             <div className="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{width: "20%"}}>
                                 <span className="sr-only">30% Complete</span>
@@ -54,20 +54,20 @@ const BreweryView = (props) => {
                         <h6 className="brewerySubtitle">Anheuser Busch Inbev India Ltd</h6> 
                         <p className="breweryLocationText"> <i className="fa fa-map-marker breweryLoc"></i> Mysuru, Karnataka</p>
 
-                        <span className="breweryPropertyText">Sales <span class="pull-right breweryPropertyValue">80,00,000</span></span>
+                        <span className="breweryPropertyText">Sales <span className="pull-right breweryPropertyValue">80,00,000</span></span>
                         <div className="progress progress-line-warning">
                             <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{width: "60%"}}>
                                 <span className="sr-only">20% Complete</span>
                             </div>
                         </div>
                 
-                        <span className="breweryPropertyText">Returns <span class="pull-right breweryPropertyValue">55,86,900</span></span>
+                        <span className="breweryPropertyText">Returns <span className="pull-right breweryPropertyValue">55,86,900</span></span>
                         <div className="progress progress-line-danger">
                             <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{width: "80%"}}>
                                 <span className="sr-only">80% Complete</span>
                             </div>
                         </div>
-                        <span className="breweryPropertyText">Return Rate <span class="pull-right breweryPropertyValue">82%</span></span>
+                        <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">82%</span></span>
                         <div className="progress progress-line-primary">
                             <div className="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{width: "20%"}}>
                                 <span className="sr-only">30% Complete</span>
@@ -81,20 +81,20 @@ const BreweryView = (props) => {
                         <h6 className="brewerySubtitle">Anheuser Busch Inbev India Ltd</h6> 
                         <p className="breweryLocationText"> <i className="fa fa-map-marker breweryLoc"></i> Mysuru, Karnataka</p>
 
-                        <span className="breweryPropertyText">Sales <span class="pull-right breweryPropertyValue">80,00,000</span></span>
+                        <span className="breweryPropertyText">Sales <span className="pull-right breweryPropertyValue">80,00,000</span></span>
                         <div className="progress progress-line-warning">
                             <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{width: "60%"}}>
                                 <span className="sr-only">20% Complete</span>
                             </div>
                         </div>
                 
-                        <span className="breweryPropertyText">Returns <span class="pull-right breweryPropertyValue">55,86,900</span></span>
+                        <span className="breweryPropertyText">Returns <span className="pull-right breweryPropertyValue">55,86,900</span></span>
                         <div className="progress progress-line-danger">
                             <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{width: "80%"}}>
                                 <span className="sr-only">80% Complete</span>
                             </div>
                         </div>
-                        <span className="breweryPropertyText">Return Rate <span class="pull-right breweryPropertyValue">82%</span></span>
+                        <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">82%</span></span>
                         <div className="progress progress-line-primary">
                             <div className="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{width: "20%"}}>
                                 <span className="sr-only">30% Complete</span>
@@ -109,20 +109,20 @@ const BreweryView = (props) => {
                         <h6 className="brewerySubtitle">Anheuser Busch Inbev India Ltd</h6> 
                         <p className="breweryLocationText"> <i className="fa fa-map-marker breweryLoc"></i> Mysuru, Karnataka</p>
 
-                        <span className="breweryPropertyText">Sales <span class="pull-right breweryPropertyValue">80,00,000</span></span>
+                        <span className="breweryPropertyText">Sales <span className="pull-right breweryPropertyValue">80,00,000</span></span>
                         <div className="progress progress-line-warning">
                             <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{width: "60%"}}>
                                 <span className="sr-only">20% Complete</span>
                             </div>
                         </div>
                 
-                        <span className="breweryPropertyText">Returns <span class="pull-right breweryPropertyValue">55,86,900</span></span>
+                        <span className="breweryPropertyText">Returns <span className="pull-right breweryPropertyValue">55,86,900</span></span>
                         <div className="progress progress-line-danger">
                             <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{width: "80%"}}>
                                 <span className="sr-only">80% Complete</span>
                             </div>
                         </div>
-                        <span className="breweryPropertyText">Return Rate <span class="pull-right breweryPropertyValue">82%</span></span>
+                        <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">82%</span></span>
                         <div className="progress progress-line-primary">
                             <div className="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{width: "20%"}}>
                                 <span className="sr-only">30% Complete</span>
@@ -136,20 +136,20 @@ const BreweryView = (props) => {
                         <h6 className="brewerySubtitle">Anheuser Busch Inbev India Ltd</h6> 
                         <p className="breweryLocationText"> <i className="fa fa-map-marker breweryLoc"></i> Mysuru, Karnataka</p>
 
-                        <span className="breweryPropertyText">Sales <span class="pull-right breweryPropertyValue">80,00,000</span></span>
+                        <span className="breweryPropertyText">Sales <span className="pull-right breweryPropertyValue">80,00,000</span></span>
                         <div className="progress progress-line-warning">
                             <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{width: "60%"}}>
                                 <span className="sr-only">20% Complete</span>
                             </div>
                         </div>
                 
-                        <span className="breweryPropertyText">Returns <span class="pull-right breweryPropertyValue">55,86,900</span></span>
+                        <span className="breweryPropertyText">Returns <span className="pull-right breweryPropertyValue">55,86,900</span></span>
                         <div className="progress progress-line-danger">
                             <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{width: "80%"}}>
                                 <span className="sr-only">80% Complete</span>
                             </div>
                         </div>
-                        <span className="breweryPropertyText">Return Rate <span class="pull-right breweryPropertyValue">82%</span></span>
+                        <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">82%</span></span>
                         <div className="progress progress-line-primary">
                             <div className="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{width: "20%"}}>
                                 <span className="sr-only">30% Complete</span>
@@ -163,20 +163,20 @@ const BreweryView = (props) => {
                         <h6 className="brewerySubtitle">Anheuser Busch Inbev India Ltd</h6> 
                         <p className="breweryLocationText"> <i className="fa fa-map-marker breweryLoc"></i> Mysuru, Karnataka</p>
 
-                        <span className="breweryPropertyText">Sales <span class="pull-right breweryPropertyValue">80,00,000</span></span>
+                        <span className="breweryPropertyText">Sales <span className="pull-right breweryPropertyValue">80,00,000</span></span>
                         <div className="progress progress-line-warning">
                             <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{width: "60%"}}>
                                 <span className="sr-only">20% Complete</span>
                             </div>
                         </div>
                 
-                        <span className="breweryPropertyText">Returns <span class="pull-right breweryPropertyValue">55,86,900</span></span>
+                        <span className="breweryPropertyText">Returns <span className="pull-right breweryPropertyValue">55,86,900</span></span>
                         <div className="progress progress-line-danger">
                             <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{width: "80%"}}>
                                 <span className="sr-only">80% Complete</span>
                             </div>
                         </div>
-                        <span className="breweryPropertyText">Return Rate <span class="pull-right breweryPropertyValue">82%</span></span>
+                        <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">82%</span></span>
                         <div className="progress progress-line-primary">
                             <div className="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{width: "20%"}}>
                                 <span className="sr-only">30% Complete</span>

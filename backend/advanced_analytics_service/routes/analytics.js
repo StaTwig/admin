@@ -10,8 +10,8 @@ var router = express.Router();
 // getInventoryByBrand/:brand/:state/:skull:
 
 router.get("/getAllStats", AnalyticsController.getAllStats);
-router.get("/getStatsBySKU/:productId/:warehouseId", AnalyticsController.getAllStats);
-router.get("/getStatsByBrewery/:warehouseId/:productId", AnalyticsController.getAllStats);
+router.get("/getStatsBySKU/:productId", AnalyticsController.getAllStats);
+router.get("/getStatsByBrewery/:warehouseId", AnalyticsController.getAllStats);
 //Implemented till here, below needs to be done
 router.get("/getSales/:state/:tenure", AnalyticsController.getAllStats);
 router.get("/getReturnedRate/:state/:tenure", AnalyticsController.getAllStats);

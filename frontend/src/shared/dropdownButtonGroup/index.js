@@ -10,14 +10,13 @@ const dropdownButtonGroup = props => {
   const [menu, setMenu] = useState(false);
   const { groups, name, onSelect, isText, value, changeFn, placeholder, dClass, disabled } = props;
 
-  const ref = useRef();
-  useOnclickOutside(ref, () => {
+  const ref = useOnclickOutside(() => {
     setMenu(false);
   });
 
   const useParse = name && name.includes('<');
   return (
-    <div className="custom-dropdown">
+    <div className="custom-dropdown" ref={ref}>
       {isText ? <input className="btn-custom-dropdown form-control" onBlur={() => setTimeout(() => { if(value) changeFn(value, 'y'); setMenu(false); }, 500)} onKeyDown={(e) => (e.keyCode == 27 || e.keyCode == 13) && setMenu(false)} onChange={(e) => changeFn(e.target.value)} value={value} type="text" onFocus={() => groups.length && setMenu(true)} placeholder={placeholder} onClick={() => groups.length && setMenu(true)} /> :
         <button
           className={`btn-custom-dropdown ${menu && 'active'}`}
@@ -46,7 +45,7 @@ const dropdownButtonGroup = props => {
                     {item?.warehouseInventory
                       ? item?.warehouseAddress
                         ? (item?.warehouseAddress?.firstLine + ', ' + item?.warehouseAddress?.city)
-                        : item.postalAddress 
+                        : item.postalAddress
                       : (item?.name ? item?.name : (item?.productName ? item?.productName : parse(item)))}
                   </span>
                   {index + 1 < groups.length && <hr />}

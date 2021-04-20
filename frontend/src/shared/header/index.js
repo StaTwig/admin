@@ -12,14 +12,16 @@ import dropdownIcon from '../../assets/icons/drop-down.png';
 import user from '../../assets/icons/user.svg';
 import { getNotifications, deleteNotification } from '../../actions/notificationActions';
 import { turnOff, turnOn } from "../../actions/spinnerActions";
-
+import useOnclickOutside from 'react-cool-onclickoutside';
 const Header = props => {
   const [menu, setMenu] = useState(false);
   const [sidebar, openSidebar] = useState(false);
   const [search, setSearch] = useState('');
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
-
+const ref = useOnclickOutside(() => {
+    setMenu(false);
+  });
   function onSearchChange(e) {
     console.log(e.target.value);
     setSearch(e.target.value);
@@ -131,7 +133,7 @@ const Header = props => {
           </div>
         </div>
         {menu && (
-          <div className="slider-menu">
+          <div className="slider-menu" ref={ref}>
             {
               <React.Fragment>
                 <div className="slider-item-text">
