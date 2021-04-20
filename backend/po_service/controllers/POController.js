@@ -585,7 +585,7 @@ exports.createOrder = [
       purchaseOrder.poUpdates = updates;
 
       const result = await purchaseOrder.save();
-      return apiResponse.successResponseWithData(res, 'Created order');
+      return apiResponse.successResponseWithData(res, 'Created order',{"poId":poId});
     } catch (err) {
       logger.log(
           'error',

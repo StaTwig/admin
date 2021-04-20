@@ -74,10 +74,10 @@ const Orders = props => {
         </div>
       </div>
       <Tiles {...props} setData={setData} />
-      <div className="mt-4">
+      <div className="mt-4 ">
         <Tabs {...props} setvisible={setvisible} visible={visible} />
       </div>
-      <div className="full-width-ribben mt-4">
+      <div className="full-width-ribben mt-4 pl-5">
         <TableFilter data={headers} fb="73%"/>
       </div>
       <div className="ribben-space">

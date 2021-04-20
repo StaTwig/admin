@@ -11,10 +11,10 @@ const ReviewOrderPopUp = (props) => {
           Success!
         </div>
         <div className="data">
-        The New Order has been Created
+         Your Order<span className="bold">{props.OrderId}</span>
         </div>
         <div className="data mb-4">
-            Successfully!
+          Sent Successfully!
         </div>
         <button className="btn-primary btn" onClick={props.onHide}>OK</button>
       </div>

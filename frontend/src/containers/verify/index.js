@@ -1,6 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import jwt_decode from 'jwt-decode';
+import MobileHeader from '../../shared/header/mobileHeader';
+import logo from '../../assets/brands/VACCINELEDGER.png';
 
 import Verify from '../../components/verify';
 import {sendOtp, setCurrentUser, verifyOtp} from '../../actions/userActions';
@@ -9,14 +11,11 @@ import setAuthToken from "../../utils/setAuthToken";
 
 const VerifyContainer = props => {
   const [email, setEmail] = useState('');
-  const [otp1, setOtp1] = useState('');
-  const [otp2, setOtp2] = useState('');
-  const [otp3, setOtp3] = useState('');
-  const [otp4, setOtp4] = useState('');
-  let otp = otp1+otp2+otp3+otp4
+  const [otp, setOtp] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const dispatch = useDispatch();
   const verifyOTP = useCallback(async () => {
+    dispatch(turnOn());
     const params = props.location.search.split('emailId=');
     if(params.length > 1) {
       const emailId = params[1];
@@ -31,7 +30,7 @@ const VerifyContainer = props => {
          // Set user and isAuthenticated
          localStorage.setItem('theLedgerToken', token);
          dispatch(setCurrentUser(decoded));
-        props.history.push(`/`);
+        props.history.push(`/overview`);
       } else {
         const err = result.data.message;
         setErrorMessage(err);
@@ -39,19 +38,16 @@ const VerifyContainer = props => {
     }else {
       setErrorMessage('Invalid Url');
     }
-
+    dispatch(turnOff());
   });
   const resendOtp = useCallback(async () => {
-    setOtp1('');
-    setOtp2('');
-    setOtp3('');
-    setOtp4('');
     dispatch(turnOn());
-    const params = props.location.search.split('emailId=');
-    if(params.length > 1) {
-      const emailId = params[1];
-      const data = { emailId };
-      const result = await sendOtp(data);
+    const params = props.location.search.split("emailId=");
+    const data = { emailId: params[1] };
+    const result = await sendOtp(data);
+    
+      
+      
       if (result.status === 200) {
         const err = result.data.message;
         setErrorMessage(err);
@@ -65,35 +61,48 @@ const VerifyContainer = props => {
         const err = result.data.data[0];
         setErrorMessage(err.msg);
       }
-    }
-
-    dispatch(turnOff());
+      dispatch(turnOff());
   });
-  const onkeydown = (event) => {
-    if (event.keyCode  === 13) {
-      verifyOTP();
-    }
-   }
-
   return (
-    <div className="container-fluid p-0" tabIndex="-1" onKeyDown={onkeydown}>
+    <div className="container-fluid p-0">
+      <MobileHeader {...props} />
+         <nav className="navbar sticky-top navbar-expand-lg">
+        <a className="navbar-brand" href="#">
+          <img src={logo} width="230" height="30" alt="logo" onClick={() =>props.history.push('/#')} />
+        </a>
+      </nav>
       <Verify
         email={email}
-        otp1={otp1}
-        otp2={otp2}
-        otp3={otp3}
-        otp4={otp4}
+        otp={otp}
         errorMessage={errorMessage}
-        onEmailChange={e => setEmail(e.target.value)}
-        onOtpChange1={e => setOtp1(e.target.value)}
-        onOtpChange2={e => setOtp2(e.target.value)}
-        onOtpChange3={e => setOtp3(e.target.value)}
-        onOtpChange4={e => setOtp4(e.target.value)}
+        onEmailChange={(e) => setEmail(e.target.value)}
+        onOtpChange={(e) => setOtp(e)}
         onVerifyOtp={verifyOTP}
         onResendOtp={resendOtp}
       />
     </div>
   );
 };
+
+//   return (
+//     <div className="container-fluid p-0" tabIndex="-1" onKeyDown={onkeydown}>
+//       <Verify
+//         email={email}
+//         otp1={otp1}
+//         otp2={otp2}
+//         otp3={otp3}
+//         otp4={otp4}
+//         errorMessage={errorMessage}
+//         onEmailChange={e => setEmail(e.target.value)}
+//         onOtpChange1={e => setOtp1(e.target.value)}
+//         onOtpChange2={e => setOtp2(e.target.value)}
+//         onOtpChange3={e => setOtp3(e.target.value)}
+//         onOtpChange4={e => setOtp4(e.target.value)}
+//         onVerifyOtp={verifyOTP}
+//         onResendOtp={resendOtp}
+//       />
+//     </div>
+//   );
+// };
 
 export default VerifyContainer;

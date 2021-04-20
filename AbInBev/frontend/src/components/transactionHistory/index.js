@@ -34,12 +34,12 @@ const TransactionHistory = (props) => {
                   </svg>
                 </div>
               </div>
-              <div class="btn-group mainButtonFilter">
-                <a href="#!" class="btn active">All</a>
-                <a href="#!" class="btn">Sent</a>
-                <a href="#!" class="btn">Received</a>
-                <a href="#!" class="btn">In-Transit</a>
-                <a href="#!" class="btn">Added</a>
+              <div className="btn-group mainButtonFilter">
+                <a href="#!" className="btn active">All</a>
+                <a href="#!" className="btn">Sent</a>
+                <a href="#!" className="btn">Received</a>
+                <a href="#!" className="btn">In-Transit</a>
+                <a href="#!" className="btn">Added</a>
               </div>
 
               <div className="productList">
@@ -57,7 +57,7 @@ const TransactionHistory = (props) => {
                           <div className="productIcon inTransit">
                             <img
                               src={inTransitIcon}
-                              class="icon-thumbnail-img"
+                              className="icon-thumbnail-img"
                               alt=""
                             />  
                           </div>
@@ -78,22 +78,22 @@ const TransactionHistory = (props) => {
                       <div className="productItem">
                       {transaction.status === 'RECEIVED' &&
                         <div className="productStatus">
-                          <span class="statusbadge receivedBadge"></span> Received
+                          <span className="statusbadge receivedBadge"></span> Received
                         </div>
                       }
                       {transaction.status === 'SENT' &&
                         <div className="productStatus">
-                          <span class="statusbadge sentBadge"></span> Sent
+                          <span className="statusbadge sentBadge"></span> Sent
                         </div>
                       }
                       {transaction.status === 'INTRANSIT' &&
                         <div className="productStatus">
-                          <span class="statusbadge transitBadge"></span> In Transit
+                          <span className="statusbadge transitBadge"></span> In Transit
                         </div>
                       }
                       {transaction.status === 'CREATED' &&
                         <div className="productStatus">
-                          <span class="statusbadge addedBadge"></span> Added
+                          <span className="statusbadge addedBadge"></span> Added
                         </div>
                       }   
                       </div>
@@ -115,17 +115,17 @@ const TransactionHistory = (props) => {
                   <img src={filterIcon} className="filterIcon"/> FILTERS
                 </div>
 
-                <div class="btn-group filterButton mt-4">
-                  <a href="#!" class="btn ">Brewery</a>
-                  <a href="#!" class="btn active">Vendor</a>
+                <div className="btn-group filterButton mt-4">
+                  <a href="#!" className="btn ">Brewery</a>
+                  <a href="#!" className="btn active">Vendor</a>
                 </div>
 
                 <label className="filterSubHeading mt-2">Time Period</label>
-                <div class="btn-group filterButton mt-2">
-                  <a href="#!" class="btn active">Today</a>
-                  <a href="#!" class="btn">Monthly</a>
-                  <a href="#!" class="btn">Quarterly</a>
-                  <a href="#!" class="btn">Yearly</a>
+                <div className="btn-group filterButton mt-2">
+                  <a href="#!" className="btn active">Today</a>
+                  <a href="#!" className="btn">Monthly</a>
+                  <a href="#!" className="btn">Quarterly</a>
+                  <a href="#!" className="btn">Yearly</a>
                 </div>
 
                 <label className="filterSubHeading mt-2">District</label>
@@ -134,10 +134,10 @@ const TransactionHistory = (props) => {
                 </select>
 
                 <label className="filterSubHeading mt-2">Vendor</label>
-                <div class="btn-group filterButton mt-2">
-                  <a href="#!" class="btn active">All</a>
-                  <a href="#!" class="btn">S1</a>
-                  <a href="#!" class="btn">S2</a>
+                <div className="btn-group filterButton mt-2">
+                  <a href="#!" className="btn active">All</a>
+                  <a href="#!" className="btn">S1</a>
+                  <a href="#!" className="btn">S2</a>
                 </div>
 
                 <label className="filterSubHeading mt-2">Select Vendor</label>
