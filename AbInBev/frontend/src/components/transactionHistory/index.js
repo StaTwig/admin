@@ -81,7 +81,7 @@ const TransactionHistory = (props) => {
         }
         if (a.status === "RECEIVED") inBound.push(a);
         if (a.status === "SENT") sent.push(a);
-        if (a.status === "TRANSIT") inTransit.push(a);
+        if (a.status === "INTRANSIT") inTransit.push(a);
       });
       setAdded(addedarray);
       console.log(results);
