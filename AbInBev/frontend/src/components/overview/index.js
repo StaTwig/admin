@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AreaChart, Area, Tooltip } from "recharts";
 import "./style.scss";
 import bottlesIcon from "../../assets/becks_330ml.png";
@@ -52,6 +52,15 @@ const data = [
   }
 ];
 const Overview = (props) => {
+  const [transactions, setTransactions] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const results = await dispatch(getAdvancedAnalytics());
+      setDisplayTransactions(results.data);
+      setTransactions(results.data.data.data);
+    })();
+  }, []);
   return (
     <div className="container-fluid">
       <div className="row">

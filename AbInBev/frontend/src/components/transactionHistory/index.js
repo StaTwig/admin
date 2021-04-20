@@ -6,6 +6,8 @@ import SideBar from "../../components/sidebar";
 import filterIcon from "../../assets/icons/funnel.svg";
 import { getTransactions } from "../../actions/transactionAction";
 import Moment from "react-moment";
+import setAuthToken from '../../utils/setAuthToken'
+import { func } from "prop-types";
 
 const TransactionHistory = (props) => {
   const dispatch = useDispatch();
@@ -21,7 +23,8 @@ const TransactionHistory = (props) => {
   const [buttonState2, setButtonActive2] = useState("btn");
   const [buttonState3, setButtonActive3] = useState("btn");
   const [buttonState4, setButtonActive4] = useState("btn");
-
+  const [dateClassName, setdateClassName] = useState("transactionListDate");
+  const [groupDate, setGroupDate] = useState("null");
   function selectThis(a) {
     console.log(a);
     if (a === "all") {
@@ -163,7 +166,7 @@ const TransactionHistory = (props) => {
               <div className="productList">
                 {displayTransactions.map((transaction, index) => (
                   <div>
-                    <span className="transactionListDate">
+                   <span className={dateClassName}>
                       <Moment format="MMM Do, YYYY">
                         {transaction.shippingDate}
                       </Moment>
@@ -301,6 +304,8 @@ const TransactionHistory = (props) => {
         </main>
       </div>
     </div>
+  
+  
   );
 };
 export default TransactionHistory;
