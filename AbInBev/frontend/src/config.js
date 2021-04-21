@@ -85,6 +85,7 @@ export function config() {
       getNotificationsUrl: `${ABINBEVPROD_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${ABINBEVPROD_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${ABINBEVPROD_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
+      getAllAnalytics: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getAllStats`,
     },
     ainbevtest: {
       loginUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -145,6 +146,7 @@ export function config() {
       getNotificationsUrl: `${ABINBEVTEST_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${ABINBEVTEST_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${ABINBEVTEST_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
+      getAllAnalytics: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getAllStats`,
     },
   };
 

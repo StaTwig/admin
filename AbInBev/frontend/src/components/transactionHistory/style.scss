@@ -23,7 +23,9 @@
     outline:none !important;
   }
 }
-
+.dontshow{
+  display: none;
+}
 .productList{
   color: #707070;
   .transactionListDate{

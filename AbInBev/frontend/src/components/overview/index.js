@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AreaChart, Area, Tooltip } from "recharts";
+import { useDispatch } from "react-redux";
 import "./style.scss";
 import bottlesIcon from "../../assets/becks_330ml.png";
 import brewIcon from "../../assets/in brewery.png";
 import s2VenorsIcon from "../../assets/s2 venors.png";
 import s1VenorsIcon from "../../assets/s1vendors.png";
 import SideBar from "../../components/sidebar";
+import { getAdvancedAnalytics } from "../../actions/overviewAction";
 
 const data = [
   {
@@ -52,6 +54,15 @@ const data = [
   }
 ];
 const Overview = (props) => {
+  const dispatch = useDispatch();
+  const [Transactions, setTransactions] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const results = await dispatch(getAdvancedAnalytics());
+      setTransactions(results.data.data);
+    })();
+  }, []);
   return (
     <div className="container-fluid">
       <div className="row">
@@ -292,6 +303,7 @@ const Overview = (props) => {
                       </tr>
                     </thead>
                     <tbody>
+                    {Transactions.map((transaction, index) => (
                       <tr>
                         <td scope="row">
                           <div className="tableProfileIconCard">
@@ -299,71 +311,18 @@ const Overview = (props) => {
                               <img src={bottlesIcon} alt="" width="50" height="50" />
                             </div>
                             <div className="profileName">
-                              <span className="profileTitle">Becks 330 ml</span>
-                              <span>526025</span>
+                              <span className="profileTitle">{transaction.productName}</span>
+                              <span>{transaction.productId}</span>
                             </div>
                           </div>
                           
                         </td>
-                        <td>333333</td>
-                        <td>333333</td>
-                        <td>333333</td>
-                        <td>333333</td>
+                        <td>{transaction.sales}</td>
+                        <td>{transaction.returns}</td>
+                        <td>{transaction.target}</td>
+                        <td>{transaction.returns}</td>
                       </tr>
-                      <tr>
-                        <td scope="row">
-                          <div className="tableProfileIconCard">
-                            <div className="profileIcon">
-                              <img src={bottlesIcon} alt="" width="50" height="50" />
-                            </div>
-                            <div className="profileName">
-                              <span className="profileTitle">Becks 330 ml</span>
-                              <span>526025</span>
-                            </div>
-                          </div>
-                          
-                        </td>
-                        <td>333333</td>
-                        <td>333333</td>
-                        <td>333333</td>
-                        <td>333333</td>
-                      </tr>
-                      <tr>
-                        <td scope="row">
-                          <div className="tableProfileIconCard">
-                            <div className="profileIcon">
-                              <img src={bottlesIcon} alt="" width="50" height="50" />
-                            </div>
-                            <div className="profileName">
-                              <span className="profileTitle">Becks 330 ml</span>
-                              <span>526025</span>
-                            </div>
-                          </div>
-                          
-                        </td>
-                        <td>333333</td>
-                        <td>333333</td>
-                        <td>333333</td>
-                        <td>333333</td>
-                      </tr>
-                      <tr>
-                        <td scope="row">
-                          <div className="tableProfileIconCard">
-                            <div className="profileIcon">
-                              <img src={bottlesIcon} alt="" width="50" height="50" />
-                            </div>
-                            <div className="profileName">
-                              <span className="profileTitle">Becks 330 ml</span>
-                              <span>526025</span>
-                            </div>
-                          </div>
-                          
-                        </td>
-                        <td>333333</td>
-                        <td>333333</td>
-                        <td>333333</td>
-                        <td>333333</td>
-                      </tr>
+                    ))}
                     </tbody>
                   </table>
                 </div>
