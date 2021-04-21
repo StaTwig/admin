@@ -57,8 +57,12 @@ const NewShipment = (props) => {
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [openShipmentFail, setOpenShipmentFail] = useState(false);
   const [shipmentError, setShipmentError] = useState("");
+  const [formatedDate, setformatedDate] = ("4-21-2021");
 const [ modalProps, setModalProps ] = useState({});
   useEffect(() => {
+    // let date = new Date();
+
+    // setformatedDate(`${date.getMonth()+1}-${date.getDate()}-${date.getFullYear()}`);
     async function fetchData() {
       const { search } = props.location;
       // const result = await getShippingOrderIds();
@@ -670,7 +674,7 @@ setModalProps({
             <div className="d-flex justify-content-between">
               <div className="value">{productQuantity}</div>
               <div className="d-flex">
-                <button type="button" class="btn btn-white shadow-radius font-bold mr-2"onClick={() => props.history.push('/shipments')}>
+                <button type="button" className="btn btn-white shadow-radius font-bold mr-2"onClick={() => props.history.push('/shipments')}>
                   Cancel
                 </button>
 
