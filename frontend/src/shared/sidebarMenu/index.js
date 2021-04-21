@@ -18,7 +18,7 @@ import trackSelectedIcon from '../../assets/icons/Track_Traceselected.png';
 import NetworkSelectedIcon from '../../assets/icons/NetworkSelected.svg';
 import UtilitiesSelected from '../../assets/icons/utilitieswhite.png';
 import UtilitiesIcon from '../../assets/icons/utilitiesblue.png';
-import OrderSelectedIcon from '../../assets/icons/orderSelected.png';
+import OrderSelectedIcon from '../../assets/icons/OrderSelected.png';
 import OrderIcon from '../../assets/icons/OrderSelected.png';
 
 import './style.scss'
