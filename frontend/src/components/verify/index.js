@@ -100,7 +100,7 @@ const FormVerifyPage = (props) => {
                       
                     }) => (
                       <form onSubmit={handleSubmit}>
-                      <div className="form-group ml-5 mr-5 flex-row d-flex">
+                      <div className="form-group ml-5 mr-5 flex-row d-flex justify-content-center">
                         {[
                           firstInputRef,
                           secondInputRef,
