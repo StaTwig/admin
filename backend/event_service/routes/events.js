@@ -10,5 +10,6 @@ router.get("/getEventByEventId/:eventID/:eventTypePrimary/:eventTypeDesc", Event
 router.get("/getEventBySecondaryOrgId/:secondaryOrgId/:eventTypePrimary/:eventTypeDesc", EventController.getEventBySecondOrgId);
 router.get("/getEventByActorOrgId/:actorOrgId/:eventTypePrimary/:eventTypeDesc", EventController.getEventByActorOrgId);
 router.delete("/deleteEventById/:eventID", EventController.deleteEventById);
+router.get("/getEventByActorId/:eventTypeDesc/:eventTypePrimary/", EventController.getAllEvents);
 
 module.exports = router;
