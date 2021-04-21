@@ -532,20 +532,21 @@ exports.getInventoryAnalytics = [
   async (req, res) => {
     try {
 
-      const {id: warehouseId } = req.user;
+      const { warehouseId } = req.user;
       var inventory = {}
       var data = {}
 
       const totalProductCategory = await ProductModel.distinct('type');
       inventory.totalProductCategory = totalProductCategory.length;
+      const warehouse = await WarehouseModel.findOne({ id: warehouseId })
 
       const stockOut = await InventoryModel.count({
-        "inventoryDetails.quantity": { $eq: 0 }
+        id: warehouse.warehouseInventory,
+        "inventoryDetails.quantity": { $lte: 0 }
       });
 
       inventory.stockOut = stockOut;
       // console.log("Products with zero Inventory (stockOut) ", stockOut);
-
 
       var today = new Date(); 
       var nextWeek = new Date();
@@ -565,8 +566,8 @@ exports.getInventoryAnalytics = [
           total: {$sum: {$size: "$batchNumbers"}}
         }
       }]
-    );
-      console.log("Batches Near Expiration ", batchExpiringThisWeek);
+      );
+      
       inventory.batchExpiringThisWeek = 0
       if(batchExpiringThisWeek.length !== 0){
         inventory.batchExpiringThisWeek = batchExpiringThisWeek[0].total;
@@ -762,14 +763,15 @@ exports.getShipmentAnalytics = [
   async (req, res) => {
     try {
 
-      const {id: warehouseId } = req.user;
+      const { warehouseId } = req.user;
       var shipment = {}
       var data = {}
 
       const inboundShipments = await ShipmentModel.count(
         { $and : [
-          {"receiver.id": warehouseId},
-          { status: { $in : [ "SHIPPED" ]} }
+          {"receiver.locationId": warehouseId},
+          { status: { $in : [ "CREATED" ]} }
+          // { status: { $in : [ "SHIPPED" ]} }
         ]
       } );
       shipment.inboundShipments = inboundShipments;
@@ -777,8 +779,9 @@ exports.getShipmentAnalytics = [
 
       const outboundShipments = await ShipmentModel.count(
         { $and : [
-          {"supplier.id": warehouseId},
-          { status: { $in : [ "SHIPPED", "RECEIVED" ]} }
+          {"supplier.locationId": warehouseId},
+          { status: { $in : [ "CREATED" ]} }
+          // { status: { $in : [ "SHIPPED", "RECEIVED" ]} }
         ]
       } );
       shipment.outboundShipments = outboundShipments;
@@ -786,8 +789,8 @@ exports.getShipmentAnalytics = [
 
       const inboundAlerts = await ShipmentModel.count(
         { $and : [
-          {"receiver.id": warehouseId},
-          { status: { $in : [ "DAMAGED" ]} }
+          {"receiver.locationId": warehouseId},
+          { status: { $in : [ "DELAYED", "DAMAGED", "LOST" ]} }
         ]
       } );
         // console.log("Number of Alerts Inbound shipments ", alertsInboundShipments);
@@ -796,8 +799,8 @@ exports.getShipmentAnalytics = [
 
       const outboundAlerts = await ShipmentModel.count(
         { $and : [
-          {"supplier.id": warehouseId},
-          { status: { $in : [ "DAMAGED"]} }
+          {"supplier.locationId": warehouseId},
+          { status: { $in : [ "DELAYED", "DAMAGED", "LOST"]} }
         ]
       } );
         // console.log("Number of Alerts Outbound shipments ", alertsOutboundShipments);
@@ -805,7 +808,6 @@ exports.getShipmentAnalytics = [
 
       data.shipment = shipment;
 
-      console.log("Response", data);
       return apiResponse.successResponseWithData(
         res,
         'Analytics',

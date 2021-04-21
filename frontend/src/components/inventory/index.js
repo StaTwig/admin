@@ -48,13 +48,13 @@ const Inventory = props => {
         "#d4e7ff", "#e0b0ff", "#F1EFCE", "#D7FAF1", "#F2B6AF" ];
 
   const [inventoryAnalytics,setInventoryAnalytics]= useState({})
-        useEffect(() => {
-          async function fetchData() {
-            const result = await getInventoryAnalytics();
-            setInventoryAnalytics(result.data.inventory);
-          }
-          fetchData();
-        }, []);
+        // useEffect(() => {
+        //   async function fetchData() {
+        //     const result = await getInventoryAnalytics();
+        //     setInventoryAnalytics(result.data.inventory);
+        //   }
+        //   fetchData();
+        // }, []);
 
 
      useEffect(() => {
@@ -62,6 +62,8 @@ const Inventory = props => {
       const result = await getProductList();
       setProductsList(result.message);
       const resultAnalytics = await getInventoryAnalytics();
+      console.log(resultAnalytics);
+      
       setInventoryAnalytics(resultAnalytics.data.inventory);
       setInventoriesCount(
         resultAnalytics.data.inventory.totalProductsAddedToInventory
