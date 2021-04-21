@@ -312,6 +312,7 @@ setModalProps({
                     <div className="form-control">
                       <DropdownButton
                         name={OrderId}
+                        name2="Select Order ID"
                         onSelect={async(v) => {
                           setFieldValue('OrderId', v);
                           // handleSOChange(v);
@@ -391,6 +392,7 @@ setModalProps({
                       <div className="form-control">
                         <DropdownButton
                           name={senderOrgLoc}
+                          name2="Select Organisation Location"
                           disabled={disabled}
                           onSelect={(v) => {
                             onWarehouseChange(v.warehouseInventory);
@@ -426,6 +428,7 @@ setModalProps({
                       <div className="form-control">
                         <DropdownButton
                           name={receiverOrgId}
+                          name2="Select Organisation Name"
                           disabled={disabled}
                           onSelect={(v) => {
                             setReceiverOrgLoc("Select Delivery Location");
@@ -449,6 +452,7 @@ setModalProps({
                       <div className="form-control">
                         <DropdownButton
                           name={receiverOrgLoc}
+                          name2="Select Delivery Location"
                           disabled={disabled}
                           onSelect={(v) => {
                             setReceiverOrgLoc(v?.warehouseAddress ? (v?.warehouseAddress?.firstLine + ', ' + v?.warehouseAddress?.city) : v.postalAddress);

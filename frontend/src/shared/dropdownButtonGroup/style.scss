@@ -5,7 +5,6 @@
   display: flex;
   outline: none;
   position: relative;
-
   small {
     color: $a8Grey;
   }
@@ -13,27 +12,39 @@
     border: none;
     display: flex;
     justify-content: space-between;
-     color:#A8A8A8;
+    color:#A8A8A8;
     flex-basis: 100%;
     outline: none;
     align-items: center;
     font-size: 12px;
-    
     background: transparent;
-
     &.active {
       color: $primaryBlue;
     }
     .textNeg{
       margin-top: -1.15rem;
-      
     }
   }
-
+  .btn-custom-dropdown1 {
+    border: none;
+    display: flex;
+    justify-content: space-between;
+     color:black;
+    flex-basis: 100%;
+    outline: none;
+    align-items: center;
+    font-size: 16px;
+    background: transparent;
+    &.active {
+      color: $primaryBlue;
+    }
+    .textNeg{
+      margin-top: -1.15rem;
+    }
+  }
   .dropdown-menu {
     height:180px;
     overflow: auto;
-
     box-shadow: 0px 3px 10px $grey;
     border-radius: 8px;
     border: none;
