@@ -23,12 +23,14 @@ const ref = useOnclickOutside(() => {
     setMenu(false);
   });
   function onSearchChange(e) {
-    console.log(e.target.value);
     setSearch(e.target.value);
   }
 
   const onSeach = () => {
-    props.history.push(`/tracing/${search}`);
+    if(search.substring(0,2)=="po"||search.substring(0,2)=="PO")
+    props.history.push(`/vieworder/${search}`);
+    else if(search.substring(0,2)=="sh"||search.substring(0,2)=="SH")
+    props.history.push(`/viewshipment/${search}`);;
   };
 
   const profile = useSelector(state => {
