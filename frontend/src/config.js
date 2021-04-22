@@ -19,6 +19,7 @@ export const STABLE_SERVER_URL_INVENTORY = 'http://54.164.66.73:3007';
 export const STABLE_SERVER_URL_TRACKANDTRACE = 'http://54.164.66.73:3005';
 export const STABLE_SERVER_URL_NOTIFICATION = 'http://54.164.66.73:3006';
 export const STABLE_SERVER_URL_PRODUCTS = 'http://54.164.66.73:3010';
+export const STABLE_SERVER_URL_ANALYTICS = 'http://54.164.66.73:3015';
 export const DEV_SERVER_URL = 'http://127.0.0.1:9001';
 
 
@@ -40,6 +41,7 @@ export function config() {
       getOverviewAnalyticsUrl:`${LOCAL_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
       getInventoryAnalyticsUrl:`${LOCAL_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getInventoryAnalytics`,
       getShipmentAnalyticsUrl:`${LOCAL_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getShipmentAnalytics`,
+      getOrderAnalyticsUrl:`${LOCAL_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getOrderAnalytics`,
       createShippingOrderUrl:`${LOCAL_SERVER_URL_SHIPPINGORDER}/shippingordermanagement/api/shipping/createShippingOrder`,
       getShippingOrdersUrl:`${LOCAL_SERVER_URL_SHIPPINGORDER}/shippingordermanagement/api/shipping/getShippingOrders`,
       getShippingOrderIdsUrl:`${LOCAL_SERVER_URL_SHIPPINGORDER}/shippingordermanagement/api/shipping/getShippingOrderIds`,
@@ -109,6 +111,7 @@ export function config() {
       getOverviewAnalyticsUrl:`${DEV_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
       getInventoryAnalyticsUrl:`${DEV_SERVER_URL}/analyticsmanagement/api/analytics/getInventoryAnalytics`,
       getShipmentAnalyticsUrl:`${DEV_SERVER_URL}/analyticsmanagement/api/analytics/getShipmentAnalytics`,
+      getOrderAnalyticsUrl:`${DEV_SERVER_URL}/analyticsmanagement/api/analytics/getOrderAnalytics`,
       createShippingOrderUrl:`${DEV_SERVER_URL}/shippingordermanagement/api/shipping/createShippingOrder`,
       getShippingOrdersUrl:`${DEV_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrders`,
       getShippingOrderIdsUrl:`${DEV_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrderIds`,
@@ -174,10 +177,11 @@ export function config() {
       getAllUsersUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/updateProfile`,
       upload: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/upload`,
-      getAnalyticsUrl:`${STABLE_SERVER_URL_USER}/analyticsmanagement/api/analytics/getAnalytics`,
-      getOverviewAnalyticsUrl:`${STABLE_SERVER_URL_USER}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
-      getInventoryAnalyticsUrl:`${STABLE_SERVER_URL_USER}/analyticsmanagement/api/analytics/getInventoryAnalytics`,
-      getShipmentAnalyticsUrl:`${STABLE_SERVER_URL_USER}/analyticsmanagement/api/analytics/getShipmentAnalytics`,
+      getAnalyticsUrl:`${STABLE_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getAnalytics`,
+      getOverviewAnalyticsUrl:`${STABLE_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
+      getInventoryAnalyticsUrl:`${STABLE_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getInventoryAnalytics`,
+      getShipmentAnalyticsUrl:`${STABLE_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getShipmentAnalytics`,
+      getOrderAnalyticsUrl:`${STABLE_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getOrderAnalytics`,
       shipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchShipments`,
       viewShipmentUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/viewShipment?shipmentId=`,
       chainOfCustody: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/chainOfCustody?shipmentId=`, 
@@ -247,6 +251,7 @@ export function config() {
       getOverviewAnalyticsUrl:`${TEST_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
       getInventoryAnalyticsUrl:`${TEST_SERVER_URL}/analyticsmanagement/api/analytics/getInventoryAnalytics`,
       getShipmentAnalyticsUrl:`${TEST_SERVER_URL}/analyticsmanagement/api/analytics/getShipmentAnalytics`,
+      getOrderAnalyticsUrl:`${TEST_SERVER_URL}/analyticsmanagement/api/analytics/getOrderAnalytics`,
       shipmentsUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchShipments`,
       viewShipmentUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/viewShipment?shipmentId=`,
       chainOfCustody: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/chainOfCustody?shipmentId=`, 
@@ -317,6 +322,7 @@ export function config() {
       getOverviewAnalyticsUrl:`${DEMO_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
       getInventoryAnalyticsUrl:`${DEMO_SERVER_URL}/analyticsmanagement/api/analytics/getInventoryAnalytics`,
       getShipmentAnalyticsUrl:`${DEMO_SERVER_URL}/analyticsmanagement/api/analytics/getShipmentAnalytics`,
+      getOrderAnalyticsUrl:`${DEMO_SERVER_URL}/analyticsmanagement/api/analytics/getOrderAnalytics`,
       createShippingOrderUrl:`${DEMO_SERVER_URL}/shippingordermanagement/api/shipping/createShippingOrder`,
       getShippingOrdersUrl:`${DEMO_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrders`,
       getShippingOrderIdsUrl:`${DEMO_SERVER_URL}/shippingordermanagement/api/shipping/getShippingOrderIds`,
@@ -386,6 +392,7 @@ export function config() {
       getOverviewAnalyticsUrl:`${PROD_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
       getInventoryAnalyticsUrl:`${PROD_SERVER_URL}/analyticsmanagement/api/analytics/getInventoryAnalytics`,
       getShipmentAnalyticsUrl:`${PROD_SERVER_URL}/analyticsmanagement/api/analytics/getShipmentAnalytics`,
+      getOrderAnalyticsUrl:`${PROD_SERVER_URL}/analyticsmanagement/api/analytics/getOrderAnalytics`,
       shipmentsUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/fetchShipments`,
       viewShipmentUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/viewShipment?shipmentId=`,
       getShipmentIdsUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/fetchShipmentIds`,
