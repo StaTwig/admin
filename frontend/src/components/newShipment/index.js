@@ -382,6 +382,7 @@ setModalProps({
                           {
                             products_temp[i].manufacturer = result.poDetails[0].productDetails[i].manufacturer;
                             products_temp[i].productName = result.poDetails[0].productDetails[i].name;
+                            products_temp[i].productQuantity = result.poDetails[0].products[i].quantity;
                           }
                           console.log('Products');
                           console.log(products_temp);
