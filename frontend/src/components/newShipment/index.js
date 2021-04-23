@@ -265,7 +265,7 @@ setModalProps({
     addProducts.splice(index, 1);
     let newArr = [...addProducts];
     newArr.push(item);
-    setFieldValue('products', newArr.map(row => ({"productId": row.id,"quantity": row?.quantity ? row?.quantity : 0,"name": row.name,"ProductCategory": row.type,"manufacturer": row.manufacturer})));
+    setFieldValue('products', newArr.map(row => ({"productId": row.id,"quantity": row?.quantity ? row?.quantity : 0,"name": row.name,"productCategory": row.type,"manufacturer": row.manufacturer})));
     setAddProducts(prod => [...newArr]);
 
     const prodIndex = products.findIndex(p => p.id === item.id);
@@ -640,7 +640,7 @@ setModalProps({
                   handleQuantityChange={(v, i) => {
                     let newArr = [...addProducts];
                     newArr[i].productQuantity = v;
-                    setFieldValue('products', newArr.map(row => ({"ProductCategory":row.type,"productID": row._id,"productQuantity": row.productQuantity,"productName": row.productName,"manufacturer": row.manufacturer,"quantity": row.quantity})));
+                    setFieldValue('products', newArr.map(row => ({"productCategory":row.type,"productID": row._id,"productQuantity": row.productQuantity,"productName": row.productName,"manufacturer": row.manufacturer,"quantity": row.quantity})));
                     setAddProducts(prod => [...newArr]);
                   }}
                   enableDelete={true}
@@ -653,7 +653,7 @@ setModalProps({
                     addProducts.splice(index, 1);
                     let newArr = [...addProducts];
                     if (newArr.length > 0)
-                      setFieldValue('products', newArr.map(row => ({"ProductCategory":row.type,"productID": row._id,"productQuantity": row.productQuantity,"productName": row.productName,"manufacturer": row.manufacturer,"quantity": row.quantity})));
+                      setFieldValue('products', newArr.map(row => ({"productCategory":row.type,"productID": row._id,"productQuantity": row.productQuantity,"productName": row.productName,"manufacturer": row.manufacturer,"quantity": row.quantity})));
                     else
                       setFieldValue('products', []);
                     setAddProducts(prod => [...newArr]);
@@ -663,7 +663,7 @@ setModalProps({
                     addProducts.splice(index, 1);
                     let newArr = [...addProducts];
                     newArr.push(item);
-                    setFieldValue('products', newArr.map(row => ({"ProductCategory":row.type,"productID": row._id,"productQuantity": row.productQuantity,"productName": row.productName,"manufacturer": row.manufacturer,"quantity": row.quantity})));
+                    setFieldValue('products', newArr.map(row => ({"productCategory":row.type,"productID": row._id,"productQuantity": row.productQuantity,"productName": row.productName,"manufacturer": row.manufacturer,"quantity": row.quantity})));
                     setAddProducts(prod => [...newArr]);
 
                     const prodIndex = products.findIndex(p => p._id === item._id);
