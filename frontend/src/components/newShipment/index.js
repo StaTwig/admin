@@ -397,7 +397,7 @@ setModalProps({
                         <DropdownButton
                           name={senderOrgLoc}
                           name2="Select Organisation Location"
-                          disabled={disabled}
+                          disabled={false}
                           onSelect={(v) => {
                             onWarehouseChange(v.warehouseInventory);
                             setFieldValue('fromOrg', senderOrganisation[0]);

@@ -28,7 +28,7 @@ import QrCode from '../containers/qrcode';
 import TransactionHistory from '../containers/transactionHistory'
 import ViewOrder from '../containers/vieworder';
 import ReviewOrder from '../containers/revieworder';
-
+import enterId from '../containers/EnterId';
 import AddProduct from '../containers/addproduct';
 import Signup from '../containers/signUp';
 import ForgotPassword from '../containers/forgotPassword';
@@ -77,6 +77,7 @@ const routes = (
     <Route path="/updateStatus/:id" component={requireAuth(UpdateStatus)} />
     <Route path="/receiveShipment/:id" component={requireAuth(ReceiveShipment)} />
     <Route path="/Addlocation" component={requireAuth(AddLocation)} />
+    <Route path="/enterid" component={requireAuth(enterId)} />
     <Route component={NoMatch} />
 
   </Switch>

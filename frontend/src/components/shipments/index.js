@@ -83,6 +83,7 @@ const ShipmentAnalytic = props => {
   return (
     <div className="shipment">
       <div className="d-flex justify-content-between">
+        
         <h1 className="breadcrumb">SHIPMENT</h1>
         <div className="d-flex">
            {/* <button className=" btn-primary btn mr-2" onClick={()=>setOpenPOExcel(true)}>Import PO</button>
@@ -94,6 +95,11 @@ const ShipmentAnalytic = props => {
             <img src={Order} width="14" height="14" className="mr-2" />
             <span>Create Purchase Order</span>
           </button> */}
+       <Link to='/enterid'>
+            <button className="btn btn-orange fontSize20 font-bold mr-5 chain" disabled={status=="RECEIVED"}>
+              Update Status
+            </button>
+          </Link>
           <Link to="/newshipment">
             <button className="btn btn-yellow fontSize20 font-bold">
               <img src={Add} width="20" height="17" className="mr-2 mb-1" />
