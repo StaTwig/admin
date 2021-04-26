@@ -1,0 +1,32 @@
+version: "3.7"
+services:
+    address:
+        build: './backend/address_service'
+        image: 'address_service1.0'
+        container_name: 'address_service'
+        ports:
+            - "3001:3001"            
+    affliate:
+        build: './backend/affliation_service'
+        image: 'affliation_service1.0'
+        container_name: 'affliate_service'
+        ports:
+            - "3002:3002"
+    rbac:
+        build: './backend/rbac_service'
+        image: 'rbac_service1.0'
+        container_name: 'rbac_service'
+        ports:
+            - "3004:3004"
+    employee:
+        build: './backend/employee_service'
+        image: 'employee_service1.0'
+        container_name: 'employee_service'
+        ports:
+            - "3003:3003"  
+    frontend:
+        build: './frontend'
+        image: 'frontend1.0'
+        container_name: 'frontend'
+        ports:
+            - "3000:3000"                                 
