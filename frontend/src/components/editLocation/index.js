@@ -27,7 +27,7 @@ return (
 <div> 
 
 <div className="addproduct" >
-    <h1 className="breadcrumb">ADD NEW LOCATION</h1>
+    <h1 className="breadcrumb">EDIT LOCATION</h1>
 
    
         <div className="card">
