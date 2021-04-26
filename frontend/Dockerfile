@@ -12,37 +12,37 @@
 # RUN npm run build 
 # # RUN npm prune --production
 #prepare nginx
-FROM nginx:1.19-alpine
+# FROM nginx:1.19-alpine
 
-# COPY --from=react_build /app /usr/share/nginx/html
-COPY . /usr/share/nginx/html
-RUN rm /etc/nginx/conf.d/default.conf
-COPY nginx/nginx.conf /etc/nginx/conf.d
+# # COPY --from=react_build /app /usr/share/nginx/html
+# COPY . /usr/share/nginx/html
+# RUN rm /etc/nginx/conf.d/default.conf
+# COPY nginx/nginx.conf /etc/nginx/conf.d
 
 
 
 #fire up nginx
-EXPOSE 80 
-CMD ["nginx","-g","daemon off;"]
+# EXPOSE 80 
+# CMD ["nginx","-g","daemon off;"]
 
 
 # Doc from NodeJS Officail documentation
-# FROM node
+FROM node
 
 # # Create app directory
-# WORKDIR /app
+WORKDIR /app
 
 # # Install app dependencies
 # # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # # where available (npm@5+)
-# COPY package*.json ./
+COPY package*.json ./
 
-# # RUN npm install
+RUN yarn
 # # If you are building your code for production
 # RUN npm ci --only=production
 
 # # Bundle app source
-# COPY . .
+COPY . .
 
-# EXPOSE 8080
-# CMD [ "node", "server.js" ]
+EXPOSE 3000
+CMD [ "node", "server.js" ]
