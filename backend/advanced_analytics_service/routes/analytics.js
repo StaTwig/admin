@@ -17,7 +17,7 @@ router.get("/getSales/:state/:tenure", AnalyticsController.getAllStats);
 router.get("/getReturnedRate/:state/:tenure", AnalyticsController.getAllStats);
 router.get("/getTarget/:state/:tenure", AnalyticsController.getAllStats);
 router.get("/getInventoryBySku/:sku/:state", AnalyticsController.getAllStats);
-router.get("/getInventoryByBrand/:brand/:state/",AnalyticsController.getAllStats);
+router.get("/getInventoryByBrand/:brand/:state/", AnalyticsController.getAllStats);
 
 /*
 /getProductsById --> Get Product details --> Product Service
