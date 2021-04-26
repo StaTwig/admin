@@ -20,6 +20,7 @@ import ShipmentPopUp from "./shipmentPopUp";
 import ShipmentFailPopUp from "./shipmentFailPopUp";
 import Modal from "../../shared/modal";
 import { Formik } from "formik";
+import { getProducts,getProductsByCategory } from '../../actions/poActions';
 
 const NewShipment = (props) => {
   const [OrderIds, setOrderIds] = useState([]);
@@ -31,6 +32,7 @@ const NewShipment = (props) => {
   const [products, setProducts] = useState([]);
   const [addProducts, setAddProducts] = useState([]);
   const dispatch = useDispatch();
+   const [category, setCategory] = useState([]);
   const [OrderId, setOrderId] = useState(
     "Select Order ID"
   );
@@ -85,6 +87,11 @@ const [ modalProps, setModalProps ] = useState({});
       setSenderOrganisation([orgSplit[0]]);
       const organisations = orgs.data.filter((org) => org.id != orgSplit[1]);
       setAllOrganisations(organisations);
+          const result1 = await getProducts();
+      const categoryArray = result1.map(
+        product => product.type,
+      );
+      setCategory(categoryArray.filter((value, index, self) => self.indexOf(value) === index));
 
       const warehouses = await getWarehouseByOrgId(orgSplit[1]);
       setSenderWarehouses(warehouses.data);
@@ -242,6 +249,30 @@ setModalProps({
     soDetailsClone.products[i]["labelId"] = value;
     setOrderDetails(soDetailsClone);
   };
+  const onCategoryChange = async (index, value, setFieldValue) => {
+    try {
+      const warehouse = await getProductsByCategory(value);
+      let newArr = [...addProducts];
+      newArr[index]['type'] = value;
+      setAddProducts(prod => [...newArr]);
+      setProducts(warehouse.data);
+    }
+    catch (err) {
+      setErrorMessage(err);
+    }
+  }
+  const onProductChange = (index, item, setFieldValue) => {
+    addProducts.splice(index, 1);
+    let newArr = [...addProducts];
+    newArr.push(item);
+    setFieldValue('products', newArr.map(row => ({"productId": row.id,"quantity": row?.quantity ? row?.quantity : 0,"name": row.name,"productCategory": row.type,"manufacturer": row.manufacturer})));
+    setAddProducts(prod => [...newArr]);
+
+    const prodIndex = products.findIndex(p => p.id === item.id);
+    let newArray = [...products];
+    newArray[prodIndex] = { ...newArray[prodIndex], isSelected: true };
+    setProducts(prod => [...newArray]);
+  }
 
   return (
     <div className="NewShipment">
@@ -328,7 +359,7 @@ setModalProps({
                           setReceiverOrgLoc(result.poDetails[0].customer.organisation.postalAddress);
                           setReceiverOrgId(result.poDetails[0].customer.organisation.id);
                           setOrderDetails(result.poDetails[0]);
-                          
+
                           dispatch(turnOff());
                           setDisabled(true);
                           let warehouse = senderWarehouses.filter(
@@ -350,7 +381,8 @@ setModalProps({
                           for(let i=0;i<products_temp.length;i++)
                           {
                             products_temp[i].manufacturer = result.poDetails[0].productDetails[i].manufacturer;
-                            products_temp[i].productName = result.poDetails[0].productDetails[i].name;                            
+                            products_temp[i].productName = result.poDetails[0].productDetails[i].name;
+                            products_temp[i].productQuantity = result.poDetails[0].products[i].quantity;
                           }
                           console.log('Products');
                           console.log(products_temp);
@@ -397,7 +429,7 @@ setModalProps({
                         <DropdownButton
                           name={senderOrgLoc}
                           name2="Select Organisation Location"
-                          disabled={false}
+                          disabled={disabled}
                           onSelect={(v) => {
                             onWarehouseChange(v.warehouseInventory);
                             setFieldValue('fromOrg', senderOrganisation[0]);
@@ -605,10 +637,11 @@ setModalProps({
                 <EditTable
                   product={addProducts}
                   products={products}
+                  category={category}
                   handleQuantityChange={(v, i) => {
                     let newArr = [...addProducts];
                     newArr[i].productQuantity = v;
-                    setFieldValue('products', newArr.map(row => ({"productID": row._id,"productQuantity": row.productQuantity,"productName": row.productName,"manufacturer": row.manufacturer,"quantity": row.quantity})));
+                    setFieldValue('products', newArr.map(row => ({"productCategory":row.type,"productID": row._id,"productQuantity": row.productQuantity,"productName": row.productName,"manufacturer": row.manufacturer,"quantity": row.quantity})));
                     setAddProducts(prod => [...newArr]);
                   }}
                   enableDelete={true}
@@ -621,7 +654,7 @@ setModalProps({
                     addProducts.splice(index, 1);
                     let newArr = [...addProducts];
                     if (newArr.length > 0)
-                      setFieldValue('products', newArr.map(row => ({"productID": row._id,"productQuantity": row.productQuantity,"productName": row.productName,"manufacturer": row.manufacturer,"quantity": row.quantity})));
+                      setFieldValue('products', newArr.map(row => ({"productCategory":row.type,"productID": row._id,"productQuantity": row.productQuantity,"productName": row.productName,"manufacturer": row.manufacturer,"quantity": row.quantity})));
                     else
                       setFieldValue('products', []);
                     setAddProducts(prod => [...newArr]);
@@ -631,7 +664,7 @@ setModalProps({
                     addProducts.splice(index, 1);
                     let newArr = [...addProducts];
                     newArr.push(item);
-                    setFieldValue('products', newArr.map(row => ({"productID": row._id,"productQuantity": row.productQuantity,"productName": row.productName,"manufacturer": row.manufacturer,"quantity": row.quantity})));
+                    setFieldValue('products', newArr.map(row => ({"productCategory":row.type,"productID": row._id,"productQuantity": row.productQuantity,"productName": row.productName,"manufacturer": row.manufacturer,"quantity": row.quantity})));
                     setAddProducts(prod => [...newArr]);
 
                     const prodIndex = products.findIndex(p => p._id === item._id);
@@ -640,6 +673,7 @@ setModalProps({
                     setProducts(prod => [...newArray]);
                   }}
                   handleLabelIdChange={handleLabelIdChange}
+                                  handleCategoryChange={onCategoryChange}
                 />
                 <div className="d-flex justify-content-between">
                   <button
@@ -729,3 +763,4 @@ setModalProps({
 };
 
 export default NewShipment;
+

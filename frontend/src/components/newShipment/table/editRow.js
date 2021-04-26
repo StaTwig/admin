@@ -11,6 +11,8 @@ const EditRow = props => {
     index,
     onRemoveRow,
     enableDelete,
+    category,
+    handleCategoryChange,
     handleProductChange,
     products
   } = props;
@@ -30,7 +32,8 @@ const EditRow = props => {
       if(e.preventDefault) e.preventDefault();
     }
   }
-  
+
+console.log("yyyy",prod);
 
   return (
     <div className="row ml-3 mr-1">
@@ -39,11 +42,26 @@ const EditRow = props => {
           <div className=" p-0">
             {/* <div className="profileIconRound recived-bg">OPV</div> */}
 
+
             <div className="d-flex flex-column">
               <div className="title recived-text">
-              {enableDelete ? 
                 <DropdownButton
-                  name={prod.productName == '' ? "Select product" : prod.productName}
+                  name={prod.type ? prod.type : "Select Product Category"}
+                  onSelect={item => { handleCategoryChange(index, item) }}
+                  groups={category}
+                />
+              </div>
+            </div>
+</div>
+</div>
+
+<div className="col pl-4 tcell p-2">
+          <div className=" p-0">
+            <div className="d-flex flex-column">
+              <div className="title recived-text">
+              {enableDelete ?
+                <DropdownButton
+                  name={prod.name == '' ? "Select product" : prod.name}
                   onSelect={item => { handleProductChange(index, item) }}
                   groups={products}
                   // groups={products.filter(p => !p?.isSelected)}
@@ -130,5 +148,4 @@ const EditRow = props => {
 };
 
 export default EditRow;
-
 
