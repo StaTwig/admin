@@ -374,7 +374,7 @@ setModalProps({
                           console.log(senderOrganisation);
                           setFieldValue('fromOrg', senderOrganisation[0]);
                           setFieldValue('fromOrgLoc', result.poDetails[0].supplier.organisation.id);
-                          setFieldValue('toOrg', result.poDetails[0].customer.organisation.name);
+                          setFieldValue('toOrg', result.poDetails[0].customer.organisation.id);
                           setFieldValue('toOrgLoc', result.poDetails[0].customer.shippingAddress.shippingAddressId);
                           // setSenderOrgLoc(warehouse[0].postalAddress);
                           let products_temp = result.poDetails[0].products;
@@ -429,7 +429,7 @@ setModalProps({
                         <DropdownButton
                           name={senderOrgLoc}
                           name2="Select Organisation Location"
-                          disabled={disabled}
+                          disabled={false}
                           onSelect={(v) => {
                             onWarehouseChange(v.warehouseInventory);
                             setFieldValue('fromOrg', senderOrganisation[0]);
