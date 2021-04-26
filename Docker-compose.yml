@@ -94,7 +94,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.frontend.entrypoints=websecure"
-      - "traefik.http.routers.frontend.rule=Host(`admin.vaccineledger.com`)
+      - "traefik.http.routers.frontend.rule=Host(`admin.vaccineledger.com`)"
       - "traefik.http.routers.frontend.tls.certresolver=leresolver"
 networks:
   default:
