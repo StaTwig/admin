@@ -20,6 +20,7 @@ import UtilitiesSelected from '../../assets/icons/utilitieswhite.png';
 import UtilitiesIcon from '../../assets/icons/utilitiesblue.png';
 import OrderSelectedIcon from '../../assets/icons/OrderSelected.png';
 import OrderIcon from '../../assets/icons/OrderSelected.png';
+import lastMileIcon from '../../assets/icons/lastMile.png'
 
 import './style.scss'
 const SideBar = ({
@@ -66,6 +67,12 @@ const SideBar = ({
           <Link to="/dashboard" className="d-inline-block">
             <img src={(url === '/dashboard')  ? NetworkSelectedIcon : NetworkIcon} alt="Shippment" />
             <span className="ml-2">Network</span>
+          </Link>
+        </li>
+        <li className={(url === '/lastMile')  ? 'active' : ''}>
+          <Link to="/lastMile" className="d-inline-block">
+            <img src={(url === '/lastMile')  ? lastMileIcon : lastMileIcon} alt="Shippment" />
+            <span className="ml-2">Last Mile</span>
           </Link>
         </li>
       </ul>
