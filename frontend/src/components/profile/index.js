@@ -262,7 +262,6 @@ class Profile extends React.Component {
                             lastName: e.target.value,
                           })
                         }
-
                       />
 
                     </div>
@@ -286,7 +285,6 @@ class Profile extends React.Component {
                           this.setState({ email: e.target.value })
                         }
                       />
-
                     </div>
                     <div className="form-group">
                       <label htmlFor="shipmentId">Phone</label>
@@ -355,11 +353,7 @@ class Profile extends React.Component {
                       </div> 
                       </div>
                     </div>                   
-
-
                   </div>
-
-
                 ) : (
                   <div>
                       <div className="col">
@@ -444,7 +438,6 @@ class Profile extends React.Component {
                     <button className="btn-primary btn" onClick={this.onSubmit}>
                       <span>SAVE</span>
                     </button>
-
                   </div>
                 )}
             </div>
