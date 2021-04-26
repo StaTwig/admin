@@ -114,11 +114,12 @@ const [organisationsArr, setOrganisationsArr] = useState([]);
                 }) => (
                   <form onSubmit={handleSubmit} className="mb-3">
                   <div className="login-form mt-3 pl-5 pr-5">
-                  <div className="card-title">Signup</div>
+                  <div className="card-title p-3">Signup</div>
                   <div className="form-group flex-column">
-                  <img alt="" src={User} className="icon imgs" />
+                    <div className="pb-1">
+                  <img alt="" src={User} className="icon imgs"/></div>
                   <input type="text"
-                  className="form-control"
+                  className="form-control-login"
                   name="firstName"
                   value={props.firstName}
                   onChange={(e) => { props.onfirstNameChange(e); handleChange(e);}}
@@ -128,9 +129,10 @@ const [organisationsArr, setOrganisationsArr] = useState([]);
                   )}
                   </div>
                   <div className="form-group flex-column">
-                  <img alt="" src={User} className="icon imgs" />
+                  <div className="pb-1">
+                  <img alt="" src={User} className="icon imgs" /></div>
                   <input type="text"
-                  className="form-control"
+                  className="form-control-login"
                   name="lastName"
                   value={props.lastName}
                   onChange={(e) => { props.onlastNameChange(e); handleChange(e);}}
@@ -140,9 +142,10 @@ const [organisationsArr, setOrganisationsArr] = useState([]);
                   )}
                   </div>
                   <div className="form-group flex-column">
-                  <img alt="" src={Mail} className="icon imgs" />
+                  <div className="pb-1">
+                  <img alt="" src={Mail} className="icon imgs" /></div>
                   <input type="text"
-                  className="form-control"
+                  className="form-control-login"
                   name="email"
                   value={props.email}
                   onChange={(e) => { props.onEmailChange(e); handleChange(e);}}
@@ -151,9 +154,9 @@ const [organisationsArr, setOrganisationsArr] = useState([]);
                     <span className="error-msg text-danger">{errors.email}</span>
                   )}
                   </div>
-                  <div className="form-group flex-column">
+                  <div className="form-group flex-column">               
                   <img alt="" src={org} className="icon imgs" />
-                  <div className="w-100">
+                  <div className="pl-3" style={{color:"black"}}>
                   <DropdownButton
                   name={props.organisation.organisationId}
                   value={value}
