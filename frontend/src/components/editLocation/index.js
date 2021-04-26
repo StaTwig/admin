@@ -8,7 +8,7 @@ import { Formik } from 'formik';
 
 
 
-const Addlocation=(props)=>{
+const editLocation=(props)=>{
   const [ LocationName,setLocationName]=useState("") 
   const [pincode,setpincode]=useState("") 
   const [ flat,setflat]=useState("") 
@@ -300,4 +300,4 @@ return (
          </div>       
 )}
 
-export default Addlocation;
+export default editLocation;
