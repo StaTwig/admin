@@ -24,9 +24,9 @@ services:
         container_name: 'employee_service'
         ports:
             - "3003:3003"  
-    frontend:
-        build: './frontend'
-        image: 'frontend1.0'
-        container_name: 'frontend'
-        ports:
-            - "3000:3000"                                 
+    # frontend:
+    #     build: './frontend'
+    #     image: 'frontend1.0'
+    #     container_name: 'frontend'
+    #     ports:
+    #         - "3000:3000"                                 
