@@ -9,6 +9,7 @@ services:
       - "443:443"
       - "8080:8080"
     command:
+      - --log.level=DEBUG
       - --entrypoints.web.address=:80
       - --entrypoints.websecure.address=:443
       - --providers.docker
@@ -36,9 +37,9 @@ services:
       - "traefik.http.middlewares.authtraefik.basicauth.users=user:$$apr1$$q8eZFHjF$$Fvmkk//V6Btlaf2i/ju5n/" 
 
       # global redirect to https
-      - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
-      - "traefik.http.routers.http-catchall.entrypoints=web"
-      - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
+      - "traefik.http.routers.httpcatchall.rule=hostregexp(`{host:.+}`)"
+      - "traefik.http.routers.httpcatchall.entrypoints=web"
+      - "traefik.http.routers.httpcatchall.middlewares=redirect-to-https"
 
       # middleware redirect
       - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"      
@@ -93,7 +94,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.frontend.entrypoints=websecure"
-      - "traefik.http.routers.frontend.rule=Path(`/`) || PathPrefix(`/dist`)"
+      - "traefik.http.routers.frontend.rule=Host(`admin.vaccineledger.com`)
       - "traefik.http.routers.frontend.tls.certresolver=leresolver"
 networks:
   default:
