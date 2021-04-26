@@ -69,6 +69,7 @@ export function config() {
       getWareHousesByCountryUrl: `${ABINBEVPROD_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?country=`,
       getWarehouseDetailsByCountryUrl: `${ABINBEVPROD_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?name=`,
       getWareHousesByRegionUrl: `${ABINBEVPROD_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByRegion?region=`,
+      getInventoryProductsUrl: `${ABINBEVPROD_SERVER_URL}/inventorymanagement/api/inventory/getInventoryProductsByPlatform`,
       trackShipment: `${ABINBEVPROD_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
       poDetailsByShipmentId:`${ABINBEVPROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${ABINBEVPROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
@@ -84,6 +85,7 @@ export function config() {
       getNotificationsUrl: `${ABINBEVPROD_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${ABINBEVPROD_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${ABINBEVPROD_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
+      getAllAnalytics: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getAllStats`,
     },
     ainbevtest: {
       loginUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -128,6 +130,7 @@ export function config() {
       getWareHousesByCountryUrl: `${ABINBEVTEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?country=`,
       getWarehouseDetailsByCountryUrl: `${ABINBEVTEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?name=`,
       getWareHousesByRegionUrl: `${ABINBEVTEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByRegion?region=`,
+      getInventoryProductsUrl: `${ABINBEVTEST_SERVER_URL}/inventorymanagement/api/inventory/getInventoryProductsByPlatform`,
       trackShipment: `${ABINBEVTEST_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
       poDetailsByShipmentId:`${ABINBEVTEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${ABINBEVTEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
@@ -143,6 +146,7 @@ export function config() {
       getNotificationsUrl: `${ABINBEVTEST_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${ABINBEVTEST_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${ABINBEVTEST_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
+      getAllAnalytics: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getAllStats`,
     },
   };
 

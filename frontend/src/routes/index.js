@@ -81,7 +81,7 @@ const routes = (
     <Route path="/Addlocation" component={requireAuth(AddLocation)} />
     <Route path="/enterid" component={requireAuth(enterId)} />
     <Route path="/editLocation" component={requireAuth(EditLocation)} />
-
+>>>>>>> frontend/src/routes/index.js
     <Route component={NoMatch} />
 
   </Switch>

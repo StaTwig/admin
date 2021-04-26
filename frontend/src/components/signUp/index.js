@@ -122,7 +122,7 @@ const [organisationsArr, setOrganisationsArr] = useState([]);
                   name="firstName"
                   value={props.firstName}
                   onChange={(e) => { props.onfirstNameChange(e); handleChange(e);}}
-                  placeholder="First Name" />
+                  placeholder="    First Name" />
                   {errors.firstName && touched.firstName && (
                     <span className="error-msg text-danger">{errors.firstName}</span>
                   )}
@@ -134,7 +134,7 @@ const [organisationsArr, setOrganisationsArr] = useState([]);
                   name="lastName"
                   value={props.lastName}
                   onChange={(e) => { props.onlastNameChange(e); handleChange(e);}}
-                  placeholder="Last Name" />
+                  placeholder="    Last Name" />
                   {errors.lastName && touched.lastName && (
                     <span className="error-msg text-danger">{errors.lastName}</span>
                   )}
@@ -146,7 +146,7 @@ const [organisationsArr, setOrganisationsArr] = useState([]);
                   name="email"
                   value={props.email}
                   onChange={(e) => { props.onEmailChange(e); handleChange(e);}}
-                  placeholder="Email ID/Mobile Number" />
+                  placeholder="    Email ID/Mobile Number" />
                   {errors.email && touched.email && (
                     <span className="error-msg text-danger">{errors.email}</span>
                   )}
@@ -159,7 +159,7 @@ const [organisationsArr, setOrganisationsArr] = useState([]);
                   value={value}
                   isText={true}
                   // placeholder='Select organisation/type new'
-                  placeholder='Organisation'
+                  placeholder='    Organisation'
                   onSelect={item => {
                     setFieldValue('org', item.name);
                     props.onOrganisationChange(item);

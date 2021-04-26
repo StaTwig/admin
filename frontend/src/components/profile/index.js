@@ -337,6 +337,13 @@ class Profile extends React.Component {
                               <img src={Pen} width="15" height="15" className="mr-2"/>
                               <span>EDIT</span>
                               </button></Link>
+                              <h5 className="card-title font-weight-bold">WAREHOUSE ID: {warehouseId}</h5>
+                              {/* <button
+                                className="btn-primary btn edit-button"
+                              >
+                                <img src={Pen} width="15" height="15" className="mr-2" />
+                                <span>EDIT</span>
+                              </button> */}
                             </div>
                           </div>
                           <div className="card-body">
@@ -387,6 +394,7 @@ class Profile extends React.Component {
                             <div className="card-header">
                               <div className="d-flex align-items-center justify-content-between">
                                <h5 className="card-title font-weight-bold">WAR {warehouseId}</h5>
+                               <h5 className="card-title font-weight-bold">WAREHOUSE ID: {warehouseId}</h5>
                                 {/* <button
                                   className="btn-primary btn edit-button"
                                 >
