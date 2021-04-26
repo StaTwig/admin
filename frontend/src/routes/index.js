@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Switch } from 'react-router';
-
 import Login from '../containers/login';
 import Verify from '../containers/verify';
 import LandingPage from '../containers/landingpage';
@@ -81,9 +80,7 @@ const routes = (
     <Route path="/Addlocation" component={requireAuth(AddLocation)} />
     <Route path="/enterid" component={requireAuth(enterId)} />
     <Route path="/editLocation" component={requireAuth(EditLocation)} />
->>>>>>> frontend/src/routes/index.js
     <Route component={NoMatch} />
-
   </Switch>
 );
 
