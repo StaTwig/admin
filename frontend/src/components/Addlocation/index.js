@@ -5,9 +5,6 @@ import Location from '../../assets/icons/CurrentLocation1.png';
 
 import './style.scss';
 import { Formik } from 'formik';
-
-
-
 const Addlocation=(props)=>{
   const [ LocationName,setLocationName]=useState("") 
   const [pincode,setpincode]=useState("") 
@@ -22,8 +19,7 @@ const Addlocation=(props)=>{
   {
     //  props.history.push('/profile');
   }
-return (
-   
+return ( 
 <div> 
 
 <div className="addproduct" >
@@ -31,8 +27,7 @@ return (
 
    
         <div className="card">
-        <div className="card-body">
-      
+        <div className="card-body"> 
         <Formik
         enableReinitialize={true}
         initialValues={{
@@ -228,7 +223,6 @@ return (
                 </div>
               </div>
               </div>
-
               <div className="row">
               <div className="col-md-6 com-sm-12">
                 <div className="form-group">
@@ -256,13 +250,10 @@ return (
                 </div>
               </div>
               </div>
-
-              
               <div className="row">
               <div className="col-md-6 com-sm-12">
                 <div className="form-group">
                   <label htmlFor="Country*">Country*</label>
-                  
                   <input
                type="text"
                className="form-control"
@@ -300,17 +291,13 @@ return (
          </div>
          
          </div>
-         <div>
-              
+         <div>  
              <button class="close" className="btn btn-blue btn-lg float-right" style={{position:"relative",top:"-65vh",right:"22px"}}>
              <img src={Location} width="26" height="26" className="mr-2 mb-1" />
             <span>Use my current Location</span>
           </button>
           </div>
-        
-        </div>
-       
-            
+        </div> 
          </div>       
 )}
 
