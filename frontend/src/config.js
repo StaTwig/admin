@@ -1,12 +1,12 @@
-export const TEST_SERVER_URL = "http://admin.vaccineledger.com";
-export const PROD_SERVER_URL = "http://api.vaccineledger.com:9001";
-export const ABINBEV_PROD_SERVER_URL = "http://admin.abinbev.statledger.io:9001";
-export const ABINBEV_TEST_SERVER_URL = "http://test.admin.abinbev.statledger.io:9001";
-export const LOCAL_SERVER_URL_USER = "http://localhost:3001";
-export const LOCAL_SERVER_URL_ADDRESS = "http://localhost:3001";
-export const LOCAL_SERVER_URL_AFFILIATION = "http://localhost:3002";
-export const LOCAL_SERVER_URL_EMPLOYEE = "http://localhost:3003";
-export const LOCAL_SERVER_URL_RBAC = "http://localhost:3004";
+export const TEST_SERVER_URL = "//admin.vaccineledger.com";
+export const PROD_SERVER_URL = "//api.vaccineledger.com:9001";
+export const ABINBEV_PROD_SERVER_URL = "//admin.abinbev.statledger.io:9001";
+export const ABINBEV_TEST_SERVER_URL = "//test.admin.abinbev.statledger.io:9001";
+export const LOCAL_SERVER_URL_USER = "//localhost:3001";
+export const LOCAL_SERVER_URL_ADDRESS = "//localhost:3001";
+export const LOCAL_SERVER_URL_AFFILIATION = "//localhost:3002";
+export const LOCAL_SERVER_URL_EMPLOYEE = "//localhost:3003";
+export const LOCAL_SERVER_URL_RBAC = "//localhost:3004";
 
 export function config() {
   const confs = {
