@@ -54,21 +54,32 @@ const Inventory = (props) => {
                     </div>
               
                 </div>
-                <div className="col-md-3 rightSideMenu pt-3 px-2">
+                <div className="col-md-3 rightSideMenu pt-5  px-3">
                   <div className="filterSection">
                     <div className="filterHeader">
                       <img src={filterIcon} className="filterIcon"/> FILTERS
                     </div>
-                    <span className="pull-right pr-4 pl-4 viewall"><a href="#">View All</a></span>
-                    <label className="filterSubHeading mt-2">Select Brewery </label>
+                    <span className="pull-right pr-4 pl-4 pt-4 viewall"><a href="#">View All</a></span>
+                    <label className="filterSubHeading mt-3">Select Brewery </label>
                     <select className="filterSelect mt-2">
-                      <option>Select Brewery</option>
+                      <option value="select">Select Brewery</option>
+                      <option>Brewery 1</option>
+                      <option>Brewery 2</option>
+                      <option>Brewery 3</option>
+                      <option>Brewery 4</option>
                     </select>
 
                     <label className="filterSubHeading mt-2">Select SKU</label>
                     <select className="filterSelect mt-2">
                       <option>Select SKU</option>
+                      <option>Adonis</option>
+                      <option>Bud</option>
+                      <option>Cadillac</option>
+                      <option>Fosters</option>
+                      <option>Patent</option>
+
                     </select>
+                    <button className="btn SearchButton mt-4">Search</button>
                   </div>   
                 </div>
               </div>
