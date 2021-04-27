@@ -1,30 +1,33 @@
-# FROM node as react_build 
-# #also say 
-# WORKDIR /app
-# #copy the react app to the container
-# COPY . /app/ 
+FROM node:14.16.1 as react_build 
 
-# # #prepare the contiainer for building react 
-# # RUN npm install --silent
-# RUN yarn
-# # RUN npm install
-# # RUN npm install react-scripts@3.0.1 -g --silent 
-# RUN npm run build 
-# # RUN npm prune --production
+WORKDIR /app
+
+# copy the react app to the container
+COPY . /app/
+ 
+RUN yarn install
+
+# RUN ["ln", "-s", "/app/node_modules"]
+
+# COPY [".", "./"]
+
+RUN npm run build 
+
 #prepare nginx
 FROM nginx:1.19-alpine
 
-# COPY --from=react_build /app /usr/share/nginx/html
-COPY . /usr/share/nginx/html
+COPY --from=react_build /app /usr/share/nginx/html
+
+# COPY . /usr/share/nginx/html
+
 RUN rm /etc/nginx/conf.d/default.conf
+
 COPY nginx/nginx.conf /etc/nginx/conf.d
-
-
 
 #fire up nginx
 EXPOSE 80 
-CMD ["nginx","-g","daemon off;"]
 
+CMD ["nginx","-g","daemon off;"]
 
 # Doc from NodeJS Officail documentation
 # FROM node
