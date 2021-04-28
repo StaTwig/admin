@@ -4,7 +4,7 @@ const ShipmentController = require("../controllers/ShipmentController");
 
 const Storage = multer.diskStorage({
   destination(req, file, callback) {
-    callback(null, "./uploads");
+    callback(null, "/home/ubuntu/shipmentimages");
   },
   filename(req, file, callback) {
     callback(null, file.originalname);

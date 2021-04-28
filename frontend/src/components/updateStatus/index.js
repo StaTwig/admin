@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
 import SuccessPopup from "./successPopup";
 import FailPopup from "./failPopup";
-import { updateTrackingStatus } from "../../actions/shipmentActions";
+import { updateTrackingStatus, uploadImage } from "../../actions/shipmentActions";
 import Modal from "../../shared/modal";
 import "./style.scss";
 import { Formik } from "formik";
@@ -13,6 +13,8 @@ const UpdateStatus = (props) => {
   const profile = useSelector((state) => {
     return state.user;
   });
+  // console.log('Profile');
+  // console.log(profile);
   const {id} = props.match.params;
   const [shipmentId, setShipmentId] = useState([]);
   const [comments, setComments] = useState("");
@@ -29,6 +31,28 @@ const UpdateStatus = (props) => {
   const setFile = (evt) => {
     setPhoto(evt.target.files[0]);
   };
+
+
+  const uploadPhoto = async () => {
+    const formData = new FormData();
+  
+    formData.append(
+      "photo",
+      photo,
+      photo.name
+    );
+
+    const result = await uploadImage(id,formData);
+    console.log(result);
+    if (result.status == 1) {
+      console.log('After uploading image');
+      console.log(result);
+    } 
+    else{
+      console.log(result.status);
+    }     
+};
+
 
   const updateStatus = async (values) => {
     console.log("1", values);
@@ -98,9 +122,9 @@ const UpdateStatus = (props) => {
           if (!values.updateStatusLocation) {
             errors.updateStatusLocation = "Required";
           }
-          if (!values.comments) {
-            errors.comments = "Required";
-          }
+          // if (!values.comments) {
+          //   errors.comments = "Required";
+          // }
           if (!values.alerttrue) {
             errors.alerttrue = "Required";
           }
@@ -295,7 +319,7 @@ const UpdateStatus = (props) => {
                   <div className="col ">
                     <div className="row">
                       <h6 className="col font-weight-bold mb-4">Upload Image</h6>
-                      <button className="col col-3 btn btn-primary font-weight-bold">
+                      <button type="button" className="col col-3 btn btn-primary font-weight-bold" onClick={uploadPhoto}>
                         <img
                           src={uploadWhite}
                           width="20"
@@ -306,6 +330,7 @@ const UpdateStatus = (props) => {
                       </button>
                     </div>
                     <div className="d-flex flex-column upload bg-white col-9 p-5">
+                      <label>{photo.name?photo.name:""}</label>
                       <img
                         src={uploadBlue}
                         name="photo"

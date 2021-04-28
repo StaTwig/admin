@@ -24,14 +24,14 @@ const ShipmentDetails = (props) => {
            <li className="mb-1 text-secondary">Shipment Date</li>
            <li className="mb-1 text-secondary">Estimate Delivery Date</li>
           </ul>
-           <ul className="elemens">
+           <ul className="w-50 elemens">
            <h6 className="poheads potext mt-3 mb-3 text-white" style={{visibility:"hidden"}}>From</h6>
             <li  className="mb-1">{props.shipments.supplier.org.name}</li>
-            <li  className="mb-1">{props.shipments.supplier.org.postalAddress.split(',')[0]},{props.shipments.supplier.org.postalAddress.split(',')[1]},{props.shipments.supplier.org.postalAddress.split(',')[2]}</li>
+            <li  className="mb-1">{props.shipments.supplier.org.postalAddress.split(',')[0]}</li>
             <h6 className="poheads potext mt-3 mb-3  text-white" style={{visibility:"hidden"}}>To </h6>
             <li  className="mb-1">{props.shipments.receiver.org.name}</li>
-            <li  className="mb-1">{props.shipments.receiver.org.postalAddress.split(',')[0]},{props.shipments.receiver.org.postalAddress.split(',')[1]},{props.shipments.receiver.org.postalAddress.split(',')[2]}</li>
-            <h6 className="poheads potext mt-3 mb-3 text-white">Delivery Details:</h6>
+            <li  className="mb-1">{props.shipments.receiver.org.postalAddress.split(',')[0]}</li>
+            <h6 className="poheads potext mt-3 mb-3 text-white" style={{visibility:"hidden"}}>Delivery Details:</h6>
             <li  className="mb-1">{props.shipments.airWayBillNo}</li>
             <li  className="mb-1">{props.shipments.label.labelId}</li>
             <li  className="mb-1">{props.shipments.shippingDate.split('T')[0].split('-')[2]+"/"+props.shipments.shippingDate.split('T')[0].split('-')[1]+"/"+props.shipments.shippingDate.split('T')[0].split('-')[0]} </li>

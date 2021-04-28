@@ -25,7 +25,7 @@ const ReceiveShipment = (props) => {
 
   const [shipmentId, setShipmentId] = useState([]);
   const [billNo, setBillNo] = useState("");
-  const [photo, setPhoto] = useState(null);
+  const [photo, setPhoto] = useState("");
   const [comment, setComment] = useState("");
   const [index, setIndex] = useState(0);
   const id = props.match.params.id
@@ -100,7 +100,7 @@ const ReceiveShipment = (props) => {
     }
   };
 
-  const uploadPhoto = () => {
+  const uploadPhoto = async () => {
       const formData = new FormData();
     
       formData.append(
@@ -109,7 +109,7 @@ const ReceiveShipment = (props) => {
         photo.name
       );
 
-      const result = uploadImage(id,formData);
+      const result = await uploadImage(id,formData);
       console.log(result);
       if (result.status == 1) {
         console.log('After uploading image');
@@ -238,22 +238,23 @@ const ReceiveShipment = (props) => {
           <div className="col-sm-4">
             <div className="row justify-content-between">
               <h6 className="heading mt-3 mb-1 ml-4">Upload Image</h6>             
-                <button className="btn btn-primary font-weight-bold mb-0" onClick={uploadPhoto} style={{height:'4vh',width:'9vw'}}>
-                  <img
+                <button className="btn btn-primary font-weight-bold mb-0" onClick={uploadPhoto} style={{height:'4.4vh',width:'6vw'}}>
+                  {/* <img
                     src={uploadWhite}
                     width="35"
                     height="17"
-                  />
+                  /> */}
                   <span style={{fontSize:'15px'}}>Upload</span>
                 </button>
             </div>
             <div className="upload bg-white panel commonpanle" style={{height:'45%'}}>
               <div className="row" style={{margin:'auto',display:'table'}}>
+                  <label>{photo.name?photo.name:""}</label>
                   <img
                     src={uploadBlue}
                     name="photo"
-                    width="80"
-                    height="80"
+                    width="50"
+                    height="50"
                     className="mt-1"
                     style={{margin:'auto',display:'table'}}
                   />
