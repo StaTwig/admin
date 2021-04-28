@@ -54,6 +54,13 @@ router.post("/addProductsToInventory", InventoryController.addProductsToInventor
 router.post("/updateInventories", InventoryController.updateInventories);
 router.post("/insertInventories", InventoryController.insertInventories);
 
+router.get("/getAllStates", InventoryController.getAllStates);
+router.get("/getDistrictsByState", InventoryController.getDistrictsByState);
+router.get("/getVendorsByDistrict", InventoryController.getVendorsByDistrict);
+router.get("/getAllSKUs", InventoryController.getAllSKUs);
+
+
+
 router.post(
   '/addInventoriesFromExcel',
   upload.single('excel'),
