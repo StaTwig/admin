@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Switch } from 'react-router';
-
 import Login from '../containers/login';
 import Verify from '../containers/verify';
 import LandingPage from '../containers/landingpage';
@@ -38,7 +37,9 @@ import UpdateStatus from  '../containers/updateStatus';
 import ReceiveShipment from  '../containers/receiveShipment';
 import AddLocation from '../containers/Addlocation';
 import LastMile from '../containers/lastMile';
+import EditLocation from '../containers/editLocation';
 import NoMatch from '../components/NoMatch';
+
 
 import './style.scss';
 
@@ -80,8 +81,9 @@ const routes = (
     <Route path="/Addlocation" component={requireAuth(AddLocation)} />
     <Route path="/lastMile" component={requireAuth(LastMile)} />
     <Route path="/enterid" component={requireAuth(enterId)} />
+    <Route path="/enterid" component={requireAuth(enterId)} />
+    <Route path="/editLocation" component={requireAuth(EditLocation)} />
     <Route component={NoMatch} />
-
   </Switch>
 );
 

@@ -83,7 +83,7 @@ export const setCurrentUser = (decoded) => {
 
 // Set logged in user
 export const logoutUser = () => {
-  localStorage.removeItem("theLedgerAdminToken");
+  localStorage.removeItem("theAbInBevToken");
   localStorage.removeItem("name");
   localStorage.removeItem("organisation");
   return {
