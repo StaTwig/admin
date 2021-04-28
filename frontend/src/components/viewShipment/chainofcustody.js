@@ -185,15 +185,6 @@ const shipmentData = props.shipments[0];
                             </h6>
                             <div>
                             {custody.updateComment}                              
-                              {/* <input
-                                style={{ fontSize: "16px" }}
-                                type="text"
-                                className="form-control"
-                                name="Comment"
-                                value={custody.updateComment}
-                                size="20"
-                                readonly
-                              /> */}
                             </div>
                           </div>
                           <div className="column">
@@ -279,16 +270,8 @@ const shipmentData = props.shipments[0];
                             <h6 className="poheads potext mt-3 mb-3">
                               Comment*
                             </h6>
-                            <div className="form-group">
-                              <input
-                                style={{ fontSize: "16px" }}
-                                type="text"
-                                className="form-control"
-                                name="Comment"
-                                value={custody.updateComment}
-                                size="20"
-                                readonly
-                              />
+                            <div>
+                            {custody.updateComment}
                             </div>
                           </div>
                           <div className="column">
