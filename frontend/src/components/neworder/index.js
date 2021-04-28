@@ -279,6 +279,7 @@ const NewOrder = (props) => {
                       <div className="form-control">
                         <DropdownButton
                           name={senderOrgId}
+                          name2="Select Organisation Name"
                           onSelect={(v) => {
                             setSenderOrgId(v.name);
                             setFieldValue('fromOrg', v.id);
@@ -317,6 +318,7 @@ const NewOrder = (props) => {
                       <div className="form-control">
                         <DropdownButton
                           name={receiverOrgId}
+                          name2="Select Organisation Name"
                           onSelect={(v) => {
                             setReceiverOrgLoc("Select Delivery Location");
                             setFieldValue('toOrgLoc', '');
@@ -350,6 +352,7 @@ const NewOrder = (props) => {
                       <div className="form-control">
                         <DropdownButton
                           name={receiverOrgLoc}
+                          name2="Select Delivery Location"
                           onSelect={(v) => {
                             let name = v?.warehouseAddress ? (v?.warehouseAddress?.firstLine + ', ' + v?.warehouseAddress?.city) : v.postalAddress;
                             setReceiverOrgLoc(name);

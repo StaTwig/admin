@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ProfilePic from '../../assets/brands/user-image/Image73@2x.png';
 import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 import DropdownButton from '../../shared/dropdownButtonGroup';
 import Pen from '../../assets/icons/pen.svg';
 import Mail from '../../assets/icons/mail.svg';
@@ -261,7 +262,6 @@ class Profile extends React.Component {
                             lastName: e.target.value,
                           })
                         }
-
                       />
 
                     </div>
@@ -285,7 +285,6 @@ class Profile extends React.Component {
                           this.setState({ email: e.target.value })
                         }
                       />
-
                     </div>
                     <div className="form-group">
                       <label htmlFor="shipmentId">Phone</label>
@@ -328,7 +327,15 @@ class Profile extends React.Component {
                         <div className="custom-card p-3">
                           <div className="card-header">
                             <div className="d-flex align-items-center justify-content-between">
-                              <h5 className="card-title font-weight-bold">HEAD OFFICE</h5>
+                              <h5 className="card-title font-weight-bold">WAR {warehouseId}</h5>
+                              <Link to ={{pathname:'/editLocation',
+                                state:{message:"hellow"}
+                               }}>
+                              <button className="btn btn-blue fontSize20 font-bold pl-2 pr-10" style={{height:"35px",width:"100px"}}>
+                              <img src={Pen} width="15" height="15" className="mr-2"/>
+                              <span>EDIT</span>
+                              </button></Link>
+                              <h5 className="card-title font-weight-bold">WAREHOUSE ID: {warehouseId}</h5>
                               {/* <button
                                 className="btn-primary btn edit-button"
                               >
@@ -346,11 +353,7 @@ class Profile extends React.Component {
                       </div> 
                       </div>
                     </div>                   
-
-
                   </div>
-
-
                 ) : (
                   <div>
                       <div className="col">
@@ -362,7 +365,7 @@ class Profile extends React.Component {
                         </div>   
                         <div className="row row-list">
                           <img src={Briefcase} width="20" height="20" className="mr-3" />
-                          {this.state.organisation ? <span>{this.state.organisation.split('/')[1]}</span> : <span>N/A</span>}
+                          {this.state.organisation ? <span>{this.state.organisation.split('/')[0]}</span> : <span>N/A</span>}
                         </div>   
                         <div className="row row-list">
                           <img src={Mail} width="20" height="20" className="mr-3" />
@@ -384,7 +387,8 @@ class Profile extends React.Component {
                           <div className="custom-card p-3">
                             <div className="card-header">
                               <div className="d-flex align-items-center justify-content-between">
-                                <h5 className="card-title font-weight-bold">HEAD OFFICE</h5>
+                               <h5 className="card-title font-weight-bold">WAR {warehouseId}</h5>
+                               <h5 className="card-title font-weight-bold">WAREHOUSE ID: {warehouseId}</h5>
                                 {/* <button
                                   className="btn-primary btn edit-button"
                                 >
@@ -434,7 +438,6 @@ class Profile extends React.Component {
                     <button className="btn-primary btn" onClick={this.onSubmit}>
                       <span>SAVE</span>
                     </button>
-
                   </div>
                 )}
             </div>

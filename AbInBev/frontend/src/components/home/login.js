@@ -4,21 +4,22 @@ import { Link } from 'react-router-dom';
 
 const Login = (props) => {
 
-  const { setSteps, setContinueClick, onSendOtp } = props;
-  const [errorMessage, setErrorMessage] = useState('');
+  const { setSteps, setContinueClick, onSendOtp, msg } = props;
+  const [errorMessage, setErrorMessage] = useState(msg);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [email, setEmail] = useState('');
 
-
-  const onSendOtpClick = () => {
+  const onSendOtpClick = async() => {
     if (!email || email.length < 1 || email === '') {
       setShowErrorMessage(true);
-      setErrorMessage('Please provide valid Email/Phone');
-      return;
+      setErrorMessage('Required');
     }
-    setShowErrorMessage(false);
-    setErrorMessage('');
-    onSendOtp(email);
+    else {
+      setShowErrorMessage(false);
+      setErrorMessage('');
+      const result = await onSendOtp(email);
+      if (result) { setShowErrorMessage(true);setErrorMessage(result);}
+    }
   }
 
   return (
@@ -31,10 +32,10 @@ const Login = (props) => {
       <div className="loginUserBlock justify-content-center">
         <div className="form-group">
           <label htmlFor="username" className="userNameLabel">Username/ Mobile No.</label>
-          <input name="username" className="form-control username" value={email}
+          <input name="username" className={`form-control username ${showErrorMessage && `border border-danger`}`} value={email}
             onChange={e => setEmail(e.target.value)} />
           {
-            showErrorMessage ? <h4 className="error-message">{errorMessage}</h4> : ""
+            showErrorMessage ? <h4 className="error-message text-danger">{errorMessage}</h4> : ""
           }
           <button
             onClick={() => {

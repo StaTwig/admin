@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ViewTable from "./table/viewTable";
@@ -23,11 +22,11 @@ const ReviewOrder = props => {
   const [openOrder, setOpenOrder] = useState(false);
   const [failedPop, setFailedPop] = useState(false);
   const [openReviewOrder, setopenReviewOrder] = useState(false);
- 
 
- 
+const [ modalProps, setModalProps ] = useState({});
+
   const onAssign = async () => {
-  
+
     let error = false;
     const { fromOrg, fromOrgId, toOrg, toOrgLoc, products } = order;
     products.forEach((p) => {
@@ -58,17 +57,22 @@ const ReviewOrder = props => {
       dispatch(turnOn());
       const result = await createOrder(data);
       dispatch(turnOff());
-      
+
       if (result.status === 200 ) {
          //dispatch(resetReviewPos({}));
           setopenReviewOrder(true);
           console.log("2", result);
           //setMessage("Status updated Successfully");
-         
-         
+          setModalProps({
+        message: 'Created Successfully!',
+        OrderId: result.data.data.poId,
+        type: 'Success'
+      })
+
+
       } else {
            setFailedPop(true);
-           setErrorMessage("Not able to create order. Try again!");
+    //       setErrorMessage("Not able to create order. Try again!");
       }
     }
   };
@@ -77,7 +81,7 @@ const ReviewOrder = props => {
     setopenReviewOrder(false);
     props.history.push("/orders");
   };
- 
+
 
   return (
     <div className="vieworder text-muted">
@@ -86,7 +90,7 @@ const ReviewOrder = props => {
       </div>
       <div className="mt-4">
         <div className=" p-3 m-3 bg-white shadow">
-          
+
           <span className="p-0 font-weight-bold" style={{color:"black"}}>Product Details</span>
           <div className="row mt-3">
             <ViewTable
@@ -150,33 +154,12 @@ const ReviewOrder = props => {
                 >
                   <ReviewOrderPopUp
                      onHide={closeModal}// onHide={closeModal} //FailurePopUp
-                  />
+                                {...modalProps}
+
+
+                />
                 </Modal>
               )}
-             
-              {openOrder && (
-                <Modal
-                  close={() => closeModal()}
-                  size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
-                >
-                  <ShipmentPopUp
-                    onHide={closeModal} //FailurePopUp
-                  />
-                </Modal>
-              )}
-              
-              {failedPop && (
-                <Modal
-                  close={() => closeModalFail()}
-                  size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
-                >
-                  <ShipmentFailPopUp
-                    onHide={closeModalFail} //FailurePopUp
-                    shipmentError={shipmentError}
-                  />
-                </Modal>
-              )}
-     
             </div>
           </div>
       </div>
