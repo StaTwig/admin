@@ -47,7 +47,7 @@ const Table = props => {
                     <img src={user} width="30" height="20" alt="User" className="rounded mr-1 align-self-center" />
                     <div className="flex-column d-flex">
                       <span className="text-primary bold">{visible == 'one' ? supplier.organisation.name : customer.organisation.name}</span>
-                      <p className="address mb-0 text-primary pl-3">{visible == 'one' ? supplier.organisation.id : customer.organisation.id}</p>
+                      <p className="address mb-0 text-primary">{visible == 'one' ? supplier.organisation.id : customer.organisation.id}</p>
                   </div>
                   </div>
                 </div>
