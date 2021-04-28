@@ -122,7 +122,7 @@ const Overview = (props) => {
                     </span>
                   </div>
                   <div className="card-footer bg-transparent" style={{ border: 0 }}>
-                    Stock :
+                    Stock: &nbsp;
                     <span className="stoct-count font-HelveticaNeue">{(overviewStats['breweryObj'] && overviewStats['breweryObj']['stock']) ? overviewStats['breweryObj']['stock'] : ''}</span>
                   </div>
                 </section>
@@ -179,7 +179,8 @@ const Overview = (props) => {
                     </Moment>
                   </div>
                   <div className="card-footer bg-transparent" style={{ border: 0 }}>
-                    Stock :<span className="stoct-count">{(overviewStats['s1Obj'] && overviewStats['s1Obj']['stock']) ? overviewStats['s1Obj']['stock'] : ''}</span>
+                  Stock: &nbsp;
+                    <span className="stoct-count">{(overviewStats['s1Obj'] && overviewStats['s1Obj']['stock']) ? overviewStats['s1Obj']['stock'] : ''}</span>
                   </div>
                 </section>
                 <section className={(selectedFilter === 'S2') ? 'selectedBox' : 'box'} onClick={() => applyFilter('S2')}>
@@ -235,7 +236,8 @@ const Overview = (props) => {
                     </Moment>
                   </div>
                   <div className="card-footer bg-transparent" style={{ border: 0 }}>
-                    Stock :<span className="stoct-count">{(overviewStats['s2Obj'] && overviewStats['s2Obj']['stock']) ? overviewStats['s2Obj']['stock'] : ''}</span>
+                    Stock: &nbsp;
+                    <span className="stoct-count">{(overviewStats['s2Obj'] && overviewStats['s2Obj']['stock']) ? overviewStats['s2Obj']['stock'] : ''}</span>
                   </div>
                 </section>
               </div>
@@ -249,7 +251,7 @@ const Overview = (props) => {
                     <th scope="col">SKU</th>
                     <th scope="col">Sales</th>
                     <th scope="col">Return Bottles</th>
-                    <th scope="col">Traget</th>
+                    <th scope="col">Target</th>
                     <th scope="col">Actual Return</th>
                   </tr>
                 </thead>
@@ -259,7 +261,7 @@ const Overview = (props) => {
                       <td scope="row">
                         <div className="tableProfileIconCard">
                           <div className="profileIcon">
-                            <img src={bottlesIcon} alt="" width="50" height="50" />
+                            <img src={bottlesIcon} alt="" width="60" height="60" />
                           </div>
                           <div className="profileName">
                             <span className="profileTitle">{transaction.productName}</span>
