@@ -778,6 +778,43 @@ exports.getDistrictsByState = [
   },
 ];
 
+exports.getVendorsByDistrict = [
+  // auth,
+  async (req, res) => {
+    try {
+      const _selectedDistrict = req.query.district;
+      const _vendorType = req.query.vendorType;
+      const allVendors = await OrganisationModel.find({
+        district: _selectedDistrict,
+        type: _vendorType
+      });
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allVendors
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getAllSKUs = [
+  // auth,
+  async (req, res) => {
+    try {
+      const allSKUs = await ProductModel.find({}, '-characteristicSet -image');
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allSKUs
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
 
 exports.addProductsToInventory = [
   auth,

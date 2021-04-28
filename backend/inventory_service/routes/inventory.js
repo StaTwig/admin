@@ -56,6 +56,9 @@ router.post("/insertInventories", InventoryController.insertInventories);
 
 router.get("/getAllStates", InventoryController.getAllStates);
 router.get("/getDistrictsByState", InventoryController.getDistrictsByState);
+router.get("/getVendorsByDistrict", InventoryController.getVendorsByDistrict);
+router.get("/getAllSKUs", InventoryController.getAllSKUs);
+
 
 
 router.post(
