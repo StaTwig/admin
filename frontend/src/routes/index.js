@@ -40,7 +40,6 @@ import LastMile from '../containers/lastMile';
 import EditLocation from '../containers/editLocation';
 import NoMatch from '../components/NoMatch';
 
-
 import './style.scss';
 
 const routes = (
@@ -80,7 +79,6 @@ const routes = (
     <Route path="/receiveShipment/:id" component={requireAuth(ReceiveShipment)} />
     <Route path="/Addlocation" component={requireAuth(AddLocation)} />
     <Route path="/lastMile" component={requireAuth(LastMile)} />
-    <Route path="/enterid" component={requireAuth(enterId)} />
     <Route path="/enterid" component={requireAuth(enterId)} />
     <Route path="/editLocation" component={requireAuth(EditLocation)} />
     <Route component={NoMatch} />
