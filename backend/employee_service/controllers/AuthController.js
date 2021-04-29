@@ -699,7 +699,8 @@ exports.userInfo = [
             warehouseAddress_country: warehouse.warehouseAddress.country,
             warehouseAddress_zipcode: warehouse.warehouseAddress.zipCode,
             warehouseAddress_city: warehouse.warehouseAddress.city,
-            warehouseAddress_firstline: warehouse.warehouseAddress.firstLine
+            warehouseAddress_firstline: warehouse.warehouseAddress.firstLine,
+            title: warehouse.title
           };
           logger.log(
             'info',
