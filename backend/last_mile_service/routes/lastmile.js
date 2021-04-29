@@ -16,4 +16,6 @@ const upload = multer({ storage: Storage });
 const router = express.Router();
 
 
+router.get("/getEOLInfoBySerialNumber", LastMileController.getEOLInfoBySerialNumber);
+
 module.exports = router;
