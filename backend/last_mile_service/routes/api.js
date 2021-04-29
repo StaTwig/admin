@@ -2,6 +2,6 @@ var express = require("express");
 var lastMileQueryRouter = require("./lastmile");
 var app = express();
 
-app.use("/lastmile", lastMileQueryRouter);
+app.use("/", lastMileQueryRouter);
 
 module.exports = app;

@@ -1,153 +1,59 @@
 var mongoose = require('mongoose');
-var LastMileSchema = new mongoose.Schema(
-{
-  properties: {
-    eol_id: {
-      required: true,
-      type: string
-    },
-    eol_info: {
-      type: object,
-      required: true,
-      properties: {
-        first_name: {
-          type: string
+var LastMileSchema = new mongoose.Schema({
+  id: { type: String, required: true, unique: true },
+  eol_id: { type: String, required: true},
+  eol_info: { type: Object, required: true, 
+    default: {
+      first_name: { type: String },
+      last_name: { type: String },
+      gender: { type: String },
+      age: { type: Number },
+      contact_number: { type: Number },
+      contact_address: { type: Object, 
+        default: {
+          firstLine: { type: String },
+          secondLine: { type: String },
+          district: { type: String },
+          state: { type: String },
+          country: { type: String },
+          landmark: { type: String },
+          zipcode: { type: Number }
         },
-        last_name: {
-          type: string
-        },
-        gender: {
-          type: string
-        },
-        age: {
-          type: number
-        },
-        contact_number: {
-          type: number
-        },
-        contact_address: {
-          type: object,
-          properties: {
-            firstLine: {
-              type: string
-            },
-            secondLine: {
-              type: string
-            },
-            district: {
-              type: string
-            },
-            state: {
-              type: string
-            },
-            country: {
-              type: string
-            },
-            landmark: {
-              type: string
-            },
-            zipcode: {
-              type: number
-            }
-          },
-          required: [
-            firstLine,
-            secondLine,
-            district,
-            state,
-            country,
-            landmark,
-            zipcode
-          ]
-        },
-        idProof: {
-          type: object,
-          properties: {
-            idType: {
-              type: string
-            },
-            idNo: {
-              type: string
-            }
-          },
-          required: [
-            idType,
-            idNo
-          ]
-        }
       },
-      required: [
-        first_name,
-        last_name,
-        gender,
-        age,
-        contact_number,
-        contact_address,
-        idProof
-      ]
     },
-    productAdministeredInfo: {
-      required: true,        
-      type: array,
-      items: {
-        type: object,
-        properties: {
-          dose: {
-            required: true,                    
-            type: string
-          },
-          productId: {
-            required: true,                    
-            type: string
-          },
-          productName: {
-            required: true,                    
-            type: string
-          },
-          productMfg: {
-            required: true,                    
-            type: string
-          },
-          productBatchNo: {
-            required: true,                    
-            type: string
-          },
-          locationInfo: {
-            type: object,
-            required: true,                    
-            properties: {
-              warehouseId: {
-                type: string
-              },
-              warehouseTitle: {
-                type: string
-              }
-            },
-            required: [
-              warehouseId,
-              warehouseTitle
-            ]
-          },
-          labelId: {
-            type: string,
-            required: true,                    
-          },
-          atomId: {
-            type: string,
-            required: true,        
-        },
-          administeredData: {
-            type: string,
-            required: true,        
-        },
-          administeredBy: {
-            type: string,
-            required: true,        
-        }
-        }
-      }
+  },
+  
+  idProof: { type: Object, required: true, 
+    default: {
+      idType: { type: String },
+      idNo: { type: String }
     }
+  },
+
+  productAdministeredInfo: { type: Array, required: true,
+    default: [
+      {
+        items: { type: Object, required: true, 
+          default: {
+            dose: { type: Number },
+            productId: { type: String },
+            productName: { type: String },
+            productMfg: { type: String },
+            productBatchNo: { type: String },
+            locationInfo: { type: Object, required: true, 
+              default: {
+                warehouseId: { type: String },
+                warehouseTitle: { type: String },
+              },
+            },
+            labelId: { type: String },
+            atomId: { type: String },
+            administeredData: '2021-03-31T18:30:00.000Z',
+            administeredBy: { type: String },
+          }
+        },
+      },
+    ],
   }
-}
-);
+});
 module.exports = mongoose.model('lastmile', LastMileSchema);

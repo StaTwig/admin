@@ -9,11 +9,11 @@ const logger = init.getLog();
 
 
 exports.getEOLInfoBySerialNumber = [
-    auth,
+    // auth,
     async (req, res) => {
       try {
-        checkToken(req, res, async (result) => {
-          if (result.success) {
+        // checkToken(req, res, async (result) => {
+        //   if (result.success) {
             logger.log(
               "info",
               "<<<<< LastMileService < LastMileController < getEOLInfoBySerialNumber : token verified successfullly, querying data by publisher"
@@ -26,26 +26,30 @@ exports.getEOLInfoBySerialNumber = [
             // checkPermissions(permission_request, async (permissionResult) => {
             //   if (permissionResult.success) {
                 const { serialNumber } = req.query;
-  
-                const eolResult = await LastMileModel.findOne({
+                await LastMileModel.findOne({
                     eol_id: serialNumber,
-                  })
-  
-                res.json({
-                  data: eolResult,
-                });
+                  }).then((eolResult) => {
+                    console.log("eolResult is ====> ", eolResult)
+                    return apiResponse.successResponseWithData(
+                      res,
+                      "EOL Info by serial Number",
+                      eolResult
+                    );
+                  }).catch((err) => {
+                    return apiResponse.ErrorResponse(res, err);
+                  });
             //   } else {
             //     res.json("Sorry! User does not have enough Permissions");
             //   }
             // });
-          } else {
-            logger.log(
-              "warn",
-              "<<<<< LastMileService < LastMileController < getEOLInfoBySerialNumber : refused token"
-            );
-            res.status(403).json(result);
-          }
-        });
+          // } else {
+          //   logger.log(
+          //     "warn",
+          //     "<<<<< LastMileService < LastMileController < getEOLInfoBySerialNumber : refused token"
+          //   );
+          //   res.status(403).json(result);
+          // }
+        // });
       } catch (err) {
         logger.log(
           "error",
