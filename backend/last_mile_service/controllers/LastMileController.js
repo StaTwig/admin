@@ -8,7 +8,7 @@ require("dotenv").config();
 const auth = require("../middlewares/jwt");
 const checkToken = require("../middlewares/middleware").checkToken;
 const WarehouseModel = require("../models/WarehouseModel");
-const logEvent = require("../../../utils/event_logger");
+const logEvent = require("../../../utils/event_logger/eventLogger");
 const init = require("../logging/init");
 const logger = init.getLog();
 const imageUrl = process.env.IMAGE_URL;
