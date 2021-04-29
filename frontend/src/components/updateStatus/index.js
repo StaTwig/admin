@@ -3,9 +3,13 @@ import uploadBlue from "../../assets/icons/UploadBlue.svg";
 import uploadWhite from "../../assets/icons/UploadWhite.svg";
 import { useSelector, useDispatch } from "react-redux";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
+import crossIcon from "../../assets/icons/crossRed.svg";
 import SuccessPopup from "./successPopup";
 import FailPopup from "./failPopup";
-import { updateTrackingStatus, uploadImage } from "../../actions/shipmentActions";
+import {
+  updateTrackingStatus,
+  uploadImage,
+} from "../../actions/shipmentActions";
 import Modal from "../../shared/modal";
 import "./style.scss";
 import { Formik } from "formik";
@@ -15,13 +19,14 @@ const UpdateStatus = (props) => {
   });
   // console.log('Profile');
   // console.log(profile);
-  const {id} = props.match.params;
+  const { id } = props.match.params;
   const [shipmentId, setShipmentId] = useState([]);
   const [comments, setComments] = useState("");
   const [firstName, setFirstName] = useState("");
   const [organisationName, setOrganisationName] = useState("");
   const [organisationLocation, setOrganisationLocation] = useState("");
   const [photo, setPhoto] = useState("");
+  const [photoUrl, setPhotoUrl] = useState(undefined);  
   const [updateStatusLocation, setUpdateStatusLocation] = useState("");
   const [alerttrue, setTrue] = useState("");
   const [openUpdatedStatus, setOpenUpdatedStatus] = useState(false);
@@ -29,30 +34,28 @@ const UpdateStatus = (props) => {
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const setFile = (evt) => {
+    setPhotoUrl(URL.createObjectURL(event.target.files[0]));    
     setPhoto(evt.target.files[0]);
   };
 
+  const clearImage = () => {
+    setPhoto("");
+    setPhotoUrl(undefined);
+  };
 
   const uploadPhoto = async () => {
     const formData = new FormData();
-  
-    formData.append(
-      "photo",
-      photo,
-      photo.name
-    );
 
-    const result = await uploadImage(id,formData);
-    console.log(result);
+    formData.append("photo", photo, photo.name);
+
+    const result = await uploadImage(id, formData);
     if (result.status == 1) {
-      console.log('After uploading image');
-      console.log(result);
-    } 
-    else{
+      setPhoto("");
+      setPhotoUrl(undefined);      
+    } else {
       console.log(result.status);
-    }     
-};
-
+    }
+  };
 
   const updateStatus = async (values) => {
     console.log("1", values);
@@ -65,10 +68,10 @@ const UpdateStatus = (props) => {
         orgid: profile.organisation,
         orglocation: profile.location,
         updatedAt: updateStatusLocation,
-        isAlertTrue: alerttrue,
+        isAlertTrue: true,
       },
     };
-   const result = await updateTrackingStatus(data);
+    const result = await updateTrackingStatus(data);
     if (result.status === 200) {
       setOpenUpdatedStatus(true);
       console.log("2", result);
@@ -81,7 +84,7 @@ const UpdateStatus = (props) => {
 
   const closeModal = () => {
     setOpenUpdatedStatus(false);
-    props.history.push("/viewshipment/"+id);
+    props.history.push("/viewshipment/" + id);
   };
   const closeModalFail = () => {
     setOpenShipmentFail(false);
@@ -125,9 +128,9 @@ const UpdateStatus = (props) => {
           // if (!values.comments) {
           //   errors.comments = "Required";
           // }
-          if (!values.alerttrue) {
-            errors.alerttrue = "Required";
-          }
+          // if (!values.alerttrue) {
+          //   errors.alerttrue = "Required";
+          // }
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
@@ -152,8 +155,14 @@ const UpdateStatus = (props) => {
                 <div className="row justify-content-between">
                   <div className="col ">
                     <div className="panel commonpanle">
-                      <div className={`form-group ${errors.shipmentId && touched.shipmentId && `mb-0`}`}>
-                        <label className="mt-3 text-secondary">Shipment ID</label>
+                      <div
+                        className={`form-group ${
+                          errors.shipmentId && touched.shipmentId && `mb-0`
+                        }`}
+                      >
+                        <label className="mt-3 text-secondary">
+                          Shipment ID
+                        </label>
                         <input
                           type="text"
                           className="form-control"
@@ -169,13 +178,14 @@ const UpdateStatus = (props) => {
                         </span>
                       )}
                     </div>
-                      <h6 className="poheads potext m-3">
-                        Account Holder Details
-                      </h6>
+                    <h6 className="poheads potext m-3">
+                      Account Holder Details
+                    </h6>
                     <div className="panel commonpanle">
-                      
                       <div className="form-group">
-                        <label className="mb-1 text-secondary">User Name*</label>
+                        <label className="mb-1 text-secondary">
+                          User Name*
+                        </label>
                         <input
                           type="text"
                           className="form-control"
@@ -198,7 +208,7 @@ const UpdateStatus = (props) => {
                           readonly
                         />
                       </div>
-                      <div className="form-group">
+                      {/* <div className="form-group">
                         <label className="mb-1 text-secondary">
                           Organisation Location*
                         </label>
@@ -212,7 +222,7 @@ const UpdateStatus = (props) => {
                           value={profile.location}
                           readonly
                         />
-                      </div>
+                      </div> */}
                       <div className="form-group mb-0">
                         <label className="mb-1 text-secondary">
                           Update Status Location*
@@ -226,100 +236,86 @@ const UpdateStatus = (props) => {
                           value={values.updateStatusLocation}
                         />
                       </div>
-                        {errors.updateStatusLocation &&
-                          touched.updateStatusLocation && (
-                            <span className="error-msg text-danger row justify-content-end col-8">
-                              {errors.updateStatusLocation}
-                            </span>
+                      {errors.updateStatusLocation &&
+                        touched.updateStatusLocation && (
+                          <span className="error-msg text-danger row justify-content-end col-8">
+                            {errors.updateStatusLocation}
+                          </span>
                         )}
                     </div>
-                    
-                    <h6 className="poheads potext m-3">Comment*</h6>
+
+                    <h6 className="poheads potext m-3">Comment</h6>
                     <div className="panel commonpanle">
                       <div className="form-group mb-0">
                         <input
                           type="text"
                           className="form-control"
                           name="comments"
-                          style={{flexBasis: '100%'}}
+                          style={{ flexBasis: "100%" }}
                           onBlur={handleBlur}
                           onChange={handleChange}
                           placeholder="Enter comments here..."
                           value={values.comments}
                         />
-                          {/* <textarea
-                            className="form-control"
-                            name="comments"
-                            style={{flexBasis: '100%'}}
-                            onBlur={handleBlur}
-                            onChange={handleChange}
-                            placeholder="Enter comments here..."
-                            value={values.comments}
-                          ></textarea> */}
-                        
                       </div>
-                        {errors.comments && touched.comments && (
-                          <span className="error-msg text-danger">
-                            {errors.comments}
-                          </span>
-                        )}
-                      <div className="row mt-3 justify-content-end">
+                      {errors.comments && touched.comments && (
+                        <span className="error-msg text-danger">
+                          {errors.comments}
+                        </span>
+                      )}
+                      {/* <div className="row mt-3 justify-content-end">
                         <span className="col row col-6 justify-content-end text-secondary">
                           Should send an alert?
                         </span>
                         <div className="col col-2 ml-2 custom-control custom-radio">
-                          <input 
-                            type="radio" 
-                            className="custom-control-input" 
+                          <input
+                            type="radio"
+                            className="custom-control-input"
                             onBlur={handleBlur}
                             onChange={handleChange}
-                            value="True" 
-                            id="yesradio" 
-                            name="alerttrue" 
+                            value="True"
+                            id="yesradio"
+                            name="alerttrue"
                           />
-                          <label className="custom-control-label" for="yesradio">Yes</label>
+                          <label
+                            className="custom-control-label"
+                            for="yesradio"
+                          >
+                            Yes
+                          </label>
                         </div>
                         <div className="col col-1 pl-2 custom-control custom-radio">
-                          <input 
-                            type="radio" 
-                            className="custom-control-input" 
+                          <input
+                            type="radio"
+                            className="custom-control-input"
                             onBlur={handleBlur}
                             onChange={handleChange}
-                            value="False" 
-                            id="noradio" 
-                            name="alerttrue" 
+                            value="False"
+                            id="noradio"
+                            name="alerttrue"
                           />
-                          <label className="custom-control-label" for="noradio">No</label>
+                          <label className="custom-control-label" for="noradio">
+                            No
+                          </label>
                         </div>
-                        {/* <input
-                          type="radio"
-                          name="alerttrue"
-                          placeholder="YES"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          value="True"
-                        />
-                        <label className="mb-1">Yes</label>
-                        <input
-                          type="radio"
-                          name="alerttrue"
-                          onBlur={handleBlur}
-                          onChange={handleChange}
-                          value="False"
-                        />
-                        <label className="mb-1">No</label> */}
                       </div>
                       {errors.alerttrue && touched.alerttrue && (
                         <span className="error-msg text-danger row justify-content-end col-12">
                           {errors.alerttrue}
                         </span>
-                      )}
+                      )} */}
                     </div>
                   </div>
                   <div className="col ">
                     <div className="row">
-                      <h6 className="col font-weight-bold mb-4">Upload Image</h6>
-                      <button type="button" className="col col-3 btn btn-primary font-weight-bold" onClick={uploadPhoto}>
+                      <h6 className="col font-weight-bold mb-4">
+                        Upload Image
+                      </h6>
+                      <button
+                        type="button"
+                        className="col col-3 btn btn-primary font-weight-bold"
+                        onClick={uploadPhoto}
+                      >
                         <img
                           src={uploadWhite}
                           width="20"
@@ -330,30 +326,71 @@ const UpdateStatus = (props) => {
                       </button>
                     </div>
                     <div className="d-flex flex-column upload bg-white col-9 p-5">
-                      <label>{photo.name?photo.name:""}</label>
-                      <img
-                        src={uploadBlue}
-                        name="photo"
-                        width="50"
-                        height="50"
-                        className="mt-3"
-                      />
-                      <label>
-                        Drag and drop files here{" "}
-                        <input type="file" class="select" onChange={setFile} />{" "}
-                      </label>
-                      <div>or</div>
-                      <label class="btn-primary btn browse">
-                        Browse Files
-                        <input
-                          type="file"
-                          class="select"
-                          onChange={setFile}
-                        />{" "}
-                      </label>
+                    {photo ? (
+              <div>
+                <div
+                  className="row"
+                  style={{ margin: "auto", display: "table"}}
+                >
+                  <img onClick={clearImage} width="20" height="20" src={crossIcon} style={{ position:'relative', left:'15vw'}}/>
+                  <img
+                    src={photoUrl}
+                    name="photo"
+                    width="250"
+                    height="125"
+                    className="mt-1"
+                    style={{ margin: "auto", display: "table" }}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div>
+                <div
+                  className="row"
+                  style={{ margin: "auto", display: "table" }}
+                >
+                  {/* <label>{photo.name?photo.name:""}</label> */}
+                  <img
+                    src={uploadBlue}
+                    name="photo"
+                    width="50"
+                    height="50"
+                    className="mt-1"
+                    style={{ margin: "auto", display: "table" }}
+                  />
+                  <label>
+                    Drag and drop files here{" "}
+                    <input type="file" class="select" onChange={setFile} />{" "}
+                  </label>
+                </div>
+                <div
+                  className="row"
+                  style={{ margin: "auto", display: "table" }}
+                >
+                  OR
+                </div>
+                <div
+                  className="row"
+                  style={{
+                    margin: "auto",
+                    display: "table",
+                    position: "relative",
+                    top: "3%",
+                  }}
+                >
+                  <label
+                    class="btn btn-primary"
+                    style={{ margin: 0, height: "5vh" }}
+                  >
+                    Browse Files
+                    <input type="file" class="select" onChange={setFile} />{" "}
+                  </label>
+                </div>
+              </div>
+            )}
                     </div>
                   </div>
-                 </div>
+                </div>
 
                 <div className="d-flex flex-row-reverse justify-content-between">
                   <div>
