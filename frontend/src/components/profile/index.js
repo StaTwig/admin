@@ -168,7 +168,7 @@ title
     };
     if (event.target.files[0]) {
       axios
-        .post(config().uploadImage, formData, configs)
+        .post(config().uploadProfileImage, formData, configs)
         .then(response => {
           alert('Profile Picture updated Successfully');
           this.setState({ profile_picture: response.data.data })
@@ -241,14 +241,14 @@ title
                   id="profile"
                   onChange={this.onChange}
                   type="file"
-                  ref={ref => (this.uploadImage= ref)}
+                  ref={ref => (this.uploadProfileImage= ref)}
                   style={{ display: 'none' }}
                 />
                 {editMode ? (
                   <button
                     type="button"
 
-                    onClick={e => this.uploadImage.click()}
+                    onClick={e => this.uploadProfileImage.click()}
                     className="btn btn-outline-info"
                   >
                     Change Photo
