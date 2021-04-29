@@ -68,7 +68,7 @@ const UpdateStatus = (props) => {
         orgid: profile.organisation,
         orglocation: profile.location,
         updatedAt: updateStatusLocation,
-        isAlertTrue: alerttrue,
+        isAlertTrue: true,
       },
     };
     const result = await updateTrackingStatus(data);
@@ -128,9 +128,9 @@ const UpdateStatus = (props) => {
           // if (!values.comments) {
           //   errors.comments = "Required";
           // }
-          if (!values.alerttrue) {
-            errors.alerttrue = "Required";
-          }
+          // if (!values.alerttrue) {
+          //   errors.alerttrue = "Required";
+          // }
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
@@ -208,7 +208,7 @@ const UpdateStatus = (props) => {
                           readonly
                         />
                       </div>
-                      <div className="form-group">
+                      {/* <div className="form-group">
                         <label className="mb-1 text-secondary">
                           Organisation Location*
                         </label>
@@ -222,7 +222,7 @@ const UpdateStatus = (props) => {
                           value={profile.location}
                           readonly
                         />
-                      </div>
+                      </div> */}
                       <div className="form-group mb-0">
                         <label className="mb-1 text-secondary">
                           Update Status Location*
@@ -244,7 +244,7 @@ const UpdateStatus = (props) => {
                         )}
                     </div>
 
-                    <h6 className="poheads potext m-3">Comment*</h6>
+                    <h6 className="poheads potext m-3">Comment</h6>
                     <div className="panel commonpanle">
                       <div className="form-group mb-0">
                         <input
@@ -263,7 +263,7 @@ const UpdateStatus = (props) => {
                           {errors.comments}
                         </span>
                       )}
-                      <div className="row mt-3 justify-content-end">
+                      {/* <div className="row mt-3 justify-content-end">
                         <span className="col row col-6 justify-content-end text-secondary">
                           Should send an alert?
                         </span>
@@ -303,7 +303,7 @@ const UpdateStatus = (props) => {
                         <span className="error-msg text-danger row justify-content-end col-12">
                           {errors.alerttrue}
                         </span>
-                      )}
+                      )} */}
                     </div>
                   </div>
                   <div className="col ">
