@@ -1,141 +1,138 @@
 var mongoose = require("mongoose");
 var LastMileSchema = new mongoose.Schema({
-  properties: {
     eol_id: {
       required: true,
-      type: string,
+      type: String,
     },
     eol_info: {
-      type: object,
+      type: Object,
       required: true,
       properties: {
         first_name: {
-          type: string,
+          type: String,
           required: true,
         },
         last_name: {
-          type: string,
+          type: String,
           required: true,
         },
         gender: {
-          type: string,
+          type: String,
           required: true,
         },
         age: {
-          type: number,
+          type: String,
           required: true,
         },
         contact_number: {
-          type: number,
+          type: String,
         },
         contact_address: {
-          type: object,
+          type: Object,
           properties: {
             firstLine: {
               required: true,
-              type: string,
+              type: String,
             },
             secondLine: {
               required: true,
-              type: string,
+              type: String,
             },
             district: {
               required: true,
-              type: string,
+              type: String,
             },
             state: {
               required: true,
-              type: string,
+              type: String,
             },
             country: {
               required: true,
-              type: string,
+              type: String,
             },
             landmark: {
               required: true,
-              type: string,
+              type: String,
             },
             zipcode: {
               required: true,
-              type: number,
+              type: String,
             },
           },
         },
         idProof: {
-          type: object,
+          type: Object,
           properties: {
             idType: {
               required: true,
-              type: string
+              type: String
             },
             idNo: {
               required: true,
-              type: string,
+              type: String,
             },
           },
-          required: [idType, idNo],
         },
       },
     },
     productAdministeredInfo: {
       required: true,
-      type: array,
+      type: Array,
       items: {
-        type: object,
+        type: Object,
         properties: {
           dose: {
             required: true,
-            type: string,
+            type: String,
           },
           productId: {
             required: true,
-            type: string,
+            type: String,
           },
           productName: {
             required: true,
-            type: string,
+            type: String,
           },
           productMfg: {
             required: true,
-            type: string,
+            type: String,
           },
           productBatchNo: {
             required: true,
-            type: string,
+            type: String,
           },
           locationInfo: {
-            type: object,
+            type: Object,
             required: true,
             properties: {
               warehouseId: {
-                type: string,
+                type: String,
                 required: true,
               },
               warehouseTitle: {
-                type: string,
+                type: String,
                 required: true,
               },
             },
           },
           labelId: {
-            type: string,
+            type: String,
             required: true,
           },
           atomId: {
-            type: string,
+            type: String,
             required: true,
           },
           administeredData: {
-            type: string,
+            type: String,
             required: true,
           },
           administeredBy: {
-            type: string,
+            type: String,
             required: true,
           },
         },
       },
     },
-  },
-});
+  });
 module.exports = mongoose.model("lastmile", LastMileSchema);

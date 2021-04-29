@@ -9,23 +9,14 @@ const logger = init.getLog();
 
 
 exports.getEOLInfoBySerialNumber = [
-    // auth,
     async (req, res) => {
       try {
-        // checkToken(req, res, async (result) => {
-        //   if (result.success) {
             logger.log(
               "info",
               "<<<<< LastMileService < LastMileController < getEOLInfoBySerialNumber : token verified successfullly, querying data by publisher"
             );
-  
-            // permission_request = {
-            //   result: result,
-            //   permissionRequired: "viewInventory",
-            // };
-            // checkPermissions(permission_request, async (permissionResult) => {
-            //   if (permissionResult.success) {
-                const { serialNumber } = req.query;
+              console.log(req.query)
+                let  serialNumber  = req.query.id;
                 await LastMileModel.findOne({
                     eol_id: serialNumber,
                   }).then((eolResult) => {
@@ -38,18 +29,6 @@ exports.getEOLInfoBySerialNumber = [
                   }).catch((err) => {
                     return apiResponse.ErrorResponse(res, err);
                   });
-            //   } else {
-            //     res.json("Sorry! User does not have enough Permissions");
-            //   }
-            // });
-          // } else {
-          //   logger.log(
-          //     "warn",
-          //     "<<<<< LastMileService < LastMileController < getEOLInfoBySerialNumber : refused token"
-          //   );
-          //   res.status(403).json(result);
-          // }
-        // });
       } catch (err) {
         logger.log(
           "error",
