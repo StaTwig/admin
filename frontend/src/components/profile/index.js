@@ -13,7 +13,7 @@ const axios = require('axios');
 import { getUserInfoUpdated, updateProfile, getUserInfo } from '../../actions/userActions';
 import { getWarehouseByOrgId } from '../../actions/productActions';
 import PopUpLocation from './popuplocation';
-import Modal from '../../shared/modal' 
+import Modal from '../../shared/modal'
 class Profile extends React.Component {
   constructor(props) {
     super(props);
@@ -39,7 +39,10 @@ class Profile extends React.Component {
       warehouseAddress_country: '',
       warehouseAddress_city: '',
       warehouseAddress_firstline: '',
-      warehouseAddress_zipcode: ''
+      warehouseAddress_zipcode: '',
+
+title:''
+
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -66,7 +69,9 @@ class Profile extends React.Component {
         warehouseAddress_country,
         warehouseAddress_city,
         warehouseAddress_firstline,
-        warehouseAddress_zipcode
+        warehouseAddress_zipcode,
+title
+
       } = response.data.data;
       console.log('Data');
       console.log(response.data.data);
@@ -87,7 +92,7 @@ class Profile extends React.Component {
         warehouseAddress_city,
         warehouseAddress_firstline,
         warehouseAddress_zipcode,
-
+title,
       });
     } else {
       //error
@@ -98,9 +103,12 @@ class Profile extends React.Component {
       const wareHouseIdResult = wareHouseResponse.data.map((txn) => txn.id)
       this.setState({ wareIds: wareHouseIdResult })
     }
-
+console.log("ids",wareHouseResponse);
   }
-  closeModal() {
+//console.log("res",wareHouseIdResult);
+
+
+ closeModal() {
     console.log("Closed Model called");
    this.setState({openModal:false});
    // props.history.push("/Addlocation");
@@ -120,7 +128,8 @@ class Profile extends React.Component {
       warehouseAddress_country,
       warehouseAddress_city,
       warehouseAddress_firstline,
-      warehouseAddress_zipcode
+      warehouseAddress_zipcode,
+title
     } = this.state.profileData;
 
     this.setState({
@@ -138,7 +147,8 @@ class Profile extends React.Component {
       warehouseAddress_country,
       warehouseAddress_city,
       warehouseAddress_firstline,
-      warehouseAddress_zipcode
+      warehouseAddress_zipcode,
+title
     });
   }
 
@@ -171,8 +181,8 @@ class Profile extends React.Component {
   }
 
   async onSubmit() {
-    const { firstName,lastName, organisation, warehouseId, phoneNumber, location, warehouseAddress_country, warehouseAddress_city, warehouseAddress_firstline, warehouseAddress_zipcode} = this.state;
-    const data = { firstName,lastName, organisation, warehouseId, phoneNumber, location,  warehouseAddress_country, warehouseAddress_city, warehouseAddress_firstline, warehouseAddress_zipcode };
+    const { firstName,lastName, organisation, warehouseId, phoneNumber, location, warehouseAddress_country, warehouseAddress_city, warehouseAddress_firstline, warehouseAddress_zipcode,title} = this.state;
+    const data = { firstName,lastName, organisation, warehouseId, phoneNumber, location,  warehouseAddress_country, warehouseAddress_city, warehouseAddress_firstline, warehouseAddress_zipcode,title };
     const result = await updateProfile(data);
 
     if (result.status === 200) {
@@ -205,7 +215,8 @@ class Profile extends React.Component {
       warehouseAddress_country,
       warehouseAddress_city,
       warehouseAddress_firstline,
-      warehouseAddress_zipcode
+      warehouseAddress_zipcode,
+title
     } = this.state;
 
     return (
@@ -295,7 +306,7 @@ class Profile extends React.Component {
                         onChange={e => this.setState({ phoneNumber: e.target.value })}
                       />
                    </div >
-                  
+
                     <div className="col">
                     <div className="row">
                         <div className="row location">
@@ -304,7 +315,7 @@ class Profile extends React.Component {
                         <div class="addloc1">
                         {
                           editMode && (
-                      <button className="btn btn-orange fontSize20 font-bold pl-10 pr-10" onClick={()=>{ 
+                      <button className="btn btn-orange fontSize20 font-bold pl-10 pr-10" onClick={()=>{
                         this.setState({openModal:true})
                       } }>
                       <span>+ Add </span>
@@ -323,11 +334,11 @@ class Profile extends React.Component {
                     </div>
                     <div className="col">
                       <div className="row">
-                        <div className="col-sm-12 col-lg-7 col-xl-7 location-cards">  
+                        <div className="col-sm-12 col-lg-7 col-xl-7 location-cards">
                         <div className="custom-card p-3">
                           <div className="card-header">
                             <div className="d-flex align-items-center justify-content-between">
-                              <h5 className="card-title font-weight-bold">WAR {warehouseId}</h5>
+                              <h3 className="card-title font-weight-bold">{this.state.title}-{warehouseId}</h3>
                               <Link to ={{pathname:'/editLocation',
                                 state:{message:"hellow"}
                                }}>
@@ -335,7 +346,6 @@ class Profile extends React.Component {
                               <img src={Pen} width="15" height="15" className="mr-2"/>
                               <span>EDIT</span>
                               </button></Link>
-                              <h5 className="card-title font-weight-bold">WAREHOUSE ID: {warehouseId}</h5>
                               {/* <button
                                 className="btn-primary btn edit-button"
                               >
@@ -347,12 +357,12 @@ class Profile extends React.Component {
                           <div className="card-body">
                             <input className="total-input" value={this.state.warehouseAddress_country} onChange={e => this.setState({ warehouseAddress_country: e.target.value })} placeholder="Country"/>
                             <input className="full-address-input" value={this.state.warehouseAddress_firstline} onChange={e => this.setState({ warehouseAddress_firstline: e.target.value })} placeholder="Address"/>
-                            <input className="pin-code-input" value={this.state.warehouseAddress_zipcode} onChange={e => this.setState({ warehouseAddress_zipcode: e.target.value })} placeholder="Zipcode"/>                                                                            
-                          </div>                        
-                        </div>    
-                      </div> 
+                            <input className="pin-code-input" value={this.state.warehouseAddress_zipcode} onChange={e => this.setState({ warehouseAddress_zipcode: e.target.value })} placeholder="Zipcode"/>
+                          </div>
+                        </div>
                       </div>
-                    </div>                   
+                      </div>
+                    </div>
                   </div>
                 ) : (
                   <div>
@@ -362,19 +372,19 @@ class Profile extends React.Component {
                         </div>
                         <div className="row name">
                           {this.state.firstName ? <span>{this.state.firstName}</span> : <span>N/A</span>}&nbsp;{this.state.lastName ? <span>{this.state.lastName}</span> : <span>N/A</span>}
-                        </div>   
+                        </div>
                         <div className="row row-list">
                           <img src={Briefcase} width="20" height="20" className="mr-3" />
                           {this.state.organisation ? <span>{this.state.organisation.split('/')[0]}</span> : <span>N/A</span>}
-                        </div>   
+                        </div>
                         <div className="row row-list">
                           <img src={Mail} width="20" height="20" className="mr-3" />
                           {this.props.user.emailId ? <span>{this.props.user.emailId}</span> : <span>N/A</span>}
-                        </div>   
+                        </div>
                         <div className="row row-list">
                           <img src={Telephone} width="20" height="20" className="mr-3" />
                           {this.state.phoneNumber ? <span>{this.state.phoneNumber}</span> : <span>N/A</span>}
-                        </div>                                                                                                               
+                        </div>
                       </div>
                       <div className="col">
                         <div className="row location">
@@ -383,12 +393,11 @@ class Profile extends React.Component {
                       </div>
                       <div className="col">
                         <div className="row">
-                        <div className="col-sm-12 col-lg-7 col-xl-7 location-cards">  
+                        <div className="col-sm-12 col-lg-7 col-xl-7 location-cards">
                           <div className="custom-card p-3">
                             <div className="card-header">
                               <div className="d-flex align-items-center justify-content-between">
-                               <h5 className="card-title font-weight-bold">WAR {warehouseId}</h5>
-                               <h5 className="card-title font-weight-bold">WAREHOUSE ID: {warehouseId}</h5>
+                               <h3 className="card-title font-weight-bold">{this.state.title}- {warehouseId}</h3>
                                 {/* <button
                                   className="btn-primary btn edit-button"
                                 >
@@ -404,15 +413,15 @@ class Profile extends React.Component {
                               <div className="full-address">
                               {/* 50 /b/, Takshila Apt, Mahakali Caves Road, Chakala, Andheri (west) Mumbai, Maharashtra, */}
                               {this.state.warehouseAddress_firstline ? <span>{this.state.warehouseAddress_firstline}</span> : <span>N/A</span>}
-                              </div>  
+                              </div>
                               <div className="pin-code">
                               Zipcode : {this.state.warehouseAddress_zipcode ? <span>{this.state.warehouseAddress_zipcode}</span> : <span>N/A</span>}
-                              </div>                                                  
-                            </div>                        
-                          </div>    
-                        </div>                             
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                      </div>                      
+                        </div>
+                      </div>
                     </div>
                   )}
               </div>
