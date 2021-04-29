@@ -3,11 +3,6 @@ import { AreaChart, Area, ResponsiveContainer, Tooltip } from "recharts";
 import "./style.scss";
 import SideBar from "../../components/sidebar";
 import filterIcon from "../../assets/icons/funnel.svg";
-import {func} from "prop-types";
-import {
-  Link
-} from "react-router-dom";
-
 const Inventory = (props) => {
   const { inventories } = props;
   const [buttonState0, setButtonActive] = useState("btn active");
@@ -43,9 +38,7 @@ const Inventory = (props) => {
                       </svg>
                     </div>
                   </div>
-
-                  <div className="btn-group mainButtonFilter">
-                                 
+                  <div className="btn-group mainButtonFilter">                                
                   <a
                   href="#1"
                   class={buttonState0}
@@ -65,31 +58,9 @@ const Inventory = (props) => {
                   }}
                 >
                   Vendor
-                </a> </div>         
+                </a> 
+                </div>         
                     <div className="inventoryDetails">
-                       <table className="inventorytable">
-                        <thead>
-                          <tr>
-                            <th className="inventoryHeader">Brand {/*<br/><span className="tableHeadersubtitle">Size</span>*/}</th>
-                            <th className="inventoryHeader">SKU<br/><span className="tableHeadersubtitle">Stock Code</span></th>
-                            <th className="inventoryHeader">Stock Long Description</th>
-                            <th className="inventoryHeader">Quantity</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {inventories.map((inventory, index) => 
-                            <tr key={index}>
-                              <td className="inventorydesc">{inventory.manufacturer} <br/><span className="inventorydescsubtitle">&nbsp;</span></td>
-                              <td className="inventorydesc">{inventory.name}<br /><span className="inventorydescsubtitle">{inventory.externalId}
-                              </span></td>
-                              <td>{inventory.shortName}</td>
-                              <td>{inventory.quantity}</td>
-                            </tr>
-                          )}
-                        </tbody>
-                      </table>
-                    </div>
-                  <div className="inventoryDetails">
                       <table className="inventorytable">
                         <thead>
                           <tr>
@@ -103,18 +74,16 @@ const Inventory = (props) => {
                           {inventories.map((inventory, index) => 
                             <tr key={index}>
                               <td className="inventorydesc">{inventory.manufacturer} <br/><span className="inventorydescsubtitle">&nbsp;</span></td>
-                              <td className="inventorydesc">{inventory.name}<br /><span className="inventorydescsubtitle">{inventory.externalId}    
-                            <span></td>
+                              <td className="inventorydesc">{inventory.name}<br /><span className="inventorydescsubtitle">{inventory.externalId}</span></td>
                               <td>{inventory.shortName}</td>
                               <td>{inventory.quantity}</td>
                             </tr>
                           )}
                         </tbody>
                       </table>
-                   </div>
-               </div>
-            </div>
-                <div className="col-md-3 rightSideMenu pt-5  px-3">
+                    </div>
+                 </div>
+               <div className="col-md-3 rightSideMenu pt-5  px-3">
                   <div className="filterSection">
                     <div className="filterHeader">
                       <img src={filterIcon} className="filterIcon"/> FILTERS
@@ -123,21 +92,18 @@ const Inventory = (props) => {
                     <label className="filterSubHeading mt-3">Select State </label>
                     <select className="filterSelect mt-2">
                       <option value="">Select State</option>
-                          <option>Karnataka</option>
+                      <option>Karnataka</option>
                       <option>Telangna</option>
                     </select>
                     <label className="filterSubHeading mt-3">Select District </label>
                     <select className="filterSelect mt-2">
                       <option value="">Select District</option>
-                          <option>District 1</option>
+                      <option>District 1</option>
                       <option>District 2</option>
                     </select>
                     <label className="filterSubHeading mt-3">Select Brewery </label>
                     <select className="filterSelect mt-2">
                       <option value="">Select Brewery</option>
-                    <label className="filterSubHeading mt-3">Select Brewery </label>
-                    <select className="filterSelect mt-2">
-                      <option value="select">Select Brewery</option>
                       <option>Brewery 1</option>
                       <option>Brewery 2</option>
                       <option>Brewery 3</option>
@@ -150,19 +116,11 @@ const Inventory = (props) => {
                       <option>SKU 2</option>
                     </select>
                     </div>   
-                      <option>Adonis</option>
-                      <option>Bud</option>
-                      <option>Cadillac</option>
-                      <option>Fosters</option>
-                      <option>Patent</option>
-                    </select>
-                    <button className="btn SearchButton mt-4">Search</button>
-                  </div>   
                 </div>
-            </div>
-          </main>
+              </div>
+            </main>
           </div>              
-        </div>       
+        </div>      
     );
 };
 export default Inventory;
