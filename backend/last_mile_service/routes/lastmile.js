@@ -17,5 +17,10 @@ const router = express.Router();
 
 
 router.get("/getEOLInfoBySerialNumber", LastMileController.getEOLInfoBySerialNumber);
+router.get("/GetEOLInfoByProductId", LastMileController.GetEOLInfoByProductId);
+router.get("/GetEOLInfoByIdentityId", LastMileController.GetEOLInfoByIdentityId);
+router.get("/GetEOLInfoByPlaceAdministered", LastMileController.GetEOLInfoByPlaceAdministered);
+router.get("/GetEOLListByDateWindow", LastMileController.GetEOLListByDateWindow);
+
 
 module.exports = router;
