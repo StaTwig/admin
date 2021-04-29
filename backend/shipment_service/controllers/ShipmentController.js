@@ -153,7 +153,7 @@ const shipmentUpdate = async (
   shipmentStatus,
   next
 ) => {
-  const shipmentUpdateDelivered = await ShipmentModel.update(
+  const shipmentUpdateDelivered = await ShipmentModel.updateOne(
     {
       id: shipmentId,
       "products.productID": id,
@@ -489,43 +489,38 @@ exports.receiveShipment = [
   async (req, res) => {
     try {
       const data = req.body;
-
-      const soID = data.shippingOrderId;
-      const poID = data.poId;
-
       const shipmentID = data.id;
-
       const shipmentInfo = await ShipmentModel.find({ id: shipmentID });
-
       var actuallyShippedQuantity = 0;
       var productNumber = -1;
-      /* if(shipmentInfo !== null){
-                const receivedProducts = data.products;
-                var shipmentProducts = shipmentInfo[0].products;
-                
-                shipmentProducts.forEach(product => {
-                    productNumber  = productNumber + 1;
-                    receivedProducts.forEach(reqProduct => {
-                        
-                        if(product.productName === reqProduct.productName){
-                            actuallyShippedQuantity = product.productQuantity;
-                            
-                            var receivedQuantity = reqProduct.productQuantity;
-                            var quantityDifference = actuallyShippedQuantity - receivedQuantity;
-                            var rejectionRate = (quantityDifference/actuallyShippedQuantity)*100;
-                            
-                            (shipmentProducts[productNumber]).quantityDelivered = receivedQuantity;
-                            (shipmentProducts[productNumber]).rejectionRate = rejectionRate;
-                        }    
+      if(shipmentInfo != null){
+        const receivedProducts = data.products;
+        var shipmentProducts = shipmentInfo[0].products;
+        shipmentProducts.forEach(product => {
+            productNumber  = productNumber + 1;
+            receivedProducts.forEach(reqProduct => {
+                if(product.productName === reqProduct.productName){
+                    actuallyShippedQuantity = product.productQuantity;
+                    var receivedQuantity = reqProduct.productQuantity;
+                    var quantityDifference = actuallyShippedQuantity - receivedQuantity;
+                    var rejectionRate = (quantityDifference/actuallyShippedQuantity)*100;
+                    (shipmentProducts[productNumber]).quantityDelivered = receivedQuantity;
+                    (shipmentProducts[productNumber]).rejectionRate = rejectionRate;
+                    ShipmentModel.updateOne({
+                        "id": shipmentID,
+                        "products.productID": product.productID
+                    }, {
+                        $set: {
+                            "products.$.rejectionRate": rejectionRate
+                        }
                     })
-                });
-                
-                if(actuallyShippedQuantity !== 0){
-                    const updatedDocument =  await ShipmentModel.updateOne({id: shipmentID}, shipmentInfo);    
-                }
-                
-            }*/
-
+                    .then(e=>{console.log(e)}).catch(err=>{
+                        console.log(err)
+                    })
+                }    
+            })
+        });
+    }
       var flag = "Y";
       if (data.poId === null) {
         flag = "YS";
@@ -571,7 +566,15 @@ exports.receiveShipment = [
           id: recvInventoryId,
         });
         var products = data.products;
+        var count = 0;
+        var totalProducts = 0; 
+        var totalReturns = 0;
+        var shipmentRejectionRate = 0;
         for (count = 0; count < products.length; count++) {
+          var shipmentProducts = shipmentInfo[0].products;
+          totalProducts = totalProducts + shipmentProducts[count].productQuantity;
+          totalReturns = totalReturns + products[count].productQuantity;
+          shipmentRejectionRate = ((totalProducts-totalReturns)/totalProducts)*100;
           inventoryUpdate(
             products[count].productID,
             products[count].productQuantity,
@@ -607,8 +610,9 @@ exports.receiveShipment = [
           { id: req.body.id },
           {
             $push: { shipmentUpdates: updates },
-            $set: { status: "RECEIVED" },
-          }
+            $set: { status: "RECEIVED" , rejectionRate: shipmentRejectionRate},
+          },
+          {"new":true}
         );
 
         //await ShipmentModel.findOneAndUpdate({
@@ -659,7 +663,7 @@ exports.receiveShipment = [
         return apiResponse.successResponseWithData(
           res,
           "Shipment Received",
-          products
+          updateData
         );
       } else {
         return apiResponse.successResponse(

@@ -222,7 +222,7 @@ const NewInventory = props => {
   return (
     <div className="Newinventory">
       <div className="d-flex justify-content-between mb-3">
-        <h1 className="breadcrumb">ADD INVENTORY</h1>
+        <h1 className="breadcrumb">ADD PRODUCTS</h1>
         <div className="d-flex flex-column align-items-center">
           <button className="btn-primary btn" onClick={() => setMenu(!menu)}>
             <div className="d-flex  align-items-center">

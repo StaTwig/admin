@@ -38,3 +38,13 @@ export const getAnalytics = async () => {
     }
   };
   
+  
+  export const getOrderAnalytics = async () => {
+    try {
+      const result = await axios.get(config().getOrderAnalyticsUrl);
+      return result.data;
+    } catch (e) {
+      return e.response;
+    }
+  };
+  

@@ -3,9 +3,20 @@ import Sent from '../../assets/icons/TotalOrdersReceived.png';
 import Received from '../../assets/icons/TotalOrdersSent.png';
 import Rejected from '../../assets/icons/TotalOrdersRejected.png';
 import Current from '../../assets/icons/TotalOrdersPending.png';
+import {
+  getOrderAnalytics
+} from '../../actions/analyticsAction';
 import './style.scss';
 
 const Tiles = props => {
+  const [orderAnalytics,setOrderAnalytics]= useState({outboundPO: 0, inboundPO: 0, pendingOrders: 0, rejectedOrders: 0})
+  useEffect(() => {
+    async function fetchData() {
+      const result = await getOrderAnalytics();
+      setOrderAnalytics(result.data.order);
+    }
+    fetchData();
+  }, []);
   return (
     <div className="row mb-4">
       <div className="col">
@@ -15,7 +26,7 @@ const Tiles = props => {
           </div>
           <div className="d-flex flex-column">
             <div className="title recived-text">Total Orders Sent</div>
-            <div className="recived-text count">200</div>
+            <div className="recived-text count">{orderAnalytics?.outboundPO}</div>
           </div>
         </div>
       </div>
@@ -26,29 +37,29 @@ const Tiles = props => {
           </div>
           <div className="d-flex flex-column">
             <div className="title sent-text ">Total Orders Received</div>
-            <div className="sent-text count">1200</div>
-          </div>
-        </div>
-      </div>
-      <div className="col">
-        <div onClick={() => props.setData('one', true)} className="panel cursorP">
-          <div className="picture inbound-alert-bg">
-            <img src={Current} alt="truck" />
-          </div>
-          <div className="d-flex flex-column">
-            <div className="title inbound-text">Total Orders Pending</div>
-            <div className="inbound-text count">10</div>
+            <div className="sent-text count">{orderAnalytics?.inboundPO}</div>
           </div>
         </div>
       </div>
       <div className="col">
         <div onClick={() => props.setData('two', true)} className="panel cursorP">
+          <div className="picture inbound-alert-bg">
+            <img src={Current} alt="truck" />
+          </div>
+          <div className="d-flex flex-column">
+            <div className="title inbound-text">Total Orders Pending</div>
+            <div className="inbound-text count">{orderAnalytics?.pendingOrders}</div>
+          </div>
+        </div>
+      </div>
+      <div className="col">
+        <div onClick={() => props.setData('one', true)} className="panel cursorP">
           <div className="picture outbound-alert-bg">
             <img src={Rejected} alt="truck" />
           </div>
           <div className="d-flex flex-column">
             <div className="title outbound-text ">Total Orders Rejected</div>
-            <div className="outbound-text count">30</div>
+            <div className="outbound-text count">{orderAnalytics?.rejectedOrders}</div>
           </div>
         </div>
       </div>

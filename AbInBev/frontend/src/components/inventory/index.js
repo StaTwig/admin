@@ -1,12 +1,26 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { AreaChart, Area, ResponsiveContainer, Tooltip } from "recharts";
 import "./style.scss";
 import SideBar from "../../components/sidebar";
-import filterIcon from "../../assets/icons/funnel.svg"
-
+import filterIcon from "../../assets/icons/funnel.svg";
 const Inventory = (props) => {
   const { inventories } = props;
-
+  const [buttonState0, setButtonActive] = useState("btn active");
+  const [buttonState1, setButtonActive1] = useState("btn");
+  
+  function selectThis(a) {
+    console.log(a);
+    if (a === "Brewery") {
+      setButtonActive1("btn");
+      setButtonActive("btn active");
+      
+    }
+    if (a === "Vendor") {
+      setButtonActive("btn");
+      setButtonActive1("btn active");
+    }
+    }
+   
   return (
     <div className="container-fluid">
           <div className="row">
@@ -24,13 +38,29 @@ const Inventory = (props) => {
                       </svg>
                     </div>
                   </div>
-
-                  <div className="btn-group mainButtonFilter">
-                    <a href="#!" className="btn active">Brewery</a>
-                    <a href="#!" className="btn">Vendor</a>
-                  </div>
-                  
-                  <div className="inventoryDetails">
+                  <div className="btn-group mainButtonFilter">                                
+                  <a
+                  href="#1"
+                  class={buttonState0}
+                  onClick={() => {
+                    setButtonActive("btn active");
+                    selectThis("Brewery");
+                  }}
+                >
+                Brewery
+                </a>
+                <a
+                  href="#2"
+                  class={buttonState1}
+                  onClick={() => {
+                    setButtonActive1("btn active");
+                    selectThis("Vendor");
+                  }}
+                >
+                  Vendor
+                </a> 
+                </div>         
+                    <div className="inventoryDetails">
                       <table className="inventorytable">
                         <thead>
                           <tr>
@@ -52,30 +82,45 @@ const Inventory = (props) => {
                         </tbody>
                       </table>
                     </div>
-              
-                </div>
-                <div className="col-md-3 rightSideMenu pt-3 px-2">
+                 </div>
+               <div className="col-md-3 rightSideMenu pt-5  px-3">
                   <div className="filterSection">
                     <div className="filterHeader">
                       <img src={filterIcon} className="filterIcon"/> FILTERS
                     </div>
-                    <span className="pull-right pr-4 pl-4 viewall"><a href="#">View All</a></span>
-                    <label className="filterSubHeading mt-2">Select Brewery </label>
+                    <span className="pull-right pr-4 pl-4 pt-4 viewall"><a href="#">View All</a></span>
+                    <label className="filterSubHeading mt-3">Select State </label>
                     <select className="filterSelect mt-2">
-                      <option>Select Brewery</option>
+                      <option value="">Select State</option>
+                      <option>Karnataka</option>
+                      <option>Telangna</option>
                     </select>
-
+                    <label className="filterSubHeading mt-3">Select District </label>
+                    <select className="filterSelect mt-2">
+                      <option value="">Select District</option>
+                      <option>District 1</option>
+                      <option>District 2</option>
+                    </select>
+                    <label className="filterSubHeading mt-3">Select Brewery </label>
+                    <select className="filterSelect mt-2">
+                      <option value="">Select Brewery</option>
+                      <option>Brewery 1</option>
+                      <option>Brewery 2</option>
+                      <option>Brewery 3</option>
+                      <option>Brewery 4</option>
+                    </select>
                     <label className="filterSubHeading mt-2">Select SKU</label>
                     <select className="filterSelect mt-2">
                       <option>Select SKU</option>
+                      <option>SKU 1</option>
+                      <option>SKU 2</option>
                     </select>
-                  </div>   
+                    </div>   
                 </div>
               </div>
-              
             </main>
-          </div>
-        </div>
+          </div>              
+        </div>      
     );
 };
 export default Inventory;
