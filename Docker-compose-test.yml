@@ -8,8 +8,8 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - acme.json:/acme.json
-      - traefik.toml:/traefik.toml
+      - "./acme.json:/acme.json"
+      - "./traefik.toml:/traefik.toml"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
   address:
     build: './backend/address_service'
@@ -19,8 +19,8 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.address.entrypoints=websecure"
-      - "traefik.http.routers.address.rule=Host(`test2.admin.vaccineledger.com`) && PathPrefix(`/api/address_service`)"
-      - traefik.http.routers.address.tls=true
+      - "traefik.http.routers.address.rule=Host(`test2.statledger.io`) && PathPrefix(`/api/address_service`)"
+      - "traefik.http.routers.address.tls=true"
       - "traefik.http.routers.address.tls.certresolver=lets-encrypt"
   affliate:
     build: './backend/affliation_service'
@@ -30,8 +30,8 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.affliate.entrypoints=websecure"
-      - "traefik.http.routers.affliate.rule=Host(`test2.admin.vaccineledger.com`) && PathPrefix(`/api/affliation_service`)"
-      - traefik.http.routers.affliate.tls=true
+      - "traefik.http.routers.affliate.rule=Host(`test2.statledger.io`) && PathPrefix(`/api/affliation_service`)"
+      - "traefik.http.routers.affliate.tls=true"
       - "traefik.http.routers.affliate.tls.certresolver=lets-encrypt"
 
   rbac:
@@ -42,8 +42,8 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.rbac.entrypoints=websecure"
-      - "traefik.http.routers.rbac.rule=Host(`test2.admin.vaccineledger.com`) && PathPrefix(`/api/rbac_service`)"
-      - traefik.http.routers.rbac.tls=true
+      - "traefik.http.routers.rbac.rule=Host(`test2.statledger.io`) && PathPrefix(`/api/rbac_service`)"
+      - "traefik.http.routers.rbac.tls=true"
       - "traefik.http.routers.rbac.tls.certresolver=lets-encrypt"
 
   employee:
@@ -54,8 +54,8 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.employee.entrypoints=websecure"
-      - "traefik.http.routers.employee.rule=Host(`test2.admin.vaccineledger.com`) && PathPrefix(`/api/employee_service`)"
-      - traefik.http.routers.employee.tls=true
+      - "traefik.http.routers.employee.rule=Host(`test2.statledger.io`) && PathPrefix(`/api/employee_service`)"
+      - "traefik.http.routers.employee.tls=true"
       - "traefik.http.routers.employee.tls.certresolver=lets-encrypt"
 
 networks:
