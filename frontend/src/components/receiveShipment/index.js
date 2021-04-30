@@ -184,7 +184,6 @@ const ReceiveShipment = (props) => {
               />
             </div>
           </div>
-          
           <div className="panel commonpanle ml-3">
             <div className="form-group">
             <label className="mb-1 text-secondary pt-2">Bill No:</label>
