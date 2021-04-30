@@ -1,5 +1,16 @@
 version: "3.7"
-services:   
+services:
+  traefik:
+    image: "traefik:v2.4"
+    container_name: "traefik"
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - acme.json:/acme.json
+      - traefik.toml:/traefik.toml
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
   address:
     build: './backend/address_service'
     image: 'address_service1.0'
