@@ -57,7 +57,6 @@ const NewShipment = (props) => {
   const [shipmentError, setShipmentError] = useState("");
   const [formatedDate, setformatedDate] = "4-21-2021";
   const [modalProps, setModalProps] = useState({});
-  const [orderIdSelected, setOrderIdSelected] = useState(false);
   useEffect(() => {
     // let date = new Date();
 
@@ -368,7 +367,6 @@ const NewShipment = (props) => {
                         name2="Select Order ID"
                         onSelect={async (v) => {
                           setFieldValue("OrderId", v);
-                          setOrderIdSelected(true);
                           // handleSOChange(v);
                           setOrderId(v);
                           dispatch(turnOn());
@@ -716,7 +714,7 @@ const NewShipment = (props) => {
                   handleLabelIdChange={handleLabelIdChange}
                 />
               )}
-              {!orderIdSelected && products?.length > 0 && (
+              {products?.length > 0 && (
                 <>
                   <EditTable
                     product={addProducts}
