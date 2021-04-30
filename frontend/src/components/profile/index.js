@@ -13,6 +13,7 @@ const axios = require('axios');
 import { getUserInfoUpdated, updateProfile, getUserInfo } from '../../actions/userActions';
 import { getWarehouseByOrgId } from '../../actions/productActions';
 import PopUpLocation from './popuplocation';
+
 import Modal from '../../shared/modal'
 class Profile extends React.Component {
   constructor(props) {
@@ -97,6 +98,9 @@ title,
     } else {
       //error
     }
+
+const [photo, setPhoto] = useState("");
+
     const item = this.state.organisation.split('/')[1]
     const wareHouseResponse = await getWarehouseByOrgId(item);
     if (wareHouseResponse.status === 1) {
@@ -106,7 +110,6 @@ title,
 console.log("ids",wareHouseResponse);
   }
 //console.log("res",wareHouseIdResult);
-
 
  closeModal() {
     console.log("Closed Model called");
@@ -156,7 +159,8 @@ title
     this.setState({ selectedFile: event.target.files[0] })
     e.preventDefault();
     const formData = new FormData();
-    formData.append('profile', event.target.files[0]);
+    formData.append( "photo",
+        event.target.files[0]);
     const configs = {
       headers: {
         'content-type': 'multipart/form-data',
@@ -164,7 +168,7 @@ title
     };
     if (event.target.files[0]) {
       axios
-        .post(config().upload, formData, configs)
+        .post(config().uploadProfileImage, formData, configs)
         .then(response => {
           alert('Profile Picture updated Successfully');
           this.setState({ profile_picture: response.data.data })
@@ -228,6 +232,7 @@ title
               <div className="col-2">
                 <div className="userPic mb-4 mr-2">
                   <img
+                    name="photo"
                     src={this.props.user.photoId}
                     className="rounded rounded-circle"
                   />
@@ -236,13 +241,14 @@ title
                   id="profile"
                   onChange={this.onChange}
                   type="file"
-                  ref={ref => (this.upload = ref)}
+                  ref={ref => (this.uploadProfileImage= ref)}
                   style={{ display: 'none' }}
                 />
                 {editMode ? (
                   <button
                     type="button"
-                    onClick={e => this.upload.click()}
+
+                    onClick={e => this.uploadProfileImage.click()}
                     className="btn btn-outline-info"
                   >
                     Change Photo
