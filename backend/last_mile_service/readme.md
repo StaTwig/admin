@@ -1,4 +1,4 @@
-`GET - GetEOLInfoBySerialNumber => lastmilemanagement/api/getEOLInfoBySerialNumber?id={serial_num}`
+`GET - GetEOLInfoBySerialNumber => lastmilemanagement/api/GetEOLInfoBySerialNumber?id={serial_num}`
 
 `GET - GetEOLInfoByProductId => lastmilemanagement/api/GetEOLInfoByProductId?id={product_id}`
 

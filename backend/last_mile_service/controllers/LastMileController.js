@@ -4,6 +4,7 @@ require("dotenv").config();
 const auth = require("../middlewares/jwt");
 const checkToken = require("../middlewares/middleware").checkToken;
 const LastMileModel = require("../models/LastMileModel");
+const WarehoseModel = require("../models/WarehouseModel");
 const init = require("../logging/init");
 const logger = init.getLog();
 async function connectDB() {
@@ -36,9 +37,9 @@ exports.getEOLInfoBySerialNumber = [
         "<<<<< LastMileService < LastMileController < getEOLInfoBySerialNumber : token verified successfullly, querying data by publisher"
       );
       console.log(req.query);
-      let serialNumber = req.query.id;
+      let serialNumber = req.query.serial_number;
       await LastMileModel.findOne({
-        eol_id: serialNumber,
+        "eol_id": serialNumber,
       })
         .then((eolResult) => {
           console.log("eolResult is ====> ", eolResult);
