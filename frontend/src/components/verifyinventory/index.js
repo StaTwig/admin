@@ -39,9 +39,7 @@ const VerifyInventory = props => {
         mfgDate: inventory.manufacturingDate,
         expDate: inventory.expiryDate,
         quantity: parseInt(inventory.quantity),
-        serialNumbersRange: inventory.serialNumber,
-        productName: inventory.productName,
-        manufacturerName: inventory.manufacturer
+        serialNumbersRange: inventory.serialNumber
       }
     });
     const result = await addProductsToInventory({
