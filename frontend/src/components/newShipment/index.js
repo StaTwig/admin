@@ -731,7 +731,7 @@ const NewShipment = (props) => {
                           productCategory: row.type,
                           productID: row._id,
                           productQuantity: row.productQuantity,
-                          productName: row.productName,
+                          productName: row.name,
                           manufacturer: row.manufacturer,
                           quantity: row.quantity,
                         }))
@@ -759,7 +759,7 @@ const NewShipment = (props) => {
                             productCategory: row.type,
                             productID: row._id,
                             productQuantity: row.productQuantity,
-                            productName: row.productName,
+                            productName: row.name,
                             manufacturer: row.manufacturer,
                             quantity: row.quantity,
                           }))
@@ -777,7 +777,7 @@ const NewShipment = (props) => {
                           productCategory: row.type,
                           productID: row._id,
                           productQuantity: row.productQuantity,
-                          productName: row.productName,
+                          productName: row.name,
                           manufacturer: row.manufacturer,
                           quantity: row.quantity,
                         }))
