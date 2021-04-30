@@ -1,0 +1,53 @@
+version: "3.7"
+services:   
+  address:
+    build: './backend/address_service'
+    image: 'address_service1.0'
+    container_name: 'address_service'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.address.entrypoints=websecure"
+      - "traefik.http.routers.address.rule=Host(`test2.admin.vaccineledger.com`) && PathPrefix(`/api/address_service`)"
+      - traefik.http.routers.address.tls=true
+      - "traefik.http.routers.address.tls.certresolver=lets-encrypt"
+  affliate:
+    build: './backend/affliation_service'
+    image: 'affliation_service1.0'
+    container_name: 'affliate_service'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.affliate.entrypoints=websecure"
+      - "traefik.http.routers.affliate.rule=Host(`test2.admin.vaccineledger.com`) && PathPrefix(`/api/affliation_service`)"
+      - traefik.http.routers.affliate.tls=true
+      - "traefik.http.routers.affliate.tls.certresolver=lets-encrypt"
+
+  rbac:
+    build: './backend/rbac_service'
+    image: 'rbac_service1.0'
+    container_name: 'rbac_service'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.rbac.entrypoints=websecure"
+      - "traefik.http.routers.rbac.rule=Host(`test2.admin.vaccineledger.com`) && PathPrefix(`/api/rbac_service`)"
+      - traefik.http.routers.rbac.tls=true
+      - "traefik.http.routers.rbac.tls.certresolver=lets-encrypt"
+
+  employee:
+    build: './backend/employee_service'
+    image: 'employee_service1.0'
+    container_name: 'employee_service'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.employee.entrypoints=websecure"
+      - "traefik.http.routers.employee.rule=Host(`test2.admin.vaccineledger.com`) && PathPrefix(`/api/employee_service`)"
+      - traefik.http.routers.employee.tls=true
+      - "traefik.http.routers.employee.tls.certresolver=lets-encrypt"
+
+networks:
+  default:
+    external:
+      name: proxy            
