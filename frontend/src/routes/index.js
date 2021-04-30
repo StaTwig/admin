@@ -1,6 +1,5 @@
 import React from 'react';
 import { Route, Switch } from 'react-router';
-
 import Login from '../containers/login';
 import Verify from '../containers/verify';
 import LandingPage from '../containers/landingpage';
@@ -15,6 +14,7 @@ import Inventory from '../containers/inventory';
 import NewInventory from '../containers/newinventory';
 import ProductList  from '../containers/productList'
 import trackAndTrace from '../containers/trackAndTrace';
+import Track from '../containers/track';
 import Tracing from '../containers/tracing';
 import ProductTracing from '../containers/productTracing';
 import Network from '../containers/network';
@@ -27,7 +27,7 @@ import QrCode from '../containers/qrcode';
 import TransactionHistory from '../containers/transactionHistory'
 import ViewOrder from '../containers/vieworder';
 import ReviewOrder from '../containers/revieworder';
-
+import enterId from '../containers/EnterId';
 import AddProduct from '../containers/addproduct';
 import Signup from '../containers/signUp';
 import ForgotPassword from '../containers/forgotPassword';
@@ -36,6 +36,8 @@ import Home from '../containers/home';
 import UpdateStatus from  '../containers/updateStatus';
 import ReceiveShipment from  '../containers/receiveShipment';
 import AddLocation from '../containers/Addlocation';
+import LastMile from '../containers/lastMile';
+import EditLocation from '../containers/editLocation';
 import NoMatch from '../components/NoMatch';
 
 import './style.scss';
@@ -63,6 +65,7 @@ const routes = (
     <Route path="/qrcode" component={requireAuth(QrCode)} />
     <Route path="/newinventory" component={requireAuth(NewInventory)} />
     <Route path="/reviewinventory" component={requireAuth(VerifyInventory)} />
+    <Route path="/track" component={requireAuth(Track)} />
     <Route path="/trackAndTrace" component={requireAuth(trackAndTrace)} />
     <Route path="/tracing/:id" component={requireAuth(Tracing)} />
     <Route path="/producttracing" component={requireAuth(ProductTracing)} />
@@ -75,8 +78,10 @@ const routes = (
     <Route path="/updateStatus/:id" component={requireAuth(UpdateStatus)} />
     <Route path="/receiveShipment/:id" component={requireAuth(ReceiveShipment)} />
     <Route path="/Addlocation" component={requireAuth(AddLocation)} />
+    <Route path="/lastMile" component={requireAuth(LastMile)} />
+    <Route path="/enterid" component={requireAuth(enterId)} />
+    <Route path="/editLocation" component={requireAuth(EditLocation)} />
     <Route component={NoMatch} />
-
   </Switch>
 );
 

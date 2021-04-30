@@ -299,7 +299,7 @@ exports.register = [
               primaryContactId: employeeId,
               name: organisationName,
               id: organisationId,
-              type: req.body?.type ? req.body.type : 'CUSTOMER_SUPPLIER',
+              type: req.body?.type ? req.body.type :'CUSTOMER_SUPPLIER',
               status: 'NOTVERIFIED',
               postalAddress: addr,
               warehouses: [warehouseId],
@@ -626,7 +626,7 @@ exports.verifyOtp = [
             firstName: user.firstName,
             emailId: user.emailId,
             role: user.role,
-            warehouseId: user.warehouseId,
+            warehouseId: user.warehouseId[0],
             organisationId: user.organisationId,
           };
           //Prepare JWT token for authentication
@@ -699,7 +699,8 @@ exports.userInfo = [
             warehouseAddress_country: warehouse.warehouseAddress.country,
             warehouseAddress_zipcode: warehouse.warehouseAddress.zipCode,
             warehouseAddress_city: warehouse.warehouseAddress.city,
-            warehouseAddress_firstline: warehouse.warehouseAddress.firstLine
+            warehouseAddress_firstline: warehouse.warehouseAddress.firstLine,
+            title: warehouse.title
           };
           logger.log(
             'info',
@@ -1026,6 +1027,33 @@ exports.assignProductConsumer = [
   },
 ];
 
+exports.getUserWarehouses = [
+  auth,
+  async (req, res) => {
+    try {
+      const users = await EmployeeModel.findOne({
+        emailId: req.user.emailId
+      });
+      logger.log(
+        'info',
+        '<<<<< UserService < AuthController < getAllUsers : retrieved users successfully',
+      );
+      return apiResponse.successResponseWithData(
+        res,
+	"User warehouses",
+        users.warehouseId,
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< UserService < AuthController < getAllUsers : error(catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+
 exports.addWarehouse = [
   auth,
   async (req, res) => {
@@ -1040,20 +1068,19 @@ exports.addWarehouse = [
 
       const invCounter = await CounterModel.findOne({'counters.name':"inventoryId"},{"counters.name.$":1})
       const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
-
-      //const inventoryId = uniqid('inv-');
       const inventoryResult = new InventoryModel({ id: inventoryId });
       await inventoryResult.save();
       const {
         organisationId,
         postalAddress,
+        title,
         region,
         country,
         location,
+        warehouseAddress,
         supervisors,
         employees,
       } = req.body;
-
       const incrementCounterWarehouse = await CounterModel.update({
                   'counters.name': "warehouseId"
                },{
@@ -1064,20 +1091,35 @@ exports.addWarehouse = [
 
       const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.name.$":1})
       const warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
-
-      //const warehouseId = uniqid('war-');
       const warehouse = new WarehouseModel({
         id: warehouseId,
         organisationId,
         postalAddress,
+        title,
         region,
         country,
         location,
         supervisors,
         employees,
+        warehouseAddress,
         warehouseInventory: inventoryResult.id,
       });
-      await warehouse.save();
+        const s = await warehouse.save();
+      /*await OrganisationModel.findOneAndUpdate({
+                    id: organisationId
+                }, {
+                    $push: {
+                        warehouses: warehouseId
+                    }
+                }); */
+      await EmployeeModel.findOneAndUpdate({
+                    id: req.user.id
+                }, {
+                    $push: {
+                        warehouseId: warehouseId
+                    }
+                });
+
       return apiResponse.successResponseWithData(
         res,
         'Warehouse added success',

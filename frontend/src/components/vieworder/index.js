@@ -12,17 +12,23 @@ const ViewOrder = props => {
   const user = useSelector((state) => {
     return state.user;
   });
-  let statusStyle = 'bg-primary';
+  let statusStyle = 'bg-info';
   let status = order.poStatus;
-  if (order.poStatus === 'RECEIVED') {
+  if  (order?.supplier?.supplierOrganisation === user?.organisationId && order.poStatus === 'CREATED'){
     statusStyle = 'bg-info';
-    status = 'Delivered';
+    status = 'Received'
+}
+else if (order?.customer?.customerOrganisation && order.poStatus === 'CREATED'){
+    statusStyle = 'bg-primary';
+    status = 'Sent';
   }
+
 else if (order.poStatus === 'Accepted') {
     statusStyle = 'bg-success';
     status = 'Accepted';
   }else if (order.poStatus === 'Rejected') {
     statusStyle = 'bg-warning';
+    status = 'Rejected';
   }
 
 
@@ -106,7 +112,7 @@ const onPOStatusChange = async status => {
                 <div class="w-100"></div>
                 <div className="col row col-6 mt-2">
                   <span className="col-4">Delivery Location:</span>
-                  <span className="col ml-2 text-dark font-weight-bold">{order.warehouse?.warehouseAddress?.city+', '+order.warehouse?.warehouseAddress?.country}</span>
+                  <span className="col ml-2 text-dark font-weight-bold">{order.customer?.shippingAddress?.shippingAddressId}</span>
                 </div>
               </div>
             </div>
@@ -124,7 +130,7 @@ const onPOStatusChange = async status => {
               </div>
               <div className="row  p-1">
                 <span className="col">Product Category:</span>
-                <span className="col text-dark font-weight-bold">{product?.category}</span>
+                <span className="col text-dark font-weight-bold">{product?.type}</span>
               </div>
               <div className="row  p-1">
                 <span className="col">Manufacturer:</span>

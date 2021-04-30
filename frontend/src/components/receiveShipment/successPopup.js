@@ -12,10 +12,10 @@ const SuccessPopup = (props) => {
           Success!
         </div>
         <div className="data">
-          Your Shipment Status has been
+          Your Shipment
         </div>
         <div className="data mb-4">
-         Updated Successfully!
+         Delivered Successfully!
         </div>
         <button className="btn-primary btn" onClick={props.onHide}>OK</button>
       </div>

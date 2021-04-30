@@ -30,6 +30,8 @@ const stream_name = process.env.STREAM;
 const init = require('../logging/init');
 const OrganisationModel = require('../models/OrganisationModel');
 const SalesDataModel = require("../models/SalesDataModel");
+const StateDistrictStaticDataModel = require("../models/StateDistrictStaticDataModel");
+const { request } = require("http");
 const logger = init.getLog();
 
 exports.getTotalCount = [
@@ -740,6 +742,80 @@ exports.insertInventories = [
     }
   },
 ];
+
+exports.getAllStates = [
+  // auth,
+  async (req, res) => {
+    try {
+      const allStates = await StateDistrictStaticDataModel.find().distinct('state');
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allStates
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getDistrictsByState = [
+  // auth,
+  async (req, res) => {
+    try {
+      const _selectedState = req.query.state;
+      const allStates = await StateDistrictStaticDataModel.find({
+        state: _selectedState
+      }).distinct('district');
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allStates
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getVendorsByDistrict = [
+  // auth,
+  async (req, res) => {
+    try {
+      const _selectedDistrict = req.query.district;
+      const _vendorType = req.query.vendorType;
+      const allVendors = await OrganisationModel.find({
+        district: _selectedDistrict,
+        type: _vendorType
+      });
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allVendors
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getAllSKUs = [
+  // auth,
+  async (req, res) => {
+    try {
+      const allSKUs = await ProductModel.find({}, '-characteristicSet -image');
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allSKUs
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+
 exports.addProductsToInventory = [
   auth,
   body("products")
@@ -782,55 +858,48 @@ exports.addProductsToInventory = [
               "Employee not assigned to any organisation"
             );
           }
-          let serialNumbersRange = true;
-          let alpha = [...Array(26)]
-            .map((_, y) => String.fromCharCode(y + 65))
-            .join("");
-          for (let i = 0; i < products.length; i++) {
-            if (products[i].serialNumbersRange.split("-").length < 2) {
-              let snoref = Date.now();
-              let rApha = "";
-              for (let i = 0; i < 4; i++)
-                rApha += alpha.charAt(Math.floor(Math.random() * alpha.length));
+          //   let serialNumbersRange = true;
+          //   let alpha = [...Array(26)].map((_, y) => String.fromCharCode(y + 65)).join('');
+          //   for (let i = 0; i < products.length; i++) {
+          //     if (products[i].serialNumbersRange.split('-').length < 2) {
+          //       let snoref = Date.now();
+          //       let rApha = '';
+          //       for (let i = 0; i < 4; i++)
+          //         rApha += alpha.charAt(Math.floor(Math.random() * alpha.length));
 
-              products[i].serialNumbersRange =
-                "DSL" + rApha + (parseInt(snoref) - parseInt(products[i].quantity - 1)) +
-                "-DSL" + rApha + snoref;
-              // serialNumbersRange = false;
-              // break;
-            }
-          }
-          if (!serialNumbersRange) {
-            return apiResponse.ErrorResponse(
-              res,
-              `Product doesn't conatin valid serial numbers range`,
-            );
-          }
+          //      products[i].serialNumbersRange =
+          //        "DSL" + rApha + (parseInt(snoref) - parseInt(products[i].quantity - 1)) +
+          //        "-DSL" + rApha + snoref;
+          //       // serialNumbersRange = false;
+          //       // break;
+          //     }
+          //   }
+          //  if(!serialNumbersRange) {
+          //    return apiResponse.ErrorResponse(
+          //      res,
+          //      `Product doesn't conatin valid serial numbers range`,
+          //    );
+          //  }
           const inventory = await InventoryModel.findOne({
             id: warehouse.warehouseInventory,
           });
           if (!inventory) return apiResponse.ErrorResponse(res, 'Cannot find inventory to this employee warehouse');
           let atoms = [];
-          products.forEach((product) => {
-            const serialNumbers = product.serialNumbersRange.split("-");
-            const serialNumbersFrom = parseInt(
-              serialNumbers[0].split(/(\d+)/)[1]
-            );
-            const serialNumbersTo = parseInt(
-              serialNumbers[1].split(/(\d+)/)[1]
-            );
-            const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
-            for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
-              const atom = `${serialNumberText + uniqid.time()}${i}`
+          products.forEach(product => {
+            const serialNumbers = product.serialNumbersRange.split('-');
+            if (serialNumbers.length > 1) {
+              const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
+              const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
+              const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
+              for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
+                const atom = `${serialNumberText}${i}`
 
-              atoms.push(atom);
+                atoms.push(atom);
+              }
             }
           })
           const dupSerialFound = await AtomModel.findOne({ id: { $in: atoms } });
           if (dupSerialFound) return apiResponse.ErrorResponse(res, 'Duplicate Serial Numbers found');
-
-
-          //This code handles the insertion of duplicate products and aggregates the counts
           await utility.asyncForEach(products, async product => {
             const inventoryId = warehouse.warehouseInventory;
             const checkProduct = await InventoryModel.find({ "$and": [{ "id": inventoryId }, { "inventoryDetails.productId": product.productId }] })
@@ -850,50 +919,47 @@ exports.addProductsToInventory = [
               });
             }
 
+            const serialNumbers = product.serialNumbersRange.split('-');
+            if (serialNumbers.length > 1) {
+              const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
+              const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
 
-
-            const serialNumbers = product.serialNumbersRange.split("-");
-            const serialNumbersFrom = parseInt(
-              serialNumbers[0].split(/(\d+)/)[1]
-            );
-            const serialNumbersTo = parseInt(
-              serialNumbers[1].split(/(\d+)/)[1]
-            );
-
-            const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
-            let atoms = [];
-
-            for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
-              const atom = {
-                id: `${serialNumberText + uniqid.time()}${i}`,
-                label: {
-                  labelId: "",
-                  labelType: "",
-                },
-                productId: product.productId,
-                inventoryIds: [inventory.id],
-                lastInventoryId: "",
-                lastShipmentId: "",
-                poIds: [],
-                shipmentIds: [],
-                txIds: [],
-                batchNumbers: [product.batchNumber],
-                atomStatus: "Healthy",
-                attributeSet: {
-                  mfgDate: product.mfgDate,
-                  expDate: product.expDate,
-                },
-                eolInfo: {
-                  eolId: "IDN29402-23423-23423",
-                  eolDate: "2021-03-31T18:30:00.000Z",
-                  eolBy: id,
-                  eolUserInfo: "",
-                },
-              };
-              atoms.push(atom);
+              const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
+              let atoms = [];
+              for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
+                const atom = {
+                  // id: `${serialNumberText + uniqid.time()}${i}`,
+                  id: `${serialNumberText}${i}`,
+                  label: {
+                    labelId: '',
+                    labelType: '',
+                  },
+                  productId: product.productId,
+                  inventoryIds: [inventory.id],
+                  lastInventoryId: '',
+                  lastShipmentId: '',
+                  poIds: [],
+                  shipmentIds: [],
+                  txIds: [],
+                  batchNumbers: [product.batchNumber],
+                  atomStatus: 'Healthy',
+                  attributeSet: {
+                    mfgDate: product.mfgDate,
+                    expDate: product.expDate,
+                  },
+                  eolInfo: {
+                    eolId: 'IDN29402-23423-23423',
+                    eolDate: '2021-03-31T18:30:00.000Z',
+                    eolBy: id,
+                    eolUserInfo: '',
+                  }
+                };
+                atoms.push(atom);
+              }
             }
             try {
-              await AtomModel.insertMany(atoms);
+              if (atoms.length > 0)
+                await AtomModel.insertMany(atoms);
               await inventory.save();
             } catch (err) {
               console.log('err', err);

@@ -42,7 +42,7 @@ const SummaryTable = (props) => {
             </div>
             {shipments.map((shipment, index) =>
               index < 5 ? (
-                <div className="combine-data" key={index}>
+                <div className="combine-data pl-2" key={index}>
                   <div>{shipment.id}</div>
                   {shipment?.shipmentAlerts?.length > 0 && (
                     <span
@@ -65,7 +65,7 @@ const SummaryTable = (props) => {
             </div>
             {shipments.map((shipment, index) =>
               index < 5 ? (
-                <div className="combine-data" key={index}>
+                <div className="pl-5" key={index}>
                   <div>
                     {profile.warehouseId == shipment.supplier.locationId
                       ? "Outbound"
@@ -85,8 +85,8 @@ const SummaryTable = (props) => {
              
             {shipments.map((shipment, index) =>
               index < 5 ? (
-                <div className="combine-data" key={index}>
-                  <div>
+                <div className="pl-5 pr-4" key={index}>
+                  <div className="text-left pr-4 ">
                     {shipment.shippingDate.length == 10 ? shipment.shippingDate : formatDate(shipment.shippingDate)}
                   </div>
                 </div>
@@ -94,7 +94,7 @@ const SummaryTable = (props) => {
             )}
           </div>
           <div className="rowData">
-            <div className="headline">
+            <div className="headline pr-4">
             <span style={{position:'relative',top:'25%'}}>
             <img src={received} height='20' width='20' className="mr-3"></img>
             <b>From</b> 
@@ -102,9 +102,9 @@ const SummaryTable = (props) => {
             </div>
             {shipments.map((shipment, index) =>
               index < 5 ? (
-                <div className="combine-data" key={index}>
-                  <div className="rTableCell">
-                    <p className="mb-0 bold">{shipment.supplier.org.name}</p>
+                <div className="pl-4" key={index}>
+                  <div className="pr-2">
+                    <p className="mb-0 pr-1">{shipment.supplier.org.name}</p>
                   </div>
                 </div>
               ) : null

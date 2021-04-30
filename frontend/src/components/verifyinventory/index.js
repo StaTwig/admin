@@ -13,8 +13,8 @@ import Manufacturer from '../../assets/icons/brand.svg';
 import Quantity from '../../assets/icons/TotalInventoryAdded_2.png';
 import Mfg_date from '../../assets/icons/ship_date.png';
 import Expire from '../../assets/icons/ship_date.png';
-import Batch from '../../assets/icons/batch.png';
-import Serial from '../../assets/icons/serial.png';
+import Batch from '../../assets/icons/Batch.png';
+import Serial from '../../assets/icons/Serial.png';
 import './style.scss';
 
 const VerifyInventory = props => {
@@ -39,7 +39,9 @@ const VerifyInventory = props => {
         mfgDate: inventory.manufacturingDate,
         expDate: inventory.expiryDate,
         quantity: parseInt(inventory.quantity),
-        serialNumbersRange: inventory.serialNumber
+        serialNumbersRange: inventory.serialNumber,
+        productName: inventory.productName,
+        manufacturerName: inventory.manufacturer
       }
     });
     const result = await addProductsToInventory({
@@ -108,11 +110,11 @@ const VerifyInventory = props => {
           <div className="">
             <div className="d-flex flex-row-reverse">
               <button className="btn-primary btn" onClick={onAssign}>
-                ADD INVENTORY
+                <b>SAVE</b>
               </button>
               <button className="btn-outline-dark btn mr-2" onClick={onEdit}>
                 <img src={Pen} width="15" height="15" className="mr-3" />
-                <span>EDIT</span>
+                <span><b>EDIT</b></span>
               </button>
 
               {openCreatedInventory && (

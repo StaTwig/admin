@@ -24,13 +24,13 @@ const Table = props => {
             <div className="rTableRow" key={index}>
               <div className="rTableCell">
                 <div className="d-flex flex-column txtBlue ">
-                  <div>{inventory.products.name}</div>
+                  <div>{inventory.products.productName}</div>
                     {/* <div className="sub">
                       {inventory.productId}
                     </div> */}
                 </div>
               </div>
-              <div className="rTableCell" style={{position:"relative",left:'7%'}}>{inventory.products.manufacturer}</div>
+              <div className="rTableCell" style={{position:"relative",left:'7%'}}>{inventory.products.manufacturerName}</div>
               <div className="rTableCell" style={{position:"relative",left:'12%',fontWeight:700}}>{inventory.inventoryDetails.quantity}</div>
               <div className="rTableCell" style={{position:"relative",left:'12%'}}>
                 <button
