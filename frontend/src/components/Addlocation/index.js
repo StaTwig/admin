@@ -5,7 +5,7 @@ import Location from '../../assets/icons/CurrentLocation1.png';
 
 import './style.scss';
 import { Formik } from 'formik';
-const Addlocation=(props)=>{
+const AddLocation=(props)=>{
   const [ LocationName,setLocationName]=useState("") 
   const [pincode,setpincode]=useState("") 
   const [ flat,setflat]=useState("") 
@@ -14,20 +14,19 @@ const Addlocation=(props)=>{
   const [ town,setRegion]=useState("") 
   const [ state_p,setState_p]=useState("") 
   const [ country,setCountry]=useState("")
-
  const requestadminforapproval=()=>
   {
     //  props.history.push('/profile');
   }
-return ( 
+return (
 <div> 
-
 <div className="addproduct" >
     <h1 className="breadcrumb">ADD NEW LOCATION</h1>
 
    
         <div className="card">
-        <div className="card-body"> 
+        <div className="card-body">
+      
         <Formik
         enableReinitialize={true}
         initialValues={{
@@ -200,6 +199,7 @@ return (
               <div className="col-md-6 com-sm-16">
                 <div className="form-group">
                   <label htmlFor="Select Location" >Select Town/City*</label>
+                 
                   <input
                type="text"
                className="form-control"
@@ -212,21 +212,18 @@ return (
                }}
                />
                 {errors.town && touched.town && (
-                    <span className="error-msg text-danger">{errors.town}</span >
+                    <span className="error-msg text-danger">{errors.town}</span>
                   )}
-                  <div className="form-control" >
-                    <DropdownButton
-                        name={state}
-                        name2="Select State"
-                       />
-                  </div>
+                  
                 </div>
               </div>
               </div>
+
               <div className="row">
               <div className="col-md-6 com-sm-12">
                 <div className="form-group">
                   <label htmlFor="State/ Province/ Region*">State/ Province/ Region*</label>
+                  
                   <input
                type="text"
                className="form-control"
@@ -241,12 +238,7 @@ return (
                 {errors.state_p && touched.state_p && (
                     <span className="error-msg text-danger">{errors.state_p}</span>
                   )}
-                  <div className="form-control">
-                    <DropdownButton
-                       name={region}
-                       name2="Select Region"
-                    />
-                  </div>
+                  
                 </div>
               </div>
               </div>
@@ -254,6 +246,7 @@ return (
               <div className="col-md-6 com-sm-12">
                 <div className="form-group">
                   <label htmlFor="Country*">Country*</label>
+                  
                   <input
                type="text"
                className="form-control"
@@ -266,21 +259,13 @@ return (
                }}
                /> 
                  {errors.country && touched.country && (
-                    <span className="error-msg text-danger">{errors.country}</span >
+                    <span className="error-msg text-danger">{errors.country}</span>
                   )} 
-                  <div className="form-control">
-                    <DropdownButton
-                     name={country}
-                     name2="Select Country"
-                    />
-                  </div>
                 </div>
               </div>
               </div>
               <div>
-              
-             <button class="close" className="btn btn-yellow btn-lg float-right" >
-               
+             <button class="close" className="btn btn-yellow btn-lg float-right" >  
             <span>Request Admin For Approval</span>
           </button>
     
@@ -289,9 +274,8 @@ return (
         )}
       </Formik> 
          </div>
-         
          </div>
-         <div>  
+         <div>       
              <button class="close" className="btn btn-blue btn-lg float-right" style={{position:"relative",top:"-65vh",right:"22px"}}>
              <img src={Location} width="26" height="26" className="mr-2 mb-1" />
             <span>Use my current Location</span>
@@ -301,4 +285,5 @@ return (
          </div>       
 )}
 
-export default Addlocation;
+export default AddLocation;
+
