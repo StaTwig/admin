@@ -18,6 +18,7 @@ const EditRow = props => {
   const {
     manufacturer,
     productName,
+    manufacturerName,
     quantity,
     categories,
     manufacturingDate,
@@ -92,7 +93,7 @@ const EditRow = props => {
                 type="text"
                 className="form-control"
                 placeholder="Manufacturer"
-                value={manufacturer}
+                value={manufacturerName}
                 disabled
               />
             </div>
