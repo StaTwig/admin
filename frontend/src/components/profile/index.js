@@ -99,7 +99,7 @@ title,
       //error
     }
 
-const [photo, setPhoto] = useState("");
+//const [photo, setPhoto] = useState("");
 
     const item = this.state.organisation.split('/')[1]
     const wareHouseResponse = await getWarehouseByOrgId(item);
@@ -165,10 +165,15 @@ title
       headers: {
         'content-type': 'multipart/form-data',
       },
+params: {
+'action':'PROFILE',
+},
+
     };
+
     if (event.target.files[0]) {
       axios
-        .post(config().uploadProfileImage, formData, configs)
+        .post(config().upload, formData, configs)
         .then(response => {
           alert('Profile Picture updated Successfully');
           this.setState({ profile_picture: response.data.data })
@@ -222,7 +227,7 @@ title
       warehouseAddress_zipcode,
 title
     } = this.state;
-
+const imgs= config().fetchProfileImage;
     return (
       <div className="profile">
         <h1 className="breadcrumb">Profile</h1>
@@ -233,7 +238,7 @@ title
                 <div className="userPic mb-4 mr-2">
                   <img
                     name="photo"
-                    src={this.props.user.photoId}
+                    src= {`${imgs}${this.props.user.photoId}`}
                     className="rounded rounded-circle"
                   />
                 </div>
@@ -241,14 +246,14 @@ title
                   id="profile"
                   onChange={this.onChange}
                   type="file"
-                  ref={ref => (this.uploadProfileImage= ref)}
+                  ref={ref => (this.upload= ref)}
                   style={{ display: 'none' }}
                 />
                 {editMode ? (
                   <button
                     type="button"
 
-                    onClick={e => this.uploadProfileImage.click()}
+                    onClick={e => this.upload.click()}
                     className="btn btn-outline-info"
                   >
                     Change Photo
