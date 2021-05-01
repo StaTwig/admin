@@ -23,10 +23,10 @@ else if (order?.customer?.customerOrganisation && order.poStatus === 'CREATED'){
     status = 'Sent';
   }
 
-else if (order.poStatus === 'Accepted') {
+else if (order.poStatus === 'ACCEPTED') {
     statusStyle = 'bg-success';
     status = 'Accepted';
-  }else if (order.poStatus === 'Rejected') {
+  }else if (order.poStatus === 'REJECTED') {
     statusStyle = 'bg-warning';
     status = 'Rejected';
   }
@@ -51,9 +51,9 @@ const onPOStatusChange = async status => {
 {order?.supplier?.supplierOrganisation === user?.organisationId && order.poStatus === 'CREATED' ? (
   <div className="d-flex">
 <Link to={`/orders`}>
- <button className="btn btn-success fontSize20 font-bold mr-4" onClick={() => onPOStatusChange('Accepted')} >Accept Order</button></Link>
+ <button className="btn btn-success fontSize20 font-bold mr-4" onClick={() => onPOStatusChange('ACCEPTED')} >Accept Order</button></Link>
 <Link to={`/orders`}>
- <button className="btn btn-orange fontSize20 font-bold mr-4"  onClick={() => onPOStatusChange('Rejected')} >Reject Order</button></Link>
+ <button className="btn btn-orange fontSize20 font-bold mr-4"  onClick={() => onPOStatusChange('REJECTED')} >Reject Order</button></Link>
 <Link to={`/orders`}>
             <button className="btn btn-outline-primary mr-2" ><img src={back} height="17" className="mr-2 mb-1" />Back to Orders</button>
           </Link>

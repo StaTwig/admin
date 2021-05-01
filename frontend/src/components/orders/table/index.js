@@ -26,16 +26,24 @@ const Table = props => {
               if (order.poStatus === 'CREATED') {
                 status = visible == 'one' ? 'Sent' : 'Received';
               }
-              else if (order.poStatus === 'RECEIVED') {
+              else if (order.poStatus === 'Received') {
                 statusStyle = 'bg-info';
-                status = 'Delivered';
+                status = 'Received';
               }
-              else if (order.poStatus === 'Accepted') {
+              else if (order.poStatus === 'ACCEPTED') {
                 statusStyle = 'bg-success';
                 status = 'Accepted';
-              }else if (order.poStatus === 'Rejected') {
+              }else if (order.poStatus === 'REJECTED') {
                 statusStyle = 'bg-warning';
                 status = 'Rejected';
+              }
+              else if (order.poStatus === 'TRANSIT&FULLYFULFILLED') {
+                statusStyle = 'bg-secondary';
+                status = 'Transit&FullyFilled';
+              }
+              else if (order.poStatus === 'FULLYFULFILLED') {
+                statusStyle = 'bg-secondary';
+                status = 'FullyFilled';
               }
 
 
