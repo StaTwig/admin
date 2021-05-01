@@ -41,6 +41,10 @@ const Table = props => {
                 statusStyle = 'bg-secondary';
                 status = 'Transit&FullyFilled';
               }
+              else if (order.poStatus === 'FULLYFULFILLED') {
+                statusStyle = 'bg-secondary';
+                status = 'FullyFilled';
+              }
 
 
               const { customer, products, supplier } = order;
