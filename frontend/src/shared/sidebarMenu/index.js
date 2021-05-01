@@ -72,7 +72,7 @@ const SideBar = ({
         <li className={(url === '/lastMile')  ? 'active' : ''}>
           <Link to="/lastMile" className="d-inline-block">
             <img src={(url === '/lastMile')  ? lastMileIcon : lastMileIcon} alt="lastMile" />
-            <img src={(url === '/lastMile')  ? lastMileIcon : lastMileIcon} alt="Shippment" />
+            
             <span className="ml-2">Last Mile</span>
           </Link>
         </li>
