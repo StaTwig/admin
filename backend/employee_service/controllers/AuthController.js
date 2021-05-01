@@ -700,6 +700,8 @@ exports.userInfo = [
             warehouseAddress_zipcode: warehouse.warehouseAddress.zipCode,
             warehouseAddress_city: warehouse.warehouseAddress.city,
             warehouseAddress_firstline: warehouse.warehouseAddress.firstLine,
+            warehouseAddress_state: warehouse.warehouseAddress.state,
+            warehouseAddress_secondline: warehouse.warehouseAddress.secondLine,
             title: warehouse.title
           };
           logger.log(
