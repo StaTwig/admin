@@ -75,6 +75,7 @@ export function config() {
       getDistrictsByState: `${ABINBEVPROD_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
       getAllSKUs: `${ABINBEVPROD_SERVER_URL}/inventorymanagement/api/inventory/getAllSKUs`,
       getOrganizationsByType: `${ABINBEVPROD_SERVER_URL}/inventorymanagement/api/inventory/getOrganizationsByType`,
+      getOrganizationInfoByID: `${ABINBEVPROD_SERVER_URL}/inventorymanagement/api/inventory/getOrganizationInfoByID`,
 
 
       trackShipment: `${ABINBEVPROD_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
@@ -144,6 +145,7 @@ export function config() {
       getDistrictsByState: `${ABINBEVTEST_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
       getAllSKUs: `${ABINBEVTEST_SERVER_URL}/inventorymanagement/api/inventory/getAllSKUs`,
       getOrganizationsByType: `${ABINBEVTEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizationsByType`,
+      getOrganizationInfoByID: `${ABINBEVTEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizationInfoByID`,
 
       trackShipment: `${ABINBEVTEST_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
       poDetailsByShipmentId: `${ABINBEVTEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,

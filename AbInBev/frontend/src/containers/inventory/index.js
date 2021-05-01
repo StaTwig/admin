@@ -9,6 +9,7 @@ const InventoryContainer = (props) => {
 
   const [filters, setFilters] = useState({
     inventoryType: 'BREWERY',
+    vendorType: 'ALL_VENDORS',
     state: '',
     district: '',
     sku: ''
