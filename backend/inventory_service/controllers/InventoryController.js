@@ -32,6 +32,7 @@ const OrganisationModel = require('../models/OrganisationModel');
 const SalesDataModel = require("../models/SalesDataModel");
 const StateDistrictStaticDataModel = require("../models/StateDistrictStaticDataModel");
 const { request } = require("http");
+const { match } = require("assert");
 const logger = init.getLog();
 
 exports.getTotalCount = [
@@ -744,7 +745,7 @@ exports.insertInventories = [
 ];
 
 exports.getAllStates = [
-  // auth,
+  auth,
   async (req, res) => {
     try {
       const allStates = await StateDistrictStaticDataModel.find().distinct('state');
@@ -760,7 +761,7 @@ exports.getAllStates = [
 ];
 
 exports.getDistrictsByState = [
-  // auth,
+  auth,
   async (req, res) => {
     try {
       const _selectedState = req.query.state;
@@ -779,7 +780,7 @@ exports.getDistrictsByState = [
 ];
 
 exports.getVendorsByDistrict = [
-  // auth,
+  auth,
   async (req, res) => {
     try {
       const _selectedDistrict = req.query.district;
@@ -800,7 +801,7 @@ exports.getVendorsByDistrict = [
 ];
 
 exports.getAllSKUs = [
-  // auth,
+  auth,
   async (req, res) => {
     try {
       const allSKUs = await ProductModel.find({}, '-characteristicSet -image');
@@ -814,6 +815,28 @@ exports.getAllSKUs = [
     }
   },
 ];
+
+
+exports.getOrganizationsByType = [
+  auth,
+  async (req, res) => {
+    try {
+      const orgType = req.query.orgType ? req.query.orgType : 'BREWERY';
+      const organisations = await OrganisationModel.aggregate([
+        {
+          $match: { type: orgType }
+        }
+      ]);
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        organisations
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+]
 
 
 exports.addProductsToInventory = [
@@ -2160,12 +2183,94 @@ exports.getInventoryProductsByOrganisation = [
   },
 ];
 
+function getFilterConditions(filters) {
+  let matchCondition = {};
+  if (filters.orgType && filters.orgType !== '') {
+    if (filters.orgType === 'BREWERY') {
+      matchCondition.type = filters.orgType;
+    } else if (filters.orgType === 'S1' || filters.orgType === 'S2') {
+      matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }];
+    }
+  }
+  if (filters.state && filters.state.length) {
+    matchCondition.state = filters.state;
+  }
+  if (filters.district && filters.district.length) {
+    matchCondition.district = filters.district;
+  }
+  if (filters.organization && filters.organization.length) {
+    matchCondition.id = filters.organization;
+  }
+  return matchCondition;
+}
+
 // total quantity as per the products for the ecosystem
 exports.getInventoryProductsByPlatform = [
   auth,
   async (req, res) => {
     try {
-      const allProductsInPlatform = await InventoryModel.aggregate([
+      const filters = req.query;
+      const platformInventory = await OrganisationModel.aggregate([
+        {
+          $match: getFilterConditions(filters)
+        },
+        {
+          $unwind: {
+            path: "$warehouses"
+          }
+        },
+        {
+          $project: {
+            warehouses: 1
+          }
+        },
+        {
+          $lookup: {
+            from: 'warehouses',
+            localField: 'warehouses',
+            foreignField: 'id',
+            as: 'warehouseinv'
+          }
+        },
+        {
+          $unwind: {
+            path: "$warehouseinv"
+          }
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: ['$warehouseinv', '$$ROOT']
+            }
+          }
+        },
+        {
+          $project: {
+            id: 1,
+            title: 1,
+            warehouseInventory: 1
+          }
+        },
+        {
+          $lookup: {
+            from: 'inventories',
+            localField: 'warehouseInventory',
+            foreignField: 'id',
+            as: 'inv'
+          }
+        },
+        {
+          $unwind: {
+            path: '$inv'
+          }
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: ['$inv', '$$ROOT']
+            }
+          }
+        },
         {
           $unwind: {
             path: '$inventoryDetails'
@@ -2174,13 +2279,8 @@ exports.getInventoryProductsByPlatform = [
         {
           $replaceRoot: {
             newRoot: {
-              $mergeObjects: ['$productDetails', '$inventoryDetails', '$$ROOT']
+              $mergeObjects: ['$inventoryDetails', '$$ROOT']
             }
-          }
-        },
-        {
-          $project: {
-            inventoryDetails: 0
           }
         },
         {
@@ -2217,10 +2317,9 @@ exports.getInventoryProductsByPlatform = [
           }
         }
       ]);
-
       return apiResponse.successResponseWithData(
         res,
-        allProductsInPlatform
+        platformInventory
       );
     } catch (err) {
       logger.log(
