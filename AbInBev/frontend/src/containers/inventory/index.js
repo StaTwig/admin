@@ -1,20 +1,33 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import Inventory from "../../components/inventory";
 import { useDispatch } from 'react-redux';
-import {getProductsInventory} from '../../actions/inventoryAction';
+import { getProductsInventory } from '../../actions/inventoryAction';
 
 const InventoryContainer = (props) => {
   const [inventories, setInventories] = useState([]);
   const dispatch = useDispatch();
 
+  const [filters, setFilters] = useState({
+    inventoryType: 'BREWERY',
+    state: '',
+    district: '',
+    sku: ''
+  });
+
+  async function _getProductsInventory(_filters) {
+    const result = await dispatch(getProductsInventory(_filters));
+    setInventories(result.message);
+  }
+
   useEffect(() => {
-    (async () => {
-      const result = await dispatch(getProductsInventory());
-      setInventories(result.message);
-    })();
+    _getProductsInventory(filters);
   }, []);
 
-  return <Inventory inventories={inventories} {...props} />;
+  const applyFilters = async (_filters) => {
+    await _getProductsInventory(_filters);
+  }
+
+  return <Inventory inventories={inventories} {...props} applyFilters={applyFilters} />;
 };
 
 export default InventoryContainer;
