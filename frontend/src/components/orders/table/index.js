@@ -26,9 +26,9 @@ const Table = props => {
               if (order.poStatus === 'CREATED') {
                 status = visible == 'one' ? 'Sent' : 'Received';
               }
-              else if (order.poStatus === 'RECEIVED') {
+              else if (order.poStatus === 'Received') {
                 statusStyle = 'bg-info';
-                status = 'Delivered';
+                status = 'Received';
               }
               else if (order.poStatus === 'ACCEPTED') {
                 statusStyle = 'bg-success';
