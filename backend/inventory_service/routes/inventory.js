@@ -59,6 +59,7 @@ router.get("/getDistrictsByState", InventoryController.getDistrictsByState);
 router.get("/getVendorsByDistrict", InventoryController.getVendorsByDistrict);
 router.get("/getAllSKUs", InventoryController.getAllSKUs);
 router.get("/getOrganizationsByType", InventoryController.getOrganizationsByType);
+router.get("/getOrganizationInfoByID", InventoryController.getOrganizationInfoByID);
 
 
 

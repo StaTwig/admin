@@ -29,6 +29,7 @@ const stream_name = process.env.STREAM;
 
 const init = require('../logging/init');
 const OrganisationModel = require('../models/OrganisationModel');
+const AnalyticsModel = require('../models/AnalyticsModel');
 const SalesDataModel = require("../models/SalesDataModel");
 const StateDistrictStaticDataModel = require("../models/StateDistrictStaticDataModel");
 const { request } = require("http");
@@ -816,21 +817,55 @@ exports.getAllSKUs = [
   },
 ];
 
-
 exports.getOrganizationsByType = [
   auth,
   async (req, res) => {
     try {
-      const orgType = req.query.orgType ? req.query.orgType : 'BREWERY';
+      const filters = req.query;
+      let matchCondition = {};
+      if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
+        matchCondition.type = filters.orgType;
+      } else if (filters.orgType === 'ALL_VENDORS') {
+        matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }];
+      }
+
       const organisations = await OrganisationModel.aggregate([
         {
-          $match: { type: orgType }
+          $match: matchCondition
         }
       ]);
       return apiResponse.successResponseWithData(
         res,
         "Operation success",
         organisations
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getOrganizationInfoByID = [
+  auth,
+  async (req, res) => {
+    try {
+      const orgId = req.query.orgId;
+      const organisation = await OrganisationModel.findOne({ id: orgId });
+      const warehouseIds = organisation.warehouses;
+      const stats = await AnalyticsModel.find({ warehouseId: { $in: warehouseIds } });
+      let totalStock = 0;
+      stats.forEach(stat => {
+        totalStock = totalStock + parseInt(stat.returns);
+      });
+
+      let responseObj = {
+        organisation,
+        totalStock
+      }
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        responseObj
       );
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
@@ -2186,9 +2221,9 @@ exports.getInventoryProductsByOrganisation = [
 function getFilterConditions(filters) {
   let matchCondition = {};
   if (filters.orgType && filters.orgType !== '') {
-    if (filters.orgType === 'BREWERY') {
+    if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
       matchCondition.type = filters.orgType;
-    } else if (filters.orgType === 'S1' || filters.orgType === 'S2') {
+    } else if (filters.orgType === 'ALL_VENDORS') {
       matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }];
     }
   }
