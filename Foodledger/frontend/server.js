@@ -19,7 +19,7 @@ app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'))
 })
 
-app.listen(3001, (err) => {
+app.listen(3000, (err) => {
   if (err) {
     return console.error(err) // eslint-disable-line no-console
   }
