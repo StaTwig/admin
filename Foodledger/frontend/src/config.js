@@ -20,9 +20,8 @@ export const STABLE_SERVER_URL_TRACKANDTRACE = 'http://54.164.66.73:3005';
 export const STABLE_SERVER_URL_NOTIFICATION = 'http://54.164.66.73:3006';
 export const STABLE_SERVER_URL_PRODUCTS = 'http://54.164.66.73:3010';
 export const DEV_SERVER_URL = 'http://127.0.0.1:9001';
-export const FOODLEDGER_PROD_SERVER_URL = 'http://abinbev.statledger.io:9001';
-export const FOODLEDGER_TEST_SERVER_URL = 'http://test.abinbev.statledger.io:9001';
-
+export const FOODLEDGER_PROD_SERVER_URL = 'http://foodledger.statledger.io:9001';
+export const FOODLEDGER_TEST_SERVER_URL = 'http://test.foodledger.statledger.io:9001';
 
 /*Shipping order URL needs to be updated for stable server*/ 
 
