@@ -13,7 +13,7 @@
   text-align: left;
   font: normal bold 15px/7.5px Arial;
   letter-spacing: 1px;
-  color: #01CEEA;
+ // color: #01CEEA;
   }
 
 .commonpanle{
@@ -81,13 +81,14 @@ border-radius:8px;
       letter-spacing: 0px;
       padding: 0.5rem;
       list-style: none;
+      font-weight: 600;
     }
   }
   }
 
 .receiveShipment {
   padding-right: 3rem;
-    padding-left: 3rem;
+    padding-left: 4rem;
     @media (max-width: $md) {
       padding-right: 10px;
       padding-left: 10px;
@@ -113,10 +114,10 @@ border-radius:8px;
         border-bottom: 2px solid #d6d6d6;
         border-radius: 0;
         color:#000000;
-        font-size: 14px;
-flex-basis: 45%;
-      flex-grow: inherit;
-      font-size: 13.5px;
+        font-size: 13.5px;
+        flex-basis: 45%;
+        flex-grow: inherit;
+       
       }
 
 
@@ -134,8 +135,8 @@ flex-basis: 45%;
           border-bottom: 2px solid #d6d6d6;
           border-radius: 0;
           color: $black;
-          font-size: 15px;
-flex-basis: 65%;
+          font-weight:600;
+        flex-basis: 65%;
         flex-grow: inherit;
         font-size: 13px;
 

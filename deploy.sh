@@ -3,7 +3,7 @@
 #Chekcing arguments
 if [ $# -eq 0 ];
   then
-    echo "Please choose the mode: PROD TEST LOCAL ABINBEVPROD ABINBEVTEST FOODLEDGERTEST UNICEFTEST"
+    echo "Please choose the mode: PROD TEST LOCAL ABINBEVPROD ABINBEVTEST FOODLEDGERTEST UNICEFTEST DEMO"
     echo "Followed by the sercices: FRONTEND GATEWAY SERVICESI SERVICESII ALL"
     echo "SERVICESI - shipping_service	 inventory_service	track_trace		user_service products_service"
     echo "SERVICESII - blockchain_service	log_service alert_service notification_service rbac_service"

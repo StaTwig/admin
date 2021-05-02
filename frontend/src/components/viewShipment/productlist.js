@@ -11,7 +11,7 @@ const ProductList = (props) => {
                 {props.shipments.products.map((product,index) =>(
                     <div className={props.productHighLight ? "col panel commonpanle highlight mb-3" : "col panel commonpanle mb-3"}>
                     <div className="d-flex flex-row " >
-                        <ul className="mr-3 w-75 elemens">
+                        <ul className="w-75 elemens">
                             <li className="mb-1 text-secondary">Product Name</li>
                             <li className="mb-1 text-secondary">Manufacturer</li>
                             <li className="mb-1 text-secondary">Quantity Sent</li>

@@ -13,7 +13,7 @@ const ShipmentPopUp = (props) => {
         </div>
         <div className="data">
           Your Shipment
-          <span className="bold">{props.id}</span>
+          <span className="bold ml-3">{props.id}</span>
         </div>
         <div className="data mb-4">
          Assigned Successfully!
