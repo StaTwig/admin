@@ -140,7 +140,9 @@ const SignUp = (props) => {
         }
       </div> */}
       <div className="col text-center footer-logo">
-        <img src={logo} width={60} />
+        <div className="foodledgerLogo">
+          <span className="logo1">FOOD</span> <span className="logo2">LEDGER</span>
+        </div>
       </div>
     </div>
   );
