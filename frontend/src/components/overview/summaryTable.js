@@ -5,8 +5,8 @@ import "./table-style.scss";
 import alertShip from "../../assets/icons/alert.png";
 
 
-import shippment from "../../assets/icons/TotalShipmentsCompleted.png"
-import inandoutbound from "../../assets/icons/TotalShipmentsCompleted.svg"
+import shippment from "../../assets/icons/shipment_id.png"
+import inandoutbound from "../../assets/icons/Inbound.png"
 import shippmentdate from "../../assets/icons/ShippingDate.svg"
 import sent from "../../assets/icons/Sent.svg"
 import received from "../../assets/icons/Received1.svg"
