@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var AtomSchema = new mongoose.Schema(
   {
-    id: { type: String, required: true, unique: true },
+    id: { type: String, required:false, unique: true },
     label: {
       type: Object,
       required: false,
@@ -11,7 +11,7 @@ var AtomSchema = new mongoose.Schema(
         type: 'QR_2DBAR',
       },
     },
-    productId: { type: String, required: true },
+    productId: { type: String, required: false },
     inventoryIds: {
       type: Array,
       required: false,
@@ -59,3 +59,4 @@ var AtomSchema = new mongoose.Schema(
   { timestamps: true },
 );
 module.exports = mongoose.model('Atom', AtomSchema);
+

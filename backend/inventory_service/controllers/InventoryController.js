@@ -951,7 +951,6 @@ exports.addProductsToInventory = [
               const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
               for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
                 const atom = `${serialNumberText}${i}`
-
                 atoms.push(atom);
               }
             }
@@ -978,19 +977,20 @@ exports.addProductsToInventory = [
             }
 
             const serialNumbers = product.serialNumbersRange.split('-');
+	    let atomsArray = [];
             if (serialNumbers.length > 1) {
               const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
               const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
 
               const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
-              let atoms = [];
+              //let atoms = [];
               for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
                 const atom = {
                   // id: `${serialNumberText + uniqid.time()}${i}`,
                   id: `${serialNumberText}${i}`,
                   label: {
-                    labelId: '',
-                    labelType: '',
+                    labelId: product.label.labelId,
+                    labelType: product.label.labelType,
                   },
                   productId: product.productId,
                   inventoryIds: [inventory.id],
@@ -1012,12 +1012,12 @@ exports.addProductsToInventory = [
                     eolUserInfo: '',
                   }
                 };
-                atoms.push(atom);
+                atomsArray.push(atom);
               }
             }
             try {
-              if (atoms.length > 0)
-                await AtomModel.insertMany(atoms);
+              if (atomsArray.length > 0)
+                await AtomModel.insertMany(atomsArray);
               await inventory.save();
             } catch (err) {
               console.log('err', err);
@@ -2474,3 +2474,4 @@ exports.uploadSalesData = [
     }
   },
 ];
+
