@@ -153,7 +153,7 @@ const shipmentUpdate = async (
   shipmentStatus,
   next
 ) => {
-  const shipmentUpdateDelivered = await ShipmentModel.update(
+  const shipmentUpdateDelivered = await ShipmentModel.updateOne(
     {
       id: shipmentId,
       "products.productID": id,
@@ -506,7 +506,6 @@ exports.receiveShipment = [
                     var rejectionRate = (quantityDifference/actuallyShippedQuantity)*100;
                     (shipmentProducts[productNumber]).quantityDelivered = receivedQuantity;
                     (shipmentProducts[productNumber]).rejectionRate = rejectionRate;
-                    console.log("Rejaction Rate "+rejectionRate)
                     ShipmentModel.updateOne({
                         "id": shipmentID,
                         "products.productID": product.productID
@@ -568,7 +567,14 @@ exports.receiveShipment = [
         });
         var products = data.products;
         var count = 0;
+        var totalProducts = 0; 
+        var totalReturns = 0;
+        var shipmentRejectionRate = 0;
         for (count = 0; count < products.length; count++) {
+          var shipmentProducts = shipmentInfo[0].products;
+          totalProducts = totalProducts + shipmentProducts[count].productQuantity;
+          totalReturns = totalReturns + products[count].productQuantity;
+          shipmentRejectionRate = ((totalProducts-totalReturns)/totalProducts)*100;
           inventoryUpdate(
             products[count].productID,
             products[count].productQuantity,
@@ -604,7 +610,7 @@ exports.receiveShipment = [
           { id: req.body.id },
           {
             $push: { shipmentUpdates: updates },
-            $set: { status: "RECEIVED" },
+            $set: { status: "RECEIVED" , rejectionRate: shipmentRejectionRate},
           },
           {"new":true}
         );

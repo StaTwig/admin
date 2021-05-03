@@ -25,6 +25,7 @@ const ChartsPage = (props) => {
               "#ffef83",
               "#d4e7ff",
               "#e0b0ff",
+
               //"#000000",
               "#EDE7F6",
               "#D1C4E9",
@@ -46,6 +47,7 @@ const ChartsPage = (props) => {
               "#ffef83",
               "#d4e7ff",
               "#e0b0ff",
+              
              //"#000000",
               "#EDE7F6",
               "#D1C4E9",

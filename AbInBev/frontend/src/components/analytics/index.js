@@ -173,7 +173,6 @@ const Analytics = (props) => {
                         </div>
                       </div>
                   </div>
-
                   <div className="tableDetals">
                       <table className="table text-align-left">
                         <thead>
@@ -196,7 +195,6 @@ const Analytics = (props) => {
                                   <span className="profileTitle">Becks 330 ml</span>
                                 </div>
                               </div>
-                              
                             </td>
                             <td>333333</td>
                             <td>333333</td>
@@ -212,8 +210,7 @@ const Analytics = (props) => {
                                 <div className="profileName">
                                   <span className="profileTitle">Becks 330 ml</span>
                                 </div>
-                              </div>
-                              
+                              </div>    
                             </td>
                             <td>333333</td>
                             <td>333333</td>
@@ -229,8 +226,7 @@ const Analytics = (props) => {
                                 <div className="profileName">
                                   <span className="profileTitle">Becks 330 ml</span>
                                 </div>
-                              </div>
-                              
+                              </div>                              
                             </td>
                             <td>333333</td>
                             <td>333333</td>
@@ -246,8 +242,7 @@ const Analytics = (props) => {
                                 <div className="profileName">
                                   <span className="profileTitle">Becks 330 ml</span>
                                 </div>
-                              </div>
-                              
+                              </div>                              
                             </td>
                             <td>333333</td>
                             <td>333333</td>
@@ -263,8 +258,7 @@ const Analytics = (props) => {
                                 <div className="profileName">
                                   <span className="profileTitle">Becks 330 ml</span>
                                 </div>
-                              </div>
-                              
+                              </div>                             
                             </td>
                             <td>333333</td>
                             <td>333333</td>
@@ -280,8 +274,7 @@ const Analytics = (props) => {
                                 <div className="profileName">
                                   <span className="profileTitle">Becks 330 ml</span>
                                 </div>
-                              </div>
-                              
+                              </div>                             
                             </td>
                             <td>333333</td>
                             <td>333333</td>
@@ -297,8 +290,7 @@ const Analytics = (props) => {
                                 <div className="profileName">
                                   <span className="profileTitle">Becks 330 ml</span>
                                 </div>
-                              </div>
-                              
+                              </div>                             
                             </td>
                             <td>333333</td>
                             <td>333333</td>
@@ -314,8 +306,7 @@ const Analytics = (props) => {
                                 <div className="profileName">
                                   <span className="profileTitle">Becks 330 ml</span>
                                 </div>
-                              </div>
-                              
+                              </div>                             
                             </td>
                             <td>333333</td>
                             <td>333333</td>
@@ -331,8 +322,7 @@ const Analytics = (props) => {
                                 <div className="profileName">
                                   <span className="profileTitle">Becks 330 ml</span>
                                 </div>
-                              </div>
-                              
+                              </div>                             
                             </td>
                             <td>333333</td>
                             <td>333333</td>
@@ -348,8 +338,7 @@ const Analytics = (props) => {
                                 <div className="profileName">
                                   <span className="profileTitle">Becks 330 ml</span>
                                 </div>
-                              </div>
-                              
+                              </div>                             
                             </td>
                             <td>333333</td>
                             <td>333333</td>
@@ -365,8 +354,7 @@ const Analytics = (props) => {
                                 <div className="profileName">
                                   <span className="profileTitle">Becks 330 ml</span>
                                 </div>
-                              </div>
-                              
+                              </div>                            
                             </td>
                             <td>333333</td>
                             <td>333333</td>
@@ -383,8 +371,7 @@ const Analytics = (props) => {
                                   <span className="profileTitle">Becks 330 ml</span>
                                   <span>526025</span>
                                 </div>
-                              </div>
-                              
+                              </div>                            
                             </td>
                             <td>333333</td>
                             <td>333333</td>
@@ -399,8 +386,7 @@ const Analytics = (props) => {
 
                   {/* Inventory tab view, we need to enable based on filter selection of radio button or need to decide for separate routing for this Reports and Inventory*/}                        
                   <InventoryDashboard></InventoryDashboard>                     
-                </div>
-                
+                </div>              
                 <div className="col-md-3 rightSideMenu pt-4 px-2">
                   <div className="filterSection">
                     <div className="filterHeader mb-3">
@@ -417,16 +403,11 @@ const Analytics = (props) => {
                     </label>
                     <label className="radioButton" for="bv">
                       <input className="radioInput" type="radio" name="radio" value="bv" id="bv" /> Brewery View
-                    </label>
-                      
-
-                    
+                    </label>                   
                     <label className="filterSubHeading mt-3">Select SPM</label>
                     <select className="filterSelect mt-2">
                     <option>Select SPM</option>
                    </select>
-                   
-
                     <label className="filterSubHeading mt-3">Select State</label>
                     <select className="filterSelect mt-2">
                       <option>Select State</option>
@@ -437,8 +418,7 @@ const Analytics = (props) => {
                 </div>
               </div>
             </main>
-          </div>
-                                      
+          </div>                                  
         </div>  
         );
 };

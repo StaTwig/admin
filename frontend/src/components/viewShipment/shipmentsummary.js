@@ -15,7 +15,7 @@ const ShipmentSummary = (props) => {
           <div className="d-flex flex-row  ">
           <ul className="mr-1 elemens w-50">
             <li className="mb-1 text-secondary">Shipment ID</li>
-            <li className="mb-1 text-secondary">Shipment</li>
+            <li className="mb-1 text-secondary">Shipment Date</li>
             <li className="mb-1 text-secondary">From</li>
             <li className="mb-1 text-secondary">To</li>
             </ul>

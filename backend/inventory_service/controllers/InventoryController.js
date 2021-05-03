@@ -29,7 +29,11 @@ const stream_name = process.env.STREAM;
 
 const init = require('../logging/init');
 const OrganisationModel = require('../models/OrganisationModel');
+const AnalyticsModel = require('../models/AnalyticsModel');
 const SalesDataModel = require("../models/SalesDataModel");
+const StateDistrictStaticDataModel = require("../models/StateDistrictStaticDataModel");
+const { request } = require("http");
+const { match } = require("assert");
 const logger = init.getLog();
 
 exports.getTotalCount = [
@@ -740,6 +744,136 @@ exports.insertInventories = [
     }
   },
 ];
+
+exports.getAllStates = [
+  auth,
+  async (req, res) => {
+    try {
+      const allStates = await StateDistrictStaticDataModel.find().distinct('state');
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allStates
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getDistrictsByState = [
+  auth,
+  async (req, res) => {
+    try {
+      const _selectedState = req.query.state;
+      const allStates = await StateDistrictStaticDataModel.find({
+        state: _selectedState
+      }).distinct('district');
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allStates
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getVendorsByDistrict = [
+  auth,
+  async (req, res) => {
+    try {
+      const _selectedDistrict = req.query.district;
+      const _vendorType = req.query.vendorType;
+      const allVendors = await OrganisationModel.find({
+        district: _selectedDistrict,
+        type: _vendorType
+      });
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allVendors
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getAllSKUs = [
+  auth,
+  async (req, res) => {
+    try {
+      const allSKUs = await ProductModel.find({}, '-characteristicSet -image');
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allSKUs
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getOrganizationsByType = [
+  auth,
+  async (req, res) => {
+    try {
+      const filters = req.query;
+      let matchCondition = {};
+      if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
+        matchCondition.type = filters.orgType;
+      } else if (filters.orgType === 'ALL_VENDORS') {
+        matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }];
+      }
+
+      const organisations = await OrganisationModel.aggregate([
+        {
+          $match: matchCondition
+        }
+      ]);
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        organisations
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getOrganizationInfoByID = [
+  auth,
+  async (req, res) => {
+    try {
+      const orgId = req.query.orgId;
+      const organisation = await OrganisationModel.findOne({ id: orgId });
+      const warehouseIds = organisation.warehouses;
+      const stats = await AnalyticsModel.find({ warehouseId: { $in: warehouseIds } });
+      let totalStock = 0;
+      stats.forEach(stat => {
+        totalStock = totalStock + parseInt(stat.returns);
+      });
+
+      let responseObj = {
+        organisation,
+        totalStock
+      }
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        responseObj
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+]
+
+
 exports.addProductsToInventory = [
   auth,
   body("products")
@@ -782,32 +916,32 @@ exports.addProductsToInventory = [
               "Employee not assigned to any organisation"
             );
           }
-        //   let serialNumbersRange = true;
-        //   let alpha = [...Array(26)].map((_, y) => String.fromCharCode(y + 65)).join('');
-        //   for (let i = 0; i < products.length; i++) {
-        //     if (products[i].serialNumbersRange.split('-').length < 2) {
-        //       let snoref = Date.now();
-        //       let rApha = '';
-        //       for (let i = 0; i < 4; i++)
-        //         rApha += alpha.charAt(Math.floor(Math.random() * alpha.length));
-              
-        //      products[i].serialNumbersRange =
-        //        "DSL" + rApha + (parseInt(snoref) - parseInt(products[i].quantity - 1)) +
-        //        "-DSL" + rApha + snoref;
-        //       // serialNumbersRange = false;
-        //       // break;
-        //     }
-        //   }
-        //  if(!serialNumbersRange) {
-        //    return apiResponse.ErrorResponse(
-        //      res,
-        //      `Product doesn't conatin valid serial numbers range`,
-        //    );
-        //  }
+          //   let serialNumbersRange = true;
+          //   let alpha = [...Array(26)].map((_, y) => String.fromCharCode(y + 65)).join('');
+          //   for (let i = 0; i < products.length; i++) {
+          //     if (products[i].serialNumbersRange.split('-').length < 2) {
+          //       let snoref = Date.now();
+          //       let rApha = '';
+          //       for (let i = 0; i < 4; i++)
+          //         rApha += alpha.charAt(Math.floor(Math.random() * alpha.length));
+
+          //      products[i].serialNumbersRange =
+          //        "DSL" + rApha + (parseInt(snoref) - parseInt(products[i].quantity - 1)) +
+          //        "-DSL" + rApha + snoref;
+          //       // serialNumbersRange = false;
+          //       // break;
+          //     }
+          //   }
+          //  if(!serialNumbersRange) {
+          //    return apiResponse.ErrorResponse(
+          //      res,
+          //      `Product doesn't conatin valid serial numbers range`,
+          //    );
+          //  }
           const inventory = await InventoryModel.findOne({
             id: warehouse.warehouseInventory,
           });
-          if(!inventory) return apiResponse.ErrorResponse(res, 'Cannot find inventory to this employee warehouse');
+          if (!inventory) return apiResponse.ErrorResponse(res, 'Cannot find inventory to this employee warehouse');
           let atoms = [];
           products.forEach(product => {
             const serialNumbers = product.serialNumbersRange.split('-');
@@ -822,8 +956,8 @@ exports.addProductsToInventory = [
               }
             }
           })
-          const dupSerialFound = await AtomModel.findOne({id: { $in: atoms}});
-          if(dupSerialFound) return apiResponse.ErrorResponse(res, 'Duplicate Serial Numbers found');
+          const dupSerialFound = await AtomModel.findOne({ id: { $in: atoms } });
+          if (dupSerialFound) return apiResponse.ErrorResponse(res, 'Duplicate Serial Numbers found');
           await utility.asyncForEach(products, async product => {
             const inventoryId = warehouse.warehouseInventory;
             const checkProduct = await InventoryModel.find({ "$and": [{ "id": inventoryId }, { "inventoryDetails.productId": product.productId }] })
@@ -844,7 +978,7 @@ exports.addProductsToInventory = [
             }
 
             const serialNumbers = product.serialNumbersRange.split('-');
-            if(serialNumbers.length > 1){
+            if (serialNumbers.length > 1) {
               const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
               const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
 
@@ -882,20 +1016,20 @@ exports.addProductsToInventory = [
               }
             }
             try {
-                if(atoms.length > 0)
-                  await AtomModel.insertMany(atoms);
-                await inventory.save();
-              }catch(err) {
-                console.log('err', err);
-              }
-               /*AtomModel.insertMany(atoms).then(async (res, err) =>  {
-                if(err) {
-                 // return apiResponse.ErrorResponse(res, 'Duplicate SerialNumber');
-                  console.log('Duplicate SerialNumber');
-                }else {
-                  await inventory.save();
-                }
-              });*/
+              if (atoms.length > 0)
+                await AtomModel.insertMany(atoms);
+              await inventory.save();
+            } catch (err) {
+              console.log('err', err);
+            }
+            /*AtomModel.insertMany(atoms).then(async (res, err) =>  {
+             if(err) {
+              // return apiResponse.ErrorResponse(res, 'Duplicate SerialNumber');
+               console.log('Duplicate SerialNumber');
+             }else {
+               await inventory.save();
+             }
+           });*/
 
           });
           var datee = new Date();
@@ -2084,12 +2218,94 @@ exports.getInventoryProductsByOrganisation = [
   },
 ];
 
+function getFilterConditions(filters) {
+  let matchCondition = {};
+  if (filters.orgType && filters.orgType !== '') {
+    if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
+      matchCondition.type = filters.orgType;
+    } else if (filters.orgType === 'ALL_VENDORS') {
+      matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }];
+    }
+  }
+  if (filters.state && filters.state.length) {
+    matchCondition.state = filters.state;
+  }
+  if (filters.district && filters.district.length) {
+    matchCondition.district = filters.district;
+  }
+  if (filters.organization && filters.organization.length) {
+    matchCondition.id = filters.organization;
+  }
+  return matchCondition;
+}
+
 // total quantity as per the products for the ecosystem
 exports.getInventoryProductsByPlatform = [
   auth,
   async (req, res) => {
     try {
-      const allProductsInPlatform = await InventoryModel.aggregate([
+      const filters = req.query;
+      const platformInventory = await OrganisationModel.aggregate([
+        {
+          $match: getFilterConditions(filters)
+        },
+        {
+          $unwind: {
+            path: "$warehouses"
+          }
+        },
+        {
+          $project: {
+            warehouses: 1
+          }
+        },
+        {
+          $lookup: {
+            from: 'warehouses',
+            localField: 'warehouses',
+            foreignField: 'id',
+            as: 'warehouseinv'
+          }
+        },
+        {
+          $unwind: {
+            path: "$warehouseinv"
+          }
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: ['$warehouseinv', '$$ROOT']
+            }
+          }
+        },
+        {
+          $project: {
+            id: 1,
+            title: 1,
+            warehouseInventory: 1
+          }
+        },
+        {
+          $lookup: {
+            from: 'inventories',
+            localField: 'warehouseInventory',
+            foreignField: 'id',
+            as: 'inv'
+          }
+        },
+        {
+          $unwind: {
+            path: '$inv'
+          }
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: ['$inv', '$$ROOT']
+            }
+          }
+        },
         {
           $unwind: {
             path: '$inventoryDetails'
@@ -2098,13 +2314,8 @@ exports.getInventoryProductsByPlatform = [
         {
           $replaceRoot: {
             newRoot: {
-              $mergeObjects: ['$productDetails', '$inventoryDetails', '$$ROOT']
+              $mergeObjects: ['$inventoryDetails', '$$ROOT']
             }
-          }
-        },
-        {
-          $project: {
-            inventoryDetails: 0
           }
         },
         {
@@ -2141,10 +2352,9 @@ exports.getInventoryProductsByPlatform = [
           }
         }
       ]);
-
       return apiResponse.successResponseWithData(
         res,
-        allProductsInPlatform
+        platformInventory
       );
     } catch (err) {
       logger.log(
