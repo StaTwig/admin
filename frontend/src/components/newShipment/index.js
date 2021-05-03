@@ -35,6 +35,7 @@ const NewShipment = (props) => {
   const [category, setCategory] = useState([]);
   const [OrderId, setOrderId] = useState("Select Order ID");
   const [senderOrgId, setSenderOrgId] = useState("Select Organisation Name");
+  const [orderIdSelected, setOrderIdSelected] = useState(false);
   const [senderOrgLoc, setSenderOrgLoc] = useState(
     "Select Organisation Location"
   );
@@ -334,7 +335,7 @@ const NewShipment = (props) => {
           // if (!values.estimateDeliveryDate) {
           //   errors.estimateDeliveryDate = "Required";
           // }
-          if (values.products.length == 0) {
+          if (!orderIdSelected && values.products.length == 0) {
             errors.products = "Required";
           }
           return errors;
@@ -366,6 +367,7 @@ const NewShipment = (props) => {
                         name={OrderId}
                         name2="Select Order ID"
                         onSelect={async (v) => {
+                          setOrderIdSelected(true);
                           setFieldValue("OrderId", v);
                           // handleSOChange(v);
                           setOrderId(v);
@@ -714,7 +716,7 @@ const NewShipment = (props) => {
                   handleLabelIdChange={handleLabelIdChange}
                 />
               )}
-              {products?.length > 0 && (
+              {!orderIdSelected && products?.length > 0 && (
                 <>
                   <EditTable
                     product={addProducts}
