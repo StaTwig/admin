@@ -16,7 +16,6 @@ const EmployeeModel = require("../models/EmployeeModel");
 const ConfigurationModel = require("../models/ConfigurationModel");
 const OrganisationModel = require("../models/OrganisationModel");
 const CounterModel = require("../models/CounterModel");
-const AtomModel = require("../models/AtomModel");
 const logEvent = require("../../../utils/event_logger");
 const init = require("../logging/init");
 const logger = init.getLog();
