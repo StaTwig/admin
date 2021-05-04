@@ -16,10 +16,12 @@ fi
 
 #Creating env variables
 echo "Creating Env variables .... "
+./pre-deploy.sh $1
 
+: <<'END'
 if [ "$1" == "PROD" ] && ([ "$2" == "SERVICESI" ] || [ "$2" == "SERVICESII" ]);
    then
-      ./pre-deploy-prod.sh
+      ./pre-deploy.sh
 
 elif [ "$1" == "TEST" ];
    then 
@@ -53,6 +55,8 @@ else
    ./pre-deploy.sh
 
 fi
+
+END
 
 # Installing the dependency in utils
 
