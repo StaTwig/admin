@@ -16,6 +16,7 @@ const EmployeeModel = require("../models/EmployeeModel");
 const ConfigurationModel = require("../models/ConfigurationModel");
 const OrganisationModel = require("../models/OrganisationModel");
 const CounterModel = require("../models/CounterModel");
+const AtomModel = require("../models/AtomModel");
 const logEvent = require("../../../utils/event_logger");
 const init = require("../logging/init");
 const logger = init.getLog();
@@ -681,42 +682,6 @@ exports.receiveShipment = [
   },
 ];
 
-exports.fetchShipmentsByQRCode = [
-  auth,
-  async (req, res) => {
-    try {
-      const { authorization } = req.headers;
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          const { QRcode } = req.query;
-          const s = await ShipmentModel.find({ "label.labelId": QRcode })
-            .then((shipments) => {
-              return apiResponse.successResponseWithData(
-                res,
-                "Shipment Details",
-                shipments
-              );
-            })
-            .catch((err) => {
-              return apiResponse.ErrorResponse(res, err);
-            });
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< ShipmentService < ShipmentController < modifyShipment : refuted token"
-          );
-          res.status(403).json("Auth failed");
-        }
-      });
-    } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
-      );
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
 
 exports.fetchShipments = [
   auth,
