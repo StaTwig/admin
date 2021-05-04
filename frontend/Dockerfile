@@ -1,19 +1,23 @@
-# Doc from NodeJS documentation
-FROM node
+FROM node:14.16.1 as react_build 
 
-# # Create app directory
 WORKDIR /app
 
-# # A wildcard is used to ensure both package.json AND package-lock.json are copied
-# # where available (npm@5+)
-COPY package*.json ./
+COPY . /app/
+ 
+RUN yarn install
 
-RUN yarn
-# # If you are building your code for production
-# RUN npm ci --only=production
+RUN yarn run build 
 
-# # Bundle app source
-COPY . .
+FROM nginx:1.19-alpine
 
-EXPOSE 3000
-CMD [ "node", "server.js" ]
+COPY --from=react_build /app /usr/share/nginx/html
+
+# COPY . /usr/share/nginx/html
+
+RUN rm /etc/nginx/conf.d/default.conf
+
+COPY nginx/nginx.conf /etc/nginx/conf.d
+
+EXPOSE 80 
+
+CMD ["nginx","-g","daemon off;"]

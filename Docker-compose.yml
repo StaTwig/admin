@@ -7,95 +7,68 @@ services:
     ports:
       - "80:80"
       - "443:443"
-      - "8080:8080"
-    command:
-      - --log.level=DEBUG
-      - --entrypoints.web.address=:80
-      - --entrypoints.websecure.address=:443
-      - --providers.docker
-      - --providers.docker.exposedByDefault=false
-      - --api
-      - --certificatesresolvers.leresolver.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
-      - --certificatesresolvers.leresolver.acme.email=ravilochan2000@gmail.com
-      - --certificatesresolvers.leresolver.acme.storage=/acme.json
-      - --certificatesresolvers.leresolver.acme.tlschallenge=true
     volumes:
-      - ./traefik_config/acme.json:/acme.json
+      - "./acme.json:/acme.json"
+      - "./traefik.toml:/traefik.toml"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    labels: 
-      # - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-      # - "traefik.http.routers.redirect-https.rule=hostregexp(`{host:.+}`)"
-      # - "traefik.http.routers.redirect-https.entrypoints=web"
-      # - "traefik.http.routers.redirect-https.middlewares=redirect-to-https"  
-
-    # Dashboard
-      - "traefik.http.routers.traefik.rule=Host(`traefik.docker.localhost`)"
-      - "traefik.http.routers.traefik.entrypoints=websecure"
-      - "traefik.http.routers.traefik.service=api@internal"
-      - "traefik.http.routers.traefik.tls.certresolver=leresolver"
-      - "traefik.http.routers.traefik.middlewares=authtraefik"
-      - "traefik.http.middlewares.authtraefik.basicauth.users=user:$$apr1$$q8eZFHjF$$Fvmkk//V6Btlaf2i/ju5n/" 
-
-      # global redirect to https
-      - "traefik.http.routers.httpcatchall.rule=hostregexp(`{host:.+}`)"
-      - "traefik.http.routers.httpcatchall.entrypoints=web"
-      - "traefik.http.routers.httpcatchall.middlewares=redirect-to-https"
-
-      # middleware redirect
-      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"      
   address:
     build: './backend/address_service'
-    image: 'address_service1.0'
+    image: 'address_service2.0'
     container_name: 'address_service'
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.address.entrypoints=websecure"
       - "traefik.http.routers.address.rule=Host(`admin.vaccineledger.com`) && PathPrefix(`/api/address_service`)"
-      - "traefik.http.routers.address.tls.certresolver=leresolver"
-
+      - "traefik.http.routers.address.tls=true"
+      - "traefik.http.routers.address.tls.certresolver=lets-encrypt"
   affliate:
     build: './backend/affliation_service'
-    image: 'affliation_service1.0'
+    image: 'affliation_service2.0'
     container_name: 'affliate_service'
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
-      - "traefik.http.routers.affliate.entrypoints=web"
+      - "traefik.http.routers.affliate.entrypoints=websecure"
       - "traefik.http.routers.affliate.rule=Host(`admin.vaccineledger.com`) && PathPrefix(`/api/affliation_service`)"
-      # - "traefik.http.routers.affliate.tls.certresolver=lets-encr"
+      - "traefik.http.routers.affliate.tls=true"
+      - "traefik.http.routers.affliate.tls.certresolver=lets-encrypt"
 
   rbac:
     build: './backend/rbac_service'
-    image: 'rbac_service1.0'
+    image: 'rbac_service2.0'
     container_name: 'rbac_service'
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.rbac.entrypoints=websecure"
       - "traefik.http.routers.rbac.rule=Host(`admin.vaccineledger.com`) && PathPrefix(`/api/rbac_service`)"
-      - "traefik.http.routers.rbac.tls.certresolver=leresolver"
+      - "traefik.http.routers.rbac.tls=true"
+      - "traefik.http.routers.rbac.tls.certresolver=lets-encrypt"
 
   employee:
     build: './backend/employee_service'
-    image: 'employee_service1.0'
+    image: 'employee_service2.0'
     container_name: 'employee_service'
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.employee.entrypoints=websecure"
       - "traefik.http.routers.employee.rule=Host(`admin.vaccineledger.com`) && PathPrefix(`/api/employee_service`)"
-      - "traefik.http.routers.employee.tls.certresolver=leresolver"
+      - "traefik.http.routers.employee.tls=true"
+      - "traefik.http.routers.employee.tls.certresolver=lets-encrypt"
   frontend:
     build: './frontend'
-    image: 'frontend1.0'
+    image: 'frontend2.0'
     container_name: 'frontend'
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.routers.frontend.rule=Host(`admin.vaccineledger.com`)"
-      - "traefik.http.routers.frontend.tls.certresolver=leresolver"
+      - "traefik.http.routers.employee.tls=true"
+      - "traefik.http.routers.employee.tls.certresolver=lets-encrypt"     
+
 networks:
   default:
     external:
