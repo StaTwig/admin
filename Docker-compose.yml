@@ -66,8 +66,8 @@ services:
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.routers.frontend.rule=Host(`admin.vaccineledger.com`)"
-      - "traefik.http.routers.employee.tls=true"
-      - "traefik.http.routers.employee.tls.certresolver=lets-encrypt"     
+      - "traefik.http.routers.frontend.tls=true"
+      - "traefik.http.routers.frontend.tls.certresolver=lets-encrypt"     
 
 networks:
   default:

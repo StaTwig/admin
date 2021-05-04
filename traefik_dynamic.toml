@@ -1,6 +1,0 @@
-[http.routers.api]
-  rule = "Host(`monitor.your_domain`)"
-  entrypoints = ["websecure"]
-  service = "api@internal"
-  [http.routers.api.tls]
-    certResolver = "lets-encrypt"
