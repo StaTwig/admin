@@ -20,7 +20,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.address.entrypoints=websecure"
-      - "traefik.http.routers.address.rule=Host(`admin.abinbev.statledger.io`) && PathPrefix(`/api/address_service`)"
+      - "traefik.http.routers.address.rule=Host(`test.admin.abinbev.statledger.io`) && PathPrefix(`/api/address_service`)"
       - "traefik.http.routers.address.tls=true"
       - "traefik.http.routers.address.tls.certresolver=lets-encrypt"
   affliate:
@@ -31,7 +31,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.affliate.entrypoints=websecure"
-      - "traefik.http.routers.affliate.rule=Host(`admin.abinbev.statledger.io`) && PathPrefix(`/api/affliation_service`)"
+      - "traefik.http.routers.affliate.rule=Host(`test.admin.abinbev.statledger.io`) && PathPrefix(`/api/affliation_service`)"
       - "traefik.http.routers.affliate.tls=true"
       - "traefik.http.routers.affliate.tls.certresolver=lets-encrypt"
 
@@ -43,7 +43,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.rbac.entrypoints=websecure"
-      - "traefik.http.routers.rbac.rule=Host(`admin.abinbev.statledger.io`) && PathPrefix(`/api/rbac_service`)"
+      - "traefik.http.routers.rbac.rule=Host(`test.admin.abinbev.statledger.io`) && PathPrefix(`/api/rbac_service`)"
       - "traefik.http.routers.rbac.tls=true"
       - "traefik.http.routers.rbac.tls.certresolver=lets-encrypt"
 
@@ -55,7 +55,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.employee.entrypoints=websecure"
-      - "traefik.http.routers.employee.rule=Host(`admin.abinbev.statledger.io`) && PathPrefix(`/api/employee_service`)"
+      - "traefik.http.routers.employee.rule=Host(`test.admin.abinbev.statledger.io`) && PathPrefix(`/api/employee_service`)"
       - "traefik.http.routers.employee.tls=true"
       - "traefik.http.routers.employee.tls.certresolver=lets-encrypt"
   frontend:
@@ -66,7 +66,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.frontend.entrypoints=websecure"
-      - "traefik.http.routers.frontend.rule=Host(`admin.abinbev.statledger.io`)"
+      - "traefik.http.routers.frontend.rule=Host(`test.admin.abinbev.statledger.io`)"
       - "traefik.http.routers.frontend.tls=true"
       - "traefik.http.routers.frontend.tls.certresolver=lets-encrypt"     
 
