@@ -56,8 +56,8 @@ const EnterId = (props) => {
             <div className="card bg-light border-0">
               <div className="card-body">
                 <div className="row justify-content-between">
-                  <div className="col ">
-                    <div className="panel commonpanle">
+                  <div className="col">
+                    <div className="panel commonpanle mr-5">
                       <div
                         className={`form-group ${
                           errors.shipmentId && touched.shipmentId && `mb-0`
@@ -88,12 +88,12 @@ const EnterId = (props) => {
                       )} */}
                     </div>
                   </div>
-                  <div className="col-1">
+                  <div className="col-1 ml-2 mr-5">
                     <h3 className="or">OR</h3>
                   </div>
 
                   <div className="col ">
-                    <div className="panel commonpanle">
+                    <div className="panel commonpanle mr-5">
                       <div
                         className={`form-group ${
                           errors.shipmentId && touched.shipmentId && `mb-0`
