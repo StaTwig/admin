@@ -18,6 +18,7 @@ const OrganisationModel = require("../models/OrganisationModel");
 const CounterModel = require("../models/CounterModel");
 const logEvent = require("../../../utils/event_logger");
 const init = require("../logging/init");
+const moment = require('moment');
 const logger = init.getLog();
 const imageUrl = process.env.IMAGE_URL;
 const CENTRAL_AUTHORITY_ID = null
@@ -716,6 +717,60 @@ function getShipmentFilterCondition(filters, warehouseIds) {
   if (filters.txn_type) {
     matchCondition.status = filters.txn_type;
   }
+
+  if (filters.date_filter_type && filters.date_filter_type.length) {
+
+    const DATE_FORMAT = 'YYYY-MM-DD';
+    if (filters.date_filter_type === 'by_range') {
+
+      let startDate = filters.start_date ? filters.start_date : new Date();
+      let endDate = filters.end_date ? filters.end_date : new Date();
+      matchCondition.shippingDate = {
+        $gte: new Date(startDate).toISOString(),
+        $lte: new Date(endDate).toISOString()
+      };
+
+    } else if (filters.date_filter_type === 'by_monthly') {
+
+      let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
+      let startDateOfTheMonth = moment(startDateOfTheYear).add(filters.month, 'months').format(DATE_FORMAT);
+      let endDateOfTheMonth = moment(startDateOfTheMonth).endOf('month');
+      matchCondition.shippingDate = {
+        $gte: new Date(startDateOfTheMonth).toISOString(),
+        $lte: new Date(endDateOfTheMonth).toISOString()
+      };
+
+    } else if (filters.date_filter_type === 'by_quarterly') {
+
+      let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
+      let startDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).startOf('quarter').format(DATE_FORMAT);
+      let endDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).endOf('quarter').format(DATE_FORMAT);
+      matchCondition.shippingDate = {
+        $gte: new Date(startDateOfTheQuarter).toISOString(),
+        $lte: new Date(endDateOfTheQuarter).toISOString()
+      };
+
+    } else if (filters.date_filter_type === 'by_yearly') {
+
+      const currentDate = moment().format(DATE_FORMAT);
+      const currentYear = moment().year();
+
+      let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
+      let endDateOfTheYear = moment([filters.year]).endOf('year')
+
+      if (filters.year === currentYear) {
+        endDateOfTheYear = currentDate;
+      }
+
+      matchCondition.shippingDate = {
+        $gte: new Date(startDateOfTheYear).toISOString(),
+        $lte: new Date(endDateOfTheYear).toISOString()
+      };
+
+    }
+
+  }
+
   return matchCondition;
 }
 
