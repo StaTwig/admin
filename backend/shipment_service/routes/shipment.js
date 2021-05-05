@@ -28,8 +28,10 @@ router.get("/getProductsByInventory", ShipmentController.getProductsByInventory)
 router.post("/UpdateTrackingStatus", ShipmentController.updateTrackingStatus); // /updateTrackingStatus
 router.get("/chainOfCustody", ShipmentController.chainOfCustody);
 
-router.post("/uploadImage",upload.single('photo'),ShipmentController.uploadImage);
-router.get("/fetchImage",ShipmentController.fetchImage);
-router.get("/fetchShipmentIds",ShipmentController.fetchShipmentIds);
+router.post("/uploadImage", upload.single('photo'), ShipmentController.uploadImage);
+router.get("/fetchImage", ShipmentController.fetchImage);
+router.get("/fetchShipmentIds", ShipmentController.fetchShipmentIds);
+
+router.get("/abinbev/fetchShipments", ShipmentController.fetchShipmentsForAbInBev);
 
 module.exports = router;
