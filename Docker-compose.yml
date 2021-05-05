@@ -6,68 +6,70 @@ services:
     restart: unless-stopped
     ports:
       - "80:80"
-      - "8080:8080"
+      - "443:443"
+
     volumes:
-      - "./traefik_config/traefik.yml:/traefik.yml:ro"
-      - ./traefik_config/acme.json:/acme.json
+      - "./acme.json:/acme.json"
+      - "./traefik.toml:/traefik.toml"
+      - "./traefik_dynamic.toml:/traefik_dynamic.toml"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
-    # labels: 
-    #   - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
-    #   - "traefik.http.routers.redirect-https.rule=hostregexp(`{host:.+}`)"
-    #   - "traefik.http.routers.redirect-https.entrypoints=web"
-    #   - "traefik.http.routers.redirect-https.middlewares=redirect-to-https"    
-  frontend:
-    build: './frontend'
-    image: 'frontend1.0'
-    container_name: 'frontend'
-    labels:
-      - "traefik.enable=true"
-      - "traefik.docker.network=proxy"
-      - "traefik.http.routers.frontend.entrypoints=web"
-      - "traefik.http.routers.frontend.rule=Path(`/`) || PathPrefix(`/dist`)"
-      # - "traefik.http.routers.frontend.tls.certresolver=lets-encr"
   address:
     build: './backend/address_service'
-    image: 'address_service1.0'
+    image: 'address_service2.0'
     container_name: 'address_service'
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
-      - "traefik.http.routers.address.entrypoints=web"
+      - "traefik.http.routers.address.entrypoints=websecure"
       - "traefik.http.routers.address.rule=Host(`admin.vaccineledger.com`) && PathPrefix(`/api/address_service`)"
-      # - "traefik.http.routers.address.tls.certresolver=lets-encr"
+      - "traefik.http.routers.address.tls=true"
+      - "traefik.http.routers.address.tls.certresolver=lets-encrypt"
   affliate:
     build: './backend/affliation_service'
-    image: 'affliation_service1.0'
+    image: 'affliation_service2.0'
     container_name: 'affliate_service'
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
-      - "traefik.http.routers.affliate.entrypoints=web"
+      - "traefik.http.routers.affliate.entrypoints=websecure"
       - "traefik.http.routers.affliate.rule=Host(`admin.vaccineledger.com`) && PathPrefix(`/api/affliation_service`)"
-      # - "traefik.http.routers.affliate.tls.certresolver=lets-encr"
+      - "traefik.http.routers.affliate.tls=true"
+      - "traefik.http.routers.affliate.tls.certresolver=lets-encrypt"
 
   rbac:
     build: './backend/rbac_service'
-    image: 'rbac_service1.0'
+    image: 'rbac_service2.0'
     container_name: 'rbac_service'
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
-      - "traefik.http.routers.rbac.entrypoints=web"
+      - "traefik.http.routers.rbac.entrypoints=websecure"
       - "traefik.http.routers.rbac.rule=Host(`admin.vaccineledger.com`) && PathPrefix(`/api/rbac_service`)"
-      # - "traefik.http.routers.rbac.tls.certresolver=lets-encr"
+      - "traefik.http.routers.rbac.tls=true"
+      - "traefik.http.routers.rbac.tls.certresolver=lets-encrypt"
 
   employee:
     build: './backend/employee_service'
-    image: 'employee_service1.0'
+    image: 'employee_service2.0'
     container_name: 'employee_service'
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
-      - "traefik.http.routers.employee.entrypoints=web"
+      - "traefik.http.routers.employee.entrypoints=websecure"
       - "traefik.http.routers.employee.rule=Host(`admin.vaccineledger.com`) && PathPrefix(`/api/employee_service`)"
-      # - "traefik.http.routers.employee.tls.certresolver=lets-encr"
+      - "traefik.http.routers.employee.tls=true"
+      - "traefik.http.routers.employee.tls.certresolver=lets-encrypt"
+  frontend:
+    build: './frontend'
+    image: 'frontend2.0'
+    container_name: 'frontend'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.rule=Host(`admin.vaccineledger.com`)"
+      - "traefik.http.routers.frontend.tls=true"
+      - "traefik.http.routers.frontend.tls.certresolver=lets-encrypt"     
 
 networks:
   default:
