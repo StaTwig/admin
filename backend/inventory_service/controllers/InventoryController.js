@@ -975,7 +975,7 @@ exports.addInventoriesFromExcel = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           permission_request = {
-            result: result,
+            role: req.user.role,
             permissionRequired: "addInventory",
           };
           checkPermissions(permission_request, async (permissionResult) => {
@@ -998,31 +998,26 @@ exports.addInventoriesFromExcel = [
               let limit = chunkSize;
               let skip = 0;
 
-              logger.log("info", "Inserting excel data in chunks");
               async function recursiveFun() {
                 skip = chunkSize * count;
                 count++;
                 limit = chunkSize * count;
-                logger.log("info", `skip ${skip}`);
-
-                logger.log("info", `limit ${limit}`);
                 const chunkedData = data.slice(skip, limit);
                 let chunkUrls = [];
                 const serialNumbers = chunkedData.map((inventory) => {
-                  return { serialNumber: inventory.serialNumber.trim() };
+                  return { id: inventory.serialNumber.trim() };
                 });
-                const inventoriesFound = await InventoryModel.findOne({
+                const inventoriesFound = await AtomModel.findOne({
                   $or: serialNumbers,
                 });
                 if (inventoriesFound) {
-                  console.log("Duplicate Inventory Found");
                   const newNotification = new NotificationModel({
                     owner: address,
                     message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${inventoriesFound.serialNumber
                       }`,
                   });
                   await newNotification.save();
-                  return;
+                  return apiResponse.ErrorResponse(res, "Duplicate Inventory Found");
                 }
                 chunkedData.forEach((inventory) => {
                   inventory.serialNumber = inventory.serialNumber.trim();
@@ -1045,15 +1040,8 @@ exports.addInventoriesFromExcel = [
                       const inventoryData = responses.map(
                         (response) => response.data
                       );
-                      logger.log(
-                        "info",
-                        `Inventory Data length' ${inventoryData.length}`
-                      );
-                      logger.log(
-                        "info",
-                        `Transaction Id,
-                        ${inventoryData[0].transactionId}`
-                      );
+                      console.log(inventoryData);
+                      
                       InventoryModel.insertMany(inventoryData, (err, res) => {
                         if (err) {
                           logger.log("error", err.errmsg);
@@ -1068,12 +1056,6 @@ exports.addInventoriesFromExcel = [
                       if (limit < data.length) {
                         recursiveFun();
                       } else {
-                        logger.log(
-                          'info',
-                          `Insertion of excel sheet data is completed. Time Taken to insert ${data.length
-                          } in seconds - `,
-                          (new Date() - start) / 1000,
-                        );
                         const newNotification = new NotificationModel({
                           owner: address,
                           message: `Your inventories from excel is added successfully on ${new Date().toLocaleString()}`,
