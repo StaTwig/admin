@@ -633,7 +633,7 @@ exports.verifyOtp = [
           const jwtPayload = userData;
           const jwtData = {
             //expiresIn: process.env.JWT_TIMEOUT_DURATION,
-            expiresIn : "2 hours"
+            expiresIn : "12 hours"
           };
           const secret = process.env.JWT_SECRET;
           //Generated JWT token with Payload and secret.
