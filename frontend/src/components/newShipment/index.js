@@ -729,7 +729,7 @@ const NewShipment = (props) => {
                         "products",
                         newArr.map((row) => ({
                           productCategory: row.type,
-                          productID: row._id,
+                          productID: row.id,
                           productQuantity: row.productQuantity,
                           productName: row.name,
                           manufacturer: row.manufacturer,
@@ -741,7 +741,7 @@ const NewShipment = (props) => {
                     enableDelete={true}
                     onRemoveRow={(index) => {
                       const prodIndex = products.findIndex(
-                        (p) => p._id === addProducts[index]._id
+                        (p) => p.id === addProducts[index].id
                       );
                       let newArray = [...products];
                       newArray[prodIndex] = {
@@ -757,7 +757,7 @@ const NewShipment = (props) => {
                           "products",
                           newArr.map((row) => ({
                             productCategory: row.type,
-                            productID: row._id,
+                            productID: row.id,
                             productQuantity: row.productQuantity,
                             productName: row.name,
                             manufacturer: row.manufacturer,
@@ -775,7 +775,7 @@ const NewShipment = (props) => {
                         "products",
                         newArr.map((row) => ({
                           productCategory: row.type,
-                          productID: row._id,
+                          productID: row.id,
                           productQuantity: row.productQuantity,
                           productName: row.name,
                           manufacturer: row.manufacturer,
@@ -785,7 +785,7 @@ const NewShipment = (props) => {
                       setAddProducts((prod) => [...newArr]);
 
                       const prodIndex = products.findIndex(
-                        (p) => p._id === item._id
+                        (p) => p.id === item.id
                       );
                       let newArray = [...products];
                       newArray[prodIndex] = {
