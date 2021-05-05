@@ -26,16 +26,24 @@ const Table = props => {
               if (order.poStatus === 'CREATED') {
                 status = visible == 'one' ? 'Sent' : 'Received';
               }
-              else if (order.poStatus === 'RECEIVED') {
+              else if (order.poStatus === 'Received') {
                 statusStyle = 'bg-info';
-                status = 'Delivered';
+                status = 'Received';
               }
-              else if (order.poStatus === 'Accepted') {
+              else if (order.poStatus === 'ACCEPTED') {
                 statusStyle = 'bg-success';
                 status = 'Accepted';
-              }else if (order.poStatus === 'Rejected') {
+              }else if (order.poStatus === 'REJECTED') {
                 statusStyle = 'bg-warning';
                 status = 'Rejected';
+              }
+              else if (order.poStatus === 'TRANSIT&FULLYFULFILLED') {
+                statusStyle = 'bg-secondary';
+                status = 'Transit&FullyFilled';
+              }
+              else if (order.poStatus === 'FULLYFULFILLED') {
+                statusStyle = 'bg-secondary';
+                status = 'FullyFilled';
               }
 
 
@@ -47,7 +55,7 @@ const Table = props => {
                     <img src={user} width="30" height="20" alt="User" className="rounded mr-1 align-self-center" />
                     <div className="flex-column d-flex">
                       <span className="text-primary bold">{visible == 'one' ? supplier.organisation.name : customer.organisation.name}</span>
-                      <p className="address mb-0 text-primary pl-3">{visible == 'one' ? supplier.organisation.id : customer.organisation.id}</p>
+                      <p className="address mb-0 text-primary">{visible == 'one' ? supplier.organisation.id : customer.organisation.id}</p>
                   </div>
                   </div>
                 </div>

@@ -98,6 +98,12 @@
       #middlewares = ["advancedanalytics-stripprefix"]
       #If the rule matches, forward to the advanced analytics management service (declared below)
       service = "advancedanalytics-management"
+    [http.routers.lastmile-management]
+      rule = "Host(`test.vaccineledger.com`) && PathPrefix(`/lastmilemanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["lastmilemanagement-stripprefix"]
+      #If the rule matches, forward to the advanced lastmile management service (declared below)
+      service = "lastmile-management"
 
   [http.middlewares]
     [http.middlewares.test-stripprefix.stripPrefix]
@@ -135,6 +141,8 @@
       prefixes = ["/eventmanagement", "/eventmanagement/"]
     [http.middlewares.advancedanalytics-stripprefix.stripPrefix]
       prefixes = ["/advancedanalytics", "/advancedanalytics/"]
+    [http.middlewares.lastmilemanagement-stripprefix.stripPrefix]
+      prefixes = ["/lastmilemanagement", "/lastmilemanagement/"]
 
   [http.services]
     # Define how to reach an existing service on our infrastructure
@@ -187,3 +195,6 @@
     [http.services.advancedanalytics-management.loadBalancer]
       [[http.services.advancedanalytics-management.loadBalancer.servers]]
         url = "http://127.0.0.1:3016/"
+    [http.services.lastmile-management.loadBalancer]
+      [[http.services.lastmile-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3017/"

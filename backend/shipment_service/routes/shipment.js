@@ -4,7 +4,7 @@ const ShipmentController = require("../controllers/ShipmentController");
 
 const Storage = multer.diskStorage({
   destination(req, file, callback) {
-    callback(null, "./uploads");
+    callback(null, "/home/ubuntu/shipmentimages");
   },
   filename(req, file, callback) {
     callback(null, file.originalname);
@@ -22,15 +22,16 @@ router.get("/viewShipment", ShipmentController.viewShipment); // /viewShipment?S
 
 router.get("/viewPoShipments", ShipmentController.fetch_po_Shipments); // /viewPoShipments?poId=po1234565
 router.get("/fetchAllShipments", ShipmentController.fetchAllShipments); // /fetchAllShipments ==> Gives all shipments in the ledger
-router.get("/fetchShipmentsByQRCode", ShipmentController.fetchShipmentsByQRCode); //Give all shipment details mapped to the QR label code
 router.post("/updateShipmentStatus", ShipmentController.updateStatus); // /updateShipmentStatus?id=123
 router.get("/getProductsByInventory", ShipmentController.getProductsByInventory);
 
 router.post("/UpdateTrackingStatus", ShipmentController.updateTrackingStatus); // /updateTrackingStatus
 router.get("/chainOfCustody", ShipmentController.chainOfCustody);
 
-router.post("/uploadImage",upload.single('photo'),ShipmentController.uploadImage);
-router.get("/fetchImage",ShipmentController.fetchImage);
-router.get("/fetchShipmentIds",ShipmentController.fetchShipmentIds);
+router.post("/uploadImage", upload.single('photo'), ShipmentController.uploadImage);
+router.get("/fetchImage", ShipmentController.fetchImage);
+router.get("/fetchShipmentIds", ShipmentController.fetchShipmentIds);
+
+router.get("/abinbev/fetchShipments", ShipmentController.fetchShipmentsForAbInBev);
 
 module.exports = router;

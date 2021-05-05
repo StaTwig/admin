@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { AreaChart, Area, Tooltip } from "recharts";
 import { useDispatch } from "react-redux";
 import "./style.scss";
+import Moment from "react-moment";
+
 import bottlesIcon from "../../assets/becks_330ml.png";
 import brewIcon from "../../assets/in brewery.png";
 import s2VenorsIcon from "../../assets/s2 venors.png";
@@ -9,57 +11,38 @@ import s1VenorsIcon from "../../assets/s1vendors.png";
 import SideBar from "../../components/sidebar";
 import { getAdvancedAnalytics } from "../../actions/overviewAction";
 
-const data = [
-  {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100
-  }
-];
 const Overview = (props) => {
   const dispatch = useDispatch();
   const [Transactions, setTransactions] = useState([]);
+  const [overviewStats, setOverviewStats] = useState({ breweryObj: {}, s1Obj: {}, s2Obj: {} });
+
+  const [selectedFilter, setSelectedFilter] = useState('BREWERY');
+
+  const today = new Date().toDateString()
+
+  const applyFilter = (_filter) => {
+    setSelectedFilter(_filter);
+    // TODO: Fetch data based on filters...
+    (async () => {
+      const results = await dispatch(getAdvancedAnalytics(_filter));
+      if (results.data.overviewStats) {
+        setOverviewStats(results.data.overviewStats);
+      } else {
+        setOverviewStats({ breweryObj: {}, s1Obj: {}, s2Obj: {} });
+      }
+      setTransactions(results.data.data);
+    })();
+  }
 
   useEffect(() => {
     (async () => {
       const results = await dispatch(getAdvancedAnalytics());
+      if (results.data.overviewStats) {
+        setOverviewStats(results.data.overviewStats);
+      } else {
+        setOverviewStats({ breweryObj: {}, s1Obj: {}, s2Obj: {} });
+      }
+
       setTransactions(results.data.data);
     })();
   }, []);
@@ -69,19 +52,20 @@ const Overview = (props) => {
         <div className="col-md-2 d-none d-md-block padding0 greyBG">
           <SideBar {...props} />
         </div>
-        <main role="main" className="col-md-9 ml-sm-auto col-lg-10">
+        <main role="main" className="col-md-9 mainContainer ml-sm-auto col-lg-10">
           <div className="row">
-            <div className="col-md-9 mainContainer pt-3 px-4">
-              <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
-                <h1 className="h2">Overview</h1>
-                <div className="btn-toolbar mb-2 mb-md-0">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="bi bi-bell" viewBox="0 0 16 16">
-                    <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
-                  </svg>
-                </div>
+            <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center p-2">
+              <h1 className="h2">Overview</h1>
+              <div className="btn-toolbar mb-2 mb-md-0">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="bi bi-bell" viewBox="0 0 16 16">
+                  <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z" />
+                </svg>
               </div>
+            </div>
+
+            <div className="col-md-9  pt-3 px-4">
               <div className="grid gafc gap3">
-                <section className="boxes1">
+                <section className={(selectedFilter === 'BREWERY') ? 'selectedBox' : 'box'} onClick={() => applyFilter('BREWERY')}>
                   <div className="grid gafc aic gapc3">
                     <div
                       className="whiteC"
@@ -94,13 +78,12 @@ const Overview = (props) => {
                   <div className="grid small-txt-1 boxes-inner-2">
                     <span className="bi2-icons">
                       <svg
-                        stroke="white"
                         xmlns="http://www.w3.org/2000/svg"
                         width="12px"
                         height="12px"
                         viewBox="0 0 21.166 21.166"
+                        fill={(selectedFilter === 'BREWERY') ? '#ffffff' : '#333751'}
                       >
-                        <defs></defs>
                         <path
                           className="a"
                           d="M25.469,16.939A2.469,2.469,0,1,0,23,14.469,2.472,2.472,0,0,0,25.469,16.939Zm0-4.233a1.764,1.764,0,1,1-1.764,1.764A1.766,1.766,0,0,1,25.469,12.706Z"
@@ -118,13 +101,13 @@ const Overview = (props) => {
                         />
                       </svg>
                     </span>
-                    <span>2</span>
+                    <span>{(overviewStats['breweryObj'] && overviewStats['breweryObj']['n_warehouses']) ? overviewStats['breweryObj']['n_warehouses'] : ''}</span>
                     <span className="bi2-icons">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="12px"
                         height="12px"
-                        fill="white"
+                        fill={(selectedFilter === 'BREWERY') ? '#ffffff' : '#333751'}
                         className="bi bi-clock"
                         viewBox="0 0 16 16"
                       >
@@ -132,29 +115,18 @@ const Overview = (props) => {
                         <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
                       </svg>
                     </span>
-                    <span>15 Nov 2019</span>
-                  </div>
-                  <div className="progressBox">
-                      <div className="progressarea">
-                        <div className="progress">
-                          <div
-                            className="progress-bar white-bg"
-                            role="progressbar"
-                            style={{ width: "87%" }}
-                            aria-valuenow="87"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                          ></div>
-                        </div>
-                      </div>
-                      <span>87%</span>     
+                    <span>
+                      <Moment format="MMM Do, YYYY">
+                        {today}
+                      </Moment>
+                    </span>
                   </div>
                   <div className="card-footer bg-transparent" style={{ border: 0 }}>
-                    Stock :
-                    <span className="stoct-count font-HelveticaNeue">2,47,953</span>
+                    Stock: &nbsp;
+                    <span className="stoct-count font-HelveticaNeue">{(overviewStats['breweryObj'] && overviewStats['breweryObj']['stock']) ? overviewStats['breweryObj']['stock'] : ''}</span>
                   </div>
                 </section>
-                <section className="boxes2">
+                <section className={(selectedFilter === 'S1') ? 'selectedBox' : 'box'} onClick={() => applyFilter('S1')}>
                   <div className="grid gafc aic gapc3">
                     <div
                       className="blueC"
@@ -169,6 +141,7 @@ const Overview = (props) => {
                         width="12px"
                         height="12px"
                         viewBox="0 0 21.166 21.166"
+                        fill={(selectedFilter === 'S1') ? '#ffffff' : '#333751'}
                       >
                         <path
                           className="a"
@@ -187,13 +160,13 @@ const Overview = (props) => {
                         />
                       </svg>
                     </span>
-                    <span>2</span>
+                    <span>{(overviewStats['s1Obj'] && overviewStats['s1Obj']['n_warehouses']) ? overviewStats['s1Obj']['n_warehouses'] : ''}</span>
                     <span className="bi2-icons">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="12px"
                         height="12px"
-                        fill="#333751"
+                        fill={(selectedFilter === 'S1') ? '#ffffff' : '#333751'}
                         className="bi bi-clock"
                         viewBox="0 0 16 16"
                       >
@@ -201,28 +174,16 @@ const Overview = (props) => {
                         <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
                       </svg>
                     </span>
-                    <span>15 Nov 2019</span>
-                  </div>
-                  <div className="progressBox">
-                      <div className="progressarea">
-                        <div className="progress">
-                          <div
-                            className="progress-bar purple-bg"
-                            role="progressbar"
-                            style={{ width: "87%" }}
-                            aria-valuenow="87"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                          ></div>
-                        </div>
-                      </div>
-                      <span>87%</span>     
+                    <Moment format="MMM Do, YYYY">
+                      {today}
+                    </Moment>
                   </div>
                   <div className="card-footer bg-transparent" style={{ border: 0 }}>
-                    Stock :<span className="stoct-count">2,47,953</span>
+                  Stock: &nbsp;
+                    <span className="stoct-count">{(overviewStats['s1Obj'] && overviewStats['s1Obj']['stock']) ? overviewStats['s1Obj']['stock'] : ''}</span>
                   </div>
                 </section>
-                <section className="boxes2">
+                <section className={(selectedFilter === 'S2') ? 'selectedBox' : 'box'} onClick={() => applyFilter('S2')}>
                   <div className="grid gafc aic gapc3">
                     <div
                       className="blueC"
@@ -237,6 +198,7 @@ const Overview = (props) => {
                         width="12px"
                         height="12px"
                         viewBox="0 0 21.166 21.166"
+                        fill={(selectedFilter === 'S2') ? '#ffffff' : '#333751'}
                       >
                         <path
                           className="a"
@@ -255,13 +217,13 @@ const Overview = (props) => {
                         />
                       </svg>
                     </span>
-                    <span>2</span>
+                    <span>{(overviewStats['s2Obj'] && overviewStats['s2Obj']['n_warehouses']) ? overviewStats['s2Obj']['n_warehouses'] : ''}</span>
                     <span className="bi2-icons">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="12px"
                         height="12px"
-                        fill="#333751"
+                        fill={(selectedFilter === 'S2') ? '#ffffff' : '#333751'}
                         className="bi bi-clock"
                         viewBox="0 0 16 16"
                       >
@@ -269,122 +231,58 @@ const Overview = (props) => {
                         <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
                       </svg>
                     </span>
-                    <span>15 Nov 2019</span>
-                  </div>
-                  <div className="progressBox">
-                      <div className="progressarea">
-                        <div className="progress">
-                          <div
-                            className="progress-bar orange-bg"
-                            role="progressbar"
-                            style={{ width: "87%" }}
-                            aria-valuenow="87"
-                            aria-valuemin="0"
-                            aria-valuemax="100"
-                          ></div>
-                        </div>
-                      </div>
-                      <span>87%</span>     
+                    <Moment format="MMM Do, YYYY">
+                      {today}
+                    </Moment>
                   </div>
                   <div className="card-footer bg-transparent" style={{ border: 0 }}>
-                    Stock :<span className="stoct-count">2,47,953</span>
+                    Stock: &nbsp;
+                    <span className="stoct-count">{(overviewStats['s2Obj'] && overviewStats['s2Obj']['stock']) ? overviewStats['s2Obj']['stock'] : ''}</span>
                   </div>
                 </section>
               </div>
-                <div className="tableDetals">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">SKU</th>
-                        <th scope="col">Sales</th>
-                        <th scope="col">Return Bottles</th>
-                        <th scope="col">Traget</th>
-                        <th scope="col">Actual Return</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                    {Transactions.map((transaction, index) => (
-                      <tr>
-                        <td scope="row">
-                          <div className="tableProfileIconCard">
-                            <div className="profileIcon">
-                              <img src={bottlesIcon} alt="" width="50" height="50" />
-                            </div>
-                            <div className="profileName">
-                              <span className="profileTitle">{transaction.productName}</span>
-                              <span>{transaction.productId}</span>
-                            </div>
-                          </div>
-                          
-                        </td>
-                        <td>{transaction.sales}</td>
-                        <td>{transaction.returns}</td>
-                        <td>{transaction.target}</td>
-                        <td>{transaction.returns}</td>
-                      </tr>
-                    ))}
-                    </tbody>
-                  </table>
-                </div>
-          
-            </div>
-            <div className="col-md-3 rightSideMenu pt-3 px-2">
-              <div className="white-box">
-                <h3 className="box-title">Order Quantity</h3>
-                <div className="row pt-3">
-                    <div className="col-md-6 col-sm-6 col-xs-6  m-t-30">
-                      <div className="quantity">7650</div>
-                      <span className="quantityDesc"><b>1.5 %</b> than last year</span> 
-                    </div>
-                    <div className="col-md-6 col-sm-6 col-xs-6">
-                      <AreaChart
-                          width={100}
-                          height={30}
-                          data={data}
-                          margin={{
-                            top: 5,
-                            right: 0,
-                            left: 0,
-                            bottom: 5
-                          }}
-                        >
-                          <Area type="monotone" dataKey="uv" stroke="#F49C00" fill="#F49C00" />
-                          <Tooltip />
-                        </AreaChart>
-                    </div>
-                </div>
-              </div>
-              <div className="white-box">
-                <h3 className="box-title">Avg. Order Value</h3>
-                <div className="row pt-3">
-                    <div className="col-md-6 col-sm-6 col-xs-6  m-t-30">
-                      <div className="quantity">$306.20</div>
-                      <span className="quantityDesc"><b>1.3 %</b> than last year</span> 
-                    </div>
-                    <div className="col-md-6 col-sm-6 col-xs-6">
-                      <AreaChart
-                        width={100}
-                        height={30}
-                        data={data}
-                        margin={{
-                          top: 5,
-                          right: 0,
-                          left: 0,
-                          bottom: 5
-                        }}
-                      >
-                        <Area type="monotone" dataKey="uv" stroke="#A3ECCD" fill="#A3ECCD" />
-                        <Tooltip />
-                      </AreaChart>
-                    </div>
-                </div>
-              </div>
             </div>
           </div>
-          
+          <div className="row">
+            <div className="tableDetals">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th scope="col">SKU</th>
+                    <th scope="col">Sales</th>
+                    <th scope="col">Return Bottles</th>
+                    <th scope="col">Target</th>
+                    <th scope="col">Actual Return</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Transactions.map((transaction, index) => (
+                    <tr key={index}>
+                      <td scope="row">
+                        <div className="tableProfileIconCard">
+                          <div className="profileIcon">
+                            <img src={bottlesIcon} alt="" width="60" height="60" />
+                          </div>
+                          <div className="profileName">
+                            <span className="profileTitle">{transaction.productName}</span>
+                            <span>{transaction.productId}</span>
+                          </div>
+                        </div>
+
+                      </td>
+                      <td>{transaction.sales}</td>
+                      <td>{transaction.returns}</td>
+                      <td>{transaction.target}</td>
+                      <td>{(transaction.returns / transaction.sales * 100).toFixed(2)}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </main>
       </div>
-    </div>  
-    );
+    </div>
+  );
 };
 export default Overview;

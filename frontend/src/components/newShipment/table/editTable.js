@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import EditRow from './editRow';
 import './style.scss';
 
-const EditTable = props => {  
+const EditTable = props => {
  return (
     <div className="table productTable mt-2">
      <div className="d-flex flex-column">
        <div className="row mb-3">
-         <div className="col theader text-left pro">Product Name*</div>
+       <div className="col theader text-center pro">Product Category*</div>
+         <div className="col theader text-center pro">Product Name*</div>
          <div className="col theader text-center pro">Manufacturer</div>
          <div className="col theader text-center pro">Quantity*</div>
          {props.enableDelete &&

@@ -340,3 +340,63 @@ exports.track = [
         }
     },
 ];
+
+exports.fetchDataByQRCode = [
+    auth,
+    async (req, res) => {
+        try {
+            const {
+                authorization
+            } = req.headers;
+            checkToken(req, res, async (result) => {
+                if (result.success) {
+                    const {
+                        QRcode
+                    } = req.query;
+
+                    const shipmentCheck = await ShipmentModel.findOne({
+                        "label.labelId": QRcode
+                    })
+                    if (shipmentCheck != null) {
+                        const s = await ShipmentModel.find({
+                                "label.labelId": QRcode
+                            })
+                            .then((shipments) => {
+                                return res.json({
+                                    shipments
+                                });
+                            })
+                            .catch((err) => {
+                                return apiResponse.ErrorResponse(res, err);
+                            });
+                    } else {
+                        const atomCheck = await AtomModel.find({
+                                "label.labelId": QRcode
+                            })
+                            .then((products) => {
+                                return res.json({
+                                    products
+                                });
+                            })
+                            .catch((err) => {
+                                return apiResponse.ErrorResponse(res, err);
+                            });
+
+                    }
+                } else {
+                    logger.log(
+                        "warn",
+                        "<<<<< ShipmentService < ShipmentController < modifyShipment : refuted token"
+                    );
+                    res.status(403).json("Auth failed");
+                }
+            });
+        } catch (err) {
+            logger.log(
+                "error",
+                "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
+            );
+            return apiResponse.ErrorResponse(res, err);
+        }
+    },
+];

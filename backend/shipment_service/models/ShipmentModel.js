@@ -32,6 +32,7 @@ ShipmentSchema = new mongoose.Schema(
     actualDeliveryDate: String,
     status: String,
     transactionIds: [String],
+    rejectionRate:{type:Number, default:0.00},
     products: [
       {
         productID: String,
@@ -41,6 +42,7 @@ ShipmentSchema = new mongoose.Schema(
         productQuantityDelivered: Number,
         rejectionRate:{type:Number, default:0.00},
         labelId: String,
+        productCategory: String,
       },
     ],
   },

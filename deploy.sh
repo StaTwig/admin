@@ -3,7 +3,7 @@
 #Chekcing arguments
 if [ $# -eq 0 ];
   then
-    echo "Please choose the mode: PROD TEST LOCAL ABINBEVPROD ABINBEVTEST FOODLEDGERTEST UNICEFTEST"
+    echo "Please choose the mode: PROD TEST LOCAL ABINBEVPROD ABINBEVTEST FOODLEDGERTEST UNICEFTEST DEMO"
     echo "Followed by the sercices: FRONTEND GATEWAY SERVICESI SERVICESII ALL"
     echo "SERVICESI - shipping_service	 inventory_service	track_trace		user_service products_service"
     echo "SERVICESII - blockchain_service	log_service alert_service notification_service rbac_service"
@@ -16,10 +16,12 @@ fi
 
 #Creating env variables
 echo "Creating Env variables .... "
+./pre-deploy.sh $1
 
+: <<'END'
 if [ "$1" == "PROD" ] && ([ "$2" == "SERVICESI" ] || [ "$2" == "SERVICESII" ]);
    then
-      ./pre-deploy-prod.sh
+      ./pre-deploy.sh
 
 elif [ "$1" == "TEST" ];
    then 
@@ -53,6 +55,8 @@ else
    ./pre-deploy.sh
 
 fi
+
+END
 
 # Installing the dependency in utils
 
