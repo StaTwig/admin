@@ -989,8 +989,8 @@ exports.addProductsToInventory = [
                   // id: `${serialNumberText + uniqid.time()}${i}`,
                   id: `${serialNumberText}${i}`,
                   label: {
-                    labelId: product.label.labelId,
-                    labelType: product.label.labelType,
+                    labelId: product?.label?.labelId,
+                    labelType: product?.label?.labelType,
                   },
                   productId: product.productId,
                   inventoryIds: [inventory.id],
