@@ -9,8 +9,13 @@ import Moment from "react-moment";
 import setAuthToken from '../../utils/setAuthToken'
 import { func } from "prop-types";
 
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
+
 const TransactionHistory = (props) => {
   const dispatch = useDispatch();
+  const [year, setYear] = useState();
   const [transactions, setTransactions] = useState([]);
   const [displayTransactions, setDisplayTransactions] = useState([]);
   const [inBound, setinBound] = useState([]); //being used for recieved
@@ -23,8 +28,21 @@ const TransactionHistory = (props) => {
   const [buttonState2, setButtonActive2] = useState("btn");
   const [buttonState3, setButtonActive3] = useState("btn");
   const [buttonState4, setButtonActive4] = useState("btn");
+  const [buttonState5, setButtonActive5] = useState("btn");
+  const [buttonState6, setButtonActive6] = useState("btn");
+  const [ButtonState7, setButtonActive7] = useState("btn");
+  const [ButtonState8, setButtonActive8] = useState("btn");
+  const [ButtonState9, setButtonActive9] = useState("btn");
+  const [ButtonState10, setButtonActive10] = useState("btn");
+  const [Brewery, setBrewery] = useState(false);
   const [dateClassName, setdateClassName] = useState("transactionListDate");
-  const [groupDate, setGroupDate] = useState("null");
+  const [datechange, setdatechange] = useState(false);
+  const [quarterly, setQuarterly] = useState(false);
+  const [today, setToday] = useState(true);
+  const [yearly, setyearly] = useState(false);
+const [AllButton, setAllButtonActive] = useState("btn")
+const [S1Button, setS1ButtonActive] = useState("btn")
+const [S2Button, setS2ButtonActive]   = useState("btn")
   function selectThis(a) {
     console.log(a);
     if (a === "all") {
@@ -74,8 +92,14 @@ const TransactionHistory = (props) => {
       setDisplayTransactions(results.data);
       setTransactions(results.data);
       let addedarray = [];
+      let date;
       results.data.forEach((a) => {
-        // console.log('a')
+        // console.log('a') =
+        if(date !== a.shippingDate){
+          date = a.shippingDate;
+        }else{
+          a.shippingDate = false;
+        }
         if (a.status === "CREATED") {
           addedarray.push(a);
         }
@@ -166,11 +190,11 @@ const TransactionHistory = (props) => {
               <div className="productList">
                 {displayTransactions.map((transaction, index) => (
                   <div>
-                   <span className={dateClassName}>
+                   {(transaction.shippingDate) ? <span className={dateClassName}>
                       <Moment format="MMM Do, YYYY">
                         {transaction.shippingDate}
                       </Moment>
-                    </span>
+                    </span> : ''}
                     <div className="transactionListContainer">
                       <div className="productContainer">
                         <div className="productItem ">
@@ -247,30 +271,136 @@ const TransactionHistory = (props) => {
                 </div>
 
                 <div class="btn-group filterButton mt-4">
-                  <a href="#!" class="btn ">
+                  <a href="#!" class={buttonState5}              
+                     onClick={() => {
+                    setButtonActive5("btn active");
+                    setButtonActive6("btn");
+                    setBrewery(true);
+                  }}>
                     Brewery
                   </a>
-                  <a href="#!" class="btn active">
+                  <a href="#!" class={buttonState6} 
+                   onClick={() => {
+                    setButtonActive6("btn active");
+                    setButtonActive5("btn");
+                    setBrewery(false);
+                  }}>
                     Vendor
                   </a>
                 </div>
 
                 <label className="filterSubHeading mt-2">Time Period</label>
                 <div class="btn-group filterButton mt-2">
-                  <a href="#!" class="btn active">
+                  <a href="#!" class={ButtonState7}
+                     onClick={() => {
+                          setButtonActive7("btn active");
+                          setButtonActive8("btn");
+                          setButtonActive9("btn");
+                          setButtonActive10("btn");
+                          setToday(true);
+                   }}>
                     Today
                   </a>
-                  <a href="#!" class="btn">
+                  <a href="#!" class={ButtonState8}
+                                       onClick={() => {
+                                        setButtonActive7("btn");
+                                        setButtonActive8("btn active");
+                                        setButtonActive9("btn");
+                                        setButtonActive10("btn");
+                                        setToday(false);
+                                        setQuarterly(false);
+                                        setyearly(false)
+
+                                 }}>
                     Monthly
                   </a>
-                  <a href="#!" class="btn">
+                  <a href="#!" class={ButtonState9}                      onClick={() => {
+                          setButtonActive7("btn");
+                          setButtonActive8("btn");
+                          setButtonActive9("btn active");
+                          setButtonActive10("btn");
+                          setToday(false);
+                          setyearly(false)
+                          setQuarterly(true);
+                   }}>
                     Quarterly
                   </a>
-                  <a href="#!" class="btn">
+                  <a href="#!" class={ButtonState10}                   
+                     onClick={() => {
+                          setButtonActive7("btn");
+                          setButtonActive8("btn");
+                          setButtonActive9("btn");
+                          setButtonActive10("btn active");
+                          setQuarterly(false);
+                          setToday(false);
+                          setyearly(true);
+                   }}>
                     Yearly
                   </a>
                 </div>
+                {/* <select className="filterSelect mt-2">
+                <DatePicker
+                          className="date"
+                          selected={new Date()
+                          }
+                          onKeyDown={(e) =>
+                            e.keyCode != 8 && e.preventDefault()
+                          }
+                          minDate={new Date()}
+                          placeholderText="Enter Shipment Date"
+                                //  <img src={Date} width="20" height="17" className="mr-2 mb-1" />
+                          onChange={(date) => {
+                            setYear(date);
+                          }}
+                          // showYearDropdown
+                          // dateFormatCalendar="MMMM"
+                          // yearDropdownItemNumber={15}
+                          // scrollableYearDropdown
+                        />
+                        </select> */}
+                    {(today)
+                    ?
+                    '' 
+                    :
+                    (quarterly) 
+                    ?                 
+                    <div className=" rightSideMenu pt-4 px-2">
+                    <label className="filterSubHeading mt-2">Select Quarter</label>                   
+                  <div className="filterSection">
+                    <label className="radioButton" for="gv">
+                      <input className="radioInput" type="radio" name="radio" value="gv" id="gv" defaultChecked={true}/> January - March
+                    </label>
+                    <label className="radioButton" for="sv">
+                      <input className="radioInput" type="radio" name="radio" value="sv" id="sv" /> April - June
+                    </label>
+                    <label className="radioButton" for="suv">
+                      <input className="radioInput" type="radio" name="radio" value="suv" id="suv" /> July - September
+                    </label>
+                    <label className="radioButton" for="bv">
+                      <input className="radioInput" type="radio" name="radio" value="bv" id="bv" /> October - December
+                    </label>                   
+                  </div>  
+                </div> :    (yearly) ?   
+                <div>
+              <label className="filterSubHeading mt-2">Select Year</label>                   
+                <select className="filterSelect mt-2">
+                    <option>Select year</option>
+                   </select> 
+                   </div>
+                   :                 
+                   <div>
+                    <label className="filterSubHeading mt-2">Select Month</label>                   
+                   <select className="filterSelect mt-2">
+                    <option>Select month</option>
+                   </select>
+                   </div> }
 
+                   <label className="filterSubHeading mt-3">Select State</label>
+                    <select className="filterSelect mt-2">
+                      <option>Select State</option>
+                      <option>Karnataka</option>
+                      <option>Telangana</option>
+                    </select>
                 <label className="filterSubHeading mt-2">District</label>
                 <select className="filterSelect mt-2">
                   <option>Select district</option>
@@ -278,23 +408,35 @@ const TransactionHistory = (props) => {
 
                 <label className="filterSubHeading mt-2">Vendor</label>
                 <div class="btn-group filterButton mt-2">
-                  <a href="#!" class="btn active">
+                  <a href="#!" class={AllButton} onClick={() => {
+                          setAllButtonActive("btn active");
+                          setS1ButtonActive("btn");
+                          setS2ButtonActive("btn");
+                   }}>
                     All
                   </a>
-                  <a href="#!" class="btn">
+                  <a href="#!" class={S1Button} onClick={() => {
+                          setAllButtonActive("btn ");
+                          setS1ButtonActive("btn active");
+                          setS2ButtonActive("btn");
+                   }}>
                     S1
                   </a>
-                  <a href="#!" class="btn">
+                  <a href="#!" class={S2Button} onClick={() => {
+                          setAllButtonActive("btn ");
+                          setS1ButtonActive("btn");
+                          setS2ButtonActive("btn active");
+                   }}>
                     S2
                   </a>
                 </div>
 
-                <label className="filterSubHeading mt-2">Select Vendor</label>
+                {(!Brewery) ? <label className="filterSubHeading mt-2">Select Vendor</label> : <label className="filterSubHeading mt-2">Select Brewery</label> }
                 <select className="filterSelect mt-2">
-                  <option>Select Vendor</option>
-                  <option>Select Vendor</option>
-                  <option>Select Vendor</option>
-                  <option>Select Vendor</option>
+                {(!Brewery) ? <option>Select Vendor</option> : <option>Select Brewery</option>}
+                  
+                {(!Brewery) ? <option>Select Vendor</option> : <option>Select Brewery</option>}
+                {(!Brewery) ? <option>Select Vendor</option> : <option>Select Brewery</option>}
                 </select>
 
                 <button className="btn SearchButton mt-4">Search</button>
