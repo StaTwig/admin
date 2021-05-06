@@ -82,7 +82,7 @@ const VerifyInventory = props => {
           {reviewInventories.map(reviewInventory => (
             <div className="row pl-4 p-3">
               <span className="col-2 pl-4 text-left">{reviewInventory.productName}</span>
-              <span className="col-2 pl-4 text-left">{reviewInventory.manufacturer}</span>
+              <span className="col-2 pl-4 text-left">{reviewInventory.manufacturer ? reviewInventory.manufacturer : reviewInventory.manufacturerName}</span>
               <span className="col pl-5 text-left">{reviewInventory.quantity}</span>
               <span className="col pl-4 text-left">{reviewInventory.manufacturingDate ? `0${new Date(
                 Date.parse(reviewInventory.manufacturingDate),
@@ -110,11 +110,12 @@ const VerifyInventory = props => {
               <button className="btn-primary btn" onClick={onAssign}>
                 <b>SAVE</b>
               </button>
-              <button className="btn-outline-dark btn mr-2" onClick={onEdit}>
-                <img src={Pen} width="15" height="15" className="mr-3" />
-                <span><b>EDIT</b></span>
-              </button>
-
+              {reviewInventories.length >0 && reviewInventories[0].manufacturer && 
+                <button className="btn-outline-dark btn mr-2" onClick={onEdit}>
+                  <img src={Pen} width="15" height="15" className="mr-3" />
+                  <span><b>EDIT</b></span>
+                </button>
+              }
               {openCreatedInventory && (
                 <Modal
                   close={() => closeModal()}
