@@ -166,7 +166,7 @@ const TransactionHistory = (props) => {
               <div className="productList">
                 {displayTransactions.map((transaction, index) => (
                   <div>
-                   <span className={dateClassName}>
+                    <span className={dateClassName}>
                       <Moment format="MMM Do, YYYY">
                         {transaction.shippingDate}
                       </Moment>
@@ -199,8 +199,8 @@ const TransactionHistory = (props) => {
                           {
                             (transaction.receiver.warehouse.warehouseAddress
                               .city,
-                            transaction.receiver.warehouse.warehouseAddress
-                              .state)
+                              transaction.receiver.warehouse.warehouseAddress
+                                .state)
                           }
                         </div>
                         <div className="productItem">
@@ -304,8 +304,8 @@ const TransactionHistory = (props) => {
         </main>
       </div>
     </div>
-  
-  
+
+
   );
 };
 export default TransactionHistory;

@@ -23,5 +23,5 @@ app.listen(3001, (err) => {
   if (err) {
     return console.error(err) // eslint-disable-line no-console
   }
-  console.log('Listening at http://localhost:3000') // eslint-disable-line no-console
+  console.log('Listening at http://localhost:3001') // eslint-disable-line no-console
 })
