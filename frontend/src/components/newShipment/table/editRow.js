@@ -64,7 +64,7 @@ console.log("yyyy",prod);
                   onSelect={item => { handleProductChange(index, item) }}
                   groups={products}
                   // groups={products.filter(p => !p?.isSelected)}
-                /> : prod.productName
+                /> : prod.name
               }</div>
               
             </div>
