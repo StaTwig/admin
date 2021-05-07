@@ -2,10 +2,10 @@
 import React from "react";
 import { AreaChart, Area, ResponsiveContainer, Tooltip } from "recharts";
 
-import "../style.scss";
-import bottlesIcon from "../../../assets/becks_330ml.png";
-import DownArrow from "../../../assets/down_arrow.png";
-import UpArrow from "../../../assets/up_arrow.png";
+import "../../style.scss";
+import bottlesIcon from "../../../../assets/becks_330ml.png";
+import DownArrow from "../../../../assets/down_arrow.png";
+import UpArrow from "../../../../assets/up_arrow.png";
 
 
 const data = [
