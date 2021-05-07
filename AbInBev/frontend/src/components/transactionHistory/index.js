@@ -6,13 +6,31 @@ import SideBar from "../../components/sidebar";
 import filterIcon from "../../assets/icons/funnel.svg";
 import { getTransactions } from "../../actions/transactionAction";
 import Moment from "react-moment";
-import setAuthToken from '../../utils/setAuthToken'
+import setAuthToken from "../../utils/setAuthToken";
 import { func } from "prop-types";
-
+import { makeStyles } from "@material-ui/core/styles";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import Typography from "@material-ui/core/Typography";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import {
+  getAllStates,
+  getDistrictsByState,
+  getOrganizationsByType,
+} from "../../actions/inventoryAction";
 
-
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100%",
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightRegular,
+  },
+}));
 const TransactionHistory = (props) => {
   const dispatch = useDispatch();
   const [year, setYear] = useState();
@@ -40,9 +58,95 @@ const TransactionHistory = (props) => {
   const [quarterly, setQuarterly] = useState(false);
   const [today, setToday] = useState(true);
   const [yearly, setyearly] = useState(false);
-const [AllButton, setAllButtonActive] = useState("btn")
-const [S1Button, setS1ButtonActive] = useState("btn")
-const [S2Button, setS2ButtonActive]   = useState("btn")
+  const [AllButton, setAllButtonActive] = useState("btn");
+  const [S1Button, setS1ButtonActive] = useState("btn");
+  const [S2Button, setS2ButtonActive] = useState("btn");
+  const [states, setStates] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [monthDate, setMonthDate] = useState(new Date());
+
+  const [organizations, setOrganizations] = useState([]);
+
+  const [filterVisibility, setFilterVisibility] = useState({
+    state: true,
+    district: false,
+    organization: false,
+  });
+  const [filters, setFilters] = useState({
+    state: "",
+    district: "",
+    inventoryType: "VENDOR",
+    startDate: new Date(),
+    endDate: new Date(),
+  });
+  const _getAllStates = async () => {
+    const response = await dispatch(getAllStates());
+    const _states = response.data ? response.data : [];
+    setStates([_states]);
+  };
+
+  const _getOrganizationsByType = async (filters) => {
+    const response = await dispatch(getOrganizationsByType(filters));
+    const _organizations = response.data ? response.data : [];
+    setOrganizations(_organizations);
+  };
+  function formatDate(date) {
+    var d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-");
+  }
+  function getYear(date) {
+    var d = new Date(date),
+      year = d.getFullYear();
+    return year;
+  }
+  function getMonth(date) {
+    var d = new Date(date),
+    month = "" + (d.getMonth() + 1);
+    if (month.length < 2) month = "0" + month;
+
+    return month;
+  }
+  const _getDistrictsByState = async (_state) => {
+    const response = await dispatch(getDistrictsByState(_state));
+    const _districts = response.data ? response.data : [];
+    setDistricts(_districts);
+  };
+  const onStateSelection = (event) => {
+    const selectedState = event.target.value;
+    const _filters = { ...filters };
+    _filters.state = selectedState;
+    setFilters(_filters);
+    // props.applyFilters(_filters);
+    _getDistrictsByState(selectedState);
+
+    const _filterVisibility = { ...filterVisibility };
+    _filterVisibility.district = true;
+    setFilterVisibility(_filterVisibility);
+  };
+  const onDistrictSelection = (event) => {
+    const selectedDistrict = event.target.value;
+    const _filters = { ...filters };
+    _filters.district = selectedDistrict;
+    setFilters(_filters);
+    _getOrganizationsByType(_filters);
+  };
+
+  const onOrganizationChange = (event) => {
+    const selectedOrganization = event.target.value;
+    const _filters = { ...filters };
+    _filters.organization = selectedOrganization;
+    setFilters(_filters);
+  }
+
   function selectThis(a) {
     console.log(a);
     if (a === "all") {
@@ -88,17 +192,22 @@ const [S2Button, setS2ButtonActive]   = useState("btn")
   }
   useEffect(() => {
     (async () => {
+      _getAllStates();
+      console.log("states are " + states);
+
       const results = await dispatch(getTransactions());
       setDisplayTransactions(results.data);
       setTransactions(results.data);
       let addedarray = [];
       let date;
-      results.data.forEach((a) => {
+      results.data.forEach((b) => {
         // console.log('a') =
-        if(date !== a.shippingDate){
+        let a = b;
+        if (date !== a.shippingDate) {
           date = a.shippingDate;
-        }else{
-          a.shippingDate = false;
+          a.shippingDates = true;
+        } else {
+          a.shippingDates = false;
         }
         if (a.status === "CREATED") {
           addedarray.push(a);
@@ -111,6 +220,7 @@ const [S2Button, setS2ButtonActive]   = useState("btn")
       console.log(results);
     })();
   }, []);
+  const classes = useStyles();
   return (
     <div className="container-fluid">
       <div className="row">
@@ -190,11 +300,15 @@ const [S2Button, setS2ButtonActive]   = useState("btn")
               <div className="productList">
                 {displayTransactions.map((transaction, index) => (
                   <div>
-                   {(transaction.shippingDate) ? <span className={dateClassName}>
-                      <Moment format="MMM Do, YYYY">
-                        {transaction.shippingDate}
-                      </Moment>
-                    </span> : ''}
+                    {transaction.shippingDates ? (
+                      <span className={dateClassName}>
+                        <Moment format="MMM Do, YYYY">
+                          {transaction.shippingDate}
+                        </Moment>
+                      </span>
+                    ) : (
+                      ""
+                    )}
                     <div className="transactionListContainer">
                       <div className="productContainer">
                         <div className="productItem ">
@@ -215,6 +329,10 @@ const [S2Button, setS2ButtonActive]   = useState("btn")
                                 <Moment format="MMMM Do YYYY, h:mm a">
                                   {transaction.shippingDate}
                                 </Moment>
+                              </span>
+                              <br />
+                              <span className="transactionDate">
+                                 <span>FROM:</span> {transaction.supplier.org.name} - TO: {transaction.receiver.org.name}
                               </span>
                             </div>
                           </div>
@@ -271,183 +389,351 @@ const [S2Button, setS2ButtonActive]   = useState("btn")
                 </div>
 
                 <div class="btn-group filterButton mt-4">
-                  <a href="#!" class={buttonState5}              
-                     onClick={() => {
-                    setButtonActive5("btn active");
-                    setButtonActive6("btn");
-                    setBrewery(true);
-                  }}>
+                  <a
+                    href="#!"
+                    class={buttonState5}
+                    onClick={() => {
+                      setButtonActive5("btn active");
+                      setButtonActive6("btn");
+                      setBrewery(true);
+                      const _filters = { ...filters };
+                      _filters.inventoryType = "BREWERY";
+                      setFilters(_filters);
+                    }}
+                  >
                     Brewery
                   </a>
-                  <a href="#!" class={buttonState6} 
-                   onClick={() => {
-                    setButtonActive6("btn active");
-                    setButtonActive5("btn");
-                    setBrewery(false);
-                  }}>
+                  <a
+                    href="#!"
+                    class={buttonState6}
+                    onClick={() => {
+                      setButtonActive6("btn active");
+                      setButtonActive5("btn");
+                      setBrewery(false);
+                      const _filters = { ...filters };
+                      _filters.inventoryType = "VENDOR";
+                      setFilters(_filters);
+                    }}
+                  >
                     Vendor
                   </a>
                 </div>
 
                 <label className="filterSubHeading mt-2">Time Period</label>
                 <div class="btn-group filterButton mt-2">
-                  <a href="#!" class={ButtonState7}
-                     onClick={() => {
-                          setButtonActive7("btn active");
-                          setButtonActive8("btn");
-                          setButtonActive9("btn");
-                          setButtonActive10("btn");
-                          setToday(true);
-                   }}>
-                    Today
+                  <a
+                    href="#!"
+                    class={ButtonState7}
+                    onClick={() => {
+                      setButtonActive7("btn active");
+                      setButtonActive8("btn");
+                      setButtonActive9("btn");
+                      setButtonActive10("btn");
+                      setToday(true);
+                    }}
+                  >
+                    Date Range
                   </a>
-                  <a href="#!" class={ButtonState8}
-                                       onClick={() => {
-                                        setButtonActive7("btn");
-                                        setButtonActive8("btn active");
-                                        setButtonActive9("btn");
-                                        setButtonActive10("btn");
-                                        setToday(false);
-                                        setQuarterly(false);
-                                        setyearly(false)
-
-                                 }}>
+                  <a
+                    href="#!"
+                    class={ButtonState8}
+                    onClick={() => {
+                      setButtonActive7("btn");
+                      setButtonActive8("btn active");
+                      setButtonActive9("btn");
+                      setButtonActive10("btn");
+                      setToday(false);
+                      setQuarterly(false);
+                      setyearly(false);
+                    }}
+                  >
                     Monthly
                   </a>
-                  <a href="#!" class={ButtonState9}                      onClick={() => {
-                          setButtonActive7("btn");
-                          setButtonActive8("btn");
-                          setButtonActive9("btn active");
-                          setButtonActive10("btn");
-                          setToday(false);
-                          setyearly(false)
-                          setQuarterly(true);
-                   }}>
+                  <a
+                    href="#!"
+                    class={ButtonState9}
+                    onClick={() => {
+                      setButtonActive7("btn");
+                      setButtonActive8("btn");
+                      setButtonActive9("btn active");
+                      setButtonActive10("btn");
+                      setToday(false);
+                      setyearly(false);
+                      setQuarterly(true);
+                    }}
+                  >
                     Quarterly
                   </a>
-                  <a href="#!" class={ButtonState10}                   
-                     onClick={() => {
-                          setButtonActive7("btn");
-                          setButtonActive8("btn");
-                          setButtonActive9("btn");
-                          setButtonActive10("btn active");
-                          setQuarterly(false);
-                          setToday(false);
-                          setyearly(true);
-                   }}>
-                    Yearly
+                  <a
+                    href="#!"
+                    class={ButtonState10}
+                    onClick={() => {
+                      setButtonActive7("btn");
+                      setButtonActive8("btn");
+                      setButtonActive9("btn");
+                      setButtonActive10("btn active");
+                      setQuarterly(false);
+                      setToday(false);
+                      setyearly(true);
+                    }}
+                  >
+                    Today
                   </a>
                 </div>
-                {/* <select className="filterSelect mt-2">
-                <DatePicker
-                          className="date"
-                          selected={new Date()
-                          }
-                          onKeyDown={(e) =>
-                            e.keyCode != 8 && e.preventDefault()
-                          }
-                          minDate={new Date()}
-                          placeholderText="Enter Shipment Date"
-                                //  <img src={Date} width="20" height="17" className="mr-2 mb-1" />
-                          onChange={(date) => {
-                            setYear(date);
-                          }}
-                          // showYearDropdown
-                          // dateFormatCalendar="MMMM"
-                          // yearDropdownItemNumber={15}
-                          // scrollableYearDropdown
-                        />
-                        </select> */}
-                    {(today)
-                    ?
-                    '' 
-                    :
-                    (quarterly) 
-                    ?                 
-                    <div className=" rightSideMenu pt-4 px-2">
-                    <label className="filterSubHeading mt-2">Select Quarter</label>                   
-                  <div className="filterSection">
-                    <label className="radioButton" for="gv">
-                      <input className="radioInput" type="radio" name="radio" value="gv" id="gv" defaultChecked={true}/> January - March
-                    </label>
-                    <label className="radioButton" for="sv">
-                      <input className="radioInput" type="radio" name="radio" value="sv" id="sv" /> April - June
-                    </label>
-                    <label className="radioButton" for="suv">
-                      <input className="radioInput" type="radio" name="radio" value="suv" id="suv" /> July - September
-                    </label>
-                    <label className="radioButton" for="bv">
-                      <input className="radioInput" type="radio" name="radio" value="bv" id="bv" /> October - December
-                    </label>                   
-                  </div>  
-                </div> :    (yearly) ?   
-                <div>
-              <label className="filterSubHeading mt-2">Select Year</label>                   
-                <select className="filterSelect mt-2">
-                    <option>Select year</option>
-                   </select> 
-                   </div>
-                   :                 
-                   <div>
-                    <label className="filterSubHeading mt-2">Select Month</label>                   
-                   <select className="filterSelect mt-2">
-                    <option>Select month</option>
-                   </select>
-                   </div> }
 
-                   <label className="filterSubHeading mt-3">Select State</label>
-                    <select className="filterSelect mt-2">
-                      <option>Select State</option>
-                      <option>Karnataka</option>
-                      <option>Telangana</option>
-                    </select>
+                {today ? (
+                  <div className="row">
+                    {/* <select className="filterSelect mt-2">
+                                                    </select> */}
+
+                    <div className="col-md-5">
+                      <DatePicker
+                        dateFormat="dd MMMM yyyy"
+                        selected={startDate}
+                        onChange={(date) => {
+                          console.log(formatDate(date));
+                          const _filters = { ...filters };
+                          _filters.endDate = formatDate(date);
+                          setFilters(_filters);
+                          setStartDate(date);
+                        }}
+                      />
+                    </div>
+                    <div className="col-md-1"></div>
+                    <div className="col-md-3">
+                      <DatePicker
+                        dateFormat="dd MMMM yyyy"
+                        selected={endDate}
+                        onChange={(date) => {
+                          console.log(formatDate(date));
+                          const _filters = { ...filters };
+                          _filters.startDate = formatDate(date);
+                          setFilters(_filters);
+                          setEndDate(date);
+                        }}
+                      />
+                    </div>
+                  </div>
+                ) : quarterly ? (
+                  <div className=" rightSideMenu pt-4 px-2">
+                    <label className="filterSubHeading mt-2">
+                      Select Quarter
+                    </label>
+                    <div className="row">
+                      <div className="col-6">
+                        <div className="filterSection">
+                          <label className="radioButton" for="gv">
+                            <input
+                              className="radioInput"
+                              type="radio"
+                              name="radio"
+                              value="Q1"
+                              id="gv"
+                              onChange={(quarter) => {
+                                const _filters = { ...filters };
+                                _filters.quarter = "Q1";
+                                setFilters(_filters);
+                              }}                              defaultChecked={true}
+                            />{" "}
+                            January - March
+                          </label>
+                          <label className="radioButton" for="sv">
+                            <input
+                              className="radioInput"
+                              type="radio"
+                              name="radio"
+                              value="Q2"
+                              onChange={(quarter) => {
+                                const _filters = { ...filters };
+                                _filters.quarter = "Q2";
+                                setFilters(_filters);
+                              }}                              id="sv"
+                            />{" "}
+                            April - June
+                          </label>
+                          <label className="radioButton" for="suv">
+                            <input
+                              className="radioInput"
+                              type="radio"
+                              name="radio"
+                              value="Q3"
+                              onChange={(quarter) => {
+                                const _filters = { ...filters };
+                                _filters.quarter = "Q3";
+                                setFilters(_filters);
+                              }}                              id="suv"
+                            />{" "}
+                            July - September
+                          </label>
+                          <label className="radioButton" for="bv">
+                            <input
+                              className="radioInput"
+                              type="radio"
+                              name="radio"
+                              value="Q4"
+                              onChange={(quarter) => {
+                                const _filters = { ...filters };
+                                _filters.quarter = "Q4";
+                                setFilters(_filters);
+                              }}
+                              id="bv"
+                            />{" "}
+                            October - December
+                          </label>
+                        </div>
+                      </div>
+                      <div className="col-6">
+                      <label className="filterSubHeading mt-2">
+                      Select year
+                    </label>
+                                      <DatePicker
+                                      dateFormat="dd MMMM yyyy"
+                                      selected={monthDate}
+                                      onChange={(date) => {
+                                        console.log(formatDate(date))
+                                        const _filters = { ...filters };
+                                        _filters.year = getYear(date);
+                                        setFilters(_filters);
+                                        setMonthDate(date)
+                                      }}
+                                      dateFormat="yyyy"
+                                      showYearPicker
+                                      showYearDropdown
+                                    />
+                                    </div>
+                    </div>
+                  </div>
+                ) : yearly ? (
+                  <div>
+                 
+                  </div>
+                ) : (
+                  <div>
+                    <label className="filterSubHeading mt-2">
+                      Select Month
+                    </label>
+                    <DatePicker
+                      dateFormat="dd MMMM yyyy"
+                      selected={monthDate}
+                      onChange={(date) => {
+                        console.log(formatDate(date));
+                        const _filters = { ...filters };
+                        _filters.month = getMonth(date);
+                        _filters.year = getYear(date);
+                        setFilters(_filters);
+                        setMonthDate(date);
+                      }}
+                      dateFormat="MMMM yyyy"
+                      showMonthYearPicker
+                      showYearDropdown
+                    />
+                  </div>
+                )}
+
+                <label className="filterSubHeading mt-3">Select State</label>
+                <select
+                  className="filterSelect mt-2"
+                  value={filters.state}
+                  onChange={onStateSelection}
+                >
+                  <option>Select State</option>
+                  {states.map((state, index) => {
+                    return (
+                      <option key={index} value={state}>
+                        {state}
+                      </option>
+                    );
+                  })}
+                </select>
                 <label className="filterSubHeading mt-2">District</label>
-                <select className="filterSelect mt-2">
-                  <option>Select district</option>
+                <select
+                  className="filterSelect mt-2"
+                  value={filters.district}
+                  onChange={onDistrictSelection}
+                  disabled={!filterVisibility.district}
+                >
+                  <option value="">Select District</option>
+                  {districts.map((district, index) => {
+                    return (
+                      <option key={index} value={district}>
+                        {district}
+                      </option>
+                    );
+                  })}
                 </select>
 
-                <label className="filterSubHeading mt-2">Vendor</label>
-                <div class="btn-group filterButton mt-2">
-                  <a href="#!" class={AllButton} onClick={() => {
+                {Brewery ? (
+                  ""
+                ) : (
+                  <div>
+                    <label className="filterSubHeading mt-2">Vendor</label>
+                    <div class="btn-group filterButton mt-2">
+                      <a
+                        href="#!"
+                        class={AllButton}
+                        onClick={() => {
                           setAllButtonActive("btn active");
                           setS1ButtonActive("btn");
                           setS2ButtonActive("btn");
-                   }}>
-                    All
-                  </a>
-                  <a href="#!" class={S1Button} onClick={() => {
+                        }}
+                      >
+                        All
+                      </a>
+                      <a
+                        href="#!"
+                        class={S1Button}
+                        onClick={() => {
                           setAllButtonActive("btn ");
                           setS1ButtonActive("btn active");
                           setS2ButtonActive("btn");
-                   }}>
-                    S1
-                  </a>
-                  <a href="#!" class={S2Button} onClick={() => {
+                        }}
+                      >
+                        S1
+                      </a>
+                      <a
+                        href="#!"
+                        class={S2Button}
+                        onClick={() => {
                           setAllButtonActive("btn ");
                           setS1ButtonActive("btn");
                           setS2ButtonActive("btn active");
-                   }}>
-                    S2
-                  </a>
-                </div>
+                        }}
+                      >
+                        S2
+                      </a>
+                    </div>
+                  </div>
+                )}
 
-                {(!Brewery) ? <label className="filterSubHeading mt-2">Select Vendor</label> : <label className="filterSubHeading mt-2">Select Brewery</label> }
-                <select className="filterSelect mt-2">
-                {(!Brewery) ? <option>Select Vendor</option> : <option>Select Brewery</option>}
-                  
-                {(!Brewery) ? <option>Select Vendor</option> : <option>Select Brewery</option>}
-                {(!Brewery) ? <option>Select Vendor</option> : <option>Select Brewery</option>}
+                {!Brewery ? (
+                  <label className="filterSubHeading mt-2">Select Vendor</label>
+                ) : (
+                  <label className="filterSubHeading mt-2">
+                    Select Brewery
+                  </label>
+                )}
+                <select className="filterSelect mt-2" onChange={onOrganizationChange}>
+                  {!Brewery ? (
+                    <option>Select Vendor</option>
+                  ) : (
+                    <option>Select Brewery</option>
+                  )}
+                  {organizations.map((organization, index) => {
+                    return (
+                      <option key={index} value={organization.id}>
+                        {organization.name}
+                      </option>
+                    );
+                  })}
                 </select>
 
-                <button className="btn SearchButton mt-4">Search</button>
+                <button className="btn SearchButton mt-4" onClick={()=>console.log(filters)}>Search</button>
               </div>
             </div>
           </div>
         </main>
       </div>
     </div>
-  
-  
   );
 };
 export default TransactionHistory;
