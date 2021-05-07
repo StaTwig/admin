@@ -908,8 +908,15 @@ exports.addProductsToInventory = [
           const { products } = req.body;
           const { id } = req.user;
           const employee = await EmployeeModel.findOne({ id });
-          const warehouseId = employee.warehouseId;
+console.log("em",employee)
+          var warehouseId = "";
+          if ( !req.query.warehouseId)
+          warehouseId  = employee.warehouseId[0];
+          else
+          warehouseId  = req.query.warehouseId;
+	console.log("wid",warehouseId)
           const warehouse = await WarehouseModel.findOne({ id: warehouseId });
+
           if (!warehouse) {
             return apiResponse.ErrorResponse(
               res,
@@ -944,8 +951,8 @@ exports.addProductsToInventory = [
           if (!inventory) return apiResponse.ErrorResponse(res, 'Cannot find inventory to this employee warehouse');
           let atoms = [];
           products.forEach(product => {
-            const serialNumbers = product.serialNumbersRange?.split('-');
-            if (serialNumbers?.length > 1) {
+            const serialNumbers = product.serialNumbersRange.split('-');
+            if (serialNumbers.length > 1) {
               const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
               const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
               const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
@@ -976,9 +983,9 @@ exports.addProductsToInventory = [
               });
             }
 
-            const serialNumbers = product.serialNumbersRange?.split('-');
+            const serialNumbers = product.serialNumbersRange.split('-');
             let atomsArray = [];
-            if (serialNumbers?.length > 1) {
+            if (serialNumbers.length > 1) {
               const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
               const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
 
@@ -989,8 +996,8 @@ exports.addProductsToInventory = [
                   // id: `${serialNumberText + uniqid.time()}${i}`,
                   id: `${serialNumberText}${i}`,
                   label: {
-                    labelId: product?.label?.labelId,
-                    labelType: product?.label?.labelType,
+                    labelId: product.label.labelId,
+                    labelType: product.label.labelType,
                   },
                   productId: product.productId,
                   inventoryIds: [inventory.id],
@@ -1308,18 +1315,15 @@ exports.getInventoryDetails = [
   auth,
   async (req, res) => {
     try {
-      var selectedWarehouseId = '';
-      if (req.body.warehouseId !== null) {
-        selectedWarehouseId = req.body.warehouseId;
-      }
-      const employee = await EmployeeModel.findOne({ id: req.user.id });
 
-      var warehouse;
-      if (selectedWarehouseId == '' || selectedWarehouseId == null) {
-        warehouse = await WarehouseModel.findOne({ id: employee.warehouseId })
-      } else {
-        warehouse = await WarehouseModel.findOne({ id: selectedWarehouseId })
-      }
+      const employee = await EmployeeModel.findOne({ id: req.user.id });
+      var warehouseId = "";
+      if ( !req.query.warehouseId)
+          warehouseId  = employee.warehouseId[0];
+      else
+          warehouseId  = req.query.warehouseId;
+      const warehouse = await WarehouseModel.findOne({ id: warehouseId })
+
       if (warehouse) {
         const inventory = await InventoryModel.findOne({ id: warehouse.warehouseInventory });
         let inventoryDetails = []
@@ -1330,7 +1334,6 @@ exports.getInventoryDetails = [
           inventoryDetailClone['manufacturer'] = product.manufacturer;
           inventoryDetails.push(inventoryDetailClone);
         })
-
         return apiResponse.successResponseWithData(res, 'Inventory Details', inventoryDetails);
       } else {
         return apiResponse.ErrorResponse(res, 'Cannot find warehouse for this employee')
@@ -1904,7 +1907,13 @@ exports.getInventory = [
   async (req, res) => {
     try {
       const { skip, limit } = req.query;
-      const { warehouseId } = req.user;
+      var warehouseId = "";
+
+      if ( !req.query.warehouseId)
+          warehouseId  = req.user.warehouseId;
+      else
+          warehouseId  = req.query.warehouseId;
+
       const warehouse = await WarehouseModel.findOne({ id: warehouseId })
       if (warehouse) {
         const inventory = await InventoryModel.aggregate([
