@@ -908,13 +908,11 @@ exports.addProductsToInventory = [
           const { products } = req.body;
           const { id } = req.user;
           const employee = await EmployeeModel.findOne({ id });
-console.log("em",employee)
           var warehouseId = "";
           if ( !req.query.warehouseId)
           warehouseId  = employee.warehouseId[0];
           else
           warehouseId  = req.query.warehouseId;
-	console.log("wid",warehouseId)
           const warehouse = await WarehouseModel.findOne({ id: warehouseId });
 
           if (!warehouse) {
@@ -983,9 +981,9 @@ console.log("em",employee)
               });
             }
 
-            const serialNumbers = product.serialNumbersRange.split('-');
+            const serialNumbers = product.serialNumbersRange?.split('-');
             let atomsArray = [];
-            if (serialNumbers.length > 1) {
+            if (serialNumbers?.length > 1) {
               const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
               const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
 

@@ -299,7 +299,7 @@ exports.register = [
               primaryContactId: employeeId,
               name: organisationName,
               id: organisationId,
-              type:  req.body?.type ? req.body.type :'CUSTOMER_SUPPLIER',
+              type: req.body?.type ? req.body.type :'CUSTOMER_SUPPLIER',
               status: 'NOTVERIFIED',
               postalAddress: addr,
               warehouses: [warehouseId],
@@ -1034,7 +1034,6 @@ exports.getUserWarehouses = [
   auth,
   async (req, res) => {
     try {
-	    console.log("1",req.user.organisationId)
       const users = await WarehouseModel.find({
 	organisationId: req.user.organisationId
       });
