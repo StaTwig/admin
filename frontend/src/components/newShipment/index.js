@@ -221,7 +221,8 @@ const NewShipment = (props) => {
       dispatch(turnOn());
       const result = await createShipment(data);
       dispatch(turnOff());
-      console.log("data", data);
+      console.log("Data");
+      console.log(data);
       if (result?.id) {
         setMessage("Created Shipment Success");
         setOpenCreatedInventory(true);
@@ -335,7 +336,7 @@ const NewShipment = (props) => {
           // if (!values.estimateDeliveryDate) {
           //   errors.estimateDeliveryDate = "Required";
           // }
-          if (!orderIdSelected && values.products.length == 0) {
+          if (values.products.length == 0) {
             errors.products = "Required";
           }
           return errors;
@@ -373,8 +374,6 @@ const NewShipment = (props) => {
                           setOrderId(v);
                           dispatch(turnOn());
                           const result = await dispatch(getOrder(v));
-                          console.log("Result");
-                          console.log(result);
                           setReceiverOrgLoc(
                             result.poDetails[0].customer.organisation
                               .postalAddress
@@ -383,6 +382,7 @@ const NewShipment = (props) => {
                             result.poDetails[0].customer.organisation.id
                           );
                           setOrderDetails(result.poDetails[0]);
+                          setProducts(result.poDetails[0].products);
 
                           dispatch(turnOff());
                           setDisabled(true);
@@ -394,9 +394,6 @@ const NewShipment = (props) => {
                               return w.id == supplierWarehouse[i];
                             }
                           });
-                          console.log(warehouse);
-                          console.log("Organisation");
-                          console.log(senderOrganisation);
                           setFieldValue("fromOrg", senderOrganisation[0]);
                           setFieldValue(
                             "fromOrgLoc",
@@ -413,23 +410,15 @@ const NewShipment = (props) => {
                           );
                           // setSenderOrgLoc(warehouse[0].postalAddress);
                           let products_temp = result.poDetails[0].products;
-                          for (let i = 0; i < products_temp.length; i++) {
-                            products_temp[i].manufacturer =
-                              result.poDetails[0].productDetails[
-                                i
-                              ].manufacturer;
-                            products_temp[i].productName =
-                              result.poDetails[0].productDetails[i].name;
-                            products_temp[i].productQuantity =
-                              result.poDetails[0].products[i].quantity;
-                          }
-                          console.log("Products");
-                          console.log(products_temp);
-                          if (result.poDetails[0].productDetails.length > 0) {
-                            setProducts([]);
-                            setAddProducts([]);
-                            setFieldValue("products", products_temp);
-                          } else setFieldValue("products", []);
+                          console.log('Products Data');
+                          setFieldValue("products", result.poDetails[0].products);
+                          
+                          // if (result.poDetails[0].products.length > 0) {
+                          //   console.log(result.poDetails[0].products);
+                          //   // setProducts(result.poDetails[0].products);
+                          //   setAddProducts([]);
+                          //   setFieldValue("products", products_temp);
+                          // } else setFieldValue("products", []);
                         }}
                         groups={OrderIds}
                       />
