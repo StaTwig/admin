@@ -977,7 +977,7 @@ exports.addProductsToInventory = [
             }
 
             const serialNumbers = product.serialNumbersRange?.split('-');
-	    let atomsArray = [];
+            let atomsArray = [];
             if (serialNumbers?.length > 1) {
               const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
               const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
@@ -1175,7 +1175,7 @@ exports.addInventoriesFromExcel = [
                         (response) => response.data
                       );
                       // console.log(inventoryData);
-                      
+
                       // InventoryModel.insertMany(inventoryData, (err, res) => {
                       //   if (err) {
                       //     logger.log("error", err.errmsg);
@@ -1244,10 +1244,10 @@ exports.addInventoriesFromExcel = [
 
               // compute(event_data).then((response) => console.log(response))
 
-                for (const [index,prod] of data.entries()) {
-                  let product = await ProductModel.findOne({ name: prod.productName });
-                  data[index].productId = product.id;
-                }
+              for (const [index, prod] of data.entries()) {
+                let product = await ProductModel.findOne({ name: prod.productName });
+                data[index].productId = product.id;
+              }
 
               return apiResponse.successResponseWithData(res, "Success", data);
             } else {
@@ -2228,10 +2228,14 @@ function getFilterConditions(filters) {
 
 // total quantity as per the products for the ecosystem
 exports.getInventoryProductsByPlatform = [
-  auth,
+  // auth,
   async (req, res) => {
     try {
       const filters = req.query;
+      const skuFilter = {};
+      if (filters.sku && filters.sku.length) {
+        skuFilter.id = filters.sku;
+      }
       const platformInventory = await OrganisationModel.aggregate([
         {
           $match: getFilterConditions(filters)
@@ -2337,6 +2341,9 @@ exports.getInventoryProductsByPlatform = [
           $project: {
             productDetails: 0
           }
+        },
+        {
+          $match: skuFilter
         }
       ]);
       return apiResponse.successResponseWithData(
