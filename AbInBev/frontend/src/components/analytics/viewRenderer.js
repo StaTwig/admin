@@ -13,6 +13,11 @@ const componentMappings = [
         moduleName: 'annualReport'
     },
     {
+        componentName: 'DetailedGeographicalView',
+        componentCode: 'DETAILED_GEO_VIEW',
+        moduleName: 'annualReport'
+    },
+    {
         componentName: 'SKUView',
         componentCode: 'SKU_VIEW',
         moduleName: 'annualReport'
