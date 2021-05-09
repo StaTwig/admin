@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import './style.scss';
-import { addInventoriesFromExcel } from '../../actions/inventoryActions';
+import { addInventoriesFromExcel, setReviewinventories } from '../../actions/inventoryActions';
 import { turnOn, turnOff } from '../../actions/spinnerActions';
 import uploadBlue from '../../assets/icons/UploadBlue.svg';
 import Checked from '../../assets/icons/checked.svg';
@@ -20,8 +20,13 @@ const ExcelPopUp = props => {
     dispatch(turnOn());
     const result = await addInventoriesFromExcel(formData);
     if (result.status === 200) {
-      console.log('success add product');
-      props.setOpenCreatedInventory(true);
+      // console.log('success add product');
+      // props.setOpenCreatedInventory(true);
+      //Store in reducer
+      dispatch(setReviewinventories(result.data.data));
+
+      //Redirect to review page.
+      props.history.push('/reviewinventory');
     }
     dispatch(turnOff());
   };

@@ -632,7 +632,8 @@ exports.verifyOtp = [
           //Prepare JWT token for authentication
           const jwtPayload = userData;
           const jwtData = {
-            expiresIn: process.env.JWT_TIMEOUT_DURATION,
+            //expiresIn: process.env.JWT_TIMEOUT_DURATION,
+            expiresIn : "12 hours"
           };
           const secret = process.env.JWT_SECRET;
           //Generated JWT token with Payload and secret.

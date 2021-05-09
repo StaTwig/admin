@@ -250,6 +250,7 @@ const NewInventory = props => {
               size="modal-md" //for other size's use `modal-lg, modal-md, modal-sm`
             >
               <ExcelPopUp
+                {...props}
                 onHide={closeExcelModal} //FailurePopUp
                 setOpenCreatedInventory={setOpenCreatedInventory}
               />

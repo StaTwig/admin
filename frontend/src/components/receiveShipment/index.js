@@ -116,8 +116,6 @@ const ReceiveShipment = (props) => {
     const result = await uploadImage(id, formData);
     if (result.status == 200) {
       setMessage("Image Uploaded");
-      setPhoto("");
-      setPhotoUrl(undefined);
     } else {
       console.log(result.status);
     }
@@ -348,6 +346,11 @@ const ReceiveShipment = (props) => {
             />
           </Modal>
         )}   */}
+      {message && (
+        <div className="alert alert-success d-flex justify-content-center mt-3">
+          {message}
+        </div>
+      )}
     </div>
   );
 };

@@ -700,6 +700,15 @@ body {
     margin-bottom: 20px;
 }
 
+.card-container-sku {
+    overflow-x: auto;
+    display: flex;
+    padding: 2rem 0rem;
+}
+.cursor-pointer{
+    cursor: pointer;
+}
+
 // Small devices (landscape phones, 576px and up)
 @media (min-width: 576px) { 
     .card-container {

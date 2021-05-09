@@ -19,7 +19,7 @@ exports.getAllEvents = [
 	auth,
 	async function (req, res) {
 		try {
-			const resPerPage = 9; 
+			const resPerPage = req.query.limit || 9; 
 			const page = req.query.page || 1; 
 			const totalRecords = await EventModal.count({...req.params})
 			EventModal.find({ ...req.params }, "_id eventID eventTime eventTypePrimary	eventTypeDesc actorId actorUserId caId caName caAddress actorOrgId actorOrgName actorOrgAddress secondaryOrgId secondaryOrgName secondaryOrgAddress	payloadData").skip((resPerPage * page) - resPerPage)
@@ -65,7 +65,7 @@ exports.getEventById = [
 	sanitizeBody("*").escape(),
 	async function (req, res) {
 		try {
-			const resPerPage = 9; 
+			const resPerPage = req.query.limit || 9; 
 			const page = req.query.page || 1; 			
 			const totalRecords = await EventModal.count({...req.params})
 			console.log(req.params)
@@ -121,7 +121,7 @@ exports.getEventByActorId = [
 	sanitizeBody("*").escape(),
 	async function (req, res) {
 		try {
-			const resPerPage = 9; 
+			const resPerPage = req.query.limit || 9; 
 			const page = req.query.page || 1; 
 			const totalRecords = await EventModal.count({...req.params})
 			const errors = validationResult(req);
@@ -176,7 +176,7 @@ exports.getEventByCaId = [
 	sanitizeBody("*").escape(),
 	async function (req, res) {
 		try {
-			const resPerPage = 9; 
+			const resPerPage = req.query.limit || 9; 
 			const page = req.query.page || 1; 
 			const totalRecords = await EventModal.count({...req.params})
 			const errors = validationResult(req);
@@ -231,7 +231,7 @@ exports.getEventByActorOrgId = [
 	sanitizeBody("*").escape(),
 	async function (req, res) {
 		try {
-			const resPerPage = 9; 
+			const resPerPage = req.query.limit || 9; 
 			const page = req.query.page || 1; 
 			const totalRecords = await EventModal.count({...req.params})
 			const errors = validationResult(req);
@@ -286,7 +286,7 @@ exports.getEventBySecondOrgId = [
 	sanitizeBody("*").escape(),
 	async function (req, res) {
 		try {
-			const resPerPage = 9; 
+			const resPerPage = req.query.limit || 9; 
 			const page = req.query.page || 1; 
 			const totalRecords = await EventModal.count({...req.params})
 			const errors = validationResult(req);

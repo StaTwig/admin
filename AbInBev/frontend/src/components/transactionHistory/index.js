@@ -346,8 +346,8 @@ const TransactionHistory = (props) => {
                           {
                             (transaction.receiver.warehouse.warehouseAddress
                               .city,
-                            transaction.receiver.warehouse.warehouseAddress
-                              .state)
+                              transaction.receiver.warehouse.warehouseAddress
+                                .state)
                           }
                         </div>
                         <div className="productItem">
