@@ -78,8 +78,8 @@ const TransactionHistory = (props) => {
     state: "",
     district: "",
     inventoryType: "VENDOR",
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: null,
+    endDate: null,
   });
   const _getAllStates = async () => {
     const response = await dispatch(getAllStates());
@@ -190,12 +190,17 @@ const TransactionHistory = (props) => {
       setDisplayTransactions(Added);
     }
   }
+  async function filterFun(){
+    const results = await dispatch(getTransactions(filters));
+    setDisplayTransactions(results.data);
+    setTransactions(results.data);
+  }
   useEffect(() => {
     (async () => {
       _getAllStates();
       console.log("states are " + states);
 
-      const results = await dispatch(getTransactions());
+      const results = await dispatch(getTransactions(filters));
       setDisplayTransactions(results.data);
       setTransactions(results.data);
       let addedarray = [];
@@ -727,7 +732,7 @@ const TransactionHistory = (props) => {
                   })}
                 </select>
 
-                <button className="btn SearchButton mt-4" onClick={()=>console.log(filters)}>Search</button>
+                <button className="btn SearchButton mt-4" onClick={()=>{filterFun();console.log(filters)}}>Search</button>
               </div>
             </div>
           </div>
