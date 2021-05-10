@@ -8,8 +8,8 @@
   [entryPoints.websecure]
     address = ":443"
 
-[api]
-  dashboard = true
+# [api]
+#   dashboard = true
 
 [certificatesResolvers.lets-encrypt.acme]
   email = "ashwini@statwig.com"
