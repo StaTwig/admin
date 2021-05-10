@@ -1,6 +1,6 @@
 import React from "react";
-import becks from "../../../assets/images/becks.png";
-import bottlesIcon from "../../../assets/becks_330ml.png";
+import becks from "../../../../assets/images/becks.png";
+import bottlesIcon from "../../../../assets/becks_330ml.png";
 
 const SupplierView = (props) => {
 

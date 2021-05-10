@@ -8,6 +8,11 @@ var WarehouseSchema = new mongoose.Schema(
       required: true,
       default: 'org123',
     },
+    postalAddress: {
+      type: String,
+      required: true,
+      default: "T-Hub, IIIT, Gachibowli, Hyderabad, Telangana, India",
+    },
     warehouseAddress: {
       type: Object,
       required: true,
@@ -45,6 +50,7 @@ var WarehouseSchema = new mongoose.Schema(
         geohash: '1231nejf923453',
       },
     },
+    status: String,
     supervisors: {
       type: Array,
       default: []

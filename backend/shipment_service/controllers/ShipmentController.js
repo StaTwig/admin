@@ -1657,3 +1657,189 @@ exports.fetchShipmentIds = [
     }
   },
 ];
+
+
+exports.fetchInboundShipments = [
+  auth,
+  async (req, res) => {
+    try {
+      const { skip, limit } = req.query;
+      checkToken(req, res, async (result) => {
+        if (result.success) {
+          const warehouseId = req.user;
+          let currentDate = new Date();
+          let fromDateFilter = 0;
+          let status = req.query.status ? req.query.status : undefined;
+          let fromSupplier = req.query.from ? req.query.from : undefined;
+          let toReceiver = req.query.to ? req.query.to : undefined;
+          switch (req.query.dateFilter) {
+            case "today":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+              break;
+            case "week":
+              fromDateFilter = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay())).toUTCString();
+              break;
+            case "month":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
+              break;
+            case "threeMonth":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, currentDate.getDate());
+              break;
+            case "sixMonth":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 6, currentDate.getDate());
+              break;
+            case "year":
+              fromDateFilter = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate());
+              break;
+            default:
+              fromDateFilter = 0;
+          }
+
+          let whereQuery = {};
+
+          if (status) {
+            whereQuery['status'] = status
+          }
+
+          if (fromDateFilter) {
+            whereQuery['createdAt'] = { $gte: fromDateFilter }
+          }
+
+          if (warehouseId) {
+            whereQuery["receiver.locationId"] = warehouseId
+          }
+
+          if (fromSupplier) {
+            let supplierOrg = await OrganisationModel.findOne({ "name": fromSupplier });
+            if (supplierOrg) {
+              whereQuery["supplier.id"] = supplierOrg.id;
+            }
+          }
+
+          if (toReceiver) {
+            let receiverOrg = await OrganisationModel.findOne({ "name": toReceiver });
+            if (receiverOrg) {
+              whereQuery["receiver.id"] = receiverOrg.id
+            }
+          }
+          console.log("whereQuery ======>", whereQuery);
+          try {
+            const inboundShipments = await ShipmentModel.find(whereQuery).sort({ createdAt: -1 }).skip(parseInt(skip)).limit(parseInt(limit));
+            return apiResponse.successResponseWithMultipleData(
+              res,
+              "Inbound Shipment Records",
+              inboundShipments
+            );
+          } catch (err) {
+            return apiResponse.ErrorResponse(res, err);
+          }
+        } else {
+          logger.log(
+            "warn",
+            "<<<<< ShipmentService < ShipmentController < fetchInboundShipments : refuted token"
+          );
+          res.status(403).json("Auth failed");
+        }
+      });
+    } catch (err) {
+      logger.log(
+        "error",
+        "<<<<< ShipmentService < ShipmentController < fetchInboundShipments : error (catch block)"
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.fetchOutboundShipments = [
+  auth,
+  async (req, res) => {
+    try {
+      const { skip, limit } = req.query;
+      checkToken(req, res, async (result) => {
+        if (result.success) {
+          const warehouseId = req.user;
+          let currentDate = new Date();
+          let fromDateFilter = 0;
+          let status = req.query.status ? req.query.status : undefined;
+          let fromSupplier = req.query.from ? req.query.from : undefined;
+          let toReceiver = req.query.to ? req.query.to : undefined;
+          switch (req.query.dateFilter) {
+            case "today":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+              break;
+            case "week":
+              fromDateFilter = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay())).toUTCString();
+              break;
+            case "month":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
+              break;
+            case "threeMonth":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, currentDate.getDate());
+              break;
+            case "sixMonth":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 6, currentDate.getDate());
+              break;
+            case "year":
+              fromDateFilter = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate());
+              break;
+            default:
+              fromDateFilter = 0;
+          }
+
+          let whereQuery = {};
+
+          if (status) {
+            whereQuery['status'] = status
+          }
+
+          if (fromDateFilter) {
+            whereQuery['createdAt'] = { $gte: fromDateFilter }
+          }
+
+          if (warehouseId) {
+            whereQuery["sender.locationId"] = warehouseId
+          }
+
+          if (fromSupplier) {
+            let supplierOrg = await OrganisationModel.findOne({ "name": fromSupplier });
+            if (supplierOrg) {
+              whereQuery["supplier.id"] = supplierOrg.id;
+            }
+          }
+
+          if (toReceiver) {
+            let receiverOrg = await OrganisationModel.findOne({ "name": toReceiver });
+            if (receiverOrg) {
+              whereQuery["receiver.id"] = receiverOrg.id
+            }
+          }
+
+          console.log("whereQuery ======>", whereQuery);
+          try {
+            const outboundShipments = await ShipmentModel.find(whereQuery).sort({ createdAt: -1 }).sort({ createdAt: -1 }).skip(parseInt(skip)).limit(parseInt(limit));
+            return apiResponse.successResponseWithMultipleData(
+              res,
+              "Outbound Shipment Records",
+              outboundShipments
+            );
+          } catch (err) {
+            return apiResponse.ErrorResponse(res, err);
+          }
+        } else {
+          logger.log(
+            "warn",
+            "<<<<< ShipmentService < ShipmentController < fetchOutboundShipments : refuted token"
+          );
+          res.status(403).json("Auth failed");
+        }
+      });
+    } catch (err) {
+      logger.log(
+        "error",
+        "<<<<< ShipmentService < ShipmentController < fetchOutboundShipments : error (catch block)"
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];

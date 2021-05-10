@@ -8,16 +8,41 @@ import ViewRenderer from "./viewRenderer";
 const Analytics = (props) => {
 
   const [filters, setFilters] = useState({
-    view: 'GEO_VIEW'
+    view: 'ANNUALREPORT_DASHBOARD'
   });
 
-  const [selectedViewCode, setSelectedViewCode] = useState('GEO_VIEW');
+  const [selectedViewCode, setSelectedViewCode] = useState('ANNUALREPORT_DASHBOARD');
+  const [annualReportButton, setannualReportButton] = useState("btn active");
+  const [inventoryButton, setInventoryButton] = useState("btn");
+  const [spm, setSpmButton] = useState("btn");
+  function selectModule(module){
+    if (module === "ANNUALREPORT_DASHBOARD") {
+      setannualReportButton("btn active"); 
+      setInventoryButton("btn");
+      setSpmButton("btn");
 
+    }
+    if (module === "INVENTORY_DASHBOARD") {
+      setannualReportButton("btn"); 
+      setInventoryButton("btn active");
+      setSpmButton("btn");
+    }
+    if (module === "SPM_DASHBOARD") {
+      setannualReportButton("btn"); 
+      setInventoryButton("btn");
+      setSpmButton("btn active");
+    }
+  }
   const changeView = (event) => {
     setSelectedViewCode(event.target.value);
   }
   const onViewChange = (viewCode, props) => {
     setSelectedViewCode(viewCode);
+  }
+
+  const onModuleChange = (moduleCode, props) =>{
+    setFilters(moduleCode);
+    setSelectedViewCode(moduleCode);
   }
 
   return (
@@ -35,9 +60,33 @@ const Analytics = (props) => {
               <div className="filterSection">
                 <div className="filterHeader mb-3">
                   <img src={filterIcon} className="filterIcon" /> FILTERS
-                    </div>
+                </div>
+                {/* TODO Tabs for for Module load  */}
+                <div class="btn-group filterButton mt-2 mb-4">
+                  <a href="#!" class={annualReportButton}
+                  onClick={() => {
+                    selectModule("ANNUALREPORT_DASHBOARD");
+                    onModuleChange("ANNUALREPORT_DASHBOARD");
+                  }}>
+                    Annual Reports
+                  </a>
+                  <a href="#!" class={inventoryButton}
+                  onClick={() => {
+                    selectModule("INVENTORY_DASHBOARD");
+                    onModuleChange("INVENTORY_DASHBOARD");
+                  }}>
+                    Inventory
+                  </a>
+                  <a href="#!" class={spm}
+                  onClick={() => {
+                    selectModule("SPM_DASHBOARD");
+                    onModuleChange("SPM_DASHBOARD");
+                  }}>
+                    SPM
+                  </a>
+                </div>
                 <label className="radioButton" for="gv">
-                  <input className="radioInput" type="radio" name="view" value="gv" id="gv" value="GEO_VIEW" onChange={changeView} defaultChecked={filters.view === 'GEO_VIEW'} /> Geographical View
+                  <input className="radioInput" type="radio" name="view" value="gv" id="gv" value="ANNUALREPORT_DASHBOARD" onChange={changeView} defaultChecked={filters.view === 'ANNUALREPORT_DASHBOARD'} /> Geographical View
                     </label>
                 <label className="radioButton" for="sv">
                   <input className="radioInput" type="radio" name="view" value="sv" id="sv" value="SKU_VIEW" onChange={changeView} defaultChecked={filters.view === 'SKU_VIEW'} /> SKU View

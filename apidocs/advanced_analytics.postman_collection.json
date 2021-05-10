@@ -1,0 +1,324 @@
+{
+	"info": {
+		"_postman_id": "6bde6a2a-49a8-4767-8ad6-2e993dfc1295",
+		"name": "advanced_analytics",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "getAllStats",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/advancedanalytics/api/analytics/getAllstats",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"advancedanalytics",
+						"api",
+						"analytics",
+						"getAllstats"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getStatsBySKU",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/advancedanalytics/api/analytics/getStatsBySKU/:productId",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"advancedanalytics",
+						"api",
+						"analytics",
+						"getStatsBySKU",
+						":productId"
+					],
+					"variable": [
+						{
+							"key": "productId",
+							"value": "prod-9bhkk6yiutx"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getStatsByBrewery",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/advancedanalytics/api/analytics/getStatsByBrewery/:warehouseId",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"advancedanalytics",
+						"api",
+						"analytics",
+						"getStatsByBrewery",
+						":warehouseId"
+					],
+					"variable": [
+						{
+							"key": "warehouseId",
+							"value": "AP001"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getSalesByState",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/advancedanalytics/api/analytics/getSales/:state/:tenure",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"advancedanalytics",
+						"api",
+						"analytics",
+						"getSales",
+						":state",
+						":tenure"
+					],
+					"variable": [
+						{
+							"key": "state",
+							"value": "India"
+						},
+						{
+							"key": "tenure",
+							"value": "2021"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getReturnedRate",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/advancedanalytics/api/analytics/getReturnedRate/:state/:tenure",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"advancedanalytics",
+						"api",
+						"analytics",
+						"getReturnedRate",
+						":state",
+						":tenure"
+					],
+					"variable": [
+						{
+							"key": "state",
+							"value": "India"
+						},
+						{
+							"key": "tenure",
+							"value": "2021"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getTarget",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/advancedanalytics/api/analytics/getTarget/:state/:tenure",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"advancedanalytics",
+						"api",
+						"analytics",
+						"getTarget",
+						":state",
+						":tenure"
+					],
+					"variable": [
+						{
+							"key": "state",
+							"value": "India"
+						},
+						{
+							"key": "tenure",
+							"value": "2021"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getInventoryBySku",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/advancedanalytics/api/analytics/getInventoryBySku/:sku/:state",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"advancedanalytics",
+						"api",
+						"analytics",
+						"getInventoryBySku",
+						":sku",
+						":state"
+					],
+					"variable": [
+						{
+							"key": "sku",
+							"value": ""
+						},
+						{
+							"key": "state",
+							"value": "India"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getInventoryByBrand",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/advancedanalytics/api/analytics/getInventoryByBrand/:brand/:state/",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"advancedanalytics",
+						"api",
+						"analytics",
+						"getInventoryByBrand",
+						":brand",
+						":state",
+						""
+					],
+					"variable": [
+						{
+							"key": "brand",
+							"value": "Biohib"
+						},
+						{
+							"key": "state",
+							"value": "Telangana"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
