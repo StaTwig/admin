@@ -1,6 +1,7 @@
 /* eslint-disable linebreak-style */
-const ExcelModal = require("../models/ExcelModel");
 const AnalyticsModel = require("../models/AnalyticsModel");
+const ProductSKUModel = require("../models/ProductSKUModel");
+
 const OrganisationModel = require("../models/OrganisationModel");
 const { body, validationResult, param } = require("express-validator");
 const { sanitizeBody } = require("express-validator");
@@ -12,11 +13,34 @@ const mailer = require("../helpers/mailer");
 const { constants } = require("../helpers/constants");
 require("dotenv").config();
 const auth = require("../middlewares/jwt");
+const moment = require('moment');
+
 
 const BREWERY_ORG = 'BREWERY';
 const S1_ORG = 'S1';
 const S2_ORG = 'S2';
 
+const DATE_FORMAT = 'YYYY-MM-DD';
+
+
+async function calculatePrevReturnRates(filters, analytic) {
+
+	const lastMonthStart = moment().subtract(1, 'months').startOf('month').format(DATE_FORMAT);
+	const lastMonthEnd = moment().subtract(1, 'months').endOf('month').format(DATE_FORMAT);
+	let prevAnalytic = await AnalyticsModel.findOne({
+		uploadDate: {
+			$lte: lastMonthEnd,
+			$gte: lastMonthStart,
+		},
+		productName: analytic.productName,
+		productId: analytic.productId
+	});
+	if (prevAnalytic && parseInt(prevAnalytic.sales)) {
+		return (parseInt(prevAnalytic.returns) / parseInt(prevAnalytic.sales)) * 100;
+	} else {
+		return 0;
+	}
+}
 
 function getFilterConditions(filters) {
 	let matchCondition = {};
@@ -156,6 +180,45 @@ exports.getOverviewStats = [
 ];
 
 /**
+ * getAllBrands.
+ *
+ * @returns {Object}
+ */
+exports.getAllBrands = [
+	//auth,
+	async function (req, res) {
+		try {
+			const filters = req.query;
+			const brandFilters = {};
+			if (filters.brand && filters.brand !== '') {
+				brandFilters.manufacturer = filters.brand;
+			}
+			let allBrands = await ProductSKUModel.aggregate([
+				{
+					$match: brandFilters
+				},
+				{
+					$group: {
+						_id: '$manufacturer',
+						products: {
+							$addToSet: '$$ROOT'
+						}
+					}
+				}
+			]);
+			return apiResponse.successResponseWithData(
+				res,
+				"Operation success",
+				allBrands
+			);
+		} catch (err) {
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
+
+
+/**
  * getAllStats.
  *
  * @returns {Object}
@@ -201,9 +264,10 @@ exports.getAllStats = [
 				.skip((resPerPage * page) - resPerPage)
 				.limit(resPerPage);
 
-			Analytics.forEach(analytic => {
+			for (let analytic of Analytics) {
 				analytic['returnRate'] = (parseInt(analytic.returns) / parseInt(analytic.sales)) * 100;
-			});
+				analytic['returnRatePrev'] = await calculatePrevReturnRates(filters, analytic);
+			}
 
 			const finalData = {
 				totalRecords: totalRecords,

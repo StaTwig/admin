@@ -11,7 +11,7 @@ var router = express.Router();
 
 router.get("/getOverviewStats", AnalyticsController.getOverviewStats);
 router.get("/getAllStats", AnalyticsController.getAllStats);
-
+router.get("/getAllBrands", AnalyticsController.getAllBrands);
 
 router.get("/getStatsBySKU/:productId", AnalyticsController.getStatsBySKU);
 router.get("/getStatsByBrewery/:warehouseId", AnalyticsController.getAllStats);

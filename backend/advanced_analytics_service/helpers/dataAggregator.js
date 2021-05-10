@@ -1,6 +1,5 @@
-const Analytics = require('../models/AnalyticsModel')
-const Excel = require('../models/ExcelModel')
-const { calculateReturns } = require('./returnShipments')
+const Analytics = require('../models/AnalyticsModel');
+const { calculateReturns } = require('./returnShipments');
 
 var today = new Date()
 var lastWeek = new Date()
@@ -55,7 +54,6 @@ async function aggregateData(timeFrame) {
     },
   });
   for (const row of analytics) {
-    console.log(row._id);
     let params = {
       'receiver.locationId': row.warehouseId,
       'products.productID': row.productId,
