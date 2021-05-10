@@ -13,6 +13,7 @@ import user from '../../assets/icons/user.svg';
 import { getNotifications, deleteNotification } from '../../actions/notificationActions';
 import { turnOff, turnOn } from "../../actions/spinnerActions";
 import useOnclickOutside from 'react-cool-onclickoutside';
+import { config } from "../../config";
 const Header = props => {
   const [menu, setMenu] = useState(false);
   const [sidebar, openSidebar] = useState(false);
@@ -56,7 +57,7 @@ const ref = useOnclickOutside(() => {
       onSeach();
     }
    }
-
+const imgs = config().fetchProfileImage;
 
   return (
     <div className="header">
@@ -121,9 +122,9 @@ const ref = useOnclickOutside(() => {
 
           <div className="userPic">
             <img
-              src={profile.profile_picture ? profile.profile_picture : user}
+              src={`${imgs}${profile.photoId}` ? `${imgs}${profile.photoId}` : user}
               alt=""
-              className={`rounded rounded-circle ${profile.profile_picture ? `` :`img-thumbnail bg-transparent border-0`}`}
+              className={`rounded rounded-circle ${`${imgs}${profile.photoId}` ? `` :`img-thumbnail bg-transparent border-0`}`}
             />
           </div>
           <div className="userActions">
