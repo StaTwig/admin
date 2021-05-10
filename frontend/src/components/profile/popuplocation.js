@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import Location from '../../assets/icons/Location.png';
+import Location1 from '../../assets/icons/add_new_location.png';
 import DropdownButton from "../../shared/dropdownButtonGroup";
 
 import {
@@ -10,28 +11,29 @@ import {
     
     return (
 
-    <div class="profile"> 
-<center><h1 className="breadcrumb">Add Location</h1></center><br></br>
+    <div class= ""> 
+<center><h1 className=""><b>Add Location</b></h1></center><br></br>
                
                 <div class="wrapper1">
                 <Link to ={'/Addlocation'}>
-                     <button className="btn btn-orange fontSize20 font-bold mr-4" >
-                     <img src={Location} width="20" height="26" className="mr-2 mb-1" />
-                    <span>Add New Location</span>
+                     <button className="btn btn-orange fontSize18 font-bold" >
+                     <img src={Location1} width="23" height="23" className="mr-2 mb-1" />
+                    <span><b>Add New Location</b></span>
                   </button>
                   </Link>
-                </div>
-               <center><h7>-------------------------        OR        -------------------------</h7></center> 
-               <div className="slectloc1" rows="10" cols="70">
+                </div><br></br>
+               <center><h7>-------------------------        Or        -------------------------</h7></center> 
+               <div className="slectloc1" >
                <div className="row">
-                  <div className="col-md-6 com-sm-16">
+                  <div className="col-md-6 com-sm-10">
                     <div className="form-group">
-                    <img src={Location} height='27' width='25' className="mr-3"></img>
-                      <label htmlFor="Select Location">Select Location*</label>
+                    <img src={Location} height='30' width='20' className="pt-2"></img>
+                      <label htmlFor="Select Location" className="pt-3"><b>Select Location</b></label>
                       <div className="form-control" >
-                        <DropdownButton
+                      {/*<DropdownButton/>*/}.
+                        
                          
-                        />
+                        
                       </div>
                     </div>
                   </div>
