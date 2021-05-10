@@ -7,14 +7,12 @@ import "./style.scss";
 import { Formik } from "formik";
 
 const editLocation = (props) => {
-  const [LocationName, setLocationName] = useState("");
-  const [pincode, setpincode] = useState("");
-  const [flat, setflat] = useState("");
-  const [Street, setStreet] = useState("");
-  const [Landmark, setLandmark] = useState("");
-  const [town, setRegion] = useState("");
-  const [state_p, setState_p] = useState("");
+  const [addressTitle, setAddressTitle] = useState("");
+  const [addressLine, setAddressLine] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
   const [country, setCountry] = useState("");
+  const [pincode, setPincode] = useState("");
 
   const requestadminforapproval = () => {
     //  props.history.push('/profile');
@@ -29,46 +27,40 @@ const editLocation = (props) => {
             <Formik
               enableReinitialize={true}
               initialValues={{
-                LocationName,
-                pincode,
-                flat,
-                Street,
-                Landmark,
-                town,
-                state_p,
+                addressTitle,
+                addressLine,
+                city,
+                state,
                 country,
+                pincode,
               }}
               validate={(values) => {
                 const errors = {};
 
-                if (!values.LocationName) {
-                  errors.LocationName = "Required";
+                if (!values.addressTitle) {
+                  errors.addressTitle = "Required";
                 }
-                if (!values.pincode) {
-                  errors.pincode = "Required";
+                if (!values.addressLine) {
+                  errors.addressLine = "Required";
                 }
-                if (!values.flat) {
-                  errors.flat = "Required";
+                if (!values.city) {
+                  errors.city = "Required";
                 }
-                if (!values.Street) {
-                  errors.Street = "Required";
-                }
-                if (!values.Landmark) {
-                  errors.Landmark = "Required";
-                }
-                if (!values.town) {
-                  errors.town = "Required";
-                }
-                if (!values.state_p) {
-                  errors.state_p = "Required";
+                if (!values.state) {
+                  errors.state = "Required";
                 }
                 if (!values.country) {
                   errors.country = "Required";
+                }
+                if (!values.pincode) {
+                  errors.pincode = "Required";
                 }
 
                 return errors;
               }}
               onSubmit={(values, { setSubmitting }) => {
+                console.log('Values');
+                console.log(values);
                 setSubmitting(false);
                 // updateStatus(values);
               }}
@@ -88,22 +80,22 @@ const editLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                        <label htmlFor="Location Name">Location Name*</label>
+                        <label htmlFor="addressTitle">Location Name*</label>
 
                         <input
                           type="text"
                           className="form-control"
-                          name="LocationName"
-                          placeholder="Enter Location Name "
-                          value={values.LocationName}
+                          name="addressTitle"
+                          placeholder="Enter Address Title"
+                          value={values.addressTitle}
                           onBlur={handleBlur}
                           onChange={(e) => {
-                            setLocationName(e.target.value);
+                            setAddressTitle(e.target.value);
                           }}
                         />
-                        {errors.LocationName && touched.LocationName && (
+                        {errors.addressTitle && touched.addressTitle && (
                           <span className="error-msg text-danger">
-                            {errors.LocationName}
+                            {errors.addressTitle}
                           </span>
                         )}
                       </div>
@@ -112,21 +104,21 @@ const editLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                        <label htmlFor="Flat"> Pincode* </label>
+                        <label htmlFor="addressLine">Address Line</label>
                         <input
                           type="text"
                           className="form-control"
-                          name="pincode"
-                          placeholder="Enter Pincode "
-                          value={values.pincode}
+                          name="addressLine"
+                          placeholder="Enter Address Line"
+                          value={values.addressLine}
                           onBlur={handleBlur}
                           onChange={(e) => {
-                            setpincode(e.target.value);
+                            setAddressLine(e.target.value);
                           }}
                         />
-                        {errors.pincode && touched.pincode && (
+                        {errors.addressLine && touched.addressLine && (
                           <span className="error-msg text-danger">
-                            {errors.pincode}
+                            {errors.addressLine}
                           </span>
                         )}
                       </div>
@@ -135,24 +127,21 @@ const editLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                        <label htmlFor="Flat">
-                          {" "}
-                          Flat, House No,Building,Company*{" "}
-                        </label>
+                        <label htmlFor="city">City/Town</label>
                         <input
                           type="text"
                           className="form-control"
-                          name="flat"
-                          placeholder="Enter  Flat, House No,Building,Company "
-                          value={values.flat}
+                          name="city"
+                          placeholder="Enter City/Town"
+                          value={values.city}
                           onBlur={handleBlur}
                           onChange={(e) => {
-                            setflat(e.target.value);
+                            setCity(e.target.value);
                           }}
                         />
-                        {errors.flat && touched.flat && (
+                        {errors.city && touched.city && (
                           <span className="error-msg text-danger">
-                            {errors.flat}
+                            {errors.city}
                           </span>
                         )}
                       </div>
@@ -162,23 +151,21 @@ const editLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                        <label htmlFor="Street">
-                          Area,Colony,Street,District,Village*{" "}
-                        </label>
+                        <label htmlFor="state">State</label>
                         <input
                           type="text"
                           className="form-control"
-                          name="Street"
-                          placeholder="Enter Area,Colony,Street,District,Village"
-                          value={values.Street}
+                          name="state"
+                          placeholder="Enter State"
+                          value={values.state}
                           onBlur={handleBlur}
                           onChange={(e) => {
-                            setStreet(e.target.value);
+                            setState(e.target.value);
                           }}
                         />
-                        {errors.Street && touched.Street && (
+                        {errors.State && touched.State && (
                           <span className="error-msg text-danger">
-                            {errors.Street}
+                            {errors.State}
                           </span>
                         )}
                       </div>
@@ -188,90 +175,12 @@ const editLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                        <label htmlFor="Landmark">Landmark</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="Landmark"
-                          placeholder="Enter Landmark"
-                          value={values.Landmark}
-                          onBlur={handleBlur}
-                          onChange={(e) => {
-                            setLandmark(e.target.value);
-                          }}
-                        />
-                        {errors.Landmark && touched.Landmark && (
-                          <span className="error-msg text-danger">
-                            {errors.Landmark}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6 com-sm-16">
-                      <div className="form-group">
-                        <label htmlFor="Select Location">
-                          Select Town/City*
-                        </label>
-
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="town"
-                          placeholder="select Town"
-                          value={values.town}
-                          onBlur={handleBlur}
-                          onChange={(e) => {
-                            setRegion(e.target.value);
-                          }}
-                        />
-                        {errors.town && touched.town && (
-                          <span className="error-msg text-danger">
-                            {errors.town}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="row">
-                    <div className="col-md-6 com-sm-12">
-                      <div className="form-group">
-                        <label htmlFor="State/ Province/ Region*">
-                          State/ Province/ Region*
-                        </label>
-
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="state_p"
-                          placeholder="Select State"
-                          value={values.state_p}
-                          onBlur={handleBlur}
-                          onChange={(e) => {
-                            setState_p(e.target.value);
-                          }}
-                        />
-                        {errors.state_p && touched.state_p && (
-                          <span className="error-msg text-danger">
-                            {errors.state_p}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="row">
-                    <div className="col-md-6 com-sm-12">
-                      <div className="form-group">
-                        <label htmlFor="Country*">Country*</label>
-
+                        <label htmlFor="country">Country</label>
                         <input
                           type="text"
                           className="form-control"
                           name="country"
-                          placeholder="Select Country"
+                          placeholder="Enter Country"
                           value={values.country}
                           onBlur={handleBlur}
                           onChange={(e) => {
@@ -286,11 +195,34 @@ const editLocation = (props) => {
                       </div>
                     </div>
                   </div>
+                  <div className="row">
+                    <div className="col-md-6 com-sm-16">
+                      <div className="form-group">
+                        <label htmlFor="Select Location">Pincode</label>
+                        <input
+                          type="text"
+                          className="form-control"
+                          name="pincode"
+                          placeholder="Select Pincode"
+                          value={values.pincode}
+                          onBlur={handleBlur}
+                          onChange={(e) => {
+                            setPincode(e.target.value);
+                          }}
+                        />
+                        {errors.pincode && touched.pincode && (
+                          <span className="error-msg text-danger">
+                            {errors.pincode}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                   <div>
                     <button
                       class="close"
                       className="btn btn-yellow btn-lg float-right"
-                      disabled={!((values.country)&&(values.LocationName)&&(values.pincode)&&(values.flat)&&(values.Street)&&(values.Landmark)&&(values.town)&&(values.state_p))}
+                      disabled={!((values.country)&&(values.addressLine)&&(values.addressTitle)&&(values.city)&&(values.state)&&(values.pincode))}
                     >
                       <span>Request Admin For Approval</span>
                     </button>
