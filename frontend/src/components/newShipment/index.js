@@ -422,7 +422,12 @@ const NewShipment = (props) => {
                               result.poDetails[0].productDetails[i].name;
                             products_temp[i].productQuantity =
                               result.poDetails[0].products[i].quantity;
-                          }
+ products_temp[i].productCategory =
+                              result.poDetails[0].products[i].type;
+ products_temp[i].productID =
+                              result.poDetails[0].products[i].productId;
+
+}
                           console.log("Products");
                           console.log(products_temp);
                          if (result.poDetails[0].productDetails.length > 0) {
