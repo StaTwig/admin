@@ -4,10 +4,14 @@ var AnalyticsSchema = new mongoose.Schema({
 	productId: { type: String, required: true },
 	productName: { type: String, required: true },
 	sales: { type: String, required: true },
-	target: { type: String, required: true },
-	returns: { type: String, required: true },
-	warehouseId: { type: String, required: true },
-	warehouseName: { type: String, required: true }
+	isDistrictAggregate: { type: Boolean },
+	districtName: { type: String },
+	depot: { type: String },
+	targetSales: { type: String, required: true },
+	returns: { type: String },
+	warehouseId: { type: String },
+	uploadDate: { type: String, required: true },
+	warehouseName: { type: String }
 }, { timestamps: true });
 
-module.exports = mongoose.model("Analytic", AnalyticsSchema);
+module.exports = mongoose.model("advanced_analytics", AnalyticsSchema);

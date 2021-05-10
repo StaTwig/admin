@@ -33,55 +33,41 @@ async function connectDB() {
     })
 }
 
-async function aggregateData(timeFrame){
-    switch (timeFrame) {
-        case 'week':
-          timeFrame = lastWeek.toISOString()
-          break
-        case 'month':
-          timeFrame = lastMonth.toISOString()
-          break
-        case 'year':
-          timeFrame = lastYear.toISOString()
-          break
-        default:
-          timeFrame = lastMonth.toISOString()
-          break
-      }
-      
-    for await (const row of Excel.find({
-         uploadDate: {
-           $lte: today.toISOString(),
-           $gte: timeFrame,
-         },
-   })) {
+async function aggregateData(timeFrame) {
+  switch (timeFrame) {
+    case 'week':
+      timeFrame = lastWeek.toISOString()
+      break
+    case 'month':
+      timeFrame = lastMonth.toISOString()
+      break
+    case 'year':
+      timeFrame = lastYear.toISOString()
+      break
+    default:
+      timeFrame = lastMonth.toISOString()
+      break
+  }
+  const analytics = await Analytics.find({
+    uploadDate: {
+      $lte: today.toISOString(),
+      $gte: timeFrame,
+    },
+  });
+  for (const row of analytics) {
+    console.log(row._id);
     let params = {
-        'receiver.locationId' : row.warehouseId,
-        'products.productID' : row.productId,
-          shippingDate: {
-            $lte: today.toISOString(),
-            $gte: timeFrame,
-          },
+      'receiver.locationId': row.warehouseId,
+      'products.productID': row.productId,
+      shippingDate: {
+        $lte: today.toISOString(),
+        $gte: timeFrame,
+      },
     }
-    const returns = await caclulateReturns(params)
-    let AnalyticsData = new Analytics({
-        productId: row.productId,
-	productName: row.productName + " " + row.productSubName,
-	sales: row.actualSales,
-	target: row.targetSales,
-    returns: await calculateReturns(params),
-	warehouseId: row.warehouseId
-    })
-    AnalyticsData.save(function(err,result){
-        if (err){
-            console.log(err);
-        }
-        else{
-            console.log(result)
-            return 1;
-        }
-    })
-   }
+    const _returns = await calculateReturns(params);
+    await Analytics.updateOne({ _id: row._id },
+      { $set: { returns: _returns } });
+  }
 }
 
 exports.aggregateData = aggregateData;

@@ -36,9 +36,9 @@ async function connectDB() {
 async function calculateReturns(params) {
   try {
     var quantity = 0
-    let connect = await connectDB()
+    // let connect = await connectDB()
     for await (const Shipment of Shipments.find(
-    params
+      params
     )) {
       for (let product in Shipment.products) {
         if (Shipment['products'][product].productID == params['products.productID']) {
@@ -46,8 +46,8 @@ async function calculateReturns(params) {
         }
       }
     }
-    db.close()
-    return quantity
+    // db.close();
+    return quantity;
   } catch (err) {
     throw err
   }
