@@ -2,10 +2,11 @@
 import React from "react";
 import { AreaChart, Area, ResponsiveContainer, Tooltip } from "recharts";
 
-import "../style.scss";
-import bottlesIcon from "../../../assets/becks_330ml.png";
-import DownArrow from "../../../assets/down_arrow.png";
-import UpArrow from "../../../assets/up_arrow.png";
+import "../../style.scss";
+import bottlesIcon from "../../../../assets/becks_330ml.png";
+import DownArrow from "../../../../assets/down_arrow.png";
+import UpArrow from "../../../../assets/up_arrow.png";
+
 
 
 const data = [
@@ -54,6 +55,9 @@ const data = [
 ];
 
 const GeographicalView = (props) => {
+    const showDetailedGeoView = () => {
+        props.onViewChange('DETAILED_GEO_VIEW');
+    }
     return (
         <>
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
@@ -182,7 +186,9 @@ const GeographicalView = (props) => {
                                         <img src={bottlesIcon} alt="" width="50" height="50" />
                                     </div>
                                     <div className="profileName">
-                                        <span className="profileTitle">Becks 330 ml</span>
+                                        <span className="profileTitle"
+                                        onClick={showDetailedGeoView}
+                                        >Becks 330 ml</span>
                                     </div>
                                 </div>
                             </td>
