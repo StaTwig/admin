@@ -1,11 +1,11 @@
-FROM node:current-alpine3.10
+FROM node:14.16.1-alpine3.13
 
 WORKDIR /src
 
 COPY . /src
 
-RUN npm install
+RUN yarn install
 
-EXPOSE 3003
+EXPOSE 3000
 
-CMD npm start
+CMD yarn start
