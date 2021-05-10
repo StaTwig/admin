@@ -908,8 +908,13 @@ exports.addProductsToInventory = [
           const { products } = req.body;
           const { id } = req.user;
           const employee = await EmployeeModel.findOne({ id });
-          const warehouseId = employee.warehouseId;
+          var warehouseId = "";
+          if ( !req.query.warehouseId)
+          warehouseId  = employee.warehouseId[0];
+          else
+          warehouseId  = req.query.warehouseId;
           const warehouse = await WarehouseModel.findOne({ id: warehouseId });
+
           if (!warehouse) {
             return apiResponse.ErrorResponse(
               res,
@@ -1308,18 +1313,15 @@ exports.getInventoryDetails = [
   auth,
   async (req, res) => {
     try {
-      var selectedWarehouseId = '';
-      if (req.body.warehouseId !== null) {
-        selectedWarehouseId = req.body.warehouseId;
-      }
-      const employee = await EmployeeModel.findOne({ id: req.user.id });
 
-      var warehouse;
-      if (selectedWarehouseId == '' || selectedWarehouseId == null) {
-        warehouse = await WarehouseModel.findOne({ id: employee.warehouseId })
-      } else {
-        warehouse = await WarehouseModel.findOne({ id: selectedWarehouseId })
-      }
+      const employee = await EmployeeModel.findOne({ id: req.user.id });
+      var warehouseId = "";
+      if ( !req.query.warehouseId)
+          warehouseId  = employee.warehouseId[0];
+      else
+          warehouseId  = req.query.warehouseId;
+      const warehouse = await WarehouseModel.findOne({ id: warehouseId })
+
       if (warehouse) {
         const inventory = await InventoryModel.findOne({ id: warehouse.warehouseInventory });
         let inventoryDetails = []
@@ -1330,7 +1332,6 @@ exports.getInventoryDetails = [
           inventoryDetailClone['manufacturer'] = product.manufacturer;
           inventoryDetails.push(inventoryDetailClone);
         })
-
         return apiResponse.successResponseWithData(res, 'Inventory Details', inventoryDetails);
       } else {
         return apiResponse.ErrorResponse(res, 'Cannot find warehouse for this employee')
@@ -1904,7 +1905,13 @@ exports.getInventory = [
   async (req, res) => {
     try {
       const { skip, limit } = req.query;
-      const { warehouseId } = req.user;
+      var warehouseId = "";
+
+      if ( !req.query.warehouseId)
+          warehouseId  = req.user.warehouseId;
+      else
+          warehouseId  = req.query.warehouseId;
+
       const warehouse = await WarehouseModel.findOne({ id: warehouseId })
       if (warehouse) {
         const inventory = await InventoryModel.aggregate([
