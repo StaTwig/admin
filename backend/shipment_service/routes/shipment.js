@@ -34,4 +34,7 @@ router.get("/fetchShipmentIds", ShipmentController.fetchShipmentIds);
 
 router.get("/abinbev/fetchShipments", ShipmentController.fetchShipmentsForAbInBev);
 
+router.get("/fetchInboundShipments", ShipmentController.fetchInboundShipments); // /fetchInboundShipments => Takes warehouseId from req.user header and filter based on the query params {date,to,from,status}
+router.get("/fetchOutboundShipments", ShipmentController.fetchOutboundShipments); // /fetchInboundShipments => Takes warehouseId from req.user header and filter based on the query params {date,to,from,status}
+
 module.exports = router;
