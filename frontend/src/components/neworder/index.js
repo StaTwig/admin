@@ -25,7 +25,7 @@ const NewOrder = (props) => {
   const editPo = useSelector(state => {
     return state?.reviewPo;
   });
-  
+
   const [allOrganisations, setAllOrganisations] = useState([]);
   const [receiverWarehouses, setReceiverWarehouses] = useState([]);
   const [products, setProducts] = useState([]);
@@ -52,7 +52,7 @@ const NewOrder = (props) => {
     async function fetchData() {
       // const orgSplit = user.organisation?.split('/');
       // console.log(orgSplit);
-      
+
       // setSenderOrganisation(orgSplit);
 
       const orgs = await getAllOrganisations();
@@ -87,7 +87,9 @@ const NewOrder = (props) => {
     try {
       const warehouse = await getWarehouseByOrgId(value);
       setReceiverWarehouses(warehouse.data);
-    }
+console.log("ware",warehouse);
+
+  }
     catch (err) {
       setErrorMessage(err);
     }
@@ -142,7 +144,7 @@ const NewOrder = (props) => {
 
   const onAssign = async (values) => {
     let error = false;
-    const { fromOrg, toOrg, toOrgLoc, products } = values;
+    const { fromOrg, toOrg, toOrgLoc, products,toOrgLocName } = values;
     products.forEach((p) => {
       if (p.quantity < 1)
         error = true;
@@ -236,7 +238,7 @@ const NewOrder = (props) => {
           dirty,
         }) => (
           <form onSubmit={handleSubmit} className="">
-            
+
             <div className="row mb-3">
               <label htmlFor="productDetails" className="headsup1">
                 Product Details
@@ -354,10 +356,10 @@ const NewOrder = (props) => {
                           name={receiverOrgLoc}
                           name2="Select Delivery Location"
                           onSelect={(v) => {
-                            let name = v?.warehouseAddress ? (v?.warehouseAddress?.firstLine + ', ' + v?.warehouseAddress?.city) : v.postalAddress;
+                            let name =v?.warehouseAddress ? (v?.title +'/' + v?.warehouseAddress?.firstLine + ', ' + v?.warehouseAddress?.city) : (v?.title  +'/' + v?.postalAddress)  ;
                             setReceiverOrgLoc(name);
                             setFieldValue('toOrgLocName', name);
-                            setFieldValue('toOrgLoc', v.id);
+                           setFieldValue('toOrgLoc', v.id);
                           }}
                           groups={receiverWarehouses}
                         />
