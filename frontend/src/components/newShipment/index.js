@@ -484,10 +484,10 @@ console.log("tes",products);
                             setFieldValue("fromOrg", senderOrganisation[0]);
                             setSenderOrgLoc(
                               v?.warehouseAddress
-                                ? v?.warehouseAddress?.firstLine +
+                                ? v?.title + '/' + v?.warehouseAddress?.firstLine +
                                     ", " +
                                     v?.warehouseAddress?.city
-                                : v.postalAddress
+                                : v?.title + '/' + v.postalAddress
                             );
                             setFieldValue("fromOrgLoc", v.id);
                       //      setFieldValue("products", []);
@@ -558,10 +558,10 @@ console.log("tes",products);
                           onSelect={(v) => {
                             setReceiverOrgLoc(
                               v?.warehouseAddress
-                                ? v?.warehouseAddress?.firstLine +
+                                ? v?.title + '/' + v?.warehouseAddress?.firstLine +
                                     ", " +
                                     v?.warehouseAddress?.city
-                                : v.postalAddress
+                                : v?.title + '/' + v.postalAddress
                             );
                             setFieldValue("toOrgLoc", v.id);
                           }}
