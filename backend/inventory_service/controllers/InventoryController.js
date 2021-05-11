@@ -5,6 +5,7 @@ const XLSX = require("xlsx");
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
 const utility = require("../helpers/utility");
+const { warehouseDistrictMapping } = require("../helpers/constants");
 const auth = require("../middlewares/jwt");
 const InventoryModel = require("../models/InventoryModel");
 const WarehouseModel = require("../models/WarehouseModel");
@@ -30,7 +31,6 @@ const stream_name = process.env.STREAM;
 const init = require('../logging/init');
 const OrganisationModel = require('../models/OrganisationModel');
 const AnalyticsModel = require('../models/AnalyticsModel');
-const SalesDataModel = require("../models/SalesDataModel");
 const StateDistrictStaticDataModel = require("../models/StateDistrictStaticDataModel");
 const { request } = require("http");
 const { match } = require("assert");
@@ -2399,17 +2399,18 @@ exports.uploadSalesData = [
       const workbook = XLSX.readFile(`${dir}/${req.file.originalname}`);
       const sheet_name_list = workbook.SheetNames;
       const sheetJSON = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]], { defval: "" });
-      let rows = [];
-      let aggregationRows = [];
+
       let headerRow1 = _spreadHeaders(sheetJSON[0]);
       let headerRow2 = _spreadHeaders(sheetJSON[1]);
       let headerRow3 = _spreadHeaders(sheetJSON[2]);
+      let headerRow4 = sheetJSON[3];
 
       const spuriousColumns = ['__EMPTY', '__EMPTY_1', '__EMPTY_2', '__EMPTY_3', '__EMPTY_4', '__EMPTY_5', '__EMPTY_6'];
+
+      let parsedRows = [];
+
       sheetJSON.forEach((row, index) => {
-        let _row = {};
         if (index > 2 && row['__EMPTY_1'].length) {
-          let products = [];
           let rowKeys = Object.keys(row);
           rowKeys = rowKeys.filter(e => spuriousColumns.indexOf(e) === -1);
           rowKeys.forEach(rowKey => {
@@ -2417,21 +2418,19 @@ exports.uploadSalesData = [
             if (!rowKey.startsWith('__') && !rowKey.startsWith('t') && rowKey !== 'target') {
               prod['productName'] = headerRow2[rowKey];
               prod['productSubName'] = headerRow3[rowKey];
+              prod['productId'] = headerRow4[rowKey];
               prod['depot'] = row['__EMPTY_1'];
               prod['sales'] = row[rowKey];
               prod['targetSales'] = row['t' + rowKey];
+              prod['uploadDate'] = collectedDate;
+              let depot = warehouseDistrictMapping.find(w => w.depot === row['__EMPTY_1']);
+              prod['warehouseId'] = (depot && depot.warehouseId) ? depot.warehouseId : '';
             }
             if (Object.keys(prod).length) {
-              products.push(prod);
+              parsedRows.push(prod);
             }
           });
-          if (products.length) {
-            _row.products = products;
-            _row.depot = row['__EMPTY_1'];
-            rows.push(_row);
-          }
         } else if (index > 2 && !row['__EMPTY_1'].length && row['__EMPTY'].length) {
-          let products = [];
           let rowKeys = Object.keys(row);
           rowKeys = rowKeys.filter(e => spuriousColumns.indexOf(e) === -1);
           rowKeys.forEach(rowKey => {
@@ -2439,32 +2438,22 @@ exports.uploadSalesData = [
             if (!rowKey.startsWith('__') && !rowKey.startsWith('t') && rowKey !== 'target') {
               prod['productName'] = headerRow2[rowKey];
               prod['productSubName'] = headerRow3[rowKey];
+              prod['productId'] = headerRow4[rowKey];
               prod['isDistrictAggregate'] = true;
               prod['districtName'] = row['__EMPTY'];
               prod['sales'] = row[rowKey];
               prod['targetSales'] = row['t' + rowKey];
+              prod['uploadDate'] = collectedDate;
             }
             if (Object.keys(prod).length) {
-              products.push(prod);
+              parsedRows.push(prod);
             }
           });
-          if (products.length) {
-            _row.products = products;
-            _row.districtName = row['__EMPTY'];
-            aggregationRows.push(_row);
-          }
         }
       });
 
-      let respObj = { depots: rows, districtAggregations: aggregationRows };
+      let respObj = await AnalyticsModel.insertMany(parsedRows);
 
-      const salesData = new SalesDataModel({
-        uploadedFileName: uploadedFileName,
-        dataCollectedDate: collectedDate,
-        depots: rows,
-        districtAggregations: aggregationRows
-      });
-      const responseObj = await salesData.save();
       return apiResponse.successResponseWithData(
         res,
         responseObj

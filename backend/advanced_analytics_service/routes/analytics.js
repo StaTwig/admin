@@ -9,8 +9,11 @@ var router = express.Router();
 // getInventoryBySku/:sku/:state [ { state, totalBottlePool } ]
 // getInventoryByBrand/:brand/:state/:skull:
 
+router.get("/getOverviewStats", AnalyticsController.getOverviewStats);
 router.get("/getAllStats", AnalyticsController.getAllStats);
-router.get("/getStatsBySKU/:productId", AnalyticsController.getAllStats);
+router.get("/getAllBrands", AnalyticsController.getAllBrands);
+
+router.get("/getStatsBySKU/:productId", AnalyticsController.getStatsBySKU);
 router.get("/getStatsByBrewery/:warehouseId", AnalyticsController.getAllStats);
 //Implemented till here, below needs to be done
 router.get("/getSales/:state/:tenure", AnalyticsController.getAllStats);
