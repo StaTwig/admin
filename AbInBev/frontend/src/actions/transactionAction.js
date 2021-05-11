@@ -6,39 +6,44 @@ import setAuthToken from '../utils/setAuthToken';
 function getQueryString(filters) {
   let queryStr = '';
   if (filters.inventoryType && filters.inventoryType.length) {
-    queryStr = '&orgType=' + filters.inventoryType
+    queryStr = queryStr + '&orgType=' + filters.inventoryType
   }
   if (filters.organization && filters.organization.length) {
-    queryStr = '&organization=' + filters.organization
+    queryStr = queryStr + '&organization=' + filters.organization
   }
   if (filters.startDate && filters.startDate.length) {
-    queryStr = '&start_date=' + filters.startDate
+    queryStr = queryStr + '&start_date=' + filters.startDate
   }
   if (filters.endDate && filters.endDate.length) {
-    queryStr = '&end_date=' + filters.endDate
+    queryStr = queryStr + '&end_date=' + filters.endDate
   }
   if (filters.state && filters.state.length) {
-    queryStr = '&state=' + filters.state
+    queryStr = queryStr + '&state=' + filters.state
   }
   if (filters.district && filters.district.length) {
-    queryStr = '&district=' + filters.district
+    queryStr = queryStr + '&district=' + filters.district
   }
   if (filters.month && filters.month.length) {
-    queryStr = '&month=' + filters.month
+    queryStr = queryStr + '&month=' + filters.month
   }
-  if (filters.district && filters.district.length) {
-    queryStr = '&year=' + filters.year
+  if (filters.year) {
+    queryStr = queryStr + '&year=' + filters.year
   }
   if (filters.quarter && filters.quarter.length) {
-    queryStr = '&year=' + filters.year
+    queryStr = queryStr + '&quarter=' + filters.quarter
   }
-  
+  if (filters.date_filter_type && filters.date_filter_type.length) {
+    queryStr = queryStr + '&date_filter_type=' + filters.date_filter_type
+  }
   return queryStr;
 }
 
 export const getTransactions = (filters) => {
     let skip = 0, limit = 100;
+    console.log(filters)
     let queryString = getQueryString(filters)
+    let params = filters;
+    console.log(`${config().shipmentsUrl}?skip=${skip}&limit=${limit}` + queryString)
     return async dispatch => {
       try {
         setAuthToken(localStorage.getItem("theAbInBevToken"))
