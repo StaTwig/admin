@@ -3,9 +3,14 @@ const Organisation = require("../models/organisationModel");
 const Warehouse = require("../models/warehouseModel");
 const Inventory = require("../models/inventoryModel");
 const CounterModel = require("../models/CounterModel");
+const EmployeeModel = require("../models/EmployeeModel");
 const auth = require("../middlewares/jwt");
 const { customAlphabet } = require("nanoid");
 const nanoid = customAlphabet("1234567890abcdef", 10);
+const XLSX = require("xlsx");
+const fs = require("fs");
+const moveFile = require("move-file");
+const fetch = require("node-fetch");
 
 exports.addressOfOrg = [
   auth,
@@ -103,16 +108,23 @@ exports.AddWarehouse = [
   auth,
   async (req, res) => {
     try {
-      const incrementCounterInv = await CounterModel.update({
-                  'counters.name': "inventoryId"
-               },{
-                    $inc: {
-                      "counters.$.value": 1
-                  }
-             })
+      const incrementCounterInv = await CounterModel.update(
+        {
+          "counters.name": "inventoryId",
+        },
+        {
+          $inc: {
+            "counters.$.value": 1,
+          },
+        }
+      );
 
-      const invCounter = await CounterModel.findOne({'counters.name':"inventoryId"},{"counters.name.$":1})
-      const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
+      const invCounter = await CounterModel.findOne(
+        { "counters.name": "inventoryId" },
+        { "counters.name.$": 1 }
+      );
+      const inventoryId =
+        invCounter.counters[0].format + invCounter.counters[0].value;
       //const inventoryId = "inv-" + nanoid();
       const inventoryResult = new Inventory({ id: inventoryId });
       await inventoryResult.save();
@@ -127,16 +139,24 @@ exports.AddWarehouse = [
         employees,
         warehouseAddress,
       } = req.body;
-      const incrementCounterWarehouse = await CounterModel.update({
-                  'counters.name': "warehouseId"
-               },{
-                    $inc: {
-                      "counters.$.value": 1
-                  }
-             })
+      const incrementCounterWarehouse = await CounterModel.update(
+        {
+          "counters.name": "warehouseId",
+        },
+        {
+          $inc: {
+            "counters.$.value": 1,
+          },
+        }
+      );
 
-      const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.name.$":1})
-      const warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
+      const warehouseCounter = await CounterModel.findOne(
+        { "counters.name": "warehouseId" },
+        { "counters.name.$": 1 }
+      );
+      const warehouseId =
+        warehouseCounter.counters[0].format +
+        warehouseCounter.counters[0].value;
       //const warehouseId = "war-" + nanoid();
       const warehouse = new Warehouse({
         id: warehouseId,
@@ -197,6 +217,126 @@ exports.AddOffice = [
       );
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.addAddressesFromExcel = [
+  auth,
+  async (req, res) => {
+    try {
+      const dir = `uploads`;
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir);
+      }
+      await moveFile(req.file.path, `${dir}/${req.file.originalname}`);
+      const workbook = XLSX.readFile(`${dir}/${req.file.originalname}`);
+      const sheet_name_list = workbook.SheetNames;
+      const data = XLSX.utils.sheet_to_json(
+        workbook.Sheets[sheet_name_list[0]],
+        { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
+      );
+
+      const incrementCounterInv = await CounterModel.update(
+        {
+          "counters.name": "inventoryId",
+        },
+        {
+          $inc: {
+            "counters.$.value": 1,
+          },
+        }
+      );
+
+      const invCounter = await CounterModel.findOne(
+        { "counters.name": "inventoryId" },
+        { "counters.name.$": 1 }
+      );
+
+      const incrementCounterWarehouse = await CounterModel.update(
+        {
+          "counters.name": "warehouseId",
+        },
+        {
+          $inc: {
+            "counters.$.value": 1,
+          },
+        }
+      );
+
+      const warehouseCounter = await CounterModel.findOne(
+        { "counters.name": "warehouseId" },
+        { "counters.name.$": 1 }
+      );
+
+      for (const [index, address] of data.entries()) {
+        let inventoryResult = new Inventory({
+          id:
+            invCounter.counters[0].format +
+            (parseInt(invCounter.counters[0].value) + parseInt(index)),
+        });
+        await inventoryResult.save();
+        let warehouseId =
+          warehouseCounter.counters[0].format +
+          (parseInt(warehouseCounter.counters[0].value) + parseInt(index));
+
+        fetch(
+          "https://nominatim.openstreetmap.org/search/" +
+            address.city +
+            "?format=json&addressdetails=1&limit=1"
+        )
+          .then((res) => res.json())
+          .then(async (res) => {
+            const reqData = {
+              id: warehouseId,
+              warehouseInventory: inventoryResult.id,
+              title: address.title,
+              organisationId: req.user.organisationId,
+              warehouseAddress: {
+                firstLine: address.line,
+                secondLine: "",
+                city: address.city,
+                state: address.state,
+                country: address.country,
+                landmark: "",
+                zipCode: address.pincode,
+              },
+              country: {
+                countryId: "001",
+                countryName: address.country,
+              },
+              region: {
+                regionId: "reg123",
+                regionName: "Earth Prime",
+              },
+              location: {
+                longitude: res?.length ? res[0].lon : "12.12323453534",
+                latitude: res?.length ? res[0].lat : "13.123435345435",
+                geohash: "1231nejf923453",
+              },
+              supervisors: [],
+              employeess: [],
+            };
+            let warehouse = new Warehouse(reqData);
+            await warehouse.save();
+            if (address?.user) {
+              console.log(address?.user);
+
+              await EmployeeModel.updateOne(
+                {
+                  $or: [
+                    { emailId: address.user },
+                    { phoneNumber: address.user },
+                  ],
+                },
+                { $push: { warehouseId: warehouseId } }
+              );
+            }
+          });
+      }
+      return apiResponse.successResponseWithData(res, "Success", data);
+    } catch (e) {
+      return apiResponse.ErrorResponse(res, e);
     }
   },
 ];

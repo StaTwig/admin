@@ -39,10 +39,12 @@ const AddressDetails = (props) => {
           </Link>
         </div>
         <div className="mt-3 d-flex mapC ">
-          <Maps
-            lan={address.location.latitude}
-            lng={address.location.longitude}
-          />
+          {address.location.latitude && (
+            <Maps
+              lat={address.location.latitude}
+              lng={address.location.longitude}
+            />
+          )}
         </div>
       </div>
     </div>
