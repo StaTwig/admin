@@ -376,8 +376,7 @@ const NewShipment = (props) => {
                           console.log("Result");
                           console.log(result);
                           setReceiverOrgLoc(
-                            result.poDetails[0].customer.organisation
-                              .postalAddress
+                             result.poDetails[0].customer.warehouse.title + '/' + result.poDetails[0].customer.warehouse.postalAddress
                           );
                           setReceiverOrgId(
                             result.poDetails[0].customer.organisation.id
