@@ -57,16 +57,16 @@ const SideBar = ({
             <span className="ml-2">Shipments</span>
           </Link>
         </li>
-         <li className={(url === '/track') ? 'active' : ''}>
-          <Link to="/track" className="d-inline-block">
-            <img src={(url === '/track') ? trackSelectedIcon : trackIcon} alt="Track & Trace" />
-            <span className="ml-2">Track & Trace</span>
-          </Link>
-        </li>
         <li className={(url === '/dashboard')  ? 'active' : ''}>
           <Link to="/dashboard" className="d-inline-block">
             <img src={(url === '/dashboard')  ? NetworkSelectedIcon : NetworkIcon} alt="Shippment" />
             <span className="ml-2">Network</span>
+          </Link>
+        </li>
+         <li className={(url === '/track') ? 'active' : ''}>
+          <Link to="/track" className="d-inline-block">
+            <img src={(url === '/track') ? trackSelectedIcon : trackIcon} alt="Track & Trace" />
+            <span className="ml-2">Track & Trace</span>
           </Link>
         </li>
         <li className={(url === '/lastMile')  ? 'active' : ''}>
