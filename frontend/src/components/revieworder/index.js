@@ -117,7 +117,7 @@ const [ modalProps, setModalProps ] = useState({});
         </div>
         <div className="row bg-white shadow p-3 m-3">
           <div className=" pl-1 col-12">
-            <span className="p-0  font-weight-bold" style={{color:"black"}}>Order To</span>
+            <span className="p-0  font-weight-bold" style={{color:"black"}}>Deliver To</span>
             <div>
               <div className=" row p-3">
                 <div className="col row">
