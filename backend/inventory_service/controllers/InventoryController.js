@@ -2158,18 +2158,18 @@ exports.getInventoryCountsByWarehouse = [
           },
         },
       ]);
+      let response = {
+        'total' : warehouseInventoryCount[0],
+        'received': warehouseReceivedCount[0],
+        'sent': warehouseSentCount[0],
+        'transit': warehouseTransitCount1[0],
+        'transit2': warehouseTransitCount2[0]
+
+      }
       return apiResponse.successResponseWithData(
         res,
-        {
-          'total' : warehouseInventoryCount[0].count,
-          'received': warehouseReceivedCount[0].count,
-          'sent': warehouseSentCount[0].count,
-          'transit': warehouseTransitCount1[0].count + warehouseTransitCount2[0].count,
-        }
-        // ,
-        
-        // warehouseTransitCount1,
-        // warehouseTransitCount2
+        'hi',
+        response
       );
     } catch (err) {
       logger.log(
