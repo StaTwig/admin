@@ -41,6 +41,7 @@ class Profile extends React.Component {
       location: "",
       orgs: [],
       wareIds: [],
+      warehouseLocations: [],
       warehouseAddress_country: "",
       warehouseAddress_city: "",
       warehouseAddress_firstline: "",
@@ -113,9 +114,14 @@ class Profile extends React.Component {
     const wareHouseResponse = await getWarehouseByOrgId(item);
     if (wareHouseResponse.status === 1) {
       const wareHouseIdResult = wareHouseResponse.data.map((txn) => txn.id);
-      this.setState({ wareIds: wareHouseIdResult });
+      const wareHouseAddresses = wareHouseResponse.data.map((txn) => txn.warehouseAddress.firstLine+", "+txn.warehouseAddress.city);
+      this.setState({
+        wareIds: wareHouseIdResult,
+        warehouseLocations: wareHouseAddresses,
+      });
     }
-    console.log("ids", wareHouseResponse);
+    console.log("Full Data", wareHouseResponse);
+    console.log("warehouses", this.state.warehouseLocations);
   }
   //console.log("res",wareHouseIdResult);
 
@@ -387,7 +393,9 @@ class Profile extends React.Component {
                                 close={() => this.closeModal()}
                                 size="" //for other size's use `modal-lg, modal-md, modal-sm`
                               >
-                                <PopUpLocation />
+                                <PopUpLocation
+                                  wareHouses={this.state.warehouseLocations}
+                                />
                               </Modal>
                             )}
                           </div>
