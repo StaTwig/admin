@@ -63,6 +63,36 @@ function getFilterConditions(filters) {
 	return matchCondition;
 }
 
+const _getWarehouseIdsByOrg = async (org) => {
+	let matchCondition = {};
+	if (org && org.id && org.id !== '') {
+		matchCondition.id = org.id;
+	}
+	const warehouses = await OrganisationModel.aggregate([
+		{
+			$match: matchCondition
+		},
+		{
+			$unwind: {
+				path: "$warehouses"
+			}
+		},
+		{
+			$group: {
+				_id: '$warehouseIds',
+				'warehouseIds': {
+					$addToSet: "$warehouses"
+				}
+			}
+		}
+	]);
+	let warehouseIds = [];
+	if (warehouses && warehouses[0] && warehouses[0].warehouseIds) {
+		warehouseIds = warehouses[0].warehouseIds;
+	}
+	return warehouseIds;
+}
+
 const _getWarehouseIds = async (filters) => {
 	const warehouses = await OrganisationModel.aggregate([
 		{
@@ -140,6 +170,14 @@ const _getOverviewStats = async () => {
 }
 
 const aggregateSalesStats = (inputArr) => {
+	if (!inputArr.length) {
+		return {
+			sales: 0,
+			targetSales: 0,
+			returns: 0,
+			actualReturns: 0
+		}
+	}
 	let sales = inputArr.map(item => parseInt(item.sales) || 0).reduce((prev, next) => prev + next);
 	let targetSales = inputArr.map(item => parseInt(item.sales) || 0).reduce((prev, next) => prev + next);
 	let returns = inputArr.map(item => parseInt(item.sales) || 0).reduce((prev, next) => prev + next);
@@ -224,21 +262,23 @@ function getAnalyticsFilterConditions(filters, warehouseIds) {
 
 	let matchCondition = {
 		warehouseId: {
-			$in: [...warehouseIds, 'WAR1006',
-				'WAR10024', 'WAR10019',
-				'WAR10018', 'WAR10017',
-				'WAR10004', 'WAR10003',
-				'WAR10025', 'AP004',
-				'warehouse_id 2', 'AP005',
-				'war-blpg132lkmwny88i', 'war-blpg1vzwkn4a0cp6',
-				'AP003', 'war-2p52232kmrduslk',
-				'war-blpg1vzwkn482zyf', 'AP001',
-				'orgwar2345', 'AP002',
-				'orgwar12345', 'war-2p51gpxkmlpfh97',
-				'war-2p51gpxkmlo2x61', 'war-2p52232kmrpfxxh',
-				'war-blpg132lkmwxmhxk', 'ware123',
-				'war-1234', 'ware234',
-				'war-blpg1vzwkn47ka4y', 'war-blpg41ggknah1lj7']
+			$in: [...warehouseIds,
+				// 'WAR1006',
+				// 'WAR10024', 'WAR10019',
+				// 'WAR10018', 'WAR10017',
+				// 'WAR10004', 'WAR10003',
+				// 'WAR10025', 'AP004',
+				// 'warehouse_id 2', 'AP005',
+				// 'war-blpg132lkmwny88i', 'war-blpg1vzwkn4a0cp6',
+				// 'AP003', 'war-2p52232kmrduslk',
+				// 'war-blpg1vzwkn482zyf', 'AP001',
+				// 'orgwar2345', 'AP002',
+				// 'orgwar12345', 'war-2p51gpxkmlpfh97',
+				// 'war-2p51gpxkmlo2x61', 'war-2p52232kmrpfxxh',
+				// 'war-blpg132lkmwxmhxk', 'ware123',
+				// 'war-1234', 'ware234',
+				// 'war-blpg1vzwkn47ka4y', 'war-blpg41ggknah1lj7'
+			]
 		}
 	};
 
@@ -451,6 +491,67 @@ exports.getStatsByBrand = [
 				res,
 				"Operation success",
 				Analytics
+			);
+		} catch (err) {
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
+
+/**
+ * getAllStats.
+ *
+ * @returns {Object}
+ */
+exports.getStatsByOrg = [
+	//auth,
+	async function (req, res) {
+		try {
+			const filters = req.query;
+
+			let organizations = await OrganisationModel.aggregate([
+				{
+					$match: getFilterConditions(filters)
+				}
+			]);
+			for (let organization of organizations) {
+				let warehouseIds = await _getWarehouseIdsByOrg(organization);
+				let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
+				let Analytics = await AnalyticsModel.aggregate([
+					{
+						$match: analyticsFilter
+					}
+				]);
+				organization.analytics = aggregateSalesStats(Analytics);
+
+				const lastMonthStart = moment().subtract(1, 'months').startOf('month').format(DATE_FORMAT);
+				const lastMonthEnd = moment().subtract(1, 'months').endOf('month').format(DATE_FORMAT);
+				let prevMonthmatchCondition = {
+					uploadDate: {
+						$lte: lastMonthEnd,
+						$gte: lastMonthStart,
+					},
+					warehouseId: {
+						$in: [...warehouseIds]
+					}
+				};
+
+				if (filters.sku && filters.sku !== '') {
+					prevMonthmatchCondition.productId = filters.sku;
+				};
+				let prevMonthAnalytics = await AnalyticsModel.aggregate([
+					{
+						$match: prevMonthmatchCondition
+					}]);
+				console.log(prevMonthAnalytics);
+				organization.analyticsPrevMonth = aggregateSalesStats(prevMonthAnalytics);
+
+			}
+
+			return apiResponse.successResponseWithData(
+				res,
+				"Operation success",
+				organizations
 			);
 		} catch (err) {
 			return apiResponse.ErrorResponse(res, err);

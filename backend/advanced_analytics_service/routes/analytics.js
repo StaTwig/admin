@@ -14,6 +14,7 @@ router.get("/getAllStats", AnalyticsController.getAllStats);
 router.get("/getAllBrands", AnalyticsController.getAllBrands);
 router.get("/getStatsBySKU", AnalyticsController.getStatsBySKU);
 router.get("/getStatsByBrand", AnalyticsController.getStatsByBrand);
+router.get("/getStatsByOrg", AnalyticsController.getStatsByOrg);
 
 router.get("/getStatsByBrewery/:warehouseId", AnalyticsController.getAllStats);
 //Implemented till here, below needs to be done
