@@ -9,6 +9,7 @@ const { warehouseDistrictMapping } = require("../helpers/constants");
 const auth = require("../middlewares/jwt");
 const InventoryModel = require("../models/InventoryModel");
 const WarehouseModel = require("../models/WarehouseModel");
+const ShipmentModel = require("../models/ShipmentModel")
 const RegionModel = require("../models/RegionModel");
 const EmployeeModel = require("../models/EmployeeModel");
 const AtomModel = require("../models/AtomModel");
@@ -2070,15 +2071,112 @@ exports.getInventoryCountsByWarehouse = [
         }, {
           $group: {
             _id: null,
-            warehouseInventory: {
+            count: {
               $sum: "$inventoryDetails.quantity"
             }
           }
         }
       ]);
+      const warehouseSentCount = await ShipmentModel.aggregate([
+        {
+          $match: {
+            $and: [
+              { status: "RECEIVED" },
+              { "supplier.locationId": warehouseId },
+            ],
+          },
+        },
+        {
+          $unwind: "$products",
+        },
+
+        {
+          $group: {
+            _id: "abc",
+            count: {
+              $sum: "$products.productQuantity",
+            },
+          },
+        },
+      ]);
+      const warehouseReceivedCount = await ShipmentModel.aggregate([
+        {
+          $match: {
+            $and: [
+              { status: "RECEIVED" },
+              { "receiver.locationId": warehouseId },
+            ],
+          },
+        },
+        {
+          $unwind: "$products",
+        },
+
+        {
+          $group: {
+            _id: "abc",
+            count: {
+              $sum: "$products.productQuantity",
+            },
+          },
+        },
+      ]);
+      const warehouseTransitCount1 = await ShipmentModel.aggregate([
+        {
+          $match: {
+            $and: [
+              { status: "CREATED" },
+              { "supplier.locationId": warehouseId },
+            ],
+          },
+        },
+        {
+          $unwind: "$products",
+        },
+
+        {
+          $group: {
+            _id: "abc",
+            count: {
+              $sum: "$products.productQuantity",
+            },
+          },
+        },
+      ]);
+      const warehouseTransitCount2 = await ShipmentModel.aggregate([
+        {
+          $match: {
+            $and: [
+              { status: "CREATED" },
+              { "receiver.locationId": warehouseId },
+            ],
+          },
+        },
+        {
+          $unwind: "$products",
+        },
+
+        {
+          $group: {
+            _id: "abc",
+            count: {
+              $sum: "$products.productQuantity",
+            },
+          },
+        },
+      ]);
       return apiResponse.successResponseWithData(
         res,
-        warehouseInventoryCount
+        {
+          'total' : warehouseInventoryCount[0].count,
+          'received': warehouseReceivedCount[0].count,
+          'sent': warehouseSentCount[0].count,
+          'transit': warehouseTransitCount1[0].count + warehouseTransitCount2[0].count,
+        }
+        // ,
+        
+        // warehouseTransitCount1,
+        // warehouseTransitCount2
       );
     } catch (err) {
       logger.log(
