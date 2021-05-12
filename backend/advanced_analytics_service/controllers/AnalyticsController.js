@@ -390,9 +390,6 @@ exports.getStatsByBrand = [
 	//auth,
 	async function (req, res) {
 		try {
-			// const filters = req.query;
-			// const brandFilters = {};
-
 			const filters = req.query;
 			let warehouseIds = await _getWarehouseIds(filters);
 			let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
@@ -511,23 +508,29 @@ function getSKUGroupByFilters(filters) {
 	if (filters.group_by && filters.group_by !== '') {
 		if (filters.group_by === 'state') {
 			matchCondition.push({
-				_id: '$state',
-				data: {
-					$addToSet: "$$ROOT"
+				$group: {
+					_id: '$state',
+					data: {
+						$addToSet: "$$ROOT"
+					}
 				}
-			});
+			}
+			);
 		} else if (filters.group_by === 'date') {
 			matchCondition.push({
 				$match: {
 					state: filters.state
 				}
 			});
-			matchCondition.push({
-				_id: '$uploadDate',
-				data: {
-					$addToSet: "$$ROOT"
-				}
-			});
+			matchCondition.push(
+				{
+					$group: {
+						_id: '$uploadDate',
+						data: {
+							$addToSet: "$$ROOT"
+						}
+					}
+				});
 
 		} else {
 			matchCondition.push({
@@ -582,11 +585,13 @@ exports.getStatsBySKU = [
 				},
 				...getSKUGroupByFilters(filters)
 			]);
-			let response = []
+			let response = [];
 			Analytics.forEach(analytic => {
-				let temp = aggregateSalesStats(analytic.data);
-				temp['groupedBy'] = analytic._id;
-				response.push(temp);
+				if (analytic.data) {
+					let temp = aggregateSalesStats(analytic.data);
+					temp['groupedBy'] = analytic._id;
+					response.push(temp);
+				}
 			});
 
 			return apiResponse.successResponseWithData(res, "Operation Success", response);
