@@ -139,6 +139,170 @@ const _getOverviewStats = async () => {
 	}
 }
 
+const aggregateSalesStats = (inputArr) => {
+	let sales = inputArr.map(item => parseInt(item.sales) || 0).reduce((prev, next) => prev + next);
+	let targetSales = inputArr.map(item => parseInt(item.sales) || 0).reduce((prev, next) => prev + next);
+	let returns = inputArr.map(item => parseInt(item.sales) || 0).reduce((prev, next) => prev + next);
+	let actualReturns = 0;
+	if (returns) {
+		actualReturns = (returns / sales) * 100;
+	}
+	return {
+		sales: sales,
+		targetSales: targetSales,
+		returns: returns,
+		actualReturns: actualReturns
+	};
+}
+
+function getSKUAnalyticsFilterConditions(filters) {
+
+	let matchCondition = {};
+
+	if (filters.sku && filters.sku !== '') {
+		matchCondition.productId = filters.sku;
+	};
+
+
+	if (filters.date_filter_type && filters.date_filter_type.length) {
+
+		const DATE_FORMAT = 'YYYY-MM-DD';
+		if (filters.date_filter_type === 'by_range') {
+
+			let startDate = filters.start_date ? filters.start_date : new Date();
+			let endDate = filters.end_date ? filters.end_date : new Date();
+			matchCondition.uploadDate = {
+				$gte: new Date(startDate).toISOString(),
+				$lte: new Date(endDate).toISOString()
+			};
+
+		} else if (filters.date_filter_type === 'by_monthly') {
+
+			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
+			let startDateOfTheMonth = moment(startDateOfTheYear).add(filters.month, 'months').format(DATE_FORMAT);
+			let endDateOfTheMonth = moment(startDateOfTheMonth).endOf('month');
+			matchCondition.uploadDate = {
+				$gte: new Date(startDateOfTheMonth).toISOString(),
+				$lte: new Date(endDateOfTheMonth).toISOString()
+			};
+
+		} else if (filters.date_filter_type === 'by_quarterly') {
+
+			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
+			let startDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).startOf('quarter').format(DATE_FORMAT);
+			let endDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).endOf('quarter').format(DATE_FORMAT);
+			matchCondition.uploadDate = {
+				$gte: new Date(startDateOfTheQuarter).toISOString(),
+				$lte: new Date(endDateOfTheQuarter).toISOString()
+			};
+
+		} else if (filters.date_filter_type === 'by_yearly') {
+
+			const currentDate = moment().format(DATE_FORMAT);
+			const currentYear = moment().year();
+
+			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
+			let endDateOfTheYear = moment([filters.year]).endOf('year')
+
+			if (filters.year === currentYear) {
+				endDateOfTheYear = currentDate;
+			}
+
+			matchCondition.uploadDate = {
+				$gte: new Date(startDateOfTheYear).toISOString(),
+				$lte: new Date(endDateOfTheYear).toISOString()
+			};
+
+		}
+
+	}
+
+	return matchCondition;
+}
+
+function getAnalyticsFilterConditions(filters, warehouseIds) {
+
+	let matchCondition = {
+		warehouseId: {
+			$in: [...warehouseIds, 'WAR1006',
+				'WAR10024', 'WAR10019',
+				'WAR10018', 'WAR10017',
+				'WAR10004', 'WAR10003',
+				'WAR10025', 'AP004',
+				'warehouse_id 2', 'AP005',
+				'war-blpg132lkmwny88i', 'war-blpg1vzwkn4a0cp6',
+				'AP003', 'war-2p52232kmrduslk',
+				'war-blpg1vzwkn482zyf', 'AP001',
+				'orgwar2345', 'AP002',
+				'orgwar12345', 'war-2p51gpxkmlpfh97',
+				'war-2p51gpxkmlo2x61', 'war-2p52232kmrpfxxh',
+				'war-blpg132lkmwxmhxk', 'ware123',
+				'war-1234', 'ware234',
+				'war-blpg1vzwkn47ka4y', 'war-blpg41ggknah1lj7']
+		}
+	};
+
+	if (filters.sku && filters.sku !== '') {
+		matchCondition.productId = filters.sku;
+	};
+
+
+	if (filters.date_filter_type && filters.date_filter_type.length) {
+
+		const DATE_FORMAT = 'YYYY-MM-DD';
+		if (filters.date_filter_type === 'by_range') {
+
+			let startDate = filters.start_date ? filters.start_date : new Date();
+			let endDate = filters.end_date ? filters.end_date : new Date();
+			matchCondition.uploadDate = {
+				$gte: new Date(startDate).toISOString(),
+				$lte: new Date(endDate).toISOString()
+			};
+
+		} else if (filters.date_filter_type === 'by_monthly') {
+
+			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
+			let startDateOfTheMonth = moment(startDateOfTheYear).add(filters.month, 'months').format(DATE_FORMAT);
+			let endDateOfTheMonth = moment(startDateOfTheMonth).endOf('month');
+			matchCondition.uploadDate = {
+				$gte: new Date(startDateOfTheMonth).toISOString(),
+				$lte: new Date(endDateOfTheMonth).toISOString()
+			};
+
+		} else if (filters.date_filter_type === 'by_quarterly') {
+
+			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
+			let startDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).startOf('quarter').format(DATE_FORMAT);
+			let endDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).endOf('quarter').format(DATE_FORMAT);
+			matchCondition.uploadDate = {
+				$gte: new Date(startDateOfTheQuarter).toISOString(),
+				$lte: new Date(endDateOfTheQuarter).toISOString()
+			};
+
+		} else if (filters.date_filter_type === 'by_yearly') {
+
+			const currentDate = moment().format(DATE_FORMAT);
+			const currentYear = moment().year();
+
+			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
+			let endDateOfTheYear = moment([filters.year]).endOf('year')
+
+			if (filters.year === currentYear) {
+				endDateOfTheYear = currentDate;
+			}
+
+			matchCondition.uploadDate = {
+				$gte: new Date(startDateOfTheYear).toISOString(),
+				$lte: new Date(endDateOfTheYear).toISOString()
+			};
+
+		}
+
+	}
+
+	return matchCondition;
+}
+
 /**
  * getOverviewStats.
  *
@@ -217,6 +381,85 @@ exports.getAllBrands = [
 	}
 ];
 
+/**
+ * getStatsByBrand.
+ *
+ * @returns {Object}
+ */
+exports.getStatsByBrand = [
+	//auth,
+	async function (req, res) {
+		try {
+			// const filters = req.query;
+			// const brandFilters = {};
+
+			const filters = req.query;
+			let warehouseIds = await _getWarehouseIds(filters);
+			let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
+			if (filters.brand && filters.brand !== '') {
+				analyticsFilter.manufacturer = filters.brand;
+			}
+
+			let Analytics = await AnalyticsModel.aggregate([
+				{
+					$match: analyticsFilter
+				},
+				{
+					$lookup: {
+						from: 'products',
+						localField: 'productId',
+						foreignField: 'externalId',
+						as: 'prodDetails'
+					}
+				},
+				{
+					$unwind: {
+						path: '$prodDetails'
+					}
+				},
+				{
+					$replaceRoot: {
+						newRoot: {
+							$mergeObjects: ['$prodDetails', '$$ROOT']
+						}
+					}
+				},
+				{
+					$project: {
+						prodDetails: 0
+					}
+				},
+				{
+					$group: {
+						_id: '$manufacturer',
+						products: {
+							$addToSet: '$$ROOT'
+						}
+					}
+				}
+
+			]);
+			for (let analytic of Analytics) {
+
+				let products = analytic.products;
+				for (let product of products) {
+					product['returnRate'] = (parseInt(product.returns) / parseInt(product.sales)) * 100;
+					product['returnRatePrev'] = await calculatePrevReturnRates(filters, product);
+				}
+				analytic.products = products;
+
+			}
+
+			return apiResponse.successResponseWithData(
+				res,
+				"Operation success",
+				Analytics
+			);
+		} catch (err) {
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
 
 /**
  * getAllStats.
@@ -235,35 +478,12 @@ exports.getAllStats = [
 			const page = req.query.page || 1;
 			const totalRecords = await AnalyticsModel.count({ ...req.params });
 
-			const analyticsFilter = {
-				warehouseId: {
-					$in: [...warehouseIds, 'WAR1006',
-						'WAR10024', 'WAR10019',
-						'WAR10018', 'WAR10017',
-						'WAR10004', 'WAR10003',
-						'WAR10025', 'AP004',
-						'warehouse_id 2', 'AP005',
-						'war-blpg132lkmwny88i', 'war-blpg1vzwkn4a0cp6',
-						'AP003', 'war-2p52232kmrduslk',
-						'war-blpg1vzwkn482zyf', 'AP001',
-						'orgwar2345', 'AP002',
-						'orgwar12345', 'war-2p51gpxkmlpfh97',
-						'war-2p51gpxkmlo2x61', 'war-2p52232kmrpfxxh',
-						'war-blpg132lkmwxmhxk', 'ware123',
-						'war-1234', 'ware234',
-						'war-blpg1vzwkn47ka4y', 'war-blpg41ggknah1lj7']
-				}
-			};
-			if (filters.sku && filters.sku !== '') {
-				analyticsFilter.productId = filters.sku;
-				isSKUMode = true;
-			}
+			let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
 
 			let Analytics = await AnalyticsModel
 				.find(analyticsFilter)
 				.skip((resPerPage * page) - resPerPage)
 				.limit(resPerPage);
-
 			for (let analytic of Analytics) {
 				analytic['returnRate'] = (parseInt(analytic.returns) / parseInt(analytic.sales)) * 100;
 				analytic['returnRatePrev'] = await calculatePrevReturnRates(filters, analytic);
@@ -286,6 +506,39 @@ exports.getAllStats = [
 
 
 
+function getSKUGroupByFilters(filters) {
+	let matchCondition = [];
+	if (filters.group_by && filters.group_by !== '') {
+		if (filters.group_by === 'state') {
+			matchCondition.push({
+				_id: '$state',
+				data: {
+					$addToSet: "$$ROOT"
+				}
+			});
+		} else if (filters.group_by === 'date') {
+			matchCondition.push({
+				$match: {
+					state: filters.state
+				}
+			});
+			matchCondition.push({
+				_id: '$uploadDate',
+				data: {
+					$addToSet: "$$ROOT"
+				}
+			});
+
+		} else {
+			matchCondition.push({
+				$match: {
+					state: filters.state
+				}
+			});
+		}
+	}
+}
+
 /**
  * getStatsBySKU.
  *
@@ -295,32 +548,48 @@ exports.getStatsBySKU = [
 	//auth,
 	async function (req, res) {
 		try {
-			const resPerPage = 10;
-			const page = req.query.page || 1;
-			const totalRecords = await AnalyticsModel.count({ ...req.params });
+			const filters = req.query;
 
-			AnalyticsModel.find({ ...req.params }).skip((resPerPage * page) - resPerPage)
-				.limit(resPerPage).then(
-					Analytics => {
-						if (Analytics.length > 0) {
-							const finalData = {
-								totalRecords: totalRecords,
-								data: Analytics
-							}
-							return apiResponse.successResponseWithData(
-								res,
-								"Operation success",
-								finalData
-							);
-						} else {
-							return apiResponse.successResponseWithData(
-								res,
-								"No Results Found",
-								[]
-							);
+			let Analytics = await AnalyticsModel.aggregate([
+				{
+					$match: getSKUAnalyticsFilterConditions(filters)
+				},
+				{
+					$lookup: {
+						from: 'abinbevstaticdata',
+						localField: 'depot',
+						foreignField: 'depot',
+						as: 'depotDetails'
+					}
+				},
+				{
+					$unwind: {
+						path: '$depotDetails'
+					}
+				},
+				{
+					$replaceRoot: {
+						newRoot: {
+							$mergeObjects: ['$depotDetails', '$$ROOT']
 						}
 					}
-				);
+				},
+				{
+					$project: {
+						depotDetails: 0
+					}
+				},
+				...getSKUGroupByFilters(filters)
+			]);
+			let response = []
+			Analytics.forEach(analytic => {
+				let temp = aggregateSalesStats(analytic.data);
+				temp['groupedBy'] = analytic._id;
+				response.push(temp);
+			});
+
+			return apiResponse.successResponseWithData(res, "Operation Success", response);
+
 		} catch (err) {
 			return apiResponse.ErrorResponse(res, err);
 		}
