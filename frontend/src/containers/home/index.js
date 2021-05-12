@@ -99,7 +99,7 @@ const HomeContainer = (props) => {
                 <div className="rounded-images">
                   <img src={icon} width="40" height="40" />
                 </div>
-                <p>Blockchain based<br /> Platform</p>
+               <p>Blockchain based<br />Platform</p>
               </div>
             </div>
             <div className="col">
@@ -107,7 +107,7 @@ const HomeContainer = (props) => {
                 <div className="rounded-images">
                   <img src={icon1} width="40" height="40" />
                 </div>
-                <p>Live Temperature<br /> Tracking</p>
+                <p>Live Temperature<br />Tracking</p>
               </div>
             </div>
             <div className="col">
@@ -128,16 +128,16 @@ const HomeContainer = (props) => {
             </div>
           </div>
         </div>
-        <img src={mobMockup} width="565" height="700"  style={{position:"absolute", left:"-13%"}}/>      
+        <img src={mobMockup} width="500" height="650"  style={{position:"absolute", top:"160%", left:"-13%"}}/>      
         </section>
       <section className="what_we_do pt-0">
         <div className="container">
           <div className="row">
             <div className="col-md-6 col-sm-12 align-text-center my-auto pb-5">
-              <h2 className="display-4">What We Do</h2>
+              <h2 className="display-4" >What We Do</h2>
               <p>
                 StaTwig provides serialization solutions to detect fake 
-                <br/> and expired products in the production using Blockchain
+                and expired products in the production using Blockchain
                 technology and IoT.<br />We are focused towards creating an
                 efficient food and Vaccine distribution Supply chain.This
                 helps in preventing failures of distribution, predicting the resources.
@@ -147,7 +147,7 @@ const HomeContainer = (props) => {
             </div>
          </div>
         </div>
-        <img src={mob} width="50%" height="1000" style={{position:"absolute", marginLeft:"48.8%", marginTop:"-48%",}} />
+        <img src={mob} width="50%" height="1000" style={{position:"absolute", marginLeft:"48.4%", marginTop:"-60%",}} />
       </section>
       <section className="How_it_works">
         <div className="container">
