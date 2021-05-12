@@ -376,8 +376,7 @@ const NewShipment = (props) => {
                           console.log("Result");
                           console.log(result);
                           setReceiverOrgLoc(
-                            result.poDetails[0].customer.organisation
-                              .postalAddress
+                             result.poDetails[0].customer.warehouse.title + '/' + result.poDetails[0].customer.warehouse.postalAddress
                           );
                           setReceiverOrgId(
                             result.poDetails[0].customer.organisation.id
@@ -484,10 +483,10 @@ console.log("tes",products);
                             setFieldValue("fromOrg", senderOrganisation[0]);
                             setSenderOrgLoc(
                               v?.warehouseAddress
-                                ? v?.warehouseAddress?.firstLine +
+                                ? v?.title + '/' + v?.warehouseAddress?.firstLine +
                                     ", " +
                                     v?.warehouseAddress?.city
-                                : v.postalAddress
+                                : v?.title + '/' + v.postalAddress
                             );
                             setFieldValue("fromOrgLoc", v.id);
                       //      setFieldValue("products", []);
@@ -558,10 +557,10 @@ console.log("tes",products);
                           onSelect={(v) => {
                             setReceiverOrgLoc(
                               v?.warehouseAddress
-                                ? v?.warehouseAddress?.firstLine +
+                                ? v?.title + '/' + v?.warehouseAddress?.firstLine +
                                     ", " +
                                     v?.warehouseAddress?.city
-                                : v.postalAddress
+                                : v?.title + '/' + v.postalAddress
                             );
                             setFieldValue("toOrgLoc", v.id);
                           }}
