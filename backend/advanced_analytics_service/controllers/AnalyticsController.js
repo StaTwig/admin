@@ -537,6 +537,7 @@ function getSKUGroupByFilters(filters) {
 			});
 		}
 	}
+	return matchCondition;
 }
 
 /**
