@@ -99,7 +99,7 @@ export function config() {
       deleteNotificationUrl: `${LOCAL_SERVER_URL_NOTIFICATION}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/updateTrackingStatus`,
       getOrderIds:`${LOCAL_SERVER_URL_PO}/pomanagement/api/po/getOrderIds`,  
-      addWarehouse: `${LOCAL_SERVER_URL_PO}/usermanagement/api/auth/addWarehouse?warehouseAddress=`, 
+      addWarehouse: `${LOCAL_SERVER_URL_PO}/usermanagement/api/auth/addWarehouse`, 
     },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
@@ -171,7 +171,7 @@ export function config() {
       deleteNotificationUrl: `${DEV_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${DEV_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
       getOrderIds:`${DEV_SERVER_URL}/pomanagement/api/po/getOrderIds`,
-      addWarehouse: `${DEV_SERVER_URL}/usermanagement/api/auth/addWarehouse?warehouseAddress=`, 
+      addWarehouse: `${DEV_SERVER_URL}/usermanagement/api/auth/addWarehouse`, 
     },
     stable: {
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
@@ -244,7 +244,7 @@ export function config() {
       deleteNotificationUrl: `${STABLE_SERVER_URL_PRODUCTS}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/updateTrackingStatus`,
       getOrderIds:`${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/getOrderIds`,
-      addWarehouse: `${STABLE_SERVER_URL_SHIPMENT}/usermanagement/api/auth/addWarehouse?warehouseAddress=`, 
+      addWarehouse: `${STABLE_SERVER_URL_SHIPMENT}/usermanagement/api/auth/addWarehouse`, 
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -318,7 +318,7 @@ export function config() {
       deleteNotificationUrl: `${TEST_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${TEST_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
       getOrderIds:`${TEST_SERVER_URL}/pomanagement/api/po/getOrderIds`,
-      addWarehouse: `${TEST_SERVER_URL}/usermanagement/api/auth/addWarehouse?warehouseAddress=`, 
+      addWarehouse: `${TEST_SERVER_URL}/usermanagement/api/auth/addWarehouse`, 
     },
     demo: {
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
@@ -392,7 +392,7 @@ export function config() {
       deleteNotificationUrl: `${DEMO_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${DEMO_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
       getOrderIds:`${DEMO_SERVER_URL}/pomanagement/api/po/getOrderIds`,
-      addWarehouse: `${DEMO_SERVER_URL}/usermanagement/api/auth/addWarehouse?warehouseAddress=`, 
+      addWarehouse: `${DEMO_SERVER_URL}/usermanagement/api/auth/addWarehouse`, 
     },
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
@@ -465,7 +465,7 @@ export function config() {
       deleteNotificationUrl: `${PROD_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${PROD_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
       getOrderIds:`${PROD_SERVER_URL}/pomanagement/api/po/getOrderIds`,
-      addWarehouse: `${PROD_SERVER_URL}/usermanagement/api/auth/addWarehouse?warehouseAddress=`, 
+      addWarehouse: `${PROD_SERVER_URL}/usermanagement/api/auth/addWarehouse`, 
     },
     
     uniceftest: {
@@ -540,7 +540,7 @@ export function config() {
       deleteNotificationUrl: `${UNICEFTEST_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
       getOrderIds:`${UNICEFTEST_SERVER_URL}/pomanagement/api/po/getOrderIds`,
-      addWarehouse: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/addWarehouse?warehouseAddress=`, 
+      addWarehouse: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/addWarehouse`, 
     },
   };
 
