@@ -59,3 +59,4 @@ var AtomSchema = new mongoose.Schema(
   { timestamps: true },
 );
 module.exports = mongoose.model('Atom', AtomSchema);
+

@@ -618,3 +618,292 @@ exports.getOrderIds = [
     }
   },
 ];
+
+exports.fetchInboundPurchaseOrders = [
+  auth,
+  async (req, res) => {
+    try {
+      checkToken(req, res, async result => {
+        if (result.success) {
+          logger.log(
+            'info',
+            '<<<<< POService < POController < fetchInboundPurchaseOrders : token verified successfully, querying data by publisher',
+          );
+          const permission_request = {
+            result: result,
+            permissionRequired: 'viewPO',
+          };
+          checkPermissions(permission_request, async permissionResult => {
+            if (permissionResult.success) {
+
+              const { organisationId, role } = req.user;
+              const { skip, limit } = req.query;
+              let currentDate = new Date();
+              let fromDateFilter = 0;
+              let fromCustomer = req.query.from ? req.query.from : undefined;
+              let productName = req.query.productName ? req.query.productName : undefined;
+              let deliveryLocation = req.query.deliveryLocation ? req.query.deliveryLocation : undefined;
+              switch (req.query.dateFilter) {
+                case "today":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+                  break;
+                case "week":
+                  fromDateFilter = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay())).toUTCString();
+                  break;
+                case "month":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
+                  break;
+                case "threeMonth":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, currentDate.getDate());
+                  break;
+                case "sixMonth":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 6, currentDate.getDate());
+                  break;
+                case "year":
+                  fromDateFilter = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate());
+                  break;
+                default:
+                  fromDateFilter = 0;
+              }
+
+              let whereQuery = {};
+              if (fromDateFilter) {
+                whereQuery['createdAt'] = { $gte: fromDateFilter }
+              }
+
+              if (organisationId) {
+                whereQuery["supplier.supplierOrganisation"] = organisationId
+              }
+              if (fromCustomer) {
+                let receiverOrg = await OrganisationModel.findOne({ "name": fromCustomer });
+                if (receiverOrg) {
+                  whereQuery["customer.customerOrganisation"] = receiverOrg.id
+                }
+              }
+
+              if (productName) {
+                whereQuery.products = {
+                  $elemMatch: {
+                    name: productName
+                  }
+                }
+              }
+
+              console.log("whereQuery ======>", whereQuery);
+              try {
+                await RecordModel.find(whereQuery).sort({ createdAt: -1 }).sort({ createdAt: -1 }).skip(parseInt(skip)).limit(parseInt(limit)).then((inboundPOList) => {
+                  let inboundPORes = [];
+                  let findInboundPOData = inboundPOList.map(async (inboundPO) => {
+                    let inboundPOData = JSON.parse(JSON.stringify(inboundPO))
+                    inboundPOData[`productDetails`] = [];
+                    let inboundProductsArray = inboundPOData.products;
+                    let productRes = inboundProductsArray.map(async (product) => {
+                      let productDetails = await ProductModel.findOne(
+                        {
+                          id: product.productId
+                        });
+                      return productDetails;
+                    });
+                    Promise.all(productRes).then(async function (productList) {
+                      inboundPOData[`productDetails`] = await productList;
+                    });
+
+                    let supplierOrganisation = await OrganisationModel.findOne(
+                      {
+                        id: inboundPO.supplier.supplierOrganisation
+                      });
+                    let customerOrganisation = await OrganisationModel.findOne(
+                      {
+                        id: inboundPOData.customer.customerOrganisation
+                      });
+                    let customerWareHouse = await WarehouseModel.findOne(
+                      {
+                        organisationId: inboundPOData.customer.customerOrganisation
+                      });
+                    inboundPOData.supplier[`organisation`] = supplierOrganisation;
+                    inboundPOData.customer[`organisation`] = customerOrganisation;
+                    inboundPOData.customer[`warehouse`] = customerWareHouse;
+                    await inboundPORes.push(inboundPOData);
+                  });
+
+                  Promise.all(findInboundPOData).then(function (results) {
+                    return apiResponse.successResponseWithData(
+                      res,
+                      "Inbound PO Records",
+                      inboundPORes
+                    );
+                  });
+                });
+              } catch (err) {
+                console.log("err ======>", err);
+                return apiResponse.ErrorResponse(res, err);
+              }
+            } else {
+              res.json('Sorry! User does not have enough Permissions');
+            }
+          });
+        } else {
+          logger.log(
+            'warn',
+            '<<<<< POService < POController < purchaseOrderStatistics  : refuted token',
+          );
+          res.status(403).json(result);
+        }
+      });
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< POService < POController < purchaseOrderStatistics : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.fetchOutboundPurchaseOrders = [
+  auth,
+  async (req, res) => {
+    try {
+      checkToken(req, res, async result => {
+        if (result.success) {
+          logger.log(
+            'info',
+            '<<<<< POService < POController < purchaseOrderStatistics : token verified successfully, querying data by publisher',
+          );
+          const permission_request = {
+            //role: req.user.role,
+            result: result,
+            permissionRequired: 'viewPO',
+          };
+          checkPermissions(permission_request, async permissionResult => {
+            if (permissionResult.success) {
+
+              const { organisationId, role } = req.user;
+              const { skip, limit } = req.query;
+              let currentDate = new Date();
+              let fromDateFilter = 0;
+              let toSupplier = req.query.to ? req.query.to : undefined;
+              let productName = req.query.productName ? req.query.productName : undefined;
+              let deliveryLocation = req.query.deliveryLocation ? req.query.deliveryLocation : undefined;
+              switch (req.query.dateFilter) {
+                case "today":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+                  break;
+                case "week":
+                  fromDateFilter = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay())).toUTCString();
+                  break;
+                case "month":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
+                  break;
+                case "threeMonth":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, currentDate.getDate());
+                  break;
+                case "sixMonth":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 6, currentDate.getDate());
+                  break;
+                case "year":
+                  fromDateFilter = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate());
+                  break;
+                default:
+                  fromDateFilter = 0;
+              }
+
+              let whereQuery = {};
+              if (fromDateFilter) {
+                whereQuery['createdAt'] = { $gte: fromDateFilter }
+              }
+
+              if (organisationId) {
+                whereQuery["customer.customerOrganisation"] = organisationId
+              }
+
+              if (toSupplier) {
+                let supplierOrg = await OrganisationModel.findOne({ "name": toSupplier });
+                if (supplierOrg) {
+                  whereQuery["supplier.supplierOrganisation"] = supplierOrg.id;
+                }
+              }
+
+              if (productName) {
+                whereQuery.products = {
+                  $elemMatch: {
+                    name: productName
+                  }
+                }
+              }
+
+              console.log("whereQuery ======>", whereQuery);
+              try {
+                RecordModel.find(whereQuery).sort({ createdAt: -1 }).sort({ createdAt: -1 }).skip(parseInt(skip)).limit(parseInt(limit)).then((outboundPOList) => {
+                  let outboundPORes = [];
+                  let findOutboundPOData = outboundPOList.map(async (outboundPO) => {
+                    let outboundPOData = JSON.parse(JSON.stringify(outboundPO))
+                    outboundPOData[`productDetails`] = [];
+                    let outboundProductsArray = outboundPOData.products;
+                    let productRes = outboundProductsArray.map(async (product) => {
+                      let productDetails = await ProductModel.findOne(
+                        {
+                          id: product.productId
+                        });
+                      return productDetails;
+                    });
+                    Promise.all(productRes).then(async function (productList) {
+                      outboundPOData[`productDetails`] = await productList;
+                    });
+
+                    let supplierOrganisation = await OrganisationModel.findOne(
+                      {
+                        id: outboundPO.supplier.supplierOrganisation
+                      });
+                    let customerOrganisation = await OrganisationModel.findOne(
+                      {
+                        id: outboundPOData.customer.customerOrganisation
+                      });
+                    let customerWareHouse = await WarehouseModel.findOne(
+                      {
+                        organisationId: outboundPOData.customer.customerOrganisation
+                      });
+                    outboundPOData.supplier[`organisation`] = supplierOrganisation;
+                    outboundPOData.customer[`organisation`] = customerOrganisation;
+                    outboundPOData.customer[`warehouse`] = customerWareHouse;
+                    await outboundPORes.push(outboundPOData);
+                  });
+
+                  Promise.all(findOutboundPOData).then(function (results) {
+                    return apiResponse.successResponseWithData(
+                      res,
+                      "Outbound PO Records",
+                      outboundPORes
+                    );
+                  });
+                });
+              } catch (err) {
+                console.log("err ======>", err);
+                return apiResponse.ErrorResponse(res, err);
+              }
+
+              logger.log(
+                'info',
+                '<<<<< POService < POController < purchaseOrderStatistics  : queried data by publisher',
+              );
+            } else {
+              res.json('Sorry! User does not have enough Permissions');
+            }
+          });
+        } else {
+          logger.log(
+            'warn',
+            '<<<<< POService < POController < purchaseOrderStatistics  : refuted token',
+          );
+          res.status(403).json(result);
+        }
+      });
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< POService < POController < purchaseOrderStatistics : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];

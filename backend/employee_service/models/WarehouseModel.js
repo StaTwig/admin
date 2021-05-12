@@ -2,10 +2,16 @@ var mongoose = require('mongoose');
 var WarehouseSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
+    title: { type: String, required: true, default: "Warehouse" },
     organisationId: {
       type: String,
       required: true,
       default: 'org123',
+    },
+    postalAddress: {
+      type: String,
+      required: true,
+      default: "T-Hub, IIIT, Gachibowli, Hyderabad, Telangana, India",
     },
     warehouseAddress: {
       type: Object,
@@ -44,6 +50,7 @@ var WarehouseSchema = new mongoose.Schema(
         geohash: '1231nejf923453',
       },
     },
+    status: String,
     supervisors: {
       type: Array,
       default: []

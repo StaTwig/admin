@@ -27,8 +27,11 @@
         border-top-right-radius: 25px;
         border-bottom-right-radius: 25px;
         box-sizing: border-box;
-        overflow: hidden;
+        // overflow: hidden;
         transition: width 0.5s ease;
+        height: 100vh;
+        overflow-y: auto;
+        position: sticky;
     }
     .container.nav-closed .sidebar,
     .container.nav-closed .header-logo {

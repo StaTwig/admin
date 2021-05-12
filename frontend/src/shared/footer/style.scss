@@ -6,22 +6,24 @@ footer {
   align-items: center;
   justify-content: center;
   color: $white;
-  font-size: 12px;
+  font-size: 8px;
   position: fixed;
-  bottom: -1.5rem;
+  bottom: -1.6rem;
   align-self: center;
+  margin-right: 25px;
 
   p {
-    margin-bottom: 0;
+    margin-bottom: -6px;
+    padding: 3px;
   }
 
   .footer-branding {
     display: flex;
-    margin-top: .5rem;
+    margin-top: .2rem;
 
     img {
       width: 80px;
-      height: 10px;
+      height: 20px;
       margin-bottom: 40px;
     }
 
@@ -30,7 +32,7 @@ footer {
     }
 
     h1 {
-      font-size: 19px;
+      font-size: 20px;
       font-weight: bold;
       letter-spacing: 1.9px;
       text-transform: uppercase;

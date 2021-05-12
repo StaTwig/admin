@@ -48,13 +48,13 @@ const Inventory = props => {
         "#d4e7ff", "#e0b0ff", "#F1EFCE", "#D7FAF1", "#F2B6AF" ];
 
   const [inventoryAnalytics,setInventoryAnalytics]= useState({})
-        useEffect(() => {
-          async function fetchData() {
-            const result = await getInventoryAnalytics();
-            setInventoryAnalytics(result.data.inventory);
-          }
-          fetchData();
-        }, []);
+        // useEffect(() => {
+        //   async function fetchData() {
+        //     const result = await getInventoryAnalytics();
+        //     setInventoryAnalytics(result.data.inventory);
+        //   }
+        //   fetchData();
+        // }, []);
 
 
      useEffect(() => {
@@ -62,6 +62,8 @@ const Inventory = props => {
       const result = await getProductList();
       setProductsList(result.message);
       const resultAnalytics = await getInventoryAnalytics();
+      console.log(resultAnalytics);
+      
       setInventoryAnalytics(resultAnalytics.data.inventory);
       setInventoriesCount(
         resultAnalytics.data.inventory.totalProductsAddedToInventory
@@ -145,7 +147,7 @@ const Inventory = props => {
                     )
                   }
                 >
-                  6 MONTHS
+                {/*6 MONTHS*/}
                 </div>
                 <div
                   className="tab-item"
@@ -160,7 +162,7 @@ const Inventory = props => {
                     )
                   }
                 >
-                  3 MONTHS
+                  {/*3 MONTHS*/}
                 </div>
                 <div
                   className="tab-item"
@@ -175,7 +177,7 @@ const Inventory = props => {
                     )
                   }
                 >
-                  THIS MONTH
+                  {/*THIS MONTH8*/}
                 </div>
                 <div
                   className="tab-item"
@@ -190,8 +192,8 @@ const Inventory = props => {
                     )
                   }
                 >
-                  THIS WEEK
-                </div>
+                  {/*THIS WEEK*/}
+              </div>
               </div>
               <div className="recived-text count">
                 {inventoryNearExpiration}
@@ -220,7 +222,7 @@ const Inventory = props => {
                     )
                   }
                 >
-                  THIS YEAR
+                  {/*THIS YEAR*/}
                 </div>
                 <div
                   className="tab-item"
@@ -235,7 +237,7 @@ const Inventory = props => {
                     )
                   }
                 >
-                  THIS MONTH
+                  {/*THIS MONTH*/}
                 </div>
                 <div
                   className="tab-item"
@@ -250,7 +252,7 @@ const Inventory = props => {
                     )
                   }
                 >
-                  THIS WEEK
+                  {/*THIS WEEK*/}
                 </div>
                 <div
                   className="tab-item"
@@ -265,7 +267,7 @@ const Inventory = props => {
                     )
                   }
                 >
-                  TODAY
+                  {/*TODAY*/}
                 </div>
               </div>
               <div className="transit-text count">{inventoryExpired}</div>

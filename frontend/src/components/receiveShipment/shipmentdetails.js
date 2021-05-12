@@ -7,7 +7,7 @@ import './style.scss'
 const ShipmentDetails = (props) => {
     return (
     Object.keys(props.shipments).length === 0 ? <div className="row panel justify-content-between">N/A</div> :
-        <div className=  { props.highLight ? "col panel commonpanle highlight" : "col panel commonpanle"}>
+        <div className=  { props.highLight ? "col panel commonpanle highlight" : "col panel commonpanle"} style={{height:"45%"}}>
           <div className="d-flex flex-row  ">
           <ul className="mr-3 elemens w-50">
           <li className="mb-1 text-secondary">Shipment Date</li>
@@ -22,10 +22,10 @@ const ShipmentDetails = (props) => {
            <li  className="mb-1">{props.shipments.shippingDate.split('T')[0].split('-')[2]+"/"+props.shipments.shippingDate.split('T')[0].split('-')[1]+"/"+props.shipments.shippingDate.split('T')[0].split('-')[0]} </li>
            <h6 className="poheads potext mt-3 mb-3" style={{visibility:'hidden'}}>From</h6>
             <li  className="mb-1">{props.shipments.supplier.org.name}</li>
-            <li  className="mb-1">{props.shipments.supplier.org.postalAddress.split(',')[0]},{props.shipments.supplier.org.postalAddress.split(',')[1]},{props.shipments.supplier.org.postalAddress.split(',')[2]}</li>
+            <li  className="mb-1">{props.shipments.supplier.org.postalAddress.split(',')[0]}</li>
             <h6 className="poheads potext mt-3 mb-3  text-white" style={{visibility:'hidden'}}>To </h6>
             <li  className="mb-1">{props.shipments.receiver.org.name}</li>
-            <li  className="mb-1">{props.shipments.receiver.org.postalAddress.split(',')[0]},{props.shipments.receiver.org.postalAddress.split(',')[1]},{props.shipments.receiver.org.postalAddress.split(',')[2]}</li>
+            <li  className="mb-1">{props.shipments.receiver.org.postalAddress.split(',')[0]}</li>
 
            </ul>
            <div>

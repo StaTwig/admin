@@ -5,6 +5,7 @@ const XLSX = require("xlsx");
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
 const utility = require("../helpers/utility");
+const { warehouseDistrictMapping } = require("../helpers/constants");
 const auth = require("../middlewares/jwt");
 const InventoryModel = require("../models/InventoryModel");
 const WarehouseModel = require("../models/WarehouseModel");
@@ -29,7 +30,10 @@ const stream_name = process.env.STREAM;
 
 const init = require('../logging/init');
 const OrganisationModel = require('../models/OrganisationModel');
-const SalesDataModel = require("../models/SalesDataModel");
+const AnalyticsModel = require('../models/AnalyticsModel');
+const StateDistrictStaticDataModel = require("../models/StateDistrictStaticDataModel");
+const { request } = require("http");
+const { match } = require("assert");
 const logger = init.getLog();
 
 exports.getTotalCount = [
@@ -740,6 +744,136 @@ exports.insertInventories = [
     }
   },
 ];
+
+exports.getAllStates = [
+  auth,
+  async (req, res) => {
+    try {
+      const allStates = await StateDistrictStaticDataModel.find().distinct('state');
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allStates
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getDistrictsByState = [
+  auth,
+  async (req, res) => {
+    try {
+      const _selectedState = req.query.state;
+      const allStates = await StateDistrictStaticDataModel.find({
+        state: _selectedState
+      }).distinct('district');
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allStates
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getVendorsByDistrict = [
+  auth,
+  async (req, res) => {
+    try {
+      const _selectedDistrict = req.query.district;
+      const _vendorType = req.query.vendorType;
+      const allVendors = await OrganisationModel.find({
+        district: _selectedDistrict,
+        type: _vendorType
+      });
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allVendors
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getAllSKUs = [
+  auth,
+  async (req, res) => {
+    try {
+      const allSKUs = await ProductModel.find({}, '-characteristicSet -image');
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allSKUs
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getOrganizationsByType = [
+  auth,
+  async (req, res) => {
+    try {
+      const filters = req.query;
+      let matchCondition = {};
+      if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
+        matchCondition.type = filters.orgType;
+      } else if (filters.orgType === 'ALL_VENDORS') {
+        matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }];
+      }
+
+      const organisations = await OrganisationModel.aggregate([
+        {
+          $match: matchCondition
+        }
+      ]);
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        organisations
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getOrganizationInfoByID = [
+  auth,
+  async (req, res) => {
+    try {
+      const orgId = req.query.orgId;
+      const organisation = await OrganisationModel.findOne({ id: orgId });
+      const warehouseIds = organisation.warehouses;
+      const stats = await AnalyticsModel.find({ warehouseId: { $in: warehouseIds } });
+      let totalStock = 0;
+      stats.forEach(stat => {
+        totalStock = totalStock + parseInt(stat.returns);
+      });
+
+      let responseObj = {
+        organisation,
+        totalStock
+      }
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        responseObj
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+]
+
+
 exports.addProductsToInventory = [
   auth,
   body("products")
@@ -774,56 +908,60 @@ exports.addProductsToInventory = [
           const { products } = req.body;
           const { id } = req.user;
           const employee = await EmployeeModel.findOne({ id });
-          const warehouseId = employee.warehouseId;
+          var warehouseId = "";
+          if ( !req.query.warehouseId)
+          warehouseId  = employee.warehouseId[0];
+          else
+          warehouseId  = req.query.warehouseId;
           const warehouse = await WarehouseModel.findOne({ id: warehouseId });
+
           if (!warehouse) {
             return apiResponse.ErrorResponse(
               res,
               "Employee not assigned to any organisation"
             );
           }
-        //   let serialNumbersRange = true;
-        //   let alpha = [...Array(26)].map((_, y) => String.fromCharCode(y + 65)).join('');
-        //   for (let i = 0; i < products.length; i++) {
-        //     if (products[i].serialNumbersRange.split('-').length < 2) {
-        //       let snoref = Date.now();
-        //       let rApha = '';
-        //       for (let i = 0; i < 4; i++)
-        //         rApha += alpha.charAt(Math.floor(Math.random() * alpha.length));
-              
-        //      products[i].serialNumbersRange =
-        //        "DSL" + rApha + (parseInt(snoref) - parseInt(products[i].quantity - 1)) +
-        //        "-DSL" + rApha + snoref;
-        //       // serialNumbersRange = false;
-        //       // break;
-        //     }
-        //   }
-        //  if(!serialNumbersRange) {
-        //    return apiResponse.ErrorResponse(
-        //      res,
-        //      `Product doesn't conatin valid serial numbers range`,
-        //    );
-        //  }
+          //   let serialNumbersRange = true;
+          //   let alpha = [...Array(26)].map((_, y) => String.fromCharCode(y + 65)).join('');
+          //   for (let i = 0; i < products.length; i++) {
+          //     if (products[i].serialNumbersRange.split('-').length < 2) {
+          //       let snoref = Date.now();
+          //       let rApha = '';
+          //       for (let i = 0; i < 4; i++)
+          //         rApha += alpha.charAt(Math.floor(Math.random() * alpha.length));
+
+          //      products[i].serialNumbersRange =
+          //        "DSL" + rApha + (parseInt(snoref) - parseInt(products[i].quantity - 1)) +
+          //        "-DSL" + rApha + snoref;
+          //       // serialNumbersRange = false;
+          //       // break;
+          //     }
+          //   }
+          //  if(!serialNumbersRange) {
+          //    return apiResponse.ErrorResponse(
+          //      res,
+          //      `Product doesn't conatin valid serial numbers range`,
+          //    );
+          //  }
           const inventory = await InventoryModel.findOne({
             id: warehouse.warehouseInventory,
           });
-          if(!inventory) return apiResponse.ErrorResponse(res, 'Cannot find inventory to this employee warehouse');
+          if (!inventory) return apiResponse.ErrorResponse(res, 'Cannot find inventory to this employee warehouse');
           let atoms = [];
           products.forEach(product => {
-            const serialNumbers = product.serialNumbersRange.split('-');
-            if (serialNumbers.length > 1) {
+            const serialNumbers = product.serialNumbersRange?.split('-');
+            if (serialNumbers?.length > 1) {
               const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
               const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
               const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
               for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
                 const atom = `${serialNumberText}${i}`
-
                 atoms.push(atom);
               }
             }
           })
-          const dupSerialFound = await AtomModel.findOne({id: { $in: atoms}});
-          if(dupSerialFound) return apiResponse.ErrorResponse(res, 'Duplicate Serial Numbers found');
+          const dupSerialFound = await AtomModel.findOne({ id: { $in: atoms } });
+          if (dupSerialFound) return apiResponse.ErrorResponse(res, 'Duplicate Serial Numbers found');
           await utility.asyncForEach(products, async product => {
             const inventoryId = warehouse.warehouseInventory;
             const checkProduct = await InventoryModel.find({ "$and": [{ "id": inventoryId }, { "inventoryDetails.productId": product.productId }] })
@@ -843,20 +981,21 @@ exports.addProductsToInventory = [
               });
             }
 
-            const serialNumbers = product.serialNumbersRange.split('-');
-            if(serialNumbers.length > 1){
+            const serialNumbers = product.serialNumbersRange?.split('-');
+            let atomsArray = [];
+            if (serialNumbers?.length > 1) {
               const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
               const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
 
               const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
-              let atoms = [];
+              //let atoms = [];
               for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
                 const atom = {
                   // id: `${serialNumberText + uniqid.time()}${i}`,
                   id: `${serialNumberText}${i}`,
                   label: {
-                    labelId: '',
-                    labelType: '',
+                    labelId: product?.label?.labelId,
+                    labelType: product?.label?.labelType,
                   },
                   productId: product.productId,
                   inventoryIds: [inventory.id],
@@ -878,24 +1017,24 @@ exports.addProductsToInventory = [
                     eolUserInfo: '',
                   }
                 };
-                atoms.push(atom);
+                atomsArray.push(atom);
               }
             }
             try {
-                if(atoms.length > 0)
-                  await AtomModel.insertMany(atoms);
-                await inventory.save();
-              }catch(err) {
-                console.log('err', err);
-              }
-               /*AtomModel.insertMany(atoms).then(async (res, err) =>  {
-                if(err) {
-                 // return apiResponse.ErrorResponse(res, 'Duplicate SerialNumber');
-                  console.log('Duplicate SerialNumber');
-                }else {
-                  await inventory.save();
-                }
-              });*/
+              if (atomsArray.length > 0)
+                await AtomModel.insertMany(atomsArray);
+              await inventory.save();
+            } catch (err) {
+              console.log('err', err);
+            }
+            /*AtomModel.insertMany(atoms).then(async (res, err) =>  {
+             if(err) {
+              // return apiResponse.ErrorResponse(res, 'Duplicate SerialNumber');
+               console.log('Duplicate SerialNumber');
+             }else {
+               await inventory.save();
+             }
+           });*/
 
           });
           var datee = new Date();
@@ -975,7 +1114,7 @@ exports.addInventoriesFromExcel = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           permission_request = {
-            result: result,
+            role: req.user.role,
             permissionRequired: "addInventory",
           };
           checkPermissions(permission_request, async (permissionResult) => {
@@ -998,31 +1137,26 @@ exports.addInventoriesFromExcel = [
               let limit = chunkSize;
               let skip = 0;
 
-              logger.log("info", "Inserting excel data in chunks");
               async function recursiveFun() {
                 skip = chunkSize * count;
                 count++;
                 limit = chunkSize * count;
-                logger.log("info", `skip ${skip}`);
-
-                logger.log("info", `limit ${limit}`);
                 const chunkedData = data.slice(skip, limit);
                 let chunkUrls = [];
                 const serialNumbers = chunkedData.map((inventory) => {
-                  return { serialNumber: inventory.serialNumber.trim() };
+                  return { id: inventory.serialNumber.trim() };
                 });
-                const inventoriesFound = await InventoryModel.findOne({
+                const inventoriesFound = await AtomModel.findOne({
                   $or: serialNumbers,
                 });
                 if (inventoriesFound) {
-                  console.log("Duplicate Inventory Found");
                   const newNotification = new NotificationModel({
                     owner: address,
                     message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${inventoriesFound.serialNumber
                       }`,
                   });
                   await newNotification.save();
-                  return;
+                  return apiResponse.ErrorResponse(res, "Duplicate Inventory Found");
                 }
                 chunkedData.forEach((inventory) => {
                   inventory.serialNumber = inventory.serialNumber.trim();
@@ -1045,40 +1179,27 @@ exports.addInventoriesFromExcel = [
                       const inventoryData = responses.map(
                         (response) => response.data
                       );
-                      logger.log(
-                        "info",
-                        `Inventory Data length' ${inventoryData.length}`
-                      );
-                      logger.log(
-                        "info",
-                        `Transaction Id,
-                        ${inventoryData[0].transactionId}`
-                      );
-                      InventoryModel.insertMany(inventoryData, (err, res) => {
-                        if (err) {
-                          logger.log("error", err.errmsg);
-                        } else
-                          logger.log(
-                            'info',
-                            'Number of documents inserted into mongo: ' +
-                            res.length,
-                          );
-                      });
+                      // console.log(inventoryData);
+
+                      // InventoryModel.insertMany(inventoryData, (err, res) => {
+                      //   if (err) {
+                      //     logger.log("error", err.errmsg);
+                      //   } else
+                      //     logger.log(
+                      //       'info',
+                      //       'Number of documents inserted into mongo: ' +
+                      //       res.length,
+                      //     );
+                      // });
 
                       if (limit < data.length) {
                         recursiveFun();
                       } else {
-                        logger.log(
-                          'info',
-                          `Insertion of excel sheet data is completed. Time Taken to insert ${data.length
-                          } in seconds - `,
-                          (new Date() - start) / 1000,
-                        );
-                        const newNotification = new NotificationModel({
-                          owner: address,
-                          message: `Your inventories from excel is added successfully on ${new Date().toLocaleString()}`,
-                        });
-                        await newNotification.save();
+                        // const newNotification = new NotificationModel({
+                        //   owner: address,
+                        //   message: `Your inventories from excel is added successfully on ${new Date().toLocaleString()}`,
+                        // });
+                        // await newNotification.save();
                       }
                     })
                   )
@@ -1127,6 +1248,11 @@ exports.addInventoriesFromExcel = [
               // }
 
               // compute(event_data).then((response) => console.log(response))
+
+              for (const [index, prod] of data.entries()) {
+                let product = await ProductModel.findOne({ name: prod.productName });
+                data[index].productId = product.id;
+              }
 
               return apiResponse.successResponseWithData(res, "Success", data);
             } else {
@@ -1187,18 +1313,15 @@ exports.getInventoryDetails = [
   auth,
   async (req, res) => {
     try {
-      var selectedWarehouseId = '';
-      if (req.body.warehouseId !== null) {
-        selectedWarehouseId = req.body.warehouseId;
-      }
-      const employee = await EmployeeModel.findOne({ id: req.user.id });
 
-      var warehouse;
-      if (selectedWarehouseId == '' || selectedWarehouseId == null) {
-        warehouse = await WarehouseModel.findOne({ id: employee.warehouseId })
-      } else {
-        warehouse = await WarehouseModel.findOne({ id: selectedWarehouseId })
-      }
+      const employee = await EmployeeModel.findOne({ id: req.user.id });
+      var warehouseId = "";
+      if ( !req.query.warehouseId)
+          warehouseId  = employee.warehouseId[0];
+      else
+          warehouseId  = req.query.warehouseId;
+      const warehouse = await WarehouseModel.findOne({ id: warehouseId })
+
       if (warehouse) {
         const inventory = await InventoryModel.findOne({ id: warehouse.warehouseInventory });
         let inventoryDetails = []
@@ -1209,7 +1332,6 @@ exports.getInventoryDetails = [
           inventoryDetailClone['manufacturer'] = product.manufacturer;
           inventoryDetails.push(inventoryDetailClone);
         })
-
         return apiResponse.successResponseWithData(res, 'Inventory Details', inventoryDetails);
       } else {
         return apiResponse.ErrorResponse(res, 'Cannot find warehouse for this employee')
@@ -1783,7 +1905,13 @@ exports.getInventory = [
   async (req, res) => {
     try {
       const { skip, limit } = req.query;
-      const { warehouseId } = req.user;
+      var warehouseId = "";
+
+      if ( !req.query.warehouseId)
+          warehouseId  = req.user.warehouseId;
+      else
+          warehouseId  = req.query.warehouseId;
+
       const warehouse = await WarehouseModel.findOne({ id: warehouseId })
       if (warehouse) {
         const inventory = await InventoryModel.aggregate([
@@ -2084,12 +2212,98 @@ exports.getInventoryProductsByOrganisation = [
   },
 ];
 
+function getFilterConditions(filters) {
+  let matchCondition = {};
+  if (filters.orgType && filters.orgType !== '') {
+    if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
+      matchCondition.type = filters.orgType;
+    } else if (filters.orgType === 'ALL_VENDORS') {
+      matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }];
+    }
+  }
+  if (filters.state && filters.state.length) {
+    matchCondition.state = filters.state;
+  }
+  if (filters.district && filters.district.length) {
+    matchCondition.district = filters.district;
+  }
+  if (filters.organization && filters.organization.length) {
+    matchCondition.id = filters.organization;
+  }
+  return matchCondition;
+}
+
 // total quantity as per the products for the ecosystem
 exports.getInventoryProductsByPlatform = [
-  auth,
+  // auth,
   async (req, res) => {
     try {
-      const allProductsInPlatform = await InventoryModel.aggregate([
+      const filters = req.query;
+      const skuFilter = {};
+      if (filters.sku && filters.sku.length) {
+        skuFilter.id = filters.sku;
+      }
+      const platformInventory = await OrganisationModel.aggregate([
+        {
+          $match: getFilterConditions(filters)
+        },
+        {
+          $unwind: {
+            path: "$warehouses"
+          }
+        },
+        {
+          $project: {
+            warehouses: 1
+          }
+        },
+        {
+          $lookup: {
+            from: 'warehouses',
+            localField: 'warehouses',
+            foreignField: 'id',
+            as: 'warehouseinv'
+          }
+        },
+        {
+          $unwind: {
+            path: "$warehouseinv"
+          }
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: ['$warehouseinv', '$$ROOT']
+            }
+          }
+        },
+        {
+          $project: {
+            id: 1,
+            title: 1,
+            warehouseInventory: 1
+          }
+        },
+        {
+          $lookup: {
+            from: 'inventories',
+            localField: 'warehouseInventory',
+            foreignField: 'id',
+            as: 'inv'
+          }
+        },
+        {
+          $unwind: {
+            path: '$inv'
+          }
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: ['$inv', '$$ROOT']
+            }
+          }
+        },
         {
           $unwind: {
             path: '$inventoryDetails'
@@ -2098,13 +2312,8 @@ exports.getInventoryProductsByPlatform = [
         {
           $replaceRoot: {
             newRoot: {
-              $mergeObjects: ['$productDetails', '$inventoryDetails', '$$ROOT']
+              $mergeObjects: ['$inventoryDetails', '$$ROOT']
             }
-          }
-        },
-        {
-          $project: {
-            inventoryDetails: 0
           }
         },
         {
@@ -2139,12 +2348,14 @@ exports.getInventoryProductsByPlatform = [
           $project: {
             productDetails: 0
           }
+        },
+        {
+          $match: skuFilter
         }
       ]);
-
       return apiResponse.successResponseWithData(
         res,
-        allProductsInPlatform
+        platformInventory
       );
     } catch (err) {
       logger.log(
@@ -2188,17 +2399,18 @@ exports.uploadSalesData = [
       const workbook = XLSX.readFile(`${dir}/${req.file.originalname}`);
       const sheet_name_list = workbook.SheetNames;
       const sheetJSON = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]], { defval: "" });
-      let rows = [];
-      let aggregationRows = [];
+
       let headerRow1 = _spreadHeaders(sheetJSON[0]);
       let headerRow2 = _spreadHeaders(sheetJSON[1]);
       let headerRow3 = _spreadHeaders(sheetJSON[2]);
+      let headerRow4 = sheetJSON[3];
 
       const spuriousColumns = ['__EMPTY', '__EMPTY_1', '__EMPTY_2', '__EMPTY_3', '__EMPTY_4', '__EMPTY_5', '__EMPTY_6'];
+
+      let parsedRows = [];
+
       sheetJSON.forEach((row, index) => {
-        let _row = {};
         if (index > 2 && row['__EMPTY_1'].length) {
-          let products = [];
           let rowKeys = Object.keys(row);
           rowKeys = rowKeys.filter(e => spuriousColumns.indexOf(e) === -1);
           rowKeys.forEach(rowKey => {
@@ -2206,21 +2418,19 @@ exports.uploadSalesData = [
             if (!rowKey.startsWith('__') && !rowKey.startsWith('t') && rowKey !== 'target') {
               prod['productName'] = headerRow2[rowKey];
               prod['productSubName'] = headerRow3[rowKey];
+              prod['productId'] = headerRow4[rowKey];
               prod['depot'] = row['__EMPTY_1'];
               prod['sales'] = row[rowKey];
               prod['targetSales'] = row['t' + rowKey];
+              prod['uploadDate'] = collectedDate;
+              let depot = warehouseDistrictMapping.find(w => w.depot === row['__EMPTY_1']);
+              prod['warehouseId'] = (depot && depot.warehouseId) ? depot.warehouseId : '';
             }
             if (Object.keys(prod).length) {
-              products.push(prod);
+              parsedRows.push(prod);
             }
           });
-          if (products.length) {
-            _row.products = products;
-            _row.depot = row['__EMPTY_1'];
-            rows.push(_row);
-          }
         } else if (index > 2 && !row['__EMPTY_1'].length && row['__EMPTY'].length) {
-          let products = [];
           let rowKeys = Object.keys(row);
           rowKeys = rowKeys.filter(e => spuriousColumns.indexOf(e) === -1);
           rowKeys.forEach(rowKey => {
@@ -2228,32 +2438,22 @@ exports.uploadSalesData = [
             if (!rowKey.startsWith('__') && !rowKey.startsWith('t') && rowKey !== 'target') {
               prod['productName'] = headerRow2[rowKey];
               prod['productSubName'] = headerRow3[rowKey];
+              prod['productId'] = headerRow4[rowKey];
               prod['isDistrictAggregate'] = true;
               prod['districtName'] = row['__EMPTY'];
               prod['sales'] = row[rowKey];
               prod['targetSales'] = row['t' + rowKey];
+              prod['uploadDate'] = collectedDate;
             }
             if (Object.keys(prod).length) {
-              products.push(prod);
+              parsedRows.push(prod);
             }
           });
-          if (products.length) {
-            _row.products = products;
-            _row.districtName = row['__EMPTY'];
-            aggregationRows.push(_row);
-          }
         }
       });
 
-      let respObj = { depots: rows, districtAggregations: aggregationRows };
+      let respObj = await AnalyticsModel.insertMany(parsedRows);
 
-      const salesData = new SalesDataModel({
-        uploadedFileName: uploadedFileName,
-        dataCollectedDate: collectedDate,
-        depots: rows,
-        districtAggregations: aggregationRows
-      });
-      const responseObj = await salesData.save();
       return apiResponse.successResponseWithData(
         res,
         responseObj
@@ -2264,3 +2464,4 @@ exports.uploadSalesData = [
     }
   },
 ];
+

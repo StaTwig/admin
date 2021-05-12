@@ -11,6 +11,8 @@ const EditRow = props => {
     index,
     onRemoveRow,
     enableDelete,
+    category,
+    handleCategoryChange,
     handleProductChange,
     products
   } = props;
@@ -30,7 +32,8 @@ const EditRow = props => {
       if(e.preventDefault) e.preventDefault();
     }
   }
-  
+
+console.log("yyyy",prod);
 
   return (
     <div className="row ml-3 mr-1">
@@ -41,18 +44,33 @@ const EditRow = props => {
 
             <div className="d-flex flex-column">
               <div className="title recived-text">
-              {enableDelete ? 
                 <DropdownButton
-                  name={prod.productName == '' ? "Select product" : prod.productName}
+                  name={prod.type ? prod.type : "Select Product Category"}
+                  onSelect={item => { handleCategoryChange(index, item) }}
+                  groups={category}
+                />
+              </div>
+            </div>
+</div>
+</div>
+
+<div className="col pl-4 tcell p-2">
+          <div className=" p-0">
+            <div className="col tcell text-center justify-content-center pl-0">
+              <div className="title recived-text">
+              {enableDelete ?
+                <DropdownButton
+                  name={prod.name == '' ? "Select product" : prod.name}
                   onSelect={item => { handleProductChange(index, item) }}
                   groups={products}
                   // groups={products.filter(p => !p?.isSelected)}
-                /> : prod.productName
+                /> : prod.name
               }</div>
+              
             </div>
           </div>
         </div>
-        <div className="col tcell text-center justify-content-center p-2">{prod.manufacturer}</div>
+        <div className="col tcell text-center justify-content-center p-2">{prod.manufacturer ? prod.manufacturer : "Manufacturer"}</div>
         <div className="col tcell text-center justify-content-center p-2">
           <div className="">
             <input
@@ -67,7 +85,7 @@ const EditRow = props => {
       </div>
         {enableDelete && props.product.length > 1 &&
           <div className="m-3 bg-light">
-            <span onClick={() => onRemoveRow(index)}><img className="border-none cursorP shadow p-1 rounded-circle" height="25" src={Delete} /></span>
+          <span className="del-pad shadow border-none rounded-circle ml-2 " onClick={() => onRemoveRow(index)}><img className=" cursorP  p-1" height="30" src={Delete} /></span>
           </div>
         }
       </div>
@@ -130,5 +148,4 @@ const EditRow = props => {
 };
 
 export default EditRow;
-
 

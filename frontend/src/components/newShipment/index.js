@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import Add from '../../assets/icons/createshipment.png';
+import Add from "../../assets/icons/createshipment.png";
 import EditTable from "./table/editTable";
 import "./style.scss";
 import { createShipment } from "../../actions/shipmentActions";
@@ -10,8 +10,9 @@ import {
   getShippingOrderById,
   getWarehouseByOrgId,
   getAllOrganisations,
-  getProductsByInventoryId
+  getProductsByInventoryId,
 } from "../../actions/shippingOrderAction";
+import { getOrderIds, getOrder } from "../../actions/poActions";
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -19,9 +20,10 @@ import ShipmentPopUp from "./shipmentPopUp";
 import ShipmentFailPopUp from "./shipmentFailPopUp";
 import Modal from "../../shared/modal";
 import { Formik } from "formik";
+import { getProducts, getProductsByCategory } from "../../actions/poActions";
 
 const NewShipment = (props) => {
-  const [shippingOrderIds, setShippingOrderIds] = useState([]);
+  const [OrderIds, setOrderIds] = useState([]);
   const [senderOrganisation, setSenderOrganisation] = useState([]);
   const [allOrganisations, setAllOrganisations] = useState([]);
   const [senderWarehouses, setSenderWarehouses] = useState([]);
@@ -30,12 +32,10 @@ const NewShipment = (props) => {
   const [products, setProducts] = useState([]);
   const [addProducts, setAddProducts] = useState([]);
   const dispatch = useDispatch();
-  const [shippingOrderId, setShippingOrderId] = useState(
-    "Select Shipping Order ID"
-  );
-  const [senderOrgId, setSenderOrgId] = useState(
-    "Select Organisation Name"
-  );
+  const [category, setCategory] = useState([]);
+  const [OrderId, setOrderId] = useState("Select Order ID");
+  const [senderOrgId, setSenderOrgId] = useState("Select Organisation Name");
+  const [orderIdSelected, setOrderIdSelected] = useState(false);
   const [senderOrgLoc, setSenderOrgLoc] = useState(
     "Select Organisation Location"
   );
@@ -46,7 +46,7 @@ const NewShipment = (props) => {
     "Select Delivery Location"
   );
   const user = useSelector((state) => state.user);
-  const [shippingOrderDetails, setShippingOrderDetails] = useState({});
+  const [OrderDetails, setOrderDetails] = useState({});
   const [po, setPo] = useState("");
   // const [shipmentDate, setShipmentDate] = useState("");
   // const [estimateDeliveryDate, setEstimateDeliveryDate] = useState("");
@@ -56,19 +56,41 @@ const NewShipment = (props) => {
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [openShipmentFail, setOpenShipmentFail] = useState(false);
   const [shipmentError, setShipmentError] = useState("");
-const [ modalProps, setModalProps ] = useState({});
+  const [formatedDate, setformatedDate] = "4-21-2021";
+  const [modalProps, setModalProps] = useState({});
   useEffect(() => {
+    // let date = new Date();
+
+    // setformatedDate(`${date.getMonth()+1}-${date.getDate()}-${date.getFullYear()}`);
     async function fetchData() {
       const { search } = props.location;
-      const result = await getShippingOrderIds();
+      // const result = await getShippingOrderIds();
+      const result = await getOrderIds();
+      // console.log('IDS');
+      // console.log(orderIds);
+      // const data1 = await dispatch(getOrder('po-1jpv1enwklta6bf8'));
+      // console.log('Data');
+      // console.log(data1);
+      // const data2 = await getShippingOrderById('so-1jpv1jsjkluz8yvs');
+      // console.log('New Data');
+      // console.log(data2);
       const ids = result.map((so) => so.id);
-      setShippingOrderIds(ids);
+      setOrderIds(ids);
 
       const orgs = await getAllOrganisations();
-      const orgSplit = user.organisation?.split('/');
+      console.log("Organisation");
+      console.log(orgs);
+      const orgSplit = user.organisation?.split("/");
       setSenderOrganisation([orgSplit[0]]);
       const organisations = orgs.data.filter((org) => org.id != orgSplit[1]);
       setAllOrganisations(organisations);
+      const result1 = await getProducts();
+      const categoryArray = result1.map((product) => product.type);
+      setCategory(
+        categoryArray.filter(
+          (value, index, self) => self.indexOf(value) === index
+        )
+      );
 
       const warehouses = await getWarehouseByOrgId(orgSplit[1]);
       setSenderWarehouses(warehouses.data);
@@ -95,21 +117,19 @@ const [ modalProps, setModalProps ] = useState({});
     try {
       const warehouse = await getWarehouseByOrgId(value);
       setReceiverWarehouses(warehouse.data);
-    }
-    catch (err) {
+    } catch (err) {
       setErrorMessage(err);
     }
-  }
+  };
 
   const onWarehouseChange = async (value) => {
     try {
       const prods = await getProductsByInventoryId(value);
       setProducts(prods.data);
-    }
-    catch (err) {
+    } catch (err) {
       setErrorMessage(err);
     }
-  }
+  };
 
   const dates = ["shipmentDate", "estimateDeliveryDate"];
 
@@ -144,16 +164,25 @@ const [ modalProps, setModalProps ] = useState({});
   const onAssign = async (values) => {
     let error = false;
     // dates.forEach(date => { if (!error) dateValidation(date) });
-    const { toOrg,airWayBillNo, shippingOrderId, labelCode, shipmentDate, estimateDeliveryDate, toOrgLoc, fromOrgLoc, products } = values;
+    const {
+      toOrg,
+      airWayBillNo,
+      OrderId,
+      labelCode,
+      shipmentDate,
+      estimateDeliveryDate,
+      toOrgLoc,
+      fromOrgLoc,
+      products,
+    } = values;
     products.forEach((p) => {
-      if (p.productQuantity < 1)
-        error = true;
+      if (p.productQuantity < 1) error = true;
     });
 
     if (!error) {
       const data = {
         airWayBillNo,
-        shippingOrderId: shippingOrderId ? shippingOrderId : null,
+        poId: OrderId ? OrderId : null,
         label: {
           labelId: labelCode,
           labelType: "QR_2DBAR",
@@ -170,61 +199,97 @@ const [ modalProps, setModalProps ] = useState({});
         shippingDate: new Date(
           shipmentDate.getTime() - shipmentDate.getTimezoneOffset() * 60000
         ).toISOString(),
-        expectedDeliveryDate: estimateDeliveryDate != '' ? (new Date(
-          estimateDeliveryDate.getTime() -
-          estimateDeliveryDate.getTimezoneOffset() * 60000
-        ).toISOString()) : '',
-        actualDeliveryDate: estimateDeliveryDate != '' ? (new Date(
-          estimateDeliveryDate.getTime() -
-          estimateDeliveryDate.getTimezoneOffset() * 60000
-        ).toISOString()) : '',
+        expectedDeliveryDate:
+          estimateDeliveryDate != ""
+            ? new Date(
+                estimateDeliveryDate.getTime() -
+                  estimateDeliveryDate.getTimezoneOffset() * 60000
+              ).toISOString()
+            : "",
+        actualDeliveryDate:
+          estimateDeliveryDate != ""
+            ? new Date(
+                estimateDeliveryDate.getTime() -
+                  estimateDeliveryDate.getTimezoneOffset() * 60000
+              ).toISOString()
+            : "",
         status: "CREATED",
         products: products,
-        poId: shippingOrderDetails.purchaseOrderId ? shippingOrderDetails.purchaseOrderId : null,
+        // poId: OrderDetails.purchaseOrderId ? OrderDetails.purchaseOrderId : null,
       };
 
       dispatch(turnOn());
       const result = await createShipment(data);
       dispatch(turnOff());
-      console.log("da", result);
-      if (result?.id ) {
-      //  setMessage("Created Shipment Success");
+      console.log("data", data);
+      if (result?.id) {
+        setMessage("Created Shipment Success");
         setOpenCreatedInventory(true);
-setModalProps({
-        message: 'Created Successfully!',
-        id: result?.id,
-        type: 'Success'
-      })
-
+        setModalProps({
+          message: "Created Successfully!",
+          id: result?.id,
+          type: "Success",
+        });
       } else {
         setOpenShipmentFail(true);
         setErrorMessage("Create Shipment Failed");
       }
-    }
-    else {
+    } else {
       setShipmentError("Check product quantity");
       setOpenShipmentFail(true);
     }
   };
 
   const handleSOChange = async (item) => {
-    setShippingOrderId(item);
+    setOrderId(item);
     dispatch(turnOn());
     const result = await getShippingOrderById(item);
-    setShippingOrderDetails(result);
+    setOrderDetails(result);
     dispatch(turnOff());
   };
 
   const handleQuantityChange = (value, i) => {
-    const soDetailsClone = { ...shippingOrderDetails };
+    const soDetailsClone = { ...OrderDetails };
     soDetailsClone.products[i].productQuantity = value;
-    setShippingOrderDetails(soDetailsClone);
+    setOrderDetails(soDetailsClone);
   };
 
   const handleLabelIdChange = (value, i) => {
-    const soDetailsClone = { ...shippingOrderDetails };
+    const soDetailsClone = { ...OrderDetails };
     soDetailsClone.products[i]["labelId"] = value;
-    setShippingOrderDetails(soDetailsClone);
+    setOrderDetails(soDetailsClone);
+  };
+  const onCategoryChange = async (index, value, setFieldValue) => {
+    try {
+      const warehouse = await getProductsByCategory(value);
+      let newArr = [...addProducts];
+      newArr[index]["type"] = value;
+      setAddProducts((prod) => [...newArr]);
+      setProducts(warehouse.data);
+    } catch (err) {
+      setErrorMessage(err);
+    }
+  };
+  const onProductChange = (index, item, setFieldValue) => {
+    addProducts.splice(index, 1);
+    let newArr = [...addProducts];
+    newArr.push(item);
+    setFieldValue(
+      "products",
+      newArr.map((row) => ({
+        productId: row.id,
+        quantity: row?.quantity ? row?.quantity : 0,
+        name: row.name,
+        productCategory: row.type,
+        manufacturer: row.manufacturer,
+      }))
+    );
+    setAddProducts((prod) => [...newArr]);
+
+    const prodIndex = products.findIndex((p) => p.id === item.id);
+    let newArray = [...products];
+    newArray[prodIndex] = { ...newArray[prodIndex], isSelected: true };
+    setProducts((prod) => [...newArray]);
   };
 
   return (
@@ -233,7 +298,7 @@ setModalProps({
       <Formik
         // enableReinitialize={true}
         initialValues={{
-          shippingOrderId: "",
+          poId: "",
           fromOrg: senderOrganisation[0],
           fromOrgLoc: "",
           toOrg: "",
@@ -242,7 +307,7 @@ setModalProps({
           labelCode: "",
           shipmentDate: "",
           estimateDeliveryDate: "",
-          products: []
+          products: [],
         }}
         validate={(values) => {
           const errors = {};
@@ -270,7 +335,7 @@ setModalProps({
           // if (!values.estimateDeliveryDate) {
           //   errors.estimateDeliveryDate = "Required";
           // }
-          if (values.products.length == 0) {
+          if (!orderIdSelected && values.products.length == 0) {
             errors.products = "Required";
           }
           return errors;
@@ -299,36 +364,79 @@ setModalProps({
                     <label htmlFor="orderID">Order ID</label>
                     <div className="form-control">
                       <DropdownButton
-                        name={shippingOrderId}
-                        onSelect={async(v) => {
-                          setFieldValue('shippingOrderId', v);
+                        name={OrderId}
+                        name2="Select Order ID"
+                        onSelect={async (v) => {
+                          setOrderIdSelected(true);
+                          setFieldValue("OrderId", v);
                           // handleSOChange(v);
-                          setShippingOrderId(v);
+                          setOrderId(v);
                           dispatch(turnOn());
-                          const result = await getShippingOrderById(v);
-                          setReceiverOrgLoc(result.customerDetails.deliveryLocation);
-                          setReceiverOrgId(result.customerDetails.customerOrgName);
-                          setShippingOrderDetails(result);
+                          const result = await dispatch(getOrder(v));
+                          console.log("Result");
+                          console.log(result);
+                          setReceiverOrgLoc(
+                             result.poDetails[0].customer.warehouse.title + '/' + result.poDetails[0].customer.warehouse.postalAddress
+                          );
+                          setReceiverOrgId(
+                            result.poDetails[0].customer.organisation.id
+                          );
+                          setOrderDetails(result.poDetails[0]);
 
                           dispatch(turnOff());
                           setDisabled(true);
-                          let warehouse = senderWarehouses.filter(w => w.id == result.supplierDetails.locationId);
+                          let warehouse = senderWarehouses.filter((w) => {
+                            let supplierWarehouse =
+                              result.poDetails[0].supplier.organisation
+                                .warehouses;
+                            for (let i = 0; i < supplierWarehouse.length; i++) {
+                              return w.id == supplierWarehouse[i];
+                            }
+                          });
                           console.log(warehouse);
+                          console.log("Organisation");
+                          console.log(senderOrganisation);
+                          setFieldValue("fromOrg", senderOrganisation[0]);
+                          setFieldValue(
+                            "fromOrgLoc",
+                            result.poDetails[0].supplier.organisation.id
+                          );
+                          setFieldValue(
+                            "toOrg",
+                            result.poDetails[0].customer.organisation.id
+                          );
+                          setFieldValue(
+                            "toOrgLoc",
+                            result.poDetails[0].customer.shippingAddress
+                              .shippingAddressId
+                          );
+                          // setSenderOrgLoc(warehouse[0].postalAddress);
+                          let products_temp = result.poDetails[0].products;
+                          for (let i = 0; i < products_temp.length; i++) {
+                            products_temp[i].manufacturer =
+                              result.poDetails[0].productDetails[
+                                i
+                              ].manufacturer;
+                            products_temp[i].productName =
+                              result.poDetails[0].productDetails[i].name;
+                            products_temp[i].productQuantity =
+                              result.poDetails[0].products[i].quantity;
+ products_temp[i].productCategory =
+                              result.poDetails[0].products[i].type;
+ products_temp[i].productID =
+                              result.poDetails[0].products[i].productId;
 
-                          setFieldValue('fromOrg', senderOrganisation[0]);
-                          setFieldValue('fromOrgLoc', result.supplierDetails.locationId);
-                          setFieldValue('toOrg', result.customerDetails.customerOrganisation);
-                          setFieldValue('toOrgLoc', result.customerDetails.shippingAddress.shippingAddressId);
-                          setSenderOrgLoc(warehouse[0].postalAddress);
-                          if (result.products.length > 0) {
-                            setProducts([]);
+}
+                          console.log("Products");
+                          console.log(products_temp);
+                         if (result.poDetails[0].productDetails.length > 0) {
+                           setProducts([]);
                             setAddProducts([]);
-                            setFieldValue('products', result.products);
-                          }
-                          else
-                            setFieldValue('products', []);
+                            setFieldValue("products",products_temp);
+console.log("tes",products);
+          } else setFieldValue("products", []);
                         }}
-                        groups={shippingOrderIds}
+                        groups={OrderIds}
                       />
                     </div>
                   </div>
@@ -344,12 +452,14 @@ setModalProps({
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="organizationName">Organisation Name*</label>
+                      <label htmlFor="organizationName">
+                        Organisation Name*
+                      </label>
                       <div className="form-control">
                         <DropdownButton
                           name={senderOrganisation[0]}
                           disabled={true}
-                          onSelect={() => { }}
+                          onSelect={() => {}}
                           groups={senderOrganisation}
                         />
                       </div>
@@ -358,25 +468,42 @@ setModalProps({
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="orgLocation">Organization Location*</label>
+                      <label htmlFor="orgLocation">
+                        Organization Location*
+                      </label>
                       <div className="form-control">
                         <DropdownButton
                           name={senderOrgLoc}
-                          disabled={disabled}
+                          name2="Select Organisation Location"
+                          disabled={false}
                           onSelect={(v) => {
+                            console.log("warehouse");
+                            console.log(v);
                             onWarehouseChange(v.warehouseInventory);
-                            setFieldValue('fromOrg', senderOrganisation[0]);
-                            setSenderOrgLoc(v?.warehouseAddress ? (v?.warehouseAddress?.firstLine + ', ' + v?.warehouseAddress?.city) : v.postalAddress);
-                            setFieldValue('fromOrgLoc', v.id);
-                            setFieldValue('products', []);
-                            setAddProducts(prod => []);
-                            let newArr = { productName: '', manufacturer: '', productQuantity: '' };
-                              setAddProducts(prod => [...prod, newArr]);
+                            setFieldValue("fromOrg", senderOrganisation[0]);
+                            setSenderOrgLoc(
+                              v?.warehouseAddress
+                                ? v?.title + '/' + v?.warehouseAddress?.firstLine +
+                                    ", " +
+                                    v?.warehouseAddress?.city
+                                : v?.title + '/' + v.postalAddress
+                            );
+                            setFieldValue("fromOrgLoc", v.id);
+                      //      setFieldValue("products", []);
+                            setAddProducts((prod) => []);
+                            let newArr = {
+                              productName: "",
+                              manufacturer: "",
+                              productQuantity: "",
+                            };
+                            setAddProducts((prod) => [...prod, newArr]);
                           }}
                           groups={senderWarehouses}
                         />
                         {errors.fromOrgLoc && touched.fromOrgLoc && (
-                          <span className="error-msg text-danger">{errors.fromOrgLoc}</span>
+                          <span className="error-msg text-danger">
+                            {errors.fromOrgLoc}
+                          </span>
                         )}
                       </div>
                     </div>
@@ -393,22 +520,27 @@ setModalProps({
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="organizationName">Organisation Name*</label>
+                      <label htmlFor="organizationName">
+                        Organisation Name*
+                      </label>
                       <div className="form-control">
                         <DropdownButton
                           name={receiverOrgId}
+                          name2="Select Organisation Name"
                           disabled={disabled}
                           onSelect={(v) => {
                             setReceiverOrgLoc("Select Delivery Location");
-                            setFieldValue('toOrgLoc', '');
+                            setFieldValue("toOrgLoc", "");
                             setReceiverOrgId(v.name);
-                            setFieldValue('toOrg', v.id);
+                            setFieldValue("toOrg", v.id);
                             onOrgChange(v.id);
                           }}
                           groups={allOrganisations}
                         />
                         {errors.toOrg && touched.toOrg && (
-                          <span className="error-msg text-danger">{errors.toOrg}</span>
+                          <span className="error-msg text-danger">
+                            {errors.toOrg}
+                          </span>
                         )}
                       </div>
                     </div>
@@ -420,15 +552,24 @@ setModalProps({
                       <div className="form-control">
                         <DropdownButton
                           name={receiverOrgLoc}
+                          name2="Select Delivery Location"
                           disabled={disabled}
                           onSelect={(v) => {
-                            setReceiverOrgLoc(v?.warehouseAddress ? (v?.warehouseAddress?.firstLine + ', ' + v?.warehouseAddress?.city) : v.postalAddress);
-                            setFieldValue('toOrgLoc', v.id);
+                            setReceiverOrgLoc(
+                              v?.warehouseAddress
+                                ? v?.title + '/' + v?.warehouseAddress?.firstLine +
+                                    ", " +
+                                    v?.warehouseAddress?.city
+                                : v?.title + '/' + v.postalAddress
+                            );
+                            setFieldValue("toOrgLoc", v.id);
                           }}
                           groups={receiverWarehouses}
                         />
                         {errors.toOrgLoc && touched.toOrgLoc && (
-                          <span className="error-msg text-danger">{errors.toOrgLoc}</span>
+                          <span className="error-msg text-danger">
+                            {errors.toOrgLoc}
+                          </span>
                         )}
                       </div>
                     </div>
@@ -457,7 +598,9 @@ setModalProps({
                       />
 
                       {errors.airWayBillNo && touched.airWayBillNo && (
-                        <span className="error-msg text-danger">{errors.airWayBillNo}</span>
+                        <span className="error-msg text-danger">
+                          {errors.airWayBillNo}
+                        </span>
                       )}
                     </div>
                   </div>
@@ -473,12 +616,14 @@ setModalProps({
                               ? new Date(Date.parse(values.shipmentDate))
                               : values.shipmentDate
                           }
-                          onKeyDown={(e) => e.keyCode != 8 && e.preventDefault()}
+                          onKeyDown={(e) =>
+                            e.keyCode != 8 && e.preventDefault()
+                          }
                           minDate={new Date()}
-                  placeholderText="Enter Shipment Date"
-      //        <img src={Date} width="20" height="17" className="mr-2 mb-1" />
-                            onChange={(date) => {
-                            setFieldValue('shipmentDate', date);
+                          placeholderText="Enter Shipment Date"
+                          //        <img src={Date} width="20" height="17" className="mr-2 mb-1" />
+                          onChange={(date) => {
+                            setFieldValue("shipmentDate", date);
                             // setShipmentDate(date);
                           }}
                           showYearDropdown
@@ -487,7 +632,9 @@ setModalProps({
                           scrollableYearDropdown
                         />
                         {errors.shipmentDate && touched.shipmentDate && (
-                          <span className="error-msg text-danger">{errors.shipmentDate}</span>
+                          <span className="error-msg text-danger">
+                            {errors.shipmentDate}
+                          </span>
                         )}
                       </div>
                     </div>
@@ -508,38 +655,49 @@ setModalProps({
                         value={values.labelCode}
                       />
                       {errors.labelCode && touched.labelCode && (
-                        <span className="error-msg text-danger">{errors.labelCode}</span>
+                        <span className="error-msg text-danger">
+                          {errors.labelCode}
+                        </span>
                       )}
                     </div>
                   </div>
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="shipmentId "> Estimate Delivery Date</label>
+                      <label htmlFor="shipmentId ">
+                        {" "}
+                        Estimate Delivery Date
+                      </label>
                       <div className="form-control">
                         <DatePicker
                           className="date"
                           placeholderText="Enter Delivery Date"
-
                           onChange={(date) => {
-                            setFieldValue('estimateDeliveryDate', date);
+                            setFieldValue("estimateDeliveryDate", date);
                             // setEstimateDeliveryDate(date);
                           }}
                           selected={
                             values.estimateDeliveryDate
-                              ? new Date(Date.parse(values.estimateDeliveryDate))
+                              ? new Date(
+                                  Date.parse(values.estimateDeliveryDate)
+                                )
                               : values.estimateDeliveryDate
                           }
                           minDate={new Date()}
-                          onKeyDown={(e) => e.keyCode != 8 && e.preventDefault()}
+                          onKeyDown={(e) =>
+                            e.keyCode != 8 && e.preventDefault()
+                          }
                           showYearDropdown
                           dateFormatCalendar="MMMM"
                           yearDropdownItemNumber={100}
                           scrollableYearDropdown
                         />
-                        {errors.estimateDeliveryDate && touched.estimateDeliveryDate && (
-                          <span className="error-msg text-danger">{errors.estimateDeliveryDate}</span>
-                        )}
+                        {errors.estimateDeliveryDate &&
+                          touched.estimateDeliveryDate && (
+                            <span className="error-msg text-danger">
+                              {errors.estimateDeliveryDate}
+                            </span>
+                          )}
                         <div />
                       </div>
                     </div>
@@ -552,9 +710,9 @@ setModalProps({
               <label htmlFor="productDetails" className="headsup">
                 Product Details
               </label>
-              {shippingOrderDetails?.products?.length > 0 && (
+              {OrderDetails?.products?.length > 0 && (
                 <EditTable
-                  product={shippingOrderDetails?.products}
+                  product={OrderDetails?.products}
                   handleQuantityChange={(v, i) => {
                     handleQuantityChange(v, i);
                   }}
@@ -563,61 +721,105 @@ setModalProps({
                   handleLabelIdChange={handleLabelIdChange}
                 />
               )}
-              {products?.length > 0 && (
+              {!orderIdSelected && products?.length > 0 && (
                 <>
-                <EditTable
-                  product={addProducts}
-                  products={products}
-                  handleQuantityChange={(v, i) => {
-                    let newArr = [...addProducts];
-                    newArr[i].productQuantity = v;
-                    setFieldValue('products', newArr.map(row => ({"productID": row._id,"productQuantity": row.productQuantity,"productName": row.productName,"manufacturer": row.manufacturer,"quantity": row.quantity})));
-                    setAddProducts(prod => [...newArr]);
-                  }}
-                  enableDelete={true}
-                  onRemoveRow={(index) => {
-                    const prodIndex = products.findIndex(p => p._id === addProducts[index]._id);
-                    let newArray = [...products];
-                    newArray[prodIndex] = { ...newArray[prodIndex], isSelected: false };
-                    setProducts(prod => [...newArray]);
-
-                    addProducts.splice(index, 1);
-                    let newArr = [...addProducts];
-                    if (newArr.length > 0)
-                      setFieldValue('products', newArr.map(row => ({"productID": row._id,"productQuantity": row.productQuantity,"productName": row.productName,"manufacturer": row.manufacturer,"quantity": row.quantity})));
-                    else
-                      setFieldValue('products', []);
-                    setAddProducts(prod => [...newArr]);
-
-                  }}
-                  handleProductChange={(index, item) => {
-                    addProducts.splice(index, 1);
-                    let newArr = [...addProducts];
-                    newArr.push(item);
-                    setFieldValue('products', newArr.map(row => ({"productID": row._id,"productQuantity": row.productQuantity,"productName": row.productName,"manufacturer": row.manufacturer,"quantity": row.quantity})));
-                    setAddProducts(prod => [...newArr]);
-
-                    const prodIndex = products.findIndex(p => p._id === item._id);
-                    let newArray = [...products];
-                    newArray[prodIndex] = { ...newArray[prodIndex], isSelected: true };
-                    setProducts(prod => [...newArray]);
-                  }}
-                  handleLabelIdChange={handleLabelIdChange}
-                />
-                <div className="d-flex justify-content-between">
-                  <button
-                    type="button"
-                    className="btn btn-white bg-white shadow-radius mt-3 font-bold"
-                    onClick={() => {
-                      let newArr = { productName: '', manufacturer: '', productQuantity: '' };
-                      setAddProducts(prod => [...prod, newArr]);
+                  <EditTable
+                    product={addProducts}
+                    products={products}
+                    category={category}
+                    handleQuantityChange={(v, i) => {
+                      let newArr = [...addProducts];
+                      newArr[i].productQuantity = v;
+                      setFieldValue(
+                        "products",
+                        newArr.map((row) => ({
+                          productCategory: row.type,
+                          productID: row.id,
+                          productQuantity: row.productQuantity,
+                          productName: row.name,
+                          manufacturer: row.manufacturer,
+                          quantity: row.quantity,
+                        }))
+                      );
+                      setAddProducts((prod) => [...newArr]);
                     }}
-                  >
-                    +<span> Add Another Product</span>
-                  </button>
-                </div>
+                    enableDelete={true}
+                    onRemoveRow={(index) => {
+                      const prodIndex = products.findIndex(
+                        (p) => p.id === addProducts[index].id
+                      );
+                      let newArray = [...products];
+                      newArray[prodIndex] = {
+                        ...newArray[prodIndex],
+                        isSelected: false,
+                      };
+                      setProducts((prod) => [...newArray]);
+
+                      addProducts.splice(index, 1);
+                      let newArr = [...addProducts];
+                      if (newArr.length > 0)
+                        setFieldValue(
+                          "products",
+                          newArr.map((row) => ({
+                            productCategory: row.type,
+                            productID: row.id,
+                            productQuantity: row.productQuantity,
+                            productName: row.name,
+                            manufacturer: row.manufacturer,
+                            quantity: row.quantity,
+                          }))
+                        );
+                      else setFieldValue("products", []);
+                      setAddProducts((prod) => [...newArr]);
+                    }}
+                    handleProductChange={(index, item) => {
+                      addProducts.splice(index, 1);
+                      let newArr = [...addProducts];
+                      newArr.push(item);
+                      setFieldValue(
+                        "products",
+                        newArr.map((row) => ({
+                          productCategory: row.type,
+                          productID: row.id,
+                          productQuantity: row.productQuantity,
+                          productName: row.name,
+                          manufacturer: row.manufacturer,
+                          quantity: row.quantity,
+                        }))
+                      );
+                      setAddProducts((prod) => [...newArr]);
+
+                      const prodIndex = products.findIndex(
+                        (p) => p.id === item.id
+                      );
+                      let newArray = [...products];
+                      newArray[prodIndex] = {
+                        ...newArray[prodIndex],
+                        isSelected: true,
+                      };
+                      setProducts((prod) => [...newArray]);
+                    }}
+                    handleLabelIdChange={handleLabelIdChange}
+                    handleCategoryChange={onCategoryChange}
+                  />
+                  <div className="d-flex justify-content-between">
+                    <button
+                      type="button"
+                      className="btn btn-white bg-white shadow-radius mt-3 font-bold"
+                      onClick={() => {
+                        let newArr = {
+                          productName: "",
+                          manufacturer: "",
+                          productQuantity: "",
+                        };
+                        setAddProducts((prod) => [...prod, newArr]);
+                      }}
+                    >
+                      +<span> Add Another Product</span>
+                    </button>
+                  </div>
                 </>
-                )}
+              )}
               {/* <div class="table productTable mt-2">
                 <div class="rTable">
                   <div class="rTableHeading">
@@ -637,7 +839,11 @@ setModalProps({
             <div className="d-flex justify-content-between">
               <div className="value">{productQuantity}</div>
               <div className="d-flex">
-                <button type="button" class="btn btn-white shadow-radius font-bold mr-2"onClick={() => props.history.push('/shipments')}>
+                <button
+                  type="button"
+                  className="btn btn-white shadow-radius font-bold mr-2"
+                  onClick={() => props.history.push("/shipments")}
+                >
                   Cancel
                 </button>
 
@@ -647,7 +853,6 @@ setModalProps({
                 </button>
               </div>
             </div>
-
           </form>
         )}
       </Formik>
@@ -658,7 +863,7 @@ setModalProps({
         >
           <ShipmentPopUp
             onHide={closeModal} //FailurePopUp
- {...modalProps}
+            {...modalProps}
           />
         </Modal>
       )}

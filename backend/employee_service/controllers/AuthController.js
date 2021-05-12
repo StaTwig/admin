@@ -299,7 +299,7 @@ exports.register = [
               primaryContactId: employeeId,
               name: organisationName,
               id: organisationId,
-              type: req.body?.type ? req.body.type : 'CUSTOMER_SUPPLIER',
+              type: req.body?.type ? req.body.type :'CUSTOMER_SUPPLIER',
               status: 'NOTVERIFIED',
               postalAddress: addr,
               warehouses: [warehouseId],
@@ -626,13 +626,14 @@ exports.verifyOtp = [
             firstName: user.firstName,
             emailId: user.emailId,
             role: user.role,
-            warehouseId: user.warehouseId,
+            warehouseId: user.warehouseId[0],
             organisationId: user.organisationId,
           };
           //Prepare JWT token for authentication
           const jwtPayload = userData;
           const jwtData = {
-            expiresIn: process.env.JWT_TIMEOUT_DURATION,
+            //expiresIn: process.env.JWT_TIMEOUT_DURATION,
+            expiresIn : "12 hours"
           };
           const secret = process.env.JWT_SECRET;
           //Generated JWT token with Payload and secret.
@@ -699,7 +700,10 @@ exports.userInfo = [
             warehouseAddress_country: warehouse.warehouseAddress.country,
             warehouseAddress_zipcode: warehouse.warehouseAddress.zipCode,
             warehouseAddress_city: warehouse.warehouseAddress.city,
-            warehouseAddress_firstline: warehouse.warehouseAddress.firstLine
+            warehouseAddress_firstline: warehouse.warehouseAddress.firstLine,
+            warehouseAddress_state: warehouse.warehouseAddress.state,
+            warehouseAddress_secondline: warehouse.warehouseAddress.secondLine,
+            title: warehouse.title
           };
           logger.log(
             'info',
@@ -1026,6 +1030,33 @@ exports.assignProductConsumer = [
   },
 ];
 
+exports.getUserWarehouses = [
+  auth,
+  async (req, res) => {
+    try {
+      const users = await WarehouseModel.find({
+	organisationId: req.user.organisationId
+      });
+      logger.log(
+        'info',
+        '<<<<< UserService < AuthController < getAllUsers : retrieved users successfully',
+      );
+      return apiResponse.successResponseWithData(
+        res,
+	"User warehouses",
+        users,
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< UserService < AuthController < getAllUsers : error(catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+
 exports.addWarehouse = [
   auth,
   async (req, res) => {
@@ -1040,20 +1071,19 @@ exports.addWarehouse = [
 
       const invCounter = await CounterModel.findOne({'counters.name':"inventoryId"},{"counters.name.$":1})
       const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
-
-      //const inventoryId = uniqid('inv-');
       const inventoryResult = new InventoryModel({ id: inventoryId });
       await inventoryResult.save();
       const {
         organisationId,
         postalAddress,
+        title,
         region,
         country,
         location,
+        warehouseAddress,
         supervisors,
         employees,
       } = req.body;
-
       const incrementCounterWarehouse = await CounterModel.update({
                   'counters.name': "warehouseId"
                },{
@@ -1064,20 +1094,36 @@ exports.addWarehouse = [
 
       const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.name.$":1})
       const warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
-
-      //const warehouseId = uniqid('war-');
       const warehouse = new WarehouseModel({
         id: warehouseId,
         organisationId,
         postalAddress,
+        title,
         region,
         country,
         location,
         supervisors,
         employees,
+        warehouseAddress,
         warehouseInventory: inventoryResult.id,
+	status: 'NOTVERIFIED'
       });
-      await warehouse.save();
+        const s = await warehouse.save();
+      /*await OrganisationModel.findOneAndUpdate({
+       	            id: organisationId
+                }, {
+                    $push: {
+                        warehouses: warehouseId
+                    }
+                });*/
+      await EmployeeModel.findOneAndUpdate({
+                    id: req.user.id
+                }, {
+                    $push: {
+                        warehouseId: warehouseId
+                    }
+                });
+
       return apiResponse.successResponseWithData(
         res,
         'Warehouse added success',
@@ -1153,7 +1199,7 @@ exports.uploadImage = async function (req, res) {
         })
 
       } else if (action == "STOREID") {
-        const data = {
+        const userData = {
           "userDocuments": {
             "imageDetails": [
               filename
@@ -1163,9 +1209,9 @@ exports.uploadImage = async function (req, res) {
         }
 
         const employee = await EmployeeModel.updateOne({
-          emailId: "satheesh@statwig.com"
+          emailId: data.emailId
         }, {
-          $push: data
+          $push: userData
         });
         return res.send({
           success: true,
@@ -1173,7 +1219,7 @@ exports.uploadImage = async function (req, res) {
           filename
         })
       } else if (action == "KYCNEW") {
-        const data = {
+        const userData = {
           "userDocuments": {
             "imageDetails": [
               filename
@@ -1184,9 +1230,9 @@ exports.uploadImage = async function (req, res) {
           }
         }
         const employee = await EmployeeModel.updateOne({
-          emailId: "satheesh@statwig.com"
+          emailId: data.emailId
         }, {
-          $push: data
+          $push: userData
         });
         return res.send({
           success: true,
