@@ -9,7 +9,7 @@ var ExcelSchema = new mongoose.Schema(
     targetSales: { type: String, required: true },
     productId: { type: String, required: false },
     warehouseId: { type: String, required: false },
-	uploadDate: { type: String, required:true}
+    uploadDate: { type: String, required: true }
   },
   { timestamps: true },
 )

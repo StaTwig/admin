@@ -1034,8 +1034,8 @@ exports.getUserWarehouses = [
   auth,
   async (req, res) => {
     try {
-      const users = await EmployeeModel.findOne({
-        emailId: req.user.emailId
+      const users = await WarehouseModel.find({
+	organisationId: req.user.organisationId
       });
       logger.log(
         'info',
@@ -1044,7 +1044,7 @@ exports.getUserWarehouses = [
       return apiResponse.successResponseWithData(
         res,
 	"User warehouses",
-        users.warehouseId,
+        users,
       );
     } catch (err) {
       logger.log(
@@ -1106,15 +1106,16 @@ exports.addWarehouse = [
         employees,
         warehouseAddress,
         warehouseInventory: inventoryResult.id,
+	status: 'NOTVERIFIED'
       });
         const s = await warehouse.save();
       /*await OrganisationModel.findOneAndUpdate({
-                    id: organisationId
+       	            id: organisationId
                 }, {
                     $push: {
                         warehouses: warehouseId
                     }
-                }); */
+                });*/
       await EmployeeModel.findOneAndUpdate({
                     id: req.user.id
                 }, {
@@ -1198,7 +1199,7 @@ exports.uploadImage = async function (req, res) {
         })
 
       } else if (action == "STOREID") {
-        const data = {
+        const userData = {
           "userDocuments": {
             "imageDetails": [
               filename
@@ -1208,9 +1209,9 @@ exports.uploadImage = async function (req, res) {
         }
 
         const employee = await EmployeeModel.updateOne({
-          emailId: "satheesh@statwig.com"
+          emailId: data.emailId
         }, {
-          $push: data
+          $push: userData
         });
         return res.send({
           success: true,
@@ -1218,7 +1219,7 @@ exports.uploadImage = async function (req, res) {
           filename
         })
       } else if (action == "KYCNEW") {
-        const data = {
+        const userData = {
           "userDocuments": {
             "imageDetails": [
               filename
@@ -1229,9 +1230,9 @@ exports.uploadImage = async function (req, res) {
           }
         }
         const employee = await EmployeeModel.updateOne({
-          emailId: "satheesh@statwig.com"
+          emailId: data.emailId
         }, {
-          $push: data
+          $push: userData
         });
         return res.send({
           success: true,

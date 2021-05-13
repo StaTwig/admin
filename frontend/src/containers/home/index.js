@@ -9,8 +9,12 @@ import icon from '../../assets/icons/block-icon.png';
 import icon1 from '../../assets/icons/temprature-icon.png';
 import icon2 from '../../assets/icons/location-icon.png';
 import icon3 from '../../assets/icons/chain-icon.png';
-import mob from '../../assets/brands/mobile.png';
+import mob from '../../assets/brands/ship_web1.png';
 import playstore from '../../assets/icons/googleplay.png';
+import googleStore from '../../assets/brands/Google_store.png'
+import appleStore from '../../assets/brands/Apple_store.png'
+import mobMockup from '../../assets/brands/ship_mockup.png'
+
 const HomeContainer = (props) => {
   const user = useSelector(state => {  
     return state.user
@@ -43,7 +47,14 @@ const HomeContainer = (props) => {
         </button>
         <div className="collapse navbar-collapse" id="navbarNavDropdown">
           <ul className="navbar-nav ml-auto">
-          
+          {/* <li className="nav-item mr-3">
+              <Link className="nav-link" to="/trackAndTrace">
+                Track & Trace
+              </Link>
+            </li>
+            {/*<div className="divider" />*/}
+   
+
             <li className="nav-item active">
               <Link className="nav-link" to="/login">
                 Login <span className="sr-only">(current)</span>
@@ -69,7 +80,12 @@ const HomeContainer = (props) => {
                 VaccineLedger is a Blockchain based platform to track and
                 trace vaccine's journey across the supply chain
               </p>
-            </div>
+              <a href="https://apps.apple.com/us/app/vaccineledger-lite/id1565684295">
+                    <img src={appleStore} width="165" height="50" /></a>&nbsp;&nbsp;&nbsp;
+              <a href="https://play.google.com/store/apps/details?id=com.thevaccineledger">
+                    <img src={googleStore} width="165" height="50" /></a>
+                   
+              </div>
             <div className="hero-image" />
           </div>
         </div>
@@ -83,7 +99,7 @@ const HomeContainer = (props) => {
                 <div className="rounded-images">
                   <img src={icon} width="40" height="40" />
                 </div>
-                <p>Blockchain based<br /> Platform</p>
+               <p>Blockchain based<br />Platform</p>
               </div>
             </div>
             <div className="col">
@@ -91,7 +107,7 @@ const HomeContainer = (props) => {
                 <div className="rounded-images">
                   <img src={icon1} width="40" height="40" />
                 </div>
-                <p>Live Temperature<br /> Tracking</p>
+                <p>Live Temperature<br />Tracking</p>
               </div>
             </div>
             <div className="col">
@@ -112,27 +128,26 @@ const HomeContainer = (props) => {
             </div>
           </div>
         </div>
-      </section>
+        <img src={mobMockup} width="500" height="650"  style={{position:"absolute", top:"160%", left:"-13%"}}/>      
+        </section>
       <section className="what_we_do pt-0">
         <div className="container">
           <div className="row">
-            <div className="col-md-6 col-sm-12 align-text-center my-auto">
-              <h2 className="display-4">What We Do</h2>
+            <div className="col-md-6 col-sm-12 align-text-center my-auto pb-5">
+              <h2 className="display-4" >What We Do</h2>
               <p>
-                StaTwig provides serialization solutions to detect fake and
-                expired products in the production using Blockchain
+                StaTwig provides serialization solutions to detect fake 
+                and expired products in the production using Blockchain
                 technology and IoT.<br />We are focused towards creating an
                 efficient food and Vaccine distribution Supply chain.This
-                helps in preventing failures of distribution, predicting the resources.Through
-                our platform, we connect all stakeholders via tamper-proof,
+                helps in preventing failures of distribution, predicting the resources.
+                Through our platform, we connect all stakeholders via tamper-proof,
                 open ledgers using our platform VaccineLedger
               </p>
             </div>
-            <div className="col-md-6 align-items-center hide-sm">
-              <img src={mob} width="100%" height="450" />
-            </div>
-          </div>
+         </div>
         </div>
+        <img src={mob} width="50%" height="1000" style={{position:"absolute", marginLeft:"48.4%", marginTop:"-60%",}} />
       </section>
       <section className="How_it_works">
         <div className="container">
@@ -170,10 +185,12 @@ const HomeContainer = (props) => {
          
               <h2 className="display-4">Mobile Application</h2>
               <p>Download the VaccineLedger Mobile app for Android, iOS from below </p>
-              <div className="mt-1"><a href="https://play.google.com/store/apps/details?id=com.thevaccineledger" 
+              <div className="mt-1"><a href="https://apps.apple.com/us/app/vaccineledger-lite/id1565684295" 
               target="_blank" >
-                <img src={playstore}  alt="logo" /></a></div> 
-     
+              <img src={appleStore} width="165" height="50" /></a>  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+              <a href="https://play.google.com/store/apps/details?id=com.thevaccineledger">
+              <img src={googleStore} width="165" height="50" /></a>
+              </div> 
             </div>
           </div>
         </div>
