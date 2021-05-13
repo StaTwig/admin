@@ -170,6 +170,7 @@ const shipmentUpdate = async (
 
 const userShipments = async (mode, warehouseId, skip, limit, callback) => {
 
+
   // var matchCondition = {};
   //var criteria = mode + ".locationId";
   //matchCondition[criteria] = warehouseId
@@ -722,32 +723,32 @@ function getShipmentFilterCondition(filters, warehouseIds) {
 
     const DATE_FORMAT = 'YYYY-MM-DD';
     if (filters.date_filter_type === 'by_range') {
-
       let startDate = filters.start_date ? filters.start_date : new Date();
       let endDate = filters.end_date ? filters.end_date : new Date();
-      matchCondition.shippingDate = {
-        $gte: new Date(startDate).toISOString(),
-        $lte: new Date(endDate).toISOString()
+      matchCondition.createdAt = {
+        $gte: new Date(`${startDate}T00:00:00.0Z`),
+        $lt: new Date(`${endDate}T23:59:59.0Z`)
       };
 
     } else if (filters.date_filter_type === 'by_monthly') {
 
       let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
-      let startDateOfTheMonth = moment(startDateOfTheYear).add(filters.month, 'months').format(DATE_FORMAT);
-      let endDateOfTheMonth = moment(startDateOfTheMonth).endOf('month');
-      matchCondition.shippingDate = {
-        $gte: new Date(startDateOfTheMonth).toISOString(),
-        $lte: new Date(endDateOfTheMonth).toISOString()
+      let startDateOfTheMonth = moment(startDateOfTheYear).add(filters.month-1, 'months').format(DATE_FORMAT);
+      let endDateOfTheMonth = moment(startDateOfTheMonth).endOf('month').format(DATE_FORMAT);
+      console.log(startDateOfTheMonth, endDateOfTheMonth)
+      matchCondition.createdAt = {
+        $gte: new Date(`${startDateOfTheMonth}T00:00:00.0Z`),
+        $lte: new Date(`${endDateOfTheMonth}T23:59:59.0Z`)
       };
-
     } else if (filters.date_filter_type === 'by_quarterly') {
 
       let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
       let startDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).startOf('quarter').format(DATE_FORMAT);
       let endDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).endOf('quarter').format(DATE_FORMAT);
-      matchCondition.shippingDate = {
-        $gte: new Date(startDateOfTheQuarter).toISOString(),
-        $lte: new Date(endDateOfTheQuarter).toISOString()
+      console.log(startDateOfTheQuarter, endDateOfTheQuarter)
+      matchCondition.createdAt = {
+        $gte: new Date(`${startDateOfTheQuarter}T00:00:00.0Z`),
+        $lte: new Date(`${endDateOfTheQuarter}T23:59:59.0Z`)
       };
 
     } else if (filters.date_filter_type === 'by_yearly') {
@@ -755,16 +756,16 @@ function getShipmentFilterCondition(filters, warehouseIds) {
       const currentDate = moment().format(DATE_FORMAT);
       const currentYear = moment().year();
 
-      let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
-      let endDateOfTheYear = moment([filters.year]).endOf('year')
+      let startDateOfTheYear = moment([filters.year]).format("YYYY-MM-DDTHH:mm:ss");
+      let endDateOfTheYear = moment([filters.year]).endOf('year').format("YYYY-MM-DDTHH:mm:ss");
 
       if (filters.year === currentYear) {
         endDateOfTheYear = currentDate;
       }
-
-      matchCondition.shippingDate = {
-        $gte: new Date(startDateOfTheYear).toISOString(),
-        $lte: new Date(endDateOfTheYear).toISOString()
+      console.log(startDateOfTheYear, endDateOfTheYear)
+      matchCondition.createdAt = {
+        $gte: new Date(startDateOfTheYear),
+        $lte: new Date(endDateOfTheYear)
       };
 
     }
