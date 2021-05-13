@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import Location from "../../assets/icons/CurrentLocation1.png";
 import {addWarehouse} from "../../actions/userActions";
+import FailedPopUp from "../../shared/PopUp/failedPopUp";
+import SuccessPopUp from "../../shared/PopUp/successPopUp";
 // import React, { useState,useRef } from 'react';
 
 import "./style.scss";
@@ -15,31 +17,39 @@ const AddLocation = (props) => {
   const [country, setCountry] = useState("");
   const [pincode, setPincode] = useState("");
 
-  // console.log(props);
+  console.log('props');
+  console.log(props);
 
   const updateStatus = async (values) => {
-    // const data = {
-    //   title: values.addressTitle,
-    //   country: values.country,
-    //   warehouseAddress: {
-    //     firstLine : values.addressLine,
-    //     secondLine : "",
-    //     city : values.city,
-    //     state : values.state,
-    //     pincode : values.pincode,
-    //     landmark : "",
-    //     zipCode : values.zipCode,
-    //   },
-    // };
-
-    const data = values.addressLine + "," + values.city;
+    const data =  {
+      title: values.addressTitle,
+      organisationId: props.user.organisationId,
+      postalAddress: props.user.postalAddress,
+      region: "",
+      country: props.user.warehouseAddress_country,
+      location: {
+        longitude: '0',
+        latitude: '0',
+        geohash: '1231nejf923453',
+      },
+      warehouseAddress: {
+        firstLine: values.addressLine,
+        secondLine: null,
+        city: values.city,
+        state: values.state,
+        country: values.country,
+        landmark: null,
+        zipCode: values.pincode,
+      },
+      supervisors: [],
+      employeess: [],
+    };
 
     const result = await addWarehouse(data);
-    console.log(result)
     if(result.status = 200){
       console.log('Added Location');
       console.log(result);
-      props.history.push('/profile');
+      // props.history.push('/profile');
     }
     else{
       console.log("Error in add location");
@@ -256,6 +266,7 @@ const AddLocation = (props) => {
                       class="close"
                       className="btn btn-yellow btn-lg float-right"
                       disabled={!((values.country)&&(values.addressLine)&&(values.addressTitle)&&(values.city)&&(values.state)&&(values.pincode))}
+                      type="submit"
                     >
                       <span>Request Admin For Approval</span>
                     </button>

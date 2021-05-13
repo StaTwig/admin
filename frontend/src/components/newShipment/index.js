@@ -359,7 +359,7 @@ const NewShipment = (props) => {
           <form onSubmit={handleSubmit} className="mb-3">
             <div className="row mb-3">
               <div className="col bg-white formContainer low mr-3">
-                <div className="col-md-6 com-sm-12 mt-3">
+                <div className="col-md-6 col-sm-12 mt-3">
                   <div className="form-group">
                     <label htmlFor="orderID">Order ID</label>
                     <div className="form-control">

@@ -80,7 +80,7 @@ class Profile extends React.Component {
 
         title,
       } = response.data.data;
-      console.log("Data");
+      console.log("User Data");
       console.log(response.data.data);
       this.setState({
         profile_picture,
@@ -114,7 +114,7 @@ class Profile extends React.Component {
     const wareHouseResponse = await getWarehouseByOrgId(item);
     if (wareHouseResponse.status === 1) {
       const wareHouseIdResult = wareHouseResponse.data.map((txn) => txn.id);
-      const wareHouseAddresses = wareHouseResponse.data.map((txn) => txn.warehouseAddress.firstLine+", "+txn.warehouseAddress.city);
+      const wareHouseAddresses = wareHouseResponse.data;
       this.setState({
         wareIds: wareHouseIdResult,
         warehouseLocations: wareHouseAddresses,
@@ -389,7 +389,7 @@ class Profile extends React.Component {
                             {this.state.openModal && (
                               <Modal
                                 class="modal-lg"
-                                style="min-width: 100%"
+                                style="width: 60vw"
                                 close={() => this.closeModal()}
                                 size="" //for other size's use `modal-lg, modal-md, modal-sm`
                               >
