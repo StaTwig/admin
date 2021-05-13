@@ -1354,14 +1354,6 @@ exports.getInventoryDetails = [
   auth,
   async (req, res) => {
     try {
-<<<<<<< HEAD
-      var selectedWarehouseId = "";
-      if (req.body.warehouseId !== null) {
-        selectedWarehouseId = req.body.warehouseId;
-      }
-=======
-
->>>>>>> 28e9ad2ce2d19086ccd99bee3df3cfa1a5119c1b
       const employee = await EmployeeModel.findOne({ id: req.user.id });
       var warehouseId = "";
       if ( !req.query.warehouseId)
@@ -1370,37 +1362,6 @@ exports.getInventoryDetails = [
           warehouseId  = req.query.warehouseId;
       const warehouse = await WarehouseModel.findOne({ id: warehouseId })
 
-<<<<<<< HEAD
-      var warehouse;
-      if (selectedWarehouseId == "" || selectedWarehouseId == null) {
-        warehouse = await WarehouseModel.findOne({ id: employee.warehouseId });
-      } else {
-        warehouse = await WarehouseModel.findOne({ id: selectedWarehouseId });
-      }
-      if (warehouse) {
-        const inventory = await InventoryModel.findOne({
-          id: warehouse.warehouseInventory,
-        });
-        let inventoryDetails = [];
-        await utility.asyncForEach(
-          inventory.inventoryDetails,
-          async (inventoryDetail) => {
-            const product = await ProductModel.findOne({
-              id: inventoryDetail.productId,
-            });
-            const inventoryDetailClone = { ...inventoryDetail };
-            inventoryDetailClone["productName"] = product.name;
-            inventoryDetailClone["manufacturer"] = product.manufacturer;
-            inventoryDetails.push(inventoryDetailClone);
-          }
-        );
-
-        return apiResponse.successResponseWithData(
-          res,
-          "Inventory Details",
-          inventoryDetails
-        );
-=======
       if (warehouse) {
         const inventory = await InventoryModel.findOne({ id: warehouse.warehouseInventory });
         let inventoryDetails = []
@@ -1412,7 +1373,6 @@ exports.getInventoryDetails = [
           inventoryDetails.push(inventoryDetailClone);
         })
         return apiResponse.successResponseWithData(res, 'Inventory Details', inventoryDetails);
->>>>>>> 28e9ad2ce2d19086ccd99bee3df3cfa1a5119c1b
       } else {
         return apiResponse.ErrorResponse(
           res,
