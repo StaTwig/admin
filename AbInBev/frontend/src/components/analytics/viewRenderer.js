@@ -64,7 +64,6 @@ export default function ViewRenderer(props) {
                 componentsToRender.push({ componentName: 'NotFound' });
             }
             const componentPromises = componentsToRender.map(async data => {
-                console.log(data.componentName);
                 const View = await importView(data.componentName,data.moduleName);
                 return <View key={shortid.generate()} {...props} />;
             });

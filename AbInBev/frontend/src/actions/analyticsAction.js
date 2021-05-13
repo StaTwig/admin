@@ -2,12 +2,57 @@ import axios from 'axios';
 import { turnOff, turnOn } from './spinnerActions';
 import { config } from '../config';
 
-export const getAnalyticsAllStats = () => {
+export const getAnalyticsAllStats = (param) => {
     return async dispatch => {
       try {
         dispatch(turnOn());
         const result = await axios.get(
-          config().allStatsAnalticsUrl,
+          config().getAnalyticsBySKUurl+param,
+        );
+        dispatch(turnOff());
+        return result.data;
+      } catch (e) {
+        dispatch(turnOff());
+      }
+    };
+};
+  
+export const getAllStates = () => {
+    return async dispatch => {
+      try {
+        dispatch(turnOn());
+        const result = await axios.get(
+          config().getAllStates,
+        );
+        dispatch(turnOff());
+        return result.data;
+      } catch (e) {
+        dispatch(turnOff());
+      }
+    };
+  };
+  
+export const getAnalyticsByBrand = () => {
+    return async dispatch => {
+      try {
+        dispatch(turnOn());
+        const result = await axios.get(
+          config().getAnalyticsByBrandurl,
+        );
+        dispatch(turnOff());
+        return result.data;
+      } catch (e) {
+        dispatch(turnOff());
+      }
+    };
+};
+  
+export const getAllBrands = () => {
+    return async dispatch => {
+      try {
+        dispatch(turnOn());
+        const result = await axios.get(
+          config().getAllBrandsurl,
         );
         dispatch(turnOff());
         return result.data;

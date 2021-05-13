@@ -1,7 +1,4 @@
 import React, {useState} from "react";
-import { AreaChart, Area, ResponsiveContainer, Tooltip } from "recharts";
-import BreweryView from "./breweryView";
-import GeographicalView from "./geographicalView";
 import "./style.scss";
 import SideBar from "../../components/sidebar";
 import filterIcon from "../../assets/icons/funnel.svg"
@@ -13,6 +10,7 @@ const Analytics = (props) => {
     view: 'ANNUALREPORT_DASHBOARD'
   });
 
+  const [prop, setProp] = useState({});
   const [selectedViewCode, setSelectedViewCode] = useState('ANNUALREPORT_DASHBOARD');
   const [annualReportButton, setannualReportButton] = useState("btn active");
   const [inventoryButton, setInventoryButton] = useState("btn");
@@ -39,6 +37,7 @@ const Analytics = (props) => {
     setSelectedViewCode(event.target.value);
   }
   const onViewChange = (viewCode, props) => {
+    setProp(props);
     setSelectedViewCode(viewCode);
   }
 
@@ -56,7 +55,7 @@ const Analytics = (props) => {
         <main role="main" className="col-md-9 ml-sm-auto col-lg-10">
           <div className="row">
             <div className="col-md-9 mainContainer pt-3 px-4">
-              <ViewRenderer viewName={selectedViewCode} onViewChange={onViewChange}></ViewRenderer>
+              <ViewRenderer {...props} prop={prop} viewName={selectedViewCode} onViewChange={onViewChange}></ViewRenderer>
             </div>
             <div className="col-md-3 rightSideMenu pt-4 px-2">
               <div className="filterSection">
@@ -99,15 +98,21 @@ const Analytics = (props) => {
                 <label className="radioButton" for="bv">
                   <input className="radioInput" type="radio" name="view" value="bv" id="bv" value="BREWERY_VIEW" onChange={changeView} defaultChecked={filters.view === 'BREWERY_VIEW'} /> Brewery View
                     </label>
-                <label className="filterSubHeading mt-3">Select SPM</label>
+                <label className="filterSubHeading mt-3">Select SKU</label>
                 <select className="filterSelect mt-2">
-                  <option>Select SPM</option>
+                  <option>Select SKU</option>
+                  {props.SKUs?.map((sku) => 
+                      <option value="{sku.externalId}">{sku.manufacturer+' - '+sku.name}</option>
+                    )
+                  }
                 </select>
                 <label className="filterSubHeading mt-3">Select State</label>
                 <select className="filterSelect mt-2">
                   <option>Select State</option>
-                  <option>Karnataka</option>
-                  <option>Telangana</option>
+                  {props.states?.map((state) => 
+                      <option value="{state}">{state}</option>
+                    )
+                  }
                 </select>
               </div>
             </div>

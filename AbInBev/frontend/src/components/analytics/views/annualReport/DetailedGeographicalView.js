@@ -1,61 +1,73 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import "../../style.scss";
 import bottlesIcon from "../../../../assets/becks_330ml.png";
+import { getAnalyticsAllStats, getAnalyticsByBrand } from '../../../../actions/analyticsAction';
+import { useDispatch } from 'react-redux';
 
-const data = [
-    {
-      name: 'Jan',
-      Sales: 2100,
-      Returns: 400,
-      Target: 2600,
-      ActualReturn:100
-    },
-    {
-      name: 'Feb',
-      Sales: 5000,
-      Returns: 250,
-      Target: 4000,
-      ActualReturn:100
-    },
-    {
-      name: 'Mar',
-      Sales: 2600,
-      Returns: 1400,
-      Target: 3000,
-      ActualReturn:1200
-    },
-    {
-      name: 'Apr',
-      Sales: 6523,
-      Returns: 500,
-      Target: 6200,
-      ActualReturn:620
-    },
-    {
-      name: 'May',
-      Sales: 4000,
-      Returns: 2400,
-      Target: 1000,
-      ActualReturn:1200
-    },
-    {
-      name: 'Jun',
-      Sales: 6000,
-      Returns: 3400,
-      Target: 5000,
-      ActualReturn:5200
-    },
-    {
-      name: 'Jul',
-      Sales: 8000,
-      Returns: 5000,
-      Target: 10000,
-      ActualReturn:2000
-    },
-  ];
+// const data = [
+//     {
+//       name: 'Jan',
+//       Sales: 2100,
+//       Returns: 400,
+//       Target: 2600,
+//       ActualReturn:100
+//     },
+//     {
+//       name: 'Feb',
+//       Sales: 5000,
+//       Returns: 250,
+//       Target: 4000,
+//       ActualReturn:100
+//     },
+//     {
+//       name: 'Mar',
+//       Sales: 2600,
+//       Returns: 1400,
+//       Target: 3000,
+//       ActualReturn:1200
+//     },
+//     {
+//       name: 'Apr',
+//       Sales: 6523,
+//       Returns: 500,
+//       Target: 6200,
+//       ActualReturn:620
+//     },
+//     {
+//       name: 'May',
+//       Sales: 4000,
+//       Returns: 2400,
+//       Target: 1000,
+//       ActualReturn:1200
+//     },
+//     {
+//       name: 'Jun',
+//       Sales: 6000,
+//       Returns: 3400,
+//       Target: 5000,
+//       ActualReturn:5200
+//     },
+//     {
+//       name: 'Jul',
+//       Sales: 8000,
+//       Returns: 5000,
+//       Target: 10000,
+//       ActualReturn:2000
+//     },
+//   ];
 
 const DetailedGeographicalView = (props) => {
+    const { states, prop } = props;
+    
+    const [analytics, setAnalytics] = useState([]);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        (async () => {
+        const result = await dispatch(getAnalyticsAllStats('sku='+prop.externalId+'group_by=state'));
+        setAnalytics(result.data);
+        })();
+    }, []);
     return (
         <>
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
@@ -70,7 +82,10 @@ const DetailedGeographicalView = (props) => {
                 <a href="#!" className="btn active">State</a>
                 <select className="btn selectState">
                     <option>Select state</option>
-                    <option>Karnataka</option>
+                    {states?.map((state) => 
+                        <option>{state}</option>
+                    )
+                    }
                 </select>
             </div>
 
@@ -78,8 +93,8 @@ const DetailedGeographicalView = (props) => {
                 <div className="author mb-2">
                     <div className="profile"><img src={bottlesIcon} alt="" width="50" height="100%" /></div>
                     <div className="info">
-                        <div className="name">Bud 650 ml</div>
-                        <div className="caption">Budweiser 650ml</div>
+                        <div className="name">{prop.name}</div>
+                        <div className="caption">{prop.shortName}</div>
                     </div>
                 </div>
             </div>
@@ -93,7 +108,7 @@ const DetailedGeographicalView = (props) => {
                             <LineChart
                             width={500}
                             height={300}
-                            data={data}
+                            data={analytics}
                             margin={{
                                 top: 5,
                                 right: 30,

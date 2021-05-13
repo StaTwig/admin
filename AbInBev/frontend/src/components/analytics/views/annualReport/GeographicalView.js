@@ -1,11 +1,13 @@
 
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { AreaChart, Area, ResponsiveContainer, Tooltip } from "recharts";
 
 import "../../style.scss";
 import bottlesIcon from "../../../../assets/becks_330ml.png";
 import DownArrow from "../../../../assets/down_arrow.png";
 import UpArrow from "../../../../assets/up_arrow.png";
+import { getAnalyticsAllStats, getAnalyticsByBrand } from '../../../../actions/analyticsAction';
+import { useDispatch } from 'react-redux';
 
 
 
@@ -55,8 +57,19 @@ const data = [
 ];
 
 const GeographicalView = (props) => {
-    const showDetailedGeoView = () => {
-        props.onViewChange('DETAILED_GEO_VIEW');
+    const { states, bstats } = props;
+    
+    const [analytics, setAnalytics] = useState(bstats);
+    const dispatch = useDispatch();
+    // useEffect(() => {
+    //     (async () => {
+    //     // const result = await dispatch(getAnalyticsAllStats('?group_by=state'));
+    //     const result = await dispatch(getAnalyticsByBrand());
+    //     setAnalytics(result.data);
+    //     })();
+    // }, []);
+    const showDetailedGeoView = (param) => {
+        props.onViewChange('DETAILED_GEO_VIEW', param);
     }
     return (
         <>
@@ -70,13 +83,16 @@ const GeographicalView = (props) => {
             </div>
             <div className="btn-group mainButtonFilter">
                 <a href="#!" className="btn active">State</a>
-                <select className="btn selectState">
+                <select className="btn selectState" onChange="getSKUByState($event)">
                     <option>Select state</option>
-                    <option>Karnataka</option>
+                    {states?.map((state) => 
+                        <option>{state}</option>
+                    )
+                    }
                 </select>
             </div>
 
-            <div className="row">
+            {/* <div className="row">
                 <div className="col-md-3 ">
                     <div className="analyticsCard">
                         <span className="analyticsTitle">Sales</span>
@@ -167,6 +183,7 @@ const GeographicalView = (props) => {
                     </div>
                 </div>
             </div>
+             */}
             <div className="tableDetals">
                 <table className="table text-align-left">
                     <thead>
@@ -179,201 +196,26 @@ const GeographicalView = (props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td scope="row">
-                                <div className="tableProfileIconCard">
-                                    <div className="profileIcon">
-                                        <img src={bottlesIcon} alt="" width="50" height="50" />
+                        {analytics?.map((a, index) =>
+                            a.products.map((analytic, i) =>
+                            <tr>
+                                <td scope="row">
+                                    <div className="tableProfileIconCard justify-content-start">
+                                        <div className="profileIcon">
+                                            <img src={bottlesIcon} alt="" width="50" height="50" />
+                                        </div>
+                                        <div className="profileName">
+                                            <span className="profileTitle" onClick={() => showDetailedGeoView(analytic)}>{analytic.manufacturer+' - '+analytic.name}</span>
+                                        </div>
                                     </div>
-                                    <div className="profileName">
-                                        <span className="profileTitle"
-                                        onClick={showDetailedGeoView}
-                                        >Becks 330 ml</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">
-                                <div className="tableProfileIconCard">
-                                    <div className="profileIcon">
-                                        <img src={bottlesIcon} alt="" width="50" height="50" />
-                                    </div>
-                                    <div className="profileName">
-                                        <span className="profileTitle">Becks 330 ml</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">
-                                <div className="tableProfileIconCard">
-                                    <div className="profileIcon">
-                                        <img src={bottlesIcon} alt="" width="50" height="50" />
-                                    </div>
-                                    <div className="profileName">
-                                        <span className="profileTitle">Becks 330 ml</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">
-                                <div className="tableProfileIconCard">
-                                    <div className="profileIcon">
-                                        <img src={bottlesIcon} alt="" width="50" height="50" />
-                                    </div>
-                                    <div className="profileName">
-                                        <span className="profileTitle">Becks 330 ml</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">
-                                <div className="tableProfileIconCard">
-                                    <div className="profileIcon">
-                                        <img src={bottlesIcon} alt="" width="50" height="50" />
-                                    </div>
-                                    <div className="profileName">
-                                        <span className="profileTitle">Becks 330 ml</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">
-                                <div className="tableProfileIconCard">
-                                    <div className="profileIcon">
-                                        <img src={bottlesIcon} alt="" width="50" height="50" />
-                                    </div>
-                                    <div className="profileName">
-                                        <span className="profileTitle">Becks 330 ml</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">
-                                <div className="tableProfileIconCard">
-                                    <div className="profileIcon">
-                                        <img src={bottlesIcon} alt="" width="50" height="50" />
-                                    </div>
-                                    <div className="profileName">
-                                        <span className="profileTitle">Becks 330 ml</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">
-                                <div className="tableProfileIconCard">
-                                    <div className="profileIcon">
-                                        <img src={bottlesIcon} alt="" width="50" height="50" />
-                                    </div>
-                                    <div className="profileName">
-                                        <span className="profileTitle">Becks 330 ml</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">
-                                <div className="tableProfileIconCard">
-                                    <div className="profileIcon">
-                                        <img src={bottlesIcon} alt="" width="50" height="50" />
-                                    </div>
-                                    <div className="profileName">
-                                        <span className="profileTitle">Becks 330 ml</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">
-                                <div className="tableProfileIconCard">
-                                    <div className="profileIcon">
-                                        <img src={bottlesIcon} alt="" width="50" height="50" />
-                                    </div>
-                                    <div className="profileName">
-                                        <span className="profileTitle">Becks 330 ml</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">
-                                <div className="tableProfileIconCard">
-                                    <div className="profileIcon">
-                                        <img src={bottlesIcon} alt="" width="50" height="50" />
-                                    </div>
-                                    <div className="profileName">
-                                        <span className="profileTitle">Becks 330 ml</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">
-                                <div className="tableProfileIconCard">
-                                    <div className="profileIcon">
-                                        <img src={bottlesIcon} alt="" width="50" height="50" />
-                                    </div>
-                                    <div className="profileName">
-                                        <span className="profileTitle">Becks 330 ml</span>
-                                        <span>526025</span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                        </tr>
+                                </td>
+                                <td>{analytic.sales}</td>
+                                <td>{analytic.returns}</td>
+                                <td>{analytic.targetSales}</td>
+                                <td>{analytic.returnRate}%</td>
+                            </tr>
+                            )
+                        )}
                     </tbody>
                 </table>
             </div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { BarChart,AreaChart, Area, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 import becks from "../../../../assets/images/becks.png";
@@ -9,6 +9,8 @@ import budmagnum from "../../../../assets/images/budmag.png";
 import fasters from "../../../../assets/images/fasters.png";
 import haywards from "../../../../assets/images/haywards.png";
 import bottlesIcon from "../../../../assets/becks_330ml.png";
+import { getAnalyticsByBrand } from '../../../../actions/analyticsAction';
+import { useDispatch } from 'react-redux';
 
 const data = [
     {
@@ -87,6 +89,18 @@ const dataInventorySKUSales = [
   ];
 
 const InventoryDashboard = (props) => {
+    const [visible, setVisible] = useState([]);
+    const [analytics, setAnalytics] = useState([]);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        (async () => {
+        const result = await dispatch(getAnalyticsByBrand());
+        console.log(result);
+        
+        setAnalytics(result.data);
+        })();
+    }, []);
+    
     return (
         <div className="inventoryDashboard">
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
@@ -102,124 +116,47 @@ const InventoryDashboard = (props) => {
                 <a href="#!" className="btn active">Brand</a>
                 <select className="btn selectState">
                     <option>All</option>
-                    <option>Becks</option>
-                    <option>Budweiser</option>
-                    <option>Budweiser Magnum</option>
-                    <option>RC</option>
-                    <option>Fosters</option>
-                    <option>Knock Out</option>
-                    <option>Haywards 5000</option>
+                    {props.brands.map((brand) => 
+                        <option value={brand._id}>{brand._id}</option>
+                    )}
                 </select>
             </div>
 
             <div className="row">
-                <div className="col-lg-3 col-md-3 col-sm-12">
-                    <div className="productGrid">
-                        <img className="productImage" src={becks} />
-                    </div>
-                </div>
-                <div className="col-lg-3 col-md-3 col-sm-12">
-                    <div className="productGrid">
-                        <img className="productImage" src={bud} />
-                    </div>
-                </div>
-                <div className="col-lg-3 col-md-3 col-sm-12">
-                    <div className="productGrid">
-                        <img className="productImage" src={budmagnum} />
-                    </div>
-                </div>
-                <div className="col-lg-3 col-md-3 col-sm-12">
-                    <div className="productGrid">
-                        <img className="productImage" src={rc} />
-                    </div>
-                </div>
-                <div className="col-lg-3 col-md-3 col-sm-12">
-                    <div className="productGrid">
-                        <img className="productImage" src={haywards} />
-                    </div>
-                </div>
+                {analytics.map((analytic, index) => {
+                    return (<>
+                        <div className="col-lg-3 col-md-3 col-sm-12">
+                            <div className="productGrid" onClick={() => { let newState = [...visible]; newState[index] = true; setVisible(newState)}}>
+                                <img className="productImage" src={analytic.products[0].image} />
+                            </div>
+                        </div>
 
-                <div className="col-lg-3 col-md-3 col-sm-12">
-                    <div className="productGrid">
-                        <img className="productImage" src={knockout} />
-                    </div>
-                </div>
-                <div className="col-lg-3 col-md-3 col-sm-12">
-                    <div className="productGrid">
-                        <img className="productImage" src={fasters} />
-                    </div>
-                </div>
-            </div>
-
-            <div className="card-container">
-                <div className="card">
-                    <div className="author mb-2">
-                        <div className="profile"><img src={bottlesIcon} alt="" width="50" height="100%" /></div>
-                        <div className="info">
-                            <div className="name">Becks 330 ml</div>
-                            <div className="caption">NRB Old Patent Becks Ice 330ml</div>
-                            <div className="caption">526025</div>
-                        </div>
-                    </div>
-                    <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">82%</span></span>
-                    <div className="progress progress-line-danger">
-                        <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "80%" }}>
-                            <span className="sr-only">80% Complete</span>
-                        </div>
-                    </div>
-                    <div className="captionSubtitle">Compared to (70% last month)</div>
-                </div>
-                <div className="card">
-                    <div className="author mb-2">
-                        <div className="profile"><img src={bottlesIcon} alt="" width="50" height="100%" /></div>
-                        <div className="info">
-                            <div className="name">Becks 330 ml</div>
-                            <div className="caption">NRB Old Patent Becks Ice 330ml</div>
-                            <div className="caption">526025</div>
-                        </div>
-                    </div>
-                    <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">82%</span></span>
-                    <div className="progress progress-line-danger">
-                        <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "80%" }}>
-                            <span className="sr-only">80% Complete</span>
-                        </div>
-                    </div>
-                    <div className="captionSubtitle">Compared to (70% last month)</div>
-                </div>
-                <div className="card">
-                    <div className="author mb-2">
-                        <div className="profile"><img src={bottlesIcon} alt="" width="50" height="100%" /></div>
-                        <div className="info">
-                            <div className="name">Becks 330 ml</div>
-                            <div className="caption">NRB Old Patent Becks Ice 330ml</div>
-                            <div className="caption">526025</div>
-                        </div>
-                    </div>
-                    <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">82%</span></span>
-                    <div className="progress progress-line-danger">
-                        <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "80%" }}>
-                            <span className="sr-only">80% Complete</span>
-                        </div>
-                    </div>
-                    <div className="captionSubtitle">Compared to (70% last month)</div>
-                </div>
-                <div className="card">
-                    <div className="author mb-2">
-                        <div className="profile"><img src={bottlesIcon} alt="" width="50" height="100%" /></div>
-                        <div className="info">
-                            <div className="name">Becks 330 ml</div>
-                            <div className="caption">NRB Old Patent Becks Ice 330ml</div>
-                            <div className="caption">526025</div>
-                        </div>
-                    </div>
-                    <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">82%</span></span>
-                    <div className="progress progress-line-danger">
-                        <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "80%" }}>
-                            <span className="sr-only">80% Complete</span>
-                        </div>
-                    </div>
-                    <div className="captionSubtitle">Compared to (70% last month)</div>
-                </div>
+                        {visible[index] &&
+                            <div className="card-container">
+                                {analytic.products.map((product, i) =>
+                                    <div className="card">
+                                        <div className="author mb-2">
+                                            <div className="profile"><img src={bottlesIcon} alt="" width="50" height="100%" /></div>
+                                            <div className="info">
+                                                <div className="name">{product.name}</div>
+                                                <div className="caption">{product.shortName}</div>
+                                                <div className="caption">{product.externalId}</div>
+                                            </div>
+                                        </div>
+                                        <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">{product.returnRate}%</span></span>
+                                        <div className="progress progress-line-danger">
+                                            <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "{product.returnRate}%" }}>
+                                                <span className="sr-only">{product.returnRate}% Complete</span>
+                                            </div>
+                                        </div>
+                                        <div className="captionSubtitle">Compared to ({product.returnRatePrev}% last month)</div>
+                                    </div>
+                                )}
+                            </div>
+                        }
+                    </>)
+                }
+                )}
             </div>
 
             {/* Single product detailed view for brand */}

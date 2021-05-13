@@ -1,8 +1,10 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 import becks from "../../../../assets/images/becks.png";
 import bottlesIcon from "../../../../assets/becks_330ml.png";
+import { getAnalyticsAllStats, getAnalyticsByBrand } from '../../../../actions/analyticsAction';
+import { useDispatch } from 'react-redux';
 
 const SKUAnnualReport = [
     {
@@ -81,6 +83,17 @@ const data = [
 ];
 
 const SKUDetailView = (props) => {
+    const { states, prop } = props;
+    
+    const [analytics, setAnalytics] = useState([]);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        (async () => {
+        const result = await dispatch(getAnalyticsAllStats('?sku='+prop.externalId+'&group_by=state'));
+        setAnalytics(result.data);
+        })();
+    }, []);
+    
     return (
         <div>
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
@@ -96,13 +109,9 @@ const SKUDetailView = (props) => {
                 <a href="#!" className="btn active">Brand</a>
                 <select className="btn selectState">
                     <option>All</option>
-                    <option>Becks</option>
-                    <option>Budweiser</option>
-                    <option>Budweiser Magnum</option>
-                    <option>RC</option>
-                    <option>Fosters</option>
-                    <option>Knock Out</option>
-                    <option>Haywards 5000</option>
+                    {props.brands.map((brand) => 
+                        <option value={brand._id}>{brand._id}</option>
+                    )}
                 </select>
             </div>
 
@@ -112,7 +121,7 @@ const SKUDetailView = (props) => {
                     <div className="col-lg-10 col-md-10 col-sm-12">
                         <div className="productDetailCard">
                             <div className="productGrid">
-                                <img className="productImage" src={becks} />
+                                <img className="productImage" src={prop.image} />
                             </div>
                             <div className="productcard">
                                 <div className="row">
@@ -120,18 +129,18 @@ const SKUDetailView = (props) => {
                                         <div className="productSection mb-2">
                                             <div className="profile"><img src={bottlesIcon} alt="" width="50" height="100%" /></div>
                                             <div className="info">
-                                                <div className="name">Becks 330 ml</div>
-                                                <div className="caption">NRB Old Patent Becks Ice 330ml</div>
-                                                <div className="caption">526025</div>
+                                                <div className="name">{prop.name}</div>
+                                                <div className="caption">{prop.shortName}</div>
+                                                <div className="caption">{prop.externalId}</div>
                                             </div>
                                         </div>
                                     </div>
                                     <div className="col-lg-6 col-md-6 col-sm-12">
-                                        <span className="productText">Return Rate <span className="breweryPropertyValue">82%</span></span>
-                                        <div className="captionSubtitle">Compared to (70% last month)</div>
+                                        <span className="productText">Return Rate <span className="breweryPropertyValue">{prop.returnRate}%</span></span>
+                                        <div className="captionSubtitle">Compared to ({prop.returnRatePrev}% last month)</div>
                                         <div className="progress progress-line-default">
-                                            <div className="progress-bar progress-bar-default" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "80%" }}>
-                                                <span className="sr-only">80% Complete</span>
+                                            <div className="progress-bar progress-bar-default" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "{prop.returnRate}%" }}>
+                                                <span className="sr-only">{prop.returnRate}% Complete</span>
                                             </div>
                                         </div>
 
@@ -144,7 +153,7 @@ const SKUDetailView = (props) => {
                 <div className="row">
                     <div className="col-md-12 col-sm-12">
                         <div className="productsChart">
-                            <label className="productsChartTitle">States</label>
+                            {/* <label className="productsChartTitle">States</label>
                             <ResponsiveContainer width="100%" height={500}>
                                 <BarChart
                                     width={500}
@@ -166,13 +175,13 @@ const SKUDetailView = (props) => {
                                     <Bar dataKey="TotalBottlepool" fill="#FDAB0F" />
                                     <Bar dataKey="Sales" fill="#A344B7" />
                                 </BarChart>
-                            </ResponsiveContainer>
+                            </ResponsiveContainer> */}
                             <label className="productsChartTitle">States</label>
                             <ResponsiveContainer width="100%" height={500}>            
                                 <BarChart
                                     width={500}
                                     height={300}
-                                    data={SKUAnnualReport}
+                                    data={analytics}
                                     layout="vertical"
                                     margin={{
                                         top: 20,
@@ -191,7 +200,7 @@ const SKUDetailView = (props) => {
                                 </BarChart>
                             </ResponsiveContainer>    
                         </div>
-                        <div className="tableDetals">
+                        {/* <div className="tableDetals">
                             <table className="table">
                                 <thead>
                                     <tr>
@@ -245,9 +254,9 @@ const SKUDetailView = (props) => {
                                     </tr>
                                 </tbody>
                             </table>
-                        </div>
+                        </div> */}
 
-                        <div className="productsChart">
+                        {/* <div className="productsChart">
                             <label className="productsChartTitle">Karnataka</label>
                             <ResponsiveContainer width="100%" height={500}>            
                                 <BarChart
@@ -271,7 +280,7 @@ const SKUDetailView = (props) => {
                                     <Bar dataKey="Target" fill="#A344B7" />
                                 </BarChart>
                             </ResponsiveContainer>    
-                        </div>
+                        </div> */}
                         <div className="tableDetals">
                             <table className="table">
                                 <thead>
@@ -284,60 +293,17 @@ const SKUDetailView = (props) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td scope="row">
-                                            <a className="stateLink" href="#">Karnataka</a>
-                                        </td>
-                                        <td>333333</td>
-                                        <td>333333</td>
-                                        <td>333333</td>
-                                        <td>50%</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">
-                                            <a className="stateLink" href="#">Delhi</a>
-                                        </td>
-                                        <td>333333</td>
-                                        <td>333333</td>
-                                        <td>333333</td>
-                                        <td>65%</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">
-                                            <a className="stateLink" href="#">Telangana</a>
-                                        </td>
-                                        <td>333333</td>
-                                        <td>333333</td>
-                                        <td>333333</td>
-                                        <td>89%</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">
-                                            <a className="stateLink" href="#">Gujarat</a>
-                                        </td>
-                                        <td>333333</td>
-                                        <td>333333</td>
-                                        <td>333333</td>
-                                        <td>99%</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">
-                                            <a className="stateLink" href="#">Maharashtra</a>
-                                        </td>
-                                        <td>333333</td>
-                                        <td>333333</td>
-                                        <td>333333</td>
-                                        <td>84%</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">
-                                            <a className="stateLink" href="#">Goa</a>
-                                        </td>
-                                        <td>333333</td>
-                                        <td>333333</td>
-                                        <td>333333</td>
-                                        <td>78%</td>
-                                    </tr>
+                                    {analytics.map((analytic, index) => 
+                                        <tr>
+                                            <td scope="row">
+                                                <a className="stateLink" href="#">{analytic.groupedBy}</a>
+                                            </td>
+                                            <td>{analytic.sales}</td>
+                                            <td>{analytic.returns}</td>
+                                            <td>{analytic.targetSales}</td>
+                                            <td>{analytic.actualReturns}%</td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                         </div>

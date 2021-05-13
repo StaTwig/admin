@@ -11,6 +11,7 @@ export const LOCAL_SERVER_URL_PO = 'http://localhost:3012';
 export const LOCAL_SERVER_URL_TRACKANDTRACE = 'http://localhost:3005';
 export const LOCAL_SERVER_URL_NOTIFICATION = 'http://localhost:3006';
 export const LOCAL_SERVER_URL_ANALYTICS = 'http://localhost:3015';
+export const LOCAL_SERVER_URL_AANALYTICS = 'http://localhost:3069';
 export const LOCAL_SERVER_URL_PRODUCTS = 'http://localhost:3010';
 export const STABLE_SERVER_URL_USER = 'http://54.164.66.73:3001';
 export const STABLE_SERVER_URL_SHIPMENT = 'http://54.164.66.73:3002';
@@ -93,7 +94,10 @@ export function config() {
       getNotificationsUrl: `${ABINBEVPROD_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${ABINBEVPROD_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl: `${ABINBEVPROD_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
-      getAllAnalytics: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getAllStats`,
+      getAllAnalytics: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getAllStats`,
+      getAnalyticsBySKUurl: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getStatsBySKU`,
+      getAnalyticsByBrandurl: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getStatsByBrand`,
+      getAllBrandsurl: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getAllBrands`,
 
     },
     ainbevtest: {
@@ -163,6 +167,9 @@ export function config() {
       deleteNotificationUrl: `${ABINBEVTEST_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl: `${ABINBEVTEST_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
       getAllAnalytics: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getAllStats`,
+      getAnalyticsBySKUurl: `${LOCAL_SERVER_URL_AANALYTICS}/advancedanalytics/api/analytics/getStatsBySKU`,
+      getAnalyticsByBrandurl: `${LOCAL_SERVER_URL_AANALYTICS}/advancedanalytics/api/analytics/getStatsByBrand`,
+      getAllBrandsurl: `${LOCAL_SERVER_URL_AANALYTICS}/advancedanalytics/api/analytics/getAllBrands`,
 
     },
   };
