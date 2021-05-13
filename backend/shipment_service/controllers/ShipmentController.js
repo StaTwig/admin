@@ -756,16 +756,16 @@ function getShipmentFilterCondition(filters, warehouseIds) {
       const currentDate = moment().format(DATE_FORMAT);
       const currentYear = moment().year();
 
-      let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
-      let endDateOfTheYear = moment([filters.year]).endOf('year')
+      let startDateOfTheYear = moment([filters.year]).format("YYYY-MM-DDTHH:mm:ss");
+      let endDateOfTheYear = moment([filters.year]).endOf('year').format("YYYY-MM-DDTHH:mm:ss");
 
       if (filters.year === currentYear) {
         endDateOfTheYear = currentDate;
       }
-
+      console.log(startDateOfTheYear, endDateOfTheYear)
       matchCondition.createdAt = {
-        $gte: new Date(startDateOfTheYear).toISOString(),
-        $lte: new Date(endDateOfTheYear).toISOString()
+        $gte: new Date(startDateOfTheYear),
+        $lte: new Date(endDateOfTheYear)
       };
 
     }
