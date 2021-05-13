@@ -39,30 +39,16 @@ const TransactionHistory = (props) => {
   const [inTransit, setinTransit] = useState([]);
   const [sent, setSent] = useState([]);
   const [Added, setAdded] = useState([]);
-  const [buttonState0, setButtonActive] = useState("btn active");
-  const [buttonState1, setButtonActive1] = useState("btn");
-  const [buttonState2, setButtonActive2] = useState("btn");
-  const [buttonState3, setButtonActive3] = useState("btn");
-  const [buttonState4, setButtonActive4] = useState("btn");
-  const [buttonState5, setButtonActive5] = useState("btn active");
-  const [buttonState6, setButtonActive6] = useState("btn");
-  const [ButtonState7, setButtonActive7] = useState("btn active");
-  const [ButtonState8, setButtonActive8] = useState("btn");
-  const [ButtonState9, setButtonActive9] = useState("btn");
-  const [ButtonState10, setButtonActive10] = useState("btn");
-  const [Brewery, setBrewery] = useState(false);
+
   const [dateClassName, setdateClassName] = useState("transactionListDate");
-  const [quarterly, setQuarterly] = useState(false);
-  const [today, setToday] = useState(true);
-  const [yearly, setyearly] = useState(false);
-  const [AllButton, setAllButtonActive] = useState("btn");
-  const [S1Button, setS1ButtonActive] = useState("btn");
-  const [S2Button, setS2ButtonActive] = useState("btn");
+
   const [states, setStates] = useState([]);
   const [districts, setDistricts] = useState([]);
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-  const [monthDate, setMonthDate] = useState(new Date());
+
+  const [selectedTransactionType, setSelectedTransactionType] = useState('ALL');
+  const [selectedOrganizationType, setSelectedOrganizationType] = useState('BREWERY');
+  const [selectedDateType, setSelectedDateType] = useState('by_range');
+  const [selectedVendorType, setSelectedVendorType] = useState('ALL_VENDORS');
 
   const [organizations, setOrganizations] = useState([]);
 
@@ -74,10 +60,78 @@ const TransactionHistory = (props) => {
   const [filters, setFilters] = useState({
     state: "",
     district: "",
-    inventoryType: "BREWERY",
-    startDate: null,
-    endDate: null,
+    transactionType: "ALL",
+    sku: '',
+    organizationType: 'BREWERY',
+    vendorType: 'ALL_VENDORS',
+    date_filter_type: 'by_range',
+    startDate: new Date(),
+    endDate: new Date(),
+    year: new Date().getFullYear(), //setCurentYear
+    month: new Date().getMonth() + 1, //setCurrentMonth
+    quarter: 0 //setCurrent Quarter.
   });
+
+  const defaultFilters = {
+    state: "",
+    district: "",
+    transactionType: "ALL",
+    sku: '',
+    organizationType: 'BREWERY',
+    vendorType: 'ALL_VENDORS',
+    date_filter_type: 'by_range',
+    startDate: new Date(),
+    endDate: new Date(),
+    year: 0, //setCurentYear
+    month: 0, //setCurrentMonth
+    quarter: 0 //setCurrent Quarter.
+  };
+
+  const onStartDateChange = (event) => {
+    const _filters = { ...filters };
+    _filters.startDate = event.target.value;
+    setFilters(_filters);
+    // applyFilters(_filters);
+  };
+
+  const onEndDateChange = (event) => {
+    const _filters = { ...filters };
+    _filters.endDate = event.target.value;
+    setFilters(_filters);
+    applyFilters(_filters);
+  };
+
+  const onTransactionTypeChange = (transactionType) => {
+    setSelectedTransactionType(transactionType);
+    const _filters = { ...filters };
+    _filters.transactionType = transactionType;
+    setFilters(_filters);
+    applyFilters(_filters);
+  };
+  const onOrganizationTypeChange = (organizationType) => {
+
+    setSelectedOrganizationType(organizationType);
+    const _filters = { ...filters };
+    _filters.organizationType = organizationType;
+
+    setFilters(_filters);
+    applyFilters(_filters);
+  };
+  const onDateTypeChange = (dateType) => {
+    setSelectedDateType(dateType);
+    const _filters = { ...filters };
+    _filters.date_filter_type = dateType;
+    setFilters(_filters);
+    applyFilters(_filters);
+  };
+  const onVendorTypeChange = (vendorType) => {
+    setSelectedVendorType(vendorType);
+    const _filters = { ...filters };
+    _filters.vendorType = vendorType;
+    setFilters(_filters);
+    applyFilters(_filters);
+  }
+
   const _getAllStates = async () => {
     const response = await dispatch(getAllStates());
     const _states = response.data ? response.data : [];
@@ -89,6 +143,13 @@ const TransactionHistory = (props) => {
     const _organizations = response.data ? response.data : [];
     setOrganizations(_organizations);
   };
+
+  const _getDistrictsByState = async (_state) => {
+    const response = await dispatch(getDistrictsByState(_state));
+    const _districts = response.data ? response.data : [];
+    setDistricts(_districts);
+  };
+
   function formatDate(date) {
     var d = new Date(date),
       month = "" + (d.getMonth() + 1),
@@ -100,40 +161,14 @@ const TransactionHistory = (props) => {
 
     return [day, month, year].join("-");
   }
-  function formatDateRev(date) {
-    var d = new Date(date),
-      month = "" + (d.getMonth() + 1),
-      day = "" + d.getDate(),
-      year = d.getFullYear();
 
-    if (month.length < 2) month = "0" + month;
-    if (day.length < 2) day = "0" + day;
 
-    return [year, month, day].join("-");
-  }
-  function getYear(date) {
-    var d = new Date(date),
-      year = d.getFullYear();
-    return year;
-  }
-  function getMonth(date) {
-    var d = new Date(date),
-      month = "" + (d.getMonth() + 1);
-    if (month.length < 2) month = "0" + month;
-
-    return month;
-  }
-  const _getDistrictsByState = async (_state) => {
-    const response = await dispatch(getDistrictsByState(_state));
-    const _districts = response.data ? response.data : [];
-    setDistricts(_districts);
-  };
   const onStateSelection = (event) => {
     const selectedState = event.target.value;
     const _filters = { ...filters };
     _filters.state = selectedState;
     setFilters(_filters);
-    // props.applyFilters(_filters);
+    applyFilters(_filters);
     _getDistrictsByState(selectedState);
 
     const _filterVisibility = { ...filterVisibility };
@@ -146,7 +181,7 @@ const TransactionHistory = (props) => {
     _filters.district = selectedDistrict;
     setFilters(_filters);
     _getOrganizationsByType(_filters);
-    filterFun(_filters);
+    applyFilters(_filters);
   };
 
   const onOrganizationChange = (event) => {
@@ -154,57 +189,54 @@ const TransactionHistory = (props) => {
     const _filters = { ...filters };
     _filters.organization = selectedOrganization;
     setFilters(_filters);
-    filterFun(_filters);
+    applyFilters(_filters);
   };
 
-  function selectThis(a) {
-    console.log(a);
-    if (a === "all") {
-      setButtonActive1("btn");
-      setButtonActive2("btn");
-      setButtonActive3("btn");
-      setButtonActive4("btn");
-      setButtonActive("btn active");
-      setDisplayTransactions(transactions);
-    }
-    if (a === "sent") {
-      setButtonActive("btn");
-      setButtonActive2("btn");
-      setButtonActive3("btn");
-      setButtonActive4("btn");
-      setButtonActive1("btn active");
-      setDisplayTransactions(sent);
-    }
-    if (a === "received") {
-      setButtonActive1("btn");
-      setButtonActive("btn");
-      setButtonActive3("btn");
-      setButtonActive4("btn");
-      setButtonActive2("btn active");
-      setDisplayTransactions(inBound);
-    }
-    if (a === "transit") {
-      setButtonActive1("btn");
-      setButtonActive2("btn");
-      setButtonActive("btn");
-      setButtonActive4("btn");
-      setButtonActive3("btn active");
-      setDisplayTransactions(inTransit);
-    }
-    if (a === "added") {
-      setButtonActive1("btn");
-      setButtonActive2("btn");
-      setButtonActive3("btn");
-      setButtonActive("btn");
-      setButtonActive4("btn active");
-      setDisplayTransactions(Added);
-    }
+  const resetFilters = () => {
+    let _filters = defaultFilters;
+    setFilters(_filters);
+    setSelectedTransactionType('ALL');
+    setSelectedOrganizationType('BREWERY');
+    setSelectedDateType('by_range');
+    applyFilters(_filters);
+
   }
-  async function applyFilters(_filters){
-    return setFilters(_filters);
+
+  const allowedMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 12];
+  let thisYear = new Date().getFullYear();
+  const allowedYears = [];
+  for (let i = 1; i < 21; i++) {
+    allowedYears.push(thisYear - i);
   }
-  async function filterFun(_filters) {
-  //  await setFilters(_filters);
+
+
+
+  const onYearChange = (event) => {
+    const selectedYear = event.target.value;
+    const _filters = { ...filters };
+    _filters.year = selectedYear;
+    setFilters(_filters);
+    applyFilters(_filters);
+  };
+
+  const onMonthChange = (event) => {
+    const selectedMonth = event.target.value;
+    const _filters = { ...filters };
+    _filters.month = selectedMonth;
+    setFilters(_filters);
+    applyFilters(_filters);
+  };
+
+  const onQuarterChange = (event) => {
+    const selectedQuarter = event.target.value;
+    const _filters = { ...filters };
+    _filters.month = selectedQuarter;
+    setFilters(_filters);
+    applyFilters(_filters);
+  };
+
+  async function applyFilters(_filters) {
+    //  await setFilters(_filters);
     const results = await dispatch(getTransactions(_filters));
     let addedarray = [];
     let date;
@@ -221,7 +253,7 @@ const TransactionHistory = (props) => {
         a.status = "SENT";
         addedarray.push(a);
       }
-      if(a.status === "RECEIVED" && a.supplier.id === props.user.id){
+      if (a.status === "RECEIVED" && a.supplier.id === props.user.id) {
         a.status = "SENT";
         addedarray.push(a);
       }
@@ -231,18 +263,14 @@ const TransactionHistory = (props) => {
     });
     setDisplayTransactions(results.data);
     setTransactions(results.data);
-    console.log("data" + results.data.length);
   }
   useEffect(() => {
     (async () => {
       _getAllStates();
-      console.log("states are " + states);
       const results = await dispatch(getTransactions(filters));
-      ``;
       let addedarray = [];
       let date;
       results.data.forEach((b) => {
-        // console.log('a') =
         let a = b;
         if (date !== a.createdAt) {
           date = a.createdAt;
@@ -258,10 +286,9 @@ const TransactionHistory = (props) => {
         if (a.status === "INTRANSIT") inTransit.push(a);
       });
       setAdded(addedarray);
-      console.log(results);
     })();
   }, []);
-  const classes = useStyles();
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -286,39 +313,64 @@ const TransactionHistory = (props) => {
                   </svg>
                 </div>
               </div>
-              <div class="btn-group mainButtonFilter">
+              <div className="btn-group mainButtonFilter">
                 <a
-                  href="#0"
-                  class={buttonState0}
+                  className={`btn ${selectedTransactionType === 'ALL' ? "active" : ""}`}
                   onClick={() => {
-                    setButtonActive("btn active");
-                    selectThis("all");
+                    onTransactionTypeChange('ALL');
                   }}
                 >
-                  All
-                </a>
+                  ALL
+                    </a>
                 <a
-                  href="#1"
-                  class={buttonState1}
+                  className={`btn ${selectedTransactionType === 'SENT' ? "active" : ""}`}
                   onClick={() => {
-                    setButtonActive1("btn active");
-                    selectThis("sent");
+                    onTransactionTypeChange('SENT');
                   }}
                 >
                   Sent
-                </a>
+                    </a>
                 <a
-                  href="#2"
-                  class={buttonState2}
+                  className={`btn ${selectedTransactionType === 'RECEIVED' ? "active" : ""}`}
                   onClick={() => {
-                    setButtonActive2("btn active");
-                    selectThis("received");
+                    onTransactionTypeChange('RECEIVED');
                   }}
                 >
                   Received
-                </a>
+                    </a>
+                <a
+                  className={`btn ${selectedTransactionType === 'IN_TRANSIT' ? "active" : ""}`}
+                  onClick={() => {
+                    onTransactionTypeChange('IN_TRANSIT');
+                  }}
+                >
+                  In-Transit
+                    </a>
+                <a
+                  className={`btn ${selectedTransactionType === 'ADDED' ? "active" : ""}`}
+                  onClick={() => {
+                    onTransactionTypeChange('ADDED');
+                  }}
+                >
+                  Added
+                    </a>
               </div>
+
+
               <div className="productList">
+                {
+                  displayTransactions.length ?
+                    <>
+                      <div className="productListHeader col-md-12">
+                        <div className=" col-md-3">Particulars</div>
+                        <div className="padLeft20 col-md-2">Warehouse Address</div>
+                        <div className="padLeft20 col-md-2">Status</div>
+                        <div className="padLeft20 col-md-3">Challan Image</div>
+                        <div className="padLeft20 col-md-2">Quantity</div>
+                      </div>
+                    </> : ""
+                }
+
                 {displayTransactions.map((transaction, index) => (
                   <div>
                     {transaction.shippingDates ? (
@@ -331,13 +383,14 @@ const TransactionHistory = (props) => {
                       ""
                     )}
                     <div className="transactionListContainer">
-                      <div className="productContainer">
-                        <div className="productItem ">
+
+                      <div className="productContainer col-md-12">
+                        <div className="productItem col-md-3">
                           <div className="iconGroup">
                             <div className="productIcon inTransit">
                               <img
                                 src={inTransitIcon}
-                                class="icon-thumbnail-img"
+                                className="icon-thumbnail-img"
                                 alt=""
                               />
                             </div>
@@ -360,40 +413,40 @@ const TransactionHistory = (props) => {
                             </div>
                           </div>
                         </div>
-                        <div className="productItem">
+                        <div className="productItem col-md-2">
                           {
                             (transaction.receiver.warehouse.warehouseAddress
                               .city,
-                            transaction.receiver.warehouse.warehouseAddress
-                              .state)
+                              transaction.receiver.warehouse.warehouseAddress
+                                .state)
                           }
                         </div>
-                        <div className="productItem">
+                        <div className="productItem col-md-2">
                           {transaction.status === "RECEIVED" && (
                             <div className="productStatus">
-                              <span class="statusbadge receivedBadge"></span>{" "}
+                              <span className="statusbadge receivedBadge"></span>{" "}
                               Received
                             </div>
                           )}
                           {transaction.status === "SENT" && (
                             <div className="productStatus">
-                              <span class="statusbadge sentBadge"></span> Sent
+                              <span className="statusbadge sentBadge"></span> Sent
                             </div>
                           )}
                           {transaction.status === "INTRANSIT" && (
                             <div className="productStatus">
-                              <span class="statusbadge transitBadge"></span> In
+                              <span className="statusbadge transitBadge"></span> In
                               Transit
                             </div>
                           )}
                           {transaction.status === "CREATED" && (
                             <div className="productStatus">
-                              <span class="statusbadge addedBadge"></span> Added
+                              <span className="statusbadge addedBadge"></span> Added
                             </div>
                           )}
                         </div>
-                        <div className="productItem">123456.jpg</div>
-                        <div className="productItem productQuantity">
+                        <div className="productItem col-md-3">123456.jpg</div>
+                        <div className="productItem productQuantity col-md-2">
                           {transaction.products.reduce(
                             (a, v) => (a = a + v.productQuantity),
                             0
@@ -411,296 +464,185 @@ const TransactionHistory = (props) => {
                   <img src={filterIcon} className="filterIcon" /> FILTERS
                 </div>
 
-                <div class="btn-group filterButton mt-4">
+                <div className="btn-group filterButton mt-4">
                   <a
-                    href="#!"
-                    class={buttonState5}
-                    onClick={async () => {
-                      setButtonActive5("btn active");
-                      setButtonActive6("btn");
-                      setBrewery(true);
-                      const _filters = {...filters};
-                      _filters.inventoryType = "BREWERY";
-                      applyFilters(_filters).then(()=>{filterFun(_filters);})
-                      
-                    }}
-                  >
-                    Brewery
-                  </a>
-                  <a
-                    href="#!"
-                    class={buttonState6}
+                    className={`btn ${selectedOrganizationType === 'BREWERY' ? "active" : ""}`}
                     onClick={() => {
-                      const _filters = {...filters};
-                      _filters.inventoryType = "VENDOR";
-                      setButtonActive6("btn active");
-                      setButtonActive5("btn");
-                      setBrewery(false);
-                      applyFilters(_filters).then(()=>{filterFun(_filters);})
+                      onOrganizationTypeChange('BREWERY');
                     }}
                   >
-                    Vendor
-                  </a>
+                    BREWERY
+                    </a>
+                  <a
+                    className={`btn ${selectedOrganizationType === 'VENDOR' ? "active" : ""}`}
+                    onClick={() => {
+                      onOrganizationTypeChange('VENDOR');
+                    }}
+                  >
+                    VENDOR
+                    </a>
                 </div>
 
                 <label className="filterSubHeading mt-2">Time Period</label>
-                <div class="btn-group filterButton mt-2">
+                <div className="btn-group filterButton mt-2">
                   <a
-                    href="#!"
-                    class={ButtonState7}
+                    className={`btn ${selectedDateType === 'by_range' ? "active" : ""}`}
                     onClick={() => {
-                      setButtonActive7("btn active");
-                      setButtonActive8("btn");
-                      setButtonActive9("btn");
-                      setButtonActive10("btn");
-                      setToday(true);
-                      const _filters = {...filters};
-                      Brewery
-                        ? (_filters.inventoryType = "BREWERY")
-                        : (_filters.inventoryType = "VENDOR");
-                      _filters.date_filter_type = "by_range";
-                      _filters.startDate = formatDateRev(startDate);
-                      _filters.endDate = formatDateRev(endDate);
-                      applyFilters(_filters).then(()=>{filterFun(_filters);})
+                      onDateTypeChange('by_range');
                     }}
                   >
                     Date Range
-                  </a>
+                    </a>
                   <a
-                    href="#!"
-                    class={ButtonState8}
+                    className={`btn ${selectedDateType === 'by_monthly' ? "active" : ""}`}
                     onClick={() => {
-                      setButtonActive7("btn");
-                      setButtonActive8("btn active");
-                      setButtonActive9("btn");
-                      setButtonActive10("btn");
-                      setToday(false);
-                      setQuarterly(false);
-                      setyearly(false);
-                      const _filters = {};
-                      Brewery
-                        ? (_filters.inventoryType = "BREWERY")
-                        : (_filters.inventoryType = "VENDOR");
-                      _filters.date_filter_type = "by_monthly";
-                      _filters.month = getMonth(monthDate);
-                      _filters.year = getYear(monthDate);
-                      applyFilters(_filters).then(()=>{filterFun(_filters);})
+                      onDateTypeChange('by_monthly');
                     }}
                   >
                     Monthly
-                  </a>
+                    </a>
                   <a
-                    href="#!"
-                    class={ButtonState9}
+                    className={`btn ${selectedDateType === 'by_quarterly' ? "active" : ""}`}
                     onClick={() => {
-                      setButtonActive7("btn");
-                      setButtonActive8("btn");
-                      setButtonActive9("btn active");
-                      setButtonActive10("btn");
-                      setToday(false);
-                      setyearly(false);
-                      setQuarterly(true);
-                      const _filters = {};
-                      Brewery
-                        ? (_filters.inventoryType = "BREWERY")
-                        : (_filters.inventoryType = "VENDOR");
-                      _filters.date_filter_type = "by_quarterly";
-                      _filters.year = getYear(new Date());
-                      _filters.quarter = "1"
-                      filterFun(_filters);
+                      onDateTypeChange('by_quarterly');
                     }}
                   >
                     Quarterly
-                  </a>
+                    </a>
                   <a
-                    href="#!"
-                    class={ButtonState10}
+                    className={`btn ${selectedDateType === 'by_yearly' ? "active" : ""}`}
                     onClick={() => {
-                      setButtonActive7("btn");
-                      setButtonActive8("btn");
-                      setButtonActive9("btn");
-                      setButtonActive10("btn active");
-                      setQuarterly(false);
-                      setToday(false);
-                      setyearly(true);
-
-                      const _filters = {};
-                      Brewery
-                        ? (_filters.inventoryType = "BREWERY")
-                        : (_filters.inventoryType = "VENDOR");
-                      _filters.date_filter_type = "by_range";
-                      _filters.startDate = formatDateRev(startDate);
-                      _filters.endDate = formatDateRev(endDate);
-                      filterFun(_filters);
+                      onDateTypeChange('by_yearly');
                     }}
                   >
-                    Today
-                  </a>
+                    Yearly
+                    </a>
                 </div>
-
-                {today ? (
-                  <div className="row">
-                    {/* <select className="filterSelect mt-2">
-                                                    </select> */}
-
-                    <div className="col-md-5">
-                      <DatePicker
-                        dateFormat="dd MMMM yyyy"
-                        selected={startDate}
-                        onChange={(date) => {
-                          console.log(formatDate(date));
-                          const _filters = { ...filters };
-                          _filters.startDate = formatDateRev(date);
-                          setStartDate(date);
-                          applyFilters(_filters).then(()=>{filterFun(_filters);})
-                        }}
-                      />
-                    </div>
-                    <div className="col-md-1"></div>
-                    <div className="col-md-3">
-                      <DatePicker
-                        dateFormat="dd MMMM yyyy"
-                        selected={endDate}
-                        onChange={(date) => {
-                          console.log(formatDate(date));
-                          const _filters = { ...filters };
-                          _filters.endDate = formatDateRev(date);
-                          setEndDate(date);
-                          applyFilters(_filters).then(()=>{filterFun(_filters);})
-
-
-                        }}
-                      />
-                    </div>
-                  </div>
-                ) : quarterly ? (
-                  <div className=" rightSideMenu pt-4 px-2">
-                    <label className="filterSubHeading mt-2">
-                      Select Quarter
-                    </label>
-                    <div className="row">
-                      <div className="col-6">
-                        <div className="filterSection">
-                          <label className="radioButton" for="gv">
-                            <input
-                              className="radioInput"
-                              type="radio"
-                              name="radio"
-                              value="1"
-                              id="gv"
-                              onChange={(quarter) => {
-                                const _filters = { ...filters };
-                                _filters.quarter = "1";
-                                _filters.date_filter_type = "by_quarterly"
-                                _filters.year = getYear(monthDate)
-                                applyFilters(_filters).then(()=>{filterFun(_filters);})
-
-                              }}
-                              defaultChecked={true}
-                            />{" "}
-                            January - March
-                          </label>
-                          <label className="radioButton" for="sv">
-                            <input
-                              className="radioInput"
-                              type="radio"
-                              name="radio"
-                              value="2"
-                              onChange={(quarter) => {
-                                const _filters = { ...filters };
-                                _filters.quarter = "2";
-                                _filters.date_filter_type = "by_quarterly"
-                                _filters.year = getYear(monthDate)
-                                applyFilters(_filters).then(()=>{filterFun(_filters);})
-
-                              }}
-                              id="sv"
-                            />{" "}
-                            April - June
-                          </label>
-                          <label className="radioButton" for="suv">
-                            <input
-                              className="radioInput"
-                              type="radio"
-                              name="radio"
-                              value="3"
-                              onChange={(quarter) => {
-                                const _filters = { ...filters };
-                                _filters.quarter = "3";
-                                _filters.date_filter_type = "by_quarterly"
-                                _filters.year = getYear(monthDate)
-                                applyFilters(_filters).then(()=>{filterFun(_filters);})
-
-                              }}
-                              id="suv"
-                            />{" "}
-                            July - September
-                          </label>
-                          <label className="radioButton" for="bv">
-                            <input
-                              className="radioInput"
-                              type="radio"
-                              name="radio"
-                              value="4"
-                              onChange={(quarter) => {
-                                const _filters = { ...filters };
-                                _filters.quarter = "4";
-                                _filters.year = getYear(monthDate)
-                                _filters.date_filter_type = "by_quarterly"
-                                applyFilters(_filters).then(()=>{filterFun(_filters);})
-
-                              }}
-                              id="bv"
-                            />{" "}
-                            October - December
-                          </label>
+                {
+                  selectedDateType === 'by_range' ?
+                    <>
+                      <div className="row">
+                        <div className="col-md-5">
+                          <input type="date"
+                            className="dateInput"
+                            value={filters.startDate}
+                            // Shiva
+                            onChange={onStartDateChange} />
+                        </div>
+                        <div className="col-md-5">
+                          <input type="date"
+                            className="dateInput"
+                            value={filters.startDate}
+                            // Shiva
+                            onChange={onEndDateChange}
+                          />
                         </div>
                       </div>
-                      <div className="col-6">
-                        <label className="filterSubHeading mt-2">
-                          Select year
-                        </label>
-                        <DatePicker
-                          dateFormat="dd MMMM yyyy"
-                          selected={monthDate}
-                          onChange={(date) => {
-                            console.log(formatDate(date));
-                            const _filters = { ...filters };
-                            _filters.year = getYear(date);
-                            setMonthDate(date);
-                            applyFilters(_filters).then(()=>{filterFun(_filters);})
-                          }}
-                          dateFormat="yyyy"
-                          showYearPicker
-                          showYearDropdown
-                        />
+                    </> : ""
+                }
+
+                {
+                  selectedDateType === 'by_monthly' ?
+                    <>
+                      <div className="row">
+                        <div className="col-md-5">
+                          <select
+                            className="filterSelect mt-2"
+                            value={filters.year}
+                            onChange={onYearChange}
+                          >
+                            <option>Select Year</option>
+                            {allowedYears.map((year, index) => {
+                              return (
+                                <option key={index} value={year}>
+                                  {year}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        </div>
+                        <div className="col-md-5">
+                          <select
+                            className="filterSelect mt-2"
+                            value={filters.month}
+                            onChange={onMonthChange}
+                          >
+                            <option>Select Year</option>
+                            {allowedMonths.map((month, index) => {
+                              return (
+                                <option key={index} value={month}>
+                                  {month}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                ) : yearly ? (
-                  <div></div>
-                ) : (
-                  <div>
-                    <label className="filterSubHeading mt-2">
-                      Select Month
-                    </label>
-                    <DatePicker
-                      dateFormat="dd MMMM yyyy"
-                      selected={monthDate}
-                      onChange={(date) => {
-                        console.log(formatDate(date));
-                        const _filters = { ...filters };
-                        _filters.month = getMonth(date);
-                        _filters.year = getYear(date);
-                        setMonthDate(date);
-                        applyFilters(_filters).then(()=>{filterFun(_filters);})
-                      }}
-                      dateFormat="MMMM yyyy"
-                      showMonthYearPicker
-                      showYearDropdown
-                    />
-                  </div>
-                )}
+                    </> : ""
+                }
+
+                {
+                  selectedDateType === 'by_quarterly' ?
+                    <>
+                      <div className="row">
+                        <div className="col-md-5">
+                          <select
+                            className="filterSelect mt-2"
+                            value={filters.year}
+                            onChange={onYearChange}
+                          >
+                            <option>Select Year</option>
+                            {allowedYears.map((year, index) => {
+                              return (
+                                <option key={index} value={year}>
+                                  {year}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        </div>
+                        <div className="col-md-5">
+                          <select
+                            className="filterSelect mt-2"
+                            value={filters.quarter}
+                            onChange={onQuarterChange}
+                          >
+                            <option>Select Quarter</option>
+                            {['1', '2', '3', '4'].map((quarter, index) => {
+                              return (
+                                <option key={index} value={quarter}>
+                                  {quarter}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        </div>
+                      </div>
+                    </> : ""
+                }
+                {
+                  selectedDateType === 'by_yearly' ?
+                    <>
+                      <div className="row">
+                        <div className="col-md-5">
+                          <select
+                            className="filterSelect mt-2"
+                            value={filters.year}
+                            onChange={onYearChange}
+                          >
+                            <option>Select Year</option>
+                            {allowedYears.map((year, index) => {
+                              return (
+                                <option key={index} value={year}>
+                                  {year}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        </div>
+                      </div>
+                    </> : ""
+                }
 
                 <label className="filterSubHeading mt-3">Select State</label>
                 <select
@@ -734,65 +676,53 @@ const TransactionHistory = (props) => {
                   })}
                 </select>
 
-                {Brewery ? (
-                  ""
-                ) : (
-                  <div>
-                    <label className="filterSubHeading mt-2">Vendor</label>
-                    <div class="btn-group filterButton mt-2">
-                      <a
-                        href="#!"
-                        class={AllButton}
-                        onClick={() => {
-                          setAllButtonActive("btn active");
-                          setS1ButtonActive("btn");
-                          setS2ButtonActive("btn");
-                        }}
-                      >
-                        All
-                      </a>
-                      <a
-                        href="#!"
-                        class={S1Button}
-                        onClick={() => {
-                          setAllButtonActive("btn ");
-                          setS1ButtonActive("btn active");
-                          setS2ButtonActive("btn");
-                        }}
-                      >
-                        S1
-                      </a>
-                      <a
-                        href="#!"
-                        class={S2Button}
-                        onClick={() => {
-                          setAllButtonActive("btn ");
-                          setS1ButtonActive("btn");
-                          setS2ButtonActive("btn active");
-                        }}
-                      >
-                        S2
-                      </a>
-                    </div>
-                  </div>
-                )}
+                {
+                  selectedOrganizationType === 'VENDOR' ?
+                    <>
+                      <label className="filterSubHeading mt-2">Vendor</label>
+                      <div className="btn-group filterButton mt-2">
+                        <a
+                          className={`btn ${selectedVendorType === 'ALL_VENDORS' ? "active" : ""}`}
+                          onClick={() => {
+                            onVendorTypeChange('ALL_VENDORS');
+                          }}
+                        >
+                          All
+                    </a>
+                        <a
+                          className={`btn ${selectedVendorType === 'S1' ? "active" : ""}`}
+                          onClick={() => {
+                            onVendorTypeChange('S1');
+                          }}
+                        >
+                          S1
+                    </a>
+                        <a
+                          className={`btn ${selectedVendorType === 'S2' ? "active" : ""}`}
+                          onClick={() => {
+                            onVendorTypeChange('S2');
+                          }}
+                        >
+                          S2
+                    </a>
+                      </div>
+                    </> : ""
+                }
 
-                {!Brewery ? (
-                  <label className="filterSubHeading mt-2">Select Vendor</label>
-                ) : (
-                  <label className="filterSubHeading mt-2">
-                    Select Brewery
-                  </label>
-                )}
+                <label className="filterSubHeading mt-2">Select
+                  {
+                    selectedOrganizationType === 'VENDOR' ? ' Vendor' : ' Brewery'
+                  }
+                </label>
                 <select
                   className="filterSelect mt-2"
                   onChange={onOrganizationChange}
                 >
-                  {!Brewery ? (
-                    <option>Select Vendor</option>
-                  ) : (
-                    <option>Select Brewery</option>
-                  )}
+                  <option>Select
+                    {
+                      selectedOrganizationType === 'VENDOR' ? ' Vendor' : ' Brewery'
+                    }
+                  </option>
                   {organizations.map((organization, index) => {
                     return (
                       <option key={index} value={organization.id}>
@@ -804,9 +734,7 @@ const TransactionHistory = (props) => {
 
                 <button
                   className="btn SearchButton mt-4"
-                  onClick={() => {
-                    filterFun({});
-                  }}
+                  onClick={resetFilters}
                 >
                   Clear
                 </button>

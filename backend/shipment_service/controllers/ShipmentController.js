@@ -692,6 +692,7 @@ function getFilterConditions(filters) {
       matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }];
     }
   }
+
   if (filters.state && filters.state.length) {
     matchCondition.state = filters.state;
   }
@@ -716,7 +717,10 @@ function getShipmentFilterCondition(filters, warehouseIds) {
     ]
   };
   if (filters.txn_type) {
-    matchCondition.status = filters.txn_type;
+    if (filters.txn_type !== 'ALL') {
+      matchCondition.status = filters.txn_type;
+    }
+
   }
 
   if (filters.date_filter_type && filters.date_filter_type.length) {
@@ -733,7 +737,7 @@ function getShipmentFilterCondition(filters, warehouseIds) {
     } else if (filters.date_filter_type === 'by_monthly') {
 
       let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
-      let startDateOfTheMonth = moment(startDateOfTheYear).add(filters.month-1, 'months').format(DATE_FORMAT);
+      let startDateOfTheMonth = moment(startDateOfTheYear).add(filters.month - 1, 'months').format(DATE_FORMAT);
       let endDateOfTheMonth = moment(startDateOfTheMonth).endOf('month').format(DATE_FORMAT);
       console.log(startDateOfTheMonth, endDateOfTheMonth)
       matchCondition.createdAt = {
