@@ -44,9 +44,9 @@ const TransactionHistory = (props) => {
   const [buttonState2, setButtonActive2] = useState("btn");
   const [buttonState3, setButtonActive3] = useState("btn");
   const [buttonState4, setButtonActive4] = useState("btn");
-  const [buttonState5, setButtonActive5] = useState("btn");
+  const [buttonState5, setButtonActive5] = useState("btn active");
   const [buttonState6, setButtonActive6] = useState("btn");
-  const [ButtonState7, setButtonActive7] = useState("btn");
+  const [ButtonState7, setButtonActive7] = useState("btn active");
   const [ButtonState8, setButtonActive8] = useState("btn");
   const [ButtonState9, setButtonActive9] = useState("btn");
   const [ButtonState10, setButtonActive10] = useState("btn");
@@ -146,7 +146,7 @@ const TransactionHistory = (props) => {
     _filters.district = selectedDistrict;
     setFilters(_filters);
     _getOrganizationsByType(_filters);
-    filterFun();
+    filterFun(_filters);
   };
 
   const onOrganizationChange = (event) => {
@@ -154,7 +154,7 @@ const TransactionHistory = (props) => {
     const _filters = { ...filters };
     _filters.organization = selectedOrganization;
     setFilters(_filters);
-    filterFun();
+    filterFun(_filters);
   };
 
   function selectThis(a) {
@@ -200,9 +200,12 @@ const TransactionHistory = (props) => {
       setDisplayTransactions(Added);
     }
   }
+  async function applyFilters(_filters){
+    return setFilters(_filters);
+  }
   async function filterFun(_filters) {
-   await setFilters(_filters);
-    const results = await dispatch(getTransactions(filters));
+  //  await setFilters(_filters);
+    const results = await dispatch(getTransactions(_filters));
     let addedarray = [];
     let date;
     results.data.forEach((b) => {
@@ -416,9 +419,10 @@ const TransactionHistory = (props) => {
                       setButtonActive5("btn active");
                       setButtonActive6("btn");
                       setBrewery(true);
-                      const _filters = {};
+                      const _filters = {...filters};
                       _filters.inventoryType = "BREWERY";
-                      filterFun(_filters);
+                      applyFilters(_filters).then(()=>{filterFun(_filters);})
+                      
                     }}
                   >
                     Brewery
@@ -427,13 +431,12 @@ const TransactionHistory = (props) => {
                     href="#!"
                     class={buttonState6}
                     onClick={() => {
-                      const _filters = {};
+                      const _filters = {...filters};
                       _filters.inventoryType = "VENDOR";
                       setButtonActive6("btn active");
                       setButtonActive5("btn");
                       setBrewery(false);
-
-                      filterFun(_filters);
+                      applyFilters(_filters).then(()=>{filterFun(_filters);})
                     }}
                   >
                     Vendor
@@ -451,12 +454,14 @@ const TransactionHistory = (props) => {
                       setButtonActive9("btn");
                       setButtonActive10("btn");
                       setToday(true);
-                      const _filters = {};
+                      const _filters = {...filters};
                       Brewery
                         ? (_filters.inventoryType = "BREWERY")
                         : (_filters.inventoryType = "VENDOR");
                       _filters.date_filter_type = "by_range";
-                      filterFun(_filters);
+                      _filters.startDate = formatDateRev(startDate);
+                      _filters.endDate = formatDateRev(endDate);
+                      applyFilters(_filters).then(()=>{filterFun(_filters);})
                     }}
                   >
                     Date Range
@@ -477,7 +482,9 @@ const TransactionHistory = (props) => {
                         ? (_filters.inventoryType = "BREWERY")
                         : (_filters.inventoryType = "VENDOR");
                       _filters.date_filter_type = "by_monthly";
-                      filterFun(_filters);
+                      _filters.month = getMonth(monthDate);
+                      _filters.year = getYear(monthDate);
+                      applyFilters(_filters).then(()=>{filterFun(_filters);})
                     }}
                   >
                     Monthly
@@ -545,7 +552,7 @@ const TransactionHistory = (props) => {
                           const _filters = { ...filters };
                           _filters.startDate = formatDateRev(date);
                           setStartDate(date);
-                          filterFun(_filters);
+                          applyFilters(_filters).then(()=>{filterFun(_filters);})
                         }}
                       />
                     </div>
@@ -559,7 +566,8 @@ const TransactionHistory = (props) => {
                           const _filters = { ...filters };
                           _filters.endDate = formatDateRev(date);
                           setEndDate(date);
-                          filterFun(_filters);
+                          applyFilters(_filters).then(()=>{filterFun(_filters);})
+
 
                         }}
                       />
@@ -583,8 +591,10 @@ const TransactionHistory = (props) => {
                               onChange={(quarter) => {
                                 const _filters = { ...filters };
                                 _filters.quarter = "1";
-                                setFilters(_filters);
-                                filterFun();
+                                _filters.date_filter_type = "by_quarterly"
+                                _filters.year = getYear(monthDate)
+                                applyFilters(_filters).then(()=>{filterFun(_filters);})
+
                               }}
                               defaultChecked={true}
                             />{" "}
@@ -599,7 +609,9 @@ const TransactionHistory = (props) => {
                               onChange={(quarter) => {
                                 const _filters = { ...filters };
                                 _filters.quarter = "2";
-                                filterFun(_filters);
+                                _filters.date_filter_type = "by_quarterly"
+                                _filters.year = getYear(monthDate)
+                                applyFilters(_filters).then(()=>{filterFun(_filters);})
 
                               }}
                               id="sv"
@@ -615,7 +627,9 @@ const TransactionHistory = (props) => {
                               onChange={(quarter) => {
                                 const _filters = { ...filters };
                                 _filters.quarter = "3";
-                                filterFun(_filters);
+                                _filters.date_filter_type = "by_quarterly"
+                                _filters.year = getYear(monthDate)
+                                applyFilters(_filters).then(()=>{filterFun(_filters);})
 
                               }}
                               id="suv"
@@ -631,7 +645,9 @@ const TransactionHistory = (props) => {
                               onChange={(quarter) => {
                                 const _filters = { ...filters };
                                 _filters.quarter = "4";
-                                filterFun(_filters);
+                                _filters.year = getYear(monthDate)
+                                _filters.date_filter_type = "by_quarterly"
+                                applyFilters(_filters).then(()=>{filterFun(_filters);})
 
                               }}
                               id="bv"
@@ -652,7 +668,7 @@ const TransactionHistory = (props) => {
                             const _filters = { ...filters };
                             _filters.year = getYear(date);
                             setMonthDate(date);
-                            filterFun(_filters);
+                            applyFilters(_filters).then(()=>{filterFun(_filters);})
                           }}
                           dateFormat="yyyy"
                           showYearPicker
@@ -677,7 +693,7 @@ const TransactionHistory = (props) => {
                         _filters.month = getMonth(date);
                         _filters.year = getYear(date);
                         setMonthDate(date);
-                        filterFun(_filters);
+                        applyFilters(_filters).then(()=>{filterFun(_filters);})
                       }}
                       dateFormat="MMMM yyyy"
                       showMonthYearPicker
