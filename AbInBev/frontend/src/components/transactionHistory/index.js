@@ -100,6 +100,17 @@ const TransactionHistory = (props) => {
 
     return [day, month, year].join("-");
   }
+  function formatDateRev(date) {
+    var d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [year, month, day].join("-");
+  }
   function getYear(date) {
     var d = new Date(date),
       year = d.getFullYear();
@@ -190,7 +201,7 @@ const TransactionHistory = (props) => {
     }
   }
   async function filterFun(_filters) {
-    setFilters(_filters);
+   await setFilters(_filters);
     const results = await dispatch(getTransactions(filters));
     let addedarray = [];
     let date;
@@ -488,6 +499,7 @@ const TransactionHistory = (props) => {
                         : (_filters.inventoryType = "VENDOR");
                       _filters.date_filter_type = "by_quarterly";
                       _filters.year = getYear(new Date());
+                      _filters.quarter = "1"
                       filterFun(_filters);
                     }}
                   >
@@ -510,8 +522,8 @@ const TransactionHistory = (props) => {
                         ? (_filters.inventoryType = "BREWERY")
                         : (_filters.inventoryType = "VENDOR");
                       _filters.date_filter_type = "by_range";
-                      _filters.startDate = formatDate(startDate);
-                      _filters.endDate = formatDate(endDate);
+                      _filters.startDate = formatDateRev(startDate);
+                      _filters.endDate = formatDateRev(endDate);
                       filterFun(_filters);
                     }}
                   >
@@ -531,7 +543,7 @@ const TransactionHistory = (props) => {
                         onChange={(date) => {
                           console.log(formatDate(date));
                           const _filters = { ...filters };
-                          _filters.startDate = formatDate(date);
+                          _filters.startDate = formatDateRev(date);
                           setStartDate(date);
                           filterFun(_filters);
                         }}
@@ -545,7 +557,7 @@ const TransactionHistory = (props) => {
                         onChange={(date) => {
                           console.log(formatDate(date));
                           const _filters = { ...filters };
-                          _filters.endDate = formatDate(date);
+                          _filters.endDate = formatDateRev(date);
                           setEndDate(date);
                           filterFun(_filters);
 
@@ -566,11 +578,11 @@ const TransactionHistory = (props) => {
                               className="radioInput"
                               type="radio"
                               name="radio"
-                              value="Q1"
+                              value="1"
                               id="gv"
                               onChange={(quarter) => {
                                 const _filters = { ...filters };
-                                _filters.quarter = "Q1";
+                                _filters.quarter = "1";
                                 setFilters(_filters);
                                 filterFun();
                               }}
@@ -583,10 +595,10 @@ const TransactionHistory = (props) => {
                               className="radioInput"
                               type="radio"
                               name="radio"
-                              value="Q2"
+                              value="2"
                               onChange={(quarter) => {
                                 const _filters = { ...filters };
-                                _filters.quarter = "Q2";
+                                _filters.quarter = "2";
                                 filterFun(_filters);
 
                               }}
@@ -599,10 +611,10 @@ const TransactionHistory = (props) => {
                               className="radioInput"
                               type="radio"
                               name="radio"
-                              value="Q3"
+                              value="3"
                               onChange={(quarter) => {
                                 const _filters = { ...filters };
-                                _filters.quarter = "Q3";
+                                _filters.quarter = "3";
                                 filterFun(_filters);
 
                               }}
@@ -615,10 +627,10 @@ const TransactionHistory = (props) => {
                               className="radioInput"
                               type="radio"
                               name="radio"
-                              value="Q4"
+                              value="4"
                               onChange={(quarter) => {
                                 const _filters = { ...filters };
-                                _filters.quarter = "Q4";
+                                _filters.quarter = "4";
                                 filterFun(_filters);
 
                               }}
