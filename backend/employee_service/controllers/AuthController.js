@@ -269,7 +269,7 @@ exports.register = [
             //   }
             // }
             const country =  req.body?.address?.country ? req.body.address?.country : 'India';
-            const address =  req.body?.address ? req.body.address :  {};
+            const address =  req.body?.address ? req.body.address : {};
             addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
             
             const incrementCounterOrg = await CounterModel.update({
@@ -1134,6 +1134,31 @@ exports.addWarehouse = [
     }
 
 
+  },
+];
+
+exports.updateWarehouseAddress = [
+  auth,
+  async (req, res) => {
+    try {
+      await WarehouseModel.findOneAndUpdate(
+        { id: req.query.warehouseId },
+        req.body,
+        { new: true }
+      )
+        .then((warehouse) => {
+          return apiResponse.successResponseWithData(
+            res,
+            "Warehouse Address Updated",
+            warehouse
+          );
+        })
+        .catch((err) => {
+          return apiResponse.ErrorResponse(res, err);
+        });
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
   },
 ];
 
