@@ -745,7 +745,11 @@ function getShipmentFilterCondition(filters, warehouseIds) {
       let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
       let startDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).startOf('quarter').format(DATE_FORMAT);
       let endDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).endOf('quarter').format(DATE_FORMAT);
-      matchCondition;
+      console.log(startDateOfTheQuarter, endDateOfTheQuarter)
+      matchCondition.createdAt = {
+        $gte: new Date(`${startDateOfTheQuarter}T00:00:00.0Z`),
+        $lte: new Date(`${endDateOfTheQuarter}T23:59:59.0Z`)
+      };
 
     } else if (filters.date_filter_type === 'by_yearly') {
 
