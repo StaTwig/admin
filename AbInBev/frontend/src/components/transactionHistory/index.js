@@ -146,7 +146,7 @@ const TransactionHistory = (props) => {
     _filters.district = selectedDistrict;
     setFilters(_filters);
     _getOrganizationsByType(_filters);
-    filterFun();
+    filterFun(_filters);
   };
 
   const onOrganizationChange = (event) => {
@@ -154,7 +154,7 @@ const TransactionHistory = (props) => {
     const _filters = { ...filters };
     _filters.organization = selectedOrganization;
     setFilters(_filters);
-    filterFun();
+    filterFun(_filters);
   };
 
   function selectThis(a) {
@@ -200,9 +200,12 @@ const TransactionHistory = (props) => {
       setDisplayTransactions(Added);
     }
   }
+  async function applyFilters(_filters){
+    return setFilters(_filters);
+  }
   async function filterFun(_filters) {
-   await setFilters(_filters);
-    const results = await dispatch(getTransactions(filters));
+  //  await setFilters(_filters);
+    const results = await dispatch(getTransactions(_filters));
     let addedarray = [];
     let date;
     results.data.forEach((b) => {
@@ -416,9 +419,10 @@ const TransactionHistory = (props) => {
                       setButtonActive5("btn active");
                       setButtonActive6("btn");
                       setBrewery(true);
-                      const _filters = {};
+                      const _filters = {...filters};
                       _filters.inventoryType = "BREWERY";
-                      filterFun(_filters);
+                      applyFilters(_filters).then(()=>{filterFun(_filters);})
+                      
                     }}
                   >
                     Brewery
@@ -427,13 +431,12 @@ const TransactionHistory = (props) => {
                     href="#!"
                     class={buttonState6}
                     onClick={() => {
-                      const _filters = {};
+                      const _filters = {...filters};
                       _filters.inventoryType = "VENDOR";
                       setButtonActive6("btn active");
                       setButtonActive5("btn");
                       setBrewery(false);
-
-                      filterFun(_filters);
+                      applyFilters(_filters).then(()=>{filterFun(_filters);})
                     }}
                   >
                     Vendor
@@ -451,12 +454,14 @@ const TransactionHistory = (props) => {
                       setButtonActive9("btn");
                       setButtonActive10("btn");
                       setToday(true);
-                      const _filters = {};
+                      const _filters = {...filters};
                       Brewery
                         ? (_filters.inventoryType = "BREWERY")
                         : (_filters.inventoryType = "VENDOR");
                       _filters.date_filter_type = "by_range";
-                      filterFun(_filters);
+                      _filters.startDate = formatDateRev(startDate);
+                      _filters.endDate = formatDateRev(endDate);
+                      applyFilters(_filters).then(()=>{filterFun(_filters);})
                     }}
                   >
                     Date Range
@@ -545,7 +550,7 @@ const TransactionHistory = (props) => {
                           const _filters = { ...filters };
                           _filters.startDate = formatDateRev(date);
                           setStartDate(date);
-                          filterFun(_filters);
+                          applyFilters(_filters).then(()=>{filterFun(_filters);})
                         }}
                       />
                     </div>
@@ -559,7 +564,8 @@ const TransactionHistory = (props) => {
                           const _filters = { ...filters };
                           _filters.endDate = formatDateRev(date);
                           setEndDate(date);
-                          filterFun(_filters);
+                          applyFilters(_filters).then(()=>{filterFun(_filters);})
+
 
                         }}
                       />
