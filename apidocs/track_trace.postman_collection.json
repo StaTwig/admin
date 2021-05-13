@@ -13,7 +13,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTY5NzkwMCwiZXhwIjoxNjE5NzA1MTAwfQ.0WRvpX_n0lfHhGHqGTXNZh8Veq5dFry_sy-hvjhjGhg",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDEyMTkzNSwiZXhwIjoxNjIwMTI5MTM1fQ.aWUWY6mim_c2X7KXIU4W88CBXnBt2IePjm8v8OjvN4Q",
 							"type": "string"
 						}
 					]
@@ -49,7 +49,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTY5NzkwMCwiZXhwIjoxNjE5NzA1MTAwfQ.0WRvpX_n0lfHhGHqGTXNZh8Veq5dFry_sy-hvjhjGhg",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
 							"type": "string"
 						}
 					]
@@ -79,7 +79,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTY5NzkwMCwiZXhwIjoxNjE5NzA1MTAwfQ.0WRvpX_n0lfHhGHqGTXNZh8Veq5dFry_sy-hvjhjGhg",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
 							"type": "string"
 						}
 					]
@@ -109,7 +109,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc2NzQxMSwiZXhwIjoxNjE5Nzc0NjExfQ.EosAPYn_4wKWRFDCAMt5RHW2Gfymg2VRWFxQ3rt3tdA",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
 							"type": "string"
 						}
 					]
@@ -131,6 +131,42 @@
 						{
 							"key": "trackingNumber",
 							"value": "SH100041"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "fetchDataByQRCode",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDI3MjU1NSwiZXhwIjoxNjIwMzE1NzU1fQ.lSZ8aLSw97UADmDo71Lb48k40oAWIl_MytCZ1eanUwE",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/tracktracemanagement/api/track/fetchDataByQRCode?QRcode=8781",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"tracktracemanagement",
+						"api",
+						"track",
+						"fetchDataByQRCode"
+					],
+					"query": [
+						{
+							"key": "QRcode",
+							"value": "8781"
 						}
 					]
 				}
