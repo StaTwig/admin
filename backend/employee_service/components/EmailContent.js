@@ -1,5 +1,5 @@
-const EmailContent = ({ name, origin, otp }) => {
-  const verifyLink = `${origin}/verify`;
+const EmailContent = ({ name, origin, otp ,email }) => {
+  const verifyLink = `${origin}/verify?emailId=${email}`;
   return `
   
   <head>
@@ -161,7 +161,7 @@ const EmailContent = ({ name, origin, otp }) => {
                   </tr>
                   <tr>
                     <td align="center" style="font-size:0px;padding:10px 25px;padding-right:16px;padding-left:25px;word-break:break-word;">
-                      <div style="font-family:open Sans Helvetica, Arial, sans-serif;font-size:16px;line-height:1;text-align:center;color:#000000;"><a href=${verifyLink}>${verifyLink}</a></div>
+                      <div style="font-family:open Sans Helvetica, Arial, sans-serif;font-size:16px;line-height:1;text-align:center;color:#000000;"><a href=${verifyLink}>Click here to Login</a></div>
                     </td>
 
                   <tr>
