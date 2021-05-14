@@ -61,3 +61,22 @@ export const getAllBrands = () => {
       }
     };
   };
+  
+export const getAllOrganisationStats = () => {
+    return async dispatch => {
+      try {
+        dispatch(turnOn());
+        console.log(config().getOrganisationStatsurl);
+        
+        const result = await axios.get(
+          config().getOrganisationStatsurl,
+        );
+        dispatch(turnOff());
+        console.log(result);
+        
+        return result.data;
+      } catch (e) {
+        dispatch(turnOff());
+      }
+    };
+  };

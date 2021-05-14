@@ -57,10 +57,10 @@ const data = [
 ];
 
 const GeographicalView = (props) => {
-    const { states, bstats } = props;
+    const { states, SKUStats, sku, viewName } = props;
     
-    const [analytics, setAnalytics] = useState(bstats);
-    const dispatch = useDispatch();
+    const [analytics, setAnalytics] = useState(SKUStats);
+    // const dispatch = useDispatch();
     // useEffect(() => {
     //     (async () => {
     //     // const result = await dispatch(getAnalyticsAllStats('?group_by=state'));
@@ -68,6 +68,17 @@ const GeographicalView = (props) => {
     //     setAnalytics(result.data);
     //     })();
     // }, []);
+
+    useEffect(() => {
+        if (sku) {
+            let n = SKUStats.filter(a => a.externalId == sku);
+            if (sku == '')
+                setAnalytics(SKUStats);
+            else 
+                setAnalytics(n);
+        }
+    }, [sku, viewName, props])
+
     const showDetailedGeoView = (param) => {
         props.onViewChange('DETAILED_GEO_VIEW', param);
     }
@@ -196,13 +207,12 @@ const GeographicalView = (props) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {analytics?.map((a, index) =>
-                            a.products.map((analytic, i) =>
+                        {analytics?.map((analytic, index) =>
                             <tr>
                                 <td scope="row">
                                     <div className="tableProfileIconCard justify-content-start">
                                         <div className="profileIcon">
-                                            <img src={bottlesIcon} alt="" width="50" height="50" />
+                                            <img src={analytic.image} alt="" width="50" height="50" />
                                         </div>
                                         <div className="profileName">
                                             <span className="profileTitle" onClick={() => showDetailedGeoView(analytic)}>{analytic.manufacturer+' - '+analytic.name}</span>
@@ -214,7 +224,6 @@ const GeographicalView = (props) => {
                                 <td>{analytic.targetSales}</td>
                                 <td>{analytic.returnRate}%</td>
                             </tr>
-                            )
                         )}
                     </tbody>
                 </table>

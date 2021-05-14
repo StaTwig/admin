@@ -58,16 +58,26 @@ import { useDispatch } from 'react-redux';
 //   ];
 
 const DetailedGeographicalView = (props) => {
-    const { states, prop } = props;
+    const { states, prop, sku, SKUStats } = props;
     
     const [analytics, setAnalytics] = useState([]);
+    const [name, setName] = useState(prop.name);
+    const [shortName, setShortname] = useState(prop.shortName);
+    const [image, setImage] = useState(prop.image);
     const dispatch = useDispatch();
     useEffect(() => {
         (async () => {
-        const result = await dispatch(getAnalyticsAllStats('sku='+prop.externalId+'group_by=state'));
-        setAnalytics(result.data);
+            if (props.sku) {
+                let n = props.SKUStats.filter(a => a.externalId == props.sku);
+                setName(n[0].name);
+                setShortname(n[0].shortName);
+                setImage(n[0].image);
+            }
+                
+            const result = await dispatch(getAnalyticsAllStats('?sku='+(props.sku ? props.sku : prop.externalId)+'&group_by=state'));
+            setAnalytics(result.data);
         })();
-    }, []);
+    }, [props]);
     return (
         <>
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
@@ -91,10 +101,10 @@ const DetailedGeographicalView = (props) => {
 
             <div className="geocard cursor-pointer mb-4">
                 <div className="author mb-2">
-                    <div className="profile"><img src={bottlesIcon} alt="" width="50" height="100%" /></div>
+                    <div className="profile"><img src={image} alt="" width="50" height="100%" /></div>
                     <div className="info">
-                        <div className="name">{prop.name}</div>
-                        <div className="caption">{prop.shortName}</div>
+                        <div className="name">{name}</div>
+                        <div className="caption">{shortName}</div>
                     </div>
                 </div>
             </div>
@@ -116,14 +126,14 @@ const DetailedGeographicalView = (props) => {
                                 bottom: 5,
                             }}
                             >
-                            <XAxis dataKey="name" />
+                            <XAxis dataKey="groupedBy" />
                             <YAxis />
                             <Tooltip />
                             <Legend />
-                            <Line type="monotone" dataKey="Sales" stroke="#FBBD0E" strokeWidth={3} dot={false} />
-                            <Line type="monotone" dataKey="Returns" stroke="#A344B7" strokeWidth={3} dot={false}/>
-                            <Line type="monotone" dataKey="Target" stroke="#A21233" strokeWidth={3} dot={false}/>
-                            <Line type="monotone" dataKey="ActualReturn" stroke="#E36141" strokeWidth={3} dot={false}/>
+                            <Line type="monotone" dataKey="sales" stroke="#FBBD0E" strokeWidth={3} dot={false} />
+                            <Line type="monotone" dataKey="returns" stroke="#A344B7" strokeWidth={3} dot={false}/>
+                            <Line type="monotone" dataKey="targetSales" stroke="#A21233" strokeWidth={3} dot={false}/>
+                            <Line type="monotone" dataKey="actualReturns" stroke="#E36141" strokeWidth={3} dot={false}/>
                             </LineChart>
                         </ResponsiveContainer> 
                     </div>

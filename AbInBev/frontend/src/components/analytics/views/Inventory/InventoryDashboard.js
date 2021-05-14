@@ -57,49 +57,19 @@ const data = [
     },
 ];
 
-const dataInventorySKUSales = [
-    {
-      name: 'JAN',
-      Sales: 10000
-    },
-    {
-      name: 'FEB',
-      Sales: 4500
-    },
-    {
-      name: 'MAR',
-      Sales: 6700
-    },
-    {
-      name: 'APR',
-      Sales: 9000
-    },
-    {
-      name: 'MAY',
-      Sales: 6478
-    },
-    {
-      name: 'JUN',
-      Sales: 2600
-    },
-    {
-      name: 'JUL',
-      Sales: 9050
-    },
-  ];
 
 const InventoryDashboard = (props) => {
     const [visible, setVisible] = useState([]);
-    const [analytics, setAnalytics] = useState([]);
-    const dispatch = useDispatch();
-    useEffect(() => {
-        (async () => {
-        const result = await dispatch(getAnalyticsByBrand());
-        console.log(result);
+    const [analytics, setAnalytics] = useState(props.bstats);
+    // const dispatch = useDispatch();
+    // useEffect(() => {
+    //     (async () => {
+    //     const result = await dispatch(getAnalyticsByBrand());
+    //     console.log(result);
         
-        setAnalytics(result.data);
-        })();
-    }, []);
+    //     setAnalytics(result.data);
+    //     })();
+    // }, []);
     
     return (
         <div className="inventoryDashboard">
@@ -126,7 +96,7 @@ const InventoryDashboard = (props) => {
                 {analytics.map((analytic, index) => {
                     return (<>
                         <div className="col-lg-3 col-md-3 col-sm-12">
-                            <div className="productGrid" onClick={() => { let newState = [...visible]; newState[index] = true; setVisible(newState)}}>
+                            <div className="productGrid" onClick={() => { let newState = [...visible]; newState[index] = !newState[index]; setVisible(newState)}}>
                                 <img className="productImage" src={analytic.products[0].image} />
                             </div>
                         </div>
@@ -158,249 +128,6 @@ const InventoryDashboard = (props) => {
                 }
                 )}
             </div>
-
-            {/* Single product detailed view for brand */}
-            <div className="productDetailedView">
-                <div className="row">
-                    <div className="col-lg-10 col-md-10 col-sm-12">
-                        <div className="productDetailCard">
-                            <div className="productGrid">
-                                <img className="productImage" src={becks} />
-                            </div>
-                            <div className="productcard">
-                                <div className="row">
-                                    <div className="col-lg-6 col-md-6 col-sm-12">
-                                        <div className="productSection mb-2">
-                                            <div className="profile"><img src={bottlesIcon} alt="" width="50" height="100%" /></div>
-                                            <div className="info">
-                                                <div className="name">Becks 330 ml</div>
-                                                <div className="caption">NRB Old Patent Becks Ice 330ml</div>
-                                                <div className="caption">526025</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="col-lg-6 col-md-6 col-sm-12">
-                                        <span className="productText">Return Rate <span className="breweryPropertyValue">82%</span></span>
-                                        <div className="captionSubtitle">Compared to (70% last month)</div>
-                                        <div className="progress progress-line-default">
-                                            <div className="progress-bar progress-bar-default" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "80%" }}>
-                                                <span className="sr-only">80% Complete</span>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-md-12 col-sm-12">
-                        <div className="productsChart">
-                            <label className="productsChartTitle">States</label>
-                            <ResponsiveContainer width="100%" height={500}>
-                                <BarChart
-                                    width={500}
-                                    height={300}
-                                    data={data}
-                                    margin={{
-                                        top: 5,
-                                        right: 30,
-                                        left: 20,
-                                        bottom: 5,
-                                    }}
-                                    barSize={10}
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="name" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Legend />
-                                    <Bar dataKey="TotalBottlepool" fill="#FDAB0F" />
-                                    <Bar dataKey="Sales" fill="#A344B7" />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </div>
-                        <div className="tableDetals">
-                            <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">States</th>
-                                        <th scope="col">Sales</th>
-                                        <th scope="col">Total Bottle Pool</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td scope="row">
-                                            <a className="stateLink" href="#">Karnataka</a>
-                                        </td>
-                                        <td>333333</td>
-                                        <td>333333</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">
-                                            <a className="stateLink" href="#">Delhi</a>
-                                        </td>
-                                        <td>333333</td>
-                                        <td>333333</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">
-                                            <a className="stateLink" href="#">Telangana</a>
-                                        </td>
-                                        <td>333333</td>
-                                        <td>333333</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">
-                                            <a className="stateLink" href="#">Gujarat</a>
-                                        </td>
-                                        <td>333333</td>
-                                        <td>333333</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">
-                                            <a className="stateLink" href="#">Maharashtra</a>
-                                        </td>
-                                        <td>333333</td>
-                                        <td>333333</td>
-                                    </tr>
-                                    <tr>
-                                        <td scope="row">
-                                            <a className="stateLink" href="#">Goa</a>
-                                        </td>
-                                        <td>333333</td>
-                                        <td>333333</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-            {/* Inventory SKU View */}
-            <h2>SKU View - Inentory</h2>
-            <br/>
-            <div className="btn-group mainButtonFilter">
-                <a href="#!" className="btn active">SKU</a>
-                <select className="btn selectState">
-                    <option>All</option>
-                    <option>Becks 330ml</option>
-                    <option>Budweiser 330ml</option>
-                </select>
-            </div>
-            <div className="productDetailedView">
-                <div className="row">
-                    
-                    <div className="col-md-6 col-lg-6 col-sm-12">
-                        <div className="productsChart">
-                            <label className="productsChartTitle">Overall Sales</label>
-                            <ResponsiveContainer width="100%" height={180}>
-                                <AreaChart
-                                    width={500}
-                                    height={400}
-                                    data={dataInventorySKUSales}
-                                    margin={{
-                                        top: 10,
-                                        right: 30,
-                                        left: 0,
-                                        bottom: 0,
-                                    }}
-                                    >
-                                    <XAxis dataKey="name" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Area type="monotone" dataKey="Sales" stroke="#8884d8" strokeWidth={2} fill="#8884d8"/>
-                                </AreaChart>
-                            </ResponsiveContainer>
-                        </div>
-                    </div>
-                    <div className="col-md-6 col-lg-6 col-sm-12">
-                        <div className="productsChart">
-                            <label className="productsChartTitle">Overall Inventory</label>
-                            <ResponsiveContainer width="100%" height={180}>
-                                <AreaChart
-                                    width={500}
-                                    height={400}
-                                    data={dataInventorySKUSales}
-                                    margin={{
-                                        top: 10,
-                                        right: 30,
-                                        left: 0,
-                                        bottom: 0,
-                                    }}
-                                    >
-                                    <XAxis dataKey="name" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Area type="monotone" dataKey="Sales" stroke="#FAAB10" strokeWidth={2} fill="#FAAB10"/>
-                                </AreaChart>
-                            </ResponsiveContainer>
-                        </div>
-                    </div>
-
-                    <div className="tableDetals">
-                        <table className="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col">States</th>
-                                    <th scope="col">Sales</th>
-                                    <th scope="col">Total Bottle Pool</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td scope="row">
-                                        <a className="stateLink" href="#">Karnataka</a>
-                                    </td>
-                                    <td>333333</td>
-                                    <td>333333</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">
-                                        <a className="stateLink" href="#">Delhi</a>
-                                    </td>
-                                    <td>333333</td>
-                                    <td>333333</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">
-                                        <a className="stateLink" href="#">Telangana</a>
-                                    </td>
-                                    <td>333333</td>
-                                    <td>333333</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">
-                                        <a className="stateLink" href="#">Gujarat</a>
-                                    </td>
-                                    <td>333333</td>
-                                    <td>333333</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">
-                                        <a className="stateLink" href="#">Maharashtra</a>
-                                    </td>
-                                    <td>333333</td>
-                                    <td>333333</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">
-                                        <a className="stateLink" href="#">Goa</a>
-                                    </td>
-                                    <td>333333</td>
-                                    <td>333333</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>                            
-
         </div>
     );
 };

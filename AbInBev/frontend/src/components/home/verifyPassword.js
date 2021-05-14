@@ -19,6 +19,12 @@ const VerifyPassword = (props) => {
     if (result) { setErrorMessage(result);}
   }
 
+  const onkeydown = (event) => {
+    if (event.keyCode  === 13) {
+        onVerifyOtpClick();
+    }
+   }
+
   const onResendOtpClick = async () => {
     setOtp1('');
     setOtp2('');
@@ -49,7 +55,7 @@ const VerifyPassword = (props) => {
       </div>
       <div className="login-form">
         <div className="card-title mb-2">Enter OTP</div>
-        <div className="form-groupverify pl-5 pr-5 mb-2">
+        <div className="form-groupverify pl-5 pr-5 mb-2" onKeyDown={onkeydown}>
           <input
             id="1"
             type='text'

@@ -22,6 +22,12 @@ const Login = (props) => {
     }
   }
 
+  const onkeydown = (event) => {
+    if (event.keyCode  === 13) {
+        onSendOtpClick();
+    }
+   }
+
   return (
     <div className="loginScreen">
       <div className="align-center pb-5 pt-5">
@@ -32,7 +38,7 @@ const Login = (props) => {
       <div className="loginUserBlock justify-content-center">
         <div className="form-group">
           <label htmlFor="username" className="userNameLabel">Username/ Mobile No.</label>
-          <input name="username" className={`form-control username ${showErrorMessage && `border border-danger`}`} value={email}
+          <input onKeyDown={onkeydown} name="username" className={`form-control username ${showErrorMessage && `border border-danger`}`} value={email}
             onChange={e => setEmail(e.target.value)} />
           {
             showErrorMessage ? <h4 className="error-message text-danger">{errorMessage}</h4> : ""

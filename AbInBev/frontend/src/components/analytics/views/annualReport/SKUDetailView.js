@@ -191,12 +191,12 @@ const SKUDetailView = (props) => {
                                     }}
                                     >
                                    <XAxis type="number" />
-                                    <YAxis dataKey="name" type="category" scale="band" />
+                                    <YAxis dataKey="groupedBy" type="category" scale="band" />
                                     <Tooltip />
                                     <Legend />
-                                    <Bar dataKey="Sales" stackId="a" fill="#FDAB0F" />
-                                    <Bar dataKey="Returns" stackId="a" fill="#A20134" />
-                                    <Bar dataKey="Target" stackId="a" fill="#A344B7" />
+                                    <Bar dataKey="sales" stackId="a" fill="#FDAB0F" />
+                                    <Bar dataKey="returns" stackId="a" fill="#A20134" />
+                                    <Bar dataKey="targetSales" stackId="a" fill="#A344B7" />
                                 </BarChart>
                             </ResponsiveContainer>    
                         </div>

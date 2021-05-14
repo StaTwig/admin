@@ -9,6 +9,7 @@ const AnalyticsContainer = (props) => {
   const [SKUs, setSKUs] = useState([]);
   const [brands, setBrands] = useState([]);
   const [brandStats, setBrandstat] = useState([]);
+  const [SKUStats, setSKUStats] = useState([]);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -21,10 +22,18 @@ const AnalyticsContainer = (props) => {
       setBrands(b_results.data);
       const s_result = await dispatch(getAnalyticsByBrand());
       setBrandstat(s_result.data);
+      let n = [];
+      for (let a of s_result.data) {
+        for (let product of a.products) {
+           n.push(product);
+        }
+      }
+      setSKUStats(n);
+      
     })();
   }, []);
 
-  return <Analytics states={states} brands={brands} SKUs={SKUs} bstats={brandStats} {...props} />;
+  return <Analytics states={states} SKUStats={SKUStats} brands={brands} SKUs={SKUs} bstats={brandStats} {...props} />;
 };
 
 export default AnalyticsContainer;
