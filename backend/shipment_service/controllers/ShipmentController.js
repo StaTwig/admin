@@ -535,7 +535,7 @@ exports.receiveShipment = [
         po.products.every((product) => {
           data.products.every((p) => {
             if (
-              parseInt(p.productQuantity) < parseInt(product.productQuantity)
+              parseInt(p.productQuantity) < parseInt(product.quantity)
             ) {
               quantityMismatch = true;
               return false;
