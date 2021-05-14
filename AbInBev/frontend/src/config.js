@@ -99,6 +99,7 @@ export function config() {
       getAnalyticsByBrandurl: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getStatsByBrand`,
       getAllBrandsurl: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getAllBrands`,
       getOrganisationStatsurl: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getStatsByOrg`,
+      getOverviewStats: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getOverviewStats`,
 
     },
     ainbevtest: {
@@ -172,6 +173,7 @@ export function config() {
       getAnalyticsByBrandurl: `${LOCAL_SERVER_URL_AANALYTICS}/advancedanalytics/api/analytics/getStatsByBrand`,
       getAllBrandsurl: `${LOCAL_SERVER_URL_AANALYTICS}/advancedanalytics/api/analytics/getAllBrands`,
       getOrganisationStatsurl: `${LOCAL_SERVER_URL_AANALYTICS}/advancedanalytics/api/analytics/getStatsByOrg`,
+      getOverviewStats: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getOverviewStats`,
 
     },
   };
