@@ -3,8 +3,8 @@ var EmployeeSchema = new mongoose.Schema({
   id: { type: String, required: false, unique: true },
   emailId: {
     type: String,
-    required: true,
-    unique: true
+    //required: true,
+    //unique: true
   },
   password: {
     type: String,

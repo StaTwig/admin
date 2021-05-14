@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BarChart,AreaChart, Area, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-
 import becks from "../../../../assets/images/becks.png";
 import rc from "../../../../assets/images/rc.png";
 import bud from "../../../../assets/images/bud.png";
@@ -10,6 +9,53 @@ import fasters from "../../../../assets/images/fasters.png";
 import haywards from "../../../../assets/images/haywards.png";
 import bottlesIcon from "../../../../assets/becks_330ml.png";
 
+import PropTypes from 'prop-types';
+import { makeStyles } from '@material-ui/core/styles';
+import Box from '@material-ui/core/Box';
+import Collapse from '@material-ui/core/Collapse';
+import IconButton from '@material-ui/core/IconButton';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Typography from '@material-ui/core/Typography';
+import Paper from '@material-ui/core/Paper';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+
+const useRowStyles = makeStyles({
+    root: {
+      '& > *': {
+        borderBottom: 'unset',
+      },
+    },
+  });
+
+
+  const rows = [
+      {
+        'name':'karnataka',
+        'sales':683000, 
+        'actualreturns':5000,
+        districts: [
+            { district: 'Bangalore', sales:'11091700', returned: '3000', target:2000, actualreturn: 3200 },
+            { district: 'Shivmoga', sales:'11091700', returned: '3000', target:2000, actualreturn: 3200 },
+            { district: 'Tumkur', sales:'11091700', returned: '3000', target:2000, actualreturn: 3200 }
+          ]    
+      },
+      {
+        'name':'Telangana',
+        'sales':583000, 
+        'actualreturns':67000,
+        districts: [
+            { district: 'Hyderabad', sales:'11091700', returned: '3000', target:2000, actualreturn: 3200 },
+            { district: 'Warangal', sales:'11091700', returned: '3000', target:2000, actualreturn: 3200 },
+            { district: 'Guntur', sales:'11091700', returned: '3000', target:2000, actualreturn: 3200 }
+          ]    
+      }
+  ];
 const data = [
     {
         name: 'Karnataka',
@@ -86,7 +132,78 @@ const dataInventorySKUSales = [
     },
   ];
 
+  const State_district_Report = [
+    {
+        name: 'Total Sales',
+        count: 619000
+    },
+    {
+        name: 'Total Bottle Pool',
+        count: 519000
+    }
+];
+
+function Row(props) {
+    const { row } = props;
+    const [open, setOpen] = React.useState(false);
+    const classes = useRowStyles();
+  
+    return (
+      <React.Fragment>
+        <TableRow className={classes.root}>
+          <TableCell>
+            <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
+              {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
+            </IconButton>
+          </TableCell>
+          <TableCell component="th" scope="row">
+            {row.name}
+          </TableCell>
+          <TableCell align="right">{row.sales}</TableCell>
+          <TableCell align="right">{row.actualreturns}</TableCell>
+        </TableRow>
+        <TableRow>
+          <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
+            <Collapse in={open} timeout="auto" unmountOnExit>
+              <Box margin={1}>
+                <Table size="small" aria-label="purchases">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>District</TableCell>
+                      <TableCell>Sales</TableCell>
+                      <TableCell align="right">Returned</TableCell>
+                      <TableCell align="right">Target</TableCell>
+                      <TableCell align="right">Actual Returns</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {row.districts.map((district) => (
+                      <TableRow>
+                        <TableCell component="th" scope="row">
+                          {district.district}
+                        </TableCell>
+                        <TableCell>{district.sales}</TableCell>
+                        <TableCell align="right">{district.returned}</TableCell>
+                        <TableCell align="right">
+                          {district.target}
+                        </TableCell>
+                        <TableCell align="right">
+                          {district.actualreturn}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </Box>
+            </Collapse>
+          </TableCell>
+        </TableRow>
+      </React.Fragment>
+    );
+  }
+
 const InventoryDashboard = (props) => {
+    
     return (
         <div className="inventoryDashboard">
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
@@ -464,6 +581,69 @@ const InventoryDashboard = (props) => {
                 </div>
             </div>                            
 
+            {/* Inventory SKU View */}
+            <h2>Geographical View - Inentory State and District Views</h2>
+            <br/>
+            <div className="btn-group mainButtonFilter">
+                <a href="#!" className="btn active">Brand</a>
+                <select className="btn selectState">
+                    <option>All</option>
+                    <option>Becks</option>
+                    <option>Budweiser</option>
+                </select>
+            </div>
+
+            <div className="row">
+                <div className="col-md-12 col-lg-12 col-sm-12">
+                    <div className="stateandDistrictCard mb-4">
+                        <h2>Karnataka</h2>
+                        <ResponsiveContainer width="100%" height={200}>            
+                            <BarChart
+                                width={200}
+                                height={150}
+                                barCategoryGap={1}
+                                data={State_district_Report}
+                                margin={{
+                                    top: 20,
+                                    right: 30,
+                                    left: 20,
+                                    bottom: 5,
+                                }}
+                                barSize={50}
+                                barGap={1}
+                                >
+                                <XAxis dataKey="name" scale="band" />
+                                <YAxis type="number" />
+                                <Tooltip />
+                                <Legend />
+                                <Bar dataKey="count" barCategoryGap={80} radius={[5, 5, 0, 0]} fill="#54265E" />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>                           
+                </div>
+
+                <div className="col-md-12 col-lg-12 col-sm-12">
+                    <div className="stateDistrictTableContainer mb-4">
+                        <TableContainer component={Paper}>
+                            <Table aria-label="collapsible table">
+                            <TableHead>
+                                <TableRow>
+                                <TableCell />
+                                    <TableCell>State</TableCell>
+                                    <TableCell align="right">Sales</TableCell>
+                                    <TableCell align="right">Actual Returns</TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {rows.map((row) => (
+                                <Row key={row.name} row={row} />
+                                ))}
+                            </TableBody>
+                            </Table>
+                        </TableContainer>                
+                    </div>
+                </div>                
+            </div>
         </div>
     );
 };

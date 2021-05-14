@@ -2,6 +2,9 @@ import React from "react";
 import "../../style.scss";
 
 const BreweryView = (props) => {
+    const openBreweryDetailView = () => {
+        props.onViewChange('BREWERY_DETAIL_VIEW');
+    }
     return (
         <div >
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
@@ -23,7 +26,7 @@ const BreweryView = (props) => {
 
             <div className="row">
                 <div className="col-lg-4 col-md-4 col-sm-12">
-                    <div className="breweryCard">
+                    <div className="breweryCard" onClick={openBreweryDetailView}>
                         <h4 className="breweryTitle">SPR Distilleries Pvt Ltd</h4>
                         <h6 className="brewerySubtitle">Anheuser Busch Inbev India Ltd</h6>
                         <p className="breweryLocationText"> <i className="fa fa-map-marker breweryLoc"></i> Mysuru, Karnataka</p>
