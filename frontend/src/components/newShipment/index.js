@@ -592,7 +592,7 @@ console.log("tes",products);
                         className="form-control"
                         name="airWayBillNo"
                         onBlur={handleBlur}
-                        placeholder="Enter Air Way Bill No"
+                        placeholder="Enter Airway Bill No"
                         onChange={handleChange}
                         value={values.airWayBillNo}
                       />
@@ -649,7 +649,7 @@ console.log("tes",products);
                         type="text"
                         className="form-control"
                         name="labelCode"
-                        placeholder="Enter Label ID"
+                        placeholder="Enter Label Code"
                         onBlur={handleBlur}
                         onChange={handleChange}
                         value={values.labelCode}
