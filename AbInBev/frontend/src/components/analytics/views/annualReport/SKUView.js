@@ -15,7 +15,7 @@ const SKUView = (props) => {
     //     })();
     // }, []);
     const openDetailView = (sku) => {
-        props.onViewChange('SKU_DETAIL_VIEW', sku);
+        props.onViewChange(props.prop?.type == 'b' ? 'BREWERY_DETAIL_VIEW' : 'SKU_DETAIL_VIEW', sku);
     }
 
     return (
@@ -61,7 +61,7 @@ const SKUView = (props) => {
                                     </div>
                                     <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">{product.returnRate}%</span></span>
                                     <div className="progress progress-line-danger">
-                                        <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "{product.returnRate}%" }}>
+                                        <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: product.returnRate+"%" }}>
                                             <span className="sr-only">{product.returnRate}% Complete</span>
                                         </div>
                                     </div>

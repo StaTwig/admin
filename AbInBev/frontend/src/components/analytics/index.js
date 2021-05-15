@@ -149,6 +149,8 @@ const Analytics = (props) => {
                     </label>
                   </>
                 }
+                {selectedViewCode != 'BREWERY_VIEW' && 
+                <>
                 <label className="filterSubHeading mt-3">Select SKU</label>
                 <select className="filterSelect mt-2" value={SKU} onChange={skuChanged}>
                   <option>Select SKU</option>
@@ -174,6 +176,8 @@ const Analytics = (props) => {
                     )
                   }
                 </select>
+                </>
+                }
                 {selectedViewCode == 'DETAILED_GEO_VIEW' &&
                   <>
                   <label className="filterSubHeading mt-3">Time Period</label>
