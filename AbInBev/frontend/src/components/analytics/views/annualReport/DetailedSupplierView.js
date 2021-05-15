@@ -100,12 +100,12 @@ const DetailedSupplierView = (props) => {
                 </div>
 
                 <div className="row">
-                    <div className="col-lg-6 col-md-6 col-sm-12">
-                    <div id="chart">
-                        <Chart options={SupplierChartData.options} series={SupplierChartData.series} type="radialBar" height={350} />
+                    <div className="col-lg-4 col-md-4 col-sm-12">
+                        <div id="chart">
+                            <Chart options={SupplierChartData.options} series={SupplierChartData.series} type="radialBar" height={350} />
+                        </div>
                     </div>
-                    </div>
-                    <div className="col-lg-6 col-md-6 col-sm-12">
+                    <div className="col-lg-8 col-md-8 col-sm-12">
                         <div className="tableDetals">
                             <table className="table">
                                 <thead>
