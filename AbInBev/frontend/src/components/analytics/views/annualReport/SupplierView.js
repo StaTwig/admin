@@ -3,12 +3,8 @@ import becks from "../../../../assets/images/becks.png";
 import bottlesIcon from "../../../../assets/becks_330ml.png";
 
 const SupplierView = (props) => {
-
-    // const openDetailView = (productId) => {
-    //     props.onViewChange('SKU_DETAIL_VIEW', productId);
-    // }
     const openDetailView = () => {
-        props.onViewChange('SKU_DETAIL_VIEW');
+        props.onViewChange('SUPPLIER_DETAIL_VIEW');
     }
 
     return (
