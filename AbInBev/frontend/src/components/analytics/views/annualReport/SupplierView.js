@@ -20,7 +20,7 @@ const SupplierView = (props) => {
     //     })();
     // }, []);
     const openDetailView = (sku) => {
-        props.onViewChange('SKU_DETAIL_VIEW', {sku: sku});
+        props.onViewChange('SUPPLIER_DETAIL_VIEW', {sku: sku});
     }
 
     return (

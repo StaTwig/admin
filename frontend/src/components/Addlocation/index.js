@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import Location from "../../assets/icons/CurrentLocation1.png";
 import {addWarehouse} from "../../actions/userActions";
-import FailedPopUp from "../../shared/PopUp/failedPopUp";
-import SuccessPopUp from "../../shared/PopUp/successPopUp";
+import SuccessPopup from "../../shared/PopUp/successPopUp";
+import FailPopup from "../../shared/PopUp/failedPopUp";
+import Modal from "../../shared/modal";
 // import React, { useState,useRef } from 'react';
 
 import "./style.scss";
@@ -16,9 +17,12 @@ const AddLocation = (props) => {
   const [state, setState] = useState("");
   const [country, setCountry] = useState("");
   const [pincode, setPincode] = useState("");
+  const [addedLocationModal, setAddedLocationModal] = useState(false);
 
-  console.log('props');
-  console.log(props);
+  const closeModalAddedLocation = ()=>{
+    setAddedLocationModal(false);
+    props.history.push('/profile');
+  };
 
   const updateStatus = async (values) => {
     const data =  {
@@ -49,6 +53,7 @@ const AddLocation = (props) => {
     if(result.status = 200){
       console.log('Added Location');
       console.log(result);
+      setAddedLocationModal(true);
       // props.history.push('/profile');
     }
     else{
@@ -286,6 +291,16 @@ const AddLocation = (props) => {
             <span>Use my current Location</span>
           </button> */}
         </div>
+        {addedLocationModal && (
+        <Modal
+          close={() => closeModalAddedLocation()}
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+          <SuccessPopup
+            onHide={closeModalAddedLocation} //FailurePopUp
+          />
+        </Modal>
+      )}
       </div>
     </div>
   );
