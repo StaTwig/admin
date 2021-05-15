@@ -5,7 +5,10 @@ const { customAlphabet } = require("nanoid");
 const nanoid = customAlphabet("1234567890abcdef", 10);
 const checkToken = require("../middlewares/middleware").checkToken;
 const { options } = require('../app');
-const uniqid = require("uniqid");
+ const uniqid = require("uniqid");
+ const CounterModel = require('../models/CounterModel');
+
+
 
  exports.addneworgtypeinstance=[
         auth,
@@ -13,8 +16,35 @@ const uniqid = require("uniqid");
         try{
           const {id,name}=req.body;
           //instance created
-              const u_id = uniqid('CONF-');
-              const Org_id = uniqid('ORG-');
+
+      const incrementCounterOrg = await CounterModel.update({
+            'counters.name': "orgId"
+         },{
+              $inc: {
+                "counters.$.value": 1
+            }
+       })
+
+      const orgCounter = await CounterModel.findOne({'counters.name':"orgId"},{"counters.name.$":1})
+      organisatId = orgCounter.counters[0].format + orgCounter.counters[0].value;
+
+      //organisationId = uniqid('org-');
+      const incrementCounterWarehouse = await CounterModel.update({
+            'counters.name': "warehouseId"
+         },{
+              $inc: {
+                "counters.$.value": 1
+            }
+       })
+
+      const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.name.$":1})
+      configid = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
+
+
+
+
+              const u_id = configid;
+              const Org_id = organisatId;
               const organisationModel =new OrganisationModel({
                 id:u_id,
               })
@@ -43,7 +73,19 @@ const uniqid = require("uniqid");
         async(req,res)=>{
         try{
           //instance created
-          const Org_id = uniqid('ORG-');
+          const incrementCounterOrg = await CounterModel.update({
+            'counters.name': "orgId"
+         },{
+              $inc: {
+                "counters.$.value": 1
+            }
+       })
+
+      const orgCounter = await CounterModel.findOne({'counters.name':"orgId"},{"counters.name.$":1})
+      organisatId = orgCounter.counters[0].format + orgCounter.counters[0].value;
+
+
+          const Org_id = organisatId;
           var newObject2 = { id :Org_id , name :req.body.name,approvalAuthority:0 }
           const organisations=await OrganisationModel.update({id:req.query.id},{"$push":{"organisationTypes": newObject2 }})
               console.log(organisations);
@@ -157,8 +199,31 @@ exports.getOrganizationsByType = [
         try{
           const {id,name}=req.body;
           //instance created
-              const u_id = uniqid('CONF-');
-              const Org_id = uniqid('WAR-');
+          const incrementCounterOrg = await CounterModel.update({
+            'counters.name': "orgId"
+         },{
+              $inc: {
+                "counters.$.value": 1
+            }
+       })
+
+      const orgCounter = await CounterModel.findOne({'counters.name':"orgId"},{"counters.name.$":1})
+      configid = orgCounter.counters[0].format + orgCounter.counters[0].value;
+
+      //organisationId = uniqid('org-');
+      const incrementCounterWarehouse = await CounterModel.update({
+            'counters.name': "warehouseId"
+         },{
+              $inc: {
+                "counters.$.value": 1
+            }
+       })
+
+      const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.name.$":1})
+      organisatId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
+
+              const u_id = configid;
+              const Org_id = organisatId;
               const organisationModel =new OrganisationModel({
                 id:u_id,
               })
@@ -187,7 +252,18 @@ exports.getOrganizationsByType = [
         async(req,res)=>{
         try{
           //instance created
-          const Org_id = uniqid('WAR-');
+          const incrementCounterWarehouse = await CounterModel.update({
+            'counters.name': "warehouseId"
+         },{
+              $inc: {
+                "counters.$.value": 1
+            }
+       })
+
+      const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.name.$":1})
+      organisatId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
+
+          const Org_id = organisatId;
           var newObject2 = { id :Org_id , name :req.body.name}
           const organisations=await OrganisationModel.update({id:req.query.id},{"$push":{"warehouseTypes": newObject2 }})
               console.log(organisations);
