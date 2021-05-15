@@ -24,6 +24,22 @@ const SKUAnnualReport = [
         Sales: 2000,
         Returns: 9800,
         Target: 2290,
+    },{
+        name: 'Telangana',
+        Sales: 2000,
+        Returns: 9800,
+        Target: 2290,
+    },
+    {
+        name: 'abc',
+        Sales: 2000,
+        Returns: 9800,
+        Target: 2290,
+    },{
+        name: 'xyx',
+        Sales: 2000,
+        Returns: 9800,
+        Target: 2290,
     }
 ];
 
@@ -167,7 +183,6 @@ const SKUDetailView = (props) => {
                                     }}
                                     barSize={10}
                                 >
-                                    <CartesianGrid strokeDasharray="3 3" />
                                     <XAxis dataKey="name" />
                                     <YAxis />
                                     <Tooltip />
@@ -184,11 +199,13 @@ const SKUDetailView = (props) => {
                                     data={analytics}
                                     layout="vertical"
                                     margin={{
-                                        top: 20,
-                                        right: 30,
-                                        left: 20,
+                                        top: 10,
+                                        right: 10,
+                                        left: 10,
                                         bottom: 5,
                                     }}
+                                    barSize={10}
+                                    barGap={1}
                                     >
                                    <XAxis type="number" />
                                     <YAxis dataKey="groupedBy" type="category" scale="band" />
@@ -196,7 +213,7 @@ const SKUDetailView = (props) => {
                                     <Legend />
                                     <Bar dataKey="sales" stackId="a" fill="#FDAB0F" />
                                     <Bar dataKey="returns" stackId="a" fill="#A20134" />
-                                    <Bar dataKey="targetSales" stackId="a" fill="#A344B7" />
+                                    <Bar dataKey="targetSales" radius={[0, 5, 5, 0]} stackId="a" fill="#A344B7" />
                                 </BarChart>
                             </ResponsiveContainer>    
                         </div>
@@ -258,10 +275,11 @@ const SKUDetailView = (props) => {
 
                         {/* <div className="productsChart">
                             <label className="productsChartTitle">Karnataka</label>
-                            <ResponsiveContainer width="100%" height={500}>            
+                            <ResponsiveContainer width="100%" height={200}>            
                                 <BarChart
                                     width={500}
-                                    height={300}
+                                    height={250}
+                                    barCategoryGap={1}
                                     data={SKU_State_AnnualReport}
                                     layout="vertical"
                                     margin={{
@@ -270,14 +288,16 @@ const SKUDetailView = (props) => {
                                         left: 20,
                                         bottom: 5,
                                     }}
+                                    barSize={10}
+                                    barGap={10}
                                     >
                                    <XAxis type="number" />
                                     <YAxis dataKey="name" type="category" scale="band" />
                                     <Tooltip />
                                     <Legend />
-                                    <Bar dataKey="Sales" fill="#FDAB0F" />
-                                    <Bar dataKey="Returns" fill="#A20134" />
-                                    <Bar dataKey="Target" fill="#A344B7" />
+                                    <Bar dataKey="Sales" barCategoryGap={80} radius={[0, 5, 5, 0]} fill="#FDAB0F" />
+                                    <Bar dataKey="Returns" barCategoryGap={80} radius={[0, 5, 5, 0]} fill="#A20134" />
+                                    <Bar dataKey="Target" barCategoryGap={80} radius={[0, 5, 5, 0]} fill="#A344B7" />
                                 </BarChart>
                             </ResponsiveContainer>    
                         </div> */}

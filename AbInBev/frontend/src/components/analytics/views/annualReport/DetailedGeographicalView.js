@@ -58,7 +58,7 @@ import { useDispatch } from 'react-redux';
 //   ];
 
 const DetailedGeographicalView = (props) => {
-    const { states, prop, sku, SKUStats } = props;
+    const { states, prop, sku, SKUStats, params } = props;
     
     const [analytics, setAnalytics] = useState([]);
     const [name, setName] = useState(prop.name);
@@ -73,8 +73,29 @@ const DetailedGeographicalView = (props) => {
                 setShortname(n[0].shortName);
                 setImage(n[0].image);
             }
+
+            let qp = '';
+
+            if (props.params) {
+                const p = props.params;
+                if (p.year)
+                    qp = '&year=' + p.year;
+                if (p.month)
+                    qp+= '&month=' + p.month;
+                if (p.quarter)
+                    qp += '&quarter=' + p.quarter;
+                if (p.state)
+                    qp += '&state=' + p.state;
                 
-            const result = await dispatch(getAnalyticsAllStats('?sku='+(props.sku ? props.sku : prop.externalId)+'&group_by=state'));
+                if (p.year && p.month)
+                    qp += '&date_filter_type=by_monthly';
+                else if (p.year && p.quarter)
+                    qp += '&date_filter_type=by_quarterly';
+                else if (p.year)
+                    qp += '&date_filter_type=by_yearly';
+            }
+                
+            const result = await dispatch(getAnalyticsAllStats('?sku='+(props.sku ? props.sku : prop.externalId)+'&group_by=date'+qp));
             setAnalytics(result.data);
         })();
     }, [props]);

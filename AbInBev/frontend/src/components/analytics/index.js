@@ -10,8 +10,46 @@ const Analytics = (props) => {
     view: 'ANNUALREPORT_DASHBOARD'
   });
 
+
+  const allowedMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  let thisYear = new Date().getFullYear();
+  const allowedYears = [];
+  for (let i = 0; i < 21; i++) {
+    allowedYears.push(thisYear - i);
+  }
+
+  const onYearChange = (event) => {
+    const selectedYear = event.target.value;
+    const filter = { ...params };
+    filter.year = selectedYear;
+    setParams(filter);
+  };
+
+  const onMonthChange = (event) => {
+    const selectedMonth = event.target.value;
+    const filter = { ...params };
+    filter.month = selectedMonth;
+    setParams(filter);
+    
+  };
+
+  const onQuarterChange = (event) => {
+    const selectedQuarter = event.target.value;
+    const filter = { ...params };
+    filter.quarter = selectedQuarter;
+    setParams(filter);
+  };
+
+  const onStateChange = (event) => {
+    const selectedState = event.target.value;
+    const filter = { ...params };
+    filter.state = selectedState;
+    setParams(filter);
+  };
+
   const [prop, setProp] = useState({});
   let skuArr = [];
+  const [params, setParams] = useState({});
   const [SKU, setSKU] = useState('');
   const [isActive, setTsActive] = useState('');
   const [selectedViewCode, setSelectedViewCode] = useState('ANNUALREPORT_DASHBOARD');
@@ -52,8 +90,6 @@ const Analytics = (props) => {
   }
 
   const skuChanged = (event) => {
-    console.log(event.target.value);
-    
     setSKU(event.target.value);
   }
 
@@ -66,7 +102,7 @@ const Analytics = (props) => {
         <main role="main" className="col-md-9 ml-sm-auto col-lg-10">
           <div className="row">
             <div className="col-md-9 mainContainer pt-3 px-4">
-              <ViewRenderer {...props} prop={prop} sku={SKU} viewName={selectedViewCode} onViewChange={onViewChange}></ViewRenderer>
+              <ViewRenderer {...props} prop={prop} params={params} sku={SKU} viewName={selectedViewCode} onViewChange={onViewChange}></ViewRenderer>
             </div>
             <div className="col-md-3 rightSideMenu pt-4 px-2">
               <div className="filterSection">
@@ -101,7 +137,7 @@ const Analytics = (props) => {
                   <input className="radioInput" type="radio" name="view" value="gv" id="gv" value={selectedViewCode === 'INVENTORY_DASHBOARD' ? "INVENTORY_DASHBOARD" : 'ANNUALREPORT_DASHBOARD'} onChange={changeView} defaultChecked={filters.view === 'ANNUALREPORT_DASHBOARD'} /> Geographical View
                     </label>
                 <label className="radioButton" for="sv">
-                  <input className="radioInput" type="radio" name="view" value="sv" id="sv" value={selectedViewCode === 'ANNUALREPORT_DASHBOARD' ? "SKU_VIEW" : 'INVENTORY_SKU'} onChange={changeView} defaultChecked={filters.view === 'SKU_VIEW' || filters.view === 'INVENTORY_SKU'} /> SKU View
+                  <input className="radioInput" type="radio" name="view" value="sv" id="sv" value={selectedViewCode === 'INVENTORY_DASHBOARD' ? "INVENTORY_SKU" : 'SKU_VIEW'} onChange={changeView} defaultChecked={filters.view === 'SKU_VIEW' || filters.view === 'INVENTORY_SKU'} /> SKU View
                     </label>
                 {selectedViewCode !== 'INVENTORY_DASHBOARD' && 
                   <>
@@ -131,10 +167,10 @@ const Analytics = (props) => {
                   }
                 </select>
                 <label className="filterSubHeading mt-3">Select State</label>
-                <select className="filterSelect mt-2">
+                <select className="filterSelect mt-2" onChange={onStateChange}>
                   <option>Select State</option>
                   {props.states?.map((state) => 
-                      <option value="{state}">{state}</option>
+                      <option value={state}>{state}</option>
                     )
                   }
                 </select>
@@ -142,45 +178,76 @@ const Analytics = (props) => {
                   <>
                   <label className="filterSubHeading mt-3">Time Period</label>
                   <div class="btn-group filterButton mt-2 mb-4">
-                    <a href="#!" class={`btn ${isActive == 'monthly' ? `active` : ``}`}
-                      onClick={() => setTsActive('monthly')}
+                    <a href="#!" class={`btn ${isActive == 'by_monthly' ? `active` : ``}`}
+                      onClick={() => { setTsActive('by_monthly'); setParams({});}}
                     >
                       Monthly
                   </a>
-                    <a href="#!" class={`btn ${isActive == 'quarterly' ? `active` : ``}`}
-                      onClick={() => setTsActive('quarterly')}
+                    <a href="#!" class={`btn ${isActive == 'by_quarterly' ? `active` : ``}`}
+                      onClick={() => {setTsActive('by_quarterly'); setParams({});}}
                     >
                       Quarterly
                   </a>
-                    <a href="#!" class={`btn ${isActive == 'yearly' ? `active` : ``}`}
-                      onClick={() => setTsActive('yearly')}
+                    <a href="#!" class={`btn ${isActive == 'by_yearly' ? `active` : ``}`}
+                      onClick={() => {setTsActive('by_yearly'); setParams({});}}
                     >
                       Yearly
                   </a>
                   </div>
                   </>
                 }
-                {isActive == 'monthly' && 
-                  <select>
-                  
-                  </select>
-                }
-                {isActive == 'quarterly' && 
-                <>
-                  <h4>Select Quarters</h4>
-                  <label className="radioButton mt-4" for="one">
-                    <input className="radioInput" type="radio" name="qtr" value="" id="one" value="" /> January - March
-                  </label>
-                  <label className="radioButton" for="two">
-                    <input className="radioInput" type="radio" name="qtr" value="" id="two" value="" /> April - June
-                  </label>
-                  <label className="radioButton" for="three">
-                    <input className="radioInput" type="radio" name="qtr" value="" id="three" value="" /> July - September
-                  </label>
-                  <label className="radioButton" for="four">
-                    <input className="radioInput" type="radio" name="qtr" value="" id="four" value="" /> October - December
-                  </label>
-                </>
+                {(isActive == 'by_monthly' || isActive == 'by_yearly' || isActive == 'by_quarterly') &&
+                  <div className="row">
+                    <div className="col-md-5">
+                      <select
+                        className="filterSelect mt-2"
+                        onChange={onYearChange}
+                      >
+                        <option>Select Year</option>
+                        {allowedYears.map((year, index) => {
+                          return (
+                            <option key={index} value={year}>
+                              {year}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </div>
+                    {isActive == 'by_monthly' &&
+                      <div className="col-md-5">
+                        <select
+                          className="filterSelect mt-2"
+                          onChange={onMonthChange}
+                        >
+                          <option>Select Month</option>
+                          {allowedMonths.map((month, index) => {
+                            return (
+                              <option key={index} value={index + 1}>
+                                {month}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                      }
+                    {isActive == 'by_quarterly' &&
+                      <div className="col-md-5">
+                        <select
+                          className="filterSelect mt-2"
+                          onChange={onQuarterChange}
+                        >
+                          <option>Select Quarter</option>
+                          {['Jan - Mar', 'Apr - Jun', 'Jul - Sep', 'Oct - Dec'].map((qtr, index) => {
+                            return (
+                              <option key={index} value={index + 1}>
+                                {qtr}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                      }
+                  </div>
                 }
               </div>
             </div>

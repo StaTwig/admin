@@ -16,6 +16,9 @@ const BreweryView = (props) => {
         setAnalytics(result.data);
         })();
     }, []);
+    const openBreweryDetailView = () => {
+        props.onViewChange('BREWERY_DETAIL_VIEW');
+    }
     return (
         <div >
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">

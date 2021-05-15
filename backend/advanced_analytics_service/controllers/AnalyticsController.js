@@ -14,6 +14,7 @@ const { constants } = require("../helpers/constants");
 require("dotenv").config();
 const auth = require("../middlewares/jwt");
 const moment = require('moment');
+const mongoose = require("mongoose");
 
 
 const BREWERY_ORG = 'BREWERY';
@@ -193,6 +194,23 @@ const aggregateSalesStats = (inputArr) => {
 	};
 }
 
+function dateConversion(filters) {
+	let conversion = {};
+	// if (filters.date_filter_type && filters.date_filter_type.length)
+	{
+		conversion = {
+						"$addFields": {
+							"uploadDate": {
+								"$dateFromString": {
+									"dateString": "$uploadDate"
+								}
+							}
+						}
+					}
+	}
+	return conversion;
+}
+
 function getSKUAnalyticsFilterConditions(filters) {
 
 	let matchCondition = {};
@@ -210,18 +228,18 @@ function getSKUAnalyticsFilterConditions(filters) {
 			let startDate = filters.start_date ? filters.start_date : new Date();
 			let endDate = filters.end_date ? filters.end_date : new Date();
 			matchCondition.uploadDate = {
-				$gte: new Date(startDate).toISOString(),
-				$lte: new Date(endDate).toISOString()
+				$gte: new Date(startDate),
+				$lte: new Date(endDate)
 			};
 
 		} else if (filters.date_filter_type === 'by_monthly') {
 
-			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
-			let startDateOfTheMonth = moment(startDateOfTheYear).add(filters.month, 'months').format(DATE_FORMAT);
+			let startDateOfTheYear = moment([filters.year]);
+			let startDateOfTheMonth = moment(startDateOfTheYear).add(filters.month-1, 'months');
 			let endDateOfTheMonth = moment(startDateOfTheMonth).endOf('month');
 			matchCondition.uploadDate = {
-				$gte: new Date(startDateOfTheMonth).toISOString(),
-				$lte: new Date(endDateOfTheMonth).toISOString()
+				$gte: new Date(startDateOfTheMonth),
+				$lte: new Date(endDateOfTheMonth)
 			};
 
 		} else if (filters.date_filter_type === 'by_quarterly') {
@@ -230,8 +248,8 @@ function getSKUAnalyticsFilterConditions(filters) {
 			let startDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).startOf('quarter').format(DATE_FORMAT);
 			let endDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).endOf('quarter').format(DATE_FORMAT);
 			matchCondition.uploadDate = {
-				$gte: new Date(startDateOfTheQuarter).toISOString(),
-				$lte: new Date(endDateOfTheQuarter).toISOString()
+				$gte: new Date(startDateOfTheQuarter),
+				$lte: new Date(endDateOfTheQuarter)
 			};
 
 		} else if (filters.date_filter_type === 'by_yearly') {
@@ -247,14 +265,13 @@ function getSKUAnalyticsFilterConditions(filters) {
 			}
 
 			matchCondition.uploadDate = {
-				$gte: new Date(startDateOfTheYear).toISOString(),
-				$lte: new Date(endDateOfTheYear).toISOString()
+				$gte: new Date(startDateOfTheYear),
+				$lte: new Date(endDateOfTheYear)
 			};
 
 		}
 
 	}
-
 	return matchCondition;
 }
 
@@ -543,7 +560,6 @@ exports.getStatsByOrg = [
 					{
 						$match: prevMonthmatchCondition
 					}]);
-				console.log(prevMonthAnalytics);
 				organization.analyticsPrevMonth = aggregateSalesStats(prevMonthAnalytics);
 
 			}
@@ -618,6 +634,7 @@ function getSKUGroupByFilters(filters) {
 			}
 			);
 		} else if (filters.group_by === 'date') {
+			if(filters.state)
 			matchCondition.push({
 				$match: {
 					state: filters.state
@@ -654,8 +671,11 @@ exports.getStatsBySKU = [
 	async function (req, res) {
 		try {
 			const filters = req.query;
-
+			const monthNames = ["January", "February", "March", "April", "May", "June",
+			"July", "August", "September", "October", "November", "December"
+			];
 			let Analytics = await AnalyticsModel.aggregate([
+				{...dateConversion(filters)},
 				{
 					$match: getSKUAnalyticsFilterConditions(filters)
 				},
@@ -690,7 +710,7 @@ exports.getStatsBySKU = [
 			Analytics.forEach(analytic => {
 				if (analytic.data) {
 					let temp = aggregateSalesStats(analytic.data);
-					temp['groupedBy'] = analytic._id;
+					temp['groupedBy'] = analytic._id.includes('-') ? monthNames[new Date(analytic._id).getMonth()] : analytic._id;
 					response.push(temp);
 				}
 			});
