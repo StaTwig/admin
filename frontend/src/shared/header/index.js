@@ -14,10 +14,14 @@ import { getNotifications, deleteNotification } from '../../actions/notification
 import { turnOff, turnOn } from "../../actions/spinnerActions";
 import useOnclickOutside from 'react-cool-onclickoutside';
 import { config } from "../../config";
+import Modal from "../modal/index";
+import FailedPopUp from "../PopUp/failedPopUp";
+
 const Header = props => {
   const [menu, setMenu] = useState(false);
   const [sidebar, openSidebar] = useState(false);
   const [search, setSearch] = useState('');
+  const [invalidSearch, setInvalidSearch] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
 const ref = useOnclickOutside(() => {
@@ -27,11 +31,20 @@ const ref = useOnclickOutside(() => {
     setSearch(e.target.value);
   }
 
+  const closeModalFail = () => {
+    setInvalidSearch(false);
+  };
+
   const onSeach = () => {
-    if(search.substring(0,2)=="po"||search.substring(0,2)=="PO")
+    console.log('Check');
+    console.log(props.orderIds);
+    console.log(props.orderIds.indexOf(search));
+    if(props.orderIds.indexOf(search)!=-1)
     props.history.push(`/vieworder/${search}`);
-    else if(search.substring(0,2)=="sh"||search.substring(0,2)=="SH")
-    props.history.push(`/viewshipment/${search}`);;
+    else if(props.shippingIds.indexOf(search)!=-1)
+    props.history.push(`/viewshipment/${search}`);
+    else
+    setInvalidSearch(true);
   };
 
   const profile = useSelector(state => {
@@ -159,6 +172,18 @@ const imgs = config().fetchProfileImage;
 
         {sidebar && <DrawerMenu {...props} close={() => openSidebar(false)} />}
       </div>
+      {invalidSearch && (
+        <Modal
+          close={() => closeModalFail()}
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+          <FailedPopUp
+            onHide={closeModalFail} //FailurePopUp
+            // {...modalProps}
+            message="Invalid Search"
+          />
+        </Modal>
+      )}
     </div>
   );
 };

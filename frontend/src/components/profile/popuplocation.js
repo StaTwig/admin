@@ -12,7 +12,7 @@ import Modal from "../../shared/modal";
 const PopUpLocation = (props) => {
   console.log("Pop Up Detail");
   console.log(props.wareHouses);
-  const wareHouseDetails = props.wareHouses.map((txn) => txn.warehouseAddress.firstLine + "," + txn.warehouseAddress.city);
+  // const wareHouseDetails = props.wareHouses.map((txn) => txn.warehouseAddress.firstLine + "," + txn.warehouseAddress.city);
   const [wareHouse, setWareHouse]= useState({});
   const [selectLocation, setSelectLocation] = useState("Select Location");
   const [addedLocationModal, setAddedLocationModal] = useState(false);
@@ -115,7 +115,7 @@ const PopUpLocation = (props) => {
           />
         </Modal>
       )}
-      {openLocationFail && (
+      {/* {openLocationFail && (
           <Modal
             close={() => closeModalFail()}
             size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
@@ -124,7 +124,7 @@ const PopUpLocation = (props) => {
               onHide={closeModalFail} //FailurePopUp
             />
           </Modal>
-        )}  
+        )}   */}
     </div>
   );
 };
