@@ -976,3 +976,38 @@ body {
     padding: 20px 0px;
 
 }
+
+.supplierImage{
+    display: flex;
+    justify-content: center;
+    font-size: 16px;
+    .displayImage{
+        width:36px;
+        height: 100%;
+        margin: 0px 10px;
+    }
+    .supplierNames{
+        display: inline-block;
+        text-align: left;
+        line-height: 20px;
+    }
+    .group{
+        font-size: 12px;
+        font-weight: 500;
+        border-radius: 5px;
+        padding:0px 2px;
+        color:#FFFFFF;
+        
+    }
+    .s1group{
+        background-color: orange;
+    }
+    .s2group{
+        background-color: blueviolet;
+
+    }
+    .s3group{
+        background-color: darkcyan;
+    }
+    
+}

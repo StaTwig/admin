@@ -51,6 +51,11 @@ const componentMappings = [
         componentName: 'BreweryDetailedView',
         componentCode: 'BREWERY_DETAIL_VIEW',
         moduleName: 'annualReport'
+    },
+    {
+        componentName: 'DetailedSupplierView',
+        componentCode: 'SUPPLIER_DETAIL_VIEW',
+        moduleName: 'annualReport'
     }
 ];
 
