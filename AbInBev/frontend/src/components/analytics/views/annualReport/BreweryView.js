@@ -1,9 +1,21 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import "../../style.scss";
+import { getAllOrganisationStats } from '../../../../actions/analyticsAction';
+import { useDispatch } from 'react-redux';
 
 const BreweryView = (props) => {
-    const openBreweryDetailView = () => {
-        props.onViewChange('BREWERY_DETAIL_VIEW');
+    const { states, prop } = props;
+    
+    const [analytics, setAnalytics] = useState([]);
+    const dispatch = useDispatch();
+    useEffect(() => {
+        (async () => {
+            const result = await dispatch(getAllOrganisationStats());
+            setAnalytics(result.data);
+        })();
+    }, []);
+    const openBreweryDetailView = (param) => {
+        props.onViewChange('SKU_VIEW', {...param, ...{type: 'b', analytics: analytics}});
     }
     return (
         <div >
@@ -19,175 +31,43 @@ const BreweryView = (props) => {
             <div className="btn-group mainButtonFilter">
                 <a href="#!" className="btn active">Brewery</a>
                 <select className="btn selectState">
-                    <option>All</option>
-                    <option>SPR Distilleries Pvt Ltd</option>
+                    <option value="">All</option>
+                    {analytics.map((analytic, index) =>
+                        <option value={analytic.name}>{analytic.name}</option>
+                    )}
                 </select>
             </div>
 
             <div className="row">
-                <div className="col-lg-4 col-md-4 col-sm-12">
-                    <div className="breweryCard" onClick={openBreweryDetailView}>
-                        <h4 className="breweryTitle">SPR Distilleries Pvt Ltd</h4>
-                        <h6 className="brewerySubtitle">Anheuser Busch Inbev India Ltd</h6>
-                        <p className="breweryLocationText"> <i className="fa fa-map-marker breweryLoc"></i> Mysuru, Karnataka</p>
+                {analytics.map((analytic, index) => 
+                    <div key={index} className="col-lg-4 col-md-4 col-sm-12" onClick={() => openBreweryDetailView(analytic)}>
+                        <div className="breweryCard">
+                            <h4 className="breweryTitle">{analytic.name}</h4>
+                            <h6 className="brewerySubtitle">&nbsp;</h6>
+                            <p className="breweryLocationText"> <i className="fa fa-map-marker breweryLoc"></i> {analytic.postalAddress}</p>
 
-                        <span className="breweryPropertyText">Sales <span className="pull-right breweryPropertyValue">80,00,000</span></span>
-                        <div className="progress progress-line-warning">
-                            <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "60%" }}>
-                                <span className="sr-only">20% Complete</span>
+                            <span className="breweryPropertyText">Sales <span className="pull-right breweryPropertyValue">{analytic.analytics.sales}</span></span>
+                            <div className="progress progress-line-warning">
+                                <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: ((analytic.analytics.sales/(analytic.analytics.targetSales > 0 ? analytic.analytics.targetSales : 1))*100)+"%" }}>
+                                    <span className="sr-only">{(analytic.analytics.returns/(analytic.analytics.targetSales > 0 ? analytic.analytics.targetSales : 1))*100}% Complete</span>
+                                </div>
                             </div>
-                        </div>
 
-                        <span className="breweryPropertyText">Returns <span className="pull-right breweryPropertyValue">55,86,900</span></span>
-                        <div className="progress progress-line-danger">
-                            <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "80%" }}>
-                                <span className="sr-only">80% Complete</span>
+                            <span className="breweryPropertyText">Returns <span className="pull-right breweryPropertyValue">{analytic.analytics.returns}</span></span>
+                            <div className="progress progress-line-danger">
+                                <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: ((analytic.analytics.actualReturns/(analytic.analytics.returns > 0 ? analytic.analytics.returns : 1))*100)+"%" }}>
+                                    <span className="sr-only">{(analytic.analytics.actualReturns/(analytic.analytics.returns > 0 ? analytic.analytics.returns : 1))*100}% Complete</span>
+                                </div>
                             </div>
-                        </div>
-                        <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">82%</span></span>
-                        <div className="progress progress-line-primary">
-                            <div className="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "20%" }}>
-                                <span className="sr-only">30% Complete</span>
+                            <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">{(analytic.analytics.actualReturns/(analytic.analytics.returns > 0 ? analytic.analytics.returns : 1))*100}%</span></span>
+                            <div className="progress progress-line-primary">
+                                <div className="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: ((analytic.analytics.actualReturns/(analytic.analytics.returns > 0 ? analytic.analytics.returns : 1))*100)+"%" }}>
+                                    <span className="sr-only">{(analytic.analytics.actualReturns/(analytic.analytics.returns > 0 ? analytic.analytics.returns : 1))*100}% Complete</span>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className="col-lg-4 col-md-4 col-sm-12">
-                    <div className="breweryCard">
-                        <h4 className="breweryTitle">SPR Distilleries Pvt Ltd</h4>
-                        <h6 className="brewerySubtitle">Anheuser Busch Inbev India Ltd</h6>
-                        <p className="breweryLocationText"> <i className="fa fa-map-marker breweryLoc"></i> Mysuru, Karnataka</p>
-
-                        <span className="breweryPropertyText">Sales <span className="pull-right breweryPropertyValue">80,00,000</span></span>
-                        <div className="progress progress-line-warning">
-                            <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "60%" }}>
-                                <span className="sr-only">20% Complete</span>
-                            </div>
-                        </div>
-
-                        <span className="breweryPropertyText">Returns <span className="pull-right breweryPropertyValue">55,86,900</span></span>
-                        <div className="progress progress-line-danger">
-                            <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "80%" }}>
-                                <span className="sr-only">80% Complete</span>
-                            </div>
-                        </div>
-                        <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">82%</span></span>
-                        <div className="progress progress-line-primary">
-                            <div className="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "20%" }}>
-                                <span className="sr-only">30% Complete</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-lg-4 col-md-4 col-sm-12">
-                    <div className="breweryCard">
-                        <h4 className="breweryTitle">SPR Distilleries Pvt Ltd</h4>
-                        <h6 className="brewerySubtitle">Anheuser Busch Inbev India Ltd</h6>
-                        <p className="breweryLocationText"> <i className="fa fa-map-marker breweryLoc"></i> Mysuru, Karnataka</p>
-
-                        <span className="breweryPropertyText">Sales <span className="pull-right breweryPropertyValue">80,00,000</span></span>
-                        <div className="progress progress-line-warning">
-                            <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "60%" }}>
-                                <span className="sr-only">20% Complete</span>
-                            </div>
-                        </div>
-
-                        <span className="breweryPropertyText">Returns <span className="pull-right breweryPropertyValue">55,86,900</span></span>
-                        <div className="progress progress-line-danger">
-                            <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "80%" }}>
-                                <span className="sr-only">80% Complete</span>
-                            </div>
-                        </div>
-                        <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">82%</span></span>
-                        <div className="progress progress-line-primary">
-                            <div className="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "20%" }}>
-                                <span className="sr-only">30% Complete</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="col-lg-4 col-md-4 col-sm-12">
-                    <div className="breweryCard">
-                        <h4 className="breweryTitle">SPR Distilleries Pvt Ltd</h4>
-                        <h6 className="brewerySubtitle">Anheuser Busch Inbev India Ltd</h6>
-                        <p className="breweryLocationText"> <i className="fa fa-map-marker breweryLoc"></i> Mysuru, Karnataka</p>
-
-                        <span className="breweryPropertyText">Sales <span className="pull-right breweryPropertyValue">80,00,000</span></span>
-                        <div className="progress progress-line-warning">
-                            <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "60%" }}>
-                                <span className="sr-only">20% Complete</span>
-                            </div>
-                        </div>
-
-                        <span className="breweryPropertyText">Returns <span className="pull-right breweryPropertyValue">55,86,900</span></span>
-                        <div className="progress progress-line-danger">
-                            <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "80%" }}>
-                                <span className="sr-only">80% Complete</span>
-                            </div>
-                        </div>
-                        <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">82%</span></span>
-                        <div className="progress progress-line-primary">
-                            <div className="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "20%" }}>
-                                <span className="sr-only">30% Complete</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-lg-4 col-md-4 col-sm-12">
-                    <div className="breweryCard">
-                        <h4 className="breweryTitle">SPR Distilleries Pvt Ltd</h4>
-                        <h6 className="brewerySubtitle">Anheuser Busch Inbev India Ltd</h6>
-                        <p className="breweryLocationText"> <i className="fa fa-map-marker breweryLoc"></i> Mysuru, Karnataka</p>
-
-                        <span className="breweryPropertyText">Sales <span className="pull-right breweryPropertyValue">80,00,000</span></span>
-                        <div className="progress progress-line-warning">
-                            <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "60%" }}>
-                                <span className="sr-only">20% Complete</span>
-                            </div>
-                        </div>
-
-                        <span className="breweryPropertyText">Returns <span className="pull-right breweryPropertyValue">55,86,900</span></span>
-                        <div className="progress progress-line-danger">
-                            <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "80%" }}>
-                                <span className="sr-only">80% Complete</span>
-                            </div>
-                        </div>
-                        <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">82%</span></span>
-                        <div className="progress progress-line-primary">
-                            <div className="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "20%" }}>
-                                <span className="sr-only">30% Complete</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-lg-4 col-md-4 col-sm-12">
-                    <div className="breweryCard">
-                        <h4 className="breweryTitle">SPR Distilleries Pvt Ltd</h4>
-                        <h6 className="brewerySubtitle">Anheuser Busch Inbev India Ltd</h6>
-                        <p className="breweryLocationText"> <i className="fa fa-map-marker breweryLoc"></i> Mysuru, Karnataka</p>
-
-                        <span className="breweryPropertyText">Sales <span className="pull-right breweryPropertyValue">80,00,000</span></span>
-                        <div className="progress progress-line-warning">
-                            <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "60%" }}>
-                                <span className="sr-only">20% Complete</span>
-                            </div>
-                        </div>
-
-                        <span className="breweryPropertyText">Returns <span className="pull-right breweryPropertyValue">55,86,900</span></span>
-                        <div className="progress progress-line-danger">
-                            <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "80%" }}>
-                                <span className="sr-only">80% Complete</span>
-                            </div>
-                        </div>
-                        <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">82%</span></span>
-                        <div className="progress progress-line-primary">
-                            <div className="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: "20%" }}>
-                                <span className="sr-only">30% Complete</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                )}
             </div>
         </div>
     );

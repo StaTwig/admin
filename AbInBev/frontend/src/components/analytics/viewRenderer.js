@@ -38,6 +38,16 @@ const componentMappings = [
         moduleName: 'annualReport'
     },
     {
+        componentName: 'geographicalDetails',
+        componentCode: 'INVENTORY_GRAPHICAL',
+        moduleName: 'Inventory'
+    },
+    {
+        componentName: 'skuView',
+        componentCode: 'INVENTORY_SKU',
+        moduleName: 'Inventory'
+    },
+    {
         componentName: 'InventoryDashboard',
         componentCode: 'INVENTORY_DASHBOARD',
         moduleName: 'Inventory'
@@ -74,7 +84,6 @@ export default function ViewRenderer(props) {
                 componentsToRender.push({ componentName: 'NotFound' });
             }
             const componentPromises = componentsToRender.map(async data => {
-                console.log(data.componentName);
                 const View = await importView(data.componentName,data.moduleName);
                 return <View key={shortid.generate()} {...props} />;
             });

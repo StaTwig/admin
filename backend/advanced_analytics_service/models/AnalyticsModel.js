@@ -1,4 +1,5 @@
 var mongoose = require("mongoose");
+const moment = require('moment');
 
 var AnalyticsSchema = new mongoose.Schema({
 	productId: { type: String, required: true },
@@ -12,7 +13,7 @@ var AnalyticsSchema = new mongoose.Schema({
 	returnRatePrev: { type: String },
 	warehouseId: { type: String, required: true },
 	warehouseName: { type: String, required: true },
-	uploadDate: { type: String, required: true }
+	uploadDate: {type:Date, default:moment(new Date()).format('DD-MM-YYYY')}
 }, { timestamps: true });
 
 module.exports = mongoose.model("advanced_analytics", AnalyticsSchema);

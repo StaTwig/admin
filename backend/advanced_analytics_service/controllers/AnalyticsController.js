@@ -14,6 +14,7 @@ const { constants } = require("../helpers/constants");
 require("dotenv").config();
 const auth = require("../middlewares/jwt");
 const moment = require('moment');
+const mongoose = require("mongoose");
 
 
 const BREWERY_ORG = 'BREWERY';
@@ -61,6 +62,36 @@ function getFilterConditions(filters) {
 		matchCondition.id = filters.organization;
 	}
 	return matchCondition;
+}
+
+const _getWarehouseIdsByOrg = async (org) => {
+	let matchCondition = {};
+	if (org && org.id && org.id !== '') {
+		matchCondition.id = org.id;
+	}
+	const warehouses = await OrganisationModel.aggregate([
+		{
+			$match: matchCondition
+		},
+		{
+			$unwind: {
+				path: "$warehouses"
+			}
+		},
+		{
+			$group: {
+				_id: '$warehouseIds',
+				'warehouseIds': {
+					$addToSet: "$warehouses"
+				}
+			}
+		}
+	]);
+	let warehouseIds = [];
+	if (warehouses && warehouses[0] && warehouses[0].warehouseIds) {
+		warehouseIds = warehouses[0].warehouseIds;
+	}
+	return warehouseIds;
 }
 
 const _getWarehouseIds = async (filters) => {
@@ -140,6 +171,14 @@ const _getOverviewStats = async () => {
 }
 
 const aggregateSalesStats = (inputArr) => {
+	if (!inputArr.length) {
+		return {
+			sales: 0,
+			targetSales: 0,
+			returns: 0,
+			actualReturns: 0
+		}
+	}
 	let sales = inputArr.map(item => parseInt(item.sales) || 0).reduce((prev, next) => prev + next);
 	let targetSales = inputArr.map(item => parseInt(item.sales) || 0).reduce((prev, next) => prev + next);
 	let returns = inputArr.map(item => parseInt(item.sales) || 0).reduce((prev, next) => prev + next);
@@ -153,6 +192,23 @@ const aggregateSalesStats = (inputArr) => {
 		returns: returns,
 		actualReturns: actualReturns
 	};
+}
+
+function dateConversion(filters) {
+	let conversion = {};
+	// if (filters.date_filter_type && filters.date_filter_type.length)
+	{
+		conversion = {
+						"$addFields": {
+							"uploadDate": {
+								"$dateFromString": {
+									"dateString": "$uploadDate"
+								}
+							}
+						}
+					}
+	}
+	return conversion;
 }
 
 function getSKUAnalyticsFilterConditions(filters) {
@@ -172,18 +228,18 @@ function getSKUAnalyticsFilterConditions(filters) {
 			let startDate = filters.start_date ? filters.start_date : new Date();
 			let endDate = filters.end_date ? filters.end_date : new Date();
 			matchCondition.uploadDate = {
-				$gte: new Date(startDate).toISOString(),
-				$lte: new Date(endDate).toISOString()
+				$gte: new Date(startDate),
+				$lte: new Date(endDate)
 			};
 
 		} else if (filters.date_filter_type === 'by_monthly') {
 
-			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
-			let startDateOfTheMonth = moment(startDateOfTheYear).add(filters.month, 'months').format(DATE_FORMAT);
+			let startDateOfTheYear = moment([filters.year]);
+			let startDateOfTheMonth = moment(startDateOfTheYear).add(filters.month-1, 'months');
 			let endDateOfTheMonth = moment(startDateOfTheMonth).endOf('month');
 			matchCondition.uploadDate = {
-				$gte: new Date(startDateOfTheMonth).toISOString(),
-				$lte: new Date(endDateOfTheMonth).toISOString()
+				$gte: new Date(startDateOfTheMonth),
+				$lte: new Date(endDateOfTheMonth)
 			};
 
 		} else if (filters.date_filter_type === 'by_quarterly') {
@@ -192,8 +248,8 @@ function getSKUAnalyticsFilterConditions(filters) {
 			let startDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).startOf('quarter').format(DATE_FORMAT);
 			let endDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).endOf('quarter').format(DATE_FORMAT);
 			matchCondition.uploadDate = {
-				$gte: new Date(startDateOfTheQuarter).toISOString(),
-				$lte: new Date(endDateOfTheQuarter).toISOString()
+				$gte: new Date(startDateOfTheQuarter),
+				$lte: new Date(endDateOfTheQuarter)
 			};
 
 		} else if (filters.date_filter_type === 'by_yearly') {
@@ -209,14 +265,13 @@ function getSKUAnalyticsFilterConditions(filters) {
 			}
 
 			matchCondition.uploadDate = {
-				$gte: new Date(startDateOfTheYear).toISOString(),
-				$lte: new Date(endDateOfTheYear).toISOString()
+				$gte: new Date(startDateOfTheYear),
+				$lte: new Date(endDateOfTheYear)
 			};
 
 		}
 
 	}
-
 	return matchCondition;
 }
 
@@ -224,21 +279,23 @@ function getAnalyticsFilterConditions(filters, warehouseIds) {
 
 	let matchCondition = {
 		warehouseId: {
-			$in: [...warehouseIds, 'WAR1006',
-				'WAR10024', 'WAR10019',
-				'WAR10018', 'WAR10017',
-				'WAR10004', 'WAR10003',
-				'WAR10025', 'AP004',
-				'warehouse_id 2', 'AP005',
-				'war-blpg132lkmwny88i', 'war-blpg1vzwkn4a0cp6',
-				'AP003', 'war-2p52232kmrduslk',
-				'war-blpg1vzwkn482zyf', 'AP001',
-				'orgwar2345', 'AP002',
-				'orgwar12345', 'war-2p51gpxkmlpfh97',
-				'war-2p51gpxkmlo2x61', 'war-2p52232kmrpfxxh',
-				'war-blpg132lkmwxmhxk', 'ware123',
-				'war-1234', 'ware234',
-				'war-blpg1vzwkn47ka4y', 'war-blpg41ggknah1lj7']
+			$in: [...warehouseIds,
+				// 'WAR1006',
+				// 'WAR10024', 'WAR10019',
+				// 'WAR10018', 'WAR10017',
+				// 'WAR10004', 'WAR10003',
+				// 'WAR10025', 'AP004',
+				// 'warehouse_id 2', 'AP005',
+				// 'war-blpg132lkmwny88i', 'war-blpg1vzwkn4a0cp6',
+				// 'AP003', 'war-2p52232kmrduslk',
+				// 'war-blpg1vzwkn482zyf', 'AP001',
+				// 'orgwar2345', 'AP002',
+				// 'orgwar12345', 'war-2p51gpxkmlpfh97',
+				// 'war-2p51gpxkmlo2x61', 'war-2p52232kmrpfxxh',
+				// 'war-blpg132lkmwxmhxk', 'ware123',
+				// 'war-1234', 'ware234',
+				// 'war-blpg1vzwkn47ka4y', 'war-blpg41ggknah1lj7'
+			]
 		}
 	};
 
@@ -390,9 +447,6 @@ exports.getStatsByBrand = [
 	//auth,
 	async function (req, res) {
 		try {
-			// const filters = req.query;
-			// const brandFilters = {};
-
 			const filters = req.query;
 			let warehouseIds = await _getWarehouseIds(filters);
 			let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
@@ -466,6 +520,66 @@ exports.getStatsByBrand = [
  *
  * @returns {Object}
  */
+exports.getStatsByOrg = [
+	//auth,
+	async function (req, res) {
+		try {
+			const filters = req.query;
+
+			let organizations = await OrganisationModel.aggregate([
+				{
+					$match: getFilterConditions(filters)
+				}
+			]);
+			for (let organization of organizations) {
+				let warehouseIds = await _getWarehouseIdsByOrg(organization);
+				let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
+				let Analytics = await AnalyticsModel.aggregate([
+					{
+						$match: analyticsFilter
+					}
+				]);
+				organization.analytics = aggregateSalesStats(Analytics);
+
+				const lastMonthStart = moment().subtract(1, 'months').startOf('month').format(DATE_FORMAT);
+				const lastMonthEnd = moment().subtract(1, 'months').endOf('month').format(DATE_FORMAT);
+				let prevMonthmatchCondition = {
+					uploadDate: {
+						$lte: lastMonthEnd,
+						$gte: lastMonthStart,
+					},
+					warehouseId: {
+						$in: [...warehouseIds]
+					}
+				};
+
+				if (filters.sku && filters.sku !== '') {
+					prevMonthmatchCondition.productId = filters.sku;
+				};
+				let prevMonthAnalytics = await AnalyticsModel.aggregate([
+					{
+						$match: prevMonthmatchCondition
+					}]);
+				organization.analyticsPrevMonth = aggregateSalesStats(prevMonthAnalytics);
+
+			}
+
+			return apiResponse.successResponseWithData(
+				res,
+				"Operation success",
+				organizations
+			);
+		} catch (err) {
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
+
+/**
+ * getAllStats.
+ *
+ * @returns {Object}
+ */
 exports.getAllStats = [
 	//auth,
 	async function (req, res) {
@@ -511,23 +625,41 @@ function getSKUGroupByFilters(filters) {
 	if (filters.group_by && filters.group_by !== '') {
 		if (filters.group_by === 'state') {
 			matchCondition.push({
-				_id: '$state',
-				data: {
-					$addToSet: "$$ROOT"
+				$group: {
+					_id: '$state',
+					data: {
+						$addToSet: "$$ROOT"
+					}
 				}
-			});
+			}
+			);
 		} else if (filters.group_by === 'date') {
+			if(filters.state)
 			matchCondition.push({
 				$match: {
 					state: filters.state
 				}
 			});
-			matchCondition.push({
-				_id: '$uploadDate',
-				data: {
-					$addToSet: "$$ROOT"
-				}
-			});
+			matchCondition.push(
+				{
+					$group: {
+						_id: '$uploadDate',
+						data: {
+							$addToSet: "$$ROOT"
+						}
+					}
+				});
+
+		} else if (filters.group_by === 'district') {
+			matchCondition.push(
+				{
+					$group: {
+						_id: '$district',
+						data: {
+							$addToSet: "$$ROOT"
+						}
+					}
+				});
 
 		} else {
 			matchCondition.push({
@@ -550,8 +682,11 @@ exports.getStatsBySKU = [
 	async function (req, res) {
 		try {
 			const filters = req.query;
-
+			const monthNames = ["January", "February", "March", "April", "May", "June",
+			"July", "August", "September", "October", "November", "December"
+			];
 			let Analytics = await AnalyticsModel.aggregate([
+				{...dateConversion(filters)},
 				{
 					$match: getSKUAnalyticsFilterConditions(filters)
 				},
@@ -582,11 +717,13 @@ exports.getStatsBySKU = [
 				},
 				...getSKUGroupByFilters(filters)
 			]);
-			let response = []
+			let response = [];
 			Analytics.forEach(analytic => {
-				let temp = aggregateSalesStats(analytic.data);
-				temp['groupedBy'] = analytic._id;
-				response.push(temp);
+				if (analytic.data) {
+					let temp = aggregateSalesStats(analytic.data);
+					temp['groupedBy'] = (analytic._id.toString()).includes('GMT') ? monthNames[new Date(analytic._id).getMonth()] : analytic._id;
+					response.push(temp);
+				}
 			});
 
 			return apiResponse.successResponseWithData(res, "Operation Success", response);

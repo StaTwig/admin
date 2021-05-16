@@ -11,6 +11,7 @@ export const LOCAL_SERVER_URL_PO = 'http://localhost:3012';
 export const LOCAL_SERVER_URL_TRACKANDTRACE = 'http://localhost:3005';
 export const LOCAL_SERVER_URL_NOTIFICATION = 'http://localhost:3006';
 export const LOCAL_SERVER_URL_ANALYTICS = 'http://localhost:3015';
+export const LOCAL_SERVER_URL_AANALYTICS = 'http://localhost:3069';
 export const LOCAL_SERVER_URL_PRODUCTS = 'http://localhost:3010';
 export const STABLE_SERVER_URL_USER = 'http://54.164.66.73:3001';
 export const STABLE_SERVER_URL_SHIPMENT = 'http://54.164.66.73:3002';
@@ -93,7 +94,12 @@ export function config() {
       getNotificationsUrl: `${ABINBEVPROD_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${ABINBEVPROD_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl: `${ABINBEVPROD_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
-      getOverviewStats: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getOverviewStats`,
+      getAllAnalytics: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getAllStats`,
+      getAnalyticsBySKUurl: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getStatsBySKU`,
+      getAnalyticsByBrandurl: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getStatsByBrand`,
+      getAllBrandsurl: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getAllBrands`,
+      getOrganisationStatsurl: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getStatsByOrg`,
+      getOverviewStats: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getOverviewStats`,
 
     },
     ainbevtest: {
@@ -162,6 +168,11 @@ export function config() {
       getNotificationsUrl: `${ABINBEVTEST_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${ABINBEVTEST_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl: `${ABINBEVTEST_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
+      getAllAnalytics: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getAllStats`,
+      getAnalyticsBySKUurl: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getStatsBySKU`,
+      getAnalyticsByBrandurl: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getStatsByBrand`,
+      getAllBrandsurl: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getAllBrands`,
+      getOrganisationStatsurl: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getStatsByOrg`,
       getOverviewStats: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getOverviewStats`,
 
     },
