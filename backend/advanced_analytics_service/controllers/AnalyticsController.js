@@ -650,6 +650,17 @@ function getSKUGroupByFilters(filters) {
 					}
 				});
 
+		} else if (filters.group_by === 'district') {
+			matchCondition.push(
+				{
+					$group: {
+						_id: '$district',
+						data: {
+							$addToSet: "$$ROOT"
+						}
+					}
+				});
+
 		} else {
 			matchCondition.push({
 				$match: {
@@ -710,7 +721,7 @@ exports.getStatsBySKU = [
 			Analytics.forEach(analytic => {
 				if (analytic.data) {
 					let temp = aggregateSalesStats(analytic.data);
-					temp['groupedBy'] = analytic._id.includes('-') ? monthNames[new Date(analytic._id).getMonth()] : analytic._id;
+					temp['groupedBy'] = (analytic._id.toString()).includes('GMT') ? monthNames[new Date(analytic._id).getMonth()] : analytic._id;
 					response.push(temp);
 				}
 			});

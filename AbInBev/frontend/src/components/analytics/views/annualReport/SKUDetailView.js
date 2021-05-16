@@ -6,98 +6,6 @@ import bottlesIcon from "../../../../assets/becks_330ml.png";
 import { getAnalyticsAllStats, getAnalyticsByBrand } from '../../../../actions/analyticsAction';
 import { useDispatch } from 'react-redux';
 
-const SKUAnnualReport = [
-    {
-        name: 'Karnataka',
-        Sales: 4000,
-        Returns: 2400,
-        Target: 2400,
-    },
-    {
-        name: 'Delhi',
-        Sales: 3000,
-        Returns: 1398,
-        Target: 2210,
-    },
-    {
-        name: 'Pindicherry',
-        Sales: 2000,
-        Returns: 9800,
-        Target: 2290,
-    },{
-        name: 'Telangana',
-        Sales: 2000,
-        Returns: 9800,
-        Target: 2290,
-    },
-    {
-        name: 'abc',
-        Sales: 2000,
-        Returns: 9800,
-        Target: 2290,
-    },{
-        name: 'xyx',
-        Sales: 2000,
-        Returns: 9800,
-        Target: 2290,
-    }
-];
-
-const SKU_State_AnnualReport = [
-    {
-        name: 'Events',
-        Sales: 687000,
-        Returns: 416000,
-        Target: 519000
-    }
-];
-
-
-const data = [
-    {
-        name: 'Karnataka',
-        Sales: 4000,
-        TotalBottlepool: 2400,
-        amt: 2400,
-    },
-    {
-        name: 'Delhi',
-        Sales: 3000,
-        TotalBottlepool: 1398,
-        amt: 2210,
-    },
-    {
-        name: 'Pindicherry',
-        Sales: 2000,
-        TotalBottlepool: 9800,
-        amt: 2290,
-    },
-    {
-        name: 'Maharashtra',
-        Sales: 2780,
-        TotalBottlepool: 3908,
-        amt: 2000,
-    },
-    {
-        name: 'Telangana',
-        Sales: 1890,
-        TotalBottlepool: 4800,
-        amt: 2181,
-    },
-    {
-        name: 'Goa',
-        Sales: 2390,
-        TotalBottlepool: 3800,
-        amt: 2500,
-    },
-    {
-        name: 'Gujarat',
-        Sales: 3490,
-        TotalBottlepool: 4300,
-        amt: 2100,
-    },
-];
-
 const SKUDetailView = (props) => {
     const { states, prop } = props;
     
@@ -181,28 +89,6 @@ const SKUDetailView = (props) => {
                         {!isActive ? 
                             <>
                                 <div className="productsChart">
-                                    {/* <label className="productsChartTitle">States</label>
-                            <ResponsiveContainer width="100%" height={500}>
-                                <BarChart
-                                    width={500}
-                                    height={300}
-                                    data={data}
-                                    margin={{
-                                        top: 5,
-                                        right: 30,
-                                        left: 20,
-                                        bottom: 5,
-                                    }}
-                                    barSize={10}
-                                >
-                                    <XAxis dataKey="name" />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Legend />
-                                    <Bar dataKey="TotalBottlepool" fill="#FDAB0F" />
-                                    <Bar dataKey="Sales" fill="#A344B7" />
-                                </BarChart>
-                            </ResponsiveContainer> */}
                                     <label className="productsChartTitle">States</label>
                                     <ResponsiveContainer width="100%" height={500}>
                                         <BarChart

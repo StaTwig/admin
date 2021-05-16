@@ -10,12 +10,12 @@ const BreweryView = (props) => {
     const dispatch = useDispatch();
     useEffect(() => {
         (async () => {
-        const result = await dispatch(getAllOrganisationStats());
-        setAnalytics(result.data);
+            const result = await dispatch(getAllOrganisationStats());
+            setAnalytics(result.data);
         })();
     }, []);
     const openBreweryDetailView = (param) => {
-        props.onViewChange('SKU_VIEW', {...param, ...{type: 'b'}});
+        props.onViewChange('SKU_VIEW', {...param, ...{type: 'b', analytics: analytics}});
     }
     return (
         <div >
@@ -48,21 +48,21 @@ const BreweryView = (props) => {
 
                             <span className="breweryPropertyText">Sales <span className="pull-right breweryPropertyValue">{analytic.analytics.sales}</span></span>
                             <div className="progress progress-line-warning">
-                                <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: ((analytic.analytics.sales/analytic.analytics.targetSales)*100)+"%" }}>
-                                    <span className="sr-only">{(analytic.analytics.returns/analytic.analytics.targetSales)*100}% Complete</span>
+                                <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: ((analytic.analytics.sales/(analytic.analytics.targetSales > 0 ? analytic.analytics.targetSales : 1))*100)+"%" }}>
+                                    <span className="sr-only">{(analytic.analytics.returns/(analytic.analytics.targetSales > 0 ? analytic.analytics.targetSales : 1))*100}% Complete</span>
                                 </div>
                             </div>
 
                             <span className="breweryPropertyText">Returns <span className="pull-right breweryPropertyValue">{analytic.analytics.returns}</span></span>
                             <div className="progress progress-line-danger">
-                                <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: ((analytic.analytics.actualReturns/analytic.analytics.returns)*100)+"%" }}>
-                                    <span className="sr-only">{(analytic.analytics.actualReturns/analytic.analytics.returns)*100}% Complete</span>
+                                <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: ((analytic.analytics.actualReturns/(analytic.analytics.returns > 0 ? analytic.analytics.returns : 1))*100)+"%" }}>
+                                    <span className="sr-only">{(analytic.analytics.actualReturns/(analytic.analytics.returns > 0 ? analytic.analytics.returns : 1))*100}% Complete</span>
                                 </div>
                             </div>
-                            <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">{(analytic.analytics.actualReturns/analytic.analytics.returns)*100}%</span></span>
+                            <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">{(analytic.analytics.actualReturns/(analytic.analytics.returns > 0 ? analytic.analytics.returns : 1))*100}%</span></span>
                             <div className="progress progress-line-primary">
-                                <div className="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: ((analytic.analytics.actualReturns/analytic.analytics.returns)*100)+"%" }}>
-                                    <span className="sr-only">{(analytic.analytics.actualReturns/analytic.analytics.returns)*100}% Complete</span>
+                                <div className="progress-bar progress-bar-primary" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: ((analytic.analytics.actualReturns/(analytic.analytics.returns > 0 ? analytic.analytics.returns : 1))*100)+"%" }}>
+                                    <span className="sr-only">{(analytic.analytics.actualReturns/(analytic.analytics.returns > 0 ? analytic.analytics.returns : 1))*100}% Complete</span>
                                 </div>
                             </div>
                         </div>

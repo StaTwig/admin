@@ -62,18 +62,16 @@ export const getAllBrands = () => {
     };
   };
   
-export const getAllOrganisationStats = () => {
+export const getAllOrganisationStats = (param = '') => {
     return async dispatch => {
       try {
         dispatch(turnOn());
-        console.log(config().getOrganisationStatsurl);
+        console.log(config().getOrganisationStatsurl+param);
         
         const result = await axios.get(
-          config().getOrganisationStatsurl,
+          config().getOrganisationStatsurl+param,
         );
         dispatch(turnOff());
-        console.log(result);
-        
         return result.data;
       } catch (e) {
         dispatch(turnOff());

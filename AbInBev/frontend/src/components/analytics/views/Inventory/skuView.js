@@ -4,52 +4,34 @@ import bottlesIcon from "../../../../assets/becks_330ml.png";
 import { getAnalyticsByBrand } from '../../../../actions/analyticsAction';
 import { useDispatch } from 'react-redux';
 import { BarChart,AreaChart, Area, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-
-
-const dataInventorySKUSales = [
-    {
-      name: 'JAN',
-      Sales: 10000
-    },
-    {
-      name: 'FEB',
-      Sales: 4500
-    },
-    {
-      name: 'MAR',
-      Sales: 6700
-    },
-    {
-      name: 'APR',
-      Sales: 9000
-    },
-    {
-      name: 'MAY',
-      Sales: 6478
-    },
-    {
-      name: 'JUN',
-      Sales: 2600
-    },
-    {
-      name: 'JUL',
-      Sales: 9050
-    },
-  ];
+import { getAnalyticsAllStats } from '../../../../actions/analyticsAction';
 
 const iSKUView = (props) => {
-    const [analytics, setAnalytics] = useState(props.bstats);
-    // const dispatch = useDispatch();
-    // useEffect(() => {
-    //     (async () => {
-    //     const result = await dispatch(getAnalyticsByBrand());
-    //     console.log(result);
-        
-    //     setAnalytics(result.data);
-    //     })();
-    // }, []);
+    const [analytics, setAnalytics] = useState([]);
+    const dispatch = useDispatch();
+    let skuArr = [];
+    
+    useEffect(() => {
+        (async () => {
+            if (props.sku) {
+                let n = props.SKUStats.filter(a => a.externalId == props.sku);
+                setName(n[0].name);
+                setShortname(n[0].shortName);
+                setImage(n[0].image);
+            }
+            const result = await dispatch(getAnalyticsAllStats('?group_by=state'+(props.sku ? "&sku="+props.sku : "")));
+            setAnalytics(result.data);
+        })();
+    }, []);
+
     const openDetailView = (sku) => {
         props.onViewChange('SKU_DETAIL_VIEW', { sku: sku });
+    }
+
+    const changeSku = async(event) => {
+        let sku = event.target.value;
+        const result = await dispatch(getAnalyticsAllStats('?group_by=state'+(sku ? "&sku="+sku : "")));
+        setAnalytics(result.data);
     }
 
     return (
@@ -58,10 +40,21 @@ const iSKUView = (props) => {
             <br/>
             <div className="btn-group mainButtonFilter">
                 <a href="#!" className="btn active">SKU</a>
-                <select className="btn selectState">
-                    <option>All</option>
-                    <option>Becks 330ml</option>
-                    <option>Budweiser 330ml</option>
+                <select className="btn selectState" onChange={changeSku}>
+                    <option value="">All</option>
+                    {props.SKUs?.map((sku) => {
+                    let enable = true;
+                    if (!skuArr.includes(sku.externalId)) 
+                      skuArr.push(sku.externalId);
+                    else 
+                      enable = false;
+                    
+                    return ( enable ? 
+                      <option value={sku.externalId}>{sku.name}</option> : ''
+                    )
+                  }
+                  )
+                  }
                 </select>
             </div>
             <div className="productDetailedView">
@@ -74,7 +67,7 @@ const iSKUView = (props) => {
                                 <AreaChart
                                     width={500}
                                     height={400}
-                                    data={dataInventorySKUSales}
+                                    data={analytics}
                                     margin={{
                                         top: 10,
                                         right: 30,
@@ -82,10 +75,10 @@ const iSKUView = (props) => {
                                         bottom: 0,
                                     }}
                                     >
-                                    <XAxis dataKey="name" />
+                                    <XAxis dataKey="groupBy" />
                                     <YAxis />
                                     <Tooltip />
-                                    <Area type="monotone" dataKey="Sales" stroke="#8884d8" strokeWidth={2} fill="#8884d8"/>
+                                    <Area type="monotone" dataKey="sales" stroke="#8884d8" strokeWidth={2} fill="#8884d8"/>
                                 </AreaChart>
                             </ResponsiveContainer>
                         </div>
@@ -97,7 +90,7 @@ const iSKUView = (props) => {
                                 <AreaChart
                                     width={500}
                                     height={400}
-                                    data={dataInventorySKUSales}
+                                    data={analytics}
                                     margin={{
                                         top: 10,
                                         right: 30,
@@ -105,10 +98,10 @@ const iSKUView = (props) => {
                                         bottom: 0,
                                     }}
                                     >
-                                    <XAxis dataKey="name" />
+                                    <XAxis dataKey="groupBy" />
                                     <YAxis />
                                     <Tooltip />
-                                    <Area type="monotone" dataKey="Sales" stroke="#FAAB10" strokeWidth={2} fill="#FAAB10"/>
+                                    <Area type="monotone" dataKey="returns" stroke="#FAAB10" strokeWidth={2} fill="#FAAB10"/>
                                 </AreaChart>
                             </ResponsiveContainer>
                         </div>
@@ -124,48 +117,15 @@ const iSKUView = (props) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td scope="row">
-                                        <a className="stateLink" href="#">Karnataka</a>
-                                    </td>
-                                    <td>333333</td>
-                                    <td>333333</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">
-                                        <a className="stateLink" href="#">Delhi</a>
-                                    </td>
-                                    <td>333333</td>
-                                    <td>333333</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">
-                                        <a className="stateLink" href="#">Telangana</a>
-                                    </td>
-                                    <td>333333</td>
-                                    <td>333333</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">
-                                        <a className="stateLink" href="#">Gujarat</a>
-                                    </td>
-                                    <td>333333</td>
-                                    <td>333333</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">
-                                        <a className="stateLink" href="#">Maharashtra</a>
-                                    </td>
-                                    <td>333333</td>
-                                    <td>333333</td>
-                                </tr>
-                                <tr>
-                                    <td scope="row">
-                                        <a className="stateLink" href="#">Goa</a>
-                                    </td>
-                                    <td>333333</td>
-                                    <td>333333</td>
-                                </tr>
+                                {analytics.map((analytic, index) => 
+                                    <tr>
+                                        <td scope="row">
+                                            <span className="stateLink">{analytic.groupedBy}</span>
+                                        </td>
+                                        <td>{analytic.sales}</td>
+                                        <td>{analytic.returns}</td>
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
                     </div>

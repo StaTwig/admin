@@ -20,7 +20,7 @@ const SupplierView = (props) => {
     //     })();
     // }, []);
     const openDetailView = (sku) => {
-        props.onViewChange('SUPPLIER_DETAIL_VIEW', {sku: sku});
+        props.onViewChange('SUPPLIER_DETAIL_VIEW', sku);
     }
 
     return (
@@ -56,9 +56,9 @@ const SupplierView = (props) => {
 
                     <div className="card-container-sku">
                         {analytic.products.map((product, i) => 
-                            <div className="card cursor-pointer" onClick={() => openDetailView(product.externalId)}>
+                            <div className="card cursor-pointer" onClick={() => openDetailView(product)}>
                                 <div className="author mb-2">
-                                    <div className="profile"><img src={bottlesIcon} alt="" width="50" height="100%" /></div>
+                                    <div className="profile"><img src={product.image} alt="" width="50" height="100%" /></div>
                                     <div className="info">
                                         <div className="name">{product.name}</div>
                                         <div className="caption">{product.shortName}</div>

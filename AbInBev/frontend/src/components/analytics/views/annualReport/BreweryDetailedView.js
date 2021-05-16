@@ -11,7 +11,7 @@ const BreweryDetailedView = (props) => {
     const [name, setName] = useState(prop.name);
     const [shortName, setShortname] = useState(prop.shortName);
     const [image, setImage] = useState(prop.image);
-    const [analytics, setAnalytics] = useState([]);
+    const [analytics, setAnalytics] = useState(props.prop.analytics);
     const dispatch = useDispatch();
     useEffect(() => {
         (async () => {
@@ -21,8 +21,14 @@ const BreweryDetailedView = (props) => {
                 setShortname(n[0].shortName);
                 setImage(n[0].image);
             }
-            const result = await dispatch(getAllOrganisationStats());
-            setAnalytics(result.data);
+            if (props.Otype) {
+                let n = props.prop.analytics.filter(a => a.type == props.Otype);
+                if (props.Otype == 'All')
+                    n = rops.prop.analytics;
+                setAnalytics(n);
+            }
+            // const result = await dispatch(getAllOrganisationStats());
+            // setAnalytics(result.data);
         })();
     }, []);
     return (
@@ -40,7 +46,9 @@ const BreweryDetailedView = (props) => {
                 <a href="#!" className="btn active">Brewery</a>
                 <select className="btn selectState">
                     <option>All</option>
-                    <option>SPR Mysuru</option>
+                    {analytics.map((analytic, index) =>
+                        <option value={analytic.name}>{analytic.name}</option>
+                    )}
                 </select>
             </div>
 

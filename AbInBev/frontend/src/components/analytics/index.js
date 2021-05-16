@@ -52,6 +52,7 @@ const Analytics = (props) => {
   const [params, setParams] = useState({});
   const [SKU, setSKU] = useState('');
   const [isActive, setTsActive] = useState('');
+  const [Otype, setOtype] = useState('All');
   const [selectedViewCode, setSelectedViewCode] = useState('ANNUALREPORT_DASHBOARD');
   const [annualReportButton, setannualReportButton] = useState("btn active");
   const [inventoryButton, setInventoryButton] = useState("btn");
@@ -93,6 +94,10 @@ const Analytics = (props) => {
     setSKU(event.target.value);
   }
 
+  const changeOType = (value) => {
+    setOtype(value);
+  }
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -102,7 +107,7 @@ const Analytics = (props) => {
         <main role="main" className="col-md-9 ml-sm-auto col-lg-10">
           <div className="row">
             <div className="col-md-9 mainContainer pt-3 px-4">
-              <ViewRenderer {...props} prop={prop} params={params} sku={SKU} viewName={selectedViewCode} onViewChange={onViewChange}></ViewRenderer>
+              <ViewRenderer {...props} prop={prop} params={params} Otype={Otype} sku={SKU} viewName={selectedViewCode} onViewChange={onViewChange}></ViewRenderer>
             </div>
             <div className="col-md-3 rightSideMenu pt-4 px-2">
               <div className="filterSection">
@@ -110,22 +115,22 @@ const Analytics = (props) => {
                   <img src={filterIcon} className="filterIcon" /> FILTERS
                 </div>
                 {/* TODO Tabs for for Module load  */}
-                <div class="btn-group filterButton mt-2 mb-4">
-                  <a href="#!" class={annualReportButton}
+                <div className="btn-group filterButton mt-2 mb-4">
+                  <a href="#!" className={annualReportButton}
                   onClick={() => {
                     selectModule("ANNUALREPORT_DASHBOARD");
                     onModuleChange("ANNUALREPORT_DASHBOARD");
                   }}>
                     Annual Reports
                   </a>
-                  <a href="#!" class={inventoryButton}
+                  <a href="#!" className={inventoryButton}
                   onClick={() => {
                     selectModule("INVENTORY_DASHBOARD");
                     onModuleChange("INVENTORY_DASHBOARD");
                   }}>
                     Inventory
                   </a>
-                  <a href="#!" class={spm}
+                  <a href="#!" className={spm}
                   onClick={() => {
                     selectModule("SPM_DASHBOARD");
                     onModuleChange("SPM_DASHBOARD");
@@ -252,6 +257,18 @@ const Analytics = (props) => {
                       </div>
                       }
                   </div>
+                }
+                {selectedViewCode == 'BREWERY_DETAIL_VIEW' || selectedViewCode == 'SUPPLIER_DETAIL_VIEW' && 
+                  <>
+                  <h3 className="filterSubHeading mt-3">Vendor</h3>
+                  <div className="btn-group filterButton mt-2 mb-4">
+                    {['All', 'S1', 'S2', 'S3'].map((otype, index) => 
+                      <span key={index} className={`btn p-2 ${Otype == otype ? `active` : `` }`} for={otype} onClick={() => changeOType(otype)}>
+                        {otype}
+                      </span>
+                    )}
+                  </div>
+                  </>
                 }
               </div>
             </div>
