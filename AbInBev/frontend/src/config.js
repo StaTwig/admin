@@ -99,7 +99,7 @@ export function config() {
       getAnalyticsByBrandurl: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getStatsByBrand`,
       getAllBrandsurl: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getAllBrands`,
       getOrganisationStatsurl: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getStatsByOrg`,
-      getOverviewStats: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getOverviewStats`,
+      getOverviewStats: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getOverviewStats`,
 
     },
     ainbevtest: {
@@ -169,10 +169,10 @@ export function config() {
       deleteNotificationUrl: `${ABINBEVTEST_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl: `${ABINBEVTEST_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
       getAllAnalytics: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getAllStats`,
-      getAnalyticsBySKUurl: `${LOCAL_SERVER_URL_AANALYTICS}/advancedanalytics/api/analytics/getStatsBySKU`,
-      getAnalyticsByBrandurl: `${LOCAL_SERVER_URL_AANALYTICS}/advancedanalytics/api/analytics/getStatsByBrand`,
-      getAllBrandsurl: `${LOCAL_SERVER_URL_AANALYTICS}/advancedanalytics/api/analytics/getAllBrands`,
-      getOrganisationStatsurl: `${LOCAL_SERVER_URL_AANALYTICS}/advancedanalytics/api/analytics/getStatsByOrg`,
+      getAnalyticsBySKUurl: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getStatsBySKU`,
+      getAnalyticsByBrandurl: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getStatsByBrand`,
+      getAllBrandsurl: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getAllBrands`,
+      getOrganisationStatsurl: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getStatsByOrg`,
       getOverviewStats: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getOverviewStats`,
 
     },
