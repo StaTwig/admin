@@ -122,6 +122,38 @@ export const getPOs = (skip = 0, limit = 5) => {
   };
 };
 
+export const getSentPOs = async (to, orderId, productName, deliveryLocation, dateFilter, skip, limit) => { //outbound po with filter(to, orderId, productName, deliveryLocation, date, skip, limit)
+    try {
+      const result = await axios.get(
+        `${config().fetchOutboundPurchaseOrderUrl}?to=${to}&orderId=${orderId}&productName=${productName}&dateFilter=${dateFilter}&deliveryLocation=${deliveryLocation}&skip=${skip}&limit=${limit}`,
+      );
+      return result.data;
+    } catch (e) {
+      return [];
+    }
+};
+
+
+export const getReceivedPOs = async (from, orderId, productName, deliveryLocation, dateFilter, skip, limit) => {//outbound po with filter(to, orderId, productName, deliveryLocation, date, skip, limit)
+    try {
+      const result = await axios.get(
+        `${config().fetchInboundPurchaseOrderUrl}?from=${from}&orderId=${orderId}&productName=${productName}&dateFilter=${dateFilter}&deliveryLocation=${deliveryLocation}&skip=${skip}&limit=${limit}`,
+      );
+      return result.data;
+    } catch (e) {
+      return [];
+    }
+};
+
+export const getProductIdDeliveryLocationsOrganisations = async () => {
+  try {
+    const result = await axios.get(config().fetchProductIdsCustomerLocationsOrganisationsUrl);
+    return result.data.data;
+  } catch (e) {
+    return [];
+  }
+}
+
 export const getOrder = (id) => {
   return async dispatch => {
     try {
