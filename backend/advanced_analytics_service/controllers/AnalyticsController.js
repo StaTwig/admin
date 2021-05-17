@@ -280,21 +280,21 @@ function getAnalyticsFilterConditions(filters, warehouseIds) {
 	let matchCondition = {
 		warehouseId: {
 			$in: [...warehouseIds,
-				'WAR1006',
-				'WAR10024', 'WAR10019',
-				'WAR10018', 'WAR10017',
-				'WAR10004', 'WAR10003',
-				'WAR10025', 'AP004',
-				'warehouse_id 2', 'AP005',
-				'war-blpg132lkmwny88i', 'war-blpg1vzwkn4a0cp6',
-				'AP003', 'war-2p52232kmrduslk',
-				'war-blpg1vzwkn482zyf', 'AP001',
-				'orgwar2345', 'AP002',
-				'orgwar12345', 'war-2p51gpxkmlpfh97',
-				'war-2p51gpxkmlo2x61', 'war-2p52232kmrpfxxh',
-				'war-blpg132lkmwxmhxk', 'ware123',
-				'war-1234', 'ware234',
-				'war-blpg1vzwkn47ka4y', 'war-blpg41ggknah1lj7'
+				// 'WAR1006',
+				// 'WAR10024', 'WAR10019',
+				// 'WAR10018', 'WAR10017',
+				// 'WAR10004', 'WAR10003',
+				// 'WAR10025', 'AP004',
+				// 'warehouse_id 2', 'AP005',
+				// 'war-blpg132lkmwny88i', 'war-blpg1vzwkn4a0cp6',
+				// 'AP003', 'war-2p52232kmrduslk',
+				// 'war-blpg1vzwkn482zyf', 'AP001',
+				// 'orgwar2345', 'AP002',
+				// 'orgwar12345', 'war-2p51gpxkmlpfh97',
+				// 'war-2p51gpxkmlo2x61', 'war-2p52232kmrpfxxh',
+				// 'war-blpg132lkmwxmhxk', 'ware123',
+				// 'war-1234', 'ware234',
+				// 'war-blpg1vzwkn47ka4y', 'war-blpg41ggknah1lj7'
 			]
 		}
 	};
