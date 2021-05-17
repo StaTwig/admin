@@ -196,17 +196,17 @@ services:
       - "traefik.http.routers.track.tls=true"
       - "traefik.http.routers.track.tls.certresolver=lets-encrypt"
 
-  # frontend:
-  #   build: './frontend'
-  #   image: 'frontend1.0'
-  #   container_name: 'frontend'
-  #   labels:
-  #     - "traefik.enable=true"
-  #     - "traefik.docker.network=proxy"
-  #     - "traefik.http.routers.frontend.entrypoints=websecure"
-  #     - "traefik.http.routers.frontend.rule=Host(`test2.statledger.io`)"
-  #     - "traefik.http.routers.frontend.tls=true"
-  #     - "traefik.http.routers.frontend.tls.certresolver=lets-encrypt"     
+  frontend:
+    build: './frontend'
+    image: 'frontend1.0'
+    container_name: 'frontend'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.rule=Host(`test2.statledger.io`)"
+      - "traefik.http.routers.frontend.tls=true"
+      - "traefik.http.routers.frontend.tls.certresolver=lets-encrypt"     
 
 networks:
   default:
