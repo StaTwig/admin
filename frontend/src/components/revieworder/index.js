@@ -129,7 +129,7 @@ const [ modalProps, setModalProps ] = useState({});
                   <span className="col" style={{color: "black"}} >{order.toOrg}</span>
                 </div>
                 <div className="w-100"></div>
-                <div className="col row col-6 mt-2">
+                <div className="col row col-6 mt-5">
                   <span className="col-4">Delivery Location:</span>
                   <span className="col ml-2 " style={{color: "black"}} >{order.toOrgLocName}</span>
                 </div>
@@ -137,7 +137,7 @@ const [ modalProps, setModalProps ] = useState({});
             </div>
           </div>
         </div>
-        <div className="mt-4">
+        <div className="mt-3 mr-3 mb-3">
             <div className="d-flex flex-row-reverse">
               <button onClick={onAssign} className="btn btn-yellow fontSize20 font-bold">
                 <img src={OrderIcon} width="20" height="17" className="mr-2 mb-1" />
