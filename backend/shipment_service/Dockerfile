@@ -1,11 +1,17 @@
-FROM node:14.16.1-alpine3.13
+FROM node:14.16.1
 
-WORKDIR /src
+WORKDIR /src/utils/event_logger
 
-COPY . /src
+COPY /utils/event_logger .
 
-RUN yarn install
+RUN npm install
 
-EXPOSE 3000
+WORKDIR /src/backend/service
 
-CMD yarn start
+COPY /backend/shipment_service/ .
+ 
+RUN npm install
+
+EXPOSE 3002
+
+CMD npm start

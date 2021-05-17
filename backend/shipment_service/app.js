@@ -13,10 +13,10 @@ const openApiDocumentation = require('./openApiDocumentation');
 const indexRouter = require("./routes/index");
 const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
-const dir = `/home/ubuntu/shipmentimages`;
-if (!fs.existsSync(dir)) {
-  fs.mkdirSync(dir);
-}
+// const dir = `/home/ubuntu/shipmentimages`;
+// if (!fs.existsSync(dir)) {
+//   fs.mkdirSync(dir);
+// }
 
 const app = express();
 
@@ -44,7 +44,7 @@ app.use(express.urlencoded({ limit: '50mb', extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocumentation));
-app.use('/shipmentmanagement/api/shipment/images', express.static(path.join('/home/ubuntu/','shipmentimages')));
+// app.use('/shipmentmanagement/api/shipment/images', express.static(path.join('/home/ubuntu/','shipmentimages')));
 //To allow cross-origin requests
 app.use(cors());
 

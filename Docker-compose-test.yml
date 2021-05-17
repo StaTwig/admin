@@ -1,0 +1,16 @@
+version: "3.7"
+services:
+    shipment:
+        build: 
+          context: .
+          dockerfile: backend/shipment_service/Dockerfile
+        image: 'shipment_service1.0'
+        container_name: 'shipment_service'
+        ports:
+          - "3002:3002"            
+    affliate:
+        build: 'backend/shippingOrder_service'
+        image: 'shippingorder_service1.0'
+        container_name: 'shippingOrder_service'
+        ports:
+          - "3013:3013"
