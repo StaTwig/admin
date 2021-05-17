@@ -1,4 +1,4 @@
-FROM node:14.16.1-alpine3.13
+FROM node:14.16.1
 
 WORKDIR /src
 
@@ -8,4 +8,4 @@ RUN yarn install
 
 EXPOSE 3004
 
-CMD yarn start
+CMD yarn run start

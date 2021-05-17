@@ -8,4 +8,4 @@ RUN yarn install
 
 EXPOSE 3010
 
-CMD yarn start
+CMD yarn run start
