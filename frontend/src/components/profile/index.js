@@ -9,6 +9,9 @@ import Briefcase from "../../assets/icons/briefcase.svg";
 import Telephone from "../../assets/icons/telephone.svg";
 import "./style.scss";
 import { config } from "../../config";
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
+
 const axios = require("axios");
 import {
   getUserInfoUpdated,
@@ -357,13 +360,13 @@ class Profile extends React.Component {
                     </div>
                     <div className="form-group">
                       <label htmlFor="shipmentId">Phone</label>
-                      <input
-                        placeholder="Enter PhoneNumber"
-                        className="form-control"
-                        value={phoneNumber}
-                        onChange={(e) =>
-                          this.setState({ phoneNumber: e.target.value })
-                        }
+                      <PhoneInput
+                      className="form-group"
+                          country={'in'}
+                          placeholder='Enter Phone number'
+                          style={{position:"absolute", marginLeft:"64%"}}
+                          value={this.state.phoneNumber}
+                          onChange={(phone) => this.setState({ phoneNumber : phone})}
                       />
                     </div>
 
