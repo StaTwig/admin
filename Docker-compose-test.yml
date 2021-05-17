@@ -75,7 +75,7 @@ services:
   inventory:
     build:
       context: .
-      dockerfile: /backend/inventory_service/Dockerfile
+      dockerfile: backend/inventory_service/Dockerfile
     image: 'inventory_service1.0'
     container_name: 'inventory_service1.0'
     labels:
