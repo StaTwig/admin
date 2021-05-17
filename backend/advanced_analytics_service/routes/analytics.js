@@ -14,6 +14,7 @@ router.get("/getAllStats", AnalyticsController.getAllStats);
 router.get("/getAllBrands", AnalyticsController.getAllBrands);
 router.get("/getStatsBySKU", AnalyticsController.getStatsBySKU);
 router.get("/getStatsByBrand", AnalyticsController.getStatsByBrand);
+router.get("/getSalesStatsByBrand", AnalyticsController.getSalesStatsByBrand);
 router.get("/getStatsByOrg", AnalyticsController.getStatsByOrg);
 
 router.get("/getStatsByBrewery/:warehouseId", AnalyticsController.getAllStats);

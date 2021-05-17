@@ -199,14 +199,14 @@ function dateConversion(filters) {
 	// if (filters.date_filter_type && filters.date_filter_type.length)
 	{
 		conversion = {
-						"$addFields": {
-							"uploadDate": {
-								"$dateFromString": {
-									"dateString": "$uploadDate"
-								}
-							}
-						}
+			"$addFields": {
+				"uploadDate": {
+					"$dateFromString": {
+						"dateString": "$uploadDate"
 					}
+				}
+			}
+		}
 	}
 	return conversion;
 }
@@ -235,7 +235,7 @@ function getSKUAnalyticsFilterConditions(filters) {
 		} else if (filters.date_filter_type === 'by_monthly') {
 
 			let startDateOfTheYear = moment([filters.year]);
-			let startDateOfTheMonth = moment(startDateOfTheYear).add(filters.month-1, 'months');
+			let startDateOfTheMonth = moment(startDateOfTheYear).add(filters.month - 1, 'months');
 			let endDateOfTheMonth = moment(startDateOfTheMonth).endOf('month');
 			matchCondition.uploadDate = {
 				$gte: new Date(startDateOfTheMonth),
@@ -516,6 +516,96 @@ exports.getStatsByBrand = [
 ];
 
 /**
+ * getSalesStatsByBrand.
+ *
+ * @returns {Object}
+ */
+exports.getSalesStatsByBrand = [
+	auth,
+	async function (req, res) {
+		try {
+			const filters = req.query;
+			let warehouseIds = await _getWarehouseIds(filters);
+			let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
+			if (filters.brand && filters.brand !== '') {
+				analyticsFilter.manufacturer = filters.brand;
+			}
+
+			let Analytics = await AnalyticsModel.aggregate([
+				{
+					$match: analyticsFilter
+				},
+				{
+					$lookup: {
+						from: 'products',
+						localField: 'productId',
+						foreignField: 'externalId',
+						as: 'prodDetails'
+					}
+				},
+				{
+					$unwind: {
+						path: '$prodDetails'
+					}
+				},
+				{
+					$replaceRoot: {
+						newRoot: {
+							$mergeObjects: ['$prodDetails', '$$ROOT']
+						}
+					}
+				},
+				{
+					$project: {
+						prodDetails: 0
+					}
+				},
+				{
+					$group: {
+						_id: '$manufacturer',
+						products: {
+							$addToSet: '$$ROOT'
+						}
+					}
+				}
+
+			]);
+			for (let analytic of Analytics) {
+				let products = analytic.products;
+				let salesTotal = 0;
+				let targetSalesTotal = 0;
+				let returnsTotal = 0;
+				let returnRateTotal = 0;
+				let returnRatePrevTotal = 0;
+				products.forEach((product) => {
+					salesTotal = salesTotal + (parseInt(product.sales) ? parseInt(product.sales) : 0);
+					targetSalesTotal = targetSalesTotal + (parseInt(product.targetSales) ? parseInt(product.targetSales) : 0);
+					returnsTotal = returnsTotal + (parseInt(product.returns) ? parseInt(product.returns) : 0);
+					returnRateTotal = returnRateTotal + (parseInt(product.returnRate) ? parseInt(product.returnRate) : 0);
+					returnRatePrevTotal = returnRatePrevTotal + (parseInt(product.returnRatePrev) ? parseInt(product.returnRatePrev) : 0);
+				});
+				delete analytic.products;
+				analytic.stats = {
+					sales: salesTotal,
+					targetSalesTotal: targetSalesTotal,
+					returns: returnsTotal,
+					returnRate: returnRateTotal,
+					returnRatePrev: returnRatePrevTotal
+				};
+			}
+
+			return apiResponse.successResponseWithData(
+				res,
+				"Operation success",
+				Analytics
+			);
+		} catch (err) {
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
+
+/**
  * getAllStats.
  *
  * @returns {Object}
@@ -634,12 +724,12 @@ function getSKUGroupByFilters(filters) {
 			}
 			);
 		} else if (filters.group_by === 'date') {
-			if(filters.state)
-			matchCondition.push({
-				$match: {
-					state: filters.state
-				}
-			});
+			if (filters.state)
+				matchCondition.push({
+					$match: {
+						state: filters.state
+					}
+				});
 			matchCondition.push(
 				{
 					$group: {
@@ -683,10 +773,10 @@ exports.getStatsBySKU = [
 		try {
 			const filters = req.query;
 			const monthNames = ["January", "February", "March", "April", "May", "June",
-			"July", "August", "September", "October", "November", "December"
+				"July", "August", "September", "October", "November", "December"
 			];
 			let Analytics = await AnalyticsModel.aggregate([
-				{...dateConversion(filters)},
+				{ ...dateConversion(filters) },
 				{
 					$match: getSKUAnalyticsFilterConditions(filters)
 				},
