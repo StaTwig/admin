@@ -18,20 +18,20 @@ const FormLoginPage = (props) => {
   return (
     <div className="login-wrapper">
       <div className="container">
-        <div className="mobile-header">
+        {/* <div className="mobile-header">
             <div className="branding">
                 <img src={logo} alt="vaccineledger" />
             </div>
-</div>
+</div> */}
           <div className="row">
-          <div className="col-sm-6 col-lg-6">
+          <div className="col-m-6 col-lg-6">
             <div className="form-content">
               <img className="logo" src={logo} />
               <h1>Welcome Back,</h1>
               <p>Login to continue</p>
             </div>
           </div>
-          <div className="col-sm-6 col-lg-5">
+          <div className="col-m-6 col-lg-5">
             <div className="card">
               <div className="card-body">
                 <div className="login-form mt-2">

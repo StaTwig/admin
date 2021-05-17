@@ -13,6 +13,16 @@ const LoginContainer = props => {
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const dispatch = useDispatch();
+  const [innerWidth,setInnerwidth] = useState(window.innerWidth);
+
+  // const updtaeInnerWidth = () =>{
+  //     setInnerwidth(window.innerWidth);
+  // } 
+  // setInterval(updtaeInnerWidth,100);
+  
+  window.onresize = () =>{
+    setInnerwidth(window.innerWidth);
+  }
 
   const onSendOtp = useCallback(async () => {
       dispatch(turnOn());
@@ -47,21 +57,21 @@ const LoginContainer = props => {
    }
 
   return(
-
     <div className="container-fluid p-0" tabIndex="-1" onKeyDown={onkeydown}>
     <MobileHeader {...props} />  
+    { innerWidth >1024 &&
    <nav className="navbar sticky-top navbar-expand-lg">
         <a className="navbar-brand" href="#">
-          <img src={logo}  width="230" height="30" alt="logo" onClick={() =>props.history.push('/#')} />
+          <img src={logo} width="230" height="30" alt="logo" onClick={() =>props.history.push('/#')} />
         </a>
-</nav>
+    </nav>
+}
  <Login
         errorMessage={errorMessage}
         onSendOtp={onSendOtp}
         onEmailChange={e => setEmail(e.target.value)}
       />
     </div>
-
   );
 };
 
