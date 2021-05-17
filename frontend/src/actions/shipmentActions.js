@@ -33,6 +33,50 @@ export const getShipments = (skip = 0, limit = 5) => {
   };
 };
 
+export const getInboundShipments = async (shipmentId, from, to, dateFilter, status, skip, limit) => {
+  try {
+    const result = await axios.get(
+      `${config().fetchInboundShipmentsUrl}?shipmentId=${shipmentId}&from=${from}&to=${to}&dateFilter=${dateFilter}&status=${status}&skip=${skip}&limit=${limit}`,
+    );
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
+export const getOutboundShipments = async (shipmentId, from, to, dateFilter, status, skip, limit) => {
+  try {
+    const result = await axios.get(
+      `${config().fetchOutboundShipmentsUrl}?shipmentId=${shipmentId}&from=${from}&to=${to}&dateFilter=${dateFilter}&status=${status}&skip=${skip}&limit=${limit}`,
+    );
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
+export const getSupplierAndReceiverList = async () => {
+  try {
+    const result = await axios.get(
+      `${config().fetchSupplierAndReceiverListUrl}`,
+    );
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
+export const getShipmentIds = async () => {
+  try {
+    const result = await axios.get(
+      `${config().getShipmentIdsUrl}`,
+    );
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
 export const trackShipment = shipmentId => {
   try {
     return async dispatch => {

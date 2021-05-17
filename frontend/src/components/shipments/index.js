@@ -18,31 +18,59 @@ import Status from '../../assets/icons/Status.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsers } from '../../actions/userActions';
 import PurchaseFormReview from '../../components/verifyPO/purchaseFormReview';
-import { getShipments, resetShipments } from '../../actions/shipmentActions';
+import { getInboundShipments, getOutboundShipments, getSupplierAndReceiverList, getShipmentIds, getShipments, resetShipments } from '../../actions/shipmentActions';
 import ExcelPopUp from './ExcelPopup';
 import Received from '../../assets/icons/Received1.svg';
 import Sent from '../../assets/icons/Sent.png';
 const ShipmentAnalytic = props => {
   const [visible, setvisible] = useState('one');
   const [skip, setSkip] = useState(0);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(10);
   const [loadMore, setLoadMore] = useState(true);
   const [shpmnts, setShpmnts] = useState([]);
   const [alerts, setAlerts] = useState(false);
   const dispatch = useDispatch();
+  const [outboundShipments, setOutboundShipments] = useState([]);
+  const [inboundShipments, setInboundShipments] = useState([]);
+  const [supplierReceiverList, setSupplierReceiverList] = useState([]);
+  const [shipmentIdList, setShipmentIdList] = useState([]);
+  const [idFilter, setIdFilter] = useState("");
+  const [dateFilter, setDateFilter] = useState("");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [toFilter, setToFilter] = useState("");
+  const [fromFilter, setFromFilter] = useState("");
 
   useEffect(() => {
-    dispatch(resetShipments());
+    async function fetchData() {
+      if (visible == 'one') {
+        const inboundRes = await getInboundShipments("", "", "", "", "", 0, limit); // id, from, to, dateFilter, status, skip, limit
+        setInboundShipments(inboundRes.data);
+      } else {
+        const outboundRes = await getOutboundShipments("", "", "", "", "", 0, limit); // id, from, to, dateFilter, status, skip, limit
+        setOutboundShipments(outboundRes.data);
+      }
+
+      const supplierReceiverListRes = await getSupplierAndReceiverList();
+      setSupplierReceiverList(supplierReceiverListRes.data);
+
+      const shipmentIdListRes = await getShipmentIds();
+      setShipmentIdList(shipmentIdListRes.data);
+      setSkip(0);
+    };
+    fetchData();
+    // dispatch(resetShipments());
     dispatch(getAllUsers());
-  }, []);
+  }, [visible]);
 
   const onLoadMore = async (isInc, isReset = false) => {
-    const newSkip = isInc ? skip + 5 : skip - 5;
+    const newSkip = isInc ? skip + 10 : skip - 10;
     setSkip(isReset ? 0 : newSkip);
-    const results = await dispatch(getShipments(isReset ? 0 : newSkip, limit));
-    props.setShipments(results);
-    if (results.length === 0) {
-      setLoadMore(false);
+    if (visible == 'one') {
+      const inboundRes = await getInboundShipments(idFilter, fromFilter, toFilter, dateFilter, statusFilter, isReset ? 0 : newSkip, limit); // id, from, to, dateFilter, status, skip, limit
+      setInboundShipments(inboundRes.data);
+    } else {
+      const outboundRes = await getOutboundShipments(idFilter, fromFilter, toFilter, dateFilter, statusFilter, isReset ? 0 : newSkip, limit); // id, from, to, dateFilter, status, skip, limit
+      setOutboundShipments(outboundRes.data);
     }
     setData(visible)
   };
@@ -64,17 +92,68 @@ const ShipmentAnalytic = props => {
   const setData = (v, a = false) => {
     setvisible(v);
     setAlerts(a);
-    // if(skip > 0)
-    //   onLoadMore(true, true);
-
-    // let rtnArr = v == 'two' ? shpmnt.filter(row => props.user.warehouseId == row.supplier.locationId) : shpmnt.filter(row => props.user.warehouseId != row.supplier.locationId);
-    // if (a != '')
-    //   rtnArr = rtnArr.filter(row => row?.shipmentAlerts?.length > 0);
-    // setShpmnts(rtnArr);
   }
 
+  const setDateFilterOnSelect = async (dateFilterSelected) => {
+    setDateFilter(dateFilterSelected);
+    setSkip(0);
+    if (visible == 'one') {
+      const inboundRes = await getInboundShipments(idFilter, fromFilter, toFilter, dateFilterSelected, statusFilter, 0, limit); // id, from, to, dateFilter, status, skip, limit
+      setInboundShipments(inboundRes.data);
+    } else {
+      const outboundRes = await getOutboundShipments(idFilter, fromFilter, toFilter, dateFilterSelected, statusFilter, 0, limit); // id, from, to, dateFilter, status, skip, limit
+      setOutboundShipments(outboundRes.data);
+    }
+  }
+
+  const setStatusFilterOnSelect = async (statusFilterSelected) => {
+    setStatusFilter(statusFilterSelected);
+    setSkip(0);
+    if (visible == 'one') {
+      const inboundRes = await getInboundShipments(idFilter, fromFilter, toFilter, dateFilter, statusFilterSelected, 0, limit); // id, from, to, dateFilter, status, skip, limit
+      setInboundShipments(inboundRes.data);
+    } else {
+      const outboundRes = await getOutboundShipments(idFilter, fromFilter, toFilter, dateFilter, statusFilterSelected, 0, limit); // id, from, to, dateFilter, status, skip, limit
+      setOutboundShipments(outboundRes.data);
+    }
+  }
+
+  const setToShipmentFilterOnSelect = async (toShipmentFilterSelected) => {
+    setToFilter(toShipmentFilterSelected);
+    setSkip(0);
+    if (visible == 'one') {
+      const inboundRes = await getInboundShipments(idFilter, fromFilter, toShipmentFilterSelected, dateFilter, statusFilter, 0, limit); // id, from, to, dateFilter, status, skip, limit
+      setInboundShipments(inboundRes.data);
+    } else {
+      const outboundRes = await getOutboundShipments(idFilter, fromFilter, toShipmentFilterSelected, dateFilter, statusFilter, 0, limit); // id, from, to, dateFilter, status, skip, limit
+      setOutboundShipments(outboundRes.data);
+    }
+  }
+
+  const setFromShipmentFilterOnSelect = async (fromShipmentFilterSelected) => {
+    setFromFilter(fromShipmentFilterSelected);
+    setSkip(0);
+    if (visible == 'one') {
+      const inboundRes = await getInboundShipments(idFilter, fromShipmentFilterSelected, toFilter, dateFilter, statusFilter, 0, limit); // id, from, to, dateFilter, status, skip, limit
+      setInboundShipments(inboundRes.data);
+    } else {
+      const outboundRes = await getOutboundShipments(idFilter, fromShipmentFilterSelected, toFilter, dateFilter, statusFilter, 0, limit); // id, from, to, dateFilter, status, skip, limit
+      setOutboundShipments(outboundRes.data);
+    }
+  }
+
+  const setShipmentIdFilterOnSelect = async (shipmentIdFilterSelected) => {
+    setSkip(0);
+    if (visible == 'one') {
+      const inboundRes = await getInboundShipments(shipmentIdFilterSelected, "", "", "", "", 0, limit); //id, from, to, dateFilter, status, skip, limit
+      setInboundShipments(inboundRes.data);
+    } else {
+      const outboundRes = await getOutboundShipments(shipmentIdFilterSelected, "", "", "", "", 0, limit); // id, from, to, dateFilter, status, skip, limit
+      setOutboundShipments(outboundRes.data);
+    }
+  }
   const sendData = () => {
-    let rtnArr = visible == 'two' ? props.shipments?.outboundShipments : props.shipments?.inboundShipments;
+    let rtnArr = visible == 'one' ? inboundShipments : outboundShipments;
     if (alerts)
       rtnArr = rtnArr.filter(row => row?.shipmentAlerts?.length > 0);
     return rtnArr ? rtnArr : [];
@@ -83,10 +162,10 @@ const ShipmentAnalytic = props => {
   return (
     <div className="shipment">
       <div className="d-flex justify-content-between">
-        
+
         <h1 className="breadcrumb">SHIPMENT</h1>
         <div className="d-flex">
-           {/* <button className=" btn-primary btn mr-2" onClick={()=>setOpenPOExcel(true)}>Import PO</button>
+          {/* <button className=" btn-primary btn mr-2" onClick={()=>setOpenPOExcel(true)}>Import PO</button>
 
           <button
             className="btn btn-orange fontSize20 font-bold mr-2"
@@ -95,8 +174,8 @@ const ShipmentAnalytic = props => {
             <img src={Order} width="14" height="14" className="mr-2" />
             <span>Create Purchase Order</span>
           </button> */}
-       <Link to='/enterid'>
-            <button className="btn btn-orange fontSize20 font-bold mr-5 chain" disabled={status=="RECEIVED"}>
+          <Link to='/enterid'>
+            <button className="btn btn-orange fontSize20 font-bold mr-5 chain" disabled={status == "RECEIVED"}>
               Update Status
             </button>
           </Link>
@@ -113,10 +192,10 @@ const ShipmentAnalytic = props => {
         <Tabs {...props} setvisible={setvisible} visible={visible} />
       </div>
       <div className="full-width-ribben mt-4">
-        <TableFilter data={headers} fb="74%"/>
+        <TableFilter data={headers} shipmentIdList={shipmentIdList} supplierReceiverList={supplierReceiverList} setShipmentIdFilterOnSelect={setShipmentIdFilterOnSelect} setFromShipmentFilterOnSelect={setFromShipmentFilterOnSelect} setToShipmentFilterOnSelect={setToShipmentFilterOnSelect} setStatusFilterOnSelect={setStatusFilterOnSelect} setDateFilterOnSelect={setDateFilterOnSelect} fb="74%" />
       </div>
       <div className="ribben-space">
-        <Table {...props} skip={skip} loadMore={loadMore} shpmnts={sendData} onLoadMore={onLoadMore}/>
+        <Table {...props} skip={skip} loadMore={loadMore} shpmnts={sendData} onLoadMore={onLoadMore} />
       </div>
     </div>
   );
