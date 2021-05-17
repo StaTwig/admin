@@ -619,7 +619,7 @@ exports.getOrderIds = [
   },
 ];
 
-exports.fetchInboundPurchaseOrders = [
+exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, productName, deliveryLocation, date)
   auth,
   async (req, res) => {
     try {
@@ -627,7 +627,7 @@ exports.fetchInboundPurchaseOrders = [
         if (result.success) {
           logger.log(
             'info',
-            '<<<<< POService < POController < fetchInboundPurchaseOrders : token verified successfully, querying data by publisher',
+            '<<<<< POService < POController < fetchInboundPurchaseOrders : token verified successfully',
           );
           const permission_request = {
             result: result,
@@ -635,7 +635,6 @@ exports.fetchInboundPurchaseOrders = [
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
-
               const { organisationId, role } = req.user;
               const { skip, limit } = req.query;
               let currentDate = new Date();
@@ -643,6 +642,7 @@ exports.fetchInboundPurchaseOrders = [
               let fromCustomer = req.query.from ? req.query.from : undefined;
               let productName = req.query.productName ? req.query.productName : undefined;
               let deliveryLocation = req.query.deliveryLocation ? req.query.deliveryLocation : undefined;
+              let orderId = req.query.orderId ? req.query.orderId : undefined;
               switch (req.query.dateFilter) {
                 case "today":
                   fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
@@ -667,6 +667,10 @@ exports.fetchInboundPurchaseOrders = [
               }
 
               let whereQuery = {};
+              if (orderId) {
+                whereQuery['id'] = orderId;
+              }
+
               if (fromDateFilter) {
                 whereQuery['createdAt'] = { $gte: fromDateFilter }
               }
@@ -674,24 +678,26 @@ exports.fetchInboundPurchaseOrders = [
               if (organisationId) {
                 whereQuery["supplier.supplierOrganisation"] = organisationId
               }
+
+              if (deliveryLocation) {
+                whereQuery["customer.shippingAddress.shippingAddressId"] = deliveryLocation
+              }
+
               if (fromCustomer) {
-                let receiverOrg = await OrganisationModel.findOne({ "name": fromCustomer });
-                if (receiverOrg) {
-                  whereQuery["customer.customerOrganisation"] = receiverOrg.id
-                }
+                  whereQuery["customer.customerOrganisation"] = fromCustomer
               }
 
               if (productName) {
                 whereQuery.products = {
                   $elemMatch: {
-                    name: productName
+                    productId: productName
                   }
                 }
               }
 
               console.log("whereQuery ======>", whereQuery);
               try {
-                await RecordModel.find(whereQuery).sort({ createdAt: -1 }).sort({ createdAt: -1 }).skip(parseInt(skip)).limit(parseInt(limit)).then((inboundPOList) => {
+                RecordModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((inboundPOList) => {
                   let inboundPORes = [];
                   let findInboundPOData = inboundPOList.map(async (inboundPO) => {
                     let inboundPOData = JSON.parse(JSON.stringify(inboundPO))
@@ -723,7 +729,7 @@ exports.fetchInboundPurchaseOrders = [
                     inboundPOData.supplier[`organisation`] = supplierOrganisation;
                     inboundPOData.customer[`organisation`] = customerOrganisation;
                     inboundPOData.customer[`warehouse`] = customerWareHouse;
-                    await inboundPORes.push(inboundPOData);
+                    inboundPORes.push(inboundPOData);
                   });
 
                   Promise.all(findInboundPOData).then(function (results) {
@@ -735,9 +741,12 @@ exports.fetchInboundPurchaseOrders = [
                   });
                 });
               } catch (err) {
-                console.log("err ======>", err);
                 return apiResponse.ErrorResponse(res, err);
               }
+              logger.log(
+                'info',
+                '<<<<< POService < POController < fetchInboundPurchaseOrders',
+              );
             } else {
               res.json('Sorry! User does not have enough Permissions');
             }
@@ -745,7 +754,7 @@ exports.fetchInboundPurchaseOrders = [
         } else {
           logger.log(
             'warn',
-            '<<<<< POService < POController < purchaseOrderStatistics  : refuted token',
+            '<<<<< POService < POController < fetchInboundPurchaseOrders  : refuted token',
           );
           res.status(403).json(result);
         }
@@ -753,14 +762,14 @@ exports.fetchInboundPurchaseOrders = [
     } catch (err) {
       logger.log(
         'error',
-        '<<<<< POService < POController < purchaseOrderStatistics : error (catch block)',
+        '<<<<< POService < POController < fetchInboundPurchaseOrders : error (catch block)',
       );
       return apiResponse.ErrorResponse(res, err);
     }
   },
 ];
 
-exports.fetchOutboundPurchaseOrders = [
+exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, productName, deliveryLocation, date)
   auth,
   async (req, res) => {
     try {
@@ -768,16 +777,14 @@ exports.fetchOutboundPurchaseOrders = [
         if (result.success) {
           logger.log(
             'info',
-            '<<<<< POService < POController < purchaseOrderStatistics : token verified successfully, querying data by publisher',
+            '<<<<< POService < POController < fetchOutboundPurchaseOrders : token verified successfully',
           );
           const permission_request = {
-            //role: req.user.role,
             result: result,
             permissionRequired: 'viewPO',
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
-
               const { organisationId, role } = req.user;
               const { skip, limit } = req.query;
               let currentDate = new Date();
@@ -785,6 +792,7 @@ exports.fetchOutboundPurchaseOrders = [
               let toSupplier = req.query.to ? req.query.to : undefined;
               let productName = req.query.productName ? req.query.productName : undefined;
               let deliveryLocation = req.query.deliveryLocation ? req.query.deliveryLocation : undefined;
+              let orderId = req.query.orderId ? req.query.orderId : undefined;
               switch (req.query.dateFilter) {
                 case "today":
                   fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
@@ -809,6 +817,10 @@ exports.fetchOutboundPurchaseOrders = [
               }
 
               let whereQuery = {};
+              if (orderId) {
+                whereQuery['id'] = orderId;
+              }
+
               if (fromDateFilter) {
                 whereQuery['createdAt'] = { $gte: fromDateFilter }
               }
@@ -817,24 +829,25 @@ exports.fetchOutboundPurchaseOrders = [
                 whereQuery["customer.customerOrganisation"] = organisationId
               }
 
+              if (deliveryLocation) {
+                whereQuery["customer.shippingAddress.shippingAddressId"] = deliveryLocation
+              }
+
               if (toSupplier) {
-                let supplierOrg = await OrganisationModel.findOne({ "name": toSupplier });
-                if (supplierOrg) {
-                  whereQuery["supplier.supplierOrganisation"] = supplierOrg.id;
-                }
+                  whereQuery["supplier.supplierOrganisation"] = toSupplier;
               }
 
               if (productName) {
                 whereQuery.products = {
                   $elemMatch: {
-                    name: productName
+                    productId: productName
                   }
                 }
               }
 
               console.log("whereQuery ======>", whereQuery);
               try {
-                RecordModel.find(whereQuery).sort({ createdAt: -1 }).sort({ createdAt: -1 }).skip(parseInt(skip)).limit(parseInt(limit)).then((outboundPOList) => {
+                RecordModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((outboundPOList) => {
                   let outboundPORes = [];
                   let findOutboundPOData = outboundPOList.map(async (outboundPO) => {
                     let outboundPOData = JSON.parse(JSON.stringify(outboundPO))
@@ -866,7 +879,7 @@ exports.fetchOutboundPurchaseOrders = [
                     outboundPOData.supplier[`organisation`] = supplierOrganisation;
                     outboundPOData.customer[`organisation`] = customerOrganisation;
                     outboundPOData.customer[`warehouse`] = customerWareHouse;
-                    await outboundPORes.push(outboundPOData);
+                    outboundPORes.push(outboundPOData);
                   });
 
                   Promise.all(findOutboundPOData).then(function (results) {
@@ -878,13 +891,11 @@ exports.fetchOutboundPurchaseOrders = [
                   });
                 });
               } catch (err) {
-                console.log("err ======>", err);
                 return apiResponse.ErrorResponse(res, err);
               }
-
               logger.log(
                 'info',
-                '<<<<< POService < POController < purchaseOrderStatistics  : queried data by publisher',
+                '<<<<< POService < POController < fetchOutboundPurchaseOrders',
               );
             } else {
               res.json('Sorry! User does not have enough Permissions');
@@ -893,7 +904,7 @@ exports.fetchOutboundPurchaseOrders = [
         } else {
           logger.log(
             'warn',
-            '<<<<< POService < POController < purchaseOrderStatistics  : refuted token',
+            '<<<<< POService < POController < fetchOutboundPurchaseOrders  : refuted token',
           );
           res.status(403).json(result);
         }
@@ -901,9 +912,42 @@ exports.fetchOutboundPurchaseOrders = [
     } catch (err) {
       logger.log(
         'error',
-        '<<<<< POService < POController < purchaseOrderStatistics : error (catch block)',
+        '<<<<< POService < POController < fetchOutboundPurchaseOrders : error (catch block)',
       );
       return apiResponse.ErrorResponse(res, err);
     }
   },
 ];
+
+
+
+exports.fetchProductIdsCustomerLocationsOrganisations = [
+  auth,
+  async (req, res) => {
+    try {
+      let responseData = {};
+      ProductModel.find({},'id').then (function (productIds){
+        WarehouseModel.find({},'id').then (function (locations){
+          OrganisationModel.find({},'id name').then (function (organisation){
+            responseData[`organisations`] = organisation;
+            responseData[`deliveryLocations`] = locations;
+            responseData[`productIds`] = productIds;
+            return apiResponse.successResponseWithData(
+              res,
+              'Product Ids and Customer Locations for filter dropdown',
+              responseData,
+            );
+          });
+        });
+      });
+      
+     
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< POService < POController < fetchProductIdsCustomerLocations : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+]
