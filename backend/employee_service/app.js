@@ -27,10 +27,10 @@ mongoose.connect(MONGODB_URL, { useNewUrlParser: true }).then(() => {
 		process.exit(1);
 	});
 const db = mongoose.connection;
-const dir = `/home/ubuntu/userimages`;
-if (!fs.existsSync(dir)) {
-  fs.mkdirSync(dir);
-}
+// const dir = `/home/ubuntu/userimages`;
+// if (!fs.existsSync(dir)) {
+//   fs.mkdirSync(dir);
+// }
 
 var app = express();
 
@@ -50,7 +50,7 @@ app.use(cors());
 //Route Prefixes
 app.use("/", indexRouter);
 app.use("/usermanagement/api/", apiRouter);
-app.use('/usermanagement/api/auth/images', express.static(path.join('/home/ubuntu/','userimages')));
+// app.use('/usermanagement/api/auth/images', express.static(path.join('/home/ubuntu/','userimages')));
 
 // throw 404 if URL not found
 app.all("*", function(req, res) {
