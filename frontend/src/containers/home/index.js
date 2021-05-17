@@ -30,7 +30,7 @@ const HomeContainer = (props) => {
       {/* Header */}
       <MobileHeader/>
       <nav className="navbar sticky-top navbar-expand-lg">
-        <a className="navbar-brand" href="#">
+        <a className="navbar-brand" href="/">
           <img src={logo} width="230" height="30" alt="logo" />
         </a>
         <button
