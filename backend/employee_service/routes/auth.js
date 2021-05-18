@@ -4,7 +4,7 @@ var multer = require("multer");
 
 const Storage = multer.diskStorage({
   destination(req, file, callback) {
-    callback(null, "./uploads");
+    callback(null, "/home/ubuntu/userimages");
   },
   filename(req, file, callback) {
     callback(null, file.originalname);
@@ -27,10 +27,14 @@ router.post("/upload", upload.single("profile"), AuthController.uploadImage);
 router.get("/createAddress", AuthController.createUserAddress);
 router.post("/assignProductConsumer", AuthController.assignProductConsumer);
 router.post("/addWarehouse", AuthController.addWarehouse);
+router.post("/updateWarehouse", AuthController.updateWarehouseAddress);
 router.get("/getAllRegisteredUsers", AuthController.getAllRegisteredUsers);
 router.get("/getAllUsersByOrganisation/:organisationId", AuthController.getAllUsersByOrganisation);
 router.get("/getAllUsersByWarehouse/:warehouseId", AuthController.getAllUsersByWarehouse);
 router.post("/uploadImage",upload.single('photo'),AuthController.uploadImage);
 router.get("/fetchImage",AuthController.fetchImage);
+router.get("/getUserWarehouses", AuthController.getUserWarehouses);
+router.get("/getOrganizationsByType", AuthController.getOrganizationsByType);
+router.get("/getwarehouseByType", AuthController.getwarehouseByType);
 
 module.exports = router;

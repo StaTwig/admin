@@ -7,7 +7,7 @@ const CounterModel = require('../models/CounterModel');
 const { body, validationResult, oneOf, check } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
 const uniqid = require('uniqid');
-
+const ConfigurationModel = require('../models/ConfigurationModel');
 //helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
 const utility = require('../helpers/utility');
@@ -269,7 +269,7 @@ exports.register = [
             //   }
             // }
             const country =  req.body?.address?.country ? req.body.address?.country : 'India';
-            const address =  req.body?.address ? req.body.address :  {};
+            const address =  req.body?.address ? req.body.address : {};
             addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
             
             const incrementCounterOrg = await CounterModel.update({
@@ -299,7 +299,7 @@ exports.register = [
               primaryContactId: employeeId,
               name: organisationName,
               id: organisationId,
-              type: req.body?.type ? req.body.type : 'CUSTOMER_SUPPLIER',
+              type: req.body?.type ? req.body.type :'CUSTOMER_SUPPLIER',
               status: 'NOTVERIFIED',
               postalAddress: addr,
               warehouses: [warehouseId],
@@ -484,7 +484,7 @@ exports.sendOtp = [
               '<<<<< UserService < AuthController < login : user is active',
             );
             let otp = utility.randomNumber(4);
-            if (user.emailId === process.env.EMAIL_APPSTORE)
+            if (process.env.EMAIL_APPSTORE.includes(user.emailId))
               otp = process.env.OTP_APPSTORE;
 
             await EmployeeModel.updateOne({ id: user.id }, { otp });
@@ -618,21 +618,50 @@ exports.verifyOtp = [
           query = { phoneNumber: phone };
         }
 
-        const user = await EmployeeModel.findOne(query);
+	   const user = await EmployeeModel.findOne(query);
+
         if (user && user.otp == req.body.otp) {
-          await EmployeeModel.update(query, { otp: null });
-          let userData = {
+
+	    var address;
+		
+		if (user.walletAddress == null || user.walletAddress == "wallet12345address")
+                   {
+                     const response = await axios.get(
+                     `${blockchain_service_url}/createUserAddress`,
+                );
+                address = response.data.items;
+                const userData = {
+                  address,
+                };
+                logger.log(
+                  'info',
+                  '<<<<< UserService < AuthController < verifyConfirm : granting permission to user',
+                );
+                await axios.post(
+                  `${blockchain_service_url}/grantPermission`,
+                  userData,
+                );
+		       await EmployeeModel.update(query, { otp: null ,walletAddress: address});
+                  }
+              else
+                 {
+                      address = user.walletAddress
+                 }
+
+            let userData = {
             id: user.id,
             firstName: user.firstName,
             emailId: user.emailId,
             role: user.role,
-            warehouseId: user.warehouseId,
+            warehouseId: user.warehouseId[0],
             organisationId: user.organisationId,
+	    walletAddress: address
           };
           //Prepare JWT token for authentication
           const jwtPayload = userData;
           const jwtData = {
-            expiresIn: process.env.JWT_TIMEOUT_DURATION,
+            //expiresIn: process.env.JWT_TIMEOUT_DURATION,
+            expiresIn : "12 hours"
           };
           const secret = process.env.JWT_SECRET;
           //Generated JWT token with Payload and secret.
@@ -699,7 +728,10 @@ exports.userInfo = [
             warehouseAddress_country: warehouse.warehouseAddress.country,
             warehouseAddress_zipcode: warehouse.warehouseAddress.zipCode,
             warehouseAddress_city: warehouse.warehouseAddress.city,
-            warehouseAddress_firstline: warehouse.warehouseAddress.firstLine
+            warehouseAddress_firstline: warehouse.warehouseAddress.firstLine,
+            warehouseAddress_state: warehouse.warehouseAddress.state,
+            warehouseAddress_secondline: warehouse.warehouseAddress.secondLine,
+            title: warehouse.title
           };
           logger.log(
             'info',
@@ -1026,6 +1058,33 @@ exports.assignProductConsumer = [
   },
 ];
 
+exports.getUserWarehouses = [
+  auth,
+  async (req, res) => {
+    try {
+      const users = await WarehouseModel.find({
+	organisationId: req.user.organisationId
+      });
+      logger.log(
+        'info',
+        '<<<<< UserService < AuthController < getAllUsers : retrieved users successfully',
+      );
+      return apiResponse.successResponseWithData(
+        res,
+	"User warehouses",
+        users,
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< UserService < AuthController < getAllUsers : error(catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+
 exports.addWarehouse = [
   auth,
   async (req, res) => {
@@ -1040,20 +1099,19 @@ exports.addWarehouse = [
 
       const invCounter = await CounterModel.findOne({'counters.name':"inventoryId"},{"counters.name.$":1})
       const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
-
-      //const inventoryId = uniqid('inv-');
       const inventoryResult = new InventoryModel({ id: inventoryId });
       await inventoryResult.save();
       const {
         organisationId,
         postalAddress,
+        title,
         region,
         country,
         location,
+        warehouseAddress,
         supervisors,
         employees,
       } = req.body;
-
       const incrementCounterWarehouse = await CounterModel.update({
                   'counters.name': "warehouseId"
                },{
@@ -1064,20 +1122,36 @@ exports.addWarehouse = [
 
       const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.name.$":1})
       const warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
-
-      //const warehouseId = uniqid('war-');
       const warehouse = new WarehouseModel({
         id: warehouseId,
         organisationId,
         postalAddress,
+        title,
         region,
         country,
         location,
         supervisors,
         employees,
+        warehouseAddress,
         warehouseInventory: inventoryResult.id,
+	status: 'NOTVERIFIED'
       });
-      await warehouse.save();
+        const s = await warehouse.save();
+      /*await OrganisationModel.findOneAndUpdate({
+       	            id: organisationId
+                }, {
+                    $push: {
+                        warehouses: warehouseId
+                    }
+                });*/
+      await EmployeeModel.findOneAndUpdate({
+                    id: req.user.id
+                }, {
+                    $push: {
+                        warehouseId: warehouseId
+                    }
+                });
+
       return apiResponse.successResponseWithData(
         res,
         'Warehouse added success',
@@ -1088,6 +1162,31 @@ exports.addWarehouse = [
     }
 
 
+  },
+];
+
+exports.updateWarehouseAddress = [
+  auth,
+  async (req, res) => {
+    try {
+      await WarehouseModel.findOneAndUpdate(
+        { id: req.query.warehouseId },
+        req.body,
+        { new: true }
+      )
+        .then((warehouse) => {
+          return apiResponse.successResponseWithData(
+            res,
+            "Warehouse Address Updated",
+            warehouse
+          );
+        })
+        .catch((err) => {
+          return apiResponse.ErrorResponse(res, err);
+        });
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
   },
 ];
 
@@ -1153,7 +1252,7 @@ exports.uploadImage = async function (req, res) {
         })
 
       } else if (action == "STOREID") {
-        const data = {
+        const userData = {
           "userDocuments": {
             "imageDetails": [
               filename
@@ -1163,9 +1262,9 @@ exports.uploadImage = async function (req, res) {
         }
 
         const employee = await EmployeeModel.updateOne({
-          emailId: "satheesh@statwig.com"
+          emailId: data.emailId
         }, {
-          $push: data
+          $push: userData
         });
         return res.send({
           success: true,
@@ -1173,7 +1272,7 @@ exports.uploadImage = async function (req, res) {
           filename
         })
       } else if (action == "KYCNEW") {
-        const data = {
+        const userData = {
           "userDocuments": {
             "imageDetails": [
               filename
@@ -1184,9 +1283,9 @@ exports.uploadImage = async function (req, res) {
           }
         }
         const employee = await EmployeeModel.updateOne({
-          emailId: "satheesh@statwig.com"
+          emailId: data.emailId
         }, {
-          $push: data
+          $push: userData
         });
         return res.send({
           success: true,
@@ -1558,3 +1657,39 @@ exports.getAllUsersByOrganisation = [
   },
 ];
 
+
+exports.getOrganizationsByType = [
+  auth,
+    async (req, res)=>{
+      try {
+        const organisationId=req.query.id;
+        const organisations=await ConfigurationModel.find({id:organisationId},'organisationTypes.id organisationTypes.name')
+        return apiResponse.successResponseWithData(
+          res,
+          "Operation success",
+          organisations
+        );
+      } catch (err) {
+        return apiResponse.ErrorResponse(res, err);
+      }
+    },
+  ];
+
+  exports.getwarehouseByType = [
+    auth,
+      async (req, res) => {
+        try {
+          const organisationId=req.query.id;
+          console.log(organisationId);
+          const organisations=await ConfigurationModel.find({id:organisationId},'warehouseTypes.id warehouseTypes.name')
+          console.log(organisations)
+          return apiResponse.successResponseWithData(
+            res,
+            "Operation success",
+            organisations
+          );
+        } catch (err) {
+          return apiResponse.ErrorResponse(res, err);
+        }
+      },
+    ];
