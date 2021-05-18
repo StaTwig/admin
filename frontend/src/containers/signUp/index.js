@@ -14,7 +14,7 @@ const SignupContainer = (props) => {
   const [lastName, setLastName] = useState('');
   const [ organisation, setOrganisation ] = useState({id: '', name: ''});
   const [showModal, setShowModal] = useState(false);
-  const [ adminAwaiting, setAdminAwaiting ] = useState(false);
+  const [adminAwaiting, setAdminAwaiting ] = useState(false);
   const [isNewOrg, setIsNewOrg] = useState(false);
   const [innerWidth,setInnerwidth] = useState(window.innerWidth);
 

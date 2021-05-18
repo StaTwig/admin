@@ -164,11 +164,11 @@ const [value, setValue] = useState('');
                     <span className="error-msg text-danger">{errors.email}</span>
                   )}
                   </div>
+
                   <div className="form-group flex-column">
                   <div className="pb-1">
-                  <img alt="Phone Icon" src={Phone} className="icon imgs" /></div>
+                  <img alt="" src={Phone} className="icon imgsPhone" /></div>
                     <PhoneInput
-                    className="form-group"
                       country={'in'}
                       placeholder='Enter Phone number'
                       inputProps={{
@@ -186,7 +186,9 @@ const [value, setValue] = useState('');
                    {errors.phone && touched.phone && (
                     <span className="error-msg text-danger">{errors.phone}</span>
                   )}
+                  <div className="pb-3"></div>
                   </div>
+          
                   <div className="form-group flex-column">               
                   <img alt="" src={org} className="icon imgs" />
                   <div className="pl-3" style={{color:"black"}}>
@@ -196,7 +198,7 @@ const [value, setValue] = useState('');
               
                       // {...console.log(name)}
                       isText={true}
-                      placeholder='    Organisation'
+                      placeholder='Organisation'
                       onSelect={item => {
                         setFieldValue('org', item.name);
                         props.onOrganisationChange(item);

@@ -48,9 +48,8 @@ const FormLoginPage = (props) => {
                   </div>
                   <div className="card-title mb-2"><h5 style={{color: 'blue'}}>OR</h5></div>
                   <div className="form-group mt-0 ml-5 mr-5 p-1">
-                    <img alt="" src={Phone} className="icon imgs" />
+                  <img alt="" src={Phone} className="icon imgsPhone" />
                       <PhoneInput
-                      className="form-group"
                         country={'in'}
                         placeholder='Enter Phone number'
                         inputProps={{
@@ -60,7 +59,10 @@ const FormLoginPage = (props) => {
                           enableSearch: true,
                         }}
                       />
+                      <div className="pb-3"></div>
+              
                     </div>
+                    
 
                   {
                     errorMessage && <div className="alert alert-danger">{errorMessage}</div>
