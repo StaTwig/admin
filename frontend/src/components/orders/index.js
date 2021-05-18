@@ -12,28 +12,63 @@ import calender from '../../assets/icons/calendar.svg';
 import Order from '../../assets/icons/orders.svg';
 import Totalshipments from "../../assets/icons/TotalShipment.svg";
 import { useDispatch, useSelector } from 'react-redux';
-import { getPOs, resetPOs, resetReviewPos } from '../../actions/poActions';
+import { getSentPOs, getReceivedPOs, getOrderIds, getProductIdDeliveryLocationsOrganisations, getPOs, resetPOs, resetReviewPos } from '../../actions/poActions';
 
 const Orders = props => {
   const [visible, setvisible] = useState('one');
   const [skip, setSkip] = useState(0);
-  const [limit, setLimit] = useState(5);
+  const [limit, setLimit] = useState(10);
   const [loadMore, setLoadMore] = useState(true);
   const [alerts, setAlerts] = useState(false);
   const dispatch = useDispatch();
+  const [outboundRecords, setOutboundRecords] = useState([]);
+  const [inboundRecords, setInboundRecords] = useState([]);
+  const [dateFilter, setDateFilter] = useState("");
+  const [productNameFilter, setProductNameFilter] = useState("");
+  const [toFilter, setToFilter] = useState("");
+  const [fromFilter, setFromFilter] = useState("");
+  const [orderIdFilter, setOrderIdFilter] = useState("");
+  const [locationFilter, setLocationFilter] = useState("");
+  const [poOrderIdList, setPoOrderIdList] = useState([]);
+  const [poDeliveryLocationsList, setPoDeliveryLocationsList] = useState([]);
+  const [poProductsList, setPoProductsList] = useState([]);
+  const [poOrganisationsList, setPoOrganisationsList] = useState([]);
 
   useEffect(() => {
-    dispatch(resetReviewPos({}));
-  },[])
-  
+    async function fetchData() {
+      if (visible == 'one') {
+        const outboundRes = await getSentPOs("", "", "", "", "", 0, limit); //to, orderId, productName, deliveryLocation, date, skip, limit
+        setOutboundRecords(outboundRes.data);
+      } else {
+        const inboundRes = await getReceivedPOs("", "", "", "", "", 0, limit); //from, orderId, productName, deliveryLocation, date, skip, limit
+        setInboundRecords(inboundRes.data);
+      }
+      const orderIdListRes = await getOrderIds();
+      setPoOrderIdList(orderIdListRes);
+
+      const productsLocationsOrganisationsRes = await getProductIdDeliveryLocationsOrganisations();
+      setPoDeliveryLocationsList(productsLocationsOrganisationsRes.deliveryLocations);
+      setPoProductsList(productsLocationsOrganisationsRes.productIds);
+      setPoOrganisationsList(productsLocationsOrganisationsRes.organisations);
+      setSkip(0);
+    };
+    // dispatch(resetReviewPos({}));
+    fetchData();
+  }, [visible])
+
   const onLoadMore = async (isInc, isReset = false) => {
-    const newSkip = isInc ? skip + 5 : skip - 5;
+    const newSkip = isInc ? skip + 10 : skip - 10;
     setSkip(isReset ? 0 : newSkip);
-    const results = await dispatch(getPOs(isReset ? 0 : newSkip, limit));
-    props.setOrders(results);
+    if (visible == 'one') {
+      const outboundRes = await getSentPOs(toFilter, orderIdFilter, productNameFilter, locationFilter, dateFilter, isReset ? 0 : newSkip, limit);//to, orderId, productName, deliveryLocation, date, skip, limit
+      setOutboundRecords(outboundRes.data);
+    } else {
+      const inboundRes = await getReceivedPOs(fromFilter, orderIdFilter, productNameFilter, locationFilter, dateFilter, isReset ? 0 : newSkip, limit);//from, orderId, productName, deliveryLocation, date, skip, limit
+      setInboundRecords(inboundRes.data);
+    }
     setData(visible);
   };
-  
+
   const headers = {
     coloumn1: visible == 'one' ? 'To' : 'From',
     coloumn2: 'Order Date',
@@ -52,9 +87,69 @@ const Orders = props => {
     setvisible(v);
     setAlerts(a);
   }
+  const setDateFilterOnSelect = async (dateFilterSelected) => {
+    setDateFilter(dateFilterSelected);
+    setSkip(0);
+    if (visible == 'one') {
+      const outboundRes = await getSentPOs(toFilter, orderIdFilter, productNameFilter, locationFilter, dateFilterSelected, 0, limit); //to, orderId, productName, deliveryLocation, date, skip, limit
+      setOutboundRecords(outboundRes.data);
+    } else {
+      const inboundRes = await getReceivedPOs(fromFilter, orderIdFilter, productNameFilter, locationFilter, dateFilterSelected, 0, limit); //from, orderId, productName, deliveryLocation, date, skip, limit
+      setInboundRecords(inboundRes.data);
+    }
+  }
+
+  const setLocationFilterOnSelect = async (locationFilterSelected) => {
+    setLocationFilter(locationFilterSelected);
+    setSkip(0);
+    if (visible == 'one') {
+      const outboundRes = await getSentPOs(toFilter, orderIdFilter, productNameFilter, locationFilterSelected, dateFilter, 0, limit); //to, orderId, productName, deliveryLocation, date, skip, limit;
+      setOutboundRecords(outboundRes.data);
+    } else {
+      const inboundRes = await getReceivedPOs(fromFilter, orderIdFilter, productNameFilter, locationFilterSelected, dateFilter, 0, limit); //from, orderId, productName, deliveryLocation, date, skip, limit
+      setInboundRecords(inboundRes.data);
+    }
+  }
+
+  const setProductNameFilterOnSelect = async (productNameFilterSelected) => {
+    setProductNameFilter(productNameFilterSelected);
+    setSkip(0);
+    if (visible == 'one') {
+      const outboundRes = await getSentPOs(toFilter, orderIdFilter, productNameFilterSelected, locationFilter, dateFilter, 0, limit); //to, orderId, productName, deliveryLocation, date, skip, limit
+      setOutboundRecords(outboundRes.data);
+    } else {
+      const inboundRes = await getReceivedPOs(fromFilter, orderIdFilter, productNameFilterSelected, locationFilter, dateFilter, 0, limit); //from, orderId, productName, deliveryLocation, date, skip, limit
+      setInboundRecords(inboundRes.data);
+    }
+  }
+
+  const setOrderIdNameFilterOnSelect = async (orderIdFilterSelected) => {
+    setOrderIdFilter(orderIdFilterSelected);
+    setSkip(0);
+    if (visible == 'one') {
+      const outboundRes = await getSentPOs(toFilter, orderIdFilterSelected, productNameFilter, locationFilter, dateFilter, 0, limit); //to, orderId, productName, deliveryLocation, date, skip, limit
+      setOutboundRecords(outboundRes.data);
+    } else {
+      const inboundRes = await getReceivedPOs(fromFilter, orderIdFilterSelected, productNameFilter, locationFilter, dateFilter, 0, limit); //from, orderId, productName, deliveryLocation, date, skip, limit
+      setInboundRecords(inboundRes.data);
+    }
+  }
+
+  const setFromToFilterOnSelect = async (fromToFilterSelected) => {
+    setFromFilter(fromToFilterSelected);
+    setToFilter(fromToFilterSelected);
+    setSkip(0);
+    if (visible == 'one') {
+      const outboundRes = await getSentPOs(fromToFilterSelected, orderIdFilter, productNameFilter, locationFilter, dateFilter, 0, limit); //to, orderId, productName, deliveryLocation, date, skip, limit
+      setOutboundRecords(outboundRes.data);
+    } else {
+      const inboundRes = await getReceivedPOs(fromToFilterSelected, orderIdFilter, productNameFilter, locationFilter, dateFilter, 0, limit); //from, orderId, productName, deliveryLocation, date, skip, limit
+      setInboundRecords(inboundRes.data);
+    }
+  }
 
   const sendData = () => {
-    let rtnArr = visible == 'one' ? props.orders?.outboundPOs : props.orders?.inboundPOs;
+    let rtnArr = visible == 'one' ? outboundRecords : inboundRecords;
     if (alerts)
       rtnArr = rtnArr.filter(row => row?.shipmentAlerts?.length > 0);
     return rtnArr ? rtnArr : [];
@@ -68,7 +163,7 @@ const Orders = props => {
           <Link to="/neworder">
             <button className="btn btn-orange fontSize20 font-bold">
               <img src={OrderIcon} width="20" height="17" className="mr-2 mb-1" />
-              <span style={{color:'white'}}>Create New Order</span>
+              <span style={{ color: 'white' }}>Create New Order</span>
             </button>
           </Link>
         </div>
@@ -78,10 +173,10 @@ const Orders = props => {
         <Tabs {...props} setvisible={setvisible} visible={visible} />
       </div>
       <div className="full-width-ribben mt-4 pl-5">
-        <TableFilter data={headers} fb="73%"/>
+        <TableFilter data={headers} poOrderIdList={poOrderIdList} poDeliveryLocationsList={poDeliveryLocationsList} poProductsList={poProductsList} poOrganisationsList={poOrganisationsList} setFromToFilterOnSelect={setFromToFilterOnSelect} setOrderIdNameFilterOnSelect={setOrderIdNameFilterOnSelect} setProductNameFilterOnSelect={setProductNameFilterOnSelect} setLocationFilterOnSelect={setLocationFilterOnSelect} setDateFilterOnSelect={setDateFilterOnSelect} fb="73%" />
       </div>
       <div className="ribben-space">
-        <Table {...props} skip={skip} loadMore={loadMore} ordrs={sendData} visible={visible} onLoadMore={onLoadMore}/>
+        <Table {...props} skip={skip} loadMore={loadMore} ordrs={sendData} visible={visible} onLoadMore={onLoadMore} />
       </div>
     </div>
   );

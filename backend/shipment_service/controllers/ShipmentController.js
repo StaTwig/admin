@@ -1664,19 +1664,20 @@ exports.fetchShipmentIds = [
 ];
 
 
-exports.fetchInboundShipments = [
+exports.fetchInboundShipments = [//inbound shipments with filter(shipmentId, from, to, status, date)
   auth,
   async (req, res) => {
     try {
       const { skip, limit } = req.query;
       checkToken(req, res, async (result) => {
         if (result.success) {
-          const warehouseId = req.user;
+          const { warehouseId } = req.user;
           let currentDate = new Date();
           let fromDateFilter = 0;
           let status = req.query.status ? req.query.status : undefined;
           let fromSupplier = req.query.from ? req.query.from : undefined;
           let toReceiver = req.query.to ? req.query.to : undefined;
+          let shipmentId = req.query.shipmentId ? req.query.shipmentId : undefined;
           switch (req.query.dateFilter) {
             case "today":
               fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
@@ -1702,8 +1703,16 @@ exports.fetchInboundShipments = [
 
           let whereQuery = {};
 
+          if (shipmentId) {
+            whereQuery['id'] = shipmentId
+          }
+
           if (status) {
-            whereQuery['status'] = status
+            if(status == "RECEIVED"){
+              whereQuery['status'] = status
+            } else{
+            whereQuery['status'] = { $ne: "RECEIVED" }
+            }
           }
 
           if (fromDateFilter) {
@@ -1715,26 +1724,49 @@ exports.fetchInboundShipments = [
           }
 
           if (fromSupplier) {
-            let supplierOrg = await OrganisationModel.findOne({ "name": fromSupplier });
-            if (supplierOrg) {
-              whereQuery["supplier.id"] = supplierOrg.id;
-            }
+              whereQuery["supplier.id"] = fromSupplier;
           }
 
           if (toReceiver) {
-            let receiverOrg = await OrganisationModel.findOne({ "name": toReceiver });
-            if (receiverOrg) {
-              whereQuery["receiver.id"] = receiverOrg.id
-            }
+              whereQuery["receiver.id"] = toReceiver
           }
-          console.log("whereQuery ======>", whereQuery);
+          console.log("In bound whereQuery ======>", whereQuery);
           try {
-            const inboundShipments = await ShipmentModel.find(whereQuery).sort({ createdAt: -1 }).skip(parseInt(skip)).limit(parseInt(limit));
-            return apiResponse.successResponseWithMultipleData(
-              res,
-              "Inbound Shipment Records",
-              inboundShipments
-            );
+            ShipmentModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((inboundShipmentsList) => {
+              let inboundShipmentsRes = [];
+              let findInboundShipmentData = inboundShipmentsList.map(async (inboundShipment) => {
+                let inboundShipmentData = JSON.parse(JSON.stringify(inboundShipment))
+                let supplierOrganisation = await OrganisationModel.findOne(
+                  {
+                    id: inboundShipmentData.supplier.id
+                  });
+                let supplierWarehouse = await WarehouseModel.findOne(
+                  {
+                    id: inboundShipmentData.supplier.locationId
+                  });
+                let receiverOrganisation = await OrganisationModel.findOne(
+                  {
+                    id: inboundShipmentData.receiver.id
+                  });
+                let receiverWarehouse = await WarehouseModel.findOne(
+                  {
+                    id: inboundShipmentData.receiver.locationId
+                  });
+                  inboundShipmentData.supplier[`org`] = supplierOrganisation;
+                  inboundShipmentData.supplier[`warehouse`] = supplierWarehouse;
+                  inboundShipmentData.receiver[`org`] = receiverOrganisation;
+                  inboundShipmentData.receiver[`warehouse`] = receiverWarehouse;
+                  inboundShipmentsRes.push(inboundShipmentData);
+              });
+
+              Promise.all(findInboundShipmentData).then(function (results) {
+                return apiResponse.successResponseWithMultipleData(
+                  res,
+                  "Inbound Shipment Records",
+                  inboundShipmentsRes
+                );
+              });
+            });
           } catch (err) {
             return apiResponse.ErrorResponse(res, err);
           }
@@ -1756,19 +1788,20 @@ exports.fetchInboundShipments = [
   },
 ];
 
-exports.fetchOutboundShipments = [
+exports.fetchOutboundShipments = [ //outbound shipments with filter(shipmentId, from, to, status, date)
   auth,
   async (req, res) => {
     try {
       const { skip, limit } = req.query;
       checkToken(req, res, async (result) => {
         if (result.success) {
-          const warehouseId = req.user;
+          const { warehouseId } = req.user;
           let currentDate = new Date();
           let fromDateFilter = 0;
           let status = req.query.status ? req.query.status : undefined;
           let fromSupplier = req.query.from ? req.query.from : undefined;
           let toReceiver = req.query.to ? req.query.to : undefined;
+          let shipmentId = req.query.shipmentId ? req.query.shipmentId : undefined;
           switch (req.query.dateFilter) {
             case "today":
               fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
@@ -1794,6 +1827,10 @@ exports.fetchOutboundShipments = [
 
           let whereQuery = {};
 
+          if (shipmentId) {
+            whereQuery['id'] = shipmentId
+          }
+
           if (status) {
             whereQuery['status'] = status
           }
@@ -1803,31 +1840,54 @@ exports.fetchOutboundShipments = [
           }
 
           if (warehouseId) {
-            whereQuery["sender.locationId"] = warehouseId
+            whereQuery["supplier.locationId"] = warehouseId
           }
 
           if (fromSupplier) {
-            let supplierOrg = await OrganisationModel.findOne({ "name": fromSupplier });
-            if (supplierOrg) {
-              whereQuery["supplier.id"] = supplierOrg.id;
-            }
+              whereQuery["supplier.id"] = fromSupplier;
           }
 
           if (toReceiver) {
-            let receiverOrg = await OrganisationModel.findOne({ "name": toReceiver });
-            if (receiverOrg) {
-              whereQuery["receiver.id"] = receiverOrg.id
-            }
+              whereQuery["receiver.id"] = toReceiver
           }
 
-          console.log("whereQuery ======>", whereQuery);
+          console.log("Out bound whereQuery ======>", whereQuery);
           try {
-            const outboundShipments = await ShipmentModel.find(whereQuery).sort({ createdAt: -1 }).sort({ createdAt: -1 }).skip(parseInt(skip)).limit(parseInt(limit));
-            return apiResponse.successResponseWithMultipleData(
-              res,
-              "Outbound Shipment Records",
-              outboundShipments
-            );
+            ShipmentModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((outboundShipmentsList) => {
+                let outboundShipmentsRes = [];
+                let findOutboundShipmentData = outboundShipmentsList.map(async (outboundShipment) => {
+                  let outboundShipmentData = JSON.parse(JSON.stringify(outboundShipment))
+                  let supplierOrganisation = await OrganisationModel.findOne(
+                    {
+                      id: outboundShipmentData.supplier.id
+                    });
+                  let supplierWarehouse = await WarehouseModel.findOne(
+                    {
+                      id: outboundShipmentData.supplier.locationId
+                    });
+                  let receiverOrganisation = await OrganisationModel.findOne(
+                    {
+                      id: outboundShipmentData.receiver.id
+                    });
+                  let receiverWarehouse = await WarehouseModel.findOne(
+                    {
+                      id: outboundShipmentData.receiver.locationId
+                    });
+                  outboundShipmentData.supplier[`org`] = supplierOrganisation;
+                  outboundShipmentData.supplier[`warehouse`] = supplierWarehouse;
+                  outboundShipmentData.receiver[`org`] = receiverOrganisation;
+                  outboundShipmentData.receiver[`warehouse`] = receiverWarehouse;
+                  outboundShipmentsRes.push(outboundShipmentData);
+                });
+
+                Promise.all(findOutboundShipmentData).then(function (results) {
+                  return apiResponse.successResponseWithMultipleData(
+                    res,
+                    "Outbound Shipment Records",
+                    outboundShipmentsRes
+                  );
+                });
+              });
           } catch (err) {
             return apiResponse.ErrorResponse(res, err);
           }
@@ -1843,6 +1903,46 @@ exports.fetchOutboundShipments = [
       logger.log(
         "error",
         "<<<<< ShipmentService < ShipmentController < fetchOutboundShipments : error (catch block)"
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+
+exports.fetchSupplierAndReceiverList = [ 
+  auth,
+  async (req, res) => {
+    try {
+      checkToken(req, res, async (result) => {
+        if (result.success) {
+          // const { warehouseId } = req.user;
+          try {
+            // let supplierReceiverList = await OrganisationModel.find( { warehouses: warehoueseId }, ['id', 'name']);
+            let supplierReceiverList = await OrganisationModel.find( {}, ['id', 'name']);
+
+            if (supplierReceiverList) {
+              return apiResponse.successResponseWithMultipleData(
+                res,
+                "supplierReceiverList",
+                supplierReceiverList
+              );
+            }
+          } catch (err) {
+            return apiResponse.ErrorResponse(res, err);
+          }
+        } else {
+          logger.log(
+            "warn",
+            "<<<<< ShipmentService < ShipmentController < fetchSupplierAndReceiverList : refuted token"
+          );
+          res.status(403).json("Auth failed");
+        }
+      });
+    } catch (err) {
+      logger.log(
+        "error",
+        "<<<<< ShipmentService < ShipmentController < fetchSupplierAndReceiverList : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
