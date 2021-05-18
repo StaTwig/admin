@@ -60,11 +60,12 @@ console.log("yyyy",prod);
               <div className="title recived-text">
               {enableDelete ?
                 <DropdownButton
-                  name={prod.name == '' ? "Select product" : prod.name}
+                  //name={prod.name == '' ? "Select product" : prod.name}
+                  name={prod.name ?  prod.name: "Select Product Name"}
                   onSelect={item => { handleProductChange(index, item) }}
                   groups={products}
                   // groups={products.filter(p => !p?.isSelected)}
-                /> : prod.productName
+                /> : prod.name
               }</div>
               
             </div>

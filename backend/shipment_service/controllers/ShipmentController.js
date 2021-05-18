@@ -170,6 +170,7 @@ const shipmentUpdate = async (
 
 const userShipments = async (mode, warehouseId, skip, limit, callback) => {
 
+
   // var matchCondition = {};
   //var criteria = mode + ".locationId";
   //matchCondition[criteria] = warehouseId
@@ -534,7 +535,7 @@ exports.receiveShipment = [
         po.products.every((product) => {
           data.products.every((p) => {
             if (
-              parseInt(p.productQuantity) < parseInt(product.productQuantity)
+              parseInt(p.productQuantity) < parseInt(product.quantity)
             ) {
               quantityMismatch = true;
               return false;
@@ -691,6 +692,7 @@ function getFilterConditions(filters) {
       matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }];
     }
   }
+
   if (filters.state && filters.state.length) {
     matchCondition.state = filters.state;
   }
@@ -715,39 +717,42 @@ function getShipmentFilterCondition(filters, warehouseIds) {
     ]
   };
   if (filters.txn_type) {
-    matchCondition.status = filters.txn_type;
+    if (filters.txn_type !== 'ALL') {
+      matchCondition.status = filters.txn_type;
+    }
+
   }
 
   if (filters.date_filter_type && filters.date_filter_type.length) {
 
     const DATE_FORMAT = 'YYYY-MM-DD';
     if (filters.date_filter_type === 'by_range') {
-
       let startDate = filters.start_date ? filters.start_date : new Date();
       let endDate = filters.end_date ? filters.end_date : new Date();
-      matchCondition.shippingDate = {
-        $gte: new Date(startDate).toISOString(),
-        $lte: new Date(endDate).toISOString()
+      matchCondition.createdAt = {
+        $gte: new Date(`${startDate}T00:00:00.0Z`),
+        $lt: new Date(`${endDate}T23:59:59.0Z`)
       };
 
     } else if (filters.date_filter_type === 'by_monthly') {
 
       let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
-      let startDateOfTheMonth = moment(startDateOfTheYear).add(filters.month, 'months').format(DATE_FORMAT);
-      let endDateOfTheMonth = moment(startDateOfTheMonth).endOf('month');
-      matchCondition.shippingDate = {
-        $gte: new Date(startDateOfTheMonth).toISOString(),
-        $lte: new Date(endDateOfTheMonth).toISOString()
+      let startDateOfTheMonth = moment(startDateOfTheYear).add(filters.month - 1, 'months').format(DATE_FORMAT);
+      let endDateOfTheMonth = moment(startDateOfTheMonth).endOf('month').format(DATE_FORMAT);
+      console.log(startDateOfTheMonth, endDateOfTheMonth)
+      matchCondition.createdAt = {
+        $gte: new Date(`${startDateOfTheMonth}T00:00:00.0Z`),
+        $lte: new Date(`${endDateOfTheMonth}T23:59:59.0Z`)
       };
-
     } else if (filters.date_filter_type === 'by_quarterly') {
 
       let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
       let startDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).startOf('quarter').format(DATE_FORMAT);
       let endDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).endOf('quarter').format(DATE_FORMAT);
-      matchCondition.shippingDate = {
-        $gte: new Date(startDateOfTheQuarter).toISOString(),
-        $lte: new Date(endDateOfTheQuarter).toISOString()
+      console.log(startDateOfTheQuarter, endDateOfTheQuarter)
+      matchCondition.createdAt = {
+        $gte: new Date(`${startDateOfTheQuarter}T00:00:00.0Z`),
+        $lte: new Date(`${endDateOfTheQuarter}T23:59:59.0Z`)
       };
 
     } else if (filters.date_filter_type === 'by_yearly') {
@@ -755,16 +760,16 @@ function getShipmentFilterCondition(filters, warehouseIds) {
       const currentDate = moment().format(DATE_FORMAT);
       const currentYear = moment().year();
 
-      let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
-      let endDateOfTheYear = moment([filters.year]).endOf('year')
+      let startDateOfTheYear = moment([filters.year]).format("YYYY-MM-DDTHH:mm:ss");
+      let endDateOfTheYear = moment([filters.year]).endOf('year').format("YYYY-MM-DDTHH:mm:ss");
 
       if (filters.year === currentYear) {
         endDateOfTheYear = currentDate;
       }
-
-      matchCondition.shippingDate = {
-        $gte: new Date(startDateOfTheYear).toISOString(),
-        $lte: new Date(endDateOfTheYear).toISOString()
+      console.log(startDateOfTheYear, endDateOfTheYear)
+      matchCondition.createdAt = {
+        $gte: new Date(startDateOfTheYear),
+        $lte: new Date(endDateOfTheYear)
       };
 
     }
@@ -1659,19 +1664,20 @@ exports.fetchShipmentIds = [
 ];
 
 
-exports.fetchInboundShipments = [
+exports.fetchInboundShipments = [//inbound shipments with filter(shipmentId, from, to, status, date)
   auth,
   async (req, res) => {
     try {
       const { skip, limit } = req.query;
       checkToken(req, res, async (result) => {
         if (result.success) {
-          const warehouseId = req.user;
+          const { warehouseId } = req.user;
           let currentDate = new Date();
           let fromDateFilter = 0;
           let status = req.query.status ? req.query.status : undefined;
           let fromSupplier = req.query.from ? req.query.from : undefined;
           let toReceiver = req.query.to ? req.query.to : undefined;
+          let shipmentId = req.query.shipmentId ? req.query.shipmentId : undefined;
           switch (req.query.dateFilter) {
             case "today":
               fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
@@ -1697,8 +1703,16 @@ exports.fetchInboundShipments = [
 
           let whereQuery = {};
 
+          if (shipmentId) {
+            whereQuery['id'] = shipmentId
+          }
+
           if (status) {
-            whereQuery['status'] = status
+            if(status == "RECEIVED"){
+              whereQuery['status'] = status
+            } else{
+            whereQuery['status'] = { $ne: "RECEIVED" }
+            }
           }
 
           if (fromDateFilter) {
@@ -1710,26 +1724,49 @@ exports.fetchInboundShipments = [
           }
 
           if (fromSupplier) {
-            let supplierOrg = await OrganisationModel.findOne({ "name": fromSupplier });
-            if (supplierOrg) {
-              whereQuery["supplier.id"] = supplierOrg.id;
-            }
+              whereQuery["supplier.id"] = fromSupplier;
           }
 
           if (toReceiver) {
-            let receiverOrg = await OrganisationModel.findOne({ "name": toReceiver });
-            if (receiverOrg) {
-              whereQuery["receiver.id"] = receiverOrg.id
-            }
+              whereQuery["receiver.id"] = toReceiver
           }
-          console.log("whereQuery ======>", whereQuery);
+          console.log("In bound whereQuery ======>", whereQuery);
           try {
-            const inboundShipments = await ShipmentModel.find(whereQuery).sort({ createdAt: -1 }).skip(parseInt(skip)).limit(parseInt(limit));
-            return apiResponse.successResponseWithMultipleData(
-              res,
-              "Inbound Shipment Records",
-              inboundShipments
-            );
+            ShipmentModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((inboundShipmentsList) => {
+              let inboundShipmentsRes = [];
+              let findInboundShipmentData = inboundShipmentsList.map(async (inboundShipment) => {
+                let inboundShipmentData = JSON.parse(JSON.stringify(inboundShipment))
+                let supplierOrganisation = await OrganisationModel.findOne(
+                  {
+                    id: inboundShipmentData.supplier.id
+                  });
+                let supplierWarehouse = await WarehouseModel.findOne(
+                  {
+                    id: inboundShipmentData.supplier.locationId
+                  });
+                let receiverOrganisation = await OrganisationModel.findOne(
+                  {
+                    id: inboundShipmentData.receiver.id
+                  });
+                let receiverWarehouse = await WarehouseModel.findOne(
+                  {
+                    id: inboundShipmentData.receiver.locationId
+                  });
+                  inboundShipmentData.supplier[`org`] = supplierOrganisation;
+                  inboundShipmentData.supplier[`warehouse`] = supplierWarehouse;
+                  inboundShipmentData.receiver[`org`] = receiverOrganisation;
+                  inboundShipmentData.receiver[`warehouse`] = receiverWarehouse;
+                  inboundShipmentsRes.push(inboundShipmentData);
+              });
+
+              Promise.all(findInboundShipmentData).then(function (results) {
+                return apiResponse.successResponseWithMultipleData(
+                  res,
+                  "Inbound Shipment Records",
+                  inboundShipmentsRes
+                );
+              });
+            });
           } catch (err) {
             return apiResponse.ErrorResponse(res, err);
           }
@@ -1751,19 +1788,20 @@ exports.fetchInboundShipments = [
   },
 ];
 
-exports.fetchOutboundShipments = [
+exports.fetchOutboundShipments = [ //outbound shipments with filter(shipmentId, from, to, status, date)
   auth,
   async (req, res) => {
     try {
       const { skip, limit } = req.query;
       checkToken(req, res, async (result) => {
         if (result.success) {
-          const warehouseId = req.user;
+          const { warehouseId } = req.user;
           let currentDate = new Date();
           let fromDateFilter = 0;
           let status = req.query.status ? req.query.status : undefined;
           let fromSupplier = req.query.from ? req.query.from : undefined;
           let toReceiver = req.query.to ? req.query.to : undefined;
+          let shipmentId = req.query.shipmentId ? req.query.shipmentId : undefined;
           switch (req.query.dateFilter) {
             case "today":
               fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
@@ -1789,6 +1827,10 @@ exports.fetchOutboundShipments = [
 
           let whereQuery = {};
 
+          if (shipmentId) {
+            whereQuery['id'] = shipmentId
+          }
+
           if (status) {
             whereQuery['status'] = status
           }
@@ -1798,31 +1840,54 @@ exports.fetchOutboundShipments = [
           }
 
           if (warehouseId) {
-            whereQuery["sender.locationId"] = warehouseId
+            whereQuery["supplier.locationId"] = warehouseId
           }
 
           if (fromSupplier) {
-            let supplierOrg = await OrganisationModel.findOne({ "name": fromSupplier });
-            if (supplierOrg) {
-              whereQuery["supplier.id"] = supplierOrg.id;
-            }
+              whereQuery["supplier.id"] = fromSupplier;
           }
 
           if (toReceiver) {
-            let receiverOrg = await OrganisationModel.findOne({ "name": toReceiver });
-            if (receiverOrg) {
-              whereQuery["receiver.id"] = receiverOrg.id
-            }
+              whereQuery["receiver.id"] = toReceiver
           }
 
-          console.log("whereQuery ======>", whereQuery);
+          console.log("Out bound whereQuery ======>", whereQuery);
           try {
-            const outboundShipments = await ShipmentModel.find(whereQuery).sort({ createdAt: -1 }).sort({ createdAt: -1 }).skip(parseInt(skip)).limit(parseInt(limit));
-            return apiResponse.successResponseWithMultipleData(
-              res,
-              "Outbound Shipment Records",
-              outboundShipments
-            );
+            ShipmentModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((outboundShipmentsList) => {
+                let outboundShipmentsRes = [];
+                let findOutboundShipmentData = outboundShipmentsList.map(async (outboundShipment) => {
+                  let outboundShipmentData = JSON.parse(JSON.stringify(outboundShipment))
+                  let supplierOrganisation = await OrganisationModel.findOne(
+                    {
+                      id: outboundShipmentData.supplier.id
+                    });
+                  let supplierWarehouse = await WarehouseModel.findOne(
+                    {
+                      id: outboundShipmentData.supplier.locationId
+                    });
+                  let receiverOrganisation = await OrganisationModel.findOne(
+                    {
+                      id: outboundShipmentData.receiver.id
+                    });
+                  let receiverWarehouse = await WarehouseModel.findOne(
+                    {
+                      id: outboundShipmentData.receiver.locationId
+                    });
+                  outboundShipmentData.supplier[`org`] = supplierOrganisation;
+                  outboundShipmentData.supplier[`warehouse`] = supplierWarehouse;
+                  outboundShipmentData.receiver[`org`] = receiverOrganisation;
+                  outboundShipmentData.receiver[`warehouse`] = receiverWarehouse;
+                  outboundShipmentsRes.push(outboundShipmentData);
+                });
+
+                Promise.all(findOutboundShipmentData).then(function (results) {
+                  return apiResponse.successResponseWithMultipleData(
+                    res,
+                    "Outbound Shipment Records",
+                    outboundShipmentsRes
+                  );
+                });
+              });
           } catch (err) {
             return apiResponse.ErrorResponse(res, err);
           }
@@ -1838,6 +1903,46 @@ exports.fetchOutboundShipments = [
       logger.log(
         "error",
         "<<<<< ShipmentService < ShipmentController < fetchOutboundShipments : error (catch block)"
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+
+exports.fetchSupplierAndReceiverList = [ 
+  auth,
+  async (req, res) => {
+    try {
+      checkToken(req, res, async (result) => {
+        if (result.success) {
+          // const { warehouseId } = req.user;
+          try {
+            // let supplierReceiverList = await OrganisationModel.find( { warehouses: warehoueseId }, ['id', 'name']);
+            let supplierReceiverList = await OrganisationModel.find( {}, ['id', 'name']);
+
+            if (supplierReceiverList) {
+              return apiResponse.successResponseWithMultipleData(
+                res,
+                "supplierReceiverList",
+                supplierReceiverList
+              );
+            }
+          } catch (err) {
+            return apiResponse.ErrorResponse(res, err);
+          }
+        } else {
+          logger.log(
+            "warn",
+            "<<<<< ShipmentService < ShipmentController < fetchSupplierAndReceiverList : refuted token"
+          );
+          res.status(403).json("Auth failed");
+        }
+      });
+    } catch (err) {
+      logger.log(
+        "error",
+        "<<<<< ShipmentService < ShipmentController < fetchSupplierAndReceiverList : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }

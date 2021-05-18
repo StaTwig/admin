@@ -6,76 +6,278 @@ import SideBar from "../../components/sidebar";
 import filterIcon from "../../assets/icons/funnel.svg";
 import { getTransactions } from "../../actions/transactionAction";
 import Moment from "react-moment";
-import setAuthToken from '../../utils/setAuthToken'
+import setAuthToken from "../../utils/setAuthToken";
 import { func } from "prop-types";
+import { makeStyles } from "@material-ui/core/styles";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
+import Typography from "@material-ui/core/Typography";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import {
+  getAllStates,
+  getDistrictsByState,
+  getOrganizationsByType,
+} from "../../actions/inventoryAction";
 
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: "100%",
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightRegular,
+  },
+}));
 const TransactionHistory = (props) => {
   const dispatch = useDispatch();
   const [transactions, setTransactions] = useState([]);
   const [displayTransactions, setDisplayTransactions] = useState([]);
   const [inBound, setinBound] = useState([]); //being used for recieved
-  const [outBound, setoutBound] = useState([]);
   const [inTransit, setinTransit] = useState([]);
   const [sent, setSent] = useState([]);
   const [Added, setAdded] = useState([]);
-  const [buttonState0, setButtonActive] = useState("btn active");
-  const [buttonState1, setButtonActive1] = useState("btn");
-  const [buttonState2, setButtonActive2] = useState("btn");
-  const [buttonState3, setButtonActive3] = useState("btn");
-  const [buttonState4, setButtonActive4] = useState("btn");
+
   const [dateClassName, setdateClassName] = useState("transactionListDate");
-  const [groupDate, setGroupDate] = useState("null");
-  function selectThis(a) {
-    console.log(a);
-    if (a === "all") {
-      setButtonActive1("btn");
-      setButtonActive2("btn");
-      setButtonActive3("btn");
-      setButtonActive4("btn");
-      setButtonActive("btn active");
-      setDisplayTransactions(transactions);
-    }
-    if (a === "sent") {
-      setButtonActive("btn");
-      setButtonActive2("btn");
-      setButtonActive3("btn");
-      setButtonActive4("btn");
-      setButtonActive1("btn active");
-      setDisplayTransactions(sent);
-    }
-    if (a === "received") {
-      setButtonActive1("btn");
-      setButtonActive("btn");
-      setButtonActive3("btn");
-      setButtonActive4("btn");
-      setButtonActive2("btn active");
-      setDisplayTransactions(inBound);
-    }
-    if (a === "transit") {
-      setButtonActive1("btn");
-      setButtonActive2("btn");
-      setButtonActive("btn");
-      setButtonActive4("btn");
-      setButtonActive3("btn active");
-      setDisplayTransactions(inTransit);
-    }
-    if (a === "added") {
-      setButtonActive1("btn");
-      setButtonActive2("btn");
-      setButtonActive3("btn");
-      setButtonActive("btn");
-      setButtonActive4("btn active");
-      setDisplayTransactions(Added);
-    }
+
+  const [states, setStates] = useState([]);
+  const [districts, setDistricts] = useState([]);
+
+  const [selectedTransactionType, setSelectedTransactionType] = useState('ALL');
+  const [selectedOrganizationType, setSelectedOrganizationType] = useState('BREWERY');
+  const [selectedDateType, setSelectedDateType] = useState('by_range');
+  const [selectedVendorType, setSelectedVendorType] = useState('ALL_VENDORS');
+
+  const [organizations, setOrganizations] = useState([]);
+
+  const [filterVisibility, setFilterVisibility] = useState({
+    state: true,
+    district: false,
+    organization: false,
+  });
+  const [filters, setFilters] = useState({
+    state: "",
+    district: "",
+    transactionType: "ALL",
+    sku: '',
+    organizationType: 'BREWERY',
+    vendorType: 'ALL_VENDORS',
+    date_filter_type: 'by_range',
+    startDate: new Date(),
+    endDate: new Date(),
+    year: new Date().getFullYear(), //setCurentYear
+    month: new Date().getMonth() + 1, //setCurrentMonth
+    quarter: 0 //setCurrent Quarter.
+  });
+
+  const defaultFilters = {
+    state: "",
+    district: "",
+    transactionType: "ALL",
+    sku: '',
+    organizationType: 'BREWERY',
+    vendorType: 'ALL_VENDORS',
+    date_filter_type: 'by_range',
+    startDate: new Date(),
+    endDate: new Date(),
+    year: 0, //setCurentYear
+    month: 0, //setCurrentMonth
+    quarter: 0 //setCurrent Quarter.
+  };
+
+  const onStartDateChange = (event) => {
+    const _filters = { ...filters };
+    _filters.startDate = event.target.value;
+    setFilters(_filters);
+    // applyFilters(_filters);
+  };
+
+  const onEndDateChange = (event) => {
+    const _filters = { ...filters };
+    _filters.endDate = event.target.value;
+    setFilters(_filters);
+    applyFilters(_filters);
+  };
+
+  const onTransactionTypeChange = (transactionType) => {
+    setSelectedTransactionType(transactionType);
+    const _filters = { ...filters };
+    _filters.transactionType = transactionType;
+    setFilters(_filters);
+    applyFilters(_filters);
+  };
+  const onOrganizationTypeChange = (organizationType) => {
+
+    setSelectedOrganizationType(organizationType);
+    const _filters = { ...filters };
+    _filters.organizationType = organizationType;
+
+    setFilters(_filters);
+    applyFilters(_filters);
+  };
+  const onDateTypeChange = (dateType) => {
+    setSelectedDateType(dateType);
+    const _filters = { ...filters };
+    _filters.date_filter_type = dateType;
+    setFilters(_filters);
+    applyFilters(_filters);
+  };
+  const onVendorTypeChange = (vendorType) => {
+    setSelectedVendorType(vendorType);
+    const _filters = { ...filters };
+    _filters.vendorType = vendorType;
+    setFilters(_filters);
+    applyFilters(_filters);
+  }
+
+  const _getAllStates = async () => {
+    const response = await dispatch(getAllStates());
+    const _states = response.data ? response.data : [];
+    setStates([_states]);
+  };
+
+  const _getOrganizationsByType = async (filters) => {
+    const response = await dispatch(getOrganizationsByType(filters));
+    const _organizations = response.data ? response.data : [];
+    setOrganizations(_organizations);
+  };
+
+  const _getDistrictsByState = async (_state) => {
+    const response = await dispatch(getDistrictsByState(_state));
+    const _districts = response.data ? response.data : [];
+    setDistricts(_districts);
+  };
+
+  function formatDate(date) {
+    var d = new Date(date),
+      month = "" + (d.getMonth() + 1),
+      day = "" + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2) month = "0" + month;
+    if (day.length < 2) day = "0" + day;
+
+    return [day, month, year].join("-");
+  }
+
+
+  const onStateSelection = (event) => {
+    const selectedState = event.target.value;
+    const _filters = { ...filters };
+    _filters.state = selectedState;
+    setFilters(_filters);
+    applyFilters(_filters);
+    _getDistrictsByState(selectedState);
+
+    const _filterVisibility = { ...filterVisibility };
+    _filterVisibility.district = true;
+    setFilterVisibility(_filterVisibility);
+  };
+  const onDistrictSelection = (event) => {
+    const selectedDistrict = event.target.value;
+    const _filters = { ...filters };
+    _filters.district = selectedDistrict;
+    setFilters(_filters);
+    _getOrganizationsByType(_filters);
+    applyFilters(_filters);
+  };
+
+  const onOrganizationChange = (event) => {
+    const selectedOrganization = event.target.value;
+    const _filters = { ...filters };
+    _filters.organization = selectedOrganization;
+    setFilters(_filters);
+    applyFilters(_filters);
+  };
+
+  const resetFilters = () => {
+    let _filters = defaultFilters;
+    setFilters(_filters);
+    setSelectedTransactionType('ALL');
+    setSelectedOrganizationType('BREWERY');
+    setSelectedDateType('by_range');
+    applyFilters(_filters);
+
+  }
+
+  const allowedMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 12];
+  let thisYear = new Date().getFullYear();
+  const allowedYears = [];
+  for (let i = 1; i < 21; i++) {
+    allowedYears.push(thisYear - i);
+  }
+
+
+
+  const onYearChange = (event) => {
+    const selectedYear = event.target.value;
+    const _filters = { ...filters };
+    _filters.year = selectedYear;
+    setFilters(_filters);
+    applyFilters(_filters);
+  };
+
+  const onMonthChange = (event) => {
+    const selectedMonth = event.target.value;
+    const _filters = { ...filters };
+    _filters.month = selectedMonth;
+    setFilters(_filters);
+    applyFilters(_filters);
+  };
+
+  const onQuarterChange = (event) => {
+    const selectedQuarter = event.target.value;
+    const _filters = { ...filters };
+    _filters.month = selectedQuarter;
+    setFilters(_filters);
+    applyFilters(_filters);
+  };
+
+  async function applyFilters(_filters) {
+    //  await setFilters(_filters);
+    const results = await dispatch(getTransactions(_filters));
+    let addedarray = [];
+    let date;
+    results.data.forEach((b) => {
+      // console.log('a') =
+      let a = b;
+      if (date !== formatDate(a.createdAt)) {
+        date = formatDate(a.createdAt);
+        a.shippingDates = true;
+      } else {
+        a.shippingDates = false;
+      }
+      if (a.status === "CREATED") {
+        a.status = "SENT";
+        addedarray.push(a);
+      }
+      if (a.status === "RECEIVED" && a.supplier.id === props.user.id) {
+        a.status = "SENT";
+        addedarray.push(a);
+      }
+      if (a.status === "RECEIVED") inBound.push(a);
+      if (a.status === "SENT") sent.push(a);
+      if (a.status === "INTRANSIT") inTransit.push(a);
+    });
+    setDisplayTransactions(results.data);
+    setTransactions(results.data);
   }
   useEffect(() => {
     (async () => {
-      const results = await dispatch(getTransactions());
-      setDisplayTransactions(results.data);
-      setTransactions(results.data);
+      _getAllStates();
+      const results = await dispatch(getTransactions(filters));
       let addedarray = [];
-      results.data.forEach((a) => {
-        // console.log('a')
+      let date;
+      results.data.forEach((b) => {
+        let a = b;
+        if (date !== a.createdAt) {
+          date = a.createdAt;
+          a.shippingDates = true;
+        } else {
+          a.shippingDates = false;
+        }
         if (a.status === "CREATED") {
           addedarray.push(a);
         }
@@ -84,9 +286,9 @@ const TransactionHistory = (props) => {
         if (a.status === "INTRANSIT") inTransit.push(a);
       });
       setAdded(addedarray);
-      console.log(results);
     })();
   }, []);
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -111,74 +313,84 @@ const TransactionHistory = (props) => {
                   </svg>
                 </div>
               </div>
-              <div class="btn-group mainButtonFilter">
+              <div className="btn-group mainButtonFilter">
                 <a
-                  href="#0"
-                  class={buttonState0}
+                  className={`btn ${selectedTransactionType === 'ALL' ? "active" : ""}`}
                   onClick={() => {
-                    setButtonActive("btn active");
-                    selectThis("all");
+                    onTransactionTypeChange('ALL');
                   }}
                 >
-                  All
-                </a>
+                  ALL
+                    </a>
                 <a
-                  href="#1"
-                  class={buttonState1}
+                  className={`btn ${selectedTransactionType === 'SENT' ? "active" : ""}`}
                   onClick={() => {
-                    setButtonActive1("btn active");
-                    selectThis("sent");
+                    onTransactionTypeChange('SENT');
                   }}
                 >
                   Sent
-                </a>
+                    </a>
                 <a
-                  href="#2"
-                  class={buttonState2}
+                  className={`btn ${selectedTransactionType === 'RECEIVED' ? "active" : ""}`}
                   onClick={() => {
-                    setButtonActive2("btn active");
-                    selectThis("received");
+                    onTransactionTypeChange('RECEIVED');
                   }}
                 >
                   Received
-                </a>
+                    </a>
                 <a
-                  href="#3"
-                  class={buttonState3}
+                  className={`btn ${selectedTransactionType === 'IN_TRANSIT' ? "active" : ""}`}
                   onClick={() => {
-                    setButtonActive3("btn active");
-                    selectThis("transit");
+                    onTransactionTypeChange('IN_TRANSIT');
                   }}
                 >
                   In-Transit
-                </a>
+                    </a>
                 <a
-                  href="#4"
-                  class={buttonState4}
+                  className={`btn ${selectedTransactionType === 'ADDED' ? "active" : ""}`}
                   onClick={() => {
-                    setButtonActive4("btn active");
-                    selectThis("added");
+                    onTransactionTypeChange('ADDED');
                   }}
                 >
                   Added
-                </a>
+                    </a>
               </div>
+
+
               <div className="productList">
+                {
+                  displayTransactions.length ?
+                    <>
+                      <div className="productListHeader col-md-12">
+                        <div className=" col-md-3">Particulars</div>
+                        <div className="padLeft20 col-md-2">Warehouse Address</div>
+                        <div className="padLeft20 col-md-2">Status</div>
+                        <div className="padLeft20 col-md-3">Challan Image</div>
+                        <div className="padLeft20 col-md-2">Quantity</div>
+                      </div>
+                    </> : ""
+                }
+
                 {displayTransactions.map((transaction, index) => (
                   <div>
-                   <span className={dateClassName}>
-                      <Moment format="MMM Do, YYYY">
-                        {transaction.shippingDate}
-                      </Moment>
-                    </span>
+                    {transaction.shippingDates ? (
+                      <span className={dateClassName}>
+                        <Moment format="MMM Do, YYYY">
+                          {transaction.createdAt}
+                        </Moment>
+                      </span>
+                    ) : (
+                      ""
+                    )}
                     <div className="transactionListContainer">
-                      <div className="productContainer">
-                        <div className="productItem ">
+
+                      <div className="productContainer col-md-12">
+                        <div className="productItem col-md-3">
                           <div className="iconGroup">
                             <div className="productIcon inTransit">
                               <img
                                 src={inTransitIcon}
-                                class="icon-thumbnail-img"
+                                className="icon-thumbnail-img"
                                 alt=""
                               />
                             </div>
@@ -189,46 +401,52 @@ const TransactionHistory = (props) => {
                               <br />
                               <span className="transactionDate">
                                 <Moment format="MMMM Do YYYY, h:mm a">
-                                  {transaction.shippingDate}
+                                  {transaction.createdAt}
                                 </Moment>
+                              </span>
+                              <br />
+                              <span className="transactionDate">
+                                <span>FROM:</span>{" "}
+                                {transaction.supplier.org.name} - TO:{" "}
+                                {transaction.receiver.org.name}
                               </span>
                             </div>
                           </div>
                         </div>
-                        <div className="productItem">
+                        <div className="productItem col-md-2">
                           {
                             (transaction.receiver.warehouse.warehouseAddress
                               .city,
-                            transaction.receiver.warehouse.warehouseAddress
-                              .state)
+                              transaction.receiver.warehouse.warehouseAddress
+                                .state)
                           }
                         </div>
-                        <div className="productItem">
+                        <div className="productItem col-md-2">
                           {transaction.status === "RECEIVED" && (
                             <div className="productStatus">
-                              <span class="statusbadge receivedBadge"></span>{" "}
+                              <span className="statusbadge receivedBadge"></span>{" "}
                               Received
                             </div>
                           )}
                           {transaction.status === "SENT" && (
                             <div className="productStatus">
-                              <span class="statusbadge sentBadge"></span> Sent
+                              <span className="statusbadge sentBadge"></span> Sent
                             </div>
                           )}
                           {transaction.status === "INTRANSIT" && (
                             <div className="productStatus">
-                              <span class="statusbadge transitBadge"></span> In
+                              <span className="statusbadge transitBadge"></span> In
                               Transit
                             </div>
                           )}
                           {transaction.status === "CREATED" && (
                             <div className="productStatus">
-                              <span class="statusbadge addedBadge"></span> Added
+                              <span className="statusbadge addedBadge"></span> Added
                             </div>
                           )}
                         </div>
-                        <div className="productItem">123456.jpg</div>
-                        <div className="productItem productQuantity">
+                        <div className="productItem col-md-3">123456.jpg</div>
+                        <div className="productItem productQuantity col-md-2">
                           {transaction.products.reduce(
                             (a, v) => (a = a + v.productQuantity),
                             0
@@ -246,66 +464,286 @@ const TransactionHistory = (props) => {
                   <img src={filterIcon} className="filterIcon" /> FILTERS
                 </div>
 
-                <div class="btn-group filterButton mt-4">
-                  <a href="#!" class="btn ">
-                    Brewery
-                  </a>
-                  <a href="#!" class="btn active">
-                    Vendor
-                  </a>
+                <div className="btn-group filterButton mt-4">
+                  <a
+                    className={`btn ${selectedOrganizationType === 'BREWERY' ? "active" : ""}`}
+                    onClick={() => {
+                      onOrganizationTypeChange('BREWERY');
+                    }}
+                  >
+                    BREWERY
+                    </a>
+                  <a
+                    className={`btn ${selectedOrganizationType === 'VENDOR' ? "active" : ""}`}
+                    onClick={() => {
+                      onOrganizationTypeChange('VENDOR');
+                    }}
+                  >
+                    VENDOR
+                    </a>
                 </div>
 
                 <label className="filterSubHeading mt-2">Time Period</label>
-                <div class="btn-group filterButton mt-2">
-                  <a href="#!" class="btn active">
-                    Today
-                  </a>
-                  <a href="#!" class="btn">
+                <div className="btn-group filterButton mt-2">
+                  <a
+                    className={`btn ${selectedDateType === 'by_range' ? "active" : ""}`}
+                    onClick={() => {
+                      onDateTypeChange('by_range');
+                    }}
+                  >
+                    Date Range
+                    </a>
+                  <a
+                    className={`btn ${selectedDateType === 'by_monthly' ? "active" : ""}`}
+                    onClick={() => {
+                      onDateTypeChange('by_monthly');
+                    }}
+                  >
                     Monthly
-                  </a>
-                  <a href="#!" class="btn">
+                    </a>
+                  <a
+                    className={`btn ${selectedDateType === 'by_quarterly' ? "active" : ""}`}
+                    onClick={() => {
+                      onDateTypeChange('by_quarterly');
+                    }}
+                  >
                     Quarterly
-                  </a>
-                  <a href="#!" class="btn">
+                    </a>
+                  <a
+                    className={`btn ${selectedDateType === 'by_yearly' ? "active" : ""}`}
+                    onClick={() => {
+                      onDateTypeChange('by_yearly');
+                    }}
+                  >
                     Yearly
-                  </a>
+                    </a>
                 </div>
+                {
+                  selectedDateType === 'by_range' ?
+                    <>
+                      <div className="row">
+                        <div className="col-md-5">
+                          <input type="date"
+                            className="dateInput"
+                            value={filters.startDate}
+                            // Shiva
+                            onChange={onStartDateChange} />
+                        </div>
+                        <div className="col-md-5">
+                          <input type="date"
+                            className="dateInput"
+                            value={filters.startDate}
+                            // Shiva
+                            onChange={onEndDateChange}
+                          />
+                        </div>
+                      </div>
+                    </> : ""
+                }
 
+                {
+                  selectedDateType === 'by_monthly' ?
+                    <>
+                      <div className="row">
+                        <div className="col-md-5">
+                          <select
+                            className="filterSelect mt-2"
+                            value={filters.year}
+                            onChange={onYearChange}
+                          >
+                            <option>Select Year</option>
+                            {allowedYears.map((year, index) => {
+                              return (
+                                <option key={index} value={year}>
+                                  {year}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        </div>
+                        <div className="col-md-5">
+                          <select
+                            className="filterSelect mt-2"
+                            value={filters.month}
+                            onChange={onMonthChange}
+                          >
+                            <option>Select Year</option>
+                            {allowedMonths.map((month, index) => {
+                              return (
+                                <option key={index} value={month}>
+                                  {month}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        </div>
+                      </div>
+                    </> : ""
+                }
+
+                {
+                  selectedDateType === 'by_quarterly' ?
+                    <>
+                      <div className="row">
+                        <div className="col-md-5">
+                          <select
+                            className="filterSelect mt-2"
+                            value={filters.year}
+                            onChange={onYearChange}
+                          >
+                            <option>Select Year</option>
+                            {allowedYears.map((year, index) => {
+                              return (
+                                <option key={index} value={year}>
+                                  {year}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        </div>
+                        <div className="col-md-5">
+                          <select
+                            className="filterSelect mt-2"
+                            value={filters.quarter}
+                            onChange={onQuarterChange}
+                          >
+                            <option>Select Quarter</option>
+                            {['1', '2', '3', '4'].map((quarter, index) => {
+                              return (
+                                <option key={index} value={quarter}>
+                                  {quarter}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        </div>
+                      </div>
+                    </> : ""
+                }
+                {
+                  selectedDateType === 'by_yearly' ?
+                    <>
+                      <div className="row">
+                        <div className="col-md-5">
+                          <select
+                            className="filterSelect mt-2"
+                            value={filters.year}
+                            onChange={onYearChange}
+                          >
+                            <option>Select Year</option>
+                            {allowedYears.map((year, index) => {
+                              return (
+                                <option key={index} value={year}>
+                                  {year}
+                                </option>
+                              );
+                            })}
+                          </select>
+                        </div>
+                      </div>
+                    </> : ""
+                }
+
+                <label className="filterSubHeading mt-3">Select State</label>
+                <select
+                  className="filterSelect mt-2"
+                  value={filters.state}
+                  onChange={onStateSelection}
+                >
+                  <option>Select State</option>
+                  {states.map((state, index) => {
+                    return (
+                      <option key={index} value={state}>
+                        {state}
+                      </option>
+                    );
+                  })}
+                </select>
                 <label className="filterSubHeading mt-2">District</label>
-                <select className="filterSelect mt-2">
-                  <option>Select district</option>
+                <select
+                  className="filterSelect mt-2"
+                  value={filters.district}
+                  onChange={onDistrictSelection}
+                  disabled={!filterVisibility.district}
+                >
+                  <option value="">Select District</option>
+                  {districts.map((district, index) => {
+                    return (
+                      <option key={index} value={district}>
+                        {district}
+                      </option>
+                    );
+                  })}
                 </select>
 
-                <label className="filterSubHeading mt-2">Vendor</label>
-                <div class="btn-group filterButton mt-2">
-                  <a href="#!" class="btn active">
-                    All
-                  </a>
-                  <a href="#!" class="btn">
-                    S1
-                  </a>
-                  <a href="#!" class="btn">
-                    S2
-                  </a>
-                </div>
+                {
+                  selectedOrganizationType === 'VENDOR' ?
+                    <>
+                      <label className="filterSubHeading mt-2">Vendor</label>
+                      <div className="btn-group filterButton mt-2">
+                        <a
+                          className={`btn ${selectedVendorType === 'ALL_VENDORS' ? "active" : ""}`}
+                          onClick={() => {
+                            onVendorTypeChange('ALL_VENDORS');
+                          }}
+                        >
+                          All
+                    </a>
+                        <a
+                          className={`btn ${selectedVendorType === 'S1' ? "active" : ""}`}
+                          onClick={() => {
+                            onVendorTypeChange('S1');
+                          }}
+                        >
+                          S1
+                    </a>
+                        <a
+                          className={`btn ${selectedVendorType === 'S2' ? "active" : ""}`}
+                          onClick={() => {
+                            onVendorTypeChange('S2');
+                          }}
+                        >
+                          S2
+                    </a>
+                      </div>
+                    </> : ""
+                }
 
-                <label className="filterSubHeading mt-2">Select Vendor</label>
-                <select className="filterSelect mt-2">
-                  <option>Select Vendor</option>
-                  <option>Select Vendor</option>
-                  <option>Select Vendor</option>
-                  <option>Select Vendor</option>
+                <label className="filterSubHeading mt-2">Select
+                  {
+                    selectedOrganizationType === 'VENDOR' ? ' Vendor' : ' Brewery'
+                  }
+                </label>
+                <select
+                  className="filterSelect mt-2"
+                  onChange={onOrganizationChange}
+                >
+                  <option>Select
+                    {
+                      selectedOrganizationType === 'VENDOR' ? ' Vendor' : ' Brewery'
+                    }
+                  </option>
+                  {organizations.map((organization, index) => {
+                    return (
+                      <option key={index} value={organization.id}>
+                        {organization.name}
+                      </option>
+                    );
+                  })}
                 </select>
 
-                <button className="btn SearchButton mt-4">Search</button>
+                <button
+                  className="btn SearchButton mt-4"
+                  onClick={resetFilters}
+                >
+                  Clear
+                </button>
               </div>
             </div>
           </div>
         </main>
       </div>
     </div>
-  
-  
   );
 };
 export default TransactionHistory;

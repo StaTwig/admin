@@ -50,21 +50,21 @@ const [organisationsArr, setOrganisationsArr] = useState([]);
   return (
     <div className="login-wrapper">
       <div className="container">
-        <div className="mobile-header">
+        {/* <div className="mobile-header ">
           <div className="branding">
             <img src={logo} alt="vaccineledger" />
           </div>
-        </div>
+        </div> */}
       
   <div className="row">
-          <div className="col-sm-6 col-lg-6">
+          <div className="col-m-6 col-lg-6">
             <div className="form-content">
               <img className="logo" src={logo} />
               <h1>Welcome,</h1>
               <p>Signup to continue</p>
             </div>
           </div>
-          <div className="col-sm-6 col-lg-5">
+          <div className="col-m-6 col-lg-6">
             <div className="card">
               { props.adminAwaiting ?
                 <><img alt="" src={Waiting} height="150" width="150" className="align-self-center mt-5 mb-4" />
@@ -114,7 +114,8 @@ const [organisationsArr, setOrganisationsArr] = useState([]);
                 }) => (
                   <form onSubmit={handleSubmit} className="mb-3">
                   <div className="login-form mt-3 pl-5 pr-5">
-                  <div className="card-title p-3">Signup</div>
+                  
+                  <div className="card-title p-0">Signup</div>
                   <div className="form-group flex-column">
                     <div className="pb-1">
                   <img alt="" src={User} className="icon imgs"/></div>
@@ -188,6 +189,7 @@ const [organisationsArr, setOrganisationsArr] = useState([]);
                   props.errorMessage && <div className="alert alert-danger">{props.errorMessage}</div>
               }
                   <div className="text-center mt-2">
+                    <br></br>
                   <button type="submit" className="btn btn-primary" >
                   SIGNUP
                   </button>

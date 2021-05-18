@@ -9,6 +9,9 @@ import Briefcase from "../../assets/icons/briefcase.svg";
 import Telephone from "../../assets/icons/telephone.svg";
 import "./style.scss";
 import { config } from "../../config";
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
+
 const axios = require("axios");
 import {
   getUserInfoUpdated,
@@ -41,6 +44,7 @@ class Profile extends React.Component {
       location: "",
       orgs: [],
       wareIds: [],
+      warehouseLocations: [],
       warehouseAddress_country: "",
       warehouseAddress_city: "",
       warehouseAddress_firstline: "",
@@ -79,7 +83,7 @@ class Profile extends React.Component {
 
         title,
       } = response.data.data;
-      console.log("Data");
+      console.log("User Data");
       console.log(response.data.data);
       this.setState({
         profile_picture,
@@ -113,9 +117,14 @@ class Profile extends React.Component {
     const wareHouseResponse = await getWarehouseByOrgId(item);
     if (wareHouseResponse.status === 1) {
       const wareHouseIdResult = wareHouseResponse.data.map((txn) => txn.id);
-      this.setState({ wareIds: wareHouseIdResult });
+      const wareHouseAddresses = wareHouseResponse.data;
+      this.setState({
+        wareIds: wareHouseIdResult,
+        warehouseLocations: wareHouseAddresses,
+      });
     }
-    console.log("ids", wareHouseResponse);
+    console.log("Full Data", wareHouseResponse);
+    console.log("warehouses", this.state.warehouseLocations);
   }
   //console.log("res",wareHouseIdResult);
 
@@ -351,13 +360,13 @@ class Profile extends React.Component {
                     </div>
                     <div className="form-group">
                       <label htmlFor="shipmentId">Phone</label>
-                      <input
-                        placeholder="Enter PhoneNumber"
-                        className="form-control"
-                        value={phoneNumber}
-                        onChange={(e) =>
-                          this.setState({ phoneNumber: e.target.value })
-                        }
+                      <PhoneInput
+                      className="form-group"
+                          country={'in'}
+                          placeholder='Enter Phone number'
+                          style={{position:"absolute", marginLeft:"64%"}}
+                          value={this.state.phoneNumber}
+                          onChange={(phone) => this.setState({ phoneNumber : phone})}
                       />
                     </div>
 
@@ -383,11 +392,13 @@ class Profile extends React.Component {
                             {this.state.openModal && (
                               <Modal
                                 class="modal-lg"
-                                style="min-width: 100%"
+                                style="width: 60vw"
                                 close={() => this.closeModal()}
                                 size="" //for other size's use `modal-lg, modal-md, modal-sm`
                               >
-                                <PopUpLocation />
+                                <PopUpLocation
+                                  wareHouses={this.state.warehouseLocations}
+                                />
                               </Modal>
                             )}
                           </div>

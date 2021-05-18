@@ -32,7 +32,8 @@ router.post("/createOrder", POController.createOrder);
 router.get("/getOrderIds", POController.getOrderIds);
 
 router.get("/fetchInboundPurchaseOrders", POController.fetchInboundPurchaseOrders);// /fetchInboundPurchaseOrders => Takes organisationId from req.user header and filter based on the query params {date,productName,from}
-router.get("/fetchOutboundPurchaseOrders", POController.fetchOutboundPurchaseOrders);// /fetchOutboundPurchaseOrders => Takes organisationId from req.user header and filter based on the query params {date,productName,to}
+router.get("/fetchOutboundPurchaseOrders", POController.fetchOutboundPurchaseOrders);// /fetchOutboundPurchaseOrders => Takes organisationId from req.user header and filter based on the query params (to, orderId, productName, deliveryLocation, date)
+router.get("/fetchProductIdsCustomerLocationsOrganisations", POController.fetchProductIdsCustomerLocationsOrganisations);
 
 module.exports = router;
 
