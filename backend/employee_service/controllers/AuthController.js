@@ -7,7 +7,7 @@ const CounterModel = require('../models/CounterModel');
 const { body, validationResult, oneOf, check } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
 const uniqid = require('uniqid');
-
+const ConfigurationModel = require('../models/ConfigurationModel');
 //helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
 const utility = require('../helpers/utility');
@@ -23,7 +23,6 @@ const fs = require("fs");
 const moveFile = require("move-file");
 const blockchain_service_url = process.env.URL;
 const stream_name = process.env.INV_STREAM;
-
 const checkToken = require('../middlewares/middleware').checkToken;
 const init = require('../logging/init');
 const logger = init.getLog();
@@ -271,7 +270,6 @@ exports.register = [
             const country =  req.body?.address?.country ? req.body.address?.country : 'India';
             const address =  req.body?.address ? req.body.address : {};
             addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
-            
             const incrementCounterOrg = await CounterModel.update({
                   'counters.name': "orgId"
                },{
@@ -1657,3 +1655,39 @@ exports.getAllUsersByOrganisation = [
   },
 ];
 
+
+exports.getOrganizationsByType = [
+  auth,
+    async (req, res)=>{
+      try {
+        const organisationId=req.query.id;
+        const organisations=await ConfigurationModel.find({id:organisationId},'organisationTypes.id organisationTypes.name')
+        return apiResponse.successResponseWithData(
+          res,
+          "Operation success",
+          organisations
+        );
+      } catch (err) {
+        return apiResponse.ErrorResponse(res, err);
+      }
+    },
+  ];
+
+  exports.getwarehouseByType = [
+    auth,
+      async (req, res) => {
+        try {
+          const organisationId=req.query.id;
+          console.log(organisationId);
+          const organisations=await ConfigurationModel.find({id:organisationId},'warehouseTypes.id warehouseTypes.name')
+          console.log(organisations)
+          return apiResponse.successResponseWithData(
+            res,
+            "Operation success",
+            organisations
+          );
+        } catch (err) {
+          return apiResponse.ErrorResponse(res, err);
+        }
+      },
+    ];

@@ -34,5 +34,7 @@ router.get("/getAllUsersByWarehouse/:warehouseId", AuthController.getAllUsersByW
 router.post("/uploadImage",upload.single('photo'),AuthController.uploadImage);
 router.get("/fetchImage",AuthController.fetchImage);
 router.get("/getUserWarehouses", AuthController.getUserWarehouses);
+router.get("/getOrganizationsByType", AuthController.getOrganizationsByType);
+router.get("/getwarehouseByType", AuthController.getwarehouseByType);
 
 module.exports = router;
