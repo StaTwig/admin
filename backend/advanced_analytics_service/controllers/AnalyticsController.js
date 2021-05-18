@@ -577,7 +577,9 @@ exports.getSalesStatsByBrand = [
 				let returnsTotal = 0;
 				let returnRateTotal = 0;
 				let returnRatePrevTotal = 0;
+				let _product = {};
 				products.forEach((product) => {
+					_product = product;
 					salesTotal = salesTotal + (parseInt(product.sales) ? parseInt(product.sales) : 0);
 					targetSalesTotal = targetSalesTotal + (parseInt(product.targetSales) ? parseInt(product.targetSales) : 0);
 					returnsTotal = returnsTotal + (parseInt(product.returns) ? parseInt(product.returns) : 0);
@@ -586,6 +588,7 @@ exports.getSalesStatsByBrand = [
 				});
 				delete analytic.products;
 				analytic.stats = {
+					..._product,
 					sales: salesTotal,
 					targetSalesTotal: targetSalesTotal,
 					returns: returnsTotal,
