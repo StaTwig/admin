@@ -618,16 +618,44 @@ exports.verifyOtp = [
           query = { phoneNumber: phone };
         }
 
-        const user = await EmployeeModel.findOne(query);
+	   const user = await EmployeeModel.findOne(query);
+
         if (user && user.otp == req.body.otp) {
-          await EmployeeModel.update(query, { otp: null });
-          let userData = {
+
+	    var address;
+		
+		if (user.walletAddress == null || user.walletAddress == "wallet12345address")
+                   {
+                     const response = await axios.get(
+                     `${blockchain_service_url}/createUserAddress`,
+                );
+                address = response.data.items;
+                const userData = {
+                  address,
+                };
+                logger.log(
+                  'info',
+                  '<<<<< UserService < AuthController < verifyConfirm : granting permission to user',
+                );
+                await axios.post(
+                  `${blockchain_service_url}/grantPermission`,
+                  userData,
+                );
+		       await EmployeeModel.update(query, { otp: null ,walletAddress: address});
+                  }
+              else
+                 {
+                      address = user.walletAddress
+                 }
+
+            let userData = {
             id: user.id,
             firstName: user.firstName,
             emailId: user.emailId,
             role: user.role,
             warehouseId: user.warehouseId[0],
             organisationId: user.organisationId,
+	    walletAddress: address
           };
           //Prepare JWT token for authentication
           const jwtPayload = userData;
