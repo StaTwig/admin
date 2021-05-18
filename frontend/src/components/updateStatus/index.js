@@ -177,7 +177,7 @@ const UpdateStatus = (props) => {
                         </span>
                       )}
                     </div>
-                    <h6 className="poheads potext m-3">
+                    <h6 className="poheads potext m-4">
                       Account Holder Details
                     </h6>
                     <div className="panel commonpanle">
@@ -187,7 +187,7 @@ const UpdateStatus = (props) => {
                         </label>
                         <input
                           type="text"
-                          className="form-control"
+                          className="form-control mb-2"
                           name="firstName"
                           onChange={(e) => setFirstName(e.target.value)}
                           value={profile.firstName}
@@ -200,7 +200,7 @@ const UpdateStatus = (props) => {
                         </label>
                         <input
                           type="text"
-                          className="form-control"
+                          className="form-control mb-2"
                           name="organisationName"
                           onChange={(e) => setOrganisationName(e.target.value)}
                           value={profile.organisation}
@@ -228,7 +228,7 @@ const UpdateStatus = (props) => {
                         </label>
                         <input
                           type="text"
-                          className="form-control"
+                          className="form-control mb-2"
                           name="updateStatusLocation"
                           onBlur={handleBlur}
                           onChange={handleChange}
@@ -243,14 +243,14 @@ const UpdateStatus = (props) => {
                         )}
                     </div>
 
-                    <h6 className="poheads potext m-3">Comment</h6>
-                    <div className="panel commonpanle">
+                    <h6 className="poheads potext m-4">Comment</h6>
+                    <div className="panel commonpanle mb-5">
                       <div className="form-group mb-0">
                         <input
                           type="text"
-                          className="form-control"
+                          className="form-control mb-2"
                           name="comments"
-                          style={{ flexBasis: "100%" }}
+                          //style={{ flexBasis: "100%" }}
                           onBlur={handleBlur}
                           onChange={handleChange}
                           placeholder="Enter comments here..."
@@ -395,7 +395,7 @@ const UpdateStatus = (props) => {
                   <div>
                     <button
                       type="button"
-                      className="btn btn-outline-primary mr-4"
+                      className="btn btn-outline-info mr-3"
                       onClick={() => props.history.push(`/viewshipment/${id}`)}
                     >
                       CANCEL

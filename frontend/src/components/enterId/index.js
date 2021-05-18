@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./style.scss";
 import { Formik } from "formik";
 const EnterId = (props) => {
+  const { id } = props.match.params;
   const [shipmentId, setShipmentId] = useState(null);
   const [billid, setbillid] = useState(null);
   const [shipdisabled, setshipdisabled] = useState(true);
@@ -52,7 +53,7 @@ const EnterId = (props) => {
           setFieldValue,
           dirty,
         }) => (
-          <form onSubmit={handleSubmit} className="mb-3">
+          <form onSubmit={handleSubmit} className="">
             <div className="card bg-light border-0">
               <div className="card-body">
                 <div className="row justify-content-between">
@@ -60,7 +61,7 @@ const EnterId = (props) => {
                     <div className="panel commonpanle mr-5">
                       <div
                         className={`form-group ${
-                          errors.shipmentId && touched.shipmentId && `mb-0`
+                          errors.shipmentId && touched.shipmentId && ``
                         }`}
                       >
                         <label className="mt-3 text-secondary">
@@ -68,7 +69,8 @@ const EnterId = (props) => {
                         </label>
                         <input
                           type="text"
-                          className="form-control"
+                          placeholder="Enter Shipment ID"
+                          className="form-control mr-5"
                           name="shipmentId"
                           onBlur={handleBlur}
                           onChange={(e) => {
@@ -89,20 +91,21 @@ const EnterId = (props) => {
                     </div>
                   </div>
                   <div className="col-1 ml-2 mr-5">
-                    <h3 className="or">OR</h3>
+                    <h4 className="or"><b>OR</b></h4>
                   </div>
 
                   <div className="col ">
                     <div className="panel commonpanle mr-5">
                       <div
                         className={`form-group ${
-                          errors.shipmentId && touched.shipmentId && `mb-0`
+                          errors.shipmentId && touched.shipmentId && ``
                         }`}
                       >
                         <label className="mt-3 text-secondary">Bill No.</label>
                         <input
                           type="text"
-                          className="form-control"
+                          className="form-control mr-5"
+                          placeholder=" Enter Bill No."
                           name="shipmentId"
                           onBlur={handleBlur}
                           onChange={(e) => {
@@ -124,9 +127,9 @@ const EnterId = (props) => {
                     <div className="row mt-5 bottom">
                       <button
                         type="button"
-                        className="btn btn-outline-primary mr-4"
-                        onClick={() =>
-                          props.history.push(`/viewshipment/${id}`)
+                        className="btn btn-outline-info mr-4"
+                        onClick={() =>  props.history.push(`/viewshipment/${id}`)
+                          
                         }
                       >
                         CANCEL
