@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
 import './style.scss';
 import Key from '../../assets/icons/key.png';
@@ -7,6 +9,7 @@ import User from '../../assets/icons/mail.png';
 import hide from '../../assets/icons/hide.png';
 import logo from '../../assets/brands/VaccineLedgerlogo.svg';
 import eye from '../../assets/icons/eye.png';
+import Phone from "../../assets/icons/phone.png";
 
 const FormLoginPage = (props) => {
   const { email, onEmailChange, errorMessage, onSendOtp } = props;
@@ -36,18 +39,35 @@ const FormLoginPage = (props) => {
               <div className="card-body">
                 <div className="login-form mt-2">
                   <div className="card-title mb-4">Login</div>
-                  <div className="form-group mt-5 ml-5 mr-5 p-1">
+                  <div className="form-group mb-3 mt-1 ml-5 mr-5 p-1">
                     <img alt="" src={User} className="icon imgs" />
                     <input type="email" className="form-control-login"
                       value={email}
                       onChange={onEmailChange}
-                      placeholder="Email ID/Mobile Number" />
+                      placeholder="Email ID"/>
                   </div>
+                  <div className="card-title mb-2"><h5 style={{color: 'blue'}}>OR</h5></div>
+                  <div className="form-group mt-0 ml-5 mr-5 p-1">
+                  <img alt="" src={Phone} className="icon imgsPhone" />
+                      <PhoneInput
+                        country={'in'}
+                        placeholder='Enter Phone number'
+                        inputProps={{
+                          name: 'phone',
+                          required: true,
+                          // autoFocus: true,
+                          enableSearch: true,
+                        }}
+                      />
+                      <div className="pb-3"></div>
+              
+                    </div>
+                    
 
                   {
                     errorMessage && <div className="alert alert-danger">{errorMessage}</div>
                   }
-                  <div className="text-center mt-5">
+                  <div className="text-center mt-2">
                     <button type="button" className="btn btn-primary" onClick={onSendOtp}>
                       SEND OTP
                     </button>
