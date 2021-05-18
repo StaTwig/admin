@@ -18,27 +18,27 @@ const FormLoginPage = (props) => {
   return (
     <div className="login-wrapper">
       <div className="container">
-        <div className="mobile-header">
+        {/* <div className="mobile-header">
             <div className="branding">
                 <img src={logo} alt="vaccineledger" />
             </div>
-</div>
+</div> */}
           <div className="row">
-          <div className="col-sm-6 col-lg-6">
+          <div className="col-m-6 col-lg-6">
             <div className="form-content">
               <img className="logo" src={logo} />
               <h1>Welcome Back,</h1>
               <p>Login to continue</p>
             </div>
           </div>
-          <div className="col-sm-6 col-lg-5">
+          <div className="col-m-6 col-lg-5">
             <div className="card">
               <div className="card-body">
                 <div className="login-form mt-2">
                   <div className="card-title mb-4">Login</div>
-                  <div className="form-group mt-5 ml-5 mr-5">
+                  <div className="form-group mt-5 ml-5 mr-5 p-1">
                     <img alt="" src={User} className="icon imgs" />
-                    <input type="email" className="form-control"
+                    <input type="email" className="form-control-login"
                       value={email}
                       onChange={onEmailChange}
                       placeholder="Email ID/Mobile Number" />

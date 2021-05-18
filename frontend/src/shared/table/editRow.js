@@ -7,8 +7,10 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import mon from '../../assets/icons/brand.svg';
 import Package from '../../assets/icons/package.svg';
-import qty from '../../assets/icons/TotalInventoryAddedcopy.svg';
+import qty from '../../assets/icons/TotalInventoryAdded_2.png';
 import sdate from "../../assets/icons/ShippingDate.svg";
+import Batch from '../../assets/icons/Batch.png';
+import Serial from '../../assets/icons/Serial.png';
 
 import './style.scss';
 
@@ -112,7 +114,7 @@ const EditRow = props => {
         </div>
           {inventories.length > 1 &&
             <div className="m-2 pl-3 pt-1">
-              <span onClick={() => props.onRemoveRow(idx)}><img className="border-none cursorP shadow p-1 rounded-circle" height="25" src={Delete} /></span>
+              <span className="del-pad shadow border-none rounded-circle mr-1" onClick={() => props.onRemoveRow(idx)}><img className="cursorP p-1" height="30" src={Delete} /></span>
             </div>
           }
         {!addMore && 
@@ -134,8 +136,8 @@ const EditRow = props => {
           <div className="row col-12 mb-2">
             <div className="col theader text-center pro"><img src={sdate} width="16" height="16" /><span className="pl-3 text-muted">Mfg Date</span></div>
             <div className="col theader text-center pro"><img src={sdate} width="16" height="16" /><span className="pl-3 text-muted">Exp Date</span></div>
-            <div className="col theader text-center pro"><span className="pl-3 text-muted">Batch Number</span></div>
-            <div className="col theader text-center pro"><span className="pl-3 text-muted">Serial Numbers</span></div>
+            <div className="col theader text-center pro"><img src={Batch} width="16" height="16" /><span className="pl-3 text-muted">Batch Number</span></div>
+            <div className="col theader text-center pro"><img src={Serial} width="16" height="16" /><span className="pl-3 text-muted">Serial Numbers</span></div>
           </div> 
           <div className="rTableRow inp-grp mb-3 row bg-white col-12">
             <div className="col mt-1 mb-1 border-right">
@@ -210,7 +212,7 @@ const EditRow = props => {
           
         </div>
         <div className="mt-4 pt-4">
-          <span onClick={() => setAddMore(false)}><img className="border-none cursorP shadow p-1 rounded-circle" height="25" src={Delete} /></span>
+          <span className="del-pad shadow border-none rounded-circle mr-1" onClick={() => setAddMore(false)}><img className="cursorP p-1" height="30" src={Delete} /></span>
         </div>
       </div>
       )}

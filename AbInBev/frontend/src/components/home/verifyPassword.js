@@ -3,24 +3,35 @@ import logo from "../../assets/ABInBev.png";
 
 const VerifyPassword = (props) => {
   const { buttonActive, setSteps, setContinueClick, onVerifyOtp, onResendOtp, email } = props;
+  const [errorMessage, setErrorMessage] = useState('');
+  const [resendMessage, setResendMessage] = useState('');
   const [otp1, setOtp1] = useState('');
   const [otp2, setOtp2] = useState('');
   const [otp3, setOtp3] = useState('');
   const [otp4, setOtp4] = useState('');
   let otp = otp1 + otp2 + otp3 + otp4;
 
-  const onVerifyOtpClick = () => {
+  const onVerifyOtpClick = async() => {
     if (otp.length < 4) {
       return;
     }
-    onVerifyOtp(otp, email);
+    const result = await onVerifyOtp(otp, email);
+    if (result) { setErrorMessage(result);}
   }
-  const onResendOtpClick = () => {
+
+  const onkeydown = (event) => {
+    if (event.keyCode  === 13) {
+        onVerifyOtpClick();
+    }
+   }
+
+  const onResendOtpClick = async () => {
     setOtp1('');
     setOtp2('');
     setOtp3('');
     setOtp4('');
-    onResendOtp(email);
+    const result = await onResendOtp(email);
+    if (result) { setResendMessage(result);}
   }
   const handleOnOTP1Change = (e) => {
     setOtp1(e.target.value);
@@ -44,11 +55,11 @@ const VerifyPassword = (props) => {
       </div>
       <div className="login-form">
         <div className="card-title mb-2">Enter OTP</div>
-        <div className="form-groupverify pl-5 pr-5 mb-2">
+        <div className="form-groupverify pl-5 pr-5 mb-2" onKeyDown={onkeydown}>
           <input
             id="1"
             type='text'
-            className="otpInput mr-3"
+            className="otpInput m-1"
             maxLength="1"
             value={otp1}
             ref={input => input && input.focus()}
@@ -58,7 +69,7 @@ const VerifyPassword = (props) => {
           <input
             id="2"
             type='text'
-            className="otpInput mr-3"
+            className="otpInput m-1"
             maxLength="1"
             value={otp2}
             ref={otp1.length === 1 ? input => input && input.focus() : null}
@@ -68,7 +79,7 @@ const VerifyPassword = (props) => {
           <input
             id="3"
             type='text'
-            className="otpInput mr-3"
+            className="otpInput m-1"
             maxLength="1"
             value={otp3}
             ref={otp2.length === 1 ? input => input && input.focus() : null}
@@ -78,19 +89,27 @@ const VerifyPassword = (props) => {
           <input
             id="4"
             type='text'
-            className="otpInput mr-3"
+            className="otpInput m-1"
             maxLength="1"
             value={otp4}
             ref={otp3.length === 1 ? input => input && input.focus() : null}
             onChange={handleOnOTP4Change}
           />
+
         </div>
+          {
+            errorMessage ? <h4 className="error-message text-danger pb-2">{errorMessage}</h4> : ""
+          }
+          
         <div>
           <p className="signUpDesc mt-1 mb-3 ">Didn’t get the code? <a href="#" onClick={
             () => {
               onResendOtpClick();
             }
           } className="signUpLink">Resend OTP</a></p>
+          {
+            resendMessage ? <h4 className="text-primary pb-2">{resendMessage}</h4> : ""
+          }
         </div>
 
         <div className="text-center mt-5">

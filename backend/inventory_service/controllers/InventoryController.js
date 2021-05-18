@@ -5,9 +5,11 @@ const XLSX = require("xlsx");
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
 const utility = require("../helpers/utility");
+const { warehouseDistrictMapping } = require("../helpers/constants");
 const auth = require("../middlewares/jwt");
 const InventoryModel = require("../models/InventoryModel");
 const WarehouseModel = require("../models/WarehouseModel");
+const ShipmentModel = require("../models/ShipmentModel");
 const RegionModel = require("../models/RegionModel");
 const EmployeeModel = require("../models/EmployeeModel");
 const AtomModel = require("../models/AtomModel");
@@ -15,12 +17,12 @@ const ProductModel = require("../models/ProductModel");
 const NotificationModel = require("../models/NotificationModel");
 const logEvent = require("../../../utils/event_logger");
 const checkToken = require("../middlewares/middleware").checkToken;
-const checkPermissions = require("../middlewares/rbac_middleware")
-  .checkPermissions;
+const checkPermissions =
+  require("../middlewares/rbac_middleware").checkPermissions;
 const axios = require("axios");
 
-const fs = require('fs');
-const uniqid = require('uniqid');
+const fs = require("fs");
+const uniqid = require("uniqid");
 // const path = require('path');
 const blockchain_service_url = process.env.URL;
 const product_service_url = process.env.PRODUCT_URL;
@@ -29,7 +31,10 @@ const stream_name = process.env.STREAM;
 
 const init = require('../logging/init');
 const OrganisationModel = require('../models/OrganisationModel');
-const SalesDataModel = require("../models/SalesDataModel");
+const AnalyticsModel = require('../models/AnalyticsModel');
+const StateDistrictStaticDataModel = require("../models/StateDistrictStaticDataModel");
+const { request } = require("http");
+const { match } = require("assert");
 const logger = init.getLog();
 
 exports.getTotalCount = [
@@ -520,12 +525,8 @@ exports.updateInventories = [
     try {
       const { address } = req.user;
       const { data } = req.body;
-      const {
-        serialNumberRange,
-        manufacturingDate,
-        expiryDate,
-        productName,
-      } = data;
+      const { serialNumberRange, manufacturingDate, expiryDate, productName } =
+        data;
       const serialNumbers = serialNumberRange.split("-");
       const serialNumbersFrom = parseInt(serialNumbers[0].split(/(\d+)/)[1]);
       const serialNumbersTo = parseInt(serialNumbers[1].split(/(\d+)/)[1]);
@@ -662,10 +663,9 @@ exports.insertInventories = [
             recursiveFun();
           } else {
             logger.log(
-              'info',
-              `Insertion of inventories from mobile is completed. Time Taken to insert ${inventories.length
-              } in seconds - `,
-              (new Date() - start) / 1000,
+              "info",
+              `Insertion of inventories from mobile is completed. Time Taken to insert ${inventories.length} in seconds - `,
+              (new Date() - start) / 1000
             );
             const newNotification = new NotificationModel({
               owner: address,
@@ -740,6 +740,143 @@ exports.insertInventories = [
     }
   },
 ];
+
+exports.getAllStates = [
+  auth,
+  async (req, res) => {
+    try {
+      const allStates = await StateDistrictStaticDataModel.find().distinct(
+        "state"
+      );
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allStates
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getDistrictsByState = [
+  auth,
+  async (req, res) => {
+    try {
+      const _selectedState = req.query.state;
+      const allStates = await StateDistrictStaticDataModel.find({
+        state: _selectedState,
+      }).distinct("district");
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allStates
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getVendorsByDistrict = [
+  auth,
+  async (req, res) => {
+    try {
+      const _selectedDistrict = req.query.district;
+      const _vendorType = req.query.vendorType;
+      const allVendors = await OrganisationModel.find({
+        district: _selectedDistrict,
+        type: _vendorType,
+      });
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allVendors
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getAllSKUs = [
+  auth,
+  async (req, res) => {
+    try {
+      const allSKUs = await ProductModel.find({}, "-characteristicSet -image");
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allSKUs
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getOrganizationsByType = [
+  auth,
+  async (req, res) => {
+    try {
+      const filters = req.query;
+      let matchCondition = {};
+      if (
+        filters.orgType === "BREWERY" ||
+        filters.orgType === "S1" ||
+        filters.orgType === "S2"
+      ) {
+        matchCondition.type = filters.orgType;
+      } else if (filters.orgType === "ALL_VENDORS") {
+        matchCondition.$or = [{ type: "S1" }, { type: "S2" }];
+      }
+
+      const organisations = await OrganisationModel.aggregate([
+        {
+          $match: matchCondition,
+        },
+      ]);
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        organisations
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getOrganizationInfoByID = [
+  auth,
+  async (req, res) => {
+    try {
+      const orgId = req.query.orgId;
+      const organisation = await OrganisationModel.findOne({ id: orgId });
+      const warehouseIds = organisation.warehouses;
+      const stats = await AnalyticsModel.find({
+        warehouseId: { $in: warehouseIds },
+      });
+      let totalStock = 0;
+      stats.forEach((stat) => {
+        totalStock = totalStock + parseInt(stat.returns);
+      });
+
+      let responseObj = {
+        organisation,
+        totalStock,
+      };
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        responseObj
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
 exports.addProductsToInventory = [
   auth,
   body("products")
@@ -774,75 +911,102 @@ exports.addProductsToInventory = [
           const { products } = req.body;
           const { id } = req.user;
           const employee = await EmployeeModel.findOne({ id });
-          const warehouseId = employee.warehouseId;
+          var warehouseId = "";
+          if ( !req.query.warehouseId)
+          warehouseId  = employee.warehouseId[0];
+          else
+          warehouseId  = req.query.warehouseId;
           const warehouse = await WarehouseModel.findOne({ id: warehouseId });
+
           if (!warehouse) {
             return apiResponse.ErrorResponse(
               res,
               "Employee not assigned to any organisation"
             );
           }
-          let serialNumbersRange = true;
-          let alpha = [...Array(26)]
-            .map((_, y) => String.fromCharCode(y + 65))
-            .join("");
-          for (let i = 0; i < products.length; i++) {
-            if (products[i].serialNumbersRange.split("-").length < 2) {
-              let snoref = Date.now();
-              let rApha = "";
-              for (let i = 0; i < 4; i++)
-                rApha += alpha.charAt(Math.floor(Math.random() * alpha.length));
+          //   let serialNumbersRange = true;
+          //   let alpha = [...Array(26)].map((_, y) => String.fromCharCode(y + 65)).join('');
+          //   for (let i = 0; i < products.length; i++) {
+          //     if (products[i].serialNumbersRange.split('-').length < 2) {
+          //       let snoref = Date.now();
+          //       let rApha = '';
+          //       for (let i = 0; i < 4; i++)
+          //         rApha += alpha.charAt(Math.floor(Math.random() * alpha.length));
 
-              products[i].serialNumbersRange =
-                "DSL" + rApha + (parseInt(snoref) - parseInt(products[i].quantity - 1)) +
-                "-DSL" + rApha + snoref;
-              // serialNumbersRange = false;
-              // break;
-            }
-          }
-          if (!serialNumbersRange) {
-            return apiResponse.ErrorResponse(
-              res,
-              `Product doesn't conatin valid serial numbers range`,
-            );
-          }
+          //      products[i].serialNumbersRange =
+          //        "DSL" + rApha + (parseInt(snoref) - parseInt(products[i].quantity - 1)) +
+          //        "-DSL" + rApha + snoref;
+          //       // serialNumbersRange = false;
+          //       // break;
+          //     }
+          //   }
+          //  if(!serialNumbersRange) {
+          //    return apiResponse.ErrorResponse(
+          //      res,
+          //      `Product doesn't conatin valid serial numbers range`,
+          //    );
+          //  }
           const inventory = await InventoryModel.findOne({
             id: warehouse.warehouseInventory,
           });
-          if (!inventory) return apiResponse.ErrorResponse(res, 'Cannot find inventory to this employee warehouse');
+          if (!inventory)
+            return apiResponse.ErrorResponse(
+              res,
+              "Cannot find inventory to this employee warehouse"
+            );
           let atoms = [];
           products.forEach((product) => {
-            const serialNumbers = product.serialNumbersRange.split("-");
-            const serialNumbersFrom = parseInt(
-              serialNumbers[0].split(/(\d+)/)[1]
-            );
-            const serialNumbersTo = parseInt(
-              serialNumbers[1].split(/(\d+)/)[1]
-            );
-            const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
-            for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
-              const atom = `${serialNumberText + uniqid.time()}${i}`
-
-              atoms.push(atom);
+            const serialNumbers = product.serialNumbersRange?.split("-");
+            if (serialNumbers?.length > 1) {
+              const serialNumbersFrom = parseInt(
+                serialNumbers[0].split(/(\d+)/)[1]
+              );
+              const serialNumbersTo = parseInt(
+                serialNumbers[1].split(/(\d+)/)[1]
+              );
+              const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
+              for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
+                const atom = `${serialNumberText}${i}`;
+                atoms.push(atom);
+              }
             }
-          })
-          const dupSerialFound = await AtomModel.findOne({ id: { $in: atoms } });
-          if (dupSerialFound) return apiResponse.ErrorResponse(res, 'Duplicate Serial Numbers found');
-
-
-          //This code handles the insertion of duplicate products and aggregates the counts
-          await utility.asyncForEach(products, async product => {
+          });
+          const dupSerialFound = await AtomModel.findOne({
+            id: { $in: atoms },
+          });
+          if (dupSerialFound)
+            return apiResponse.ErrorResponse(
+              res,
+              "Duplicate Serial Numbers found"
+            );
+          await utility.asyncForEach(products, async (product) => {
             const inventoryId = warehouse.warehouseInventory;
-            const checkProduct = await InventoryModel.find({ "$and": [{ "id": inventoryId }, { "inventoryDetails.productId": product.productId }] })
+            const checkProduct = await InventoryModel.find({
+              $and: [
+                { id: inventoryId },
+                { "inventoryDetails.productId": product.productId },
+              ],
+            });
             if (checkProduct != "") {
-              const exist_quantity = await InventoryModel.find({ "id": inventoryId }, { "inventoryDetails": { "$elemMatch": { "productId": product.productId } } })
-              const new_quantity = exist_quantity[0].inventoryDetails[0].quantity + product.quantity;
+              const exist_quantity = await InventoryModel.find(
+                { id: inventoryId },
+                {
+                  inventoryDetails: {
+                    $elemMatch: { productId: product.productId },
+                  },
+                }
+              );
+              const new_quantity =
+                exist_quantity[0].inventoryDetails[0].quantity +
+                product.quantity;
 
-              const update = await InventoryModel.updateOne({ "id": inventoryId, "inventoryDetails.productId": product.productId },
-                { "$set": { "inventoryDetails.$.quantity": new_quantity } }
-              )
-
-
+              const update = await InventoryModel.updateOne(
+                {
+                  id: inventoryId,
+                  "inventoryDetails.productId": product.productId,
+                },
+                { $set: { "inventoryDetails.$.quantity": new_quantity } }
+              );
             } else {
               inventory.inventoryDetails.push({
                 productId: product.productId,
@@ -850,53 +1014,54 @@ exports.addProductsToInventory = [
               });
             }
 
+            const serialNumbers = product.serialNumbersRange?.split("-");
+            let atomsArray = [];
+            if (serialNumbers?.length > 1) {
+              const serialNumbersFrom = parseInt(
+                serialNumbers[0].split(/(\d+)/)[1]
+              );
+              const serialNumbersTo = parseInt(
+                serialNumbers[1].split(/(\d+)/)[1]
+              );
 
-
-            const serialNumbers = product.serialNumbersRange.split("-");
-            const serialNumbersFrom = parseInt(
-              serialNumbers[0].split(/(\d+)/)[1]
-            );
-            const serialNumbersTo = parseInt(
-              serialNumbers[1].split(/(\d+)/)[1]
-            );
-
-            const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
-            let atoms = [];
-
-            for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
-              const atom = {
-                id: `${serialNumberText + uniqid.time()}${i}`,
-                label: {
-                  labelId: "",
-                  labelType: "",
-                },
-                productId: product.productId,
-                inventoryIds: [inventory.id],
-                lastInventoryId: "",
-                lastShipmentId: "",
-                poIds: [],
-                shipmentIds: [],
-                txIds: [],
-                batchNumbers: [product.batchNumber],
-                atomStatus: "Healthy",
-                attributeSet: {
-                  mfgDate: product.mfgDate,
-                  expDate: product.expDate,
-                },
-                eolInfo: {
-                  eolId: "IDN29402-23423-23423",
-                  eolDate: "2021-03-31T18:30:00.000Z",
-                  eolBy: id,
-                  eolUserInfo: "",
-                },
-              };
-              atoms.push(atom);
+              const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
+              //let atoms = [];
+              for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
+                const atom = {
+                  // id: `${serialNumberText + uniqid.time()}${i}`,
+                  id: `${serialNumberText}${i}`,
+                  label: {
+                    labelId: product?.label?.labelId,
+                    labelType: product?.label?.labelType,
+                  },
+                  productId: product.productId,
+                  inventoryIds: [inventory.id],
+                  lastInventoryId: "",
+                  lastShipmentId: "",
+                  poIds: [],
+                  shipmentIds: [],
+                  txIds: [],
+                  batchNumbers: [product.batchNumber],
+                  atomStatus: "Healthy",
+                  attributeSet: {
+                    mfgDate: product.mfgDate,
+                    expDate: product.expDate,
+                  },
+                  eolInfo: {
+                    eolId: "IDN29402-23423-23423",
+                    eolDate: "2021-03-31T18:30:00.000Z",
+                    eolBy: id,
+                    eolUserInfo: "",
+                  },
+                };
+                atomsArray.push(atom);
+              }
             }
             try {
-              await AtomModel.insertMany(atoms);
+              if (atomsArray.length > 0) await AtomModel.insertMany(atomsArray);
               await inventory.save();
             } catch (err) {
-              console.log('err', err);
+              console.log("err", err);
             }
             /*AtomModel.insertMany(atoms).then(async (res, err) =>  {
              if(err) {
@@ -906,7 +1071,6 @@ exports.addProductsToInventory = [
                await inventory.save();
              }
            });*/
-
           });
           var datee = new Date();
           datee = datee.toISOString();
@@ -985,7 +1149,7 @@ exports.addInventoriesFromExcel = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           permission_request = {
-            result: result,
+            role: req.user.role,
             permissionRequired: "addInventory",
           };
           checkPermissions(permission_request, async (permissionResult) => {
@@ -1008,31 +1172,30 @@ exports.addInventoriesFromExcel = [
               let limit = chunkSize;
               let skip = 0;
 
-              logger.log("info", "Inserting excel data in chunks");
               async function recursiveFun() {
                 skip = chunkSize * count;
                 count++;
                 limit = chunkSize * count;
-                logger.log("info", `skip ${skip}`);
-
-                logger.log("info", `limit ${limit}`);
                 const chunkedData = data.slice(skip, limit);
                 let chunkUrls = [];
                 const serialNumbers = chunkedData.map((inventory) => {
-                  return { serialNumber: inventory.serialNumber.trim() };
+                  return { id: inventory.serialNumber.trim() };
                 });
-                const inventoriesFound = await InventoryModel.findOne({
+                const inventoriesFound = await AtomModel.findOne({
                   $or: serialNumbers,
                 });
                 if (inventoriesFound) {
-                  console.log("Duplicate Inventory Found");
                   const newNotification = new NotificationModel({
                     owner: address,
-                    message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${inventoriesFound.serialNumber
-                      }`,
+                    message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${
+                      inventoriesFound.serialNumber
+                    }`,
                   });
                   await newNotification.save();
-                  return;
+                  return apiResponse.ErrorResponse(
+                    res,
+                    "Duplicate Inventory Found"
+                  );
                 }
                 chunkedData.forEach((inventory) => {
                   inventory.serialNumber = inventory.serialNumber.trim();
@@ -1055,40 +1218,27 @@ exports.addInventoriesFromExcel = [
                       const inventoryData = responses.map(
                         (response) => response.data
                       );
-                      logger.log(
-                        "info",
-                        `Inventory Data length' ${inventoryData.length}`
-                      );
-                      logger.log(
-                        "info",
-                        `Transaction Id,
-                        ${inventoryData[0].transactionId}`
-                      );
-                      InventoryModel.insertMany(inventoryData, (err, res) => {
-                        if (err) {
-                          logger.log("error", err.errmsg);
-                        } else
-                          logger.log(
-                            'info',
-                            'Number of documents inserted into mongo: ' +
-                            res.length,
-                          );
-                      });
+                      // console.log(inventoryData);
+
+                      // InventoryModel.insertMany(inventoryData, (err, res) => {
+                      //   if (err) {
+                      //     logger.log("error", err.errmsg);
+                      //   } else
+                      //     logger.log(
+                      //       'info',
+                      //       'Number of documents inserted into mongo: ' +
+                      //       res.length,
+                      //     );
+                      // });
 
                       if (limit < data.length) {
                         recursiveFun();
                       } else {
-                        logger.log(
-                          'info',
-                          `Insertion of excel sheet data is completed. Time Taken to insert ${data.length
-                          } in seconds - `,
-                          (new Date() - start) / 1000,
-                        );
-                        const newNotification = new NotificationModel({
-                          owner: address,
-                          message: `Your inventories from excel is added successfully on ${new Date().toLocaleString()}`,
-                        });
-                        await newNotification.save();
+                        // const newNotification = new NotificationModel({
+                        //   owner: address,
+                        //   message: `Your inventories from excel is added successfully on ${new Date().toLocaleString()}`,
+                        // });
+                        // await newNotification.save();
                       }
                     })
                   )
@@ -1137,6 +1287,13 @@ exports.addInventoriesFromExcel = [
               // }
 
               // compute(event_data).then((response) => console.log(response))
+
+              for (const [index, prod] of data.entries()) {
+                let product = await ProductModel.findOne({
+                  name: prod.productName,
+                });
+                data[index].productId = product.id;
+              }
 
               return apiResponse.successResponseWithData(res, "Success", data);
             } else {
@@ -1197,18 +1354,14 @@ exports.getInventoryDetails = [
   auth,
   async (req, res) => {
     try {
-      var selectedWarehouseId = '';
-      if (req.body.warehouseId !== null) {
-        selectedWarehouseId = req.body.warehouseId;
-      }
       const employee = await EmployeeModel.findOne({ id: req.user.id });
+      var warehouseId = "";
+      if ( !req.query.warehouseId)
+          warehouseId  = employee.warehouseId[0];
+      else
+          warehouseId  = req.query.warehouseId;
+      const warehouse = await WarehouseModel.findOne({ id: warehouseId })
 
-      var warehouse;
-      if (selectedWarehouseId == '' || selectedWarehouseId == null) {
-        warehouse = await WarehouseModel.findOne({ id: employee.warehouseId })
-      } else {
-        warehouse = await WarehouseModel.findOne({ id: selectedWarehouseId })
-      }
       if (warehouse) {
         const inventory = await InventoryModel.findOne({ id: warehouse.warehouseInventory });
         let inventoryDetails = []
@@ -1219,13 +1372,15 @@ exports.getInventoryDetails = [
           inventoryDetailClone['manufacturer'] = product.manufacturer;
           inventoryDetails.push(inventoryDetailClone);
         })
-
         return apiResponse.successResponseWithData(res, 'Inventory Details', inventoryDetails);
       } else {
-        return apiResponse.ErrorResponse(res, 'Cannot find warehouse for this employee')
+        return apiResponse.ErrorResponse(
+          res,
+          "Cannot find warehouse for this employee"
+        );
       }
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err)
+      return apiResponse.ErrorResponse(res, err);
     }
   },
 ];
@@ -1610,21 +1765,22 @@ exports.getProductListCounts = [
   async (req, res) => {
     try {
       const { warehouseId } = req.user;
-      const InventoryId = await WarehouseModel.find({ "id": warehouseId })
-      const val = InventoryId[0].warehouseInventory
-      const productList = await InventoryModel.find({ "id": val });
-      const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails))
+      const InventoryId = await WarehouseModel.find({ id: warehouseId });
+      const val = InventoryId[0].warehouseInventory;
+      const productList = await InventoryModel.find({ id: val });
+      const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails));
       var productArray = [];
       for (j = 0; j < list.length; j++) {
         var productId = list[j].productId;
-        const product = await ProductModel.find({ "id": productId })
-        var product1 = { productName: product[0].name, productId: product[0].id, quantity: list[j].quantity };
-        productArray.push(product1)
+        const product = await ProductModel.find({ id: productId });
+        var product1 = {
+          productName: product[0].name,
+          productId: product[0].id,
+          quantity: list[j].quantity,
+        };
+        productArray.push(product1);
       }
-      return apiResponse.successResponseWithData(
-        res,
-        productArray
-      );
+      return apiResponse.successResponseWithData(res, productArray);
     } catch (err) {
       logger.log(
         "error",
@@ -1640,29 +1796,37 @@ exports.getProductDetailsByWarehouseId = [
   async (req, res) => {
     try {
       const { warehouseId } = req.query;
-      const warehouseDetails = await WarehouseModel.findOne({ "id": warehouseId })
-      const val = warehouseDetails.warehouseInventory
-      const productList = await InventoryModel.find({ "id": val });
-      const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails))
+      const warehouseDetails = await WarehouseModel.findOne({
+        id: warehouseId,
+      });
+      const val = warehouseDetails.warehouseInventory;
+      const productList = await InventoryModel.find({ id: val });
+      const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails));
       var productArray = [];
       for (j = 0; j < list.length; j++) {
         var productId = list[j].productId;
-        const product = await ProductModel.find({ "id": productId })
-        var product1 = { productName: product[0].name, productId: product[0].id, manufacturer: product[0].manufacturer, quantity: list[j].quantity };
-        productArray.push(product1)
+        const product = await ProductModel.find({ id: productId });
+        var product1 = {
+          productName: product[0].name,
+          productId: product[0].id,
+          manufacturer: product[0].manufacturer,
+          quantity: list[j].quantity,
+        };
+        productArray.push(product1);
       }
       var warehouse = {
-        "warehouseCountryId": warehouseDetails.country.id, "warehouseCountryName": warehouseDetails.country.name, "warehouseId": warehouseDetails.id,
-        "warehouseName": warehouseDetails.title, "warehouseAddress": warehouseDetails.postalAddress, "warehouseLocation": warehouseDetails.location
-      }
+        warehouseCountryId: warehouseDetails.country.id,
+        warehouseCountryName: warehouseDetails.country.name,
+        warehouseId: warehouseDetails.id,
+        warehouseName: warehouseDetails.title,
+        warehouseAddress: warehouseDetails.postalAddress,
+        warehouseLocation: warehouseDetails.location,
+      };
 
-      return apiResponse.successResponseWithData(
-        res, "Fetch success",
-        {
-          warehouse,
-          productArray
-        }
-      );
+      return apiResponse.successResponseWithData(res, "Fetch success", {
+        warehouse,
+        productArray,
+      });
     } catch (err) {
       logger.log(
         "error",
@@ -1678,10 +1842,11 @@ exports.getEmployeeDetailsByWarehouseId = [
   async (req, res) => {
     try {
       const { warehouseId } = req.query;
-      const warehouseDetails = await WarehouseModel.find({ "id": warehouseId })
-      const employees = warehouseDetails[0].supervisors
+      const warehouseDetails = await WarehouseModel.find({ id: warehouseId });
+      const employees = warehouseDetails[0].supervisors;
       return apiResponse.successResponseWithData(
-        res, "Fetch success",
+        res,
+        "Fetch success",
         employees
       );
     } catch (err) {
@@ -1699,8 +1864,8 @@ exports.getCountryDetailsByRegion = [
   async (req, res) => {
     try {
       const { region } = req.query;
-      const regionDetails = await RegionModel.find({ "name": region })
-      console.log(regionDetails[0].country)
+      const regionDetails = await RegionModel.find({ name: region });
+      console.log(regionDetails[0].country);
       // var countryArray = [];
       /*for (j=0;j<regionDetails.length;j++)
                    {
@@ -1708,10 +1873,9 @@ exports.getCountryDetailsByRegion = [
                         countryArray.push(countryName)
                    } */
 
-      return apiResponse.successResponseWithData(
-        res, "Fetch success",
-        { "countries": regionDetails[0].country }
-      );
+      return apiResponse.successResponseWithData(res, "Fetch success", {
+        countries: regionDetails[0].country,
+      });
     } catch (err) {
       logger.log(
         "error",
@@ -1739,16 +1903,19 @@ exports.getWarehouseDetailsByRegion = [
   async (req, res) => {
     try {
       const { region } = req.query;
-      const warehouseDetails = await WarehouseModel.find({ "region.name": region })
+      const warehouseDetails = await WarehouseModel.find({
+        "region.name": region,
+      });
 
       var warehouseArray = [];
       for (j = 0; j < warehouseDetails.length; j++) {
         var warehouseId = warehouseDetails[j];
-        warehouseArray.push(warehouseId)
+        warehouseArray.push(warehouseId);
       }
 
       return apiResponse.successResponseWithData(
-        res, "Fetch success",
+        res,
+        "Fetch success",
         warehouseArray
       );
     } catch (err) {
@@ -1766,16 +1933,19 @@ exports.getWarehouseDetailsByCountry = [
   async (req, res) => {
     try {
       const { country } = req.query;
-      const warehouseDetails = await WarehouseModel.find({ "country.name": country })
+      const warehouseDetails = await WarehouseModel.find({
+        "country.name": country,
+      });
 
       var warehouseArray = [];
       for (j = 0; j < warehouseDetails.length; j++) {
         var warehouseId = warehouseDetails[j];
-        warehouseArray.push(warehouseId)
+        warehouseArray.push(warehouseId);
       }
 
       return apiResponse.successResponseWithData(
-        res, "Fetch success",
+        res,
+        "Fetch success",
         warehouseArray
       );
     } catch (err) {
@@ -1793,7 +1963,13 @@ exports.getInventory = [
   async (req, res) => {
     try {
       const { skip, limit } = req.query;
-      const { warehouseId } = req.user;
+      var warehouseId = "";
+
+      if ( !req.query.warehouseId)
+          warehouseId  = req.user.warehouseId;
+      else
+          warehouseId  = req.query.warehouseId;
+
       const warehouse = await WarehouseModel.findOne({ id: warehouseId })
       if (warehouse) {
         const inventory = await InventoryModel.aggregate([
@@ -1808,17 +1984,25 @@ exports.getInventory = [
             },
           },
           { $unwind: "$products" },
-        ]).sort({ createdAt: -1 })
+        ])
+          .sort({ createdAt: -1 })
           .skip(parseInt(skip))
           .limit(parseInt(limit));
-        return apiResponse.successResponseWithData(res, 'Inventory Details', inventory);
+        return apiResponse.successResponseWithData(
+          res,
+          "Inventory Details",
+          inventory
+        );
       } else {
-        return apiResponse.ErrorResponse(res, 'Cannot find warehouse for this employee')
+        return apiResponse.ErrorResponse(
+          res,
+          "Cannot find warehouse for this employee"
+        );
       }
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
     }
-  }
+  },
 ];
 
 // return the list of the organisations with the list of warehouses with their respective inventory counts
@@ -1826,22 +2010,22 @@ exports.getInventoryCountsOfThePlatform = [
   auth,
   async (req, res) => {
     try {
-      const platformInventoryCount = await InventoryModel.aggregate([{ $unwind: "$inventoryDetails" }, {
-        $group: {
-          _id: null,
-          "platformInventory": {
-            $sum: "$inventoryDetails.quantity"
-          }
-        }
-      }]);
-      return apiResponse.successResponseWithData(
-        res,
-        platformInventoryCount
-      );
+      const platformInventoryCount = await InventoryModel.aggregate([
+        { $unwind: "$inventoryDetails" },
+        {
+          $group: {
+            _id: null,
+            platformInventory: {
+              $sum: "$inventoryDetails.quantity",
+            },
+          },
+        },
+      ]);
+      return apiResponse.successResponseWithData(res, platformInventoryCount);
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< InventoryService < InventoryController < getInventoryCountsOfThePlatform : error (catch block)',
+        "error",
+        "<<<<< InventoryService < InventoryController < getInventoryCountsOfThePlatform : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -1854,64 +2038,73 @@ exports.getInventoryCountsByOrganisation = [
   async (req, res) => {
     try {
       const organisationId = req.query.organisationId;
-      const orgDocument = await OrganisationModel.findOne({ id: organisationId });
+      const orgDocument = await OrganisationModel.findOne({
+        id: organisationId,
+      });
       let orgInventoryCount = 0;
       if (orgDocument.warehouses && orgDocument.warehouses.length) {
-        await utility.asyncForEach(orgDocument.warehouses, async warehouse => {
-          let warehouseInventoryCount = await WarehouseModel.aggregate([
-            {
-              $match: {
-                'id': warehouse
-              }
-            },
-            {
-
-              $lookup: {
-                from: 'inventories',
-                localField: 'warehouseInventory',
-                foreignField: 'id',
-                as: 'inventory'
-              }
-            },
-            {
-              $unwind: {
-                path: '$inventory',
-              }
-            },
-            {
-              $project: {
-                id: 1,
-                title: 1,
-                inventoryDetails: '$inventory.inventoryDetails',
-              }
-            },
-            {
-              $unwind: {
-                path: '$inventoryDetails',
-              }
-            },
-            {
-              $group: {
-                _id: null,
-                warehouseInventory: {
-                  $sum: "$inventoryDetails.quantity"
-                }
-              }
+        await utility.asyncForEach(
+          orgDocument.warehouses,
+          async (warehouse) => {
+            let warehouseInventoryCount = await WarehouseModel.aggregate([
+              {
+                $match: {
+                  id: warehouse,
+                },
+              },
+              {
+                $lookup: {
+                  from: "inventories",
+                  localField: "warehouseInventory",
+                  foreignField: "id",
+                  as: "inventory",
+                },
+              },
+              {
+                $unwind: {
+                  path: "$inventory",
+                },
+              },
+              {
+                $project: {
+                  id: 1,
+                  title: 1,
+                  inventoryDetails: "$inventory.inventoryDetails",
+                },
+              },
+              {
+                $unwind: {
+                  path: "$inventoryDetails",
+                },
+              },
+              {
+                $group: {
+                  _id: null,
+                  warehouseInventory: {
+                    $sum: "$inventoryDetails.quantity",
+                  },
+                },
+              },
+            ]);
+            if (
+              warehouseInventoryCount &&
+              warehouseInventoryCount[0] &&
+              warehouseInventoryCount[0].warehouseInventory
+            ) {
+              orgInventoryCount =
+                orgInventoryCount +
+                warehouseInventoryCount[0].warehouseInventory;
             }
-          ]);
-          if (warehouseInventoryCount && warehouseInventoryCount[0] && warehouseInventoryCount[0].warehouseInventory) {
-            orgInventoryCount = orgInventoryCount + warehouseInventoryCount[0].warehouseInventory;
           }
-        });
+        );
       }
-      return apiResponse.successResponseWithData(
-        res,
-        { orgInventoryCount: orgInventoryCount }
-      );
+      return apiResponse.successResponseWithData(res, {
+        orgInventoryCount: orgInventoryCount,
+      });
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< InventoryService < InventoryController < getInventoryCountsByOrganisation : error (catch block)',
+        "error",
+        "<<<<< InventoryService < InventoryController < getInventoryCountsByOrganisation : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -1922,126 +2115,230 @@ exports.getInventoryCountsByWarehouse = [
   auth,
   async (req, res) => {
     try {
-      const warehouseId = req.query.warehouseId;
+      let response = {};
+      let warehouseId = req.query.warehouseId;
       const warehouseInventoryCount = await WarehouseModel.aggregate([
         {
           $match: {
-            'id': warehouseId
-          }
-        }, {
+            id: warehouseId,
+          },
+        },
+        {
           $lookup: {
-            from: 'inventories',
-            localField: 'warehouseInventory',
-            foreignField: 'id',
-            as: 'inventory'
-          }
-        }, {
+            from: "inventories",
+            localField: "warehouseInventory",
+            foreignField: "id",
+            as: "inventory",
+          },
+        },
+        {
           $unwind: {
-            path: '$inventory',
-          }
-        }, {
+            path: "$inventory",
+          },
+        },
+        {
           $project: {
             id: 1,
             title: 1,
-            inventoryDetails: '$inventory.inventoryDetails',
-          }
-        }, {
+            inventoryDetails: "$inventory.inventoryDetails",
+          },
+        },
+        {
           $unwind: {
-            path: '$inventoryDetails',
-          }
-        }, {
+            path: "$inventoryDetails",
+          },
+        },
+        {
           $group: {
             _id: null,
-            warehouseInventory: {
-              $sum: "$inventoryDetails.quantity"
-            }
-          }
-        }
+            count: {
+              $sum: "$inventoryDetails.quantity",
+            },
+          },
+        },
       ]);
-      return apiResponse.successResponseWithData(
-        res,
-        warehouseInventoryCount
-      );
+      const warehouseSentCount = await ShipmentModel.aggregate([
+        {
+          $match: {
+            $and: [
+              { status: "RECEIVED" },
+              { "supplier.locationId": warehouseId },
+            ],
+          },
+        },
+        {
+          $unwind: "$products",
+        },
+
+        {
+          $group: {
+            _id: "abc",
+            count: {
+              $sum: "$products.productQuantity",
+            },
+          },
+        },
+      ]);
+      const warehouseReceivedCount = await ShipmentModel.aggregate([
+        {
+          $match: {
+            $and: [
+              { status: "RECEIVED" },
+              { "receiver.locationId": warehouseId },
+            ],
+          },
+        },
+        {
+          $unwind: "$products",
+        },
+
+        {
+          $group: {
+            _id: "abc",
+            count: {
+              $sum: "$products.productQuantity",
+            },
+          },
+        },
+      ]);
+      const warehouseTransitCount1 = await ShipmentModel.aggregate([
+        {
+          $match: {
+            $and: [
+              { status: "CREATED" },
+              { "supplier.locationId": warehouseId },
+            ],
+          },
+        },
+        {
+          $unwind: "$products",
+        },
+
+        {
+          $group: {
+            _id: "abc",
+            count: {
+              $sum: "$products.productQuantity",
+            },
+          },
+        },
+      ]);
+      const warehouseTransitCount2 = await ShipmentModel.aggregate([
+        {
+          $match: {
+            $and: [
+              { status: "CREATED" },
+              { "receiver.locationId": warehouseId },
+            ],
+          },
+        },
+        {
+          $unwind: "$products",
+        },
+
+        {
+          $group: {
+            _id: "abc",
+            count: {
+              $sum: "$products.productQuantity",
+            },
+          },
+        },
+      ]);
+      response = {
+        total: warehouseInventoryCount.length
+          ? warehouseInventoryCount[0].count
+          : 0,
+        received: warehouseReceivedCount.length
+          ? warehouseReceivedCount[0].count
+          : 0,
+        sent: warehouseSentCount.length ? warehouseSentCount[0].count : 0,
+        transit:
+          (warehouseTransitCount1.length
+            ? warehouseTransitCount1[0].count
+            : 0) +
+          (warehouseTransitCount2.length ? warehouseTransitCount2[0].count : 0),
+      };
+      return apiResponse.successResponseWithData(res, "counts are:", response);
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< InventoryService < InventoryController < getInventoryCountsByWarehouse : error (catch block)',
+        "error",
+        "<<<<< InventoryService < InventoryController < getInventoryCountsByWarehouse : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
   },
-
 ];
 
 async function getInventoryProductsByWarehouseID(warehouseId) {
   const inventoryProductsByWarehouse = await WarehouseModel.aggregate([
     {
       $match: {
-        'id': warehouseId
-      }
+        id: warehouseId,
+      },
     },
     {
       $lookup: {
-        from: 'inventories',
-        localField: 'warehouseInventory',
-        foreignField: 'id',
-        as: 'inventory'
-      }
+        from: "inventories",
+        localField: "warehouseInventory",
+        foreignField: "id",
+        as: "inventory",
+      },
     },
     {
       $unwind: {
-        path: '$inventory',
-      }
+        path: "$inventory",
+      },
     },
     {
       $project: {
         id: 1,
         title: 1,
-        inventoryDetails: '$inventory.inventoryDetails',
-      }
+        inventoryDetails: "$inventory.inventoryDetails",
+      },
     },
     {
       $unwind: {
-        path: '$inventoryDetails',
-      }
+        path: "$inventoryDetails",
+      },
     },
     {
       $lookup: {
-        from: 'products',
-        localField: 'inventoryDetails.productId',
-        foreignField: 'id',
-        as: 'productDetails'
-      }
+        from: "products",
+        localField: "inventoryDetails.productId",
+        foreignField: "id",
+        as: "productDetails",
+      },
     },
     {
       $unwind: {
-        path: '$productDetails'
-      }
+        path: "$productDetails",
+      },
     },
     {
       $replaceRoot: {
         newRoot: {
-          $mergeObjects: ['$productDetails', '$inventoryDetails', '$$ROOT']
-        }
-      }
+          $mergeObjects: ["$productDetails", "$inventoryDetails", "$$ROOT"],
+        },
+      },
     },
     {
       $project: {
         inventoryDetails: 0,
-        productDetails: 0
-      }
+        productDetails: 0,
+      },
     },
     {
       $group: {
-        _id: '$id',
+        _id: "$id",
         products: {
-          $addToSet: "$$ROOT"
-        }
-      }
-    }
+          $addToSet: "$$ROOT",
+        },
+      },
+    },
   ]);
   return inventoryProductsByWarehouse;
-};
+}
 
 // Total quantity as per the products for the warhouse
 exports.getInventoryProductsByWarehouse = [
@@ -2049,15 +2346,16 @@ exports.getInventoryProductsByWarehouse = [
   async (req, res) => {
     try {
       const warehouseId = req.query.warehouseId;
-      const warehouseInventoryPerProduct = await getInventoryProductsByWarehouseID(warehouseId);
+      const warehouseInventoryPerProduct =
+        await getInventoryProductsByWarehouseID(warehouseId);
       return apiResponse.successResponseWithData(
         res,
         warehouseInventoryPerProduct
       );
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< InventoryService < InventoryController < getInventoryProductsByWarehouse : error (catch block)',
+        "error",
+        "<<<<< InventoryService < InventoryController < getInventoryProductsByWarehouse : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -2070,96 +2368,183 @@ exports.getInventoryProductsByOrganisation = [
   async (req, res) => {
     try {
       const organisationId = req.query.organisationId;
-      const orgDocument = await OrganisationModel.findOne({ id: organisationId });
+      const orgDocument = await OrganisationModel.findOne({
+        id: organisationId,
+      });
       let orgInventoryPerProduct = [];
       if (orgDocument.warehouses && orgDocument.warehouses.length) {
-        await utility.asyncForEach(orgDocument.warehouses, async warehouse => {
-          const _orgInventoryPerProduct = await getInventoryProductsByWarehouseID(warehouse);
-          if (_orgInventoryPerProduct && _orgInventoryPerProduct.length) {
-            orgInventoryPerProduct.push(_orgInventoryPerProduct[0]);
+        await utility.asyncForEach(
+          orgDocument.warehouses,
+          async (warehouse) => {
+            const _orgInventoryPerProduct =
+              await getInventoryProductsByWarehouseID(warehouse);
+            if (_orgInventoryPerProduct && _orgInventoryPerProduct.length) {
+              orgInventoryPerProduct.push(_orgInventoryPerProduct[0]);
+            }
           }
-        });
+        );
       }
-      return apiResponse.successResponseWithData(
-        res,
-        orgInventoryPerProduct
-      );
+      return apiResponse.successResponseWithData(res, orgInventoryPerProduct);
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< InventoryService < InventoryController < getInventoryProductsByWarehouse : error (catch block)',
+        "error",
+        "<<<<< InventoryService < InventoryController < getInventoryProductsByWarehouse : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
   },
 ];
 
+function getFilterConditions(filters) {
+  let matchCondition = {};
+  if (filters.orgType && filters.orgType !== "") {
+    if (
+      filters.orgType === "BREWERY" ||
+      filters.orgType === "S1" ||
+      filters.orgType === "S2"
+    ) {
+      matchCondition.type = filters.orgType;
+    } else if (filters.orgType === "ALL_VENDORS") {
+      matchCondition.$or = [{ type: "S1" }, { type: "S2" }];
+    }
+  }
+  if (filters.state && filters.state.length) {
+    matchCondition.state = filters.state;
+  }
+  if (filters.district && filters.district.length) {
+    matchCondition.district = filters.district;
+  }
+  if (filters.organization && filters.organization.length) {
+    matchCondition.id = filters.organization;
+  }
+  return matchCondition;
+}
+
 // total quantity as per the products for the ecosystem
 exports.getInventoryProductsByPlatform = [
-  auth,
+  // auth,
   async (req, res) => {
     try {
-      const allProductsInPlatform = await InventoryModel.aggregate([
+      const filters = req.query;
+      const skuFilter = {};
+      if (filters.sku && filters.sku.length) {
+        skuFilter.id = filters.sku;
+      }
+      const platformInventory = await OrganisationModel.aggregate([
         {
-          $unwind: {
-            path: '$inventoryDetails'
-          }
+          $match: getFilterConditions(filters),
         },
         {
-          $replaceRoot: {
-            newRoot: {
-              $mergeObjects: ['$productDetails', '$inventoryDetails', '$$ROOT']
-            }
-          }
+          $unwind: {
+            path: "$warehouses",
+          },
         },
         {
           $project: {
-            inventoryDetails: 0
-          }
-        },
-        {
-          $group: {
-            _id: '$productId',
-            quantity: {
-              $sum: '$quantity'
-            }
-          }
+            warehouses: 1,
+          },
         },
         {
           $lookup: {
-            from: 'products',
-            localField: '_id',
-            foreignField: 'id',
-            as: 'productDetails'
-          }
+            from: "warehouses",
+            localField: "warehouses",
+            foreignField: "id",
+            as: "warehouseinv",
+          },
         },
         {
           $unwind: {
-            path: '$productDetails'
-          }
+            path: "$warehouseinv",
+          },
         },
         {
           $replaceRoot: {
             newRoot: {
-              $mergeObjects: ['$productDetails', '$$ROOT']
-            }
-          }
+              $mergeObjects: ["$warehouseinv", "$$ROOT"],
+            },
+          },
         },
         {
           $project: {
-            productDetails: 0
-          }
-        }
+            id: 1,
+            title: 1,
+            warehouseInventory: 1,
+          },
+        },
+        {
+          $lookup: {
+            from: "inventories",
+            localField: "warehouseInventory",
+            foreignField: "id",
+            as: "inv",
+          },
+        },
+        {
+          $unwind: {
+            path: "$inv",
+          },
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: ["$inv", "$$ROOT"],
+            },
+          },
+        },
+        {
+          $unwind: {
+            path: "$inventoryDetails",
+          },
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: ["$inventoryDetails", "$$ROOT"],
+            },
+          },
+        },
+        {
+          $group: {
+            _id: "$productId",
+            quantity: {
+              $sum: "$quantity",
+            },
+          },
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "_id",
+            foreignField: "id",
+            as: "productDetails",
+          },
+        },
+        {
+          $unwind: {
+            path: "$productDetails",
+          },
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: ["$productDetails", "$$ROOT"],
+            },
+          },
+        },
+        {
+          $project: {
+            productDetails: 0,
+          },
+        },
+        {
+          $match: skuFilter,
+        },
       ]);
-
-      return apiResponse.successResponseWithData(
-        res,
-        allProductsInPlatform
-      );
+      return apiResponse.successResponseWithData(res, platformInventory);
     } catch (err) {
       logger.log(
-        'error',
-        '<<<<< InventoryService < InventoryController < getInventoryProductsByWarehouse : error (catch block)',
+        "error",
+        "<<<<< InventoryService < InventoryController < getInventoryProductsByWarehouse : error (catch block)"
       );
       return apiResponse.ErrorResponse(res, err);
     }
@@ -2167,10 +2552,10 @@ exports.getInventoryProductsByPlatform = [
 ];
 
 function _spreadHeaders(inputObj) {
-  let prevHeaderVal = '';
+  let prevHeaderVal = "";
   let keys = Object.keys(inputObj);
-  keys.forEach(key => {
-    if (key.startsWith('__') || key.startsWith('t')) {
+  keys.forEach((key) => {
+    if (key.startsWith("__") || key.startsWith("t")) {
       return;
     }
     if (inputObj[key].length) {
@@ -2178,10 +2563,8 @@ function _spreadHeaders(inputObj) {
     } else {
       inputObj[key] = prevHeaderVal;
     }
-
   });
   return inputObj;
-
 }
 
 exports.uploadSalesData = [
@@ -2198,72 +2581,61 @@ exports.uploadSalesData = [
       const workbook = XLSX.readFile(`${dir}/${req.file.originalname}`);
       const sheet_name_list = workbook.SheetNames;
       const sheetJSON = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]], { defval: "" });
-      let rows = [];
-      let aggregationRows = [];
+
       let headerRow1 = _spreadHeaders(sheetJSON[0]);
       let headerRow2 = _spreadHeaders(sheetJSON[1]);
       let headerRow3 = _spreadHeaders(sheetJSON[2]);
+      let headerRow4 = sheetJSON[3];
 
       const spuriousColumns = ['__EMPTY', '__EMPTY_1', '__EMPTY_2', '__EMPTY_3', '__EMPTY_4', '__EMPTY_5', '__EMPTY_6'];
+
+      let parsedRows = [];
+
       sheetJSON.forEach((row, index) => {
-        let _row = {};
         if (index > 2 && row['__EMPTY_1'].length) {
-          let products = [];
           let rowKeys = Object.keys(row);
-          rowKeys = rowKeys.filter(e => spuriousColumns.indexOf(e) === -1);
-          rowKeys.forEach(rowKey => {
+          rowKeys = rowKeys.filter((e) => spuriousColumns.indexOf(e) === -1);
+          rowKeys.forEach((rowKey) => {
             let prod = {};
             if (!rowKey.startsWith('__') && !rowKey.startsWith('t') && rowKey !== 'target') {
               prod['productName'] = headerRow2[rowKey];
               prod['productSubName'] = headerRow3[rowKey];
+              prod['productId'] = headerRow4[rowKey];
               prod['depot'] = row['__EMPTY_1'];
               prod['sales'] = row[rowKey];
               prod['targetSales'] = row['t' + rowKey];
+              prod['uploadDate'] = collectedDate;
+              let depot = warehouseDistrictMapping.find(w => w.depot === row['__EMPTY_1']);
+              prod['warehouseId'] = (depot && depot.warehouseId) ? depot.warehouseId : '';
             }
             if (Object.keys(prod).length) {
-              products.push(prod);
+              parsedRows.push(prod);
             }
           });
-          if (products.length) {
-            _row.products = products;
-            _row.depot = row['__EMPTY_1'];
-            rows.push(_row);
-          }
         } else if (index > 2 && !row['__EMPTY_1'].length && row['__EMPTY'].length) {
-          let products = [];
           let rowKeys = Object.keys(row);
-          rowKeys = rowKeys.filter(e => spuriousColumns.indexOf(e) === -1);
-          rowKeys.forEach(rowKey => {
+          rowKeys = rowKeys.filter((e) => spuriousColumns.indexOf(e) === -1);
+          rowKeys.forEach((rowKey) => {
             let prod = {};
             if (!rowKey.startsWith('__') && !rowKey.startsWith('t') && rowKey !== 'target') {
               prod['productName'] = headerRow2[rowKey];
               prod['productSubName'] = headerRow3[rowKey];
+              prod['productId'] = headerRow4[rowKey];
               prod['isDistrictAggregate'] = true;
               prod['districtName'] = row['__EMPTY'];
               prod['sales'] = row[rowKey];
               prod['targetSales'] = row['t' + rowKey];
+              prod['uploadDate'] = collectedDate;
             }
             if (Object.keys(prod).length) {
-              products.push(prod);
+              parsedRows.push(prod);
             }
           });
-          if (products.length) {
-            _row.products = products;
-            _row.districtName = row['__EMPTY'];
-            aggregationRows.push(_row);
-          }
         }
       });
 
-      let respObj = { depots: rows, districtAggregations: aggregationRows };
+      let respObj = await AnalyticsModel.insertMany(parsedRows);
 
-      const salesData = new SalesDataModel({
-        uploadedFileName: uploadedFileName,
-        dataCollectedDate: collectedDate,
-        depots: rows,
-        districtAggregations: aggregationRows
-      });
-      const responseObj = await salesData.save();
       return apiResponse.successResponseWithData(
         res,
         responseObj

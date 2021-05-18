@@ -11,6 +11,15 @@ export const updateProfile = async (data) => {
   }
 };
 
+export const addWarehouse = async (data) => {
+  try {
+    const result = await axios.post(config().addWarehouse, data);
+    return result;
+  }catch(e){
+    return e.response;
+  }
+};
+
 export const verifyOtp = async (data) => {
   try  {
     const result = await  axios.post(config().verifyOtpUrl, data);

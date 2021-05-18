@@ -3,7 +3,7 @@
 #Chekcing arguments
 if [ $# -eq 0 ];
   then
-    echo "Please choose the mode: PROD TEST LOCAL ABINBEVPROD ABINBEVTEST FOODLEDGERTEST"
+    echo "Please choose the mode: PROD TEST LOCAL ABINBEVPROD ABINBEVTEST FOODLEDGERTEST UNICEFTEST DEMO"
     echo "Followed by the sercices: FRONTEND GATEWAY SERVICESI SERVICESII ALL"
     echo "SERVICESI - shipping_service	 inventory_service	track_trace		user_service products_service"
     echo "SERVICESII - blockchain_service	log_service alert_service notification_service rbac_service"
@@ -16,10 +16,12 @@ fi
 
 #Creating env variables
 echo "Creating Env variables .... "
+./pre-deploy.sh $1
 
+: <<'END'
 if [ "$1" == "PROD" ] && ([ "$2" == "SERVICESI" ] || [ "$2" == "SERVICESII" ]);
    then
-      ./pre-deploy-prod.sh
+      ./pre-deploy.sh
 
 elif [ "$1" == "TEST" ];
    then 
@@ -45,10 +47,16 @@ elif [ "$1" == "FOODLEDGERTEST" ];
    then
       ./pre-deploy-foodledger-test.sh
 
+elif [ "$1" == "UNICEFTEST" ];
+   then
+      ./pre-deploy-unicef-test.sh
+
 else
    ./pre-deploy.sh
 
 fi
+
+END
 
 # Installing the dependency in utils
 
@@ -77,7 +85,7 @@ elif [ "$1" == "PROD" ] && [ "$2" == "SERVICESII" ]
 
 fi
 
-if ([ "$1" == "PROD" ] || [ "$1" == "TEST" ] || [ "$1" == "DEMO" ] || [ "$1" == "ABINBEVPROD" ] || [ "$1" == "ABINBEVTEST" ] || [ "$1" == "FOODLEDGERTEST" ]) && ([ "$2" == "SERVICESI" ] || [ "$2" == "SERVICESII" ] || [ "$2" == "ALL" ]);
+if ([ "$1" == "PROD" ] || [ "$1" == "TEST" ] || [ "$1" == "DEMO" ] || [ "$1" == "ABINBEVPROD" ] || [ "$1" == "ABINBEVTEST" ] || [ "$1" == "FOODLEDGERTEST" ] || [ "$1" == "UNICEFTEST" ]) && ([ "$2" == "SERVICESI" ] || [ "$2" == "SERVICESII" ] || [ "$2" == "ALL" ]);
    then
       cd -P .
       for dir in ./*/
@@ -173,6 +181,11 @@ if ([ "$2" == "GATEWAY" ] || [ "$2" == "ALL" ]);
          then
             echo "Starting Traefik in FoodLedger Test mode ...."
             traefik --configFile=traefik-cloud-foodledger-api-test.yml &
+
+      elif [ "$1" == "UNICEFTEST" ]
+         then
+            echo "Starting Traefik in UNICEF Test mode ...."
+            traefik --configFile=traefik-cloud-unicef-api-test.yml &
       
       fi
 

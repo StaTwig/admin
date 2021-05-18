@@ -585,7 +585,7 @@ exports.createOrder = [
       purchaseOrder.poUpdates = updates;
 
       const result = await purchaseOrder.save();
-      return apiResponse.successResponseWithData(res, 'Created order');
+      return apiResponse.successResponseWithData(res, 'Created order',{"poId":poId});
     } catch (err) {
       logger.log(
           'error',
@@ -618,3 +618,336 @@ exports.getOrderIds = [
     }
   },
 ];
+
+exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, productName, deliveryLocation, date)
+  auth,
+  async (req, res) => {
+    try {
+      checkToken(req, res, async result => {
+        if (result.success) {
+          logger.log(
+            'info',
+            '<<<<< POService < POController < fetchInboundPurchaseOrders : token verified successfully',
+          );
+          const permission_request = {
+            result: result,
+            permissionRequired: 'viewPO',
+          };
+          checkPermissions(permission_request, async permissionResult => {
+            if (permissionResult.success) {
+              const { organisationId, role } = req.user;
+              const { skip, limit } = req.query;
+              let currentDate = new Date();
+              let fromDateFilter = 0;
+              let fromCustomer = req.query.from ? req.query.from : undefined;
+              let productName = req.query.productName ? req.query.productName : undefined;
+              let deliveryLocation = req.query.deliveryLocation ? req.query.deliveryLocation : undefined;
+              let orderId = req.query.orderId ? req.query.orderId : undefined;
+              switch (req.query.dateFilter) {
+                case "today":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+                  break;
+                case "week":
+                  fromDateFilter = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay())).toUTCString();
+                  break;
+                case "month":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
+                  break;
+                case "threeMonth":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, currentDate.getDate());
+                  break;
+                case "sixMonth":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 6, currentDate.getDate());
+                  break;
+                case "year":
+                  fromDateFilter = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate());
+                  break;
+                default:
+                  fromDateFilter = 0;
+              }
+
+              let whereQuery = {};
+              if (orderId) {
+                whereQuery['id'] = orderId;
+              }
+
+              if (fromDateFilter) {
+                whereQuery['createdAt'] = { $gte: fromDateFilter }
+              }
+
+              if (organisationId) {
+                whereQuery["supplier.supplierOrganisation"] = organisationId
+              }
+
+              if (deliveryLocation) {
+                whereQuery["customer.shippingAddress.shippingAddressId"] = deliveryLocation
+              }
+
+              if (fromCustomer) {
+                  whereQuery["customer.customerOrganisation"] = fromCustomer
+              }
+
+              if (productName) {
+                whereQuery.products = {
+                  $elemMatch: {
+                    productId: productName
+                  }
+                }
+              }
+
+              console.log("whereQuery ======>", whereQuery);
+              try {
+                RecordModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((inboundPOList) => {
+                  let inboundPORes = [];
+                  let findInboundPOData = inboundPOList.map(async (inboundPO) => {
+                    let inboundPOData = JSON.parse(JSON.stringify(inboundPO))
+                    inboundPOData[`productDetails`] = [];
+                    let inboundProductsArray = inboundPOData.products;
+                    let productRes = inboundProductsArray.map(async (product) => {
+                      let productDetails = await ProductModel.findOne(
+                        {
+                          id: product.productId
+                        });
+                      return productDetails;
+                    });
+                    Promise.all(productRes).then(async function (productList) {
+                      inboundPOData[`productDetails`] = await productList;
+                    });
+
+                    let supplierOrganisation = await OrganisationModel.findOne(
+                      {
+                        id: inboundPO.supplier.supplierOrganisation
+                      });
+                    let customerOrganisation = await OrganisationModel.findOne(
+                      {
+                        id: inboundPOData.customer.customerOrganisation
+                      });
+                    let customerWareHouse = await WarehouseModel.findOne(
+                      {
+                        organisationId: inboundPOData.customer.customerOrganisation
+                      });
+                    inboundPOData.supplier[`organisation`] = supplierOrganisation;
+                    inboundPOData.customer[`organisation`] = customerOrganisation;
+                    inboundPOData.customer[`warehouse`] = customerWareHouse;
+                    inboundPORes.push(inboundPOData);
+                  });
+
+                  Promise.all(findInboundPOData).then(function (results) {
+                    return apiResponse.successResponseWithData(
+                      res,
+                      "Inbound PO Records",
+                      inboundPORes
+                    );
+                  });
+                });
+              } catch (err) {
+                return apiResponse.ErrorResponse(res, err);
+              }
+              logger.log(
+                'info',
+                '<<<<< POService < POController < fetchInboundPurchaseOrders',
+              );
+            } else {
+              res.json('Sorry! User does not have enough Permissions');
+            }
+          });
+        } else {
+          logger.log(
+            'warn',
+            '<<<<< POService < POController < fetchInboundPurchaseOrders  : refuted token',
+          );
+          res.status(403).json(result);
+        }
+      });
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< POService < POController < fetchInboundPurchaseOrders : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, productName, deliveryLocation, date)
+  auth,
+  async (req, res) => {
+    try {
+      checkToken(req, res, async result => {
+        if (result.success) {
+          logger.log(
+            'info',
+            '<<<<< POService < POController < fetchOutboundPurchaseOrders : token verified successfully',
+          );
+          const permission_request = {
+            result: result,
+            permissionRequired: 'viewPO',
+          };
+          checkPermissions(permission_request, async permissionResult => {
+            if (permissionResult.success) {
+              const { organisationId, role } = req.user;
+              const { skip, limit } = req.query;
+              let currentDate = new Date();
+              let fromDateFilter = 0;
+              let toSupplier = req.query.to ? req.query.to : undefined;
+              let productName = req.query.productName ? req.query.productName : undefined;
+              let deliveryLocation = req.query.deliveryLocation ? req.query.deliveryLocation : undefined;
+              let orderId = req.query.orderId ? req.query.orderId : undefined;
+              switch (req.query.dateFilter) {
+                case "today":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+                  break;
+                case "week":
+                  fromDateFilter = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay())).toUTCString();
+                  break;
+                case "month":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
+                  break;
+                case "threeMonth":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, currentDate.getDate());
+                  break;
+                case "sixMonth":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 6, currentDate.getDate());
+                  break;
+                case "year":
+                  fromDateFilter = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate());
+                  break;
+                default:
+                  fromDateFilter = 0;
+              }
+
+              let whereQuery = {};
+              if (orderId) {
+                whereQuery['id'] = orderId;
+              }
+
+              if (fromDateFilter) {
+                whereQuery['createdAt'] = { $gte: fromDateFilter }
+              }
+
+              if (organisationId) {
+                whereQuery["customer.customerOrganisation"] = organisationId
+              }
+
+              if (deliveryLocation) {
+                whereQuery["customer.shippingAddress.shippingAddressId"] = deliveryLocation
+              }
+
+              if (toSupplier) {
+                  whereQuery["supplier.supplierOrganisation"] = toSupplier;
+              }
+
+              if (productName) {
+                whereQuery.products = {
+                  $elemMatch: {
+                    productId: productName
+                  }
+                }
+              }
+
+              console.log("whereQuery ======>", whereQuery);
+              try {
+                RecordModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((outboundPOList) => {
+                  let outboundPORes = [];
+                  let findOutboundPOData = outboundPOList.map(async (outboundPO) => {
+                    let outboundPOData = JSON.parse(JSON.stringify(outboundPO))
+                    outboundPOData[`productDetails`] = [];
+                    let outboundProductsArray = outboundPOData.products;
+                    let productRes = outboundProductsArray.map(async (product) => {
+                      let productDetails = await ProductModel.findOne(
+                        {
+                          id: product.productId
+                        });
+                      return productDetails;
+                    });
+                    Promise.all(productRes).then(async function (productList) {
+                      outboundPOData[`productDetails`] = await productList;
+                    });
+
+                    let supplierOrganisation = await OrganisationModel.findOne(
+                      {
+                        id: outboundPO.supplier.supplierOrganisation
+                      });
+                    let customerOrganisation = await OrganisationModel.findOne(
+                      {
+                        id: outboundPOData.customer.customerOrganisation
+                      });
+                    let customerWareHouse = await WarehouseModel.findOne(
+                      {
+                        organisationId: outboundPOData.customer.customerOrganisation
+                      });
+                    outboundPOData.supplier[`organisation`] = supplierOrganisation;
+                    outboundPOData.customer[`organisation`] = customerOrganisation;
+                    outboundPOData.customer[`warehouse`] = customerWareHouse;
+                    outboundPORes.push(outboundPOData);
+                  });
+
+                  Promise.all(findOutboundPOData).then(function (results) {
+                    return apiResponse.successResponseWithData(
+                      res,
+                      "Outbound PO Records",
+                      outboundPORes
+                    );
+                  });
+                });
+              } catch (err) {
+                return apiResponse.ErrorResponse(res, err);
+              }
+              logger.log(
+                'info',
+                '<<<<< POService < POController < fetchOutboundPurchaseOrders',
+              );
+            } else {
+              res.json('Sorry! User does not have enough Permissions');
+            }
+          });
+        } else {
+          logger.log(
+            'warn',
+            '<<<<< POService < POController < fetchOutboundPurchaseOrders  : refuted token',
+          );
+          res.status(403).json(result);
+        }
+      });
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< POService < POController < fetchOutboundPurchaseOrders : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+
+
+exports.fetchProductIdsCustomerLocationsOrganisations = [
+  auth,
+  async (req, res) => {
+    try {
+      let responseData = {};
+      ProductModel.find({},'id').then (function (productIds){
+        WarehouseModel.find({},'id').then (function (locations){
+          OrganisationModel.find({},'id name').then (function (organisation){
+            responseData[`organisations`] = organisation;
+            responseData[`deliveryLocations`] = locations;
+            responseData[`productIds`] = productIds;
+            return apiResponse.successResponseWithData(
+              res,
+              'Product Ids and Customer Locations for filter dropdown',
+              responseData,
+            );
+          });
+        });
+      });
+      
+     
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< POService < POController < fetchProductIdsCustomerLocations : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+]

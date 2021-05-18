@@ -12,21 +12,39 @@ import dropdownIcon from '../../assets/icons/drop-down.png';
 import user from '../../assets/icons/user.svg';
 import { getNotifications, deleteNotification } from '../../actions/notificationActions';
 import { turnOff, turnOn } from "../../actions/spinnerActions";
+import useOnclickOutside from 'react-cool-onclickoutside';
+import { config } from "../../config";
+import Modal from "../modal/index";
+import FailedPopUp from "../PopUp/failedPopUp";
 
 const Header = props => {
   const [menu, setMenu] = useState(false);
   const [sidebar, openSidebar] = useState(false);
   const [search, setSearch] = useState('');
+  const [invalidSearch, setInvalidSearch] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
-
+const ref = useOnclickOutside(() => {
+    setMenu(false);
+  });
   function onSearchChange(e) {
-    console.log(e.target.value);
     setSearch(e.target.value);
   }
 
+  const closeModalFail = () => {
+    setInvalidSearch(false);
+  };
+
   const onSeach = () => {
-    props.history.push(`/tracing/${search}`);
+    console.log('Check');
+    console.log(props.orderIds);
+    console.log(props.orderIds.indexOf(search));
+    if(props.orderIds.indexOf(search)!=-1)
+    props.history.push(`/vieworder/${search}`);
+    else if(props.shippingIds.indexOf(search)!=-1)
+    props.history.push(`/viewshipment/${search}`);
+    else
+    setInvalidSearch(true);
   };
 
   const profile = useSelector(state => {
@@ -52,7 +70,7 @@ const Header = props => {
       onSeach();
     }
    }
-
+const imgs = config().fetchProfileImage;
 
   return (
     <div className="header">
@@ -117,9 +135,9 @@ const Header = props => {
 
           <div className="userPic">
             <img
-              src={profile.profile_picture ? profile.profile_picture : user}
+              src={`${imgs}${profile.photoId}` ? `${imgs}${profile.photoId}` : user}
               alt=""
-              className={`rounded rounded-circle ${profile.profile_picture ? `` :`img-thumbnail bg-transparent border-0`}`}
+              className={`rounded rounded-circle ${`${imgs}${profile.photoId}` ? `` :`img-thumbnail bg-transparent border-0`}`}
             />
           </div>
           <div className="userActions">
@@ -131,7 +149,7 @@ const Header = props => {
           </div>
         </div>
         {menu && (
-          <div className="slider-menu">
+          <div className="slider-menu" ref={ref}>
             {
               <React.Fragment>
                 <div className="slider-item-text">
@@ -154,6 +172,18 @@ const Header = props => {
 
         {sidebar && <DrawerMenu {...props} close={() => openSidebar(false)} />}
       </div>
+      {invalidSearch && (
+        <Modal
+          close={() => closeModalFail()}
+          size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+        >
+          <FailedPopUp
+            onHide={closeModalFail} //FailurePopUp
+            // {...modalProps}
+            message="Invalid Search"
+          />
+        </Modal>
+      )}
     </div>
   );
 };

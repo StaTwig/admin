@@ -2,8 +2,8 @@
 
 
 .NewShipment {
-  padding-right: 2rem;
-    padding-left: 4rem;
+  padding-right: 2.5rem;
+    padding-left: 5.5rem;
     @media (max-width: $md) {
       padding-right: 10px;
       padding-left: 10px;
@@ -73,7 +73,7 @@
 
     @media (min-width: $xl) {
       label {
-        font-size: 14px;
+        font-size: 15px;
         margin-bottom:0px;
       } 
 
@@ -86,8 +86,7 @@
         color: $black;
         flex-basis: 65%;
         flex-grow: inherit;
-        font-size: 13px;
-       
+        font-size: 15.5px;       
         
       }
 

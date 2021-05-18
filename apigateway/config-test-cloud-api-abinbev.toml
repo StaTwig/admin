@@ -92,6 +92,18 @@
       #middlewares = ["event-stripprefix"]
       #If the rule matches, forward to the event management service (declared below)
       service = "event-management"
+    [http.routers.advancedanalytics-management]
+      rule = "Host(`test.abinbev.statledger.io`) && PathPrefix(`/advancedanalytics/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["advancedanalytics-stripprefix"]
+      #If the rule matches, forward to the advancedanalytics management service (declared below)
+      service = "advancedanalytics-management"
+    [http.routers.lastmile-management]
+      rule = "Host(`test.abinbev.statledger.io`) && PathPrefix(`/lastmilemanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["lastmilemanagement-stripprefix"]
+      #If the rule matches, forward to the advanced lastmile management service (declared below)
+      service = "lastmile-management"
 
   [http.middlewares]
     [http.middlewares.test-stripprefix.stripPrefix]
@@ -127,6 +139,10 @@
       prefixes = ["/analyticsmanagement", "/analyticsmanagement/"]
     [http.middlewares.event-stripprefix.stripPrefix]
       prefixes = ["/eventmanagement", "/eventmanagement/"]
+    [http.middlewares.advancedanalytics-stripprefix.stripPrefix]
+      prefixes = ["/advancedanalytics", "/advancedanalytics/"]
+    [http.middlewares.lastmilemanagement-stripprefix.stripPrefix]
+      prefixes = ["/lastmilemanagement", "/lastmilemanagement/"]
 
   [http.services]
     # Define how to reach an existing service on our infrastructure
@@ -176,6 +192,12 @@
     [http.services.event-management.loadBalancer]
       [[http.services.event-management.loadBalancer.servers]]
         url = "http://127.0.0.1:3014/"
+    [http.services.advancedanalytics-management.loadBalancer]
+      [[http.services.advancedanalytics-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3016/"
+    [http.services.lastmile-management.loadBalancer]
+      [[http.services.lastmile-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3017/"
 
 
   

@@ -2,7 +2,7 @@
 
 .inventory {
   padding-right: 3rem;
-  padding-left: 3rem;
+  padding-left: 5rem;
   @media (max-width: $md) {
     padding-right: 10px;
     padding-left: 10px;
@@ -73,6 +73,7 @@
       height: 40px;
       display: flex;
       justify-content: center;
+      text-align: center;
       align-items: center;
       margin-top: 10px;
     }

@@ -56,6 +56,12 @@
       #middlewares = ["blockchain-stripprefix"]
       #If the rule matches, forward to the user management service (declared below)
       service = "blockchain-management"
+    [http.routers.lastmile-management]
+      rule = "Host(`13.52.184.142`) && PathPrefix(`/lastmilemanagement/`)"
+      #If the rule matches, applies the middleware
+      #middlewares = ["lastmilemanagement-stripprefix"]
+      #If the rule matches, forward to the advanced lastmile management service (declared below)
+      service = "lastmile-management"
 
   [http.middlewares]
     [http.middlewares.test-stripprefix.stripPrefix]
@@ -79,6 +85,8 @@
       prefixes = ["/inventorymanagement", "/inventorymanagement/"]
     [http.middlewares.blockchain-stripprefix.stripPrefix]
       prefixes = ["/blockchainmanagement", "/blockchainmanagement/"]
+    [http.middlewares.lastmilemanagement-stripprefix.stripPrefix]
+      prefixes = ["/lastmilemanagement", "/lastmilemanagement/"]
     
   [http.services]
     # Define how to reach an existing service on our infrastructure
@@ -110,4 +118,7 @@
     [http.services.blockchain-management.loadBalancer]
       [[http.services.blockchain-management.loadBalancer.servers]]
         url = "http://127.0.0.1:3008/"
+    [http.services.lastmile-management.loadBalancer]
+      [[http.services.lastmile-management.loadBalancer.servers]]
+        url = "http://127.0.0.1:3017/"
     

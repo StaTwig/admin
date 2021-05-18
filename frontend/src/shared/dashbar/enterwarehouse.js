@@ -40,14 +40,14 @@ const EnterWareHouse = props => {
           <img src={Verifiedpic} width="15" height="15" className="mt-1" />
         </div>
         {!props.visible &&
-          <div className="d-flex flex-row mt-2">
-            <ul className="mr-3">
+          <div className="d-flex text-white flex-row mt-2">
+            <ul className="mr-3 text-light">
               <li className="mb-1">Country ID</li>
               <li className="mb-1">Country</li>
               <li className="mb-1">Location</li>
               <li className="mb-1">Location Name</li>
             </ul>
-            <ul>
+            <ul className="text-light">
               <li className="mb-1">{warehouse?.warehouseCountryId}&nbsp;</li>
               <li className="mb-1">{warehouse?.warehouseCountryName}&nbsp;</li>
               <li className="mb-1">{warehouse?.warehouseId}&nbsp;</li>
@@ -123,7 +123,7 @@ const EnterWareHouse = props => {
       </div>
       <div className="d-flex flex-row justify-content-between prod mt-3 mb-2">
         <div className="font-size-one">{props.visible ? 'Product Details' : 'Inventory'}</div>
-        <Link to="/productlist/all">
+        <Link to={props.visible ? "/viewshipment/"+dashBarData.id : "/productlist/all"}>
           <div className="text-primary ">View All</div>
         </Link>
       </div>

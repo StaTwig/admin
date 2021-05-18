@@ -1,18 +1,61 @@
-import React, { useState,useRef } from 'react';
-import Key from '../../assets/icons/key.png';
-import mail from '../../assets/icons/mail.png';
-import hide from '../../assets/icons/hide.png';
-import eye from '../../assets/icons/eye.png';
+import React, { useState, useRef, useEffect } from 'react';
 import logo from '../../assets/brands/VaccineLedgerlogo.svg';
 import '../login/style.scss';
+import { Formik } from "formik";
 
 const FormVerifyPage = (props) => {
-  const { otp1, onOtpChange1, otp2, onOtpChange2, otp3, onOtpChange3, otp4, onOtpChange4,
-    onVerifyOtp, errorMessage, onResendOtp } = props;
-    const ref= useRef();
-  return (
+  const { otp, onOtpChange, onVerifyOtp, errorMessage, onResendOtp } = props;
+  const [otpArray, setOtpArray] = useState(["", "", "", ""]);
+  const firstInputRef = useRef(null);
+  const secondInputRef = useRef(null);
+  const thirdInputRef = useRef(null);
+  const fourthInputRef = useRef(null);  
+  const formRef = useRef();
+  
+
+  useEffect(() => {
+    setOtpArray(otp.split(""));
+  }, []);
+  
+  const otpChange = (index, handleChange,) => {
+    return (event) => {
+      let value = event.target.value;
+      if (isNaN(Number(value))) {
+        return;
+      }
+      const otpArrayCopy = otpArray.concat();
+      otpArrayCopy[index] = value;
+      setOtpArray(otpArrayCopy);
+      onOtpChange(otpArrayCopy.join().replaceAll(",", ""));
+      if (value !== "") {
+        if (index === 0) secondInputRef.current.focus();
+        else if (index === 1) thirdInputRef.current.focus();
+        else if (index === 2) fourthInputRef.current.focus();
+      }
+      handleChange(event);
+      if (otpArrayCopy.filter((v) => v != "").length == 4) {
+        formRef.current.handleSubmit();
+      }
+    };
+  };
+  const onOtpKeyPress = (index) => {
+    return ({ nativeEvent: { key: value } }) => {
+      if (value === "Backspace" && otpArray[index] === "") {
+        if (index === 1) firstInputRef.current.focus();
+        else if (index === 2) secondInputRef.current.focus();
+        else if (index === 3) thirdInputRef.current.focus();
+      }
+    };
+  };
+    return (
     <div className="login-wrapper">
       <div className="container">
+          <div className="mobile-header" >
+            <div className="branding" >
+            
+              <img src={ logo } alt="vaccineledger" />
+            </div>
+           </div>
         <div className="row">
           <div className="col-sm-6 col-lg-6">
             <div className="form-content">
@@ -25,61 +68,111 @@ const FormVerifyPage = (props) => {
               <div className="card-body">
                 <div className="login-form">
                   <div className="card-title mb-5">Enter OTP</div>
-                  <div className="form-groupverify pl-5 pr-5 mb-5">
-                    <input 
-                      id="1"
-                      type='text'
-                      className="form-controlverify mr-3" 
-                      maxlength="1"
-                      value={otp1}
-                      ref={input => input && input.focus()}
-                      onChange={onOtpChange1} 
-                      />
-                 
-                    <input 
-                      id="2"
-                      type='text' 
-                      className="form-controlverify mr-3" 
-                      maxlength="1"
-                      value={otp2} 
-                      ref={otp1.length === 1 ? input => input && input.focus():null}
-                      onChange={onOtpChange2} 
-                   />
+                  <Formik
+                    innerRef={formRef}
+                    initialValues={{ otp0: "", otp1: "", otp2: "", otp3: "" }}
+                    validate={(values) => {
+                      const errors = {};
+                      if (!values.otp0) {
+                        errors.otp0 = "Required";
+                      } else if (!values.otp1) {
+                        errors.otp1 = "Required";
+                      } else if (!values.otp2) {
+                        errors.otp2 = "Required";
+                      } else if (!values.otp3) {
+                        errors.otp3 = "Required";
+                      }
+                      return errors;
+                    }}
+                    onSubmit={(values, { setSubmitting }) => {
+                      setSubmitting(false);
+                      onVerifyOtp();
+                    }}
+                  >
+                  {({
+                      values,
+                      errors,
+                      touched,
+                      handleChange,
+                      handleBlur,
+                      handleSubmit,
+                      isSubmitting,
+                      
+                    }) => (
+                      <form onSubmit={handleSubmit}>
+                      <div className="form-group ml-5 mr-5 flex-row d-flex justify-content-center">
+                        {[
+                          firstInputRef,
+                          secondInputRef,
+                          thirdInputRef,
+                          fourthInputRef,
+                        ].map((textInputRef, index) => (
+                          <input
+                            ref={textInputRef}
+                            name={"otp" + index}
+                            id={"otp" + index}
+                            type="text"
+                            className={`form-control text-center mr-3 ${
+                              errors.otp0 ||
+                              errors.otp1 ||
+                              errors.otp2 ||
+                              errors.otp3
+                                ? "border-danger"
+                                : ""
+                            }`}
+                            value={otpArray[index]}
+                            onKeyUp={onOtpKeyPress(index)}
+                            maxLength={1}
+                            onChange={otpChange(
+                              index,
+                              handleChange,
+                              handleSubmit
+                            )}
+                            onKeyDown={onkeydown}
+                            onBlur={handleBlur}
+                            autoFocus={index === 0 ? true : undefined}
+                            key={index}
+                          />
+                        ))}
+                        </div>
+                        <div className="ml-5 mb-5">
+                          {(errors.otp0 ||
+                            errors.otp1 ||
+                            errors.otp2 ||
+                            errors.otp3) &&
+                            (touched.otp0 ||
+                              touched.otp1 ||
+                              touched.otp2 ||
+                              touched.otp3) && (
+                              <span className="error-msg text-danger">
+                                Required
+                              </span>
+                            )}
+                          &nbsp;
+                        </div>
+                        <div className="font-weight-bold text-center mb-2">
+                          Didn't receive the OTP?
+                        </div>
+                        <div
+                          className="text-center mb-5 text-primary resend"
+                          onClick={onResendOtp}
+                        >
+                          RESEND CODE
+                        </div>
 
-                    <input 
-                     id="3"
-                     type='text' 
-                     className="form-controlverify mr-3" 
-                     maxlength="1"
-                     value={otp3}
-                     ref={otp2.length === 1 ? input => input && input.focus():null}
-                     onChange={onOtpChange3} 
-                     />
-
-                    <input 
-                      id="4"
-                      type='text' 
-                      className="form-controlverify mr-3" 
-                      maxlength="1"
-                      value={otp4}
-                      ref={otp3.length === 1 ? input => input && input.focus():null}
-                      onChange={onOtpChange4} 
-                      />
-
-
-                  </div>
-                  <div className="font-weight-bold text-center mb-2">Didn't receive the OTP?</div>
-                  <div className="cursorP text-center mb-5 resend" onClick={onResendOtp}>RESEND CODE</div>
-                  <div></div>
-
-                  {
-                    errorMessage && <div className="alert alert-danger">{errorMessage}</div>
-                  }
-                  <div className="text-center">
-                    <button type="button" className="btn btn-primary" onClick={onVerifyOtp}>
-                      LOGIN
-                    </button>
-                  </div>
+                        {errorMessage && (
+                          <div className="alert alert-danger">
+                            {errorMessage}
+                          </div>
+                        )}
+                        <div className="text-center">
+                          <button type="submit" className="btn btn-primary">
+                            LOGIN
+                          </button>
+                        </div>
+                      </form>
+                    )}
+                  </Formik>
                 </div>
               </div>
             </div>
@@ -88,7 +181,7 @@ const FormVerifyPage = (props) => {
       </div>
     </div>
   );
-};
+};         
 
 export default FormVerifyPage;
 

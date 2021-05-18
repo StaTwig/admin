@@ -1,325 +1,282 @@
-import React from "react";
-import { AreaChart, Area, ResponsiveContainer, Tooltip } from "recharts";
+import React, {useState} from "react";
 import "./style.scss";
-import bottlesIcon from "../../assets/becks_330ml.png";
-import DownArrow from "../../assets/down_arrow.png";
-import UpArrow from "../../assets/up_arrow.png";
 import SideBar from "../../components/sidebar";
-
-const data = [
-    {
-        name: "Page A",
-        uv: 4000,
-        pv: 2400,
-        amt: 2400
-    },
-    {
-        name: "Page B",
-        uv: 3000,
-        pv: 1398,
-        amt: 2210
-    },
-    {
-        name: "Page C",
-        uv: 2000,
-        pv: 9800,
-        amt: 2290
-    },
-    {
-        name: "Page D",
-        uv: 2780,
-        pv: 3908,
-        amt: 2000
-    },
-    {
-        name: "Page E",
-        uv: 1890,
-        pv: 4800,
-        amt: 2181
-    },
-    {
-        name: "Page F",
-        uv: 2390,
-        pv: 3800,
-        amt: 2500
-    },
-    {
-        name: "Page G",
-        uv: 3490,
-        pv: 4300,
-        amt: 2100
-    }
-];
+import filterIcon from "../../assets/icons/funnel.svg"
+import ViewRenderer from "./viewRenderer";
 
 const Analytics = (props) => {
-    return (
-        <div className="container-fluid">
+
+  const [filters, setFilters] = useState({
+    view: 'ANNUALREPORT_DASHBOARD'
+  });
+
+
+  const allowedMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  let thisYear = new Date().getFullYear();
+  const allowedYears = [];
+  for (let i = 0; i < 21; i++) {
+    allowedYears.push(thisYear - i);
+  }
+
+  const onYearChange = (event) => {
+    const selectedYear = event.target.value;
+    const filter = { ...params };
+    filter.year = selectedYear;
+    setParams(filter);
+  };
+
+  const onMonthChange = (event) => {
+    const selectedMonth = event.target.value;
+    const filter = { ...params };
+    filter.month = selectedMonth;
+    setParams(filter);
+    
+  };
+
+  const onQuarterChange = (event) => {
+    const selectedQuarter = event.target.value;
+    const filter = { ...params };
+    filter.quarter = selectedQuarter;
+    setParams(filter);
+  };
+
+  const onStateChange = (event) => {
+    const selectedState = event.target.value;
+    const filter = { ...params };
+    filter.state = selectedState;
+    setParams(filter);
+  };
+
+  const [prop, setProp] = useState({});
+  let skuArr = [];
+  const [params, setParams] = useState({});
+  const [SKU, setSKU] = useState('');
+  const [isActive, setTsActive] = useState('');
+  const [Otype, setOtype] = useState('All');
+  const [selectedViewCode, setSelectedViewCode] = useState('ANNUALREPORT_DASHBOARD');
+  const [annualReportButton, setannualReportButton] = useState("btn active");
+  const [inventoryButton, setInventoryButton] = useState("btn");
+  const [spm, setSpmButton] = useState("btn");
+  function selectModule(module){
+    setSKU('');
+    if (module === "ANNUALREPORT_DASHBOARD") {
+      setannualReportButton("btn active"); 
+      setInventoryButton("btn");
+      setSpmButton("btn");
+
+    }
+    if (module === "INVENTORY_DASHBOARD") {
+      setannualReportButton("btn"); 
+      setInventoryButton("btn active");
+      setSpmButton("btn");
+    }
+    if (module === "SPM_DASHBOARD") {
+      setannualReportButton("btn"); 
+      setInventoryButton("btn");
+      setSpmButton("btn active");
+    }
+  }
+  const changeView = (event) => {
+    setSKU('');
+    setSelectedViewCode(event.target.value);
+  }
+  const onViewChange = (viewCode, props) => {
+    setProp(props);
+    setSelectedViewCode(viewCode);
+  }
+
+  const onModuleChange = (moduleCode, props) =>{
+    setFilters(moduleCode);
+    setSelectedViewCode(moduleCode);
+  }
+
+  const skuChanged = (event) => {
+    setSKU(event.target.value);
+  }
+
+  const changeOType = (value) => {
+    setOtype(value);
+  }
+
+  return (
+    <div className="container-fluid">
+      <div className="row">
+        <div className="col-md-2 d-none d-md-block padding0 greyBG">
+          <SideBar {...props} />
+        </div>
+        <main role="main" className="col-md-9 ml-sm-auto col-lg-10">
           <div className="row">
-            <div className="col-md-2 d-none d-md-block padding0 greyBG">
-              <SideBar {...props} />
+            <div className="col-md-9 mainContainer pt-3 px-4">
+              <ViewRenderer {...props} prop={prop} params={params} Otype={Otype} sku={SKU} viewName={selectedViewCode} onViewChange={onViewChange}></ViewRenderer>
             </div>
-            <main role="main" className="col-md-9 ml-sm-auto col-lg-10">
-              <div className="row">
-                <div className="col-md-9 mainContainer pt-3 px-4">
-                  <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
-                    <h1 className="h2">Analytics</h1>
-                    <div className="btn-toolbar mb-2 mb-md-0">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" className="bi bi-bell" viewBox="0 0 16 16">
-                        <path d="M8 16a2 2 0 0 0 2-2H6a2 2 0 0 0 2 2zM8 1.918l-.797.161A4.002 4.002 0 0 0 4 6c0 .628-.134 2.197-.459 3.742-.16.767-.376 1.566-.663 2.258h10.244c-.287-.692-.502-1.49-.663-2.258C12.134 8.197 12 6.628 12 6a4.002 4.002 0 0 0-3.203-3.92L8 1.917zM14.22 12c.223.447.481.801.78 1H1c.299-.199.557-.553.78-1C2.68 10.2 3 6.88 3 6c0-2.42 1.72-4.44 4.005-4.901a1 1 0 1 1 1.99 0A5.002 5.002 0 0 1 13 6c0 .88.32 4.2 1.22 6z"/>
-                      </svg>
-                    </div>
+            <div className="col-md-3 rightSideMenu pt-4 px-2">
+              <div className="filterSection">
+                <div className="filterHeader mb-3">
+                  <img src={filterIcon} className="filterIcon" /> FILTERS
+                </div>
+                {/* TODO Tabs for for Module load  */}
+                <div className="btn-group filterButton mt-2 mb-4">
+                  <a href="#!" className={annualReportButton}
+                  onClick={() => {
+                    selectModule("ANNUALREPORT_DASHBOARD");
+                    onModuleChange("ANNUALREPORT_DASHBOARD");
+                  }}>
+                    Annual Reports
+                  </a>
+                  <a href="#!" className={inventoryButton}
+                  onClick={() => {
+                    selectModule("INVENTORY_DASHBOARD");
+                    onModuleChange("INVENTORY_DASHBOARD");
+                  }}>
+                    Inventory
+                  </a>
+                  <a href="#!" className={spm}
+                  onClick={() => {
+                    selectModule("SPM_DASHBOARD");
+                    onModuleChange("SPM_DASHBOARD");
+                  }}>
+                    SPM
+                  </a>
+                </div>
+                <label className="radioButton" for="gv">
+                  <input className="radioInput" type="radio" name="view" value="gv" id="gv" value={selectedViewCode === 'INVENTORY_DASHBOARD' ? "INVENTORY_DASHBOARD" : 'ANNUALREPORT_DASHBOARD'} onChange={changeView} defaultChecked={filters.view === 'ANNUALREPORT_DASHBOARD'} /> Geographical View
+                    </label>
+                <label className="radioButton" for="sv">
+                  <input className="radioInput" type="radio" name="view" value="sv" id="sv" value={selectedViewCode === 'INVENTORY_DASHBOARD' ? "INVENTORY_SKU" : 'SKU_VIEW'} onChange={changeView} defaultChecked={filters.view === 'SKU_VIEW' || filters.view === 'INVENTORY_SKU'} /> SKU View
+                    </label>
+                {selectedViewCode !== 'INVENTORY_DASHBOARD' && 
+                  <>
+                <label className="radioButton" for="suv">
+                  <input className="radioInput" type="radio" name="view" value="suv" id="suv" value="SUPPLIER_VIEW" onChange={changeView} defaultChecked={filters.view === 'SUPPLIER_VIEW'} /> Supplier View
+                    </label>
+                <label className="radioButton" for="bv">
+                  <input className="radioInput" type="radio" name="view" value="bv" id="bv" value="BREWERY_VIEW" onChange={changeView} defaultChecked={filters.view === 'BREWERY_VIEW'} /> Brewery View
+                    </label>
+                  </>
+                }
+                {selectedViewCode != 'BREWERY_VIEW' && 
+                <>
+                <label className="filterSubHeading mt-3">Select SKU</label>
+                <select className="filterSelect mt-2" value={SKU} onChange={skuChanged}>
+                  <option>Select SKU</option>
+                  {props.SKUs?.map((sku) => {
+                    let enable = true;
+                    if (!skuArr.includes(sku.externalId)) 
+                      skuArr.push(sku.externalId);
+                    else 
+                      enable = false;
+                    
+                    return ( enable ? 
+                      <option value={sku.externalId}>{sku.name}</option> : ''
+                    )
+                  }
+                  )
+                  }
+                </select>
+                <label className="filterSubHeading mt-3">Select State</label>
+                <select className="filterSelect mt-2" onChange={onStateChange}>
+                  <option>Select State</option>
+                  {props.states?.map((state) => 
+                      <option value={state}>{state}</option>
+                    )
+                  }
+                </select>
+                </>
+                }
+                {selectedViewCode == 'DETAILED_GEO_VIEW' &&
+                  <>
+                  <label className="filterSubHeading mt-3">Time Period</label>
+                  <div class="btn-group filterButton mt-2 mb-4">
+                    <a href="#!" class={`btn ${isActive == 'by_monthly' ? `active` : ``}`}
+                      onClick={() => { setTsActive('by_monthly'); setParams({});}}
+                    >
+                      Monthly
+                  </a>
+                    <a href="#!" class={`btn ${isActive == 'by_quarterly' ? `active` : ``}`}
+                      onClick={() => {setTsActive('by_quarterly'); setParams({});}}
+                    >
+                      Quarterly
+                  </a>
+                    <a href="#!" class={`btn ${isActive == 'by_yearly' ? `active` : ``}`}
+                      onClick={() => {setTsActive('by_yearly'); setParams({});}}
+                    >
+                      Yearly
+                  </a>
                   </div>
-
-                  <div class="btn-group mainButtonFilter">
-                    <a href="#!" class="btn active">State</a>
-                    <select class="btn selectState">
-                        <option>Select state</option>
-                        <option>Karnataka</option>
-                    </select>
-                  </div>
-                  
+                  </>
+                }
+                {(isActive == 'by_monthly' || isActive == 'by_yearly' || isActive == 'by_quarterly') &&
                   <div className="row">
-                      <div className="col-md-3 ">
-                            <div className="analyticsCard">
-                              <span className="analyticsTitle">Sales</span>
-                              <span className="analyticsPercentage yellow">82% <img className="arrowIcon" src={UpArrow} /></span>
-                              <div className="chartAnalytics">
-                                <ResponsiveContainer width="100%" height={100}>
-                                        <AreaChart
-                                            
-                                            data={data}
-                                            margin={{
-                                                top: 5,
-                                                right: 0,
-                                                left: 0,
-                                                bottom: 5
-                                            }}
-                                            >
-                                                <Area type="monotone" dataKey="uv" stroke="#F49C00" fill="#F49C00" />
-                                                <Tooltip />
-                                        </AreaChart>
-                                    </ResponsiveContainer>
-                              </div>
-                            </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="analyticsCard">
-                            <span className="analyticsTitle">Returns</span>
-                            <span className="analyticsPercentage">82%</span>
-                            <div className="chartAnalytics">
-                                <ResponsiveContainer width="100%" height={100}>
-                                        <AreaChart
-                                            
-                                            data={data}
-                                            margin={{
-                                                top: 5,
-                                                right: 0,
-                                                left: 0,
-                                                bottom: 5
-                                            }}
-                                            >
-                                                <Area type="monotone" dataKey="uv" stroke="#C8F4E1" fill="#C8F4E1" />
-                                                <Tooltip />
-                                        </AreaChart>
-                                    </ResponsiveContainer>
-                              </div>
-                        </div>
-                      </div>
-                      <div className="col-md-3 ">
-                        <div className="analyticsCard">
-                            <span className="analyticsTitle">Target</span>
-                            <span className="analyticsPercentage pink">82% <img className="arrowIcon" src={DownArrow} /></span>
-                            <div className="chartAnalytics">
-                                <ResponsiveContainer width="100%" height={100}>
-                                    <AreaChart
-                                        
-                                        data={data}
-                                        margin={{
-                                            top: 5,
-                                            right: 0,
-                                            left: 0,
-                                            bottom: 5
-                                        }}
-                                        >
-                                            <Area type="monotone" dataKey="uv" stroke="#F85566" fill="#F85566" />
-                                            <Tooltip />
-                                    </AreaChart>
-                                </ResponsiveContainer>
-                            </div>
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="analyticsCard">
-                            <span className="analyticsTitle">Actual Returns</span>
-                            <span className="analyticsPercentage blue">82%</span>
-                            <div className="chartAnalytics">
-                                <ResponsiveContainer width="100%" height={100}>
-                                    <AreaChart
-                                        
-                                        data={data}
-                                        margin={{
-                                            top: 5,
-                                            right: 0,
-                                            left: 0,
-                                            bottom: 5
-                                        }}
-                                        >
-                                            <Area type="monotone" dataKey="uv" stroke="#20BECB" fill="#20BECB" />
-                                            <Tooltip />
-                                    </AreaChart>
-                                </ResponsiveContainer>
-                            </div>
-                        </div>
-                      </div>
-                  </div>
-
-                  <div className="tableDetals">
-                      <table className="table">
-                        <thead>
-                          <tr>
-                            <th scope="col">SKU</th>
-                            <th scope="col">Sales</th>
-                            <th scope="col">Return Bottles</th>
-                            <th scope="col">Traget</th>
-                            <th scope="col">Actual Return</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td scope="row">
-                              <div className="tableProfileIconCard">
-                                <div className="profileIcon">
-                                  <img src={bottlesIcon} alt="" width="50" height="50" />
-                                </div>
-                                <div className="profileName">
-                                  <span className="profileTitle">Becks 330 ml</span>
-                                  <span>526025</span>
-                                </div>
-                              </div>
-                              
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                          </tr>
-                          <tr>
-                            <td scope="row">
-                              <div className="tableProfileIconCard">
-                                <div className="profileIcon">
-                                  <img src={bottlesIcon} alt="" width="50" height="50" />
-                                </div>
-                                <div className="profileName">
-                                  <span className="profileTitle">Becks 330 ml</span>
-                                  <span>526025</span>
-                                </div>
-                              </div>
-                              
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                          </tr>
-                          <tr>
-                            <td scope="row">
-                              <div className="tableProfileIconCard">
-                                <div className="profileIcon">
-                                  <img src={bottlesIcon} alt="" width="50" height="50" />
-                                </div>
-                                <div className="profileName">
-                                  <span className="profileTitle">Becks 330 ml</span>
-                                  <span>526025</span>
-                                </div>
-                              </div>
-                              
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                          </tr>
-                          <tr>
-                            <td scope="row">
-                              <div className="tableProfileIconCard">
-                                <div className="profileIcon">
-                                  <img src={bottlesIcon} alt="" width="50" height="50" />
-                                </div>
-                                <div className="profileName">
-                                  <span className="profileTitle">Becks 330 ml</span>
-                                  <span>526025</span>
-                                </div>
-                              </div>
-                              
-                            </td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                            <td>333333</td>
-                          </tr>
-                        </tbody>
-                      </table>
+                    <div className="col-md-5">
+                      <select
+                        className="filterSelect mt-2"
+                        onChange={onYearChange}
+                      >
+                        <option>Select Year</option>
+                        {allowedYears.map((year, index) => {
+                          return (
+                            <option key={index} value={year}>
+                              {year}
+                            </option>
+                          );
+                        })}
+                      </select>
                     </div>
-              
-                </div>
-                <div className="col-md-3 rightSideMenu pt-3 px-2">
-                  <div className="white-box">
-                    <h3 className="box-title">Order Quantity</h3>
-                    <div className="row pt-3">
-                        <div className="col-md-6 col-sm-6 col-xs-6  m-t-30">
-                          <div className="quantity">7650</div>
-                          <span className="quantityDesc"><b>1.5 %</b> than last year</span> 
-                        </div>
-                        <div className="col-md-6 col-sm-6 col-xs-6">
-                          <AreaChart
-                              width={100}
-                              height={30}
-                              data={data}
-                              margin={{
-                                top: 5,
-                                right: 0,
-                                left: 0,
-                                bottom: 5
-                              }}
-                            >
-                              <Area type="monotone" dataKey="uv" stroke="#F49C00" fill="#F49C00" />
-                              <Tooltip />
-                            </AreaChart>
-                        </div>
-                    </div>
+                    {isActive == 'by_monthly' &&
+                      <div className="col-md-5">
+                        <select
+                          className="filterSelect mt-2"
+                          onChange={onMonthChange}
+                        >
+                          <option>Select Month</option>
+                          {allowedMonths.map((month, index) => {
+                            return (
+                              <option key={index} value={index + 1}>
+                                {month}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                      }
+                    {isActive == 'by_quarterly' &&
+                      <div className="col-md-5">
+                        <select
+                          className="filterSelect mt-2"
+                          onChange={onQuarterChange}
+                        >
+                          <option>Select Quarter</option>
+                          {['Jan - Mar', 'Apr - Jun', 'Jul - Sep', 'Oct - Dec'].map((qtr, index) => {
+                            return (
+                              <option key={index} value={index + 1}>
+                                {qtr}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                      }
                   </div>
-                  <div className="white-box">
-                    <h3 className="box-title">Avg. Order Value</h3>
-                    <div className="row pt-3">
-                        <div className="col-md-6 col-sm-6 col-xs-6  m-t-30">
-                          <div className="quantity">$306.20</div>
-                          <span className="quantityDesc"><b>1.3 %</b> than last year</span> 
-                        </div>
-                        <div className="col-md-6 col-sm-6 col-xs-6">
-                          <AreaChart
-                            width={100}
-                            height={30}
-                            data={data}
-                            margin={{
-                              top: 5,
-                              right: 0,
-                              left: 0,
-                              bottom: 5
-                            }}
-                          >
-                            <Area type="monotone" dataKey="uv" stroke="#A3ECCD" fill="#A3ECCD" />
-                            <Tooltip />
-                          </AreaChart>
-                        </div>
-                    </div>
+                }
+                {selectedViewCode == 'BREWERY_DETAIL_VIEW' || selectedViewCode == 'SUPPLIER_DETAIL_VIEW' && 
+                  <>
+                  <h3 className="filterSubHeading mt-3">Vendor</h3>
+                  <div className="btn-group filterButton mt-2 mb-4">
+                    {['All', 'S1', 'S2', 'S3'].map((otype, index) => 
+                      <span key={index} className={`btn p-2 ${Otype == otype ? `active` : `` }`} for={otype} onClick={() => changeOType(otype)}>
+                        {otype}
+                      </span>
+                    )}
                   </div>
-                </div>
+                  </>
+                }
               </div>
-              
-            </main>
+            </div>
           </div>
-        </div>  
-        );
+        </main>
+      </div>
+    </div>
+  );
 };
 
 export default Analytics;
