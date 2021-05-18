@@ -23,7 +23,6 @@ const fs = require("fs");
 const moveFile = require("move-file");
 const blockchain_service_url = process.env.URL;
 const stream_name = process.env.INV_STREAM;
-
 const checkToken = require('../middlewares/middleware').checkToken;
 const init = require('../logging/init');
 const logger = init.getLog();
@@ -271,7 +270,6 @@ exports.register = [
             const country =  req.body?.address?.country ? req.body.address?.country : 'India';
             const address =  req.body?.address ? req.body.address : {};
             addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
-            
             const incrementCounterOrg = await CounterModel.update({
                   'counters.name': "orgId"
                },{
