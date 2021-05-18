@@ -13,15 +13,40 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc2MDY5NywiZXhwIjoxNjE5NzY3ODk3fQ.6dr74N9twMPi1Qsd5GTnRj1umQgR2YP_EZ4jfVAj03I",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
 							"type": "string"
 						}
 					]
 				},
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "firstName",
+							"value": "Sourav",
+							"type": "text"
+						},
+						{
+							"key": "lastName",
+							"value": "Dey",
+							"type": "text"
+						},
+						{
+							"key": "organisationId",
+							"value": "AP1001",
+							"type": "text"
+						},
+						{
+							"key": "emailId",
+							"value": "sourav.lko@gmail.com",
+							"type": "text"
+						}
+					]
+				},
 				"url": {
-					"raw": "{{url}}/usermanagement/api/auth/check?emailId=sourav.lko@gmail.com",
+					"raw": "{{url}}/usermanagement/api/auth/check",
 					"host": [
 						"{{url}}"
 					],
@@ -34,7 +59,8 @@
 					"query": [
 						{
 							"key": "emailId",
-							"value": "sourav.lko@gmail.com"
+							"value": "sourav.lko@gmail.com",
+							"disabled": true
 						}
 					]
 				}
@@ -49,7 +75,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc2MDY5NywiZXhwIjoxNjE5NzY3ODk3fQ.6dr74N9twMPi1Qsd5GTnRj1umQgR2YP_EZ4jfVAj03I",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
 							"type": "string"
 						}
 					]
@@ -60,36 +86,43 @@
 					"mode": "urlencoded",
 					"urlencoded": [
 						{
-							"key": "Name",
+							"key": "firstName",
 							"value": "SOurav",
 							"type": "text"
 						},
 						{
-							"key": "password",
-							"value": "123456",
+							"key": "lastName",
+							"value": "Dey",
 							"type": "text"
 						},
 						{
-							"key": "email",
+							"key": "emailId",
 							"value": "sourav.lko15@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "organisationId",
+							"value": "org-12345",
 							"type": "text"
 						}
 					]
 				},
 				"url": {
-					"raw": "{{url}}usermanagement/api/auth/register?=",
+					"raw": "{{url}}/usermanagement/api/auth/register",
 					"host": [
-						"{{url}}usermanagement"
+						"{{url}}"
 					],
 					"path": [
+						"usermanagement",
 						"api",
 						"auth",
 						"register"
 					],
 					"query": [
 						{
-							"key": "",
-							"value": ""
+							"key": "Name",
+							"value": "Sourav",
+							"disabled": true
 						}
 					]
 				}
@@ -104,15 +137,25 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc2MDY5NywiZXhwIjoxNjE5NzY3ODk3fQ.6dr74N9twMPi1Qsd5GTnRj1umQgR2YP_EZ4jfVAj03I",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
 							"type": "string"
 						}
 					]
 				},
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "emailId",
+							"value": "sourav.lko@gmail.com",
+							"type": "text"
+						}
+					]
+				},
 				"url": {
-					"raw": "{{url}}/usermanagement/api/auth/sendOtp?emailId=sourav.lko@gmail.com",
+					"raw": "{{url}}/usermanagement/api/auth/sendOtp",
 					"host": [
 						"{{url}}"
 					],
@@ -125,7 +168,8 @@
 					"query": [
 						{
 							"key": "emailId",
-							"value": "sourav.lko@gmail.com"
+							"value": "sourav.lko@gmail.com",
+							"disabled": true
 						}
 					]
 				}
@@ -140,15 +184,30 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc2MDY5NywiZXhwIjoxNjE5NzY3ODk3fQ.6dr74N9twMPi1Qsd5GTnRj1umQgR2YP_EZ4jfVAj03I",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
 							"type": "string"
 						}
 					]
 				},
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "emailId",
+							"value": "sourav.lko@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "otp",
+							"value": "8083",
+							"type": "text"
+						}
+					]
+				},
 				"url": {
-					"raw": "{{url}}/usermanagement/api/auth/verifyOtp?emailId=sourav.lko@gmail.com&otp=1615",
+					"raw": "{{url}}/usermanagement/api/auth/verifyOtp",
 					"host": [
 						"{{url}}"
 					],
@@ -161,11 +220,13 @@
 					"query": [
 						{
 							"key": "emailId",
-							"value": "sourav.lko@gmail.com"
+							"value": "sourav.lko@gmail.com",
+							"disabled": true
 						},
 						{
 							"key": "otp",
-							"value": "1615"
+							"value": "1615",
+							"disabled": true
 						}
 					]
 				}
@@ -180,7 +241,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc3NTM0MCwiZXhwIjoxNjE5NzgyNTQwfQ.BBOMoWDP_IJi67gwBswNZ6jo1Z4oK6TvRlbCzooIoQs",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
 							"type": "string"
 						}
 					]
@@ -210,7 +271,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc3NTM0MCwiZXhwIjoxNjE5NzgyNTQwfQ.BBOMoWDP_IJi67gwBswNZ6jo1Z4oK6TvRlbCzooIoQs",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
 							"type": "string"
 						}
 					]
@@ -240,13 +301,38 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc3NTM0MCwiZXhwIjoxNjE5NzgyNTQwfQ.BBOMoWDP_IJi67gwBswNZ6jo1Z4oK6TvRlbCzooIoQs",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
 							"type": "string"
 						}
 					]
 				},
 				"method": "POST",
 				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "firstName",
+							"value": "Sourav",
+							"type": "text"
+						},
+						{
+							"key": "lastName",
+							"value": "Dey",
+							"type": "text"
+						},
+						{
+							"key": "warehouseId",
+							"value": "AP002",
+							"type": "text"
+						},
+						{
+							"key": "organisationId",
+							"value": "AP1001",
+							"type": "text"
+						}
+					]
+				},
 				"url": {
 					"raw": "{{url}}/usermanagement/api/auth/updateProfile",
 					"host": [
@@ -300,7 +386,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc3NTM0MCwiZXhwIjoxNjE5NzgyNTQwfQ.BBOMoWDP_IJi67gwBswNZ6jo1Z4oK6TvRlbCzooIoQs",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
 							"type": "string"
 						}
 					]
@@ -330,7 +416,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc3NTM0MCwiZXhwIjoxNjE5NzgyNTQwfQ.BBOMoWDP_IJi67gwBswNZ6jo1Z4oK6TvRlbCzooIoQs",
+							"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
 							"type": "string"
 						}
 					]
@@ -360,7 +446,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc3NTM0MCwiZXhwIjoxNjE5NzgyNTQwfQ.BBOMoWDP_IJi67gwBswNZ6jo1Z4oK6TvRlbCzooIoQs",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
 							"type": "string"
 						}
 					]
@@ -426,7 +512,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc3NTM0MCwiZXhwIjoxNjE5NzgyNTQwfQ.BBOMoWDP_IJi67gwBswNZ6jo1Z4oK6TvRlbCzooIoQs",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
 							"type": "string"
 						}
 					]
@@ -450,21 +536,34 @@
 		},
 		{
 			"name": "getAllUsersByOrganisation",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc3NTM0MCwiZXhwIjoxNjE5NzgyNTQwfQ.BBOMoWDP_IJi67gwBswNZ6jo1Z4oK6TvRlbCzooIoQs",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
 							"type": "string"
 						}
 					]
 				},
 				"method": "GET",
 				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "organisationId",
+							"value": "AP1001",
+							"type": "text"
+						}
+					]
+				},
 				"url": {
-					"raw": "{{url}}/usermanagement/api/auth/getAllUsersByOrganisation?organisationId=AP1001",
+					"raw": "{{url}}/usermanagement/api/auth/getAllUsersByOrganisation",
 					"host": [
 						"{{url}}"
 					],
@@ -473,12 +572,6 @@
 						"api",
 						"auth",
 						"getAllUsersByOrganisation"
-					],
-					"query": [
-						{
-							"key": "organisationId",
-							"value": "AP1001"
-						}
 					]
 				}
 			},
@@ -522,7 +615,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc3NTM0MCwiZXhwIjoxNjE5NzgyNTQwfQ.BBOMoWDP_IJi67gwBswNZ6jo1Z4oK6TvRlbCzooIoQs",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
 							"type": "string"
 						}
 					]
@@ -530,20 +623,20 @@
 				"method": "POST",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/shipmentmanagement/api/shipment/uploadImage?id=SH100220",
+					"raw": "{{url}}/usermanagement/api/auth/uploadImage?action=STOREID",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
-						"shipmentmanagement",
+						"usermanagement",
 						"api",
-						"shipment",
+						"auth",
 						"uploadImage"
 					],
 					"query": [
 						{
-							"key": "id",
-							"value": "SH100220"
+							"key": "action",
+							"value": "STOREID"
 						}
 					]
 				}
@@ -558,7 +651,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYxOTc3NTM0MCwiZXhwIjoxNjE5NzgyNTQwfQ.BBOMoWDP_IJi67gwBswNZ6jo1Z4oK6TvRlbCzooIoQs",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
 							"type": "string"
 						}
 					]
@@ -566,20 +659,20 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/shipmentmanagement/api/shipment/fetchImage?id=SH100034",
+					"raw": "{{url}}/usermanagement/api/auth/fetchImage?type=STOREID",
 					"host": [
 						"{{url}}"
 					],
 					"path": [
-						"shipmentmanagement",
+						"usermanagement",
 						"api",
-						"shipment",
+						"auth",
 						"fetchImage"
 					],
 					"query": [
 						{
-							"key": "id",
-							"value": "SH100034"
+							"key": "type",
+							"value": "STOREID"
 						}
 					]
 				}

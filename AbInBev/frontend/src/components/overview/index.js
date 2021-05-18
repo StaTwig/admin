@@ -9,7 +9,7 @@ import brewIcon from "../../assets/in brewery.png";
 import s2VenorsIcon from "../../assets/s2 venors.png";
 import s1VenorsIcon from "../../assets/s1vendors.png";
 import SideBar from "../../components/sidebar";
-import { getAdvancedAnalytics } from "../../actions/overviewAction";
+import { getOverviewAnalytics } from "../../actions/overviewAction";
 
 const Overview = (props) => {
   const dispatch = useDispatch();
@@ -24,7 +24,7 @@ const Overview = (props) => {
     setSelectedFilter(_filter);
     // TODO: Fetch data based on filters...
     (async () => {
-      const results = await dispatch(getAdvancedAnalytics(_filter));
+      const results = await dispatch(getOverviewAnalytics(_filter));
       if (results.data.overviewStats) {
         setOverviewStats(results.data.overviewStats);
       } else {
@@ -36,7 +36,7 @@ const Overview = (props) => {
 
   useEffect(() => {
     (async () => {
-      const results = await dispatch(getAdvancedAnalytics());
+      const results = await dispatch(getOverviewAnalytics());
       if (results.data.overviewStats) {
         setOverviewStats(results.data.overviewStats);
       } else {
@@ -101,7 +101,7 @@ const Overview = (props) => {
                         />
                       </svg>
                     </span>
-                    <span>{(overviewStats['breweryObj'] && overviewStats['breweryObj']['n_warehouses']) ? overviewStats['breweryObj']['n_warehouses'] : ''}</span>
+                    <span>{(overviewStats['breweryObj'] && overviewStats['breweryObj']['n_warehouses']) ? overviewStats['breweryObj']['n_warehouses'] : 0}</span>
                     <span className="bi2-icons">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -123,7 +123,7 @@ const Overview = (props) => {
                   </div>
                   <div className="card-footer bg-transparent" style={{ border: 0 }}>
                     Stock: &nbsp;
-                    <span className="stoct-count font-HelveticaNeue">{(overviewStats['breweryObj'] && overviewStats['breweryObj']['stock']) ? overviewStats['breweryObj']['stock'] : ''}</span>
+                    <span className="stoct-count font-HelveticaNeue">{(overviewStats['breweryObj'] && overviewStats['breweryObj']['stock']) ? overviewStats['breweryObj']['stock'] : 0}</span>
                   </div>
                 </section>
                 <section className={(selectedFilter === 'S1') ? 'selectedBox' : 'box'} onClick={() => applyFilter('S1')}>
@@ -160,7 +160,7 @@ const Overview = (props) => {
                         />
                       </svg>
                     </span>
-                    <span>{(overviewStats['s1Obj'] && overviewStats['s1Obj']['n_warehouses']) ? overviewStats['s1Obj']['n_warehouses'] : ''}</span>
+                    <span>{(overviewStats['s1Obj'] && overviewStats['s1Obj']['n_warehouses']) ? overviewStats['s1Obj']['n_warehouses'] : 0}</span>
                     <span className="bi2-icons">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -179,8 +179,8 @@ const Overview = (props) => {
                     </Moment>
                   </div>
                   <div className="card-footer bg-transparent" style={{ border: 0 }}>
-                  Stock: &nbsp;
-                    <span className="stoct-count">{(overviewStats['s1Obj'] && overviewStats['s1Obj']['stock']) ? overviewStats['s1Obj']['stock'] : ''}</span>
+                    Stock: &nbsp;
+                    <span className="stoct-count">{(overviewStats['s1Obj'] && overviewStats['s1Obj']['stock']) ? overviewStats['s1Obj']['stock'] : 0}</span>
                   </div>
                 </section>
                 <section className={(selectedFilter === 'S2') ? 'selectedBox' : 'box'} onClick={() => applyFilter('S2')}>
@@ -217,7 +217,7 @@ const Overview = (props) => {
                         />
                       </svg>
                     </span>
-                    <span>{(overviewStats['s2Obj'] && overviewStats['s2Obj']['n_warehouses']) ? overviewStats['s2Obj']['n_warehouses'] : ''}</span>
+                    <span>{(overviewStats['s2Obj'] && overviewStats['s2Obj']['n_warehouses']) ? overviewStats['s2Obj']['n_warehouses'] : 0}</span>
                     <span className="bi2-icons">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -237,7 +237,7 @@ const Overview = (props) => {
                   </div>
                   <div className="card-footer bg-transparent" style={{ border: 0 }}>
                     Stock: &nbsp;
-                    <span className="stoct-count">{(overviewStats['s2Obj'] && overviewStats['s2Obj']['stock']) ? overviewStats['s2Obj']['stock'] : ''}</span>
+                    <span className="stoct-count">{(overviewStats['s2Obj'] && overviewStats['s2Obj']['stock']) ? overviewStats['s2Obj']['stock'] : 0}</span>
                   </div>
                 </section>
               </div>
@@ -248,7 +248,8 @@ const Overview = (props) => {
               <table className="table">
                 <thead>
                   <tr>
-                    <th scope="col">SKU</th>
+                    <th scope="col"></th>
+                    <th scope="col" className="skuColumnHead">SKU</th>
                     <th scope="col">Sales</th>
                     <th scope="col">Return Bottles</th>
                     <th scope="col">Target</th>
@@ -258,21 +259,20 @@ const Overview = (props) => {
                 <tbody>
                   {Transactions.map((transaction, index) => (
                     <tr key={index}>
-                      <td scope="row">
-                        <div className="tableProfileIconCard">
-                          <div className="profileIcon">
-                            <img src={bottlesIcon} alt="" width="60" height="60" />
-                          </div>
-                          <div className="profileName">
-                            <span className="profileTitle">{transaction.productName}</span>
-                            <span>{transaction.productId}</span>
-                          </div>
+                      <td>
+                        <div className="profileIcon">
+                          <img src={bottlesIcon} alt="" width="60" height="60" />
                         </div>
-
+                      </td>
+                      <td scope="row">
+                        <div className="profileName">
+                          <span className="profileTitle">{transaction.productName}</span>
+                          <span>{transaction.productId}</span>
+                        </div>
                       </td>
                       <td>{transaction.sales}</td>
                       <td>{transaction.returns}</td>
-                      <td>{transaction.target}</td>
+                      <td>{transaction.targetSales}</td>
                       <td>{(transaction.returns / transaction.sales * 100).toFixed(2)}%</td>
                     </tr>
                   ))}

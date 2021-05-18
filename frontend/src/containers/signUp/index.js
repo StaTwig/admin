@@ -15,7 +15,16 @@ const SignupContainer = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [ adminAwaiting, setAdminAwaiting ] = useState(false);
   const [isNewOrg, setIsNewOrg] = useState(false);
+  const [innerWidth,setInnerwidth] = useState(window.innerWidth);
 
+  // const updtaeInnerWidth = () =>{
+  //     setInnerwidth(window.innerWidth);
+  // } 
+  // setInterval(updtaeInnerWidth,100);
+  
+  window.onresize = () =>{
+    setInnerwidth(window.innerWidth);
+  }
   const onSignup = useCallback(async (values) => {
     let data = { firstName, lastName, emailId: email, organisationId: organisation.id };
     if (isNewOrg) {
@@ -45,6 +54,7 @@ const SignupContainer = (props) => {
     }
   });
 
+  
   const checkNcontinue = async () => {
     if (isNewOrg) {
       let data = { firstName, lastName, emailId: email, organisationId: organisation.id };
@@ -88,12 +98,13 @@ const SignupContainer = (props) => {
         </Modal>
       )}
  <MobileHeader {...props} />
+ { innerWidth >1024 &&
    <nav className="navbar sticky-top navbar-expand-lg">
         <a className="navbar-brand" href="#">
           <img src={logo} width="230" height="30" alt="logo" onClick={() =>props.history.push('/#')} />
         </a>
-</nav>
-
+    </nav>
+}
       <Signup
         email={email}
         firstName={firstName}

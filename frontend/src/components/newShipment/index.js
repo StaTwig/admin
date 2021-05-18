@@ -359,7 +359,7 @@ const NewShipment = (props) => {
           <form onSubmit={handleSubmit} className="mb-3">
             <div className="row mb-3">
               <div className="col bg-white formContainer low mr-3">
-                <div className="col-md-6 com-sm-12 mt-3">
+                <div className="col-md-6 col-sm-12 mt-3">
                   <div className="form-group">
                     <label htmlFor="orderID">Order ID</label>
                     <div className="form-control">
@@ -376,8 +376,7 @@ const NewShipment = (props) => {
                           console.log("Result");
                           console.log(result);
                           setReceiverOrgLoc(
-                            result.poDetails[0].customer.organisation
-                              .postalAddress
+                             result.poDetails[0].customer.warehouse.title + '/' + result.poDetails[0].customer.warehouse.postalAddress
                           );
                           setReceiverOrgId(
                             result.poDetails[0].customer.organisation.id
@@ -422,14 +421,20 @@ const NewShipment = (props) => {
                               result.poDetails[0].productDetails[i].name;
                             products_temp[i].productQuantity =
                               result.poDetails[0].products[i].quantity;
-                          }
+ products_temp[i].productCategory =
+                              result.poDetails[0].products[i].type;
+ products_temp[i].productID =
+                              result.poDetails[0].products[i].productId;
+
+}
                           console.log("Products");
                           console.log(products_temp);
-                          if (result.poDetails[0].productDetails.length > 0) {
-                            setProducts([]);
+                         if (result.poDetails[0].productDetails.length > 0) {
+                           setProducts([]);
                             setAddProducts([]);
-                            setFieldValue("products", products_temp);
-                          } else setFieldValue("products", []);
+                            setFieldValue("products",products_temp);
+console.log("tes",products);
+          } else setFieldValue("products", []);
                         }}
                         groups={OrderIds}
                       />
@@ -478,13 +483,13 @@ const NewShipment = (props) => {
                             setFieldValue("fromOrg", senderOrganisation[0]);
                             setSenderOrgLoc(
                               v?.warehouseAddress
-                                ? v?.warehouseAddress?.firstLine +
+                                ? v?.title + '/' + v?.warehouseAddress?.firstLine +
                                     ", " +
                                     v?.warehouseAddress?.city
-                                : v.postalAddress
+                                : v?.title + '/' + v.postalAddress
                             );
                             setFieldValue("fromOrgLoc", v.id);
-                            setFieldValue("products", []);
+                      //      setFieldValue("products", []);
                             setAddProducts((prod) => []);
                             let newArr = {
                               productName: "",
@@ -552,10 +557,10 @@ const NewShipment = (props) => {
                           onSelect={(v) => {
                             setReceiverOrgLoc(
                               v?.warehouseAddress
-                                ? v?.warehouseAddress?.firstLine +
+                                ? v?.title + '/' + v?.warehouseAddress?.firstLine +
                                     ", " +
                                     v?.warehouseAddress?.city
-                                : v.postalAddress
+                                : v?.title + '/' + v.postalAddress
                             );
                             setFieldValue("toOrgLoc", v.id);
                           }}
@@ -587,7 +592,7 @@ const NewShipment = (props) => {
                         className="form-control"
                         name="airWayBillNo"
                         onBlur={handleBlur}
-                        placeholder="Enter Air Way Bill No"
+                        placeholder="Enter Airway Bill No"
                         onChange={handleChange}
                         value={values.airWayBillNo}
                       />
@@ -644,7 +649,7 @@ const NewShipment = (props) => {
                         type="text"
                         className="form-control"
                         name="labelCode"
-                        placeholder="Enter Label ID"
+                        placeholder="Enter Label Code"
                         onBlur={handleBlur}
                         onChange={handleChange}
                         value={values.labelCode}
