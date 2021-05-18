@@ -4,20 +4,25 @@
   color: #0093E9; 
   padding-left: 2rem;
   padding-top: 2rem;
+  @media (max-width: $md) {
+    padding-right: 0px;
+    padding-left: 0px;
+    font-size: 15px;
+    padding-top: 3rem;
+  }
 }
 .bottom {
   position: absolute;
   padding-top: 22rem;
-  padding-left: 12rem;
+  padding-left: 13rem;
 }
 .updateStatus {
   padding-right: 3rem;
     padding-left: 5rem;
     @media (max-width: $md) {
-      padding-right: 10px;
-      padding-left: 10px;
+      padding-right: 0px;
+      padding-left: 60px;
     }
-
 
     .browse{
       display: flex;
@@ -61,6 +66,7 @@
         flex-basis: 55%;
         flex-grow: inherit;
         font-size: 14px;
+        margin-bottom: -16px;
 
       }
 
@@ -68,7 +74,7 @@
       @media (min-width: $xl) {
         label {
           font-size: 15px;
-          flex-basis: 100%;
+          flex-basis: 20% !important;
           flex-grow: inherit;
           text-align: left;
           margin-bottom:0px;
