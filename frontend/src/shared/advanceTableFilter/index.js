@@ -328,9 +328,9 @@ const AdvanceTableFilter = (props) => {
         </a>
         <StyledMenu
           id="customized-menu"
-          anchorEl={fromPoOrderIdAnchorEl}
+          anchorEl={fromShipmentAnchorEl}
           keepMounted
-          open={Boolean(fromPoOrderIdAnchorEl)}
+          open={Boolean(fromShipmentAnchorEl)}
           onClose={handleFromShipmentClose}
         >
           <div className="d-flex flex-column align-items-center">
