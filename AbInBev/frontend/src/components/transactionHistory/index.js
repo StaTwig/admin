@@ -4,7 +4,7 @@ import "./style.scss";
 import inTransitIcon from "../../assets/intransit.png";
 import SideBar from "../../components/sidebar";
 import filterIcon from "../../assets/icons/funnel.svg";
-import { getTransactions } from "../../actions/transactionAction";
+import { getTransactions, fetchShipment } from "../../actions/transactionAction";
 import Moment from "react-moment";
 import setAuthToken from "../../utils/setAuthToken";
 import { func } from "prop-types";
@@ -47,7 +47,7 @@ const TransactionHistory = (props) => {
 
   const [selectedTransactionType, setSelectedTransactionType] = useState('ALL');
   const [selectedOrganizationType, setSelectedOrganizationType] = useState('BREWERY');
-  const [selectedDateType, setSelectedDateType] = useState('by_range');
+  const [selectedDateType, setSelectedDateType] = useState('by_yearly');
   const [selectedVendorType, setSelectedVendorType] = useState('ALL_VENDORS');
 
   const [organizations, setOrganizations] = useState([]);
@@ -64,12 +64,12 @@ const TransactionHistory = (props) => {
     sku: '',
     organizationType: 'BREWERY',
     vendorType: 'ALL_VENDORS',
-    date_filter_type: 'by_range',
+    date_filter_type: 'by_yearly',
     startDate: new Date(),
     endDate: new Date(),
-    year: new Date().getFullYear(), //setCurentYear
-    month: new Date().getMonth() + 1, //setCurrentMonth
-    quarter: 0 //setCurrent Quarter.
+    year: new Date().getFullYear(),
+    month: new Date().getMonth() + 1,
+    quarter: 0
   });
 
   const defaultFilters = {
@@ -79,12 +79,12 @@ const TransactionHistory = (props) => {
     sku: '',
     organizationType: 'BREWERY',
     vendorType: 'ALL_VENDORS',
-    date_filter_type: 'by_range',
+    date_filter_type: 'by_yearly',
     startDate: new Date(),
     endDate: new Date(),
-    year: 0, //setCurentYear
-    month: 0, //setCurrentMonth
-    quarter: 0 //setCurrent Quarter.
+    year: new Date().getFullYear(),
+    month: new Date().getMonth() + 1,
+    quarter: 0
   };
 
   const onStartDateChange = (event) => {
@@ -130,6 +130,11 @@ const TransactionHistory = (props) => {
     _filters.vendorType = vendorType;
     setFilters(_filters);
     applyFilters(_filters);
+  }
+
+  const toFixed2 = input => {
+    if (!input) return 0;
+    return input.toFixed(2);
   }
 
   const _getAllStates = async () => {
@@ -197,7 +202,7 @@ const TransactionHistory = (props) => {
     setFilters(_filters);
     setSelectedTransactionType('ALL');
     setSelectedOrganizationType('BREWERY');
-    setSelectedDateType('by_range');
+    setSelectedDateType('by_yearly');
     applyFilters(_filters);
 
   }
@@ -205,7 +210,7 @@ const TransactionHistory = (props) => {
   const allowedMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 12];
   let thisYear = new Date().getFullYear();
   const allowedYears = [];
-  for (let i = 1; i < 21; i++) {
+  for (let i = 0; i < 21; i++) {
     allowedYears.push(thisYear - i);
   }
 
@@ -235,13 +240,29 @@ const TransactionHistory = (props) => {
     applyFilters(_filters);
   };
 
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
+  const [selectedIndex, setSelectedIndex] = useState();
+
+  const selectTransaction = async (transaction, index) => {
+    if (index === selectedIndex) {
+      setSelectedIndex(null);
+      setSelectedTransaction(null);
+    } else {
+      const result = await dispatch(fetchShipment(transaction.id));
+      setSelectedTransaction(result.data);
+      setSelectedIndex(index);
+    }
+  }
+
+  const getSumByProperty = (inputArr, key) => {
+    return inputArr.map(item => parseInt(item[key]) || 0).reduce((prev, next) => prev + next);
+  }
+
   async function applyFilters(_filters) {
-    //  await setFilters(_filters);
     const results = await dispatch(getTransactions(_filters));
     let addedarray = [];
     let date;
     results.data.forEach((b) => {
-      // console.log('a') =
       let a = b;
       if (date !== formatDate(a.createdAt)) {
         date = formatDate(a.createdAt);
@@ -261,6 +282,11 @@ const TransactionHistory = (props) => {
       if (a.status === "SENT") sent.push(a);
       if (a.status === "INTRANSIT") inTransit.push(a);
     });
+    if (results && results.data) {
+      results.data = results.data.filter(trxn => {
+        return trxn.supplier.org.name !== 'dev@statwigorg';
+      });
+    }
     setDisplayTransactions(results.data);
     setTransactions(results.data);
   }
@@ -272,20 +298,32 @@ const TransactionHistory = (props) => {
       let date;
       results.data.forEach((b) => {
         let a = b;
-        if (date !== a.createdAt) {
-          date = a.createdAt;
+        if (date !== formatDate(a.createdAt)) {
+          date = formatDate(a.createdAt);
           a.shippingDates = true;
         } else {
           a.shippingDates = false;
         }
         if (a.status === "CREATED") {
+          a.status = "SENT";
+          addedarray.push(a);
+        }
+        if (a.status === "RECEIVED" && a.supplier.id === props.user.id) {
+          a.status = "SENT";
           addedarray.push(a);
         }
         if (a.status === "RECEIVED") inBound.push(a);
         if (a.status === "SENT") sent.push(a);
         if (a.status === "INTRANSIT") inTransit.push(a);
       });
-      setAdded(addedarray);
+      if (results && results.data) {
+        results.data = results.data.filter(trxn => {
+          return trxn.supplier.org.name !== 'dev@statwigorg';
+        });
+      }
+      setDisplayTransactions(results.data);
+      setTransactions(results.data);
+      // setAdded(addedarray);
     })();
   }, []);
 
@@ -338,22 +376,6 @@ const TransactionHistory = (props) => {
                 >
                   Received
                     </a>
-                <a
-                  className={`btn ${selectedTransactionType === 'IN_TRANSIT' ? "active" : ""}`}
-                  onClick={() => {
-                    onTransactionTypeChange('IN_TRANSIT');
-                  }}
-                >
-                  In-Transit
-                    </a>
-                <a
-                  className={`btn ${selectedTransactionType === 'ADDED' ? "active" : ""}`}
-                  onClick={() => {
-                    onTransactionTypeChange('ADDED');
-                  }}
-                >
-                  Added
-                    </a>
               </div>
 
 
@@ -362,17 +384,16 @@ const TransactionHistory = (props) => {
                   displayTransactions.length ?
                     <>
                       <div className="productListHeader col-md-12">
-                        <div className=" col-md-3">Particulars</div>
-                        <div className="padLeft20 col-md-2">Warehouse Address</div>
+                        <div className=" col-md-4">Particulars</div>
                         <div className="padLeft20 col-md-2">Status</div>
-                        <div className="padLeft20 col-md-3">Challan Image</div>
-                        <div className="padLeft20 col-md-2">Quantity</div>
+                        <div className="padLeft40 col-md-4">Challan Image</div>
+                        <div className="padLeft40 col-md-2">Quantity</div>
                       </div>
                     </> : ""
                 }
 
                 {displayTransactions.map((transaction, index) => (
-                  <div>
+                  <div key={index}>
                     {transaction.shippingDates ? (
                       <span className={dateClassName}>
                         <Moment format="MMM Do, YYYY">
@@ -384,8 +405,8 @@ const TransactionHistory = (props) => {
                     )}
                     <div className="transactionListContainer">
 
-                      <div className="productContainer col-md-12">
-                        <div className="productItem col-md-3">
+                      <div className={`productContainer col-md-12 ${selectedIndex === index ? "productDetailActive" : ""}`} onClick={() => selectTransaction(transaction, index)}>
+                        <div className="productItem col-md-4">
                           <div className="iconGroup">
                             <div className="productIcon inTransit">
                               <img
@@ -414,14 +435,6 @@ const TransactionHistory = (props) => {
                           </div>
                         </div>
                         <div className="productItem col-md-2">
-                          {
-                            (transaction.receiver.warehouse.warehouseAddress
-                              .city,
-                              transaction.receiver.warehouse.warehouseAddress
-                                .state)
-                          }
-                        </div>
-                        <div className="productItem col-md-2">
                           {transaction.status === "RECEIVED" && (
                             <div className="productStatus">
                               <span className="statusbadge receivedBadge"></span>{" "}
@@ -445,7 +458,7 @@ const TransactionHistory = (props) => {
                             </div>
                           )}
                         </div>
-                        <div className="productItem col-md-3">123456.jpg</div>
+                        <div className="productItem col-md-4">{transaction.imageDetails ? transaction.imageDetails[0] : ''}</div>
                         <div className="productItem productQuantity col-md-2">
                           {transaction.products.reduce(
                             (a, v) => (a = a + v.productQuantity),
@@ -453,6 +466,98 @@ const TransactionHistory = (props) => {
                           )}
                         </div>
                       </div>
+
+                      {
+                        selectedIndex === index ?
+                          <>
+                            <div className="productDetail">
+                              <div className="row supplierOrgName">
+                                {
+                                  (selectedTransaction.supplier && selectedTransaction.supplier.org) ? selectedTransaction.supplier.org.name : ''
+                                }
+                              </div>
+                              <div className="row">
+                                <div className="col-md-3">
+                                  <span>Transaction ID:</span><span>{selectedTransaction.externalShipmentId}</span>
+                                </div>
+                                <div className="col-md-3">
+                                  <span>Status:</span><span>{selectedTransaction.status}</span>
+                                </div>
+                                <div className="col-md-3">
+                                  <span>Date:</span><span>{selectedTransaction.shippingDate}</span>
+                                </div>
+                                <div className="col-md-3">
+                                  <span>Challan No:</span><span>{selectedTransaction.airWayBillNo}</span>
+                                </div>
+                                {/* <div className="col-md-3">
+                                  <span>Truck No:</span><span>{selectedTransaction.externalShipmentId}</span>
+                                </div> */}
+                              </div>
+
+                              <div className=" transactionProducts row">
+                                {
+                                  selectedTransaction.products.length ?
+                                    <>
+                                      <div className="productHeader col-md-3">Manufacturer</div>
+                                      <div className="productHeader col-md-3">Product</div>
+                                      <div className="productHeader col-md-3">Quantity Sent</div>
+                                      <div className="productHeader col-md-3">Quantity Received</div>
+                                    </> : ""
+                                }
+                                {
+                                  selectedTransaction.products.map(product => {
+                                    return (
+                                      <>
+                                        <div className="col-md-3">
+                                          {
+                                            product.manufacturer
+                                          }
+                                        </div>
+                                        <div className="col-md-3">
+                                          {
+                                            product.productName
+                                          }
+                                        </div>
+                                        <div className="col-md-3">
+                                          {
+                                            product.productQuantity
+                                          }
+                                        </div>
+                                        <div className="col-md-3">
+                                          {
+                                            product.productQuantity
+                                          }
+                                        </div>
+                                      </>
+                                    )
+                                  })
+                                }
+                                {
+                                  selectedTransaction.products.length ?
+                                    <>
+                                      <div className="productHeader col-md-3"></div>
+                                      <div className="productHeader col-md-3">
+                                        Total
+                                      </div>
+                                      <div className="productHeader col-md-3">
+                                        {
+                                          getSumByProperty(selectedTransaction.products, 'productQuantity')
+                                        }</div>
+                                      <div className="productHeader col-md-3">
+                                        {
+                                          getSumByProperty(selectedTransaction.products, 'productQuantity')
+                                        }
+                                      </div>
+                                    </> : ""
+                                }
+
+                              </div>
+                              <div className="row rejectionRateRow">
+                                <span>Rejection Rate: {toFixed2(selectedTransaction.rejectionRate)}% </span>
+                              </div>
+                            </div>
+                          </> : ""
+                      }
                     </div>
                   </div>
                 ))}
@@ -743,7 +848,7 @@ const TransactionHistory = (props) => {
           </div>
         </main>
       </div>
-    </div>
+    </div >
   );
 };
 export default TransactionHistory;

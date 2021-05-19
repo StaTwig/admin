@@ -41,6 +41,15 @@ const Inventory = (props) => {
     inventoryType: 'BREWERY',
   });
 
+  const defaultFilters = {
+    state: '',
+    district: '',
+    brewery: '',
+    organization: '',
+    sku: '',
+    inventoryType: 'BREWERY',
+  };
+
   const onInventoryTypeChange = (inventoryType) => {
     setSelectedVendor(null);
     setSelectedInventoryType(inventoryType);
@@ -101,6 +110,12 @@ const Inventory = (props) => {
     _filterVisibility.organization = false;
     setFilterVisibility(_filterVisibility);
   };
+
+  const resetFilters = () => {
+    let _filters = defaultFilters;
+    setFilters(_filters);
+    props.applyFilters(_filters);
+  }
 
   const onDistrictSelection = (event) => {
     const selectedDistrict = event.target.value;
@@ -236,7 +251,6 @@ const Inventory = (props) => {
                       <div className="filterHeader">
                         <img src={filterIcon} className="filterIcon" /> FILTERS
                 </div>
-                      <span className="pull-right pr-4 pl-4 pt-4 viewall"><a href="#">View All</a></span>
                       {
                         filters.inventoryType === 'VENDOR' ?
                           <>
@@ -306,6 +320,12 @@ const Inventory = (props) => {
                           })
                         }
                       </select>
+                      <button
+                        className="btn SearchButton mt-4"
+                        onClick={resetFilters}
+                      >
+                        Clear
+                </button>
                     </div>
                   </>
               }
