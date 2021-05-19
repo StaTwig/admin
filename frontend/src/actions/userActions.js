@@ -38,6 +38,15 @@ export const checkUser = async data => {
   }
 };
 
+export const updateWarehouse = async (data, id) => {
+  try{
+    const result = await axios.post(config().updateWarehouse + id, data);
+    return result;
+  } catch(e){
+    return e.response;
+  }
+};
+
 export const registerUser = async data => {
   try {
     const result = await axios.post(config().registerUrl, data );

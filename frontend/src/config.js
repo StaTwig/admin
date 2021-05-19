@@ -105,6 +105,7 @@ export function config() {
       fetchInboundShipmentsUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchInboundShipments`,
       fetchOutboundShipmentsUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchOutboundShipments`,
       fetchSupplierAndReceiverListUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
+      updateWarehouse: `${DEV_SERVER_URL}/usermanagement/api/auth/updateWarehouse?warehouseId=`,
           },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
@@ -176,6 +177,7 @@ export function config() {
       deleteNotificationUrl: `${DEV_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${DEV_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
       getOrderIds:`${DEV_SERVER_URL}/pomanagement/api/po/getOrderIds`,
+      updateWarehouse: `${DEV_SERVER_URL}/usermanagement/api/auth/updateWarehouse?warehouseId=`,
       // fetchOutboundPurchaseOrderUrl: `${DEV_SERVER_URL}/pomanagement/api/po/fetchOutboundPurchaseOrders`,
       // fetchInboundPurchaseOrderUrl: `${DEV_SERVER_URL}/pomanagement/api/po/fetchInboundPurchaseOrders`,
       // fetchInboundShipmentsUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/fetchInboundShipments`,
@@ -253,6 +255,7 @@ export function config() {
       deleteNotificationUrl: `${STABLE_SERVER_URL_PRODUCTS}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/updateTrackingStatus`,
       getOrderIds:`${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/getOrderIds`,
+      updateWarehouse: `${STABLE_SERVER_URL_SHIPMENT}/usermanagement/api/auth/updateWarehouse?warehouseId=`,
       // fetchOutboundPurchaseOrderUrl: `${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/fetchOutboundPurchaseOrders`,
       // fetchInboundPurchaseOrderUrl: `${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/fetchInboundPurchaseOrders`,
       // fetchInboundShipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchInboundShipments`,
@@ -337,6 +340,7 @@ export function config() {
       fetchInboundShipmentsUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchInboundShipments`,
       fetchOutboundShipmentsUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchOutboundShipments`,
       fetchSupplierAndReceiverListUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
+      updateWarehouse: `${TEST_SERVER_URL}/usermanagement/api/auth/updateWarehouse?warehouseId=`,
     },
     demo: {
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
@@ -411,6 +415,7 @@ export function config() {
       updateTrackingStatusUrl:`${DEMO_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
       getOrderIds:`${DEMO_SERVER_URL}/pomanagement/api/po/getOrderIds`,
       addWarehouse: `${DEMO_SERVER_URL}/usermanagement/api/auth/addWarehouse`, 
+      updateWarehouse: `${DEMO_SERVER_URL}/usermanagement/api/auth/updateWarehouse?warehouseId=`,
     },
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
@@ -484,6 +489,7 @@ export function config() {
       updateTrackingStatusUrl:`${PROD_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
       getOrderIds:`${PROD_SERVER_URL}/pomanagement/api/po/getOrderIds`,
       addWarehouse: `${PROD_SERVER_URL}/usermanagement/api/auth/addWarehouse`, 
+      updateWarehouse: `${PROD_SERVER_URL}/usermanagement/api/auth/updateWarehouse?warehouseId=`,
     },
     
     uniceftest: {
@@ -559,6 +565,7 @@ export function config() {
       updateTrackingStatusUrl:`${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
       getOrderIds:`${UNICEFTEST_SERVER_URL}/pomanagement/api/po/getOrderIds`,
       addWarehouse: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/addWarehouse`, 
+      updateWarehouse: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/updateWarehouse?warehouseId=`,
     },
   };
 

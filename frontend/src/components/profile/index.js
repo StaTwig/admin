@@ -416,7 +416,7 @@ class Profile extends React.Component {
                                 </h3>
                                 <Link
                                   to={{
-                                    pathname: "/editLocation",
+                                    pathname: `/editLocation/${warehouseId}`,
                                     state: { message: "hellow" },
                                   }}
                                 >
