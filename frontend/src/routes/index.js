@@ -80,7 +80,7 @@ const routes = (
     <Route path="/Addlocation" component={requireAuth(AddLocation)} />
     <Route path="/lastMile" component={requireAuth(LastMile)} />
     <Route path="/enterid" component={requireAuth(enterId)} />
-    <Route path="/editLocation" component={requireAuth(EditLocation)} />
+    <Route path="/editLocation/:id" component={requireAuth(EditLocation)} />
     <Route component={NoMatch} />
   </Switch>
 );
