@@ -234,13 +234,13 @@ const NewInventory = props => {
           {menu ? (
             <div class="menu">
               <button
-                className=" btn btn-outline-primary mb-2"
+                className=" btn btn-outline-info mb-2 "
                 onClick={() => setOpenExcel(true)}
               >
                 {' '}
                 Excel
               </button>
-              <button className=" btn btn-outline-primary"> Other</button>
+              <button className=" btn btn-outline-info" > Other</button>
             </div>
           ) : null}
           {openExcel && (
