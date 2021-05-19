@@ -13,8 +13,9 @@
     .shadow{
       border-radius: 1rem;
     }
-    .btn-outline-primary:hover, .btn-outline-primary:active{
-      background-color: transparent !important;
+    .btn-outline-primary:hover{
+     color: #0093E9 !important;
+     border-color: #0093E9 !important;
     }
     .col{
       text-align: left;

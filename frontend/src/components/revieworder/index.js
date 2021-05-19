@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import ViewTable from "./table/viewTable";
 import { useSelector, useDispatch } from "react-redux";
 import OrderIcon from '../../assets/icons/order.svg';
-import Pen from '../../assets/icons/pen1.svg';
+import Pen from '../../assets/icons/edit.png';
 import ShipmentPopUp from "../neworder/shipmentPopUp";
 import ShipmentFailPopUp from "../neworder/shipmentFailPopUp";
 import './style.scss';
@@ -86,7 +86,7 @@ const [ modalProps, setModalProps ] = useState({});
   return (
     <div className="vieworder text-muted">
       <div className="d-flex justify-content-between">
-        <h1 className="breadcrumb">REVIEW ORDER</h1>
+        <h1 className="breadcrumb">REVIEW NEW ORDER</h1>
       </div>
       <div className="mt-4">
         <div className=" p-3 m-3 bg-white shadow">
@@ -141,10 +141,10 @@ const [ modalProps, setModalProps ] = useState({});
             <div className="d-flex flex-row-reverse">
               <button onClick={onAssign} className="btn btn-yellow fontSize20 font-bold">
                 <img src={OrderIcon} width="20" height="17" className="mr-2 mb-1" />
-                <span>Create Order</span>
+                <span>Create New Order</span>
               </button>
-              <button className="btn-outline-primary btn mr-2" onClick={() => props.history.push('/neworder')}>
-                <img src={Pen} width="15" height="15" className="mr-3" />
+              <button className="btn-outline-primary btn mr-3" onClick={() => props.history.push('/neworder')}>
+                <img src={Pen} width="15" height="15" className="mr-2" />
                 <span>EDIT</span>
               </button>
                   {openReviewOrder && (
