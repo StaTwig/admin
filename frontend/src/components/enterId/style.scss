@@ -1,20 +1,15 @@
 @import '../../assets/styles/global.scss';
 
 .or{
-  color: #0093E9; 
-  padding-left: 2rem;
+  color: #0093E9;
+  padding-left: 7rem;
   padding-top: 2rem;
-  @media (max-width: $md) {
-    padding-right: 0px;
-    padding-left: 0px;
-    font-size: 15px;
-    padding-top: 3rem;
-  }
+  
 }
 .bottom {
   position: absolute;
-  padding-top: 22rem;
-  padding-left: 13rem;
+  padding-top: 24rem;
+  padding-left: 29rem;
 }
 .updateStatus {
   padding-right: 3rem;

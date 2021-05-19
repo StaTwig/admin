@@ -95,7 +95,7 @@ const Inventory = props => {
         <h1 className="breadcrumb">INVENTORY </h1>
         <div className="d-flex">
           <Link to="/newinventory">
-            <button className="btn btn-yellow font-weight-bold">
+            <button className="btn btn-yellow">
               <img src={Add} width="13" height="13" className="mr-2" />
               <span>Add Inventory</span>
             </button>

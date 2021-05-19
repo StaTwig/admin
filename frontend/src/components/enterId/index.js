@@ -54,11 +54,10 @@ const EnterId = (props) => {
           dirty,
         }) => (
           <form onSubmit={handleSubmit} className="">
-            <div className="card bg-light border-0">
-              <div className="card-body">
-                <div className="row justify-content-between">
-                  <div className="col">
-                    <div className="panel commonpanle mr-5">
+              <div className="">
+                <div className="row" >
+                  <div className="" >
+                    <div className="panel commonpanle ml-4" style={{height:"80%",width:"114%" }}>
                       <div
                         className={`form-group ${
                           errors.shipmentId && touched.shipmentId && ``
@@ -70,7 +69,7 @@ const EnterId = (props) => {
                         <input
                           type="text"
                           placeholder="Enter Shipment ID"
-                          className="form-control mr-5"
+                          className="form-control ml-5 "
                           name="shipmentId"
                           onBlur={handleBlur}
                           onChange={(e) => {
@@ -90,12 +89,12 @@ const EnterId = (props) => {
                       )} */}
                     </div>
                   </div>
-                  <div className="col-1 ml-2 mr-5">
-                    <h4 className="or"><b>OR</b></h4>
+                  <div className="col-1 ml-3 mr-4" >
+                    <h6 className="or" style={{position:"absolute", left:"4px",top:"8px"}}><b>OR</b></h6>
                   </div>
 
-                  <div className="col ">
-                    <div className="panel commonpanle mr-5">
+                  <div className="" >
+                    <div className="panel commonpanle ml-5" style={{height:"80%", width:"114%" }}>
                       <div
                         className={`form-group ${
                           errors.shipmentId && touched.shipmentId && ``
@@ -104,7 +103,7 @@ const EnterId = (props) => {
                         <label className="mt-3 text-secondary">Bill No.</label>
                         <input
                           type="text"
-                          className="form-control mr-5"
+                          className="form-control ml-5 "
                           placeholder=" Enter Bill No."
                           name="shipmentId"
                           onBlur={handleBlur}
@@ -127,7 +126,7 @@ const EnterId = (props) => {
                     <div className="row mt-5 bottom">
                       <button
                         type="button"
-                        className="btn btn-outline-info mr-4"
+                        className="btn btn-outline-primary mr-4 "
                         onClick={() =>  props.history.push(`/viewshipment/${id}`)
                           
                         }
@@ -149,7 +148,6 @@ const EnterId = (props) => {
                   </div>
                 </div>
               </div>
-            </div>
           </form>
         )}
       </Formik>
