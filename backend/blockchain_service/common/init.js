@@ -6,7 +6,7 @@ const LogzioWinstonTransport = require('winston-logzio');
 
 exports.getMultichain = function () {
     let multichain = require("multichain-node")({
-        port: process.env.PORT,
+        port: process.env.BCPORT,
         host: process.env.HOST,
         user: process.env.USERNAME,
         pass: process.env.PASSWORD,
