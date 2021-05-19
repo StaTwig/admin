@@ -174,7 +174,6 @@ const [value, setValue] = useState('');
                       inputProps={{
                         name: 'phone',
                         required:false,
-                        autoFocus: true,
                         defaultCountry:"US",
                         enableSearch: true,
                       }}
@@ -198,7 +197,7 @@ const [value, setValue] = useState('');
               
                       // {...console.log(name)}
                       isText={true}
-                      placeholder='Organisation'
+                      placeholder='     Organisation'
                       onSelect={item => {
                         setFieldValue('org', item.name);
                         props.onOrganisationChange(item);
