@@ -1,8 +1,6 @@
 const EmployeeModel = require("../models/EmployeeModel");
 const CounterModel = require("../models/CounterModel");
 const auth = require("../middlewares/jwt");
-const init = require("../logging/init");
-const logger = init.getLog();
 const mailer = require("../helpers/mailer");
 const { constants } = require("../helpers/constants");
 const RequestApproved = require("../components/RequestApproved");

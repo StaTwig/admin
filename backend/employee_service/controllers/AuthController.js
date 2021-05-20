@@ -1,8 +1,6 @@
 const EmployeeModel = require("../models/EmployeeModel");
 const OrganisationModel = require("../models/OrganisationModel");
 const { check, validationResult , sanitizeBody } = require("express-validator");
-const uniqid = require("uniqid");
-const mongoose = require("mongoose");
 const dotenv = require('dotenv').config();
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
@@ -10,14 +8,9 @@ const utility = require("../helpers/utility");
 const jwt = require("jsonwebtoken");
 const mailer = require("../helpers/mailer");
 const { constants } = require("../helpers/constants");
-var base64Img = require("base64-img");
 const auth = require("../middlewares/jwt");
 const axios = require("axios");
 
-const blockchain_service_url = process.env.URL;
-const stream_name = process.env.INV_STREAM;
-
-const checkToken = require("../middlewares/middleware").checkToken;
 const EmailContent = require("../components/EmailContent");
 
 const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -302,25 +295,26 @@ exports.uploadImage = [
     try {
       EmployeeModel.findOne({ emailId: req.user.emailId }).then((user) => {
         if (user) {
-          base64Img.base64(
-            "uploads/" + req.file.filename,
-            function (err, data) {
-              var base64ImgData = data;
-              user.profile_picture = data;
-              user.image_location = req.file.filename;
-              // Save user.
-              user.save(function (err) {
-                if (err) {
-                  return apiResponse.ErrorResponse(res, err);
-                }
-                return apiResponse.successResponseWithData(
-                  res,
-                  "Updated",
-                  base64ImgData
-                );
-              });
-            }
-          );
+          console.log(req.file)
+          // base64Img.base64(
+          //   "uploads/" + req.file.filename,
+          //   function (err, data) {
+          //     var base64ImgData = data;
+          //     user.profile_picture = data;
+          //     user.image_location = req.file.filename;
+          //     // Save user.
+          //     user.save(function (err) {
+          //       if (err) {
+          //         return apiResponse.ErrorResponse(res, err);
+          //       }
+          //       return apiResponse.successResponseWithData(
+          //         res,
+          //         "Updated",
+          //         base64ImgData
+          //       );
+          //     });
+          //   }
+          // );
         }
       });
     } catch (err) {

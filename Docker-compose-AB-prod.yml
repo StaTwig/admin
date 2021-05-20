@@ -16,6 +16,7 @@ services:
     build: './backend/address_service'
     image: 'address_service2.0'
     container_name: 'address_service'
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -27,6 +28,7 @@ services:
     build: './backend/affliation_service'
     image: 'affliation_service2.0'
     container_name: 'affliate_service'
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -39,6 +41,7 @@ services:
     build: './backend/rbac_service'
     image: 'rbac_service2.0'
     container_name: 'rbac_service'
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -51,6 +54,7 @@ services:
     build: './backend/employee_service'
     image: 'employee_service2.0'
     container_name: 'employee_service'
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -62,6 +66,7 @@ services:
     build: './frontend'
     image: 'frontend2.0'
     container_name: 'frontend'
+    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
