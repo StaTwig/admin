@@ -151,6 +151,10 @@ exports.register = [
     .isLength({ min: 1 })
     .trim()
     .withMessage('name must be specified.'),
+  body('brewery')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('brewery must be specified.'),
   body('organisationId')
     .isLength({ min: 1 })
     .trim()
@@ -238,14 +242,14 @@ exports.register = [
         var warehouseId = 'NA';
 
         const incrementCounterEmp = await CounterModel.update({
-                  'counters.name': "employeeId"
-               },{
-                    $inc: {
-                      "counters.$.value": 1
-                  }
-             })
+          'counters.name': "employeeId"
+        }, {
+          $inc: {
+            "counters.$.value": 1
+          }
+        })
 
-        const empCounter = await CounterModel.findOne({'counters.name':"employeeId"},{"counters.name.$":1})
+        const empCounter = await CounterModel.findOne({ 'counters.name': "employeeId" }, { "counters.name.$": 1 })
         var employeeId = empCounter.counters[0].format + empCounter.counters[0].value;
 
         //var employeeId = uniqid('emp-');
@@ -267,37 +271,37 @@ exports.register = [
 
             //   }
             // }
-            const country =  req.body?.address?.country ? req.body.address?.country : 'India';
-            const address =  req.body?.address ? req.body.address : {};
+            const country = req.body?.address?.country ? req.body.address?.country : 'India';
+            const address = req.body?.address ? req.body.address : {};
             addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
             const incrementCounterOrg = await CounterModel.update({
-                  'counters.name': "orgId"
-               },{
-                    $inc: {
-                      "counters.$.value": 1
-                  }
-             })
+              'counters.name': "orgId"
+            }, {
+              $inc: {
+                "counters.$.value": 1
+              }
+            })
 
-            const orgCounter = await CounterModel.findOne({'counters.name':"orgId"},{"counters.name.$":1})
+            const orgCounter = await CounterModel.findOne({ 'counters.name': "orgId" }, { "counters.name.$": 1 })
             organisationId = orgCounter.counters[0].format + orgCounter.counters[0].value;
 
             //organisationId = uniqid('org-');
             const incrementCounterWarehouse = await CounterModel.update({
-                  'counters.name': "warehouseId"
-               },{
-                    $inc: {
-                      "counters.$.value": 1
-                  }
-             })
+              'counters.name': "warehouseId"
+            }, {
+              $inc: {
+                "counters.$.value": 1
+              }
+            })
 
-            const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.name.$":1})
+            const warehouseCounter = await CounterModel.findOne({ 'counters.name': "warehouseId" }, { "counters.name.$": 1 })
             warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
             //warehouseId = uniqid('war-');
             const org = new OrganisationModel({
               primaryContactId: employeeId,
               name: organisationName,
               id: organisationId,
-              type: req.body?.type ? req.body.type :'CUSTOMER_SUPPLIER',
+              type: req.body?.type ? req.body.type : 'CUSTOMER_SUPPLIER',
               status: 'NOTVERIFIED',
               postalAddress: addr,
               warehouses: [warehouseId],
@@ -306,19 +310,20 @@ exports.register = [
                 countryId: '001',
                 countryName: country
               },
-              configuration_id: 'CONF001'
+              configuration_id: 'CONF001',
+              approvingAuthority: req.body?.brewery
             });
             await org.save();
 
             const incrementCounterInv = await CounterModel.update({
-                  'counters.name': "inventoryId"
-               },{
-                    $inc: {
-                      "counters.$.value": 1
-                  }
-             })
+              'counters.name': "inventoryId"
+            }, {
+              $inc: {
+                "counters.$.value": 1
+              }
+            })
 
-            const invCounter = await CounterModel.findOne({'counters.name':"inventoryId"},{"counters.name.$":1})
+            const invCounter = await CounterModel.findOne({ 'counters.name': "inventoryId" }, { "counters.name.$": 1 })
             const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
 
             //const inventoryId = uniqid('inv-');
@@ -616,50 +621,48 @@ exports.verifyOtp = [
           query = { phoneNumber: phone };
         }
 
-	   const user = await EmployeeModel.findOne(query);
+        const user = await EmployeeModel.findOne(query);
 
         if (user && user.otp == req.body.otp) {
 
-	    var address;
-		
-		if (user.walletAddress == null || user.walletAddress == "wallet12345address")
-                   {
-                     const response = await axios.get(
-                     `${blockchain_service_url}/createUserAddress`,
-                );
-                address = response.data.items;
-                const userData = {
-                  address,
-                };
-                logger.log(
-                  'info',
-                  '<<<<< UserService < AuthController < verifyConfirm : granting permission to user',
-                );
-                await axios.post(
-                  `${blockchain_service_url}/grantPermission`,
-                  userData,
-                );
-		       await EmployeeModel.update(query, { otp: null ,walletAddress: address});
-                  }
-              else
-                 {
-                      address = user.walletAddress
-                 }
+          var address;
 
-            let userData = {
+          if (user.walletAddress == null || user.walletAddress == "wallet12345address") {
+            const response = await axios.get(
+              `${blockchain_service_url}/createUserAddress`,
+            );
+            address = response.data.items;
+            const userData = {
+              address,
+            };
+            logger.log(
+              'info',
+              '<<<<< UserService < AuthController < verifyConfirm : granting permission to user',
+            );
+            await axios.post(
+              `${blockchain_service_url}/grantPermission`,
+              userData,
+            );
+            await EmployeeModel.update(query, { otp: null, walletAddress: address });
+          }
+          else {
+            address = user.walletAddress
+          }
+
+          let userData = {
             id: user.id,
             firstName: user.firstName,
             emailId: user.emailId,
             role: user.role,
             warehouseId: user.warehouseId[0],
             organisationId: user.organisationId,
-	    walletAddress: address
+            walletAddress: address
           };
           //Prepare JWT token for authentication
           const jwtPayload = userData;
           const jwtData = {
             //expiresIn: process.env.JWT_TIMEOUT_DURATION,
-            expiresIn : "12 hours"
+            expiresIn: "12 hours"
           };
           const secret = process.env.JWT_SECRET;
           //Generated JWT token with Payload and secret.
@@ -1061,7 +1064,7 @@ exports.getUserWarehouses = [
   async (req, res) => {
     try {
       const users = await WarehouseModel.find({
-	organisationId: req.user.organisationId
+        organisationId: req.user.organisationId
       });
       logger.log(
         'info',
@@ -1069,7 +1072,7 @@ exports.getUserWarehouses = [
       );
       return apiResponse.successResponseWithData(
         res,
-	"User warehouses",
+        "User warehouses",
         users,
       );
     } catch (err) {
@@ -1088,14 +1091,14 @@ exports.addWarehouse = [
   async (req, res) => {
     try {
       const incrementCounterInv = await CounterModel.update({
-                  'counters.name': "inventoryId"
-               },{
-                    $inc: {
-                      "counters.$.value": 1
-                  }
-             })
+        'counters.name': "inventoryId"
+      }, {
+        $inc: {
+          "counters.$.value": 1
+        }
+      })
 
-      const invCounter = await CounterModel.findOne({'counters.name':"inventoryId"},{"counters.name.$":1})
+      const invCounter = await CounterModel.findOne({ 'counters.name': "inventoryId" }, { "counters.name.$": 1 })
       const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
       const inventoryResult = new InventoryModel({ id: inventoryId });
       await inventoryResult.save();
@@ -1111,14 +1114,14 @@ exports.addWarehouse = [
         employees,
       } = req.body;
       const incrementCounterWarehouse = await CounterModel.update({
-                  'counters.name': "warehouseId"
-               },{
-                    $inc: {
-                      "counters.$.value": 1
-                  }
-             })
+        'counters.name': "warehouseId"
+      }, {
+        $inc: {
+          "counters.$.value": 1
+        }
+      })
 
-      const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.name.$":1})
+      const warehouseCounter = await CounterModel.findOne({ 'counters.name': "warehouseId" }, { "counters.name.$": 1 })
       const warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
       const warehouse = new WarehouseModel({
         id: warehouseId,
@@ -1132,23 +1135,23 @@ exports.addWarehouse = [
         employees,
         warehouseAddress,
         warehouseInventory: inventoryResult.id,
-	status: 'NOTVERIFIED'
+        status: 'NOTVERIFIED'
       });
-        const s = await warehouse.save();
+      const s = await warehouse.save();
       /*await OrganisationModel.findOneAndUpdate({
-       	            id: organisationId
+                      id: organisationId
                 }, {
                     $push: {
                         warehouses: warehouseId
                     }
                 });*/
       await EmployeeModel.findOneAndUpdate({
-                    id: req.user.id
-                }, {
-                    $push: {
-                        warehouseId: warehouseId
-                    }
-                });
+        id: req.user.id
+      }, {
+        $push: {
+          warehouseId: warehouseId
+        }
+      });
 
       return apiResponse.successResponseWithData(
         res,
@@ -1218,13 +1221,13 @@ exports.uploadImage = async function (req, res) {
       const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]))
       try {
         if (action == "STOREID")
-	  filename = t.value + "-" + req.file.filename;
+          filename = t.value + "-" + req.file.filename;
         else if (action == "PROFILE")
-	  filename = "PROFILE" + "-" +  data.id + ".png"
-	else
-           filename = id + "-" + type + imageSide + "-" + t.format + t.value + ".png";	
-	
-	let dir = `/home/ubuntu/userimages`;
+          filename = "PROFILE" + "-" + data.id + ".png"
+        else
+          filename = id + "-" + type + imageSide + "-" + t.format + t.value + ".png";
+
+        let dir = `/home/ubuntu/userimages`;
         await moveFile(req.file.path, `${dir}/${filename}`);
       } catch (e) {
         console.log("Error in image upload", e);
@@ -1294,7 +1297,7 @@ exports.uploadImage = async function (req, res) {
         const employee = await EmployeeModel.updateOne({
           emailId: data.emailId
         }, {
-          $set: { "photoId": "/images/" + filename} 
+          $set: { "photoId": "/images/" + filename }
         });
         return res.send({
           success: true,
@@ -1377,7 +1380,7 @@ exports.getAllRegisteredUsers = [
       const page = req.query.page || 1; // Page 
       const totalRecords = await EmployeeModel.count({})
       const users = await EmployeeModel.find({}).skip((resPerPage * page) - resPerPage)
-      .limit(resPerPage);;
+        .limit(resPerPage);;
       const confirmedUsers = users.filter(user => user.walletAddress !== '');
       if (confirmedUsers.length > 0) {
         logger.log(
@@ -1433,8 +1436,8 @@ exports.getAllRegisteredUsers = [
           }
         }
         const finalData = {
-          totalRecords : totalRecords,
-          data : users_data
+          totalRecords: totalRecords,
+          data: users_data
         }
         logger.log(
           'info',
@@ -1470,9 +1473,9 @@ exports.getAllUsersByWarehouse = [
     try {
       const resPerPage = 10; // results per page
       const page = req.query.page || 1; // Page 
-      const totalRecords = await EmployeeModel.count({warehouseId: req.params.warehouseId})
-      const users = await EmployeeModel.find({warehouseId: req.params.warehouseId}).skip((resPerPage * page) - resPerPage)
-      .limit(resPerPage);;
+      const totalRecords = await EmployeeModel.count({ warehouseId: req.params.warehouseId })
+      const users = await EmployeeModel.find({ warehouseId: req.params.warehouseId }).skip((resPerPage * page) - resPerPage)
+        .limit(resPerPage);;
       const confirmedUsers = users.filter(user => user.walletAddress !== '');
       const warehouse = await WarehouseModel.findOne({ id: req.params.warehouseId });
       if (confirmedUsers.length > 0) {
@@ -1496,7 +1499,7 @@ exports.getAllUsersByWarehouse = [
             photoId,
             postalAddress
           } = confirmedUsers[i];
-          const org = await OrganisationModel.findOne({ id: organisationId }, 'name');          
+          const org = await OrganisationModel.findOne({ id: organisationId }, 'name');
           users_data[i] = {
             firstName,
             lastName,
@@ -1528,8 +1531,8 @@ exports.getAllUsersByWarehouse = [
           }
         }
         const finalData = {
-          totalRecords : totalRecords,
-          data : users_data
+          totalRecords: totalRecords,
+          data: users_data
         }
         logger.log(
           'info',
@@ -1568,8 +1571,8 @@ exports.getAllUsersByOrganisation = [
       const page = req.query.page || 1; // Page 
       const totalRecords = await EmployeeModel.count({ organisationId: req.params.organisationId })
       const users = await EmployeeModel.find({ organisationId: req.params.organisationId }).skip((resPerPage * page) - resPerPage)
-      .limit(resPerPage);;
-      const confirmedUsers = users.filter(user => user.walletAddress !== '');      
+        .limit(resPerPage);;
+      const confirmedUsers = users.filter(user => user.walletAddress !== '');
       const org = await OrganisationModel.findOne({ id: req.params.organisationId }, 'name');
       if (confirmedUsers.length > 0) {
         logger.log(
@@ -1624,8 +1627,8 @@ exports.getAllUsersByOrganisation = [
           }
         }
         const finalData = {
-          totalRecords : totalRecords,
-          data : users_data
+          totalRecords: totalRecords,
+          data: users_data
         }
         logger.log(
           'info',
@@ -1657,37 +1660,37 @@ exports.getAllUsersByOrganisation = [
 
 
 exports.getOrganizationsByType = [
-  auth,
-    async (req, res)=>{
-      try {
-        const organisationId=req.query.id;
-        const organisations=await ConfigurationModel.find({id:organisationId},'organisationTypes.id organisationTypes.name')
-        return apiResponse.successResponseWithData(
-          res,
-          "Operation success",
-          organisations
-        );
-      } catch (err) {
-        return apiResponse.ErrorResponse(res, err);
-      }
-    },
-  ];
+  // auth,
+  async (req, res) => {
+    try {
+      const organisationId = req.query.id;
+      const organisations = await ConfigurationModel.find({ id: organisationId }, 'organisationTypes.id organisationTypes.name')
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        organisations
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
 
-  exports.getwarehouseByType = [
-    auth,
-      async (req, res) => {
-        try {
-          const organisationId=req.query.id;
-          console.log(organisationId);
-          const organisations=await ConfigurationModel.find({id:organisationId},'warehouseTypes.id warehouseTypes.name')
-          console.log(organisations)
-          return apiResponse.successResponseWithData(
-            res,
-            "Operation success",
-            organisations
-          );
-        } catch (err) {
-          return apiResponse.ErrorResponse(res, err);
-        }
-      },
-    ];
+exports.getwarehouseByType = [
+  auth,
+  async (req, res) => {
+    try {
+      const organisationId = req.query.id;
+      console.log(organisationId);
+      const organisations = await ConfigurationModel.find({ id: organisationId }, 'warehouseTypes.id warehouseTypes.name')
+      console.log(organisations)
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        organisations
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];

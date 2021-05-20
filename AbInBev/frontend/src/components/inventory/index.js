@@ -137,8 +137,11 @@ const Inventory = (props) => {
     setFilters(_filters);
     props.applyFilters(_filters);
     if (_filters.inventoryType === 'VENDOR') {
-      let vendor = _getOrganizationById(selectedOrganization);
-      setSelectedVendor(vendor);
+      _getOrganizationById(selectedOrganization).then(response => {
+        console.log(response);
+        setSelectedVendor(response);
+      });
+
     } else {
       setSelectedVendor(null);
     }
@@ -227,22 +230,22 @@ const Inventory = (props) => {
               {
                 selectedVendor ?
                   <>
-                    <h1>{(selectedVendor.organization && selectedVendor.organization.name) ? selectedVendor.organization.name : ''}</h1>
+                    <h1><span className="labelHead">OrgName:</span> {(selectedVendor.organisation && selectedVendor.organisation.name) ? selectedVendor.organisation.name : ''}</h1>
                     <div>
-                      <span>Vendor ID:</span>
-                      <span>{selectedVendor.organization ? selectedVendor.organization.id : ''}</span>
+                      <span className="labelHead">Vendor ID:</span>
+                      <span>{(selectedVendor.organisation && selectedVendor.organisation.id) ? selectedVendor.organisation.id : ''}</span>
                     </div>
                     <div>
-                      <span>Mobile No:</span>
-                      <span>{selectedVendor.organization.id ? selectedVendor.organization.id : ''}</span>
+                      <span className="labelHead">Mobile No:</span>
+                      <span>{(selectedVendor.organisation && selectedVendor.organisation.id) ? selectedVendor.organisation.id : ''}</span>
                     </div>
                     <div>
-                      <span>Total Stock:</span>
+                      <span className="labelHead">Total Stock:</span>
                       <span>{selectedVendor.totalStock}</span>
                     </div>
                     <div>
-                      <span>Address:</span>
-                      <span>{(selectedVendor.organization && selectedVendor.organization.postalAddress) ? selectedVendor.organization.postalAddress : ''}</span>
+                      <span className="labelHead">Address:</span>
+                      <span>{(selectedVendor.organisation && selectedVendor.organisation.postalAddress) ? selectedVendor.organisation.postalAddress : ''}</span>
                     </div>
                   </>
                   :
