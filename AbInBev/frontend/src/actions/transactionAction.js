@@ -39,9 +39,6 @@ function getQueryString(filters) {
   if (filters.date_filter_type && filters.date_filter_type.length) {
     queryStr = queryStr + '&date_filter_type=' + filters.date_filter_type;
   }
-  if (filters.transactionType && filters.transactionType.length && filters.transactionType !== 'ALL') {
-    queryStr = queryStr + '&txn_type=' + filters.transactionType;
-  }
   return queryStr;
 }
 
@@ -57,6 +54,23 @@ export const getTransactions = (filters) => {
       dispatch(turnOn());
       const result = await axios.get(
         `${config().shipmentsUrl}?skip=${skip}&limit=${limit}` + queryString,
+      );
+      dispatch(turnOff());
+      return result.data;
+    } catch (e) {
+      dispatch(turnOff());
+    }
+  };
+};
+
+
+export const fetchShipment = (shipmentId) => {
+  return async dispatch => {
+    try {
+      setAuthToken(localStorage.getItem("theAbInBevToken"))
+      dispatch(turnOn());
+      const result = await axios.get(
+        `${config().viewShipmentUrl}` + shipmentId,
       );
       dispatch(turnOff());
       return result.data;
