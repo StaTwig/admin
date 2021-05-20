@@ -1,11 +1,11 @@
 const EmployeeModel = require("../models/EmployeeModel");
 const OrganisationModel = require("../models/OrganisationModel");
-const { check, validationResult , sanitizeBody } = require("express-validator");
+const { check, validationResult} = require("express-validator");
 const dotenv = require('dotenv').config();
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
 const utility = require("../helpers/utility");
-const jwt = require("jsonwebtoken");
+const JWT = require("jsonwebtoken");
 const mailer = require("../helpers/mailer");
 const { constants } = require("../helpers/constants");
 const auth = require("../middlewares/jwt");
@@ -171,7 +171,7 @@ exports.verifyOtp = [
                     };
                     const secret = process.env.JWT_SECRET;
                     //Generated JWT token with Payload and secret.
-                    userData.token = jwt.sign(jwtPayload, secret, jwtData);
+                    userData.token = JWT.sign(jwtPayload, secret , jwtData);
                     return apiResponse.successResponseWithData(
                       res,
                       "Login Success",
@@ -188,7 +188,7 @@ exports.verifyOtp = [
           } else {
             return apiResponse.ErrorResponse(
               res,
-              `User dosen't have enough Permission for Admin Model`
+              `User dosen't have enough Permission for Admin Module`
             );
           }
         } else {
