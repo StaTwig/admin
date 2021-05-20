@@ -10,7 +10,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import "react-hot-loader/patch"
 import TextField from '@material-ui/core/TextField';
-//import Autocomplete from '@material-ui/lab/Autocomplete';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const StyledMenu = withStyles({
   paper: {
