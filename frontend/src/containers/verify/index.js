@@ -75,7 +75,7 @@ const VerifyContainer = props => {
         email={email}
         otp={otp}
         errorMessage={errorMessage}
-        onEmailChange={(e) => setEmail(e.target.value)}
+        onEmailChange={(e) => setEmail((e.target.value).toLowerCase())}
         onOtpChange={(e) => setOtp(e)}
         onVerifyOtp={verifyOTP}
         onResendOtp={resendOtp}

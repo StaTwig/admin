@@ -1657,7 +1657,7 @@ exports.getAllUsersByOrganisation = [
 
 
 exports.getOrganizationsByType = [
-  auth,
+  // auth,
     async (req, res)=>{
       try {
         const organisationId=req.query.id;

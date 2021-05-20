@@ -55,7 +55,6 @@ export const getProducts = async () => {
 export const createOrder = async data => {
   try {
     console.log(config().createOrderUrl);
-    
     const result = await axios.post(config().createOrderUrl, data);
     return result;
   } catch (e) {

@@ -12,7 +12,6 @@ const FormVerifyPage = (props) => {
   const fourthInputRef = useRef(null);  
   const formRef = useRef();
   
-
   useEffect(() => {
     setOtpArray(otp.split(""));
   }, []);

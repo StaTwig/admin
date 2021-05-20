@@ -28,6 +28,14 @@ export const verifyOtp = async (data) => {
     return e.response;
   }
 };
+export const getOrganizationsByType = async (data) => {
+  try {
+    const result = await axios.get(config().getOrganizationsByType,data);
+    return result.data.data;
+  } catch (e) {
+    return [];
+  }
+};
 
 export const checkUser = async data => {
   try {
