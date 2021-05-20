@@ -22,7 +22,7 @@ export const getShippingOrders = async () => {
 
 export const getShippingOrderIds = async () => {
   try {
-    const result = await axios.get(config().getShippingOrderIdsUrl);
+    const result = await axios.get(config().getShipmentIdsUrl);
     return result.data.data;
   } catch (e) {
     return [];

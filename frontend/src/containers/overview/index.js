@@ -28,21 +28,12 @@ const OverviewContainer = props => {
   const [shippingIds, setShippingIds] = useState([]);
 
   useEffect(() => {
-
-    async function getIds(){
-      const resultShippingIds = await getShippingOrderIds();
-      const resultOrderIds = await getOrderIds();
-      setOrderIds(resultOrderIds.map((so)=>so.id));
-      setShippingIds(resultShippingIds.map((so)=>so.id));
-    }
-
-    getIds();
     dispatch(getShipments());
     dispatch(getInventories());
   }, []);
   return (
     <div className="container-fluid p-0">
-      <Header {...props} orderIds={orderIds} shippingIds={shippingIds}/>
+      <Header {...props}/>
       <div className="d-flex">
         <Sidebar {...props} />
         <div className="content">
