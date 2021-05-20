@@ -21,29 +21,36 @@ Docker -->  Docker Compose
 
 - [x] Docker-compose.yml file has all the docker service configuration , Traefik routing rules and Loadbalancing.
 
-- [x] Deploy folder is a File provider configuration setup for traefik if using Node instances without docker ( NOT CURRENTLY USING )
 
-- [x] All static configuration of Traefik is present in traefik_config folder , "traefik.yml" file ( CURRENTLY USING )
+- [x] All static configuration of Traefik is present in "traefik.toml" file
+
+
+- [x] Dynamic Configuration is present in the file "traefik_dynamic.toml" 
+
+
+- [x]  acme.json in the root folder is used the TLS Challenge LetsEncrypt for HTTPS in Traefik. Make sure that acme.json has Read and Write Permissions.
 
 
 ## Deployment :
 1) Login to server
 
-2) Git pull -- Enter github deatils if prompted
+2) Git clone for fresh deployment or git pull to pull latest changes --> Enter github deatils if prompted
 
-3) Build the images
+3) Run Dependency installer script to download Docker Engine , Docker Compose and create Docker Network named : Proxy
+
+4) Build the images
 ```
 sudo docker-compose -f Docker-compose.yml build
 ```
 Builds all the docker containers as images and caches ,the old ones
 
-4) 
+5) 
 ```
 sudo docker-compse -f Docker-compose.yml up -d
 ```
 Running all services in as a daemon process
 
-5) If wanted to see the logs(console) 
+6) If wanted to see the logs(console) 
 ```
 sudo docker-compse -f Docker-compose.yml up 
 ```
@@ -53,7 +60,7 @@ Ctrl + c
 ```
 This will exit all running docker images
 
-6) To properlly stop all services 
+7) To properlly stop all services 
 ```
 sudo docker-compse -f Docker-compose.yml down
 ```
