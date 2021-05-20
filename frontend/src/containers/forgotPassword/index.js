@@ -7,7 +7,7 @@ const forgotPasswordContainer = (props) => {
   const [errorMessage, setErrorMessage] = useState('');
 
   const onEmailChange = (e) => {
-         setEmail(e.target.value);
+         setEmail((e.target.value).toLowerCase());
   }
   
   const onForgot =  useCallback(async () => {

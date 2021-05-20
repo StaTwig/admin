@@ -28,7 +28,7 @@ const ForgotPassword = (props) => {
                     <img alt="" src={Mail} className="icon" />
                     <input type="email"
                       className="form-control"
-                      value={email}
+                      value={email.toLowerCase()}
                       onChange={onEmailChange}
                       placeholder="Email" />
                   </div>
