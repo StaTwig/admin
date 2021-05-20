@@ -40,6 +40,7 @@ export function config() {
       upload: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/uploadImage?`,
       fetchProfileImage:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth`,
       uploadProfileImage:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/uploadImage?action=PROFILE`,
+      getOrganizationsByTypeUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsByType?id=`,
       getAnalyticsUrl:`${LOCAL_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl:`${LOCAL_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
       getInventoryAnalyticsUrl:`${LOCAL_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getInventoryAnalytics`,
@@ -195,7 +196,8 @@ export function config() {
       updateProfileUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/updateProfile`,
       upload: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/uploadImage?`,
       fetchProfileImage:`${STABLE_SERVER_URL_USER}/usermanagement/api/auth`,
-      uploadProfileImage:`${STABLE_SERVER_URL_USER}/usermanagement/api/auth/uploadImage?action=PROFILE`,
+      uploadProfileImage: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/uploadImage?action=PROFILE`,
+      getOrganizationsByTypeUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsByType?id=`,
       getAnalyticsUrl:`${STABLE_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl:`${STABLE_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
       getInventoryAnalyticsUrl:`${STABLE_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getInventoryAnalytics`,
@@ -273,7 +275,8 @@ export function config() {
       updateProfileUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${TEST_SERVER_URL}/usermanagement/api/auth/uploadImage?`,
       fetchProfileImage:`${TEST_SERVER_URL}/usermanagement/api/auth`,
-      uploadProfileImage:`${TEST_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
+      uploadProfileImage: `${TEST_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
+      getOrganizationsByTypeUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsByType?id=`,
       getAnalyticsUrl:`${TEST_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl:`${TEST_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
       getInventoryAnalyticsUrl:`${TEST_SERVER_URL}/analyticsmanagement/api/analytics/getInventoryAnalytics`,
@@ -353,7 +356,8 @@ export function config() {
       updateProfileUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${DEMO_SERVER_URL}/usermanagement/api/auth/uploadImage?`,
       fetchProfileImage:`${DEMO_SERVER_URL}/usermanagement/api/auth`,
-      uploadProfileImage:`${DEMO_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
+      uploadProfileImage: `${DEMO_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
+      getOrganizationsByTypeUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/getOrganizationsByType?id=`,
       getAnalyticsUrl:`${DEMO_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl:`${DEMO_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
       getInventoryAnalyticsUrl:`${DEMO_SERVER_URL}/analyticsmanagement/api/analytics/getInventoryAnalytics`,
@@ -428,7 +432,8 @@ export function config() {
       updateProfileUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${PROD_SERVER_URL}/usermanagement/api/auth/uploadImage?`,
       fetchProfileImage:`${PROD_SERVER_URL}/usermanagement/api/auth`,
-      uploadProfileImage:`${PROD_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
+      uploadProfileImage: `${PROD_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
+      getOrganizationsByTypeUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/getOrganizationsByType?id=`,
       getAnalyticsUrl:`${PROD_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl:`${PROD_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
       getInventoryAnalyticsUrl:`${PROD_SERVER_URL}/analyticsmanagement/api/analytics/getInventoryAnalytics`,
@@ -503,7 +508,8 @@ export function config() {
       updateProfileUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/uploadImage?`,
       fetchProfileImage:`${UNICEFTEST_SERVER_URL}/usermanagement/api/auth`,
-      uploadProfileImage:`${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
+      uploadProfileImage: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
+      getOrganizationsByTypeUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsByType?id=`,
       getAnalyticsUrl:`${UNICEFTEST_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl:`${UNICEFTEST_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
       getInventoryAnalyticsUrl:`${UNICEFTEST_SERVER_URL}/analyticsmanagement/api/analytics/getInventoryAnalytics`,
@@ -569,7 +575,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || `test`; // change prod to test, local,stable, dev for respective environments
+  const environment = process.env.ENVIRONMENT || `local`; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
   return conf;
 }

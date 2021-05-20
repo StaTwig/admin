@@ -707,7 +707,7 @@ exports.userInfo = [
             photoId,
             postalAddress
           } = user;
-          const org = await OrganisationModel.findOne({ id: organisationId }, 'name');
+          const org = await OrganisationModel.findOne({ id: organisationId }, 'name configuration_id');
           const warehouse = await WarehouseModel.findOne({ id: warehouseId });
           console.log(warehouse);
           let user_data = {
@@ -722,6 +722,7 @@ exports.userInfo = [
             accountStatus,
             role,
             photoId,
+            configuration_id: org.configuration_id,
             location: postalAddress,
             warehouseAddress_country: warehouse.warehouseAddress.country,
             warehouseAddress_zipcode: warehouse.warehouseAddress.zipCode,
@@ -1657,7 +1658,7 @@ exports.getAllUsersByOrganisation = [
 
 
 exports.getOrganizationsByType = [
-  auth,
+  // auth,
     async (req, res)=>{
       try {
         const organisationId=req.query.id;
