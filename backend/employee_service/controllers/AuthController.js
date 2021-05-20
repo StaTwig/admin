@@ -315,6 +315,7 @@ exports.uploadImage = [
           //     });
           //   }
           // );
+          return apiResponse.successResponse(res, "Uploaded but not stored")
         }
       });
     } catch (err) {
