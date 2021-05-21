@@ -31,8 +31,24 @@ const NewOrder = (props) => {
     return state.user;
   });
 
-  console.log(profile);
-  
+  const customStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      borderBottom: '1px solid #d6d6d6',
+      // padding: 20,
+    }),
+    control: () => ({
+      display: 'flex'
+    }),
+    indicatorSeparator: () => ({
+      display: 'none'
+    }),
+    singleValue: (provided, state) => {
+      const opacity = state.isDisabled ? 0.5 : 1;
+      const transition = 'opacity 300ms';
+      return { ...provided, opacity, transition };
+    }
+  }
 
   const [allOrganisations, setAllOrganisations] = useState([]);
   const [receiverWarehouses, setReceiverWarehouses] = useState([]);
@@ -265,8 +281,6 @@ const NewOrder = (props) => {
           if (values.products.length == 0) {
             errors.products = "Required";
           }
-
-          console.log(values, errors);
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
@@ -328,6 +342,8 @@ const NewOrder = (props) => {
                         <label htmlFor="organizationName">Organisation Type*</label>
                         <div className="form-control">
                           <Select
+                            styles={customStyles}
+                            placeholder="Select Organisation Type"
                             onChange={(v) => {
                               setFieldValue('type', v?.value);
                               setFieldValue('typeName', v?.label);
@@ -358,7 +374,9 @@ const NewOrder = (props) => {
                           }}
                           groups={allOrganisations}
                         /> */}
-                        <Select
+                          <Select
+                            styles={customStyles}
+                            placeholder="Select Organisation Name"
                             defaultInputValue={values.fromOrgId}
                             onChange={(v) => {
                               setFieldValue('fromOrg', v.value);
@@ -398,6 +416,8 @@ const NewOrder = (props) => {
                         <label htmlFor="organizationName">Organisation Type*</label>
                         <div className="form-control">
                           <Select
+                            styles={customStyles}
+                            placeholder="Select Organisation Type"
                             defaultInputValue={values.rtypeName}
                             onChange={(v) => {
                               setFieldValue('rtype', v.value);
@@ -431,7 +451,9 @@ const NewOrder = (props) => {
                           }}
                           groups={allOrganisations.filter((org) => org.id != values.fromOrg)}
                         /> */}
-                        <Select
+                          <Select
+                            styles={customStyles}
+                            placeholder="Select Organisation Name"
                             defaultInputValue={values.toOrgName}
                             onChange={(v) => {
                               setFieldValue('toOrgLoc', '');
@@ -475,7 +497,9 @@ const NewOrder = (props) => {
                           }}
                           groups={receiverWarehouses}
                         /> */}
-                        <Select
+                          <Select
+                            styles={customStyles}
+                            placeholder="Select Delivery Location"
                             defaultInputValue={values.toOrgLocName}
                             onChange={(v) => {
                               let name =v?.warehouseAddress ? (v?.label +'/' + v?.warehouseAddress?.firstLine + ', ' + v?.warehouseAddress?.city) : (v?.label  +'/' + v?.postalAddress)  ;
