@@ -6,9 +6,6 @@ const auth = require('../middlewares/jwt');
 
 const apiResponse = require('../helpers/apiResponse');
 
-const init = require('../logging/init');
-const logger = init.getLog();
-
 exports.getPermissions = [
   auth,
   async (req, res) => {
