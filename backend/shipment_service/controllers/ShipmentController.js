@@ -256,7 +256,7 @@ exports.createShipment = [
       console.log(req.user);
       let data = req.body;
       data.data.products.forEach(element => {
-        var product = await ProductModel.findOne({ id: element.productId });
+        var product =  ProductModel.findOne({ id: element.productId });
         element.type = product.type
       });
       var i = 0;
