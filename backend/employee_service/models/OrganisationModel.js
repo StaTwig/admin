@@ -47,6 +47,7 @@ var OrganisationSchema = new mongoose.Schema(
       type: Array,
       default: ['em12345', 'em12346', 'em12347'],
     },
+    authority: String
   },
   { timestamps: true },
 );
