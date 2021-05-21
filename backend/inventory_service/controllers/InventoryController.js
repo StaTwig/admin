@@ -900,8 +900,11 @@ exports.addProductsToInventory = [
           errors.array()
         );
       }
-      const payload = req.body;
-
+      let payload = req.body;
+      payload.data.products.forEach(element => {
+        var product = await ProductModel.findOne({ id: element.productId });
+        element.type = product.type
+      });
       permission_request = {
         role: req.user.role,
         permissionRequired: "addInventory",
@@ -1112,7 +1115,7 @@ exports.addProductsToInventory = [
           event_data.eventID = "ev0000" + evid;
           event_data.eventTime = datee;
           event_data.eventType.primary = "ADD";
-          event_data.eventType.description = "PRODUCTS_TO_INVENTORY";
+          event_data.eventType.description = "INVENTORY";
           event_data.actor.actorid = user_id || "null";
           event_data.actor.actoruserid = email || "null";
           event_data.payload.data = payload;
@@ -1142,7 +1145,7 @@ exports.addProductsToInventory = [
   },
 ];
 
-exports.addInventoriesFromExcel = [
+exports.addInventoriesFrom2l = [
   auth,
   async (req, res) => {
     try {
@@ -2157,7 +2160,7 @@ exports.getInventoryCountsByWarehouse = [
           },
         },
       ]);
-      const warehouseSentCount = await ShipmentModel.aggregate([
+      const warehouseCount = await ShipmentModel.aggregate([
         {
           $match: {
             $and: [
