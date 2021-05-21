@@ -1,6 +1,7 @@
 import React from 'react';
 import Delete from '../../../assets/icons/Delete.png';
 import DropdownButton from '../../../shared/dropdownButtonGroup';
+import Select from 'react-select';
 import './style.scss';
 
 const EditRow = props => {
@@ -38,10 +39,17 @@ const EditRow = props => {
           <div className=" p-0">
             <div className="d-flex flex-column">
               <div className="title recived-text">
-                <DropdownButton
+                {/* <DropdownButton
                   name={prod.type ? prod.type : "Select Product Category"}
                   onSelect={item => { handleCategoryChange(index, item) }}
                   groups={category}
+                /> */}
+                <Select
+                  className="no-border"
+                  placeholder="Select Product Category"
+                  defaultInputValue={prod.type}
+                  onChange={(v) => handleCategoryChange(index, v.value)}
+                  options={category}
                 />
               </div>
             </div>
@@ -50,14 +58,21 @@ const EditRow = props => {
         <div className="col tcell text-center justify-content-center p-2">
           <div className="">
             <div className="d-flex pt-1 flex-row justify-content-between">
-              <div className="title recived-text">
-                <DropdownButton
+              <div className="title recived-text w-50">
+                {/* <DropdownButton
                   name={prod.name ? prod.name : "Product Name"}
                   onSelect={item => { handleProductChange(index, item) }}
                   groups={products}
+                /> */}
+                <Select
+                  className="no-border"
+                  placeholder="Select Product Name"
+                  defaultInputValue={prod.name}
+                  onChange={(v) => handleProductChange(index, v)}
+                  options={products}
                 />
               </div>
-              <div className="title recived-text">{prod.id ? prod.id : "Product ID"}</div>
+              <div className="title recived-text align-self-center">{prod.id ? prod.id : "Product ID"}</div>
             </div>
           </div>
         </div>
