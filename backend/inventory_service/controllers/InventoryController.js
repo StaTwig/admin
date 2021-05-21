@@ -1145,7 +1145,7 @@ exports.addProductsToInventory = [
   },
 ];
 
-exports.addInventoriesFrom2l = [
+exports.addInventoriesFromExcel = [
   auth,
   async (req, res) => {
     try {
