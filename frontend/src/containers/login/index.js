@@ -69,7 +69,7 @@ const LoginContainer = props => {
  <Login
         errorMessage={errorMessage}
         onSendOtp={onSendOtp}
-        onEmailChange={e => setEmail(e.target.value)}
+        onEmailChange={e => setEmail((e.target.value).toLowerCase())}
       />
     </div>
   );

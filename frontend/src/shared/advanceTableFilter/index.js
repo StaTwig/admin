@@ -15,6 +15,9 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 const StyledMenu = withStyles({
   paper: {
     border: '1px solid #D3D4D5',
+    width: "10%",
+    borderRadius:"15px",
+
   },
 })((props) => (
   <Menu
@@ -99,7 +102,7 @@ const AdvanceTableFilter = (props) => {
             {props.data.img5}
           </div>
           <div className="filterTitle">{props.data.coloumn5}</div>
-          <img src={updownarrow} width="16" height="16" className="ml-3" />
+          <img src={updownarrow} width="10" height="10" className="ml-3" />
         </a>
         <StyledMenu
           id="customized-menu"
@@ -129,7 +132,7 @@ const AdvanceTableFilter = (props) => {
             {props.data.img5}
           </div>
           <div className="filterTitle">{props.data.coloumn5}</div>
-          <img src={updownarrow} width="16" height="16" className="ml-3" />
+          <img src={updownarrow} width="10" height="10" className="ml-3" />
         </a>
         <StyledMenu
           id="customized-menu"
@@ -220,7 +223,7 @@ const AdvanceTableFilter = (props) => {
             {props.data.img4}
           </div>
           <div className="filterTitle">{props.data.coloumn4}</div>
-          <img src={updownarrow} width="16" height="16" className="ml-3" />
+          <img src={updownarrow} width="10" height="10" className="ml-3" />
         </a>
         <StyledMenu
           id="customized-menu"
@@ -269,7 +272,7 @@ const AdvanceTableFilter = (props) => {
             {props.data.img4}
           </div>
           <div className="filterTitle">{props.data.coloumn4}</div>
-          <img src={updownarrow} width="16" height="16" className="ml-3" />
+          <img src={updownarrow} width="10" height="10" className="ml-3" />
         </a>
         <StyledMenu
           id="customized-menu"
@@ -360,7 +363,7 @@ const AdvanceTableFilter = (props) => {
             {props.data.img3}
           </div>
           <div className="filterTitle">{props.data.coloumn3}</div>
-          <img src={updownarrow} width="16" height="16" className="ml-3" />
+          <img src={updownarrow} width="10" height="10" className="ml-3" />
         </a>
         <StyledMenu
           id="customized-menu"
@@ -410,7 +413,7 @@ const AdvanceTableFilter = (props) => {
             {props.data.img3}
           </div>
           <div className="filterTitle">{props.data.coloumn3}</div>
-          <img src={updownarrow} width="16" height="16" className="ml-3" />
+          <img src={updownarrow} width="10" height="10" className="ml-3" />
         </a>
         <StyledMenu
           id="customized-menu"
@@ -513,7 +516,7 @@ const AdvanceTableFilter = (props) => {
             {props.data.img1}
           </div>
           <div className="filterTitle">{props.data.coloumn1}</div>
-          <img src={updownarrow} width="16" height="16" className="ml-3" />
+          <img src={updownarrow} width="10" height="10" className="ml-3" />
         </a>
         <StyledMenu
           id="customized-menu"
@@ -561,7 +564,7 @@ const AdvanceTableFilter = (props) => {
             {props.data.img1}
           </div>
           <div className="filterTitle">{props.data.coloumn1}</div>
-          <img src={updownarrow} width="16" height="16" className="ml-3" />
+          <img src={updownarrow} width="10" height="10" className="ml-3" />
         </a>
         <StyledMenu
           id="customized-menu"
@@ -610,7 +613,7 @@ const AdvanceTableFilter = (props) => {
             {props.data.img1}
           </div>
           <div className="filterTitle">{props.data.coloumn1}</div>
-          <img src={updownarrow} width="16" height="16" className="ml-3" />
+          <img src={updownarrow} width="10" height="10" className="ml-3" />
         </a>
         <StyledMenu
           id="customized-menu"
@@ -748,9 +751,9 @@ const AdvanceTableFilter = (props) => {
           <div className="box col">
             {/* <button className="btn btn-md btn-blue mr-2">
             <div className="d-flex align-items-center">
-              <img src={FilterIcon} width="16" height="16" className="mr-3" />
+              <img src={FilterIcon} width="10" height="10" className="mr-3" />
               <span className="text">Filter</span>
-              <img src={dropdownIcon} width="16" height="16" className="ml-3" />
+              <img src={dropdownIcon} width="10" height="10" className="ml-3" />
             </div>
           </button> */}
             <button
@@ -759,7 +762,7 @@ const AdvanceTableFilter = (props) => {
               <div className="d-flex align-items-center">
                 <img src={FilterIcon} width="16" height="16" className="mr-3" />
                 <span className="text">Filter</span>
-                <img src={dropdownIcon} width="16" height="16" className="ml-3" />
+                <img src={dropdownIcon} width="10" height="10" className="ml-3" />
               </div>
             </button>
             <StyledMenu
@@ -770,23 +773,23 @@ const AdvanceTableFilter = (props) => {
               onClose={handleClose}
             >
               <div className="d-flex flex-column align-items-center">
-                <StyledMenuItem>
-                  <Button variant="outlined" color="primary" onClick={() => setDateFilterOnSelect("today")}>Today</Button>
+              <StyledMenuItem>
+                <Button type="button" style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-outline-primary btn-sm" onClick={() => setDateFilterOnSelect("today")}><b>Today</b></Button>
                 </StyledMenuItem>
                 <StyledMenuItem>
-                  <Button variant="outlined" color="primary" onClick={() => setDateFilterOnSelect("week")}>This Week</Button>
+                  <Button type="button" style={{height: "40px" , width:"130px"}} class="btn btn-outline-primary btn-sm" onClick={() => setDateFilterOnSelect("week")}><b>This Week</b></Button>
                 </StyledMenuItem>
                 <StyledMenuItem>
-                  <Button variant="outlined" color="primary" onClick={() => setDateFilterOnSelect("month")}>This Month</Button>
+                  <Button type="button" style={{height: "40px" , width:"130px"}} class="btn btn-outline-primary btn-sm" onClick={() => setDateFilterOnSelect("month")}><b>This Month</b></Button>
                 </StyledMenuItem>
                 <StyledMenuItem>
-                  <Button variant="outlined" color="primary" onClick={() => setDateFilterOnSelect("threeMonth")}>Last 3 Months</Button>
+                  <Button type="button" style={{height: "40px" , width:"130px"}} class="btn btn-outline-primary btn-sm" onClick={() => setDateFilterOnSelect("threeMonth")}><b>Last 3 Months</b></Button>
                 </StyledMenuItem>
                 <StyledMenuItem>
-                  <Button variant="outlined" color="primary" onClick={() => setDateFilterOnSelect("sixMonth")}>Last 6 Months</Button>
+                  <Button type="button" style={{height: "40px" , width:"130px"}} class="btn btn-outline-primary btn-sm" onClick={() => setDateFilterOnSelect("sixMonth")}><b>Last 6 Months</b></Button>
                 </StyledMenuItem>
                 <StyledMenuItem>
-                  <Button variant="outlined" color="primary" onClick={() => setDateFilterOnSelect("year")}>This Year</Button>
+                  <Button type="button" style={{height: "40px" , width:"130px"}} class="btn btn-outline-primary btn-sm" onClick={() => setDateFilterOnSelect("year")}><b>This Year</b></Button>
                 </StyledMenuItem>
               </div>
             </StyledMenu>
@@ -794,7 +797,7 @@ const AdvanceTableFilter = (props) => {
               <div className="d-flex  align-items-center">
                 <img src={ExportIcon} width="16" height="16" className="mr-3" />
                 <span>Export</span>
-                <img src={dropdownIcon} width="16" height="16" className="ml-3" />
+                <img src={dropdownIcon} width="10" height="10" className="ml-3" />
               </div>
             </button>
           </div>

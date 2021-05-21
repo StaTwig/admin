@@ -55,7 +55,6 @@ export const getProducts = async () => {
 export const createOrder = async data => {
   try {
     console.log(config().createOrderUrl);
-    
     const result = await axios.post(config().createOrderUrl, data);
     return result;
   } catch (e) {
@@ -211,4 +210,13 @@ export const resetEditPos = data => {
     type: RESET_EDIT_PO,
     payload: data,
   };
+};
+
+export const getOrganizationsByTypes = async id => {
+  try {
+    const result = await axios.get(config().getOrganizationsByTypeUrl + id);
+    return result.data;
+  } catch (e) {
+    return e.response;
+  }
 };

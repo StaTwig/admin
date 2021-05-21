@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Delete from '../../../assets/icons/Delete.png';
 import DropdownButton from '../../../shared/dropdownButtonGroup';
+import Select from 'react-select';
 import './style.scss';
 
 const EditRow = props => {
@@ -44,10 +45,17 @@ console.log("yyyy",prod);
 
             <div className="d-flex flex-column">
               <div className="title recived-text">
-                <DropdownButton
+                {/* <DropdownButton
                   name={prod.type ? prod.type : "Select Product Category"}
                   onSelect={item => { handleCategoryChange(index, item) }}
                   groups={category}
+                /> */}
+                <Select
+                  className="no-border"
+                  placeholder="Select Product Category"
+                  defaultInputValue={prod.type}
+                  onChange={(v) => handleCategoryChange(index, v.value)}
+                  options={category}
                 />
               </div>
             </div>
@@ -58,7 +66,7 @@ console.log("yyyy",prod);
           <div className=" p-0">
             <div className="col tcell text-center justify-content-center pl-0">
               <div className="title recived-text">
-              {enableDelete ?
+              {/* {enableDelete ?
                 <DropdownButton
                   //name={prod.name == '' ? "Select product" : prod.name}
                   name={prod.name ?  prod.name: "Select Product Name"}
@@ -66,7 +74,17 @@ console.log("yyyy",prod);
                   groups={products}
                   // groups={products.filter(p => !p?.isSelected)}
                 /> : prod.name
-              }</div>
+                } */}
+                {enableDelete ?
+                <Select
+                  className="no-border"
+                  placeholder="Select Product Name"
+                  defaultInputValue={prod.name}
+                  onChange={(v) => handleProductChange(index, v)}
+                  options={products}
+                /> : prod.name
+                }
+              </div>
               
             </div>
           </div>

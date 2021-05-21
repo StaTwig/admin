@@ -2,6 +2,7 @@ import React, { useState,useEffect } from "react";
 import { Link } from 'react-router-dom';
 import DropdownButton from '../../shared/dropdownButtonGroup';
 import {getOrganisations} from '../../actions/productActions';
+import {getOrganizationsByType} from '../../actions/userActions';
 import { Formik } from "formik";
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
@@ -19,6 +20,7 @@ import logo from "../../assets/brands/VaccineLedgerlogo.svg";
 
 const FormPage = (props) => {
 const [organisations, setOrganisations] = useState([]);
+const [organisationsType, setOrganisationsType] = useState([]);
 const [organisationsArr, setOrganisationsArr] = useState([]);
 const [value, setValue] = useState('');
   
@@ -31,9 +33,16 @@ const [value, setValue] = useState('');
       setOrganisations(orgs);
       setOrganisationsArr(orgs);
     }
-    fetchData();
 
+    async function fetchOrganisationType() {
+      const orgsType = await getOrganizationsByType({id:"CONF001"});
+      setOrganisationsType(orgsType);
+
+    }
+    fetchOrganisationType();
+    fetchData();
   }, []);
+  console.log(organisationsType);
   const changeFn = (value_new, e) => {
     setValue(value_new);
     let orgs = organisationsArr.filter(org => org.name.toLowerCase().includes(value_new.toLowerCase()));
@@ -49,8 +58,8 @@ const [value, setValue] = useState('');
         setValue('Other');
       }
     }
-    
-    props.onOrganisationChange({id: 0, name: value_new});
+
+  props.onOrganisationChange({id: 0, name: value_new});
   }
   return (
     <div className="login-wrapper">
@@ -157,7 +166,8 @@ const [value, setValue] = useState('');
                   <input type="text"
                   className="form-control-login"
                   name="email"
-                  value={props.email}
+                  autoCapitalize = 'none'
+                  value={(props.email).toLowerCase()}
                   onChange={(e) => { props.onEmailChange(e); handleChange(e);}}
                   placeholder="    Email ID" />
                   {errors.email && touched.email && (
@@ -189,8 +199,8 @@ const [value, setValue] = useState('');
                   </div>
           
                   <div className="form-group flex-column">               
-                  <img alt="" src={org} className="icon imgs" />
                   <div className="pl-3" style={{color:"black"}}>
+                    <img alt="" src={org} className="icon imgs" />
                     <DropdownButton
                       name={props.organisation.organisationId}
                       value={value}

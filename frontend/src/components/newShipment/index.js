@@ -20,7 +20,8 @@ import ShipmentPopUp from "./shipmentPopUp";
 import ShipmentFailPopUp from "./shipmentFailPopUp";
 import Modal from "../../shared/modal";
 import { Formik } from "formik";
-import { getProducts, getProductsByCategory } from "../../actions/poActions";
+import Select from 'react-select';
+import { getProducts, getProductsByCategory, getOrganizationsByTypes } from "../../actions/poActions";
 
 const NewShipment = (props) => {
   const [OrderIds, setOrderIds] = useState([]);
@@ -58,6 +59,31 @@ const NewShipment = (props) => {
   const [shipmentError, setShipmentError] = useState("");
   const [formatedDate, setformatedDate] = "4-21-2021";
   const [modalProps, setModalProps] = useState({});
+  const [orgTypes, setOrgTypes] = useState([]);
+
+  const profile = useSelector((state) => {
+    return state.user;
+  });
+
+  const customStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      borderBottom: '1px solid #d6d6d6',
+      // padding: 20,
+    }),
+    control: () => ({
+      display: 'flex'
+    }),
+    indicatorSeparator: () => ({
+      display: 'none'
+    }),
+    singleValue: (provided, state) => {
+      const opacity = state.isDisabled ? 0.5 : 1;
+      const transition = 'opacity 300ms';
+      return { ...provided, opacity, transition };
+    }
+  }
+
   useEffect(() => {
     // let date = new Date();
 
@@ -74,26 +100,55 @@ const NewShipment = (props) => {
       // const data2 = await getShippingOrderById('so-1jpv1jsjkluz8yvs');
       // console.log('New Data');
       // console.log(data2);
-      const ids = result.map((so) => so.id);
+      const ids = result.map(item => {
+                                      return {
+                                        value: item.id,
+                                        label: item.id
+                                      };
+                                    });
       setOrderIds(ids);
 
       const orgs = await getAllOrganisations();
-      console.log("Organisation");
-      console.log(orgs);
+      
       const orgSplit = user.organisation?.split("/");
       setSenderOrganisation([orgSplit[0]]);
       const organisations = orgs.data.filter((org) => org.id != orgSplit[1]);
-      setAllOrganisations(organisations);
+      setAllOrganisations(organisations.map(item => {
+                                      return {
+                                        ...item,
+                                        value: item.id,
+                                        label: item.name
+                                      };
+                                    }));
       const result1 = await getProducts();
       const categoryArray = result1.map((product) => product.type);
       setCategory(
         categoryArray.filter(
           (value, index, self) => self.indexOf(value) === index
-        )
+        ).map(item => {
+                        return {
+                          value: item,
+                          label: item
+                        };
+                      })
       );
 
       const warehouses = await getWarehouseByOrgId(orgSplit[1]);
-      setSenderWarehouses(warehouses.data);
+      setSenderWarehouses(warehouses.data.map(v => {
+                                      return {
+                                        ...v,
+                                        value: v.id,
+                                        label: v?.warehouseAddress ? v?.title + '/' + v?.warehouseAddress?.firstLine + ", " + v?.warehouseAddress?.city : v?.title + '/' + v.postalAddress
+                                      };
+                                    }));
+
+      const orgType = await getOrganizationsByTypes(profile.configuration_id);
+      setOrgTypes(orgType.data.length > 0 ? orgType.data[0].organisationTypes.map(item => {
+                                      return {
+                                        value: item.id,
+                                        label: item.name
+                                      };
+                                    }) : []);
 
       if (search) {
         const shippingId = search.split("=")[1];
@@ -116,7 +171,13 @@ const NewShipment = (props) => {
   const onOrgChange = async (value) => {
     try {
       const warehouse = await getWarehouseByOrgId(value);
-      setReceiverWarehouses(warehouse.data);
+      setReceiverWarehouses(warehouse.data.map(v => {
+                                      return {
+                                        ...v,
+                                        value: v.id,
+                                        label: v?.warehouseAddress ? v?.title + '/' + v?.warehouseAddress?.firstLine + ", " + v?.warehouseAddress?.city : v?.title + '/' + v.postalAddress
+                                      };
+                                    }));
     } catch (err) {
       setErrorMessage(err);
     }
@@ -125,7 +186,13 @@ const NewShipment = (props) => {
   const onWarehouseChange = async (value) => {
     try {
       const prods = await getProductsByInventoryId(value);
-      setProducts(prods.data);
+      setProducts(prods.data.map(item => {
+                                      return {
+                                        value: item.name,
+                                        label: item.name,
+                                        ...item
+                                      };
+                                    }));
     } catch (err) {
       setErrorMessage(err);
     }
@@ -265,7 +332,13 @@ const NewShipment = (props) => {
       let newArr = [...addProducts];
       newArr[index]["type"] = value;
       setAddProducts((prod) => [...newArr]);
-      setProducts(warehouse.data);
+      setProducts(warehouse.data.map(item => {
+                                      return {
+                                        value: item.name,
+                                        label: item.name,
+                                        ...item
+                                      };
+                                    }));
     } catch (err) {
       setErrorMessage(err);
     }
@@ -299,6 +372,10 @@ const NewShipment = (props) => {
         // enableReinitialize={true}
         initialValues={{
           poId: "",
+          type: "",
+          typeName: "",
+          rtype: "",
+          rtypeName: "",
           fromOrg: senderOrganisation[0],
           fromOrgLoc: "",
           toOrg: "",
@@ -363,7 +440,7 @@ const NewShipment = (props) => {
                   <div className="form-group">
                     <label htmlFor="orderID">Order ID</label>
                     <div className="form-control">
-                      <DropdownButton
+                      {/* <DropdownButton
                         name={OrderId}
                         name2="Select Order ID"
                         onSelect={async (v) => {
@@ -393,9 +470,6 @@ const NewShipment = (props) => {
                               return w.id == supplierWarehouse[i];
                             }
                           });
-                          console.log(warehouse);
-                          console.log("Organisation");
-                          console.log(senderOrganisation);
                           setFieldValue("fromOrg", senderOrganisation[0]);
                           setFieldValue(
                             "fromOrgLoc",
@@ -414,29 +488,89 @@ const NewShipment = (props) => {
                           let products_temp = result.poDetails[0].products;
                           for (let i = 0; i < products_temp.length; i++) {
                             products_temp[i].manufacturer =
-                              result.poDetails[0].productDetails[
-                                i
-                              ].manufacturer;
+                              result.poDetails[0].productDetails[i].manufacturer;
                             products_temp[i].productName =
                               result.poDetails[0].productDetails[i].name;
                             products_temp[i].productQuantity =
                               result.poDetails[0].products[i].quantity;
- products_temp[i].productCategory =
+                            products_temp[i].productCategory =
                               result.poDetails[0].products[i].type;
- products_temp[i].productID =
+                            products_temp[i].productID =
                               result.poDetails[0].products[i].productId;
-
-}
-                          console.log("Products");
-                          console.log(products_temp);
+                          }
+                          
                          if (result.poDetails[0].productDetails.length > 0) {
                            setProducts([]);
                             setAddProducts([]);
                             setFieldValue("products",products_temp);
-console.log("tes",products);
-          } else setFieldValue("products", []);
+                          } else setFieldValue("products", []);
                         }}
                         groups={OrderIds}
+                      /> */}
+                      <Select
+                        styles={customStyles}
+                        placeholder="Select Order ID"
+                        onChange={async(v) => {
+                          setOrderIdSelected(true);
+                          setFieldValue("OrderId", v.value);
+                          setOrderId(v.value);
+                          dispatch(turnOn());
+                          const result = await dispatch(getOrder(v.value));
+                          setReceiverOrgLoc(
+                             result.poDetails[0].customer.warehouse.title + '/' + result.poDetails[0].customer.warehouse.postalAddress
+                          );
+                          setReceiverOrgId(
+                            result.poDetails[0].customer.organisation.id
+                          );
+                          setOrderDetails(result.poDetails[0]);
+
+                          dispatch(turnOff());
+                          setDisabled(true);
+                          let warehouse = senderWarehouses.filter((w) => {
+                            let supplierWarehouse =
+                              result.poDetails[0].supplier.organisation
+                                .warehouses;
+                            for (let i = 0; i < supplierWarehouse.length; i++) {
+                              return w.id == supplierWarehouse[i];
+                            }
+                          });
+                          setFieldValue("fromOrg", senderOrganisation[0]);
+                          setFieldValue(
+                            "fromOrgLoc",
+                            result.poDetails[0].supplier.organisation.id
+                          );
+                          setFieldValue(
+                            "toOrg",
+                            result.poDetails[0].customer.organisation.id
+                          );
+                          setFieldValue(
+                            "toOrgLoc",
+                            result.poDetails[0].customer.shippingAddress
+                              .shippingAddressId
+                          );
+                          
+                          let products_temp = result.poDetails[0].products;
+                          for (let i = 0; i < products_temp.length; i++) {
+                            products_temp[i].manufacturer =
+                              result.poDetails[0].productDetails[i].manufacturer;
+                            products_temp[i].productName =
+                              result.poDetails[0].productDetails[i].name;
+                            products_temp[i].productQuantity =
+                              result.poDetails[0].products[i].quantity;
+                            products_temp[i].productCategory =
+                              result.poDetails[0].products[i].type;
+                            products_temp[i].productID =
+                              result.poDetails[0].products[i].productId;
+                          }
+                          
+                         if (result.poDetails[0].productDetails.length > 0) {
+                           setProducts([]);
+                            setAddProducts([]);
+                            setFieldValue("products",products_temp);
+                          } else setFieldValue("products", []);
+                        }}
+                        defaultInputValue={values.OrderId}
+                        options={OrderIds}
                       />
                     </div>
                   </div>
@@ -449,6 +583,29 @@ console.log("tes",products);
                 <label htmlFor="client" className="headsup">
                   From
                 </label>
+                {/* <div className="row">
+                  <div className="col-md-6 com-sm-12">
+                    <div className="form-group">
+                      <label htmlFor="organizationType">Organisation Type*</label>
+                      <div className="form-control">
+                        <Select
+                          styles={customStyles}
+                          isDisabled={disabled}
+                          placeholder="Select Organisation Type"
+                          onChange={(v) => {
+                            setFieldValue('type', v?.value);
+                            setFieldValue('typeName', v?.label);
+                          }}
+                          defaultInputValue={values.typeName}
+                          options={orgTypes}
+                        />
+                        {errors.type && touched.type && (
+                          <span className="error-msg text-danger">{errors.type}</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div> */}
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
@@ -456,11 +613,24 @@ console.log("tes",products);
                         Organisation Name*
                       </label>
                       <div className="form-control">
-                        <DropdownButton
+                        {/* <DropdownButton
                           name={senderOrganisation[0]}
                           disabled={true}
                           onSelect={() => {}}
                           groups={senderOrganisation}
+                        /> */}
+                        <Select
+                          styles={customStyles}
+                          isDisabled={true}
+                          onChange={(v) => {
+                          }}
+                          placeholder={senderOrganisation[0]}
+                          defaultInputValue={senderOrganisation[0]}
+                          value={senderOrganisation[0]}
+                          options={senderOrganisation.map((v) => { return {
+                                        value: v,
+                                        label: v
+                                      };  })}
                         />
                       </div>
                     </div>
@@ -469,16 +639,14 @@ console.log("tes",products);
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label htmlFor="orgLocation">
-                        Organization Location*
+                        Organisation Location*
                       </label>
                       <div className="form-control">
-                        <DropdownButton
+                        {/* <DropdownButton
                           name={senderOrgLoc}
                           name2="Select Organisation Location"
                           disabled={false}
                           onSelect={(v) => {
-                            console.log("warehouse");
-                            console.log(v);
                             onWarehouseChange(v.warehouseInventory);
                             setFieldValue("fromOrg", senderOrganisation[0]);
                             setSenderOrgLoc(
@@ -499,6 +667,27 @@ console.log("tes",products);
                             setAddProducts((prod) => [...prod, newArr]);
                           }}
                           groups={senderWarehouses}
+                        /> */}
+                        <Select
+                          styles={customStyles}
+                          isDisabled={false}
+                          placeholder="Select Organisation Location"
+                          onChange={(v) => {
+                            console.log(v.warehouseInventory);
+                            
+                            onWarehouseChange(v.warehouseInventory);
+                            setFieldValue("fromOrg", senderOrganisation[0]);
+                            setFieldValue("fromOrgLoc", v.value);
+                            setAddProducts((prod) => []);
+                            let newArr = {
+                              productName: "",
+                              manufacturer: "",
+                              productQuantity: "",
+                            };
+                            setAddProducts((prod) => [...prod, newArr]);
+                          }}
+                          defaultInputValue={values.fromOrgLoc}
+                          options={senderWarehouses}
                         />
                         {errors.fromOrgLoc && touched.fromOrgLoc && (
                           <span className="error-msg text-danger">
@@ -520,11 +709,34 @@ console.log("tes",products);
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
+                      <label htmlFor="organizationType">Organisation Type*</label>
+                      <div className="form-control">
+                        <Select
+                          styles={customStyles}
+                          isDisabled={disabled}
+                          placeholder="Select Organisation Type"
+                          onChange={(v) => {
+                            setFieldValue('rtype', v?.value);
+                            setFieldValue('rtypeName', v?.label);
+                          }}
+                          defaultInputValue={values.rtypeName}
+                          options={orgTypes}
+                        />
+                        {errors.rtype && touched.rtype && (
+                          <span className="error-msg text-danger">{errors.rtype}</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="row">
+                  <div className="col-md-6 com-sm-12">
+                    <div className="form-group">
                       <label htmlFor="organizationName">
                         Organisation Name*
                       </label>
                       <div className="form-control">
-                        <DropdownButton
+                        {/* <DropdownButton
                           name={receiverOrgId}
                           name2="Select Organisation Name"
                           disabled={disabled}
@@ -536,6 +748,19 @@ console.log("tes",products);
                             onOrgChange(v.id);
                           }}
                           groups={allOrganisations}
+                        /> */}
+                        <Select
+                          styles={customStyles}
+                          isDisabled={disabled}
+                          placeholder={disabled ? values.toOrg : "Select Delivery Location"}
+                          onChange={(v) => {
+                            setFieldValue("toOrgLoc", "");
+                            setReceiverOrgId(v.label);
+                            setFieldValue("toOrg", v.value);
+                            onOrgChange(v.value);
+                          }}
+                          defaultInputValue={values.toOrg}
+                          options={allOrganisations.filter(a => a.type == values.rtypeName)}
                         />
                         {errors.toOrg && touched.toOrg && (
                           <span className="error-msg text-danger">
@@ -550,7 +775,7 @@ console.log("tes",products);
                     <div className="form-group">
                       <label htmlFor="delLocation">Delivery Location*</label>
                       <div className="form-control">
-                        <DropdownButton
+                        {/* <DropdownButton
                           name={receiverOrgLoc}
                           name2="Select Delivery Location"
                           disabled={disabled}
@@ -565,6 +790,16 @@ console.log("tes",products);
                             setFieldValue("toOrgLoc", v.id);
                           }}
                           groups={receiverWarehouses}
+                        /> */}
+                        <Select
+                          styles={customStyles}
+                          isDisabled={disabled}
+                          placeholder={disabled ? values.toOrgLoc : "Select Delivery Location"}
+                          onChange={(v) => {
+                            setFieldValue("toOrgLoc", v.value);
+                          }}
+                          defaultInputValue={values.toOrgLoc}
+                          options={receiverWarehouses}
                         />
                         {errors.toOrgLoc && touched.toOrgLoc && (
                           <span className="error-msg text-danger">

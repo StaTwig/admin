@@ -41,6 +41,16 @@
           border-right: none;
         }
     }
+    .no-border div:last-child, div:first-child{
+      border: none !important;
+      div:hover{
+        border: none !important;
+        border-color: transparent !important;
+      }
+      span:first-child {
+          display: none;
+      }
+    }
   }
 
   .rTable {
@@ -118,10 +128,7 @@
       }
     }
   }
-}
-
-
-
+}    
 
 
 .editTable {

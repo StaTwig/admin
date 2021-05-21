@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./style.scss";
 import { Formik } from "formik";
+import update from '../../assets/icons/Update_Status.png';
+
 const EnterId = (props) => {
   const { id } = props.match.params;
   const [shipmentId, setShipmentId] = useState(null);
@@ -127,7 +129,7 @@ const EnterId = (props) => {
                       <button
                         type="button"
                         className="btn btn-outline-primary mr-4 "
-                        onClick={() =>  props.history.push(`/viewshipment/${id}`)
+                        onClick={() =>  props.history.push(`/shipments`)
                           
                         }
                       >
@@ -142,7 +144,8 @@ const EnterId = (props) => {
                             : props.history.push(`/updatestatus/${billid}`);
                         }}
                       >
-                        <span>UPDATE SHIPMENT</span>
+                        <img src={update} width="20" height="17" className="mr-2 mb-1" />
+                      <span>Update Shipment</span>
                       </button>
                     </div>
                   </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import './style.scss';
-
+import { Redirect } from 'react-router-dom';
 import DrawerMenu from './drawerMenu';
 import { getUserInfo, logoutUser } from '../../actions/userActions';
 import logo from '../../assets/brands/VACCINELEDGER.png';
@@ -16,6 +16,9 @@ import useOnclickOutside from 'react-cool-onclickoutside';
 import { config } from "../../config";
 import Modal from "../modal/index";
 import FailedPopUp from "../PopUp/failedPopUp";
+import {getShippingOrderIds} from "../../actions/shippingOrderAction";
+import { getOrderIds} from "../../actions/poActions";
+
 
 const Header = props => {
   const [menu, setMenu] = useState(false);
@@ -24,6 +27,8 @@ const Header = props => {
   const [invalidSearch, setInvalidSearch] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [orderIds, setOrderIds] = useState([]);
+  const [shippingIds, setShippingIds] = useState([]);
 const ref = useOnclickOutside(() => {
     setMenu(false);
   });
@@ -35,13 +40,26 @@ const ref = useOnclickOutside(() => {
     setInvalidSearch(false);
   };
 
+  useEffect(() => {
+
+    async function getIds(){
+      const resultShippingIds = await getShippingOrderIds();
+      const resultOrderIds = await getOrderIds();
+      setOrderIds(resultOrderIds.map((so)=>so.id));
+      setShippingIds(resultShippingIds.map((so)=>so.id));
+    }
+
+    getIds();
+  }, []);
+
   const onSeach = () => {
     console.log('Check');
-    console.log(props.orderIds);
-    console.log(props.orderIds.indexOf(search));
-    if(props.orderIds.indexOf(search)!=-1)
+    // console(context);
+    console.log(orderIds);
+    console.log(orderIds.indexOf(search));
+    if(orderIds.indexOf(search)!=-1)
     props.history.push(`/vieworder/${search}`);
-    else if(props.shippingIds.indexOf(search)!=-1)
+    else if(shippingIds.indexOf(search)!=-1)
     props.history.push(`/viewshipment/${search}`);
     else
     setInvalidSearch(true);

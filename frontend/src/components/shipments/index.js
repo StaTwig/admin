@@ -22,6 +22,7 @@ import { getInboundShipments, getOutboundShipments, getSupplierAndReceiverList, 
 import ExcelPopUp from './ExcelPopup';
 import Received from '../../assets/icons/Received1.svg';
 import Sent from '../../assets/icons/Sent.png';
+import update from '../../assets/icons/Update_Status.png';
 const ShipmentAnalytic = props => {
   const [visible, setvisible] = useState('one');
   const [skip, setSkip] = useState(0);
@@ -176,7 +177,8 @@ const ShipmentAnalytic = props => {
           </button> */}
           <Link to='/enterid'>
             <button className="btn btn-orange fontSize20 font-bold mr-5 chain" disabled={status == "RECEIVED"}>
-              Update Status
+              <img src={update} width="20" height="17" className="mr-2 mb-1" />
+              <span>Update Shipment</span>
             </button>
           </Link>
           <Link to="/newshipment">
