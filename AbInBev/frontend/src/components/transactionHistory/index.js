@@ -542,7 +542,7 @@ const TransactionHistory = (props) => {
                                         </div>
                                         <div className="col-md-3">
                                           {
-                                            product.productQuantity
+                                            product.productQuantityDelivered
                                           }
                                         </div>
                                       </>

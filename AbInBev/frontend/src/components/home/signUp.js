@@ -40,7 +40,7 @@ const SignUp = (props) => {
       </div>
       <Formik
         initialValues={{
-          firstName: '', lastName: '', mobileemail: '', brewery: '', organisation: ''
+          firstName: '', lastName: '', mobileemail: '', authority: '', organisation: ''
         }}
         validate={(values) => {
           const errors = {};
@@ -53,8 +53,8 @@ const SignUp = (props) => {
           if (!values.mobileemail) {
             errors.mobileemail = "Required";
           }
-          if (!values.brewery) {
-            errors.brewery = "Required";
+          if (!values.authority) {
+            errors.authority = "Required";
           }
           if (!values.organisation) {
             errors.organisation = "Required";
@@ -119,11 +119,11 @@ const SignUp = (props) => {
                   <div className="error-msg text-danger mb-3">{errors.mobileemail}</div>
                 )}
 
-                <label htmlFor="brewery" className="organisationLabel mb-1">Brewery</label>
+                <label htmlFor="authority" className="organisationLabel mb-1">Brewery</label>
                 <select
-                  name="brewery"
-                  className={`form-control brewery ${errors.brewery ? `` : `mb-3`}`}
-                  value={values.brewery}
+                  name="authority"
+                  className={`form-control brewery ${errors.authority ? `` : `mb-3`}`}
+                  value={values.authority}
                   onChange={handleChange}
                 >
                   <option value="">Select Brewery</option>

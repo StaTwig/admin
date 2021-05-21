@@ -151,10 +151,10 @@ exports.register = [
     .isLength({ min: 1 })
     .trim()
     .withMessage('name must be specified.'),
-  body('brewery')
-    .isLength({ min: 1 })
-    .trim()
-    .withMessage('brewery must be specified.'),
+  // body('authority')
+  //   .isLength({ min: 1 })
+  //   .trim()
+  //   .withMessage('authority must be specified.'),
   body('organisationId')
     .isLength({ min: 1 })
     .trim()
@@ -311,7 +311,7 @@ exports.register = [
                 countryName: country
               },
               configuration_id: 'CONF001',
-              approvingAuthority: req.body?.brewery
+              authority: req.body?.authority
             });
             await org.save();
 
