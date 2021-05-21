@@ -24,8 +24,7 @@
     "express-jwt": "^6.0.0",
     "mongoose": "^5.11.15",
     "morgan": "^1.10.0",
-    "nanoid": "^3.1.20",
-    "winston-logzio": "^5.1.2"
+    "nanoid": "^3.1.20"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"

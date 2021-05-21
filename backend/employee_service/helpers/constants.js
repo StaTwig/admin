@@ -5,11 +5,11 @@ exports.constants = {
   },
   confirmEmails: {
     from: `${process.env.EMAIL_SMTP_USERNAME}`,
-    subject: 'Account Verification - One Time Password for your Login on VaccineLedger'
+    subject: 'Account Verification - One Time Password for your Login on BrewCollect'
   },
   appovalEmail: {
     from: `${process.env.EMAIL_SMTP_USERNAME}`,
-    subject: 'Account Approved - Login into VaccineLedger'
+    subject: 'Account Approved - Login into BrewCollect'
   },
   rejectEmail: {
     from: `${process.env.EMAIL_SMTP_USERNAME}`,
@@ -17,6 +17,6 @@ exports.constants = {
   },
   addUser: {
     from: `${process.env.EMAIL_SMTP_USERNAME}`,
-    subject: 'You are requested to Join Vaccine Ledger - Login with this email'
+    subject: 'You are requested to Join BrewCollect - Login with this email'
   },
 };

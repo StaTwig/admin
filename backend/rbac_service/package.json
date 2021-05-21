@@ -17,12 +17,8 @@
     "express-jwt": "^5.3.1",
     "express-validator": "^6.2.0",
     "jsonwebtoken": "^8.5.1",
-    "moment": "^2.24.0",
     "mongoose": "^5.7.6",
-    "morgan": "~1.9.0",
-    "move-file": "^2.0.0",
-    "multer": "^1.4.2",
-    "winston-logzio": "^5.1.2"
+    "morgan": "~1.9.0"
   },
   "devDependencies": {
     "nodemon": "^1.19.4"
