@@ -1,6 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from 'react-redux';
 import { Formik } from "formik";
 import logo from "../../assets/ABInBev.png";
+
+import {
+  getOrganizationsByType
+} from '../../actions/inventoryAction';
 
 const SignUp = (props) => {
   const {
@@ -9,8 +14,24 @@ const SignUp = (props) => {
     onSignUpClick
   } = props;
 
+  const dispatch = useDispatch();
+
   const [responseError, SetResponseError] = useState('');
-  
+
+  const [allBreweries, setAllBreweries] = useState([]);
+
+  useEffect(() => {
+    (async () => {
+      const filters = {
+        inventoryType: 'BREWERY',
+      };
+      const response = await dispatch(getOrganizationsByType(filters));
+      const _organizations = response.data ? response.data : [];
+      setAllBreweries(_organizations);
+    })();
+
+  }, []);
+
   return (
     <div className="signUpScreen">
       <div className="align-center pb-5 pt-5">
@@ -19,7 +40,7 @@ const SignUp = (props) => {
       </div>
       <Formik
         initialValues={{
-          firstName: '', lastName: '', mobileemail: '', organisation: ''
+          firstName: '', lastName: '', mobileemail: '', authority: '', organisation: ''
         }}
         validate={(values) => {
           const errors = {};
@@ -32,6 +53,9 @@ const SignUp = (props) => {
           if (!values.mobileemail) {
             errors.mobileemail = "Required";
           }
+          if (!values.authority) {
+            errors.authority = "Required";
+          }
           if (!values.organisation) {
             errors.organisation = "Required";
           }
@@ -40,9 +64,9 @@ const SignUp = (props) => {
         onSubmit={async (values, { setSubmitting }) => {
           setSubmitting(false);
           const result = await onSignUpClick(values);
-          
+
           SetResponseError(result.msg);
-          
+
         }}
       >
         {({
@@ -57,71 +81,87 @@ const SignUp = (props) => {
           dirty,
         }) => (
           <form onSubmit={handleSubmit} className="">
-      <div className="loginUserBlock justify-content-center">
-        <div className="form-group">
-          <label htmlFor="firstName" className="userNameLabel mb-1">First Name</label>
-          <input 
-            name="firstName" 
-            className={`form-control username ${errors.firstName ? `` : `mb-3`}`}
-            value={values.firstName}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
-          {errors.firstName && touched.firstName && (
-            <div className="error-msg text-danger mb-3">{errors.firstName}</div>
-          )}
+            <div className="loginUserBlock justify-content-center">
+              <div className="form-group">
+                <label htmlFor="firstName" className="userNameLabel mb-1">First Name</label>
+                <input
+                  name="firstName"
+                  className={`form-control username ${errors.firstName ? `` : `mb-3`}`}
+                  value={values.firstName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.firstName && touched.firstName && (
+                  <div className="error-msg text-danger mb-3">{errors.firstName}</div>
+                )}
 
-          <label htmlFor="lastName" className="userNameLabel mb-1">Last Name</label>
-          <input 
-            name="lastName" 
-            className={`form-control username ${errors.lastName  ? `` :  `mb-3`}`}
-            value={values.lastName}
-            onChange={handleChange}
-            onBlur={handleBlur} 
-          />
-          {errors.lastName && touched.lastName && (
-            <div className="error-msg text-danger mb-3">{errors.lastName}</div>
-          )}
+                <label htmlFor="lastName" className="userNameLabel mb-1">Last Name</label>
+                <input
+                  name="lastName"
+                  className={`form-control username ${errors.lastName ? `` : `mb-3`}`}
+                  value={values.lastName}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.lastName && touched.lastName && (
+                  <div className="error-msg text-danger mb-3">{errors.lastName}</div>
+                )}
 
-          <label htmlFor="mobileemail" className="userNameLabel mb-1">Mobile No / Email ID</label>
-          <input 
-            name="mobileemail" 
-            className={`form-control username ${errors.mobileemail  ? `` :  `mb-3`}`}
-            value={values.mobileemail}
-            onChange={handleChange}
-            onBlur={handleBlur} 
-          />
-          {errors.mobileemail && touched.mobileemail && (
-            <div className="error-msg text-danger mb-3">{errors.mobileemail}</div>
-          )}
+                <label htmlFor="mobileemail" className="userNameLabel mb-1">Mobile No / Email ID</label>
+                <input
+                  name="mobileemail"
+                  className={`form-control username ${errors.mobileemail ? `` : `mb-3`}`}
+                  value={values.mobileemail}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.mobileemail && touched.mobileemail && (
+                  <div className="error-msg text-danger mb-3">{errors.mobileemail}</div>
+                )}
 
-          <label htmlFor="organisation" className="organisationLabel mb-1">Organisation</label>
-          <input 
-            name="organisation" 
-            className={`form-control organisation ${errors.organisation  ? `` :  `mb-3`}`}
-            value={values.organisation}
-            onChange={handleChange}
-            onBlur={handleBlur} 
-          />
-          {errors.organisation && touched.organisation && (
-            <div className="error-msg text-danger mb-3">{errors.organisation}</div>
-          )}
-          {responseError && <div className="text-danger mt-2 mb-2">{responseError}</div>}
-          <button 
-            className={`width100 btn mt-4`}
-          >
-            GET STARTED
+                <label htmlFor="authority" className="organisationLabel mb-1">Brewery</label>
+                <select
+                  name="authority"
+                  className={`form-control brewery ${errors.authority ? `` : `mb-3`}`}
+                  value={values.authority}
+                  onChange={handleChange}
+                >
+                  <option value="">Select Brewery</option>
+                  {
+                    allBreweries.map(brewery => (
+                      <option value={brewery.id}>{brewery.name}</option>
+                    ))
+                  }
+                  <option value="BREWERY">I am a Brewery</option>
+                </select>
+
+                <label htmlFor="organisation" className="organisationLabel mb-1">Organisation</label>
+                <input
+                  name="organisation"
+                  className={`form-control organisation ${errors.organisation ? `` : `mb-3`}`}
+                  value={values.organisation}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+                {errors.organisation && touched.organisation && (
+                  <div className="error-msg text-danger mb-3">{errors.organisation}</div>
+                )}
+                {responseError && <div className="text-danger mt-2 mb-2">{responseError}</div>}
+                <button
+                  className={`width100 btn mt-4`}
+                >
+                  GET STARTED
           </button>
-          <p className="signUpDesc align-center mt-3 ">Already have an account? <a href="#" onClick={
-            () => {
-              setContinueClick(true);
-              setSteps(2);
-            }
-          } className="signUpLink">Log In</a></p>
-        </div>
-      </div>
-      </form>
-      )}
+                <p className="signUpDesc align-center mt-3 ">Already have an account? <a href="#" onClick={
+                  () => {
+                    setContinueClick(true);
+                    setSteps(2);
+                  }
+                } className="signUpLink">Log In</a></p>
+              </div>
+            </div>
+          </form>
+        )}
       </Formik>
       {/* <div className="loginUserBlock justify-content-center">
         {

@@ -34,6 +34,15 @@ export const registerUser = async (data) => {
   }
 };
 
+export const getAllBreweries = async () => {
+  try {
+    const result = await axios.get(config().getOrganizationsByType);
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+}
+
 export const sendOtp = async (data) => {
   try {
     const result = await axios.post(config().sendOtpUrl, data);

@@ -282,13 +282,21 @@ const TransactionHistory = (props) => {
       if (a.status === "SENT") sent.push(a);
       if (a.status === "INTRANSIT") inTransit.push(a);
     });
+    let _transactions = [];
     if (results && results.data) {
-      results.data = results.data.filter(trxn => {
-        return trxn.supplier.org.name !== 'dev@statwigorg';
+      _transactions = results.data.filter(trxn => {
+        let isDevTrxn = false;
+        if (trxn.supplier.org.name === 'dev@statwigorg') {
+          isDevTrxn = true;
+        }
+        if (trxn.receiver.org.name === 'dev@statwigorg') {
+          isDevTrxn = true;
+        }
+        return !isDevTrxn;
       });
     }
-    setDisplayTransactions(results.data);
-    setTransactions(results.data);
+    setDisplayTransactions(_transactions);
+    setTransactions(_transactions);
   }
   useEffect(() => {
     (async () => {
@@ -316,9 +324,18 @@ const TransactionHistory = (props) => {
         if (a.status === "SENT") sent.push(a);
         if (a.status === "INTRANSIT") inTransit.push(a);
       });
+      let transactions = [];
       if (results && results.data) {
         results.data = results.data.filter(trxn => {
-          return trxn.supplier.org.name !== 'dev@statwigorg';
+          let isDevTrxn = false;
+          if (trxn.supplier.org.name === 'dev@statwigorg') {
+            isDevTrxn = true;
+          }
+          if (trxn.receiver.org.name === 'dev@statwigorg') {
+            isDevTrxn = true;
+          }
+          return !isDevTrxn;
+
         });
       }
       setDisplayTransactions(results.data);
@@ -525,7 +542,7 @@ const TransactionHistory = (props) => {
                                         </div>
                                         <div className="col-md-3">
                                           {
-                                            product.productQuantity
+                                            product.productQuantityDelivered
                                           }
                                         </div>
                                       </>
