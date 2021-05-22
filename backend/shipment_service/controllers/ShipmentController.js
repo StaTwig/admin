@@ -1968,9 +1968,7 @@ exports.fetchAllWarehouseShipments = [
                         const empDetails = await EmployeeModel.findOne({
                             emailId:emailId
                         });
-			    console.log("ee",empDetails)
                         const warehouses = empDetails.warehouseId;
-		        console.log(warehouses)
                         var shipmentsArray = [];
                         for (i = 0; i < warehouses.length; i++) {
                             const shipments = await ShipmentModel.aggregate([{
@@ -2042,7 +2040,6 @@ exports.fetchAllWarehouseShipments = [
                                 })
                                 .skip(parseInt(skip))
                                 .limit(parseInt(limit));
-				console.log("ss",shipments)
                             shipmentsArray.push(shipments)
                         };
 
