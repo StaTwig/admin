@@ -7,7 +7,7 @@
  const morgan = require('morgan')
  const path = require("path")
  const fs = require("fs")
- const router = require("./routes/auth")
+ const router = require("./routes/api")
  const mongoose = require("mongoose")
  require('dotenv').config({path: __dirname + '/.env'})
  /**

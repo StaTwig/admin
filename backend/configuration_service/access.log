@@ -1,1 +1,6 @@
 ::1 - GET /api/configuration_service/getOrganizationsByType HTTP/1.1 200 9671 - 483.628 ms
+::1 - GET /api/configuration_service/getOrganizationsByType HTTP/1.1 401 2489 - 10.375 ms
+::1 - GET /api/configuration_service/getOrganizationsByType HTTP/1.1 200 52 - 285.583 ms
+::1 - GET /api/configuration_service/getOrgTypes HTTP/1.1 200 194 - 305.642 ms
+::1 - GET /api/configuration_service/getWarehouseTypes HTTP/1.1 404 39 - 8.612 ms
+::1 - GET /api/configuration_service/getWarehouseTypes HTTP/1.1 200 89 - 275.218 ms

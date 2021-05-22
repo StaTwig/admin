@@ -37,7 +37,7 @@ exports.getApprovals = [
               return apiResponse.ErrorResponse(res, err);
             });
         } else {
-          res.status(403).json("Auth failed");
+          return apiResponse.unauthorizedResponse(res, "Auth Failed")
         }
       });
     } catch (err) {
@@ -117,7 +117,7 @@ exports.acceptApproval = [
               return apiResponse.ErrorResponse(res, err);
             });
         } else {
-          res.status(403).json("Auth failed");
+          return apiResponse.unauthorizedResponse(res, "Auth Failed")
         }
       });
     } catch (err) {
@@ -182,7 +182,7 @@ exports.rejectApproval = [
               return apiResponse.ErrorResponse(res, err);
             });
         } else {
-          res.status(403).json("Auth failed");
+          return apiResponse.unauthorizedResponse(res, "Auth Failed")
         }
       });
     } catch (err) {
@@ -242,7 +242,7 @@ exports.addUser = [
           }
           return apiResponse.successResponse(res, "User Added");
         } else {
-          res.status(403).json("Auth failed");
+          return apiResponse.unauthorizedResponse(res, "Auth Failed")
         }
       });
     } catch (err) {
@@ -330,7 +330,7 @@ exports.activateUser = [
               return apiResponse.ErrorResponse(res, err);
             });
         } else {
-          res.status(403).json("Auth failed");
+          return apiResponse.unauthorizedResponse(res, "Auth Failed")
         }
       });
     } catch (err) {
@@ -379,7 +379,7 @@ exports.deactivateUser = [
               return apiResponse.ErrorResponse(res, err);
             });
         } else {
-          res.status(403).json("Auth failed");
+          return apiResponse.unauthorizedResponse(res, "Auth Failed")
         }
       });
     } catch (err) {
