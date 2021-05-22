@@ -31,7 +31,7 @@ exports.updateOrg = [
     try {
       checkToken(req, res, async (result) => {
         if (result.success) {
-          const { id, status } = req.body;
+          const { id, status, type, typeId } = req.body;
           await OrganisationModel.findOneAndUpdate(
             {
               id: id,
@@ -39,6 +39,8 @@ exports.updateOrg = [
             {
               $set: {
                 status: status,
+                type:type,
+                typeId : typeId || ""
               },
             }
           )
