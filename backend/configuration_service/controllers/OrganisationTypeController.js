@@ -128,53 +128,53 @@ exports.getOrganizationsByType = [
     },
   ];
 
-exports.getOrgTypes =[
-  auth,
-  async(req,res) =>{
-    try{
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          const organisations=await OrganisationModel.find({},'organisationTypes.id organisationTypes.name')
-          return apiResponse.successResponseWithData(
-            res,
-            "Success - Organisations Types List",
-            organisations
-          );
-      } else{
-        return apiResponse.unauthorizedResponse(res, "Auth Failed")
-    }
-  }
-  )
-  }
-  catch(err){
-    return apiResponse.ErrorResponse(res, err);
-  }
-  }
-]  
+// exports.getOrgTypes =[
+//   auth,
+//   async(req,res) =>{
+//     try{
+//       checkToken(req, res, async (result) => {
+//         if (result.success) {
+//           const organisations=await OrganisationModel.find({},'organisationTypes.id organisationTypes.name')
+//           return apiResponse.successResponseWithData(
+//             res,
+//             "Success - Organisations Types List",
+//             organisations
+//           );
+//       } else{
+//         return apiResponse.unauthorizedResponse(res, "Auth Failed")
+//     }
+//   }
+//   )
+//   }
+//   catch(err){
+//     return apiResponse.ErrorResponse(res, err);
+//   }
+//   }
+// ]  
 
-exports.getWarehouseTypes =[
-  auth,
-  async(req,res) =>{
-    try{
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          const warehouses=await OrganisationModel.find({},'warehouseTypes.id warehouseTypes.name')
-          return apiResponse.successResponseWithData(
-            res,
-            "Warehouse Types List",
-            warehouses
-          );
-      } else{
-        return apiResponse.unauthorizedResponse(res, "Auth Failed")
-    }
-  }
-  )
-  }
-  catch(err){
-    return apiResponse.ErrorResponse(res, err);
-  }
-  }
-]
+// exports.getWarehouseTypes =[
+//   auth,
+//   async(req,res) =>{
+//     try{
+//       checkToken(req, res, async (result) => {
+//         if (result.success) {
+//           const warehouses=await OrganisationModel.find({},'warehouseTypes.id warehouseTypes.name')
+//           return apiResponse.successResponseWithData(
+//             res,
+//             "Warehouse Types List",
+//             warehouses
+//           );
+//       } else{
+//         return apiResponse.unauthorizedResponse(res, "Auth Failed")
+//     }
+//   }
+//   )
+//   }
+//   catch(err){
+//     return apiResponse.ErrorResponse(res, err);
+//   }
+//   }
+// ]
  
   exports.getWarehouseByType = [
     auth,

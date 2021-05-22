@@ -28,7 +28,4 @@ router.post("/updateWareHouseByType", updateWareHouseByType);
 router.post("/addNewWarehouseTypeInstance", addNewWarehouseTypeInstance);
 router.post("/addNewWarehouseType", addNewWarehouseType);
 
-router.get("/getOrgTypes", getOrgTypes)
-router.get("/getWarehouseTypes" , getWarehouseTypes)
-
 module.exports = router;
