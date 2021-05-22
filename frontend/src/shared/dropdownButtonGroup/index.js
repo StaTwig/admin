@@ -23,7 +23,7 @@ const dropdownButtonGroup = (props) => {
         className={`btn-custom-dropdown ${menu && "active"}`}
         name={namer}
         role="button"
-        onClick={() => setMenu(!menu)}
+        onClick={() => {setMenu(!menu); console.log(groups)}}
       >
         {!useParse && <span>{name}</span>}
         {useParse && <span>{parse(name)}</span>}
