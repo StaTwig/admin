@@ -11,11 +11,8 @@ import "./style.scss";
 import { Formik } from "formik";
 
 const editLocation = (props) => {
-  let id_temp = props.match.params.id;
-  console.log("ID");
-  console.log(id_temp.split(","));
-  console.log("First ID"); 
-  const id = id_temp.split(",")[0];
+  const id = props.match.params.id;
+
   console.log(id);
 
   const [addressTitle, setAddressTitle] = useState("");

@@ -9,14 +9,15 @@ import Briefcase from "../../assets/icons/briefcase.svg";
 import Telephone from "../../assets/icons/telephone.svg";
 import "./style.scss";
 import { config } from "../../config";
-import PhoneInput from 'react-phone-input-2'
-import 'react-phone-input-2/lib/style.css'
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 const axios = require("axios");
 import {
   getUserInfoUpdated,
   updateProfile,
   getUserInfo,
+  updateWarehouse,
 } from "../../actions/userActions";
 import { getWarehouseByOrgId } from "../../actions/productActions";
 import PopUpLocation from "./popuplocation";
@@ -361,12 +362,14 @@ class Profile extends React.Component {
                     <div className="form-group">
                       <label htmlFor="shipmentId">Phone</label>
                       <PhoneInput
-                      className="form-group"
-                          country={'in'}
-                          placeholder='Enter Phone number'
-                          style={{position:"absolute", marginLeft:"64%"}}
-                          value={this.state.phoneNumber}
-                          onChange={(phone) => this.setState({ phoneNumber : phone})}
+                        className="form-group"
+                        country={"in"}
+                        placeholder="Enter Phone number"
+                        style={{ position: "absolute", marginLeft: "64%" }}
+                        value={this.state.phoneNumber}
+                        onChange={(phone) =>
+                          this.setState({ phoneNumber: phone })
+                        }
                       />
                     </div>
 
@@ -405,18 +408,19 @@ class Profile extends React.Component {
                         </div>
                       </div>
                     </div>
-                    <div className="col">
-                      <div className="row">
-                        <div className="col-sm-12 col-lg-7 col-xl-7 location-cards">
+                      <div className="row" style={{width:"150vw", overflow:"hidden"}}>
+                        {Object.keys(warehouseId).map((id)=>{
+                          return (
+                          <div className="col location-cards">
                           <div className="custom-card p-3">
                             <div className="card-header">
                               <div className="d-flex align-items-center justify-content-between">
                                 <h3 className="card-title font-weight-bold">
-                                  {this.state.title}-{warehouseId}
+                                  {this.state.title}-{warehouseId[id]}
                                 </h3>
                                 <Link
                                   to={{
-                                    pathname: `/editLocation/${warehouseId}`,
+                                    pathname: `/editLocation/${warehouseId[id]}`,
                                     state: { message: "hellow" },
                                   }}
                                 >
@@ -506,9 +510,9 @@ class Profile extends React.Component {
                               />
                             </div>
                           </div>
-                        </div>
+                        </div>);
+                        })}
                       </div>
-                    </div>
                   </div>
                 ) : (
                   <div>
@@ -576,102 +580,104 @@ class Profile extends React.Component {
                     <div className="col">
                       <div className="row location">MY LOCATIONS</div>
                     </div>
-                    <div className="col">
-                      <div className="row">
-                        <div className="col-sm-12 col-lg-7 col-xl-7 location-cards">
-                          <div className="custom-card p-3">
-                            <div className="card-header">
-                              <div className="d-flex align-items-center justify-content-between">
-                                <h3 className="card-title font-weight-bold">
-                                  {this.state.title}- {warehouseId}
-                                </h3>
-                                {/* <button
-                                  className="btn-primary btn edit-button"
-                                >
-                                  <img src={Pen} width="15" height="15" className="mr-2" />
-                                  <span>EDIT</span>
-                                </button> */}
-                              </div>
-                            </div>
-                            <div className="card-body">
-                              <div className="total">
-                                {this.state.warehouseAddress_city ? (
-                                  <span>
-                                    {this.state.warehouseAddress_city}
-                                  </span>
-                                ) : (
-                                  <span>N/A</span>
-                                )}
-                                ,
-                                {this.state.warehouseAddress_state ? (
-                                  <span>
-                                    {this.state.warehouseAddress_state}
-                                  </span>
-                                ) : (
-                                  <span>N/A</span>
-                                )}
-                                ,
-                                {this.state.warehouseAddress_country ? (
-                                  <span>
-                                    {this.state.warehouseAddress_country}
-                                  </span>
-                                ) : (
-                                  <span>N/A</span>
-                                )}
-                              </div>
+                    <div
+                      className="row"
+                      style={{ width: "150vw", overflow: "hidden" }}
+                    >
+                      {Object.keys(warehouseId).map((id) => {
+                        // console.log(x);
+                        return (
+                          <div className="col">
+                            <div className="location-cards">
+                              <div className="custom-card p-3">
+                                <div className="card-header">
+                                  <div className="d-flex align-items-center justify-content-between">
+                                    <h3 className="card-title font-weight-bold">
+                                      {this.state.title}-{warehouseId[id]}
+                                    </h3>
+                                  </div>
+                                </div>
+                                <div className="card-body">
+                                  <div className="total">
+                                    {this.state.warehouseAddress_city ? (
+                                      <span>
+                                        {this.state.warehouseAddress_city}
+                                      </span>
+                                    ) : (
+                                      <span>N/A</span>
+                                    )}
+                                    ,
+                                    {this.state.warehouseAddress_state ? (
+                                      <span>
+                                        {this.state.warehouseAddress_state}
+                                      </span>
+                                    ) : (
+                                      <span>N/A</span>
+                                    )}
+                                    ,
+                                    {this.state.warehouseAddress_country ? (
+                                      <span>
+                                        {this.state.warehouseAddress_country}
+                                      </span>
+                                    ) : (
+                                      <span>N/A</span>
+                                    )}
+                                  </div>
 
-                              <div className="full-address">
-                                {/* 50 /b/, Takshila Apt, Mahakali Caves Road, Chakala, Andheri (west) Mumbai, Maharashtra, */}
-                                {this.state.warehouseAddress_firstline ? (
-                                  <span>
-                                    {this.state.warehouseAddress_firstline}
-                                  </span>
-                                ) : (
-                                  <span>N/A</span>
-                                )}
-                              </div>
-                              <div className="full-address">
-                                {/* 50 /b/, Takshila Apt, Mahakali Caves Road, Chakala, Andheri (west) Mumbai, Maharashtra, */}
-                                {this.state.warehouseAddress_secondline ? (
-                                  <span>
-                                    {this.state.warehouseAddress_secondline}
-                                  </span>
-                                ) : (
-                                  <span>N/A</span>
-                                )}
-                              </div>
-                              <div className="pin-code">
-                                Zipcode :{" "}
-                                {this.state.warehouseAddress_zipcode ? (
-                                  <span>
-                                    {this.state.warehouseAddress_zipcode}
-                                  </span>
-                                ) : (
-                                  <span>N/A</span>
-                                )}
+                                  <div className="full-address">
+                                    {/* 50 /b/, Takshila Apt, Mahakali Caves Road, Chakala, Andheri (west) Mumbai, Maharashtra, */}
+                                    {this.state.warehouseAddress_firstline ? (
+                                      <span>
+                                        {this.state.warehouseAddress_firstline}
+                                      </span>
+                                    ) : (
+                                      <span>N/A</span>
+                                    )}
+                                  </div>
+                                  <div className="full-address">
+                                    {/* 50 /b/, Takshila Apt, Mahakali Caves Road, Chakala, Andheri (west) Mumbai, Maharashtra, */}
+                                    {this.state.warehouseAddress_secondline ? (
+                                      <span>
+                                        {this.state.warehouseAddress_secondline}
+                                      </span>
+                                    ) : (
+                                      <span>N/A</span>
+                                    )}
+                                  </div>
+                                  <div className="pin-code">
+                                    Zipcode :{" "}
+                                    {this.state.warehouseAddress_zipcode ? (
+                                      <span>
+                                        {this.state.warehouseAddress_zipcode}
+                                      </span>
+                                    ) : (
+                                      <span>N/A</span>
+                                    )}
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      </div>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
               </div>
               {!editMode ? (
-                <div className="col">
-                  <button
-                    className="btn-primary btn"
-                    onClick={() => {
-                      this.setState({ editMode: true });
-                      this.onOrganisation();
-                    }}
-                  >
-                    <img src={Pen} width="15" height="15" className="mr-3" />
-                    <span>EDIT</span>
-                  </button>
-                </div>
+                // <div>
+                <button
+                  className="btn-primary btn"
+                  onClick={() => {
+                    this.setState({ editMode: true });
+                    this.onOrganisation();
+                  }}
+                >
+                  <img src={Pen} width="15" height="15" className="mr-3" />
+                  <span>EDIT</span>
+                </button>
               ) : (
+                // </div>
                 <div className="d-flex flex-row justify-content-between">
                   <button
                     className="btn btn-outline-info mr-2"
