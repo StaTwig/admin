@@ -1,0 +1,1 @@
+::1 - GET /api/configuration_service/getOrganizationsByType HTTP/1.1 200 9671 - 483.628 ms
