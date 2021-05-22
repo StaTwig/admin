@@ -10,6 +10,7 @@ import {
   SET_AFFILATED_PENDING_REQ,
   SET_AFFILATED_ORGS,
   SET_ORGANISATIONS,
+  SET_ORGANISATION_TYPES
 } from "../constants/organisationConstants";
 import { turnOn, turnOff } from "./spinnerActions";
 
@@ -234,6 +235,23 @@ export const getOrgs = () => {
       });
       dispatch(turnOff());
       return result.data.data.length;
+    };
+  } catch (e) {
+    throw Error(e.message);
+  }
+};
+
+export const getTypes = () => {
+  try {
+    return async (dispatch) => {
+      dispatch(turnOn());
+      const result = await axios.get(config().getOrgTypesUrl);
+      dispatch({
+        type: SET_ORGANISATION_TYPES,
+        payload: result.data,
+      });
+      dispatch(turnOff());
+      return result.data.data[0].organisationTypes;
     };
   } catch (e) {
     throw Error(e.message);
