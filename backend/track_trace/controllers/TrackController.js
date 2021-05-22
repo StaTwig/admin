@@ -358,24 +358,109 @@ exports.fetchDataByQRCode = [
                         "label.labelId": QRcode
                     })
                     if (shipmentCheck != null) {
-                        const s = await ShipmentModel.find({
-                                "label.labelId": QRcode
-                            })
+                        const s = await ShipmentModel.aggregate([{
+                                    $match: {
+                                        "label.labelId": QRcode
+                                    }
+                                },
+                                {
+                                    $lookup: {
+                                        from: "warehouses",
+                                        localField: "supplier.locationId",
+                                        foreignField: "id",
+                                        as: "supplier.warehouse",
+                                    },
+                                },
+                                {
+                                    $unwind: {
+                                        path: "$supplier.warehouse",
+                                    },
+                                },
+                                {
+                                    $lookup: {
+                                        from: "organisations",
+                                        localField: "supplier.warehouse.organisationId",
+                                        foreignField: "id",
+                                        as: "supplier.org",
+                                    },
+                                },
+                                {
+                                    $unwind: {
+                                        path: "$supplier.org",
+                                    },
+                                },
+                                {
+                                    $lookup: {
+                                        from: "warehouses",
+                                        localField: "receiver.locationId",
+                                        foreignField: "id",
+                                        as: "receiver.warehouse",
+                                    },
+                                },
+                                {
+                                    $unwind: {
+                                        path: "$receiver.warehouse",
+                                    },
+                                },
+                                {
+                                    $lookup: {
+                                        from: "organisations",
+                                        localField: "receiver.warehouse.organisationId",
+                                        foreignField: "id",
+                                        as: "receiver.org",
+                                    },
+                                },
+                                {
+                                    $unwind: {
+                                        path: "$receiver.org",
+                                    },
+                                },
+                            ])
                             .then((shipments) => {
                                 return res.json({
-                                    shipments
+                                    "type": "Shipment",
+                                    "shipments": shipments
                                 });
                             })
                             .catch((err) => {
                                 return apiResponse.ErrorResponse(res, err);
                             });
                     } else {
-                        const atomCheck = await AtomModel.find({
-                                "label.labelId": QRcode
-                            })
+                        const atomCheck = await AtomModel.aggregate([{
+                                    $match: {
+                                        "label.labelId": QRcode
+                                    }
+                                },
+                                {
+                                    $lookup: {
+                                        from: "products",
+                                        localField: "productId",
+                                        foreignField: "id",
+                                        as: "productDetails",
+                                    },
+                                },
+                                {
+                                    $unwind: {
+                                        path: "$productDetails",
+                                    },
+                                },
+                                {
+                                    $project: {
+                                        productId: 1,
+                                        label: 1,
+                                        id: 1,
+					batchNumbers: 1,
+                                        name: "$productDetails.type",
+                                        type: "$productDetails.name",
+                                        manufacturer: "$productDetails.manufacturer",
+                                    }
+                                }
+                            ])
                             .then((products) => {
                                 return res.json({
-                                    products
+                                    "type": "Product",
+                                    "quantity": products.length,
+                                    "products": products
                                 });
                             })
                             .catch((err) => {

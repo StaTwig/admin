@@ -1948,3 +1948,123 @@ exports.fetchSupplierAndReceiverList = [
     }
   },
 ];
+
+exports.fetchAllWarehouseShipments = [
+    auth,
+    async (req, res) => {
+        try {
+            const {
+                skip,
+                limit
+            } = req.query;
+            checkToken(req, res, async (result) => {
+                if (result.success) {
+                    const {
+                        emailId
+                    } = req.user;
+			console.log(emailId)
+                    try {
+
+                        const empDetails = await EmployeeModel.findOne({
+                            emailId:emailId
+                        });
+                        const warehouses = empDetails.warehouseId;
+                        var shipmentsArray = [];
+                        for (i = 0; i < warehouses.length; i++) {
+                            const shipments = await ShipmentModel.aggregate([{
+                                        $match: {
+                                            $or: [{
+                                                    "supplier.locationId": warehouses[i],
+                                                },
+                                                {
+                                                    "receiver.locationId": warehouses[i],
+                                                },
+                                            ],
+                                        },
+                                    },
+                                    {
+                                        $lookup: {
+                                            from: "warehouses",
+                                            localField: "supplier.locationId",
+                                            foreignField: "id",
+                                            as: "supplier.warehouse",
+                                        },
+                                    },
+                                    {
+                                        $unwind: {
+                                            path: "$supplier.warehouse",
+                                        },
+                                    },
+                                    {
+                                        $lookup: {
+                                            from: "organisations",
+                                            localField: "supplier.warehouse.organisationId",
+                                            foreignField: "id",
+                                            as: "supplier.org",
+                                        },
+                                    },
+                                    {
+                                        $unwind: {
+                                            path: "$supplier.org",
+                                        },
+                                    },
+                                    {
+                                        $lookup: {
+                                            from: "warehouses",
+                                            localField: "receiver.locationId",
+                                            foreignField: "id",
+                                            as: "receiver.warehouse",
+                                        },
+                                    },
+                                    {
+                                        $unwind: {
+                                            path: "$receiver.warehouse",
+                                        },
+                                    },
+                                    {
+                                        $lookup: {
+                                            from: "organisations",
+                                            localField: "receiver.warehouse.organisationId",
+                                            foreignField: "id",
+                                            as: "receiver.org",
+                                        },
+                                    },
+                                    {
+                                        $unwind: {
+                                            path: "$receiver.org",
+                                        },
+                                    },
+                                ])
+                                .sort({
+                                    createdAt: -1,
+                                })
+                                .skip(parseInt(skip))
+                                .limit(parseInt(limit));
+                            shipmentsArray.push(shipments)
+                        };
+
+                        return apiResponse.successResponseWithData(
+                            res,
+                            "Shipments Table",
+                            shipmentsArray
+                        );
+                    } catch (err) {
+                        return apiResponse.ErrorResponse(res, err);
+                    }
+                } else {
+                    logger.log(
+                        "warn",
+                        "<<<<< ShipmentService < ShipmentController < modifyShipment : refuted token"
+                    );
+                    res.status(403).json("Auth failed");
+                }
+            });
+        } catch (err) {
+            logger.log(
+                "error",
+                "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
+            );
+            return apiResponse.ErrorResponse(res, err);
+        }
+    },
+];
