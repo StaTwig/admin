@@ -3,22 +3,32 @@ import "leaflet/dist/leaflet.css";
 import "./style.scss";
 import { formatDate } from "../../utils/dateHelper";
 import DropdownButton from "../../shared/dropdownButtonGroup";
+import { map } from "leaflet";
 
 const Details = (props) => {
   const { org, modifyOrg, types } = props;
   const [status, setStatus] = useState("");
-
+  const [typeId, setTypeId] = useState("");
   const [type, setType] = useState(org?.type);
   useEffect(() => {
     setStatus(org?.status);
     // console.log(types)
-
+    typedIdset()
+    console.log(typeId)
 
   }, [setStatus, org]);
   const changeStatus = (status) => {
     org.status = status;
     setStatus(status);
   };
+  function typedIdset(){
+    types[0].organisationTypes.forEach(element => {
+      if(element.name === type){
+        setTypeId(element.id);
+        return
+      }
+    });
+  }
   return (
     <div className="card rounded bg-white border border-white mt-1 ml-1 p-1 mb-3">
       <div className="card-body d-flex flex-row justify-content-between">
@@ -36,7 +46,7 @@ const Details = (props) => {
           {/* {org?.type} */}
           <DropdownButton
                   groups={types[0].organisationTypes}
-                  onSelect={item => setType(item)}
+                  onSelect={item => {setType(item); typedIdset()}}
                   name={type}
                 />
         </span>
@@ -61,6 +71,8 @@ const Details = (props) => {
                   id: org?.id,
                   status: "DEACTIVATED",
                   index: org?.ridex,
+                  type: type,
+                  typeId: typeId
                 });
                 changeStatus("DEACTIVATED");
               } else {
@@ -68,6 +80,8 @@ const Details = (props) => {
                   id: org?.id,
                   status: "ACTIVE",
                   index: org?.ridex,
+                  type: type,
+                  typeId: typeId
                 });
                 changeStatus("ACTIVE");
               }
