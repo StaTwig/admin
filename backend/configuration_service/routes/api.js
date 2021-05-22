@@ -8,10 +8,7 @@ const {
     getWarehouseByType,
     updateWareHouseByType,
     addNewWarehouseTypeInstance,
-    addNewWarehouseType,
-    getOrgTypes,
-    getWarehouseTypes
-
+    addNewWarehouseType
       } = require("../controllers/OrganisationTypeController");
 
 
