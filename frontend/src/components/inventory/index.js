@@ -17,17 +17,25 @@ import user from '../../assets/icons/brand.svg';
 import Package from '../../assets/icons/package.svg';
 import calender from '../../assets/icons/calendar.svg';
 import Status from '../../assets/icons/Status.svg';
+import Quantity from '../../assets/icons/Quantity.png';
+import Product from '../../assets/icons/Producttype.png';
 
 const Inventory = props => {
   const headers = {
     coloumn1: 'Product Name',
-    coloumn2: 'Manufacturer',
-    coloumn3: 'Quantity',
+    coloumn2: 'Product Category',
+    coloumn3: 'Manufacturer',
+    coloumn4: 'Date',
+    coloumn5: 'Quantity',
+    coloumn6: 'Status',
 
 
-    img1: <img src={Package} width="16" height="16" />,
-    img2: <img src={user} width="16" height="16" />,
-    img3: <img src={Status} width="16" height="16" />,
+    img1: <img src={Product} width="16" height="16" />,
+    img2: <img src={Quantity} width="24" height="16" />,
+    img3: <img src={user} width="16" height="16" />,
+    img4: <img src={calender} width="16" height="16" />,
+    img5: <img src={Quantity} width="24" height="16" />,
+    img6: <img src={Status} width="16" height="16" />,
   };
 
   const tableHeaders = {
@@ -285,16 +293,16 @@ const Inventory = props => {
           </div>
           <div className="col-sm-12 col-xl-3">
             <div className="list-container">
-              <div className="d-flex justify-content-between align-items-center">
+              <div className="d-flex justify-content-between align-items-center ml-4">
                 <h4><b>Product List</b></h4>
                 <Link to="/productlist/all">
-                  <button className="btn btn-link"><b>View all</b></button>
+                  <button className="btn btn-link mr-3"><b>View all</b></button>
                 </Link>
               </div>
               <div className="row overflow">
                 {productsList?.map((product, index) => (
                   <div className="col-sm-6" key={index}>
-                    <div className="d-flex card flex-column align-items-center"  style={{backgroundColor: colors[index]}}>
+                    <div className="d-flex card flex-column align-items-center ml-4"  style={{backgroundColor: colors[index]}}>
                     <div className="round-sign">{product.productName}</div>
                       <p className="product">&nbsp;</p>
                       {/* <p className="product">{product.productName}</p> */}
