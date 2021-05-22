@@ -4,7 +4,7 @@ import "./style.scss";
 import inTransitIcon from "../../assets/intransit.png";
 import SideBar from "../../components/sidebar";
 import filterIcon from "../../assets/icons/funnel.svg";
-import { getTransactions, fetchShipment } from "../../actions/transactionAction";
+import { getTransactions, fetchShipment, fetchChallanImage } from "../../actions/transactionAction";
 import Moment from "react-moment";
 import setAuthToken from "../../utils/setAuthToken";
 import { func } from "prop-types";
@@ -16,11 +16,14 @@ import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { config } from '../../config';
 import {
   getAllStates,
   getDistrictsByState,
   getOrganizationsByType,
 } from "../../actions/inventoryAction";
+import ModalImage from "react-modal-image";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -252,6 +255,10 @@ const TransactionHistory = (props) => {
       setSelectedTransaction(result.data);
       setSelectedIndex(index);
     }
+  }
+
+  const getImageURL = (imageId) => {
+    return `${config().fetchChallanImageUrl}/${imageId}`;
   }
 
   const getSumByProperty = (inputArr, key) => {
@@ -510,7 +517,23 @@ const TransactionHistory = (props) => {
                                   <span>Truck No:</span><span>{selectedTransaction.externalShipmentId}</span>
                                 </div> */}
                               </div>
+                              <div className="row">
+                                {
+                                  selectedTransaction.imageDetails && selectedTransaction.imageDetails.map(image => (
+                                    <>
+                                      <ModalImage
+                                        small={getImageURL(image)}
+                                        className="challanImage"
+                                        large={getImageURL(image)}
+                                        showRotate={true}
+                                        hideZoom={false}
+                                        alt="Challan Image"
+                                      />
+                                    </>
+                                  ))
+                                }
 
+                              </div>
                               <div className=" transactionProducts row">
                                 {
                                   selectedTransaction.products.length ?

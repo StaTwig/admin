@@ -79,3 +79,19 @@ export const fetchShipment = (shipmentId) => {
     }
   };
 };
+
+export const fetchChallanImage = (imageId) => {
+  return async dispatch => {
+    try {
+      setAuthToken(localStorage.getItem("theAbInBevToken"))
+      dispatch(turnOn());
+      const result = await axios.get(
+        `${config().fetchChallanImageUrl}/` + imageId,
+      );
+      dispatch(turnOff());
+      return result.data;
+    } catch (e) {
+      dispatch(turnOff());
+    }
+  };
+};
