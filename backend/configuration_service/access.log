@@ -1,0 +1,4 @@
+::1 - GET /api/configuration_service/getOrganizationsByType?id=CONF001 HTTP/1.1 200 204 - 284.520 ms
+::1 - GET /api/configuration_service/getWarehouseTypes HTTP/1.1 404 39 - 4.260 ms
+::1 - GET /api/configuration_service/getOrganizationsByType?id=CONF001 HTTP/1.1 200 204 - 264.004 ms
+::1 - GET /api/configuration_service/getOrganizationsByType?id=CONF001 HTTP/1.1 200 86 - 297.426 ms
