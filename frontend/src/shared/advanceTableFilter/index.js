@@ -458,7 +458,7 @@ const AdvanceTableFilter = (props) => {
       return (<div className="box col">
         <div className="filter-item">
           <div className="icon mr-2">
-            {props.data.img4}
+            {props.data.img3}
           </div>
           <div className="filterTitle">{props.data.coloumn3}</div>
           <div className="filterAction">
@@ -659,7 +659,7 @@ const AdvanceTableFilter = (props) => {
       return (<div className="box col">
         <div className="filter-item">
           <div className="icon mr-2">
-            {props.data.img4}
+            {props.data.img1}
           </div>
           <div className="filterTitle">{props.data.coloumn1}</div>
           <div className="filterAction">
@@ -746,6 +746,18 @@ const AdvanceTableFilter = (props) => {
             // </div> 
             renderColumn5(props.data.coloumn5)
             : null}
+        </div>
+        <div className="box col">
+        <span className="divider" />
+          <div className="filter-item">
+            <div className="icon mr-2">
+              {props.data.img6}
+            </div>
+            <div className="filterTitle">{props.data.coloumn6}</div>
+            <div className="filterAction">
+              {/* <img src={updownarrow} width="9" height="9" /> */}
+            </div>
+          </div>
         </div>
         <div className="">
           <div className="box col">
