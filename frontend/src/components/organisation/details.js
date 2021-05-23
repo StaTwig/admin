@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "leaflet/dist/leaflet.css";
-import "./style.scss";
+// import "./style.scss";
 import { formatDate } from "../../utils/dateHelper";
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import { map } from "leaflet";
@@ -13,22 +13,21 @@ const Details = (props) => {
   useEffect(() => {
     setStatus(org?.status);
     // console.log(types)
-    typedIdset()
-    console.log(typeId)
-
+    // typedIdset();
   }, [setStatus, org]);
   const changeStatus = (status) => {
     org.status = status;
     setStatus(status);
   };
-  function typedIdset(){
-    types[0].organisationTypes.forEach(element => {
-      if(element.name === type){
-        setTypeId(element.id);
-        return
-      }
-    });
-  }
+  // function typedIdset() {
+  //   types[0].organisationTypes.forEach((element) => {
+  //     if (element.name === type) {
+  //       setTypeId(element.id);
+  //       return;
+  //     }
+  //   });
+  // }
+
   return (
     <div className="card rounded bg-white border border-white mt-1 ml-1 p-1 mb-3">
       <div className="card-body d-flex flex-row justify-content-between">
@@ -41,14 +40,17 @@ const Details = (props) => {
             />
           )}
           <h6 className="text-primary pt-1 txtWrapu">{org?.name}</h6>
-        </div> 
-        <span className="txtWrapu text-center w-15 align-self-center">
+        </div>
+        <span className=" text-center w-15 align-self-center">
           {/* {org?.type} */}
           <DropdownButton
-                  groups={types[0].organisationTypes}
-                  onSelect={item => {setType(item); typedIdset()}}
-                  name={type}
-                />
+            groups={types[0].organisationTypes}
+            onSelect={(item) => {
+              setType(item.name);
+              setTypeId(item.id);
+            }}
+            name={type ? type : org?.type}
+          />
         </span>
         <span className=" w-20 text-center align-self-center">
           {org?.postalAddress}
@@ -72,7 +74,7 @@ const Details = (props) => {
                   status: "DEACTIVATED",
                   index: org?.ridex,
                   type: type,
-                  typeId: typeId
+                  typeId: typeId,
                 });
                 changeStatus("DEACTIVATED");
               } else {
@@ -81,7 +83,7 @@ const Details = (props) => {
                   status: "ACTIVE",
                   index: org?.ridex,
                   type: type,
-                  typeId: typeId
+                  typeId: typeId,
                 });
                 changeStatus("ACTIVE");
               }
