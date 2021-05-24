@@ -1695,3 +1695,21 @@ exports.getwarehouseByType = [
     }
   },
 ];
+
+exports.getwarehouseinfo=[
+  auth,
+  async(req,res)=>{
+    try{
+      const warehouseId=req.query.id;
+      const warehouseinfo= await WarehouseModel.find({id:warehouseId})
+      
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        warehouseinfo
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+    }
+  ]
