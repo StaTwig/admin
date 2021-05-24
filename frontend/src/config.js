@@ -1,7 +1,7 @@
 export const TEST_SERVER_URL = "https://test.admin.vaccineledger.com";
 export const PROD_SERVER_URL = "//api.vaccineledger.com:9001";
 export const ABINBEV_PROD_SERVER_URL = "//admin.abinbev.statledger.io";
-export const ABINBEV_TEST_SERVER_URL = "//test.admin.abinbev.statledger.io";
+export const ABINBEV_TEST_SERVER_URL = "https://test.admin.abinbev.statledger.io";
 export const LOCAL_SERVER_URL_USER = "//localhost:3001";
 export const LOCAL_SERVER_URL_ADDRESS = "//localhost:3001";
 export const LOCAL_SERVER_URL_AFFILIATION = "//localhost:3002";
