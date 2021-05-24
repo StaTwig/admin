@@ -1,8 +1,7 @@
 const EmployeeModel = require("../models/EmployeeModel");
 const OrganisationModel = require("../models/OrganisationModel");
 const { check, validationResult , sanitizeBody } = require("express-validator");
-const uniqid = require("uniqid");
-const mongoose = require("mongoose");
+
 const dotenv = require('dotenv').config();
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
@@ -13,9 +12,6 @@ const { constants } = require("../helpers/constants");
 var base64Img = require("base64-img");
 const auth = require("../middlewares/jwt");
 const axios = require("axios");
-
-const blockchain_service_url = process.env.URL;
-const stream_name = process.env.INV_STREAM;
 
 const checkToken = require("../middlewares/middleware").checkToken;
 const EmailContent = require("../components/EmailContent");

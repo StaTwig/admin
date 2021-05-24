@@ -33,6 +33,7 @@ var OrganisationSchema = new mongoose.Schema(
     primaryContactId: String,
     logoId: String,
     type: String,
+    typeId:String,
     status: String,
     warehouses: {
       type: Array,

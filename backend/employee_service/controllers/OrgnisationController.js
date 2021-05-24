@@ -1,22 +1,9 @@
 const OrganisationModel = require("../models/OrganisationModel");
 const EmployeeModel = require("../models/EmployeeModel");
-const { check, validationResult } = require("express-validator");
-const uniqid = require("uniqid");
-const mongoose = require("mongoose");
 
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
-const utility = require("../helpers/utility");
-const jwt = require("jsonwebtoken");
-const mailer = require("../helpers/mailer");
-const { constants } = require("../helpers/constants");
-var base64Img = require("base64-img");
 const auth = require("../middlewares/jwt");
-const axios = require("axios");
-const dotenv = require("dotenv").config();
-const blockchain_service_url = process.env.URL;
-const stream_name = process.env.INV_STREAM;
-
 const checkToken = require("../middlewares/middleware").checkToken;
 
 exports.getOrgs = [
@@ -45,7 +32,7 @@ exports.updateOrg = [
     try {
       checkToken(req, res, async (result) => {
         if (result.success) {
-          const { id, status } = req.body;
+          const { id, status, type, typeId } = req.body;
           await OrganisationModel.findOneAndUpdate(
             {
               id: id,
@@ -53,6 +40,8 @@ exports.updateOrg = [
             {
               $set: {
                 status: status,
+                type : type || "S2",
+                typeId: typeId || "4",
               },
             }
           )
