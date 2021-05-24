@@ -900,8 +900,11 @@ exports.addProductsToInventory = [
           errors.array()
         );
       }
-      const payload = req.body;
-
+      let payload = req.body;
+      payload.data.products.forEach(element => {
+        var product =  ProductModel.findOne({ id: element.productId });
+        element.type = product.type
+      });
       permission_request = {
         role: req.user.role,
         permissionRequired: "addInventory",
@@ -1112,7 +1115,7 @@ exports.addProductsToInventory = [
           event_data.eventID = "ev0000" + evid;
           event_data.eventTime = datee;
           event_data.eventType.primary = "ADD";
-          event_data.eventType.description = "PRODUCTS_TO_INVENTORY";
+          event_data.eventType.description = "INVENTORY";
           event_data.actor.actorid = user_id || "null";
           event_data.actor.actoruserid = email || "null";
           event_data.payload.data = payload;
@@ -1152,6 +1155,8 @@ exports.addInventoriesFromExcel = [
             role: req.user.role,
             permissionRequired: "addInventory",
           };
+          const email = req.user.emailId;
+          const user_id = req.user.id;
           checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
               const dir = `uploads`;
@@ -1161,7 +1166,7 @@ exports.addInventoriesFromExcel = [
               await moveFile(req.file.path, `${dir}/${req.file.originalname}`);
               const workbook = XLSX.readFile(`${dir}/${req.file.originalname}`);
               const sheet_name_list = workbook.SheetNames;
-              const data = XLSX.utils.sheet_to_json(
+              let data = XLSX.utils.sheet_to_json(
                 workbook.Sheets[sheet_name_list[0]],
                 { dateNF: "dd/mm/yyyy;@", cellDates: true, raw: false }
               );
@@ -1247,54 +1252,71 @@ exports.addInventoriesFromExcel = [
                   });
               }
               recursiveFun();
-              //   event_data = {
-              //     "eventID": "ev0000"+  Math.random().toString(36).slice(2),
-              //     "eventTime": new Date().toISOString(),
-              //     "eventType": {
-              //         "primary": "CREATE",
-              //         "description": "SHIPMENT ALERTS"
-              //     },
-              //     "actor": {
-              //         "actorid": "userid1",
-              //         "actoruserid": "ashwini@statwig.com"
-              //     },
-              //     "stackholders": {
-              //         "ca": {
-              //             "id": "org001",
-              //             "name": "Statwig Pvt. Ltd.",
-              //             "address": "ca_address_object"
-              //         },
-              //         "actororg": {
-              //             "id": "org002",
-              //             "name": "Appollo Hospitals Jublihills",
-              //             "address": "actororg_address_object"
-              //         },
-              //         "secondorg": {
-              //             "id": "org003",
-              //             "name": "Med Plus Gachibowli",
-              //             "address": "secondorg_address_object"
-              //         }
-              //     },
-              //     "payload": {
-              //         "data": {
-              //             "abc": 123
-              //         }
-              //     }
-              // }
-              // async function compute(event_data) {
-              //     result = await logEvent(event_data)
-              //     return result
-              // }
-
-              // compute(event_data).then((response) => console.log(response))
-
               for (const [index, prod] of data.entries()) {
                 let product = await ProductModel.findOne({
                   name: prod.productName,
                 });
-                data[index].productId = product.id;
+                if(product){
+                  data[index].productId = product.id;
+                  data[index].type = product.type;
+                }
+                else{
+                  console.log(product)
+                }
               }
 
+              var datee = new Date();
+          datee = datee.toISOString();
+          var evid = Math.random().toString(36).slice(2);
+          let event_data = {
+            eventID: null,
+            eventTime: null,
+            eventType: {
+              primary: "CREATE",
+              description: "SHIPMENT_CREATION",
+            },
+            actor: {
+              actorid: null,
+              actoruserid: null,
+            },
+            stackholders: {
+              ca: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+              actororg: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+              secondorg: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+            },
+            payload: {
+              data: {
+                abc: 123,
+              },
+            },
+          };
+          event_data.eventID = "ev0000" + evid;
+          event_data.eventTime = datee;
+          event_data.eventType.primary = "ADD";
+          event_data.eventType.description = "INVENTORY";
+          event_data.actor.actorid = user_id || "null";
+          event_data.actor.actoruserid = email || "null";
+          event_data.payload.data = data;
+          console.log(event_data);
+          async function compute(event_data) {
+            result = await logEvent(event_data);
+            return result;
+          }
+          compute(event_data).then((response) => {
+            console.log(response);
+          });
               return apiResponse.successResponseWithData(res, "Success", data);
             } else {
               return apiResponse.ErrorResponse(
@@ -2157,7 +2179,7 @@ exports.getInventoryCountsByWarehouse = [
           },
         },
       ]);
-      const warehouseSentCount = await ShipmentModel.aggregate([
+      const warehouseCount = await ShipmentModel.aggregate([
         {
           $match: {
             $and: [
