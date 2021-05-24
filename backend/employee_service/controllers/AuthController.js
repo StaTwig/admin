@@ -28,7 +28,7 @@ const init = require('../logging/init');
 const logger = init.getLog();
 const EmailContent = require('../components/EmailContent');
 const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const phoneRgex = /^\d{10}$/;
+const phoneRgex = /^\d{12}$/;
 
 /**
  * Uniques email check
@@ -61,13 +61,13 @@ exports.checkEmail = [
       const emailId = value.toLowerCase().replace(' ', '');
       let user;
       let phone = '';
-      if (!emailId.replace('+91', '').match(phoneRgex) && !emailId.match(emailRegex))
+      if (!emailId.match(phoneRgex) && !emailId.match(emailRegex))
         return Promise.reject('E-mail/Mobile not in valid');
 
       if (emailId.indexOf('@') > -1)
         user = await EmployeeModel.findOne({ emailId });
       else {
-        phone = emailId.indexOf('+91') === 0 ? emailId : '+91' + emailId;
+        phone = '+' + emailId;
         user = await EmployeeModel.findOne({ phoneNumber: phone });
       }
       // return EmployeeModel.findOne({ emailId: value.toLowerCase() }).then(user => {
@@ -169,13 +169,13 @@ exports.register = [
       const emailId = value.toLowerCase().replace(' ', '');
       let user;
       let phone = '';
-      if (!emailId.replace('+91', '').match(phoneRgex) && !emailId.match(emailRegex))
+      if (!emailId.match(phoneRgex) && !emailId.match(emailRegex))
         return Promise.reject('E-mail/Mobile not in valid');
 
       if (emailId.indexOf('@') > -1)
         user = await EmployeeModel.findOne({ emailId });
       else {
-        phone = emailId.indexOf('+91') === 0 ? emailId : '+91' + emailId;
+       phone = '+' + emailId;
         user = await EmployeeModel.findOne({ phoneNumber: phone });
       }
 
@@ -357,8 +357,7 @@ exports.register = [
         const emailId = req.body.emailId.toLowerCase().replace(' ', '');
         let phone = '';
         if (emailId.indexOf('@') === -1)
-          phone = emailId.indexOf('+91') === 0 ? emailId : '+91' + emailId;
-
+           phone = '+' + emailId;
         // Create User object with escaped and trimmed data
         const user = new EmployeeModel({
           firstName: req.body.firstName,
@@ -477,7 +476,7 @@ exports.sendOtp = [
         if (emailId.indexOf('@') > -1)
           user = await EmployeeModel.findOne({ emailId });
         else {
-          phone = emailId.indexOf('+91') === 0 ? emailId : '+91' + emailId;
+           phone = '+' + emailId;
           user = await EmployeeModel.findOne({ phoneNumber: phone });
         }
         if (user) {
@@ -617,7 +616,7 @@ exports.verifyOtp = [
         const emailId = req.body.emailId.toLowerCase();
         var query = { emailId };
         if (emailId.indexOf('@') === -1) {
-          let phone = emailId.indexOf('+91') === 0 ? emailId : '+91' + emailId;
+          let  phone = '+' + emailId;
           query = { phoneNumber: phone };
         }
 
@@ -1695,21 +1694,3 @@ exports.getwarehouseByType = [
     }
   },
 ];
-
-exports.getwarehouseinfo=[
-  auth,
-  async(req,res)=>{
-    try{
-      const warehouseId=req.query.id;
-      const warehouseinfo= await WarehouseModel.find({id:warehouseId})
-      
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        warehouseinfo
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
-    }
-    }
-  ]
