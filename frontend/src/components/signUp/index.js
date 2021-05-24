@@ -16,6 +16,7 @@ import hide from "../../assets/icons/hide.png";
 import eye from "../../assets/icons/eye.png";
 import org from "../../assets/icons/organization.png";
 import Waiting from "../../assets/icons/waiting.png";
+import organisationType from "../../assets/icons/organisationType.png";
 import logo from "../../assets/brands/VaccineLedgerlogo.svg";
 
 const FormPage = (props) => {
@@ -23,27 +24,36 @@ const [organisations, setOrganisations] = useState([]);
 const [organisationsType, setOrganisationsType] = useState([]);
 const [organisationsArr, setOrganisationsArr] = useState([]);
 const [value, setValue] = useState('');
-  
+const [orgType, setorgType] = useState('');
+const [selectedType,setselectedType] = useState();
   useEffect(() => {
     async function fetchData() {
       const orgs = await getOrganisations();
-      // const orgIds = orgs.map(org => org.id);
-      // setOrganisations(orgIds);
+
       orgs.push({ id: 'Other', name: 'Other' });
       setOrganisations(orgs);
       setOrganisationsArr(orgs);
     }
-
     async function fetchOrganisationType() {
-      const orgsType = await getOrganizationsByType({id:"CONF001"});
-      setOrganisationsType(orgsType);
-
+      const orgsType = await getOrganizationsByType("CONF001");
+      var arr =[];
+      arr.push(orgsType.data[0].organisationTypes);
+      setOrganisationsType(arr);
     }
     fetchOrganisationType();
     fetchData();
   }, []);
-  console.log(organisationsType);
-  const changeFn = (value_new, e) => {
+var orgTypeArray = [];
+organisationsType.map((data)=>{
+  for(var i=0;i<data.length;i++){
+    orgTypeArray.push(data[i].name);
+  }
+})
+const showOrgByType = (value) =>{
+  let arr = organisations.filter(data => data.type == value);
+  return arr;
+}
+  const changeFn = (value_new,e) => {
     setValue(value_new);
     let orgs = organisationsArr.filter(org => org.name.toLowerCase().includes(value_new.toLowerCase()));
     // orgs.push({ id: 0, name: 'Other' });
@@ -199,35 +209,53 @@ const [value, setValue] = useState('');
                   </div>
           
                   <div className="form-group flex-column">               
-                  <div className="pl-3" style={{color:"black"}}>
-                    <img alt="" src={org} className="icon imgs" />
+                  <div className="pl-4" style={{color:"black"}}>
+                    <img alt="" src={organisationType} className="icon imgs" />
                     <DropdownButton
-                      name={props.organisation.organisationId}
-                      value={value}
-              
-                      // {...console.log(name)}
                       isText={true}
-                      placeholder='     Organisation'
+                      value={orgType}
+                      placeholder='  Organisation Type'
                       onSelect={item => {
-                        setFieldValue('org', item.name);
-                        props.onOrganisationChange(item);
-                        let orgs = organisationsArr.filter(org => org.name.toLowerCase() == item.name.toLowerCase());
-                        // console.log(orgs);
-                        if (orgs.length && item.name != 'Other')
-                          props.onOrgChange(false);
-                        else
-                          props.onOrgChange(true);
-                        setValue(item.name);
+                        setselectedType(item);
+                        setorgType(item);
+                        setValue("");
                       }}
-                      groups={organisations}
-                    //   changeFn={(v, e = '') => {
-                    //     console.log(v);
-                    //     setFieldValue('org', v); 
-                    //     changeFn(v, e);
-                    //  }}
+                      groups={orgTypeArray}
                       dClass="ml-4"
                       className="text"
-                    />
+                    />   
+                                      {errors.org && touched.org && (
+                    <span className="error-msg text-danger">{errors.org}</span>
+                  )}
+                     </div></div>
+                    <div className="pb-4"></div>
+                  <div className="form-group flex-column">               
+                  <div className="pl-4" style={{color:"black"}}>
+                    <img alt="" src={org} className="icon imgs" />
+                  <DropdownButton
+                    name={props.organisation.organisationId}
+                    value={value}
+                    isText={true}
+                    placeholder='  Organisation Name'
+                    onSelect={item => {
+                      setFieldValue('org', item);
+                      props.onOrganisationChange(item);
+                      let orgs = organisationsArr.filter(org => org.name == item.name);
+                      if (orgs.length && item.name != 'Other')
+                        props.onOrgChange(false);
+                      else
+                        props.onOrgChange(true);
+                        setValue(item.name);
+                    }}
+                    groups={showOrgByType(selectedType)}
+                  //   changeFn={(v, e = '') => {
+                  //     console.log(v);
+                  //     setFieldValue('org', v); 
+                  //     changeFn(v, e);
+                  //  }}
+                    dClass="ml-4"
+                    className="text"
+                  /> 
                   {errors.org && touched.org && (
                     <span className="error-msg text-danger">{errors.org}</span>
                   )}
@@ -249,9 +277,7 @@ const [value, setValue] = useState('');
                 )}
               </Formik>
                   </div>
-              }
-
-             
+              }   
             </div>
           </div>
         </div>
