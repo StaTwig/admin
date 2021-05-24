@@ -15,6 +15,7 @@ require("dotenv").config();
 const auth = require("../middlewares/jwt");
 const moment = require('moment');
 const mongoose = require("mongoose");
+const ShipmentModel = require("../models/ShipmentModel");
 
 
 const BREWERY_ORG = 'BREWERY';
@@ -661,6 +662,144 @@ exports.getStatsByOrg = [
 				res,
 				"Operation success",
 				organizations
+			);
+		} catch (err) {
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
+
+function getFilterConditions(filters) {
+	let matchCondition = {};
+	if (filters.orgType && filters.orgType !== '') {
+		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
+			matchCondition.type = filters.orgType;
+		} else if (filters.orgType === 'ALL_VENDORS') {
+			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }];
+		}
+	}
+
+	if (filters.state && filters.state.length) {
+		matchCondition.state = filters.state;
+	}
+	if (filters.district && filters.district.length) {
+		matchCondition.district = filters.district;
+	}
+	if (filters.organization && filters.organization.length) {
+		matchCondition.id = filters.organization;
+	}
+	return matchCondition;
+}
+
+/**
+ * getLeadTimes.
+ *
+ * @returns {Object}
+ */
+exports.getLeadTimes = [
+	//auth,
+	async function (req, res) {
+		try {
+			const warehouses = await OrganisationModel.aggregate([
+				{
+					$match: getFilterConditions(filters)
+				},
+				{
+					$group: {
+						_id: 'warehouses',
+						warehouses: {
+							$addToSet: '$warehouses'
+						}
+					}
+				},
+				{
+					$unwind: {
+						path: '$warehouses'
+					}
+				},
+				{
+					$unwind: {
+						path: '$warehouses'
+					}
+				},
+				{
+					$group: {
+						_id: 'warehouses',
+						warehouseIds: {
+							$addToSet: '$warehouses'
+						}
+					}
+				}
+			]);
+			let warehouseIds = [];
+			if (warehouses[0] && warehouses[0].warehouseIds) {
+				warehouseIds = warehouses[0].warehouseIds;
+			}
+			let shipmentLeadTimes = await ShipmentModel.aggregate([
+				{
+					$match: {
+						"supplier.locationId": { $in: warehouseIds }
+					}
+				},
+				{
+					$project: {
+						"supplier.id": 1,
+						id: 1,
+						shippingDate: 1,
+						createdAt: 1,
+						actualDeliveryDate: {
+							$dateFromString: {
+								dateString: '$actualDeliveryDate'
+							}
+						},
+						shippingDate: {
+							$dateFromString: {
+								dateString: '$shippingDate'
+							}
+						}
+					}
+				},
+				{
+					$project: {
+						"supplier.id": 1,
+						id: 1,
+						"leadtime": {
+							"$divide": [
+								{ "$subtract": ["$actualDeliveryDate", "$shippingDate"] },
+								60 * 1000 * 60
+							]
+						},
+
+					}
+				},
+				{
+					$replaceRoot: {
+						newRoot: {
+							$mergeObjects: ['$$ROOT', '$supplier']
+						}
+					}
+				},
+				{
+					$group: {
+						_id: "$id",
+						avgLeadTime: {
+							$avg: "$leadtime"
+						}
+					}
+				},
+				{
+					$lookup: {
+						from: 'organisations',
+						localField: '_id',
+						foreignField: 'id',
+						as: 'orgDetails'
+					}
+				}
+			]);
+			return apiResponse.successResponseWithData(
+				res,
+				"Operation success",
+				shipmentLeadTimes
 			);
 		} catch (err) {
 			return apiResponse.ErrorResponse(res, err);

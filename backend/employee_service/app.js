@@ -27,10 +27,10 @@ mongoose.connect(MONGODB_URL, { useNewUrlParser: true }).then(() => {
 		process.exit(1);
 	});
 const db = mongoose.connection;
-// const dir = `/home/ubuntu/userimages`;
-// if (!fs.existsSync(dir)) {
-//   fs.mkdirSync(dir);
-// }
+const dir = `/home/ubuntu/userimages`;
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir);
+}
 
 var app = express();
 

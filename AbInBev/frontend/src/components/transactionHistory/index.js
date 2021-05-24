@@ -4,7 +4,7 @@ import "./style.scss";
 import inTransitIcon from "../../assets/intransit.png";
 import SideBar from "../../components/sidebar";
 import filterIcon from "../../assets/icons/funnel.svg";
-import { getTransactions, fetchShipment } from "../../actions/transactionAction";
+import { getTransactions, fetchShipment, fetchChallanImage } from "../../actions/transactionAction";
 import Moment from "react-moment";
 import setAuthToken from "../../utils/setAuthToken";
 import { func } from "prop-types";
@@ -16,11 +16,14 @@ import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { config } from '../../config';
 import {
   getAllStates,
   getDistrictsByState,
   getOrganizationsByType,
 } from "../../actions/inventoryAction";
+import ModalImage from "react-modal-image";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -254,6 +257,10 @@ const TransactionHistory = (props) => {
     }
   }
 
+  const getImageURL = (imageId) => {
+    return `${config().fetchChallanImageUrl}/${imageId}`;
+  }
+
   const getSumByProperty = (inputArr, key) => {
     return inputArr.map(item => parseInt(item[key]) || 0).reduce((prev, next) => prev + next);
   }
@@ -282,13 +289,21 @@ const TransactionHistory = (props) => {
       if (a.status === "SENT") sent.push(a);
       if (a.status === "INTRANSIT") inTransit.push(a);
     });
+    let _transactions = [];
     if (results && results.data) {
-      results.data = results.data.filter(trxn => {
-        return trxn.supplier.org.name !== 'dev@statwigorg';
+      _transactions = results.data.filter(trxn => {
+        let isDevTrxn = false;
+        if (trxn.supplier.org.name === 'dev@statwigorg') {
+          isDevTrxn = true;
+        }
+        if (trxn.receiver.org.name === 'dev@statwigorg') {
+          isDevTrxn = true;
+        }
+        return !isDevTrxn;
       });
     }
-    setDisplayTransactions(results.data);
-    setTransactions(results.data);
+    setDisplayTransactions(_transactions);
+    setTransactions(_transactions);
   }
   useEffect(() => {
     (async () => {
@@ -316,9 +331,18 @@ const TransactionHistory = (props) => {
         if (a.status === "SENT") sent.push(a);
         if (a.status === "INTRANSIT") inTransit.push(a);
       });
+      let transactions = [];
       if (results && results.data) {
         results.data = results.data.filter(trxn => {
-          return trxn.supplier.org.name !== 'dev@statwigorg';
+          let isDevTrxn = false;
+          if (trxn.supplier.org.name === 'dev@statwigorg') {
+            isDevTrxn = true;
+          }
+          if (trxn.receiver.org.name === 'dev@statwigorg') {
+            isDevTrxn = true;
+          }
+          return !isDevTrxn;
+
         });
       }
       setDisplayTransactions(results.data);
@@ -493,7 +517,23 @@ const TransactionHistory = (props) => {
                                   <span>Truck No:</span><span>{selectedTransaction.externalShipmentId}</span>
                                 </div> */}
                               </div>
+                              <div className="row">
+                                {
+                                  selectedTransaction.imageDetails && selectedTransaction.imageDetails.map(image => (
+                                    <>
+                                      <ModalImage
+                                        small={getImageURL(image)}
+                                        className="challanImage"
+                                        large={getImageURL(image)}
+                                        showRotate={true}
+                                        hideZoom={false}
+                                        alt="Challan Image"
+                                      />
+                                    </>
+                                  ))
+                                }
 
+                              </div>
                               <div className=" transactionProducts row">
                                 {
                                   selectedTransaction.products.length ?
@@ -525,7 +565,7 @@ const TransactionHistory = (props) => {
                                         </div>
                                         <div className="col-md-3">
                                           {
-                                            product.productQuantity
+                                            product.productQuantityDelivered
                                           }
                                         </div>
                                       </>

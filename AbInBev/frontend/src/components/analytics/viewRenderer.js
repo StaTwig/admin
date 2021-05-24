@@ -58,6 +58,11 @@ const componentMappings = [
         moduleName: 'SPM'    
     },
     {
+        componentName: 'SpmDashboardDetails',
+        componentCode: 'SPM_DASHBOARD_DETAILS',
+        moduleName: 'SPM'    
+    },
+    {
         componentName: 'BreweryDetailedView',
         componentCode: 'BREWERY_DETAIL_VIEW',
         moduleName: 'annualReport'

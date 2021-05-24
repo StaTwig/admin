@@ -19,12 +19,36 @@ import ShipmentPopUp from "./shipmentPopUp";
 import ShipmentFailPopUp from "./shipmentFailPopUp";
 import Modal from "../../shared/modal";
 import { Formik } from "formik";
-import { getProducts, getProductsByCategory, setReviewPos, resetReviewPos } from '../../actions/poActions';
+import Select from 'react-select';
+import { getProducts, getProductsByCategory, setReviewPos, resetReviewPos, getOrganizationsByTypes } from '../../actions/poActions';
 
 const NewOrder = (props) => {
   const editPo = useSelector(state => {
     return state?.reviewPo;
   });
+
+  const profile = useSelector((state) => {
+    return state.user;
+  });
+
+  const customStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      borderBottom: '1px solid #d6d6d6',
+      // padding: 20,
+    }),
+    control: () => ({
+      display: 'flex'
+    }),
+    indicatorSeparator: () => ({
+      display: 'none'
+    }),
+    singleValue: (provided, state) => {
+      const opacity = state.isDisabled ? 0.5 : 1;
+      const transition = 'opacity 300ms';
+      return { ...provided, opacity, transition };
+    }
+  }
 
   const [allOrganisations, setAllOrganisations] = useState([]);
   const [receiverWarehouses, setReceiverWarehouses] = useState([]);
@@ -34,6 +58,9 @@ const NewOrder = (props) => {
   const dispatch = useDispatch();
   const [senderOrgId, setSenderOrgId] = useState(
     editPo !== null ? editPo.fromOrgId : "Select Organisation Name"
+  );
+  const [senderOrgType, setSenderOrgType] = useState(
+    editPo !== null ? editPo.typeName : ""
   );
   const [receiverOrgId, setReceiverOrgId] = useState(
     editPo !== null ? editPo.toOrgName : "Select Organisation Name"
@@ -47,6 +74,7 @@ const NewOrder = (props) => {
   const [openOrder, setOpenOrder] = useState(false);
   const [failedPop, setFailedPop] = useState(false);
   const [shipmentError, setOrderError] = useState("");
+  const [orgTypes, setOrgTypes] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -56,7 +84,21 @@ const NewOrder = (props) => {
       // setSenderOrganisation(orgSplit);
 
       const orgs = await getAllOrganisations();
-      setAllOrganisations(orgs.data);
+      setAllOrganisations(orgs.data.map(item => {
+                                      return {
+                                        value: item.id,
+                                        label: item.name,
+                                        type: item.type
+                                      };
+                                    }));
+
+      const orgType = await getOrganizationsByTypes(profile.configuration_id);
+      setOrgTypes(orgType.data.length > 0 ? orgType.data[0].organisationTypes.map(item => {
+                                      return {
+                                        value: item.id,
+                                        label: item.name
+                                      };
+                                    }) : []);
       // if (orgSplit?.length > 0) {
       //   const organisations = orgs.data.filter((org) => org.id != user.organisationId);
       // }
@@ -68,7 +110,12 @@ const NewOrder = (props) => {
       const categoryArray = result.map(
         product => product.type,
       );
-      setCategory(categoryArray.filter((value, index, self) => self.indexOf(value) === index));
+      setCategory(categoryArray.filter((value, index, self) => self.indexOf(value) === index).map(item => {
+                                      return {
+                                        value: item,
+                                        label: item
+                                      };
+                                    }));
     }
 
     fetchData();
@@ -86,10 +133,15 @@ const NewOrder = (props) => {
   const onOrgChange = async (value) => {
     try {
       const warehouse = await getWarehouseByOrgId(value);
-      setReceiverWarehouses(warehouse.data);
-console.log("ware",warehouse);
-
-  }
+      setReceiverWarehouses(warehouse.data.map(item => {
+                                      return {
+                                        value: item.id,
+                                        label: item.title,
+                                        warehouseAddress: item.warehouseAddress,
+                                        postalAddress: item.postalAddress
+                                      };
+                                    }));
+    }
     catch (err) {
       setErrorMessage(err);
     }
@@ -101,7 +153,13 @@ console.log("ware",warehouse);
       let newArr = [...addProducts];
       newArr[index]['type'] = value;
       setAddProducts(prod => [...newArr]);
-      setProducts(warehouse.data);
+      setProducts(warehouse.data.map(item => {
+                                      return {
+                                        value: item.name,
+                                        label: item.name,
+                                        ...item
+                                      };
+                                    }));
     }
     catch (err) {
       setErrorMessage(err);
@@ -198,6 +256,10 @@ console.log("ware",warehouse);
         // enableReinitialize={true}
         initialValues={{
           fromOrg: editPo !== null ? editPo.fromOrg : '',
+          type: editPo !== null ? editPo.type : '',
+          typeName: editPo !== null ? editPo.typeName : '',
+          rtype: editPo !== null ? editPo.rtype : '',
+          rtypeName: editPo !== null ? editPo.rtypeName : '',
           fromOrgId: editPo !== null ? editPo.fromOrgId : '',
           toOrg:  editPo !== null ? editPo.toOrg : '',
           toOrgName:  editPo !== null ? editPo.toOrgName : '',
@@ -275,11 +337,34 @@ console.log("ware",warehouse);
                   Order From
                 </label>
                 <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                        <label htmlFor="organizationName">Organisation Type*</label>
+                        <div className="form-control">
+                          <Select
+                            styles={customStyles}
+                            placeholder="Select Organisation Type"
+                            onChange={(v) => {
+                              setFieldValue('type', v?.value);
+                              setFieldValue('typeName', v?.label);
+                            }}
+                            defaultInputValue={values.typeName}
+                            options={orgTypes}
+                          />
+                          {errors.type && touched.type && (
+                            <span className="error-msg text-danger">{errors.type}</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label htmlFor="organizationName">Organisation Name*</label>
                       <div className="form-control">
-                        <DropdownButton
+                        {/* <DropdownButton
+                          isText={true}
                           name={senderOrgId}
                           name2="Select Organisation Name"
                           onSelect={(v) => {
@@ -288,7 +373,18 @@ console.log("ware",warehouse);
                             setFieldValue('fromOrgId', v.name);
                           }}
                           groups={allOrganisations}
-                        />
+                        /> */}
+                          <Select
+                            styles={customStyles}
+                            placeholder="Select Organisation Name"
+                            defaultInputValue={values.fromOrgId}
+                            onChange={(v) => {
+                              setFieldValue('fromOrg', v.value);
+                              setFieldValue('fromOrgId', v.label);
+                            }}
+                            isDisabled={values.typeName == ''}
+                            options={allOrganisations.filter(a => a.type == values.typeName)}
+                          />
                         {errors.fromOrg && touched.fromOrg && (
                           <span className="error-msg text-danger">{errors.fromOrg}</span>
                         )}
@@ -313,12 +409,36 @@ console.log("ware",warehouse);
                 <label htmlFor="client" className="headsup">
                 Deliver To
                 </label>
+                  
+                 <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                        <label htmlFor="organizationName">Organisation Type*</label>
+                        <div className="form-control">
+                          <Select
+                            styles={customStyles}
+                            placeholder="Select Organisation Type"
+                            defaultInputValue={values.rtypeName}
+                            onChange={(v) => {
+                              setFieldValue('rtype', v.value);
+                              setFieldValue('rtypeName', v.label);
+                            }}
+                            options={orgTypes}
+                          />
+                          {errors.rtype && touched.rtype && (
+                            <span className="error-msg text-danger">{errors.rtype}</span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                </div>
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label htmlFor="organizationName">Organisation Name*</label>
                       <div className="form-control">
-                        <DropdownButton
+                        {/* <DropdownButton
+                          isText={true}
                           name={receiverOrgId}
                           name2="Select Organisation Name"
                           onSelect={(v) => {
@@ -330,7 +450,20 @@ console.log("ware",warehouse);
                             onOrgChange(v.id);
                           }}
                           groups={allOrganisations.filter((org) => org.id != values.fromOrg)}
-                        />
+                        /> */}
+                          <Select
+                            styles={customStyles}
+                            placeholder="Select Organisation Name"
+                            defaultInputValue={values.toOrgName}
+                            onChange={(v) => {
+                              setFieldValue('toOrgLoc', '');
+                              setFieldValue('toOrg', v.value);
+                              setFieldValue('toOrgName', v.label);
+                              onOrgChange(v.value);
+                            }}
+                            isDisabled={values.rtypeName == ''}
+                            options={allOrganisations.filter(a => a.type == values.rtypeName && a.value != values.fromOrg)}
+                          />
                         {errors.toOrg && touched.toOrg && (
                           <span className="error-msg text-danger">{errors.toOrg}</span>
                         )}
@@ -352,7 +485,8 @@ console.log("ware",warehouse);
                     <div className="form-group">
                       <label htmlFor="delLocation">Delivery Location*</label>
                       <div className="form-control">
-                        <DropdownButton
+                        {/* <DropdownButton
+                          isText={true}
                           name={receiverOrgLoc}
                           name2="Select Delivery Location"
                           onSelect={(v) => {
@@ -362,7 +496,19 @@ console.log("ware",warehouse);
                            setFieldValue('toOrgLoc', v.id);
                           }}
                           groups={receiverWarehouses}
-                        />
+                        /> */}
+                          <Select
+                            styles={customStyles}
+                            placeholder="Select Delivery Location"
+                            defaultInputValue={values.toOrgLocName}
+                            onChange={(v) => {
+                              let name =v?.warehouseAddress ? (v?.label +'/' + v?.warehouseAddress?.firstLine + ', ' + v?.warehouseAddress?.city) : (v?.label  +'/' + v?.postalAddress)  ;
+                              setFieldValue('toOrgLocName', name);
+                              setFieldValue('toOrgLoc', v.value);
+                            }}
+                            isDisabled={values.rtypeName == ''}
+                            options={receiverWarehouses}
+                          />
                         {errors.toOrgLoc && touched.toOrgLoc && (
                           <span className="error-msg text-danger">{errors.toOrgLoc}</span>
                         )}

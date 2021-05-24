@@ -211,3 +211,12 @@ export const resetEditPos = data => {
     payload: data,
   };
 };
+
+export const getOrganizationsByTypes = async id => {
+  try {
+    const result = await axios.get(config().getOrganizationsByTypeUrl + id);
+    return result.data;
+  } catch (e) {
+    return e.response;
+  }
+};

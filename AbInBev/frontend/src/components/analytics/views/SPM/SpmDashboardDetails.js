@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import profile from '../../../../assets/user.png';
 import StarRatings from 'react-star-ratings';
 
-const SpmDashboard = (props) => {
+const SpmDashboardDetails = (props) => {
   return (
     <div>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
-        <h1 className="h2">Dashboard - SPM</h1>
+        <h1 className="h2">Dashboard - SPM Details</h1>
         <div className="btn-toolbar mb-2 mb-md-0">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -33,115 +33,6 @@ const SpmDashboard = (props) => {
                     } */}
         </select>
       </div>
-
-      <div className="tableDetals">
-        <table className="table text-align-left">
-          <thead>
-            <tr>
-              <th scope="col">Rank</th>
-              <th scope="col">Supplier</th>
-              <th scope="col">Location</th>
-              <th scope="col">Overall Rating</th>
-              <th scope="col"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td scope="row">1</td>
-              <td>
-                <div className="tableProfileIconCard justify-content-start">
-                  <div className="profileIcon">
-                    <img src={profile} alt="" />
-                  </div>
-                  <div className="profileName">
-                    <span className="profileTitle">Supplier Name</span>
-                    <label className="badge-purple">S1 Supplier</label>
-                  </div>
-                </div>
-              </td>
-              <td>Hyd, Telangana</td>
-              <td>
-                <StarRatings
-                  rating={4}
-                  name="small-rating"
-                  caption="Small!"
-                  size={5}
-                  starRatedColor="#ffcc00"
-                  numberOfStars={5}
-                  name="rating"
-                  starDimension="25px"
-                  starSpacing="5px"
-                />
-              </td>
-              <td>
-                <div className="round round-lg">
-                  <span className="fa fa-angle-right marron"></span>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td scope="row">1</td>
-              <td>
-                <div className="tableProfileIconCard justify-content-start">
-                  <div className="profileIcon">
-                    <img src={profile} alt="" />
-                  </div>
-                  <div className="profileName">
-                    <span className="profileTitle">Supplier Name</span>
-                    <label className="badge-purple">S1 Supplier</label>
-                  </div>
-                </div>
-              </td>
-              <td>Hyd, Telangana</td>
-              <td>
-                <StarRatings
-                  rating={2}
-                  name="small-rating"
-                  caption="Small!"
-                  size={5}
-                  starRatedColor="#ffcc00"
-                  numberOfStars={5}
-                  name="rating"
-                  starDimension="25px"
-                  starSpacing="5px"
-                />
-              </td>
-              <td></td>
-            </tr>
-            <tr>
-              <td scope="row">1</td>
-              <td>
-                <div className="tableProfileIconCard justify-content-start">
-                  <div className="profileIcon">
-                    <img src={profile} alt="" />
-                  </div>
-                  <div className="profileName">
-                    <span className="profileTitle">Supplier Name</span>
-                    <label className="badge-purple">S1 Supplier</label>
-                  </div>
-                </div>
-              </td>
-              <td>Hyd, Telangana</td>
-              <td>
-                <StarRatings
-                  rating={5}
-                  name="small-rating"
-                  caption="Small!"
-                  size={5}
-                  starRatedColor="#ffcc00"
-                  numberOfStars={5}
-                  name="rating"
-                  starDimension="25px"
-                  starSpacing="5px"
-                />
-              </td>
-              <td></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <h1>SPM detialed view</h1>
       <div className="tableDetals spmDetail">
         <table className="table text-align-left">
           <tbody>
@@ -177,7 +68,7 @@ const SpmDashboard = (props) => {
               </td>
               <td>
                 <StarRatings
-                  rating={3}
+                  rating={5}
                   name="small-rating"
                   caption="Small!"
                   size={5}
@@ -217,7 +108,7 @@ const SpmDashboard = (props) => {
               <td></td>
               <td>
                 <StarRatings
-                  rating={3}
+                  rating={1}
                   name="small-rating"
                   caption="Small!"
                   size={5}
@@ -255,7 +146,7 @@ const SpmDashboard = (props) => {
               <td></td>
               <td>
                 <StarRatings
-                  rating={4}
+                  rating={3}
                   name="small-rating"
                   caption="Small!"
                   size={5}
@@ -274,7 +165,7 @@ const SpmDashboard = (props) => {
               <td></td>
               <td>
                 <StarRatings
-                  rating={1}
+                  rating={4}
                   name="small-rating"
                   caption="Small!"
                   size={5}
@@ -293,4 +184,4 @@ const SpmDashboard = (props) => {
   );
 };
 
-export default SpmDashboard;
+export default SpmDashboardDetails;

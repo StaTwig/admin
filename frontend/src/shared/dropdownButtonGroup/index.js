@@ -8,16 +8,25 @@ import './style.scss';
 
 const dropdownButtonGroup = props => {
   const [menu, setMenu] = useState(false);
-  const { groups, name, name2, onSelect, isText, value, changeFn, placeholder, dClass, disabled } = props;
+  const {groups, name, name2, onSelect, isText, value, changeFn, placeholder, dClass, disabled } = props;
 
   const ref = useOnclickOutside(() => {
     setMenu(false);
   });
-
   const useParse = name && name.includes('<');
   return (
     <div className="custom-dropdown" ref={ref}>
-      {isText ? <input className="btn-custom-dropdown form-control" onBlur={() => setTimeout(() => { if(value) changeFn(value, 'y'); setMenu(false); }, 500 )} onKeyDown={(e) => (e.keyCode == 27 || e.keyCode == 13) && setMenu(false)} onChange={(e) => changeFn(e.target.value)} value={value} type="text" onFocus={() => groups.length && setMenu(true)} placeholder={placeholder} onClick={() => groups.length && setMenu(true)} /> :
+      {isText ? <input className="btn-custom-dropdown form-control" 
+        onBlur={() => setTimeout(() => { 
+          if(value) changeFn(value, 'y'); 
+          setMenu(false); }, 500 )}
+        onKeyDown={(e) => (e.keyCode == 27 || e.keyCode == 13) && setMenu(false)}
+        onChange={(e) => changeFn(e.target.value)}
+        value={value} 
+        type="text" 
+        onFocus={() => groups.length && setMenu(true)} 
+        placeholder={placeholder} 
+        onClick={() => groups.length && setMenu(true)} /> :
         <button
         className={name===name2 ? `btn-custom-dropdown` : `btn-custom-dropdown1 ` }
          // className={`btn-custom-dropdown ${menu && 'active'}`}
