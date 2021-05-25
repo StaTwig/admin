@@ -11,6 +11,7 @@ import "./style.scss";
 import { config } from "../../config";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import {getWarehouseById} from "../../actions/userActions";
 
 const axios = require("axios");
 import {
@@ -128,6 +129,12 @@ class Profile extends React.Component {
     console.log("warehouses", this.state.warehouseLocations);
   }
   //console.log("res",wareHouseIdResult);
+
+  async getDataForWareHouse(id){
+    const result = await getWarehouseById(id);
+    return result;
+  }
+
 
   closeModal() {
     console.log("Closed Model called");
@@ -585,7 +592,8 @@ class Profile extends React.Component {
                       style={{ width: "150vw", overflow: "hidden" }}
                     >
                       {Object.keys(warehouseId).map((id) => {
-                        // console.log(x);
+                          // const result = getWarehouseById(warehouseId[id]);
+                          // console.log(result);
                         return (
                           <div className="col">
                             <div className="location-cards">
