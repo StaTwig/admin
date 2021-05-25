@@ -697,6 +697,7 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
 
               console.log("whereQuery ======>", whereQuery);
               try {
+                let inboundPOsCount = await RecordModel.count(whereQuery);
                 RecordModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((inboundPOList) => {
                   let inboundPORes = [];
                   let findInboundPOData = inboundPOList.map(async (inboundPO) => {
@@ -736,7 +737,7 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
                     return apiResponse.successResponseWithData(
                       res,
                       "Inbound PO Records",
-                      inboundPORes
+                      {"inboundPOs":inboundPORes, "count":inboundPOsCount}
                     );
                   });
                 });
@@ -847,6 +848,7 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
 
               console.log("whereQuery ======>", whereQuery);
               try {
+                let outboundPOsCount = await RecordModel.count(whereQuery);
                 RecordModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((outboundPOList) => {
                   let outboundPORes = [];
                   let findOutboundPOData = outboundPOList.map(async (outboundPO) => {
@@ -886,7 +888,7 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
                     return apiResponse.successResponseWithData(
                       res,
                       "Outbound PO Records",
-                      outboundPORes
+                      {"outboundPOs":outboundPORes, "count":outboundPOsCount}
                     );
                   });
                 });

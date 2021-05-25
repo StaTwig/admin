@@ -36,6 +36,7 @@
     "qrcode": "^1.4.4",
     "swagger": "^0.0.1",
     "swagger-ui-express": "^4.1.6",
+    "winston": "^3.3.3",
     "winston-logzio": "^5.1.2",
     "xlsx": "^0.16.8"
   },
