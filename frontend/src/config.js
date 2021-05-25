@@ -115,7 +115,10 @@ export function config() {
       GetEOLInfoByIdentityId:`${LOCAL_SERVER_URL_EOL}/lastmilemanagement/api/GetEOLInfoByIdentityId?id=`,
       GetEOLInfoByPlaceAdministered:`${LOCAL_SERVER_URL_EOL}/lastmilemanagement/api/GetEOLInfoByPlaceAdministered?place=`,
       GetEOLListByDateWindow:`${LOCAL_SERVER_URL_EOL}/lastmilemanagement/api/GetEOLListByDateWindow`,
-    },
+      fetchSupplierAndReceiverListUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
+      updateWarehouse: `${LOCAL_SERVER_URL_SHIPMENT}/usermanagement/api/auth/updateWarehouse?warehouseId=`,
+      getWarehouseById: `${LOCAL_SERVER_URL_SHIPMENT}/usermanagement/api/auth/getwarehouseinfo?id=`,
+          },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/sendOtp`,
@@ -194,6 +197,7 @@ export function config() {
       GetEOLInfoByPlaceAdministered:`${DEV_SERVER_URL}/lastmilemanagement/api/GetEOLInfoByPlaceAdministered?place=`,
       GetEOLListByDateWindow:`${DEV_SERVER_URL}/lastmilemanagement/api/GetEOLListByDateWindow`,
       updateWarehouse: `${DEV_SERVER_URL}/usermanagement/api/auth/updateWarehouse?warehouseId=`,
+      getWarehouseById: `${DEV_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
       // fetchOutboundPurchaseOrderUrl: `${DEV_SERVER_URL}/pomanagement/api/po/fetchOutboundPurchaseOrders`,
       // fetchInboundPurchaseOrderUrl: `${DEV_SERVER_URL}/pomanagement/api/po/fetchInboundPurchaseOrders`,
       // fetchInboundShipmentsUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/fetchInboundShipments`,
@@ -280,6 +284,7 @@ export function config() {
       GetEOLInfoByIdentityId:`${STABLE_SERVER_URL_SHIPMENT}/lastmilemanagement/api/GetEOLInfoByIdentityId?id=`,
       GetEOLInfoByPlaceAdministered:`${STABLE_SERVER_URL_SHIPMENT}/lastmilemanagement/api/GetEOLInfoByPlaceAdministered?place=`,
       GetEOLListByDateWindow:`${STABLE_SERVER_URL_SHIPMENT}/lastmilemanagement/api/GetEOLListByDateWindow`,
+      getWarehouseById: `${STABLE_SERVER_URL_SHIPMENT}/usermanagement/api/auth/getwarehouseinfo?id=`,
       // fetchOutboundPurchaseOrderUrl: `${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/fetchOutboundPurchaseOrders`,
       // fetchInboundPurchaseOrderUrl: `${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/fetchInboundPurchaseOrders`,
       // fetchInboundShipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchInboundShipments`,
@@ -373,6 +378,7 @@ export function config() {
       GetEOLInfoByIdentityId:`${TEST_SERVER_URL}/lastmilemanagement/api/GetEOLInfoByIdentityId?id=`,
       GetEOLInfoByPlaceAdministered:`${TEST_SERVER_URL}/lastmilemanagement/api/GetEOLInfoByPlaceAdministered?place=`,
       GetEOLListByDateWindow:`${TEST_SERVER_URL}/lastmilemanagement/api/GetEOLListByDateWindow`,
+      getWarehouseById: `${TEST_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
     },
     demo: {
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
@@ -456,6 +462,7 @@ export function config() {
       GetEOLInfoByIdentityId:`${DEMO_SERVER_URL}/lastmilemanagement/api/GetEOLInfoByIdentityId?id=`,
       GetEOLInfoByPlaceAdministered:`${DEMO_SERVER_URL}/lastmilemanagement/api/GetEOLInfoByPlaceAdministered?place=`,
       GetEOLListByDateWindow:`${DEMO_SERVER_URL}/lastmilemanagement/api/GetEOLListByDateWindow`,
+      getWarehouseById: `${DEMO_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
     },
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
@@ -538,6 +545,7 @@ export function config() {
       GetEOLInfoByIdentityId:`${PROD_SERVER_URL}/lastmilemanagement/api/GetEOLInfoByIdentityId?id=`,
       GetEOLInfoByPlaceAdministered:`${PROD_SERVER_URL}/lastmilemanagement/api/GetEOLInfoByPlaceAdministered?place=`,
       GetEOLListByDateWindow:`${PROD_SERVER_URL}/lastmilemanagement/api/GetEOLListByDateWindow`,
+      getWarehouseById: `${PROD_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
     },
     
     uniceftest: {
@@ -622,6 +630,7 @@ export function config() {
       GetEOLInfoByIdentityId:`${UNICEFTEST_SERVER_URL}/lastmilemanagement/api/GetEOLInfoByIdentityId?id=`,
       GetEOLInfoByPlaceAdministered:`${UNICEFTEST_SERVER_URL}/lastmilemanagement/api/GetEOLInfoByPlaceAdministered?place=`,
       GetEOLListByDateWindow:`${UNICEFTEST_SERVER_URL}/lastmilemanagement/api/GetEOLListByDateWindow`,
+      getWarehouseById: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
     },
   };
 
