@@ -1660,11 +1660,14 @@ exports.getAllUsersByOrganisation = [
 
 
 exports.getOrganizationsByType = [
-  // auth,
+  auth,
   async (req, res) => {
     try {
-      const organisationId = req.query.id;
-      const organisations = await ConfigurationModel.find({ id: organisationId }, 'organisationTypes.id organisationTypes.name')
+      const organisationId=req.query.id;
+      const typeId = req.query.typeid;
+      const orgtype=req.query.type;
+      //const organisations= await OrganisationModel.find({$or:[{'id':organisationId},{'typeId':typeId}]},'name')
+      const organisations = await OrganisationModel.find({$or:[{'typeId': typeId },{'type':orgtype},{'id' :organisationId}]},'name', { projection: { _id: 0, name: 1} });
       return apiResponse.successResponseWithData(
         res,
         "Operation success",
