@@ -35,7 +35,7 @@ const [selectedType,setselectedType] = useState();
       setOrganisationsArr(orgs);
     }
     async function fetchOrganisationType() {
-      const orgsType = await getOrganizationsByType("CONF001");
+      const orgsType = await getOrganizationsByType("CONF000");
       var arr =[];
       arr.push(orgsType.data[0].organisationTypes);
       setOrganisationsType(arr);
@@ -113,9 +113,9 @@ const showOrgByType = (value) =>{
                   if (!values.lastName) {
                     errors.lastName = "Required";
                   }
-                  if (!values.email) {
-                    errors.email = "Required";
-                  }
+                  //if (!values.email) {
+                   // errors.email = "Required";
+                  //}
                   // if (!values.phone) {
                   //   errors.phone = "Required";
                   // }
@@ -198,9 +198,8 @@ const showOrgByType = (value) =>{
                         enableSearch: true,
                       }}
                       value={props.phone}
-                      handleOnChange = {(value, data, event, formattedValue)=> {
-                        this.setState({phone: value.slice(data.dialCode.length) })
-                      }}
+
+                      onChange = {props.onphoneChange}
                     />
                    {errors.phone && touched.phone && (
                     <span className="error-msg text-danger">{errors.phone}</span>

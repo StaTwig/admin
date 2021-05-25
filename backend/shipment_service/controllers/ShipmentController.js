@@ -254,7 +254,11 @@ exports.createShipment = [
   async (req, res) => {
     try {
       console.log(req.user);
-      const data = req.body;
+      let data = req.body;
+      data.data.products.forEach(element => {
+        var product =  ProductModel.findOne({ id: element.productId });
+        element.type = product.type
+      });
       var i = 0;
       const incrementCounter = await CounterModel.update(
         {
@@ -431,7 +435,7 @@ exports.createShipment = [
         event_data.eventID = "ev0000" + evid;
         event_data.eventTime = datee;
         event_data.eventType.primary = "CREATE";
-        event_data.eventType.description = "SHIPMENT_CREATION";
+        event_data.eventType.description = "SHIPMENT";
         event_data.actor.actorid = user_id || "null";
         event_data.actor.actoruserid = email || "null";
         event_data.stackholders.actororg.id = orgId || "null";

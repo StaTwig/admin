@@ -104,6 +104,15 @@ export const getUserInfoUpdated = async () => {
   }
 };
 
+export const getWarehouseById = async (id) => {
+  try {    
+      const result = await axios.get(config().getWarehouseById+id );
+      return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
 
 
 // Set logged in user

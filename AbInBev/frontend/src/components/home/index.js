@@ -28,7 +28,7 @@ const Home = (props) => {
     dispatch(turnOn());
     const result = await sendOtp(data);
     dispatch(turnOff());
-    
+
     if (result.status === 200) {
       setContinueClick(true);
       setSteps(3);
@@ -112,7 +112,7 @@ const Home = (props) => {
 
   return (
     <div className="home">
-      <div className="container centered">
+      <div className="container centered scroll-y">
         <div className="selectUser centered">
           {steps == 1 && (
             <Selection
@@ -140,7 +140,7 @@ const Home = (props) => {
                       Click <a href="#" onClick={() => { setSteps(2); }} className="signUpLink text-primary">here</a>&nbsp;login
                     </h4>
                   </div>
-                  </div>
+                </div>
               }
             </>
           }
