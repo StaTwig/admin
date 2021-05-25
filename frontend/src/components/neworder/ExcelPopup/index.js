@@ -22,6 +22,9 @@ const ExcelPopUp = props => {
       console.log('success add PO');
       props.setOpenPOExcel(false);
     }
+    else{
+      console.log("error on addPO");
+    }
     dispatch(turnOff());
   };
   return (

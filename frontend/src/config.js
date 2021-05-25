@@ -84,7 +84,6 @@ export function config() {
       fetchPurchaseOrderById: `${LOCAL_SERVER_URL_PO}/pomanagement/api/po/fetchPurchaseOrders?skip=0&limit=5&poId=`,
       productListUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getProductListCounts`,
       inventoriesUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventory`,
-      addPOsFromExcelUrl: `${LOCAL_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
       changePOStatus: `${LOCAL_SERVER_URL_SHIPMENT}/pomanagement/api/po/changePOStatus`,
       fetchAllPurchaseOrderUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
       getPOsUrl: `${LOCAL_SERVER_URL_PO}/pomanagement/api/po/purchaseOrderStatistics`,
@@ -118,6 +117,7 @@ export function config() {
       fetchSupplierAndReceiverListUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
       updateWarehouse: `${LOCAL_SERVER_URL_SHIPMENT}/usermanagement/api/auth/updateWarehouse?warehouseId=`,
       getWarehouseById: `${LOCAL_SERVER_URL_SHIPMENT}/usermanagement/api/auth/getwarehouseinfo?id=`,
+      addPOsFromExcel:`${LOCAL_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
           },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
@@ -172,7 +172,6 @@ export function config() {
       createOrderUrl: `${DEV_SERVER_URL}/pomanagement/api/po/createOrder`,
       fetchPurchaseOrderUrl: `${DEV_SERVER_URL}/pomanagement/api/po/fetchPurchaseOrders`,
       fetchPurchaseOrderById: `${DEV_SERVER_URL}/pomanagement/api/po/fetchPurchaseOrders?skip=0&limit=5&poId=`,
-      addPOsFromExcelUrl: `${DEV_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       changePOStatus: `${DEV_SERVER_URL}/pomanagement/api/po/changePOStatus`,
       fetchAllPurchaseOrderUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
       getPOsUrl: `${DEV_SERVER_URL}/pomanagement/api/po/purchaseOrderStatistics`,
@@ -203,6 +202,7 @@ export function config() {
        fetchInboundShipmentsUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/fetchInboundShipments`,
        fetchOutboundShipmentsUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/fetchOutboundShipments`,
        fetchSupplierAndReceiverListUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
+       addPOsFromExcel:`${DEV_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
     },
     stable: {
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
@@ -245,7 +245,6 @@ export function config() {
       createOrderUrl: `${STABLE_SERVER_URL_PO}/pomanagement/api/po/createOrder`,
       fetchPurchaseOrderUrl: `${STABLE_SERVER_URL_PO}/pomanagement/api/po/fetchPurchaseOrders`,
       fetchPurchaseOrderById: `${STABLE_SERVER_URL_PO}/pomanagement/api/po/fetchPurchaseOrders?skip=0&limit=5&poId=`,
-      addPOsFromExcelUrl: `${STABLE_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
       changePOStatus: `${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/changePOStatus`,
       fetchAllPurchaseOrderUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
       getPOsUrl: `${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/purchaseOrderStatistics`,
@@ -290,6 +289,7 @@ export function config() {
        fetchInboundShipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchInboundShipments`,
        fetchOutboundShipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchOutboundShipments`,
        fetchSupplierAndReceiverListUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
+       addPOsFromExcel:`${STABLE_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -328,7 +328,6 @@ export function config() {
       createOrderUrl: `${TEST_SERVER_URL}/pomanagement/api/po/createOrder`,
       fetchPurchaseOrderUrl: `${TEST_SERVER_URL}/pomanagement/api/po/fetchPurchaseOrders`,
       fetchPurchaseOrderById: `${TEST_SERVER_URL}/pomanagement/api/po/fetchPurchaseOrders?skip=0&limit=5&poId=`,
-      addPOsFromExcelUrl: `${TEST_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       changePOStatus: `${TEST_SERVER_URL}/pomanagement/api/po/changePOStatus`,
       fetchAllPurchaseOrderUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
       getPOsUrl: `${TEST_SERVER_URL}/pomanagement/api/po/purchaseOrderStatistics`,
@@ -379,6 +378,7 @@ export function config() {
       GetEOLInfoByPlaceAdministered:`${TEST_SERVER_URL}/lastmilemanagement/api/GetEOLInfoByPlaceAdministered?place=`,
       GetEOLListByDateWindow:`${TEST_SERVER_URL}/lastmilemanagement/api/GetEOLListByDateWindow`,
       getWarehouseById: `${TEST_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
+      addPOsFromExcel:`${TEST_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
     },
     demo: {
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
@@ -417,7 +417,6 @@ export function config() {
       createOrderUrl: `${DEMO_SERVER_URL}/pomanagement/api/po/createOrder`,
       fetchPurchaseOrderUrl: `${DEMO_SERVER_URL}/pomanagement/api/po/fetchPurchaseOrders`,
       fetchPurchaseOrderById: `${DEMO_SERVER_URL}/pomanagement/api/po/fetchPurchaseOrders?skip=0&limit=5&poId=`,
-      addPOsFromExcelUrl: `${DEMO_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       changePOStatus: `${DEMO_SERVER_URL}/pomanagement/api/po/changePOStatus`,
       fetchAllPurchaseOrderUrl: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
       getPOsUrl: `${DEMO_SERVER_URL}/pomanagement/api/po/purchaseOrderStatistics`,
@@ -463,6 +462,7 @@ export function config() {
       GetEOLInfoByPlaceAdministered:`${DEMO_SERVER_URL}/lastmilemanagement/api/GetEOLInfoByPlaceAdministered?place=`,
       GetEOLListByDateWindow:`${DEMO_SERVER_URL}/lastmilemanagement/api/GetEOLListByDateWindow`,
       getWarehouseById: `${DEMO_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
+      addPOsFromExcel:`${DEMO_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
     },
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
@@ -505,7 +505,6 @@ export function config() {
       fetchPurchaseOrderUrl: `${PROD_SERVER_URL}/pomanagement/api/po/fetchPurchaseOrders`,
       fetchPurchaseOrderById: `${PROD_SERVER_URL}/pomanagement/api/po/fetchPurchaseOrders?skip=0&limit=5&poId=`,
       createShipmentUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/createShipment`,
-      addPOsFromExcelUrl: `${PROD_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       changePOStatus: `${PROD_SERVER_URL}/pomanagement/api/po/changePOStatus`,
       fetchAllPurchaseOrderUrl: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
       getPOsUrl: `${PROD_SERVER_URL}/pomanagement/api/po/purchaseOrderStatistics`,
@@ -546,6 +545,7 @@ export function config() {
       GetEOLInfoByPlaceAdministered:`${PROD_SERVER_URL}/lastmilemanagement/api/GetEOLInfoByPlaceAdministered?place=`,
       GetEOLListByDateWindow:`${PROD_SERVER_URL}/lastmilemanagement/api/GetEOLListByDateWindow`,
       getWarehouseById: `${PROD_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
+      addPOsFromExcel:`${PROD_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
     },
     
     uniceftest: {
@@ -585,7 +585,6 @@ export function config() {
       createOrderUrl: `${UNICEFTEST_SERVER_URL}/pomanagement/api/po/createOrder`,
       fetchPurchaseOrderUrl: `${UNICEFTEST_SERVER_URL}/pomanagement/api/po/fetchPurchaseOrders`,
       fetchPurchaseOrderById: `${UNICEFTEST_SERVER_URL}/pomanagement/api/po/fetchPurchaseOrders?skip=0&limit=5&poId=`,
-      addPOsFromExcelUrl: `${UNICEFTEST_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       changePOStatus: `${UNICEFTEST_SERVER_URL}/pomanagement/api/po/changePOStatus`,
       fetchAllPurchaseOrderUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
       getPOsUrl: `${UNICEFTEST_SERVER_URL}/pomanagement/api/po/purchaseOrderStatistics`,
@@ -631,6 +630,7 @@ export function config() {
       GetEOLInfoByPlaceAdministered:`${UNICEFTEST_SERVER_URL}/lastmilemanagement/api/GetEOLInfoByPlaceAdministered?place=`,
       GetEOLListByDateWindow:`${UNICEFTEST_SERVER_URL}/lastmilemanagement/api/GetEOLListByDateWindow`,
       getWarehouseById: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
+      addPOsFromExcel:`${UNICEFTEST_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
     },
   };
 

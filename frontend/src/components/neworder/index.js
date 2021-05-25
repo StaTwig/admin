@@ -14,13 +14,14 @@ import {
 //   getAllOrganisations,
 //   getProductsByInventoryId
 // } from "../../actions/shippingOrderAction";
+import addPOsFromExcel from "../../actions/poActions";
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import ShipmentPopUp from "./shipmentPopUp";
 import ShipmentFailPopUp from "./shipmentFailPopUp";
 import { Formik } from "formik";
 import Select from 'react-select';
 import Modal from '../../shared/modal';
-import ExcelPopUp from '../newinventory/excelpopup';
+import ExcelPopUp from './ExcelPopup/index';
 import ExportIcon from '../../assets/icons/Export.svg';
 import dropdownIcon from '../../assets/icons/drop-down.svg';
 
@@ -53,7 +54,7 @@ const NewOrder = (props) => {
       return { ...provided, opacity, transition };
     }
   }
-  const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
+  const [openCreatedOrder, setOpenCreatedOrder] = useState(false);
   const [allOrganisations, setAllOrganisations] = useState([]);
   const [receiverWarehouses, setReceiverWarehouses] = useState([]);
   const [products, setProducts] = useState([]);
@@ -139,7 +140,7 @@ const NewOrder = (props) => {
     setFailedPop(false);
   };
   const closeModal = () => {
-    setOpenCreatedInventory(false);
+    setOpenCreatedOrder(false);
   };
 
   const onOrgChange = async (value) => {
@@ -293,7 +294,7 @@ const NewOrder = (props) => {
               <ExcelPopUp
                 {...props}
                 onHide={closeExcelModal} //FailurePopUp
-                setOpenCreatedInventory={setOpenCreatedInventory}
+                setOpenCreatedOrder={setOpenCreatedOrder}
               />
             </Modal>
           )}
