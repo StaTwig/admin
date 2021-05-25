@@ -39,7 +39,7 @@ const dropdownButtonGroup = props => {
           <img src={upDownArrow} alt="downarrow" width="9" height="9" />
         </button>
       }
-      {menu && !disabled && groups.length > 0 && (
+      {menu && !disabled && (
         <div ref={ref} className={`dropdown-menu show transform-group ${dClass}`}>
           {groups &&
             groups.map((item, index) => {
