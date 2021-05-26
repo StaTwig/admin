@@ -8,8 +8,8 @@ const Organisations = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState([]);
   const closeModal = () => setShowModal(false);
-  const { orgList, modifyOrg, setShowModals, addOrg } = props;
-
+  const { orgList, modifyOrg, setShowModals, addOrg, orgTypes } = props;
+  // console.log("org" + orgTypes)
   return (
     <div className="users">
       {showModal && (
@@ -63,6 +63,7 @@ const Organisations = (props) => {
                 rindex={index}
                 setShowModals={setShowModals}
                 modifyOrg={modifyOrg}
+                types={orgTypes}
               />
             ))}
           </div>

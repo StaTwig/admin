@@ -23,6 +23,12 @@
     &.active {
       color: $primaryBlue;
     }
+    .text {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 130px;
+    }
   }
 
   .dropdown-menu {

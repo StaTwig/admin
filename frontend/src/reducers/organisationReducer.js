@@ -8,6 +8,7 @@ import {
   SET_AFFILATED_PENDING_REQ,
   SET_AFFILATED_ORGS,
   SET_ORGANISATIONS,
+  SET_ORGANISATION_TYPES,
 } from "../constants/organisationConstants";
 
 export const initialState = {
@@ -29,6 +30,8 @@ export const organisationReducer = (state = initialState, action) => {
       return { ...state, permissions: action.payload.data };
     case SET_ORGANISATION_ADDRESSES:
       return { ...state, addresses: action.payload.data };
+    case SET_ORGANISATION_TYPES:
+        return { ...state, types: action.payload.data };      
     case SET_ORGANISATION_USERS:
       return { ...state, users: action.payload.data };
     case SET_ORGANISATION_REQ_SENT:
