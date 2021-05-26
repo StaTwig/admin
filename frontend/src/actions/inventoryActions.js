@@ -20,8 +20,10 @@ export const getInventories = (skip = 0, limit = 5) => {
       try {
         dispatch(turnOn());
         const result = await axios.get(
-          `${config().inventoriesUrl}?skip=${skip}&limit=${limit}`,
+          // `${config().getTransactions}/ORG10021?skip=${skip}&limit=${limit}`,
+          'http://test.vaccineledger.com:9001/eventmanagement/api/event/getEventByActorOrgId/null/'
         );
+        console.log(result.data)
         dispatch(setInventories(result.data));
         dispatch(setInventoriesCount(result.data));
         dispatch(turnOff());
