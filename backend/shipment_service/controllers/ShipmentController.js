@@ -256,7 +256,7 @@ exports.createShipment = [
     try {
       console.log(req.user);
       let data = req.body;
-      data.data.products.forEach(element => {
+      data.products.forEach(element => {
         var product =  ProductModel.findOne({ id: element.productId });
         element.type = product.type
       });
