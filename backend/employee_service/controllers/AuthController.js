@@ -660,8 +660,8 @@ exports.verifyOtp = [
           //Prepare JWT token for authentication
           const jwtPayload = userData;
           const jwtData = {
-            //expiresIn: process.env.JWT_TIMEOUT_DURATION,
-            expiresIn: "12 hours"
+            expiresIn: process.env.JWT_TIMEOUT_DURATION,
+            //expiresIn: "12 hours"
           };
           const secret = process.env.JWT_SECRET;
           //Generated JWT token with Payload and secret.
@@ -1660,11 +1660,14 @@ exports.getAllUsersByOrganisation = [
 
 
 exports.getOrganizationsByType = [
-  // auth,
+  
   async (req, res) => {
     try {
-      const organisationId = req.query.id;
-      const organisations = await ConfigurationModel.find({ id: organisationId }, 'organisationTypes.id organisationTypes.name')
+      const organisationId=req.query.id;
+      const typeId = req.query.typeid;
+      const orgtype=req.query.type;
+      //const organisations= await OrganisationModel.find({$or:[{'id':organisationId},{'typeId':typeId}]},'name')
+      const organisations = await OrganisationModel.find({$or:[{'typeId': typeId },{'type':orgtype},{'id' :organisationId}]},'name', { projection: { _id: 0, name: 1} });
       return apiResponse.successResponseWithData(
         res,
         "Operation success",
@@ -1694,3 +1697,21 @@ exports.getwarehouseByType = [
     }
   },
 ];
+
+exports.getwarehouseinfo=[
+  auth,
+  async(req,res)=>{
+    try{
+      const warehouseId=req.query.id;
+      const warehouseinfo= await WarehouseModel.find({id:warehouseId})
+      
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        warehouseinfo
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+    },
+  ];

@@ -18,7 +18,6 @@ const Orders = props => {
   const [visible, setvisible] = useState('one');
   const [skip, setSkip] = useState(0);
   const [limit, setLimit] = useState(10);
-  const [loadMore, setLoadMore] = useState(true);
   const [alerts, setAlerts] = useState(false);
   const dispatch = useDispatch();
   const [outboundRecords, setOutboundRecords] = useState([]);
@@ -33,15 +32,18 @@ const Orders = props => {
   const [poDeliveryLocationsList, setPoDeliveryLocationsList] = useState([]);
   const [poProductsList, setPoProductsList] = useState([]);
   const [poOrganisationsList, setPoOrganisationsList] = useState([]);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     async function fetchData() {
       if (visible == 'one') {
         const outboundRes = await getSentPOs("", "", "", "", "", 0, limit); //to, orderId, productName, deliveryLocation, date, skip, limit
-        setOutboundRecords(outboundRes.data);
+        setOutboundRecords(outboundRes.data.outboundPOs);
+        setCount(outboundRes.data.count)
       } else {
         const inboundRes = await getReceivedPOs("", "", "", "", "", 0, limit); //from, orderId, productName, deliveryLocation, date, skip, limit
-        setInboundRecords(inboundRes.data);
+        setInboundRecords(inboundRes.data.inboundPOs);
+        setCount(inboundRes.data.count)
       }
       const orderIdListRes = await getOrderIds();
       setPoOrderIdList(orderIdListRes);
@@ -56,15 +58,17 @@ const Orders = props => {
     fetchData();
   }, [visible])
 
-  const onLoadMore = async (isInc, isReset = false) => {
-    const newSkip = isInc ? skip + 10 : skip - 10;
-    setSkip(isReset ? 0 : newSkip);
+  const onPageChange = async (pageNum) => {
+    const recordSkip = (pageNum-1)*limit;
+    setSkip(recordSkip);
     if (visible == 'one') {
-      const outboundRes = await getSentPOs(toFilter, orderIdFilter, productNameFilter, locationFilter, dateFilter, isReset ? 0 : newSkip, limit);//to, orderId, productName, deliveryLocation, date, skip, limit
-      setOutboundRecords(outboundRes.data);
+      const outboundRes = await getSentPOs(toFilter, orderIdFilter, productNameFilter, locationFilter, dateFilter, recordSkip, limit);//to, orderId, productName, deliveryLocation, date, skip, limit
+      setOutboundRecords(outboundRes.data.outboundPOs);
+      setCount(outboundRes.data.count)
     } else {
-      const inboundRes = await getReceivedPOs(fromFilter, orderIdFilter, productNameFilter, locationFilter, dateFilter, isReset ? 0 : newSkip, limit);//from, orderId, productName, deliveryLocation, date, skip, limit
-      setInboundRecords(inboundRes.data);
+      const inboundRes = await getReceivedPOs(fromFilter, orderIdFilter, productNameFilter, locationFilter, dateFilter, recordSkip, limit);//from, orderId, productName, deliveryLocation, date, skip, limit
+      setInboundRecords(inboundRes.data.inboundPOs);
+      setCount(inboundRes.data.count)
     }
     setData(visible);
   };
@@ -92,10 +96,12 @@ const Orders = props => {
     setSkip(0);
     if (visible == 'one') {
       const outboundRes = await getSentPOs(toFilter, orderIdFilter, productNameFilter, locationFilter, dateFilterSelected, 0, limit); //to, orderId, productName, deliveryLocation, date, skip, limit
-      setOutboundRecords(outboundRes.data);
+      setOutboundRecords(outboundRes.data.outboundPOs);
+      setCount(outboundRes.data.count)
     } else {
       const inboundRes = await getReceivedPOs(fromFilter, orderIdFilter, productNameFilter, locationFilter, dateFilterSelected, 0, limit); //from, orderId, productName, deliveryLocation, date, skip, limit
-      setInboundRecords(inboundRes.data);
+      setInboundRecords(inboundRes.data.inboundPOs);
+      setCount(inboundRes.data.count)
     }
   }
 
@@ -104,10 +110,12 @@ const Orders = props => {
     setSkip(0);
     if (visible == 'one') {
       const outboundRes = await getSentPOs(toFilter, orderIdFilter, productNameFilter, locationFilterSelected, dateFilter, 0, limit); //to, orderId, productName, deliveryLocation, date, skip, limit;
-      setOutboundRecords(outboundRes.data);
+      setOutboundRecords(outboundRes.data.outboundPOs);
+      setCount(outboundRes.data.count)
     } else {
       const inboundRes = await getReceivedPOs(fromFilter, orderIdFilter, productNameFilter, locationFilterSelected, dateFilter, 0, limit); //from, orderId, productName, deliveryLocation, date, skip, limit
-      setInboundRecords(inboundRes.data);
+      setInboundRecords(inboundRes.data.inboundPOs);
+      setCount(inboundRes.data.count)
     }
   }
 
@@ -116,10 +124,12 @@ const Orders = props => {
     setSkip(0);
     if (visible == 'one') {
       const outboundRes = await getSentPOs(toFilter, orderIdFilter, productNameFilterSelected, locationFilter, dateFilter, 0, limit); //to, orderId, productName, deliveryLocation, date, skip, limit
-      setOutboundRecords(outboundRes.data);
+      setOutboundRecords(outboundRes.data.outboundPOs);
+      setCount(outboundRes.data.count)
     } else {
       const inboundRes = await getReceivedPOs(fromFilter, orderIdFilter, productNameFilterSelected, locationFilter, dateFilter, 0, limit); //from, orderId, productName, deliveryLocation, date, skip, limit
-      setInboundRecords(inboundRes.data);
+      setInboundRecords(inboundRes.data.inboundPOs);
+      setCount(inboundRes.data.count)
     }
   }
 
@@ -128,10 +138,12 @@ const Orders = props => {
     setSkip(0);
     if (visible == 'one') {
       const outboundRes = await getSentPOs(toFilter, orderIdFilterSelected, productNameFilter, locationFilter, dateFilter, 0, limit); //to, orderId, productName, deliveryLocation, date, skip, limit
-      setOutboundRecords(outboundRes.data);
+      setOutboundRecords(outboundRes.data.outboundPOs);
+      setCount(outboundRes.data.count)
     } else {
       const inboundRes = await getReceivedPOs(fromFilter, orderIdFilterSelected, productNameFilter, locationFilter, dateFilter, 0, limit); //from, orderId, productName, deliveryLocation, date, skip, limit
-      setInboundRecords(inboundRes.data);
+      setInboundRecords(inboundRes.data.inboundPOs);
+      setCount(inboundRes.data.count)
     }
   }
 
@@ -141,10 +153,12 @@ const Orders = props => {
     setSkip(0);
     if (visible == 'one') {
       const outboundRes = await getSentPOs(fromToFilterSelected, orderIdFilter, productNameFilter, locationFilter, dateFilter, 0, limit); //to, orderId, productName, deliveryLocation, date, skip, limit
-      setOutboundRecords(outboundRes.data);
+      setOutboundRecords(outboundRes.data.outboundPOs);
+      setCount(outboundRes.data.count)
     } else {
       const inboundRes = await getReceivedPOs(fromToFilterSelected, orderIdFilter, productNameFilter, locationFilter, dateFilter, 0, limit); //from, orderId, productName, deliveryLocation, date, skip, limit
-      setInboundRecords(inboundRes.data);
+      setInboundRecords(inboundRes.data.inboundPOs);
+      setCount(inboundRes.data.count)
     }
   }
 
@@ -176,7 +190,7 @@ const Orders = props => {
         <TableFilter data={headers} poOrderIdList={poOrderIdList} poDeliveryLocationsList={poDeliveryLocationsList} poProductsList={poProductsList} poOrganisationsList={poOrganisationsList} setFromToFilterOnSelect={setFromToFilterOnSelect} setOrderIdNameFilterOnSelect={setOrderIdNameFilterOnSelect} setProductNameFilterOnSelect={setProductNameFilterOnSelect} setLocationFilterOnSelect={setLocationFilterOnSelect} setDateFilterOnSelect={setDateFilterOnSelect} fb="73%" />
       </div>
       <div className="ribben-space">
-        <Table {...props} skip={skip} loadMore={loadMore} ordrs={sendData} visible={visible} onLoadMore={onLoadMore} />
+        <Table {...props} skip={skip} ordrs={sendData} visible={visible} count={count} onPageChange={onPageChange} />
       </div>
     </div>
   );

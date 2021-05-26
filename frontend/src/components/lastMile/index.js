@@ -10,6 +10,11 @@ import pingrey from '../../assets/icons/pingrey.png';
 import TableFilter from './tablefilter.js';
 import ExportIcon from '../../assets/icons/Export.svg';
 import dropdownIcon from '../../assets/icons/drop-down.svg';
+import {GetEOLInfoBySerialNumber} from '../../actions/eolAction';
+import {GetEOLInfoByProductId} from '../../actions/eolAction';
+import {GetEOLInfoByIdentityId} from '../../actions/eolAction';
+import {GetEOLInfoByPlaceAdministered} from '../../actions/eolAction';
+import {GetEOLListByDateWindow} from '../../actions/eolAction';
 
 const lastMile=(props)=>{
     const [region,setRegion]= useState('Select Region')
@@ -33,8 +38,14 @@ const lastMile=(props)=>{
         img4: <img src={Product} width="20" height="22" className="pb-1"/>,
         img5: <img src={Date_time} width="19" height="22" className="pb-1"/>,
       };
+useEffect(()=>{
+    async function fetchData(){
+        const eol_ProductID = await GetEOLInfoByProductId("pro123456");
+        // console.log(eol_ProductID);
+    }
+    fetchData();
+},[]);
       
-
   
 return (
       
@@ -58,6 +69,7 @@ return (
       </div>
       </div>
       </div>
+
       </div>
       
         <div className="col-xl-3">
