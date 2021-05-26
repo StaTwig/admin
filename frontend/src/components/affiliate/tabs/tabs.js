@@ -5,7 +5,7 @@ const Tabs = (props) => {
   const { tabIndex, setTabIndex } = props;
   return (
     <div className="tabs">
-      <ul className="nav nav-pills mb-2 mr-3">
+      <ul className="nav nav-pills mb-2 mr-3" >
         <li
           className={tabIndex == 1 ? "nav-item-active " : "nav-item"}
           onClick={() => setTabIndex(1)}
