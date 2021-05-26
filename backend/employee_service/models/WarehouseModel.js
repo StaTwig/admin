@@ -17,13 +17,13 @@ var WarehouseSchema = new mongoose.Schema(
       type: Object,
       required: true,
       properties: {
-        firstLine: {type: String},
-        secondLine: {type: String},
-        city: {type: String},
-        state: {type: String},
-        country: {type: String},
-        landmark: {type: String},
-        zipCode: {type: String}
+        firstLine: { type: String },
+        secondLine: { type: String },
+        city: { type: String },
+        state: { type: String },
+        country: { type: String },
+        landmark: { type: String },
+        zipCode: { type: String }
       }
     },
     region: {
@@ -59,11 +59,19 @@ var WarehouseSchema = new mongoose.Schema(
       type: Array,
       default: []
     },
-   warehouseInventory: {
+    warehouseInventory: {
       type: String,
-     required: true,
-     unique: true
-   },
+      required: true,
+      unique: true
+    },
+    bottleCapacity: {
+      type: Number,
+      default: 0
+    },
+    sqft: {
+      type: Number,
+      default: 0
+    }
   },
   { timestamps: true },
 );
