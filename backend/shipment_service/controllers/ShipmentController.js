@@ -10,6 +10,7 @@ const checkToken = require("../middlewares/middleware").checkToken;
 const ShipmentModel = require("../models/ShipmentModel");
 const RecordModel = require("../models/RecordModel");
 const ShippingOrderModel = require("../models/ShippingOrderModel");
+const ProductModel = require("../models/ProductModel");
 const WarehouseModel = require("../models/WarehouseModel");
 const InventoryModel = require("../models/InventoryModel");
 const EmployeeModel = require("../models/EmployeeModel");
@@ -255,10 +256,10 @@ exports.createShipment = [
     try {
       console.log(req.user);
       let data = req.body;
-      // data.data.products.forEach(element => {
-      //   var product =  ProductModel.findOne({ id: element.productId });
-      //   element.type = product.type
-      // });
+      data.data.products.forEach(element => {
+        var product =  ProductModel.findOne({ id: element.productId });
+        element.type = product.type
+      });
       var i = 0;
       const incrementCounter = await CounterModel.update(
         {

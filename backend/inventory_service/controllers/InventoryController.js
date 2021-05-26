@@ -901,10 +901,10 @@ exports.addProductsToInventory = [
         );
       }
       let payload = req.body;
-      // payload.data.products.forEach(element => {
-      //   var product =  ProductModel.findOne({ id: element.productId });
-      //   element.type = product.type
-      // });
+      payload.products.forEach(element => {
+        var product =  ProductModel.findOne({ id: element.productId });
+        element.type = product.type
+      });
       permission_request = {
         role: req.user.role,
         permissionRequired: "addInventory",
@@ -2179,7 +2179,7 @@ exports.getInventoryCountsByWarehouse = [
           },
         },
       ]);
-      const warehouseCount = await ShipmentModel.aggregate([
+      const warehouseSentCount = await ShipmentModel.aggregate([
         {
           $match: {
             $and: [
