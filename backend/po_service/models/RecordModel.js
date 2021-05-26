@@ -38,6 +38,12 @@ var RecordSchema = new mongoose.Schema(
       required: false,
       default: [],
     },
+    createdBy: {
+      type: String,
+    },
+    lastUpdatedBy : {
+      type: String,
+    },
   },
   { timestamps: true },
 );
