@@ -141,6 +141,15 @@ background-color: $white;
         position: absolute;
         top: 12px;
         left: 5px;
+        min-width: 20px;
+      }
+      .orgType {
+        width: 25px;
+        height: 25px;
+        position: absolute;
+        top: 12px;
+        left: 3px;
+        bottom: 0px;
         min-width: 25px;
       }
       .react-tel-input{
