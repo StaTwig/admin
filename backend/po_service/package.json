@@ -12,6 +12,7 @@
     "axios": "^0.19.2",
     "bcrypt": "^3.0.6",
     "codacy-coverage": "^3.4.0",
+    "convert-excel-to-json": "^1.7.0",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.5",
     "date-and-time": "^1.0.0",
