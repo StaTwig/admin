@@ -255,10 +255,10 @@ exports.createShipment = [
     try {
       console.log(req.user);
       let data = req.body;
-      data.data.products.forEach(element => {
-        var product =  ProductModel.findOne({ id: element.productId });
-        element.type = product.type
-      });
+      // data.data.products.forEach(element => {
+      //   var product =  ProductModel.findOne({ id: element.productId });
+      //   element.type = product.type
+      // });
       var i = 0;
       const incrementCounter = await CounterModel.update(
         {
@@ -1672,7 +1672,7 @@ exports.fetchInboundShipments = [//inbound shipments with filter(shipmentId, fro
   auth,
   async (req, res) => {
     try {
-      const { skip, limit } = req.query;
+      const { skip, limit } = req.query;      
       checkToken(req, res, async (result) => {
         if (result.success) {
           const { warehouseId } = req.user;
@@ -1736,6 +1736,7 @@ exports.fetchInboundShipments = [//inbound shipments with filter(shipmentId, fro
           }
           console.log("In bound whereQuery ======>", whereQuery);
           try {
+            let inboundShipmentsCount = await ShipmentModel.count(whereQuery);
             ShipmentModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((inboundShipmentsList) => {
               let inboundShipmentsRes = [];
               let findInboundShipmentData = inboundShipmentsList.map(async (inboundShipment) => {
@@ -1767,7 +1768,7 @@ exports.fetchInboundShipments = [//inbound shipments with filter(shipmentId, fro
                 return apiResponse.successResponseWithMultipleData(
                   res,
                   "Inbound Shipment Records",
-                  inboundShipmentsRes
+                  {"inboundShipments":inboundShipmentsRes, "count":inboundShipmentsCount}
                 );
               });
             });
@@ -1857,6 +1858,7 @@ exports.fetchOutboundShipments = [ //outbound shipments with filter(shipmentId, 
 
           console.log("Out bound whereQuery ======>", whereQuery);
           try {
+            let outboundShipmentsCount = await ShipmentModel.count(whereQuery);
             ShipmentModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((outboundShipmentsList) => {
                 let outboundShipmentsRes = [];
                 let findOutboundShipmentData = outboundShipmentsList.map(async (outboundShipment) => {
@@ -1888,7 +1890,7 @@ exports.fetchOutboundShipments = [ //outbound shipments with filter(shipmentId, 
                   return apiResponse.successResponseWithMultipleData(
                     res,
                     "Outbound Shipment Records",
-                    outboundShipmentsRes
+                    {"outboundShipments":outboundShipmentsRes, "count":outboundShipmentsCount}
                   );
                 });
               });
