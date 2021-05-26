@@ -1717,7 +1717,7 @@ exports.getwarehouseinfo=[
   ];
 
   exports.getOrganizationsTypewithauth = [
-    auth,
+    // auth, //Commented out because to show organistion type on sign up page we don't have auth that's why it is throwing 404 error
       async (req, res) => {
         try {
           const organisationId=req.query.id;
