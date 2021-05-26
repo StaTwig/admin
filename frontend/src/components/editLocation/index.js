@@ -6,6 +6,7 @@ import SuccessPopup from "../../shared/PopUp/successPopUp";
 import FailPopup from "../../shared/PopUp/failedPopUp";
 import Modal from "../../shared/modal";
 // import React, { useState,useRef } from 'react';
+import {getWarehouseById} from "../../actions/userActions";
 
 import "./style.scss";
 import { Formik } from "formik";
@@ -27,6 +28,34 @@ const editLocation = (props) => {
     setAddedLocationModal(false);
     props.history.push('/profile');
   };
+
+
+  // async getDataForWareHouse(id){
+    // const result = await getWarehouseById(id);
+    // return result;
+  // }
+
+  const getDataForWareHouse = async(id) => {
+    const result = await getWarehouseById(id);
+    return result;
+  }
+
+  useEffect(() => {
+    async function fetchData() {
+      const result = await getWarehouseById(id);  
+      console.log('results');
+      console.log(result.data.data);   
+      const warehouseInfo = result.data.data[0];
+      setAddressTitle(warehouseInfo.title);
+      setAddressLine(warehouseInfo.warehouseAddress.firstLine);
+      setCity(warehouseInfo.warehouseAddress.city);
+      setCountry(warehouseInfo.country.countryName);
+      setPincode(warehouseInfo.warehouseAddress.zipCode);
+      setState(warehouseInfo.warehouseAddress.state);
+    }
+
+    fetchData();
+  }, []);
 
   const updateStatus = async (values, id) => {
     const data =  {
