@@ -209,7 +209,7 @@ const showOrgByType = (value) =>{
           
                   <div className="form-group flex-column">               
                   <div className="pl-4" style={{color:"black"}}>
-                    <img alt="" src={organisationType} className="icon imgs" />
+                    <img alt="" src={organisationType} className="icon orgType" />
                     <DropdownButton
                       isText={true}
                       value={orgType}

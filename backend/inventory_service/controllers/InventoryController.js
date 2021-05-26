@@ -816,7 +816,7 @@ exports.getAllSKUs = [
 ];
 
 exports.getOrganizationsByType = [
-  // auth,
+  auth,
   async (req, res) => {
     try {
       const filters = req.query;
@@ -901,8 +901,8 @@ exports.addProductsToInventory = [
         );
       }
       let payload = req.body;
-      payload.data.products.forEach(element => {
-        var product = ProductModel.findOne({ id: element.productId });
+      payload.products.forEach(element => {
+        var product =  ProductModel.findOne({ id: element.productId });
         element.type = product.type
       });
       permission_request = {
@@ -915,10 +915,10 @@ exports.addProductsToInventory = [
           const { id } = req.user;
           const employee = await EmployeeModel.findOne({ id });
           var warehouseId = "";
-          if (!req.query.warehouseId)
-            warehouseId = employee.warehouseId[0];
+          if ( !req.query.warehouseId)
+          warehouseId  = employee.warehouseId[0];
           else
-            warehouseId = req.query.warehouseId;
+          warehouseId  = req.query.warehouseId;
           const warehouse = await WarehouseModel.findOne({ id: warehouseId });
 
           if (!warehouse) {
@@ -1192,8 +1192,9 @@ exports.addInventoriesFromExcel = [
                 if (inventoriesFound) {
                   const newNotification = new NotificationModel({
                     owner: address,
-                    message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${inventoriesFound.serialNumber
-                      }`,
+                    message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${
+                      inventoriesFound.serialNumber
+                    }`,
                   });
                   await newNotification.save();
                   return apiResponse.ErrorResponse(
@@ -1255,67 +1256,67 @@ exports.addInventoriesFromExcel = [
                 let product = await ProductModel.findOne({
                   name: prod.productName,
                 });
-                if (product) {
+                if(product){
                   data[index].productId = product.id;
                   data[index].type = product.type;
                 }
-                else {
+                else{
                   console.log(product)
                 }
               }
 
               var datee = new Date();
-              datee = datee.toISOString();
-              var evid = Math.random().toString(36).slice(2);
-              let event_data = {
-                eventID: null,
-                eventTime: null,
-                eventType: {
-                  primary: "CREATE",
-                  description: "SHIPMENT_CREATION",
-                },
-                actor: {
-                  actorid: null,
-                  actoruserid: null,
-                },
-                stackholders: {
-                  ca: {
-                    id: "null",
-                    name: "null",
-                    address: "null",
-                  },
-                  actororg: {
-                    id: "null",
-                    name: "null",
-                    address: "null",
-                  },
-                  secondorg: {
-                    id: "null",
-                    name: "null",
-                    address: "null",
-                  },
-                },
-                payload: {
-                  data: {
-                    abc: 123,
-                  },
-                },
-              };
-              event_data.eventID = "ev0000" + evid;
-              event_data.eventTime = datee;
-              event_data.eventType.primary = "ADD";
-              event_data.eventType.description = "INVENTORY";
-              event_data.actor.actorid = user_id || "null";
-              event_data.actor.actoruserid = email || "null";
-              event_data.payload.data = data;
-              console.log(event_data);
-              async function compute(event_data) {
-                result = await logEvent(event_data);
-                return result;
-              }
-              compute(event_data).then((response) => {
-                console.log(response);
-              });
+          datee = datee.toISOString();
+          var evid = Math.random().toString(36).slice(2);
+          let event_data = {
+            eventID: null,
+            eventTime: null,
+            eventType: {
+              primary: "CREATE",
+              description: "SHIPMENT_CREATION",
+            },
+            actor: {
+              actorid: null,
+              actoruserid: null,
+            },
+            stackholders: {
+              ca: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+              actororg: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+              secondorg: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+            },
+            payload: {
+              data: {
+                abc: 123,
+              },
+            },
+          };
+          event_data.eventID = "ev0000" + evid;
+          event_data.eventTime = datee;
+          event_data.eventType.primary = "ADD";
+          event_data.eventType.description = "INVENTORY";
+          event_data.actor.actorid = user_id || "null";
+          event_data.actor.actoruserid = email || "null";
+          event_data.payload.data = data;
+          console.log(event_data);
+          async function compute(event_data) {
+            result = await logEvent(event_data);
+            return result;
+          }
+          compute(event_data).then((response) => {
+            console.log(response);
+          });
               return apiResponse.successResponseWithData(res, "Success", data);
             } else {
               return apiResponse.ErrorResponse(
@@ -1377,10 +1378,10 @@ exports.getInventoryDetails = [
     try {
       const employee = await EmployeeModel.findOne({ id: req.user.id });
       var warehouseId = "";
-      if (!req.query.warehouseId)
-        warehouseId = employee.warehouseId[0];
+      if ( !req.query.warehouseId)
+          warehouseId  = employee.warehouseId[0];
       else
-        warehouseId = req.query.warehouseId;
+          warehouseId  = req.query.warehouseId;
       const warehouse = await WarehouseModel.findOne({ id: warehouseId })
 
       if (warehouse) {
@@ -1986,10 +1987,10 @@ exports.getInventory = [
       const { skip, limit } = req.query;
       var warehouseId = "";
 
-      if (!req.query.warehouseId)
-        warehouseId = req.user.warehouseId;
+      if ( !req.query.warehouseId)
+          warehouseId  = req.user.warehouseId;
       else
-        warehouseId = req.query.warehouseId;
+          warehouseId  = req.query.warehouseId;
 
       const warehouse = await WarehouseModel.findOne({ id: warehouseId })
       if (warehouse) {
@@ -2178,7 +2179,7 @@ exports.getInventoryCountsByWarehouse = [
           },
         },
       ]);
-      const warehouseCount = await ShipmentModel.aggregate([
+      const warehouseSentCount = await ShipmentModel.aggregate([
         {
           $match: {
             $and: [

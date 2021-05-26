@@ -1664,7 +1664,7 @@ exports.getAllUsersByOrganisation = [
 
 
 exports.getOrganizationsByType = [
-  auth,
+
   async (req, res) => {
     try {
       const organisationId = req.query.id;
@@ -1713,6 +1713,23 @@ exports.getwarehouseinfo = [
         res,
         "Operation success",
         warehouseinfo
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getOrganizationsTypewithauth = [
+  auth,
+  async (req, res) => {
+    try {
+      const organisationId = req.query.id;
+      const organisations = await ConfigurationModel.find({ id: organisationId }, 'organisationTypes.id organisationTypes.name')
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        organisations
       );
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
