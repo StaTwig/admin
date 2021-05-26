@@ -38,6 +38,7 @@ import ReceiveShipment from  '../containers/receiveShipment';
 import AddLocation from '../containers/Addlocation';
 import LastMile from '../containers/lastMile';
 import EditLocation from '../containers/editLocation';
+import ProductCategory from '../containers/productcategory';
 import NoMatch from '../components/NoMatch';
 
 import './style.scss';
@@ -81,6 +82,7 @@ const routes = (
     <Route path="/lastMile" component={requireAuth(LastMile)} />
     <Route path="/enterid" component={requireAuth(enterId)} />
     <Route path="/editLocation/:id" component={requireAuth(EditLocation)} />
+    <Route path="/productcategory" component={requireAuth(ProductCategory)} />
     <Route component={NoMatch} />
   </Switch>
 );

@@ -112,16 +112,18 @@ const Inventory = props => {
       </div>
       <div className="row mb-4">
         <div className="col">
-          <div className="panel" style={{height:'14vh'}}>
-            <div className="picture truck-bg">
-              <img src={TotalInventoryAdded} alt="truck" />
+          <Link to="/productcategory">
+            <div className="panel" style={{height:'14vh'}}>
+              <div className="picture truck-bg">
+                <img src={TotalInventoryAdded} alt="truck" />
+              </div>
+              <div className="d-flex flex-column">
+                <div className="title truck-text">Total Product Category</div>
+                
+                <div className="count truck-text">{inventoriesCount} {inventoryAnalytics.totalProductCategory}</div>
+              </div>
             </div>
-            <div className="d-flex flex-column">
-              <div className="title truck-text">Total Product Category</div>
-              
-              <div className="count truck-text">{inventoriesCount} {inventoryAnalytics.totalProductCategory}</div>
-            </div>
-          </div>
+          </Link>
         </div>
         <div className="col">
           <div className="panel" style={{height:'14vh'}}>
