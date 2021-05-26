@@ -175,7 +175,7 @@ exports.register = [
       if (emailId.indexOf('@') > -1)
         user = await EmployeeModel.findOne({ emailId });
       else {
-       phone = '+' + emailId;
+        phone = '+' + emailId;
         user = await EmployeeModel.findOne({ phoneNumber: phone });
       }
 
@@ -357,7 +357,7 @@ exports.register = [
         const emailId = req.body.emailId.toLowerCase().replace(' ', '');
         let phone = '';
         if (emailId.indexOf('@') === -1)
-           phone = '+' + emailId;
+          phone = '+' + emailId;
         // Create User object with escaped and trimmed data
         const user = new EmployeeModel({
           firstName: req.body.firstName,
@@ -476,7 +476,7 @@ exports.sendOtp = [
         if (emailId.indexOf('@') > -1)
           user = await EmployeeModel.findOne({ emailId });
         else {
-           phone = '+' + emailId;
+          phone = '+' + emailId;
           user = await EmployeeModel.findOne({ phoneNumber: phone });
         }
         if (user) {
@@ -616,7 +616,7 @@ exports.verifyOtp = [
         const emailId = req.body.emailId.toLowerCase();
         var query = { emailId };
         if (emailId.indexOf('@') === -1) {
-          let  phone = '+' + emailId;
+          let phone = '+' + emailId;
           query = { phoneNumber: phone };
         }
 
@@ -1112,6 +1112,8 @@ exports.addWarehouse = [
         warehouseAddress,
         supervisors,
         employees,
+        bottleCapacity,
+        sqft
       } = req.body;
       const incrementCounterWarehouse = await CounterModel.update({
         'counters.name': "warehouseId"
@@ -1131,6 +1133,8 @@ exports.addWarehouse = [
         region,
         country,
         location,
+        bottleCapacity,
+        sqft,
         supervisors,
         employees,
         warehouseAddress,
@@ -1660,14 +1664,14 @@ exports.getAllUsersByOrganisation = [
 
 
 exports.getOrganizationsByType = [
-  
+
   async (req, res) => {
     try {
-      const organisationId=req.query.id;
+      const organisationId = req.query.id;
       const typeId = req.query.typeid;
-      const orgtype=req.query.type;
+      const orgtype = req.query.type;
       //const organisations= await OrganisationModel.find({$or:[{'id':organisationId},{'typeId':typeId}]},'name')
-      const organisations = await OrganisationModel.find({$or:[{'typeId': typeId },{'type':orgtype},{'id' :organisationId}]},'name', { projection: { _id: 0, name: 1} });
+      const organisations = await OrganisationModel.find({ $or: [{ 'typeId': typeId }, { 'type': orgtype }, { 'id': organisationId }] }, 'name', { projection: { _id: 0, name: 1 } });
       return apiResponse.successResponseWithData(
         res,
         "Operation success",
@@ -1698,13 +1702,13 @@ exports.getwarehouseByType = [
   },
 ];
 
-exports.getwarehouseinfo=[
+exports.getwarehouseinfo = [
   auth,
-  async(req,res)=>{
-    try{
-      const warehouseId=req.query.id;
-      const warehouseinfo= await WarehouseModel.find({id:warehouseId})
-      
+  async (req, res) => {
+    try {
+      const warehouseId = req.query.id;
+      const warehouseinfo = await WarehouseModel.find({ id: warehouseId })
+
       return apiResponse.successResponseWithData(
         res,
         "Operation success",
@@ -1713,22 +1717,22 @@ exports.getwarehouseinfo=[
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
     }
-    },
-  ];
+  },
+];
 
-  exports.getOrganizationsTypewithauth = [
-    auth,
-      async (req, res) => {
-        try {
-          const organisationId=req.query.id;
-          const organisations=await ConfigurationModel.find({id:organisationId},'organisationTypes.id organisationTypes.name')
-          return apiResponse.successResponseWithData(
-            res,
-            "Operation success",
-            organisations
-          );
-        } catch (err) {
-          return apiResponse.ErrorResponse(res, err);
-        }
-      },
-    ];
+exports.getOrganizationsTypewithauth = [
+  auth,
+  async (req, res) => {
+    try {
+      const organisationId = req.query.id;
+      const organisations = await ConfigurationModel.find({ id: organisationId }, 'organisationTypes.id organisationTypes.name')
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        organisations
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
