@@ -378,6 +378,7 @@ export function config() {
       GetEOLInfoByPlaceAdministered:`${TEST_SERVER_URL}/lastmilemanagement/api/GetEOLInfoByPlaceAdministered?place=`,
       GetEOLListByDateWindow:`${TEST_SERVER_URL}/lastmilemanagement/api/GetEOLListByDateWindow`,
       getWarehouseById: `${TEST_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
+      addWarehouse: `${TEST_SERVER_URL}/usermanagement/api/auth/addWarehouse`,
       addPOsFromExcel:`${TEST_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
     },
     demo: {
