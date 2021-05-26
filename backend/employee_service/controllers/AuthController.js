@@ -1667,7 +1667,7 @@ exports.getOrganizationsByType = [
       const typeId = req.query.typeid;
       const orgtype=req.query.type;
       //const organisations= await OrganisationModel.find({$or:[{'id':organisationId},{'typeId':typeId}]},'name')
-      const organisations = await OrganisationModel.find({$or:[{'typeId': typeId },{'type':orgtype},{'id' :organisationId}]},'name', { projection: { _id: 0, name: 1} });
+      const organisations = await OrganisationModel.find({$or:[{'typeId': typeId },{'type':orgtype},{'id' :organisationId}]},'id name ', { projection: { _id: 0, id: 1,name: 1} });
       return apiResponse.successResponseWithData(
         res,
         "Operation success",
