@@ -1,11 +1,11 @@
-FROM node:14.16.1
+FROM node:lts-alpine3.13
 
 WORKDIR /src
 
 COPY . /src
 
-RUN npm install
+RUN yarn install
 
 EXPOSE 3017
 
-CMD npm start
+CMD yarn run start

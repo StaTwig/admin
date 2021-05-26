@@ -4,14 +4,14 @@ WORKDIR /src/utils/event_logger
 
 COPY /utils/event_logger .
 
-RUN npm install
+RUN yarn install
 
 WORKDIR /src/backend/service
 
 COPY /backend/inventory_service/ .
  
-RUN npm install
+RUN yarn install
 
 EXPOSE 3007
 
-CMD npm start
+CMD yarn run start

@@ -6,7 +6,6 @@ const OrganisationModel = require('../models/OrganisationModel');
 const CounterModel = require('../models/CounterModel');
 const { body, validationResult, oneOf, check } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
-const uniqid = require('uniqid');
 
 //helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
