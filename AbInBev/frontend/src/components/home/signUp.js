@@ -4,8 +4,8 @@ import { Formik } from "formik";
 import logo from "../../assets/ABInBev.png";
 
 import {
-  getOrganizationsByType
-} from '../../actions/inventoryAction';
+  getAllBreweries
+} from '../../actions/userActions';
 
 const SignUp = (props) => {
   const {
@@ -22,10 +22,7 @@ const SignUp = (props) => {
 
   useEffect(() => {
     (async () => {
-      const filters = {
-        inventoryType: 'BREWERY',
-      };
-      const response = await dispatch(getOrganizationsByType(filters));
+      const response = await dispatch(getAllBreweries());
       const _organizations = response.data ? response.data : [];
       setAllBreweries(_organizations);
     })();
