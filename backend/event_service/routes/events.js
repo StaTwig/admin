@@ -24,5 +24,6 @@ router.get("/getEventByActorOrgId/:actorOrgId/:eventTypePrimary", EventControlle
 router.get("/getEventByActorOrgId/:actorOrgId", EventController.getAllEvents);
 //Delet Event by Id 
 router.delete("/deleteEventById/:eventID", EventController.deleteEventById);
+router.get("/getAllEventsWithFilter", EventController.getAllEventsWithFilter);
 
 module.exports = router;
