@@ -1,6 +1,6 @@
 @import "../../assets/styles/global.scss";
 
-.inventory {
+.batchexpiry {
   padding-right: 3rem;
   padding-left: 5rem;
   @media (max-width: $md) {
@@ -8,107 +8,65 @@
     padding-left: 10px;
   }
 
-  a, a:focus{
-    text-decoration: none;
-  }
-
-  .full-width-ribben {
+  .full-width-ribbon{
     position: absolute;
     left: 0;
     right: 0;
     background-color: #eaeaea;
-    .filter {
+    .filter{
       margin-left: 9rem;
       margin-right: 3rem;
     }
   }
 
-  .ribben-space {
-    margin-top: 6.5rem;
+  .rounded{
+    border-radius: 15px !important;
   }
 
-  .fix-wrap {
-    flex-wrap: wrap;
-    justify-content: space-between;
-    @media (min-width: 1600px) {
-      flex-wrap: nowrap;
-      justify-content: space-between;
-    }
+  .ribbon-space {
+    margin-top: 4rem;
   }
 
-  .rTableHeader{
-    font-weight: bold;
-    text-align: center;
+  .txt{
+    font-weight: 600;
+    font-size: small;
   }
-  .table .rTable .rTableCell {
-      color: $black;
-      text-align: left;
-      font-weight: 600;
- }
-  .list-container {
-    h4 {
-      color: $OBBlue;
-      font-weight: 400;
-      font-size: 16px;
-    }
 
-    .btn {
-      font-size: 11px;
-      padding: 0;
-    }
+  .txtBlue{
+    color: #0093e9;
+  }
 
-    .overflow {
-      .col-sm-6 {
-        margin-top: 12px;
-        padding-bottom: 8px;
-      }
-    }
+  .bg-grey{
+    background-color: #d6d6d6 !important;
+  }
 
-    .product{
-      font-size:12px;
-    }
-    .round-sign {
-      border-radius: 100%;
-      font: Bold 13px Roboto;
-      letter-spacing: 0px;
-      color: #707070;
-      padding: 5px;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      justify-content: center;
-      text-align: center;
-      align-items: center;
-      margin-top: 10px;
-    }
+  .active{
+    box-shadow: 0px 3px 6px $grey;
+    background-color: #d6d6d6 !important;
+  }
 
-    p {
-      font-size: 10px;
-      margin-top: 0.5rem;
-      text-align: center;
-      min-height: 30px;
-      margin-bottom: 0.2rem;
-    }
-
-    h3 {
-      font-size: 14px;
-      font-weight: bold;
-    }
-
-    .overflow {
-      overflow: auto;
-      height: 300px;
-    }
+  .font-small{
+    font-size: small;
   }
 
   .panel {
-    box-shadow: 0px 3px 6px $grey;
+    // box-shadow: 0px 3px 6px $grey;
     border-radius: 15px;
     background-color: $white;
+    cursor: pointer;
     padding: 20px 20px 5px 22px;
     margin-top: 20px;
     display: flex;
+    justify-content: center;
     align-items: flex-start;
+    // -ms-flex: 0 0 18%;
+    // flex: 0 0 18%;
+    // max-width: 18%;
+    // height: 35vh;
+    overflow: hidden;
+
+    text-align: center;
+    text-align: -webkit-center;
 
     & > .d-flex {
       margin-top: 5px;
@@ -125,15 +83,24 @@
       }
     }
 
+    .txt-outline{
+      border: 1px solid #57c1ff;
+      border-radius: 10px;
+      padding: 0.2rem;
+      margin: 0.2rem;
+      font-size: small;
+      text-align: center;
+    }
+
     &:last-child {
       margin-right: 0;
     }
 
     .picture {
-      width: 40px;
-      height: 40px;
+      width: 50px;
+      height: 50px;
       box-shadow: 0px 3px 6px #00000029;
-      border-radius: 50%;
+      // border-radius: 50%;
       justify-content: center;
       align-items: center;
       margin-right: 15px;

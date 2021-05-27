@@ -2022,6 +2022,8 @@ exports.getInventory = [
         );
       }
     } catch (err) {
+      console.log(err);
+      
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -2663,6 +2665,118 @@ exports.uploadSalesData = [
         responseObj
       );
 
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+
+exports.getBatchNearExpiration = [
+  auth,
+  async (req, res) => {
+    try {
+      var warehouseId = "";
+
+      if (!req.query.warehouseId)
+        warehouseId = req.user.warehouseId;
+      else
+        warehouseId = req.query.warehouseId;
+      
+      var today = new Date(); 
+      var nextMonth = new Date();
+      nextMonth.setDate(today.getDate() + 30)
+
+      const warehouse = await WarehouseModel.findOne({ id: warehouseId })
+      if (warehouse) {
+        const result = await AtomModel.aggregate([
+          {
+            $match: {
+              $and: [
+                {
+                  "attributeSet.expDate": {
+                    $gte: today.toISOString(),
+                    $lt: nextMonth.toISOString()
+                  }
+                }, { $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] } }
+              ]
+            }
+          },
+          {
+            $lookup: {
+              from: "products",
+              localField: "productId",
+              foreignField: "id",
+              as: "products",
+            },
+          },
+          { $unwind: "$products" },
+        ]);
+        return apiResponse.successResponseWithData(
+          res,
+          "Near expiring batch Details",
+          result
+        );
+      } else {
+        return apiResponse.ErrorResponse(
+          res,
+          "Cannot find warehouse for this employee"
+        );
+      }
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getBatchExpired = [
+  auth,
+  async (req, res) => {
+    try {
+      var warehouseId = "";
+
+      if (!req.query.warehouseId)
+        warehouseId = req.user.warehouseId;
+      else
+        warehouseId = req.query.warehouseId;
+      
+      var today = new Date(); 
+
+      const warehouse = await WarehouseModel.findOne({ id: warehouseId });
+      if (warehouse) {
+        const result = await AtomModel.aggregate([
+          {
+            $match: {
+              $and: [
+                {
+                  "attributeSet.expDate": {
+                    $lt: today.toISOString()
+                  }
+                }, { $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] } }
+              ]
+            }
+          },
+          {
+            $lookup: {
+              from: "products",
+              localField: "productId",
+              foreignField: "id",
+              as: "products",
+            },
+          },
+          { $unwind: "$products" },
+        ]);
+        return apiResponse.successResponseWithData(
+          res,
+          "Expired Batch Details",
+          result
+        );
+      } else {
+        return apiResponse.ErrorResponse(
+          res,
+          "Cannot find warehouse for this employee"
+        );
+      }
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
     }
