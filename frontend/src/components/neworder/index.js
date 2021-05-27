@@ -98,8 +98,7 @@ const NewOrder = (props) => {
                                       };
                                     }));
 
-      const orgType = await getOrganizationsTypewithauth(profile.organisationId);
-      console.log(orgType);
+      const orgType = await getOrganizationsTypewithauth('CONF000');
       setOrgTypes(orgType.data.length > 0 ? orgType.data[0].organisationTypes.map(item => {
                                       return {
                                         value: item.id,
