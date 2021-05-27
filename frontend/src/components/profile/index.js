@@ -11,7 +11,7 @@ import "./style.scss";
 import { config } from "../../config";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import {getWarehouseById} from "../../actions/userActions";
+
 
 const axios = require("axios");
 import {
@@ -120,6 +120,8 @@ class Profile extends React.Component {
     if (wareHouseResponse.status === 1) {
       const wareHouseIdResult = wareHouseResponse.data.map((txn) => txn.id);
       const wareHouseAddresses = wareHouseResponse.data;
+      console.log("Results");
+      console.log(wareHouseAddresses);
       this.setState({
         wareIds: wareHouseIdResult,
         warehouseLocations: wareHouseAddresses,
@@ -129,11 +131,6 @@ class Profile extends React.Component {
     console.log("warehouses", this.state.warehouseLocations);
   }
   //console.log("res",wareHouseIdResult);
-
-  async getDataForWareHouse(id){
-    const result = await getWarehouseById(id);
-    return result;
-  }
 
 
   closeModal() {
@@ -415,19 +412,19 @@ class Profile extends React.Component {
                         </div>
                       </div>
                     </div>
-                      <div className="row" style={{width:"150vw", overflow:"hidden"}}>
-                        {Object.keys(warehouseId).map((id)=>{
+                      <div className="row" style={{width:"50vw", overflow:"hidden"}}>
+                        {Object.keys(this.state.warehouseLocations).map((id)=>{
                           return (
-                          <div className="col location-cards">
+                          <div className="col location-cards p-3">
                           <div className="custom-card p-3">
                             <div className="card-header">
                               <div className="d-flex align-items-center justify-content-between">
                                 <h3 className="card-title font-weight-bold">
-                                  {this.state.title}-{warehouseId[id]}
+                                  {this.state.title}-{this.state.warehouseLocations[id]['id']}
                                 </h3>
                                 <Link
                                   to={{
-                                    pathname: `/editLocation/${warehouseId[id]}`,
+                                    pathname: `/editLocation/${this.state.warehouseLocations[id]['id']}`,
                                     state: { message: "hellow" },
                                   }}
                                 >
@@ -455,7 +452,7 @@ class Profile extends React.Component {
                             <div className="card-body">
                               <input
                                 className="total-input"
-                                value={this.state.warehouseAddress_city}
+                                value={this.state.warehouseLocations[id].warehouseAddress.city}
                                 onChange={(e) =>
                                   this.setState({
                                     warehouseAddress_city: e.target.value,
@@ -465,7 +462,7 @@ class Profile extends React.Component {
                               />
                               <input
                                 className="total-input"
-                                value={this.state.warehouseAddress_state}
+                                value={this.state.warehouseLocations[id].warehouseAddress.state}
                                 onChange={(e) =>
                                   this.setState({
                                     warehouseAddress_state: e.target.value,
@@ -475,7 +472,7 @@ class Profile extends React.Component {
                               />
                               <input
                                 className="total-input"
-                                value={this.state.warehouseAddress_country}
+                                value={this.state.warehouseLocations[id].country.countryName}
                                 onChange={(e) =>
                                   this.setState({
                                     warehouseAddress_country: e.target.value,
@@ -486,7 +483,7 @@ class Profile extends React.Component {
 
                               <input
                                 className="full-address-input"
-                                value={this.state.warehouseAddress_firstline}
+                                value={this.state.warehouseLocations[id].warehouseAddress.firstLine}
                                 onChange={(e) =>
                                   this.setState({
                                     warehouseAddress_firstline: e.target.value,
@@ -496,7 +493,7 @@ class Profile extends React.Component {
                               />
                               <input
                                 className="full-address-input"
-                                value={this.state.warehouseAddress_secondline}
+                                value={this.state.warehouseLocations[id].warehouseAddress.secondLine}
                                 onChange={(e) =>
                                   this.setState({
                                     warehouseAddress_secondline: e.target.value,
@@ -507,7 +504,7 @@ class Profile extends React.Component {
 
                               <input
                                 className="pin-code-input"
-                                value={this.state.warehouseAddress_zipcode}
+                                value={this.state.warehouseLocations[id].warehouseAddress.zipCode}
                                 onChange={(e) =>
                                   this.setState({
                                     warehouseAddress_zipcode: e.target.value,
@@ -589,9 +586,9 @@ class Profile extends React.Component {
                     </div>
                     <div
                       className="row"
-                      style={{ width: "150vw", overflow: "hidden" }}
+                      style={{ width: "50vw", overflow: "hidden" }}
                     >
-                      {Object.keys(warehouseId).map((id) => {
+                      {Object.keys(this.state.warehouseLocations).map((id) => {
                           // const result = getWarehouseById(warehouseId[id]);
                           // console.log(result);
                         return (
@@ -601,31 +598,31 @@ class Profile extends React.Component {
                                 <div className="card-header">
                                   <div className="d-flex align-items-center justify-content-between">
                                     <h3 className="card-title font-weight-bold">
-                                      {this.state.title}-{warehouseId[id]}
+                                      {this.state.title}-{this.state.warehouseLocations[id]['id']}
                                     </h3>
                                   </div>
                                 </div>
                                 <div className="card-body">
                                   <div className="total">
-                                    {this.state.warehouseAddress_city ? (
+                                    {this.state.warehouseLocations[id].warehouseAddress.city ? (
                                       <span>
-                                        {this.state.warehouseAddress_city}
+                                        {this.state.warehouseLocations[id].warehouseAddress.city}
                                       </span>
                                     ) : (
                                       <span>N/A</span>
                                     )}
                                     ,
-                                    {this.state.warehouseAddress_state ? (
+                                    {this.state.warehouseLocations[id].warehouseAddress.state ? (
                                       <span>
-                                        {this.state.warehouseAddress_state}
+                                        {this.state.warehouseLocations[id].warehouseAddress.state}
                                       </span>
                                     ) : (
                                       <span>N/A</span>
                                     )}
                                     ,
-                                    {this.state.warehouseAddress_country ? (
+                                    {this.state.warehouseLocations[id].country.countryName ? (
                                       <span>
-                                        {this.state.warehouseAddress_country}
+                                        {this.state.warehouseLocations[id].country.countryName}
                                       </span>
                                     ) : (
                                       <span>N/A</span>
@@ -634,9 +631,9 @@ class Profile extends React.Component {
 
                                   <div className="full-address">
                                     {/* 50 /b/, Takshila Apt, Mahakali Caves Road, Chakala, Andheri (west) Mumbai, Maharashtra, */}
-                                    {this.state.warehouseAddress_firstline ? (
+                                    {this.state.warehouseLocations[id].warehouseAddress.firstLine ? (
                                       <span>
-                                        {this.state.warehouseAddress_firstline}
+                                        {this.state.warehouseLocations[id].warehouseAddress.firstLine}
                                       </span>
                                     ) : (
                                       <span>N/A</span>

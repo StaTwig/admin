@@ -2,7 +2,7 @@ import React, { useState,useEffect } from "react";
 import { Link } from 'react-router-dom';
 import DropdownButton from '../../shared/dropdownButtonGroup';
 import {getOrganisations} from '../../actions/productActions';
-import {getOrganizationsByType} from '../../actions/userActions';
+import {getOrganizationsTypewithauth} from '../../actions/userActions';
 import { Formik } from "formik";
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
@@ -35,7 +35,7 @@ const [selectedType,setselectedType] = useState();
       setOrganisationsArr(orgs);
     }
     async function fetchOrganisationType() {
-      const orgsType = await getOrganizationsByType("CONF000");
+      const orgsType = await getOrganizationsTypewithauth("CONF000");
       var arr =[];
       arr.push(orgsType.data[0].organisationTypes);
       setOrganisationsType(arr);
@@ -209,7 +209,7 @@ const showOrgByType = (value) =>{
           
                   <div className="form-group flex-column">               
                   <div className="pl-4" style={{color:"black"}}>
-                    <img alt="" src={organisationType} className="icon imgs" />
+                    <img alt="" src={organisationType} className="icon orgType" />
                     <DropdownButton
                       isText={true}
                       value={orgType}
