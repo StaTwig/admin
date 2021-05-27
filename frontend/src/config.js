@@ -107,8 +107,6 @@ export function config() {
       fetchProductIdsCustomerLocationsOrganisationsUrl: `${LOCAL_SERVER_URL_PO}/pomanagement/api/po/fetchProductIdsCustomerLocationsOrganisations`,
       fetchInboundShipmentsUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchInboundShipments`,
       fetchOutboundShipmentsUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchOutboundShipments`,
-      fetchSupplierAndReceiverListUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
-      updateWarehouse: `${DEV_SERVER_URL}/usermanagement/api/auth/updateWarehouse?warehouseId=`,
       GetEOLInfoBySerialNumber:`${LOCAL_SERVER_URL_EOL}/lastmilemanagement/api/GetEOLInfoBySerialNumber?serial_number=`,
       GetEOLInfoByProductId:`${LOCAL_SERVER_URL_EOL}/lastmilemanagement/api/GetEOLInfoByProductId?id=`,
       GetEOLInfoByIdentityId:`${LOCAL_SERVER_URL_EOL}/lastmilemanagement/api/GetEOLInfoByIdentityId?id=`,
