@@ -1717,22 +1717,22 @@ exports.getwarehouseinfo = [
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
     }
-  },
-];
+    },
+  ];
 
-exports.getOrganizationsTypewithauth = [
-  auth,
-  async (req, res) => {
-    try {
-      const organisationId = req.query.id;
-      const organisations = await ConfigurationModel.find({ id: organisationId }, 'organisationTypes.id organisationTypes.name')
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        organisations
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
+  exports.getOrganizationsTypewithauth = [
+    // auth, //Commented out because to show organistion type on sign up page we don't have auth that's why it is throwing 404 error
+      async (req, res) => {
+        try {
+          const organisationId=req.query.id;
+          const organisations=await ConfigurationModel.find({id:organisationId},'organisationTypes.id organisationTypes.name')
+          return apiResponse.successResponseWithData(
+            res,
+            "Operation success",
+            organisations
+          );
+        } catch (err) {
+          return apiResponse.ErrorResponse(res, err);
+        }
+      },
+    ];
