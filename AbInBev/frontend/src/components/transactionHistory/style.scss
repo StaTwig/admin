@@ -58,17 +58,22 @@
 .challanImage{
   width:200px;
   height:200px;
+  margin: 10px 0px;
+}
+.textRight{
+  text-align: right;
 }
 .productDetailActive{
-  background-color: #eee6e6;
-  border:1px solid #53265d;
+  background-color: #e9ecef;
+  border:  0.5px solid #e1dff0;
   border-radius: 15px;
+  padding:10px
 }
 .productDetail{
   padding:25px;
-  background-color: #eee6e6;
-  border:1px solid #53265d;
-  border-radius: 15px;
+  // background-color: #eee6e6;
+  // border:1px solid #53265d;
+  // border-radius: 15px;
 }
 .rejectionRateRow{
   background-color:orange;
@@ -80,6 +85,12 @@
 
 .transactionProducts{
  margin-top: 20px;
+ margin-bottom: 20px;
+ padding: 0px 15px;
+ table, tbody, tr {
+  line-height:2;
+ }
+ tr:nth-child(even) {background-color: #f0f0f0;}
 }
 .productHeader{
   font-weight: bold;
@@ -92,19 +103,38 @@
     font-weight: bold;
     margin-bottom: 10px;
   }
+  .activeTxnContainer{
+    background-color: #e1dff0;
+  }
   .transactionListContainer{
     margin-top: 15px;
+    padding:10px;
+    &:hover{
+      background-color: #e1dff0;
+      // border: 1px solid #414141;
+      border-radius: 15px;
+    }
     // padding-left: 32px;
   }
   .productContainer{
+    // display: flex;
+    // cursor:pointer;
+    background-color: #53265d;
+    // &:hover{
+    //   border:1px solid #53265d;
+    //   border-radius: 15px;
+    //   padding:5px;
+    // }
+  }
+  .productContainerListItem{
     display: flex;
     cursor:pointer;
-    &:hover{
-      border:1px solid #53265d;
-      border-radius: 15px;
-      padding:5px;
-    }
-  }
+    // &:hover{
+    //   // border:1px solid #53265d;
+    //   // border-radius: 15px;
+    //   padding:5px;
+    // }
+  }  
   .productItem{
     flex-grow: 1;
     height: 100px;
@@ -219,6 +249,7 @@
     border: none;
     box-shadow: 0px 4px 8px #54265e26;
     border-radius: 10px;
+    width:100%;
   }
   .filterButton{
     background: #FFFFFF 0% 0% no-repeat padding-box;
