@@ -31,6 +31,7 @@ router.get("/getEmployeeDetailsByWarehouseId", InventoryController.getEmployeeDe
 router.get("/getInventory", InventoryController.getInventory);
 router.get("/getBatchNearExpiration", InventoryController.getBatchNearExpiration);
 router.get("/getBatchExpired", InventoryController.getBatchExpired);
+router.get("/getBatchWarehouse", InventoryController.getBatchWarehouse);
 
 router.get("/getInventoryCountsPlatform", InventoryController.getInventoryCountsOfThePlatform);
 router.get("/getInventoryCountsByOrganisation", InventoryController.getInventoryCountsByOrganisation);
