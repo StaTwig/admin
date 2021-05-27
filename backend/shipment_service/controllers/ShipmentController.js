@@ -1,7 +1,4 @@
-const { body, validationResult, sanitizeBody } = require("express-validator");
-const { nanoid } = require("nanoid");
 const apiResponse = require("../helpers/apiResponse");
-const fs = require("fs");
 const moveFile = require("move-file");
 const date = require("date-and-time");
 require("dotenv").config();
@@ -9,7 +6,6 @@ const auth = require("../middlewares/jwt");
 const checkToken = require("../middlewares/middleware").checkToken;
 const ShipmentModel = require("../models/ShipmentModel");
 const RecordModel = require("../models/RecordModel");
-const ShippingOrderModel = require("../models/ShippingOrderModel");
 const WarehouseModel = require("../models/WarehouseModel");
 const InventoryModel = require("../models/InventoryModel");
 const EmployeeModel = require("../models/EmployeeModel");
