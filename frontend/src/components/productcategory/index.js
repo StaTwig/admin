@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './style.scss';
-import TotalInventoryAdded from '../../assets/icons/TotalInventoryAddedcopy.svg';
+import user from '../../assets/icons/brand.svg';
 import Add from '../../assets/icons/add.svg';
 
 const ProductCategory = props => {
@@ -29,27 +29,36 @@ const ProductCategory = props => {
           let displayCount = false;
           let prods = products.filter(p => p.type == cat)
           return (
-            <div className="panel m-2 ">
-              <div className="flex flex-column">
-                <div className=" picture truck-bg">
-                  <img src={TotalInventoryAdded} alt="truck" />
-                </div>
-                <div className="pt-3 flex" >{cat}</div>
-                <div className=" pt-2 pb-2 d-flex row">
-                  {prods.map((product, j) => {
-                    let isNull = false;
-                    if (displayCount) isNull = true;
-                    sum += product.name.length; 
-                    if (sum > 40 && !isNull)
-                      displayCount = true;
-                    return isNull ? null : displayCount && j < prods.length ? <span className="txt-outline text-muted">{"+"+ ( prods.length - j)}</span> : <span className="txt-outline text-muted">{product.name}</span>
-                  }
-                  )}
-                </div>
+              <div className="panel m-2 ">
+                <Link to={`/productinventory/${cat}`}>
+                  <div className="flex flex-column">
+                    <div className=" picture truck-bg">
+                    <img src={user} alt="truck" />
+                    </div>
+                    <div className="pt-3 flex" >{cat}</div>
+                    <div className=" pt-2 pb-2 d-flex row">
+                      {prods.map((product, j) => {
+                        let isNull = false;
+                        if (displayCount) isNull = true;
+                        sum += product.name.length; 
+                        if (sum > 40 && !isNull)
+                          displayCount = true;
+                        return isNull ? null : displayCount && j < prods.length ? <span className="txt-outline text-muted">{"+"+ ( prods.length - j)}</span> : <span className="txt-outline text-muted">{product.name}</span>
+                      }
+                      )}
+                    </div>
+                  </div>
+                </Link>
               </div>
-            </div>
           )
         })}
+        <div className="panel m-2 bg-grey align-items-center justify-content-center">
+          <div className="flex flex-column">
+            <div className=" pt-2 pb-2 d-flex row text-light">
+              + Add New Category
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

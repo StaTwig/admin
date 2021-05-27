@@ -243,3 +243,21 @@ export const getShipmentIds = async (id) => {
     return {};
   }
 };
+
+export const getNearExpiringProductsByBatch = async (id) => {
+  try {
+    const result = await axios.get(config().bacthcNearExpiryUrl);
+    return result.data.data;
+  } catch (e) {
+    return {};
+  }
+};
+
+export const getExpiredProductsByBatch = async (id) => {
+  try {
+    const result = await axios.get(config().batchExpiredUrl);
+    return result.data.data;
+  } catch (e) {
+    return {};
+  }
+};
