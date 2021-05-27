@@ -928,8 +928,8 @@ exports.fetchProductIdsCustomerLocationsOrganisations = [
   async (req, res) => {
     try {
       let responseData = {};
-      ProductModel.find({},'id').then (function (productIds){
-        WarehouseModel.find({},'id').then (function (locations){
+      ProductModel.find({},'id name').then (function (productIds){
+        WarehouseModel.find({},'id title').then (function (locations){
           OrganisationModel.find({},'id name').then (function (organisation){
             responseData[`organisations`] = organisation;
             responseData[`deliveryLocations`] = locations;
@@ -942,8 +942,6 @@ exports.fetchProductIdsCustomerLocationsOrganisations = [
           });
         });
       });
-      
-     
     } catch (err) {
       logger.log(
         'error',
