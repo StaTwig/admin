@@ -27,7 +27,9 @@ const SignupContainer = (props) => {
     setInnerwidth(window.innerWidth);
   }
   const onSignup = useCallback(async (values) => {
-    let data = { firstName, lastName, emailId: email,phone: phone, organisationId: organisation.id };
+    console.log("1",email);
+      console.log("2",phone);
+    let data = { firstName, lastName, emailId: email != '' ? email : phone, organisationId: organisation.id };
     if (isNewOrg) {
       // data.organisationName = organisation.name;
       data.organisationName = values.name;
@@ -57,8 +59,10 @@ const SignupContainer = (props) => {
 
   
   const checkNcontinue = async () => {
+    console.log("1",email);
+      console.log("2",phone);
     if (isNewOrg) {
-      let data = { firstName, lastName, emailId: email,phone, organisationId: organisation.id };
+      let data = { firstName, lastName, emailId: email != '' ? email : phone, organisationId: organisation.id };
       const result = await checkUser(data);
       if(result.status === 200) {
         setShowModal(true);
@@ -116,7 +120,7 @@ const SignupContainer = (props) => {
         onfirstNameChange={e => setFirstName(e.target.value)}
         errorMessage={errorMessage}
         onEmailChange={e => setEmail((e.target.value).toLowerCase())}
-        onphoneChange={e => setPhone(e.target.value)}
+        onphoneChange={value => setPhone(value)}
         onOrgChange={value => setIsNewOrg(value)}
         onPasswordChange={e => setPassword(e.target.value)}
         onlastNameChange={e => setLastName(e.target.value)}

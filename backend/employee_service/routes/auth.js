@@ -36,5 +36,7 @@ router.get("/fetchImage",AuthController.fetchImage);
 router.get("/getUserWarehouses", AuthController.getUserWarehouses);
 router.get("/getOrganizationsByType", AuthController.getOrganizationsByType);
 router.get("/getwarehouseByType", AuthController.getwarehouseByType);
+router.get("/getwarehouseinfo", AuthController.getwarehouseinfo);
+router.get("/getOrganizationsTypewithauth", AuthController.getOrganizationsTypewithauth);
 
 module.exports = router;

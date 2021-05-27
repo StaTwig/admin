@@ -11,6 +11,7 @@ import setAuthToken from '../../utils/setAuthToken';
 
 const LoginContainer = props => {
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const dispatch = useDispatch();
   const [innerWidth,setInnerwidth] = useState(window.innerWidth);
@@ -26,7 +27,11 @@ const LoginContainer = props => {
 
   const onSendOtp = useCallback(async () => {
       dispatch(turnOn());
-    const data = { emailId:email };
+     
+
+
+    const data = { emailId: email != '' ? email : phone};
+    console.log("3",data);
     const result = await sendOtp(data);
     if (result.status === 200) {
       // Set auth token auth
@@ -37,7 +42,7 @@ const LoginContainer = props => {
       // Set user and isAuthenticated
       localStorage.setItem('theLedgerToken', token);
       dispatch(setCurrentUser(decoded));*/
-      props.history.push(`/verify?emailId=${email}`);
+      props.history.push(`/verify?emailId=${email != '' ? email : phone}`);
     }else if(result.status === 500) {
         const err = result.data.message;
         setErrorMessage(err);
@@ -69,7 +74,13 @@ const LoginContainer = props => {
  <Login
         errorMessage={errorMessage}
         onSendOtp={onSendOtp}
-        onEmailChange={e => setEmail((e.target.value).toLowerCase())}
+         
+       
+      onEmailChange={e => setEmail((e.target.value).toLowerCase())}
+       onPhoneChange={value=> setPhone(value)}
+      
+      
+
       />
     </div>
   );

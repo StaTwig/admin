@@ -8,6 +8,7 @@ import App from "./App";
 import configureStore, { history } from "./configureStore";
 import { setCurrentUser, logoutUser } from "./actions/userActions";
 import setAuthToken from "./utils/setAuthToken";
+import '../node_modules/font-awesome/css/font-awesome.min.css'; 
 
 const store = configureStore();
 const render = () => {

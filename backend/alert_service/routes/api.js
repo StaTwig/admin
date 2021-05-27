@@ -1,5 +1,5 @@
 var express = require("express");
-var AlertQueryRouter = require("./alert")
+var alertQueryRouter = require("./alert")
 var app = express();
 
 app.use("/alert",alertQueryRouter);

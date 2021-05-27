@@ -14,6 +14,7 @@ export const updateProfile = async (data) => {
 export const addWarehouse = async (data) => {
   try {
     const result = await axios.post(config().addWarehouse, data);
+    console.log(result);
     return result;
   }catch(e){
     return e.response;
@@ -28,10 +29,11 @@ export const verifyOtp = async (data) => {
     return e.response;
   }
 };
+
 export const getOrganizationsByType = async (data) => {
   try {
-    const result = await axios.get(config().getOrganizationsByType,data);
-    return result.data.data;
+    const result = await axios.get(config().getOrganizationsByType + data);
+    return result.data;
   } catch (e) {
     return [];
   }
@@ -97,6 +99,15 @@ export const getUserInfo = () => {
 export const getUserInfoUpdated = async () => {
   try {    
       const result = await axios.get(config().userInfoUrl );
+      return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+export const getWarehouseById = async (id) => {
+  try {    
+      const result = await axios.get(config().getWarehouseById+id );
       return result;
   } catch (e) {
     return e.response;

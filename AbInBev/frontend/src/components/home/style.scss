@@ -1,5 +1,9 @@
 @import "../../assets/styles/global.scss";
 
+.scroll-y{
+  overflow-y: auto;  
+}
+
 .home {
   .centered {
     display: flex;

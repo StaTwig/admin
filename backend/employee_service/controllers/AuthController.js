@@ -28,7 +28,7 @@ const init = require('../logging/init');
 const logger = init.getLog();
 const EmailContent = require('../components/EmailContent');
 const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-const phoneRgex = /^\d{10}$/;
+const phoneRgex = /^\d{12}$/;
 
 /**
  * Uniques email check
@@ -61,13 +61,13 @@ exports.checkEmail = [
       const emailId = value.toLowerCase().replace(' ', '');
       let user;
       let phone = '';
-      if (!emailId.replace('+91', '').match(phoneRgex) && !emailId.match(emailRegex))
+      if (!emailId.match(phoneRgex) && !emailId.match(emailRegex))
         return Promise.reject('E-mail/Mobile not in valid');
 
       if (emailId.indexOf('@') > -1)
         user = await EmployeeModel.findOne({ emailId });
       else {
-        phone = emailId.indexOf('+91') === 0 ? emailId : '+91' + emailId;
+        phone = '+' + emailId;
         user = await EmployeeModel.findOne({ phoneNumber: phone });
       }
       // return EmployeeModel.findOne({ emailId: value.toLowerCase() }).then(user => {
@@ -169,13 +169,13 @@ exports.register = [
       const emailId = value.toLowerCase().replace(' ', '');
       let user;
       let phone = '';
-      if (!emailId.replace('+91', '').match(phoneRgex) && !emailId.match(emailRegex))
+      if (!emailId.match(phoneRgex) && !emailId.match(emailRegex))
         return Promise.reject('E-mail/Mobile not in valid');
 
       if (emailId.indexOf('@') > -1)
         user = await EmployeeModel.findOne({ emailId });
       else {
-        phone = emailId.indexOf('+91') === 0 ? emailId : '+91' + emailId;
+        phone = '+' + emailId;
         user = await EmployeeModel.findOne({ phoneNumber: phone });
       }
 
@@ -357,8 +357,7 @@ exports.register = [
         const emailId = req.body.emailId.toLowerCase().replace(' ', '');
         let phone = '';
         if (emailId.indexOf('@') === -1)
-          phone = emailId.indexOf('+91') === 0 ? emailId : '+91' + emailId;
-
+          phone = '+' + emailId;
         // Create User object with escaped and trimmed data
         const user = new EmployeeModel({
           firstName: req.body.firstName,
@@ -477,7 +476,7 @@ exports.sendOtp = [
         if (emailId.indexOf('@') > -1)
           user = await EmployeeModel.findOne({ emailId });
         else {
-          phone = emailId.indexOf('+91') === 0 ? emailId : '+91' + emailId;
+          phone = '+' + emailId;
           user = await EmployeeModel.findOne({ phoneNumber: phone });
         }
         if (user) {
@@ -617,7 +616,7 @@ exports.verifyOtp = [
         const emailId = req.body.emailId.toLowerCase();
         var query = { emailId };
         if (emailId.indexOf('@') === -1) {
-          let phone = emailId.indexOf('+91') === 0 ? emailId : '+91' + emailId;
+          let phone = '+' + emailId;
           query = { phoneNumber: phone };
         }
 
@@ -661,8 +660,8 @@ exports.verifyOtp = [
           //Prepare JWT token for authentication
           const jwtPayload = userData;
           const jwtData = {
-            //expiresIn: process.env.JWT_TIMEOUT_DURATION,
-            expiresIn: "12 hours"
+            expiresIn: process.env.JWT_TIMEOUT_DURATION,
+            //expiresIn: "12 hours"
           };
           const secret = process.env.JWT_SECRET;
           //Generated JWT token with Payload and secret.
@@ -1113,6 +1112,8 @@ exports.addWarehouse = [
         warehouseAddress,
         supervisors,
         employees,
+        bottleCapacity,
+        sqft
       } = req.body;
       const incrementCounterWarehouse = await CounterModel.update({
         'counters.name': "warehouseId"
@@ -1132,6 +1133,8 @@ exports.addWarehouse = [
         region,
         country,
         location,
+        bottleCapacity,
+        sqft,
         supervisors,
         employees,
         warehouseAddress,
@@ -1661,11 +1664,14 @@ exports.getAllUsersByOrganisation = [
 
 
 exports.getOrganizationsByType = [
-  // auth,
+
   async (req, res) => {
     try {
       const organisationId = req.query.id;
-      const organisations = await ConfigurationModel.find({ id: organisationId }, 'organisationTypes.id organisationTypes.name')
+      const typeId = req.query.typeid;
+      const orgtype = req.query.type;
+      //const organisations= await OrganisationModel.find({$or:[{'id':organisationId},{'typeId':typeId}]},'name')
+      const organisations = await OrganisationModel.find({$or:[{'typeId': typeId },{'type':orgtype},{'id' :organisationId}]},'id name ', { projection: { _id: 0, id: 1,name: 1} });
       return apiResponse.successResponseWithData(
         res,
         "Operation success",
@@ -1685,6 +1691,41 @@ exports.getwarehouseByType = [
       console.log(organisationId);
       const organisations = await ConfigurationModel.find({ id: organisationId }, 'warehouseTypes.id warehouseTypes.name')
       console.log(organisations)
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        organisations
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getwarehouseinfo = [
+  auth,
+  async (req, res) => {
+    try {
+      const warehouseId = req.query.id;
+      const warehouseinfo = await WarehouseModel.find({ id: warehouseId })
+
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        warehouseinfo
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getOrganizationsTypewithauth = [
+  auth,
+  async (req, res) => {
+    try {
+      const organisationId = req.query.id;
+      const organisations = await ConfigurationModel.find({ id: organisationId }, 'organisationTypes.id organisationTypes.name')
       return apiResponse.successResponseWithData(
         res,
         "Operation success",

@@ -8,14 +8,17 @@ import next from '../../../assets/icons/next.png';
 import user from '../../../assets/icons/user.svg';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../../../utils/dateHelper';
+import Pagination from '@material-ui/lab/Pagination';
 
 import './style.scss';
 
 const Table = props => {
   const dispatch = useDispatch();
-  const { loadMore, onLoadMore, skip, ordrs, visible } = props;
+  const {ordrs, visible } = props;
   const orders = ordrs();
-
+  const handlePageChange  = (event, value) => {
+    props.onPageChange(value)
+  };
   return (
     <div className="table pr-1">
         <div className="rTable">
@@ -87,15 +90,12 @@ const Table = props => {
             })}
           {orders?.length > 0 && (
             <div className="d-flex flex-row-reverse">
-              <img style={{ padding: 1, height: 30, cursor: 'pointer' }} onClick={() => orders.length > 4 && onLoadMore(true)} src={next} />
-              <img style={{ padding: 1, height: 30, cursor: 'pointer' }} onClick={() => skip > 0 && onLoadMore(false)} src={previous} />
-            </div>
+            <Pagination showFirstButton showLastButton color="primary" count={Math.ceil(props.count/10)} onChange={handlePageChange} />
+            <span className="mx-5 my-1 rounded text-primary">Total Records {props.count} </span>
+          </div> 
           )}
           </div>
         </div>
-        {/* {loadMore && (
-          <button className=" btn-primary btn mr-2" onClick={onLoadMore}>Load More</button>
-          )} */}
     </div>
   );
 };
