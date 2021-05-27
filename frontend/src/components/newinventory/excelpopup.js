@@ -13,11 +13,13 @@ const ExcelPopUp = props => {
   const setExcelFile = evt => {
     setExcel(evt.target.files[0]);
   };
+  console.log(evt.target.files[0]);
 
   const uploadExcel = async () => {
     let formData = new FormData();
-    formData.append('excel', excel);
+    formData.append('excel', evt.target.files[0]);
     dispatch(turnOn());
+    console.log(formData);
     const result = await addInventoriesFromExcel(formData);
     if (result.status === 200) {
       // console.log('success add product');
