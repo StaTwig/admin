@@ -84,7 +84,7 @@ const NewOrder = (props) => {
     async function fetchData() {
       // const orgSplit = user.organisation?.split('/');
       // console.log(orgSplit);
-
+      
       // setSenderOrganisation(orgSplit);
 
       const orgs = await getAllOrganisations();
@@ -124,10 +124,6 @@ const NewOrder = (props) => {
     fetchData();
   }, []);
 
-  // const closeModal = () => {
-  //   setOpenOrder(false);
-  //   props.history.push("/orders");
-  // };
   const closeExcelModal = () => {
     setOpenExcel(false);
   };

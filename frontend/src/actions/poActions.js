@@ -18,12 +18,6 @@ export const createPO = async data => {
     return e.response;
   }
 };
-export const setReviewPO = data => {
-  return {
-    type: SET_REVIEW_PO,
-    payload: data,
-  };
-};
 
 export const getPO = async po => {
   try {
@@ -70,7 +64,7 @@ export const createOrder = async data => {
 
 export const addPOsFromExcel = async data => {
   try {
-    const url = config().addPOsFromExcelUrl;
+    const url = config().addPOsFromExcel;
     const result = await axios.post(url, data, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
