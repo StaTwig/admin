@@ -22,7 +22,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.advancedanalytics.entrypoints=websecure"
-      - "traefik.http.routers.advancedanalytics.rule=Host(`test2.statledger.io`) && PathPrefix(`/advancedanalytics/`)"
+      - "traefik.http.routers.advancedanalytics.rule=Host(`unicef.vaccineledger.com`) && PathPrefix(`/advancedanalytics/`)"
       - "traefik.http.routers.advancedanalytics.tls=true"
       - "traefik.http.routers.advancedanalytics.tls.certresolver=lets-encrypt"
 
@@ -35,7 +35,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.alert.entrypoints=websecure"
-      - "traefik.http.routers.alert.rule=Host(`test2.statledger.io`) && PathPrefix(`/alertmanagement/`)"
+      - "traefik.http.routers.alert.rule=Host(`unicef.vaccineledger.com`) && PathPrefix(`/alertmanagement/`)"
       - "traefik.http.routers.alert.tls=true"
       - "traefik.http.routers.alert.tls.certresolver=lets-encrypt"
 
@@ -48,7 +48,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.analytics.entrypoints=websecure"
-      - "traefik.http.routers.analytics.rule=Host(`test2.statledger.io`) && PathPrefix(`/analyticsmanagement/`)"
+      - "traefik.http.routers.analytics.rule=Host(`unicef.vaccineledger.com`) && PathPrefix(`/analyticsmanagement/`)"
       - "traefik.http.routers.analytics.tls=true"
       - "traefik.http.routers.analytics.tls.certresolver=lets-encrypt"
 
@@ -61,7 +61,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.blockchain.entrypoints=websecure"
-      - "traefik.http.routers.blockchain.rule=Host(`test2.statledger.io`) && PathPrefix(`/blockchainmanagement/`)"
+      - "traefik.http.routers.blockchain.rule=Host(`unicef.vaccineledger.com`) && PathPrefix(`/blockchainmanagement/`)"
       - "traefik.http.routers.blockchain.tls=true"
       - "traefik.http.routers.blockchain.tls.certresolver=lets-encrypt"
 
@@ -74,7 +74,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.event.entrypoints=websecure"
-      - "traefik.http.routers.event.rule=Host(`test2.statledger.io`) && PathPrefix(`/eventmanagement/`)"
+      - "traefik.http.routers.event.rule=Host(`unicef.vaccineledger.com`) && PathPrefix(`/eventmanagement/`)"
       - "traefik.http.routers.event.tls=true"
       - "traefik.http.routers.event.tls.certresolver=lets-encrypt"      
 
@@ -89,7 +89,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.inventory.entrypoints=websecure"
-      - "traefik.http.routers.inventory.rule=Host(`test2.statledger.io`) && PathPrefix(`/inventorymanagement/`)"
+      - "traefik.http.routers.inventory.rule=Host(`unicef.vaccineledger.com`) && PathPrefix(`/inventorymanagement/`)"
       - "traefik.http.routers.inventory.tls=true"
       - "traefik.http.routers.inventory.tls.certresolver=lets-encrypt"
 
@@ -102,7 +102,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.lastmile.entrypoints=websecure"
-      - "traefik.http.routers.lastmile.rule=Host(`test2.statledger.io`) && PathPrefix(`/lastmilemanagement/`)"
+      - "traefik.http.routers.lastmile.rule=Host(`unicef.vaccineledger.com`) && PathPrefix(`/lastmilemanagement/`)"
       - "traefik.http.routers.lastmile.tls=true"
       - "traefik.http.routers.lastmile.tls.certresolver=lets-encrypt"
 
@@ -115,7 +115,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.notification.entrypoints=websecure"
-      - "traefik.http.routers.notification.rule=Host(`test2.statledger.io`) && PathPrefix(`/notificationmanagement/`)"
+      - "traefik.http.routers.notification.rule=Host(`unicef.vaccineledger.com`) && PathPrefix(`/notificationmanagement/`)"
       - "traefik.http.routers.notification.tls=true"
       - "traefik.http.routers.notification.tls.certresolver=lets-encrypt"
 
@@ -128,7 +128,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.po.entrypoints=websecure"
-      - "traefik.http.routers.po.rule=Host(`test2.statledger.io`) && PathPrefix(`/pomanagement/`)"
+      - "traefik.http.routers.po.rule=Host(`unicef.vaccineledger.com`) && PathPrefix(`/pomanagement/`)"
       - "traefik.http.routers.po.tls=true"
       - "traefik.http.routers.po.tls.certresolver=lets-encrypt"  
 
@@ -141,7 +141,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.product.entrypoints=websecure"
-      - "traefik.http.routers.product.rule=Host(`test2.statledger.io`) && PathPrefix(`/productmanagement/`)"
+      - "traefik.http.routers.product.rule=Host(`unicef.vaccineledger.com`) && PathPrefix(`/productmanagement/`)"
       - "traefik.http.routers.product.tls=true"
       - "traefik.http.routers.product.tls.certresolver=lets-encrypt"       
 
@@ -156,7 +156,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.shipment.entrypoints=websecure"
-      - "traefik.http.routers.shipment.rule=Host(`test2.statledger.io`) && PathPrefix(`/shipmentmanagement/`)"
+      - "traefik.http.routers.shipment.rule=Host(`unicef.vaccineledger.com`) && PathPrefix(`/shipmentmanagement/`)"
       - "traefik.http.routers.shipment.tls=true"
       - "traefik.http.routers.shipment.tls.certresolver=lets-encrypt"
 
@@ -169,7 +169,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.rbac.entrypoints=websecure"
-      - "traefik.http.routers.rbac.rule=Host(`test2.statledger.io`) && PathPrefix(`/rbacmanagement/`)"
+      - "traefik.http.routers.rbac.rule=Host(`unicef.vaccineledger.com`) && PathPrefix(`/rbacmanagement/`)"
       - "traefik.http.routers.rbac.tls=true"
       - "traefik.http.routers.rbac.tls.certresolver=lets-encrypt"
 
@@ -182,7 +182,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.employee.entrypoints=websecure"
-      - "traefik.http.routers.employee.rule=Host(`test2.statledger.io`) && PathPrefix(`/usermanagement/`)"
+      - "traefik.http.routers.employee.rule=Host(`unicef.vaccineledger.com`) && PathPrefix(`/usermanagement/`)"
       - "traefik.http.routers.employee.tls=true"
       - "traefik.http.routers.employee.tls.certresolver=lets-encrypt"
 
@@ -195,7 +195,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.shippingorder.entrypoints=websecure"
-      - "traefik.http.routers.shippingorder.rule=Host(`test2.statledger.io`) && PathPrefix(`/shippingordermanagement/`)"
+      - "traefik.http.routers.shippingorder.rule=Host(`unicef.vaccineledger.com`) && PathPrefix(`/shippingordermanagement/`)"
       - "traefik.http.routers.shippingorder.tls=true"
       - "traefik.http.routers.shippingorder.tls.certresolver=lets-encrypt"
 
@@ -208,7 +208,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.track.entrypoints=websecure"
-      - "traefik.http.routers.track.rule=Host(`test2.statledger.io`) && PathPrefix(`/tracktracemanagement/`)"
+      - "traefik.http.routers.track.rule=Host(`unicef.vaccineledger.com`) && PathPrefix(`/tracktracemanagement/`)"
       - "traefik.http.routers.track.tls=true"
       - "traefik.http.routers.track.tls.certresolver=lets-encrypt"
 
@@ -221,7 +221,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.frontend.entrypoints=websecure"
-      - "traefik.http.routers.frontend.rule=Host(`test2.statledger.io`)"
+      - "traefik.http.routers.frontend.rule=Host(`unicef.vaccineledger.com`)"
       - "traefik.http.routers.frontend.tls=true"
       - "traefik.http.routers.frontend.tls.certresolver=lets-encrypt"     
 
