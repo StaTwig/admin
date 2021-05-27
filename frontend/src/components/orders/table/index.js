@@ -9,21 +9,21 @@ import user from '../../../assets/icons/user.svg';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../../../utils/dateHelper';
 import Pagination from '@material-ui/lab/Pagination';
-
 import './style.scss';
 
 const Table = props => {
-  const dispatch = useDispatch();
   const {ordrs, visible } = props;
   const orders = ordrs();
   const handlePageChange  = (event, value) => {
     props.onPageChange(value)
   };
+  console.log(orders);
   return (
     <div className="table pr-1">
         <div className="rTable">
           <div className="">
-            {orders.map((order, index) => {
+          {orders.length == 0 && <div className="rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none">No records found</div>}
+          {orders.map((order, index) => {
               let statusStyle = 'bg-primary';
               let status = order.poStatus;
               if (order.poStatus === 'CREATED') {
@@ -49,10 +49,10 @@ const Table = props => {
                 status = 'FullyFilled';
               }
 
-
               const { customer, products, supplier } = order;
+
               return (
-              <div key={index} className="rTableRow pt-2 pb-2 shadow-none">
+              <div className="rTableRow pt-2 pb-2 shadow-none" key={index}>
                 <div className="rTableCell pr-1">
                   <div className="userPic text-center rounded d-flex flex-row">
                     <img src={user} width="30" height="20" alt="User" className="rounded mr-1 align-self-center" />

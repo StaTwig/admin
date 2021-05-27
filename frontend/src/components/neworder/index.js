@@ -263,9 +263,10 @@ const NewOrder = (props) => {
 
   return (
     <div className="NewOrder m-3">
+    <div className="d-flex justify-content-between mb-3">
       <h1 className="breadcrumb">CREATE NEW ORDER</h1>
-      <div className="float-right" style={{position:"absolute",left:"1230px",top:"15vh",right:"520px"}}>
-    <button className="btn btn-md btn-main-blue" onClick={() => setMenu(!menu)}>
+      <div className="d-flex flex-column align-items-center">
+    <button className="btn-primary btn" onClick={() => setMenu(!menu)}>
             <div className="d-flex align-items-center">
               <img src={ExportIcon} width="16" height="16" className="mr-3" />
               <span>Import</span>
@@ -297,6 +298,7 @@ const NewOrder = (props) => {
               />
             </Modal>
           )}
+          </div>
           </div>
       <Formik
         // enableReinitialize={true}
