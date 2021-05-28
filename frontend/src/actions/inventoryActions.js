@@ -261,3 +261,21 @@ export const getExpiredProductsByBatch = async (id) => {
     return {};
   }
 };
+
+export const getInventoryByWareHouse = async (skip = 0, limit = 5, warehouseId = '') => {
+  try {
+    const result = await axios.get(`${config().inventoriesUrl}?skip=${skip}&limit=${limit}&warehouseId=${warehouseId}`);
+    return result.data.data;
+  } catch (e) {
+    return {};
+  }
+};
+
+export const getBatchDetailsByWareHouse = async (inventory_id, product_id) => {
+  try {
+    const result = await axios.get(`${config().batchWarehouseUrl}?inventory_id=${inventory_id}&product_id=${product_id}`);
+    return result.data.data;
+  } catch (e) {
+    return {};
+  }
+};

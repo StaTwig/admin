@@ -2782,3 +2782,41 @@ exports.getBatchExpired = [
     }
   },
 ];
+
+exports.getBatchWarehouse = [
+  auth,
+  async (req, res) => {
+    try {
+      const inventoryId = req.query.inventory_id;
+      const productId = req.query.product_id;
+    
+      const result = await AtomModel.aggregate([
+        {
+          $match: {
+            $and: [
+              {
+                productId: productId
+              }, { $expr: { $in: [inventoryId, "$inventoryIds"] } }
+            ]
+          }
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "productId",
+            foreignField: "id",
+            as: "products",
+          },
+        },
+        { $unwind: "$products" },
+      ]);
+      return apiResponse.successResponseWithData(
+        res,
+        "Warehouse Batch Details",
+        result
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];

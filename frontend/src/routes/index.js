@@ -41,6 +41,7 @@ import EditLocation from '../containers/editLocation';
 import ProductCategory from '../containers/productcategory';
 import ProductInventory from '../containers/productinventory';
 import BatchExpiry from '../containers/batchexpiry';
+import ViewInventory from '../containers/viewInventory';
 import NoMatch from '../components/NoMatch';
 
 import './style.scss';
@@ -89,6 +90,7 @@ const routes = (
     <Route path="/productoutofstock" component={requireAuth(ProductInventory)} />
     <Route path="/batchnearexpiry/:category" component={requireAuth(BatchExpiry)} />
     <Route path="/batchexpired" component={requireAuth(BatchExpiry)} />
+    <Route path="/viewinventory/:warehouseId" component={requireAuth(ViewInventory)} />
     <Route component={NoMatch} />
   </Switch>
 );
