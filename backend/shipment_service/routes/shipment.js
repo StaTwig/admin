@@ -28,6 +28,7 @@ router.get("/getProductsByInventory", ShipmentController.getProductsByInventory)
 
 router.post("/UpdateTrackingStatus", ShipmentController.updateTrackingStatus); // /updateTrackingStatus
 router.get("/chainOfCustody", ShipmentController.chainOfCustody);
+router.get("/trackShipmentJourney", ShipmentController.trackShipmentJourney);
 
 router.post("/uploadImage", upload.single('photo'), ShipmentController.uploadImage);
 router.get("/fetchImage", ShipmentController.fetchImage);

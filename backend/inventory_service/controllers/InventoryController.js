@@ -959,8 +959,8 @@ exports.addProductsToInventory = [
             );
           let atoms = [];
           products.forEach((product) => {
-            const serialNumbers = product.serialNumbersRange?.split("-");
-            if (serialNumbers?.length > 1) {
+            const serialNumbers = product.serialNumbersRange.split("-");
+            if (serialNumbers.length > 1) {
               const serialNumbersFrom = parseInt(
                 serialNumbers[0].split(/(\d+)/)[1]
               );
@@ -1017,9 +1017,9 @@ exports.addProductsToInventory = [
               });
             }
 
-            const serialNumbers = product.serialNumbersRange?.split("-");
+            const serialNumbers = product.serialNumbersRange.split("-");
             let atomsArray = [];
-            if (serialNumbers?.length > 1) {
+            if (serialNumbers.length > 1) {
               const serialNumbersFrom = parseInt(
                 serialNumbers[0].split(/(\d+)/)[1]
               );
@@ -1034,9 +1034,10 @@ exports.addProductsToInventory = [
                   // id: `${serialNumberText + uniqid.time()}${i}`,
                   id: `${serialNumberText}${i}`,
                   label: {
-                    labelId: product?.label?.labelId,
-                    labelType: product?.label?.labelType,
+                    labelId: product.label.labelId,
+                    labelType: product.label.labelType,
                   },
+	          quantity : 1,
                   productId: product.productId,
                   inventoryIds: [inventory.id],
                   lastInventoryId: "",
@@ -1060,6 +1061,39 @@ exports.addProductsToInventory = [
                 atomsArray.push(atom);
               }
             }
+
+
+             else {
+                const atom = {
+                  id: uniqid('batch-'),
+                  label: {
+                    labelId: product.label.labelId,
+                    labelType: product.label.labelType,
+                  },
+                  quantity : product.quantity,
+                  productId: product.productId,
+                  inventoryIds: [inventory.id],
+                  lastInventoryId: "",
+                  lastShipmentId: "",
+                  poIds: [],
+                  shipmentIds: [],
+                  txIds: [],
+                  batchNumbers: [product.batchNumber],
+                  atomStatus: "Healthy",
+                  attributeSet: {
+                    mfgDate: product.mfgDate,
+                    expDate: product.expDate,
+                  },
+                  eolInfo: {
+                    eolId: "IDN29402-23423-23423",
+                    eolDate: "2021-03-31T18:30:00.000Z",
+                    eolBy: id,
+                    eolUserInfo: "",
+                  },
+                };
+                atomsArray.push(atom);
+	    }
+
             try {
               if (atomsArray.length > 0) await AtomModel.insertMany(atomsArray);
               await inventory.save();
