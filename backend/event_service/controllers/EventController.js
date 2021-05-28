@@ -1,5 +1,8 @@
 /* eslint-disable linebreak-style */
 const EventModal = require("../models/EventModal");
+const ProductModel = require('../models/ProductModel');
+const ShipmentModel = require('../models/ShipmentModel');
+
 const { body, validationResult, param } = require("express-validator");
 const { sanitizeBody } = require("express-validator");
 //helper file to prepare responses.
@@ -92,13 +95,134 @@ exports.deleteEventById = [
 	}
 ];
 
+exports.getAllEventsWithFilter = [ //inventory with filter(status, actorOrgId, date)
+	// auth,
+	async (req, res) => {
+		try {
+			const {
+				skip,
+				limit
+			} = req.query;
+			let currentDate = new Date();
+			let fromDateFilter = 0;
+			let status = req.query.status ? req.query.status : undefined;
+			let actorOrgId = req.query.actorOrgId ? req.query.actorOrgId : undefined;
+			switch (req.query.dateFilter) {
+				case "today":
+					fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+					break;
+				case "week":
+					fromDateFilter = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay())).toUTCString();
+					break;
+				case "month":
+					fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
+					break;
+				case "threeMonth":
+					fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, currentDate.getDate());
+					break;
+				case "sixMonth":
+					fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 6, currentDate.getDate());
+					break;
+				case "year":
+					fromDateFilter = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate());
+					break;
+				default:
+					fromDateFilter = 0;
+			}
+
+			let whereQuery = {};
 
 
+			if (status) {
+				whereQuery["eventTypePrimary"] = status
+			}
 
+			if (actorOrgId) {
+				whereQuery["actorOrgId"] = actorOrgId;
+			}
 
+			if (fromDateFilter) {
+				whereQuery['createdAt'] = {
+					$gte: fromDateFilter
+				}
+			}
 
+			console.log("Inventory whereQuery ======>", whereQuery);
+			try {
+				let inventoryCount = await EventModal.count(whereQuery);
+				EventModal.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({
+					createdAt: -1
+				}).then(async (eventRecords) => {
+					let inventoryRecords = [];
+					let eventRecordsRes = eventRecords.map(async function (event) {
+						let eventRecords = JSON.parse(JSON.stringify(event))
+						eventRecords[`ProductList`] = [];
+						let payloadRecord = JSON.parse(event.payloadData);
+						if (payloadRecord.data.products) {
+							let inventoryQuantity = 0;
+							let productsRes = payloadRecord.data.products.map(async function (product) {
+								let detaildProduct = JSON.parse(JSON.stringify(product))
+								detaildProduct[`productDetails`] = {};
+								detaildProduct[`shipmentDetails`] = {};
+								inventoryQuantity += Number(detaildProduct.quantity);
+								let whereQuery = {};
+								if (detaildProduct.productId) {
+									whereQuery[`id`] = detaildProduct.productId
+								} else if (detaildProduct.productName) {
+									whereQuery[`name`] = detaildProduct.productName
+								}
+								let productDetails = await ProductModel.findOne(whereQuery);
+								detaildProduct[`productDetails`] = productDetails;
 
-
-
-
-
+								if (payloadRecord.data.id) {
+									let shipmentDetails = await ShipmentModel.findOne({
+										id: payloadRecord.data.id
+									});
+									detaildProduct[`shipmentDetails`] = shipmentDetails;
+								}
+								return detaildProduct;
+							});
+							let productList = await Promise.all(productsRes);
+							eventRecords[`ProductList`].push(...productList);
+							eventRecords[`inventoryQuantity`] = inventoryQuantity;
+							inventoryRecords.push(eventRecords);
+						} else if (payloadRecord.data.length > 0) {
+							let inventoryQuantity = 0;
+							let productsRes = payloadRecord.data.map(async function (dataproduct) {
+								let detaildProduct = JSON.parse(JSON.stringify(dataproduct))
+								detaildProduct[`productDetails`] = {};
+								detaildProduct[`shipmentDetails`] = {};
+								inventoryQuantity += Number(detaildProduct.quantity);
+								let whereQuery = {};
+								if (detaildProduct.productId) {
+									whereQuery[`id`] = detaildProduct.productId
+								} else if (detaildProduct.productName) {
+									whereQuery[`name`] = detaildProduct.productName
+								}
+								let productDetails = await ProductModel.findOne(whereQuery);
+								detaildProduct[`productDetails`] = productDetails;
+								return detaildProduct;
+							});
+							let productList = await Promise.all(productsRes);
+							eventRecords[`ProductList`].push(...productList);
+							eventRecords[`inventoryQuantity`] = inventoryQuantity;
+							inventoryRecords.push(eventRecords);
+						}
+					});
+					let inventoryResult = await Promise.all(eventRecordsRes);
+					return apiResponse.successResponseWithData(
+						res,
+						"Inventory Records",
+						{"inventoryRecords":inventoryRecords, "count":inventoryCount}
+					);
+				});
+			} catch (err) {
+				console.log(err)
+				return apiResponse.ErrorResponse(res, err);
+			}
+		} catch (err) {
+			console.log(err)
+			return apiResponse.ErrorResponse(res, err);
+		}
+	},
+];
