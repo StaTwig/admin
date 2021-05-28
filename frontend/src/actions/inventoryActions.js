@@ -20,12 +20,11 @@ export const getInventories = (skip = 0, limit = 5) => {
       try {
         dispatch(turnOn());
         const result = await axios.get(
-          // `${config().getTransactions}/ORG10021?skip=${skip}&limit=${limit}`,
-          'http://test.vaccineledger.com:9001/eventmanagement/api/event/getEventByActorOrgId/null/'
-        );
-        console.log(result.data)
-        dispatch(setInventories(result.data));
-        dispatch(setInventoriesCount(result.data));
+          `${config().getTransactions}/eventmanagement/api/event/getAllEventsWithFilter?skip=${skip}&limit=${limit}&status=${status}`
+          );
+        console.log(result.data.data.inventoryRecords)
+        dispatch(setInventories(result.data.data.inventoryRecords));
+        dispatch(setInventoriesCount(result.data.data.inventoryRecords));
         dispatch(turnOff());
         return result.data.data.length;
       }catch(e) {

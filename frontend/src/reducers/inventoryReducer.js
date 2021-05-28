@@ -5,7 +5,8 @@ export const initialState = [];
 export const inventoryReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_INVENTORIES_SUCCESS:
-      const inventories = action.payload.data;
+      const inventories = action.payload;
+      // console.log(action.payload)
       return [
         // ...state, ...inventories
         ...inventories

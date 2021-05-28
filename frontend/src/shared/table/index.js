@@ -12,13 +12,13 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 
-
-
 const Table = props => {
   const { loadMore, onLoadMore, inventoryDetails, colors, skip } = props;
   const [display, setDisplay] = useState(false);
-  
- 
+//   console.log(props.inventoryDetails)
+function getDate(n){
+    return n.substring(0,10)
+}
   return (
     <div className="table">
     
@@ -38,14 +38,14 @@ const Table = props => {
                                    
                   <div className="rTableCell" style={{position:"relative",left:'-3%'}}>
                     <div className="d-flex flex-column txtBlue ">
-                      <div>{inventory.products.name}</div>
+                      <div>{inventory.ProductList[0].productDetails.name}</div>
                     </div>
                   </div>
-                  <div className="rTableCell" style={{position:"relative",left:'0%'}}>Vaccines</div>
-                  <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.products.manufacturer}</div>
-                  <div className="rTableCell" style={{position:"relative",left:'4%'}}>21/05/2021</div>
-                  <div className="rTableCell" style={{position:"relative",left:'9%'}}>{inventory.inventoryDetails.quantity}</div>
-                  <div className="rTableCell" style={{position:"relative",left:'8%'}}> Sent </div>
+                  <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.type}</div>
+                  <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.manufacturer}</div>
+                  <div className="rTableCell" style={{position:"relative",left:'4%'}}>{inventory.ProductList[0].productDetails.createdAt}</div>
+                  <div className="rTableCell" style={{position:"relative",left:'9%'}}>{inventory.inventoryQuantity}</div>
+                  <div className="rTableCell" style={{position:"relative",left:'8%'}}> {(inventory.eventTypePrimary !== 'ADD') ? (inventory.ProductList[0].shipmentDetails.shipmentUpdates[0].status === 'CREATED') ? 'SENT' :'RECEIVED' : 'Added'} </div>
                                   
                   
                   <div className="rTableCell" style={{position:"relative",left:'3%'}}>
@@ -62,45 +62,46 @@ const Table = props => {
                 <AccordionDetails>
                   <Typography>
                             <div className="" style={{position:"absolute" ,top:"25%",width:"97%" }}>
-                          <hr class="solid" ></hr></div>
+                          <hr className="solid" ></hr></div>
                              <TableContainer >
-                                <Tablee class="table-borderless lg">
+                                <Tablee className="table-borderless lg">
                                 <TableBody>
-                                    <TableRow>
+                                    {(inventory.eventTypePrimary === 'CREATE') ?
+                                    <div>
+                                     <TableRow>
                                         <TableCell>Shipment Id</TableCell>
-                                        <div className="ml-5"><TableCell align="left"><b>SHP1234</b></TableCell></div>
-                                        <TableCell align="left">Mfg Date</TableCell>
-                                        <div className="ml-5"><TableCell align="left"><b>01/2019</b></TableCell></div>
-                                        
-                                      </TableRow>
-
+                                        <div className="ml-5"><TableCell align="left"><b>{inventory.ProductList[0].shipmentDetails.externalShipmentId}</b></TableCell></div>
+                                        <TableCell align="left">From Organisation</TableCell>
+                                        <div className="ml-5"><TableCell align="left"><b>{inventory.ProductList[0].shipmentDetails.supplier.id}</b></TableCell></div>
+                                        </TableRow>
                                       <TableRow>
-                                          <TableCell>From Organisation</TableCell>
-                                          <div className="ml-5"><TableCell align="left"><b>Dr Reddy's Lab</b></TableCell></div>
-                                         <TableCell align="left">Exp Date</TableCell>
-                                         <div className="ml-5"><TableCell align="left"><b>01/2022</b></TableCell></div></TableRow>
-                                         
-                                    
+                                          <TableCell>From Location</TableCell>
+                                          <div className="ml-5"><TableCell align="left"><b>{(inventory.actorOrgId === inventory.ProductList[0].shipmentDetails.supplier.id) ? inventory.actorOrgAddress : inventory.secondaryOrgAddress}</b></TableCell></div>
+                         </TableRow>
+                         </div>
+                                         :
+                         <TableRow>
+                                      <TableCell>Mfg Date</TableCell>
+                                      <div className="ml-5"><TableCell align="left"><b>{inventory.ProductList[0].mfgDate}</b></TableCell></div>
+                                      <TableCell align="left">Exp Date</TableCell>
+                                      <div className="ml-5"><TableCell align="left"><b>{inventory.ProductList[0].expDate}</b></TableCell></div>
+                                      <TableCell align="left">Batch</TableCell>
+                                      <div className="ml-5"><TableCell align="left"><b>{inventory.ProductList[0].batchNumber}</b></TableCell></div>
+                                    </TableRow> }    
 
-                                    <TableRow>
-                                        <TableCell component="th" scope="row">From Location</TableCell>
-                                        <div className="ml-5" mr-5><TableCell align="left"><b>Plant 1, Baccupally,Hyderabad</b></TableCell></div>
-                                        <TableCell align="left">Batch</TableCell>
-                                        <div className="ml-5"><TableCell align="left"><b>BB76OPV</b></TableCell></div>
-                                        
-                                      </TableRow>
+                         
                                       <div className="mt-3" style={{position:"absolute", left:"80%", bottom:"40%" , heigth:"10%", width:"20%"}}>
-                                      <button
-                                          type="button" class="btn btn-outline-primary " 
+                                      {(inventory.eventTypePrimary === 'CREATE') ? <button
+                                          type="button" className="btn btn-outline-primary " 
                                           onClick={() => {
                                             {inventory.inventoryDetails.batchNumber}
                                           }}
                         
-                                        >View Shipment</button>
+                                        >View Shipment</button>: ''}
                                         </div>
                                           <div className="mt-3" style={{position:"absolute", left:"78%", bottom:"15%" , width:"20%"}}>
                                         <button
-                                        type="button" class="btn btn-outline-warning "
+                                        type="button" className="btn btn-outline-warning "
                                         onClick={() => {
                                           props.history.push(`/productlist/${inventory.inventoryDetails.batchNumber}`)
                                         }}
