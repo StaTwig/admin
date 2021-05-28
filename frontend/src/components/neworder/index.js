@@ -14,12 +14,17 @@ import {
 //   getAllOrganisations,
 //   getProductsByInventoryId
 // } from "../../actions/shippingOrderAction";
+import addPOsFromExcel from "../../actions/poActions";
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import ShipmentPopUp from "./shipmentPopUp";
 import ShipmentFailPopUp from "./shipmentFailPopUp";
-import Modal from "../../shared/modal";
 import { Formik } from "formik";
 import Select from 'react-select';
+import Modal from '../../shared/modal';
+import ExcelPopUp from './ExcelPopup/index';
+import ExportIcon from '../../assets/icons/Export.svg';
+import dropdownIcon from '../../assets/icons/drop-down.svg';
+
 import { getProducts, getProductsByCategory, setReviewPos, resetReviewPos, getOrganizationsByTypes } from '../../actions/poActions';
 
 const NewOrder = (props) => {
@@ -49,11 +54,13 @@ const NewOrder = (props) => {
       return { ...provided, opacity, transition };
     }
   }
-
+  const [openCreatedOrder, setOpenCreatedOrder] = useState(false);
   const [allOrganisations, setAllOrganisations] = useState([]);
   const [receiverWarehouses, setReceiverWarehouses] = useState([]);
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState([]);
+  const [openExcel, setOpenExcel] = useState(false);
+  const [menu, setMenu] = useState(false);
   const [addProducts, setAddProducts] = useState(editPo !== null ? editPo.products : [{"productId": "","quantity": "","name": "","manufacturer": "","type": ""}]);
   const dispatch = useDispatch();
   const [senderOrgId, setSenderOrgId] = useState(
@@ -121,13 +128,19 @@ const NewOrder = (props) => {
     fetchData();
   }, []);
 
-  const closeModal = () => {
-    setOpenOrder(false);
-    props.history.push("/orders");
+  // const closeModal = () => {
+  //   setOpenOrder(false);
+  //   props.history.push("/orders");
+  // };
+  const closeExcelModal = () => {
+    setOpenExcel(false);
   };
 
   const closeModalFail = () => {
     setFailedPop(false);
+  };
+  const closeModal = () => {
+    setOpenCreatedOrder(false);
   };
 
   const onOrgChange = async (value) => {
@@ -252,6 +265,40 @@ const NewOrder = (props) => {
   return (
     <div className="NewOrder m-3">
       <h1 className="breadcrumb">CREATE NEW ORDER</h1>
+      <div className="float-right" style={{position:"absolute",left:"1230px",top:"15vh",right:"520px"}}>
+    <button className="btn btn-md btn-main-blue" onClick={() => setMenu(!menu)}>
+            <div className="d-flex align-items-center">
+              <img src={ExportIcon} width="16" height="16" className="mr-3" />
+              <span>Import</span>
+              <img src={dropdownIcon} width="16" height="16" className="ml-3" />
+            </div>
+          </button>
+          {menu ? (
+            <div class="menu">
+              <button
+                className=" btn btn-outline-info mb-2 "
+                onClick={() => setOpenExcel(true)}
+              >
+                {' '}
+                Excel
+              </button>
+              <button className=" btn btn-outline-info" > Other</button>
+            </div>
+          ) : null}
+              {openExcel && (
+            <Modal
+              title="Import"
+              close={() => closeExcelModal()}
+              size="modal-md" //for other size's use `modal-lg, modal-md, modal-sm`
+            >
+              <ExcelPopUp
+                {...props}
+                onHide={closeExcelModal} //FailurePopUp
+                setOpenCreatedOrder={setOpenCreatedOrder}
+              />
+            </Modal>
+          )}
+          </div>
       <Formik
         // enableReinitialize={true}
         initialValues={{

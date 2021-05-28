@@ -280,23 +280,7 @@ function getAnalyticsFilterConditions(filters, warehouseIds) {
 
 	let matchCondition = {
 		warehouseId: {
-			$in: [...warehouseIds,
-				// 'WAR1006',
-				// 'WAR10024', 'WAR10019',
-				// 'WAR10018', 'WAR10017',
-				// 'WAR10004', 'WAR10003',
-				// 'WAR10025', 'AP004',
-				// 'warehouse_id 2', 'AP005',
-				// 'war-blpg132lkmwny88i', 'war-blpg1vzwkn4a0cp6',
-				// 'AP003', 'war-2p52232kmrduslk',
-				// 'war-blpg1vzwkn482zyf', 'AP001',
-				// 'orgwar2345', 'AP002',
-				// 'orgwar12345', 'war-2p51gpxkmlpfh97',
-				// 'war-2p51gpxkmlo2x61', 'war-2p52232kmrpfxxh',
-				// 'war-blpg132lkmwxmhxk', 'ware123',
-				// 'war-1234', 'ware234',
-				// 'war-blpg1vzwkn47ka4y', 'war-blpg41ggknah1lj7'
-			]
+			$in: [...warehouseIds]
 		}
 	};
 
@@ -407,7 +391,7 @@ exports.getOverviewStats = [
  * @returns {Object}
  */
 exports.getAllBrands = [
-	//auth,
+	auth,
 	async function (req, res) {
 		try {
 			const filters = req.query;
@@ -445,7 +429,7 @@ exports.getAllBrands = [
  * @returns {Object}
  */
 exports.getStatsByBrand = [
-	//auth,
+	auth,
 	async function (req, res) {
 		try {
 			const filters = req.query;
@@ -615,7 +599,7 @@ exports.getSalesStatsByBrand = [
  * @returns {Object}
  */
 exports.getStatsByOrg = [
-	//auth,
+	auth,
 	async function (req, res) {
 		try {
 			const filters = req.query;
@@ -697,7 +681,7 @@ function getFilterConditions(filters) {
  * @returns {Object}
  */
 exports.getLeadTimes = [
-	//auth,
+	auth,
 	async function (req, res) {
 		try {
 			const warehouses = await OrganisationModel.aggregate([
@@ -807,13 +791,227 @@ exports.getLeadTimes = [
 	}
 ];
 
+
+async function calculateLeadTimeByOrg(supplierOrg) {
+	const warehouses = await OrganisationModel.aggregate([
+		{
+			$match: {
+				id: supplierOrg.id
+			}
+		},
+		{
+			$group: {
+				_id: 'warehouses',
+				warehouses: {
+					$addToSet: '$warehouses'
+				}
+			}
+		},
+		{
+			$unwind: {
+				path: '$warehouses'
+			}
+		},
+		{
+			$unwind: {
+				path: '$warehouses'
+			}
+		},
+		{
+			$group: {
+				_id: 'warehouses',
+				warehouseIds: {
+					$addToSet: '$warehouses'
+				}
+			}
+		}
+	]);
+	let warehouseIds = [];
+	if (warehouses[0] && warehouses[0].warehouseIds) {
+		warehouseIds = warehouses[0].warehouseIds;
+	}
+	let shipmentLeadTimes = await ShipmentModel.aggregate([
+		{
+			$match: {
+				"supplier.locationId": { $in: warehouseIds }
+			}
+		},
+		{
+			$project: {
+				"supplier.id": 1,
+				id: 1,
+				shippingDate: 1,
+				createdAt: 1,
+				actualDeliveryDate: {
+					$dateFromString: {
+						dateString: '$actualDeliveryDate'
+					}
+				},
+				shippingDate: {
+					$dateFromString: {
+						dateString: '$shippingDate'
+					}
+				}
+			}
+		},
+		{
+			$project: {
+				"supplier.id": 1,
+				id: 1,
+				"leadtime": {
+					"$divide": [
+						{ "$subtract": ["$actualDeliveryDate", "$shippingDate"] },
+						60 * 1000 * 60
+					]
+				},
+
+			}
+		},
+		{
+			$replaceRoot: {
+				newRoot: {
+					$mergeObjects: ['$$ROOT', '$supplier']
+				}
+			}
+		},
+		{
+			$group: {
+				_id: "$id",
+				avgLeadTime: {
+					$avg: "$leadtime"
+				}
+			}
+		},
+		{
+			$lookup: {
+				from: 'organisations',
+				localField: '_id',
+				foreignField: 'id',
+				as: 'orgDetails'
+			}
+		}
+	]);
+	return shipmentLeadTimes;
+}
+
+async function calculateReturnRateByOrg(supplierOrg) {
+	const warehouses = await OrganisationModel.aggregate([
+		{
+			$match: {
+				id: supplierOrg.id
+			}
+		},
+		{
+			$group: {
+				_id: 'warehouses',
+				warehouses: {
+					$addToSet: '$warehouses'
+				}
+			}
+		},
+		{
+			$unwind: {
+				path: '$warehouses'
+			}
+		},
+		{
+			$unwind: {
+				path: '$warehouses'
+			}
+		},
+		{
+			$group: {
+				_id: 'warehouses',
+				warehouseIds: {
+					$addToSet: '$warehouses'
+				}
+			}
+		}
+	]);
+	let warehouseIds = [];
+	if (warehouses[0] && warehouses[0].warehouseIds) {
+		warehouseIds = warehouses[0].warehouseIds;
+	}
+
+	let Analytics = await AnalyticsModel
+		.find({
+			warehouseId: {
+				$in: [...warehouseIds]
+			}
+		});
+	let totalReturns = 0;
+	let totalSales = 0;
+	let returnRate = 0;
+	for (let analytic of Analytics) {
+		totalReturns = totalReturns + parseInt(analytic.returns);
+		totalSales = totalSales + parseInt(analytic.sales);
+	}
+	returnRate = totalReturns / totalSales * 100;
+	return returnRate;
+
+}
+
+async function calculateStorageCapacityByOrg(supplierOrg) {
+	const warehouses = await OrganisationModel.aggregate([
+		{
+			$match: {
+				id: supplierOrg.id
+			}
+		}]);
+	let bottleCapacity = 0;
+	let sqft = 0;
+	warehouses.forEach(w => {
+		bottleCapacity = bottleCapacity + (w.bottleCapacity ? w.bottleCapacity : 0);
+		sqft = sqft + (w.sqft ? w.sqft : 0);
+	});
+	return { bottleCapacity, sqft };
+}
+
+/**
+ * getSupplierPerformance.
+ *
+ * @returns {Object}
+ */
+exports.getSupplierPerformance = [
+	auth,
+	async function (req, res) {
+		try {
+			const orgType = req.query.supplierType;
+			let matchCondition = {}
+			if (!orgType || orgType === 'ALL') {
+				matchCondition = { $or: [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }] };
+			} else {
+				matchCondition.type = orgType;
+			}
+			const supplierOrgs = await OrganisationModel.aggregate([
+				{
+					$match: matchCondition
+				}
+			]);
+			for (const supplier of supplierOrgs) {
+				supplier.leadTime = await calculateLeadTimeByOrg(supplier);
+				supplier.returnRate = await calculateReturnRateByOrg(supplier);
+				supplier.storageCapacity = await calculateStorageCapacityByOrg(supplier);
+			}
+
+			return apiResponse.successResponseWithData(
+				res,
+				"Operation success",
+				supplierOrgs
+			);
+		} catch (err) {
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
+
 /**
  * getAllStats.
  *
  * @returns {Object}
  */
 exports.getAllStats = [
-	//auth,
+	auth,
 	async function (req, res) {
 		try {
 
@@ -910,7 +1108,7 @@ function getSKUGroupByFilters(filters) {
  * @returns {Object}
  */
 exports.getStatsBySKU = [
-	//auth,
+	auth,
 	async function (req, res) {
 		try {
 			const filters = req.query;

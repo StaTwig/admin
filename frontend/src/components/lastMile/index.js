@@ -38,7 +38,13 @@ const lastMile=(props)=>{
         img4: <img src={Product} width="20" height="22" className="pb-1"/>,
         img5: <img src={Date_time} width="19" height="22" className="pb-1"/>,
       };
-
+useEffect(()=>{
+    async function fetchData(){
+        const eol_ProductID = await GetEOLInfoByProductId("pro123456");
+        // console.log(eol_ProductID);
+    }
+    fetchData();
+},[]);
       
   
 return (
@@ -63,6 +69,7 @@ return (
       </div>
       </div>
       </div>
+
       </div>
       
         <div className="col-xl-3">

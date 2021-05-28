@@ -36,7 +36,7 @@ export const registerUser = async (data) => {
 
 export const getAllBreweries = async () => {
   try {
-    const result = await axios.get(config().getOrganizationsByType);
+    const result = await axios.get(config().getOrganizationsByType + 'BREWERY');
     return result;
   } catch (e) {
     return e.response;
