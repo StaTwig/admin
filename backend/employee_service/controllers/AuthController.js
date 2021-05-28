@@ -1671,6 +1671,26 @@ exports.getOrganizationsByType = [
       const typeId = req.query.typeid;
       const orgtype = req.query.type;
 
+      const organisations = await OrganisationModel.find({ $or: [{ 'typeId': typeId }, { 'type': orgtype }, { 'id': organisationId }] }, 'id name ', { projection: { _id: 0, id: 1, name: 1 } });
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        organisations
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getOrganizationsByTypeForAbInBev = [
+
+  async (req, res) => {
+    try {
+      const organisationId = req.query.id;
+      const typeId = req.query.typeid;
+      const orgtype = req.query.type;
+
       let orgTypeMatchCondition = {};
       if (orgtype === 'SUPPLIER') {
         orgTypeMatchCondition.type = {
