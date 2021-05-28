@@ -100,8 +100,8 @@ function getDate(n){
                                       {(inventory.eventTypePrimary === 'CREATE') ? <button
                                           type="button" className="btn btn-outline-primary " 
                                           onClick={() => {
-                                            {inventory.inventoryDetails.batchNumber}
-                                          }}
+                                            props.history.push(`/viewshipment/${inventory.ProductList[0].shipmentDetails.id}`)
+                                        }}
                         
                                         >View Shipment</button>: ''}
                                         </div>
@@ -109,7 +109,7 @@ function getDate(n){
                                         <button
                                         type="button" className="btn btn-outline-warning "
                                         onClick={() => {
-                                          props.history.push(`/productlist/${inventory.inventoryDetails.batchNumber}`)
+                                          props.history.push(`/transactionproducts`, {data: inventory.ProductList})
                                         }}
                       
                                       >Show Product Details</button></div>
