@@ -14,4 +14,5 @@ router.get("/getOrgActiveUsers", AuthController.getOrgActiveUsers);
 router.get("/getUsers", AuthController.getUsers);
 router.post("/updateProfile", AuthController.updateProfile);
 router.post("/upload", upload.single("profile"), AuthController.uploadImage);
+
 module.exports = router;

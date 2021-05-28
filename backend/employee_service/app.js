@@ -40,8 +40,6 @@ app.use(cors());
 
 //Route Prefixes
 app.use("/api/employee_service", apiRouter);
-app.use('/images', express.static(__dirname+'/uploads/'));
-
 // throw 404 if URL not found
 app.all("*", function(req, res) {
 	return apiResponse.notFoundResponse(res, "Page not found");
