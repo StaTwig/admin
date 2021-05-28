@@ -41,7 +41,6 @@ export const getOrganizationsByType = async (data) => {
 export const getOrganizationsTypewithauth = async (data) => {
   try {
     const result = await axios.get(config().getOrganizationsTypewithauth + data);
-    console.log(result.data);
     return result.data;
   } catch (e) {
     return [];

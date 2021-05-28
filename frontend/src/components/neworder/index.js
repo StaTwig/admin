@@ -14,8 +14,6 @@ import {
 //   getAllOrganisations,
 //   getProductsByInventoryId
 // } from "../../actions/shippingOrderAction";
-import addPOsFromExcel from "../../actions/poActions";
-import DropdownButton from "../../shared/dropdownButtonGroup";
 import ShipmentPopUp from "./shipmentPopUp";
 import ShipmentFailPopUp from "./shipmentFailPopUp";
 import { Formik } from "formik";
@@ -86,7 +84,7 @@ const NewOrder = (props) => {
     async function fetchData() {
       // const orgSplit = user.organisation?.split('/');
       // console.log(orgSplit);
-
+      
       // setSenderOrganisation(orgSplit);
 
       const orgs = await getAllOrganisations();
@@ -126,10 +124,6 @@ const NewOrder = (props) => {
     fetchData();
   }, []);
 
-  // const closeModal = () => {
-  //   setOpenOrder(false);
-  //   props.history.push("/orders");
-  // };
   const closeExcelModal = () => {
     setOpenExcel(false);
   };
