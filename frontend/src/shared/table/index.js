@@ -11,10 +11,16 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
+import Pagination from '@material-ui/lab/Pagination';
+import { formatDate } from '../../utils/dateHelper';
 
 const Table = props => {
-  const { loadMore, onLoadMore, inventoryDetails, colors, skip } = props;
+  const { inventoryDetails, inventoryCount, colors, skip } = props;
   const [display, setDisplay] = useState(false);
+  
+  const handlePageChange  = (event, value) => {
+    props.onPageChange(value)
+  };
 //   console.log(props.inventoryDetails)
 function getDate(n){
     return n.substring(0,10)
@@ -43,7 +49,7 @@ function getDate(n){
                   </div>
                   <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.type}</div>
                   <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.manufacturer}</div>
-                  <div className="rTableCell" style={{position:"relative",left:'4%'}}>{inventory.ProductList[0].productDetails.createdAt}</div>
+                  <div className="rTableCell" style={{position:"relative",left:'4%'}}>{formatDate(inventory.ProductList[0].productDetails.createdAt)}</div>
                   <div className="rTableCell" style={{position:"relative",left:'9%'}}>{inventory.inventoryQuantity}</div>
                   <div className="rTableCell" style={{position:"relative",left:'8%'}}> {(inventory.eventTypePrimary !== 'ADD') ? (inventory.ProductList[0].shipmentDetails.shipmentUpdates[0].status === 'CREATED') ? 'SENT' :'RECEIVED' : 'Added'} </div>
                                   
@@ -70,7 +76,7 @@ function getDate(n){
                                     <div>
                                      <TableRow>
                                         <TableCell>Shipment Id</TableCell>
-                                        <div className="ml-5"><TableCell align="left"><b>{inventory.ProductList[0].shipmentDetails.externalShipmentId}</b></TableCell></div>
+                                        <div className="ml-5"><TableCell align="left"><b>{inventory.ProductList[0].shipmentDetails.id}</b></TableCell></div>
                                         <TableCell align="left">From Organisation</TableCell>
                                         <div className="ml-5"><TableCell align="left"><b>{inventory.ProductList[0].shipmentDetails.supplier.id}</b></TableCell></div>
                                         </TableRow>
@@ -120,10 +126,12 @@ function getDate(n){
           
            ))}
      
-        <div className="d-flex flex-row-reverse">
-          <img style={{ padding: 1, height: 30, cursor: 'pointer' }} onClick={() => inventoryDetails.length > 4 && onLoadMore(true)} src={next} />
-          <img style={{ padding: 1, height: 30, cursor: 'pointer' }} onClick={() => skip > 0 && onLoadMore(false)} src={previous} />
-        </div>
+     {inventoryCount > 0 && (
+            <div className="d-flex flex-row-reverse">
+              <Pagination showFirstButton showLastButton color="primary" count={Math.ceil(inventoryCount/10)} onChange={handlePageChange} />
+              <span className="mx-5 my-1 rounded text-primary">Total Records {inventoryCount} </span>
+            </div>            
+          )}
       </div>
       {/* {loadMore && (
          <button className=" btn-primary btn mr-2 float-left" onClick={onLoadMore}>Load More</button>

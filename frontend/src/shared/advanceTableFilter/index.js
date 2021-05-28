@@ -55,7 +55,81 @@ const AdvanceTableFilter = (props) => {
   const [poOrderIdAnchorEl, setPoOrderIdAnchorEl] = React.useState(null);
   const [poFromAnchorEl, setPoFromAnchorEl] = React.useState(null);
   const [poToAnchorEl, setPoToAnchorEl] = React.useState(null);
+  const [inventoryStatusAnchorEl, setInventoryStatusAnchorEl] = React.useState(null)
+  const handleInventoryStatusClick = (event) => {
+    setInventoryStatusAnchorEl(event.currentTarget);
+  };
 
+  const handleInventoryStatusClose = () => {
+    setInventoryStatusAnchorEl(null);
+  };
+
+  const setInventoryStatusFilterOnSelect = (selectedVal) => {
+    props.setInventoryStatusFilterOnSelect(selectedVal);
+    handleInventoryStatusClose();
+  }
+
+  const renderColumn6 = (columnData) => {
+    if (columnData == "Status") {
+      // return (<div className="box col">
+      // <span className="divider" />
+      //   <a className="filter-item" onClick={handleInventoryStatusClick}>
+      //     <div className="icon mr-2">
+      //       {props.data.img5}
+      //     </div>
+      //     <div className="filterTitle">{props.data.coloumn6}</div>
+      //     <img src={updownarrow} width="10" height="10" className="ml-3" />
+      //   </a>
+      //   <StyledMenu
+      //     id="customized-menu"
+      //     anchorEl={inventoryStatusAnchorEl}
+      //     keepMounted
+      //     open={Boolean(inventoryStatusAnchorEl)}
+      //     onClose={handleInventoryStatusClose}
+      //   >
+      //     <div className="d-flex flex-column align-items-center">
+      //       <StyledMenuItem>
+      //         <Button variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("")}>Clear</Button>
+      //       </StyledMenuItem>
+      //       <StyledMenuItem>
+      //         <Button variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("ADD")}>Add</Button>
+      //       </StyledMenuItem>
+      //       <StyledMenuItem>
+      //         <Button variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("CREATE")}>Create</Button>
+      //       </StyledMenuItem>
+      //     </div>
+      //   </StyledMenu>
+
+      // </div>);
+      return (  <div className="box col">
+      <span className="divider" />
+      <div className="filter-item">
+        <div className="icon mr-2">
+          {props.data.img6}
+        </div>
+        <div className="filterTitle">{props.data.coloumn6}</div>
+        <div className="filterAction">
+          {/* <img src={updownarrow} width="9" height="9" /> */}
+         </div>
+      </div>
+    </div>
+      );
+    } else {
+      return (  <div className="box col">
+      <span className="divider" />
+      <div className="filter-item">
+        <div className="icon mr-2">
+          {props.data.img6}
+        </div>
+        <div className="filterTitle">{props.data.coloumn6}</div>
+        <div className="filterAction">
+          {/* <img src={updownarrow} width="9" height="9" /> */}
+         </div>
+      </div>
+    </div>
+      );
+    }
+  }
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -746,9 +820,13 @@ const AdvanceTableFilter = (props) => {
             // </div> 
             renderColumn5(props.data.coloumn5)
             : null}
+            
         </div>
-        <div className="box col">
-        <span className="divider" />
+        {props.data.img6 ?
+            renderColumn6(props.data.coloumn6)
+            : null}
+        {/* <div className="box col">
+          <span className="divider" />
           <div className="filter-item">
             <div className="icon mr-2">
               {props.data.img6}
@@ -756,9 +834,9 @@ const AdvanceTableFilter = (props) => {
             <div className="filterTitle">{props.data.coloumn6}</div>
             <div className="filterAction">
               {/* <img src={updownarrow} width="9" height="9" /> */}
-            </div>
+            {/* </div>
           </div>
-        </div>
+        </div> */} 
         <div className="">
           <div className="box col">
             {/* <button className="btn btn-md btn-blue mr-2">
