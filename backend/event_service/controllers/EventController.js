@@ -96,7 +96,7 @@ exports.deleteEventById = [
 ];
 
 exports.getAllEventsWithFilter = [ //inventory with filter(status, actorOrgId, date)
-	auth,
+	// auth,
 	async (req, res) => {
 		try {
 			const {
@@ -149,6 +149,7 @@ exports.getAllEventsWithFilter = [ //inventory with filter(status, actorOrgId, d
 
 			console.log("Inventory whereQuery ======>", whereQuery);
 			try {
+				let inventoryCount = await EventModal.count(whereQuery);
 				EventModal.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({
 					createdAt: -1
 				}).then(async (eventRecords) => {
@@ -212,7 +213,7 @@ exports.getAllEventsWithFilter = [ //inventory with filter(status, actorOrgId, d
 					return apiResponse.successResponseWithData(
 						res,
 						"Inventory Records",
-						inventoryRecords
+						{"inventoryRecords":inventoryRecords, "count":inventoryCount}
 					);
 				});
 			} catch (err) {
