@@ -21,7 +21,8 @@ import ShipmentFailPopUp from "./shipmentFailPopUp";
 import Modal from "../../shared/modal";
 import { Formik } from "formik";
 import Select from 'react-select';
-import { getProducts, getProductsByCategory, getOrganizationsByTypes } from "../../actions/poActions";
+import {getOrganizationsTypewithauth} from '../../actions/userActions';
+import { getProducts, getProductsByCategory } from "../../actions/poActions";
 
 const NewShipment = (props) => {
   const [OrderIds, setOrderIds] = useState([]);
@@ -110,7 +111,7 @@ const NewShipment = (props) => {
 
       const orgs = await getAllOrganisations();
       
-      const orgSplit = user.organisation?.split("/");
+      const orgSplit = user.organisationId?.split("/");
       setSenderOrganisation([orgSplit[0]]);
       const organisations = orgs.data.filter((org) => org.id != orgSplit[1]);
       setAllOrganisations(organisations.map(item => {
@@ -142,7 +143,7 @@ const NewShipment = (props) => {
                                       };
                                     }));
 
-      const orgType = await getOrganizationsByTypes(profile.configuration_id);
+      const orgType = await getOrganizationsTypewithauth('CONF000');
       setOrgTypes(orgType.data.length > 0 ? orgType.data[0].organisationTypes.map(item => {
                                       return {
                                         value: item.id,

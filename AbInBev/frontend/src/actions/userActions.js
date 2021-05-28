@@ -5,6 +5,7 @@ import {
   GET_ALL_USERS_SUCCESS,
 } from "../constants/userConstants";
 import { config } from "../config";
+import { turnOff, turnOn } from './spinnerActions';
 import axios from "axios";
 
 export const updateProfile = async (data) => {
@@ -34,13 +35,17 @@ export const registerUser = async (data) => {
   }
 };
 
-export const getAllBreweries = async () => {
-  try {
-    const result = await axios.get(config().getOrganizationsByType + 'BREWERY');
-    return result;
-  } catch (e) {
-    return e.response;
-  }
+export const getAllBreweries = () => {
+  return async dispatch => {
+    try {
+      dispatch(turnOn());
+      const result = await axios.get(config().getOrganizationsByType + 'BREWERY');
+      dispatch(turnOff());
+      return result.data;
+    } catch (e) {
+      dispatch(turnOff());
+    }
+  };
 }
 
 export const sendOtp = async (data) => {

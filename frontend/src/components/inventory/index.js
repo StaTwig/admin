@@ -139,18 +139,21 @@ const Inventory = props => {
       </div>
       <div className="row mb-4">
         <div className="col">
-          <div className="panel" style={{height:'14vh'}}>
-            <div className="picture truck-bg">
-              <img src={TotalInventoryAdded} alt="truck" />
+          <Link to="/productcategory">
+            <div className="panel" style={{height:'14vh'}}>
+              <div className="picture truck-bg">
+                <img src={TotalInventoryAdded} alt="truck" />
+              </div>
+              <div className="d-flex flex-column">
+                <div className="title truck-text">Total Product Category</div>
+                
+                <div className="count truck-text">{inventoriesCount} {inventoryAnalytics.totalProductCategory}</div>
+              </div>
             </div>
-            <div className="d-flex flex-column">
-              <div className="title truck-text">Total Product Category</div>
-              
-              <div className="count truck-text">{inventoriesCount} {inventoryAnalytics.totalProductCategory}</div>
-            </div>
-          </div>
+          </Link>
         </div>
         <div className="col">
+          <Link to="/productoutofstock">
           <div className="panel" style={{height:'14vh'}}>
             <div className="picture sent-bg">
               <img src={currentinventory} alt="truck" />
@@ -159,9 +162,12 @@ const Inventory = props => {
               <div className="title sent-text">Product Out Of Stock</div>
               <div className="sent-text count">{currentInventoriesCount}{inventoryAnalytics.stockOut}</div>
               </div>
-              </div>       
+            </div>
+          </Link>      
               </div>
-          <div className="col">
+          
+        <div className="col">
+          <Link to="/batchnearexpiry/product">
           <div className="panel" style={{height:'14vh'}}>
             <div className="picture recived-bg">
               <img src={Expiration} alt="truck" />
@@ -235,8 +241,10 @@ const Inventory = props => {
               </div>
             </div>
           </div>
+        </Link>
         </div>
         <div className="col">
+          <Link to="/batchexpired">
           <div className="panel" style={{height:'14vh'}}>
             <div className="picture transit-bg">
               <img src={TotalVaccineExpired} alt="truck" />
@@ -308,6 +316,7 @@ const Inventory = props => {
               <div className="transit-text count">{inventoryExpired}</div>
             </div>
           </div>
+          </Link>
         </div>
       </div>
       <div className="full-width-ribben">

@@ -17,8 +17,10 @@ const ExcelPopUp = props => {
   const uploadExcel = async () => {
     let formData = new FormData();
     formData.append('excel', excel);
+    console.log(formData);
     dispatch(turnOn());
     const result = await addInventoriesFromExcel(formData);
+    // console.log(result);
     if (result.status === 200) {
       // console.log('success add product');
       // props.setOpenCreatedInventory(true);

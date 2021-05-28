@@ -803,7 +803,27 @@ exports.getAllSKUs = [
   auth,
   async (req, res) => {
     try {
-      const allSKUs = await ProductModel.find({}, "-characteristicSet -image");
+      const allSKUs = await ProductModel.aggregate([
+        {
+          $group: {
+            _id: { externalId: "$externalId", name: "$name" }
+          }
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              $mergeObjects: ["$_id", "$$ROOT"]
+            }
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            id: "$externalId",
+            name: 1
+          }
+        }
+      ]).sort({ name: 1 });
       return apiResponse.successResponseWithData(
         res,
         "Operation success",
@@ -902,7 +922,7 @@ exports.addProductsToInventory = [
       }
       let payload = req.body;
       payload.products.forEach(element => {
-        var product =  ProductModel.findOne({ id: element.productId });
+        var product = ProductModel.findOne({ id: element.productId });
         element.type = product.type
       });
       permission_request = {
@@ -915,10 +935,10 @@ exports.addProductsToInventory = [
           const { id } = req.user;
           const employee = await EmployeeModel.findOne({ id });
           var warehouseId = "";
-          if ( !req.query.warehouseId)
-          warehouseId  = employee.warehouseId[0];
+          if (!req.query.warehouseId)
+            warehouseId = employee.warehouseId[0];
           else
-          warehouseId  = req.query.warehouseId;
+            warehouseId = req.query.warehouseId;
           const warehouse = await WarehouseModel.findOne({ id: warehouseId });
 
           if (!warehouse) {
@@ -1192,9 +1212,8 @@ exports.addInventoriesFromExcel = [
                 if (inventoriesFound) {
                   const newNotification = new NotificationModel({
                     owner: address,
-                    message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${
-                      inventoriesFound.serialNumber
-                    }`,
+                    message: `Your inventories from excel is failed to add on ${new Date().toLocaleString()} due to Duplicate Inventory found ${inventoriesFound.serialNumber
+                      }`,
                   });
                   await newNotification.save();
                   return apiResponse.ErrorResponse(
@@ -1256,67 +1275,67 @@ exports.addInventoriesFromExcel = [
                 let product = await ProductModel.findOne({
                   name: prod.productName,
                 });
-                if(product){
+                if (product) {
                   data[index].productId = product.id;
                   data[index].type = product.type;
                 }
-                else{
+                else {
                   console.log(product)
                 }
               }
 
               var datee = new Date();
-          datee = datee.toISOString();
-          var evid = Math.random().toString(36).slice(2);
-          let event_data = {
-            eventID: null,
-            eventTime: null,
-            eventType: {
-              primary: "CREATE",
-              description: "SHIPMENT_CREATION",
-            },
-            actor: {
-              actorid: null,
-              actoruserid: null,
-            },
-            stackholders: {
-              ca: {
-                id: "null",
-                name: "null",
-                address: "null",
-              },
-              actororg: {
-                id: "null",
-                name: "null",
-                address: "null",
-              },
-              secondorg: {
-                id: "null",
-                name: "null",
-                address: "null",
-              },
-            },
-            payload: {
-              data: {
-                abc: 123,
-              },
-            },
-          };
-          event_data.eventID = "ev0000" + evid;
-          event_data.eventTime = datee;
-          event_data.eventType.primary = "ADD";
-          event_data.eventType.description = "INVENTORY";
-          event_data.actor.actorid = user_id || "null";
-          event_data.actor.actoruserid = email || "null";
-          event_data.payload.data = data;
-          console.log(event_data);
-          async function compute(event_data) {
-            result = await logEvent(event_data);
-            return result;
-          }
-          compute(event_data).then((response) => {
-            console.log(response);
-          });
+              datee = datee.toISOString();
+              var evid = Math.random().toString(36).slice(2);
+              let event_data = {
+                eventID: null,
+                eventTime: null,
+                eventType: {
+                  primary: "CREATE",
+                  description: "SHIPMENT_CREATION",
+                },
+                actor: {
+                  actorid: null,
+                  actoruserid: null,
+                },
+                stackholders: {
+                  ca: {
+                    id: "null",
+                    name: "null",
+                    address: "null",
+                  },
+                  actororg: {
+                    id: "null",
+                    name: "null",
+                    address: "null",
+                  },
+                  secondorg: {
+                    id: "null",
+                    name: "null",
+                    address: "null",
+                  },
+                },
+                payload: {
+                  data: {
+                    abc: 123,
+                  },
+                },
+              };
+              event_data.eventID = "ev0000" + evid;
+              event_data.eventTime = datee;
+              event_data.eventType.primary = "ADD";
+              event_data.eventType.description = "INVENTORY";
+              event_data.actor.actorid = user_id || "null";
+              event_data.actor.actoruserid = email || "null";
+              event_data.payload.data = data;
+              console.log(event_data);
+              async function compute(event_data) {
+                result = await logEvent(event_data);
+                return result;
+              }
+              compute(event_data).then((response) => {
+                console.log(response);
+              });
               return apiResponse.successResponseWithData(res, "Success", data);
             } else {
               return apiResponse.ErrorResponse(
@@ -1378,10 +1397,10 @@ exports.getInventoryDetails = [
     try {
       const employee = await EmployeeModel.findOne({ id: req.user.id });
       var warehouseId = "";
-      if ( !req.query.warehouseId)
-          warehouseId  = employee.warehouseId[0];
+      if (!req.query.warehouseId)
+        warehouseId = employee.warehouseId[0];
       else
-          warehouseId  = req.query.warehouseId;
+        warehouseId = req.query.warehouseId;
       const warehouse = await WarehouseModel.findOne({ id: warehouseId })
 
       if (warehouse) {
@@ -1987,10 +2006,10 @@ exports.getInventory = [
       const { skip, limit } = req.query;
       var warehouseId = "";
 
-      if ( !req.query.warehouseId)
-          warehouseId  = req.user.warehouseId;
+      if (!req.query.warehouseId)
+        warehouseId = req.user.warehouseId;
       else
-          warehouseId  = req.query.warehouseId;
+        warehouseId = req.query.warehouseId;
 
       const warehouse = await WarehouseModel.findOne({ id: warehouseId })
       if (warehouse) {
@@ -2022,6 +2041,8 @@ exports.getInventory = [
         );
       }
     } catch (err) {
+      console.log(err);
+
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -2663,6 +2684,156 @@ exports.uploadSalesData = [
         responseObj
       );
 
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+
+exports.getBatchNearExpiration = [
+  auth,
+  async (req, res) => {
+    try {
+      var warehouseId = "";
+
+      if (!req.query.warehouseId)
+        warehouseId = req.user.warehouseId;
+      else
+        warehouseId = req.query.warehouseId;
+
+      var today = new Date();
+      var nextMonth = new Date();
+      nextMonth.setDate(today.getDate() + 30)
+
+      const warehouse = await WarehouseModel.findOne({ id: warehouseId })
+      if (warehouse) {
+        const result = await AtomModel.aggregate([
+          {
+            $match: {
+              $and: [
+                {
+                  "attributeSet.expDate": {
+                    $gte: today.toISOString(),
+                    $lt: nextMonth.toISOString()
+                  }
+                }, { $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] } }
+              ]
+            }
+          },
+          {
+            $lookup: {
+              from: "products",
+              localField: "productId",
+              foreignField: "id",
+              as: "products",
+            },
+          },
+          { $unwind: "$products" },
+        ]);
+        return apiResponse.successResponseWithData(
+          res,
+          "Near expiring batch Details",
+          result
+        );
+      } else {
+        return apiResponse.ErrorResponse(
+          res,
+          "Cannot find warehouse for this employee"
+        );
+      }
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getBatchExpired = [
+  auth,
+  async (req, res) => {
+    try {
+      var warehouseId = "";
+
+      if (!req.query.warehouseId)
+        warehouseId = req.user.warehouseId;
+      else
+        warehouseId = req.query.warehouseId;
+
+      var today = new Date();
+
+      const warehouse = await WarehouseModel.findOne({ id: warehouseId });
+      if (warehouse) {
+        const result = await AtomModel.aggregate([
+          {
+            $match: {
+              $and: [
+                {
+                  "attributeSet.expDate": {
+                    $lt: today.toISOString()
+                  }
+                }, { $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] } }
+              ]
+            }
+          },
+          {
+            $lookup: {
+              from: "products",
+              localField: "productId",
+              foreignField: "id",
+              as: "products",
+            },
+          },
+          { $unwind: "$products" },
+        ]);
+        return apiResponse.successResponseWithData(
+          res,
+          "Expired Batch Details",
+          result
+        );
+      } else {
+        return apiResponse.ErrorResponse(
+          res,
+          "Cannot find warehouse for this employee"
+        );
+      }
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getBatchWarehouse = [
+  auth,
+  async (req, res) => {
+    try {
+      const inventoryId = req.query.inventory_id;
+      const productId = req.query.product_id;
+    
+      const result = await AtomModel.aggregate([
+        {
+          $match: {
+            $and: [
+              {
+                productId: productId
+              }, { $expr: { $in: [inventoryId, "$inventoryIds"] } }
+            ]
+          }
+        },
+        {
+          $lookup: {
+            from: "products",
+            localField: "productId",
+            foreignField: "id",
+            as: "products",
+          },
+        },
+        { $unwind: "$products" },
+      ]);
+      return apiResponse.successResponseWithData(
+        res,
+        "Warehouse Batch Details",
+        result
+      );
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
     }

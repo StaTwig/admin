@@ -12,6 +12,10 @@ function getQueryString(filters) {
       queryStr = '?orgType=' + filters.organizationType;
     }
   }
+  if (filters.transactionType && filters.transactionType.length) {
+    queryStr = queryStr + '&txn_type=' + filters.transactionType;
+  }
+
   if (filters.organization && filters.organization.length) {
     queryStr = queryStr + '&organization=' + filters.organization;
   }

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import './styles.scss';
-import { addPOsFromExcel } from '../../../actions/poActions';
-import { turnOn, turnOff } from '../../../actions/spinnerActions';
+import {addPOsFromExcel ,setReviewPos} from '../../../actions/poActions';
+import {turnOn,turnOff} from '../../../actions/spinnerActions';
 import uploadBlue from '../../../assets/icons/UploadBlue.svg';
 
 const ExcelPopUp = props => {
@@ -19,11 +19,10 @@ const ExcelPopUp = props => {
     dispatch(turnOn());
     const result = await addPOsFromExcel(formData);
     if (result && result.status === 200) {
-      console.log('success add PO');
-      props.setOpenPOExcel(false);
-    }
-    else{
-      console.log("error on addPO");
+      // console.log('success add PO');
+      // props.setOpenPOExcel(false);
+      dispatch(setReviewPos(result.data.data));
+      props.history.push('/revieworder');
     }
     dispatch(turnOff());
   };

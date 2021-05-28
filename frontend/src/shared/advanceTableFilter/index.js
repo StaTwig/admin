@@ -232,7 +232,7 @@ const AdvanceTableFilter = (props) => {
               <Autocomplete
               id="toShipment"
               options={props.poDeliveryLocationsList}
-              getOptionLabel={(options) => options.id}
+              getOptionLabel={(options) => options.title ? options.title + " ("+ options.id +" )" : " ("+ options.id +" )"}
               onChange={(event, newValue) => {
                 setPoDeliveryLocationFilterOnSelect(newValue.id)
               }}
@@ -373,7 +373,7 @@ const AdvanceTableFilter = (props) => {
               <Autocomplete
                 id="fromShipment"
                 options={props.poProductsList}
-                getOptionLabel={(options) => options.id}
+                getOptionLabel={(options) => options.name ? options.name+" ("+ options.id +" )" : " ("+ options.id +" )"}
                 onChange={(event, newValue) => {
                   setPoProductNameFilterOnSelect(newValue.id)
                 }}
