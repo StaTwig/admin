@@ -1061,8 +1061,6 @@ exports.addProductsToInventory = [
                 atomsArray.push(atom);
               }
             }
-
-
              else {
                 const atom = {
                   id: uniqid('batch-'),
