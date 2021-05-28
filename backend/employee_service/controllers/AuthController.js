@@ -311,7 +311,7 @@ exports.register = [
                 countryName: country
               },
               configuration_id: 'CONF001',
-              authority: req.body.authority
+              authority: req.body?.authority
             });
             await org.save();
 
