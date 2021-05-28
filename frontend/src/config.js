@@ -13,6 +13,7 @@ export const LOCAL_SERVER_URL_TRACKANDTRACE = 'http://localhost:3005';
 export const LOCAL_SERVER_URL_NOTIFICATION = 'http://localhost:3006';
 export const LOCAL_SERVER_URL_ANALYTICS = 'http://localhost:3015';
 export const LOCAL_SERVER_URL_EOL = 'http://localhost:3017';
+export const LOCAL_SERVER_URL_EVENT = 'http://localhost:3014';
 export const LOCAL_SERVER_URL_PRODUCTS = 'http://localhost:3010';
 export const STABLE_SERVER_URL_USER = 'http://54.164.66.73:3001';
 export const STABLE_SERVER_URL_SHIPMENT = 'http://54.164.66.73:3002';
@@ -121,6 +122,7 @@ export function config() {
       getWarehouseById: `${LOCAL_SERVER_URL_SHIPMENT}/usermanagement/api/auth/getwarehouseinfo?id=`,
       addPOsFromExcel:`${LOCAL_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
+      getTransactions: `${LOCAL_SERVER_URL_EVENT}/eventmanagement/api/event/getAllEventsWithFilter`
           },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
@@ -210,7 +212,8 @@ export function config() {
        fetchSupplierAndReceiverListUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
        addPOsFromExcel:`${DEV_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
        getOrganizationsTypewithauth:`${DEV_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-    },
+       getTransactions: `${DEV_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
+      },
     stable: {
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
       sendOtpUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/sendOtp`,
@@ -301,6 +304,7 @@ export function config() {
        fetchSupplierAndReceiverListUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
        addPOsFromExcel:`${STABLE_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
        getOrganizationsTypewithauth:`${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
+       getTransactions: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/getAllEventsWithFilter`
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -395,7 +399,8 @@ export function config() {
       addWarehouse: `${TEST_SERVER_URL}/usermanagement/api/auth/addWarehouse`,
       addPOsFromExcel:`${TEST_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${TEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-    },
+      getTransactions: `${TEST_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
+},
     demo: {
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/sendOtp`,
@@ -483,6 +488,7 @@ export function config() {
       getWarehouseById: `${DEMO_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
       addPOsFromExcel:`${DEMO_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${DEMO_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
+      getTransactions: `${DEMO_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
     },
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
@@ -570,6 +576,7 @@ export function config() {
       getWarehouseById: `${PROD_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
       addPOsFromExcel:`${PROD_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${PROD_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
+      getTransactions: `${PROD_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
     },
     
     uniceftest: {
@@ -659,6 +666,8 @@ export function config() {
       getWarehouseById: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
       addPOsFromExcel:`${UNICEFTEST_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
+      getTransactions: `${UNICEFTEST_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
+
     },
   };
 

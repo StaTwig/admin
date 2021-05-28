@@ -18,7 +18,8 @@ import Package from '../../assets/icons/package.svg';
 import calender from '../../assets/icons/calendar.svg';
 import Status from '../../assets/icons/Status.svg';
 import Quantity from '../../assets/icons/Quantity.png';
-import Product from '../../assets/icons/Producttype.png';
+import Product from '../../assets/icons/Producttype.png';import {useDispatch, useSelector} from "react-redux";
+import {getInventories, resetInventories, getInventoryDetails} from "../../actions/inventoryActions";
 
 const Inventory = props => {
   const headers = {
@@ -51,7 +52,7 @@ const Inventory = props => {
   const [inventoriesCount, setInventoriesCount] = useState('');
   const [currentInventoriesCount, setCurrentInventoriesCount] = useState('');
   const [productsList,setProductsList] = useState([]);
-
+  const dispatch = useDispatch();
   const colors = ["#ffbcc4", "#c1e3f2", "#ffc18c", "#ffef83",
         "#d4e7ff", "#e0b0ff", "#F1EFCE", "#D7FAF1", "#F2B6AF" ];
 
@@ -64,6 +65,10 @@ const Inventory = props => {
         //   fetchData();
         // }, []);
 
+        const [skip, setSkip] = useState(0);
+        const [limit, setLimit] = useState(10);
+        const [count, setCount] = useState(0);
+        const [dateFilter, setDateFilter] = useState("");
 
      useEffect(() => {
     async function fetchData() {
@@ -96,6 +101,28 @@ const Inventory = props => {
     fetchData();
   }, []);
 
+
+  const onPageChange = async (pageNum) => {
+    console.log("onPageChange =========>", pageNum)
+    const recordSkip = (pageNum-1)*limit;
+    setSkip(recordSkip);
+    dispatch(getInventories(recordSkip, limit, dateFilter));
+  };
+
+  const setDateFilterOnSelect = async (dateFilterSelected) => {
+    console.log("setDateFilterOnSelect =========>", dateFilterSelected)
+    setDateFilter(dateFilterSelected);
+    setSkip(0);
+    dispatch(getInventories(skip, limit, dateFilterSelected));
+  }
+
+  // const setInventoryStatusFilterOnSelect = async (statusFilterSelected) => {
+  //   console.log("setInventoryStatusFilterOnSelect =========>", statusFilterSelected)
+  //   setStatusFilter(statusFilterSelected);
+  //   setSkip(0);
+      
+  //     dispatch(getInventories(skip, limit, statusFilterSelected, ""));
+  // }
 
   return (
     <div className="inventory">
@@ -293,12 +320,12 @@ const Inventory = props => {
         </div>
       </div>
       <div className="full-width-ribben">
-        <TableFilter data={headers} fb="60%" />
+        <TableFilter data={headers} setDateFilterOnSelect={setDateFilterOnSelect} fb="60%" />
       </div>
       <div className="ribben-space">
         <div className="row no-gutter">
         <div className="col-sm-12 col-xl-9 rTableHeader">
-            <Table data={tableHeaders} {...props} colors={colors} loadMore={props.loadMore} onLoadMore={props.onLoadMore} />
+            <Table data={tableHeaders} {...props} colors={colors}inventoryCount ={props.inventoriesCount} onPageChange={onPageChange} />
           </div>
           <div className="col-sm-12 col-xl-3">
             <div className="list-container">
