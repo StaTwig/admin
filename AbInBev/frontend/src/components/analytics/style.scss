@@ -404,8 +404,28 @@ body {
     background-color: #FFFFFF !important
 }
 .selectedSupplier{
-    background-color: gray;
+    // background-color: gray;
+    background:#0d6efd40  !important;
+    // border-radius: 15px !important;
+    padding: 15px !important;
 }
+.mb-0{
+    margin-bottom: 0px !important;
+}
+.noBottomRadius{
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+}
+.selectedRow{
+    background:#0d6efd40  !important;
+    border-radius: 15px !important;
+    border:none !important;
+}
+.noTopRadius{
+    border-top-right-radius: 0px !important;
+    border-top-left-radius: 0px !important;
+}
+
 .selectState{
     margin-right: 10px;
 }
@@ -550,15 +570,18 @@ body {
     .tableProfileIconCard{
         display: flex;
         align-items: center;
-        justify-content: center !important;
+        justify-content: flex-start !important;
         .profileIcon{
-            margin-right: 10px;
+            margin-right: 25px;
             img{
                 width:30px;
             }
         }
     }
     .profileName{
+        display: grid;
+        align-items: center !important;
+        text-align: left;
         .profileTitle{
             text-decoration: underline;
             font-weight: 600;
@@ -1053,11 +1076,13 @@ body {
 
     
     .badge-purple{
-        padding:2px 10px;
+        padding: 2px 10px;
         border-radius: 10px;
-        margin:3px 0px;
-        background-color: blueviolet;  
-        color: #FFFFFF; 
+        margin: 3px 0px;
+        background-color: blueviolet;
+        color: #FFFFFF;
+        text-align: center;
+        width: 50px;
     }
     .badge-orange{
         background-color: orange;    
