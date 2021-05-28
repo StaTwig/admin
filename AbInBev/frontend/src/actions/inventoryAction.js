@@ -106,7 +106,7 @@ export const getOrganizationsByType = (filters) => {
     try {
       dispatch(turnOn());
       const result = await axios.get(
-        config().getOrganizationsByType + `${queryStr}`,
+        config().getOrganizationsByTypeAbInBev + `${queryStr}`,
       );
       dispatch(turnOff());
       return result.data;
