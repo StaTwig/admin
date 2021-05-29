@@ -1,4 +1,4 @@
-export const TEST_SERVER_URL = '//test2.statledger.io';
+export const TEST_SERVER_URL = 'https://test2.statledger.io';
 export const PROD_SERVER_URL = 'http://api.vaccineledger.com:9001';
 export const ABINBEVPROD_SERVER_URL = 'http://abinbev.statledger.io:9001';
 export const ABINBEVTEST_SERVER_URL = 'http://test.abinbev.statledger.io:9001';
@@ -38,7 +38,7 @@ export function config() {
       getAllUsersUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/updateProfile`,
       upload: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/uploadImage?`,
-      fetchProfileImage:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth`,
+      fetchProfileImage:`${LOCAL_SERVER_URL_USER}`,
       uploadProfileImage:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/uploadImage?action=PROFILE`,
       getAnalyticsUrl:`${LOCAL_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl:`${LOCAL_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
@@ -110,7 +110,7 @@ export function config() {
       getAllUsersUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${DEV_SERVER_URL}/usermanagement/api/auth/uploadImage?`,
-      fetchProfileImage:`${DEV_SERVER_URL}/usermanagement/api/auth`,
+      fetchProfileImage:`${DEV_SERVER_URL}`,
       getAnalyticsUrl:`${DEV_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl:`${DEV_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
       getInventoryAnalyticsUrl:`${DEV_SERVER_URL}/analyticsmanagement/api/analytics/getInventoryAnalytics`,
@@ -181,7 +181,7 @@ export function config() {
       getAllUsersUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/updateProfile`,
       upload: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/uploadImage?`,
-      fetchProfileImage:`${STABLE_SERVER_URL_USER}/usermanagement/api/auth`,
+      fetchProfileImage:`${STABLE_SERVER_URL_USER}`,
       uploadProfileImage:`${STABLE_SERVER_URL_USER}/usermanagement/api/auth/uploadImage?action=PROFILE`,
       getAnalyticsUrl:`${STABLE_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl:`${STABLE_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
@@ -253,7 +253,7 @@ export function config() {
       getAllUsersUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${TEST_SERVER_URL}/usermanagement/api/auth/uploadImage?`,
-      fetchProfileImage:`${TEST_SERVER_URL}/usermanagement/api/auth`,
+      fetchProfileImage:`${TEST_SERVER_URL}`,
       uploadProfileImage:`${TEST_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
       getAnalyticsUrl:`${TEST_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl:`${TEST_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
@@ -326,7 +326,7 @@ export function config() {
       getAllUsersUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${DEMO_SERVER_URL}/usermanagement/api/auth/uploadImage?`,
-      fetchProfileImage:`${DEMO_SERVER_URL}/usermanagement/api/auth`,
+      fetchProfileImage:`${DEMO_SERVER_URL}`,
       uploadProfileImage:`${DEMO_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
       getAnalyticsUrl:`${DEMO_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl:`${DEMO_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
@@ -399,7 +399,7 @@ export function config() {
       getAllUsersUrl: `${PROD_SERVER_URL}/api/auth/getAllUsers`,
       updateProfileUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${PROD_SERVER_URL}/usermanagement/api/auth/uploadImage?`,
-      fetchProfileImage:`${PROD_SERVER_URL}/usermanagement/api/auth`,
+      fetchProfileImage:`${PROD_SERVER_URL}`,
       uploadProfileImage:`${PROD_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
       getAnalyticsUrl:`${PROD_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl:`${PROD_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
@@ -472,7 +472,7 @@ export function config() {
       getAllUsersUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/uploadImage?`,
-      fetchProfileImage:`${UNICEFTEST_SERVER_URL}/usermanagement/api/auth`,
+      fetchProfileImage:`${UNICEFTEST_SERVER_URL}`,
       uploadProfileImage:`${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
       getAnalyticsUrl:`${UNICEFTEST_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl:`${UNICEFTEST_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,

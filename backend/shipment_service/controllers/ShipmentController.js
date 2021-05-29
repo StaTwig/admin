@@ -1362,7 +1362,7 @@ exports.uploadImage = async function (req, res) {
         console.log("Unlinked")
         const update = await ShipmentModel.findOneAndUpdate(
           { id: Id },
-          { $push: { imageDetails: `/shipmentmanagement/api/shipment/images/${Upload.key}`}},{ new: true}
+          { $push: { imageDetails: `${Upload.key}`}},{ new: true}
         );
         return apiResponse.successResponseWithData(res, "Image uploaded successfullly", update);
       } catch (e) {
@@ -1377,7 +1377,6 @@ exports.uploadImage = async function (req, res) {
 exports.fetchImage = async function (req, res) {
   checkToken(req, res, async (result) => {
     if (result.success) {
-      const { data } = result;
       const Id = req.query.id;
       var imageArray = [];
       const update = await ShipmentModel.find({ id: Id }, { imageDetails: 1 })
@@ -1386,6 +1385,7 @@ exports.fetchImage = async function (req, res) {
         })
         .catch((e) => {
           console.log("Err", e);
+          return apiResponse.ErrorResponse(res, e);
         });
 
       var resArray = [];
@@ -1394,12 +1394,9 @@ exports.fetchImage = async function (req, res) {
         const s = "/images/" + imageArray[i];
         resArray.push(s);
       }
-      return res.send({
-        success: true,
-        data: resArray,
-      });
+      return apiResponse.successResponseWithData(res, "Images " , resArray)
     } else {
-      res.json(result);
+      return apiResponse.ErrorResponse(res, result)
     }
   });
 };

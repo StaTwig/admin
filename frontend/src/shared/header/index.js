@@ -121,7 +121,7 @@ const ref = useOnclickOutside(() => {
 
           <div className="userPic">
             <img
-              src={profile.profile_picture ? profile.profile_picture : user}
+              src={profile.photoId ? profile.photoId : user}
               alt=""
               className={`rounded rounded-circle ${profile.profile_picture ? `` :`img-thumbnail bg-transparent border-0`}`}
             />

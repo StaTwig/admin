@@ -1197,7 +1197,7 @@ exports.uploadImage = async function (req, res) {
         }]
       }, {
         "$push": {
-          "userDocuments.$.imageDetails": `/usermanagement/api/auth/images/${Upload.key}`
+          "userDocuments.$.imageDetails": `${Upload.key}`
         }
       } ,{ new: true})
       return apiResponse.successResponseWithData(res, "Image Uploaded" , update);
@@ -1205,7 +1205,7 @@ exports.uploadImage = async function (req, res) {
       const userData = {
         "userDocuments": {
           "imageDetails": [
-            `/usermanagement/api/auth/images/${Upload.key}`
+            `${Upload.key}`
           ],
           "idType": "STOREID",
         }
@@ -1220,7 +1220,7 @@ exports.uploadImage = async function (req, res) {
       const userData = {
         "userDocuments": {
           "imageDetails": [
-            `/usermanagement/api/auth/images/${Upload.key}`
+            `${Upload.key}`
           ],
           "idType": type,
           "idNumber": parseInt(id),
