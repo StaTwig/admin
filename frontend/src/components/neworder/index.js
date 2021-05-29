@@ -554,8 +554,7 @@ const NewOrder = (props) => {
                             placeholder="Select Delivery Location"
                             defaultInputValue={values.toOrgLocName}
                             onChange={(v) => {
-                              // let name =v?.warehouseAddress ? (v?.label +'/' + v?.warehouseAddress?.firstLine + ', ' + v?.warehouseAddress?.city) : (v?.label  +'/' + v?.postalAddress)  ;
-                              // setFieldValue('toOrgLocName', name);
+                              setFieldValue('toOrgLocName', v.label);
                               setFieldValue('toOrgLoc', v.value);
                             }}
                             isDisabled={values.rtypeName == ''}
@@ -570,7 +569,6 @@ const NewOrder = (props) => {
                 </div>
               </div>
             </div>
-
             <div className="d-flex pt-4 justify-content-between">
               <div className="value">{quantity}</div>
               <div className="d-flex">
