@@ -6,6 +6,7 @@ import {getOrganizationsTypewithauth} from '../../actions/userActions';
 import { Formik } from "formik";
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
+import OrganisationPopUp from "./organisationPopUp";
 
 import '../login/style.scss';
 import Key from "../../assets/icons/key.png";
@@ -25,6 +26,7 @@ const [organisationsType, setOrganisationsType] = useState([]);
 const [organisationsArr, setOrganisationsArr] = useState([]);
 const [value, setValue] = useState('');
 const [orgType, setorgType] = useState('');
+const [showOther,setShowOther] = useState(false);
 const [selectedType,setselectedType] = useState();
   useEffect(() => {
     async function fetchData() {
@@ -51,6 +53,8 @@ organisationsType.map((data)=>{
 })
 const showOrgByType = (value) =>{
   let arr = organisations.filter(data => data.type == value);
+  console.log(arr);
+  arr.push({name:'Other'});
   return arr;
 }
   const changeFn = (value_new,e) => {
@@ -89,6 +93,9 @@ const showOrgByType = (value) =>{
             </div>
           </div>
           <div className="col-m-6 col-lg-6">
+            {/* {showOther?<OrganisationPopUp
+                            {...props}
+            />: */}
             <div className="card">
               { props.adminAwaiting ?
                 <><img alt="" src={Waiting} height="150" width="150" className="align-self-center mt-5 mb-4" />
@@ -245,6 +252,10 @@ const showOrgByType = (value) =>{
                       else
                         props.onOrgChange(true);
                         setValue(item.name);
+                        // console.log(item.name);
+                        // if(item.name =='Other'){
+                        //   setShowOther(true);
+                        // }
                     }}
                     groups={showOrgByType(selectedType)}
                   //   changeFn={(v, e = '') => {
@@ -252,6 +263,7 @@ const showOrgByType = (value) =>{
                   //     setFieldValue('org', v); 
                   //     changeFn(v, e);
                   //  }}
+                  
                     dClass="ml-4"
                     className="text"
                   /> 
