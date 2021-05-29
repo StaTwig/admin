@@ -61,7 +61,7 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.employee.entrypoints=websecure"
-      - "traefik.http.routers.employee.rule=Host(`test.admin.abinbev.statledger.io`) && PathPrefix(`/api/employee_service`)"
+      - "traefik.http.routers.employee.rule=Host(`test.admin.abinbev.statledger.io`) && PathPrefix(`/api/employee_service`) || PathPrefix(`/usermanagement/api/`)"
       - "traefik.http.routers.employee.tls=true"
       - "traefik.http.routers.employee.tls.certresolver=lets-encrypt"
 
