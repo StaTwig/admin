@@ -21,6 +21,11 @@ const CENTRAL_AUTHORITY_ID = null
 const CENTRAL_AUTHORITY_NAME = null
 const CENTRAL_AUTHORITY_ADDRESS = null
 
+const {uploadFile} = require("../helpers/s3");
+const fs = require('fs');
+const util = require('util');
+const unlinkFile = util.promisify(fs.unlink);
+
 const inventoryUpdate = async (
   id,
   quantity,
@@ -1328,45 +1333,43 @@ exports.getProductsByInventory = [
 exports.uploadImage = async function (req, res) {
   checkToken(req, res, async (result) => {
     if (result.success) {
-      const { data } = result;
       const Id = req.query.id;
-
-      const incrementCounter = await CounterModel.update(
-        {
-          "counters.name": "shipmentImage",
-        },
-        {
-          $inc: {
-            "counters.$.value": 1,
-          },
-        }
-      );
-
-      const poCounter = await CounterModel.find(
-        { "counters.name": "shipmentImage" },
-        { "counters.name.$": 1 }
-      );
-      const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]));
+      // const incrementCounter = await CounterModel.updateOne(
+      //   {
+      //     "counters.name": "shipmentImage",
+      //   },
+      //   {
+      //     $inc: {
+      //       "counters.$.value": 1,
+      //     },
+      //   }
+      // );
+      // console.log(incrementCounter)
+      // const poCounter = await CounterModel.find(
+      //   { "counters.name": "shipmentImage" },
+      //   { "counters.name.$": 1 }
+      // );
+      // console.log(poCounter)
+      // const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]));
       try {
-        const filename = Id + "-" + t.format + t.value + ".png";
-        let dir = `/home/ubuntu/shipmentimages`;
+        // const filename = Id + "-" + t.format + t.value + ".png";
+        // let dir = `/home/ubuntu/shipmentimages`;
 
-        await moveFile(req.file.path, `${dir}/${filename}`);
-        const update = await ShipmentModel.updateOne(
+        // await moveFile(req.file.path, `${dir}/${filename}`);
+        const Upload = await uploadFile(req.file)
+        console.log(Upload)
+        await unlinkFile(req.file.path)
+        console.log("Unlinked")
+        const update = await ShipmentModel.findOneAndUpdate(
           { id: Id },
-          { $push: { imageDetails: filename } }
+          { $push: { imageDetails: `/shipmentmanagement/api/shipment/images/${Upload.key}`}},{ new: true}
         );
-        return res.send({
-          success: true,
-          data: "Image uploaded successfullly.!",
-          filename,
-        });
+        return apiResponse.successResponseWithData(res, "Image uploaded successfullly", update);
       } catch (e) {
-        console.log("Error in image upload", e);
-        res.status(403).json(e);
+        return apiResponse.ErrorResponse(res, e);
       }
     } else {
-      res.json(result);
+      return apiResponse.unauthorizedResponse(res, result);
     }
   });
 };
