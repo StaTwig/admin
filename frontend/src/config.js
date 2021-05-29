@@ -1,4 +1,4 @@
-export const TEST_SERVER_URL = 'https://test2.statledger.io';
+export const TEST_SERVER_URL = '://test.vaccineledger.com';
 export const PROD_SERVER_URL = 'http://api.vaccineledger.com:9001';
 export const ABINBEVPROD_SERVER_URL = 'http://abinbev.statledger.io:9001';
 export const ABINBEVTEST_SERVER_URL = 'http://test.abinbev.statledger.io:9001';
