@@ -1,17 +1,17 @@
 var express = require("express");
 const AuthController = require("../controllers/AuthController");
 var multer = require("multer");
+var upload = multer({ dest: "uploads/" });
+// const Storage = multer.diskStorage({
+//   destination(req, file, callback) {
+//     callback(null, "/home/ubuntu/userimages");
+//   },
+//   filename(req, file, callback) {
+//     callback(null, file.originalname);
+//   },
+// });
 
-const Storage = multer.diskStorage({
-  destination(req, file, callback) {
-    callback(null, "/home/ubuntu/userimages");
-  },
-  filename(req, file, callback) {
-    callback(null, file.originalname);
-  },
-});
-
-const upload = multer({ storage: Storage });
+// const upload = multer({ storage: Storage });
 
 var router = express.Router();
 

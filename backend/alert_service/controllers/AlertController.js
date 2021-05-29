@@ -1,11 +1,5 @@
-const UserModel = require('../models/UserModel')
 //helper file to prepare responses.
-const apiResponse = require('../helpers/apiResponse')
-const utility = require('../helpers/utility')
-const jwt = require('jsonwebtoken')
-const { body, validationResult, oneOf, check } = require('express-validator')
-const { sanitizeBody } = require('express-validator')
-const { constants } = require('../helpers/constants')
+const apiResponse = require("../helpers/apiResponse");
 
 //models
 const Alerts = require('../models/AlertModel')
