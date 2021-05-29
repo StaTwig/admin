@@ -5,6 +5,7 @@ const logger = require("morgan");
 require("dotenv").config();
 const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
+const {getFileStream} = require("./helpers/s3");
 const cors = require("cors");
 
 // DB connection
@@ -40,6 +41,11 @@ app.use(cors());
 
 //Route Prefixes
 app.use("/api/employee_service", apiRouter);
+app.use("/usermanagement/api/", apiRouter);
+app.get('/usermanagement/api/auth/images/:key', (req, res) => {
+	const FileStream = getFileStream(req.params.key);
+	FileStream.pipe(res)
+	});
 // throw 404 if URL not found
 app.all("*", function(req, res) {
 	return apiResponse.notFoundResponse(res, "Page not found");

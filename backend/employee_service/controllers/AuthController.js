@@ -302,7 +302,7 @@ exports.uploadImage = [
           await unlinkFile(req.file.path)
           console.log("Unlinked")
           const image = await EmployeeModel.findOneAndUpdate({ emailId: req.user.emailId}, 
-            { photoId: `/api/employee_service/images/${result.key}`}, { new: true})
+            { photoId: `/images/${result.key}`}, { new: true})
           return apiResponse.successResponseWithData(res, "Uploaded ", image)
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
