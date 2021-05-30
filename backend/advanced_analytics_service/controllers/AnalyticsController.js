@@ -1,7 +1,7 @@
 /* eslint-disable linebreak-style */
 const AnalyticsModel = require("../models/AnalyticsModel");
 const ProductSKUModel = require("../models/ProductSKUModel");
-
+const auth = require("../middlewares/jwt");
 const OrganisationModel = require("../models/OrganisationModel");
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");

@@ -1,6 +1,7 @@
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
-
+const { body, sanitizeBody, oneOf, check } = require('express-validator');
+const auth = require("../middlewares/jwt");
 //models
 const Alerts = require('../models/AlertModel')
 const EmployeeModel = require('../models/EmployeeModel')
@@ -16,7 +17,7 @@ exports.getAllAlerts = [
 ]
 
 exports.createNewAlert = [
-  //	auth,
+  auth,
   body('user', 'username must not be empty.').isLength({ min: 1 }).trim(),
   sanitizeBody('*').escape(),
   async function (req, res) {
