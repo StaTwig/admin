@@ -1359,7 +1359,7 @@ exports.addInventoriesFromExcel = [
               event_data.eventType.description = "INVENTORY";
               event_data.actor.actorid = user_id || "null";
               event_data.actor.actoruserid = email || "null";
-              event_data.payload.data = data;
+              event_data.payload.data.products = [...data];
               console.log(event_data);
               async function compute(event_data) {
                 result = await logEvent(event_data);
