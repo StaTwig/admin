@@ -218,10 +218,10 @@ const imgs = config().fetchProfileImage;
 
           <div className="userPic">
             <img
-              src={`${imgs}${profile.photoId}` ? `${imgs}${profile.photoId}` : user}
+              src={`${imgs}${profile.photoId}` ? `${imgs}${profile.photoId}` : user }
               alt="profile"
-              className={`rounded rounded-circle ${`${imgs}${profile.photoId}` ? `` :`img-thumbnail bg-transparent border-0`}`}
-              onClick={() => setMenu(!menu)}
+              className={`rounded rounded-circle ${`${imgs}${profile.photoId}` ? `` :`img-thumbnail bg-transparent border-0`}` }
+              onClick={() => setMenu(!menu) }
               />
           </div>
           <div className="userActions">
