@@ -39,6 +39,7 @@ const Inventory = (props) => {
     organization: '',
     sku: '',
     inventoryType: 'BREWERY',
+    organizationType: 'BREWERY'
   });
 
   const defaultFilters = {
@@ -48,6 +49,7 @@ const Inventory = (props) => {
     organization: '',
     sku: '',
     inventoryType: 'BREWERY',
+    organizationType: 'BREWERY'
   };
 
   const onInventoryTypeChange = (inventoryType) => {
@@ -55,6 +57,7 @@ const Inventory = (props) => {
     setSelectedInventoryType(inventoryType);
     const _filters = { ...filters };
     _filters.inventoryType = inventoryType;
+    _filters.organizationType = inventoryType;
     _filters.vendorType = 'ALL_VENDORS';
     setFilters(_filters);
     props.applyFilters(_filters);
@@ -104,6 +107,7 @@ const Inventory = (props) => {
     setFilters(_filters);
     props.applyFilters(_filters);
     _getDistrictsByState(selectedState);
+    _getOrganizationsByType(_filters);
 
     const _filterVisibility = { ...filterVisibility };
     _filterVisibility.district = true;

@@ -4,7 +4,7 @@ const ConsumerModel = require('../models/ConsumerModel');
 const InventoryModel = require('../models/InventoryModel');
 const OrganisationModel = require('../models/OrganisationModel');
 const CounterModel = require('../models/CounterModel');
-const { body, validationResult} = require('express-validator');
+const { body, validationResult } = require('express-validator');
 const { sanitizeBody } = require('express-validator');
 //helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
@@ -28,7 +28,7 @@ const EmailContent = require('../components/EmailContent');
 const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const phoneRgex = /^\d{12}$/;
 
-const {uploadFile} = require("../helpers/s3");
+const { uploadFile } = require("../helpers/s3");
 const fs = require('fs');
 const util = require('util');
 const unlinkFile = util.promisify(fs.unlink);
@@ -713,8 +713,8 @@ exports.userInfo = [
             postalAddress
           } = user;
           const org = await OrganisationModel.findOne({ id: organisationId }, 'name configuration_id');
-          const warehouse = await EmployeeModel.findOne({ emailId },{_id: 0, warehouseId: 1});
-	  const warehouseArray = await WarehouseModel.find({id: { "$in": warehouse.warehouseId } })
+          const warehouse = await EmployeeModel.findOne({ emailId }, { _id: 0, warehouseId: 1 });
+          const warehouseArray = await WarehouseModel.find({ id: { "$in": warehouse.warehouseId } })
           let user_data = {
             firstName,
             lastName,
@@ -729,7 +729,7 @@ exports.userInfo = [
             photoId,
             configuration_id: org.configuration_id,
             location: postalAddress,
-	    warehouses: warehouseArray
+            warehouses: warehouseArray
           };
           logger.log(
             'info',
@@ -1206,101 +1206,101 @@ exports.uploadImage = async function (req, res) {
         action
       } = req.query;
 
-  //     const incrementCounter = await CounterModel.updateOne({
-  //       'counters.name': "employeeImage"
-  //     }, {
-  //       $inc: {
-  //         "counters.$.value": 1
-  //       }
-  //     })
+      //     const incrementCounter = await CounterModel.updateOne({
+      //       'counters.name': "employeeImage"
+      //     }, {
+      //       $inc: {
+      //         "counters.$.value": 1
+      //       }
+      //     })
 
-  //     const poCounter = await CounterModel.find({
-  //       "counters.name": "employeeImage"
-  //     }, {
-  //       "counters.name.$": 1
-  //     })
-  //     const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]))
-  //     try {
-  //       if (action == "STOREID")
-	//   filename = t.value + "-" + req.file.filename;
-  //       else if (action == "PROFILE")
-	//   filename = "PROFILE" + "-" +  data.id + ".png"
-	// else
-  //          filename = id + "-" + type + imageSide + "-" + t.format + t.value + ".png";	
-	
-	// let dir = `/home/ubuntu/userimages`;
-  //       await moveFile(req.file.path, `${dir}/${filename}`);
-  //     } catch (e) {
-  //       console.log("Error in image upload", e);
-  //       res.status(403).json(e);
-  //     }
+      //     const poCounter = await CounterModel.find({
+      //       "counters.name": "employeeImage"
+      //     }, {
+      //       "counters.name.$": 1
+      //     })
+      //     const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]))
+      //     try {
+      //       if (action == "STOREID")
+      //   filename = t.value + "-" + req.file.filename;
+      //       else if (action == "PROFILE")
+      //   filename = "PROFILE" + "-" +  data.id + ".png"
+      // else
+      //          filename = id + "-" + type + imageSide + "-" + t.format + t.value + ".png";	
 
-  try{
-    const Upload = await uploadFile(req.file)
-    console.log(Upload)
-    await unlinkFile(req.file.path)
-    if (action == "KYCUPLOAD") {
-      const update = await EmployeeModel.findOneAndUpdate({
-        $and: [{
-          "userDocuments.idNumber": parseInt(id)
-        }, {
-          "userDocuments.idType": type
-        }]
-      }, {
-        "$push": {
-          "userDocuments.$.imageDetails": `${Upload.key}`
-        }
-      } ,{ new: true})
-      return apiResponse.successResponseWithData(res, "Image Uploaded" , update);
-    } else if (action == "STOREID") {
-      const userData = {
-        "userDocuments": {
-          "imageDetails": [
-            `${Upload.key}`
-          ],
-          "idType": "STOREID",
+      // let dir = `/home/ubuntu/userimages`;
+      //       await moveFile(req.file.path, `${dir}/${filename}`);
+      //     } catch (e) {
+      //       console.log("Error in image upload", e);
+      //       res.status(403).json(e);
+      //     }
+
+      try {
+        const Upload = await uploadFile(req.file)
+        console.log(Upload)
+        await unlinkFile(req.file.path)
+        if (action == "KYCUPLOAD") {
+          const update = await EmployeeModel.findOneAndUpdate({
+            $and: [{
+              "userDocuments.idNumber": parseInt(id)
+            }, {
+              "userDocuments.idType": type
+            }]
+          }, {
+            "$push": {
+              "userDocuments.$.imageDetails": `${Upload.key}`
+            }
+          }, { new: true })
+          return apiResponse.successResponseWithData(res, "Image Uploaded", update);
+        } else if (action == "STOREID") {
+          const userData = {
+            "userDocuments": {
+              "imageDetails": [
+                `${Upload.key}`
+              ],
+              "idType": "STOREID",
+            }
+          }
+          const employee = await EmployeeModel.findOneAndUpdate({
+            emailId: data.emailId
+          }, {
+            $push: userData
+          }, { new: true });
+          return apiResponse.successResponseWithData(res, "StoreID Image Uploaded", employee)
+        } else if (action == "KYCNEW") {
+          const userData = {
+            "userDocuments": {
+              "imageDetails": [
+                `${Upload.key}`
+              ],
+              "idType": type,
+              "idNumber": parseInt(id),
+              "approvalStatus": "NOTAPPROVED"
+            }
+          }
+          const employee = await EmployeeModel.findOneAndUpdate({
+            emailId: data.emailId
+          }, {
+            $push: userData
+          }, { new: true });
+          return apiResponse.successResponseWithData(res, "KYC Image Uploaded", employee)
+        } else if (action == "PROFILE") {
+          const employeeUpdate = await EmployeeModel.findOneAndUpdate({
+            emailId: data.emailId
+          }, {
+            $set: { "photoId": `/usermanagement/api/auth/images/${Upload.key}` }
+          }, { new: true });
+          return apiResponse.successResponseWithData(res, "Profile Image Uploaded ", employeeUpdate)
+        } else {
+          return apiResponse.ErrorResponse(res, "Please check the type action you want to perfrom STOREID/KYCNEW/KYCUPLOAD ")
         }
       }
-      const employee = await EmployeeModel.findOneAndUpdate({
-        emailId: data.emailId
-      }, {
-        $push: userData
-      }, {new:true});
-      return apiResponse.successResponseWithData(res, "StoreID Image Uploaded" , employee)
-    } else if (action == "KYCNEW") {
-      const userData = {
-        "userDocuments": {
-          "imageDetails": [
-            `${Upload.key}`
-          ],
-          "idType": type,
-          "idNumber": parseInt(id),
-          "approvalStatus": "NOTAPPROVED"
-        }
+      catch (err) {
+        console.log(err);
+        return apiResponse.ErrorResponse(res, err);
       }
-      const employee = await EmployeeModel.findOneAndUpdate({
-        emailId: data.emailId
-      }, {
-        $push: userData
-      },{ new:true });
-      return apiResponse.successResponseWithData(res, "KYC Image Uploaded" , employee)
-    } else if (action == "PROFILE") {
-      const employeeUpdate = await EmployeeModel.findOneAndUpdate({
-        emailId: data.emailId
-      }, {
-        $set: { "photoId": `/usermanagement/api/auth/images/${Upload.key}`} 
-      },{ new: true });
-      return apiResponse.successResponseWithData(res, "Profile Image Uploaded ", employeeUpdate)
     } else {
-      return apiResponse.ErrorResponse(res, "Please check the type action you want to perfrom STOREID/KYCNEW/KYCUPLOAD ")
-    }
-  }
-  catch (err){
-    console.log(err);
-    return apiResponse.ErrorResponse(res, err);
-  }
-    } else {
-     return apiResponse.ErrorResponse(res,result)
+      return apiResponse.ErrorResponse(res, result)
     }
   });
 };
@@ -1674,6 +1674,17 @@ exports.getOrganizationsByTypeForAbInBev = [
     try {
       const filters = req.query;
       let matchCondition = {};
+      matchCondition.staus = 'ACTIVE';
+      if (filters.status && filters.status !== '') {
+        matchCondition.status = filters.status;
+      }
+      if (filters.state && filters.state !== '') {
+        matchCondition.state = filters.state;
+      }
+      if (filters.district && filters.district !== '') {
+        matchCondition.district = filters.district;
+      }
+
       if (filters.type === "SUPPLIER") {
         matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }];
       } else {

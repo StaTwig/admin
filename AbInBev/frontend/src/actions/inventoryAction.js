@@ -100,6 +100,17 @@ export const getOrganizationsByType = (filters) => {
     } else {
       queryStr = filters.organizationType;
     }
+
+
+    if (filters.state && filters.state !== '') {
+      queryStr = queryStr + '&state=' + filters.state;
+    }
+
+    if (filters.district && filters.district !== '') {
+      queryStr = queryStr + '&district=' + filters.district;
+    }
+
+
   }
 
   return async dispatch => {
