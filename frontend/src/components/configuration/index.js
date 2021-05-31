@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import Tabs from "./tabs/tabs";
 import "./style.scss";
-import { Formik } from "formik";
 import Arrow from "../../assets/icons/arrow.png"
-import ORGType from "./orgtype.js";
-
-import WARType from "./warehousetype";
-import { func } from "prop-types";
-import { Link } from "react-router-dom";
+import Add from '../../assets/icons/add.svg';
+import EditTable from "./table/editTable";
+import EditTable1 from "./table1/editTable";
+ import { useSelector, useDispatch } from "react-redux";
+//import EditTable from "./table/editTable";
+import { Formik } from "formik";
 
 
 const Configurationpart = (props) => {
@@ -16,24 +16,43 @@ const Configurationpart = (props) => {
   const closeModal = () => setShowModal(false);
   const [orgType,setOrgType]=useState(false);
   const [warType,setWarType]=useState(false);
+  const [addOrganisation, setAddOrganisation] = useState([]);
+  const [blankInventory, setBlankInventory] = useState({
+    orgname: '', 
+  });
+  const [showorg,setShowOrg]=useState(true);
+
+  const [showleft,setShowLeft]=useState(true);
+  
+  const editPo = useSelector(state => {
+    return state?.reviewPo;
+  });
+  
+  const [products, setProducts] = useState([]);
+  const [category, setCategory] = useState([]);
+
+  const [addProducts, setAddProducts] = useState([]);
+  const [addProducts1, setAddProducts1] = useState([]);
+  const dispatch = useDispatch();
+
+ 
 
 
+  const onQuantityChange = (v, i, setFieldValue) => {
+    let newArr = [...addProducts];
+    newArr[i].quantity = v;
+    setFieldValue('products', newArr.map(row => ({"type": row.type})));
+    setAddProducts(prod => [...newArr]);
+  }
 
-const showOrgType = ()=>{
-  setOrgType(true);
- setWarType(false);
-}
+ 
 
-// const showWarType = ()=>{
-//   setWarType(true);
-//  setOrgType(false);
-// }
 
-const showWarType = () => {
-  setWarType(true);
-  setOrgType(false);
-  console.log("-------------------",orgType,warType);
-};
+  const onAddAnotherOrganisation = () => {
+    setInventoryState([...addOrganisation, blankInventory ]);
+  };
+
+
 
 
   return (
@@ -45,38 +64,132 @@ const showWarType = () => {
         </div>
        
         {tabIndex == 6 && (
-          <div className="">
-             
-            {/* <button type="button" className="btn btn-primary" onclick={()=>showOrgType()}>Organisation Type</button>
-            
-            
-            <button type="button" className="btn btn-primary ml-5" onclick={()=>showWarType()}>Warehouse Type</button> */}
-            <div className="w-100">
-    <WARType />
-   </div>
-{/* {
-  orgType ? <div className="w-100">
-    <ORGType />
-   </div> : <div className="w-100">
-    <WARType />
-   </div>
-}
-{
- warType ? <div className="w-100">
-    <WARType />
-   </div> :<div>
-   </div>
-}
-        */}
-           
-          </div>
+          <div className="row">
+              <div className="col-2">
+                <div className="card" Style="list-style: none; height:450px">
+                  <div className="card-body" >
+                    <li className="p-2 "
+                      onClick={()=>{setShowOrg(true)}}
+                    >
+                     <a href="#">Organisation</a>
+                      <img src={Arrow} alt="icon" width="7px" height="12px" className="ml-4"/></li>
+                    <li className="p-2" onClick={()=>{setShowOrg(false)}}>
+                    <a href="#">   Warehouse</a>
+                      <img src={Arrow} alt="icon" width="7px" height="12px" className="ml-4"/></li>
+                  </div>
+                </div>
+              </div>
+              {
+                showorg ? 
+                
+                <div className="col">
+                <div className="row">
+                  <p className="mb-4"><b>Organisation Type</b></p>
+                    <div style={{position:"relative",left:"70%" }}>
+                        <button className="btn btn-yellow ml-5" 
+                          onClick={() => {
+                            let newArr = {  name: '' };
+                            setAddProducts(prod => [...prod, newArr]);
+                            setShowLeft(!showleft);
+                            console.log(showleft,"------------------");
+                            }}
+                              >
+                          <img src={Add} width="13" height="13" className="mr-2" />
+                          <span>Add New Type</span>
+                          </button>
+                     </div>
+                </div>
+              <div className="col">
+              <div className="row">
+                {
+                  showleft ? 
+                  
+                  <div className="col-6">
+                        <EditTable
+                          product={addProducts}
+                          products={products}
+                         // category={category}
+                          handleQuantityChange={(v, i) => onQuantityChange(v, i, setFieldValue)}
+                        />
+                        {/* {setShowLeft(false)}; */}
+                      </div>
+                       :
+                       <div className="col-6 ">
+                            <EditTable
+                            product={addProducts}
+                            products={products}
+                          // category={category}
+                            handleQuantityChange={(v, i) => onQuantityChange(v, i, setFieldValue)}
+                          /> 
+                        {/* {setShowLeft(true)}; */}
+
+                          </div>
+                }        
+                    </div>
+
+              </div>
+          </div>  : 
+
+                  
+            <div className="col">
+                  <div className="row">
+                    <p className="mb-4"><b>Warehouse Type</b></p>
+                   
+                      <div style={{position:"relative",left:"70%" }}>
+                            <button className="btn btn-yellow ml-5" 
+                            onClick={() => {
+                              let newArr = {  name: '' };
+                              setAddProducts1(prod => [...prod, newArr]);
+                              setShowLeft(!showleft);
+                              console.log(showleft,"------------------");
+                              }}
+                                >
+
+                            <img src={Add} width="13" height="13" className="mr-2" />
+                            <span>Add New Type</span>
+                            </button>
+                       </div>
+                  </div>
+                <div className="col">
+                <div className="row">
+                  {
+                    showleft ? 
+                    
+                    <div className="col-6">
+                          <EditTable1
+                            product={addProducts1}
+                            products={products}
+                           // category={category}
+                            handleQuantityChange={(v, i) => onQuantityChange(v, i, setFieldValue)}
+                          />
+                        </div>
+                         :
+                         <div className="col-6">
+                              <EditTable1
+                              product={addProducts1}
+                              products={products}
+                            // category={category}
+                              handleQuantityChange={(v, i) => onQuantityChange(v, i, setFieldValue)}
+
+                            /> 
+                        
+
+                            </div>
+                  }    
+                      </div>
+                </div>
+            </div>
+              }
+              </div>    
         )}
-         {tabIndex == 3 && (
+
+
+      {tabIndex == 3 && (
        <div className="row d-flex flex-row p-3">
         <div className=" w-13 mt-3 mr-3">
      
           <div className="card">
-            <div className="card-body" style="list-style: none; height:450px">
+            <div className="card-body" Style="list-style: none; height:450px">
             <div className="">
               <li className="p-2 ">Overview<img src={Arrow} alt="icon" width="7px" height="12px" className="ml-4"/></li>
               <li className="p-2">Shipment<img src={Arrow} alt="icon" width="7px" height="12px" className="ml-4"/></li>
@@ -203,3 +316,5 @@ const showWarType = () => {
 };
 
 export default Configurationpart;
+
+
