@@ -64,7 +64,7 @@ export const createOrder = async data => {
 
 export const addPOsFromExcel = async data => {
   try {
-    const url = config().addPOsFromExcelUrl;
+    const url = config().addPOsFromExcel;
     const result = await axios.post(url, data, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });

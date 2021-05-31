@@ -1,5 +1,3 @@
-const mailer = require('./mailer');
-const { constants } = require('./constants');
 const axios = require('axios');
 
 function eventToData(event,type){

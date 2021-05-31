@@ -1,17 +1,17 @@
 const express = require("express");
 const multer = require("multer");
 const ShipmentController = require("../controllers/ShipmentController");
+var upload = multer({ dest: "uploads/" });
+// const Storage = multer.diskStorage({
+//   destination(req, file, callback) {
+//     callback(null, "/home/ubuntu/shipmentimages");
+//   },
+//   filename(req, file, callback) {
+//     callback(null, file.originalname);
+//   },
+// });
 
-const Storage = multer.diskStorage({
-  destination(req, file, callback) {
-    callback(null, "/home/ubuntu/shipmentimages");
-  },
-  filename(req, file, callback) {
-    callback(null, file.originalname);
-  },
-});
-
-const upload = multer({ storage: Storage });
+// const upload = multer({ storage: Storage });
 
 const router = express.Router();
 
@@ -28,6 +28,7 @@ router.get("/getProductsByInventory", ShipmentController.getProductsByInventory)
 
 router.post("/UpdateTrackingStatus", ShipmentController.updateTrackingStatus); // /updateTrackingStatus
 router.get("/chainOfCustody", ShipmentController.chainOfCustody);
+router.get("/trackShipmentJourney", ShipmentController.trackShipmentJourney);
 
 router.post("/uploadImage", upload.single('photo'), ShipmentController.uploadImage);
 router.get("/fetchImage", ShipmentController.fetchImage);

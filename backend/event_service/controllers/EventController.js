@@ -7,10 +7,6 @@ const { body, validationResult, param } = require("express-validator");
 const { sanitizeBody } = require("express-validator");
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
-const utility = require("../helpers/utility");
-const jwt = require("jsonwebtoken");
-const mailer = require("../helpers/mailer");
-const { constants } = require("../helpers/constants");
 require("dotenv").config();
 const auth = require("../middlewares/jwt");
 /**
@@ -103,10 +99,13 @@ exports.getAllEventsWithFilter = [ //inventory with filter(status, actorOrgId, d
 				skip,
 				limit
 			} = req.query;
+			const { organisationId } = req.user;
+			console.log("req.user =======> ", req.user);
+			console.log("req.query =======> ", req.query);
 			let currentDate = new Date();
 			let fromDateFilter = 0;
 			let status = req.query.status ? req.query.status : undefined;
-			let actorOrgId = req.query.actorOrgId ? req.query.actorOrgId : undefined;
+			// let actorOrgId = req.query.actorOrgId ? req.query.actorOrgId : undefined;
 			switch (req.query.dateFilter) {
 				case "today":
 					fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
@@ -137,8 +136,8 @@ exports.getAllEventsWithFilter = [ //inventory with filter(status, actorOrgId, d
 				whereQuery["eventTypePrimary"] = status
 			}
 
-			if (actorOrgId) {
-				whereQuery["actorOrgId"] = actorOrgId;
+			if (organisationId) {
+				whereQuery["actorOrgId"] = organisationId;
 			}
 
 			if (fromDateFilter) {
@@ -149,6 +148,7 @@ exports.getAllEventsWithFilter = [ //inventory with filter(status, actorOrgId, d
 
 			console.log("Inventory whereQuery ======>", whereQuery);
 			try {
+				let inventoryCount = await EventModal.count(whereQuery);
 				EventModal.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({
 					createdAt: -1
 				}).then(async (eventRecords) => {
@@ -163,7 +163,8 @@ exports.getAllEventsWithFilter = [ //inventory with filter(status, actorOrgId, d
 								let detaildProduct = JSON.parse(JSON.stringify(product))
 								detaildProduct[`productDetails`] = {};
 								detaildProduct[`shipmentDetails`] = {};
-								inventoryQuantity += Number(detaildProduct.quantity);
+								// console.log("(detaildProduct.quantity) ==>", detaildProduct)
+								inventoryQuantity += detaildProduct.quantity ? Number(detaildProduct.quantity): Number(detaildProduct.productQuantity);
 								let whereQuery = {};
 								if (detaildProduct.productId) {
 									whereQuery[`id`] = detaildProduct.productId
@@ -184,14 +185,17 @@ exports.getAllEventsWithFilter = [ //inventory with filter(status, actorOrgId, d
 							let productList = await Promise.all(productsRes);
 							eventRecords[`ProductList`].push(...productList);
 							eventRecords[`inventoryQuantity`] = inventoryQuantity;
-							inventoryRecords.push(eventRecords);
+							if(productList.length > 0){
+								inventoryRecords.push(eventRecords);
+							}
 						} else if (payloadRecord.data.length > 0) {
 							let inventoryQuantity = 0;
 							let productsRes = payloadRecord.data.map(async function (dataproduct) {
 								let detaildProduct = JSON.parse(JSON.stringify(dataproduct))
 								detaildProduct[`productDetails`] = {};
 								detaildProduct[`shipmentDetails`] = {};
-								inventoryQuantity += Number(detaildProduct.quantity);
+								// console.log("(detaildProduct.quantity) ==>", detaildProduct)
+								inventoryQuantity += detaildProduct.quantity? Number(detaildProduct.quantity): Number(detaildProduct.productQuantity);
 								let whereQuery = {};
 								if (detaildProduct.productId) {
 									whereQuery[`id`] = detaildProduct.productId
@@ -205,14 +209,16 @@ exports.getAllEventsWithFilter = [ //inventory with filter(status, actorOrgId, d
 							let productList = await Promise.all(productsRes);
 							eventRecords[`ProductList`].push(...productList);
 							eventRecords[`inventoryQuantity`] = inventoryQuantity;
-							inventoryRecords.push(eventRecords);
+							if(productList.length > 0){
+								inventoryRecords.push(eventRecords);
+							}
 						}
 					});
 					let inventoryResult = await Promise.all(eventRecordsRes);
 					return apiResponse.successResponseWithData(
 						res,
 						"Inventory Records",
-						inventoryRecords
+						{"inventoryRecords":inventoryRecords, "count":inventoryCount}
 					);
 				});
 			} catch (err) {

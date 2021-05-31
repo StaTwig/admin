@@ -22,7 +22,7 @@ const VerifyInventory = props => {
   const reviewInventories = useSelector(state => {
     return state.reviewInventory;
   });
-
+  console.log(props);
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [ successMessage, setSuccessMessage ] = useState('');
   const [ errorMessage, setErrorMessage ] = useState('');

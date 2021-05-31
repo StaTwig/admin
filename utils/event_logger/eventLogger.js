@@ -56,7 +56,7 @@ async function logEvent(data) {
                     secondaryOrgId: data.stackholders.secondorg.id,
                     secondaryOrgName: data.stackholders.secondorg.name,
                     secondaryOrgAddress: data.stackholders.secondorg.address,
-                    payloadData: JSON.stringify(data.payload),
+                    payloadData: data.payload,
                 })
                 return event.save(function (err) {
                     if (err) {                        

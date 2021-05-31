@@ -71,29 +71,31 @@ const Map = (props) => {
 
     if (warehouseArr.length > 0) {
       warehouseArr.forEach((w, i) => {
-        if (i === 0) {
-          map = new mapboxgl.Map({
-            container: mapContainerRef.current,
-            style: 'mapbox://styles/mapbox/light-v10',
-            center: [w.location.latitude, w.location.longitude],
-            zoom: 10
-          });
-          setLng(w.location.longitude);
-          setLat(w.location.latitude);
-        }
-        const coords = [w.location.latitude, w.location.longitude];
-        let color = colors[Math.floor(Math.random() * 3) + 1];
-        let options = { color: color };
-        if (warehouseLocation) {
-          options.color = colors[0];
-          if (warehouseLocation.latitude == w.location.latitude && warehouseLocation.longitude == w.location.longitude) {
-            options.color = colors[Math.floor(Math.random() * 3) + 1];
-            options.scale = 2;
+        if (w.location?.latitude) {
+          if (i === 0){
+            map = new mapboxgl.Map({
+              container: mapContainerRef.current,
+              style: 'mapbox://styles/mapbox/light-v10',
+              center: [w.location.latitude, w.location.longitude],
+              zoom: 10
+            });
+            setLng(w.location.longitude);
+            setLat(w.location.latitude);
           }
-        }
+          const coords = [w.location.latitude, w.location.longitude];
+          let color = colors[Math.floor(Math.random() * 3) + 1];
+          let options = { color: color };
+          if (warehouseLocation) {
+            options.color = colors[0];
+            if (warehouseLocation.latitude == w.location.latitude && warehouseLocation.longitude == w.location.longitude) {
+              options.color = colors[Math.floor(Math.random() * 3) + 1];
+              options.scale = 2;
+            }
+          }
 
-        newMarker = new mapboxgl.Marker(options).setLngLat(coords).addTo(map);
-        markers.push(newMarker);
+          newMarker = new mapboxgl.Marker(options).setLngLat(coords).addTo(map);
+          markers.push(newMarker);
+        }
       });
     }
     

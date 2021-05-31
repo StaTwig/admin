@@ -116,7 +116,7 @@ const TransactionHistory = (props) => {
     setSelectedOrganizationType(organizationType);
     const _filters = { ...filters };
     _filters.organizationType = organizationType;
-
+    _getOrganizationsByType(_filters);
     setFilters(_filters);
     applyFilters(_filters);
   };
@@ -210,7 +210,7 @@ const TransactionHistory = (props) => {
 
   }
 
-  const allowedMonths = [1, 2, 3, 4, 5, 6, 7, 8, 9, 12];
+  const allowedMonths = [{ key: 1, value: "Jan" }, { key: 2, value: "Feb" }, { key: 3, value: "Mar" }, { key: 4, value: "Apr" }, { key: 5, value: "May" }, { key: 6, value: "Jun" }, { key: 7, value: "Jul" }, { key: 8, value: "Aug" }, { key: 9, value: "Sept" }, { key: 10, value: "Oct" }, { key: 11, value: "Nov" }, { key: 12, value: "Dec" }];
   let thisYear = new Date().getFullYear();
   const allowedYears = [];
   for (let i = 0; i < 21; i++) {
@@ -308,6 +308,7 @@ const TransactionHistory = (props) => {
   useEffect(() => {
     (async () => {
       _getAllStates();
+      _getOrganizationsByType(filters);
       const results = await dispatch(getTransactions(filters));
       let addedarray = [];
       let date;
@@ -427,177 +428,165 @@ const TransactionHistory = (props) => {
                     ) : (
                       ""
                     )}
-                    <div className="transactionListContainer">
-
-                      <div className={`productContainer col-md-12 ${selectedIndex === index ? "productDetailActive" : ""}`} onClick={() => selectTransaction(transaction, index)}>
-                        <div className="productItem col-md-4">
-                          <div className="iconGroup">
-                            <div className="productIcon inTransit">
-                              <img
-                                src={inTransitIcon}
-                                className="icon-thumbnail-img"
-                                alt=""
-                              />
-                            </div>
-                            <div>
-                              <span className="transactionTitle">
-                                {transaction.receiver.org.name}
-                              </span>
-                              <br />
-                              <span className="transactionDate">
-                                <Moment format="MMMM Do YYYY, h:mm a">
-                                  {transaction.createdAt}
-                                </Moment>
-                              </span>
-                              <br />
-                              <span className="transactionDate">
-                                <span>FROM:</span>{" "}
-                                {transaction.supplier.org.name} - TO:{" "}
-                                {transaction.receiver.org.name}
-                              </span>
+                    <div className={`transactionListContainer ${selectedIndex === index ? "activeTxnContainer" : ""}`}>
+                      <div className={`productConainer ${selectedIndex === index ? "productDetailActive" : ""}`}>
+                        <div className={`productContainerListItem col-md-12`} onClick={() => selectTransaction(transaction, index)}>
+                          <div className="productItem col-md-4">
+                            <div className="iconGroup">
+                              <div className="productIcon inTransit">
+                                <img
+                                  src={inTransitIcon}
+                                  className="icon-thumbnail-img"
+                                  alt=""
+                                />
+                              </div>
+                              <div>
+                                <span className="transactionTitle">
+                                  {transaction.receiver.org.name}
+                                </span>
+                                <br />
+                                <span className="transactionDate">
+                                  <Moment format="MMMM Do YYYY, h:mm a">
+                                    {transaction.createdAt}
+                                  </Moment>
+                                </span>
+                                <br />
+                                <span className="transactionDate">
+                                  <span>FROM:</span>{" "}
+                                  {transaction.supplier.org.name} - TO:{" "}
+                                  {transaction.receiver.org.name}
+                                </span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div className="productItem col-md-2">
-                          {transaction.status === "RECEIVED" && (
-                            <div className="productStatus">
-                              <span className="statusbadge receivedBadge"></span>{" "}
-                              Received
-                            </div>
-                          )}
-                          {transaction.status === "SENT" && (
-                            <div className="productStatus">
-                              <span className="statusbadge sentBadge"></span> Sent
-                            </div>
-                          )}
-                          {transaction.status === "INTRANSIT" && (
-                            <div className="productStatus">
-                              <span className="statusbadge transitBadge"></span> In
-                              Transit
-                            </div>
-                          )}
-                          {transaction.status === "CREATED" && (
-                            <div className="productStatus">
-                              <span className="statusbadge addedBadge"></span> Added
-                            </div>
-                          )}
-                        </div>
-                        <div className="productItem col-md-4">{transaction.imageDetails ? transaction.imageDetails[0] : ''}</div>
-                        <div className="productItem productQuantity col-md-2">
-                          {transaction.products.reduce(
-                            (a, v) => (a = a + v.productQuantity),
-                            0
-                          )}
-                        </div>
-                      </div>
-
-                      {
-                        selectedIndex === index ?
-                          <>
-                            <div className="productDetail">
-                              <div className="row supplierOrgName">
-                                {
-                                  (selectedTransaction.supplier && selectedTransaction.supplier.org) ? selectedTransaction.supplier.org.name : ''
-                                }
+                          <div className="productItem col-md-2">
+                            {transaction.status === "RECEIVED" && (
+                              <div className="productStatus">
+                                <span className="statusbadge receivedBadge"></span>{" "}
+                              RECEIVED
                               </div>
-                              <div className="row">
-                                <div className="col-md-3">
-                                  <span>Transaction ID:</span><span>{selectedTransaction.externalShipmentId}</span>
+                            )}
+                            {transaction.status === "SENT" && (
+                              <div className="productStatus">
+                                <span className="statusbadge sentBadge"></span> SENT
+                              </div>
+                            )}
+                            {transaction.status === "INTRANSIT" && (
+                              <div className="productStatus">
+                                <span className="statusbadge transitBadge"></span> IN TRANSIT
+                              </div>
+                            )}
+                            {transaction.status === "CREATED" && (
+                              <div className="productStatus">
+                                <span className="statusbadge addedBadge"></span> ADDED
+                              </div>
+                            )}
+                          </div>
+                          <div className="productItem col-md-4">{transaction.imageDetails ? transaction.imageDetails[0] : ''}</div>
+                          <div className="productItem productQuantity col-md-2">
+                            {transaction.products.reduce(
+                              (a, v) => (a = a + v.productQuantity),
+                              0
+                            )}
+                          </div>
+                        </div>
+                        {
+                          selectedIndex === index ?
+                            <hr /> : ""
+                        }
+                        {
+                          selectedIndex === index ?
+                            <>
+                              <div className="productDetail">
+                                <div className="row supplierOrgName">
+                                  {
+                                    (selectedTransaction.supplier && selectedTransaction.supplier.org) ? selectedTransaction.supplier.org.name : ''
+                                  }
                                 </div>
-                                <div className="col-md-3">
-                                  <span>Status:</span><span>{selectedTransaction.status}</span>
-                                </div>
-                                <div className="col-md-3">
-                                  <span>Date:</span><span>{selectedTransaction.shippingDate}</span>
-                                </div>
-                                <div className="col-md-3">
-                                  <span>Challan No:</span><span>{selectedTransaction.airWayBillNo}</span>
-                                </div>
-                                {/* <div className="col-md-3">
+                                <div className="row">
+                                  <div className="col-md-3">
+                                    <span className="productHeader">Transaction ID:&nbsp;&nbsp;</span> <span>{selectedTransaction.externalShipmentId}</span>
+                                  </div>
+                                  <div className="col-md-3">
+                                    <span className="productHeader">Status: &nbsp;&nbsp;</span><span>{selectedTransaction.status}</span>
+                                  </div>
+                                  <div className="col-md-3">
+                                    <span className="productHeader">Date: &nbsp;&nbsp;</span><span>{new Date(selectedTransaction.shippingDate).toISOString().slice(0, 10)}</span>
+                                  </div>
+                                  <div className="col-md-3">
+                                    <span className="productHeader">Challan No: &nbsp;&nbsp;</span><span>{selectedTransaction.airWayBillNo}</span>
+                                  </div>
+                                  {/* <div className="col-md-3">
                                   <span>Truck No:</span><span>{selectedTransaction.externalShipmentId}</span>
                                 </div> */}
-                              </div>
-                              <div className="row">
-                                {
-                                  selectedTransaction.imageDetails && selectedTransaction.imageDetails.map(image => (
-                                    <>
-                                      <ModalImage
-                                        small={getImageURL(image)}
-                                        className="challanImage"
-                                        large={getImageURL(image)}
-                                        showRotate={true}
-                                        hideZoom={false}
-                                        alt="Challan Image"
-                                      />
-                                    </>
-                                  ))
-                                }
-
-                              </div>
-                              <div className=" transactionProducts row">
-                                {
-                                  selectedTransaction.products.length ?
-                                    <>
-                                      <div className="productHeader col-md-3">Manufacturer</div>
-                                      <div className="productHeader col-md-3">Product</div>
-                                      <div className="productHeader col-md-3">Quantity Sent</div>
-                                      <div className="productHeader col-md-3">Quantity Received</div>
-                                    </> : ""
-                                }
-                                {
-                                  selectedTransaction.products.map(product => {
-                                    return (
+                                </div>
+                                <div className="row">
+                                  {
+                                    selectedTransaction.imageDetails && selectedTransaction.imageDetails.map(image => (
                                       <>
-                                        <div className="col-md-3">
-                                          {
-                                            product.manufacturer
-                                          }
-                                        </div>
-                                        <div className="col-md-3">
-                                          {
-                                            product.productName
-                                          }
-                                        </div>
-                                        <div className="col-md-3">
-                                          {
-                                            product.productQuantity
-                                          }
-                                        </div>
-                                        <div className="col-md-3">
-                                          {
-                                            product.productQuantityDelivered
-                                          }
-                                        </div>
+                                        <ModalImage
+                                          small={getImageURL(image)}
+                                          className="challanImage"
+                                          large={getImageURL(image)}
+                                          showRotate={true}
+                                          hideZoom={false}
+                                          alt="Challan Image"
+                                        />
                                       </>
-                                    )
-                                  })
-                                }
-                                {
-                                  selectedTransaction.products.length ?
-                                    <>
-                                      <div className="productHeader col-md-3"></div>
-                                      <div className="productHeader col-md-3">
-                                        Total
-                                      </div>
-                                      <div className="productHeader col-md-3">
-                                        {
-                                          getSumByProperty(selectedTransaction.products, 'productQuantity')
-                                        }</div>
-                                      <div className="productHeader col-md-3">
-                                        {
-                                          getSumByProperty(selectedTransaction.products, 'productQuantity')
-                                        }
-                                      </div>
-                                    </> : ""
-                                }
+                                    ))
+                                  }
 
+                                </div>
+                                <div className=" transactionProducts row">
+                                  {
+                                    selectedTransaction.products.length ?
+                                      <>
+                                        <table>
+                                          <thead>
+                                            <tr>
+                                              <th className="productHeader">Manufacturer</th>
+                                              <th className="productHeader">Product</th>
+                                              <th className="productHeader">Quantity Sent</th>
+                                              <th className="productHeader">Quantity Received</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            {
+                                              selectedTransaction.products.map(product => {
+                                                return (<>
+                                                  <tr>
+                                                    <td>{product.manufacturer}</td>
+                                                    <td>{product.productName}</td>
+                                                    <td>{product.productQuantity}</td>
+                                                    <td>{product.productQuantityDelivered}</td>
+                                                  </tr>
+                                                </>)
+                                              })
+                                            }
+                                            {
+                                              selectedTransaction?.products?.length ?
+                                                <>
+                                                  <tr>
+                                                    <td></td>
+                                                    <td className="productHeader">Total</td>
+                                                    <td className="productHeader">{getSumByProperty(selectedTransaction.products, 'productQuantity')}</td>
+                                                    <td className="productHeader">{getSumByProperty(selectedTransaction.products, 'productQuantityDelivered')}</td>
+                                                  </tr>
+                                                </> : ""
+                                            }
+                                          </tbody>
+                                        </table>
+                                      </> : ""
+                                  }
+                                </div>
+                                <div className="row rejectionRateRow">
+                                  <span>Rejection Rate: {toFixed2(selectedTransaction.rejectionRate)}% </span>
+                                </div>
                               </div>
-                              <div className="row rejectionRateRow">
-                                <span>Rejection Rate: {toFixed2(selectedTransaction.rejectionRate)}% </span>
-                              </div>
-                            </div>
-                          </> : ""
-                      }
+                            </> : ""
+                        }
+                      </div>
+
                     </div>
                   </div>
                 ))}
@@ -712,11 +701,11 @@ const TransactionHistory = (props) => {
                             value={filters.month}
                             onChange={onMonthChange}
                           >
-                            <option>Select Year</option>
+                            <option>Select Month</option>
                             {allowedMonths.map((month, index) => {
                               return (
-                                <option key={index} value={month}>
-                                  {month}
+                                <option key={index} value={month.key}>
+                                  {month.value}
                                 </option>
                               );
                             })}
@@ -868,13 +857,15 @@ const TransactionHistory = (props) => {
                       selectedOrganizationType === 'VENDOR' ? ' Vendor' : ' Brewery'
                     }
                   </option>
-                  {organizations.map((organization, index) => {
-                    return (
-                      <option key={index} value={organization.id}>
-                        {organization.name}
-                      </option>
-                    );
-                  })}
+                  {
+                    organizations && organizations.map((organization, index) => {
+                      return (
+                        <option key={index} value={organization.id}>
+                          {organization.name}
+                        </option>
+                      );
+                    })
+                  }
                 </select>
 
                 <button

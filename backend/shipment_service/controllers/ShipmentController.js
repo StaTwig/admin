@@ -1,7 +1,4 @@
-const { body, validationResult, sanitizeBody } = require("express-validator");
-const { nanoid } = require("nanoid");
 const apiResponse = require("../helpers/apiResponse");
-const fs = require("fs");
 const moveFile = require("move-file");
 const date = require("date-and-time");
 require("dotenv").config();
@@ -9,8 +6,6 @@ const auth = require("../middlewares/jwt");
 const checkToken = require("../middlewares/middleware").checkToken;
 const ShipmentModel = require("../models/ShipmentModel");
 const RecordModel = require("../models/RecordModel");
-const ShippingOrderModel = require("../models/ShippingOrderModel");
-const ProductModel = require("../models/ProductModel");
 const WarehouseModel = require("../models/WarehouseModel");
 const InventoryModel = require("../models/InventoryModel");
 const EmployeeModel = require("../models/EmployeeModel");
@@ -25,6 +20,11 @@ const imageUrl = process.env.IMAGE_URL;
 const CENTRAL_AUTHORITY_ID = null
 const CENTRAL_AUTHORITY_NAME = null
 const CENTRAL_AUTHORITY_ADDRESS = null
+
+const {uploadFile} = require("../helpers/s3");
+const fs = require('fs');
+const util = require('util');
+const unlinkFile = util.promisify(fs.unlink);
 
 const inventoryUpdate = async (
   id,
@@ -460,6 +460,24 @@ exports.createShipment = [
 
         const shipment = new ShipmentModel(data);
         const result = await shipment.save();
+
+        if (data.taggedShipments) {
+	    const prevTaggedShipments = await ShipmentModel.findOne({
+        	id: data.taggedShipments
+    	}, {
+        	_id: 0,
+        	taggedShipments: 1
+    	});
+
+    	await ShipmentModel.findOneAndUpdate({
+        	id: shipmentId
+    	}, {
+        	$push: {
+            	taggedShipments: prevTaggedShipments.taggedShipments
+       		}
+    	});
+	}
+
         async function compute(event_data) {
           resultt = await logEvent(event_data);
           return resultt;
@@ -1342,45 +1360,43 @@ exports.getProductsByInventory = [
 exports.uploadImage = async function (req, res) {
   checkToken(req, res, async (result) => {
     if (result.success) {
-      const { data } = result;
       const Id = req.query.id;
-
-      const incrementCounter = await CounterModel.update(
-        {
-          "counters.name": "shipmentImage",
-        },
-        {
-          $inc: {
-            "counters.$.value": 1,
-          },
-        }
-      );
-
-      const poCounter = await CounterModel.find(
-        { "counters.name": "shipmentImage" },
-        { "counters.name.$": 1 }
-      );
-      const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]));
+      // const incrementCounter = await CounterModel.updateOne(
+      //   {
+      //     "counters.name": "shipmentImage",
+      //   },
+      //   {
+      //     $inc: {
+      //       "counters.$.value": 1,
+      //     },
+      //   }
+      // );
+      // console.log(incrementCounter)
+      // const poCounter = await CounterModel.find(
+      //   { "counters.name": "shipmentImage" },
+      //   { "counters.name.$": 1 }
+      // );
+      // console.log(poCounter)
+      // const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]));
       try {
-        const filename = Id + "-" + t.format + t.value + ".png";
-        let dir = `/home/ubuntu/shipmentimages`;
+        // const filename = Id + "-" + t.format + t.value + ".png";
+        // let dir = `/home/ubuntu/shipmentimages`;
 
-        await moveFile(req.file.path, `${dir}/${filename}`);
-        const update = await ShipmentModel.updateOne(
+        // await moveFile(req.file.path, `${dir}/${filename}`);
+        const Upload = await uploadFile(req.file)
+        console.log(Upload)
+        await unlinkFile(req.file.path)
+        console.log("Unlinked")
+        const update = await ShipmentModel.findOneAndUpdate(
           { id: Id },
-          { $push: { imageDetails: filename } }
+          { $push: { imageDetails: `${Upload.key}`}},{ new: true}
         );
-        return res.send({
-          success: true,
-          data: "Image uploaded successfullly.!",
-          filename,
-        });
+        return apiResponse.successResponseWithData(res, "Image uploaded successfullly", update);
       } catch (e) {
-        console.log("Error in image upload", e);
-        res.status(403).json(e);
+        return apiResponse.ErrorResponse(res, e);
       }
     } else {
-      res.json(result);
+      return apiResponse.unauthorizedResponse(res, result);
     }
   });
 };
@@ -1388,7 +1404,6 @@ exports.uploadImage = async function (req, res) {
 exports.fetchImage = async function (req, res) {
   checkToken(req, res, async (result) => {
     if (result.success) {
-      const { data } = result;
       const Id = req.query.id;
       var imageArray = [];
       const update = await ShipmentModel.find({ id: Id }, { imageDetails: 1 })
@@ -1397,6 +1412,7 @@ exports.fetchImage = async function (req, res) {
         })
         .catch((e) => {
           console.log("Err", e);
+          return apiResponse.ErrorResponse(res, e);
         });
 
       var resArray = [];
@@ -1405,12 +1421,9 @@ exports.fetchImage = async function (req, res) {
         const s = "/images/" + imageArray[i];
         resArray.push(s);
       }
-      return res.send({
-        success: true,
-        data: resArray,
-      });
+      return apiResponse.successResponseWithData(res, "Images " , resArray)
     } else {
-      res.json(result);
+      return apiResponse.ErrorResponse(res, result)
     }
   });
 };
@@ -2070,6 +2083,71 @@ exports.fetchAllWarehouseShipments = [
             logger.log(
                 "error",
                 "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
+            );
+            return apiResponse.ErrorResponse(res, err);
+        }
+    },
+];
+
+exports.trackShipmentJourney = [
+    auth,
+    async (req, res) => {
+        try {
+            checkToken(req, res, async (result) => {
+                if (result.success) {
+                    var inwardShipmentsArray = [];
+                    var poDetails;
+                    const inwardShipments = await ShipmentModel.findOne({
+                        id: req.query.shipmentId
+                    }, {
+                        _id: 0,
+                        "taggedShipments": 1,
+                        poId: 1
+                    })
+                    if (inwardShipments.taggedShipments.length > 0)
+                        inwardShipmentsArray = await ShipmentModel.find({
+                            "$and": [{
+                                id: inwardShipments.taggedShipments
+                            }, {
+                                status: "RECEIVED"
+                            }]
+                        })
+                    else if (inwardShipments.poId != null)
+                        poDetails = await RecordModel.findOne({
+                            id: inwardShipments.poId
+                        })
+                    const trackedShipment = await ShipmentModel.findOne({
+                        id: req.query.shipmentId
+                    })
+                    const outwardShipmentsArray = await ShipmentModel.find({
+                        "$and": [{
+                            taggedShipments: req.query.shipmentId
+                        }, {
+                            status: "RECEIVED"
+                        }]
+                    })
+
+                    return apiResponse.successResponseWithData(
+                        res,
+                        "Shipments Table", {
+                            "poDetails": poDetails,
+                            "inwardShipmentsArray": inwardShipmentsArray,
+                            "trackedShipment": trackedShipment,
+                            "outwardShipmentsArray": outwardShipmentsArray
+                        }
+                    );
+                } else {
+                    logger.log(
+                        "warn",
+                        "<<<<< ShipmentService < ShipmentController < fetchShipmentIds : refuted token"
+                    );
+                    res.status(403).json("Auth failed");
+                }
+            });
+        } catch (err) {
+            logger.log(
+                "error",
+                "<<<<< ShipmentService < ShipmentController < fetchShipmentIds : error (catch block)"
             );
             return apiResponse.ErrorResponse(res, err);
         }
