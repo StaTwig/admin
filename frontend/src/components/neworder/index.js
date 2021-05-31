@@ -14,8 +14,6 @@ import {
 //   getAllOrganisations,
 //   getProductsByInventoryId
 // } from "../../actions/shippingOrderAction";
-import addPOsFromExcel from "../../actions/poActions";
-import DropdownButton from "../../shared/dropdownButtonGroup";
 import ShipmentPopUp from "./shipmentPopUp";
 import ShipmentFailPopUp from "./shipmentFailPopUp";
 import { Formik } from "formik";
@@ -86,7 +84,7 @@ const NewOrder = (props) => {
     async function fetchData() {
       // const orgSplit = user.organisation?.split('/');
       // console.log(orgSplit);
-
+      
       // setSenderOrganisation(orgSplit);
 
       const orgs = await getAllOrganisations();
@@ -126,10 +124,6 @@ const NewOrder = (props) => {
     fetchData();
   }, []);
 
-  // const closeModal = () => {
-  //   setOpenOrder(false);
-  //   props.history.push("/orders");
-  // };
   const closeExcelModal = () => {
     setOpenExcel(false);
   };
@@ -144,12 +138,11 @@ const NewOrder = (props) => {
   const onOrgChange = async (value) => {
     try {
       const warehouse = await getWarehouseByOrgId(value);
-      setReceiverWarehouses(warehouse.data.map(item => {
+      setReceiverWarehouses(warehouse.data.map(v => {
                                       return {
-                                        value: item.id,
-                                        label: item.title,
-                                        warehouseAddress: item.warehouseAddress,
-                                        postalAddress: item.postalAddress
+                                        ...v,
+                                        value: v.id,
+                                        label: v?.warehouseAddress ? v?.title + '/' + v?.warehouseAddress?.firstLine + ", " + v?.warehouseAddress?.city : v?.title + '/' + v.postalAddress
                                       };
                                     }));
     }
@@ -545,13 +538,23 @@ const NewOrder = (props) => {
                           }}
                           groups={receiverWarehouses}
                         /> */}
+ {/* <Select
+                          styles={customStyles}
+                          isDisabled={disabled}
+                          placeholder={disabled ? values.toOrgLoc : "Select Delivery Location"}
+                          onChange={(v) => {
+                            setFieldValue("toOrgLoc", v.value);
+                          }}
+                          defaultInputValue={values.toOrgLoc}
+                          options={receiverWarehouses}
+                        /> */}
+
                           <Select
                             styles={customStyles}
                             placeholder="Select Delivery Location"
                             defaultInputValue={values.toOrgLocName}
                             onChange={(v) => {
-                              let name =v?.warehouseAddress ? (v?.label +'/' + v?.warehouseAddress?.firstLine + ', ' + v?.warehouseAddress?.city) : (v?.label  +'/' + v?.postalAddress)  ;
-                              setFieldValue('toOrgLocName', name);
+                              setFieldValue('toOrgLocName', v.label);
                               setFieldValue('toOrgLoc', v.value);
                             }}
                             isDisabled={values.rtypeName == ''}
@@ -566,7 +569,6 @@ const NewOrder = (props) => {
                 </div>
               </div>
             </div>
-
             <div className="d-flex pt-4 justify-content-between">
               <div className="value">{quantity}</div>
               <div className="d-flex">

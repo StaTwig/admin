@@ -14,16 +14,17 @@ import {
 } from '../constants/inventoryConstants';
 import { turnOn, turnOff } from './spinnerActions';
 
-export const getInventories = (skip = 0, limit = 5) => {
-
+export const getInventories = (skip, limit, dateFilter) => {
+console.log(" inside getInventories =======> ");
     return async dispatch => {
       try {
         dispatch(turnOn());
         const result = await axios.get(
-          `${config().inventoriesUrl}?skip=${skip}&limit=${limit}`,
-        );
-        dispatch(setInventories(result.data));
-        dispatch(setInventoriesCount(result.data));
+          `${config().getTransactions}?skip=${skip}&limit=${limit}&dateFilter=${dateFilter}`
+          );
+        console.log(result.data.data.inventoryRecords)
+        dispatch(setInventories(result.data.data.inventoryRecords));
+        dispatch(setInventoriesCount(result.data.data.count));
         dispatch(turnOff());
         return result.data.data.length;
       }catch(e) {
@@ -256,6 +257,24 @@ export const getNearExpiringProductsByBatch = async (id) => {
 export const getExpiredProductsByBatch = async (id) => {
   try {
     const result = await axios.get(config().batchExpiredUrl);
+    return result.data.data;
+  } catch (e) {
+    return {};
+  }
+};
+
+export const getInventoryByWareHouse = async (skip = 0, limit = 5, warehouseId = '') => {
+  try {
+    const result = await axios.get(`${config().inventoriesUrl}?skip=${skip}&limit=${limit}&warehouseId=${warehouseId}`);
+    return result.data.data;
+  } catch (e) {
+    return {};
+  }
+};
+
+export const getBatchDetailsByWareHouse = async (inventory_id, product_id) => {
+  try {
+    const result = await axios.get(`${config().batchWarehouseUrl}?inventory_id=${inventory_id}&product_id=${product_id}`);
     return result.data.data;
   } catch (e) {
     return {};

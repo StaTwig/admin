@@ -125,8 +125,8 @@ const SignUp = (props) => {
                 >
                   <option value="">Select Brewery</option>
                   {
-                    allBreweries.map(brewery => (
-                      <option value={brewery.id}>{brewery.name}</option>
+                    allBreweries && allBreweries.map((brewery, index) => (
+                      <option key={index} value={brewery.id}>{brewery.name}</option>
                     ))
                   }
                   <option value="BREWERY">I am a Brewery</option>

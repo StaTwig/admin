@@ -608,7 +608,7 @@ exports.getOrderIds = [
     try {
      
       const {organisationId } = req.user;
-      const orderID = await RecordModel.find({$or:[{"supplier.supplierOrganisation":organisationId},{"receiver.receiverOrganisation":organisationId}]},'id');
+      const orderID = await RecordModel.find({$or:[{"supplier.supplierOrganisation":organisationId},{"customer.customerOrganisation":organisationId}]},'id');
       
       return apiResponse.successResponseWithData(
         res,

@@ -13,6 +13,7 @@ export const LOCAL_SERVER_URL_TRACKANDTRACE = 'http://localhost:3005';
 export const LOCAL_SERVER_URL_NOTIFICATION = 'http://localhost:3006';
 export const LOCAL_SERVER_URL_ANALYTICS = 'http://localhost:3015';
 export const LOCAL_SERVER_URL_EOL = 'http://localhost:3017';
+export const LOCAL_SERVER_URL_EVENT = 'http://localhost:3014';
 export const LOCAL_SERVER_URL_PRODUCTS = 'http://localhost:3010';
 export const STABLE_SERVER_URL_USER = 'http://54.164.66.73:3001';
 export const STABLE_SERVER_URL_SHIPMENT = 'http://54.164.66.73:3002';
@@ -86,6 +87,7 @@ export function config() {
       inventoriesUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventory`,
       bacthcNearExpiryUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getBatchNearExpiration`,
       batchExpiredUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getBatchExpired`,
+      batchWarehouseUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getBatchWarehouse`,
       addPOsFromExcelUrl: `${LOCAL_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
       changePOStatus: `${LOCAL_SERVER_URL_SHIPMENT}/pomanagement/api/po/changePOStatus`,
       fetchAllPurchaseOrderUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
@@ -120,6 +122,7 @@ export function config() {
       getWarehouseById: `${LOCAL_SERVER_URL_SHIPMENT}/usermanagement/api/auth/getwarehouseinfo?id=`,
       addPOsFromExcel:`${LOCAL_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
+      getTransactions: `${LOCAL_SERVER_URL_EVENT}/eventmanagement/api/event/getAllEventsWithFilter`
           },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
@@ -172,6 +175,7 @@ export function config() {
       inventoriesUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getInventory`,
       bacthcNearExpiryUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getBatchNearExpiration`,
       batchExpiredUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getBatchExpired`,
+      batchWarehouseUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getBatchWarehouse`,
       createPurchaseOrderUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/createPurchaseOrder`,
       createOrderUrl: `${DEV_SERVER_URL}/pomanagement/api/po/createOrder`,
       fetchPurchaseOrderUrl: `${DEV_SERVER_URL}/pomanagement/api/po/fetchPurchaseOrders`,
@@ -208,7 +212,8 @@ export function config() {
        fetchSupplierAndReceiverListUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
        addPOsFromExcel:`${DEV_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
        getOrganizationsTypewithauth:`${DEV_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-    },
+       getTransactions: `${DEV_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
+      },
     stable: {
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
       sendOtpUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/sendOtp`,
@@ -256,6 +261,7 @@ export function config() {
       inventoriesUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventory`,
       bacthcNearExpiryUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getBatchNearExpiration`,
       batchExpiredUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getBatchExpired`,
+      batchWarehouseUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getBatchWarehouse`,
       inventorySearch: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`,
       addProductsToInventory: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/addProductsToInventory`,
       addInventoriesFromExcel: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/addInventoriesFromExcel`,
@@ -298,6 +304,7 @@ export function config() {
        fetchSupplierAndReceiverListUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
        addPOsFromExcel:`${STABLE_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
        getOrganizationsTypewithauth:`${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
+       getTransactions: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/getAllEventsWithFilter`
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -342,6 +349,7 @@ export function config() {
       inventoriesUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getInventory`,
       bacthcNearExpiryUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getBatchNearExpiration`,
       batchExpiredUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getBatchExpired`,
+      batchWarehouseUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getBatchWarehouse`,
       inventorySearch: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`,
       getSerialNumbersByBatchNumber: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
       getInventoryDetailsUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetails`,
@@ -391,7 +399,8 @@ export function config() {
       addWarehouse: `${TEST_SERVER_URL}/usermanagement/api/auth/addWarehouse`,
       addPOsFromExcel:`${TEST_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${TEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-    },
+      getTransactions: `${TEST_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
+},
     demo: {
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/sendOtp`,
@@ -435,6 +444,7 @@ export function config() {
       inventoriesUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getInventory`,
       bacthcNearExpiryUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getBatchNearExpiration`,
       batchExpiredUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getBatchExpired`,
+      batchWarehouseUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getBatchWarehouse`,
       inventorySearch: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`,
       getSerialNumbersByBatchNumber: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
       getInventoryDetailsUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetails`,
@@ -478,6 +488,7 @@ export function config() {
       getWarehouseById: `${DEMO_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
       addPOsFromExcel:`${DEMO_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${DEMO_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
+      getTransactions: `${DEMO_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
     },
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
@@ -526,6 +537,7 @@ export function config() {
       inventoriesUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getInventory`,
       bacthcNearExpiryUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getBatchNearExpiration`,
       batchExpiredUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getBatchExpired`,
+      batchWarehouseUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getBatchWarehouse`,
       inventorySearch: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`,
       getSerialNumbersByBatchNumber: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
       getInventoryDetailsUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetails`,
@@ -564,6 +576,7 @@ export function config() {
       getWarehouseById: `${PROD_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
       addPOsFromExcel:`${PROD_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${PROD_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
+      getTransactions: `${PROD_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
     },
     
     uniceftest: {
@@ -609,6 +622,7 @@ export function config() {
       inventoriesUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getInventory`,
       bacthcNearExpiryUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getBatchNearExpiration`,
       batchExpiredUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getBatchExpired`,
+      batchWarehouseUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getBatchWarehouse`,
       inventorySearch: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsForProduct?key=`,
       getSerialNumbersByBatchNumber: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetailsByBatchNumber?skip=0&limit=100&batchNumber=`,
       getInventoryDetailsUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getInventoryDetails`,
@@ -652,6 +666,8 @@ export function config() {
       getWarehouseById: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
       addPOsFromExcel:`${UNICEFTEST_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
+      getTransactions: `${UNICEFTEST_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
+
     },
   };
 

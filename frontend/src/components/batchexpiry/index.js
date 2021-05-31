@@ -17,7 +17,7 @@ const BatchExpiry = props => {
   useEffect(() => {
     async function fetchData() {
       dispatch(turnOn());
-      let result = await getNearExpiringProductsByBatch();
+      let result;
       if (props.match.params?.category)
         result = await getNearExpiringProductsByBatch();
       else {

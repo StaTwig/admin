@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from "react-redux";
 import './style.scss';
 import DropdownButton from '../../shared/dropdownButtonGroup';
 import Date_time from '../../assets/icons/date_time.png';
@@ -41,7 +42,7 @@ const lastMile=(props)=>{
 useEffect(()=>{
     async function fetchData(){
         const eol_ProductID = await GetEOLInfoByProductId("pro123456");
-        // console.log(eol_ProductID);
+        console.log(eol_ProductID);
     }
     fetchData();
 },[]);
