@@ -153,7 +153,7 @@ const imgs = config().fetchProfileImage;
 
           <div className="userPic">
             <img
-              src={`${imgs}${profile.photoId}` ? `${imgs}${profile.photoId}` : user}
+              src={profile.photoId ? profile.photoId : user}
               alt=""
               className={`rounded rounded-circle ${`${imgs}${profile.photoId}` ? `` :`img-thumbnail bg-transparent border-0`}`}
             />

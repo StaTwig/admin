@@ -68,7 +68,7 @@ const SpmDashboard = (props) => {
             {
               supplierPerformances?.map(((perf, index) =>
                 <>
-                  <tr>
+                  <tr className={`${selectedRatingIndex === index ? "selectedRow noBottomRadius" : ""}`}>
                     <td scope="row">{index + 1}</td>
                     <td>
                       <div className="tableProfileIconCard justify-content-start">
@@ -101,10 +101,10 @@ const SpmDashboard = (props) => {
                   </tr>
                   {
                     selectedRatingIndex === index ?
-                      <tr className="selectedSupplier">
-                        <td colSpan="5">
-                          <div className="tableDetals spmDetail">
-                            <table className="table text-align-left">
+                      <tr>
+                        <td colSpan="5" className="selectedSupplier">
+                          <div>
+                            <table className="table text-align-left noBottomRadius mb-0">
                               <tbody>
                                 <tr>
                                   <td scope="row"></td>
@@ -149,8 +149,8 @@ const SpmDashboard = (props) => {
                             </table>
                           </div>
 
-                          <div className="tableDetals mb-4">
-                            <table className="table text-align-left">
+                          <div>
+                            <table className="table text-align-left noTopRadius">
                               <thead>
                                 <tr>
                                   <th scope="col">Criteria</th>
@@ -162,28 +162,28 @@ const SpmDashboard = (props) => {
                               <tbody>
                                 <tr>
                                   <td scope="row">Return Rate</td>
-                                  <td></td>
-                                  <td></td>
                                   <td>
                                     {perf.returnRate ? perf.returnRate : 0}
                                   </td>
+                                  <td></td>
+                                  <td></td>
                                 </tr>
                                 <tr>
                                   <td scope="row">Lead Time</td>
-                                  <td></td>
-                                  <td></td>
                                   <td>
                                     {perf.leadTime && perf.leadTime[0] && perf.leadTime[0].avgLeadTime ? perf.leadTime[0].avgLeadTime : 0}
                                   </td>
+                                  <td></td>
+                                  <td></td>
                                 </tr>
                                 <tr>
                                   <td scope="row">Storage Capacity</td>
-                                  <td></td>
-                                  <td></td>
                                   <td>
                                     {perf.storageCapacity.bottleCapacity}<br />
                                     {perf.storageCapacity.sqft}
                                   </td>
+                                  <td></td>
+                                  <td></td>
                                 </tr>
                               </tbody>
                             </table>

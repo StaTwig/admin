@@ -4,7 +4,7 @@ const OrganisationModel = require('../models/OrganisationModel');
 const WarehouseModel = require('../models/WarehouseModel');
 //this helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
-const utility = require('../helpers/utility');
+
 const auth = require('../middlewares/jwt');
 const checkToken = require('../middlewares/middleware').checkToken;
 const checkPermissions = require('../middlewares/rbac_middleware')

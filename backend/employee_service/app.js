@@ -10,11 +10,11 @@ const apiResponse = require("./helpers/apiResponse");
 const cors = require("cors");
 const swaggerUi = require('swagger-ui-express');
 const openApiDocumentation = require('./openApiDocumentation');
-
+const {getFileStream} = require("./helpers/s3")
 // DB connection
 const MONGODB_URL = process.env.MONGODB_URL;
 const mongoose = require("mongoose");
-mongoose.connect(MONGODB_URL, { useNewUrlParser: true }).then(() => {
+mongoose.connect(MONGODB_URL, { useNewUrlParser: true ,useUnifiedTopology: true, useFindAndModify: false }).then(() => {
 	//don't show the log when it is test
 	if(process.env.NODE_ENV !== "test") {
 		console.log("Connected to %s", MONGODB_URL);
@@ -27,10 +27,10 @@ mongoose.connect(MONGODB_URL, { useNewUrlParser: true }).then(() => {
 		process.exit(1);
 	});
 const db = mongoose.connection;
-const dir = `/home/ubuntu/userimages`;
-if (!fs.existsSync(dir)) {
-  fs.mkdirSync(dir);
-}
+// const dir = `/home/ubuntu/userimages`;
+// if (!fs.existsSync(dir)) {
+//   fs.mkdirSync(dir);
+// }
 
 var app = express();
 
@@ -50,7 +50,10 @@ app.use(cors());
 //Route Prefixes
 app.use("/", indexRouter);
 app.use("/usermanagement/api/", apiRouter);
-app.use('/usermanagement/api/auth/images', express.static(path.join('/home/ubuntu/','userimages')));
+app.get('/usermanagement/api/auth/images/:key', (req, res) => {
+	const FileStream = getFileStream(req.params.key);
+	FileStream.pipe(res)
+	});
 
 // throw 404 if URL not found
 app.all("*", function(req, res) {

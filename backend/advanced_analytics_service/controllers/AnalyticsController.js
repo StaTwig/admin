@@ -1,22 +1,11 @@
 /* eslint-disable linebreak-style */
 const AnalyticsModel = require("../models/AnalyticsModel");
 const ProductSKUModel = require("../models/ProductSKUModel");
-
+const auth = require("../middlewares/jwt");
 const OrganisationModel = require("../models/OrganisationModel");
-const { body, validationResult, param } = require("express-validator");
-const { sanitizeBody } = require("express-validator");
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
-const utility = require("../helpers/utility");
-const jwt = require("jsonwebtoken");
-const mailer = require("../helpers/mailer");
-const { constants } = require("../helpers/constants");
 require("dotenv").config();
-const auth = require("../middlewares/jwt");
-const moment = require('moment');
-const mongoose = require("mongoose");
-const ShipmentModel = require("../models/ShipmentModel");
-
 
 const BREWERY_ORG = 'BREWERY';
 const S1_ORG = 'S1';

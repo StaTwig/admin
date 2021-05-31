@@ -13,6 +13,7 @@ export const LOCAL_SERVER_URL_TRACKANDTRACE = 'http://localhost:3005';
 export const LOCAL_SERVER_URL_NOTIFICATION = 'http://localhost:3006';
 export const LOCAL_SERVER_URL_ANALYTICS = 'http://localhost:3015';
 export const LOCAL_SERVER_URL_EOL = 'http://localhost:3017';
+export const LOCAL_SERVER_URL_EVENT = 'http://localhost:3014';
 export const LOCAL_SERVER_URL_PRODUCTS = 'http://localhost:3010';
 export const STABLE_SERVER_URL_USER = 'http://54.164.66.73:3001';
 export const STABLE_SERVER_URL_SHIPMENT = 'http://54.164.66.73:3002';
@@ -39,7 +40,7 @@ export function config() {
       getAllUsersUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/updateProfile`,
       upload: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/uploadImage?`,
-      fetchProfileImage:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth`,
+      fetchProfileImage:`${LOCAL_SERVER_URL_USER}`,
       uploadProfileImage:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/uploadImage?action=PROFILE`,
       getOrganizationsByTypeUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsByType?id=`,
       getAnalyticsUrl:`${LOCAL_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getAnalytics`,
@@ -121,6 +122,7 @@ export function config() {
       getWarehouseById: `${LOCAL_SERVER_URL_SHIPMENT}/usermanagement/api/auth/getwarehouseinfo?id=`,
       addPOsFromExcel:`${LOCAL_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
+      getTransactions: `${LOCAL_SERVER_URL_EVENT}/eventmanagement/api/event/getAllEventsWithFilter`
           },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
@@ -132,7 +134,7 @@ export function config() {
       getAllUsersUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${DEV_SERVER_URL}/usermanagement/api/auth/uploadImage?`,
-      fetchProfileImage:`${DEV_SERVER_URL}/usermanagement/api/auth`,
+      fetchProfileImage:`${DEV_SERVER_URL}`,
       getAnalyticsUrl:`${DEV_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl:`${DEV_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
       getInventoryAnalyticsUrl:`${DEV_SERVER_URL}/analyticsmanagement/api/analytics/getInventoryAnalytics`,
@@ -210,7 +212,8 @@ export function config() {
        fetchSupplierAndReceiverListUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
        addPOsFromExcel:`${DEV_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
        getOrganizationsTypewithauth:`${DEV_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-    },
+       getTransactions: `${DEV_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
+      },
     stable: {
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
       sendOtpUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/sendOtp`,
@@ -221,9 +224,8 @@ export function config() {
       getAllUsersUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/updateProfile`,
       upload: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/uploadImage?`,
-      fetchProfileImage:`${STABLE_SERVER_URL_USER}/usermanagement/api/auth`,
-      uploadProfileImage: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/uploadImage?action=PROFILE`,
-      getOrganizationsByTypeUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsByType?id=`,
+      fetchProfileImage:`${STABLE_SERVER_URL_USER}`,
+      uploadProfileImage:`${STABLE_SERVER_URL_USER}/usermanagement/api/auth/uploadImage?action=PROFILE`,
       getAnalyticsUrl:`${STABLE_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl:`${STABLE_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
       getInventoryAnalyticsUrl:`${STABLE_SERVER_URL_ANALYTICS}/analyticsmanagement/api/analytics/getInventoryAnalytics`,
@@ -301,6 +303,7 @@ export function config() {
        fetchSupplierAndReceiverListUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
        addPOsFromExcel:`${STABLE_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
        getOrganizationsTypewithauth:`${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
+       getTransactions: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/getAllEventsWithFilter`
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -312,9 +315,8 @@ export function config() {
       getAllUsersUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${TEST_SERVER_URL}/usermanagement/api/auth/uploadImage?`,
-      fetchProfileImage:`${TEST_SERVER_URL}/usermanagement/api/auth`,
-      uploadProfileImage: `${TEST_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
-      getOrganizationsByTypeUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsByType?id=`,
+      fetchProfileImage:`${TEST_SERVER_URL}`,
+      uploadProfileImage:`${TEST_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
       getAnalyticsUrl:`${TEST_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl:`${TEST_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
       getInventoryAnalyticsUrl:`${TEST_SERVER_URL}/analyticsmanagement/api/analytics/getInventoryAnalytics`,
@@ -395,7 +397,8 @@ export function config() {
       addWarehouse: `${TEST_SERVER_URL}/usermanagement/api/auth/addWarehouse`,
       addPOsFromExcel:`${TEST_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${TEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-    },
+      getTransactions: `${TEST_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
+},
     demo: {
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/sendOtp`,
@@ -406,9 +409,8 @@ export function config() {
       getAllUsersUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${DEMO_SERVER_URL}/usermanagement/api/auth/uploadImage?`,
-      fetchProfileImage:`${DEMO_SERVER_URL}/usermanagement/api/auth`,
-      uploadProfileImage: `${DEMO_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
-      getOrganizationsByTypeUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/getOrganizationsByType?id=`,
+      fetchProfileImage:`${DEMO_SERVER_URL}`,
+      uploadProfileImage:`${DEMO_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
       getAnalyticsUrl:`${DEMO_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl:`${DEMO_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
       getInventoryAnalyticsUrl:`${DEMO_SERVER_URL}/analyticsmanagement/api/analytics/getInventoryAnalytics`,
@@ -483,6 +485,7 @@ export function config() {
       getWarehouseById: `${DEMO_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
       addPOsFromExcel:`${DEMO_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${DEMO_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
+      getTransactions: `${DEMO_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
     },
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
@@ -494,9 +497,8 @@ export function config() {
       getAllUsersUrl: `${PROD_SERVER_URL}/api/auth/getAllUsers`,
       updateProfileUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${PROD_SERVER_URL}/usermanagement/api/auth/uploadImage?`,
-      fetchProfileImage:`${PROD_SERVER_URL}/usermanagement/api/auth`,
-      uploadProfileImage: `${PROD_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
-      getOrganizationsByTypeUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/getOrganizationsByType?id=`,
+      fetchProfileImage:`${PROD_SERVER_URL}`,
+      uploadProfileImage:`${PROD_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
       getAnalyticsUrl:`${PROD_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl:`${PROD_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
       getInventoryAnalyticsUrl:`${PROD_SERVER_URL}/analyticsmanagement/api/analytics/getInventoryAnalytics`,
@@ -570,6 +572,7 @@ export function config() {
       getWarehouseById: `${PROD_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
       addPOsFromExcel:`${PROD_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${PROD_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
+      getTransactions: `${PROD_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
     },
     
     uniceftest: {
@@ -582,9 +585,8 @@ export function config() {
       getAllUsersUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/uploadImage?`,
-      fetchProfileImage:`${UNICEFTEST_SERVER_URL}/usermanagement/api/auth`,
-      uploadProfileImage: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
-      getOrganizationsByTypeUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsByType?id=`,
+      fetchProfileImage:`${UNICEFTEST_SERVER_URL}`,
+      uploadProfileImage:`${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
       getAnalyticsUrl:`${UNICEFTEST_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl:`${UNICEFTEST_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
       getInventoryAnalyticsUrl:`${UNICEFTEST_SERVER_URL}/analyticsmanagement/api/analytics/getInventoryAnalytics`,
@@ -659,6 +661,8 @@ export function config() {
       getWarehouseById: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
       addPOsFromExcel:`${UNICEFTEST_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
+      getTransactions: `${UNICEFTEST_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
+
     },
   };
 
