@@ -2,13 +2,17 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import './style.scss';
+import searchingIcon from '../../assets/icons/search_head.svg';
+import bellIcon from '../../assets/icons/notification_blue.png';
+import dropdownIcon from '../../assets/icons/dropdown_selected.png';
+import Location from '../../assets/icons/location_blue.png';
 import { Redirect } from 'react-router-dom';
 import DrawerMenu from './drawerMenu';
 import { getUserInfo, logoutUser } from '../../actions/userActions';
 import logo from '../../assets/brands/VACCINELEDGER.png';
-import searchingIcon from '../../assets/icons/searching@2x.png';
-import bellIcon from '../../assets/icons/bellwhite.png';
-import dropdownIcon from '../../assets/icons/drop-down.png';
+//import searchingIcon from '../../assets/icons/searching@2x.png';
+//import bellIcon from '../../assets/icons/bellwhite.png';
+//import dropdownIcon from '../../assets/icons/drop-down.png';
 import user from '../../assets/icons/user.svg';
 import { getNotifications, deleteNotification } from '../../actions/notificationActions';
 import { turnOff, turnOn } from "../../actions/spinnerActions";
@@ -18,10 +22,19 @@ import Modal from "../modal/index";
 import FailedPopUp from "../PopUp/failedPopUp";
 import {getShippingOrderIds} from "../../actions/shippingOrderAction";
 import { getOrderIds} from "../../actions/poActions";
+import Badge from '@material-ui/core/Badge';
+import MailIcon from '@material-ui/icons/Mail';
+import Divider from '@material-ui/core/Divider';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import ListItemText from '@material-ui/core/ListItemText';
+import Select from '@material-ui/core/Select';
+import DropdownButton from "../../shared/dropdownButtonGroup";
 
 
 const Header = props => {
   const [menu, setMenu] = useState(false);
+  const [location, setLocation] = useState(false);
   const [sidebar, openSidebar] = useState(false);
   const [search, setSearch] = useState('');
   const [invalidSearch, setInvalidSearch] = useState(false);
@@ -29,8 +42,12 @@ const Header = props => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [orderIds, setOrderIds] = useState([]);
   const [shippingIds, setShippingIds] = useState([]);
+  const [wareHouse, setWareHouse]= useState({});
+  const [selectLocation, setSelectLocation] = useState("");
+  
 const ref = useOnclickOutside(() => {
     setMenu(false);
+    setLocation(false);
   });
   function onSearchChange(e) {
     setSearch(e.target.value);
@@ -103,6 +120,7 @@ const imgs = config().fetchProfileImage;
           onClick={() => props.history.push('/overview')}
         />
       </div>
+      
       <div className="actions">
         <div className="search-form" tabIndex="-1" onKeyDown={onkeydown}>
           <input
@@ -110,16 +128,20 @@ const imgs = config().fetchProfileImage;
             // value={search}
             placeholder="Search by PO ID/Shipment ID/ Product ID"
             onFocus={(e) => e.target.placeholder = ''}
-            onBlur={(e) => e.target.placeholder = 'Search by PO ID/Shipment ID/ Product ID'}
+            onBlur={(e) => e.target.placeholder = 'Search PO ID/ Shipment ID/ Product ID'}
             onChange={onSearchChange}
-            className="form-control search-field"
+            className="form-control search-field border-blue"
           />
           <img src={searchingIcon} onClick={onSeach} alt="searching" />
         </div>
-        <div className="user-info">
-          {/* <div className="notifications">
-            <div className="bellicon-wrap" onClick={() => setShowNotifications(!showNotifications)}>
-              <img src={bellIcon} alt="notification" />
+        <div>
+        
+       <div className="user-info ">
+       <div className="notifications">
+                {/*   <Badge badgeContent={1} color="primary"> </Badge> {/*<img src={bellIcon} alt="notification" /><MailIcon />*/}
+                  
+                    {  /* <div className="bellicon-wrap" onClick={() => setShowNotifications(!showNotifications)}>
+            
               {notifications.length > 0 && <span className="badge badge-light">{notifications.length }</span> }
             </div>
             {showNotifications && notifications.length > 0 && (
@@ -143,20 +165,64 @@ const imgs = config().fetchProfileImage;
                   </div>)}
                 </React.Fragment>
               </div>
-            )}
-          </div> */}
-          <div className="divider" />
+            )}*/}
+            </div>  
+            <div className="divider" />
+           <div className="location">
+              <img src={Location} width="20" height="26" /> 
+           </div>  
+          <div className="userName" style={{fontSize: "13px", marginBottom:"0px"}}
+          onClick={() => setLocation(!location)}> 
+          <p className="cname1"><b>Location 1</b></p>
+          <p className="uname"> Location Address </p>
+          </div>
+                           
+           <div className="userActions mr-3"> 
+              <img src={dropdownIcon} 
+              alt="actions"
+              onClick={() => setLocation(!location)}
+                />
+           </div>
+           {location && (
+            <div className="slider-menu1">
+              {
+                <React.Fragment>
+                <div
+                    className="slider-item1 border-top-0" 
+                    >
+                    Locaton 1
+                    </div>
+
+                 <div
+                    className="slider-item1"
+                   
+                  >
+                    Location 2
+                  </div>
+                  <div
+                    className="slider-item1"
+                   
+                  >
+                    Location 3
+                  </div>
+                </React.Fragment>
+              }
+            </div>
+          )}
+           
           <div className="userName">
             <p className="cname">{profile?.organisation?.split('/')[0]}</p>
-            <p className="uname">{profile.warehouseAddress_city}</p>
+           {/*  <p className="uname">{profile.warehouseAddress_city}</p> */}
+           <p className="uname">{profile.firstName} {profile.lastName}</p>
           </div>
 
           <div className="userPic">
             <img
-              src={profile.photoId ? profile.photoId : user}
-              alt=""
-              className={`rounded rounded-circle ${`${imgs}${profile.photoId}` ? `` :`img-thumbnail bg-transparent border-0`}`}
-            />
+              src={`${imgs}${profile.photoId}` ? `${imgs}${profile.photoId}` : user }
+              alt="profile"
+              className={`rounded rounded-circle ${`${imgs}${profile.photoId}` ? `` :`img-thumbnail bg-transparent border-0`}` }
+              onClick={() => setMenu(!menu) }
+              />
           </div>
           <div className="userActions">
             <img
@@ -175,7 +241,7 @@ const imgs = config().fetchProfileImage;
                   <p>{profile?.organisation?.split('/')[0]}</p>
                 </div>
                 <Link className="slider-item border-top-0" to="/profile">
-                  My profile
+                  My Profile
                 </Link>
                <div
                   className="slider-item"
@@ -202,6 +268,7 @@ const imgs = config().fetchProfileImage;
           />
         </Modal>
       )}
+      </div>
     </div>
   );
 };

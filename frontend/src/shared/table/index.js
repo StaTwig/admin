@@ -27,10 +27,8 @@ function getDate(n){
 }
   return (
     <div className="table">
-    
     <div className="rTable">
-    
-        {inventoryDetails.map((inventory, index) => (
+       {inventoryDetails.map((inventory, index) => (
          
           <div className="" key={index}>
           <Accordion className="mb-3" style={{borderRadius:"15px" }}>
@@ -43,7 +41,7 @@ function getDate(n){
                   >
                                    
                   <div className="rTableCell" style={{position:"relative",left:'-3%'}}>
-                    <div className="d-flex flex-column txtBlue ">
+                    <div className="d-flex flex-column txtBlue">
                       <div>{inventory.ProductList[0].productDetails.name}</div>
                     </div>
                   </div>
@@ -51,7 +49,8 @@ function getDate(n){
                   <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.manufacturer}</div>
                   <div className="rTableCell" style={{position:"relative",left:'4%'}}>{formatDate(inventory.ProductList[0].productDetails.createdAt)}</div>
                   <div className="rTableCell" style={{position:"relative",left:'9%'}}>{inventory.inventoryQuantity}</div>
-                  <div className="rTableCell" style={{position:"relative",left:'8%'}}> {(inventory.eventTypePrimary !== 'ADD') ? (inventory.ProductList[0].shipmentDetails.shipmentUpdates[0].status === 'CREATED') ? 'SENT' :'RECEIVED' : 'Added'} </div>
+                  <div className="rTableCell" style={{position:"relative",left:'8%'}}> {(inventory.eventTypePrimary !== 'ADD') ? (inventory.ProductList[0].shipmentDetails.shipmentUpdates[0].status === 'CREATED') ? 'SENT' :'RECEIVED' : 'ADDED'}
+                  </div>
                                   
                   
                   <div className="rTableCell" style={{position:"relative",left:'3%'}}>
@@ -67,37 +66,47 @@ function getDate(n){
              </AccordionSummary>
                 <AccordionDetails>
                   <Typography>
-                            <div className="" style={{position:"absolute" ,top:"25%",width:"97%" }}>
-                          <hr className="solid" ></hr></div>
-                             <TableContainer >
-                                <Tablee className="table-borderless lg">
+                            <div className="" style={{position:"relative", bottom:"15%", width:"190%" }}>
+                                 <hr className="solid" ></hr>
+                            </div>
+                              <TableContainer> 
+                               <Tablee className="table-borderless lg">
                                 <TableBody>
                                     {(inventory.eventTypePrimary === 'CREATE') ?
                                     <div>
                                      <TableRow>
-                                        <TableCell>Shipment Id</TableCell>
-                                        <div className="ml-5"><TableCell align="left"><b>{inventory.ProductList[0].shipmentDetails.id}</b></TableCell></div>
-                                        <TableCell align="left">From Organisation</TableCell>
-                                        <div className="ml-5"><TableCell align="left"><b>{inventory.ProductList[0].shipmentDetails.supplier.id}</b></TableCell></div>
-                                        </TableRow>
+                                          <TableCell>Shipment Id:</TableCell>
+                                             <div className="">
+                                             <TableCell align="left"><b>{inventory.ProductList[0].shipmentDetails.id}</b></TableCell></div>
+                                      </TableRow>
                                       <TableRow>
-                                          <TableCell>From Location</TableCell>
-                                          <div className="ml-5"><TableCell align="left"><b>{(inventory.actorOrgId === inventory.ProductList[0].shipmentDetails.supplier.id) ? inventory.actorOrgAddress : inventory.secondaryOrgAddress}</b></TableCell></div>
-                         </TableRow>
-                         </div>
+                                          <TableCell>From Organisation:</TableCell>
+                                             <div className="">
+                                             <TableCell align="left"><b>{inventory.ProductList[0].shipmentDetails.supplier.id}</b></TableCell></div>
+                                      </TableRow>
+                                      <TableRow>
+                                          <TableCell>From Location:</TableCell>
+                                          <div className="">
+                                          <TableCell align="left"><b>{(inventory.actorOrgId === inventory.ProductList[0].shipmentDetails.supplier.id) ? inventory.actorOrgAddress : inventory.secondaryOrgAddress}</b></TableCell></div>
+                                      </TableRow>
+                                    </div>
                                          :
-                         <TableRow>
-                                      <TableCell>Mfg Date</TableCell>
-                                      <div className="ml-5"><TableCell align="left"><b>{inventory.ProductList[0].mfgDate}</b></TableCell></div>
-                                      <TableCell align="left">Exp Date</TableCell>
-                                      <div className="ml-5"><TableCell align="left"><b>{inventory.ProductList[0].expDate}</b></TableCell></div>
-                                      <TableCell align="left">Batch</TableCell>
-                                      <div className="ml-5"><TableCell align="left"><b>{inventory.ProductList[0].batchNumber}</b></TableCell></div>
+                                     <TableRow>
+                                           <TableCell>Mfg Date</TableCell>
+                                              <div className="ml-5">
+                                              <TableCell align="left"><b>{inventory.ProductList[0].mfgDate}</b></TableCell></div>
+                                          <TableCell align="left">Exp Date</TableCell>
+                                              <div className="ml-5">
+                                              <TableCell align="left"><b>{inventory.ProductList[0].expDate}</b></TableCell></div>
+                                          <TableCell align="left">Batch</TableCell>
+                                              <div className="ml-5">
+                                              <TableCell align="left"><b>{inventory.ProductList[0].batchNumber}</b></TableCell></div>
                                     </TableRow> }    
 
                          
-                                      <div className="mt-3" style={{position:"absolute", left:"80%", bottom:"40%" , heigth:"10%", width:"20%"}}>
-                                      {(inventory.eventTypePrimary === 'CREATE') ? <button
+                                      <div className="mt-3" style={{position:"absolute", left:"80%", bottom:"38%" , heigth:"10%", width:"20%"}}>
+                                      {(inventory.eventTypePrimary === 'CREATE') ? 
+                                      <button
                                           type="button" className="btn btn-outline-primary " 
                                           onClick={() => {
                                             props.history.push(`/viewshipment/${inventory.ProductList[0].shipmentDetails.id}`)
@@ -113,17 +122,14 @@ function getDate(n){
                                         }}
                       
                                       >Show Product Details</button></div>
-          
-                                    
-                                  </TableBody>
+                                   </TableBody>
                                 </Tablee>
-                                      </TableContainer> 
+                               
+                      </TableContainer> 
                   </Typography>
-                </AccordionDetails>
-        </Accordion>
-          </div>
-          
-          
+               </AccordionDetails>
+            </Accordion>
+          </div>         
            ))}
      
      {inventoryCount > 0 && (
