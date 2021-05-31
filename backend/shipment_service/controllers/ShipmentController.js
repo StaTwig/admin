@@ -460,6 +460,24 @@ exports.createShipment = [
 
         const shipment = new ShipmentModel(data);
         const result = await shipment.save();
+
+        if (data.taggedShipments) {
+	    const prevTaggedShipments = await ShipmentModel.findOne({
+        	id: data.taggedShipments
+    	}, {
+        	_id: 0,
+        	taggedShipments: 1
+    	});
+
+    	await ShipmentModel.findOneAndUpdate({
+        	id: shipmentId
+    	}, {
+        	$push: {
+            	taggedShipments: prevTaggedShipments.taggedShipments
+       		}
+    	});
+	}
+
         async function compute(event_data) {
           resultt = await logEvent(event_data);
           return resultt;
@@ -2070,6 +2088,71 @@ exports.fetchAllWarehouseShipments = [
             logger.log(
                 "error",
                 "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
+            );
+            return apiResponse.ErrorResponse(res, err);
+        }
+    },
+];
+
+exports.trackShipmentJourney = [
+    auth,
+    async (req, res) => {
+        try {
+            checkToken(req, res, async (result) => {
+                if (result.success) {
+                    var inwardShipmentsArray = [];
+                    var poDetails;
+                    const inwardShipments = await ShipmentModel.findOne({
+                        id: req.query.shipmentId
+                    }, {
+                        _id: 0,
+                        "taggedShipments": 1,
+                        poId: 1
+                    })
+                    if (inwardShipments.taggedShipments.length > 0)
+                        inwardShipmentsArray = await ShipmentModel.find({
+                            "$and": [{
+                                id: inwardShipments.taggedShipments
+                            }, {
+                                status: "RECEIVED"
+                            }]
+                        })
+                    else if (inwardShipments.poId != null)
+                        poDetails = await RecordModel.findOne({
+                            id: inwardShipments.poId
+                        })
+                    const trackedShipment = await ShipmentModel.findOne({
+                        id: req.query.shipmentId
+                    })
+                    const outwardShipmentsArray = await ShipmentModel.find({
+                        "$and": [{
+                            taggedShipments: req.query.shipmentId
+                        }, {
+                            status: "RECEIVED"
+                        }]
+                    })
+
+                    return apiResponse.successResponseWithData(
+                        res,
+                        "Shipments Table", {
+                            "poDetails": poDetails,
+                            "inwardShipmentsArray": inwardShipmentsArray,
+                            "trackedShipment": trackedShipment,
+                            "outwardShipmentsArray": outwardShipmentsArray
+                        }
+                    );
+                } else {
+                    logger.log(
+                        "warn",
+                        "<<<<< ShipmentService < ShipmentController < fetchShipmentIds : refuted token"
+                    );
+                    res.status(403).json("Auth failed");
+                }
+            });
+        } catch (err) {
+            logger.log(
+                "error",
+                "<<<<< ShipmentService < ShipmentController < fetchShipmentIds : error (catch block)"
             );
             return apiResponse.ErrorResponse(res, err);
         }

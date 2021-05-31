@@ -710,8 +710,8 @@ exports.userInfo = [
             postalAddress
           } = user;
           const org = await OrganisationModel.findOne({ id: organisationId }, 'name configuration_id');
-          const warehouse = await WarehouseModel.findOne({ id: warehouseId });
-          console.log(warehouse);
+          const warehouse = await EmployeeModel.findOne({ emailId },{_id: 0, warehouseId: 1});
+	  const warehouseArray = await WarehouseModel.find({id: { "$in": warehouse.warehouseId } })
           let user_data = {
             firstName,
             lastName,
@@ -726,13 +726,7 @@ exports.userInfo = [
             photoId,
             configuration_id: org.configuration_id,
             location: postalAddress,
-            warehouseAddress_country: warehouse.warehouseAddress.country,
-            warehouseAddress_zipcode: warehouse.warehouseAddress.zipCode,
-            warehouseAddress_city: warehouse.warehouseAddress.city,
-            warehouseAddress_firstline: warehouse.warehouseAddress.firstLine,
-            warehouseAddress_state: warehouse.warehouseAddress.state,
-            warehouseAddress_secondline: warehouse.warehouseAddress.secondLine,
-            title: warehouse.title
+	    warehouses: warehouseArray
           };
           logger.log(
             'info',
