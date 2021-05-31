@@ -1,10 +1,3 @@
-const {
-    body,
-    validationResult
-} = require("express-validator");
-const {
-    sanitizeBody
-} = require("express-validator");
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");

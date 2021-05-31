@@ -5,6 +5,8 @@ const logger = require("morgan");
 const cors = require("cors");
 const fs = require('fs');
 const mongoose = require("mongoose");
+const {getFileStream} = require("./helpers/s3")
+
 
 require("dotenv").config();
 const swaggerUi = require('swagger-ui-express');
@@ -13,16 +15,16 @@ const openApiDocumentation = require('./openApiDocumentation');
 const indexRouter = require("./routes/index");
 const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
-const dir = `/home/ubuntu/shipmentimages`;
-if (!fs.existsSync(dir)) {
-  fs.mkdirSync(dir);
-}
+// const dir = `/home/ubuntu/shipmentimages`;
+// if (!fs.existsSync(dir)) {
+//   fs.mkdirSync(dir);
+// }
 
 const app = express();
 
 // DB connection
 const MONGODB_URL = process.env.MONGODB_URL;
-mongoose.connect(MONGODB_URL, { useNewUrlParser: true }).then(() => {
+mongoose.connect(MONGODB_URL, { useNewUrlParser: true , useUnifiedTopology: true}).then(() => {
   //don't show the log when it is test
   if(process.env.NODE_ENV !== "test") {
     console.log("Connected to %s", MONGODB_URL);
@@ -34,7 +36,7 @@ mongoose.connect(MONGODB_URL, { useNewUrlParser: true }).then(() => {
     console.error("App starting error:", err.message);
     process.exit(1);
   });
-var db = mongoose.connection;
+
 //don't show the log when it is test
 if(process.env.NODE_ENV !== "test") {
 	app.use(logger("dev"));
@@ -44,7 +46,11 @@ app.use(express.urlencoded({ limit: '50mb', extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocumentation));
-app.use('/shipmentmanagement/api/shipment/images', express.static(path.join('/home/ubuntu/','shipmentimages')));
+app.get('/shipmentmanagement/api/shipment/images/:key',(req, res) => {
+	const FileStream = getFileStream(req.params.key);
+	FileStream.pipe(res)
+	});
+
 //To allow cross-origin requests
 app.use(cors());
 

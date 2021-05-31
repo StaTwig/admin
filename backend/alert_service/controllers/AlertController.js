@@ -1,12 +1,7 @@
-const UserModel = require('../models/UserModel')
 //helper file to prepare responses.
-const apiResponse = require('../helpers/apiResponse')
-const utility = require('../helpers/utility')
-const jwt = require('jsonwebtoken')
-const { body, validationResult, oneOf, check } = require('express-validator')
-const { sanitizeBody } = require('express-validator')
-const { constants } = require('../helpers/constants')
-
+const apiResponse = require("../helpers/apiResponse");
+const { body, sanitizeBody, oneOf, check } = require('express-validator');
+const auth = require("../middlewares/jwt");
 //models
 const Alerts = require('../models/AlertModel')
 const EmployeeModel = require('../models/EmployeeModel')
@@ -22,7 +17,7 @@ exports.getAllAlerts = [
 ]
 
 exports.createNewAlert = [
-  //	auth,
+  auth,
   body('user', 'username must not be empty.').isLength({ min: 1 }).trim(),
   sanitizeBody('*').escape(),
   async function (req, res) {
