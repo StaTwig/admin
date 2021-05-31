@@ -1,19 +1,25 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import jwt_decode from 'jwt-decode';
-import Waiting from "../../assets/icons/waiting.png";
+import Waiting from '../../assets/icons/waiting.png';
 
-import Selection from "./selection";
-import Login from "./login";
+import Selection from './selection';
+import Login from './login';
 import VerifyPassword from './verifyPassword';
 import SignUp from './signUp';
-import "./style.scss";
-import { sendOtp, verifyOtp, setCurrentUser, registerUser } from "../../actions/userActions";
+import './style.scss';
+import {
+  sendOtp,
+  verifyOtp,
+  setCurrentUser,
+  registerUser,
+} from '../../actions/userActions';
 import { turnOff, turnOn } from '../../actions/spinnerActions';
-import setAuthToken from "../../utils/setAuthToken";
+import setAuthToken from '../../utils/setAuthToken';
 
 const Home = (props) => {
-  const [showSignUpCompletedMessage, setShowSignUpCompletedMessage] = useState(false);
+  const [showSignUpCompletedMessage, setShowSignUpCompletedMessage] =
+    useState(false);
   const [buttonActive, setButtonActive] = useState(0);
   const [steps, setSteps] = useState(1);
   const [continueClick, setContinueClick] = useState(false);
@@ -60,7 +66,7 @@ const Home = (props) => {
       const decoded = jwt_decode(token);
       localStorage.setItem('theAbInBevToken', token);
       dispatch(setCurrentUser(decoded));
-      props.history.push("/overview");
+      props.history.push('/overview');
     } else {
       const err = result.data.message;
       setErrorMessage(err);
@@ -92,7 +98,13 @@ const Home = (props) => {
   });
 
   const onSignUpClick = useCallback(async (values) => {
-    let data = { firstName: values.firstName, lastName: values.lastName, emailId: values.mobileemail, organisationName: values.organisation, organisationId: 0 };
+    let data = {
+      firstName: values.firstName,
+      lastName: values.lastName,
+      emailId: values.mobileemail,
+      organisationName: values.organisation,
+      organisationId: 0,
+    };
     dispatch(turnOn());
     const result = await registerUser(data);
     dispatch(turnOff());
@@ -102,8 +114,7 @@ const Home = (props) => {
     } else if (result.status === 500) {
       setErrorMessage(result.data.message);
       return result.data.message;
-    }
-    else {
+    } else {
       const err = result.data.data[0];
       setErrorMessage(err.msg);
       return err;
@@ -123,27 +134,68 @@ const Home = (props) => {
               setSteps={setSteps}
             />
           )}
-          {steps == 2 && <Login msg={errorMessage} setSteps={setSteps} setContinueClick={setContinueClick} steps={steps} onSendOtp={onSendOtp} />}
-          {steps == 3 && <VerifyPassword setSteps={setSteps} setContinueClick={setContinueClick} steps={steps} buttonActive={buttonActive} setButtonActive={setButtonActive} email={email}
-            onVerifyOtp={onVerifyOTP}
-            onResendOtp={resendOtp} />}
-          {steps == 4 && <SignUp setSteps={setSteps} setContinueClick={setContinueClick} onSignUpClick={onSignUpClick} />}
-          {steps == 5 &&
+          {steps == 2 && (
+            <Login
+              msg={errorMessage}
+              setSteps={setSteps}
+              setContinueClick={setContinueClick}
+              steps={steps}
+              onSendOtp={onSendOtp}
+            />
+          )}
+          {steps == 3 && (
+            <VerifyPassword
+              setSteps={setSteps}
+              setContinueClick={setContinueClick}
+              steps={steps}
+              buttonActive={buttonActive}
+              setButtonActive={setButtonActive}
+              email={email}
+              onVerifyOtp={onVerifyOTP}
+              onResendOtp={resendOtp}
+            />
+          )}
+          {steps == 4 && (
+            <SignUp
+              setSteps={setSteps}
+              setContinueClick={setContinueClick}
+              onSignUpClick={onSignUpClick}
+            />
+          )}
+          {steps == 5 && (
             <>
-              {
-                showSignUpCompletedMessage &&
+              {showSignUpCompletedMessage && (
                 <div className="col-sm-6 col-lg-5">
                   <div className="card">
-                    <img alt="" src={Waiting} height="150" width="150" className="align-self-center mt-5 mb-4" />
-                    <div className="font-weight-bold text-dark align-self-center text-center ml-2 mr-2 approve">Request is pending and you will receive an email/sms after approval</div>
+                    <img
+                      alt=""
+                      src={Waiting}
+                      height="150"
+                      width="150"
+                      className="align-self-center mt-1 mb-4"
+                    />
+                    <div className="font-weight-bold align-self-center text-center ml-2 mr-2 approve">
+                      Request is pending and you will receive an email/sms after
+                      approval
+                    </div>
                     <h4 className="mb-5 text-dark text-center">
-                      Click <a href="#" onClick={() => { setSteps(2); }} className="signUpLink text-primary">here</a>&nbsp;login
+                      Click{' '}
+                      <a
+                        href="#"
+                        onClick={() => {
+                          setSteps(2);
+                        }}
+                        className="signUpLink text-primary"
+                      >
+                        here
+                      </a>
+                      &nbsp;login
                     </h4>
                   </div>
                 </div>
-              }
+              )}
             </>
-          }
+          )}
         </div>
       </div>
     </div>
