@@ -54,13 +54,14 @@ const Track = (props) => {
         <h1 className="breadcrumb">Track & Trace</h1>
       </div>
       <div className="row">
-        <div className="col-6">
-          <div className="row mb-4">
-            <div className="col" style={{ minHeight: 400 }}>
-              <Map />
+        {shippmentChainOfCustodyData.length > 0 &&
+          <div className="col-6">
+            <div className="row mb-4">
+              <div className="col" style={{ minHeight: 400 }}>
+                <Map />
+              </div>
             </div>
-          </div>
-          <div className="panel commonpanle row shadow bg-white mb-4">
+            {/* <div className="panel commonpanle row shadow bg-white mb-4">
             <div className="row col-12">
               <div className="col row ml-3">
                 <div className="arrow col-1 mr-2">
@@ -81,10 +82,10 @@ const Track = (props) => {
             <div className="row col-12">
               <Chart />
             </div>
-          </div>
-        </div>
+          </div> */}
+          </div>}
         <div className="col row ml-3">
-          {poChainOfCustodyData.length == 0 ? (
+          {shippmentChainOfCustodyData.length == 0 ? (
             <>
               <div className="noOutline" tabIndex="-1" onKeyDown={onkeydown}>
                 <div className="search-form">
@@ -133,7 +134,7 @@ const Track = (props) => {
                       </div>
                       <div className="col ml-1">
                         <div className="">
-                          <div className="text-muted ">Shipment ID</div>
+                            <div className="text-muted ">{searchType == 'SH' ? 'Shipment ID' : 'Order ID'}</div>
                           <div className="font-weight-bold ">
                             {shippmentChainOfCustodyData?.length > 0
                               ? shippmentChainOfCustodyData[0].id
@@ -143,8 +144,14 @@ const Track = (props) => {
                       </div>
                     </div>
                     <div className="pb-4">
-                      {shippmentChainOfCustodyData.map((row, index) => {
-                        return row.shipmentUpdates.map((r, i) => (
+                      {shippmentChainOfCustodyData.map((row, index) => { 
+                        let newArr = [];
+                        // if(row.id == value)
+                        newArr = shippmentChainOfCustodyData.filter(rw => rw.taggedShipments.includes(value));
+                        let cIndex = shippmentChainOfCustodyData.map((el) => el.id).indexOf(value) + 1;
+                        cIndex = index < cIndex ? index : cIndex;
+                        
+                        return row.shipmentUpdates.filter(s => s.status == 'RECEIVED').map((r, i) => (
                           <SoChainOfCustody
                             len={row.shipmentUpdates.length}
                             i={i}
@@ -156,11 +163,12 @@ const Track = (props) => {
                             setOp={setOp}
                             data={row}
                             update={r}
-                            index={3 + i + 1}
+                            index={i + 3}
+                            parentIndex={newArr.length && row.id != value ? cIndex : index }
                             pindex={
                               shippmentChainOfCustodyData.length - 1 == index
                                 ? 1
-                                : shippmentChainOfCustodyData.length
+                                : newArr.length && row.id != value ? newArr.length : 1 
                             }
                             container={2 + i}
                           />

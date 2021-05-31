@@ -111,7 +111,7 @@ const NewShipment = (props) => {
 
       const orgs = await getAllOrganisations();
       
-      const orgSplit = user.organisationId?.split("/");
+      const orgSplit = user.organisation?.split("/");
       setSenderOrganisation([orgSplit[0]]);
       const organisations = orgs.data.filter((org) => org.id != orgSplit[1]);
       setAllOrganisations(organisations.map(item => {
