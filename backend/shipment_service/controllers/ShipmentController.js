@@ -22,7 +22,7 @@ const CENTRAL_AUTHORITY_ID = null
 const CENTRAL_AUTHORITY_NAME = null
 const CENTRAL_AUTHORITY_ADDRESS = null
 
-const {uploadFile} = require("../helpers/s3");
+const { uploadFile } = require("../helpers/s3");
 const fs = require('fs');
 const util = require('util');
 const unlinkFile = util.promisify(fs.unlink);
@@ -258,7 +258,7 @@ exports.createShipment = [
       console.log(req.user);
       let data = req.body;
       data.products.forEach(element => {
-        var product =  ProductModel.findOne({ id: element.productId });
+        var product = ProductModel.findOne({ id: element.productId });
         element.type = product.type
       });
       var i = 0;
@@ -463,21 +463,21 @@ exports.createShipment = [
         const result = await shipment.save();
 
         if (data.taggedShipments) {
-	    const prevTaggedShipments = await ShipmentModel.findOne({
-        	id: data.taggedShipments
-    	}, {
-        	_id: 0,
-        	taggedShipments: 1
-    	});
+          const prevTaggedShipments = await ShipmentModel.findOne({
+            id: data.taggedShipments
+          }, {
+            _id: 0,
+            taggedShipments: 1
+          });
 
-    	await ShipmentModel.findOneAndUpdate({
-        	id: shipmentId
-    	}, {
-        	$push: {
-            	taggedShipments: prevTaggedShipments.taggedShipments
-       		}
-    	});
-	}
+          await ShipmentModel.findOneAndUpdate({
+            id: shipmentId
+          }, {
+            $push: {
+              taggedShipments: prevTaggedShipments.taggedShipments
+            }
+          });
+        }
 
         async function compute(event_data) {
           resultt = await logEvent(event_data);
@@ -731,21 +731,33 @@ function getFilterConditions(filters) {
 }
 
 function getShipmentFilterCondition(filters, warehouseIds) {
-  let matchCondition = {
-    $or: [
-      {
-        "supplier.locationId": { $in: warehouseIds }
-      },
-      {
-        "receiver.locationId": { $in: warehouseIds },
-      },
-    ]
-  };
-  if (filters.txn_type) {
-    if (filters.txn_type !== 'ALL') {
-      matchCondition.status = filters.txn_type;
-    }
+  let matchCondition = {};
+  if (filters.organization && filters.organization !== '') {
+    if (filters.txn_type === 'ALL') {
+      matchCondition.$or = [
+        {
+          "supplier.id": filters.organization
+        },
+        {
+          "receiver.id": filters.organization,
+        },
+      ];
 
+    } else if (filters.txn_type === 'SENT') {
+
+      matchCondition = {
+        "supplier.id": filters.organization,
+        status: 'RECEIVED'
+      };
+
+    } else if (filters.txn_type === 'RECEIVED') {
+
+      matchCondition = {
+        "receiver.id": filters.organization,
+        status: 'RECEIVED'
+      };
+
+    }
   }
 
   if (filters.date_filter_type && filters.date_filter_type.length) {
@@ -1391,7 +1403,7 @@ exports.uploadImage = async function (req, res) {
         console.log("Unlinked")
         const update = await ShipmentModel.findOneAndUpdate(
           { id: Id },
-          { $push: { imageDetails: `${Upload.key}`}},{ new: true}
+          { $push: { imageDetails: `${Upload.key}` } }, { new: true }
         );
         return apiResponse.successResponseWithData(res, "Image uploaded successfullly", update);
       } catch (e) {
@@ -1423,7 +1435,7 @@ exports.fetchImage = async function (req, res) {
         const s = "/images/" + imageArray[i];
         resArray.push(s);
       }
-      return apiResponse.successResponseWithData(res, "Images " , resArray)
+      return apiResponse.successResponseWithData(res, "Images ", resArray)
     } else {
       return apiResponse.ErrorResponse(res, result)
     }
@@ -1688,7 +1700,7 @@ exports.fetchInboundShipments = [//inbound shipments with filter(shipmentId, fro
   auth,
   async (req, res) => {
     try {
-      const { skip, limit } = req.query;      
+      const { skip, limit } = req.query;
       checkToken(req, res, async (result) => {
         if (result.success) {
           const { warehouseId } = req.user;
@@ -1728,10 +1740,10 @@ exports.fetchInboundShipments = [//inbound shipments with filter(shipmentId, fro
           }
 
           if (status) {
-            if(status == "RECEIVED"){
+            if (status == "RECEIVED") {
               whereQuery['status'] = status
-            } else{
-            whereQuery['status'] = { $ne: "RECEIVED" }
+            } else {
+              whereQuery['status'] = { $ne: "RECEIVED" }
             }
           }
 
@@ -1744,11 +1756,11 @@ exports.fetchInboundShipments = [//inbound shipments with filter(shipmentId, fro
           }
 
           if (fromSupplier) {
-              whereQuery["supplier.id"] = fromSupplier;
+            whereQuery["supplier.id"] = fromSupplier;
           }
 
           if (toReceiver) {
-              whereQuery["receiver.id"] = toReceiver
+            whereQuery["receiver.id"] = toReceiver
           }
           console.log("In bound whereQuery ======>", whereQuery);
           try {
@@ -1773,18 +1785,18 @@ exports.fetchInboundShipments = [//inbound shipments with filter(shipmentId, fro
                   {
                     id: inboundShipmentData.receiver.locationId
                   });
-                  inboundShipmentData.supplier[`org`] = supplierOrganisation;
-                  inboundShipmentData.supplier[`warehouse`] = supplierWarehouse;
-                  inboundShipmentData.receiver[`org`] = receiverOrganisation;
-                  inboundShipmentData.receiver[`warehouse`] = receiverWarehouse;
-                  inboundShipmentsRes.push(inboundShipmentData);
+                inboundShipmentData.supplier[`org`] = supplierOrganisation;
+                inboundShipmentData.supplier[`warehouse`] = supplierWarehouse;
+                inboundShipmentData.receiver[`org`] = receiverOrganisation;
+                inboundShipmentData.receiver[`warehouse`] = receiverWarehouse;
+                inboundShipmentsRes.push(inboundShipmentData);
               });
 
               Promise.all(findInboundShipmentData).then(function (results) {
                 return apiResponse.successResponseWithMultipleData(
                   res,
                   "Inbound Shipment Records",
-                  {"inboundShipments":inboundShipmentsRes, "count":inboundShipmentsCount}
+                  { "inboundShipments": inboundShipmentsRes, "count": inboundShipmentsCount }
                 );
               });
             });
@@ -1865,51 +1877,51 @@ exports.fetchOutboundShipments = [ //outbound shipments with filter(shipmentId, 
           }
 
           if (fromSupplier) {
-              whereQuery["supplier.id"] = fromSupplier;
+            whereQuery["supplier.id"] = fromSupplier;
           }
 
           if (toReceiver) {
-              whereQuery["receiver.id"] = toReceiver
+            whereQuery["receiver.id"] = toReceiver
           }
 
           console.log("Out bound whereQuery ======>", whereQuery);
           try {
             let outboundShipmentsCount = await ShipmentModel.count(whereQuery);
             ShipmentModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((outboundShipmentsList) => {
-                let outboundShipmentsRes = [];
-                let findOutboundShipmentData = outboundShipmentsList.map(async (outboundShipment) => {
-                  let outboundShipmentData = JSON.parse(JSON.stringify(outboundShipment))
-                  let supplierOrganisation = await OrganisationModel.findOne(
-                    {
-                      id: outboundShipmentData.supplier.id
-                    });
-                  let supplierWarehouse = await WarehouseModel.findOne(
-                    {
-                      id: outboundShipmentData.supplier.locationId
-                    });
-                  let receiverOrganisation = await OrganisationModel.findOne(
-                    {
-                      id: outboundShipmentData.receiver.id
-                    });
-                  let receiverWarehouse = await WarehouseModel.findOne(
-                    {
-                      id: outboundShipmentData.receiver.locationId
-                    });
-                  outboundShipmentData.supplier[`org`] = supplierOrganisation;
-                  outboundShipmentData.supplier[`warehouse`] = supplierWarehouse;
-                  outboundShipmentData.receiver[`org`] = receiverOrganisation;
-                  outboundShipmentData.receiver[`warehouse`] = receiverWarehouse;
-                  outboundShipmentsRes.push(outboundShipmentData);
-                });
-
-                Promise.all(findOutboundShipmentData).then(function (results) {
-                  return apiResponse.successResponseWithMultipleData(
-                    res,
-                    "Outbound Shipment Records",
-                    {"outboundShipments":outboundShipmentsRes, "count":outboundShipmentsCount}
-                  );
-                });
+              let outboundShipmentsRes = [];
+              let findOutboundShipmentData = outboundShipmentsList.map(async (outboundShipment) => {
+                let outboundShipmentData = JSON.parse(JSON.stringify(outboundShipment))
+                let supplierOrganisation = await OrganisationModel.findOne(
+                  {
+                    id: outboundShipmentData.supplier.id
+                  });
+                let supplierWarehouse = await WarehouseModel.findOne(
+                  {
+                    id: outboundShipmentData.supplier.locationId
+                  });
+                let receiverOrganisation = await OrganisationModel.findOne(
+                  {
+                    id: outboundShipmentData.receiver.id
+                  });
+                let receiverWarehouse = await WarehouseModel.findOne(
+                  {
+                    id: outboundShipmentData.receiver.locationId
+                  });
+                outboundShipmentData.supplier[`org`] = supplierOrganisation;
+                outboundShipmentData.supplier[`warehouse`] = supplierWarehouse;
+                outboundShipmentData.receiver[`org`] = receiverOrganisation;
+                outboundShipmentData.receiver[`warehouse`] = receiverWarehouse;
+                outboundShipmentsRes.push(outboundShipmentData);
               });
+
+              Promise.all(findOutboundShipmentData).then(function (results) {
+                return apiResponse.successResponseWithMultipleData(
+                  res,
+                  "Outbound Shipment Records",
+                  { "outboundShipments": outboundShipmentsRes, "count": outboundShipmentsCount }
+                );
+              });
+            });
           } catch (err) {
             return apiResponse.ErrorResponse(res, err);
           }
@@ -1932,7 +1944,7 @@ exports.fetchOutboundShipments = [ //outbound shipments with filter(shipmentId, 
 ];
 
 
-exports.fetchSupplierAndReceiverList = [ 
+exports.fetchSupplierAndReceiverList = [
   auth,
   async (req, res) => {
     try {
@@ -1941,7 +1953,7 @@ exports.fetchSupplierAndReceiverList = [
           // const { warehouseId } = req.user;
           try {
             // let supplierReceiverList = await OrganisationModel.find( { warehouses: warehoueseId }, ['id', 'name']);
-            let supplierReceiverList = await OrganisationModel.find( {}, ['id', 'name']);
+            let supplierReceiverList = await OrganisationModel.find({}, ['id', 'name']);
 
             if (supplierReceiverList) {
               return apiResponse.successResponseWithMultipleData(
@@ -1972,186 +1984,186 @@ exports.fetchSupplierAndReceiverList = [
 ];
 
 exports.fetchAllWarehouseShipments = [
-    auth,
-    async (req, res) => {
-        try {
-            const {
-                skip,
-                limit
-            } = req.query;
-            checkToken(req, res, async (result) => {
-                if (result.success) {
-                    const {
-                        emailId
-                    } = req.user;
-			console.log(emailId)
-                    try {
+  auth,
+  async (req, res) => {
+    try {
+      const {
+        skip,
+        limit
+      } = req.query;
+      checkToken(req, res, async (result) => {
+        if (result.success) {
+          const {
+            emailId
+          } = req.user;
+          console.log(emailId)
+          try {
 
-                        const empDetails = await EmployeeModel.findOne({
-                            emailId:emailId
-                        });
-                        const warehouses = empDetails.warehouseId;
-                        var shipmentsArray = [];
-                        for (i = 0; i < warehouses.length; i++) {
-                            const shipments = await ShipmentModel.aggregate([{
-                                        $match: {
-                                            $or: [{
-                                                    "supplier.locationId": warehouses[i],
-                                                },
-                                                {
-                                                    "receiver.locationId": warehouses[i],
-                                                },
-                                            ],
-                                        },
-                                    },
-                                    {
-                                        $lookup: {
-                                            from: "warehouses",
-                                            localField: "supplier.locationId",
-                                            foreignField: "id",
-                                            as: "supplier.warehouse",
-                                        },
-                                    },
-                                    {
-                                        $unwind: {
-                                            path: "$supplier.warehouse",
-                                        },
-                                    },
-                                    {
-                                        $lookup: {
-                                            from: "organisations",
-                                            localField: "supplier.warehouse.organisationId",
-                                            foreignField: "id",
-                                            as: "supplier.org",
-                                        },
-                                    },
-                                    {
-                                        $unwind: {
-                                            path: "$supplier.org",
-                                        },
-                                    },
-                                    {
-                                        $lookup: {
-                                            from: "warehouses",
-                                            localField: "receiver.locationId",
-                                            foreignField: "id",
-                                            as: "receiver.warehouse",
-                                        },
-                                    },
-                                    {
-                                        $unwind: {
-                                            path: "$receiver.warehouse",
-                                        },
-                                    },
-                                    {
-                                        $lookup: {
-                                            from: "organisations",
-                                            localField: "receiver.warehouse.organisationId",
-                                            foreignField: "id",
-                                            as: "receiver.org",
-                                        },
-                                    },
-                                    {
-                                        $unwind: {
-                                            path: "$receiver.org",
-                                        },
-                                    },
-                                ])
-                                .sort({
-                                    createdAt: -1,
-                                })
-                                .skip(parseInt(skip))
-                                .limit(parseInt(limit));
-                            shipmentsArray.push(shipments)
-                        };
-
-                        return apiResponse.successResponseWithData(
-                            res,
-                            "Shipments Table",
-                            shipmentsArray
-                        );
-                    } catch (err) {
-                        return apiResponse.ErrorResponse(res, err);
-                    }
-                } else {
-                    logger.log(
-                        "warn",
-                        "<<<<< ShipmentService < ShipmentController < modifyShipment : refuted token"
-                    );
-                    res.status(403).json("Auth failed");
-                }
+            const empDetails = await EmployeeModel.findOne({
+              emailId: emailId
             });
-        } catch (err) {
-            logger.log(
-                "error",
-                "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
+            const warehouses = empDetails.warehouseId;
+            var shipmentsArray = [];
+            for (i = 0; i < warehouses.length; i++) {
+              const shipments = await ShipmentModel.aggregate([{
+                $match: {
+                  $or: [{
+                    "supplier.locationId": warehouses[i],
+                  },
+                  {
+                    "receiver.locationId": warehouses[i],
+                  },
+                  ],
+                },
+              },
+              {
+                $lookup: {
+                  from: "warehouses",
+                  localField: "supplier.locationId",
+                  foreignField: "id",
+                  as: "supplier.warehouse",
+                },
+              },
+              {
+                $unwind: {
+                  path: "$supplier.warehouse",
+                },
+              },
+              {
+                $lookup: {
+                  from: "organisations",
+                  localField: "supplier.warehouse.organisationId",
+                  foreignField: "id",
+                  as: "supplier.org",
+                },
+              },
+              {
+                $unwind: {
+                  path: "$supplier.org",
+                },
+              },
+              {
+                $lookup: {
+                  from: "warehouses",
+                  localField: "receiver.locationId",
+                  foreignField: "id",
+                  as: "receiver.warehouse",
+                },
+              },
+              {
+                $unwind: {
+                  path: "$receiver.warehouse",
+                },
+              },
+              {
+                $lookup: {
+                  from: "organisations",
+                  localField: "receiver.warehouse.organisationId",
+                  foreignField: "id",
+                  as: "receiver.org",
+                },
+              },
+              {
+                $unwind: {
+                  path: "$receiver.org",
+                },
+              },
+              ])
+                .sort({
+                  createdAt: -1,
+                })
+                .skip(parseInt(skip))
+                .limit(parseInt(limit));
+              shipmentsArray.push(shipments)
+            };
+
+            return apiResponse.successResponseWithData(
+              res,
+              "Shipments Table",
+              shipmentsArray
             );
+          } catch (err) {
             return apiResponse.ErrorResponse(res, err);
+          }
+        } else {
+          logger.log(
+            "warn",
+            "<<<<< ShipmentService < ShipmentController < modifyShipment : refuted token"
+          );
+          res.status(403).json("Auth failed");
         }
-    },
+      });
+    } catch (err) {
+      logger.log(
+        "error",
+        "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
 ];
 
 exports.trackShipmentJourney = [
-    auth,
-    async (req, res) => {
-        try {
-            checkToken(req, res, async (result) => {
-                if (result.success) {
-                    var inwardShipmentsArray = [];
-                    var poDetails;
-                    const inwardShipments = await ShipmentModel.findOne({
-                        id: req.query.shipmentId
-                    }, {
-                        _id: 0,
-                        "taggedShipments": 1,
-                        poId: 1
-                    })
-                    if (inwardShipments.taggedShipments.length > 0)
-                        inwardShipmentsArray = await ShipmentModel.find({
-                            "$and": [{
-                                id: inwardShipments.taggedShipments
-                            }, {
-                                status: "RECEIVED"
-                            }]
-                        })
-                    else if (inwardShipments.poId != null)
-                        poDetails = await RecordModel.findOne({
-                            id: inwardShipments.poId
-                        })
-                    const trackedShipment = await ShipmentModel.findOne({
-                        id: req.query.shipmentId
-                    })
-                    const outwardShipmentsArray = await ShipmentModel.find({
-                        "$and": [{
-                            taggedShipments: req.query.shipmentId
-                        }, {
-                            status: "RECEIVED"
-                        }]
-                    })
+  auth,
+  async (req, res) => {
+    try {
+      checkToken(req, res, async (result) => {
+        if (result.success) {
+          var inwardShipmentsArray = [];
+          var poDetails;
+          const inwardShipments = await ShipmentModel.findOne({
+            id: req.query.shipmentId
+          }, {
+            _id: 0,
+            "taggedShipments": 1,
+            poId: 1
+          })
+          if (inwardShipments.taggedShipments.length > 0)
+            inwardShipmentsArray = await ShipmentModel.find({
+              "$and": [{
+                id: inwardShipments.taggedShipments
+              }, {
+                status: "RECEIVED"
+              }]
+            })
+          else if (inwardShipments.poId != null)
+            poDetails = await RecordModel.findOne({
+              id: inwardShipments.poId
+            })
+          const trackedShipment = await ShipmentModel.findOne({
+            id: req.query.shipmentId
+          })
+          const outwardShipmentsArray = await ShipmentModel.find({
+            "$and": [{
+              taggedShipments: req.query.shipmentId
+            }, {
+              status: "RECEIVED"
+            }]
+          })
 
-                    return apiResponse.successResponseWithData(
-                        res,
-                        "Shipments Table", {
-                            "poDetails": poDetails,
-                            "inwardShipmentsArray": inwardShipmentsArray,
-                            "trackedShipment": trackedShipment,
-                            "outwardShipmentsArray": outwardShipmentsArray
-                        }
-                    );
-                } else {
-                    logger.log(
-                        "warn",
-                        "<<<<< ShipmentService < ShipmentController < fetchShipmentIds : refuted token"
-                    );
-                    res.status(403).json("Auth failed");
-                }
-            });
-        } catch (err) {
-            logger.log(
-                "error",
-                "<<<<< ShipmentService < ShipmentController < fetchShipmentIds : error (catch block)"
-            );
-            return apiResponse.ErrorResponse(res, err);
+          return apiResponse.successResponseWithData(
+            res,
+            "Shipments Table", {
+            "poDetails": poDetails,
+            "inwardShipmentsArray": inwardShipmentsArray,
+            "trackedShipment": trackedShipment,
+            "outwardShipmentsArray": outwardShipmentsArray
+          }
+          );
+        } else {
+          logger.log(
+            "warn",
+            "<<<<< ShipmentService < ShipmentController < fetchShipmentIds : refuted token"
+          );
+          res.status(403).json("Auth failed");
         }
-    },
+      });
+    } catch (err) {
+      logger.log(
+        "error",
+        "<<<<< ShipmentService < ShipmentController < fetchShipmentIds : error (catch block)"
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
 ];
