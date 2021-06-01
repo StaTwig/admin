@@ -3,6 +3,7 @@ const WarehouseModel = require('../models/WarehouseModel');
 const ConsumerModel = require('../models/ConsumerModel');
 const InventoryModel = require('../models/InventoryModel');
 const OrganisationModel = require('../models/OrganisationModel');
+const ConfigurationModel = require('../models/ConfigurationModel');
 const CounterModel = require('../models/CounterModel');
 const ConfigurationModel = require('../models/ConfigurationModel');
 const { body, validationResult} = require('express-validator');

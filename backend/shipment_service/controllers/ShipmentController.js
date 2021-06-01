@@ -12,6 +12,7 @@ const EmployeeModel = require("../models/EmployeeModel");
 const ConfigurationModel = require("../models/ConfigurationModel");
 const OrganisationModel = require("../models/OrganisationModel");
 const CounterModel = require("../models/CounterModel");
+const ProductModel = require("../models/ProductModel");
 const logEvent = require("../../../utils/event_logger");
 const init = require("../logging/init");
 const moment = require('moment');
@@ -499,6 +500,7 @@ exports.createShipment = [
         );
       }
     } catch (err) {
+      console.log(err);
       logger.log(
         "error",
         "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"

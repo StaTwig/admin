@@ -111,7 +111,7 @@ const NewShipment = (props) => {
 
       const orgs = await getAllOrganisations();
       
-      const orgSplit = user.organisationId?.split("/");
+      const orgSplit = user.organisation?.split("/");
       setSenderOrganisation([orgSplit[0]]);
       const organisations = orgs.data.filter((org) => org.id != orgSplit[1]);
       setAllOrganisations(organisations.map(item => {
@@ -241,6 +241,7 @@ const NewShipment = (props) => {
       estimateDeliveryDate,
       toOrgLoc,
       fromOrgLoc,
+      shipmentID,
       products,
     } = values;
     products.forEach((p) => {
@@ -255,6 +256,7 @@ const NewShipment = (props) => {
           labelId: labelCode,
           labelType: "QR_2DBAR",
         },
+        taggedShipments: shipmentID,
         externalShipmentId: "",
         supplier: {
           id: user.organisationId,
@@ -375,6 +377,7 @@ const NewShipment = (props) => {
           poId: "",
           type: "",
           typeName: "",
+          shipmentID: "",
           rtype: "",
           rtypeName: "",
           fromOrg: senderOrganisation[0],
@@ -437,7 +440,8 @@ const NewShipment = (props) => {
           <form onSubmit={handleSubmit} className="mb-3">
             <div className="row mb-3">
               <div className="col bg-white formContainer low mr-3">
-                <div className="col-md-6 col-sm-12 mt-3">
+                <div className="row mt-3">
+                <div className="col-md-6 col-sm-12 ">
                   <div className="form-group">
                     <label htmlFor="orderID">Order ID</label>
                     <div className="form-control">
@@ -575,6 +579,21 @@ const NewShipment = (props) => {
                       />
                     </div>
                   </div>
+                </div>
+               <div className="col-md-6 com-sm-12">
+                  <div className="form-group">
+                    <label htmlFor="shipmentID">Reference Shipment ID</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="shipmentID"
+                      onBlur={handleBlur}
+                      placeholder="Enter Reference Shipment ID"
+                      onChange={handleChange}
+                      value={values.shipmentID}
+                    />
+                  </div>
+                </div>
                 </div>
               </div>
             </div>
