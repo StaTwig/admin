@@ -259,7 +259,7 @@ const TransactionHistory = (props) => {
   }
 
   const getImageURL = (imageId) => {
-    return `${config().fetchChallanImageUrl}/${imageId}`;
+    return `${config().fetchChallanImageUrl}${imageId}`;
   }
 
   const getSumByProperty = (inputArr, key) => {
