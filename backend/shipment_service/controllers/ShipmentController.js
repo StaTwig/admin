@@ -1088,7 +1088,15 @@ exports.viewShipment = [
         if (result.success) {
           await ShipmentModel.aggregate([
             {
-              $match: { id: req.query.shipmentId },
+              $match:{
+                     $or: [{
+                             id: req.query.shipmentId
+                           },
+                           {
+                             airWayBillNo : req.query.shipmentId
+                           },
+                          ],
+                     }
             },
             {
               $lookup: {
@@ -2008,13 +2016,13 @@ exports.fetchAllWarehouseShipments = [
               const shipments = await ShipmentModel.aggregate([{
                 $match: {
                   $or: [{
-                    "supplier.locationId": warehouses[i],
-                  },
-                  {
-                    "receiver.locationId": warehouses[i],
-                  },
-                  ],
-                },
+			  "supplier.locationId": { "$in" : warehouses},
+                       },
+		       {
+                         "receiver.locationId": { "$in" : warehouses},
+                       },
+                     ],
+		},
               },
               {
                 $lookup: {
