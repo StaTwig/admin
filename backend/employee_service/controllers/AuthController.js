@@ -1672,7 +1672,7 @@ exports.getOrganizationsByTypeForAbInBev = [
     try {
       const filters = req.query;
       let matchCondition = {};
-      matchCondition.staus = 'ACTIVE';
+      matchCondition.status = 'ACTIVE';
       if (filters.status && filters.status !== '') {
         matchCondition.status = filters.status;
       }
@@ -1688,6 +1688,7 @@ exports.getOrganizationsByTypeForAbInBev = [
       } else {
         matchCondition.type = filters.type;
       }
+      console.log(matchCondition);
       const organisations = await OrganisationModel.aggregate([
         {
           $match: matchCondition,
