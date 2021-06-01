@@ -39,7 +39,7 @@ export const getAllBreweries = () => {
   return async dispatch => {
     try {
       dispatch(turnOn());
-      const result = await axios.get(config().getOrganizationsByType + 'BREWERY');
+      const result = await axios.get(config().getOrganizationsByTypeAbInBev + 'BREWERY');
       dispatch(turnOff());
       return result.data;
     } catch (e) {

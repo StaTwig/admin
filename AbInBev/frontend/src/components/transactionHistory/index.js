@@ -178,6 +178,7 @@ const TransactionHistory = (props) => {
     setFilters(_filters);
     applyFilters(_filters);
     _getDistrictsByState(selectedState);
+    _getOrganizationsByType(_filters);
 
     const _filterVisibility = { ...filterVisibility };
     _filterVisibility.district = true;
@@ -293,10 +294,10 @@ const TransactionHistory = (props) => {
     if (results && results.data) {
       _transactions = results.data.filter(trxn => {
         let isDevTrxn = false;
-        if (trxn.supplier.org.name === 'dev@statwigorg') {
+        if (trxn.supplier.org.name === 'dev@statwigorg' || trxn.supplier.org.name === 'Statwig') {
           isDevTrxn = true;
         }
-        if (trxn.receiver.org.name === 'dev@statwigorg') {
+        if (trxn.receiver.org.name === 'dev@statwigorg' || trxn.receiver.org.name === 'Statwig') {
           isDevTrxn = true;
         }
         return !isDevTrxn;
@@ -336,10 +337,10 @@ const TransactionHistory = (props) => {
       if (results && results.data) {
         results.data = results.data.filter(trxn => {
           let isDevTrxn = false;
-          if (trxn.supplier.org.name === 'dev@statwigorg') {
+          if (trxn.supplier.org.name === 'dev@statwigorg' || trxn.supplier.org.name === 'Statwig') {
             isDevTrxn = true;
           }
-          if (trxn.receiver.org.name === 'dev@statwigorg') {
+          if (trxn.receiver.org.name === 'dev@statwigorg' || trxn.receiver.org.name === 'Statwig') {
             isDevTrxn = true;
           }
           return !isDevTrxn;
