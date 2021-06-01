@@ -226,7 +226,7 @@ export const resetEditPos = data => {
 
 export const getOrganizationsByTypes = async id => {
   try {
-    const result = await axios.get(config().getOrganizationsByTypeUrl + id);
+    const result = await axios.get(config().getOrganizationsTypewithauth + id);
     return result.data;
   } catch (e) {
     return e.response;
