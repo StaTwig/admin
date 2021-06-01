@@ -119,7 +119,7 @@ const SignupContainer = (props) => {
         errorMessage={errorMessage}
         onEmailChange={e => setEmail((e.target.value).toLowerCase())}
         onphoneChange={value => setPhone(value)}
-        onOrgChange={value => {setIsNewOrg(value),setShowModal(true)}}
+        onOrgChange={value => {setIsNewOrg(value),setShowModal(value)}}
         onPasswordChange={e => setPassword(e.target.value)}
         onlastNameChange={e => setLastName(e.target.value)}
         onOrganisationChange={org => setOrganisation({id: org.id, name: org.name})}
