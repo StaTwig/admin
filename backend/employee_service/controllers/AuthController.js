@@ -5,7 +5,6 @@ const InventoryModel = require('../models/InventoryModel');
 const OrganisationModel = require('../models/OrganisationModel');
 const ConfigurationModel = require('../models/ConfigurationModel');
 const CounterModel = require('../models/CounterModel');
-const ConfigurationModel = require('../models/ConfigurationModel');
 const { body, validationResult} = require('express-validator');
 const { sanitizeBody } = require('express-validator');
 //helper file to prepare responses.
