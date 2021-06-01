@@ -5,6 +5,8 @@ const auth = require("../middlewares/jwt");
 const OrganisationModel = require("../models/OrganisationModel");
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
+const moment = require('moment');
+
 require("dotenv").config();
 
 const BREWERY_ORG = 'BREWERY';
@@ -424,10 +426,10 @@ exports.getStatsByBrand = [
 			const filters = req.query;
 			let warehouseIds = await _getWarehouseIds(filters);
 			let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
+			let brandFilter = {};
 			if (filters.brand && filters.brand !== '') {
-				analyticsFilter.manufacturer = filters.brand;
+				brandFilter.manufacturer = filters.brand;
 			}
-
 			let Analytics = await AnalyticsModel.aggregate([
 				{
 					$match: analyticsFilter
@@ -458,6 +460,9 @@ exports.getStatsByBrand = [
 					}
 				},
 				{
+					$match: brandFilter
+				},
+				{
 					$group: {
 						_id: '$manufacturer',
 						products: {
@@ -467,6 +472,7 @@ exports.getStatsByBrand = [
 				}
 
 			]);
+			// console.log(Analytics);
 			for (let analytic of Analytics) {
 
 				let products = analytic.products;
