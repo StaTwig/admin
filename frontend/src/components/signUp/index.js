@@ -240,13 +240,10 @@ const showOrgByType = (value) =>{
                     onSelect={item => {
                       setFieldValue('org', item);
                       props.onOrganisationChange(item);
-                      let orgs = organisationsArr.filter(org => org.name == item.name);
-                      if (orgs.length && item.name != 'Other')
-                        props.onOrgChange(false);
-                      else
-                        props.onOrgChange(true);
-                        setValue(item.name);
-                        // console.log(item.name);
+                        if(item.name!='Other'){
+                          setValue(item.name);
+                          props.onOrgChange(false);
+                        }
                         if(item.name =='Other'){
                           props.onOrgChange(true);
                         }
