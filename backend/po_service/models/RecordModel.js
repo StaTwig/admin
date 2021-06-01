@@ -2,9 +2,7 @@ var mongoose = require('mongoose');
 var RecordSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
-    externalId: {
-      type: String,
-    },
+    externalId: { type: 'String',  index: { unique: true, sparse: true }, dropDups: true   },
     creationDate: {
       type: String,
     },

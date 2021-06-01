@@ -64,8 +64,6 @@
   text-align: right;
 }
 .productDetailActive{
-  background-color: #e9ecef;
-  border:  0.5px solid #e1dff0;
   border-radius: 15px;
   padding:10px
 }
@@ -104,15 +102,18 @@
     margin-bottom: 10px;
   }
   .activeTxnContainer{
-    background-color: #e1dff0;
+    background-color: #cccccc2e;
+      border-radius: 15px;
+      box-shadow: 0px 3px 6px #54265E26;
+      margin-bottom:10px;
   }
   .transactionListContainer{
     margin-top: 15px;
-    padding:10px;
+    padding:5px 0px 0px 5px;
     &:hover{
-      background-color: #e1dff0;
-      // border: 1px solid #414141;
+      background-color: #cccccc2e;
       border-radius: 15px;
+      box-shadow: 0px 3px 6px #54265E26;
     }
     // padding-left: 32px;
   }
@@ -137,7 +138,7 @@
   }  
   .productItem{
     flex-grow: 1;
-    height: 100px;
+    height: 65px;
   }
   .productItem + .productItem{
     margin-left: 2%;

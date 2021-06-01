@@ -513,15 +513,17 @@ exports.addPOsFromExcel = [
               }
             });
             console.log(poDataArray)
-            await RecordModel.insertMany(poDataArray);
+            await RecordModel.insertMany(poDataArray,{ ordered: false });
             return apiResponse.successResponseWithData(
                 res,
                 'Upload Result',
                 poDataArray
             );
           } catch (e) {
-            return apiResponse.ErrorResponse(res, 'Error from Blockchain');
-
+            if(e.code=='11000'){
+              return apiResponse.successResponseWithData(res, 'Error in insertion ( Duplicate Values)', e);
+            }            
+            else return apiResponse.ErrorResponseWithData(res, 'Error in insertion', e);
           }
     //     } else {
     //       res.json('Sorry! User does not have enough Permissions');
@@ -532,6 +534,7 @@ exports.addPOsFromExcel = [
     }
   },
 ];
+
 
 exports.success = [
   async (req, res) => {

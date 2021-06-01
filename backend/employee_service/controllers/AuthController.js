@@ -4,7 +4,8 @@ const ConsumerModel = require('../models/ConsumerModel');
 const InventoryModel = require('../models/InventoryModel');
 const OrganisationModel = require('../models/OrganisationModel');
 const CounterModel = require('../models/CounterModel');
-const { body, validationResult } = require('express-validator');
+const ConfigurationModel = require('../models/ConfigurationModel');
+const { body, validationResult} = require('express-validator');
 const { sanitizeBody } = require('express-validator');
 //helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
@@ -1649,14 +1650,11 @@ exports.getAllUsersByOrganisation = [
 
 
 exports.getOrganizationsByType = [
-
+//without auth for new user register 
   async (req, res) => {
     try {
       const organisationId = req.query.id;
-      const typeId = req.query.typeid;
-      const orgtype = req.query.type;
-      //const organisations= await OrganisationModel.find({$or:[{'id':organisationId},{'typeId':typeId}]},'name')
-      const organisations = await OrganisationModel.find({ $or: [{ 'typeId': typeId }, { 'type': orgtype }, { 'id': organisationId }] }, 'id name ', { projection: { _id: 0, id: 1, name: 1 } });
+      const organisations = await ConfigurationModel.find({ id: organisationId }, 'organisationTypes.id organisationTypes.name')
       return apiResponse.successResponseWithData(
         res,
         "Operation success",
@@ -1751,7 +1749,7 @@ exports.getwarehouseinfo = [
 ];
 
 exports.getOrganizationsTypewithauth = [
-  // auth, //Commented out because to show organistion type on sign up page we don't have auth that's why it is throwing 404 error
+   auth, 
   async (req, res) => {
     try {
       const organisationId = req.query.id;
