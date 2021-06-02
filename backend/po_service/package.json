@@ -7,6 +7,7 @@
     "dev": "nodemon po_server.js"
   },
   "dependencies": {
+    "@mapbox/node-pre-gyp": "^1.0.5",
     "axios": "^0.21.1",
     "cookie-parser": "~1.4.5",
     "cors": "^2.8.5",
