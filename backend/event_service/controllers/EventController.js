@@ -95,7 +95,7 @@ exports.deleteEventById = [
 	}
 ];
 
-exports.getAllEventsWithFilter = [ //inventory with filter(status, actorOrgId, date)
+exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilter, productName, productManufacturer, status)
 	auth,
 	async (req, res) => {
 		try {
@@ -103,13 +103,14 @@ exports.getAllEventsWithFilter = [ //inventory with filter(status, actorOrgId, d
 				skip,
 				limit
 			} = req.query;
+			// console.log("req.user =======> ", req.user);
+			// console.log("req.query =======> ", req.query);
 			const { organisationId } = req.user;
-			console.log("req.user =======> ", req.user);
-			console.log("req.query =======> ", req.query);
 			let currentDate = new Date();
 			let fromDateFilter = 0;
+			let productName = req.query.productName ? req.query.productName : undefined;
+			let productManufacturer = req.query.productManufacturer ? req.query.productManufacturer : undefined;
 			let status = req.query.status ? req.query.status : undefined;
-			// let actorOrgId = req.query.actorOrgId ? req.query.actorOrgId : undefined;
 			switch (req.query.dateFilter) {
 				case "today":
 					fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
@@ -133,41 +134,56 @@ exports.getAllEventsWithFilter = [ //inventory with filter(status, actorOrgId, d
 					fromDateFilter = 0;
 			}
 
-			let whereQuery = {};
+			let elementMatchQuery = {};
 
-
-			if (status) {
-				whereQuery["eventTypePrimary"] = status
+			if (productName) {
+				elementMatchQuery[`productId`] = productName;
 			}
 
-			if (organisationId) {
-				whereQuery["actorOrgId"] = organisationId;
+			if (productManufacturer) {
+				elementMatchQuery[`manufacturer`] = productManufacturer;
 			}
 
-			if (fromDateFilter) {
-				whereQuery['createdAt'] = {
-					$gte: fromDateFilter
-				}
-			}
+			console.log("elementMatchQuery========>", elementMatchQuery);
 
-			console.log("Inventory whereQuery ======>", whereQuery);
 			try {
-				let inventoryCount = await EventModal.count(whereQuery);
-				EventModal.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({
+				let inventoryCount = await EventModal.countDocuments(
+					{ 'payloadData.data.products': {
+						$exists: true, 
+						$ne: [],
+						$elemMatch: elementMatchQuery
+					},
+					'createdAt': {
+						$gte: fromDateFilter
+					},
+					'eventTypePrimary' : (status ? status : { $in: ["ADD", "CREATE"] }),
+					"actorOrgId" : organisationId,
+					}
+				);
+				EventModal.find({ 'payloadData.data.products': {
+					$exists: true, 
+					$ne: [],
+					$elemMatch: elementMatchQuery
+				},
+				'createdAt': {
+					$gte: fromDateFilter
+				},
+				'eventTypePrimary' : (status ? status : { $in: ["ADD", "CREATE"] }),
+				"actorOrgId" : organisationId,
+				}).skip(parseInt(skip)).limit(parseInt(limit)).sort({
 					createdAt: -1
 				}).then(async (eventRecords) => {
 					let inventoryRecords = [];
 					let eventRecordsRes = eventRecords.map(async function (event) {
 						let eventRecords = JSON.parse(JSON.stringify(event))
 						eventRecords[`ProductList`] = [];
-						let payloadRecord = JSON.parse(event.payloadData);
+						let payloadRecord = event.payloadData;
 						if (payloadRecord.data.products) {
 							let inventoryQuantity = 0;
 							let productsRes = payloadRecord.data.products.map(async function (product) {
-								let detaildProduct = JSON.parse(JSON.stringify(product))
+								let detaildProduct = product;
 								detaildProduct[`productDetails`] = {};
 								detaildProduct[`shipmentDetails`] = {};
-								// console.log("(detaildProduct.quantity) ==>", detaildProduct)
 								inventoryQuantity += detaildProduct.quantity ? Number(detaildProduct.quantity): Number(detaildProduct.productQuantity);
 								let whereQuery = {};
 								if (detaildProduct.productId) {
@@ -184,30 +200,6 @@ exports.getAllEventsWithFilter = [ //inventory with filter(status, actorOrgId, d
 									});
 									detaildProduct[`shipmentDetails`] = shipmentDetails;
 								}
-								return detaildProduct;
-							});
-							let productList = await Promise.all(productsRes);
-							eventRecords[`ProductList`].push(...productList);
-							eventRecords[`inventoryQuantity`] = inventoryQuantity;
-							if(productList.length > 0){
-								inventoryRecords.push(eventRecords);
-							}
-						} else if (payloadRecord.data.length > 0) {
-							let inventoryQuantity = 0;
-							let productsRes = payloadRecord.data.map(async function (dataproduct) {
-								let detaildProduct = JSON.parse(JSON.stringify(dataproduct))
-								detaildProduct[`productDetails`] = {};
-								detaildProduct[`shipmentDetails`] = {};
-								// console.log("(detaildProduct.quantity) ==>", detaildProduct)
-								inventoryQuantity += detaildProduct.quantity? Number(detaildProduct.quantity): Number(detaildProduct.productQuantity);
-								let whereQuery = {};
-								if (detaildProduct.productId) {
-									whereQuery[`id`] = detaildProduct.productId
-								} else if (detaildProduct.productName) {
-									whereQuery[`name`] = detaildProduct.productName
-								}
-								let productDetails = await ProductModel.findOne(whereQuery);
-								detaildProduct[`productDetails`] = productDetails;
 								return detaildProduct;
 							});
 							let productList = await Promise.all(productsRes);
@@ -235,3 +227,23 @@ exports.getAllEventsWithFilter = [ //inventory with filter(status, actorOrgId, d
 		}
 	},
 ];
+
+exports.fetchProductDetailsList = [
+	auth,
+	async (req, res) => {
+	  try {
+		let responseData = {}
+			ProductModel.find({},'id name manufacturer').then (function (productDetails){
+			  responseData[`productDetails`] = productDetails;
+			  return apiResponse.successResponseWithData(
+				res,
+				'Product Details for filter dropdown',
+				responseData,
+			  );
+		});
+	  } catch (err) {
+		console.log(err)
+		return apiResponse.ErrorResponse(res, err);
+	  }
+	},
+  ]
