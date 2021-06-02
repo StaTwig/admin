@@ -1085,8 +1085,8 @@ exports.addProductsToInventory = [
                 const atom = {
                   id: uniqid('batch-'),
                   label: {
-                    labelId: product.label.labelId,
-                    labelType: product.label.labelType,
+                    labelId: product?.label?.labelId,
+                    labelType: product?.label?.labelType,
                   },
                   quantity : product.quantity,
                   productId: product.productId,
@@ -2713,7 +2713,7 @@ exports.uploadSalesData = [
 
       return apiResponse.successResponseWithData(
         res,
-        responseObj
+        respObj
       );
 
     } catch (err) {
