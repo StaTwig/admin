@@ -114,7 +114,6 @@ export function config() {
       getOrgTypeiIdsUrl: `${PROD_SERVER_URL}/api/configuration_service/getOrganizationsByType?id=`,
       updateOrgTypesUrl: `${PROD_SERVER_URL}/api/configuration_service/updateOrganizationsByType`,
       addNewOrgTypesUrl: `${PROD_SERVER_URL}/api/configuration_service/addNewOrgType`,
-
     },
     abinbevtest: {
       sendOtpUrl: `${ABINBEV_TEST_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -148,7 +147,6 @@ export function config() {
       getOrgTypeiIdsUrl: `${ABINBEV_TEST_SERVER_URL}/api/configuration_service/getOrganizationsByType?id=`,
       updateOrgTypesUrl: `${ABINBEV_TEST_SERVER_URL}/api/configuration_service/updateOrganizationsByType`,
       addNewOrgTypesUrl: `${ABINBEV_TEST_SERVER_URL}/api/configuration_service/addNewOrgType`,
-
     },
     abinbevprod: {
       sendOtpUrl: `${ABINBEV_PROD_SERVER_URL}/api/employee_service/auth/sendOtp`,

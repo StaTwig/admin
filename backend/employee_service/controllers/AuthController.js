@@ -10,6 +10,10 @@ const mailer = require("../helpers/mailer");
 const { constants } = require("../helpers/constants");
 const auth = require("../middlewares/jwt");
 const axios = require("axios");
+const {uploadFile} = require("../helpers/s3");
+const fs = require('fs');
+const util = require('util');
+const unlinkFile = util.promisify(fs.unlink);
 
 const EmailContent = require("../components/EmailContent");
 
@@ -291,33 +295,15 @@ exports.updateProfile = [
 
 exports.uploadImage = [
   auth,
-  (req, res) => {
+  async (req, res) => {
     try {
-      EmployeeModel.findOne({ emailId: req.user.emailId }).then((user) => {
-        if (user) {
-          console.log(req.file)
-          // base64Img.base64(
-          //   "uploads/" + req.file.filename,
-          //   function (err, data) {
-          //     var base64ImgData = data;
-          //     user.profile_picture = data;
-          //     user.image_location = req.file.filename;
-          //     // Save user.
-          //     user.save(function (err) {
-          //       if (err) {
-          //         return apiResponse.ErrorResponse(res, err);
-          //       }
-          //       return apiResponse.successResponseWithData(
-          //         res,
-          //         "Updated",
-          //         base64ImgData
-          //       );
-          //     });
-          //   }
-          // );
-          return apiResponse.successResponse(res, "Uploaded but not stored")
-        }
-      });
+          const result = await uploadFile(req.file)
+          console.log(result)
+          await unlinkFile(req.file.path)
+          console.log("Unlinked")
+          const image = await EmployeeModel.findOneAndUpdate({ emailId: req.user.emailId}, 
+            { photoId: `/images/${result.key}`}, { new: true})
+          return apiResponse.successResponseWithData(res, "Uploaded ", image)
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
     }

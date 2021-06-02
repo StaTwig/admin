@@ -23,3 +23,14 @@
   position: relative;
   height: 75%;
 }
+.excelpopup {
+  .upload {
+    height: 200px;
+    width: 350px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px dashed #707070;
+    border-radius: 8px;
+  }
+}
