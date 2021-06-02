@@ -13,11 +13,11 @@
 
     .full-width-ribben {
         position: absolute;
-        left: -150px;
+        left: -110px;
         right: -25px;
         background-color: #eaeaea;
         .filter {
-          margin-left: 8rem;
+          margin-left: 9rem;
           margin-right: 3rem;
         }
       }
@@ -40,7 +40,7 @@
         align-items: flex-start;
 
         & > .d-flex {
-          margin-top: 20px;
+          margin-top: 15px;
         }
 
         @media screen and (max-width: 768px) {

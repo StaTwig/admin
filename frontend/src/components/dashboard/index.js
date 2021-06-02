@@ -18,7 +18,7 @@ const DashBoard = props => {
 
   return (
     <div className="dashboard">
-      <div >
+      <div style={{position:"relative", top:"-22px", right:"25px"}}>
         <h1 className="breadcrumb dash">YOUR NETWORK </h1>
       </div>
       <div className="panel">

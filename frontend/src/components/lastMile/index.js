@@ -53,21 +53,20 @@ return (
       
 <div> 
 <div>
-<div className="addproduct" >
-
+<div className="addproduct" style={{position:"relative",left:"-22px",top:"-20px"}}>
     <h1 className="breadcrumb">LAST MILE</h1>
-    <div className="float-right" style={{position:"absolute",left:"1020px",top:"15vh",right:"520px"}}>
-    <button className="btn btn-md btn-main-blue">
+    <div className="float-right" style={{position:"absolute",left:"55rem",top:"0vh"}}>
+    <button className="btn btn-md btn-main-blue ml-5">
             <div className="d-flex align-items-center">
               <img src={ExportIcon} width="16" height="16" className="mr-3" />
               <span>Export</span>
-              <img src={dropdownIcon} width="16" height="16" className="ml-3" />
+              <img src={dropdownIcon} width="12" height="12" className="ml-3" />
             </div>
           </button></div>
     <div className="row">
-    <div className="col tab" style={{width:"80%"}}>
-    <div className=" mt-1 pl-1">
-        <TableFilter data={headers} fb="77%"/>
+    <div className="col tab" style={{width:"100%"}}>
+    <div className="">
+        <TableFilter data={headers} fb="79%"/>
       </div>
      
       </div>
@@ -81,7 +80,7 @@ return (
         <div className="col-xl-3">
         <div className="dashbar">
           
-          <div className="d-flex flex-column mb-2 region pt-5">
+          <div className="d-flex flex-column mb-2 region pt-4">
                 <div className="form-group row mr-1">
                   <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">Region</label>
                     <div className="form-control col">
