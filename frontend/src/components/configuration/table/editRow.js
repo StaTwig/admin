@@ -1,15 +1,13 @@
-import React ,{useState} from 'react';
-import Delete from '../../../assets/icons/Delete.png';
-import './style.scss';
-import {updateOrgTypesUrl} from "../../../actions/organisationActions";
-import {addNewOrgTypesUrl} from "../../../actions/organisationActions";
+import React, { useState } from "react";
+import "./style.scss";
+import { updateOrgTypesUrl } from "../../../actions/organisationActions";
+import { addNewOrgTypesUrl } from "../../../actions/organisationActions";
 
-
-const EditRow = props => {
-  const [editButtonStatus,setEditButtonStatus]=useState(false);
-  const [changeValue,setValue]=useState("");
-  const [changebtn,setbtn]=useState(false);
-  const [addnew,setAddnew]=useState(!props.category);
+const EditRow = (props) => {
+  const [editButtonStatus, setEditButtonStatus] = useState(false);
+  const [changeValue, setValue] = useState("");
+  const [changebtn, setbtn] = useState(false);
+  const [addnew, setAddnew] = useState(!props.category);
   const [disabled, setDisabled] = useState(true);
   const {
     prod,
@@ -20,113 +18,92 @@ const EditRow = props => {
     handleProductChange,
     products,
     handleCategoryChange,
-add
+    add,
   } = props;
 
   //console.log(add,"9999999999999999");
-  console.log(props.category,"wwwwqqqqqqqqq");
+  console.log(props.category, "wwwwqqqqqqqqq");
 
-  const onEditClick=(e)=>{
+  const onEditClick = (e) => {
     setDisabled(!disabled);
     setEditButtonStatus(true);
     //setDisabled(!disabled);
     //setEditButtonStatus(false);
-  }
+  };
 
-  const onAddClick=(e)=>
-  {
-   // console.log(e,"oooooooooooooooo");
-    const data=
-      {
-      name:changeValue
-      }
+  const onAddClick = (e) => {
+    // console.log(e,"oooooooooooooooo");
+    const data = {
+      name: changeValue,
+    };
     addNewOrgTypesUrl(data);
-    setAddnew(false)
+    setAddnew(false);
 
-   // props.category=false;
-  }
+    // props.category=false;
+  };
 
-    const onSaveClick=(e)=>
-    {
-          const data=
-          {
-            id:prod.id,
-            name:changeValue
-          }
-          updateOrgTypesUrl(data);
-          setbtn(true);
-          setDisabled(!disabled);
-          setEditButtonStatus(false);
-    }
+  const onSaveClick = (e) => {
+    const data = {
+      id: prod.id,
+      name: changeValue,
+    };
+    updateOrgTypesUrl(data);
+    setbtn(true);
+    setDisabled(!disabled);
+    setEditButtonStatus(false);
+  };
 
-
-    const handleNameChange=(e)=>
-    {
-      setValue(e);
-    }
+  const handleNameChange = (e) => {
+    setValue(e);
+  };
 
   return (
     <div className="row ml-3">
       <div className="trow row text-dark col">
-  
         <div className="col tcell text-center justify-content-center p-2">
           <div className="">
             <input
               className="form-control"
               placeholder="Type"
-              defaultValue={prod.name }
+              defaultValue={prod.name}
               disabled={disabled}
-              onChange={e => handleNameChange(e.target.value, index)}
+              onChange={(e) => handleNameChange(e.target.value, index)}
             />
           </div>
         </div>
-        
+
         <div className="pr-3">
-          
-       <div>
-            {
-              editButtonStatus ?
+          <div>
+            {editButtonStatus ? (
               <div>
-              {
-                
-                addnew ?   
-
-                <button className="bg-white btn-outline-primary d-width" 
-                onClick={onSaveClick}
+                {addnew ? (
+                  <button
+                    className="bg-white btn-outline-primary d-width"
+                    onClick={onSaveClick}
                   >
-                  <i className="fa fa-pencil"></i>
-                    <span className="ml-1">
-                    {
-                      changebtn ? "Saved"  : "Save"
-                    }
-                    </span>
-                </button>
-
-                :
-                
-                <button className="bg-white btn-outline-primary d-width" 
-                onClick={onAddClick}
+                    <i className="fa fa-pencil"></i>
+                    <span className="ml-1">{changebtn ? "Saved" : "Save"}</span>
+                  </button>
+                ) : (
+                  <button
+                    className="bg-white btn-outline-primary d-width"
+                    onClick={onAddClick}
                   >
-                  <i className="fa fa-pencil"></i>
-                    <span className="ml-1">
-                   ADD
-                    </span>
-                </button> 
-              }
-              
+                    <i className="fa fa-pencil"></i>
+                    <span className="ml-1">ADD</span>
+                  </button>
+                )}
               </div>
-              : 
-              
-            <button className="bg-white btn-outline-primary d-width" 
-            onClick={onEditClick}
-            >
-              <i className="fa fa-pencil"></i>
-            <span className="ml-1">EDIT</span>
-            </button>
-
-            }
-    </div>
-        
+            ) : (
+              <button
+                className="bg-white btn-outline-primary d-width"
+                onClick={onEditClick}
+              >
+                <i className="fa fa-pencil"></i>
+                <span className="ml-1">EDIT</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
       {/* {props.product.length > 0 &&
@@ -139,17 +116,6 @@ add
 };
 
 export default EditRow;
-
-
-
-
-
-
-
-
-
-
-
 
 // import React from 'react';
 // // import Delete from '../../../assets/icons/Delete.png';
@@ -168,8 +134,6 @@ export default EditRow;
 //     handleCategoryChange,
 //   } = props;
 
- 
-
 //   return (
 //     <div className="row ml-3">
 //       <div className="trow row text-dark col">
@@ -177,7 +141,7 @@ export default EditRow;
 //           <div className=" p-0">
 //             <div className="d-flex flex-column">
 //               <div className="title recived-text">
-              
+
 //                 <input
 //               className="form-control text-center"
 //               placeholder="Quantity"
@@ -188,10 +152,8 @@ export default EditRow;
 //           </div>
 //             </div>
 //           </div>
-    
+
 //   );
 // };
 
 // export default EditRow;
-
-

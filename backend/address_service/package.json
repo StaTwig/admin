@@ -26,7 +26,11 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.15",
     "morgan": "^1.10.0",
+    "move-file": "^2.0.0",
+    "multer": "^1.4.2",
     "nanoid": "^3.1.20",
+    "node-fetch": "^2.6.1",
+    "xlsx": "^0.16.9",
     "winston": "^3.3.3",
     "winston-logzio": "^5.1.2"
   },

@@ -1,8 +1,7 @@
-import React from 'react';
-import Delete from '../../../assets/icons/Delete.png';
-import './style.scss';
+import React from "react";
+import "./style.scss";
 
-const EditRow = props => {
+const EditRow = (props) => {
   const {
     prod,
     handleQuantityChange,
@@ -13,32 +12,32 @@ const EditRow = props => {
     products,
     handleCategoryChange,
   } = props;
-  
 
   const numbersOnly = (e) => {
     // Handle paste
-  
-  }
+  };
 
   return (
     <div className="row ml-3">
       <div className="trow row text-dark col">
-  
         <div className="col tcell text-center justify-content-center p-2">
           <div className="">
             <input
               className="form-control"
               placeholder="Type"
-              value={prod.productQuantity ? prod.productQuantity : prod.quantity}
-              onChange={e => handleQuantityChange(e.target.value, index)}
+              value={
+                prod.productQuantity ? prod.productQuantity : prod.quantity
+              }
+              onChange={(e) => handleQuantityChange(e.target.value, index)}
             />
           </div>
         </div>
         <div className="pr-3">
-        <button className="bg-white btn-outline-primary d-width">
-                  <i className="fa fa-pencil"></i>
+          <button className="bg-white btn-outline-primary d-width">
+            <i className="fa fa-pencil"></i>
             <span className="ml-1">Edit</span>
-       </button></div>
+          </button>
+        </div>
       </div>
       {/* {props.product.length > 0 &&
         <div className=" m-3 bg-light">
@@ -50,17 +49,6 @@ const EditRow = props => {
 };
 
 export default EditRow;
-
-
-
-
-
-
-
-
-
-
-
 
 // import React from 'react';
 // // import Delete from '../../../assets/icons/Delete.png';
@@ -79,8 +67,6 @@ export default EditRow;
 //     handleCategoryChange,
 //   } = props;
 
- 
-
 //   return (
 //     <div className="row ml-3">
 //       <div className="trow row text-dark col">
@@ -88,7 +74,7 @@ export default EditRow;
 //           <div className=" p-0">
 //             <div className="d-flex flex-column">
 //               <div className="title recived-text">
-              
+
 //                 <input
 //               className="form-control text-center"
 //               placeholder="Quantity"
@@ -99,10 +85,8 @@ export default EditRow;
 //           </div>
 //             </div>
 //           </div>
-    
+
 //   );
 // };
 
 // export default EditRow;
-
-

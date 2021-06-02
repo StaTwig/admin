@@ -386,3 +386,15 @@ export const getAddressByLatLong = async (data) => {
     return e.response;
   }
 };
+
+export const addAddressesFromExcel = async (data) => {
+  try {
+    const url = config().addAddressesFromExcelUrl;
+    const result = await axios.post(url, data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};

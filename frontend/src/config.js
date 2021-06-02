@@ -1,7 +1,8 @@
 export const TEST_SERVER_URL = "https://test.admin.vaccineledger.com";
 export const PROD_SERVER_URL = "//api.vaccineledger.com:9001";
 export const ABINBEV_PROD_SERVER_URL = "//admin.abinbev.statledger.io:9001";
-export const ABINBEV_TEST_SERVER_URL = "//test.admin.abinbev.statledger.io:9001";
+export const ABINBEV_TEST_SERVER_URL =
+  "//test.admin.abinbev.statledger.io:9001";
 export const LOCAL_SERVER_URL_USER = "//localhost:3001";
 export const LOCAL_SERVER_URL_ADDRESS = "//localhost:3001";
 export const LOCAL_SERVER_URL_AFFILIATION = "//localhost:3002";
@@ -36,7 +37,8 @@ export function config() {
       rejectAffiliateUrl: `${LOCAL_SERVER_URL_AFFILIATION}/api/affliation_service/rejectAffiliate`,
       addAffiliateUrl: `${LOCAL_SERVER_URL_AFFILIATION}/api/affliation_service/addAffiliate`,
       addOrgAddressrUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/addWarehouse`,
-      updateOrgAddressrUrl: `${LOCAL_SERVER_URL_ADDRESS}//api/address_service/updateWarehouse`,
+      updateOrgAddressrUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/updateWarehouse`,
+      addAddressesFromExcelUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/addAddressesFromExcel`,
       getOrgTypesUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/configuration_service/getOrganizationsByType?id=CONF001`,
     },
     test: {
@@ -66,6 +68,7 @@ export function config() {
       addOrgAddressrUrl: `${TEST_SERVER_URL}/api/address_service/addWarehouse`,
       addAffiliateUrl: `${TEST_SERVER_URL}/api/affliation_service/addAffiliate`,
       updateOrgAddressrUrl: `${TEST_SERVER_URL}/api/address_service/updateWarehouse`,
+      addAddressesFromExcelUrl: `${TEST_SERVER_URL}/api/address_service/addAddressesFromExcel`,
       getOrgTypesUrl: `${TEST_SERVER_URL}/api/configuration_service/getOrganizationsByType?id=CONF001`,
     },
     prod: {
@@ -95,8 +98,8 @@ export function config() {
       addAffiliateUrl: `${PROD_SERVER_URL}/api/affliation_service/addAffiliate`,
       addOrgAddressrUrl: `${PROD_SERVER_URL}/api/address_service/addWarehouse`,
       updateOrgAddressrUrl: `${PROD_SERVER_URL}/api/address_service/updateWarehouse`,
+      addAddressesFromExcelUrl: `${PROD_SERVER_URL}/api/address_service/addAddressesFromExcel`,
       getOrgTypesUrl: `${PROD_SERVER_URL}/api/configuration_service/getOrganizationsByType?id=CONF001`,
-
     },
     abinbevtest: {
       sendOtpUrl: `${ABINBEV_TEST_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -125,8 +128,8 @@ export function config() {
       addOrgAddressrUrl: `${ABINBEV_TEST_SERVER_URL}/api/address_service/addWarehouse`,
       addAffiliateUrl: `${ABINBEV_TEST_SERVER_URL}/api/affliation_service/addAffiliate`,
       updateOrgAddressrUrl: `${ABINBEV_TEST_SERVER_URL}/api/address_service/updateWarehouse`,
+      addAddressesFromExcelUrl: `${ABINBEV_TEST_SERVER_URL}/api/address_service/addAddressesFromExcel`,
       getOrgTypesUrl: `${ABINBEV_TEST_SERVER_URL}/api/configuration_service/getOrganizationsByType?id=CONF001`,
-
     },
     abinbevprod: {
       sendOtpUrl: `${ABINBEV_PROD_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -155,6 +158,7 @@ export function config() {
       addOrgAddressrUrl: `${ABINBEV_PROD_SERVER_URL}/api/address_service/addWarehouse`,
       addAffiliateUrl: `${ABINBEV_PROD_SERVER_URL}/api/affliation_service/addAffiliate`,
       updateOrgAddressrUrl: `${ABINBEV_PROD_SERVER_URL}/api/address_service/updateWarehouse`,
+      addAddressesFromExcelUrl: `${ABINBEV_PROD_SERVER_URL}/api/address_service/addAddressesFromExcel`,
       getOrgTypesUrl: `${ABINBEV_PROD_SERVER_URL}/api/configuration_service/getOrganizationsByType?id=CONF001`,
     },
   };
