@@ -24,18 +24,7 @@ const Configurationpart = (props) => {
     orgname: '', 
   });
 
-  const [showleft,setShowLeft]=useState(true);
-  
-  const editPo = useSelector(state => {
-    return state?.reviewPo;
-  });
-  
-  const [products, setProducts] = useState([]);
-  const [category, setCategory] = useState([]);
 
-  const [addProducts, setAddProducts] = useState([]);
-  const [addProducts1, setAddProducts1] = useState([]);
-  const dispatch = useDispatch();
 
   const [showorg,setShowOrg]=useState(true);
 
