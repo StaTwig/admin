@@ -14,6 +14,45 @@ import {
 } from "../constants/organisationConstants";
 import { turnOn, turnOff } from "./spinnerActions";
 
+
+
+export const getOrgTypeiIdsUrl = async (data) => {
+  try {
+    const result = await axios.get(config().getOrgTypeiIdsUrl + data);
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
+
+
+export const updateOrgTypesUrl = async (data) => {
+  try {
+    //console.log(data,"------------");
+    const id="CONF000"
+    const result = await axios.put(`${config().updateOrgTypesUrl}?id=${id}`, data);
+   // console.log(result,"+++++++++++++");
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+
+
+export const addNewOrgTypesUrl = async (data) => {
+  try {
+    const id="CONF000"
+      const result = await axios.post(`${config().addNewOrgTypesUrl}?id=${id}`, data);
+      return result;
+    }
+   catch (e) {
+    return e.response;
+  }
+};
+
+
 export const getRequestsPending = (skip = 0, limit = 5) => {
   try {
     return async (dispatch) => {
@@ -382,6 +421,18 @@ export const getAddressByLatLong = async (data) => {
     return result.length > 0
       ? result.Response.View.Result[0].Location.Address
       : {};
+  } catch (e) {
+    return e.response;
+  }
+};
+
+export const addAddressesFromExcel = async (data) => {
+  try {
+    const url = config().addAddressesFromExcelUrl;
+    const result = await axios.post(url, data, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return result;
   } catch (e) {
     return e.response;
   }
