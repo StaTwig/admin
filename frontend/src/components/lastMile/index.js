@@ -16,7 +16,7 @@ import {GetEOLInfoByProductId} from '../../actions/eolAction';
 import {GetEOLInfoByIdentityId} from '../../actions/eolAction';
 import {GetEOLInfoByPlaceAdministered} from '../../actions/eolAction';
 import {GetEOLListByDateWindow} from '../../actions/eolAction';
-
+import Table from './table'
 const lastMile=(props)=>{
     const [region,setRegion]= useState('Select Region')
     const [regions,setRegions]= useState([])
@@ -42,11 +42,12 @@ const lastMile=(props)=>{
 useEffect(()=>{
     async function fetchData(){
         const eol_ProductID = await GetEOLInfoByProductId("pro123456");
-        console.log(eol_ProductID);
+        //console.log(eol_ProductID);
     }
     fetchData();
 },[]);
       
+
   
 return (
       
@@ -68,7 +69,11 @@ return (
     <div className=" mt-1 pl-1">
         <TableFilter data={headers} fb="77%"/>
       </div>
+     
       </div>
+      </div>
+      <div className="ribben-space" style={{width:"76%"}}>
+      <Table {...props}/>
       </div>
 
       </div>
