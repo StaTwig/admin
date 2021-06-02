@@ -2713,7 +2713,7 @@ exports.uploadSalesData = [
 
       return apiResponse.successResponseWithData(
         res,
-        responseObj
+        respObj
       );
 
     } catch (err) {
