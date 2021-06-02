@@ -1088,7 +1088,15 @@ exports.viewShipment = [
         if (result.success) {
           await ShipmentModel.aggregate([
             {
-              $match: { id: req.query.shipmentId },
+              $match:{
+                     $or: [{
+                             id: req.query.shipmentId
+                           },
+                           {
+                             airWayBillNo : req.query.shipmentId
+                           },
+                          ],
+                     }
             },
             {
               $lookup: {
@@ -2003,18 +2011,16 @@ exports.fetchAllWarehouseShipments = [
               emailId: emailId
             });
             const warehouses = empDetails.warehouseId;
-            var shipmentsArray = [];
-            for (i = 0; i < warehouses.length; i++) {
               const shipments = await ShipmentModel.aggregate([{
                 $match: {
                   $or: [{
-                    "supplier.locationId": warehouses[i],
-                  },
-                  {
-                    "receiver.locationId": warehouses[i],
-                  },
-                  ],
-                },
+			  "supplier.locationId": { "$in" : warehouses},
+                       },
+		       {
+                         "receiver.locationId": { "$in" : warehouses},
+                       },
+                     ],
+		},
               },
               {
                 $lookup: {
@@ -2074,13 +2080,11 @@ exports.fetchAllWarehouseShipments = [
                 })
                 .skip(parseInt(skip))
                 .limit(parseInt(limit));
-              shipmentsArray.push(shipments)
-            };
 
             return apiResponse.successResponseWithData(
               res,
               "Shipments Table",
-              shipmentsArray
+              shipments
             );
           } catch (err) {
             return apiResponse.ErrorResponse(res, err);
