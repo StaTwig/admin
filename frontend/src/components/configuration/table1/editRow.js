@@ -1,5 +1,4 @@
 import React from 'react';
-import Delete from '../../../assets/icons/Delete.png';
 import './style.scss';
 
 const EditRow = props => {
