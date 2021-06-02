@@ -1,5 +1,4 @@
 import React ,{useState} from 'react';
-import Delete from '../../../assets/icons/Delete.png';
 import './style.scss';
 import {updateOrgTypesUrl} from "../../../actions/organisationActions";
 import {addNewOrgTypesUrl} from "../../../actions/organisationActions";
