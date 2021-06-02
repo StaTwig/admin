@@ -8,6 +8,8 @@ export const LOCAL_SERVER_URL_ADDRESS = "//localhost:3001";
 export const LOCAL_SERVER_URL_AFFILIATION = "//localhost:3002";
 export const LOCAL_SERVER_URL_EMPLOYEE = "//localhost:3003";
 export const LOCAL_SERVER_URL_RBAC = "//localhost:3004";
+export const LOCAL_SERVER_URL_CONFIG = "//localhost:3005";
+
 
 export function config() {
   const confs = {
@@ -40,6 +42,12 @@ export function config() {
       updateOrgAddressrUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/updateWarehouse`,
       addAddressesFromExcelUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/addAddressesFromExcel`,
       getOrgTypesUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/configuration_service/getOrganizationsByType?id=CONF001`,
+
+      getOrgTypeiIdsUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/configuration_service/getOrganizationsByType?id=`,
+      updateOrgTypesUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/configuration_service/updateOrganizationsByType`,
+      addNewOrgTypesUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/configuration_service/addNewOrgType`,
+
+
     },
     test: {
       sendOtpUrl: `${TEST_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -70,6 +78,9 @@ export function config() {
       updateOrgAddressrUrl: `${TEST_SERVER_URL}/api/address_service/updateWarehouse`,
       addAddressesFromExcelUrl: `${TEST_SERVER_URL}/api/address_service/addAddressesFromExcel`,
       getOrgTypesUrl: `${TEST_SERVER_URL}/api/configuration_service/getOrganizationsByType?id=CONF001`,
+      getOrgTypeiIdsUrl: `${TEST_SERVER_URL}/api/configuration_service/getOrganizationsByType?id=`,
+      updateOrgTypesUrl: `${TEST_SERVER_URL}/api/configuration_service/updateOrganizationsByType`,
+      addNewOrgTypesUrl: `${TEST_SERVER_URL}/api/configuration_service/addNewOrgType`,
     },
     prod: {
       sendOtpUrl: `${PROD_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -100,6 +111,9 @@ export function config() {
       updateOrgAddressrUrl: `${PROD_SERVER_URL}/api/address_service/updateWarehouse`,
       addAddressesFromExcelUrl: `${PROD_SERVER_URL}/api/address_service/addAddressesFromExcel`,
       getOrgTypesUrl: `${PROD_SERVER_URL}/api/configuration_service/getOrganizationsByType?id=CONF001`,
+      getOrgTypeiIdsUrl: `${PROD_SERVER_URL}/api/configuration_service/getOrganizationsByType?id=`,
+      updateOrgTypesUrl: `${PROD_SERVER_URL}/api/configuration_service/updateOrganizationsByType`,
+      addNewOrgTypesUrl: `${PROD_SERVER_URL}/api/configuration_service/addNewOrgType`,
     },
     abinbevtest: {
       sendOtpUrl: `${ABINBEV_TEST_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -130,6 +144,9 @@ export function config() {
       updateOrgAddressrUrl: `${ABINBEV_TEST_SERVER_URL}/api/address_service/updateWarehouse`,
       addAddressesFromExcelUrl: `${ABINBEV_TEST_SERVER_URL}/api/address_service/addAddressesFromExcel`,
       getOrgTypesUrl: `${ABINBEV_TEST_SERVER_URL}/api/configuration_service/getOrganizationsByType?id=CONF001`,
+      getOrgTypeiIdsUrl: `${ABINBEV_TEST_SERVER_URL}/api/configuration_service/getOrganizationsByType?id=`,
+      updateOrgTypesUrl: `${ABINBEV_TEST_SERVER_URL}/api/configuration_service/updateOrganizationsByType`,
+      addNewOrgTypesUrl: `${ABINBEV_TEST_SERVER_URL}/api/configuration_service/addNewOrgType`,
     },
     abinbevprod: {
       sendOtpUrl: `${ABINBEV_PROD_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -160,10 +177,14 @@ export function config() {
       updateOrgAddressrUrl: `${ABINBEV_PROD_SERVER_URL}/api/address_service/updateWarehouse`,
       addAddressesFromExcelUrl: `${ABINBEV_PROD_SERVER_URL}/api/address_service/addAddressesFromExcel`,
       getOrgTypesUrl: `${ABINBEV_PROD_SERVER_URL}/api/configuration_service/getOrganizationsByType?id=CONF001`,
+      getOrgTypeiIdsUrl: `${ABINBEV_PROD_SERVER_URL}/api/configuration_service/getOrganizationsByType?id=`,
+      updateOrgTypesUrl: `${ABINBEV_PROD_SERVER_URL}/api/configuration_service/updateOrganizationsByType`,
+      addNewOrgTypesUrl: `${ABINBEV_PROD_SERVER_URL}/api/configuration_service/addNewOrgType`,
+      
     },
   };
 
-  const environment = process.env.ENVIRONMENT || "local"; // change prod to test, local,stable, dev for respective environments
+  const environment = process.env.ENVIRONMENT || "test"; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
 
   return conf;
