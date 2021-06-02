@@ -1,13 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import EditRow from './editRow';
+import {getOrgTypeiIdsUrl} from "../../../actions/organisationActions"
+
 
 import './style.scss';
 
-const EditTable = props => {  
+const EditTable = props => { 
+  const [add,setAdd]=useState(false);
+
+  //console.log(props.products,"0000");
+  console.log(props.category);
+  
+
  return (
     <div className="table productTable mb-0 mt-2">
      <div className="d-flex flex-column">
-       
+      
+        <div className="">
+        
+          {props.products[0].map((product, index) => (
+           
+            <EditRow
+                key={index}
+                prod={product}
+                {...props}
+                index={index}
+                category={props.category}
+                
+            />
+          ))}
+          
+        </div>
         <div className="">
           {props.product.map((product, index) => (
             <EditRow
@@ -15,9 +38,12 @@ const EditTable = props => {
               prod={product}
               {...props}
               index={index}
+              category={props.category}
             />
           ))}
+          
         </div>
+       
       </div>
     </div>
   );
