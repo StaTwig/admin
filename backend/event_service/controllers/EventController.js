@@ -91,7 +91,7 @@ exports.deleteEventById = [
 	}
 ];
 
-exports.getAllEventsWithFilter = [ //inventory with filter(status, actorOrgId, date)
+exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilter, productName, productManufacturer, status)
 	auth,
 	async (req, res) => {
 		try {
@@ -99,13 +99,15 @@ exports.getAllEventsWithFilter = [ //inventory with filter(status, actorOrgId, d
 				skip,
 				limit
 			} = req.query;
+			// console.log("req.user =======> ", req.user);
+			// console.log("req.query =======> ", req.query);
 			const { organisationId } = req.user;
-			console.log("req.user =======> ", req.user);
-			console.log("req.query =======> ", req.query);
 			let currentDate = new Date();
 			let fromDateFilter = 0;
+			let category = req.query.category;
+			let productName = req.query.productName ? req.query.productName : undefined;
+			let productManufacturer = req.query.productManufacturer ? req.query.productManufacturer : undefined;
 			let status = req.query.status ? req.query.status : undefined;
-			// let actorOrgId = req.query.actorOrgId ? req.query.actorOrgId : undefined;
 			switch (req.query.dateFilter) {
 				case "today":
 					fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
@@ -129,105 +131,192 @@ exports.getAllEventsWithFilter = [ //inventory with filter(status, actorOrgId, d
 					fromDateFilter = 0;
 			}
 
-			let whereQuery = {};
-
-
-			if (status) {
-				whereQuery["eventTypePrimary"] = status
+			let elementMatchQuery = {};
+			console.log(fromDateFilter)
+			if (productName) {
+				elementMatchQuery[`productDetails.id`] = productName;
 			}
 
-			if (organisationId) {
-				whereQuery["actorOrgId"] = organisationId;
+			if (productManufacturer) {
+				elementMatchQuery[`productDetails.manufacturer`] = productManufacturer;
 			}
 
-			if (fromDateFilter) {
-				whereQuery['createdAt'] = {
+			if(category){
+				elementMatchQuery[`productDetails.type`] = category
+			}
+			if(status){
+				elementMatchQuery[`eventTypePrimary`] = status
+			}
+			if(fromDateFilter){
+				elementMatchQuery[`createdAt`] = {
 					$gte: fromDateFilter
 				}
 			}
 
-			console.log("Inventory whereQuery ======>", whereQuery);
-			try {
-				let inventoryCount = await EventModal.count(whereQuery);
-				EventModal.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({
-					createdAt: -1
-				}).then(async (eventRecords) => {
-					let inventoryRecords = [];
-					let eventRecordsRes = eventRecords.map(async function (event) {
-						let eventRecords = JSON.parse(JSON.stringify(event))
-						eventRecords[`ProductList`] = [];
-						let payloadRecord = JSON.parse(event.payloadData);
-						if (payloadRecord.data.products) {
-							let inventoryQuantity = 0;
-							let productsRes = payloadRecord.data.products.map(async function (product) {
-								let detaildProduct = JSON.parse(JSON.stringify(product))
-								detaildProduct[`productDetails`] = {};
-								detaildProduct[`shipmentDetails`] = {};
-								// console.log("(detaildProduct.quantity) ==>", detaildProduct)
-								inventoryQuantity += detaildProduct.quantity ? Number(detaildProduct.quantity): Number(detaildProduct.productQuantity);
-								let whereQuery = {};
-								if (detaildProduct.productId) {
-									whereQuery[`id`] = detaildProduct.productId
-								} else if (detaildProduct.productName) {
-									whereQuery[`name`] = detaildProduct.productName
-								}
-								let productDetails = await ProductModel.findOne(whereQuery);
-								detaildProduct[`productDetails`] = productDetails;
+			console.log("elementMatchQuery========>", elementMatchQuery);
 
-								if (payloadRecord.data.id) {
-									let shipmentDetails = await ShipmentModel.findOne({
-										id: payloadRecord.data.id
-									});
-									detaildProduct[`shipmentDetails`] = shipmentDetails;
-								}
-								return detaildProduct;
-							});
-							let productList = await Promise.all(productsRes);
-							eventRecords[`ProductList`].push(...productList);
-							eventRecords[`inventoryQuantity`] = inventoryQuantity;
-							if(productList.length > 0){
-								inventoryRecords.push(eventRecords);
+			try {
+				// let inventoryCount = await EventModal.countDocuments(
+				// 	{ 'payloadData.data.products': {
+				// 		$exists: true, 
+				// 		$ne: [],
+				// 		$elemMatch: elementMatchQuery
+				// 	},
+				// 	'createdAt': {
+				// 		$gte: fromDateFilter
+				// 	},
+				// 	'eventTypePrimary' : (status ? status : { $in: ["ADD", "CREATE"] }),
+				// 	"actorOrgId" : organisationId,
+				// 	}
+				// );
+			// 	EventModal.find({ 'payloadData.data.products': {
+			// 		$exists: true, 
+			// 		$ne: [],
+			// 		$elemMatch: elementMatchQuery
+			// 	},
+			// 	'createdAt': {
+			// 		$gte: fromDateFilter
+			// 	},
+			// 	'eventTypePrimary' : (status ? status : { $in: ["ADD", "CREATE"] }),
+			// 	"actorOrgId" : organisationId,
+			// 	}).skip(parseInt(skip)).limit(parseInt(limit)).sort({
+			// 		createdAt: -1
+			// 	}).then(async (eventRecords) => {
+			// 		let inventoryRecords = [];
+			// 		let eventRecordsRes = eventRecords.map(async function (event) {
+			// 			let eventRecords = JSON.parse(JSON.stringify(event))
+			// 			eventRecords[`ProductList`] = [];
+			// 			let payloadRecord = event.payloadData;
+			// 			if (payloadRecord.data.products) {
+			// 				let inventoryQuantity = 0;
+			// 				let productsRes = payloadRecord.data.products.map(async function (product) {
+			// 					let detaildProduct = product;
+			// 					detaildProduct[`productDetails`] = {};
+			// 					detaildProduct[`shipmentDetails`] = {};
+			// 					inventoryQuantity += detaildProduct.quantity ? Number(detaildProduct.quantity): Number(detaildProduct.productQuantity);
+			// 					let whereQuery = {};
+			// 					if (detaildProduct.productId) {
+			// 						whereQuery[`id`] = detaildProduct.productId
+			// 					} else if (detaildProduct.productName) {
+			// 						whereQuery[`name`] = detaildProduct.productName
+			// 					}
+			// 					let productDetails = await ProductModel.findOne(whereQuery);
+			// 					detaildProduct[`productDetails`] = productDetails;
+
+			// 					if (payloadRecord.data.id) {
+			// 						let shipmentDetails = await ShipmentModel.findOne({
+			// 							id: payloadRecord.data.id
+			// 						});
+			// 						detaildProduct[`shipmentDetails`] = shipmentDetails;
+			// 					}
+			// 					return detaildProduct;
+			// 				});
+			// 				let productList = await Promise.all(productsRes);
+			// 				eventRecords[`ProductList`].push(...productList);
+			// 				eventRecords[`inventoryQuantity`] = inventoryQuantity;
+			// 				if(productList.length > 0){
+			// 					inventoryRecords.push(eventRecords);
+			// 				}
+			// 			}
+			// 		});
+			// 		let inventoryResult = await Promise.all(eventRecordsRes);
+			// 		return apiResponse.successResponseWithData(
+			// 			res,
+			// 			"Inventory Records",
+			// 			{"inventoryRecords":inventoryRecords, "count":inventoryCount}
+			// 		);
+			// 	});
+			// } catch (err) {
+			// 	console.log(err)
+			// 	return apiResponse.ErrorResponse(res, err);
+			// }
+			let inventoryCount = 0
+			EventModal.aggregate([
+				{ $lookup: {        
+					   from: 'products',
+					   localField: 'payloadData.data.products.productId',
+					   foreignField: 'id',
+					   as: 'productDetails',
+					} },
+					  { "$unwind": "$productDetails" },
+					  { $match: elementMatchQuery},
+					  
+					  ]).skip(parseInt(skip)).limit(parseInt(limit)).sort({
+				createdAt: -1
+			}).then(async (eventRecords) => {
+				console.log(eventRecords)
+				let inventoryRecords = [];
+				inventoryCount = eventRecords.length
+				let eventRecordsRes = eventRecords.map(async function (event) {
+					let eventRecords = JSON.parse(JSON.stringify(event))
+					eventRecords[`ProductList`] = [];
+					let payloadRecord = event.payloadData;
+					if (payloadRecord.data.products) {
+						let inventoryQuantity = 0;
+						let productsRes = payloadRecord.data.products.map(async function (product) {
+							let detaildProduct = product;
+							detaildProduct[`productDetails`] = {};
+							detaildProduct[`shipmentDetails`] = {};
+							inventoryQuantity += detaildProduct.quantity ? Number(detaildProduct.quantity): Number(detaildProduct.productQuantity);
+							let whereQuery = {};
+							if (detaildProduct.productId) {
+								whereQuery[`id`] = detaildProduct.productId
+							} else if (detaildProduct.productName) {
+								whereQuery[`name`] = detaildProduct.productName
 							}
-						} else if (payloadRecord.data.length > 0) {
-							let inventoryQuantity = 0;
-							let productsRes = payloadRecord.data.map(async function (dataproduct) {
-								let detaildProduct = JSON.parse(JSON.stringify(dataproduct))
-								detaildProduct[`productDetails`] = {};
-								detaildProduct[`shipmentDetails`] = {};
-								// console.log("(detaildProduct.quantity) ==>", detaildProduct)
-								inventoryQuantity += detaildProduct.quantity? Number(detaildProduct.quantity): Number(detaildProduct.productQuantity);
-								let whereQuery = {};
-								if (detaildProduct.productId) {
-									whereQuery[`id`] = detaildProduct.productId
-								} else if (detaildProduct.productName) {
-									whereQuery[`name`] = detaildProduct.productName
-								}
-								let productDetails = await ProductModel.findOne(whereQuery);
-								detaildProduct[`productDetails`] = productDetails;
-								return detaildProduct;
-							});
-							let productList = await Promise.all(productsRes);
-							eventRecords[`ProductList`].push(...productList);
-							eventRecords[`inventoryQuantity`] = inventoryQuantity;
-							if(productList.length > 0){
-								inventoryRecords.push(eventRecords);
+							let productDetails = await ProductModel.findOne(whereQuery);
+							detaildProduct[`productDetails`] = productDetails;
+
+							if (payloadRecord.data.id) {
+								let shipmentDetails = await ShipmentModel.findOne({
+									id: payloadRecord.data.id
+								});
+								detaildProduct[`shipmentDetails`] = shipmentDetails;
 							}
+							return detaildProduct;
+						});
+						let productList = await Promise.all(productsRes);
+						eventRecords[`ProductList`].push(...productList);
+						eventRecords[`inventoryQuantity`] = inventoryQuantity;
+						if(productList.length > 0){
+							inventoryRecords.push(eventRecords);
 						}
-					});
-					let inventoryResult = await Promise.all(eventRecordsRes);
-					return apiResponse.successResponseWithData(
-						res,
-						"Inventory Records",
-						{"inventoryRecords":inventoryRecords, "count":inventoryCount}
-					);
+					}
 				});
-			} catch (err) {
-				console.log(err)
-				return apiResponse.ErrorResponse(res, err);
-			}
+				let inventoryResult = await Promise.all(eventRecordsRes);
+				return apiResponse.successResponseWithData(
+					res,
+					"Inventory Records",
+					{"inventoryRecords":inventoryRecords, "count":inventoryCount}
+				);
+			});
+		} catch (err) {
+			console.log(err)
+			return apiResponse.ErrorResponse(res, err);
+		}
 		} catch (err) {
 			console.log(err)
 			return apiResponse.ErrorResponse(res, err);
 		}
 	},
 ];
+
+exports.fetchProductDetailsList = [
+	auth,
+	async (req, res) => {
+	  try {
+		let responseData = {}
+			ProductModel.find({},'id name manufacturer').then (function (productDetails){
+			  responseData[`productDetails`] = productDetails;
+			  return apiResponse.successResponseWithData(
+				res,
+				'Product Details for filter dropdown',
+				responseData,
+			  );
+		});
+	  } catch (err) {
+		console.log(err)
+		return apiResponse.ErrorResponse(res, err);
+	  }
+	},
+  ]
