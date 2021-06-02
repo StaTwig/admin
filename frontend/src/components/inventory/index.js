@@ -69,6 +69,9 @@ const Inventory = props => {
         const [limit, setLimit] = useState(10);
         const [count, setCount] = useState(0);
         const [dateFilter, setDateFilter] = useState("");
+        const [productNameFilter, setProductNameFilter] = useState("");
+        const [manufacturerFilter, setManufacturerFilter] = useState("");
+        const [statusFilter, setStatusFilter] = useState("");
 
      useEffect(() => {
     async function fetchData() {
@@ -106,23 +109,36 @@ const Inventory = props => {
     console.log("onPageChange =========>", pageNum)
     const recordSkip = (pageNum-1)*limit;
     setSkip(recordSkip);
-    dispatch(getInventories(recordSkip, limit, dateFilter));
+    dispatch(getInventories(recordSkip, limit, dateFilter, productNameFilter, manufacturerFilter, statusFilter));  //(skip, limit, dateFilter, productName, productManufacturer, status)
   };
 
   const setDateFilterOnSelect = async (dateFilterSelected) => {
     console.log("setDateFilterOnSelect =========>", dateFilterSelected)
     setDateFilter(dateFilterSelected);
     setSkip(0);
-    dispatch(getInventories(skip, limit, dateFilterSelected));
+    dispatch(getInventories(0, limit, dateFilterSelected,  productNameFilter, manufacturerFilter, statusFilter));  //(skip, limit, dateFilter, productName, productManufacturer, status)
   }
 
-  // const setInventoryStatusFilterOnSelect = async (statusFilterSelected) => {
-  //   console.log("setInventoryStatusFilterOnSelect =========>", statusFilterSelected)
-  //   setStatusFilter(statusFilterSelected);
-  //   setSkip(0);
-      
-  //     dispatch(getInventories(skip, limit, statusFilterSelected, ""));
-  // }
+  const setInventoryStatusFilterOnSelect = async (statusFilterSelected) => {
+    console.log("setInventoryStatusFilterOnSelect =========>", statusFilterSelected);
+    setStatusFilter(statusFilterSelected);
+    setSkip(0);
+      dispatch(getInventories(0, limit, dateFilter, productNameFilter, manufacturerFilter, statusFilterSelected));  //(skip, limit, dateFilter, productName, productManufacturer, status)
+  }
+
+  const setInventoryProductNameFilterOnSelect = async (productNameFilterSelected) => {
+    console.log("setInventoryProductNameFilterOnSelect =========>", productNameFilterSelected)
+    setProductNameFilter(productNameFilterSelected);
+    setSkip(0);
+      dispatch(getInventories(0, limit, dateFilter, productNameFilterSelected, manufacturerFilter, statusFilter));  //(skip, limit, dateFilter, productName, productManufacturer, status)
+  }
+
+  const setInventoryManufacturerFilterOnSelect = async (manufacturerFilterSelected) => {
+    console.log("setInventoryManufacturerFilterOnSelect =========>", manufacturerFilterSelected)
+    setManufacturerFilter(manufacturerFilterSelected);
+    setSkip(0);
+      dispatch(getInventories(0, limit, dateFilter, productNameFilter, manufacturerFilterSelected, statusFilter));  //(skip, limit, dateFilter, productName, productManufacturer, status)
+  }
 
   return (
     <div className="inventory">
@@ -311,7 +327,7 @@ const Inventory = props => {
         </div>
       </div>
       <div className="full-width-ribben">
-        <TableFilter data={headers} setDateFilterOnSelect={setDateFilterOnSelect} fb="60%" />
+        <TableFilter data={headers} inventoryFilterData={props.inventoryFilterData} setInventoryProductNameFilterOnSelect={setInventoryProductNameFilterOnSelect} setInventoryManufacturerFilterOnSelect={setInventoryManufacturerFilterOnSelect}  setInventoryStatusFilterOnSelect={setInventoryStatusFilterOnSelect} setDateFilterOnSelect={setDateFilterOnSelect} fb="60%" />
       </div>
       <div className="ribben-space">
         <div className="row no-gutter">
