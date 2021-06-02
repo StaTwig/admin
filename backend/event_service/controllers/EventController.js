@@ -108,6 +108,7 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 			const { organisationId } = req.user;
 			let currentDate = new Date();
 			let fromDateFilter = 0;
+			let category = req.query.category;
 			let productName = req.query.productName ? req.query.productName : undefined;
 			let productManufacturer = req.query.productManufacturer ? req.query.productManufacturer : undefined;
 			let status = req.query.status ? req.query.status : undefined;
@@ -135,92 +136,164 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 			}
 
 			let elementMatchQuery = {};
-
+			console.log(fromDateFilter)
 			if (productName) {
-				elementMatchQuery[`productId`] = productName;
+				elementMatchQuery[`productDetails.id`] = productName;
 			}
 
 			if (productManufacturer) {
-				elementMatchQuery[`manufacturer`] = productManufacturer;
+				elementMatchQuery[`productDetails.manufacturer`] = productManufacturer;
+			}
+
+			if(category){
+				elementMatchQuery[`productDetails.type`] = category
+			}
+			if(status){
+				elementMatchQuery[`eventTypePrimary`] = status
+			}
+			if(fromDateFilter){
+				elementMatchQuery[`createdAt`] = {
+					$gte: fromDateFilter
+				}
 			}
 
 			console.log("elementMatchQuery========>", elementMatchQuery);
 
 			try {
-				let inventoryCount = await EventModal.countDocuments(
-					{ 'payloadData.data.products': {
-						$exists: true, 
-						$ne: [],
-						$elemMatch: elementMatchQuery
-					},
-					'createdAt': {
-						$gte: fromDateFilter
-					},
-					'eventTypePrimary' : (status ? status : { $in: ["ADD", "CREATE"] }),
-					"actorOrgId" : organisationId,
-					}
-				);
-				EventModal.find({ 'payloadData.data.products': {
-					$exists: true, 
-					$ne: [],
-					$elemMatch: elementMatchQuery
-				},
-				'createdAt': {
-					$gte: fromDateFilter
-				},
-				'eventTypePrimary' : (status ? status : { $in: ["ADD", "CREATE"] }),
-				"actorOrgId" : organisationId,
-				}).skip(parseInt(skip)).limit(parseInt(limit)).sort({
-					createdAt: -1
-				}).then(async (eventRecords) => {
-					let inventoryRecords = [];
-					let eventRecordsRes = eventRecords.map(async function (event) {
-						let eventRecords = JSON.parse(JSON.stringify(event))
-						eventRecords[`ProductList`] = [];
-						let payloadRecord = event.payloadData;
-						if (payloadRecord.data.products) {
-							let inventoryQuantity = 0;
-							let productsRes = payloadRecord.data.products.map(async function (product) {
-								let detaildProduct = product;
-								detaildProduct[`productDetails`] = {};
-								detaildProduct[`shipmentDetails`] = {};
-								inventoryQuantity += detaildProduct.quantity ? Number(detaildProduct.quantity): Number(detaildProduct.productQuantity);
-								let whereQuery = {};
-								if (detaildProduct.productId) {
-									whereQuery[`id`] = detaildProduct.productId
-								} else if (detaildProduct.productName) {
-									whereQuery[`name`] = detaildProduct.productName
-								}
-								let productDetails = await ProductModel.findOne(whereQuery);
-								detaildProduct[`productDetails`] = productDetails;
+				// let inventoryCount = await EventModal.countDocuments(
+				// 	{ 'payloadData.data.products': {
+				// 		$exists: true, 
+				// 		$ne: [],
+				// 		$elemMatch: elementMatchQuery
+				// 	},
+				// 	'createdAt': {
+				// 		$gte: fromDateFilter
+				// 	},
+				// 	'eventTypePrimary' : (status ? status : { $in: ["ADD", "CREATE"] }),
+				// 	"actorOrgId" : organisationId,
+				// 	}
+				// );
+			// 	EventModal.find({ 'payloadData.data.products': {
+			// 		$exists: true, 
+			// 		$ne: [],
+			// 		$elemMatch: elementMatchQuery
+			// 	},
+			// 	'createdAt': {
+			// 		$gte: fromDateFilter
+			// 	},
+			// 	'eventTypePrimary' : (status ? status : { $in: ["ADD", "CREATE"] }),
+			// 	"actorOrgId" : organisationId,
+			// 	}).skip(parseInt(skip)).limit(parseInt(limit)).sort({
+			// 		createdAt: -1
+			// 	}).then(async (eventRecords) => {
+			// 		let inventoryRecords = [];
+			// 		let eventRecordsRes = eventRecords.map(async function (event) {
+			// 			let eventRecords = JSON.parse(JSON.stringify(event))
+			// 			eventRecords[`ProductList`] = [];
+			// 			let payloadRecord = event.payloadData;
+			// 			if (payloadRecord.data.products) {
+			// 				let inventoryQuantity = 0;
+			// 				let productsRes = payloadRecord.data.products.map(async function (product) {
+			// 					let detaildProduct = product;
+			// 					detaildProduct[`productDetails`] = {};
+			// 					detaildProduct[`shipmentDetails`] = {};
+			// 					inventoryQuantity += detaildProduct.quantity ? Number(detaildProduct.quantity): Number(detaildProduct.productQuantity);
+			// 					let whereQuery = {};
+			// 					if (detaildProduct.productId) {
+			// 						whereQuery[`id`] = detaildProduct.productId
+			// 					} else if (detaildProduct.productName) {
+			// 						whereQuery[`name`] = detaildProduct.productName
+			// 					}
+			// 					let productDetails = await ProductModel.findOne(whereQuery);
+			// 					detaildProduct[`productDetails`] = productDetails;
 
-								if (payloadRecord.data.id) {
-									let shipmentDetails = await ShipmentModel.findOne({
-										id: payloadRecord.data.id
-									});
-									detaildProduct[`shipmentDetails`] = shipmentDetails;
-								}
-								return detaildProduct;
-							});
-							let productList = await Promise.all(productsRes);
-							eventRecords[`ProductList`].push(...productList);
-							eventRecords[`inventoryQuantity`] = inventoryQuantity;
-							if(productList.length > 0){
-								inventoryRecords.push(eventRecords);
+			// 					if (payloadRecord.data.id) {
+			// 						let shipmentDetails = await ShipmentModel.findOne({
+			// 							id: payloadRecord.data.id
+			// 						});
+			// 						detaildProduct[`shipmentDetails`] = shipmentDetails;
+			// 					}
+			// 					return detaildProduct;
+			// 				});
+			// 				let productList = await Promise.all(productsRes);
+			// 				eventRecords[`ProductList`].push(...productList);
+			// 				eventRecords[`inventoryQuantity`] = inventoryQuantity;
+			// 				if(productList.length > 0){
+			// 					inventoryRecords.push(eventRecords);
+			// 				}
+			// 			}
+			// 		});
+			// 		let inventoryResult = await Promise.all(eventRecordsRes);
+			// 		return apiResponse.successResponseWithData(
+			// 			res,
+			// 			"Inventory Records",
+			// 			{"inventoryRecords":inventoryRecords, "count":inventoryCount}
+			// 		);
+			// 	});
+			// } catch (err) {
+			// 	console.log(err)
+			// 	return apiResponse.ErrorResponse(res, err);
+			// }
+			let inventoryCount = 0
+			EventModal.aggregate([
+				{ $lookup: {        
+					   from: 'products',
+					   localField: 'payloadData.data.products.productId',
+					   foreignField: 'id',
+					   as: 'productDetails',
+					} },
+					  { "$unwind": "$productDetails" },
+					  { $match: elementMatchQuery}]).skip(parseInt(skip)).limit(parseInt(limit)).sort({
+				createdAt: -1
+			}).then(async (eventRecords) => {
+				let inventoryRecords = [];
+				let eventRecordsRes = eventRecords.map(async function (event) {
+					let eventRecords = JSON.parse(JSON.stringify(event))
+					eventRecords[`ProductList`] = [];
+					let payloadRecord = event.payloadData;
+					if (payloadRecord.data.products) {
+						let inventoryQuantity = 0;
+						let productsRes = payloadRecord.data.products.map(async function (product) {
+							let detaildProduct = product;
+							detaildProduct[`productDetails`] = {};
+							detaildProduct[`shipmentDetails`] = {};
+							inventoryQuantity += detaildProduct.quantity ? Number(detaildProduct.quantity): Number(detaildProduct.productQuantity);
+							let whereQuery = {};
+							if (detaildProduct.productId) {
+								whereQuery[`id`] = detaildProduct.productId
+							} else if (detaildProduct.productName) {
+								whereQuery[`name`] = detaildProduct.productName
 							}
+							let productDetails = await ProductModel.findOne(whereQuery);
+							detaildProduct[`productDetails`] = productDetails;
+
+							if (payloadRecord.data.id) {
+								let shipmentDetails = await ShipmentModel.findOne({
+									id: payloadRecord.data.id
+								});
+								detaildProduct[`shipmentDetails`] = shipmentDetails;
+							}
+							return detaildProduct;
+						});
+						let productList = await Promise.all(productsRes);
+						eventRecords[`ProductList`].push(...productList);
+						eventRecords[`inventoryQuantity`] = inventoryQuantity;
+						if(productList.length > 0){
+							inventoryRecords.push(eventRecords);
 						}
-					});
-					let inventoryResult = await Promise.all(eventRecordsRes);
-					return apiResponse.successResponseWithData(
-						res,
-						"Inventory Records",
-						{"inventoryRecords":inventoryRecords, "count":inventoryCount}
-					);
+					}
 				});
-			} catch (err) {
-				console.log(err)
-				return apiResponse.ErrorResponse(res, err);
-			}
+				let inventoryResult = await Promise.all(eventRecordsRes);
+				return apiResponse.successResponseWithData(
+					res,
+					"Inventory Records",
+					{"inventoryRecords":inventoryRecords, "count":inventoryCount}
+				);
+			});
+		} catch (err) {
+			console.log(err)
+			return apiResponse.ErrorResponse(res, err);
+		}
 		} catch (err) {
 			console.log(err)
 			return apiResponse.ErrorResponse(res, err);
