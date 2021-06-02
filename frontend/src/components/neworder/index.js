@@ -503,7 +503,7 @@ const NewOrder = (props) => {
                               onOrgChange(v.value);
                             }}
                             isDisabled={values.rtypeName == ''}
-                            options={allOrganisations.filter(a => a.type == values.rtypeName && a.value != values.fromOrg)}
+                            options={allOrganisations.filter(a => a.type == values.rtypeName)}
                           />
                         {errors.toOrg && touched.toOrg && (
                           <span className="error-msg text-danger">{errors.toOrg}</span>
