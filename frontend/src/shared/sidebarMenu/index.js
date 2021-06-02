@@ -9,6 +9,8 @@ import UserSelectedIcon from "../../assets/aicons/ManageUsers-selected.png";
 import AddressIcon from "../../assets/aicons/ManageAddress.png";
 import AddressSelectedIcon from "../../assets/aicons/ManageAddress-selected.png";
 import AffiliatedOrganisationIcon from "../../assets/aicons/AffiliatedOrganisation.png";
+
+import Configration from "../../assets/aicons/configration.png";
 import AffiliatedOrganisationSelectedIcon from "../../assets/aicons/AffiliatedOrganisation-selected.png";
 import "./style.scss";
 
@@ -100,6 +102,15 @@ const SideBar = ({ match, location, user }) => {
             </Link>
           </li>
         )}
+        <li className={url === "/configuration" ? "active" : ""}>
+          <Link to="/configuration">
+            <img
+              src={url === "/Configration" ? Configration : Configration}
+              alt="configuration"
+            />
+            <span className="pt-2 text-center">configuration</span>
+          </Link>
+        </li>
       </ul>
       <Footer />
     </div>

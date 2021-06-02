@@ -14,6 +14,7 @@ import requireAuth from "../components/hocs/requireAuth";
 import Signup from "../containers/signUp";
 import ForgotPassword from "../containers/forgotPassword";
 import resetPasswordPage from "../containers/resetPassword";
+import Configuration from "../containers/configuration";
 
 import Home from "../containers/home";
 
@@ -36,6 +37,7 @@ const routes = (
     <Route path="/forgotPassword" component={ForgotPassword} />
     <Route path="/resetPassword" component={resetPasswordPage} />
     <Route path="/profile" component={requireAuth(Profile)} />
+    <Route path="/configuration" component={requireAuth(Configuration)} />
     <Route component={NoMatch} />
   </Switch>
 );
