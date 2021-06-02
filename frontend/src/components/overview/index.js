@@ -131,7 +131,7 @@ const Overview = props => {
           </div>  
         </div>
         <div className="col-sm-12 col-lg-7 col-xl-7 p-lg-0  mb-sm-4">
-          <div className="custom-card">
+          <div className="custom-card ml-1">
             <div className="card-header">
               <div className="d-flex align-items-center justify-content-between">
                 <h5 className="card-title font-weight-bold mt-2">Shipment Summary</h5>
