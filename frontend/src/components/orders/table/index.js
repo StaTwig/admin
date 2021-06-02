@@ -53,8 +53,8 @@ const Table = props => {
 
               return (
               <div className="rTableRow pt-2 pb-2 shadow-none" key={index}>
-                <div className="rTableCell pr-1">
-                  <div className="userPic text-center rounded d-flex flex-row">
+                <div className="rTableCell">
+                  <div className="userPic text-right rounded d-flex flex-row">
                     <img src={user} width="30" height="20" alt="User" className="rounded mr-1 align-self-center" />
                     <div className="flex-column d-flex">
                       <span className="text-primary bold">{visible == 'one' ? supplier.organisation.name : customer.organisation.name}</span>
@@ -62,12 +62,12 @@ const Table = props => {
                   </div>
                   </div>
                 </div>
-                <div className="rTableCell pl-5 text-center pr-3">
+                <div className="rTableCell">
                   {formatDate(order.creationDate)}
                 </div>
-                  <div className="rTableCell pl-5"><p className="mb-0 bold address mb-0 text-muted">{order.id}</p></div>
-                  <div className="rTableCell text-left"><p className="mb-0 bold mb-0 address text-muted">{products[0]?.name+(products.length > 1 ? ' + '+(products.length-1)+' more' : '')}</p></div> 
-                <div className="rTableCell d-flex text-left flex-column"> 
+                  <div className="rTableCell"><p className="mb-0 bold address mb-0 text-muted">{order.id}</p></div>
+                  <div className="rTableCell mr-4"><p className="mb-0 bold mb-0 address text-muted">{products[0]?.name+(products.length > 1 ? ' + '+(products.length-1)+' more' : '')}</p></div> 
+                <div className="rTableCell d-flex flex-column mr-4"> 
                   <span>{customer.warehouse?.warehouseAddress?.city}</span>
                   <span className="text-muted">{customer.shippingAddress.shippingAddressId}</span>
                 </div> 

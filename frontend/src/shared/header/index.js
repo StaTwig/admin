@@ -130,7 +130,7 @@ const imgs = config().fetchProfileImage;
             onFocus={(e) => e.target.placeholder = ''}
             onBlur={(e) => e.target.placeholder = 'Search PO ID/ Shipment ID/ Product ID'}
             onChange={onSearchChange}
-            className="form-control search-field border-blue"
+            className= "form-control border border-primary search-field"
           />
           <img src={searchingIcon} onClick={onSeach} alt="searching" />
         </div>

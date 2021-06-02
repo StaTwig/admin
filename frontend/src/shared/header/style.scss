@@ -80,9 +80,10 @@
       width: 350px;
       position: relative;
       top: 70px;
-      right: 26rem;
+      right: 24.5rem;
       //left: unset;
       display: block;
+      
       
 
       @media screen and (max-width: 768px) {
@@ -101,6 +102,10 @@
         box-shadow: 0px 1px 3px #00000065;
         border-radius: 10px;
         border-color: #0B65C1;
+        font-size: 12px;
+        &::placeholder{
+          color: #0093E9;
+        }
         
         // opacity: 0.75;
       }

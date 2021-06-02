@@ -130,7 +130,7 @@ const Inventory = props => {
         <h1 className="breadcrumb">INVENTORY </h1>
         <div className="d-flex">
           <Link to="/newinventory">
-            <button className="btn btn-yellow">
+            <button className="btn btn-yellow mt-2">
               <img src={Add} width="13" height="13" className="mr-2" />
               <span>Add Inventory</span>
             </button>
@@ -142,7 +142,7 @@ const Inventory = props => {
           <Link to="/productcategory">
             <div className="panel" style={{height:'14vh'}}>
               <div className="picture truck-bg">
-                <img src={TotalInventoryAdded} alt="truck" />
+                <img src={TotalInventoryAdded} alt="truck"/>
               </div>
               <div className="d-flex flex-column">
                 <div className="title truck-text">Total Product Category</div>
@@ -320,7 +320,7 @@ const Inventory = props => {
         </div>
       </div>
       <div className="full-width-ribben">
-        <TableFilter data={headers} setDateFilterOnSelect={setDateFilterOnSelect} fb="60%" />
+        <TableFilter data={headers} setDateFilterOnSelect={setDateFilterOnSelect} fb="70%" />
       </div>
       <div className="ribben-space">
         <div className="row no-gutter">

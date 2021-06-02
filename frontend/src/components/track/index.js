@@ -91,10 +91,11 @@ const Track = (props) => {
                 <div className="search-form">
                   <input
                     type="text"
-                    placeholder="Enter Order ID or Serial No"
+                    placeholder="Enter Order ID or Serial No."
                     onChange={onSearchChange}
-                    className="form-control border border-primary search-field"
-                  />
+                    //className="form-control border border-primary search-field"
+                      className="form-control search-field border-8"
+                    />
                   <img
                     src={searchingIcon}
                     onClick={onSeach}
