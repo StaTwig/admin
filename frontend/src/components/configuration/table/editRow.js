@@ -1,8 +1,16 @@
-import React from 'react';
+import React ,{useState} from 'react';
 import Delete from '../../../assets/icons/Delete.png';
 import './style.scss';
+import {updateOrgTypesUrl} from "../../../actions/organisationActions";
+import {addNewOrgTypesUrl} from "../../../actions/organisationActions";
+
 
 const EditRow = props => {
+  const [editButtonStatus,setEditButtonStatus]=useState(false);
+  const [changeValue,setValue]=useState("");
+  const [changebtn,setbtn]=useState(false);
+  const [addnew,setAddnew]=useState(!props.category);
+  const [disabled, setDisabled] = useState(true);
   const {
     prod,
     handleQuantityChange,
@@ -12,13 +20,50 @@ const EditRow = props => {
     handleProductChange,
     products,
     handleCategoryChange,
+add
   } = props;
-  
 
-  const numbersOnly = (e) => {
-    // Handle paste
-  
+  //console.log(add,"9999999999999999");
+  console.log(props.category,"wwwwqqqqqqqqq");
+
+  const onEditClick=(e)=>{
+    setDisabled(!disabled);
+    setEditButtonStatus(true);
+    //setDisabled(!disabled);
+    //setEditButtonStatus(false);
   }
+
+  const onAddClick=(e)=>
+  {
+   // console.log(e,"oooooooooooooooo");
+    const data=
+      {
+      name:changeValue
+      }
+    addNewOrgTypesUrl(data);
+    setAddnew(false)
+
+   // props.category=false;
+  }
+
+    const onSaveClick=(e)=>
+    {
+          const data=
+          {
+            id:prod.id,
+            name:changeValue
+          }
+          updateOrgTypesUrl(data);
+          setbtn(true);
+          setDisabled(!disabled);
+          setEditButtonStatus(false);
+    }
+
+
+    const handleNameChange=(e)=>
+    {
+      setValue(e);
+    }
 
   return (
     <div className="row ml-3">
@@ -29,16 +74,60 @@ const EditRow = props => {
             <input
               className="form-control"
               placeholder="Type"
-              value={prod.productQuantity ? prod.productQuantity : prod.quantity}
-              onChange={e => handleQuantityChange(e.target.value, index)}
+              defaultValue={prod.name }
+              disabled={disabled}
+              onChange={e => handleNameChange(e.target.value, index)}
             />
           </div>
         </div>
+        
         <div className="pr-3">
-        <button className="bg-white btn-outline-primary d-width">
+          
+       <div>
+            {
+              editButtonStatus ?
+              <div>
+              {
+                
+                addnew ?   
+
+                <button className="bg-white btn-outline-primary d-width" 
+                onClick={onSaveClick}
+                  >
                   <i className="fa fa-pencil"></i>
-            <span className="ml-1">Edit</span>
-       </button></div>
+                    <span className="ml-1">
+                    {
+                      changebtn ? "Saved"  : "Save"
+                    }
+                    </span>
+                </button>
+
+                :
+                
+                <button className="bg-white btn-outline-primary d-width" 
+                onClick={onAddClick}
+                  >
+                  <i className="fa fa-pencil"></i>
+                    <span className="ml-1">
+                   ADD
+                    </span>
+                </button> 
+              }
+              
+              </div>
+              : 
+              
+            <button className="bg-white btn-outline-primary d-width" 
+            onClick={onEditClick}
+            >
+              <i className="fa fa-pencil"></i>
+            <span className="ml-1">EDIT</span>
+            </button>
+
+            }
+    </div>
+        
+        </div>
       </div>
       {/* {props.product.length > 0 &&
         <div className=" m-3 bg-light">
