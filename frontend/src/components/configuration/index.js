@@ -9,18 +9,20 @@ import EditTable1 from "./table1/editTable";
 //import EditTable from "./table/editTable";
 import { Formik } from "formik";
 
+import {getOrgTypeiIdsUrl} from "../../actions/organisationActions";
+import {updateOrgTypesUrl} from "../../actions/organisationActions";
+import {addNewOrgTypesUrl} from "../../actions/organisationActions";
+
 
 const Configurationpart = (props) => {
   const [tabIndex, setTabIndex] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const closeModal = () => setShowModal(false);
-  const [orgType,setOrgType]=useState(false);
-  const [warType,setWarType]=useState(false);
+ 
   const [addOrganisation, setAddOrganisation] = useState([]);
   const [blankInventory, setBlankInventory] = useState({
     orgname: '', 
   });
-  const [showorg,setShowOrg]=useState(true);
 
   const [showleft,setShowLeft]=useState(true);
   
@@ -35,9 +37,42 @@ const Configurationpart = (props) => {
   const [addProducts1, setAddProducts1] = useState([]);
   const dispatch = useDispatch();
 
+  const [showorg,setShowOrg]=useState(true);
+
+  const [showleft,setShowLeft]=useState(true);
+  
+  const editPo = useSelector(state => {
+    return state?.reviewPo;
+  });
+  
+  const [products, setProducts] = useState([]);
+
+  const [category, setCategory] = useState(false);
+
+  const [addProducts, setAddProducts] = useState([]);
+  const [addProducts1, setAddProducts1] = useState([]);
+  const dispatch = useDispatch();
+
  
+  const [organisationsArr, setOrganisationsArr] = useState([]);
 
-
+  useEffect(()=>{
+    async function fetchOrganisationType() {
+      const orgsType = await getOrgTypeiIdsUrl("CONF000");
+      var arr =[];
+      arr.push(orgsType.data[0].organisationTypes);
+      setOrganisationsArr(arr);
+    }
+    fetchOrganisationType();
+   },[])
+    
+    var orgTypeArray = [];
+    organisationsArr.map((data)=>{
+    for(var i=0;i<data.length;i++){
+      orgTypeArray.push(data[i].name);
+    }
+  })
+  
   const onQuantityChange = (v, i, setFieldValue) => {
     let newArr = [...addProducts];
     newArr[i].quantity = v;
@@ -46,8 +81,6 @@ const Configurationpart = (props) => {
   }
 
  
-
-
   const onAddAnotherOrganisation = () => {
     setInventoryState([...addOrganisation, blankInventory ]);
   };
@@ -86,45 +119,36 @@ const Configurationpart = (props) => {
                 <div className="row">
                   <p className="mb-4"><b>Organisation Type</b></p>
                     <div style={{position:"relative",left:"70%" }}>
+                      
                         <button className="btn btn-yellow ml-5" 
                           onClick={() => {
                             let newArr = {  name: '' };
                             setAddProducts(prod => [...prod, newArr]);
                             setShowLeft(!showleft);
-                            console.log(showleft,"------------------");
+                            setCategory(true);
+                            
                             }}
-                              >
+                        >
                           <img src={Add} width="13" height="13" className="mr-2" />
                           <span>Add New Type</span>
                           </button>
+
+
                      </div>
                 </div>
               <div className="col">
               <div className="row">
-                {
-                  showleft ? 
-                  
                   <div className="col-6">
                         <EditTable
                           product={addProducts}
-                          products={products}
-                         // category={category}
+                          products={organisationsArr}
+                          category={category}
+                        
                           handleQuantityChange={(v, i) => onQuantityChange(v, i, setFieldValue)}
                         />
                         {/* {setShowLeft(false)}; */}
                       </div>
-                       :
-                       <div className="col-6 ">
-                            <EditTable
-                            product={addProducts}
-                            products={products}
-                          // category={category}
-                            handleQuantityChange={(v, i) => onQuantityChange(v, i, setFieldValue)}
-                          /> 
-                        {/* {setShowLeft(true)}; */}
-
-                          </div>
-                }        
+                           
                     </div>
 
               </div>
@@ -152,9 +176,7 @@ const Configurationpart = (props) => {
                   </div>
                 <div className="col">
                 <div className="row">
-                  {
-                    showleft ? 
-                    
+              
                     <div className="col-6">
                           <EditTable1
                             product={addProducts1}
@@ -163,26 +185,13 @@ const Configurationpart = (props) => {
                             handleQuantityChange={(v, i) => onQuantityChange(v, i, setFieldValue)}
                           />
                         </div>
-                         :
-                         <div className="col-6">
-                              <EditTable1
-                              product={addProducts1}
-                              products={products}
-                            // category={category}
-                              handleQuantityChange={(v, i) => onQuantityChange(v, i, setFieldValue)}
-
-                            /> 
-                        
-
-                            </div>
-                  }    
+                          
                       </div>
                 </div>
             </div>
               }
               </div>    
         )}
-
 
       {tabIndex == 3 && (
        <div className="row d-flex flex-row p-3">
