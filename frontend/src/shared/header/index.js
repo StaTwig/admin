@@ -190,7 +190,7 @@ const imgs = config().fetchProfileImage;
                 <div
                     className="slider-item1 border-top-0" 
                     >
-                    Locaton 1
+                    Location 1
                     </div>
 
                  <div

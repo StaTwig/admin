@@ -12,7 +12,7 @@ import totalinventory from "../../assets/icons/TotalInventoryAdded.svg";
 import currentshipment from "../../assets/icons/CurrentShipmentInTransit.svg";
 import Totalshipments from "../../assets/icons/TotalShipments.svg";
 import shipmentsdelayed from "../../assets/icons/TotalShipmentsDelayed.svg";
-import TotalInventoryAdded from '../../assets/icons/TotalInventoryAddedcopy.svg';
+import TotalInventoryAdded from '../../assets/icons/TotalProductCategory.png';
 import AverageOrderProcessingTime from  '../../assets/icons/Av_or_pr_ti.png';
 
 import './style.scss';
@@ -69,8 +69,8 @@ const Overview = props => {
           </div>
           <div className="col">
             <div className="panel">
-              <div className="picture truck-bg">
-              <img src={TotalInventoryAdded} alt="truck" />
+              <div className="time truck-bg">
+              <img src={TotalInventoryAdded} alt="truck" width="65%" />
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Product Category</div>
@@ -110,40 +110,40 @@ const Overview = props => {
           <div className="custom-card">
             <div className="card-header">
               <div className="d-flex align-items-center justify-content-between">
-                <h5 className="card-title font-weight-bold">Inventory Summary</h5>
+                <h5 className="card-title font-weight-bold mt-2">Inventory Summary</h5>
                 <Link to="/newinventory">
-                  <button className="btn-primary btn-sm btn"> Add Inventory</button>
+                  <button className="btn-primary btn-sm btn mt-3"> Add Inventory</button>
                 </Link>
               </div>
             </div>
             <div className="card-body pl-1">
 
-              <div id="chartjs-render-monitor" ><ChartsPage {...props}/></div>
+              <div id="chartjs-render-monitor"><ChartsPage {...props}/></div>
 
             </div>
-            <div className="card-footer">
+            <div className="card-footer mb-2">
               <div className="d-flex align-items-center justify-content-center">
                 <Link to="/inventory">
                 <button className=" card-link btn btn-outline-primary"> View More</button>
               </Link>
               </div>
             </div>
-          </div>
+          </div>  
         </div>
-        <div className="col-sm-12 col-lg-7 col-xl-7 p-lg-0 mr-lg-0">
+        <div className="col-sm-12 col-lg-7 col-xl-7 p-lg-0  mb-sm-4">
           <div className="custom-card">
             <div className="card-header">
               <div className="d-flex align-items-center justify-content-between">
-                <h5 className="card-title font-weight-bold">Shipment Summary</h5>
+                <h5 className="card-title font-weight-bold mt-2">Shipment Summary</h5>
                 <Link to="/newshipment">
-                  <button className="btn-primary btn-sm btn"> Create Shipment</button>
+                  <button className="btn-primary btn-sm btn mt-3"> Create Shipment</button>
                 </Link>
               </div>
             </div>
             <div className="card-body" style={{padding:0}}>
               <SummaryTable {...props} setvisible={setData} visible={visible}/>
               </div>
-            <div className="card-footer">
+            <div className="card-footer mb-2">
               <div className="d-flex align-items-center justify-content-center">
                 <Link to="/shipments">
                 <button className=" card-link btn btn-outline-primary"> View More</button>
