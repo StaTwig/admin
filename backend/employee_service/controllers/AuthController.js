@@ -1,101 +1,129 @@
 const EmployeeModel = require("../models/EmployeeModel");
 const OrganisationModel = require("../models/OrganisationModel");
-const { check, validationResult } = require("express-validator");
-const uniqid = require("uniqid");
-const mongoose = require("mongoose");
-
+const { check, validationResult} = require("express-validator");
+const dotenv = require('dotenv').config();
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
 const utility = require("../helpers/utility");
-const jwt = require("jsonwebtoken");
+const JWT = require("jsonwebtoken");
 const mailer = require("../helpers/mailer");
 const { constants } = require("../helpers/constants");
-var base64Img = require("base64-img");
 const auth = require("../middlewares/jwt");
 const axios = require("axios");
-const dotenv = require("dotenv").config();
-const blockchain_service_url = process.env.URL;
-const stream_name = process.env.INV_STREAM;
+const {uploadFile} = require("../helpers/s3");
+const fs = require('fs');
+const util = require('util');
+const unlinkFile = util.promisify(fs.unlink);
 
-const checkToken = require("../middlewares/middleware").checkToken;
 const EmailContent = require("../components/EmailContent");
+
+const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const phoneRgex = /^\d{10}$/;
 
 exports.sendOtp = [
   check("emailId")
-    .isLength({ min: 1 })
-    .withMessage("Email must be specified.")
-    .isEmail(),
+    .isLength({ min: 7 })
+    .withMessage("Email / Number must be specified.")
+    .custom(async value => {
+      const emailId = value.toLowerCase().replace(' ', '');
+      let user;
+      let phone = '';
+      if (!emailId.replace('+91', '').match(phoneRgex) && !emailId.match(emailRegex))
+        return Promise.reject('E-mail/Mobile not in valid');
+
+      if (emailId.indexOf('@') > -1)
+        user = await EmployeeModel.findOne({ emailId });
+      else {
+        phone = emailId.indexOf('+91') === 0 ? emailId : '+91' + emailId;
+        user = await EmployeeModel.findOne({ phoneNumber: phone });
+      }
+      if (!user) {
+        return Promise.reject('Account Doesn’t exit');
+      }
+    }),
   async (req, res) => {
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         return apiResponse.validationErrorWithData(
           res,
-          "Validation Error.",
-          errors.array()
+          'Validation Error.',
+          errors.array(),
         );
       } else {
         const emailId = req.body.emailId.toLowerCase();
-        const user = await EmployeeModel.findOne({ emailId });
+        let user;
+        let phone = '';
+        if (emailId.indexOf('@') > -1)
+          user = await EmployeeModel.findOne({ emailId });
+        else {
+          phone = emailId.indexOf('+91') === 0 ? emailId : '+91' + emailId;
+          user = await EmployeeModel.findOne({ phoneNumber: phone });
+        }
         if (user) {
-          if (user.accountStatus === "ACTIVE") {
+          if (user.accountStatus === 'ACTIVE') {
             let otp = utility.randomNumber(4);
-            await EmployeeModel.updateOne({ emailId }, { otp });
-            let html = EmailContent({
-              name: user.firstName,
-              origin: req.headers.origin,
-              otp,
-            });
-            // Send confirmation email
-            try {
-              await mailer.send(
-                constants.confirmEmails.from,
-                user.emailId,
-                constants.confirmEmails.subject,
-                html
-              );
-              return apiResponse.successResponseWithData(
-                res,
-                "OTP Sent Success."
-              );
-            } catch (err) {
-              return apiResponse.ErrorResponse(res, err);
-            }
+            if (user.emailId === process.env.EMAIL_APPSTORE)
+              otp = process.env.OTP_APPSTORE;
 
-            /* let userData = {
-              id: user.id,
-              firstName: user.firstName,
-              emailId: user.emailId,
-              role: user.role,
-              warehouseId:user.warehouseId,
-            };
-            //Prepare JWT token for authentication
-            const jwtPayload = userData;
-            const jwtData = {
-              expiresIn: process.env.JWT_TIMEOUT_DURATION,
-            };
-            const secret = process.env.JWT_SECRET;
-            //Generated JWT token with Payload and secret.
-            userData.token = jwt.sign(jwtPayload, secret, jwtData);
-            logger.log(
-                'info',
-                '<<<<< UserService < AuthController < login : user login success',
-            );*/
+            await EmployeeModel.updateOne({ id: user.id }, { otp });
+            if(emailId.indexOf('@') > -1){
+              let html = EmailContent({
+                name: user.firstName,
+                origin: req.headers.origin || "admin.abinbev.statledger.io",
+                otp,
+                email:user.emailId,
+              });
+              // Send confirmation email
+              try {
+                await mailer.send(
+                  constants.confirmEmails.from,
+                  user.emailId,
+                  constants.confirmEmails.subject,
+                  html
+                );
+                return apiResponse.successResponseWithData(
+                  res,
+                  "OTP Sent Success."
+                );
+              } catch (err) {
+                return apiResponse.ErrorResponse(res, err);
+              }
+            }
+            axios.post(process.env.OTP_ENDPOINT, {
+              subject: "OTP request for Vaccine Ledger",
+              email: user.emailId,
+              phone: user.phoneNumber ? user.phoneNumber : '',
+              otp: otp.toString(),
+              message: "Please Send the OTP",
+              source: process.env.SOURCE
+            })
+              .then((response) => {
+                if (response.status === 200) {
+                  return apiResponse.successResponseWithData(
+                    res,
+                    'OTP Sent Success.',
+                    { email: user.emailId }
+                  );
+                }
+                else {
+                  return apiResponse.ErrorResponse(res, response.statusText);
+                }
+              }, (error) => {
+                console.log(error);
+              });
           } else {
             return apiResponse.unauthorizedResponse(
               res,
-              "Account is not Approved. Please contact admin."
+              'Account is not Approved. Please contact admin.',
             );
           }
         } else {
-          return apiResponse.ErrorResponse(res, "User not registered");
+          return apiResponse.ErrorResponse(res, 'User not registered');
         }
       }
     } catch (err) {
-      return apiResponse.ErrorResponse(
-        res,
-        "Email already registered. Check Email for verifying the account"
-      );
+      return apiResponse.ErrorResponse(res, 'Email already registered. Check Email for verifying the account');
     }
   },
 ];
@@ -147,7 +175,7 @@ exports.verifyOtp = [
                     };
                     const secret = process.env.JWT_SECRET;
                     //Generated JWT token with Payload and secret.
-                    userData.token = jwt.sign(jwtPayload, secret, jwtData);
+                    userData.token = JWT.sign(jwtPayload, secret , jwtData);
                     return apiResponse.successResponseWithData(
                       res,
                       "Login Success",
@@ -164,7 +192,7 @@ exports.verifyOtp = [
           } else {
             return apiResponse.ErrorResponse(
               res,
-              `User dosen't have enough Permission for Admin Model`
+              `User dosen't have enough Permission for Admin Module`
             );
           }
         } else {
@@ -267,31 +295,15 @@ exports.updateProfile = [
 
 exports.uploadImage = [
   auth,
-  (req, res) => {
+  async (req, res) => {
     try {
-      EmployeeModel.findOne({ emailId: req.user.emailId }).then((user) => {
-        if (user) {
-          base64Img.base64(
-            "uploads/" + req.file.filename,
-            function (err, data) {
-              var base64ImgData = data;
-              user.profile_picture = data;
-              user.image_location = req.file.filename;
-              // Save user.
-              user.save(function (err) {
-                if (err) {
-                  return apiResponse.ErrorResponse(res, err);
-                }
-                return apiResponse.successResponseWithData(
-                  res,
-                  "Updated",
-                  base64ImgData
-                );
-              });
-            }
-          );
-        }
-      });
+          const result = await uploadFile(req.file)
+          console.log(result)
+          await unlinkFile(req.file.path)
+          console.log("Unlinked")
+          const image = await EmployeeModel.findOneAndUpdate({ emailId: req.user.emailId}, 
+            { photoId: `/images/${result.key}`}, { new: true})
+          return apiResponse.successResponseWithData(res, "Uploaded ", image)
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
     }

@@ -13,7 +13,7 @@ const dropdownButtonGroup = (props) => {
   useOnclickOutside(ref, () => {
     setMenu(false);
   });
-  const useParse = name && name.includes("<");
+  const useParse = name && name?.includes("<");
   return (
     <div
       className={`custom-dropdown form-control ${error ? "border-danger" : ""}`}
@@ -23,10 +23,12 @@ const dropdownButtonGroup = (props) => {
         className={`btn-custom-dropdown ${menu && "active"}`}
         name={namer}
         role="button"
-        onClick={() => setMenu(!menu)}
+        onClick={() => {
+          setMenu(!menu);
+        }}
       >
-        {!useParse && <span>{name}</span>}
-        {useParse && <span>{parse(name)}</span>}
+        {!useParse && <span className="text">{name}</span>}
+        {useParse && <span className="text">{parse(name)}</span>}
         <img src={upDownArrow} alt="downarrow" width="9" height="9" />
       </button>
       {menu && (
@@ -42,6 +44,7 @@ const dropdownButtonGroup = (props) => {
                       setMenu(false);
                       onSelect(item);
                     }}
+                    {...console.log(item)}
                   >
                     {namer == "employee"
                       ? item.firstName +

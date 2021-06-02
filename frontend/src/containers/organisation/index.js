@@ -4,7 +4,7 @@ import Header from "../../shared/header";
 import Sidebar from "../../shared/sidebarMenu";
 import "./style.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { getOrgs, updateOrg } from "../../actions/organisationActions";
+import { getOrgs, updateOrg, getTypes } from "../../actions/organisationActions";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
 import Modal from "../../shared/modal";
 import SuccessPopUp from "../../shared/PopUp/successPopUp";
@@ -22,12 +22,16 @@ const OrganisationContainer = (props) => {
 
   useEffect(() => {
     dispatch(getOrgs());
+    dispatch(getTypes());
+
   }, []);
 
   const orgList = useSelector((state) => {
     return state.organisation.list;
   });
-
+  const orgTypes = useSelector((state) => {
+    return state.organisation.types;
+  });
   const updateOrgs = async (data) => {
     dispatch(turnOn());
     const result = await updateOrg(data);
@@ -76,6 +80,7 @@ const OrganisationContainer = (props) => {
             modifyOrg={updateOrgs}
             showModals={showModals}
             setShowModals={setShowModals}
+            orgTypes={orgTypes}
             // addOrg={addOrgs}
           />
         </div>

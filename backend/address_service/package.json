@@ -19,18 +19,20 @@
   "homepage": "https://github.com/StaTwig/admin#readme",
   "dependencies": {
     "cors": "^2.8.5",
+    "debug": "^4.3.1",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-jwt": "^6.0.0",
-    "fs": "*",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.11.15",
     "morgan": "^1.10.0",
     "move-file": "^2.0.0",
     "multer": "^1.4.2",
     "nanoid": "^3.1.20",
     "node-fetch": "^2.6.1",
-    "winston-logzio": "^5.1.2",
-    "xlsx": "^0.16.9"
+    "xlsx": "^0.16.9",
+    "winston": "^3.3.3",
+    "winston-logzio": "^5.1.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.7"
