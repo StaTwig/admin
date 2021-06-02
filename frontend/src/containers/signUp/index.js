@@ -52,6 +52,7 @@ const SignupContainer = (props) => {
     else{
       const err = result.data.data[0];
       setErrorMessage(err.msg);
+      setShowModal(false);
     }
   });
 
