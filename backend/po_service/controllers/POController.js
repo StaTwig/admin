@@ -8,6 +8,9 @@ const date = require('date-and-time');
 
 const POModel = require('../models/POModel');
 const RecordModel = require('../models/RecordModel');
+const OrganisationModel = require('../models/OrganisationModel');
+const WarehouseModel = require('../models/WarehouseModel');
+const ProductModel = require('../models/ProductModel');
 const CounterModel = require('../models/CounterModel')
 //this helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
