@@ -134,6 +134,7 @@ const TransactionHistory = (props) => {
     setSelectedVendorType(vendorType);
     const _filters = { ...filters };
     _filters.vendorType = vendorType;
+    _getOrganizationsByType(_filters);
     setFilters(_filters);
     applyFilters(_filters);
   };
@@ -271,7 +272,7 @@ const TransactionHistory = (props) => {
   };
 
   const getImageURL = (imageId) => {
-    return `${config().fetchChallanImageUrl}/${imageId}`;
+    return `${config().fetchChallanImageUrl}${imageId}`;
   };
 
   const getSumByProperty = (inputArr, key) => {
@@ -404,9 +405,8 @@ const TransactionHistory = (props) => {
               </div>
               <div className="btn-group mainButtonFilter">
                 <a
-                  className={`btn ${
-                    selectedTransactionType === 'ALL' ? 'active' : ''
-                  }`}
+                  className={`btn ${selectedTransactionType === 'ALL' ? 'active' : ''
+                    }`}
                   onClick={() => {
                     onTransactionTypeChange('ALL');
                   }}
@@ -414,9 +414,8 @@ const TransactionHistory = (props) => {
                   ALL
                 </a>
                 <a
-                  className={`btn ${
-                    selectedTransactionType === 'SENT' ? 'active' : ''
-                  }`}
+                  className={`btn ${selectedTransactionType === 'SENT' ? 'active' : ''
+                    }`}
                   onClick={() => {
                     onTransactionTypeChange('SENT');
                   }}
@@ -424,9 +423,8 @@ const TransactionHistory = (props) => {
                   Sent
                 </a>
                 <a
-                  className={`btn ${
-                    selectedTransactionType === 'RECEIVED' ? 'active' : ''
-                  }`}
+                  className={`btn ${selectedTransactionType === 'RECEIVED' ? 'active' : ''
+                    }`}
                   onClick={() => {
                     onTransactionTypeChange('RECEIVED');
                   }}
@@ -460,14 +458,12 @@ const TransactionHistory = (props) => {
                       ''
                     )}
                     <div
-                      className={`transactionListContainer ${
-                        selectedIndex === index ? 'activeTxnContainer' : ''
-                      }`}
+                      className={`transactionListContainer ${selectedIndex === index ? 'activeTxnContainer' : ''
+                        }`}
                     >
                       <div
-                        className={`productConainer ${
-                          selectedIndex === index ? 'productDetailActive' : ''
-                        }`}
+                        className={`productConainer ${selectedIndex === index ? 'productDetailActive' : ''
+                          }`}
                       >
                         <div
                           className={`productContainerListItem col-md-12`}
@@ -540,7 +536,7 @@ const TransactionHistory = (props) => {
                             <div className="productDetail">
                               <div className="row supplierOrgName">
                                 {selectedTransaction.supplier &&
-                                selectedTransaction.supplier.org
+                                  selectedTransaction.supplier.org
                                   ? selectedTransaction.supplier.org.name
                                   : ''}
                               </div>
@@ -698,9 +694,8 @@ const TransactionHistory = (props) => {
 
                 <div className="btn-group filterButton mt-4">
                   <a
-                    className={`btn ${
-                      selectedOrganizationType === 'BREWERY' ? 'active' : ''
-                    }`}
+                    className={`btn ${selectedOrganizationType === 'BREWERY' ? 'active' : ''
+                      }`}
                     onClick={() => {
                       onOrganizationTypeChange('BREWERY');
                     }}
@@ -708,9 +703,8 @@ const TransactionHistory = (props) => {
                     BREWERY
                   </a>
                   <a
-                    className={`btn ${
-                      selectedOrganizationType === 'VENDOR' ? 'active' : ''
-                    }`}
+                    className={`btn ${selectedOrganizationType === 'VENDOR' ? 'active' : ''
+                      }`}
                     onClick={() => {
                       onOrganizationTypeChange('VENDOR');
                     }}
@@ -722,9 +716,8 @@ const TransactionHistory = (props) => {
                 <label className="filterSubHeading mt-2">Time Period</label>
                 <div className="btn-group filterButton mt-2">
                   <a
-                    className={`btn ${
-                      selectedDateType === 'by_range' ? 'active' : ''
-                    }`}
+                    className={`btn ${selectedDateType === 'by_range' ? 'active' : ''
+                      }`}
                     onClick={() => {
                       onDateTypeChange('by_range');
                     }}
@@ -732,9 +725,8 @@ const TransactionHistory = (props) => {
                     Date Range
                   </a>
                   <a
-                    className={`btn ${
-                      selectedDateType === 'by_monthly' ? 'active' : ''
-                    }`}
+                    className={`btn ${selectedDateType === 'by_monthly' ? 'active' : ''
+                      }`}
                     onClick={() => {
                       onDateTypeChange('by_monthly');
                     }}
@@ -742,9 +734,8 @@ const TransactionHistory = (props) => {
                     Monthly
                   </a>
                   <a
-                    className={`btn ${
-                      selectedDateType === 'by_quarterly' ? 'active' : ''
-                    }`}
+                    className={`btn ${selectedDateType === 'by_quarterly' ? 'active' : ''
+                      }`}
                     onClick={() => {
                       onDateTypeChange('by_quarterly');
                     }}
@@ -752,9 +743,8 @@ const TransactionHistory = (props) => {
                     Quarterly
                   </a>
                   <a
-                    className={`btn ${
-                      selectedDateType === 'by_yearly' ? 'active' : ''
-                    }`}
+                    className={`btn ${selectedDateType === 'by_yearly' ? 'active' : ''
+                      }`}
                     onClick={() => {
                       onDateTypeChange('by_yearly');
                     }}
@@ -932,9 +922,8 @@ const TransactionHistory = (props) => {
                     <label className="filterSubHeading mt-2">Vendor</label>
                     <div className="btn-group filterButton mt-2">
                       <a
-                        className={`btn ${
-                          selectedVendorType === 'ALL_VENDORS' ? 'active' : ''
-                        }`}
+                        className={`btn ${selectedVendorType === 'ALL_VENDORS' ? 'active' : ''
+                          }`}
                         onClick={() => {
                           onVendorTypeChange('ALL_VENDORS');
                         }}
@@ -942,9 +931,8 @@ const TransactionHistory = (props) => {
                         All
                       </a>
                       <a
-                        className={`btn ${
-                          selectedVendorType === 'S1' ? 'active' : ''
-                        }`}
+                        className={`btn ${selectedVendorType === 'S1' ? 'active' : ''
+                          }`}
                         onClick={() => {
                           onVendorTypeChange('S1');
                         }}
@@ -952,9 +940,8 @@ const TransactionHistory = (props) => {
                         S1
                       </a>
                       <a
-                        className={`btn ${
-                          selectedVendorType === 'S2' ? 'active' : ''
-                        }`}
+                        className={`btn ${selectedVendorType === 'S2' ? 'active' : ''
+                          }`}
                         onClick={() => {
                           onVendorTypeChange('S2');
                         }}
