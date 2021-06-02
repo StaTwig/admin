@@ -455,7 +455,6 @@ exports.createPurchaseOrder = [
 exports.addPOsFromExcel = [
   auth,
   async (req, res) => {
-    console.log(req.user)
     try {
       // const permission_request = {
       //   role: req.user.role,
@@ -468,7 +467,6 @@ exports.addPOsFromExcel = [
             if (!fs.existsSync(dir)) {
               fs.mkdirSync(dir);
             }
-            console.log(req.file)
             await moveFile(
                 req.file.path,
                 `${dir}/${req.file.originalname}`,
@@ -484,7 +482,6 @@ exports.addPOsFromExcel = [
             console.log(data)
             const  createdBy = lastUpdatedBy = req.user.id;
             let poDataArray = [];
-            console.log(data)
             poDataArray = data.map(po => {
               return {
                 "id": uniqid('po-'),
@@ -515,13 +512,24 @@ exports.addPOsFromExcel = [
                 "lastUpdatedBy" : lastUpdatedBy
               }
             });
-            console.log(poDataArray)
+            for(let i in poDataArray){
+              if(poDataArray[i].externalId!=null){
+                duplicate = await RecordModel.findOne({ externalId: poDataArray[i].externalId})
+                if(duplicate!= null){
+                  delete poDataArray[i]
+                  i--;
+                }
+              }
+            }
+            if(poDataArray.length > 0){
             await RecordModel.insertMany(poDataArray,{ ordered: false });
             return apiResponse.successResponseWithData(
                 res,
                 'Upload Result',
                 poDataArray
             );
+            }
+            else return apiResponse.ErrorResponse(res,'Data Already Exists')
           } catch (e) {
             if(e.code=='11000'){
               return apiResponse.successResponseWithData(res, 'Error in insertion ( Duplicate Values)', e);
