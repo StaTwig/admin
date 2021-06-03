@@ -46,12 +46,10 @@ function getDate(n){
                     </div>
                   </div>
                   <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.type}</div>
-                  <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.manufacturer}</div>
+                  {/* <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.manufacturer}</div> */}
                   <div className="rTableCell" style={{position:"relative",left:'4%'}}>{formatDate(inventory.ProductList[0].productDetails.createdAt)}</div>
-                  <div className="rTableCell" style={{position:"relative",left:'9%'}}>{inventory.inventoryQuantity}</div>
-                  <div className="rTableCell" style={{position:"relative",left:'8%'}}> {(inventory.eventTypePrimary !== 'ADD') ? (inventory.ProductList[0].shipmentDetails.shipmentUpdates[0].status === 'CREATED') ? 'SENT' :'RECEIVED' : 'ADDED'}
-                  </div>
-                                  
+                  <div className="rTableCell" style={{position:"relative",left:'8%'}}> {(inventory.eventTypePrimary !== 'ADD') ? (inventory.eventTypePrimary === 'RECEIVED' ? 'RECEIVED' :  'SENT') : 'ADDED'} </div>
+                  <div className="rTableCell" style={{position:"relative",left:'9%'}}>{inventory.inventoryQuantity}</div>                                 
                   
                   <div className="rTableCell" style={{position:"relative",left:'3%'}}>
                     <button
@@ -109,7 +107,7 @@ function getDate(n){
                                       <button
                                           type="button" className="btn btn-outline-primary " 
                                           onClick={() => {
-                                            props.history.push(`/viewshipment/${inventory.ProductList[0].shipmentDetails.id}`)
+                                            props.history.push(`/viewshipment/${inventory.payloadData.data.id}`)
                                         }}
                         
                                         >View Shipment</button>: ''}
@@ -117,8 +115,9 @@ function getDate(n){
                                           <div className="mt-3" style={{position:"absolute", left:"78%", bottom:"15%" , width:"20%"}}>
                                         <button
                                         type="button" className="btn btn-outline-warning "
+                                        disabled = {!inventory.payloadData.data.products[0].batchNumber}
                                         onClick={() => {
-                                          props.history.push(`/transactionproducts`, {data: inventory.ProductList})
+                                          props.history.push(`/productlist/${inventory.payloadData.data.products[0].batchNumber}`)
                                         }}
                       
                                       >Show Product Details</button></div>
