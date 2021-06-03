@@ -189,8 +189,8 @@ const Inventory = (props) => {
                         <div className="col-md-12">
                           <h2 className="orgTitle">
                             {(selectedVendor.organisation && selectedVendor.organisation.name) ? selectedVendor.organisation.name : ''} &nbsp;
-                            ({(selectedVendor.organisation && selectedVendor.organisation.type) ? selectedVendor.organisation.type : ''})
-                            </h2>
+                            <span className="purple-badge">{(selectedVendor.organisation && selectedVendor.organisation.type) ? selectedVendor.organisation.type : ''}</span>
+                          </h2>
                         </div>
                         <div className="col-md-12">
                           <div className="pad-tb-10">
