@@ -99,9 +99,10 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 				skip,
 				limit
 			} = req.query;
-			// console.log("req.user =======> ", req.user);
+			console.log("req.user =======> ", req.user);
 			// console.log("req.query =======> ", req.query);
-			const { organisationId } = req.user;
+			const organisationId  = req.user.organisationId;
+			
 			let currentDate = new Date();
 			let fromDateFilter = 0;
 			let category = req.query.category;
@@ -146,6 +147,9 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 			}
 			if(status){
 				elementMatchQuery[`eventTypePrimary`] = status
+			}
+			if(organisationId){
+				elementMatchQuery[`actorOrgId`] = organisationId
 			}
 			if(fromDateFilter){
 				elementMatchQuery[`createdAt`] = {
@@ -230,7 +234,21 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 			// 	console.log(err)
 			// 	return apiResponse.ErrorResponse(res, err);
 			// }
-			let inventoryCount = 0
+			let inventoryCount = await EventModal.aggregate([
+				{ $lookup: {        
+					   from: 'products',
+					   localField: 'payloadData.data.products.productId',
+					   foreignField: 'id',
+					   as: 'productDetails',
+					} },
+					  { "$unwind": "$productDetails" },
+					  { $match: elementMatchQuery},
+					  { $group: { _id: null, myCount: { $sum: 1 } } }
+					  ]).sort({
+				createdAt: -1
+			})
+			inventoryCount = inventoryCount[0].myCount
+			console.log(inventoryCount)
 			EventModal.aggregate([
 				{ $lookup: {        
 					   from: 'products',
@@ -244,7 +262,7 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 					  ]).skip(parseInt(skip)).limit(parseInt(limit)).sort({
 				createdAt: -1
 			}).then(async (eventRecords) => {
-				console.log(eventRecords)
+				// console.log(eventRecords)
 				let inventoryRecords = [];
 				inventoryCount = eventRecords.length
 				let eventRecordsRes = eventRecords.map(async function (event) {
