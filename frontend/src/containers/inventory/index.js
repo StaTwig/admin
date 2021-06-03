@@ -30,7 +30,7 @@ const InventoryContainer = props => {
       setInventoryFilterData(inventoryFilterDataRes);
     };
     dispatch(resetInventories());
-    dispatch(getInventories(0, 10, "", "", "", "")); //(skip, limit, dateFilter, productName, productManufacturer, status)
+    dispatch(getInventories(0, 10, "", "", "", "")); //(skip, limit, dateFilter, productName, productCategory, status)
     fetchData();
   }, []);
 
