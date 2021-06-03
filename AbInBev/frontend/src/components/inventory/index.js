@@ -124,12 +124,14 @@ const Inventory = (props) => {
       _filters.state = '';
       _filters.brewery = '';
       _filters.sku = '';
+      _filters.organization = '';
     } else {
       _filters = { ...filters };
       _filters.inventoryType = 'VENDOR';
       _filters.district = '';
       _filters.state = '';
       _filters.sku = '';
+      _filters.organization = '';
       setSelectedVendorType('ALL_VENDORS');
     }
     setFilters(_filters);
