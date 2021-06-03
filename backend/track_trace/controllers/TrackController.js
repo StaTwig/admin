@@ -1,10 +1,3 @@
-const {
-    body,
-    validationResult
-} = require("express-validator");
-const {
-    sanitizeBody
-} = require("express-validator");
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
@@ -450,6 +443,7 @@ exports.fetchDataByQRCode = [
                                         label: 1,
                                         id: 1,
 					batchNumbers: 1,
+					quantity : 1,
                                         name: "$productDetails.type",
                                         type: "$productDetails.name",
                                         manufacturer: "$productDetails.manufacturer",
@@ -459,7 +453,6 @@ exports.fetchDataByQRCode = [
                             .then((products) => {
                                 return res.json({
                                     "type": "Product",
-                                    "quantity": products.length,
                                     "products": products
                                 });
                             })

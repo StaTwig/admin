@@ -18,7 +18,8 @@ import Package from '../../assets/icons/package.svg';
 import calender from '../../assets/icons/calendar.svg';
 import Status from '../../assets/icons/Status.svg';
 import Quantity from '../../assets/icons/Quantity.png';
-import Product from '../../assets/icons/Producttype.png';
+import Product from '../../assets/icons/Producttype.png';import {useDispatch, useSelector} from "react-redux";
+import {getInventories, resetInventories, getInventoryDetails} from "../../actions/inventoryActions";
 
 const Inventory = props => {
   const headers = {
@@ -51,7 +52,7 @@ const Inventory = props => {
   const [inventoriesCount, setInventoriesCount] = useState('');
   const [currentInventoriesCount, setCurrentInventoriesCount] = useState('');
   const [productsList,setProductsList] = useState([]);
-
+  const dispatch = useDispatch();
   const colors = ["#ffbcc4", "#c1e3f2", "#ffc18c", "#ffef83",
         "#d4e7ff", "#e0b0ff", "#F1EFCE", "#D7FAF1", "#F2B6AF" ];
 
@@ -64,6 +65,10 @@ const Inventory = props => {
         //   fetchData();
         // }, []);
 
+        const [skip, setSkip] = useState(0);
+        const [limit, setLimit] = useState(10);
+        const [count, setCount] = useState(0);
+        const [dateFilter, setDateFilter] = useState("");
 
      useEffect(() => {
     async function fetchData() {
@@ -97,13 +102,35 @@ const Inventory = props => {
   }, []);
 
 
+  const onPageChange = async (pageNum) => {
+    console.log("onPageChange =========>", pageNum)
+    const recordSkip = (pageNum-1)*limit;
+    setSkip(recordSkip);
+    dispatch(getInventories(recordSkip, limit, dateFilter));
+  };
+
+  const setDateFilterOnSelect = async (dateFilterSelected) => {
+    console.log("setDateFilterOnSelect =========>", dateFilterSelected)
+    setDateFilter(dateFilterSelected);
+    setSkip(0);
+    dispatch(getInventories(skip, limit, dateFilterSelected));
+  }
+
+  // const setInventoryStatusFilterOnSelect = async (statusFilterSelected) => {
+  //   console.log("setInventoryStatusFilterOnSelect =========>", statusFilterSelected)
+  //   setStatusFilter(statusFilterSelected);
+  //   setSkip(0);
+      
+  //     dispatch(getInventories(skip, limit, statusFilterSelected, ""));
+  // }
+
   return (
     <div className="inventory">
       <div className="d-flex justify-content-between">
         <h1 className="breadcrumb">INVENTORY </h1>
         <div className="d-flex">
           <Link to="/newinventory">
-            <button className="btn btn-yellow">
+            <button className="btn btn-yellow mt-2">
               <img src={Add} width="13" height="13" className="mr-2" />
               <span>Add Inventory</span>
             </button>
@@ -112,18 +139,21 @@ const Inventory = props => {
       </div>
       <div className="row mb-4">
         <div className="col">
-          <div className="panel" style={{height:'14vh'}}>
-            <div className="picture truck-bg">
-              <img src={TotalInventoryAdded} alt="truck" />
+          <Link to="/productcategory">
+            <div className="panel" style={{height:'14vh'}}>
+              <div className="picture truck-bg">
+                <img src={TotalInventoryAdded} alt="truck"/>
+              </div>
+              <div className="d-flex flex-column">
+                <div className="title truck-text">Total Product Category</div>
+                
+                <div className="count truck-text">{inventoriesCount} {inventoryAnalytics.totalProductCategory}</div>
+              </div>
             </div>
-            <div className="d-flex flex-column">
-              <div className="title truck-text">Total Product Category</div>
-              
-              <div className="count truck-text">{inventoriesCount} {inventoryAnalytics.totalProductCategory}</div>
-            </div>
-          </div>
+          </Link>
         </div>
         <div className="col">
+          <Link to="/productoutofstock">
           <div className="panel" style={{height:'14vh'}}>
             <div className="picture sent-bg">
               <img src={currentinventory} alt="truck" />
@@ -132,9 +162,12 @@ const Inventory = props => {
               <div className="title sent-text">Product Out Of Stock</div>
               <div className="sent-text count">{currentInventoriesCount}{inventoryAnalytics.stockOut}</div>
               </div>
-              </div>       
+            </div>
+          </Link>      
               </div>
-          <div className="col">
+          
+        <div className="col">
+          <Link to="/batchnearexpiry/product">
           <div className="panel" style={{height:'14vh'}}>
             <div className="picture recived-bg">
               <img src={Expiration} alt="truck" />
@@ -208,8 +241,10 @@ const Inventory = props => {
               </div>
             </div>
           </div>
+        </Link>
         </div>
         <div className="col">
+          <Link to="/batchexpired">
           <div className="panel" style={{height:'14vh'}}>
             <div className="picture transit-bg">
               <img src={TotalVaccineExpired} alt="truck" />
@@ -281,15 +316,16 @@ const Inventory = props => {
               <div className="transit-text count">{inventoryExpired}</div>
             </div>
           </div>
+          </Link>
         </div>
       </div>
       <div className="full-width-ribben">
-        <TableFilter data={headers} fb="60%" />
+        <TableFilter data={headers} setDateFilterOnSelect={setDateFilterOnSelect} fb="70%" />
       </div>
       <div className="ribben-space">
         <div className="row no-gutter">
         <div className="col-sm-12 col-xl-9 rTableHeader">
-            <Table data={tableHeaders} {...props} colors={colors} loadMore={props.loadMore} onLoadMore={props.onLoadMore} />
+            <Table data={tableHeaders} {...props} colors={colors}inventoryCount ={props.inventoriesCount} onPageChange={onPageChange} />
           </div>
           <div className="col-sm-12 col-xl-3">
             <div className="list-container">

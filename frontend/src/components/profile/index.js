@@ -420,7 +420,7 @@ class Profile extends React.Component {
                             <div className="card-header">
                               <div className="d-flex align-items-center justify-content-between">
                                 <h3 className="card-title font-weight-bold">
-                                  {this.state.title}-{this.state.warehouseLocations[id]['id']}
+                                  {this.state.warehouseLocations[id]['title']}-{this.state.warehouseLocations[id]['id']}
                                 </h3>
                                 <Link
                                   to={{
@@ -598,7 +598,7 @@ class Profile extends React.Component {
                                 <div className="card-header">
                                   <div className="d-flex align-items-center justify-content-between">
                                     <h3 className="card-title font-weight-bold">
-                                      {this.state.title}-{this.state.warehouseLocations[id]['id']}
+                                    {this.state.warehouseLocations[id]['title']}-{this.state.warehouseLocations[id]['id']}
                                     </h3>
                                   </div>
                                 </div>

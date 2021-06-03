@@ -58,17 +58,20 @@
 .challanImage{
   width:200px;
   height:200px;
+  margin: 10px 0px;
+}
+.textRight{
+  text-align: right;
 }
 .productDetailActive{
-  background-color: #eee6e6;
-  border:1px solid #53265d;
   border-radius: 15px;
+  padding:10px
 }
 .productDetail{
   padding:25px;
-  background-color: #eee6e6;
-  border:1px solid #53265d;
-  border-radius: 15px;
+  // background-color: #eee6e6;
+  // border:1px solid #53265d;
+  // border-radius: 15px;
 }
 .rejectionRateRow{
   background-color:orange;
@@ -80,6 +83,12 @@
 
 .transactionProducts{
  margin-top: 20px;
+ margin-bottom: 20px;
+ padding: 0px 15px;
+ table, tbody, tr {
+  line-height:2;
+ }
+ tr:nth-child(even) {background-color: #f0f0f0;}
 }
 .productHeader{
   font-weight: bold;
@@ -89,25 +98,50 @@
 .productList{
   color: #707070;
   .transactionListDate{
-    font-weight: bold;
-    margin-bottom: 10px;
+        font-weight: bold;
+        margin-bottom: 28px;
+        display: flex;
+        margin-top: 25px;
+        font-size: 15px;
+  }
+  .activeTxnContainer{
+    background-color: #cccccc2e;
+      border-radius: 15px;
+      box-shadow: 0px 3px 6px #54265E26;
+      margin-bottom:10px;
   }
   .transactionListContainer{
     margin-top: 15px;
+    padding:5px 0px 0px 5px;
+    &:hover{
+      background-color: #cccccc2e;
+      border-radius: 15px;
+      box-shadow: 0px 3px 6px #54265E26;
+    }
     // padding-left: 32px;
   }
   .productContainer{
+    // display: flex;
+    // cursor:pointer;
+    background-color: #53265d;
+    // &:hover{
+    //   border:1px solid #53265d;
+    //   border-radius: 15px;
+    //   padding:5px;
+    // }
+  }
+  .productContainerListItem{
     display: flex;
     cursor:pointer;
-    &:hover{
-      border:1px solid #53265d;
-      border-radius: 15px;
-      padding:5px;
-    }
-  }
+    // &:hover{
+    //   // border:1px solid #53265d;
+    //   // border-radius: 15px;
+    //   padding:5px;
+    // }
+  }  
   .productItem{
     flex-grow: 1;
-    height: 100px;
+    height: 65px;
   }
   .productItem + .productItem{
     margin-left: 2%;
@@ -219,6 +253,7 @@
     border: none;
     box-shadow: 0px 4px 8px #54265e26;
     border-radius: 10px;
+    width:100%;
   }
   .filterButton{
     background: #FFFFFF 0% 0% no-repeat padding-box;

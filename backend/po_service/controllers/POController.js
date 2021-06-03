@@ -7,15 +7,13 @@ const uniqid = require('uniqid');
 const date = require('date-and-time');
 
 const POModel = require('../models/POModel');
-const ShipmentModel = require('../models/ShipmentModel');
 const RecordModel = require('../models/RecordModel');
 const OrganisationModel = require('../models/OrganisationModel');
-const ProductModel = require('../models/ProductModel');
 const WarehouseModel = require('../models/WarehouseModel');
+const ProductModel = require('../models/ProductModel');
 const CounterModel = require('../models/CounterModel')
 //this helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
-const utility = require('../helpers/utility');
 const auth = require('../middlewares/jwt');
 const checkToken = require('../middlewares/middleware').checkToken;
 const checkPermissions = require('../middlewares/rbac_middleware')
@@ -457,7 +455,6 @@ exports.createPurchaseOrder = [
 exports.addPOsFromExcel = [
   auth,
   async (req, res) => {
-    console.log(req.user)
     try {
       // const permission_request = {
       //   role: req.user.role,
@@ -470,7 +467,6 @@ exports.addPOsFromExcel = [
             if (!fs.existsSync(dir)) {
               fs.mkdirSync(dir);
             }
-            console.log(req.file)
             await moveFile(
                 req.file.path,
                 `${dir}/${req.file.originalname}`,
@@ -486,7 +482,6 @@ exports.addPOsFromExcel = [
             console.log(data)
             const  createdBy = lastUpdatedBy = req.user.id;
             let poDataArray = [];
-            console.log(data)
             poDataArray = data.map(po => {
               return {
                 "id": uniqid('po-'),
@@ -517,16 +512,29 @@ exports.addPOsFromExcel = [
                 "lastUpdatedBy" : lastUpdatedBy
               }
             });
-            console.log(poDataArray)
-            await RecordModel.insertMany(poDataArray);
+            for(let i in poDataArray){
+              if(poDataArray[i].externalId!=null){
+                duplicate = await RecordModel.findOne({ externalId: poDataArray[i].externalId})
+                if(duplicate!= null){
+                  delete poDataArray[i]
+                  i--;
+                }
+              }
+            }
+            if(poDataArray.length > 0){
+            await RecordModel.insertMany(poDataArray,{ ordered: false });
             return apiResponse.successResponseWithData(
                 res,
                 'Upload Result',
                 poDataArray
             );
+            }
+            else return apiResponse.ErrorResponse(res,'Data Already Exists')
           } catch (e) {
-            return apiResponse.ErrorResponse(res, 'Error from Blockchain');
-
+            if(e.code=='11000'){
+              return apiResponse.successResponseWithData(res, 'Error in insertion ( Duplicate Values)', e);
+            }            
+            else return apiResponse.ErrorResponseWithData(res, 'Error in insertion', e);
           }
     //     } else {
     //       res.json('Sorry! User does not have enough Permissions');
@@ -537,6 +545,7 @@ exports.addPOsFromExcel = [
     }
   },
 ];
+
 
 exports.success = [
   async (req, res) => {
@@ -608,7 +617,7 @@ exports.getOrderIds = [
     try {
      
       const {organisationId } = req.user;
-      const orderID = await RecordModel.find({$or:[{"supplier.supplierOrganisation":organisationId},{"receiver.receiverOrganisation":organisationId}]},'id');
+      const orderID = await RecordModel.find({$or:[{"supplier.supplierOrganisation":organisationId},{"customer.customerOrganisation":organisationId}]},'id');
       
       return apiResponse.successResponseWithData(
         res,

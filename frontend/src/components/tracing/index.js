@@ -34,12 +34,14 @@ const Tracing = (props) => {
   const [openShipping, setOpenShipping] = useState(false);
   const tracking = props.trackData;
   const shippmentChainOfCustodyData = props.shippmentChainOfCustodyData;
-  console.log(shippmentChainOfCustodyData)
-  // console.log(tracking);
+  // console.log(shippmentChainOfCustodyData.status)
+  var status;
+  shippmentChainOfCustodyData.map((data)=>{
+    status = data.status;
+  })
   const productCard = props.productDetails;
   const poCard = props.poDetails;
   const {id} = props.match.params;
-  console.log(id);
 
   const closeModal = () => {
     setOpenPurchase(false);
@@ -53,14 +55,14 @@ const Tracing = (props) => {
       <div className="row justify-content-between">
         <h1 className="breadcrumb">Track & Trace</h1>
         <div className="row">
-          <Link to={`/updatestatus/${id}`}>
-            <button className="btn btn-orange fontSize20 font-bold mr-5">
+          <Link to={(status=="RECEIVED")?`/tracing/${id}`:`/updatestatus/${id}`}>
+            <button className="btn btn-orange fontSize20 font-bold mr-5" disabled={status=="RECEIVED"}>
               <span className="chain">Update Status</span>
             </button>
           </Link>
-          <Link to={`/receiveShipment/${id}`}>
-          <button className="btn btn-main-blue fontSize20 font-bold ">
-            <img src={returnShipment} width="14" height="14" className="mr-2" />
+          <Link to={(status=="RECEIVED")?`/tracing/${id}`:`/receiveShipment/${id}`}>
+          <button className="btn btn-main-blue fontSize20 font-bold " disabled={status=="RECEIVED"}>
+            <img src={returnShipment} width="14" height="14" className="mr-2" disabled={status=="RECEIVED"}/>
             <span className="chain">Receive Shipment</span>
           </button>
           </Link>

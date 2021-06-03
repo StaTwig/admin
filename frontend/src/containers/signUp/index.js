@@ -27,8 +27,6 @@ const SignupContainer = (props) => {
     setInnerwidth(window.innerWidth);
   }
   const onSignup = useCallback(async (values) => {
-    console.log("1",email);
-      console.log("2",phone);
     let data = { firstName, lastName, emailId: email != '' ? email : phone, organisationId: organisation.id };
     if (isNewOrg) {
       // data.organisationName = organisation.name;
@@ -54,6 +52,7 @@ const SignupContainer = (props) => {
     else{
       const err = result.data.data[0];
       setErrorMessage(err.msg);
+      setShowModal(false);
     }
   });
 
@@ -121,7 +120,7 @@ const SignupContainer = (props) => {
         errorMessage={errorMessage}
         onEmailChange={e => setEmail((e.target.value).toLowerCase())}
         onphoneChange={value => setPhone(value)}
-        onOrgChange={value => setIsNewOrg(value)}
+        onOrgChange={value => {setIsNewOrg(value),setShowModal(value)}}
         onPasswordChange={e => setPassword(e.target.value)}
         onlastNameChange={e => setLastName(e.target.value)}
         onOrganisationChange={org => setOrganisation({id: org.id, name: org.name})}

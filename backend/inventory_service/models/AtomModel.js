@@ -17,6 +17,10 @@ var AtomSchema = new mongoose.Schema(
       required: false,
       default: [],
     },
+    quantity: {
+      type: Number,
+      required: false
+    },
     poIds: {
       type: Array,
       required: false,

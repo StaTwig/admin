@@ -6,23 +6,20 @@ import { formatTimeAMPM } from '../../utils/dateHelper';
 import { Link } from 'react-router-dom';
 
 const SoChainOfCustody = (props) => {
-  const { index, container, pindex, data, update, op, setOp, i, level, v, setV, len } = props;
+  const { index, container, pindex, data, update, op, setOp, i, level, v, setV, len, parentIndex } = props;
   const [visible, setVisible] = useState(v);
-
-  console.log(data.id, i, len);
-  
   
   return (
   <>
       {op >= level ?
-        <div className={`row orderTxt ml-${index} mr-0 pl-${index > 4 ? 4 : 3}`}>
+        <div className={`row orderTxt  mr-0 `} style={{marginLeft: (parentIndex == 0 ? 0.5 : parentIndex)+"rem", paddingLeft: (parentIndex == 0 ? 0.5 : 1)+"rem"}}>
           <span className={`pt-${index > 2 ? 2 : index} p-0 ${pindex == 1 && `border-primary border-left`}`} style={{ height: '1rem' }}></span>
           <div className={`pt-${index > 2 ? 2 : index} p-0 col ${pindex > 1 && `border-primary border-left`} `}>
             <div className="row dot-pad">
               <div className={`big-dot dot-${container} bg-info`}></div>
               <span className="text-primary pl-4 pb-1 row col-12 font-weight-bold">{data?.supplier?.warehouse?.title}</span>
             </div>
-            <div className={`panel row ml-${index > 4 ? 4 : index} container-${container} mr-0 commonpanle`}>
+            <div className={`panel row container-${container} mr-0 commonpanle`} style={{marginLeft: "0.5rem"}}>
               <div className="col-12 row justify-content-between">
                 <div className={`${visible && v ? `col` : `col-10`}`}>
                   <span className="font-weight-bold">{update.status}</span>

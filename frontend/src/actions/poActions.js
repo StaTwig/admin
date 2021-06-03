@@ -64,7 +64,7 @@ export const createOrder = async data => {
 
 export const addPOsFromExcel = async data => {
   try {
-    const url = config().addPOsFromExcelUrl;
+    const url = config().addPOsFromExcel;
     const result = await axios.post(url, data, {
       headers: { 'Content-Type': 'multipart/form-data' },
     });
@@ -226,7 +226,7 @@ export const resetEditPos = data => {
 
 export const getOrganizationsByTypes = async id => {
   try {
-    const result = await axios.get(config().getOrganizationsByTypeUrl + id);
+    const result = await axios.get(config().getOrganizationsTypewithauth + id);
     return result.data;
   } catch (e) {
     return e.response;

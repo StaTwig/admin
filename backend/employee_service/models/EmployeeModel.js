@@ -32,7 +32,7 @@ var EmployeeSchema = new mongoose.Schema({
     type: String,
     required: false,
     default:
-      '/images/user.svg',
+      '/usermanagement/api/auth/images/e835ac51d35cfbe691e485b64397f3a5',
   },
   phoneNumber: { type: String, required: false, default: '' },
   jobTitle: { type: String, required: false, default: 'junior Engineer' },

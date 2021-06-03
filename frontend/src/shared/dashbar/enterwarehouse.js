@@ -123,7 +123,7 @@ const EnterWareHouse = props => {
       </div>
       <div className="d-flex flex-row justify-content-between prod mt-3 mb-2">
         <div className="font-size-one">{props.visible ? 'Product Details' : 'Inventory'}</div>
-        <Link to={props.visible ? "/viewshipment/"+dashBarData.id : "/productlist/all"}>
+        <Link to={props.visible ? "/viewshipment/"+dashBarData.id : "/viewinventory/"+warehouse?.warehouseId}>
           <div className="text-primary ">View All</div>
         </Link>
       </div>

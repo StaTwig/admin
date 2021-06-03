@@ -45,9 +45,9 @@ const SideBar = ({
           </Link>
         </li>
 
-        <li className={(url === '/inventory'|| url === '/newinventory'|| url === '/addproduct'|| url === '/productlist/all') ? 'active' : ''}>
+        <li className={(url === '/inventory' || url === '/newinventory' || url === '/productcategory' || url === '/batchexpired' || url === '/batchnearexpiry/product' || url === '/productoutofstock'|| url === '/addproduct'|| url === '/productlist/all') ? 'active' : ''}>
           <Link to="/inventory" className="d-inline-block">
-            <img src={(url === '/inventory' || url === '/newinventory' || url === '/addproduct'|| url === '/productlist/all') ? InventorySelectedIcon : InventoryIcon} alt="Inventory" />
+            <img src={(url === '/inventory' || url === '/newinventory' || url === '/productcategory' || url === '/batchexpired' || url === '/batchnearexpiry/product' || url === '/productoutofstock' || url === '/addproduct' || url === '/productlist/all') ? InventorySelectedIcon : InventoryIcon} alt="Inventory" />
             <span className="ml-2">Inventory</span>
           </Link>
         </li>

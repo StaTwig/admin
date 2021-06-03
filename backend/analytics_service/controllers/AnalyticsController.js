@@ -5,21 +5,12 @@ const InventoryModel = require('../models/InventoryModel');
 const ProductModel = require('../models/ProductModel');
 const POModel = require('../models/POModel');
 const ShippingOrderModel = require('../models/ShippingOrderModel');
-
-const OrganisationModel = require('../models/OrganisationModel');
 const WarehouseModel = require('../models/WarehouseModel');
 //this helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
-const utility = require('../helpers/utility');
 const auth = require('../middlewares/jwt');
-const checkToken = require('../middlewares/middleware').checkToken;
 // const checkPermissions = require('../middlewares/rbac_middleware')
   // .checkPermissions;
-const wrapper = require('../models/DBWrapper');
-const uniqid = require('uniqid');
-
-const init = require('../logging/init');
-const logger = init.getLog();
 
 exports.getAnalytics = [
   auth,
@@ -414,10 +405,6 @@ exports.getAnalytics = [
         data,
       );
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< AnalyticsService < AnalyticsController < fetchAllShippingOrders : error (catch block)',
-      );
       console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
@@ -525,10 +512,6 @@ exports.getOverviewAnalytics = [
         data,
       );
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< AnalyticsService < AnalyticsController < fetchAllShippingOrders : error (catch block)',
-      );
       console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
@@ -775,10 +758,6 @@ exports.getInventoryAnalytics = [
         data,
       );
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< AnalyticsService < AnalyticsController < fetchAllShippingOrders : error (catch block)',
-      );
       console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
@@ -840,10 +819,6 @@ exports.getShipmentAnalytics = [
         data,
       );
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< AnalyticsService < AnalyticsController < fetchAllShippingOrders : error (catch block)',
-      );
       console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }
@@ -902,10 +877,6 @@ exports.getOrderAnalytics = [
         data,
       );
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< AnalyticsService < AnalyticsController < getOrderAnalytics : error (catch block)',
-      );
       console.log(err);
       return apiResponse.ErrorResponse(res, err);
     }

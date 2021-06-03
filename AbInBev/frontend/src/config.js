@@ -37,6 +37,8 @@ export function config() {
       getAllUsersUrl: `${ABINBEVPROD_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${ABINBEVPROD_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       getOrganizationsByType: `${ABINBEVPROD_SERVER_URL}/usermanagement/api/auth/getOrganizationsByType?type=`,
+      getOrganizationsByTypeAbInBev: `${ABINBEVPROD_SERVER_URL}/usermanagement/api/auth/abinbev/getOrganizationsByType?type=`,
+
       upload: `${ABINBEVPROD_SERVER_URL}/usermanagement/api/auth/upload`,
       getAnalyticsUrl: `${ABINBEVPROD_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl: `${ABINBEVPROD_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
@@ -101,6 +103,7 @@ export function config() {
       getAllBrandsurl: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getAllBrands`,
       getOrganisationStatsurl: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getStatsByOrg`,
       getOverviewStats: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getOverviewStats`,
+      getSupplierPerfomance: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getSupplierPerfomance`,
 
     },
     ainbevtest: {
@@ -113,6 +116,8 @@ export function config() {
       getAllUsersUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       getOrganizationsByType: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsByType?type=`,
+      getOrganizationsByTypeAbInBev: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/abinbev/getOrganizationsByType?type=`,
+
       upload: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/upload`,
       getAnalyticsUrl: `${ABINBEVTEST_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
       getOverviewAnalyticsUrl: `${ABINBEVTEST_SERVER_URL}/analyticsmanagement/api/analytics/getOverviewAnalytics`,
@@ -176,6 +181,7 @@ export function config() {
       getAllBrandsurl: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getAllBrands`,
       getOrganisationStatsurl: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getStatsByOrg`,
       getOverviewStats: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getOverviewStats`,
+      getSupplierPerfomance: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getSupplierPerfomance`,
 
     },
   };
