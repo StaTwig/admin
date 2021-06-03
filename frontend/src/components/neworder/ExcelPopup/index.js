@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import './styles.scss';
-import { addPOsFromExcel } from '../../../actions/poActions';
+import { addPOsFromExcel,setReviewPos } from '../../../actions/poActions';
 import { turnOn, turnOff } from '../../../actions/spinnerActions';
 import uploadBlue from '../../../assets/icons/UploadBlue.svg';
+import Modal from '../../../shared/modal';
+import SuccessOrderPopUp from './SuccessOrder/SuccessOrder';
+import FailPopup from "../../../shared/PopUp/failedPopUp";
+
 
 const ExcelPopUp = props => {
   const [excel, setExcel] = useState('');
   const dispatch = useDispatch();
+  const [openSuccesfulOrder, setopenSuccesfulOrder] = useState(false);
+  const [openFailedPopup,setopenFailedPop] = useState(false);
+  const [ modalProps, setModalProps ] = useState({});
 
   const setExcelFile = evt => {
     setExcel(evt.target.files[0]);
@@ -18,14 +25,30 @@ const ExcelPopUp = props => {
     formData.append('excel', excel);
     dispatch(turnOn());
     const result = await addPOsFromExcel(formData);
+    console.log(result);
     if (result && result.status === 200) {
       console.log('success add PO');
-      props.setOpenPOExcel(false);
+      // dispatch(setReviewPos(result.data.data));
+      setopenSuccesfulOrder(true);
+      setModalProps({
+    message: 'Created Successfully!',
+    OrderLength: result.data.data.length,
+    type: 'Success'
+  })
     }
-    else{
-      console.log("error on addPO");
-    }
+    else {
+      setopenFailedPop(true);
+ }
     dispatch(turnOff());
+  };
+
+  const closeModal = () => {
+    setopenSuccesfulOrder(false);
+    props.history.push("/orders");
+  };
+  const closeModalFailedPopUp = () => {
+    setopenFailedPop(false);
+    props.history.push("/neworder");
   };
   return (
     <div className="excelpopup col">
@@ -53,6 +76,28 @@ const ExcelPopUp = props => {
           <button className="btn-primary btn mr-4" onClick={uploadExcel}>
             IMPORT
           </button>
+          {openSuccesfulOrder && (
+                <Modal
+                  close={() => closeModal()}
+                  size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+                >
+                  <SuccessOrderPopUp
+                     onHide={closeModal}// onHide={closeModal} //FailurePopUp
+                    {...modalProps}
+                />
+                </Modal>
+              )}
+              {openFailedPopup && (
+                <Modal
+                  close={() => closeModalFailedPopUp()}
+                  size="modal-sm"
+                  > 
+                  <FailPopup
+                    onHide={closeModalFailedPopUp}
+                  />
+                </Modal>
+              )}
+
         </div>
       </div>
     </div>

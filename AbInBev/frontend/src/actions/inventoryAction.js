@@ -88,12 +88,36 @@ export const getAllSKUs = () => {
 }
 
 export const getOrganizationsByType = (filters) => {
-  const queryString = getQueryStringFromFilters(filters);
+  let queryStr = '';
+  if (filters.organizationType && filters.organizationType.length) {
+
+    if (filters.organizationType === 'VENDOR') {
+      if (filters.vendorType === 'ALL_VENDORS') {
+        queryStr = 'SUPPLIER';
+      } else {
+        queryStr = filters.vendorType;
+      }
+    } else {
+      queryStr = filters.organizationType;
+    }
+
+
+    if (filters.state && filters.state !== '') {
+      queryStr = queryStr + '&state=' + filters.state;
+    }
+
+    if (filters.district && filters.district !== '') {
+      queryStr = queryStr + '&district=' + filters.district;
+    }
+
+
+  }
+
   return async dispatch => {
     try {
       dispatch(turnOn());
       const result = await axios.get(
-        config().getOrganizationsByType + `${queryString}`,
+        config().getOrganizationsByTypeAbInBev + `${queryStr}`,
       );
       dispatch(turnOff());
       return result.data;

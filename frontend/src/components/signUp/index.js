@@ -51,6 +51,7 @@ organisationsType.map((data)=>{
 })
 const showOrgByType = (value) =>{
   let arr = organisations.filter(data => data.type == value);
+  arr.push({name:'Other'});
   return arr;
 }
   const changeFn = (value_new,e) => {
@@ -239,12 +240,13 @@ const showOrgByType = (value) =>{
                     onSelect={item => {
                       setFieldValue('org', item);
                       props.onOrganisationChange(item);
-                      let orgs = organisationsArr.filter(org => org.name == item.name);
-                      if (orgs.length && item.name != 'Other')
-                        props.onOrgChange(false);
-                      else
-                        props.onOrgChange(true);
-                        setValue(item.name);
+                        if(item.name!='Other'){
+                          setValue(item.name);
+                          props.onOrgChange(false);
+                        }
+                        if(item.name =='Other'){
+                          props.onOrgChange(true);
+                        }
                     }}
                     groups={showOrgByType(selectedType)}
                   //   changeFn={(v, e = '') => {
@@ -252,6 +254,7 @@ const showOrgByType = (value) =>{
                   //     setFieldValue('org', v); 
                   //     changeFn(v, e);
                   //  }}
+                  
                     dClass="ml-4"
                     className="text"
                   /> 

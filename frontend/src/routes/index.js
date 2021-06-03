@@ -38,6 +38,11 @@ import ReceiveShipment from  '../containers/receiveShipment';
 import AddLocation from '../containers/Addlocation';
 import LastMile from '../containers/lastMile';
 import EditLocation from '../containers/editLocation';
+import TransactionProducts from '../containers/TransactionProducts';
+import ProductCategory from '../containers/productcategory';
+import ProductInventory from '../containers/productinventory';
+import BatchExpiry from '../containers/batchexpiry';
+import ViewInventory from '../containers/viewInventory';
 import NoMatch from '../components/NoMatch';
 
 import './style.scss';
@@ -81,6 +86,13 @@ const routes = (
     <Route path="/lastMile" component={requireAuth(LastMile)} />
     <Route path="/enterid" component={requireAuth(enterId)} />
     <Route path="/editLocation/:id" component={requireAuth(EditLocation)} />
+    <Route path="/transactionproducts" component={requireAuth(TransactionProducts)} />
+    <Route path="/productcategory" component={requireAuth(ProductCategory)} />
+    <Route path="/productinventory/:category" component={requireAuth(ProductInventory)} />
+    <Route path="/productoutofstock" component={requireAuth(ProductInventory)} />
+    <Route path="/batchnearexpiry/:category" component={requireAuth(BatchExpiry)} />
+    <Route path="/batchexpired" component={requireAuth(BatchExpiry)} />
+    <Route path="/viewinventory/:warehouseId" component={requireAuth(ViewInventory)} />
     <Route component={NoMatch} />
   </Switch>
 );

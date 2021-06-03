@@ -12,6 +12,7 @@ import ReviewOrderPopUp from './revieworderpopup';
 
 import Modal from '../../shared/modal';
 import { createOrder, resetReviewPos } from '../../actions/poActions';
+import { element } from 'prop-types';
 
 const ReviewOrder = props => {
   const order = useSelector(state => {
@@ -22,13 +23,11 @@ const ReviewOrder = props => {
   const [openOrder, setOpenOrder] = useState(false);
   const [failedPop, setFailedPop] = useState(false);
   const [openReviewOrder, setopenReviewOrder] = useState(false);
-
-const [ modalProps, setModalProps ] = useState({});
+  const [ modalProps, setModalProps ] = useState({});
 
   const onAssign = async () => {
-
     let error = false;
-    const { fromOrg, fromOrgId, toOrg, toOrgLoc, products } = order;
+    const { fromOrg, fromOrgId, toOrg, toOrgLoc, products, typeName, rtypeName } = order;
     products.forEach((p) => {
       if (p.quantity < 1)
         error = true;
@@ -39,10 +38,12 @@ const [ modalProps, setModalProps ] = useState({});
         supplier: {
           supplierIncharge: null,
           supplierOrganisation: fromOrg,
+          supplierType: typeName,
         },
         customer: {
           customerIncharge: null,
           customerOrganisation: toOrg,
+          customerType: rtypeName,
           shippingAddress: {
             shippingAddressId: toOrgLoc,
             shipmentReceiverId: null
@@ -53,7 +54,7 @@ const [ modalProps, setModalProps ] = useState({});
         poStatus: "CREATED",
         products: products,
       };
-
+console.log(data);
       dispatch(turnOn());
       const result = await createOrder(data);
       dispatch(turnOff());
@@ -61,7 +62,6 @@ const [ modalProps, setModalProps ] = useState({});
       if (result.status === 200 ) {
          //dispatch(resetReviewPos({}));
           setopenReviewOrder(true);
-          console.log("2", result);
           //setMessage("Status updated Successfully");
           setModalProps({
         message: 'Created Successfully!',
@@ -81,7 +81,8 @@ const [ modalProps, setModalProps ] = useState({});
     setopenReviewOrder(false);
     props.history.push("/orders");
   };
-
+  var arr=[];
+  arr.push(order);
 
   return (
     <div className="vieworder text-muted">
@@ -93,9 +94,15 @@ const [ modalProps, setModalProps ] = useState({});
 
           <span className="p-0 font-weight-bold" style={{color:"black"}}>Product Details</span>
           <div className="row mt-3">
-            <ViewTable
-              product={order?.products}
-            />
+           {arr[0].length!=undefined?arr[0].map(element => {
+                         return(  
+                         <ViewTable
+                          product={element?.products}
+                        />
+                         );
+            }):                         <ViewTable
+            product={order?.products}
+          />} 
           </div>
         </div>
         <div className="row bg-white shadow p-3 m-3">
@@ -109,7 +116,7 @@ const [ modalProps, setModalProps ] = useState({});
                 </div>
                 <div className="col row">
                   <span className="col-4">Organisation ID: </span>
-                  <span className="col" style={{color: "black"}} >{order.fromOrg}</span>
+                  <span className="col" style={{color: "black"}} >{order.typeName}/{order.fromOrg}</span>
                 </div>
               </div>
             </div>
@@ -126,7 +133,7 @@ const [ modalProps, setModalProps ] = useState({});
                 </div>
                 <div className="col row">
                   <span className="col-4">Organisation ID: </span>
-                  <span className="col" style={{color: "black"}} >{order.toOrg}</span>
+                  <span className="col" style={{color: "black"}} >{order.rtypeName}/{order.toOrg}</span>
                 </div>
                 <div className="w-100"></div>
                 <div className="col row col-6 mt-5">
@@ -155,8 +162,6 @@ const [ modalProps, setModalProps ] = useState({});
                   <ReviewOrderPopUp
                      onHide={closeModal}// onHide={closeModal} //FailurePopUp
                                 {...modalProps}
-
-
                 />
                 </Modal>
               )}

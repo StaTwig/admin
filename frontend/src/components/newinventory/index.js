@@ -10,7 +10,7 @@ import uploadBlue from '../../assets/icons/UploadWhite.svg';
 import ExportIcon from '../../assets/icons/Export.svg';
 import dropdownIcon from '../../assets/icons/drop-down.svg';
 import review from '../../assets/icons/review.png';
-import ShipmentFailPopUp from "../neworder/shipmentFailPopUp";
+import ShipmentFailPopUp from '../neworder/shipmentFailPopUp';
 
 import {
   addMultipleInventories,
@@ -20,8 +20,8 @@ import {
 import { turnOn, turnOff } from '../../actions/spinnerActions';
 import { getProducts, getProductsByCategory } from '../../actions/poActions';
 
-const NewInventory = props => {
-  const editInventories = useSelector(state => {
+const NewInventory = (props) => {
+  const editInventories = useSelector((state) => {
     return state.reviewInventory;
   });
 
@@ -31,36 +31,42 @@ const NewInventory = props => {
     async function fetchData() {
       dispatch(turnOn());
       const result = await getProducts();
-      const productsArray = result.map(
-        product => product.name,
-      );
+      const productsArray = result.map((product) => product.name);
       setProducts(result);
-      
-      const categoryArray = result.map(
-        product => product.type,
+
+      const categoryArray = result.map((product) => product.type);
+
+      setCategory(
+        categoryArray
+          .filter((value, index, self) => self.indexOf(value) === index)
+          .map((item) => {
+            return {
+              value: item,
+              label: item,
+            };
+          }),
       );
-      
-      setCategory(categoryArray.filter((value, index, self) => self.indexOf(value) === index));
       setBlankInventory({ ...blankInventory, products: productsArray });
-      if(editInventories.length === 0) {
-        setInventoryState([{ ...blankInventory, products: productsArray }])
-      }else {
+      if (editInventories.length === 0) {
+        setInventoryState([{ ...blankInventory, products: productsArray }]);
+      } else {
         setInventoryState(editInventories);
       }
 
       dispatch(turnOff());
-      }
+    }
 
     fetchData();
   }, []);
 
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [openFailInventory, setOpenFailInventory] = useState(false);
-  const [openQuantityFailInventory, setOpenQuantityFailInventory] = useState(false);
+  const [openQuantityFailInventory, setOpenQuantityFailInventory] =
+    useState(false);
   const [inventoryError, setInventoryError] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [products, setProducts] = useState([]);
-  const [ inventoryState, setInventoryState ] = useState([]);
+  const [inventoryState, setInventoryState] = useState([]);
   const [menu, setMenu] = useState(false);
   const [openExcel, setOpenExcel] = useState(false);
   const [blankInventory, setBlankInventory] = useState({
@@ -88,7 +94,6 @@ const NewInventory = props => {
   const closeModalFail1 = () => {
     setOpenQuantityFailInventory(false);
   };
-  
 
   var numeric = { year: 'numeric', month: 'numeric' };
 
@@ -110,9 +115,9 @@ const NewInventory = props => {
   const todayDate = newMonth + '/' + new Date().getFullYear();
   const dateValidationFields = ['expiryDate'];
   //const [validate,setValidate] = useState('')
-  const expiryDateValidation = date => {
+  const expiryDateValidation = (date) => {
     let error = false;
-    inventoryState.forEach(inventory => {
+    inventoryState.forEach((inventory) => {
       if (error) return;
       let validationVariable = inventory.expiryDate;
       let a = new Date(
@@ -123,13 +128,15 @@ const NewInventory = props => {
         ),
       ).getFullYear();
       let b = todayDate.slice(-4);
-      let c = `0${new Date(
-        Date.parse(
-          typeof validationVariable == 'string'
-            ? validationVariable
-            : validationVariable.toLocaleDateString(),
-        ),
-      ).getMonth() + 1}`.slice(-2);
+      let c = `0${
+        new Date(
+          Date.parse(
+            typeof validationVariable == 'string'
+              ? validationVariable
+              : validationVariable.toLocaleDateString(),
+          ),
+        ).getMonth() + 1
+      }`.slice(-2);
       let d = todayDate.substring(0, 2);
       if (a < b || (a == b && c <= d)) {
         setInventoryError('Check expiryDate');
@@ -140,15 +147,17 @@ const NewInventory = props => {
 
     return error;
   };
-  const checkValidationErrors = validations => {
+  const checkValidationErrors = (validations) => {
     let error = false;
-    inventoryState.forEach(inventory => {
+    inventoryState.forEach((inventory) => {
       if (error) return error;
       for (let i = 0; i < validations.length; i++) {
         let validationVariable = inventory[validations[i]];
 
-        if (validationVariable.length < 1 ||
-          validationVariable == 'Select Product' || validationVariable == 'Select Category'
+        if (
+          validationVariable.length < 1 ||
+          validationVariable == 'Select Product' ||
+          validationVariable == 'Select Category'
         ) {
           setInventoryError(validations[i]);
           setOpenFailInventory(true);
@@ -156,21 +165,15 @@ const NewInventory = props => {
           break;
         }
       }
-      if(parseInt(inventory.quantity,10)<1)
-      {
-
-      
+      if (parseInt(inventory.quantity, 10) < 1) {
         setInventoryError('Check Quantity ');
         setOpenQuantityFailInventory(true);
-        error=true;
+        error = true;
       }
-    
-     
     });
     return error;
   };
   const onProceedToReview = () => {
-   
     if (checkValidationErrors(inventoryFields)) {
       return;
     } else if (expiryDateValidation(dateValidationFields)) {
@@ -185,39 +188,46 @@ const NewInventory = props => {
   };
 
   const onAddAnotherProduct = () => {
-    setInventoryState([...inventoryState, blankInventory ]);
+    setInventoryState([...inventoryState, blankInventory]);
   };
   const handleInventoryChange = (index, key, value) => {
     const updatedInventoryState = JSON.parse(JSON.stringify(inventoryState));
     updatedInventoryState[index][key] = value;
     const product = products.find(
-      p => p.name === updatedInventoryState[index]['productName'],
+      (p) => p.name === updatedInventoryState[index]['productName'],
     );
     updatedInventoryState[index]['manufacturer'] = product?.manufacturer;
     updatedInventoryState[index]['productId'] = product?.id;
     let total = 0;
-    updatedInventoryState.forEach(inv => total += parseInt(inv.quantity)  )
+    updatedInventoryState.forEach((inv) => (total += parseInt(inv.quantity)));
     setInventoryState(updatedInventoryState);
   };
 
-  const onRemoveRow=(index) => {
+  const onRemoveRow = (index) => {
     const inventoryStateClone = JSON.parse(JSON.stringify(inventoryState));
-    inventoryStateClone.splice(index,1);
+    inventoryStateClone.splice(index, 1);
     setInventoryState(inventoryStateClone);
     let total = 0;
-    inventoryStateClone.forEach(inv => total += parseInt(inv.quantity)  )
-  }
+    inventoryStateClone.forEach((inv) => (total += parseInt(inv.quantity)));
+  };
 
   const onCategoryChange = async (index, value) => {
     try {
       const warehouse = await getProductsByCategory(value);
       handleInventoryChange(index, 'categories', value);
-      setProducts(warehouse.data);
-    }
-    catch (err) {
+      setProducts(
+        warehouse.data.map((item) => {
+          return {
+            value: item.name,
+            label: item.name,
+            ...item,
+          };
+        }),
+      );
+    } catch (err) {
       setErrorMessage(err);
     }
-  }
+  };
 
   return (
     <div className="Newinventory">
@@ -240,7 +250,7 @@ const NewInventory = props => {
                 {' '}
                 Excel
               </button>
-              <button className=" btn btn-outline-info" > Other</button>
+              <button className=" btn btn-outline-info"> Other</button>
             </div>
           ) : null}
           {openExcel && (
@@ -281,9 +291,10 @@ const NewInventory = props => {
         <span className="value">{grandTotal}</span> */}
 
         <button className="btn-primary btn" onClick={onProceedToReview}>
-          <img src={review} width="20" className="" /><span className="ml-1">Review</span>
+          <img src={review} width="20" className="" />
+          <span className="ml-1">Review</span>
         </button>
-     </div>
+      </div>
       {openCreatedInventory && (
         <Modal
           close={() => closeModal()}
@@ -306,12 +317,12 @@ const NewInventory = props => {
           />
         </Modal>
       )}
-       {openQuantityFailInventory && (
+      {openQuantityFailInventory && (
         <Modal
           close={() => closeModalFail1()}
           size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
         >
-         <ShipmentFailPopUp
+          <ShipmentFailPopUp
             onHide={closeModalFail1} //FailurePopUp
             shipmentError={inventoryError}
           />

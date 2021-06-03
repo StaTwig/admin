@@ -188,47 +188,30 @@
       }
     }
   }
-
-
 }
-  .cursorP{
-    cursor: pointer;
+.cursorP{
+  cursor: pointer;
+}
+.inp-grp input, .inp-grp input:focus, input:disabled{
+  border: none;
+  text-align: center;
+  background-color: white !important;
+}
+.inp-grp input::placeholder{
+    // color: red !important;
+    opacity: 0.5;
   }
-  .w-10{
-    width: 10vw;
-    align-self: center;
-    text-align: center;
-  }
-  .w-20{
-    width: 20vw;
-    align-self: center;
-    text-align: center;
-  }
-  .w-15{
-    width: 15vw;
-    align-self: center;
-    text-align: center;
-  }
-  .inp-grp input, .inp-grp input:focus, input:disabled{
-    border: none;
-    text-align: center;
-    background-color: white !important;
-  }
-  .inp-grp input::placeholder{
-      // color: red !important;
-      opacity: 0.5;
-    }
-  .txtColor{
-    color: #707070;
-  }
-  .txtBlue{
-    color: #0093e9;
-  }
-  .del-pad{
-    padding: 0.7rem 0.4rem;
-    
-  }
-
+.txtColor{
+  color: #707070;
+}
+.txtBlue{
+  color: #0093e9;
+}
+.del-pad{
+  padding: 0.7rem 0.4rem;
+  
+}
+ 
 
 /* .btn{
       width: 60px;

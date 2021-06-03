@@ -3,11 +3,10 @@ const WarehouseModel = require('../models/WarehouseModel');
 const ConsumerModel = require('../models/ConsumerModel');
 const InventoryModel = require('../models/InventoryModel');
 const OrganisationModel = require('../models/OrganisationModel');
-const CounterModel = require('../models/CounterModel');
-const { body, validationResult, oneOf, check } = require('express-validator');
-const { sanitizeBody } = require('express-validator');
-const uniqid = require('uniqid');
 const ConfigurationModel = require('../models/ConfigurationModel');
+const CounterModel = require('../models/CounterModel');
+const { body, validationResult} = require('express-validator');
+const { sanitizeBody } = require('express-validator');
 //helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
 const utility = require('../helpers/utility');
@@ -19,7 +18,7 @@ var base64Img = require('base64-img');
 const auth = require('../middlewares/jwt');
 const axios = require('axios');
 const dotenv = require('dotenv').config();
-const fs = require("fs");
+// const fs = require("fs");
 const moveFile = require("move-file");
 const blockchain_service_url = process.env.URL;
 const stream_name = process.env.INV_STREAM;
@@ -29,6 +28,11 @@ const logger = init.getLog();
 const EmailContent = require('../components/EmailContent');
 const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const phoneRgex = /^\d{12}$/;
+
+const { uploadFile } = require("../helpers/s3");
+const fs = require('fs');
+const util = require('util');
+const unlinkFile = util.promisify(fs.unlink);
 
 /**
  * Uniques email check
@@ -710,8 +714,8 @@ exports.userInfo = [
             postalAddress
           } = user;
           const org = await OrganisationModel.findOne({ id: organisationId }, 'name configuration_id');
-          const warehouse = await WarehouseModel.findOne({ id: warehouseId });
-          console.log(warehouse);
+          const warehouse = await EmployeeModel.findOne({ emailId }, { _id: 0, warehouseId: 1 });
+          const warehouseArray = await WarehouseModel.find({ id: { "$in": warehouse.warehouseId } })
           let user_data = {
             firstName,
             lastName,
@@ -726,13 +730,7 @@ exports.userInfo = [
             photoId,
             configuration_id: org.configuration_id,
             location: postalAddress,
-            warehouseAddress_country: warehouse.warehouseAddress.country,
-            warehouseAddress_zipcode: warehouse.warehouseAddress.zipCode,
-            warehouseAddress_city: warehouse.warehouseAddress.city,
-            warehouseAddress_firstline: warehouse.warehouseAddress.firstLine,
-            warehouseAddress_state: warehouse.warehouseAddress.state,
-            warehouseAddress_secondline: warehouse.warehouseAddress.secondLine,
-            title: warehouse.title
+            warehouses: warehouseArray
           };
           logger.log(
             'info',
@@ -1201,7 +1199,7 @@ exports.uploadImage = async function (req, res) {
       const {
         data
       } = result;
-      var filename;
+      // var filename;
       const {
         id,
         type,
@@ -1209,113 +1207,101 @@ exports.uploadImage = async function (req, res) {
         action
       } = req.query;
 
-      const incrementCounter = await CounterModel.update({
-        'counters.name': "employeeImage"
-      }, {
-        $inc: {
-          "counters.$.value": 1
-        }
-      })
+      //     const incrementCounter = await CounterModel.updateOne({
+      //       'counters.name': "employeeImage"
+      //     }, {
+      //       $inc: {
+      //         "counters.$.value": 1
+      //       }
+      //     })
 
-      const poCounter = await CounterModel.find({
-        "counters.name": "employeeImage"
-      }, {
-        "counters.name.$": 1
-      })
-      const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]))
+      //     const poCounter = await CounterModel.find({
+      //       "counters.name": "employeeImage"
+      //     }, {
+      //       "counters.name.$": 1
+      //     })
+      //     const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]))
+      //     try {
+      //       if (action == "STOREID")
+      //   filename = t.value + "-" + req.file.filename;
+      //       else if (action == "PROFILE")
+      //   filename = "PROFILE" + "-" +  data.id + ".png"
+      // else
+      //          filename = id + "-" + type + imageSide + "-" + t.format + t.value + ".png";	
+
+      // let dir = `/home/ubuntu/userimages`;
+      //       await moveFile(req.file.path, `${dir}/${filename}`);
+      //     } catch (e) {
+      //       console.log("Error in image upload", e);
+      //       res.status(403).json(e);
+      //     }
+
       try {
-        if (action == "STOREID")
-          filename = t.value + "-" + req.file.filename;
-        else if (action == "PROFILE")
-          filename = "PROFILE" + "-" + data.id + ".png"
-        else
-          filename = id + "-" + type + imageSide + "-" + t.format + t.value + ".png";
-
-        let dir = `/home/ubuntu/userimages`;
-        await moveFile(req.file.path, `${dir}/${filename}`);
-      } catch (e) {
-        console.log("Error in image upload", e);
-        res.status(403).json(e);
-      }
-
-      if (action == "KYCUPLOAD") {
-        const update = await EmployeeModel.updateOne({
-          $and: [{
-            "userDocuments.idNumber": parseInt(id)
+        const Upload = await uploadFile(req.file)
+        console.log(Upload)
+        await unlinkFile(req.file.path)
+        if (action == "KYCUPLOAD") {
+          const update = await EmployeeModel.findOneAndUpdate({
+            $and: [{
+              "userDocuments.idNumber": parseInt(id)
+            }, {
+              "userDocuments.idType": type
+            }]
           }, {
-            "userDocuments.idType": type
-          }]
-        }, {
-          "$push": {
-            "userDocuments.$.imageDetails": filename
+            "$push": {
+              "userDocuments.$.imageDetails": `${Upload.key}`
+            }
+          }, { new: true })
+          return apiResponse.successResponseWithData(res, "Image Uploaded", update);
+        } else if (action == "STOREID") {
+          const userData = {
+            "userDocuments": {
+              "imageDetails": [
+                `${Upload.key}`
+              ],
+              "idType": "STOREID",
+            }
           }
-        })
-        return res.send({
-          success: true,
-          data: "Image uploaded successfullly.!",
-          filename
-        })
-
-      } else if (action == "STOREID") {
-        const userData = {
-          "userDocuments": {
-            "imageDetails": [
-              filename
-            ],
-            "idType": "STOREID",
+          const employee = await EmployeeModel.findOneAndUpdate({
+            emailId: data.emailId
+          }, {
+            $push: userData
+          }, { new: true });
+          return apiResponse.successResponseWithData(res, "StoreID Image Uploaded", employee)
+        } else if (action == "KYCNEW") {
+          const userData = {
+            "userDocuments": {
+              "imageDetails": [
+                `${Upload.key}`
+              ],
+              "idType": type,
+              "idNumber": parseInt(id),
+              "approvalStatus": "NOTAPPROVED"
+            }
           }
+          const employee = await EmployeeModel.findOneAndUpdate({
+            emailId: data.emailId
+          }, {
+            $push: userData
+          }, { new: true });
+          return apiResponse.successResponseWithData(res, "KYC Image Uploaded", employee)
+        } else if (action == "PROFILE") {
+          const employeeUpdate = await EmployeeModel.findOneAndUpdate({
+            emailId: data.emailId
+          }, {
+            $set: { "photoId": `/usermanagement/api/auth/images/${Upload.key}` }
+          }, { new: true });
+          return apiResponse.successResponseWithData(res, "Profile Image Uploaded ", employeeUpdate)
+        } else {
+          return apiResponse.ErrorResponse(res, "Please check the type action you want to perfrom STOREID/KYCNEW/KYCUPLOAD ")
         }
-
-        const employee = await EmployeeModel.updateOne({
-          emailId: data.emailId
-        }, {
-          $push: userData
-        });
-        return res.send({
-          success: true,
-          data: "Uploaded successfully",
-          filename
-        })
-      } else if (action == "KYCNEW") {
-        const userData = {
-          "userDocuments": {
-            "imageDetails": [
-              filename
-            ],
-            "idType": type,
-            "idNumber": parseInt(id),
-            "approvalStatus": "NOTAPPROVED"
-          }
-        }
-        const employee = await EmployeeModel.updateOne({
-          emailId: data.emailId
-        }, {
-          $push: userData
-        });
-        return res.send({
-          success: true,
-          data: "Uploaded successfully",
-          filename
-        })
-      } else if (action == "PROFILE") {
-        const employee = await EmployeeModel.updateOne({
-          emailId: data.emailId
-        }, {
-          $set: { "photoId": "/images/" + filename }
-        });
-        return res.send({
-          success: true,
-          data: "Uploaded successfully",
-          filename
-        })
-      } else {
-        return res.send({
-          success: false,
-          data: "Please check the type action you want to perfrom STOREID/KYCNEW/KYCUPLOAD.!"
-        })
+      }
+      catch (err) {
+        console.log(err);
+        return apiResponse.ErrorResponse(res, err);
       }
     } else {
-      res.json(result);
+      return apiResponse.ErrorResponse(res, result)
     }
   });
 };
@@ -1664,14 +1650,57 @@ exports.getAllUsersByOrganisation = [
 
 
 exports.getOrganizationsByType = [
-
+//without auth for new user register 
   async (req, res) => {
     try {
       const organisationId = req.query.id;
-      const typeId = req.query.typeid;
-      const orgtype = req.query.type;
-      //const organisations= await OrganisationModel.find({$or:[{'id':organisationId},{'typeId':typeId}]},'name')
-      const organisations = await OrganisationModel.find({$or:[{'typeId': typeId },{'type':orgtype},{'id' :organisationId}]},'id name ', { projection: { _id: 0, id: 1,name: 1} });
+      const organisations = await ConfigurationModel.find({ id: organisationId }, 'organisationTypes.id organisationTypes.name')
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        organisations
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getOrganizationsByTypeForAbInBev = [
+
+  async (req, res) => {
+    try {
+      const filters = req.query;
+      let matchCondition = {};
+      matchCondition.status = 'ACTIVE';
+      if (filters.status && filters.status !== '') {
+        matchCondition.status = filters.status;
+      }
+      if (filters.state && filters.state !== '') {
+        matchCondition.state = filters.state;
+      }
+      if (filters.district && filters.district !== '') {
+        matchCondition.district = filters.district;
+      }
+
+      if (filters.type === "SUPPLIER") {
+        matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }];
+      } else {
+        matchCondition.type = filters.type;
+      }
+      console.log(matchCondition);
+      const organisations = await OrganisationModel.aggregate([
+        {
+          $match: matchCondition,
+        },
+        {
+          $project: {
+            id: 1,
+            name: 1,
+            type: 1
+          }
+        }
+      ]);
       return apiResponse.successResponseWithData(
         res,
         "Operation success",
@@ -1721,7 +1750,7 @@ exports.getwarehouseinfo = [
 ];
 
 exports.getOrganizationsTypewithauth = [
-  auth,
+   auth, 
   async (req, res) => {
     try {
       const organisationId = req.query.id;

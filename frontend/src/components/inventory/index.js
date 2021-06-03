@@ -79,7 +79,6 @@ const Inventory = props => {
       const result = await getProductList();
       setProductsList(result.message);
       const resultAnalytics = await getInventoryAnalytics();
-      console.log(resultAnalytics);
       
       setInventoryAnalytics(resultAnalytics.data.inventory);
       setInventoriesCount(
@@ -153,7 +152,7 @@ const Inventory = props => {
         <h1 className="breadcrumb">INVENTORY </h1>
         <div className="d-flex">
           <Link to="/newinventory">
-            <button className="btn btn-yellow">
+            <button className="btn btn-yellow mt-2">
               <img src={Add} width="13" height="13" className="mr-2" />
               <span>Add Inventory</span>
             </button>
@@ -162,18 +161,21 @@ const Inventory = props => {
       </div>
       <div className="row mb-4">
         <div className="col">
-          <div className="panel" style={{height:'14vh'}}>
-            <div className="picture truck-bg">
-              <img src={TotalInventoryAdded} alt="truck" />
+          <Link to="/productcategory">
+            <div className="panel" style={{height:'14vh'}}>
+              <div className="picture truck-bg">
+                <img src={TotalInventoryAdded} alt="truck"/>
+              </div>
+              <div className="d-flex flex-column">
+                <div className="title truck-text">Total Product Category</div>
+                
+                <div className="count truck-text">{inventoriesCount} {inventoryAnalytics.totalProductCategory}</div>
+              </div>
             </div>
-            <div className="d-flex flex-column">
-              <div className="title truck-text">Total Product Category</div>
-              
-              <div className="count truck-text">{inventoriesCount} {inventoryAnalytics.totalProductCategory}</div>
-            </div>
-          </div>
+          </Link>
         </div>
         <div className="col">
+          <Link to="/productoutofstock">
           <div className="panel" style={{height:'14vh'}}>
             <div className="picture sent-bg">
               <img src={currentinventory} alt="truck" />
@@ -182,9 +184,12 @@ const Inventory = props => {
               <div className="title sent-text">Product Out Of Stock</div>
               <div className="sent-text count">{currentInventoriesCount}{inventoryAnalytics.stockOut}</div>
               </div>
-              </div>       
+            </div>
+          </Link>      
               </div>
-          <div className="col">
+          
+        <div className="col">
+          <Link to="/batchnearexpiry/product">
           <div className="panel" style={{height:'14vh'}}>
             <div className="picture recived-bg">
               <img src={Expiration} alt="truck" />
@@ -258,8 +263,10 @@ const Inventory = props => {
               </div>
             </div>
           </div>
+        </Link>
         </div>
         <div className="col">
+          <Link to="/batchexpired">
           <div className="panel" style={{height:'14vh'}}>
             <div className="picture transit-bg">
               <img src={TotalVaccineExpired} alt="truck" />
@@ -331,10 +338,12 @@ const Inventory = props => {
               <div className="transit-text count">{inventoryExpired}</div>
             </div>
           </div>
+          </Link>
         </div>
       </div>
       <div className="full-width-ribben">
-        <TableFilter data={headers} inventoryFilterData={props.inventoryFilterData} setInventoryProductNameFilterOnSelect={setInventoryProductNameFilterOnSelect} setInventoryManufacturerFilterOnSelect={setInventoryManufacturerFilterOnSelect}  setInventoryStatusFilterOnSelect={setInventoryStatusFilterOnSelect} setDateFilterOnSelect={setDateFilterOnSelect} setInventoryProductCategoryFilterOnSelect={setInventoryProductCategoryFilterOnSelect} fb="60%" />
+        <TableFilter data={headers} inventoryFilterData={props.inventoryFilterData} setInventoryProductNameFilterOnSelect={setInventoryProductNameFilterOnSelect} setInventoryManufacturerFilterOnSelect={setInventoryManufacturerFilterOnSelect}  setInventoryStatusFilterOnSelect={setInventoryStatusFilterOnSelect} setDateFilterOnSelect={setDateFilterOnSelect} setInventoryProductCategoryFilterOnSelect={setInventoryProductCategoryFilterOnSelect} 
+        fb="60%"/>
       </div>
       <div className="ribben-space">
         <div className="row no-gutter">

@@ -3,7 +3,7 @@ import Track from '../../components/track';
 import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
 import {useDispatch} from "react-redux";
-import { chainOfCustody, chainOfCustodyTrack } from "../../actions/shipmentActions";
+import { chainOfCustody, chainOfCustodyTrack, getShipmentJourney } from "../../actions/shipmentActions";
 import { turnOff, turnOn } from '../../actions/spinnerActions';
 
 const TrackContainer = props => {
@@ -11,13 +11,27 @@ const TrackContainer = props => {
   const [poChainOfCustodyData, setPoChainOfCustodyData] = useState([]);
   const [shippmentChainOfCustodyData, setShippmentChainOfCustodyData] = useState([]);
   
+  // const searchData = async (id) => {
+  //   dispatch(turnOn());
+  //   const result = await chainOfCustody(id);
+  //   dispatch(turnOff());
+  //   if (result.status == 200) {
+  //     setPoChainOfCustodyData(result.data.data.poChainOfCustody);
+  //     setShippmentChainOfCustodyData(result.data.data.shipmentChainOfCustody);
+  //   }else{
+  //     setPoChainOfCustodyData([]);
+  //     setShippmentChainOfCustodyData([]);
+  //   }
+  // }
+
   const searchData = async (id) => {
     dispatch(turnOn());
-    const result = await chainOfCustody(id);
+    const result = await getShipmentJourney(id);
+    
     dispatch(turnOff());
     if (result.status == 200) {
-      setPoChainOfCustodyData(result.data.data.poChainOfCustody);
-      setShippmentChainOfCustodyData(result.data.data.shipmentChainOfCustody);
+      setPoChainOfCustodyData(result.data.data.poDetails);
+      setShippmentChainOfCustodyData(result.data.data.inwardShipmentsArray.concat([result.data.data.trackedShipment]).concat(result.data.data.outwardShipmentsArray));
     }else{
       setPoChainOfCustodyData([]);
       setShippmentChainOfCustodyData([]);
