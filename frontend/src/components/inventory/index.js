@@ -75,7 +75,6 @@ const Inventory = props => {
       const result = await getProductList();
       setProductsList(result.message);
       const resultAnalytics = await getInventoryAnalytics();
-      console.log(resultAnalytics);
       
       setInventoryAnalytics(resultAnalytics.data.inventory);
       setInventoriesCount(
