@@ -286,23 +286,19 @@ exports.createShipment = [
       });
       const orgId = empData.organisationId;
       const orgName = empData.name;
-      console.log(++i);
       const orgData = await OrganisationModel.findOne({ id: orgId });
       const address = orgData.postalAddress;
       const confId = orgData.configuration_id;
       const confData = await ConfigurationModel.findOne({ id: confId });
       const process = confData.process;
-      console.log(++i);
       const supplierID = req.body.supplier.id;
       const supplierOrgData = await OrganisationModel.findOne({
         id: req.body.supplier.id,
       });
-      console.log(++i);
 
       const receiverOrgData = await OrganisationModel.findOne({
         id: req.body.receiver.id,
       });
-      console.log(++i);
 
       const supplierName = supplierOrgData.name;
       const supplierAddress = supplierOrgData.postalAddress;
@@ -517,6 +513,42 @@ exports.receiveShipment = [
       const data = req.body;
       const shipmentID = data.id;
       const shipmentInfo = await ShipmentModel.find({ id: shipmentID });
+      
+
+      const email = req.user.emailId;
+      const user_id = req.user.id;
+      const empData = await EmployeeModel.findOne({
+        emailId: req.user.emailId,
+      });
+      const orgId = empData.organisationId;
+      const orgName = empData.name;
+      const orgData = await OrganisationModel.findOne({ id: orgId });
+      const address = orgData.postalAddress;
+      const confId = orgData.configuration_id;
+      const confData = await ConfigurationModel.findOne({ id: confId });
+      const supplierID = req.body.supplier.id;
+      const receiverId = req.body.receiver.id;
+
+      if(supplierID) {
+      const supplierOrgData = await OrganisationModel.findOne({
+        id: req.body.supplier.id,
+      });
+      const supplierName = supplierOrgData.name;
+      const supplierAddress = supplierOrgData.postalAddress;
+    }
+
+    if(receiverId){
+      const receiverOrgData = await OrganisationModel.findOne({
+        id: req.body.receiver.id,
+      });
+      const receiverName = receiverOrgData.name;
+      const receiverAddress = receiverOrgData.postalAddress;
+    }
+
+  
+
+
+
       var actuallyShippedQuantity = 0;
       var productNumber = -1;
       if (shipmentInfo != null) {
@@ -646,46 +678,76 @@ exports.receiveShipment = [
         //}, {
         //  status: "RECEIVED"
         //}, );
-        //   event_data = {
-        //     "eventID": "ev0000"+  Math.random().toString(36).slice(2),
-        //     "eventTime": new Date().toISOString(),
-        //     "eventType": {
-        //         "primary": "CREATE",
-        //         "description": "SHIPMENT ALERTS"
-        //     },
-        //     "actor": {
-        //         "actorid": "userid1",
-        //         "actoruserid": "ashwini@statwig.com"
-        //     },
-        //     "stackholders": {
-        //         "ca": {
-        //             "id": "org001",
-        //             "name": "Statwig Pvt. Ltd.",
-        //             "address": "ca_address_object"
-        //         },
-        //         "actororg": {
-        //             "id": "org002",
-        //             "name": "Appollo Hospitals Jublihills",
-        //             "address": "actororg_address_object"
-        //         },
-        //         "secondorg": {
-        //             "id": "org003",
-        //             "name": "Med Plus Gachibowli",
-        //             "address": "secondorg_address_object"
-        //         }
-        //     },
-        //     "payload": {
-        //         "data": {
-        //             "abc": 123
-        //         }
-        //     }
-        // }
-        // async function compute(event_data) {
-        //     result = await logEvent(event_data)
-        //     return result
-        // }
 
-        // compute(event_data).then((response) => console.log(response))
+        var datee = new Date();
+        datee = datee.toISOString();
+        var evid = Math.random().toString(36).slice(2);
+        let event_data = {
+          eventID: null,
+          eventTime: null,
+          eventType: {
+            primary: "CREATE",
+            description: "SHIPMENT_CREATION",
+          },
+          actor: {
+            actorid: null,
+            actoruserid: null,
+          },
+          stackholders: {
+            ca: {
+              id: null,
+              name: null,
+              address: null,
+            },
+            actororg: {
+              id: null,
+              name: null,
+              address: null,
+            },
+            secondorg: {
+              id: null,
+              name: null,
+              address: null,
+            },
+          },
+          payload: {
+            data: {
+              abc: 123,
+            },
+          },
+        };
+        event_data.eventID = "ev0000" + evid;
+        event_data.eventTime = datee;
+        event_data.eventType.primary = "RECEIVE";
+        event_data.eventType.description = "SHIPMENT";
+        event_data.actor.actorid = user_id || "null";
+        event_data.actor.actoruserid = email || "null";
+        event_data.stackholders.actororg.id = orgId || "null";
+        event_data.stackholders.actororg.name = orgName || "null";
+        event_data.stackholders.actororg.address = address || "null";
+        event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+        event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+        event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
+        if (orgId === supplierID) {
+          event_data.stackholders.secondorg.id = receiverId || "null";
+          event_data.stackholders.secondorg.name = receiverName || "null";
+          event_data.stackholders.secondorg.address = receiverAddress || "null";
+        } else {
+          event_data.stackholders.secondorg.id = supplierID || "null";
+          event_data.stackholders.secondorg.name = supplierName || "null";
+          event_data.stackholders.secondorg.address = supplierAddress || "null";
+        }
+
+        event_data.payload.data = data;
+        console.log(event_data);
+        async function compute(event_data) {
+          resultt = await logEvent(event_data);
+          return resultt;
+        }
+        compute(event_data).then((response) => {
+          console.log(response);
+        });
+
         return apiResponse.successResponseWithData(
           res,
           "Shipment Received",

@@ -144,7 +144,7 @@ const Analytics = (props) => {
                 <label className="radioButton" for="sv">
                   <input className="radioInput" type="radio" name="view" value="sv" id="sv" value={selectedViewCode === 'INVENTORY_DASHBOARD' ? "INVENTORY_SKU" : 'SKU_VIEW'} onChange={changeView} defaultChecked={filters.view === 'SKU_VIEW' || filters.view === 'INVENTORY_SKU'} /> SKU View
                     </label>
-                {selectedViewCode !== 'INVENTORY_DASHBOARD' && 
+                {selectedViewCode !== 'INVENTORY_DASHBOARD' && selectedViewCode !== 'INVENTORY_SKU' && 
                   <>
                 <label className="radioButton" for="suv">
                   <input className="radioInput" type="radio" name="view" value="suv" id="suv" value="SUPPLIER_VIEW" onChange={changeView} defaultChecked={filters.view === 'SUPPLIER_VIEW'} /> Supplier View

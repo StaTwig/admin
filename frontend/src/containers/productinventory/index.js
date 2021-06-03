@@ -23,7 +23,6 @@ const ProductInventoryContainer = props => {
     }
     fetchData();
   }, []);
-
   return (
     <div className="container-fluid p-0">
       <Header {...props} />

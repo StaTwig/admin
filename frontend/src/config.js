@@ -123,7 +123,8 @@ export function config() {
       getWarehouseById: `${LOCAL_SERVER_URL_SHIPMENT}/usermanagement/api/auth/getwarehouseinfo?id=`,
       addPOsFromExcel:`${LOCAL_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-      getTransactions: `${LOCAL_SERVER_URL_EVENT}/eventmanagement/api/event/getAllEventsWithFilter`
+      getTransactions: `${LOCAL_SERVER_URL_EVENT}/eventmanagement/api/event/getAllEventsWithFilter`,
+      getTransactionFilterList: `${LOCAL_SERVER_URL_EVENT}/eventmanagement/api/event/fetchProductDetailsList`
           },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
@@ -214,7 +215,8 @@ export function config() {
        fetchSupplierAndReceiverListUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
        addPOsFromExcel:`${DEV_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
        getOrganizationsTypewithauth:`${DEV_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-       getTransactions: `${DEV_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
+       getTransactions: `${DEV_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
+       getTransactionFilterList: `${DEV_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`
       },
     stable: {
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
@@ -306,7 +308,8 @@ export function config() {
        fetchSupplierAndReceiverListUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
        addPOsFromExcel:`${STABLE_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
        getOrganizationsTypewithauth:`${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-       getTransactions: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/getAllEventsWithFilter`
+       getTransactions: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/getAllEventsWithFilter`,
+       getTransactionFilterList: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/fetchProductDetailsList`
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -401,7 +404,8 @@ export function config() {
       addWarehouse: `${TEST_SERVER_URL}/usermanagement/api/auth/addWarehouse`,
       addPOsFromExcel:`${TEST_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${TEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-      getTransactions: `${TEST_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
+      getTransactions: `${TEST_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
+      getTransactionFilterList: `${TEST_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`
 },
     demo: {
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
@@ -490,7 +494,8 @@ export function config() {
       getWarehouseById: `${DEMO_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
       addPOsFromExcel:`${DEMO_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${DEMO_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-      getTransactions: `${DEMO_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
+      getTransactions: `${DEMO_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
+      getTransactionFilterList: `${DEMO_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`
     },
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
@@ -578,7 +583,8 @@ export function config() {
       getWarehouseById: `${PROD_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
       addPOsFromExcel:`${PROD_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${PROD_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-      getTransactions: `${PROD_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
+      getTransactions: `${PROD_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
+      getTransactionFilterList: `${PROD_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`
     },
     
     uniceftest: {
@@ -668,7 +674,8 @@ export function config() {
       getWarehouseById: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
       addPOsFromExcel:`${UNICEFTEST_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-      getTransactions: `${UNICEFTEST_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
+      getTransactions: `${UNICEFTEST_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
+      getTransactionFilterList: `${UNICEFTEST_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`
 
     },
   };

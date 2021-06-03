@@ -12,24 +12,48 @@ const ProductInventory = props => {
   const [data, setData] = useState([]);
   const [enable, setEnable] = useState(true);
   const { products, inventories } = props;
+  console.log(products,"products");
+  console.log(inventories,"inventories");
   const categoryArray = products.map(
         product => product.type,
   ).filter((value, index, self) => self.indexOf(value) === index);
-
   useEffect(() => {
-    if (props.match.params?.category)
-      setData(inventories.filter(r => r.products.type == props.match.params?.category));
-    else {
-      setEnable(false);
-      setData(inventories.filter(r => r.inventoryDetails.quantity <= 0));
+    if (props.match.params?.category){
+      let prodArray = [];
+      inventories.map((val)=>{
+        if(val.payloadData.data.products){
+            val.payloadData.data.products.map((productRecord)=>{
+                if(productRecord.type==props.match.params?.category){
+                  prodArray.push(productRecord);
+                }
+            })
+        }
+        
+      });
+      setData(prodArray);
     }
+    // else {
+    //   setEnable(false);
+    //   setData(inventories.filter(r => r.inventoryQuantity <= 0));
+    // }
   }, [props]);
 
   const changeType = (cat) => {
     setCategory(cat);
-    setData(inventories.filter(r => r.products.type == cat));
-  }
-  
+      let prodArray = [];
+      inventories.map((val)=>{
+        if(val.payloadData.data.products){
+            val.payloadData.data.products.map((productRecord)=>{
+                if(productRecord.type==cat){
+                  prodArray.push(productRecord);
+                }
+            })
+        }
+        
+      });
+      setData(prodArray);
+    }
+    // setData(inventories.filter(r => r.payloadData.data.products[0].type == cat));
   return (
     <div className="productinventory">
       <div className="d-flex justify-content-between">
@@ -81,10 +105,10 @@ const ProductInventory = props => {
         <div className="ribbon-space col-12">
           {data.map((inv, i) => 
             <div key={i} className="col-12 p-3 mb-3 rounded row bg-white shadow">
-              <div className="col-3 txt txtBlue">{inv.products.name}</div>
-              <div className="col-3 txt ">{inv.products.type}</div>
-              <div className="col-3 txt ">{inv.products.manufacturer}</div>
-              <div className="col-3 txt ">{inv.inventoryDetails.quantity}</div>
+              <div className="col-3 txt txtBlue">{inv.name?inv.name:"N/A"}</div>
+              <div className="col-3 txt ">{inv.type ? inv.type:"N/A"}</div>
+              <div className="col-3 txt ">{inv.manufacturer?inv.manufacturer:"N/A"}</div>
+              <div className="col-3 txt ">{inv.quantity?inv.quantity:"N/A"}</div>
             </div>
           )}
         </div>

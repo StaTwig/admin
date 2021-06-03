@@ -95,8 +95,7 @@ const NewOrder = (props) => {
                                         type: item.type
                                       };
                                     }));
-
-      const orgType = await getOrganizationsByTypes(profile.configuration_id);
+      const orgType = await getOrganizationsByTypes("CONF000");
       setOrgTypes(orgType.data.length > 0 ? orgType.data[0].organisationTypes.map(item => {
                                       return {
                                         value: item.id,

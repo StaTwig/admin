@@ -1,6 +1,7 @@
 /* eslint-disable linebreak-style */
 const AnalyticsModel = require("../models/AnalyticsModel");
 const ProductSKUModel = require("../models/ProductSKUModel");
+const ShipmentModel = require("../models/ShipmentModel");
 const auth = require("../middlewares/jwt");
 const OrganisationModel = require("../models/OrganisationModel");
 //helper file to prepare responses.
@@ -464,10 +465,11 @@ exports.getStatsByBrand = [
 				},
 				{
 					$group: {
-						_id: '$manufacturer',
-						products: {
-							$addToSet: '$$ROOT'
-						}
+						_id: '$productId',
+						sales : { $sum: 1 },
+						targetSales : { $sum: 1 },
+						products: {$addToSet: '$$ROOT'}
+						
 					}
 				}
 
@@ -476,12 +478,25 @@ exports.getStatsByBrand = [
 			for (let analytic of Analytics) {
 
 				let products = analytic.products;
+				let prods = [];
+				let arrIds = [];
+				let salesSum = 0;
+				let targetSum = 0;
 				for (let product of products) {
-					product['returnRate'] = (parseInt(product.returns) / parseInt(product.sales)) * 100;
-					product['returnRatePrev'] = await calculatePrevReturnRates(filters, product);
+					if (arrIds.indexOf(product.externaId) === -1) {
+						salesSum = 0;
+						targetSum = 0;
+						product['returnRate'] = (parseInt(product.returns) / parseInt(product.sales)) * 100;
+						product['returnRatePrev'] = await calculatePrevReturnRates(filters, product);
+						arrIds.push(product.externaId);
+						prods.push(product);
+					}
+					salesSum+= parseInt(product.sales);
+					targetSum+= parseInt(product.targetSales);
 				}
-				analytic.products = products;
-
+				prods[0]['sales'] = salesSum;
+				prods[0]['targetSales'] = targetSum;
+				analytic.products = prods;
 			}
 
 			return apiResponse.successResponseWithData(
