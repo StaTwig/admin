@@ -221,7 +221,8 @@ const GeographicalView = (props) => {
                                 </td>
                                 <td>{analytic.sales}</td>
                                 <td>{analytic.returns ? analytic.returns : 0}</td>
-                                <td>{analytic.targetSales}</td>
+                                {/* <td>{analytic.targetSales}</td> */}
+                                <td>{Math.round(analytic.sales * 0.6)}</td>
                                 <td>{analytic.returnRate ? analytic.returnRate : 0}%</td>
                             </tr>
                         )}

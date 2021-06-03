@@ -161,13 +161,13 @@ const Analytics = (props) => {
                   <option>Select SKU</option>
                   {props.SKUs?.map((sku) => {
                     let enable = true;
-                    if (!skuArr.includes(sku.externalId)) 
-                      skuArr.push(sku.externalId);
+                    if (!skuArr.includes(sku.id)) 
+                      skuArr.push(sku.id);
                     else 
                       enable = false;
                     
                     return ( enable ? 
-                      <option value={sku.externalId}>{sku.name}</option> : ''
+                      <option value={sku.id}>{sku.name}</option> : ''
                     )
                   }
                   )
@@ -183,7 +183,7 @@ const Analytics = (props) => {
                 </select>
                 </>
                 }
-                {selectedViewCode == 'DETAILED_GEO_VIEW' &&
+                {(selectedViewCode == 'DETAILED_GEO_VIEW' || selectedViewCode == 'ANNUALREPORT_DASHBOARD') &&
                   <>
                   <label className="filterSubHeading mt-3">Time Period</label>
                   <div class="btn-group filterButton mt-2 mb-4">
@@ -205,7 +205,7 @@ const Analytics = (props) => {
                   </div>
                   </>
                 }
-                {(isActive == 'by_monthly' || isActive == 'by_yearly' || isActive == 'by_quarterly') &&
+                {(selectedViewCode == 'DETAILED_GEO_VIEW' || selectedViewCode == 'ANNUALREPORT_DASHBOARD') && (isActive == 'by_monthly' || isActive == 'by_yearly' || isActive == 'by_quarterly') &&
                   <div className="row">
                     <div className="col-md-5">
                       <select
@@ -239,7 +239,7 @@ const Analytics = (props) => {
                         </select>
                       </div>
                       }
-                    {isActive == 'by_quarterly' &&
+                    {(selectedViewCode == 'DETAILED_GEO_VIEW' || selectedViewCode == 'ANNUALREPORT_DASHBOARD') && isActive == 'by_quarterly' &&
                       <div className="col-md-5">
                         <select
                           className="filterSelect mt-2"

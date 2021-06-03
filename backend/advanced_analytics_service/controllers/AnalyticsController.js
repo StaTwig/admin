@@ -465,37 +465,54 @@ exports.getStatsByBrand = [
 				},
 				{
 					$group: {
-						_id: '$productId',
+						_id: '$manufacturer',
 						sales : { $sum: 1 },
 						targetSales : { $sum: 1 },
 						products: {$addToSet: '$$ROOT'}
 						
 					}
-				}
+				},
+				{$sort: { "products.productId": 1 } }
 
 			]);
 			// console.log(Analytics);
 			for (let analytic of Analytics) {
 
-				let products = analytic.products;
+				let products = analytic.products.sort(function (a, b) {
+									return a.productId - b.productId;
+								});
 				let prods = [];
 				let arrIds = [];
 				let salesSum = 0;
 				let targetSum = 0;
-				for (let product of products) {
-					if (arrIds.indexOf(product.externaId) === -1) {
-						salesSum = 0;
-						targetSum = 0;
-						product['returnRate'] = (parseInt(product.returns) / parseInt(product.sales)) * 100;
-						product['returnRatePrev'] = await calculatePrevReturnRates(filters, product);
-						arrIds.push(product.externaId);
-						prods.push(product);
+				let prevProd = '';
+				
+				for (const [index, product] of products.entries()) {
+					if (prevProd == '')
+						prevProd = product.productId;
+					
+					if (prevProd !== product.productId || index === products.length - 1) {
+						if (index === products.length - 1) {
+							salesSum+= parseInt(product.sales);
+							targetSum += parseInt(product.targetSales);
+						}
+							
+						prevProd = product.productId;
+						if (arrIds.indexOf(product.productId) === -1) {
+							product['returnRate'] = (parseInt(product.returns) / parseInt(product.sales)) * 100;
+							product['returnRatePrev'] = await calculatePrevReturnRates(filters, product);
+							arrIds.push(product.productId);
+							
+							product['sales'] = salesSum;
+							product['targetSales'] = targetSum;
+							prods.push(product);
+							salesSum = 0;
+							targetSum = 0;
+						}
 					}
 					salesSum+= parseInt(product.sales);
-					targetSum+= parseInt(product.targetSales);
+					targetSum += parseInt(product.targetSales);
 				}
-				prods[0]['sales'] = salesSum;
-				prods[0]['targetSales'] = targetSum;
 				analytic.products = prods;
 			}
 
