@@ -132,7 +132,6 @@ const Inventory = (props) => {
       _filters.sku = '';
       setSelectedVendorType('ALL_VENDORS');
     }
-    setSelectedVendor(null);
     setFilters(_filters);
     props.applyFilters(_filters);
   };
@@ -207,7 +206,7 @@ const Inventory = (props) => {
               </div>
               {selectedVendor ? (
                 <>
-                  <h3 className="productsChartTitle">Sale's Report</h3>
+                  <h3>Sale's Report</h3>
                 </>
               ) : (
                 <div className="btn-group mainButtonFilter">
@@ -232,59 +231,6 @@ const Inventory = (props) => {
                     Vendor
                   </a>
                 </div>
-              )}
-
-              {selectedVendor ? (
-                <div className="productDetailedView">
-                  <div className="row">
-                    <div className="col-lg-10 col-md-10 col-sm-12">
-                      <div className="productDetailCard">
-                        <div className="productcard">
-                          <div className="row">
-                            <div className="col-lg-6 col-md-6 col-sm-12">
-                              <div className="productSection mb-2">
-                                <div className="info">
-                                  <div className="name">
-                                    {selectedVendor.organisation &&
-                                    selectedVendor.organisation.name
-                                      ? selectedVendor.organisation.name
-                                      : ''}
-                                  </div>
-                                  <span className="productText">
-                                    Vendor ID:{' '}
-                                    {selectedVendor.organisation &&
-                                    selectedVendor.organisation.id
-                                      ? selectedVendor.organisation.id
-                                      : ''}
-                                  </span>
-                                  <span className="productText">
-                                    Mobile Number:{' '}
-                                    {selectedVendor.organisation &&
-                                    selectedVendor.organisation.id
-                                      ? selectedVendor.organisation.id
-                                      : ''}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="col-lg-6 col-md-6 col-sm-12">
-                              <span className="productText">
-                                Total Stock: {' ' + selectedVendor.totalStock}
-                              </span>
-                              <span className="productText">Address:</span>
-                              {selectedVendor.organisation &&
-                              selectedVendor.organisation.postalAddress
-                                ? selectedVendor.organisation.postalAddress
-                                : ''}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                ''
               )}
 
               <div className="inventoryDetails">
@@ -329,126 +275,177 @@ const Inventory = (props) => {
               </div>
             </div>
             <div className="col-md-3 rightSideMenu pt-5  px-3">
-              <div className="filterSection">
-                <div className="filterHeader">
-                  <img src={filterIcon} className="filterIcon" /> FILTERS
-                </div>
-                {filters.inventoryType === 'VENDOR' ? (
-                  <>
-                    <label className="filterSubHeading mt-3">
-                      Vendor Type{' '}
-                    </label>
-                    <div className="btn-group mainButtonFilter">
-                      <a
-                        className={`btn ${
-                          selectedVendorType === 'ALL_VENDORS' ? 'active' : ''
-                        }`}
-                        onClick={() => {
-                          onVendorTypeChange('ALL_VENDORS');
-                        }}
-                      >
-                        All
-                      </a>
-                      <a
-                        className={`btn ${
-                          selectedVendorType === 'S1' ? 'active' : ''
-                        }`}
-                        onClick={() => {
-                          onVendorTypeChange('S1');
-                        }}
-                      >
-                        S1
-                      </a>
-                      <a
-                        className={`btn ${
-                          selectedVendorType === 'S2' ? 'active' : ''
-                        }`}
-                        onClick={() => {
-                          onVendorTypeChange('S2');
-                        }}
-                      >
-                        S2
-                      </a>
+              {selectedVendor ? (
+                <>
+                  <h1>
+                    <span className="labelHead">OrgName:</span>{' '}
+                    {selectedVendor.organisation &&
+                    selectedVendor.organisation.name
+                      ? selectedVendor.organisation.name
+                      : ''}
+                  </h1>
+                  <div>
+                    <span className="labelHead">Vendor ID:</span>
+                    <span>
+                      {selectedVendor.organisation &&
+                      selectedVendor.organisation.id
+                        ? selectedVendor.organisation.id
+                        : ''}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="labelHead">Mobile No:</span>
+                    <span>
+                      {selectedVendor.organisation &&
+                      selectedVendor.organisation.id
+                        ? selectedVendor.organisation.id
+                        : ''}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="labelHead">Total Stock:</span>
+                    <span>{selectedVendor.totalStock}</span>
+                  </div>
+                  <div>
+                    <span className="labelHead">Address:</span>
+                    <span>
+                      {selectedVendor.organisation &&
+                      selectedVendor.organisation.postalAddress
+                        ? selectedVendor.organisation.postalAddress
+                        : ''}
+                    </span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="filterSection">
+                    <div className="filterHeader">
+                      <img src={filterIcon} className="filterIcon" /> FILTERS
                     </div>
-                  </>
-                ) : (
-                  ''
-                )}
-                <label className="filterSubHeading mt-3"> State </label>
-                <select
-                  className="filterSelect mt-2"
-                  value={filters.state}
-                  onChange={onStateSelection}
-                >
-                  <option value="">Select State</option>
-                  {states.map((state, index) => {
-                    return (
-                      <option key={index} value={state}>
-                        {state}
-                      </option>
-                    );
-                  })}
-                </select>
+                    {filters.inventoryType === 'VENDOR' ? (
+                      <>
+                        <label className="filterSubHeading mt-3">
+                          Vendor Type{' '}
+                        </label>
+                        <div className="btn-group mainButtonFilter">
+                          <a
+                            className={`btn ${
+                              selectedVendorType === 'ALL_VENDORS'
+                                ? 'active'
+                                : ''
+                            }`}
+                            onClick={() => {
+                              onVendorTypeChange('ALL_VENDORS');
+                            }}
+                          >
+                            All
+                          </a>
+                          <a
+                            className={`btn ${
+                              selectedVendorType === 'S1' ? 'active' : ''
+                            }`}
+                            onClick={() => {
+                              onVendorTypeChange('S1');
+                            }}
+                          >
+                            S1
+                          </a>
+                          <a
+                            className={`btn ${
+                              selectedVendorType === 'S2' ? 'active' : ''
+                            }`}
+                            onClick={() => {
+                              onVendorTypeChange('S2');
+                            }}
+                          >
+                            S2
+                          </a>
+                        </div>
+                      </>
+                    ) : (
+                      ''
+                    )}
+                    <label className="filterSubHeading mt-3"> State </label>
+                    <select
+                      className="filterSelect mt-2"
+                      value={filters.state}
+                      onChange={onStateSelection}
+                    >
+                      <option value="">Select State</option>
+                      {states.map((state, index) => {
+                        return (
+                          <option key={index} value={state}>
+                            {state}
+                          </option>
+                        );
+                      })}
+                    </select>
 
-                <label className="filterSubHeading mt-3"> District </label>
-                <select
-                  className="filterSelect mt-2"
-                  value={filters.district}
-                  onChange={onDistrictSelection}
-                  disabled={!filterVisibility.district}
-                >
-                  <option value="">Select District</option>
-                  {districts.map((district, index) => {
-                    return (
-                      <option key={index} value={district}>
-                        {district}
+                    <label className="filterSubHeading mt-3"> District </label>
+                    <select
+                      className="filterSelect mt-2"
+                      value={filters.district}
+                      onChange={onDistrictSelection}
+                      disabled={!filterVisibility.district}
+                    >
+                      <option value="">Select District</option>
+                      {districts.map((district, index) => {
+                        return (
+                          <option key={index} value={district}>
+                            {district}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <label className="filterSubHeading mt-3">
+                      {filters.inventoryType === 'BREWERY'
+                        ? 'Brewery'
+                        : 'Vendor'}{' '}
+                    </label>
+                    <select
+                      className="filterSelect mt-2"
+                      disabled={!filterVisibility.organization}
+                      value={filters.organization}
+                      onChange={onOrganizationChange}
+                    >
+                      <option value="">
+                        Select{' '}
+                        {filters.inventoryType === 'BREWERY'
+                          ? 'Brewery'
+                          : 'Vendor'}
                       </option>
-                    );
-                  })}
-                </select>
-                <label className="filterSubHeading mt-3">
-                  {filters.inventoryType === 'BREWERY' ? 'Brewery' : 'Vendor'}{' '}
-                </label>
-                <select
-                  className="filterSelect mt-2"
-                  disabled={!filterVisibility.organization}
-                  value={filters.organization}
-                  onChange={onOrganizationChange}
-                >
-                  <option value="">
-                    Select{' '}
-                    {filters.inventoryType === 'BREWERY' ? 'Brewery' : 'Vendor'}
-                  </option>
-                  {organizations.map((organization, index) => {
-                    return (
-                      <option key={index} value={organization.id}>
-                        {organization.name}
-                      </option>
-                    );
-                  })}
-                </select>
-                <label className="filterSubHeading mt-2"> SKU</label>
-                <select
-                  className="filterSelect mt-2"
-                  value={filters.sku}
-                  onChange={onSKUChange}
-                >
-                  <option>Select SKU</option>
-                  {SKUs.map((sku, index) => {
-                    return (
-                      <option key={index} value={sku.id}>
-                        {sku.name}
-                      </option>
-                    );
-                  })}
-                </select>
-                <button
-                  className="btn SearchButton mt-4"
-                  onClick={resetFilters}
-                >
-                  Clear
-                </button>
-              </div>
+                      {organizations.map((organization, index) => {
+                        return (
+                          <option key={index} value={organization.id}>
+                            {organization.name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <label className="filterSubHeading mt-2"> SKU</label>
+                    <select
+                      className="filterSelect mt-2"
+                      value={filters.sku}
+                      onChange={onSKUChange}
+                    >
+                      <option>Select SKU</option>
+                      {SKUs.map((sku, index) => {
+                        return (
+                          <option key={index} value={sku.id}>
+                            {sku.name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                    <button
+                      className="btn SearchButton mt-4"
+                      onClick={resetFilters}
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </main>
