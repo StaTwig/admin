@@ -12,6 +12,8 @@ const OrganisationModel = require('../models/OrganisationModel');
 const WarehouseModel = require('../models/WarehouseModel');
 const ProductModel = require('../models/ProductModel');
 const CounterModel = require('../models/CounterModel')
+const OrganisationModel = require('../models/OrganisationModel')
+const ProductModel = require('../models/ProductModel')
 //this helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
 const auth = require('../middlewares/jwt');
@@ -463,6 +465,7 @@ exports.addPOsFromExcel = [
       // checkPermissions(permission_request, async permissionResult => {
       //   if (permissionResult.success) {
           try {
+            console.log(req.user)
             const dir = `uploads`;
             if (!fs.existsSync(dir)) {
               fs.mkdirSync(dir);
@@ -479,12 +482,12 @@ exports.addPOsFromExcel = [
                 workbook.Sheets[sheet_name_list[0]],
                 { dateNF: 'dd/mm/yyyy;@', cellDates: true, raw: false },
             );            
-            console.log(data)
+            //console.log(data)
             const  createdBy = lastUpdatedBy = req.user.id;
             let poDataArray = [];
             poDataArray = data.map(po => {
               return {
-                "id": uniqid('po-'),
+                id : po.id || 0,
                "externalId": po['UNICEf PO Number'],
                 "creationDate": po['Document Date'],
                 "lastUpdatedOn": new Date().toISOString(),
@@ -496,11 +499,10 @@ exports.addPOsFromExcel = [
                 "customer": {
                   "customerOrganisation": po['IP Code'],
                   // "customerIncharge": po['Customer Incharge'],
-                  // "shippingAddress": {
-                  //   "shippingAddressId": po['Shipping Address Id'],
-                  //   "shipmentReceiverId": po['Shipment Receiver Id']
-
-                  // }
+                  "shippingAddress": {
+                    "shippingAddressId": po['Plant'],
+                    "shipmentReceiverId": po['Shipment Receiver Id'] || 'NA'
+                  }
                 },
                 "products": [
                   {
@@ -511,7 +513,16 @@ exports.addPOsFromExcel = [
                 "createdBy" : createdBy,
                 "lastUpdatedBy" : lastUpdatedBy
               }
+            });              
+            const incrementCounter = await CounterModel.update({
+              'counters.name': "poId"
+            }, {
+              $inc: {
+                "counters.$.value": 1
+              }
             });
+            let poCounter = await CounterModel.findOne({'counters.name':"poId"},{"counters.name.$":1})
+            let dataRows =0;
             for(let i in poDataArray){
               if(poDataArray[i].externalId!=null){
                 duplicate = await RecordModel.findOne({ externalId: poDataArray[i].externalId})
@@ -519,10 +530,49 @@ exports.addPOsFromExcel = [
                   delete poDataArray[i]
                   i--;
                 }
+                else{        
+                  poDataArray[i].id = poCounter.counters[0].format + poCounter.counters[0].value++;
+                  console.log(poDataArray[i].customer.customerOrganisation)
+                  let customerOrganisation = await OrganisationModel.findOne(
+                    {
+                      id: poDataArray[i].customer.customerOrganisation
+                    });
+                    console.log("CUSTOMER DETAILS", customerOrganisation)
+                    poDataArray[i].customer.name = customerOrganisation.name;
+                    poDataArray[i].customer.customerType = customerOrganisation.type;
+                  let supplierOrganisation = await OrganisationModel.findOne(
+                    {
+                      id: poDataArray[i].supplier.supplierOrganisation
+                    });
+                    poDataArray[i].supplier.name = supplierOrganisation.name;
+                    poDataArray[i].supplier.supplierType = supplierOrganisation.type;
+                    poDataArray[i].supplier.shippingAddress = {
+                      "shippingAddressId": "NA",
+                      "shipmentReceiverId": "NA"
+                  }
+                  let productDetails = await ProductModel.findOne(
+                    {
+                      externalId: poDataArray[i].products[0].productId
+                    });
+                    console.log("PRODUCT DETAILS",productDetails)
+                   poDataArray[i].products[0].name = productDetails.name,
+                   poDataArray[i].products[0].type = productDetails.type,
+                   poDataArray[i].products[0].manufacturer = productDetails.manufacturer,
+                  dataRows++;
+                }
               }
             }
+            console.log(poDataArray)
             if(poDataArray.length > 0){
             await RecordModel.insertMany(poDataArray,{ ordered: false });
+            console.log("Incrementing Data Rows by ",dataRows)
+            const incrementCounter = await CounterModel.update({
+              'counters.name': "poId"
+            }, {
+              $inc: {
+                "counters.$.value": dataRows
+              }
+            });
             return apiResponse.successResponseWithData(
                 res,
                 'Upload Result',
@@ -532,7 +582,7 @@ exports.addPOsFromExcel = [
             else return apiResponse.ErrorResponse(res,'Data Already Exists')
           } catch (e) {
             if(e.code=='11000'){
-              return apiResponse.successResponseWithData(res, 'Error in insertion ( Duplicate Values)', e);
+              return apiResponse.successResponseWithData(res, 'Inserted excluding Duplicate Values', e);
             }            
             else return apiResponse.ErrorResponseWithData(res, 'Error in insertion', e);
           }
