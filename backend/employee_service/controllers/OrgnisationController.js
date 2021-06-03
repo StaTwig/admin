@@ -14,6 +14,14 @@ exports.getOrgs = [
       }).select(
         "name postalAddress country primaryContactId createdAt type status logoId id"
       );
+      for(var c = 0; c < users.length; c++){
+        try {
+          const employeeEmail = await EmployeeModel.findOne({id:users[c].primaryContactId}).select("emailId");
+          users[c].primaryContactId = employeeEmail;
+        } catch (err) {
+          console.log(err);
+        }
+      }
       return apiResponse.successResponseWithData(
         res,
         "Organisation list",

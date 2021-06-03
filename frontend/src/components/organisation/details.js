@@ -31,7 +31,8 @@ const Details = (props) => {
   return (
     <div className="card rounded bg-white border border-white mt-1 ml-1 p-1 mb-3">
       <div className="card-body d-flex flex-row justify-content-between">
-        <div className="userPic w-20 text-center rounded d-flex flex-row">
+        <div className="d-flex flex-column w-20">
+        <div className="userPic text-center rounded d-flex flex-row">
           {org?.logoId && (
             <img
               src={org?.logoId}
@@ -40,6 +41,8 @@ const Details = (props) => {
             />
           )}
           <h6 className="text-primary pt-1 txtWrapu">{org?.name}</h6>
+        </div>
+        <div className="blockquote-footer mt-2 ml-4 txtWrapu">{org?.primaryContactId}</div>
         </div>
         <span className=" text-center w-15 align-self-center">
           {/* {org?.type} */}
