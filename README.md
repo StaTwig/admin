@@ -32,7 +32,7 @@ Branch out from development, merge requests/pull requests shall be to developmen
 
 
 # Dependencies:
-1. NodeJS
+<!-- 1. NodeJS
 
 2. [Traefik] (https://docs.traefik.io/getting-started/install-traefik/)
     2.1. [Windows](https://github.com/containous/traefik/releases/download/v2.1.9/traefik_v2.1.9_windows_amd64.zip)
@@ -65,7 +65,7 @@ OR
 
 Step 4: without frontend / i.e. with postman or insomania or script
 
-    * localhost:9001
+    * localhost:9001 -->
 
 
 
