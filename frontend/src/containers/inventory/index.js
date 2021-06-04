@@ -56,7 +56,7 @@ const InventoryContainer = props => {
       <div className="d-flex">
         <Sidebar {...props} />
         <div className="content">
-          <Inventory skip={skip} inventories={inventories} inventoriesCount={inventoriesCount} inventoryDetails={inventories} inventoryFilterData={inventoryFilterData} {...props} />
+          <Inventory skip={skip} inventoriesCount={inventoriesCount} inventoryDetails={inventories} inventoryFilterData={inventoryFilterData} {...props} />
         </div>
       </div>
     </div>
