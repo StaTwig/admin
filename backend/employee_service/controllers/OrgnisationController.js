@@ -17,7 +17,7 @@ exports.getOrgs = [
       for(var c = 0; c < users.length; c++){
         try {
           const employeeEmail = await EmployeeModel.findOne({id:users[c].primaryContactId}).select("emailId");
-          users[c].primaryContactId = employeeEmail;
+          users[c].primaryContactId = employeeEmail.emailId;
         } catch (err) {
           console.log(err);
         }
