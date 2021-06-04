@@ -540,214 +540,241 @@ exports.getInventoryAnalytics = [
       inventory.stockOut = stockOut;
       // console.log("Products with zero Inventory (stockOut) ", stockOut);
 
-      var today = new Date(); 
-      var nextWeek = new Date();
-      nextWeek.setDate(today.getDate() + 7);
 
-      const batchExpiringThisWeek = await AtomModel.aggregate(
-        [ { $match: { 
-          "attributeSet.expDate" :  {
-            $gte: today.toISOString(), 
-            $lt: nextWeek.toISOString() 
-            }
-          }
-        }, 
-      {
-        $group: {
-          _id: "$status", 
-          total: {$sum: {$size: "$batchNumbers"}}
-        }
-      }]
-      );
-
-      // const batchExpiringThisWeek = await InventoryModel.aggregate(
-      //   [ 
-      //     { 
-      //       "$project": {
-      //           "createdAtWeek": { "$week": "$createdAt" },
-      //           "createdAtMonth": { "$month": "$createdAt" },
-      //           "rating": 1
-      //       }
-      //     },
-      //     {
-      //       "$group": {
-      //           "_id": "$createdAtWeek",
-      //           "average": { "$avg": "$rating" },
-      //           "month": { "$first": "$createdAtMonth" }
-      //       }
-      //     }
-      //   ]
-      // );
-      
-      inventory.batchExpiringThisWeek = 0
-      if(batchExpiringThisWeek.length !== 0){
-        inventory.batchExpiringThisWeek = batchExpiringThisWeek[0].total;
-      }
-
+      var today = new Date();
       var nextMonth = new Date();
       nextMonth.setDate(today.getDate() + 30);
 
-      const batchExpiringThisMonth = await AtomModel.aggregate(
-        [ { $match: { 
-          "attributeSet.expDate" :  {
-            $gte: today.toISOString(), 
-            $lt: nextMonth.toISOString() 
+      const batchNearExpiration = await AtomModel.aggregate([
+          {
+            $match: {
+              $and: [
+                {
+                  "attributeSet.expDate": {
+                    $gte: today.toISOString(),
+                    $lt: nextMonth.toISOString()
+                  }
+                }, { $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] } },
+                // {batchNumbers: {$ne: ""}},
+                {"attributeSet.mfgDate": {$ne: ""}},
+                {"attributeSet.expDate": {$ne: ""}}
+              ]
             }
+        },
+        {
+          $group: {
+            _id: "$batchNumbers", 
+            total: {$sum: {$size: "$quantity"}}
           }
-        }, 
-      {
-        $group: {
-          _id: "$status", 
-          total: {$sum: {$size: "$batchNumbers"}}
         }
-      }]
-    );
-      // console.log("Batches Near Expiration ", batchNearExpiration[0].total);
-      inventory.batchExpiringThisMonth = 0
-      if(batchExpiringThisMonth.length !== 0){
-        inventory.batchExpiringThisMonth = batchExpiringThisMonth[0].total;
+      ]);
+      
+      const batchExpired = await AtomModel.aggregate([
+          {
+            $match: {
+              $and: [
+                {
+                  "attributeSet.expDate": {
+                    $lt: today.toISOString()
+                  }
+                }, { $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] } },
+                // {batchNumbers: {$ne: ""}},
+                {"attributeSet.mfgDate": {$ne: ""}},
+                {"attributeSet.expDate": {$ne: ""}}
+              ]
+            }
+          },
+        {
+          $group: {
+            _id: "$batchNumbers", 
+            total: {$sum: "$quantity"}
+          }
+        }
+      ]);
+
+      inventory.batchExpired = 0
+      if (batchExpired.length !== 0) {
+        let sum = 0;
+        for (let row of batchExpired) 
+          sum += parseInt(row.total);
+        inventory.batchExpired = sum;
       }
 
-
-      var nextThreeMonths = new Date();
-      nextThreeMonths.setDate(today.getDate() + 90 );
-
-      const batchExpiringInThreeMonths = await AtomModel.aggregate(
-        [ { $match: { 
-          "attributeSet.expDate" :  {
-            $gte: today.toISOString(), 
-            $lt: nextThreeMonths.toISOString() 
-            }
-          }
-        }, 
-      {
-        $group: {
-          _id: "$status", 
-          total: {$sum: {$size: "$batchNumbers"}}
-        }
-      }]
-    );
-      // console.log("Batches Near Expiration ", batchNearExpiration[0].total);
-      inventory.batchExpiringInThreeMonths = 0
-      if(batchExpiringInThreeMonths.length !== 0){
-        inventory.batchExpiringInThreeMonths = batchExpiringInThreeMonths[0].total;
+      inventory.batchNearExpiration = 0
+      if (batchNearExpiration.length !== 0) {
+        let sum = 0;
+        for (let row of batchNearExpiration) 
+          sum += parseInt(row.total);
+        inventory.batchNearExpiration = sum;
       }
       
-      var nextSixMonths = new Date();
-      nextSixMonths.setDate(today.getDate() + 180 );
 
-      const batchExpiringInSixMonths = await AtomModel.aggregate(
-        [ { $match: { 
-          "attributeSet.expDate" :  {
-            $gte: today.toISOString(), 
-            $lt: nextSixMonths.toISOString() 
-            }
-          }
-        }, 
-      {
-        $group: {
-          _id: "$status", 
-          total: {$sum: {$size: "$batchNumbers"}}
-        }
-      }]
-    );
+
+    //   var nextMonth = new Date();
+    //   nextMonth.setDate(today.getDate() + 30);
+
+    //   const batchExpiringThisMonth = await AtomModel.aggregate(
+    //     [ { $match: { 
+    //       "attributeSet.expDate" :  {
+    //         $gte: today.toISOString(), 
+    //         $lt: nextMonth.toISOString() 
+    //         }
+    //       }
+    //     }, 
+    //   {
+    //     $group: {
+    //       _id: "$status", 
+    //       total: {$sum: {$size: "$batchNumbers"}}
+    //     }
+    //   }]
+    // );
+    
       // console.log("Batches Near Expiration ", batchNearExpiration[0].total);
-      inventory.batchExpiringInSixMonths = 0
-      if(batchExpiringInSixMonths.length !== 0){
-        inventory.batchExpiringInSixMonths = batchExpiringInSixMonths[0].total;
-      }
+    //   inventory.batchExpiringThisMonth = 0
+    //   if(batchExpiringThisMonth.length !== 0){
+    //     inventory.batchExpiringThisMonth = batchExpiringThisMonth[0].total;
+    //   }
+
+
+    //   var nextThreeMonths = new Date();
+    //   nextThreeMonths.setDate(today.getDate() + 90 );
+
+    //   const batchExpiringInThreeMonths = await AtomModel.aggregate(
+    //     [ { $match: { 
+    //       "attributeSet.expDate" :  {
+    //         $gte: today.toISOString(), 
+    //         $lt: nextThreeMonths.toISOString() 
+    //         }
+    //       }
+    //     }, 
+    //   {
+    //     $group: {
+    //       _id: "$status", 
+    //       total: {$sum: {$size: "$batchNumbers"}}
+    //     }
+    //   }]
+    // );
+    //   // console.log("Batches Near Expiration ", batchNearExpiration[0].total);
+    //   inventory.batchExpiringInThreeMonths = 0
+    //   if(batchExpiringInThreeMonths.length !== 0){
+    //     inventory.batchExpiringInThreeMonths = batchExpiringInThreeMonths[0].total;
+    //   }
       
-      const batchExpiredToday = await AtomModel.aggregate(
-        [ { $match: { 
-            "attributeSet.expDate" :  {
-              $eq: today.toISOString(), 
-              }
-            }
-          }, 
-        {
-          $group: {
-            _id: "$status", 
-            total: {$sum: {$size: "$batchNumbers"}}
-          }
-        }]
-      );
-      // console.log("Batches Expired ", batchExpired[0].total);
-      inventory.batchExpiredToday = 0
-      if(batchExpiredToday.length !== 0){
-        inventory.batchExpiredToday = batchExpiredToday[0].total;
-      }
+    //   var nextSixMonths = new Date();
+    //   nextSixMonths.setDate(today.getDate() + 180 );
+
+    //   const batchExpiringInSixMonths = await AtomModel.aggregate(
+    //     [ { $match: { 
+    //       "attributeSet.expDate" :  {
+    //         $gte: today.toISOString(), 
+    //         $lt: nextSixMonths.toISOString() 
+    //         }
+    //       }
+    //     }, 
+    //   {
+    //     $group: {
+    //       _id: "$status", 
+    //       total: {$sum: {$size: "$batchNumbers"}}
+    //     }
+    //   }]
+    // );
+    //   // console.log("Batches Near Expiration ", batchNearExpiration[0].total);
+    //   inventory.batchExpiringInSixMonths = 0
+    //   if(batchExpiringInSixMonths.length !== 0){
+    //     inventory.batchExpiringInSixMonths = batchExpiringInSixMonths[0].total;
+    //   }
       
-      var lastWeek = new Date();
-      lastWeek.setDate(today.getDate() - 7);
+    //   const batchExpiredToday = await AtomModel.aggregate(
+    //     [ { $match: { 
+    //         "attributeSet.expDate" :  {
+    //           $eq: today.toISOString(), 
+    //           }
+    //         }
+    //       }, 
+    //     {
+    //       $group: {
+    //         _id: "$status", 
+    //         total: {$sum: {$size: "$batchNumbers"}}
+    //       }
+    //     }]
+    //   );
+    //   // console.log("Batches Expired ", batchExpired[0].total);
+    //   inventory.batchExpiredToday = 0
+    //   if(batchExpiredToday.length !== 0){
+    //     inventory.batchExpiredToday = batchExpiredToday[0].total;
+    //   }
+      
+    //   var lastWeek = new Date();
+    //   lastWeek.setDate(today.getDate() - 7);
 
-      const batchExpiredLastWeek = await AtomModel.aggregate(
-        [ { $match: { 
-            "attributeSet.expDate" :  {
-              $lte: today.toISOString(), 
-              $gte: lastWeek.toISOString()
-              }
-            }
-          }, 
-        {
-          $group: {
-            _id: "$status", 
-            total: {$sum: {$size: "$batchNumbers"}}
-          }
-        }]
-      );
-      // console.log("Batches Expired ", batchExpired[0].total);
-      inventory.batchExpiredLastWeek = 0
-      if(batchExpiredLastWeek.length !== 0){
-        inventory.batchExpiredLastWeek = batchExpiredLastWeek[0].total;
-      }
+    //   const batchExpiredLastWeek = await AtomModel.aggregate(
+    //     [ { $match: { 
+    //         "attributeSet.expDate" :  {
+    //           $lte: today.toISOString(), 
+    //           $gte: lastWeek.toISOString()
+    //           }
+    //         }
+    //       }, 
+    //     {
+    //       $group: {
+    //         _id: "$status", 
+    //         total: {$sum: {$size: "$batchNumbers"}}
+    //       }
+    //     }]
+    //   );
+    //   // console.log("Batches Expired ", batchExpired[0].total);
+    //   inventory.batchExpiredLastWeek = 0
+    //   if(batchExpiredLastWeek.length !== 0){
+    //     inventory.batchExpiredLastWeek = batchExpiredLastWeek[0].total;
+    //   }
 
-      var lastMonth = new Date();
-      lastMonth.setDate(today.getDate() - 30);
+    //   var lastMonth = new Date();
+    //   lastMonth.setDate(today.getDate() - 30);
 
-      const batchExpiredLastMonth = await AtomModel.aggregate(
-        [ { $match: { 
-            "attributeSet.expDate" :  {
-              $lte: today.toISOString(), 
-              $gte: lastMonth.toISOString()
-              }
-            }
-          }, 
-        {
-          $group: {
-            _id: "$status", 
-            total: {$sum: {$size: "$batchNumbers"}}
-          }
-        }]
-      );
-      // console.log("Batches Expired ", batchExpired[0].total);
-      inventory.batchExpiredLastMonth = 0
-      if(batchExpiredLastMonth.length !== 0){
-        inventory.batchExpiredLastMonth = batchExpiredLastMonth[0].total;
-      }
+    //   const batchExpiredLastMonth = await AtomModel.aggregate(
+    //     [ { $match: { 
+    //         "attributeSet.expDate" :  {
+    //           $lte: today.toISOString(), 
+    //           $gte: lastMonth.toISOString()
+    //           }
+    //         }
+    //       }, 
+    //     {
+    //       $group: {
+    //         _id: "$status", 
+    //         total: {$sum: {$size: "$batchNumbers"}}
+    //       }
+    //     }]
+    //   );
+    //   // console.log("Batches Expired ", batchExpired[0].total);
+    //   inventory.batchExpiredLastMonth = 0
+    //   if(batchExpiredLastMonth.length !== 0){
+    //     inventory.batchExpiredLastMonth = batchExpiredLastMonth[0].total;
+    //   }
 
-      var lastYear = new Date();
-      lastYear.setDate(today.getDate() -365 );
+    //   var lastYear = new Date();
+    //   lastYear.setDate(today.getDate() -365 );
 
-      const batchExpiredLastYear = await AtomModel.aggregate(
-        [ { $match: { 
-            "attributeSet.expDate" :  {
-              $lte: today.toISOString(), 
-              $gte: lastYear.toISOString()
-              }
-            }
-          }, 
-        {
-          $group: {
-            _id: "$status", 
-            total: {$sum: {$size: "$batchNumbers"}}
-          }
-        }]
-      );
-      // console.log("Batches Expired ", batchExpired[0].total);
-      inventory.batchExpiredLastYear = 0
-      if(batchExpiredLastYear.length !== 0){
-        inventory.batchExpiredLastYear = batchExpiredLastYear[0].total;
-      }
+    //   const batchExpiredLastYear = await AtomModel.aggregate(
+    //     [ { $match: { 
+    //         "attributeSet.expDate" :  {
+    //           $lte: today.toISOString(), 
+    //           $gte: lastYear.toISOString()
+    //           }
+    //         }
+    //       }, 
+    //     {
+    //       $group: {
+    //         _id: "$status", 
+    //         total: {$sum: {$size: "$batchNumbers"}}
+    //       }
+    //     }]
+    //   );
+    //   // console.log("Batches Expired ", batchExpired[0].total);
+    //   inventory.batchExpiredLastYear = 0
+    //   if(batchExpiredLastYear.length !== 0){
+    //     inventory.batchExpiredLastYear = batchExpiredLastYear[0].total;
+    //   }
 
       data.inventory = inventory;
 

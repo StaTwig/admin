@@ -88,11 +88,17 @@ const Inventory = props => {
       setCurrentInventoriesCount(
         resultAnalytics.data.inventory.totalProductsInInventory
       );
+      // setInventoryNearExpiration(
+      //   resultAnalytics.data.inventory.batchExpiringInSixMonths
+      // );
       setInventoryNearExpiration(
-        resultAnalytics.data.inventory.batchExpiringInSixMonths
+        resultAnalytics.data.inventory.batchNearExpiration
       );
+      // setInventoryExpired(
+      //   resultAnalytics.data.inventory.batchExpiredLastYear
+      // );
       setInventoryExpired(
-        resultAnalytics.data.inventory.batchExpiredLastYear
+        resultAnalytics.data.inventory.batchExpired
       );
       setProductCategory(
         resultAnalytics.data.inventory.totalProductCategory
@@ -170,7 +176,7 @@ const Inventory = props => {
               <div className="d-flex flex-column">
                 <div className="title truck-text">Total Product Category</div>
                 
-                <div className="count truck-text">{inventoriesCount} {inventoryAnalytics.totalProductCategory}</div>
+                <div className="count truck-text">{inventoriesCount} {inventoryAnalytics?.totalProductCategory}</div>
               </div>
             </div>
           </Link>
@@ -183,7 +189,7 @@ const Inventory = props => {
             </div>
             <div className="d-flex flex-column">
               <div className="title sent-text">Product Out Of Stock</div>
-              <div className="sent-text count">{currentInventoriesCount}{inventoryAnalytics.stockOut}</div>
+              <div className="sent-text count">{currentInventoriesCount}{inventoryAnalytics?.stockOut}</div>
               </div>
             </div>
           </Link>      
@@ -197,7 +203,7 @@ const Inventory = props => {
             </div>
             <div className="d-flex flex-column">
               <div className="title recived-text">Batch near Expiration</div>
-              <div className="tab-container">
+              {/* <div className="tab-container">
                 <div
                   className="tab-item active"
                   onMouseLeave={() =>
@@ -211,7 +217,6 @@ const Inventory = props => {
                     )
                   }
                 >
-                {/*6 MONTHS*/}
                 </div>
                 <div
                   className="tab-item"
@@ -226,7 +231,6 @@ const Inventory = props => {
                     )
                   }
                 >
-                  {/*3 MONTHS*/}
                 </div>
                 <div
                   className="tab-item"
@@ -241,7 +245,6 @@ const Inventory = props => {
                     )
                   }
                 >
-                  {/*THIS MONTH8*/}
                 </div>
                 <div
                   className="tab-item"
@@ -256,9 +259,8 @@ const Inventory = props => {
                     )
                   }
                 >
-                  {/*THIS WEEK*/}
               </div>
-              </div>
+              </div> */}
               <div className="recived-text count">
                 {inventoryNearExpiration}
               </div>
@@ -274,7 +276,7 @@ const Inventory = props => {
             </div>
             <div className="d-flex flex-column">
               <div className="title transit-text">Batch Expired</div>
-              <div className="tab-container">
+              {/* <div className="tab-container">
                 <div
                   className="tab-item active"
                   onMouseLeave={() =>
@@ -288,7 +290,6 @@ const Inventory = props => {
                     )
                   }
                 >
-                  {/*THIS YEAR*/}
                 </div>
                 <div
                   className="tab-item"
@@ -303,7 +304,6 @@ const Inventory = props => {
                     )
                   }
                 >
-                  {/*THIS MONTH*/}
                 </div>
                 <div
                   className="tab-item"
@@ -318,7 +318,6 @@ const Inventory = props => {
                     )
                   }
                 >
-                  {/*THIS WEEK*/}
                 </div>
                 <div
                   className="tab-item"
@@ -333,9 +332,8 @@ const Inventory = props => {
                     )
                   }
                 >
-                  {/*TODAY*/}
                 </div>
-              </div>
+              </div> */}
               <div className="transit-text count">{inventoryExpired}</div>
             </div>
           </div>
