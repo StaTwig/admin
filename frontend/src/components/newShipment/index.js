@@ -546,12 +546,17 @@ const NewShipment = (props) => {
                           );
                           setFieldValue(
                             "toOrg",
-                            result.poDetails[0].customer.organisation.id
+                            result.poDetails[0].customer.organisation.name
                           );
                           setFieldValue(
                             "toOrgLoc",
-                            result.poDetails[0].customer.shippingAddress
-                              .shippingAddressId
+                            result.poDetails[0].customer.warehouse
+                              .postalAddress
+                          );
+                          setFieldValue(
+                            "rtype",
+                            result.poDetails[0].customer.organisation
+                              .type
                           );
                           
                           let products_temp = result.poDetails[0].products;
@@ -734,7 +739,8 @@ const NewShipment = (props) => {
                         <Select
                           styles={customStyles}
                           isDisabled={disabled}
-                          placeholder="Select Organisation Type"
+
+                          placeholder={disabled ? values.rtype: "Select Organisation Type"}
                           onChange={(v) => {
                             setFieldValue('rtype', v?.value);
                             setFieldValue('rtypeName', v?.label);
@@ -772,7 +778,7 @@ const NewShipment = (props) => {
                         <Select
                           styles={customStyles}
                           isDisabled={disabled}
-                          placeholder={disabled ? values.toOrg : "Select Delivery Location"}
+                          placeholder={disabled ? values.toOrg : "Select Organisation Name"}
                           onChange={(v) => {
                             setFieldValue("toOrgLoc", "");
                             setReceiverOrgId(v.label);
