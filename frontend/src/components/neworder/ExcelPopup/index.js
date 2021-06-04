@@ -6,12 +6,14 @@ import { turnOn, turnOff } from '../../../actions/spinnerActions';
 import uploadBlue from '../../../assets/icons/UploadBlue.svg';
 import Modal from '../../../shared/modal';
 import SuccessOrderPopUp from './SuccessOrder/SuccessOrder';
+import FailPopup from "../../../shared/PopUp/failedPopUp";
 
 
 const ExcelPopUp = props => {
   const [excel, setExcel] = useState('');
   const dispatch = useDispatch();
   const [openSuccesfulOrder, setopenSuccesfulOrder] = useState(false);
+  const [openFailedPopup,setopenFailedPop] = useState(false);
   const [ modalProps, setModalProps ] = useState({});
 
   const setExcelFile = evt => {
@@ -23,6 +25,7 @@ const ExcelPopUp = props => {
     formData.append('excel', excel);
     dispatch(turnOn());
     const result = await addPOsFromExcel(formData);
+    console.log(result);
     if (result && result.status === 200) {
       console.log('success add PO');
       // dispatch(setReviewPos(result.data.data));
@@ -34,7 +37,7 @@ const ExcelPopUp = props => {
   })
     }
     else {
-      setFailedPop(true);
+      setopenFailedPop(true);
  }
     dispatch(turnOff());
   };
@@ -42,6 +45,10 @@ const ExcelPopUp = props => {
   const closeModal = () => {
     setopenSuccesfulOrder(false);
     props.history.push("/orders");
+  };
+  const closeModalFailedPopUp = () => {
+    setopenFailedPop(false);
+    props.history.push("/neworder");
   };
   return (
     <div className="excelpopup col">
@@ -76,10 +83,21 @@ const ExcelPopUp = props => {
                 >
                   <SuccessOrderPopUp
                      onHide={closeModal}// onHide={closeModal} //FailurePopUp
-                                {...modalProps}
+                    {...modalProps}
                 />
                 </Modal>
               )}
+              {openFailedPopup && (
+                <Modal
+                  close={() => closeModalFailedPopUp()}
+                  size="modal-sm"
+                  > 
+                  <FailPopup
+                    onHide={closeModalFailedPopUp}
+                  />
+                </Modal>
+              )}
+
         </div>
       </div>
     </div>

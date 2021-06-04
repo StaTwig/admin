@@ -95,8 +95,7 @@ const NewOrder = (props) => {
                                         type: item.type
                                       };
                                     }));
-
-      const orgType = await getOrganizationsByTypes(profile.configuration_id);
+      const orgType = await getOrganizationsByTypes("CONF000");
       setOrgTypes(orgType.data.length > 0 ? orgType.data[0].organisationTypes.map(item => {
                                       return {
                                         value: item.id,
@@ -503,7 +502,7 @@ const NewOrder = (props) => {
                               onOrgChange(v.value);
                             }}
                             isDisabled={values.rtypeName == ''}
-                            options={allOrganisations.filter(a => a.type == values.rtypeName && a.value != values.fromOrg)}
+                            options={allOrganisations.filter(a => a.type == values.rtypeName)}
                           />
                         {errors.toOrg && touched.toOrg && (
                           <span className="error-msg text-danger">{errors.toOrg}</span>

@@ -14,15 +14,13 @@ import {
 } from '../constants/inventoryConstants';
 import { turnOn, turnOff } from './spinnerActions';
 
-export const getInventories = (skip, limit, dateFilter) => {
-console.log(" inside getInventories =======> ");
+export const getInventories = (skip, limit, dateFilter, productName, productCategory, status) => {
     return async dispatch => {
       try {
         dispatch(turnOn());
         const result = await axios.get(
-          `${config().getTransactions}?skip=${skip}&limit=${limit}&dateFilter=${dateFilter}`
+          `${config().getTransactions}?skip=${skip}&limit=${limit}&dateFilter=${dateFilter}&productName=${productName}&category=${productCategory}&status=${status}`
           );
-        console.log(result.data.data.inventoryRecords)
         dispatch(setInventories(result.data.data.inventoryRecords));
         dispatch(setInventoriesCount(result.data.data.count));
         dispatch(turnOff());
@@ -38,6 +36,18 @@ console.log(" inside getInventories =======> ");
   }
 
 };
+
+export const getTransactionFilterList = async () => {
+        try {
+          const result = await axios.get(
+            `${config().getTransactionFilterList}`
+            );
+          return result.data.data.productDetails;
+        }catch(e) {
+          return [];
+        }
+  
+  };
 
 export const getInventoryDetails = (skip = 0, limit = 5) => {
     return async dispatch => {

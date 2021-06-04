@@ -1057,7 +1057,7 @@ exports.addProductsToInventory = [
                     labelId: product?.label?.labelId,
                     labelType: product?.label?.labelType,
                   },
-	          quantity : 1,
+                  quantity: 1,
                   productId: product.productId,
                   inventoryIds: [inventory.id],
                   lastInventoryId: "",
@@ -1081,36 +1081,36 @@ exports.addProductsToInventory = [
                 atomsArray.push(atom);
               }
             }
-             else {
-                const atom = {
-                  id: uniqid('batch-'),
-                  label: {
-                    labelId: product?.label?.labelId,
-                    labelType: product?.label?.labelType,
-                  },
-                  quantity : product.quantity,
-                  productId: product.productId,
-                  inventoryIds: [inventory.id],
-                  lastInventoryId: "",
-                  lastShipmentId: "",
-                  poIds: [],
-                  shipmentIds: [],
-                  txIds: [],
-                  batchNumbers: [product.batchNumber],
-                  atomStatus: "Healthy",
-                  attributeSet: {
-                    mfgDate: product.mfgDate,
-                    expDate: product.expDate,
-                  },
-                  eolInfo: {
-                    eolId: "IDN29402-23423-23423",
-                    eolDate: "2021-03-31T18:30:00.000Z",
-                    eolBy: id,
-                    eolUserInfo: "",
-                  },
-                };
-                atomsArray.push(atom);
-	    }
+            else {
+              const atom = {
+                id: uniqid('batch-'),
+                label: {
+                  labelId: product?.label?.labelId,
+                  labelType: product?.label?.labelType,
+                },
+                quantity: product.quantity,
+                productId: product.productId,
+                inventoryIds: [inventory.id],
+                lastInventoryId: "",
+                lastShipmentId: "",
+                poIds: [],
+                shipmentIds: [],
+                txIds: [],
+                batchNumbers: [product.batchNumber],
+                atomStatus: "Healthy",
+                attributeSet: {
+                  mfgDate: product.mfgDate,
+                  expDate: product.expDate,
+                },
+                eolInfo: {
+                  eolId: "IDN29402-23423-23423",
+                  eolDate: "2021-03-31T18:30:00.000Z",
+                  eolBy: id,
+                  eolUserInfo: "",
+                },
+              };
+              atomsArray.push(atom);
+            }
 
             try {
               if (atomsArray.length > 0) await AtomModel.insertMany(atomsArray);
@@ -2503,7 +2503,7 @@ exports.getInventoryProductsByPlatform = [
       const filters = req.query;
       const skuFilter = {};
       if (filters.sku && filters.sku.length) {
-        skuFilter.id = filters.sku;
+        skuFilter.externalId = filters.sku;
       }
       const platformInventory = await OrganisationModel.aggregate([
         {
@@ -2840,7 +2840,7 @@ exports.getBatchWarehouse = [
     try {
       const inventoryId = req.query.inventory_id;
       const productId = req.query.product_id;
-    
+
       const result = await AtomModel.aggregate([
         {
           $match: {

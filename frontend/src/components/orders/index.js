@@ -175,7 +175,7 @@ const Orders = props => {
         <h1 className="breadcrumb">YOUR ORDERS</h1>
         <div className="d-flex">
           <Link to="/neworder">
-            <button className="btn btn-orange fontSize20 font-bold">
+            <button className="btn btn-orange fontSize20 font-bold mt-1">
               <img src={OrderIcon} width="20" height="17" className="mr-2 mb-1" />
               <span style={{ color: 'white' }}>Create New Order</span>
             </button>
@@ -186,7 +186,7 @@ const Orders = props => {
       <div className="mt-4 ">
         <Tabs {...props} setvisible={setvisible} visible={visible} />
       </div>
-      <div className="full-width-ribben mt-4 pl-5">
+      <div className="full-width-ribben mt-4">
         <TableFilter data={headers} poOrderIdList={poOrderIdList} poDeliveryLocationsList={poDeliveryLocationsList} poProductsList={poProductsList} poOrganisationsList={poOrganisationsList} setFromToFilterOnSelect={setFromToFilterOnSelect} setOrderIdNameFilterOnSelect={setOrderIdNameFilterOnSelect} setProductNameFilterOnSelect={setProductNameFilterOnSelect} setLocationFilterOnSelect={setLocationFilterOnSelect} setDateFilterOnSelect={setDateFilterOnSelect} fb="73%" />
       </div>
       <div className="ribben-space">
