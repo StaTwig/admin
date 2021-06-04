@@ -100,7 +100,7 @@ const ReceiveShipment = (props) => {
     console.log(data);
     const result = await receiveApi(data);
     if (result.status == 200) {
-      setOpenUpdatedStatus(true);
+      //setOpenUpdatedStatus(true);
       console.log("success add product");
       setreceiveShipmentModal(true);
     } else {
@@ -165,7 +165,7 @@ const ReceiveShipment = (props) => {
                 close={() => closeModal()}
                 size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
                 
-              > <SuccessPopup/></Modal>
+              ></Modal>
             )}
           </div>
         </div>
