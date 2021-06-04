@@ -294,3 +294,47 @@ flex-shrink: 0;
         text-decoration: underline;
     }
 }
+
+
+.vendorDetailCard {
+  background: #ffffff;
+//   width: 430px;
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  justify-content: space-between;
+//   border-radius: 100px 20px 20px 100px;
+background-color: #cccccc2e;
+border-radius: 15px;
+box-shadow: 0px 3px 6px #54265e26;
+margin-bottom: 10px;
+}
+
+.userImage{
+    display: flex;
+    justify-content: center;
+    color: #53265d;
+    border: 5px solid #53265d;
+    border-radius: 50px;
+    width: 90px;
+    height: 90px;
+}
+.orgTitle{
+    font-size: 14pt;
+    font-weight: 800;
+    color: #53265d;
+}
+.pad-tb-10{
+    padding: 10px 0px;
+}
+.purple-badge{
+    padding: 1px 10px;
+    border-radius: 10px;
+    margin: 3px 0px;
+    background-color: blueviolet;
+    color: #FFFFFF;
+    text-align: center;
+    width: 50px;
+    font-weight: 600;
+    font-size: medium;
+}
