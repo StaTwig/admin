@@ -12,7 +12,6 @@ const OrganisationModel = require('../models/OrganisationModel');
 const WarehouseModel = require('../models/WarehouseModel');
 const ProductModel = require('../models/ProductModel');
 const CounterModel = require('../models/CounterModel')
-const OrganisationModel = require('../models/OrganisationModel')
 const ProductModel = require('../models/ProductModel')
 //this helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
