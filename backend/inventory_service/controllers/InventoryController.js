@@ -2643,64 +2643,47 @@ function _spreadHeaders(inputObj) {
 }
 
 exports.uploadSalesData = [
-  // auth,
+  auth,
   async (req, res) => {
     try {
       const dir = `uploads`;
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir);
       }
-      const { collectedDate } = req.body;
-      const uploadedFileName = req.file.originalname;
+      const { collectedDate, targetPercentage } = req.body;
       await moveFile(req.file.path, `${dir}/${req.file.originalname}`);
       const workbook = XLSX.readFile(`${dir}/${req.file.originalname}`);
       const sheet_name_list = workbook.SheetNames;
-      const sheetJSON = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]], { defval: "" });
+
+      var range = XLSX.utils.decode_range(workbook.Sheets[sheet_name_list[0]]['!ref']);
+      range.s.c = 0;
+      range.e.c = 58;
+      var new_range = XLSX.utils.encode_range(range);
+
+      const sheetJSON = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]], { blankrows: false, defval: "", range: new_range });
 
       let headerRow1 = _spreadHeaders(sheetJSON[0]);
       let headerRow2 = _spreadHeaders(sheetJSON[1]);
       let headerRow3 = _spreadHeaders(sheetJSON[2]);
       let headerRow4 = sheetJSON[3];
-
-      const spuriousColumns = ['__EMPTY', '__EMPTY_1', '__EMPTY_2', '__EMPTY_3', '__EMPTY_4', '__EMPTY_5', '__EMPTY_6'];
+      let headerRow5 = sheetJSON[4];
 
       let parsedRows = [];
-
       sheetJSON.forEach((row, index) => {
-        if (index > 2 && row['__EMPTY_1'].length) {
+        if (index > 4) {
           let rowKeys = Object.keys(row);
-          rowKeys = rowKeys.filter((e) => spuriousColumns.indexOf(e) === -1);
           rowKeys.forEach((rowKey) => {
             let prod = {};
-            if (!rowKey.startsWith('__') && !rowKey.startsWith('t') && rowKey !== 'target') {
-              prod['productName'] = headerRow2[rowKey];
+            if (headerRow5[rowKey] && headerRow5[rowKey].length) {
+              prod['productName'] = headerRow4[rowKey];
               prod['productSubName'] = headerRow3[rowKey];
-              prod['productId'] = headerRow4[rowKey];
+              prod['productId'] = headerRow5[rowKey];
               prod['depot'] = row['__EMPTY_1'];
               prod['sales'] = row[rowKey];
-              prod['targetSales'] = row['t' + rowKey];
+              prod['targetSales'] = row[rowKey] * (targetPercentage / 100);
               prod['uploadDate'] = collectedDate;
               let depot = warehouseDistrictMapping.find(w => w.depot === row['__EMPTY_1']);
               prod['warehouseId'] = (depot && depot.warehouseId) ? depot.warehouseId : '';
-            }
-            if (Object.keys(prod).length) {
-              parsedRows.push(prod);
-            }
-          });
-        } else if (index > 2 && !row['__EMPTY_1'].length && row['__EMPTY'].length) {
-          let rowKeys = Object.keys(row);
-          rowKeys = rowKeys.filter((e) => spuriousColumns.indexOf(e) === -1);
-          rowKeys.forEach((rowKey) => {
-            let prod = {};
-            if (!rowKey.startsWith('__') && !rowKey.startsWith('t') && rowKey !== 'target') {
-              prod['productName'] = headerRow2[rowKey];
-              prod['productSubName'] = headerRow3[rowKey];
-              prod['productId'] = headerRow4[rowKey];
-              prod['isDistrictAggregate'] = true;
-              prod['districtName'] = row['__EMPTY'];
-              prod['sales'] = row[rowKey];
-              prod['targetSales'] = row['t' + rowKey];
-              prod['uploadDate'] = collectedDate;
             }
             if (Object.keys(prod).length) {
               parsedRows.push(prod);
@@ -2713,7 +2696,7 @@ exports.uploadSalesData = [
 
       return apiResponse.successResponseWithData(
         res,
-        respObj
+        `Uploaded Sales Data successfully. Num Records - ${respObj.length}`
       );
 
     } catch (err) {
