@@ -22,6 +22,9 @@ const CENTRAL_AUTHORITY_ID = null
 const CENTRAL_AUTHORITY_NAME = null
 const CENTRAL_AUTHORITY_ADDRESS = null
 
+const blockchain_service_url = process.env.URL;
+const shipment_stream = process.env.SHIP_STREAM;
+const axios = require("axios");
 const { uploadFile } = require("../helpers/s3");
 const fs = require('fs');
 const util = require('util');
@@ -457,6 +460,26 @@ exports.createShipment = [
 
         const shipment = new ShipmentModel(data);
         const result = await shipment.save();
+        
+
+	//Blockchain Integration
+	  const userData = {
+            stream: shipment_stream,
+            key:  shipmentId,
+            address: req.user.walletAddress,
+            data: data,
+          };
+          const response =  await axios.post(
+            `${blockchain_service_url}/publish`,
+            userData,
+          );
+          await ShipmentModel.findOneAndUpdate({
+            id: shipmentId
+          }, {
+            $push: {
+              transactionIds: response.data.transactionId
+            }
+          });
 
         if (data.taggedShipments) {
           const prevTaggedShipments = await ShipmentModel.findOne({
