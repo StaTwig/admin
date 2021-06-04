@@ -320,8 +320,6 @@ exports.addAddressesFromExcel = [
             let warehouse = new Warehouse(reqData);
             await warehouse.save();
             if (address?.user) {
-              console.log(address?.user);
-
               await EmployeeModel.updateOne(
                 {
                   $or: [
@@ -334,6 +332,26 @@ exports.addAddressesFromExcel = [
             }
           });
       }
+      await CounterModel.update(
+        {
+          "counters.name": "warehouseId",
+        },
+        {
+          $inc: {
+            "counters.$.value": data.length,
+          },
+        }
+      );
+      await CounterModel.update(
+        {
+          "counters.name": "inventoryId",
+        },
+        {
+          $inc: {
+            "counters.$.value": data.length,
+          },
+        }
+      );
       return apiResponse.successResponseWithData(res, "Success", data);
     } catch (e) {
       return apiResponse.ErrorResponse(res, e);
