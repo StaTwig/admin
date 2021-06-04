@@ -1,32 +1,32 @@
-import React from "react";
+import React from 'react';
 
-import { Link } from "react-router-dom";
-import Footer from "../footer";
-import HomeIcon from "../../assets/aicons/home.png";
-import HomeSelectedIcon from "../../assets/aicons/home-selected.png";
-import UserIcon from "../../assets/aicons/ManageUsers.png";
-import UserSelectedIcon from "../../assets/aicons/ManageUsers-selected.png";
-import AddressIcon from "../../assets/aicons/ManageAddress.png";
-import AddressSelectedIcon from "../../assets/aicons/ManageAddress-selected.png";
-import AffiliatedOrganisationIcon from "../../assets/aicons/AffiliatedOrganisation.png";
-import AffiliatedOrganisationSelectedIcon from "../../assets/aicons/AffiliatedOrganisation-selected.png";
-import "./style.scss";
+import { Link } from 'react-router-dom';
+import Footer from '../footer';
+import HomeIcon from '../../assets/aicons/home.png';
+import HomeSelectedIcon from '../../assets/aicons/home-selected.png';
+import UserIcon from '../../assets/aicons/ManageUsers.png';
+import UserSelectedIcon from '../../assets/aicons/ManageUsers-selected.png';
+import AddressIcon from '../../assets/aicons/ManageAddress.png';
+import AddressSelectedIcon from '../../assets/aicons/ManageAddress-selected.png';
+import AffiliatedOrganisationIcon from '../../assets/aicons/AffiliatedOrganisation.png';
+import AffiliatedOrganisationSelectedIcon from '../../assets/aicons/AffiliatedOrganisation-selected.png';
+import './style.scss';
 
 const SideBar = ({ match, location, user }) => {
   const { url } = match;
   return (
     <div className="sidebar">
       <ul>
-        <li className={url === "/overview" ? "active" : ""}>
+        <li className={url === '/overview' ? 'active' : ''}>
           <Link to="/overview">
             <img
-              src={url === "/overview" ? HomeSelectedIcon : HomeIcon}
+              src={url === '/overview' ? HomeSelectedIcon : HomeIcon}
               alt="Overview"
             />
             <span className="pt-2 text-center">Overview</span>
           </Link>
         </li>
-        <li
+        {/* <li
           className={
             url === "/address" || url === "/newaddress" ? "active" : ""
           }
@@ -80,13 +80,13 @@ const SideBar = ({ match, location, user }) => {
               Organisation
             </span>
           </Link>
-        </li>
-        {user.type == "CENTRAL_AUTHORITY" && (
-          <li className={url === "/organisation" ? "active" : ""}>
+        </li> */}
+        {user.type == 'CENTRAL_AUTHORITY' && (
+          <li className={url === '/organisation' ? 'active' : ''}>
             <Link to="/organisation">
               <img
                 src={
-                  url === "/organisation"
+                  url === '/organisation'
                     ? AffiliatedOrganisationSelectedIcon
                     : AffiliatedOrganisationIcon
                 }

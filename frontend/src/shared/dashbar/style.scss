@@ -107,6 +107,16 @@
       .custom-dropdown .btn-custom-dropdown{
         font-size:13px;
         color:#000000;
+        &.active {
+          color: $abinSideBar;
+        }
+        .text {
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          width: 150px;
+          text-align: left;
+        }
         @media (max-width: 1250px) {
           font-size:14px;
           color:#000000;

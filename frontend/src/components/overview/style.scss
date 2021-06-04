@@ -22,7 +22,8 @@
 }
 .sub-header {
   margin-left: 1em;
-  color: blue;
+  color: #f59c00;
+  font-weight: 500;
 }
 .dropdownLabel {
   font-size: larger;
@@ -35,8 +36,8 @@
   color: $lightGrey;
 }
 .orangeBtn {
-  background-color: #ff8c00;
-  color: #ffffff;
+  background-color: $abinBevButton;
+  color: $abinbevButtonText;
 }
 .txtWrapR {
   white-space: nowrap;

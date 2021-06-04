@@ -36,12 +36,12 @@ body {
 }
 
 .btn-white {
-  color: $primaryBlue;
+  color: $abinSideBar;
 }
 
 .btn-primary {
   background: transparent
-    linear-gradient(109deg, $primaryBlue 0%, $skyBlue 100%) 0% 0% no-repeat
+    linear-gradient(109deg, $abinSideBar 0%, $abinSideBar2 100%) 0% 0% no-repeat
     padding-box;
   box-shadow: 0px 3px 6px $grey;
   border-radius: 10px;
@@ -50,7 +50,7 @@ body {
 }
 
 .btn-main-blue {
-  background: $primaryBlue;
+  background: $abinSideBar;
   border-radius: 10px;
   border-width: 0;
   border-color: transparent;
@@ -62,7 +62,7 @@ body {
 }
 
 .btn-blue {
-  background: $skyBlue;
+  background: $abinSideBar2;
   border-radius: 10px;
   border-width: 0;
   border-color: transparent;
@@ -89,10 +89,13 @@ body {
     color: $white;
   }
 }
+.btn:hover{
+  color:$white;
+}
 
 .btn-outline-primary {
-  color: $primaryBlue !important;
-  border-color: $primaryBlue !important;
+  color: $abinSideBar !important;
+  border-color: $abinSideBar !important;
   border-width: 1px !important;
   border-radius: 10px !important;
 }

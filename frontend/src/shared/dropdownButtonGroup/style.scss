@@ -21,13 +21,14 @@
     background: transparent;
 
     &.active {
-      color: $primaryBlue;
+      color: $abinSideBar;
     }
     .text {
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      width: 130px;
+      width: 150px;
+      text-align: left;
     }
   }
 
@@ -44,6 +45,7 @@
       clear: both;
       font-size: 14px;
       cursor: pointer;
+      white-space: pre-wrap;
     }
     hr {
       border-width: 2px;
@@ -55,8 +57,8 @@
     position: absolute;
     transform: translate3d(0px, 38px, 0px);
     top: 0;
-    left: -16px;
-    right: -15px;
+    left: 0;
+    right: 0;
     will-change: transform;
   }
 }
