@@ -13,21 +13,20 @@ const Details = (props) => {
   useEffect(() => {
     setStatus(org?.status);
     // console.log(types)
-    // typedIdset();
+    typedIdset();
   }, [setStatus, org]);
   const changeStatus = (status) => {
     org.status = status;
     setStatus(status);
   };
-  // function typedIdset() {
-  //   types[0].organisationTypes.forEach((element) => {
-  //     if (element.name === type) {
-  //       setTypeId(element.id);
-  //       return;
-  //     }
-  //   });
-  // }
-
+  function typedIdset(){
+    types?.forEach(element => {
+      if(element.name === type){
+        setTypeId(element.id);
+        return
+      }
+    });
+  }
   return (
     <div className="card rounded bg-white border border-white mt-1 ml-1 p-1 mb-3">
       <div className="card-body d-flex flex-row justify-content-between">
@@ -47,13 +46,10 @@ const Details = (props) => {
         <span className=" text-center w-15 align-self-center">
           {/* {org?.type} */}
           <DropdownButton
-            groups={types[0].organisationTypes}
-            onSelect={(item) => {
-              setType(item.name);
-              setTypeId(item.id);
-            }}
-            name={type ? type : org?.type}
-          />
+                  groups={types}
+                  onSelect={item => {setType(item); typedIdset()}}
+                  name={type}
+                />
         </span>
         <span className=" w-20 text-center align-self-center">
           {org?.postalAddress}
