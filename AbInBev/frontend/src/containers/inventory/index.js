@@ -5,6 +5,7 @@ import { getProductsInventory } from '../../actions/inventoryAction';
 
 const InventoryContainer = (props) => {
   const [inventories, setInventories] = useState([]);
+  const [totalStock, setTotalStock] = useState(0);
   const dispatch = useDispatch();
 
   const [filters, setFilters] = useState({
@@ -18,6 +19,9 @@ const InventoryContainer = (props) => {
   async function _getProductsInventory(_filters) {
     const result = await dispatch(getProductsInventory(_filters));
     setInventories(result.message);
+    let inventories = result.message;
+    let _totalStock = inventories.reduce((a, b) => +a + +b.quantity, 0);
+    setTotalStock(_totalStock);
   }
 
   useEffect(() => {
@@ -28,7 +32,7 @@ const InventoryContainer = (props) => {
     await _getProductsInventory(_filters);
   }
 
-  return <Inventory inventories={inventories} {...props} applyFilters={applyFilters} />;
+  return <Inventory inventories={inventories} totalStock={totalStock} {...props} applyFilters={applyFilters} />;
 };
 
 export default InventoryContainer;
