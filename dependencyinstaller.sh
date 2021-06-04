@@ -1,5 +1,3 @@
-# install node
-
 sudo apt update
 sudo apt install apt-transport-https ca-certificates curl software-properties-common
 
@@ -17,3 +15,9 @@ docker-compose --version
 sudo apt-get install build-essential -y
 
 sudo docker network create proxy
+
+cd admin
+
+touch acme.json
+
+sudo chmod 600 acme.json

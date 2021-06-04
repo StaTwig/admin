@@ -248,7 +248,7 @@ export const getTypes = () => {
       const result = await axios.get(config().getOrgTypesUrl);
       dispatch({
         type: SET_ORGANISATION_TYPES,
-        payload: result.data,
+        payload: result.data.data[0].organisationTypes,
       });
       dispatch(turnOff());
       return result.data.data[0].organisationTypes;

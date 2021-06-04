@@ -12,21 +12,21 @@ const Details = (props) => {
   const [type, setType] = useState(org?.type);
   useEffect(() => {
     setStatus(org?.status);
-    // console.log(types)
-    // typedIdset();
+    types?console.log(types):console.log('')
+    typedIdset();
   }, [setStatus, org]);
   const changeStatus = (status) => {
     org.status = status;
     setStatus(status);
   };
-  // function typedIdset() {
-  //   types[0].organisationTypes.forEach((element) => {
-  //     if (element.name === type) {
-  //       setTypeId(element.id);
-  //       return;
-  //     }
-  //   });
-  // }
+  function typedIdset(){
+    types?.forEach(element => {
+      if(element.name === type){
+        setTypeId(element.id);
+        return
+      }
+    });
+  }
 
   return (
     <div className="card rounded bg-white border border-white mt-1 ml-1 p-1 mb-3">
@@ -44,7 +44,7 @@ const Details = (props) => {
         <span className=" text-center w-15 align-self-center">
           {/* {org?.type} */}
           <DropdownButton
-            groups={types[0].organisationTypes}
+            groups={types}
             onSelect={(item) => {
               setType(item.name);
               setTypeId(item.id);
