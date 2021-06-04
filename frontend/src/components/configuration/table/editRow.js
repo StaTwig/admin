@@ -37,7 +37,7 @@ const EditRow = props => {
       name: changeValue,
     };
     addNewOrgTypesUrl(data);
-    setAddnew(false);
+    setAddnew(true);
 
     // props.category=false;
   };
