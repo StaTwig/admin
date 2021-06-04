@@ -96,7 +96,7 @@ const ChainOfCustody = (props) => {
                   </div>
                   <div className="d-flex flex-column mr-5">
                     <div className="emp"></div>
-                    <div>{custody.updatedOn.split(" ")[0]}</div>
+                    <div>{custody.updatedOn?.split(" ")[0]}</div>
                     <div></div>
                   </div>
                 </div>
@@ -193,7 +193,7 @@ const ChainOfCustody = (props) => {
                       </div>
                       <div className="d-flex flex-column mr-5">
                         <div className="emp"></div>
-                        <div>{custody.updatedOn.split(" ")[0]}</div>
+                        <div>{custody.updatedOn?.split(" ")[0]}</div>
                         <div></div>
                       </div>
                     </div>
@@ -283,7 +283,7 @@ const ChainOfCustody = (props) => {
                       </div>
                       <div className="d-flex flex-column mr-5">
                         <div className="emp"></div>
-                        <div>{custody.updatedOn.split(" ")[0]}</div>
+                        <div>{custody.updatedOn?.split(" ")[0]}</div>
                         <div></div>
                       </div>
                     </div>
