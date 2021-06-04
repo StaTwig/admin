@@ -4,7 +4,7 @@ import Popup from 'reactjs-popup';
 const UploadModal = (props) => {
   return (
     <Popup
-      trigger={<div className="btn btn-warning dahbtnupload" > Open Modal </div >}
+      trigger={<div className="btn btn-warning dahbtnupload" > Upload Sales Data </div >}
       modal
     >
       <div className="col-md-12 uploadModal">
