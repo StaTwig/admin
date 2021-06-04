@@ -40,7 +40,7 @@ exports.updateOrg = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           const { id, status, type, typeId } = req.body;
-          await OrganisationModel.findOneAndUpdate(
+          const organisation = await OrganisationModel.findOneAndUpdate(
             {
               id: id,
             },
@@ -50,11 +50,13 @@ exports.updateOrg = [
                 type:type,
                 typeId : typeId || ""
               },
+            },
+            {
+              new: true
             }
           )
             .then(async (org) => {
-              let res_message = "Organisation updated!!";
-              await EmployeeModel.updateOne(
+              await EmployeeModel.findOneAndUpdate(
                 { id: org.primaryContactId },
                 {
                   $set: {
@@ -62,7 +64,7 @@ exports.updateOrg = [
                   },
                 }
               );
-              return apiResponse.successResponseWithData(res, res_message);
+              return apiResponse.successResponseWithData(res,"Organisation updated ", organisation);
             })
             .catch((err) => {
               console.log(err);
@@ -70,7 +72,7 @@ exports.updateOrg = [
               return apiResponse.ErrorResponse(res, err);
             });
         } else {
-          res.status(403).json("Auth failed");
+          return apiResponse.unauthorizedResponse(res , result)
         }
       });
     } catch (err) {
