@@ -2749,7 +2749,10 @@ exports.getBatchNearExpiration = [
                     $gte: today.toISOString(),
                     $lt: nextMonth.toISOString()
                   }
-                }, { $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] } }
+                }, { $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] } },
+                // {batchNumbers: {$ne: ""}},
+                {"attributeSet.mfgDate": {$ne: ""}},
+                {"attributeSet.expDate": {$ne: ""}}
               ]
             }
           },
@@ -2803,7 +2806,10 @@ exports.getBatchExpired = [
                   "attributeSet.expDate": {
                     $lt: today.toISOString()
                   }
-                }, { $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] } }
+                }, { $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] } },
+                // {batchNumbers: {$ne: ""}},
+                {"attributeSet.mfgDate": {$ne: ""}},
+                {"attributeSet.expDate": {$ne: ""}}
               ]
             }
           },
