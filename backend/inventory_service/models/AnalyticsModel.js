@@ -11,7 +11,7 @@ var AnalyticsSchema = new mongoose.Schema({
 	targetSales: { type: String, required: true },
 	returns: { type: String },
 	warehouseId: { type: String },
-	uploadDate: { type: String, required: true },
+	uploadDate: { type: Date, required: true },
 	warehouseName: { type: String }
 }, { timestamps: true });
 
