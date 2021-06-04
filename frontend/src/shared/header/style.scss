@@ -21,7 +21,8 @@
     padding-left: 30px;
     flex-basis: 70%;
     img {
-      width: 198px;
+      width: 120px;
+      height: 100%;
     }
     @media (min-width: $xl) {
       flex-basis: 75%;
@@ -53,11 +54,11 @@
       margin: 0;
 
       &:first-child {
-        color: $primaryBlue;
+        color: $abinSideBar;
       }
 
       &:nth-child {
-        color: $primaryBlue;
+        color: $abinSideBar;
       }
     }
   }
@@ -69,7 +70,7 @@
     align-items: center;
     position: relative;
     background: transparent
-      linear-gradient(246deg, $primaryBlue 0%, $skyBlue 100%) 0% 0% no-repeat
+      linear-gradient(246deg, $abinSideBar 0%, $abinSideBar2 100%) 0% 0% no-repeat
       padding-box;
     border-radius: 0px 0px 0px 100px;
     flex: 1;
