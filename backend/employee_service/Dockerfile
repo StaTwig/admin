@@ -4,8 +4,8 @@ WORKDIR /src
 
 COPY . /src
 
-RUN npm install
+RUN yarn install
 
 EXPOSE 3003
 
-CMD npm start
+CMD yarn run start

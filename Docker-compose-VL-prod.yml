@@ -59,9 +59,23 @@ services:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
       - "traefik.http.routers.employee.entrypoints=websecure"
-      - "traefik.http.routers.employee.rule=Host(`admin.vaccineledger.com`) && PathPrefix(`/api/employee_service`)"
+      - "traefik.http.routers.employee.rule=Host(`admin.vaccineledger.com`) && PathPrefix(`/api/employee_service`) || PathPrefix(`/usermanagement/api/`)"
       - "traefik.http.routers.employee.tls=true"
       - "traefik.http.routers.employee.tls.certresolver=lets-encrypt"
+
+  configuration:
+    build: './backend/configuration_service' 
+    image: 'configuration_service1.0'
+    container_name: 'configuration_service'
+    restart: always
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.configuration.entrypoints=websecure"
+      - "traefik.http.routers.configuration.rule=Host(`admin.vaccineledger.com`) && PathPrefix(`/api/configuration_service`)"
+      - "traefik.http.routers.configuration.tls=true"
+      - "traefik.http.routers.configuration.tls.certresolver=lets-encrypt"  
+
   frontend:
     build: './frontend'
     image: 'frontend2.0'

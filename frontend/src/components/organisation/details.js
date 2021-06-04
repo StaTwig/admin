@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "leaflet/dist/leaflet.css";
-import "./style.scss";
+// import "./style.scss";
 import { formatDate } from "../../utils/dateHelper";
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import { map } from "leaflet";
@@ -12,10 +12,8 @@ const Details = (props) => {
   const [type, setType] = useState(org?.type);
   useEffect(() => {
     setStatus(org?.status);
-    types?console.log(types):console.log('')
-    typedIdset()
-    console.log(typeId)
-
+    // console.log(types)
+    typedIdset();
   }, [setStatus, org]);
   const changeStatus = (status) => {
     org.status = status;
@@ -32,7 +30,8 @@ const Details = (props) => {
   return (
     <div className="card rounded bg-white border border-white mt-1 ml-1 p-1 mb-3">
       <div className="card-body d-flex flex-row justify-content-between">
-        <div className="userPic w-20 text-center rounded d-flex flex-row">
+        <div className="d-flex flex-column w-20">
+        <div className="userPic text-center rounded d-flex flex-row">
           {org?.logoId && (
             <img
               src={org?.logoId}
@@ -41,8 +40,10 @@ const Details = (props) => {
             />
           )}
           <h6 className="text-primary pt-1 txtWrapu">{org?.name}</h6>
-        </div> 
-        <span className="txtWrapu text-center w-15 align-self-center">
+        </div>
+        <div className="blockquote-footer mt-2 ml-4 txtWrapu">{org?.primaryContactId}</div>
+        </div>
+        <span className=" text-center w-15 align-self-center">
           {/* {org?.type} */}
           <DropdownButton
                   groups={types}
@@ -72,7 +73,7 @@ const Details = (props) => {
                   status: "DEACTIVATED",
                   index: org?.ridex,
                   type: type,
-                  typeId: typeId
+                  typeId: typeId,
                 });
                 changeStatus("DEACTIVATED");
               } else {
@@ -81,7 +82,7 @@ const Details = (props) => {
                   status: "ACTIVE",
                   index: org?.ridex,
                   type: type,
-                  typeId: typeId
+                  typeId: typeId,
                 });
                 changeStatus("ACTIVE");
               }

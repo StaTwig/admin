@@ -1,22 +1,15 @@
 const OrganisationModel = require('../models/ConfigurationModel');
 const apiResponse = require("../utils/apiResponse")
 const auth = require("../middlewares/jwt");
-const { customAlphabet } = require("nanoid");
-const nanoid = customAlphabet("1234567890abcdef", 10);
 const checkToken = require("../middlewares/middleware").checkToken;
-const { options } = require('../app');
- const uniqid = require("uniqid");
- const CounterModel = require('../models/CounterModel');
+const CounterModel = require('../models/CounterModel');
 
-
-
- exports.addneworgtypeinstance=[
+ exports.addNewOrgTypeInstance=[
         auth,
         async(req,res)=>{
         try{
           const {id,name}=req.body;
           //instance created
-
       const incrementCounterOrg = await CounterModel.update({
             'counters.name': "orgId"
          },{
@@ -27,8 +20,6 @@ const { options } = require('../app');
 
       const orgCounter = await CounterModel.findOne({'counters.name':"orgId"},{"counters.name.$":1})
       organisatId = orgCounter.counters[0].format + orgCounter.counters[0].value;
-
-      //organisationId = uniqid('org-');
       const incrementCounterWarehouse = await CounterModel.update({
             'counters.name': "warehouseId"
          },{
@@ -39,10 +30,6 @@ const { options } = require('../app');
 
       const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.name.$":1})
       configid = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
-
-
-
-
               const u_id = configid;
               const Org_id = organisatId;
               const organisationModel =new OrganisationModel({
@@ -54,21 +41,18 @@ const { options } = require('../app');
                 approvalAuthority:0,
               })
               const result=await organisationModel.save()
-              console.log(result);
-              res.send({
-                message:"success",
-                payload:result,
-              })
+              return apiResponse.successResponseWithData(res, "New Organisation Type Instance Addded" , result)
         }
         catch(error)
         {
           console.log(error.message);
+          return apiResponse.ErrorResponse(res, error.message);
         }
       }
       ];
 
 
-      exports.addneworgtype=[
+      exports.addNewOrgType=[
         auth,
         async(req,res)=>{
         try{
@@ -88,15 +72,12 @@ const { options } = require('../app');
           const Org_id = organisatId;
           var newObject2 = { id :Org_id , name :req.body.name,approvalAuthority:0 }
           const organisations=await OrganisationModel.update({id:req.query.id},{"$push":{"organisationTypes": newObject2 }})
-              console.log(organisations);
-              res.send({
-                message:"success",
-                payload:organisations,
-              })
+              return apiResponse.successResponseWithData(res, "Organisation Type Added" , organisations)
         }
         catch(error)
         {
           console.log(error.message);
+          return apiResponse.ErrorResponse(res, error.message)
         }
       }
       ];
@@ -147,8 +128,55 @@ exports.getOrganizationsByType = [
     },
   ];
 
+// exports.getOrgTypes =[
+//   auth,
+//   async(req,res) =>{
+//     try{
+//       checkToken(req, res, async (result) => {
+//         if (result.success) {
+//           const organisations=await OrganisationModel.find({},'organisationTypes.id organisationTypes.name')
+//           return apiResponse.successResponseWithData(
+//             res,
+//             "Success - Organisations Types List",
+//             organisations
+//           );
+//       } else{
+//         return apiResponse.unauthorizedResponse(res, "Auth Failed")
+//     }
+//   }
+//   )
+//   }
+//   catch(err){
+//     return apiResponse.ErrorResponse(res, err);
+//   }
+//   }
+// ]  
+
+// exports.getWarehouseTypes =[
+//   auth,
+//   async(req,res) =>{
+//     try{
+//       checkToken(req, res, async (result) => {
+//         if (result.success) {
+//           const warehouses=await OrganisationModel.find({},'warehouseTypes.id warehouseTypes.name')
+//           return apiResponse.successResponseWithData(
+//             res,
+//             "Warehouse Types List",
+//             warehouses
+//           );
+//       } else{
+//         return apiResponse.unauthorizedResponse(res, "Auth Failed")
+//     }
+//   }
+//   )
+//   }
+//   catch(err){
+//     return apiResponse.ErrorResponse(res, err);
+//   }
+//   }
+// ]
  
-  exports.getwarehouseByType = [
+  exports.getWarehouseByType = [
     auth,
       async (req, res) => {
         try {
@@ -167,7 +195,7 @@ exports.getOrganizationsByType = [
       },
     ];
 
-    exports.updatewareHouseByType = [
+    exports.updateWareHouseByType = [
       auth,
         async (req, res) => {
           try {
@@ -193,7 +221,7 @@ exports.getOrganizationsByType = [
       ];
 
 
-      exports.addnewwarehousetypeinstance=[
+      exports.addNewWarehouseTypeInstance=[
         auth,
         async(req,res)=>{
         try{
@@ -233,21 +261,18 @@ exports.getOrganizationsByType = [
                 
               })
               const result=await organisationModel.save()
-              console.log(result);
-              res.send({
-                message:"success",
-                payload:result,
-              })
+              return apiResponse.successResponseWithData(res, "Added New Warehouse Instance", result)
         }
         catch(error)
         {
           console.log(error.message);
+          return apiResponse.ErrorResponse(res, error.message)
         }
       }
       ];
 
 
-      exports.addnewwarehousetype=[
+      exports.addNewWarehouseType=[
         auth,
         async(req,res)=>{
         try{
@@ -266,15 +291,12 @@ exports.getOrganizationsByType = [
           const Org_id = organisatId;
           var newObject2 = { id :Org_id , name :req.body.name}
           const organisations=await OrganisationModel.update({id:req.query.id},{"$push":{"warehouseTypes": newObject2 }})
-              console.log(organisations);
-              res.send({
-                message:"success",
-                payload:organisations,
-              })
+              return apiResponse.successResponseWithData(res, "Warehouse Type Added", organisations)
         }
         catch(error)
         {
           console.log(error.message);
+          return apiResponse.ErrorResponse(res, error.message)
         }
       }
       ];

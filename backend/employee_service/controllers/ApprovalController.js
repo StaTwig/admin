@@ -11,6 +11,7 @@ const apiResponse = require("../helpers/apiResponse");
 const axios = require("axios");
 const uniqid = require("uniqid");
 const dotenv = require("dotenv").config();
+const { URL } = require('url')
 const blockchain_service_url = process.env.URL;
 
 exports.getApprovals = [
@@ -37,7 +38,7 @@ exports.getApprovals = [
               return apiResponse.ErrorResponse(res, err);
             });
         } else {
-          res.status(403).json("Auth failed");
+          return apiResponse.unauthorizedResponse(res, "Auth Failed")
         }
       });
     } catch (err) {
@@ -50,6 +51,7 @@ exports.acceptApproval = [
   auth,
   (req, res) => {
     try {
+      var errorList = [];
       checkToken(req, res, async (result) => {
         if (result.success) {
           const { organisationName } = req.user;
@@ -59,19 +61,24 @@ exports.acceptApproval = [
           })
             .then((employee) => {
               if (employee) {
-                axios
+                try{
+                  axios
                   .get(`${blockchain_service_url}/createUserAddress`)
                   .then((response) => {
                     const walletAddress = response.data.items;
                     const userData = {
                       walletAddress,
-                    };
+                    }
                     axios
-                      .post(
-                        `${blockchain_service_url}/grantPermission`,
-                        userData
-                      )
-                      .then(() => console.log("posted"));
+                    .post(
+                      `${blockchain_service_url}/grantPermission`,
+                      userData
+                    )
+                    .then(() => console.log("posted"))
+                    .catch((err)=>{
+                      console.log(err);
+                      errorList.push(err);
+                    });
                     EmployeeModel.findOneAndUpdate(
                       { id: id },
                       {
@@ -99,8 +106,9 @@ exports.acceptApproval = [
                             constants.appovalEmail.subject,
                             emailBody
                           );
-                        } catch (mailerr) {
-                          console.log(mailerr);
+                        } catch (mailError) {
+                          console.log(mailError);
+                          errorList.push(mailError);
                         }
                         return apiResponse.successResponseWithData(
                           res,
@@ -108,20 +116,31 @@ exports.acceptApproval = [
                           emp
                         );
                       });
-                  });
+                  }  
+                  ).catch((err)=>{
+                      console.log(err);
+                      errorList.push(errorList);
+                    })
+                }
+                catch(error){
+                  console.log(error);
+                  errorList.push(error);
+                }
               } else {
                 return apiResponse.notFoundResponse(res, "User Not Found");
               }
             })
             .catch((err) => {
-              return apiResponse.ErrorResponse(res, err);
+              errorList.push(err);
+              return apiResponse.ErrorResponse(res, errorList);
             });
         } else {
-          res.status(403).json("Auth failed");
+          return apiResponse.unauthorizedResponse(res, "Auth Failed")
         }
       });
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      errorList.push(err)
+      return apiResponse.ErrorResponse(res, errorList);
     }
   },
 ];
@@ -182,7 +201,7 @@ exports.rejectApproval = [
               return apiResponse.ErrorResponse(res, err);
             });
         } else {
-          res.status(403).json("Auth failed");
+          return apiResponse.unauthorizedResponse(res, "Auth Failed")
         }
       });
     } catch (err) {
@@ -242,7 +261,7 @@ exports.addUser = [
           }
           return apiResponse.successResponse(res, "User Added");
         } else {
-          res.status(403).json("Auth failed");
+          return apiResponse.unauthorizedResponse(res, "Auth Failed")
         }
       });
     } catch (err) {
@@ -311,8 +330,8 @@ exports.activateUser = [
                               constants.appovalEmail.subject,
                               emailBody
                             );
-                          } catch (mailerr) {
-                            console.log(mailerr);
+                          } catch (mailError) {
+                            console.log(mailError);
                           }
                           return apiResponse.successResponseWithData(
                             res,
@@ -330,7 +349,7 @@ exports.activateUser = [
               return apiResponse.ErrorResponse(res, err);
             });
         } else {
-          res.status(403).json("Auth failed");
+          return apiResponse.unauthorizedResponse(res, "Auth Failed")
         }
       });
     } catch (err) {
@@ -379,7 +398,7 @@ exports.deactivateUser = [
               return apiResponse.ErrorResponse(res, err);
             });
         } else {
-          res.status(403).json("Auth failed");
+          return apiResponse.unauthorizedResponse(res, "Auth Failed")
         }
       });
     } catch (err) {
