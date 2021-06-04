@@ -62,7 +62,7 @@ const Overview = props => {
 
               <div className="d-flex flex-column">
                 <div className="title">Total Inbound Shipments</div>
-                <div className="count2" >{overviewAnalytics.inboundShipments}<small className="dayStatus ml-1"></small></div>
+                <div className="count3" >{overviewAnalytics.inboundShipments}<small className="dayStatus ml-1"></small></div>
               </div>
             </div>
 
@@ -74,7 +74,7 @@ const Overview = props => {
               </div>
               <div className="d-flex flex-column">
                 <div className="title">Total Product Category</div>
-                <div className="count3">{overviewAnalytics.totalProductCategory}<small className="dayStatus ml-1"></small></div>
+                <div className="count2">{overviewAnalytics.totalProductCategory}<small className="dayStatus ml-1"></small></div>
               </div>
             </div>
 

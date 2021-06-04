@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import './style.scss';
-import searchingIcon from '../../assets/icons/search_head.svg';
+import searchingIcon from '../../assets/icons/search.png';   //'../../assets/icons/search_head.svg'
 import bellIcon from '../../assets/icons/notification_blue.png';
 import dropdownIcon from '../../assets/icons/dropdown_selected.png';
 import Location from '../../assets/icons/location_blue.png';
@@ -130,7 +130,7 @@ const imgs = config().fetchProfileImage;
             onFocus={(e) => e.target.placeholder = ''}
             onBlur={(e) => e.target.placeholder = 'Search PO ID/ Shipment ID/ Product ID'}
             onChange={onSearchChange}
-            className= "form-control border border-primary search-field"
+            className= "form-control search-field"
           />
           <img src={searchingIcon} onClick={onSeach} alt="searching" />
         </div>

@@ -13,6 +13,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Pagination from '@material-ui/lab/Pagination';
 import { formatDate } from '../../utils/dateHelper';
+import dropdownIcon from '../../assets/icons/dropdown_selected.png';
 
 const Table = props => {
   const { inventoryDetails, inventoryCount, colors, skip } = props;
@@ -31,40 +32,44 @@ function getDate(n){
        {inventoryDetails.map((inventory, index) => (
          
           <div className="" key={index}>
-          <Accordion className="mb-3" style={{borderRadius:"15px" }}>
+          <Accordion className="mb-3" style={{borderRadius:"15px", width:"103%" }}>
            
               <AccordionSummary
-                  expanded={display}
+                 // expand={display}
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                   //className="rTableRow"
                   >
                                    
-                  <div className="rTableCell" style={{position:"relative",left:'-3%'}}>
+                  <div className="rTableCell" style={{position:"relative",left:'0%'}}>
                     <div className="d-flex flex-column txtBlue">
                       <div>{inventory.ProductList[0].productDetails.name}</div>
                     </div>
                   </div>
-                  <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.type}</div>
+                  <div className="rTableCell" style={{position:"relative",left:'6%'}}>{inventory.ProductList[0].productDetails.type}</div>
                   {/* <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.manufacturer}</div> */}
-                  <div className="rTableCell" style={{position:"relative",left:'4%'}}>{formatDate(inventory.ProductList[0].productDetails.createdAt)}</div>
-                  <div className="rTableCell" style={{position:"relative",left:'8%'}}> {(inventory.eventTypePrimary !== 'ADD') ? (inventory.eventTypePrimary === 'RECEIVED' ? 'RECEIVED' :  'SENT') : 'ADDED'} </div>
-                  <div className="rTableCell" style={{position:"relative",left:'9%'}}>{inventory.inventoryQuantity}</div>                                 
-                  
-                  <div className="rTableCell" style={{position:"relative",left:'3%'}}>
-                    <button
+                  <div className="rTableCell" style={{position:"relative",left:'12%'}}>{formatDate(inventory.ProductList[0].productDetails.createdAt)}</div>
+                  <div className="rTableCell" style={{position:"relative",left:'19%'}}>{inventory.inventoryQuantity}</div>                                 
+                  <div className="rTableCell" style={{position:"relative",left:'22%'}}> {(inventory.eventTypePrimary !== 'ADD') ? (inventory.eventTypePrimary === 'RECEIVED' ? 'RECEIVED' :  'SENT') : 'ADDED'} </div>
+                 <div className=" rTableCell m-2" 
+                         style={{position:"relative",left:'12%'}}>
+                         <span className="drop-pad shadow rounded-circle">
+                         <img src={dropdownIcon} height="12" width="18"/></span>
+                  </div>                  
+              {  /* <button
                       className="btn btn-outline-primary fontSize200 expand"
                       type="button"
                       onClick={() => setDisplay(!display)}
-                    >{display ? "SHOW LESS" : "SHOW MORE"}</button>
-                 </div>
+                      >{display ? "SHOW LESS" : "SHOW MORE"}
+                    </button> */}
+       
                  
            
 
              </AccordionSummary>
                 <AccordionDetails>
                   <Typography>
-                            <div className="" style={{position:"relative", bottom:"15%", width:"190%" }}>
+                            <div className="" style={{position:"relative", bottom:"15%", width:"200%" }}>
                                  <hr className="solid" ></hr>
                             </div>
                               <TableContainer> 
