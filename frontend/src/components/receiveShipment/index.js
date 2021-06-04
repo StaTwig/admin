@@ -100,7 +100,7 @@ const ReceiveShipment = (props) => {
     console.log(data);
     const result = await receiveApi(data);
     if (result.status == 200) {
-      // setOpenUpdatedStatus(true);
+      //setOpenUpdatedStatus(true);
       console.log("success add product");
       setreceiveShipmentModal(true);
     } else {
@@ -153,9 +153,9 @@ const ReceiveShipment = (props) => {
               >
                 <img
                   src={returnShipment}
-                  width="14"
-                  height="14"
-                  className="mr-2"
+                  width="16"
+                  height="16"
+                  className="mr-2 mb-1" 
                 />
                 <span>Receive Shipment</span>
               </button>
@@ -164,6 +164,7 @@ const ReceiveShipment = (props) => {
               <Modal
                 close={() => closeModal()}
                 size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+                
               ></Modal>
             )}
           </div>

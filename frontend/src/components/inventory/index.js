@@ -27,16 +27,17 @@ const Inventory = props => {
     coloumn2: 'Product Category',
     // coloumn3: 'Manufacturer',
     coloumn3: 'Date',
-    coloumn4: 'Status',
-    coloumn5: 'Quantity',
-
+    coloumn4: 'Quantity',
+    coloumn5: 'Status',
+    
 
     img1: <img src={Product} width="16" height="16" />,
     img2: <img src={Quantity} width="24" height="16" />,
     // img3: <img src={user} width="16" height="16" />,
     img3: <img src={calender} width="16" height="16" />,
-    img4: <img src={Status} width="16" height="16" />,
-    img5: <img src={Quantity} width="24" height="16" />,
+    img4: <img src={Quantity} width="24" height="16" />,
+    img5: <img src={Status} width="16" height="16" />,
+    
   };
 
   const tableHeaders = {
@@ -342,8 +343,9 @@ const Inventory = props => {
         </div>
       </div>
       <div className="full-width-ribben">
-        <TableFilter data={headers} inventoryFilterData={props.inventoryFilterData} setInventoryProductNameFilterOnSelect={setInventoryProductNameFilterOnSelect} setInventoryManufacturerFilterOnSelect={setInventoryManufacturerFilterOnSelect}  setInventoryStatusFilterOnSelect={setInventoryStatusFilterOnSelect} setDateFilterOnSelect={setDateFilterOnSelect} setInventoryProductCategoryFilterOnSelect={setInventoryProductCategoryFilterOnSelect} 
-        fb="60%"/>
+        
+      <TableFilter data={headers} inventoryFilterData={props.inventoryFilterData} setInventoryProductNameFilterOnSelect={setInventoryProductNameFilterOnSelect} setInventoryManufacturerFilterOnSelect={setInventoryManufacturerFilterOnSelect}  setInventoryStatusFilterOnSelect={setInventoryStatusFilterOnSelect} setDateFilterOnSelect={setDateFilterOnSelect} setInventoryProductCategoryFilterOnSelect={setInventoryProductCategoryFilterOnSelect} 
+        fb="80%"/>
       </div>
       <div className="ribben-space">
         <div className="row no-gutter">
