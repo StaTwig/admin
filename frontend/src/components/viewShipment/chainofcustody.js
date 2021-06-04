@@ -36,7 +36,7 @@ const ChainOfCustody = (props) => {
     <div className="row panel justify-content-between">N/A</div>
   ) : (
     <div>
-      {props.shipments[0].shipmentUpdates.map((custody, index) =>
+      {props.shipments[0].shipmentUpdates?.map((custody, index) =>
         index == 0 ? (
           <div className="row  mb-3">
             <div></div>
