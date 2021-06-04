@@ -356,7 +356,7 @@ const Inventory = props => {
             <div className="list-container">
               <div className="d-flex justify-content-between align-items-center ml-4">
                 <h4><b>Product List</b></h4>
-                <Link to="/productcategory">
+                <Link to="/productlist/all">
                   <button className="btn btn-link mr-3"><b>View all</b></button>
                 </Link>
               </div>
