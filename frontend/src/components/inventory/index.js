@@ -175,7 +175,7 @@ const Inventory = props => {
               <div className="d-flex flex-column">
                 <div className="title truck-text">Total Product Category</div>
                 
-                <div className="count truck-text">{inventoriesCount} {inventoryAnalytics.totalProductCategory}</div>
+                <div className="count truck-text">{inventoriesCount} {inventoryAnalytics?.totalProductCategory}</div>
               </div>
             </div>
           </Link>
@@ -188,7 +188,7 @@ const Inventory = props => {
             </div>
             <div className="d-flex flex-column">
               <div className="title sent-text">Product Out Of Stock</div>
-              <div className="sent-text count">{currentInventoriesCount}{inventoryAnalytics.stockOut}</div>
+              <div className="sent-text count">{currentInventoriesCount}{inventoryAnalytics?.stockOut}</div>
               </div>
             </div>
           </Link>      
