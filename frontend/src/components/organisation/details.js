@@ -12,7 +12,7 @@ const Details = (props) => {
   const [type, setType] = useState(org?.type);
   useEffect(() => {
     setStatus(org?.status);
-    // console.log(types)
+    types?console.log(types):console.log('')
     typedIdset()
     console.log(typeId)
 
@@ -22,7 +22,7 @@ const Details = (props) => {
     setStatus(status);
   };
   function typedIdset(){
-    types[0].organisationTypes.forEach(element => {
+    types?.forEach(element => {
       if(element.name === type){
         setTypeId(element.id);
         return
@@ -45,7 +45,7 @@ const Details = (props) => {
         <span className="txtWrapu text-center w-15 align-self-center">
           {/* {org?.type} */}
           <DropdownButton
-                  groups={types[0].organisationTypes}
+                  groups={types}
                   onSelect={item => {setType(item); typedIdset()}}
                   name={type}
                 />
