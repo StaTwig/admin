@@ -5,7 +5,7 @@ import DropdownButton from "../../shared/dropdownButtonGroup";
 
 const NUModal = (props) => {
   const [selectedValue, setSelectedValue] = useState(-1);
-  const [wh, setWH] = useState("Select a warehouse");
+  const [wh, setWH] = useState("Select a Location");
   const { permissions, onHide, onSuccess, data, setData, addresses } = props;
   const setRole = (role) => {
     setSelectedValue(role);
