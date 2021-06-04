@@ -505,7 +505,7 @@ exports.addPOsFromExcel = [
                 "products": [
                   {
                     "productId": po['Material'],
-                    "productQuantity": po['Order Quantity']
+                    "quantity": po['Order Quantity']
                   }
                 ],
                 "createdBy" : createdBy,
