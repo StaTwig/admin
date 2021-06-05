@@ -546,18 +546,19 @@ const NewShipment = (props) => {
                           );
                           setFieldValue(
                             "toOrg",
-                            result.poDetails[0].customer.organisation.name
+                            result.poDetails[0].customer.organisation.id
                           );
                           setFieldValue(
                             "toOrgLoc",
-                            result.poDetails[0].customer.warehouse
-                              .postalAddress
+                            result.poDetails[0].customer.shippingAddress
+                              .shippingAddressId
                           );
                           setFieldValue(
                             "rtype",
                             result.poDetails[0].customer.organisation
                               .type
                           );
+                        
                           
                           let products_temp = result.poDetails[0].products;
                           for (let i = 0; i < products_temp.length; i++) {
@@ -778,7 +779,7 @@ const NewShipment = (props) => {
                         <Select
                           styles={customStyles}
                           isDisabled={disabled}
-                          placeholder={disabled ? values.toOrg : "Select Organisation Name"}
+                          placeholder={disabled ? values.toOrg : "Select Delivery Location"}
                           onChange={(v) => {
                             setFieldValue("toOrgLoc", "");
                             setReceiverOrgId(v.label);
