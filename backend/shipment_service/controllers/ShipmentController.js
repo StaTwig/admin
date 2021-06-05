@@ -2207,18 +2207,22 @@ exports.trackShipmentJourney = [
             "taggedShipments": 1,
             poId: 1
           })
-          if (inwardShipments.taggedShipments.length > 0)
-            inwardShipmentsArray = await ShipmentModel.find({
-              "$and": [{
-                id: inwardShipments.taggedShipments
-              }, {
-                status: "RECEIVED"
-              }]
-            })
-          else if (inwardShipments.poId != null)
-            poDetails = await RecordModel.findOne({
-              id: inwardShipments.poId
-            })
+          console.log(inwardShipments);
+          
+          if (inwardShipments?.taggedShipments) {
+            if (inwardShipments.taggedShipments.length > 0 && inwardShipments.taggedShipments[0] !== '')
+              inwardShipmentsArray = await ShipmentModel.find({
+                "$and": [{
+                  id: inwardShipments.taggedShipments
+                }, {
+                  status: "RECEIVED"
+                }]
+              })
+            else if (inwardShipments.poId != null)
+              poDetails = await RecordModel.findOne({
+                id: inwardShipments.poId
+              })
+          }
           const trackedShipment = await ShipmentModel.findOne({
             id: req.query.shipmentId
           })

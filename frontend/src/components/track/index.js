@@ -135,7 +135,7 @@ const Track = (props) => {
                       </div>
                       <div className="col ml-1">
                         <div className="">
-                            <div className="text-muted ">{searchType == 'SH' ? 'Shipment ID' : 'Order ID'}</div>
+                            <div className="text-muted ">{poChainOfCustodyData ? 'Order ID' : 'Shipment ID'}</div>
                           <div className="font-weight-bold ">
                             {shippmentChainOfCustodyData?.length > 0
                               ? shippmentChainOfCustodyData[0].id
@@ -148,11 +148,11 @@ const Track = (props) => {
                       {shippmentChainOfCustodyData.map((row, index) => { 
                         let newArr = [];
                         // if(row.id == value)
-                        newArr = shippmentChainOfCustodyData.filter(rw => rw.taggedShipments.includes(value));
+                        newArr = shippmentChainOfCustodyData.filter(rw => rw?.taggedShipments?.includes(value));
                         let cIndex = shippmentChainOfCustodyData.map((el) => el.id).indexOf(value) + 1;
                         cIndex = index < cIndex ? index : cIndex;
                         
-                        return row.shipmentUpdates.filter(s => s.status == 'RECEIVED').map((r, i) => (
+                        return row?.shipmentUpdates?.filter(s => s.status == 'RECEIVED').map((r, i) => (
                           <SoChainOfCustody
                             len={row.shipmentUpdates.length}
                             i={i}
