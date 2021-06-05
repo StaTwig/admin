@@ -95,6 +95,54 @@ exports.GetEOLInfoByProductId = [
   },
 ];
 
+
+exports.getEOLInfo = [
+  async (req, res) => {
+    try {
+      logger.log(
+        "info",
+        "<<<<< LastMileService < LastMileController < getEOLInfoBySerialNumber : token verified successfullly, querying data by publisher"
+      );
+      // console.log(req.query);
+        let matchQuery = {}
+        if(req.query.country){
+          matchQuery[`eol_info.contact_address.country`] = req.query.country
+        }
+        if(req.query.state){
+          matchQuery[`eol_info.contact_address.state`] = req.query.state
+        }
+        if(req.query.district){
+          matchQuery[`eol_info.contact_address.district`] = req.query.district
+        }
+        if(req.query.location){
+          matchQuery[`productAdministeredInfo.locationInfo.warehouseId`] = req.query.location
+        }
+        if(req.query.product){
+          matchQuery[`productAdministeredInfo.productId`] = req.query.product
+        }
+        console.log(matchQuery)
+      await LastMileModel.find(matchQuery).skip(req.query.skip).limit(req.query.limit)
+        .then((eolResult) => {
+          console.log("eolResult is ====> ", eolResult);
+          return apiResponse.successResponseWithData(
+            res,
+            "EOL Info with filters",
+            eolResult
+          );
+        })
+        .catch((err) => {
+          return apiResponse.ErrorResponse(res, err);
+        });
+    } catch (err) {
+      logger.log(
+        "error",
+        "<<<<< LastMileService < LastMileController < getEOLInfoBySerialNumber : error (catch block)"
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
 exports.GetEOLInfoByIdentityId = [
   async (req, res) => {
     try {
