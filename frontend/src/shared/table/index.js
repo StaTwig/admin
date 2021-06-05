@@ -29,6 +29,7 @@ function getDate(n){
   return (
     <div className="table">
     <div className="rTable">
+    {inventoryDetails.length == 0 && <div className="rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none">No records found</div>}
        {inventoryDetails.map((inventory, index) => (
          
           <div className="" key={index}>
