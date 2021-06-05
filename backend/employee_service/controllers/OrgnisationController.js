@@ -4,22 +4,28 @@ const auth = require("../middlewares/jwt");
 const apiResponse = require("../helpers/apiResponse");
 
 const checkToken = require("../middlewares/middleware").checkToken;
+let EmployeeIdMap = new Map();
 
 exports.getOrgs = [
   auth,
   async (req, res) => {
     try {
-      const users = await OrganisationModel.find({
-        // status: "NOTVERIFIED",
-      }).select(
-        "name postalAddress country primaryContactId createdAt type status logoId id"
-      );
+        const users = await OrganisationModel.find({
+          // status: "NOTVERIFIED",
+        }).select(
+          "name postalAddress country primaryContactId createdAt type status logoId id"
+        );
       for(var c = 0; c < users.length; c++){
-        try {
-          const employeeEmail = await EmployeeModel.findOne({id:users[c].primaryContactId}).select("emailId");
-          users[c].primaryContactId = employeeEmail.emailId;
-        } catch (err) {
-          console.log(err);
+        if(EmployeeIdMap.has(users[c].primaryContactId)){
+          users[c].primaryContactId = EmployeeIdMap.get(users[c].primaryContactId);
+        }
+        else{
+          try {
+            const employeeEmail = await EmployeeModel.findOne({id:users[c].primaryContactId}).select("emailId");
+            EmployeeIdMap.set(users[c].primaryContactId, employeeEmail.emailId);
+            users[c].primaryContactId = employeeEmail.emailId;
+          } catch (err) {
+          }
         }
       }
       return apiResponse.successResponseWithData(
@@ -40,7 +46,7 @@ exports.updateOrg = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           const { id, status, type, typeId } = req.body;
-          const organisation = await OrganisationModel.findOneAndUpdate(
+          await OrganisationModel.findOneAndUpdate(
             {
               id: id,
             },
@@ -64,11 +70,10 @@ exports.updateOrg = [
                   },
                 }
               );
-              return apiResponse.successResponseWithData(res,"Organisation updated ", organisation);
+              return apiResponse.successResponseWithData(res,"Organisation updated ", org);
             })
             .catch((err) => {
               console.log(err);
-
               return apiResponse.ErrorResponse(res, err);
             });
         } else {
