@@ -16,7 +16,7 @@ var EventSchema = new mongoose.Schema({
 	secondaryOrgId: { type: String, required: true },
 	secondaryOrgName: { type: String, required: true },
 	secondaryOrgAddress: { type: String, required: true },
-	payloadData: { type: String, required: true },
+	payloadData: { type: Object, required: true },
 }, { timestamps: true });
 
 module.exports = mongoose.model("Events", EventSchema);
