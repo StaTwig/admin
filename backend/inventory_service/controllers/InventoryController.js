@@ -934,11 +934,12 @@ exports.addProductsToInventory = [
           const { products } = req.body;
           const { id } = req.user;
           const employee = await EmployeeModel.findOne({ id });
-          var warehouseId = "";
-          if (!req.query.warehouseId)
-            warehouseId = employee.warehouseId[0];
-          else
-            warehouseId = req.query.warehouseId;
+          var warehouseId = req.user.warehouseId;
+          // if (!req.query.warehouseId)
+          //   warehouseId = employee.warehouseId[0];
+          // else
+          //   warehouseId = req.query.warehouseId;
+          console.log(employee)
           const warehouse = await WarehouseModel.findOne({ id: warehouseId });
 
           if (!warehouse) {
@@ -1148,7 +1149,7 @@ exports.addProductsToInventory = [
                 address: "null",
               },
               actororg: {
-                id: "null",
+                id: req.user.organisationId || "null",
                 name: "null",
                 address: "null",
               },
