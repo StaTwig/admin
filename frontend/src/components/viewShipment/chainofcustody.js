@@ -201,7 +201,7 @@ const ChainOfCustody = (props) => {
                       <div className="row">
                         <div className="column">
                           <h6 className="poheads potext mt-3 mb-3">Comment*</h6>
-                          <div>{custody.updateComment}</div>
+                          {/* <div>{custody.updateComment}</div> */}
                         </div>
                         <div className="column">
                           <h6 className="poheads potext mt-3 mb-3">
@@ -291,7 +291,7 @@ const ChainOfCustody = (props) => {
                       <div className="row">
                         <div className="column">
                           <h6 className="poheads potext mt-3 mb-3">Comment*</h6>
-                          <div>{custody.updateComment}</div>
+                          {/* <div>{custody.updateComment}</div> */}
                         </div>
                         <div className="column">
                           <h6 className="poheads potext mt-3 mb-3">
