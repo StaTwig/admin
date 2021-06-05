@@ -86,9 +86,9 @@ exports.acceptApproval = [
                           accountStatus: "ACTIVE",
                           isConfirmed: true,
                           walletAddress,
-                          role,
-                          warehouseId,
+                          role
                         },
+                        $push: {warehouseId}
                       },
                       { new: true }
                     )
