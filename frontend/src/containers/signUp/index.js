@@ -12,6 +12,7 @@ const SignupContainer = (props) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [orgType, setOrgType] = useState('CUSTOMER');
   const [ organisation, setOrganisation ] = useState({id: '', name: ''});
   const [showModal, setShowModal] = useState(false);
   const [adminAwaiting, setAdminAwaiting ] = useState(false);
@@ -39,6 +40,7 @@ const SignupContainer = (props) => {
         country: values.country
       }
       // data.type = 'CUSTOMER_SUPPLIER';
+      data.type = orgType;
       data.organisationId = 0;
     }
     
@@ -123,6 +125,7 @@ const SignupContainer = (props) => {
         onOrgChange={value => {setIsNewOrg(value),setShowModal(value)}}
         onPasswordChange={e => setPassword(e.target.value)}
         onlastNameChange={e => setLastName(e.target.value)}
+        onOrgTypeChange={value => setOrgType(value)}
         onOrganisationChange={org => setOrganisation({id: org.id, name: org.name})}
         organisation={organisation}
       />
