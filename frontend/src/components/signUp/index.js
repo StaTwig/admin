@@ -105,6 +105,7 @@ const showOrgByType = (value) =>{
                   email: '',
                   phone:'',
                   org: "",
+                  type: "",
                 }}
                 validate={(values) => {
                   const errors = {};
@@ -216,16 +217,18 @@ const showOrgByType = (value) =>{
                       value={orgType}
                       placeholder='  Organisation Type'
                       onSelect={item => {
+                        setFieldValue('type', item);
+                        props.onOrgTypeChange(item);
                         setselectedType(item);
                         setorgType(item);
-                        setValue("");
+                        setValue('');
                       }}
                       groups={orgTypeArray}
                       dClass="ml-4"
                       className="text"
                     />   
-                                      {errors.org && touched.org && (
-                    <span className="error-msg text-danger">{errors.org}</span>
+                                      {errors.type && touched.type && (
+                    <span className="error-msg text-danger">{errors.type}</span>
                   )}
                      </div></div>
                     <div className="pb-4"></div>
