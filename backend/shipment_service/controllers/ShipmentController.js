@@ -2286,7 +2286,7 @@ exports.trackJourney = [
                                     "$and": [{
                                         id: inwardShipments.taggedShipments
                                     }, {
-                                        status: "CREATED"
+                                        status: "RECEIVED"
                                     }]
                                 })
                         }
@@ -2297,7 +2297,7 @@ exports.trackJourney = [
                             "$and": [{
                                 taggedShipments: trackingId
                             }, {
-                                status: "CREATED"
+                                status: "RECEIVED"
                             }]
                         })
                     } else if (trackingId.includes("PO")) {
