@@ -4,10 +4,10 @@
 .login-wrapper {
 background-size:cover;
 background: url(../../assets/brands/background.png);
-  background-size:cover;
-  height: 100%;
- position: fixed;  
- display: flex;
+background-size:cover;
+height: 100%;
+position: fixed;  
+display: flex;
   align-items: center;
   width: 100%;
 .mobile-header {
@@ -50,57 +50,31 @@ background-color: $white;
     flex-direction: column;
     justify-content: center;
     height: 100%;
+    
 
     @media screen and (max-width: 767px){
       align-items: center;
     }
-
-    .logo {
-      max-width: 80%;
-      margin-bottom: 20px;
-    }
-    h1 {
-      font-size: 50px;
-      font-weight: bolder;
-      @media screen and (max-width: 767px){
-        font-size: 34px;
-      }
-    }
-    p {
-      font-size: 28px;
-      @media screen and (max-width: 767px){
-        font-size: 24px;
-      }
-    }
   }
-
-.approve{
-  font-size: 24px;
-}
-.resend{
-  font-size: 14px;
-}
   .card{
-    margin-top: 80px;
-    margin-bottom: 90px;
-       height: 90%;
-      
+    margin-top: 60px;
+     //margin-bottom: 109px;
+    width:110%;
+       height: 75%;
        border: none;
        box-shadow: 0px 3px 25px #00000029;
+       border-radius: 15px;
     
   }
-
-  .cardHeight{
-    height:400px;
- 
-}
-
-  .login-form {
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
+   .login-form {
+     
+    
+    //box-sizing: border-box;
+    //display: flex;
+    //flex-direction: column;
+   
     .card-title {
-      font-size: 25px;
+      font-size: 30px;
       font-weight: bold;
       text-align: center;
     }
@@ -128,10 +102,11 @@ background-color: $white;
 
     .form-group {
       position: relative;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
       display: flex;
       flex-direction: row;
-      
+      width:100%;
+            
       .imgs {
         width: 18px;
         height: 18px;
@@ -144,19 +119,21 @@ background-color: $white;
         width: 25px;
         height: 25px;
         position: absolute;
-        top: 12px;
+        top: 14px;
         left: 3px;
         bottom: 0px;
         min-width: 25px;
       }
       .react-tel-input{
+        width: 365px;
+        height: 30px;
         position: absolute;
-        left: 44px;
+        left: 42px;
         margin-bottom: 10px;
       }
       .imgsPhone {
-        width: 18px;
-        height: 18px;
+        width: 20px;
+        height: 20px;
         position: absolute;
         top: 12px;
         left: 5px;
@@ -175,16 +152,17 @@ background-color: $white;
       }
 
       .form-control {
-            border: none;
+            //border: none;
             border-bottom: 1px solid #757575;
             border-radius: 0;
             width: 100%;
-            font-size: 20px;
+            font-size: 16px;
+                      
             // padding-left: 3rem;
             outline: none;
-            
       
-         .custom-dropdown .btn-custom-dropdown {
+            
+        .custom-dropdown .btn-custom-dropdown {
           font-size: 19px;
           @media (max-width: 1250px) {
             font-size: 19px;
@@ -193,12 +171,12 @@ background-color: $white;
       }
 
       .form-control-login {
-        width: 110%;
+        width: 100%;
         border: none;
         border-bottom: 1px solid #D6D6D6;
         border-radius: 0;
         font-size: 20px;
-        padding-left: 2rem;
+        padding-left: 1.5rem;
         outline: none;
         
         .custom-dropdown .btn-custom-dropdown {
@@ -226,27 +204,18 @@ background-color: $white;
       font-size: 14px;
       color: #707070;
     }
-    .form-controllogin {
-      width: 180%;
-      //padding-left: 3rem;
-      
-    }
-    .form-controlsignup {
-      width: 10%;
-      font-size: 20px;
-      // padding-left: 3rem;
-      outline: none;
-    }
-    .form-controll {
-      //border: none;
-      //border-bottom: 1px solid #757575;
-      //border-radius: 0;
-      width: 80%;
-      font-size: 20px;
-      // padding-left: 3rem;
-      outline: none;
+    .form-group1 {
+      position: relative;
+      margin-bottom: 1.5rem;
+      display: flex;
+      flex-direction: row;
+      width:100%;
   }
+  
+  
 }
+
 }
+
 
 
