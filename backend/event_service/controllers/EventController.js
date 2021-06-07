@@ -276,7 +276,8 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 							let shipmentDetails = await ShipmentModel.findOne({
 								id: payloadRecord.data.id
 							});
-							payloadRecord.data.products[`shipmentDetails`] = shipmentDetails;
+							eventRecord[`shipmentDetails`] = shipmentDetails;
+							eventRecord[`shipmentDetails`].id = payloadRecord.data.id;
 						}
 					}
 					eventRecord[`payloadData`] = payloadRecord;
