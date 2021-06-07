@@ -44,16 +44,14 @@ const FormLoginPage = (props) => {
                   <div style={{position:"absolute", left:"-5px", top:"25px"}}>
                         <img alt="Mail Icon" src={User} height="15px" width="18px" />
                   </div>      
-                  <form>
                   <TextField 
                         label="Email ID" 
                         className="form-controllogin ml-4"
                         name="email"
                         autoCapitalize = 'none'
                         value={email}
-                      onChange={onEmailChange}
+                        onChange={onEmailChange}
                       />
-                  </form>  
                   </div>
                   <div className="card-title mb-2"><h5 style={{color:"#0093E9"}}>OR</h5></div>
                   <div className="form-group mt-0 ml-5 mr-5 p-1" style={{position:"relative", left:"-45px"}}>
