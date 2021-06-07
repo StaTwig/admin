@@ -36,6 +36,9 @@ const StateDistrictStaticDataModel = require("../models/StateDistrictStaticDataM
 const { request } = require("http");
 const { match } = require("assert");
 const logger = init.getLog();
+const CENTRAL_AUTHORITY_ID = null;
+const CENTRAL_AUTHORITY_NAME = null;
+const CENTRAL_AUTHORITY_ADDRESS = null;
 
 exports.getTotalCount = [
   auth,
@@ -904,9 +907,16 @@ exports.addProductsToInventory = [
     .withMessage("Products  must be specified."),
   async (req, res) => {
     try {
-      console.log(req.user);
       const email = req.user.emailId;
       const user_id = req.user.id;
+      const empData = await EmployeeModel.findOne({
+        emailId: req.user.emailId,
+      });
+      const orgId = empData.organisationId;
+      const orgName = empData.name;
+      const orgData = await OrganisationModel.findOne({ id: orgId });
+      const address = orgData.postalAddress;
+
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         logger.log(
@@ -1171,6 +1181,12 @@ exports.addProductsToInventory = [
           event_data.eventType.description = "INVENTORY";
           event_data.actor.actorid = user_id || "null";
           event_data.actor.actoruserid = email || "null";
+          event_data.stackholders.actororg.id = orgId || "null";
+          event_data.stackholders.actororg.name = orgName || "null";
+          event_data.stackholders.actororg.address = address || "null";
+          event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+          event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+          event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
           event_data.payload.data = payload;
           console.log(event_data);
           async function compute(event_data) {
@@ -1210,6 +1226,13 @@ exports.addInventoriesFromExcel = [
           };
           const email = req.user.emailId;
           const user_id = req.user.id;
+          const empData = await EmployeeModel.findOne({
+            emailId: req.user.emailId,
+          });
+          const orgId = empData.organisationId;
+          const orgName = empData.name;
+          const orgData = await OrganisationModel.findOne({ id: orgId });
+          const address = orgData.postalAddress;
           checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
               const dir = `uploads`;
@@ -1360,6 +1383,12 @@ exports.addInventoriesFromExcel = [
               event_data.eventType.description = "INVENTORY";
               event_data.actor.actorid = user_id || "null";
               event_data.actor.actoruserid = email || "null";
+              event_data.stackholders.actororg.id = orgId || req.user.organisationId || "null";
+              event_data.stackholders.actororg.name = orgName || "null";
+              event_data.stackholders.actororg.address = address || "null";
+              event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+              event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+              event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
               event_data.payload.data.products = [...data];
               console.log(event_data);
               async function compute(event_data) {
