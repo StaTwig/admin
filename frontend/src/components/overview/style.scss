@@ -15,8 +15,8 @@
     position: absolute;
     left: -105px;
     right: -80px;
-    margin-top: 2px;
-     
+    margin-top: 1px;
+         
     background-color: $eeGrey;
     @media screen and (max-width: 768px) {
       position: unset;
@@ -49,6 +49,7 @@
 
   .custom-card {
     margin-right: 0px;
+    margin-top: -12px;
     height: 101% !important;
     padding: 0;
     display: flex;
@@ -211,7 +212,7 @@
 
     .count4 {
       font-size: 26px;
-      color: #36C2CF;
+      color: #FA7923;
       font-weight: bold;
     }
 

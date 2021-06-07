@@ -2,6 +2,7 @@ import React from 'react';
 import traceDrop from '../../assets/icons/traceDrop.png';
 import Down from '../../assets/icons/up.png';
 import Verifiedpic from '../../assets/icons/Verifiedpic.png';
+import { formatDate } from '../../utils/dateHelper';
 import './style.scss'
 
 const ShipmentDetails = (props) => {
@@ -34,8 +35,8 @@ const ShipmentDetails = (props) => {
             <h6 className="poheads potext mt-3 mb-3 text-white" style={{visibility:"hidden"}}>Delivery Details:</h6>
             <li  className="mb-1">{props.shipments.airWayBillNo}</li>
             <li  className="mb-1">{props.shipments.label.labelId}</li>
-            <li  className="mb-1">{props.shipments.shippingDate.split('T')[0].split('-')[2]+"/"+props.shipments.shippingDate.split('T')[0].split('-')[1]+"/"+props.shipments.shippingDate.split('T')[0].split('-')[0]} </li>
-            <li  className="mb-1">{props.shipments.expectedDeliveryDate.split('T')[0].split('-')[2]+"/"+props.shipments.expectedDeliveryDate.split('T')[0].split('-')[1]+"/"+props.shipments.expectedDeliveryDate.split('T')[0].split('-')[0]}</li>
+            <li  className="mb-1">{props.shipments.shippingDate.length == 10 ? props.shipments.shippingDate : formatDate(props.shipments.shippingDate)} </li>
+            <li  className="mb-1">{props.shipments.expectedDeliveryDate.length == 10 ? props.shipments.expectedDeliveryDate : formatDate(props.shipments.expectedDeliveryDate)}</li>
 
            </ul>
            <div>

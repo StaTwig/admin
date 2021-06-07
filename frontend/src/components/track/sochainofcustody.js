@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom';
 const SoChainOfCustody = (props) => {
   const { index, container, pindex, data, update, op, setOp, i, level, v, setV, len, parentIndex } = props;
   const [visible, setVisible] = useState(v);
+
+  const isShipment = !update?.isOrder;
   
   return (
   <>
@@ -25,14 +27,14 @@ const SoChainOfCustody = (props) => {
                   <span className="font-weight-bold">{update.status}</span>
                   {(!visible || !v) &&
                     <div className="text-primary mt-2">
-                      <span className=" ">Shipment ID: </span>
+                      <span className=" ">{isShipment ? 'Shipment' : 'Order'} ID: </span>
                       <span className=" font-weight-bold">{data.id}</span>
                     </div>
                   }
                 </div>
                 {visible && v &&
                   <div className="col-6 text-primary">
-                    <span className=" ">Shipment ID: </span>
+                    <span className=" ">{isShipment ? 'Shipment' : 'Order'} ID: </span>
                     <span className=" font-weight-bold">{data.id}</span>
                   </div>
                 }
@@ -46,14 +48,14 @@ const SoChainOfCustody = (props) => {
                   <div className="row mt-1 ml-1 col-5">
                     {update.products.map((product, index) =>
                       <div key={index} className="col-12 row justify-content-between">
-                        <span className="text-muted">{product.productName}</span>
-                        <span className="text-muted text-weight-bold">{product.productQuantity}</span>
+                        <span className="text-muted">{product?.productName ? product?.productName : product.name}</span>
+                        <span className="text-muted text-weight-bold">{product?.productQuantity ? product.productQuantity : product.quantity}</span>
                       </div>
                     )}
                   </div>
                   <div className="col-12 mt-2">
-                    <Link to={`/viewshipment/${data.id}`}>
-                      <button className="btn btn-orange fontSize20 font-bold">View Shipment</button>
+                    <Link to={isShipment?`/viewshipment/${data.id}`:`/vieworder/${data.id}`}>
+                      <button className="btn btn-orange fontSize20 font-bold">View {isShipment ? 'Shipment' : 'Order'}</button>
                     </Link>
                   </div>
                 </>

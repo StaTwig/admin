@@ -27,16 +27,17 @@ const Inventory = props => {
     coloumn2: 'Product Category',
     // coloumn3: 'Manufacturer',
     coloumn3: 'Date',
-    coloumn4: 'Status',
-    coloumn5: 'Quantity',
-
+    coloumn4: 'Quantity',
+    coloumn5: 'Status',
+    
 
     img1: <img src={Product} width="16" height="16" />,
     img2: <img src={Quantity} width="24" height="16" />,
     // img3: <img src={user} width="16" height="16" />,
     img3: <img src={calender} width="16" height="16" />,
-    img4: <img src={Status} width="16" height="16" />,
-    img5: <img src={Quantity} width="24" height="16" />,
+    img4: <img src={Quantity} width="24" height="16" />,
+    img5: <img src={Status} width="16" height="16" />,
+    
   };
 
   const tableHeaders = {
@@ -87,11 +88,17 @@ const Inventory = props => {
       setCurrentInventoriesCount(
         resultAnalytics.data.inventory.totalProductsInInventory
       );
+      // setInventoryNearExpiration(
+      //   resultAnalytics.data.inventory.batchExpiringInSixMonths
+      // );
       setInventoryNearExpiration(
-        resultAnalytics.data.inventory.batchExpiringInSixMonths
+        resultAnalytics.data.inventory.batchNearExpiration
       );
+      // setInventoryExpired(
+      //   resultAnalytics.data.inventory.batchExpiredLastYear
+      // );
       setInventoryExpired(
-        resultAnalytics.data.inventory.batchExpiredLastYear
+        resultAnalytics.data.inventory.batchExpired
       );
       setProductCategory(
         resultAnalytics.data.inventory.totalProductCategory
@@ -169,7 +176,7 @@ const Inventory = props => {
               <div className="d-flex flex-column">
                 <div className="title truck-text">Total Product Category</div>
                 
-                <div className="count truck-text">{inventoriesCount} {inventoryAnalytics.totalProductCategory}</div>
+                <div className="count truck-text">{inventoriesCount} {inventoryAnalytics?.totalProductCategory}</div>
               </div>
             </div>
           </Link>
@@ -182,7 +189,7 @@ const Inventory = props => {
             </div>
             <div className="d-flex flex-column">
               <div className="title sent-text">Product Out Of Stock</div>
-              <div className="sent-text count">{currentInventoriesCount}{inventoryAnalytics.stockOut}</div>
+              <div className="sent-text count">{currentInventoriesCount}{inventoryAnalytics?.stockOut}</div>
               </div>
             </div>
           </Link>      
@@ -196,7 +203,7 @@ const Inventory = props => {
             </div>
             <div className="d-flex flex-column">
               <div className="title recived-text">Batch near Expiration</div>
-              <div className="tab-container">
+              {/* <div className="tab-container">
                 <div
                   className="tab-item active"
                   onMouseLeave={() =>
@@ -210,7 +217,6 @@ const Inventory = props => {
                     )
                   }
                 >
-                {/*6 MONTHS*/}
                 </div>
                 <div
                   className="tab-item"
@@ -225,7 +231,6 @@ const Inventory = props => {
                     )
                   }
                 >
-                  {/*3 MONTHS*/}
                 </div>
                 <div
                   className="tab-item"
@@ -240,7 +245,6 @@ const Inventory = props => {
                     )
                   }
                 >
-                  {/*THIS MONTH8*/}
                 </div>
                 <div
                   className="tab-item"
@@ -255,9 +259,8 @@ const Inventory = props => {
                     )
                   }
                 >
-                  {/*THIS WEEK*/}
               </div>
-              </div>
+              </div> */}
               <div className="recived-text count">
                 {inventoryNearExpiration}
               </div>
@@ -273,7 +276,7 @@ const Inventory = props => {
             </div>
             <div className="d-flex flex-column">
               <div className="title transit-text">Batch Expired</div>
-              <div className="tab-container">
+              {/* <div className="tab-container">
                 <div
                   className="tab-item active"
                   onMouseLeave={() =>
@@ -287,7 +290,6 @@ const Inventory = props => {
                     )
                   }
                 >
-                  {/*THIS YEAR*/}
                 </div>
                 <div
                   className="tab-item"
@@ -302,7 +304,6 @@ const Inventory = props => {
                     )
                   }
                 >
-                  {/*THIS MONTH*/}
                 </div>
                 <div
                   className="tab-item"
@@ -317,7 +318,6 @@ const Inventory = props => {
                     )
                   }
                 >
-                  {/*THIS WEEK*/}
                 </div>
                 <div
                   className="tab-item"
@@ -332,9 +332,8 @@ const Inventory = props => {
                     )
                   }
                 >
-                  {/*TODAY*/}
                 </div>
-              </div>
+              </div> */}
               <div className="transit-text count">{inventoryExpired}</div>
             </div>
           </div>
@@ -342,8 +341,9 @@ const Inventory = props => {
         </div>
       </div>
       <div className="full-width-ribben">
-        <TableFilter data={headers} inventoryFilterData={props.inventoryFilterData} setInventoryProductNameFilterOnSelect={setInventoryProductNameFilterOnSelect} setInventoryManufacturerFilterOnSelect={setInventoryManufacturerFilterOnSelect}  setInventoryStatusFilterOnSelect={setInventoryStatusFilterOnSelect} setDateFilterOnSelect={setDateFilterOnSelect} setInventoryProductCategoryFilterOnSelect={setInventoryProductCategoryFilterOnSelect} 
-        fb="60%"/>
+        
+      <TableFilter data={headers} inventoryFilterData={props.inventoryFilterData} setInventoryProductNameFilterOnSelect={setInventoryProductNameFilterOnSelect} setInventoryManufacturerFilterOnSelect={setInventoryManufacturerFilterOnSelect}  setInventoryStatusFilterOnSelect={setInventoryStatusFilterOnSelect} setDateFilterOnSelect={setDateFilterOnSelect} setInventoryProductCategoryFilterOnSelect={setInventoryProductCategoryFilterOnSelect} 
+        fb="80%"/>
       </div>
       <div className="ribben-space">
         <div className="row no-gutter">
@@ -354,7 +354,7 @@ const Inventory = props => {
             <div className="list-container">
               <div className="d-flex justify-content-between align-items-center ml-4">
                 <h4><b>Product List</b></h4>
-                <Link to="/productlist/all">
+                <Link to="/productcategory">
                   <button className="btn btn-link mr-3"><b>View all</b></button>
                 </Link>
               </div>

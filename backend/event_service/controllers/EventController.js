@@ -247,8 +247,8 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 					  ]).sort({
 				createdAt: -1
 			})
-			inventoryCount = inventoryCount[0].myCount
-			console.log(inventoryCount)
+			inventoryCount = inventoryCount.length > 0 ? inventoryCount[0].myCount : 0
+			console.log(elementMatchQuery)
 			EventModal.aggregate([
 				{ $lookup: {        
 					   from: 'products',
