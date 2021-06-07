@@ -114,7 +114,7 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 					fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
 					break;
 				case "week":
-					fromDateFilter = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay())).toUTCString();
+					fromDateFilter = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay()));
 					break;
 				case "month":
 					fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
@@ -267,7 +267,6 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 				// console.log(eventRecords)
 				let inventoryRecords = [];
 				await Promise.all(eventRecords.map(async function (event) {
-					console.log('hi')
 					let eventRecord = JSON.parse(JSON.stringify(event))
 					let payloadRecord = event.payloadData;
 					eventRecord[`inventoryQuantity`] = payloadRecord.data.products.quantity;
@@ -281,7 +280,6 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 						}
 					}
 					eventRecord[`payloadData`] = payloadRecord;
-					console.log(eventRecord)
 					inventoryRecords.push(eventRecord);
 				}))
 				return apiResponse.successResponseWithData(
