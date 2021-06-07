@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { receiveApi, uploadImage } from "../../actions/shipmentActions";
+import { turnOn , turnOff } from '../../actions/spinnerActions';
+import { useDispatch } from 'react-redux';
 import Modal from "../../shared/modal";
 import returnShipment from "../../assets/icons/returnShipment.svg";
 import crossIcon from "../../assets/icons/crossRed.svg";
@@ -23,6 +25,7 @@ const ReceiveShipment = (props) => {
   const [highLight, setHighLight] = useState(false);
   const [productHighLight, setProductHighLight] = useState(false);
   const [delivered, setDelivered] = useState(0);
+  const dispatch = useDispatch();
 
   const [shipmentId, setShipmentId] = useState([]);
   const [billNo, setBillNo] = useState("");
@@ -98,6 +101,7 @@ const ReceiveShipment = (props) => {
 
     console.log("On Button Click");
     console.log(data);
+    dispatch(turnOn());
     const result = await receiveApi(data);
     if (result.status == 200) {
       //setOpenUpdatedStatus(true);
@@ -106,6 +110,7 @@ const ReceiveShipment = (props) => {
     } else {
       console.log(result);
     }
+    dispatch(turnOff());
   };
 
   const uploadPhoto = async () => {

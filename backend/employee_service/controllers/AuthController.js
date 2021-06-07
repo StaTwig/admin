@@ -263,7 +263,7 @@ exports.register = [
         //create organisation if doesn't exists 
         if (req.body.organisationName) {
           const organisationName = req.body.organisationName;
-          const organisation = await OrganisationModel.findOne({ name: { $regex: organisationName, $options: 'i' } });
+          const organisation = await OrganisationModel.findOne({ name: new RegExp('^'+organisationName+'$', "i") });
           if (organisation) {
             organisationId = organisation.id;
           }
@@ -314,7 +314,7 @@ exports.register = [
                 countryId: '001',
                 countryName: country
               },
-              configuration_id: 'CONF001',
+              configuration_id: 'CONF000',
               authority: req.body?.authority
             });
             await org.save();

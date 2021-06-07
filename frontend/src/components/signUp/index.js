@@ -108,6 +108,7 @@ const showOrgByType = (value) =>{
                   email: '',
                   phone:'',
                   org: "",
+                  type: "",
                 }}
                 validate={(values) => {
                   const errors = {};
@@ -239,9 +240,11 @@ const showOrgByType = (value) =>{
                       value={orgType}
                       placeholder='Organisation Type'
                       onSelect={item => {
+                        setFieldValue('type', item);
+                        props.onOrgTypeChange(item);
                         setselectedType(item);
                         setorgType(item);
-                        setValue("");
+                        setValue('');
                       }}
                       groups={orgTypeArray}
                       dClass="ml-4"
@@ -250,19 +253,15 @@ const showOrgByType = (value) =>{
                     <div style={{position:"relative", left:"-35px", top:"10px",cursor:"pointer"}}>
                     <img src={dropdownIcon} width="15" height="10" />
                     </div>
-                    {errors.org && touched.org && (
-                    <span className="error-msg text-danger">{errors.org}</span>
+                    {errors.org && touched.org &&  (
+                    <span  className="error-msg text-danger "> {errors.org} </span>
                     )}
-                    </div>
-                 
-                 
+                    </div>                
                   <div className="form-group" style={{position:"relative", left:"30px", bottom:"0px"}}>
-                 
-                  <div style={{position:"absolute", left:"-40px", top:"10px", color:"black"}}>
+                  <div style={{position:"absolute ", left:"-40px", top:"10px", color:"black"}}>
                        <img alt="Phone icon" src={org} height="20px" width="20px" />
                   </div>
                     <DropdownButton
-                    
                     name={props.organisation.organisationId}
                     value={value}
                     isText={true}

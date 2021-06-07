@@ -22,6 +22,9 @@ const CENTRAL_AUTHORITY_ID = null
 const CENTRAL_AUTHORITY_NAME = null
 const CENTRAL_AUTHORITY_ADDRESS = null
 
+const blockchain_service_url = process.env.URL;
+const shipment_stream = process.env.SHIP_STREAM;
+const axios = require("axios");
 const { uploadFile } = require("../helpers/s3");
 const fs = require('fs');
 const util = require('util');
@@ -457,6 +460,26 @@ exports.createShipment = [
 
         const shipment = new ShipmentModel(data);
         const result = await shipment.save();
+        
+
+	//Blockchain Integration
+	  const userData = {
+            stream: shipment_stream,
+            key:  shipmentId,
+            address: req.user.walletAddress,
+            data: data,
+          };
+          const response =  await axios.post(
+            `${blockchain_service_url}/publish`,
+            userData,
+          );
+          await ShipmentModel.findOneAndUpdate({
+            id: shipmentId
+          }, {
+            $push: {
+              transactionIds: response.data.transactionId
+            }
+          });
 
         if (data.taggedShipments) {
           const prevTaggedShipments = await ShipmentModel.findOne({
@@ -2064,13 +2087,11 @@ exports.fetchAllWarehouseShipments = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           const {
-            emailId
+            id
           } = req.user;
-          console.log(emailId)
           try {
-
             const empDetails = await EmployeeModel.findOne({
-              emailId: emailId
+              id: id
             });
             const warehouses = empDetails.warehouseId;
               const shipments = await ShipmentModel.aggregate([{
@@ -2184,18 +2205,22 @@ exports.trackShipmentJourney = [
             "taggedShipments": 1,
             poId: 1
           })
-          if (inwardShipments.taggedShipments.length > 0)
-            inwardShipmentsArray = await ShipmentModel.find({
-              "$and": [{
-                id: inwardShipments.taggedShipments
-              }, {
-                status: "RECEIVED"
-              }]
-            })
-          else if (inwardShipments.poId != null)
-            poDetails = await RecordModel.findOne({
-              id: inwardShipments.poId
-            })
+          console.log(inwardShipments);
+          
+          if (inwardShipments?.taggedShipments) {
+            if (inwardShipments.taggedShipments.length > 0 && inwardShipments.taggedShipments[0] !== '')
+              inwardShipmentsArray = await ShipmentModel.find({
+                "$and": [{
+                  id: inwardShipments.taggedShipments
+                }, {
+                  status: "RECEIVED"
+                }]
+              })
+            else if (inwardShipments.poId != null)
+              poDetails = await RecordModel.findOne({
+                id: inwardShipments.poId
+              })
+          }
           const trackedShipment = await ShipmentModel.findOne({
             id: req.query.shipmentId
           })

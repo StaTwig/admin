@@ -10,6 +10,7 @@ import DropdownButton from '../../shared/dropdownButtonGroup';
 const OrganisationPopUp = (props) => {
     const dispatch = useDispatch();
     const [showModal, setShowModal] = useState(false);
+    const [clicked, setClicked] = useState(false);
     const [orgType, setOrgType] = useState("Organisation type");
     const [message, setMessage] = useState(
         "Location service is disabled. Enter address manually!!!"
@@ -132,6 +133,7 @@ const OrganisationPopUp = (props) => {
                   return errors;
                 }}
                 onSubmit={(values, { setSubmitting }) => {
+                  setClicked(true);
                   setSubmitting(false);
                   props.onSignup(values);
                 }}
@@ -225,7 +227,7 @@ const OrganisationPopUp = (props) => {
                       value={values.pincode}
                     />
                     <div className="pt-5 d-flex flex-row-reverse">
-                      <button type="submit" className="btn btn-primary ">
+                      <button disabled={clicked} type="submit" className="btn btn-primary ">
                         Done
                       </button>
                     </div>

@@ -13,6 +13,7 @@ import InventoryIcon from "../../assets/icons/inventory.svg";
 import rightArrow from "../../assets/icons/rightarrow.svg";
 import { useSelector, useDispatch } from 'react-redux';
 import { logoutUser } from '../../actions/userActions';
+import UploadModal from "./UploadModal";
 
 const Sidebar = (props) => {
   const { history } = props;
@@ -39,8 +40,8 @@ const Sidebar = (props) => {
             <div className="gdsl-in">
               <img src={
                 history.location.pathname.includes("overview")
-                ? HomeSelectedIcon
-                : HomeIcon
+                  ? HomeSelectedIcon
+                  : HomeIcon
               } />
               <div onClick={() => history.push("/overview")}>Overview</div>
             </div>
@@ -55,8 +56,8 @@ const Sidebar = (props) => {
             <div className="gdsl-in">
               <img src={
                 history.location.pathname.includes("analytics")
-                ? DashboardSelectedIcon
-                : DashboardIcon
+                  ? DashboardSelectedIcon
+                  : DashboardIcon
               } />
               <div onClick={() => history.push("/analytics")}>Analytics</div>
             </div>
@@ -72,8 +73,8 @@ const Sidebar = (props) => {
             <div className="gdsl-in">
               <img src={
                 history.location.pathname.includes("transactionHistory")
-                ? TransactionIconSelected
-                : TransactionIcon
+                  ? TransactionIconSelected
+                  : TransactionIcon
               } />
               <div onClick={() => history.push("/transactionHistory")}>
                 Transaction History
@@ -90,8 +91,8 @@ const Sidebar = (props) => {
             <div className="gdsl-in">
               <img src={
                 history.location.pathname.includes("inventory")
-                ? InventoryIconSelected
-                : InventoryIcon
+                  ? InventoryIconSelected
+                  : InventoryIcon
               } />
               <div onClick={() => history.push("/inventory")}>Inventory</div>
             </div>
@@ -104,12 +105,13 @@ const Sidebar = (props) => {
           </div> */}
           <div className="gds-links">
             <div className="gdsl-in">
-              <img src={Logout}/>
+              <img src={Logout} />
               <div onClick={() => dispatch(logoutUser())}>Logout</div>
             </div>
           </div>
         </div>
       </div>
+      <UploadModal />
       <button className="btn btn-warning dahbtngo">
         <span className="whiteC"></span>
         <span className="grid jis">
@@ -119,8 +121,8 @@ const Sidebar = (props) => {
         <span>
           <img src={rightArrow} />
         </span>
-      </button>      
-    </nav>
+      </button>
+    </nav >
   );
 };
 
