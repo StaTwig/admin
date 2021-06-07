@@ -61,7 +61,7 @@ const AdvanceTableFilter = (props) => {
   const [inventoryManufacturerAnchorEl, setInventoryManufacturerAnchorEl] = React.useState(null)
 
   const renderColumn6 = (columnData) => {
-    if (columnData == "Status") {
+    if (columnData === "Status") {
       return (<div className="box col">
       <span className="divider" />
         <a className="filter-item" onClick={handleInventoryStatusClick}>
@@ -162,7 +162,8 @@ const AdvanceTableFilter = (props) => {
   const renderColumn5 = (columnData) => {
     if (columnData == "Status") {
       return (<div className="box col">
-        <a className="filter-item" onClick={handleStatusClick}>
+      <span className="divider" />
+        <a className="filter-item" onClick={handleInventoryStatusClick}>
           <div className="icon mr-2">
             {props.data.img5}
           </div>
@@ -171,25 +172,41 @@ const AdvanceTableFilter = (props) => {
         </a>
         <StyledMenu
           id="customized-menu"
-          anchorEl={statusAnchorEl}
+          anchorEl={inventoryStatusAnchorEl}
           keepMounted
-          open={Boolean(statusAnchorEl)}
-          onClose={handleStatusClose}
+          open={Boolean(inventoryStatusAnchorEl)}
+          onClose={handleInventoryStatusClose}
         >
           <div className="d-flex flex-column align-items-center">
             <StyledMenuItem>
-              <Button variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("")}>Clear</Button>
+              <Button variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("")}>Clear</Button>
             </StyledMenuItem>
             <StyledMenuItem>
-              <Button variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("SHIPPED")}>Shipped</Button>
+              <Button variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("ADD")}>Added</Button>
             </StyledMenuItem>
             <StyledMenuItem>
-              <Button variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("RECEIVED")}>Delivered</Button>
+              <Button variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("CREATE")}>Sent</Button>
+            </StyledMenuItem>
+            <StyledMenuItem>
+              <Button variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("RECEIVE")}>Received</Button>
             </StyledMenuItem>
           </div>
         </StyledMenu>
 
       </div>);
+    //   return (  <div className="box col">
+    //   <span className="divider" />
+    //   <div className="filter-item">
+    //     <div className="icon mr-2">
+    //       {props.data.img6}
+    //     </div>
+    //     <div className="filterTitle">{props.data.coloumn6}</div>
+    //     <div className="filterAction">
+    //       {/* <img src={updownarrow} width="9" height="9" /> */}
+    //      </div>
+    //   </div>
+    // </div>
+    //   );
     } else if (columnData == "Delivery Location") {
       return (<div className="box col">
         <a className="filter-item" onClick={handlePoDeliveryLocationClick}>
