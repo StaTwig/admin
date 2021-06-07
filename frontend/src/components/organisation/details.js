@@ -1,29 +1,29 @@
-import React, { useState, useEffect } from "react";
-import "leaflet/dist/leaflet.css";
-// import "./style.scss";
-import { formatDate } from "../../utils/dateHelper";
-import DropdownButton from "../../shared/dropdownButtonGroup";
-import { map } from "leaflet";
+import React, { useState, useEffect } from 'react';
+import 'leaflet/dist/leaflet.css';
+import './style.scss';
+import { formatDate } from '../../utils/dateHelper';
+import DropdownButton from '../../shared/dropdownButtonGroup';
+import { map } from 'leaflet';
 
 const Details = (props) => {
   const { org, modifyOrg, types } = props;
-  const [status, setStatus] = useState("");
-  const [typeId, setTypeId] = useState("");
+  const [status, setStatus] = useState('');
+  const [typeId, setTypeId] = useState('');
   const [type, setType] = useState(org?.type);
   useEffect(() => {
     setStatus(org?.status);
-    types?console.log(types):console.log('')
+    types ? console.log(types) : console.log('');
     typedIdset();
   }, [setStatus, org]);
   const changeStatus = (status) => {
     org.status = status;
     setStatus(status);
   };
-  function typedIdset(){
-    types?.forEach(element => {
-      if(element.name === type){
+  function typedIdset() {
+    types?.forEach((element) => {
+      if (element.name === type) {
         setTypeId(element.id);
-        return
+        return;
       }
     });
   }
@@ -62,48 +62,50 @@ const Details = (props) => {
           {status}
         </span>
         <span className="txtWrapu text-center w-15 align-self-center">
-          {org?.createdAt ? formatDate(org?.createdAt) : ""}
+          {org?.createdAt ? formatDate(org?.createdAt) : ''}
         </span>
         <div className="w-20 align-self-center">
           <button
             type="button"
             onClick={() => {
-              if (status == "ACTIVE") {
+              if (status == 'ACTIVE') {
                 modifyOrg({
                   id: org?.id,
-                  status: "DEACTIVATED",
+                  status: 'DEACTIVATED',
                   index: org?.ridex,
                   type: type,
                   typeId: typeId,
                 });
-                changeStatus("DEACTIVATED");
+                changeStatus('DEACTIVATED');
               } else {
                 modifyOrg({
                   id: org?.id,
-                  status: "ACTIVE",
+                  status: 'ACTIVE',
                   index: org?.ridex,
                   type: type,
                   typeId: typeId,
                 });
-                changeStatus("ACTIVE");
+                changeStatus('ACTIVE');
               }
             }}
-            className="btn btn-view w-auto"
+            className={`btn btn-view w-auto ${
+              status == 'ACTIVE' ? 'btn-deactive' : 'btn-active'
+            }`}
           >
-            {status == "ACTIVE" ? "Deactivate" : "Activate"}
+            {status == 'ACTIVE' ? 'Deactivate' : 'Activate'}
           </button>
-          {status == "NOTVERIFIED" && (
+          {status == 'NOTVERIFIED' && (
             <button
               type="button"
               onClick={() => {
                 modifyOrg({
                   id: org?.id,
-                  status: "REJECTED",
+                  status: 'REJECTED',
                   index: org?.ridex,
                 });
-                changeStatus("REJECTED");
+                changeStatus('REJECTED');
               }}
-              className="btn ml-2 bg-secondary btn-view w-auto"
+              className="btn ml-2 btn-view bg-red  w-auto"
             >
               Reject
             </button>
