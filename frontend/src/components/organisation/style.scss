@@ -4,6 +4,7 @@
   padding-left: 2rem;
   padding-right: 1rem;
 }
+
 .w-15 {
   width: 15%;
   text-align: center;
@@ -51,4 +52,14 @@
   box-shadow: 0px 3px 6px #00000029;
   border-radius: 10px;
   opacity: 1;
+}
+.btn-active{
+  background: green; 
+}
+.btn-deactive{
+  background: gray;
+}
+.bg-red{
+  background-color: red !important;
+  color:#ffffff;
 }

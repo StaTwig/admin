@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import "./style.scss";
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import './style.scss';
 
-import DrawerMenu from "./drawerMenu";
-import logo from "../../assets/aicons/AdminLogo.png";
-import searchingIcon from "../../assets/icons/searching@2x.png";
-import bellIcon from "../../assets/icons/bellwhite.png";
-import dropdownIcon from "../../assets/icons/drop-down.png";
-import { getUserInfo, logoutUser } from "../../actions/userActions";
+import DrawerMenu from './drawerMenu';
+import logo from '../../assets/aicons/AdminLogo.png';
+import searchingIcon from '../../assets/icons/searching@2x.png';
+import bellIcon from '../../assets/icons/bellwhite.png';
+import dropdownIcon from '../../assets/icons/drop-down.png';
+import { getUserInfo, logoutUser } from '../../actions/userActions';
 
 const Header = (props) => {
   const [menu, setMenu] = useState(false);
   const [sidebar, openSidebar] = useState(false);
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -45,7 +45,7 @@ const Header = (props) => {
           src={logo}
           alt="vaccineledger"
           className="logo"
-          onClick={() => props.history.push("/overview")}
+          onClick={() => props.history.push('/overview')}
         />
       </div>
       <div className="actions">
@@ -61,7 +61,7 @@ const Header = (props) => {
         </div>
         <div className="user-info">
           <div className="notifications">
-            <div
+            {/* <div
               className="bellicon-wrap"
               onClick={() => setShowNotifications(!showNotifications)}
             >
@@ -71,7 +71,7 @@ const Header = (props) => {
                   {notifications.length}
                 </span>
               )}
-            </div>
+            </div> */}
             {showNotifications && notifications.length > 0 && (
               <div className="slider-menu">
                 <React.Fragment>
@@ -102,16 +102,16 @@ const Header = (props) => {
           </div>
           <div className="divider" />
           <div className="userName">
-            <p className="cname">{profile?.organisation?.split("/")[0]}</p>
+            <p className="cname">{profile?.organisation?.split('/')[0]}</p>
             <p className="uname">
-              {profile?.firstName + " " + profile?.lastName}
+              {profile?.firstName + ' ' + profile?.lastName}
             </p>
           </div>
 
           <div className="userPic">
             <img
               src={profile?.photoId}
-              alt={profile?.firstName + " " + profile?.lastName}
+              alt={profile?.firstName + ' ' + profile?.lastName}
               className="rounded rounded-circle"
             />
           </div>
@@ -128,8 +128,8 @@ const Header = (props) => {
             {
               <React.Fragment>
                 <div className="slider-item-text">
-                  <p>{profile?.firstName + " " + profile?.lastName}</p>
-                  <p>{profile?.organisation?.split("/")[0]}</p>
+                  <p>{profile?.firstName + ' ' + profile?.lastName}</p>
+                  <p>{profile?.organisation?.split('/')[0]}</p>
                 </div>
                 {/* <Link className="slider-item border-top-0" to="/profile">
                   My profile
