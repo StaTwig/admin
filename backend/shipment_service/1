@@ -2272,14 +2272,14 @@ exports.trackShipmentJourney = [
                             _id: 0,
                             "taggedShipments": 1,
                             poId: 1
-                        }
-			)
+                        })
                         shipmentsArray = inwardShipments.taggedShipments;
                         shipmentsArray.push(trackingId)
                         poDetails = await RecordModel.find({
 			    shipments: { "$in" : shipmentsArray }
                         })
 
+			 console.log("t",inwardShipments.taggedShipments)
                         if (inwardShipments.taggedShipments) {
                             if (inwardShipments.taggedShipments.length > 0 && inwardShipments.taggedShipments[0] !== '')
                                 inwardShipmentsArray = await ShipmentModel.find({
