@@ -2264,7 +2264,7 @@ exports.trackJourney = [
                     var inwardShipmentsArray = [];
                     var outwardShipmentsArray = [];
                     var poDetails, trackedShipment;
-                    const trackingId = req.query.shipmentId;
+                    const trackingId = req.query.trackingId;
                     if (!trackingId.includes("PO")) {
                         const inwardShipments = await ShipmentModel.findOne({
                         $or: [{
