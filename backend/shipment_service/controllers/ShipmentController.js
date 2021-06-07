@@ -2254,7 +2254,7 @@ exports.fetchAllWarehouseShipments = [
   },
 ];
 
-exports.trackShipmentJourney = [
+exports.trackJourney = [
     auth,
     async (req, res) => {
         try {
