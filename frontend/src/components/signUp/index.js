@@ -7,7 +7,7 @@ import { Formik } from "formik";
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 
-import '../login/style.scss';
+import './style.scss';
 import Key from "../../assets/icons/key.png";
 import User from "../../assets/icons/user.png";
 import Mail from "../../assets/icons/mail.png";
@@ -18,6 +18,8 @@ import org from "../../assets/icons/organization.png";
 import Waiting from "../../assets/icons/waiting.png";
 import organisationType from "../../assets/icons/organisationType.png";
 import logo from "../../assets/brands/VaccineLedgerlogo.svg";
+import dropdownIcon from '../../assets/icons/dropdown_selected.png';
+import TextField from '@material-ui/core/TextField';
 
 const FormPage = (props) => {
 const [organisations, setOrganisations] = useState([]);
@@ -72,6 +74,7 @@ const showOrgByType = (value) =>{
 
   props.onOrganisationChange({id: 0, name: value_new});
   }
+  
   return (
     <div className="login-wrapper">
       <div className="container">
@@ -92,8 +95,8 @@ const showOrgByType = (value) =>{
           <div className="col-m-6 col-lg-6">
             <div className="card">
               { props.adminAwaiting ?
-                <><img alt="" src={Waiting} height="150" width="150" className="align-self-center mt-5 mb-4" />
-              <div className="font-weight-bold align-self-center text-center ml-2 mr-2 mb-5 approve">Request is pending and you will receive an email/sms after approval</div></>
+                <><img alt="" src={Waiting} height="150" width="150" className="align-self-center mt-5 mb-2" />
+              <div className="font-weight-bold align-self-center text-center ml-2 mr-2 mb-3 approve">Request is pending and you will receive an email/sms after approval</div></>
               
               :
                 <div className="card-body">
@@ -142,61 +145,79 @@ const showOrgByType = (value) =>{
                   setFieldValue,
                   dirty,
                 }) => (
-                  <form onSubmit={handleSubmit} className="mb-3">
-                  <div className="login-form mt-3 pl-5 pr-5">
-                  
-                  <div className="card-title p-0">Signup</div>
-                  <div className="form-group flex-column">
-                    <div className="pb-1">
-                  <img alt="" src={User} className="icon imgs"/></div>
-                  <input type="text"
-                  className="form-control-login"
+                  <form onSubmit={handleSubmit} className="mb-5">
+                  <div className="login-form mt-1 pl-5 pr-5">
+                 <div className="card-title p-0">Signup</div>
+                  <div className="form-group flex-column ">
+                   
+                  <div style={{position:"absolute", left:"-10px", top:"20px"}}>
+                       <img alt="" src={User} height="20px" width="18px"/>
+                  </div>
+                  <form noValidate>
+                  <TextField 
+                  id="standard-basic"
+                  label="First Name" 
+                  className="form-controll ml-4"
                   name="firstName"
                   value={props.firstName}
                   onChange={(e) => { props.onfirstNameChange(e); handleChange(e);}}
-                  placeholder="    First Name" />
+                  />
                   {errors.firstName && touched.firstName && (
-                    <span className="error-msg text-danger">{errors.firstName}</span>
+                  <span className="error-msg text-danger">{errors.firstName}</span>
                   )}
+                  </form>
                   </div>
-                  <div className="form-group flex-column">
-                  <div className="pb-1">
-                  <img alt="" src={User} className="icon imgs" /></div>
-                  <input type="text"
-                  className="form-control-login"
+                  
+                  <div className="form-group flex-column" style={{position:"relative", top:"-10px"}}>
+                  <div style={{position:"absolute", left:"-10px", top:"20px"}}>
+                        <img alt="" src={User} height="20px" width="18px"/>
+                  </div>
+                  <form noValidate>
+                  <TextField 
+                  id="standard-basic" 
+                  label="Last Name" 
+                  className=" form-controll ml-4"
                   name="lastName"
                   value={props.lastName}
                   onChange={(e) => { props.onlastNameChange(e); handleChange(e);}}
-                  placeholder="    Last Name" />
+                  />
                   {errors.lastName && touched.lastName && (
                     <span className="error-msg text-danger">{errors.lastName}</span>
                   )}
+                  </form>
                   </div>
-                  <div className="form-group flex-column">
-                  <div className="pb-1">
-                  <img alt="Mail Icon" src={Mail} className="icon imgs" /></div>
-                  <input type="text"
-                  className="form-control-login"
+
+
+                  <div className="form-group flex-column" style={{position:"relative", top:"-20px"}}>
+                  <div style={{position:"absolute", left:"-10px", top:"20px"}}>
+                        <img alt="Mail Icon" src={Mail} height="15px" width="18px" />
+                  </div>
+                  <form>
+                  <TextField 
+                  id="standard-basic" 
+                  label="Email ID" 
+                  className="form-controll ml-4"
                   name="email"
                   autoCapitalize = 'none'
                   value={(props.email).toLowerCase()}
                   onChange={(e) => { props.onEmailChange(e); handleChange(e);}}
-                  placeholder="    Email ID" />
+                  />
                   {errors.email && touched.email && (
                     <span className="error-msg text-danger">{errors.email}</span>
-                  )}
+                  )}</form>
                   </div>
 
-                  <div className="form-group flex-column">
-                  <div className="pb-1">
-                  <img alt="" src={Phone} className="icon imgsPhone" /></div>
+                  <div className="form-group" style={{position:"relative", left:"-15px", bottom:"20px"}}>
+                  <div style={{position:"absolute", left:"4px", top:"10px"}}>
+                        <img alt="Phone icon" src={Phone} height="20px" width="19px" />
+                  </div>
                     <PhoneInput
                       country={'in'}
                       placeholder='Enter Phone number'
                       inputProps={{
                         name: 'phone',
                         required:false,
-                        defaultCountry:"US",
+                        defaultCountry:"IN",
                         enableSearch: true,
                       }}
                       value={props.phone}
@@ -208,14 +229,16 @@ const showOrgByType = (value) =>{
                   )}
                   <div className="pb-3"></div>
                   </div>
-          
-                  <div className="form-group flex-column">               
-                  <div className="pl-4" style={{color:"black"}}>
-                    <img alt="" src={organisationType} className="icon orgType" />
-                    <DropdownButton
+                            
+                   
+                  <div className="form-group" style={{position:"relative", left:"30px", bottom:"0px"}}>
+                  <div style={{position:"absolute", left:"-40px", top:"10px", color:"black"}}>
+                        <img alt="Phone icon" src={organisationType} height="30px" width="25px" />
+                  </div>  
+                   <DropdownButton
                       isText={true}
                       value={orgType}
-                      placeholder='  Organisation Type'
+                      placeholder='Organisation Type'
                       onSelect={item => {
                         setFieldValue('type', item);
                         props.onOrgTypeChange(item);
@@ -227,19 +250,22 @@ const showOrgByType = (value) =>{
                       dClass="ml-4"
                       className="text"
                     />   
-                                      {errors.type && touched.type && (
-                    <span className="error-msg text-danger">{errors.type}</span>
-                  )}
-                     </div></div>
-                    <div className="pb-4"></div>
-                  <div className="form-group flex-column">               
-                  <div className="pl-4" style={{color:"black"}}>
-                    <img alt="" src={org} className="icon imgs" />
-                  <DropdownButton
+                    <div style={{position:"relative", left:"-35px", top:"10px",cursor:"pointer"}}>
+                    <img src={dropdownIcon} width="15" height="10" />
+                    </div>
+                    { errors.org && touched.org &&  (
+                      <span  className="error-msg text-danger "> {errors.org} </span>
+                    )}
+                    </div>                
+                    <div className="form-group" style={{position:"relative", left:"30px", bottom:"0px"}}>
+                    <div style={{position:"absolute ", left:"-40px", top:"10px", color:"black"}}>
+                       <img alt="Phone icon" src={org} height="20px" width="20px" />
+                    </div>
+                    <DropdownButton
                     name={props.organisation.organisationId}
                     value={value}
                     isText={true}
-                    placeholder='  Organisation Name'
+                    placeholder='Organisation Name'
                     onSelect={item => {
                       setFieldValue('org', item);
                       props.onOrganisationChange(item);
@@ -252,30 +278,31 @@ const showOrgByType = (value) =>{
                         }
                     }}
                     groups={showOrgByType(selectedType)}
-                  //   changeFn={(v, e = '') => {
-                  //     console.log(v);
-                  //     setFieldValue('org', v); 
-                  //     changeFn(v, e);
-                  //  }}
-                  
+                                                          //   changeFn={(v, e = '') => {
+                                                          //     console.log(v);
+                                                          //     setFieldValue('org', v); 
+                                                          //     changeFn(v, e);
+                                                          //  }}
                     dClass="ml-4"
                     className="text"
                   /> 
+                  <div style={{position:"relative", left:"-30px", top:"10px",cursor:"pointer"}}>
+                  <img src={dropdownIcon} width="15" height="10" className="ml-3" />
+                  </div>
                   {errors.org && touched.org && (
                     <span className="error-msg text-danger">{errors.org}</span>
                   )}
                   </div>
-                  </div>
-              {
+                  {
                   props.errorMessage && <div className="alert alert-danger">{props.errorMessage}</div>
               }
-                  <div className="text-center mt-2">
+                  <div className="text-center" >
                     <br></br>
                   <button type="submit" className="btn btn-primary" >
                   SIGNUP
                   </button>
                     </div>
-                        <div className="signup-link text-center mt-2">
+                        <div className="signup-link text-center mt-3 mb-4">
                   Already have an Account? <Link to="/login">Login</Link>
                   </div>
                   </div></form>

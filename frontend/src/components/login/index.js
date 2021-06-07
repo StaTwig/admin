@@ -10,6 +10,7 @@ import hide from '../../assets/icons/hide.png';
 import logo from '../../assets/brands/VaccineLedgerlogo.svg';
 import eye from '../../assets/icons/eye.png';
 import Phone from "../../assets/icons/phone.png";
+import TextField from '@material-ui/core/TextField';
 
 const FormLoginPage = (props) => {
   const { email, onEmailChange, errorMessage, onSendOtp, phone, onPhoneChange } = props;
@@ -39,16 +40,25 @@ const FormLoginPage = (props) => {
               <div className="card-body">
                 <div className="login-form mt-2">
                   <div className="card-title mb-4">Login</div>
-                  <div className="form-group mb-3 mt-1 ml-5 mr-5 p-1">
-                    <img alt="" src={User} className="icon imgs" />
-                    <input type="email" className="form-control-login"
-                      value={email}
+                  <div className="form-group mb-3 mt-1 ml-3 mr-5 p-1">
+                  <div style={{position:"absolute", left:"-5px", top:"25px"}}>
+                        <img alt="Mail Icon" src={User} height="15px" width="18px" />
+                  </div>      
+                  <form>
+                  <TextField 
+                        label="Email ID" 
+                        className="form-controllogin ml-4"
+                        name="email"
+                        autoCapitalize = 'none'
+                        value={email}
                       onChange={onEmailChange}
-                      placeholder="Email ID"/>
+                      />
+                  </form>  
                   </div>
-                  <div className="card-title mb-2"><h5 style={{color: 'blue'}}>OR</h5></div>
-                  <div className="form-group mt-0 ml-5 mr-5 p-1">
-                  <img alt="" src={Phone} className="icon imgsPhone" />
+                  <div className="card-title mb-2"><h5 style={{color:"#0093E9"}}>OR</h5></div>
+                  <div className="form-group mt-0 ml-5 mr-5 p-1" style={{position:"relative", left:"-45px"}}>
+                  <div className="form-group mt-0 ml-3 p-1" style={{position:"relative", left:"-15px"}}>
+                        <img alt="Phone icon" src={Phone} height="20px" width="20px" /></div>
                       <PhoneInput
                         country={'in'}
                         placeholder='Enter Phone number'
@@ -61,9 +71,7 @@ const FormLoginPage = (props) => {
 						            value={phone}
                         onChange={onPhoneChange}
                       />
-                      <div className="pb-3"></div>
-              
-                    </div>
+                   </div>
                     
 
                   {
