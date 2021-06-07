@@ -253,14 +253,14 @@ const showOrgByType = (value) =>{
                     <div style={{position:"relative", left:"-35px", top:"10px",cursor:"pointer"}}>
                     <img src={dropdownIcon} width="15" height="10" />
                     </div>
-                    {errors.org && touched.org &&  (
-                    <span  className="error-msg text-danger "> {errors.org} </span>
+                    { errors.org && touched.org &&  (
+                      <span  className="error-msg text-danger "> {errors.org} </span>
                     )}
                     </div>                
-                  <div className="form-group" style={{position:"relative", left:"30px", bottom:"0px"}}>
-                  <div style={{position:"absolute ", left:"-40px", top:"10px", color:"black"}}>
+                    <div className="form-group" style={{position:"relative", left:"30px", bottom:"0px"}}>
+                    <div style={{position:"absolute ", left:"-40px", top:"10px", color:"black"}}>
                        <img alt="Phone icon" src={org} height="20px" width="20px" />
-                  </div>
+                    </div>
                     <DropdownButton
                     name={props.organisation.organisationId}
                     value={value}
