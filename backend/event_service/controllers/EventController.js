@@ -242,6 +242,7 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 					   as: 'productDetails',
 					} },
 					  { "$unwind": "$productDetails" },
+					  { "$unwind": '$payloadData.data.products' },
 					  { $match: elementMatchQuery},
 					  { $group: { _id: null, myCount: { $sum: 1 } } }
 					  ]).sort({
