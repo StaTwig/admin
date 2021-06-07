@@ -2265,10 +2265,14 @@ exports.trackJourney = [
                     var outwardShipmentsArray = [];
                     var poDetails, trackedShipment;
                     const trackingId = req.query.shipmentId;
-                    if (trackingId.includes("SH")) {
+                    if (!trackingId.includes("PO")) {
                         const inwardShipments = await ShipmentModel.findOne({
-                            id: trackingId
-                        }, {
+                        $or: [{
+                                id: trackingId
+                            }, {
+                                airWayBillNo: trackingId
+                            }]
+			}, {
                             _id: 0,
                             "taggedShipments": 1,
                             poId: 1
@@ -2291,8 +2295,13 @@ exports.trackJourney = [
                                 })
                         }
                         trackedShipment = await ShipmentModel.findOne({
-                            id: trackingId
-                        })
+                        $or: [{
+                                id: trackingId
+                            }, {
+                                airWayBillNo: trackingId
+                            }]
+			})
+
                         outwardShipmentsArray = await ShipmentModel.find({
                             "$and": [{
                                 taggedShipments: trackingId
