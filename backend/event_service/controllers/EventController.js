@@ -256,7 +256,8 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 					   foreignField: 'id',
 					   as: 'productDetails',
 					} },
-					  { "$unwind": "$productDetails" },
+					  { "$unwind": '$payloadData.data.products' },
+					  { "$unwind": '$productDetails' },
 					  { $match: elementMatchQuery},
 					  
 					  ]).skip(parseInt(skip)).limit(parseInt(limit)).sort({
