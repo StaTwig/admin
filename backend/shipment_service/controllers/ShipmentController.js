@@ -559,7 +559,7 @@ exports.createShipment = [
                 result
               );
             }
-          } catch(err){
+          } catch (err) {
             return apiResponse.ErrorResponse(res,err);
           } 
       } 
@@ -600,21 +600,24 @@ exports.receiveShipment = [
       const confData = await ConfigurationModel.findOne({ id: confId });
       const supplierID = req.body.supplier.id;
       const receiverId = req.body.receiver.id;
-
+      let supplierName = '';
+      let supplierAddress = '';
+      let receiverName = '';
+      let receiverAddress = '';
       if(supplierID) {
       const supplierOrgData = await OrganisationModel.findOne({
         id: req.body.supplier.id,
       });
-      const supplierName = supplierOrgData.name;
-      const supplierAddress = supplierOrgData.postalAddress;
+      supplierName = supplierOrgData.name;
+      supplierAddress = supplierOrgData.postalAddress;
     }
 
     if(receiverId){
       const receiverOrgData = await OrganisationModel.findOne({
         id: req.body.receiver.id,
       });
-      const receiverName = receiverOrgData.name;
-      const receiverAddress = receiverOrgData.postalAddress;
+      receiverName = receiverOrgData.name;
+      receiverAddress = receiverOrgData.postalAddress;
     }
 
   
