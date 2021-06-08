@@ -123,4 +123,28 @@
       text-align: center;
     }
   }
+  .form-content
+  {
+      padding: 5%;
+      margin-bottom: 2%;
+  }
+  .form-control{
+      border-radius:1.5rem;
+  }
+  .signUpScreen{
+    width:60%;
+  }
+  .errorDisplay{
+    display: inline-block;
+  }
+  .btnSubmit
+  {
+      border:none;
+      border-radius:1.5rem;
+      padding: 1%;
+      width: 20%;
+      cursor: pointer;
+      background: #0062cc;
+      color: #fff;
+  }
 }
