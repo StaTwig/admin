@@ -31,9 +31,16 @@ const Track = (props) => {
     ) {
       setSearchType('SH');
       setOp(1);
-    } else {
+    } else if (
+      e.target.value.substring(0, 2) == 'PO' ||
+      e.target.value.substring(0, 2) == 'po'
+    ) {
       setSearchType('PO');
       setOp(-1);
+    }
+    else{
+      setSearchType("AO");
+      setOp(0);
     }
   };
 
@@ -41,6 +48,7 @@ const Track = (props) => {
     await searchData(value);
     setIsSubmitted(true);
   };
+
 
   const onkeydown = (event) => {
     if (event.keyCode === 13) {
@@ -61,28 +69,6 @@ const Track = (props) => {
                 <Map />
               </div>
             </div>
-            {/* <div className="panel commonpanle row shadow bg-white mb-4">
-            <div className="row col-12">
-              <div className="col row ml-3">
-                <div className="arrow col-1 mr-2">
-                  <img src={CurrentTemperature} width="20" height="20" />
-                </div>
-
-                <div className="col">
-                  <div className="info">Current temperature</div>
-                  <div className="info">3°C</div>
-                </div>
-              </div>
-
-              <div className="col">
-                <div className="info col">Last Upadated on</div>
-                <div className="info col">07:00 am</div>
-              </div>
-            </div>
-            <div className="row col-12">
-              <Chart />
-            </div>
-          </div> */}
           </div>}
         <div className="col row ml-3">
           {shippmentChainOfCustodyData.length == 0 ? (
@@ -151,7 +137,7 @@ const Track = (props) => {
                         newArr = shippmentChainOfCustodyData.filter(rw => rw?.taggedShipments?.includes(value));
                         let cIndex = shippmentChainOfCustodyData.map((el) => el.id).indexOf(value) + 1;
                         cIndex = index < cIndex ? index : cIndex;
-                        
+                        console.log(row);
                         return row?.shipmentUpdates?.filter(s => s.status == 'RECEIVED').map((r, i) => (
                           <SoChainOfCustody
                             len={row.shipmentUpdates.length}
