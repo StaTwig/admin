@@ -280,6 +280,9 @@ function getAnalyticsFilterConditions(filters, warehouseIds) {
 		matchCondition.productId = filters.sku;
 	};
 
+	if (filters.district && filters.district !== '') {
+		matchCondition.depot = filters.districts;
+	};
 
 	if (filters.date_filter_type && filters.date_filter_type.length) {
 

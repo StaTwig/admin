@@ -9,7 +9,7 @@ const Analytics = (props) => {
   const [filters, setFilters] = useState({
     view: 'ANNUALREPORT_DASHBOARD'
   });
-
+  const [districts, setDistricts] = useState([]);
 
   const allowedMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   let thisYear = new Date().getFullYear();
@@ -40,10 +40,19 @@ const Analytics = (props) => {
     setParams(filter);
   };
 
-  const onStateChange = (event) => {
+  const onStateChange = async(event) => {
     const selectedState = event.target.value;
     const filter = { ...params };
     filter.state = selectedState;
+    const result = await props.getDistricts(selectedState);
+    setDistricts(result.data);
+    setParams(filter);
+  };
+
+  const onDistrictChange = (event) => {
+    const selectedDistrict = event.target.value;
+    const filter = { ...params };
+    filter.district = selectedDistrict;
     setParams(filter);
   };
 
@@ -158,7 +167,7 @@ const Analytics = (props) => {
                 <>
                 <label className="filterSubHeading mt-3">Select SKU</label>
                 <select className="filterSelect mt-2" value={SKU} onChange={skuChanged}>
-                  <option>Select SKU</option>
+                  <option value="">Select SKU</option>
                   {props.SKUs?.map((sku) => {
                     let enable = true;
                     if (!skuArr.includes(sku.id)) 
@@ -175,9 +184,17 @@ const Analytics = (props) => {
                 </select>
                 <label className="filterSubHeading mt-3">Select State</label>
                 <select className="filterSelect mt-2" onChange={onStateChange}>
-                  <option>Select State</option>
+                  <option value="">Select State</option>
                   {props.states?.map((state) => 
                       <option value={state}>{state}</option>
+                    )
+                  }
+                </select>
+                <label className="filterSubHeading mt-3">Select District</label>
+                <select className="filterSelect mt-2" onChange={onDistrictChange}>
+                  <option value="">Select District</option>
+                  {districts?.map((district) => 
+                      <option value={district}>{district}</option>
                     )
                   }
                 </select>
