@@ -19,7 +19,7 @@ export const getInventories = (skip, limit, dateFilter, productName, productCate
       try {
         dispatch(turnOn());
         const result = await axios.get(
-          `http://localhost:3014/eventmanagement/api/event/getAllEventsWithFilter?skip=${skip}&limit=${limit}&dateFilter=${dateFilter}&productName=${productName}&category=${productCategory}&status=${status}`
+          `${config().getTransactions}?skip=${skip}&limit=${limit}&dateFilter=${dateFilter}&productName=${productName}&category=${productCategory}&status=${status}`
           );
         dispatch(setInventories(result.data.data.inventoryRecords));
         dispatch(setInventoriesCount(result.data.data.count));

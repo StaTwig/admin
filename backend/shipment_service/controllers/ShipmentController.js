@@ -709,8 +709,8 @@ exports.receiveShipment = [
           eventID: null,
           eventTime: null,
           eventType: {
-            primary: "CREATE",
-            description: "SHIPMENT_CREATION",
+            primary: "RECEIVE",
+            description: "SHIPMENT",
           },
           actor: {
             actorid: null,
@@ -2087,11 +2087,13 @@ exports.fetchAllWarehouseShipments = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           const {
-            id
+            emailId
           } = req.user;
+          console.log(emailId)
           try {
+
             const empDetails = await EmployeeModel.findOne({
-              id: id
+              emailId: emailId
             });
             const warehouses = empDetails.warehouseId;
               const shipments = await ShipmentModel.aggregate([{
