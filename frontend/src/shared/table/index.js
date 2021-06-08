@@ -44,12 +44,12 @@ function getDate(n){
                                    
                   <div className="rTableCell" style={{position:"relative",left:'0%'}}>
                     <div className="d-flex flex-column txtBlue">
-                      <div>{inventory.ProductList[0].productDetails.name}</div>
+                      <div>{inventory.productDetails.name}</div>
                     </div>
                   </div>
-                  <div className="rTableCell" style={{position:"relative",left:'6%'}}>{inventory.ProductList[0].productDetails.type}</div>
+                  <div className="rTableCell" style={{position:"relative",left:'6%'}}>{inventory.productDetails.type}</div>
                   {/* <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.manufacturer}</div> */}
-                  <div className="rTableCell" style={{position:"relative",left:'12%'}}>{formatDate(inventory.ProductList[0].productDetails.createdAt)}</div>
+                  <div className="rTableCell" style={{position:"relative",left:'12%'}}>{formatDate(inventory.createdAt)}</div>
                   <div className="rTableCell" style={{position:"relative",left:'19%'}}>{inventory.inventoryQuantity}</div>                                 
                   <div className="rTableCell" style={{position:"relative",left:'22%'}}> {(inventory.eventTypePrimary !== 'ADD') ? (inventory.eventTypePrimary === 'RECEIVED' ? 'RECEIVED' :  'SENT') : 'ADDED'} </div>
                  <div className=" rTableCell m-2" 
@@ -81,30 +81,30 @@ function getDate(n){
                                      <TableRow>
                                           <TableCell>Shipment Id:</TableCell>
                                              <div className="">
-                                             <TableCell align="left"><b>{inventory.ProductList[0].shipmentDetails.id}</b></TableCell></div>
+                                             <TableCell align="left"><b>{inventory.shipmentDetails.id}</b></TableCell></div>
                                       </TableRow>
                                       <TableRow>
                                           <TableCell>From Organisation:</TableCell>
                                              <div className="">
-                                             <TableCell align="left"><b>{inventory.ProductList[0].shipmentDetails.supplier.id}</b></TableCell></div>
+                                             <TableCell align="left"><b>{inventory.shipmentDetails.supplier.id}</b></TableCell></div>
                                       </TableRow>
                                       <TableRow>
                                           <TableCell>From Location:</TableCell>
                                           <div className="">
-                                          <TableCell align="left"><b>{(inventory.actorOrgId === inventory.ProductList[0].shipmentDetails.supplier.id) ? inventory.actorOrgAddress : inventory.secondaryOrgAddress}</b></TableCell></div>
+                                          <TableCell align="left"><b>{(inventory.actorOrgId === inventory.shipmentDetails.supplier.id) ? inventory.actorOrgAddress : inventory.secondaryOrgAddress}</b></TableCell></div>
                                       </TableRow>
                                     </div>
                                          :
                                      <TableRow>
                                            <TableCell>Mfg Date</TableCell>
                                               <div className="ml-5">
-                                              <TableCell align="left"><b>{inventory.ProductList[0].mfgDate}</b></TableCell></div>
+                                              <TableCell align="left"><b>{inventory.productDetails.mfgDate}</b></TableCell></div>
                                           <TableCell align="left">Exp Date</TableCell>
                                               <div className="ml-5">
-                                              <TableCell align="left"><b>{inventory.ProductList[0].expDate}</b></TableCell></div>
+                                              <TableCell align="left"><b>{inventory.productDetails.expDate}</b></TableCell></div>
                                           <TableCell align="left">Batch</TableCell>
                                               <div className="ml-5">
-                                              <TableCell align="left"><b>{inventory.ProductList[0].batchNumber}</b></TableCell></div>
+                                              <TableCell align="left"><b>{inventory.productDetails.batchNumber}</b></TableCell></div>
                                     </TableRow> }    
 
                          
@@ -121,9 +121,9 @@ function getDate(n){
                                           <div className="mt-3" style={{position:"absolute", left:"78%", bottom:"15%" , width:"20%"}}>
                                         <button
                                         type="button" className="btn btn-outline-warning "
-                                        disabled = {!inventory.payloadData.data.products[0].batchNumber}
+                                        disabled = {!inventory.payloadData.data.products.batchNumber}
                                         onClick={() => {
-                                          props.history.push(`/productlist/${inventory.payloadData.data.products[0].batchNumber}`)
+                                          props.history.push(`/productlist/${inventory.payloadData.data.products.batchNumber}`)
                                         }}
                       
                                       >Show Product Details</button></div>
