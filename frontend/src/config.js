@@ -1,4 +1,4 @@
-export const TEST_SERVER_URL = 'http://test.vaccineledger.com:9001';
+export const TEST_SERVER_URL = 'https://test.vaccineledger.com';
 export const PROD_SERVER_URL = 'http://api.vaccineledger.com:9001';
 export const ABINBEVPROD_SERVER_URL = 'http://abinbev.statledger.io:9001';
 export const ABINBEVTEST_SERVER_URL = 'http://test.abinbev.statledger.io:9001';
@@ -93,6 +93,7 @@ export function config() {
       fetchAllPurchaseOrderUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
       getPOsUrl: `${LOCAL_SERVER_URL_PO}/pomanagement/api/po/purchaseOrderStatistics`,
       trackShipment: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
+      trackJourney: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/trackJourney?id=`,
       poDetailsByShipmentId:`${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
       trackTemperature: `${LOCAL_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/track/fetchTemp`,
@@ -122,7 +123,8 @@ export function config() {
       getWarehouseById: `${LOCAL_SERVER_URL_SHIPMENT}/usermanagement/api/auth/getwarehouseinfo?id=`,
       addPOsFromExcel:`${LOCAL_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-      getTransactions: `${LOCAL_SERVER_URL_EVENT}/eventmanagement/api/event/getAllEventsWithFilter`
+      getTransactions: `${LOCAL_SERVER_URL_EVENT}/eventmanagement/api/event/getAllEventsWithFilter`,
+      getTransactionFilterList: `${LOCAL_SERVER_URL_EVENT}/eventmanagement/api/event/fetchProductDetailsList`
           },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
@@ -184,6 +186,7 @@ export function config() {
       fetchAllPurchaseOrderUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
       getPOsUrl: `${DEV_SERVER_URL}/pomanagement/api/po/purchaseOrderStatistics`,
       trackShipment: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
+      trackJourney: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/trackJourney?id=`,
       poDetailsByShipmentId:`${DEV_SERVER_URL}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${DEV_SERVER_URL}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
       trackTemperature: `${DEV_SERVER_URL}/tracktracemanagement/api/track/fetchTemp`,
@@ -212,7 +215,8 @@ export function config() {
        fetchSupplierAndReceiverListUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
        addPOsFromExcel:`${DEV_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
        getOrganizationsTypewithauth:`${DEV_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-       getTransactions: `${DEV_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
+       getTransactions: `${DEV_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
+       getTransactionFilterList: `${DEV_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`
       },
     stable: {
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
@@ -275,6 +279,7 @@ export function config() {
       getWareHousesByCountryUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?country=`,
       getWareHousesByRegionUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getWarehouseDetailsByRegion?region=`,
       trackShipment: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
+      trackJourney: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/trackJourney?id=`,
       poDetailsByShipmentId:`${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
       trackTemperature: `${STABLE_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/track/fetchTemp`,
@@ -303,7 +308,8 @@ export function config() {
        fetchSupplierAndReceiverListUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
        addPOsFromExcel:`${STABLE_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
        getOrganizationsTypewithauth:`${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-       getTransactions: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/getAllEventsWithFilter`
+       getTransactions: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/getAllEventsWithFilter`,
+       getTransactionFilterList: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/fetchProductDetailsList`
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -363,6 +369,7 @@ export function config() {
       getWarehouseDetailsByCountryUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?name=`,
       getWareHousesByRegionUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByRegion?region=`,
       trackShipment: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
+      trackJourney: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/trackJourney?id=`,
       poDetailsByShipmentId:`${TEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${TEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
       trackTemperature: `${TEST_SERVER_URL}/tracktracemanagement/api/track/fetchTemp`,
@@ -397,7 +404,8 @@ export function config() {
       addWarehouse: `${TEST_SERVER_URL}/usermanagement/api/auth/addWarehouse`,
       addPOsFromExcel:`${TEST_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${TEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-      getTransactions: `${TEST_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
+      getTransactions: `${TEST_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
+      getTransactionFilterList: `${TEST_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`
 },
     demo: {
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
@@ -457,6 +465,7 @@ export function config() {
       getWarehouseDetailsByCountryUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?name=`,
       getWareHousesByRegionUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByRegion?region=`,
       trackShipment: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
+      trackJourney: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipment/trackJourney?id=`,
       poDetailsByShipmentId:`${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
       trackTemperature: `${DEMO_SERVER_URL}/tracktracemanagement/api/track/fetchTemp`,
@@ -485,7 +494,8 @@ export function config() {
       getWarehouseById: `${DEMO_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
       addPOsFromExcel:`${DEMO_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${DEMO_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-      getTransactions: `${DEMO_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
+      getTransactions: `${DEMO_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
+      getTransactionFilterList: `${DEMO_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`
     },
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
@@ -548,6 +558,7 @@ export function config() {
       getWarehouseDetailsByCountryUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?name=`,
       getWareHousesByCountryUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?country=`,
       trackShipment: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
+      trackJourney: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/trackJourney?id=`,
       poDetailsByShipmentId:`${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
       trackTemperature: `${PROD_SERVER_URL}/tracktracemanagement/api/track/fetchTemp`,
@@ -572,7 +583,8 @@ export function config() {
       getWarehouseById: `${PROD_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
       addPOsFromExcel:`${PROD_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${PROD_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-      getTransactions: `${PROD_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
+      getTransactions: `${PROD_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
+      getTransactionFilterList: `${PROD_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`
     },
     
     uniceftest: {
@@ -633,6 +645,7 @@ export function config() {
       getWarehouseDetailsByCountryUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?name=`,
       getWareHousesByRegionUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByRegion?region=`,
       trackShipment: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
+      trackJourney: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/trackJourney?id=`,
       poDetailsByShipmentId:`${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
       trackTemperature: `${UNICEFTEST_SERVER_URL}/tracktracemanagement/api/track/fetchTemp`,
@@ -661,7 +674,14 @@ export function config() {
       getWarehouseById: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
       addPOsFromExcel:`${UNICEFTEST_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-      getTransactions: `${UNICEFTEST_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`
+      getTransactions: `${UNICEFTEST_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
+      getTransactionFilterList: `${UNICEFTEST_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`,
+      fetchOutboundPurchaseOrderUrl: `${UNICEFTEST_SERVER_URL}/pomanagement/api/po/fetchOutboundPurchaseOrders`,
+      fetchInboundPurchaseOrderUrl: `${UNICEFTEST_SERVER_URL}/pomanagement/api/po/fetchInboundPurchaseOrders`,
+      fetchProductIdsCustomerLocationsOrganisationsUrl: `${UNICEFTEST_SERVER_URL}/pomanagement/api/po/fetchProductIdsCustomerLocationsOrganisations`,
+      fetchInboundShipmentsUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchInboundShipments`,
+      fetchOutboundShipmentsUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchOutboundShipments`,
+      fetchSupplierAndReceiverListUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`
 
     },
   };

@@ -1,8 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import Signup from '../../components/signUp';
 import {registerUser, checkUser} from '../../actions/userActions';
+import { turnOn , turnOff } from '../../actions/spinnerActions';
 import MobileHeader from '../../shared/header/mobileHeader';
 import logo from '../../assets/brands/VACCINELEDGER.png';
+import { useDispatch } from 'react-redux';
 import Modal from '../../shared/modal';
 import OrganisationPopUp from '../../components/signUp/organisationPopUp';
 
@@ -12,11 +14,13 @@ const SignupContainer = (props) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
+  const [orgType, setOrgType] = useState('CUSTOMER');
   const [ organisation, setOrganisation ] = useState({id: '', name: ''});
   const [showModal, setShowModal] = useState(false);
   const [adminAwaiting, setAdminAwaiting ] = useState(false);
   const [isNewOrg, setIsNewOrg] = useState(false);
   const [innerWidth,setInnerwidth] = useState(window.innerWidth);
+  const dispatch = useDispatch();
 
   // const updtaeInnerWidth = () =>{
   //     setInnerwidth(window.innerWidth);
@@ -39,9 +43,11 @@ const SignupContainer = (props) => {
         country: values.country
       }
       // data.type = 'CUSTOMER_SUPPLIER';
+      data.type = orgType;
       data.organisationId = 0;
     }
     
+    dispatch(turnOn());
     const result = await registerUser(data);
     if (result.status === 200) {
       setShowModal(false);
@@ -52,7 +58,9 @@ const SignupContainer = (props) => {
     else{
       const err = result.data.data[0];
       setErrorMessage(err.msg);
+      setShowModal(false);
     }
+    dispatch(turnOff());
   });
 
   
@@ -119,9 +127,10 @@ const SignupContainer = (props) => {
         errorMessage={errorMessage}
         onEmailChange={e => setEmail((e.target.value).toLowerCase())}
         onphoneChange={value => setPhone(value)}
-        onOrgChange={value => {setIsNewOrg(value),setShowModal(true)}}
+        onOrgChange={value => {setIsNewOrg(value),setShowModal(value)}}
         onPasswordChange={e => setPassword(e.target.value)}
         onlastNameChange={e => setLastName(e.target.value)}
+        onOrgTypeChange={value => setOrgType(value)}
         onOrganisationChange={org => setOrganisation({id: org.id, name: org.name})}
         organisation={organisation}
       />

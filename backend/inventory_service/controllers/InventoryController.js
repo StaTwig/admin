@@ -36,6 +36,9 @@ const StateDistrictStaticDataModel = require("../models/StateDistrictStaticDataM
 const { request } = require("http");
 const { match } = require("assert");
 const logger = init.getLog();
+const CENTRAL_AUTHORITY_ID = null;
+const CENTRAL_AUTHORITY_NAME = null;
+const CENTRAL_AUTHORITY_ADDRESS = null;
 
 exports.getTotalCount = [
   auth,
@@ -904,9 +907,16 @@ exports.addProductsToInventory = [
     .withMessage("Products  must be specified."),
   async (req, res) => {
     try {
-      console.log(req.user);
       const email = req.user.emailId;
       const user_id = req.user.id;
+      const empData = await EmployeeModel.findOne({
+        emailId: req.user.emailId,
+      });
+      const orgId = empData.organisationId;
+      const orgName = empData.name;
+      const orgData = await OrganisationModel.findOne({ id: orgId });
+      const address = orgData.postalAddress;
+
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         logger.log(
@@ -934,11 +944,12 @@ exports.addProductsToInventory = [
           const { products } = req.body;
           const { id } = req.user;
           const employee = await EmployeeModel.findOne({ id });
-          var warehouseId = "";
-          if (!req.query.warehouseId)
-            warehouseId = employee.warehouseId[0];
-          else
-            warehouseId = req.query.warehouseId;
+          var warehouseId = req.user.warehouseId;
+          // if (!req.query.warehouseId)
+          //   warehouseId = employee.warehouseId[0];
+          // else
+          //   warehouseId = req.query.warehouseId;
+          console.log(employee)
           const warehouse = await WarehouseModel.findOne({ id: warehouseId });
 
           if (!warehouse) {
@@ -1057,7 +1068,7 @@ exports.addProductsToInventory = [
                     labelId: product?.label?.labelId,
                     labelType: product?.label?.labelType,
                   },
-	          quantity : 1,
+                  quantity: 1,
                   productId: product.productId,
                   inventoryIds: [inventory.id],
                   lastInventoryId: "",
@@ -1081,36 +1092,36 @@ exports.addProductsToInventory = [
                 atomsArray.push(atom);
               }
             }
-             else {
-                const atom = {
-                  id: uniqid('batch-'),
-                  label: {
-                    labelId: product.label.labelId,
-                    labelType: product.label.labelType,
-                  },
-                  quantity : product.quantity,
-                  productId: product.productId,
-                  inventoryIds: [inventory.id],
-                  lastInventoryId: "",
-                  lastShipmentId: "",
-                  poIds: [],
-                  shipmentIds: [],
-                  txIds: [],
-                  batchNumbers: [product.batchNumber],
-                  atomStatus: "Healthy",
-                  attributeSet: {
-                    mfgDate: product.mfgDate,
-                    expDate: product.expDate,
-                  },
-                  eolInfo: {
-                    eolId: "IDN29402-23423-23423",
-                    eolDate: "2021-03-31T18:30:00.000Z",
-                    eolBy: id,
-                    eolUserInfo: "",
-                  },
-                };
-                atomsArray.push(atom);
-	    }
+            else {
+              const atom = {
+                id: uniqid('batch-'),
+                label: {
+                  labelId: product?.label?.labelId,
+                  labelType: product?.label?.labelType,
+                },
+                quantity: product.quantity,
+                productId: product.productId,
+                inventoryIds: [inventory.id],
+                lastInventoryId: "",
+                lastShipmentId: "",
+                poIds: [],
+                shipmentIds: [],
+                txIds: [],
+                batchNumbers: [product.batchNumber],
+                atomStatus: "Healthy",
+                attributeSet: {
+                  mfgDate: product.mfgDate,
+                  expDate: product.expDate,
+                },
+                eolInfo: {
+                  eolId: "IDN29402-23423-23423",
+                  eolDate: "2021-03-31T18:30:00.000Z",
+                  eolBy: id,
+                  eolUserInfo: "",
+                },
+              };
+              atomsArray.push(atom);
+            }
 
             try {
               if (atomsArray.length > 0) await AtomModel.insertMany(atomsArray);
@@ -1148,7 +1159,7 @@ exports.addProductsToInventory = [
                 address: "null",
               },
               actororg: {
-                id: "null",
+                id: req.user.organisationId || "null",
                 name: "null",
                 address: "null",
               },
@@ -1170,6 +1181,12 @@ exports.addProductsToInventory = [
           event_data.eventType.description = "INVENTORY";
           event_data.actor.actorid = user_id || "null";
           event_data.actor.actoruserid = email || "null";
+          event_data.stackholders.actororg.id = orgId || "null";
+          event_data.stackholders.actororg.name = orgName || "null";
+          event_data.stackholders.actororg.address = address || "null";
+          event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+          event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+          event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
           event_data.payload.data = payload;
           console.log(event_data);
           async function compute(event_data) {
@@ -1209,6 +1226,13 @@ exports.addInventoriesFromExcel = [
           };
           const email = req.user.emailId;
           const user_id = req.user.id;
+          const empData = await EmployeeModel.findOne({
+            emailId: req.user.emailId,
+          });
+          const orgId = empData.organisationId;
+          const orgName = empData.name;
+          const orgData = await OrganisationModel.findOne({ id: orgId });
+          const address = orgData.postalAddress;
           checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
               const dir = `uploads`;
@@ -1359,6 +1383,12 @@ exports.addInventoriesFromExcel = [
               event_data.eventType.description = "INVENTORY";
               event_data.actor.actorid = user_id || "null";
               event_data.actor.actoruserid = email || "null";
+              event_data.stackholders.actororg.id = orgId || req.user.organisationId || "null";
+              event_data.stackholders.actororg.name = orgName || "null";
+              event_data.stackholders.actororg.address = address || "null";
+              event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+              event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+              event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
               event_data.payload.data.products = [...data];
               console.log(event_data);
               async function compute(event_data) {
@@ -2503,7 +2533,7 @@ exports.getInventoryProductsByPlatform = [
       const filters = req.query;
       const skuFilter = {};
       if (filters.sku && filters.sku.length) {
-        skuFilter.id = filters.sku;
+        skuFilter.externalId = filters.sku;
       }
       const platformInventory = await OrganisationModel.aggregate([
         {
@@ -2643,64 +2673,47 @@ function _spreadHeaders(inputObj) {
 }
 
 exports.uploadSalesData = [
-  // auth,
+  auth,
   async (req, res) => {
     try {
       const dir = `uploads`;
       if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir);
       }
-      const { collectedDate } = req.body;
-      const uploadedFileName = req.file.originalname;
+      const { collectedDate, targetPercentage } = req.body;
       await moveFile(req.file.path, `${dir}/${req.file.originalname}`);
       const workbook = XLSX.readFile(`${dir}/${req.file.originalname}`);
       const sheet_name_list = workbook.SheetNames;
-      const sheetJSON = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]], { defval: "" });
+
+      var range = XLSX.utils.decode_range(workbook.Sheets[sheet_name_list[0]]['!ref']);
+      range.s.c = 0;
+      range.e.c = 58;
+      var new_range = XLSX.utils.encode_range(range);
+
+      const sheetJSON = XLSX.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]], { blankrows: false, defval: "", range: new_range });
 
       let headerRow1 = _spreadHeaders(sheetJSON[0]);
       let headerRow2 = _spreadHeaders(sheetJSON[1]);
       let headerRow3 = _spreadHeaders(sheetJSON[2]);
       let headerRow4 = sheetJSON[3];
-
-      const spuriousColumns = ['__EMPTY', '__EMPTY_1', '__EMPTY_2', '__EMPTY_3', '__EMPTY_4', '__EMPTY_5', '__EMPTY_6'];
+      let headerRow5 = sheetJSON[4];
 
       let parsedRows = [];
-
       sheetJSON.forEach((row, index) => {
-        if (index > 2 && row['__EMPTY_1'].length) {
+        if (index > 4) {
           let rowKeys = Object.keys(row);
-          rowKeys = rowKeys.filter((e) => spuriousColumns.indexOf(e) === -1);
           rowKeys.forEach((rowKey) => {
             let prod = {};
-            if (!rowKey.startsWith('__') && !rowKey.startsWith('t') && rowKey !== 'target') {
-              prod['productName'] = headerRow2[rowKey];
+            if (headerRow5[rowKey] && headerRow5[rowKey].length) {
+              prod['productName'] = headerRow4[rowKey];
               prod['productSubName'] = headerRow3[rowKey];
-              prod['productId'] = headerRow4[rowKey];
+              prod['productId'] = headerRow5[rowKey];
               prod['depot'] = row['__EMPTY_1'];
               prod['sales'] = row[rowKey];
-              prod['targetSales'] = row['t' + rowKey];
+              prod['targetSales'] = row[rowKey] * (targetPercentage / 100);
               prod['uploadDate'] = collectedDate;
               let depot = warehouseDistrictMapping.find(w => w.depot === row['__EMPTY_1']);
               prod['warehouseId'] = (depot && depot.warehouseId) ? depot.warehouseId : '';
-            }
-            if (Object.keys(prod).length) {
-              parsedRows.push(prod);
-            }
-          });
-        } else if (index > 2 && !row['__EMPTY_1'].length && row['__EMPTY'].length) {
-          let rowKeys = Object.keys(row);
-          rowKeys = rowKeys.filter((e) => spuriousColumns.indexOf(e) === -1);
-          rowKeys.forEach((rowKey) => {
-            let prod = {};
-            if (!rowKey.startsWith('__') && !rowKey.startsWith('t') && rowKey !== 'target') {
-              prod['productName'] = headerRow2[rowKey];
-              prod['productSubName'] = headerRow3[rowKey];
-              prod['productId'] = headerRow4[rowKey];
-              prod['isDistrictAggregate'] = true;
-              prod['districtName'] = row['__EMPTY'];
-              prod['sales'] = row[rowKey];
-              prod['targetSales'] = row['t' + rowKey];
-              prod['uploadDate'] = collectedDate;
             }
             if (Object.keys(prod).length) {
               parsedRows.push(prod);
@@ -2713,7 +2726,7 @@ exports.uploadSalesData = [
 
       return apiResponse.successResponseWithData(
         res,
-        responseObj
+        `Uploaded Sales Data successfully. Num Records - ${respObj.length}`
       );
 
     } catch (err) {
@@ -2749,7 +2762,10 @@ exports.getBatchNearExpiration = [
                     $gte: today.toISOString(),
                     $lt: nextMonth.toISOString()
                   }
-                }, { $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] } }
+                }, { $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] } },
+                // {batchNumbers: {$ne: ""}},
+                {"attributeSet.mfgDate": {$ne: ""}},
+                {"attributeSet.expDate": {$ne: ""}}
               ]
             }
           },
@@ -2803,7 +2819,10 @@ exports.getBatchExpired = [
                   "attributeSet.expDate": {
                     $lt: today.toISOString()
                   }
-                }, { $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] } }
+                }, { $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] } },
+                // {batchNumbers: {$ne: ""}},
+                {"attributeSet.mfgDate": {$ne: ""}},
+                {"attributeSet.expDate": {$ne: ""}}
               ]
             }
           },
@@ -2840,7 +2859,7 @@ exports.getBatchWarehouse = [
     try {
       const inventoryId = req.query.inventory_id;
       const productId = req.query.product_id;
-    
+
       const result = await AtomModel.aggregate([
         {
           $match: {

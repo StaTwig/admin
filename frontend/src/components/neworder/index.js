@@ -22,8 +22,8 @@ import Modal from '../../shared/modal';
 import ExcelPopUp from './ExcelPopup/index';
 import ExportIcon from '../../assets/icons/Export.svg';
 import dropdownIcon from '../../assets/icons/drop-down.svg';
-import {getOrganizationsTypewithauth} from '../../actions/userActions';
-import { getProducts, getProductsByCategory, setReviewPos, resetReviewPos } from '../../actions/poActions';
+
+import { getProducts, getProductsByCategory, setReviewPos, resetReviewPos , getOrganizationsByTypes} from '../../actions/poActions';
 
 const NewOrder = (props) => {
   const editPo = useSelector(state => {
@@ -95,8 +95,7 @@ const NewOrder = (props) => {
                                         type: item.type
                                       };
                                     }));
-
-      const orgType = await getOrganizationsTypewithauth('CONF000');
+      const orgType = await getOrganizationsByTypes("CONF000");
       setOrgTypes(orgType.data.length > 0 ? orgType.data[0].organisationTypes.map(item => {
                                       return {
                                         value: item.id,
@@ -503,7 +502,7 @@ const NewOrder = (props) => {
                               onOrgChange(v.value);
                             }}
                             isDisabled={values.rtypeName == ''}
-                            options={allOrganisations.filter(a => a.type == values.rtypeName && a.value != values.fromOrg)}
+                            options={allOrganisations.filter(a => a.type == values.rtypeName)}
                           />
                         {errors.toOrg && touched.toOrg && (
                           <span className="error-msg text-danger">{errors.toOrg}</span>

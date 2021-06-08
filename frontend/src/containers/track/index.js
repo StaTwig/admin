@@ -3,21 +3,52 @@ import Track from '../../components/track';
 import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
 import {useDispatch} from "react-redux";
-import { chainOfCustody, chainOfCustodyTrack } from "../../actions/shipmentActions";
+import { chainOfCustody, chainOfCustodyTrack, getJourneyTrack,getViewShipment} from "../../actions/shipmentActions";
 import { turnOff, turnOn } from '../../actions/spinnerActions';
+import moment from 'moment';
 
 const TrackContainer = props => {
   const dispatch = useDispatch();
   const [poChainOfCustodyData, setPoChainOfCustodyData] = useState([]);
   const [shippmentChainOfCustodyData, setShippmentChainOfCustodyData] = useState([]);
   
+  // const searchData = async (id) => {
+  //   dispatch(turnOn());
+  //   const result = await chainOfCustody(id);
+  //   dispatch(turnOff());
+  //   if (result.status == 200) {
+  //     setPoChainOfCustodyData(result.data.data.poChainOfCustody);
+  //     setShippmentChainOfCustodyData(result.data.data.shipmentChainOfCustody);
+  //   }else{
+  //     setPoChainOfCustodyData([]);
+  //     setShippmentChainOfCustodyData([]);
+  //   }
+  // }
+ 
+
   const searchData = async (id) => {
     dispatch(turnOn());
-    const result = await chainOfCustody(id);
+    const result = await getJourneyTrack(id);
+
     dispatch(turnOff());
     if (result.status == 200) {
-      setPoChainOfCustodyData(result.data.data.poChainOfCustody);
-      setShippmentChainOfCustodyData(result.data.data.shipmentChainOfCustody);
+      setPoChainOfCustodyData(result.data.data.poDetails);
+      var arr = [];
+      var finalArr = [];
+      if (result.data.data.poDetails) {
+        arr = result.data.data.poDetails;
+        arr["shipmentUpdates"] = [{
+          // status: result.data.data.poDetails.poStatus,
+          status: 'RECEIVED',
+          products: result.data.data.poDetails.products,
+          updatedOn: moment(result.data.data.poDetails.lastUpdatedOn).format('DD/MM/YYYY hh:mm'),
+          isOrder: 1
+        }];
+        finalArr = [arr].concat(result.data.data.inwardShipmentsArray).concat([result.data.data.trackedShipment]).concat(result.data.data.outwardShipmentsArray);
+      }
+      else if(result.data.data.trackedShipment)
+        finalArr = result.data.data.inwardShipmentsArray.concat([result.data.data.trackedShipment]).concat(result.data.data.outwardShipmentsArray)
+      setShippmentChainOfCustodyData(finalArr);
     }else{
       setPoChainOfCustodyData([]);
       setShippmentChainOfCustodyData([]);
@@ -28,7 +59,8 @@ const TrackContainer = props => {
     setPoChainOfCustodyData([]);
     setShippmentChainOfCustodyData([]);
   }
-
+console.log(poChainOfCustodyData,"poChainOfCustodyData");
+console.log(shippmentChainOfCustodyData,"shippmentChainOfCustodyData");
   return (
     <div className="container-fluid p-0">
       <Header {...props} />

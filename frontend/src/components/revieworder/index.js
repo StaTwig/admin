@@ -27,7 +27,7 @@ const ReviewOrder = props => {
 
   const onAssign = async () => {
     let error = false;
-    const { fromOrg, fromOrgId, toOrg, toOrgLoc, products } = order;
+    const { fromOrg, fromOrgId, toOrg, toOrgLoc, products, typeName, rtypeName } = order;
     products.forEach((p) => {
       if (p.quantity < 1)
         error = true;
@@ -38,10 +38,12 @@ const ReviewOrder = props => {
         supplier: {
           supplierIncharge: null,
           supplierOrganisation: fromOrg,
+          supplierType: typeName,
         },
         customer: {
           customerIncharge: null,
           customerOrganisation: toOrg,
+          customerType: rtypeName,
           shippingAddress: {
             shippingAddressId: toOrgLoc,
             shipmentReceiverId: null
@@ -114,7 +116,7 @@ console.log(data);
                 </div>
                 <div className="col row">
                   <span className="col-4">Organisation ID: </span>
-                  <span className="col" style={{color: "black"}} >{order.fromOrg}</span>
+                  <span className="col" style={{color: "black"}} >{order.typeName}/{order.fromOrg}</span>
                 </div>
               </div>
             </div>
@@ -131,7 +133,7 @@ console.log(data);
                 </div>
                 <div className="col row">
                   <span className="col-4">Organisation ID: </span>
-                  <span className="col" style={{color: "black"}} >{order.toOrg}</span>
+                  <span className="col" style={{color: "black"}} >{order.rtypeName}/{order.toOrg}</span>
                 </div>
                 <div className="w-100"></div>
                 <div className="col row col-6 mt-5">

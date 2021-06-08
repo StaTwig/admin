@@ -25,23 +25,24 @@ const Inventory = props => {
   const headers = {
     coloumn1: 'Product Name',
     coloumn2: 'Product Category',
-    coloumn3: 'Manufacturer',
-    coloumn4: 'Date',
-    coloumn5: 'Quantity',
-    coloumn6: 'Status',
-
+    // coloumn3: 'Manufacturer',
+    coloumn3: 'Date',
+    coloumn4: 'Quantity',
+    coloumn5: 'Status',
+    
 
     img1: <img src={Product} width="16" height="16" />,
     img2: <img src={Quantity} width="24" height="16" />,
-    img3: <img src={user} width="16" height="16" />,
-    img4: <img src={calender} width="16" height="16" />,
-    img5: <img src={Quantity} width="24" height="16" />,
-    img6: <img src={Status} width="16" height="16" />,
+    // img3: <img src={user} width="16" height="16" />,
+    img3: <img src={calender} width="16" height="16" />,
+    img4: <img src={Quantity} width="24" height="16" />,
+    img5: <img src={Status} width="16" height="16" />,
+    
   };
 
   const tableHeaders = {
     coloumn1: 'Product Name',
-    coloumn2: 'Manufacturer',
+    // coloumn2: 'Manufacturer',
     coloumn3: 'Quantity',
   };
   const [inventoryNearExpiration, setInventoryNearExpiration] = useState('');
@@ -69,13 +70,16 @@ const Inventory = props => {
         const [limit, setLimit] = useState(10);
         const [count, setCount] = useState(0);
         const [dateFilter, setDateFilter] = useState("");
+        const [productNameFilter, setProductNameFilter] = useState("");
+        const [productCategoryFilter, setProductCategoryFilter] = useState("");
+        const [manufacturerFilter, setManufacturerFilter] = useState("");
+        const [statusFilter, setStatusFilter] = useState("");
 
      useEffect(() => {
     async function fetchData() {
       const result = await getProductList();
       setProductsList(result.message);
       const resultAnalytics = await getInventoryAnalytics();
-      console.log(resultAnalytics);
       
       setInventoryAnalytics(resultAnalytics.data.inventory);
       setInventoriesCount(
@@ -84,11 +88,17 @@ const Inventory = props => {
       setCurrentInventoriesCount(
         resultAnalytics.data.inventory.totalProductsInInventory
       );
+      // setInventoryNearExpiration(
+      //   resultAnalytics.data.inventory.batchExpiringInSixMonths
+      // );
       setInventoryNearExpiration(
-        resultAnalytics.data.inventory.batchExpiringInSixMonths
+        resultAnalytics.data.inventory.batchNearExpiration
       );
+      // setInventoryExpired(
+      //   resultAnalytics.data.inventory.batchExpiredLastYear
+      // );
       setInventoryExpired(
-        resultAnalytics.data.inventory.batchExpiredLastYear
+        resultAnalytics.data.inventory.batchExpired
       );
       setProductCategory(
         resultAnalytics.data.inventory.totalProductCategory
@@ -106,31 +116,50 @@ const Inventory = props => {
     console.log("onPageChange =========>", pageNum)
     const recordSkip = (pageNum-1)*limit;
     setSkip(recordSkip);
-    dispatch(getInventories(recordSkip, limit, dateFilter));
+    dispatch(getInventories(recordSkip, limit, dateFilter, productNameFilter, productCategoryFilter, statusFilter));  //(skip, limit, dateFilter, productName, productCategoryFilter, status)
   };
 
   const setDateFilterOnSelect = async (dateFilterSelected) => {
     console.log("setDateFilterOnSelect =========>", dateFilterSelected)
     setDateFilter(dateFilterSelected);
     setSkip(0);
-    dispatch(getInventories(skip, limit, dateFilterSelected));
+    dispatch(getInventories(0, limit, dateFilterSelected,  productNameFilter, productCategoryFilter, statusFilter));  //(skip, limit, dateFilter, productName, productCategoryFilter, status)
   }
 
-  // const setInventoryStatusFilterOnSelect = async (statusFilterSelected) => {
-  //   console.log("setInventoryStatusFilterOnSelect =========>", statusFilterSelected)
-  //   setStatusFilter(statusFilterSelected);
-  //   setSkip(0);
-      
-  //     dispatch(getInventories(skip, limit, statusFilterSelected, ""));
-  // }
+  const setInventoryStatusFilterOnSelect = async (statusFilterSelected) => {
+    console.log("setInventoryStatusFilterOnSelect =========>", statusFilterSelected);
+    setStatusFilter(statusFilterSelected);
+    setSkip(0);
+      dispatch(getInventories(0, limit, dateFilter, productNameFilter, productCategoryFilter, statusFilterSelected));  //(skip, limit, dateFilter, productName, productCategoryFilter, status)
+  }
 
+  const setInventoryProductNameFilterOnSelect = async (productNameFilterSelected) => {
+    console.log("setInventoryProductNameFilterOnSelect =========>", productNameFilterSelected)
+    setProductNameFilter(productNameFilterSelected);
+    setSkip(0);
+      dispatch(getInventories(0, limit, dateFilter, productNameFilterSelected, productCategoryFilter, statusFilter));  //(skip, limit, dateFilter, productName, productCategoryFilter, status)
+  }
+
+  const setInventoryManufacturerFilterOnSelect = async (manufacturerFilterSelected) => {
+    console.log("setInventoryManufacturerFilterOnSelect =========>", manufacturerFilterSelected)
+    setManufacturerFilter(manufacturerFilterSelected);
+    setSkip(0);
+      dispatch(getInventories(0, limit, dateFilter, productNameFilter, manufacturerFilterSelected, statusFilter));  //(skip, limit, dateFilter, productName, productManufacturer, status)
+  }
+
+  const setInventoryProductCategoryFilterOnSelect = async (categoryFilterSelected) => {
+    console.log("setInventoryProductCategoryFilterOnSelect =========>", categoryFilterSelected)
+    setProductCategoryFilter(categoryFilterSelected);
+    setSkip(0);
+      dispatch(getInventories(0, limit, dateFilter, productNameFilter, categoryFilterSelected, statusFilter));  //(skip, limit, dateFilter, productName, productCategory, status)
+  }
   return (
     <div className="inventory">
       <div className="d-flex justify-content-between">
         <h1 className="breadcrumb">INVENTORY </h1>
         <div className="d-flex">
           <Link to="/newinventory">
-            <button className="btn btn-yellow">
+            <button className="btn btn-yellow mt-2">
               <img src={Add} width="13" height="13" className="mr-2" />
               <span>Add Inventory</span>
             </button>
@@ -142,12 +171,12 @@ const Inventory = props => {
           <Link to="/productcategory">
             <div className="panel" style={{height:'14vh'}}>
               <div className="picture truck-bg">
-                <img src={TotalInventoryAdded} alt="truck" />
+                <img src={TotalInventoryAdded} alt="truck"/>
               </div>
               <div className="d-flex flex-column">
                 <div className="title truck-text">Total Product Category</div>
                 
-                <div className="count truck-text">{inventoriesCount} {inventoryAnalytics.totalProductCategory}</div>
+                <div className="count truck-text">{inventoriesCount} {inventoryAnalytics?.totalProductCategory}</div>
               </div>
             </div>
           </Link>
@@ -160,7 +189,7 @@ const Inventory = props => {
             </div>
             <div className="d-flex flex-column">
               <div className="title sent-text">Product Out Of Stock</div>
-              <div className="sent-text count">{currentInventoriesCount}{inventoryAnalytics.stockOut}</div>
+              <div className="sent-text count">{currentInventoriesCount}{inventoryAnalytics?.stockOut}</div>
               </div>
             </div>
           </Link>      
@@ -174,7 +203,7 @@ const Inventory = props => {
             </div>
             <div className="d-flex flex-column">
               <div className="title recived-text">Batch near Expiration</div>
-              <div className="tab-container">
+              {/* <div className="tab-container">
                 <div
                   className="tab-item active"
                   onMouseLeave={() =>
@@ -188,7 +217,6 @@ const Inventory = props => {
                     )
                   }
                 >
-                {/*6 MONTHS*/}
                 </div>
                 <div
                   className="tab-item"
@@ -203,7 +231,6 @@ const Inventory = props => {
                     )
                   }
                 >
-                  {/*3 MONTHS*/}
                 </div>
                 <div
                   className="tab-item"
@@ -218,7 +245,6 @@ const Inventory = props => {
                     )
                   }
                 >
-                  {/*THIS MONTH8*/}
                 </div>
                 <div
                   className="tab-item"
@@ -233,9 +259,8 @@ const Inventory = props => {
                     )
                   }
                 >
-                  {/*THIS WEEK*/}
               </div>
-              </div>
+              </div> */}
               <div className="recived-text count">
                 {inventoryNearExpiration}
               </div>
@@ -251,7 +276,7 @@ const Inventory = props => {
             </div>
             <div className="d-flex flex-column">
               <div className="title transit-text">Batch Expired</div>
-              <div className="tab-container">
+              {/* <div className="tab-container">
                 <div
                   className="tab-item active"
                   onMouseLeave={() =>
@@ -265,7 +290,6 @@ const Inventory = props => {
                     )
                   }
                 >
-                  {/*THIS YEAR*/}
                 </div>
                 <div
                   className="tab-item"
@@ -280,7 +304,6 @@ const Inventory = props => {
                     )
                   }
                 >
-                  {/*THIS MONTH*/}
                 </div>
                 <div
                   className="tab-item"
@@ -295,7 +318,6 @@ const Inventory = props => {
                     )
                   }
                 >
-                  {/*THIS WEEK*/}
                 </div>
                 <div
                   className="tab-item"
@@ -310,9 +332,8 @@ const Inventory = props => {
                     )
                   }
                 >
-                  {/*TODAY*/}
                 </div>
-              </div>
+              </div> */}
               <div className="transit-text count">{inventoryExpired}</div>
             </div>
           </div>
@@ -320,7 +341,9 @@ const Inventory = props => {
         </div>
       </div>
       <div className="full-width-ribben">
-        <TableFilter data={headers} setDateFilterOnSelect={setDateFilterOnSelect} fb="60%" />
+        
+      <TableFilter data={headers} inventoryFilterData={props.inventoryFilterData} setInventoryProductNameFilterOnSelect={setInventoryProductNameFilterOnSelect} setInventoryManufacturerFilterOnSelect={setInventoryManufacturerFilterOnSelect}  setInventoryStatusFilterOnSelect={setInventoryStatusFilterOnSelect} setDateFilterOnSelect={setDateFilterOnSelect} setInventoryProductCategoryFilterOnSelect={setInventoryProductCategoryFilterOnSelect} 
+        fb="80%"/>
       </div>
       <div className="ribben-space">
         <div className="row no-gutter">
@@ -331,7 +354,7 @@ const Inventory = props => {
             <div className="list-container">
               <div className="d-flex justify-content-between align-items-center ml-4">
                 <h4><b>Product List</b></h4>
-                <Link to="/productlist/all">
+                <Link to="/productcategory">
                   <button className="btn btn-link mr-3"><b>View all</b></button>
                 </Link>
               </div>

@@ -77,6 +77,17 @@ export const getShipmentIds = async () => {
   }
 };
 
+export const getJourneyTrack = async (id) => {
+  try {
+    const result = await axios.get(
+      `${config().trackJourney+id}`,
+    );
+    return result;
+  } catch (e) {
+    return [];
+  }
+};
+
 export const trackShipment = shipmentId => {
   try {
     return async dispatch => {

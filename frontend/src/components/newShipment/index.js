@@ -111,7 +111,7 @@ const NewShipment = (props) => {
 
       const orgs = await getAllOrganisations();
       
-      const orgSplit = user.organisationId?.split("/");
+      const orgSplit = user.organisation?.split("/");
       setSenderOrganisation([orgSplit[0]]);
       const organisations = orgs.data.filter((org) => org.id != orgSplit[1]);
       setAllOrganisations(organisations.map(item => {
@@ -241,6 +241,7 @@ const NewShipment = (props) => {
       estimateDeliveryDate,
       toOrgLoc,
       fromOrgLoc,
+      shipmentID,
       products,
     } = values;
     products.forEach((p) => {
@@ -255,14 +256,15 @@ const NewShipment = (props) => {
           labelId: labelCode,
           labelType: "QR_2DBAR",
         },
+        taggedShipments: shipmentID,
         externalShipmentId: "",
         supplier: {
           id: user.organisationId,
           locationId: fromOrgLoc,
         },
         receiver: {
-          id: toOrg,
-          locationId: toOrgLoc,
+          id: toOrg.split("/")[0],
+          locationId: toOrgLoc.split("/")[0],
         },
         shippingDate: new Date(
           shipmentDate.getTime() - shipmentDate.getTimezoneOffset() * 60000
@@ -375,6 +377,7 @@ const NewShipment = (props) => {
           poId: "",
           type: "",
           typeName: "",
+          shipmentID: "",
           rtype: "",
           rtypeName: "",
           fromOrg: senderOrganisation[0],
@@ -437,7 +440,8 @@ const NewShipment = (props) => {
           <form onSubmit={handleSubmit} className="mb-3">
             <div className="row mb-3">
               <div className="col bg-white formContainer low mr-3">
-                <div className="col-md-6 col-sm-12 mt-3">
+                <div className="row mt-3">
+                <div className="col-md-6 col-sm-12 ">
                   <div className="form-group">
                     <label htmlFor="orderID">Order ID</label>
                     <div className="form-control">
@@ -542,13 +546,18 @@ const NewShipment = (props) => {
                           );
                           setFieldValue(
                             "toOrg",
-                            result.poDetails[0].customer.organisation.id
+                            result.poDetails[0].customer.organisation.id + "/"+result.poDetails[0].customer.organisation.name
                           );
                           setFieldValue(
                             "toOrgLoc",
-                            result.poDetails[0].customer.shippingAddress
-                              .shippingAddressId
+                            result.poDetails[0].customer.shippingAddress.shippingAddressId+"/"+result.poDetails[0].customer.warehouse.postalAddress
                           );
+                          setFieldValue(
+                            "rtype",
+                            result.poDetails[0].customer.organisation
+                              .type
+                          );
+                        
                           
                           let products_temp = result.poDetails[0].products;
                           for (let i = 0; i < products_temp.length; i++) {
@@ -575,6 +584,21 @@ const NewShipment = (props) => {
                       />
                     </div>
                   </div>
+                </div>
+               <div className="col-md-6 com-sm-12">
+                  <div className="form-group">
+                    <label htmlFor="shipmentID">Reference Shipment ID</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="shipmentID"
+                      onBlur={handleBlur}
+                      placeholder="Enter Reference Shipment ID"
+                      onChange={handleChange}
+                      value={values.shipmentID}
+                    />
+                  </div>
+                </div>
                 </div>
               </div>
             </div>
@@ -715,7 +739,8 @@ const NewShipment = (props) => {
                         <Select
                           styles={customStyles}
                           isDisabled={disabled}
-                          placeholder="Select Organisation Type"
+
+                          placeholder={disabled ? values.rtype: "Select Organisation Type"}
                           onChange={(v) => {
                             setFieldValue('rtype', v?.value);
                             setFieldValue('rtypeName', v?.label);
@@ -753,13 +778,14 @@ const NewShipment = (props) => {
                         <Select
                           styles={customStyles}
                           isDisabled={disabled}
-                          placeholder={disabled ? values.toOrg : "Select Delivery Location"}
+                          placeholder={disabled ? (values.toOrg).split("/")[1] : "Select Delivery Location"}
                           onChange={(v) => {
                             setFieldValue("toOrgLoc", "");
                             setReceiverOrgId(v.label);
                             setFieldValue("toOrg", v.value);
                             onOrgChange(v.value);
                           }}
+                         
                           defaultInputValue={values.toOrg}
                           options={allOrganisations.filter(a => a.type == values.rtypeName)}
                         />
@@ -795,7 +821,7 @@ const NewShipment = (props) => {
                         <Select
                           styles={customStyles}
                           isDisabled={disabled}
-                          placeholder={disabled ? values.toOrgLoc : "Select Delivery Location"}
+                          placeholder={disabled ? values.toOrgLoc.split("/")[1] : "Select Delivery Location"}
                           onChange={(v) => {
                             setFieldValue("toOrgLoc", v.value);
                           }}

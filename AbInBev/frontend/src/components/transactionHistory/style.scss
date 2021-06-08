@@ -98,8 +98,11 @@
 .productList{
   color: #707070;
   .transactionListDate{
-    font-weight: bold;
-    margin-bottom: 10px;
+        font-weight: bold;
+        margin-bottom: 28px;
+        display: flex;
+        margin-top: 25px;
+        font-size: 15px;
   }
   .activeTxnContainer{
     background-color: #cccccc2e;

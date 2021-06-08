@@ -1,8 +1,11 @@
 @import '../../assets/styles/global.scss';
 
 .shipment {
-    padding-right: 3rem;
-    padding-left: 5rem;
+  position: relative;
+  top:-22px;
+    padding-right: 20px;
+    padding-left: 55px;
+    overflow: hidden;
     @media (max-width: $md) {
       padding-right: 10px;
       padding-left: 10px;
@@ -10,8 +13,8 @@
 
     .full-width-ribben {
         position: absolute;
-        left: 0;
-        right: 0;
+        left: -80px;
+        right: -27px;
         background-color: #eaeaea;
         .filter {
           margin-left: 9rem;
@@ -20,7 +23,7 @@
       }
 
       .ribben-space {
-        margin-top: 6.5rem;
+        margin-top: 6rem;
         .address{
           word-wrap: break-word;
           word-break: break-word
@@ -28,11 +31,11 @@
       }
 
     .panel {
-        box-shadow: 0px 3px 6px $grey;
+        box-shadow: 0px 3px 7px $grey;
         border-radius: 15px;
         background-color: $white;
         padding: 20px 20px 5px 20px;
-        margin-top: 20px;
+        margin-top: 7px;
         display: flex;
         align-items: flex-start;
 
@@ -72,8 +75,8 @@
           }
 
           img {
-            width: 40px;
-            height: 18px;
+            width: 30px;
+            height: 30px;
           }
 
           &.truck-bg {
@@ -128,10 +131,10 @@ width: 20px;
 
         .title {
           font-size: 14px;
-          line-height: 9px;
+          line-height: 0px;
           font-weight: bold;
           color: #707070;
-          margin-bottom: 8px;
+          margin-bottom: 10px;
           @media (min-width: $xl) {
             font-size: 14px;
           }

@@ -15,6 +15,14 @@ const Table = props => {
   const dispatch = useDispatch();
   const {shpmnts } = props;
   const shipments = shpmnts();
+  shipments.sort(function(a,b){
+    if(a.id>b.id){
+      return -1;
+    }
+    else{
+      return 1;
+    }
+  })
   const handlePageChange  = (event, value) => {
     props.onPageChange(value)
   };

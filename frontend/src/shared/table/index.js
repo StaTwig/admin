@@ -13,6 +13,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Pagination from '@material-ui/lab/Pagination';
 import { formatDate } from '../../utils/dateHelper';
+import dropdownIcon from '../../assets/icons/dropdown_selected.png';
 
 const Table = props => {
   const { inventoryDetails, inventoryCount, colors, skip } = props;
@@ -28,45 +29,48 @@ function getDate(n){
   return (
     <div className="table">
     <div className="rTable">
+    {inventoryDetails.length == 0 && <div className="rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none">No records found</div>}
        {inventoryDetails.map((inventory, index) => (
          
           <div className="" key={index}>
-          <Accordion className="mb-3" style={{borderRadius:"15px" }}>
+          <Accordion className="mb-3" style={{borderRadius:"15px", width:"103%" }}>
            
               <AccordionSummary
-                  expanded={display}
+                 // expand={display}
                   aria-controls="panel1a-content"
                   id="panel1a-header"
                   //className="rTableRow"
                   >
                                    
-                  <div className="rTableCell" style={{position:"relative",left:'-3%'}}>
+                  <div className="rTableCell" style={{position:"relative",left:'0%'}}>
                     <div className="d-flex flex-column txtBlue">
-                      <div>{inventory.ProductList[0].productDetails.name}</div>
+                      <div>{inventory.productDetails.name}</div>
                     </div>
                   </div>
-                  <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.type}</div>
-                  <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.manufacturer}</div>
-                  <div className="rTableCell" style={{position:"relative",left:'4%'}}>{formatDate(inventory.ProductList[0].productDetails.createdAt)}</div>
-                  <div className="rTableCell" style={{position:"relative",left:'9%'}}>{inventory.inventoryQuantity}</div>
-                  <div className="rTableCell" style={{position:"relative",left:'8%'}}> {(inventory.eventTypePrimary !== 'ADD') ? (inventory.ProductList[0].shipmentDetails.shipmentUpdates[0].status === 'CREATED') ? 'SENT' :'RECEIVED' : 'ADDED'}
-                  </div>
-                                  
-                  
-                  <div className="rTableCell" style={{position:"relative",left:'3%'}}>
-                    <button
+                  <div className="rTableCell" style={{position:"relative",left:'6%'}}>{inventory.productDetails.type}</div>
+                  {/* <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.manufacturer}</div> */}
+                  <div className="rTableCell" style={{position:"relative",left:'12%'}}>{formatDate(inventory.createdAt)}</div>
+                  <div className="rTableCell" style={{position:"relative",left:'19%'}}>{inventory.inventoryQuantity}</div>                                 
+                  <div className="rTableCell" style={{position:"relative",left:'22%'}}> {(inventory.eventTypePrimary !== 'ADD') ? (inventory.eventTypePrimary === 'RECEIVED' ? 'RECEIVED' :  'SENT') : 'ADDED'} </div>
+                 <div className=" rTableCell m-2" 
+                         style={{position:"relative",left:'12%'}}>
+                         <span className="drop-pad shadow rounded-circle">
+                         <img src={dropdownIcon} height="12" width="18"/></span>
+                  </div>                  
+              {  /* <button
                       className="btn btn-outline-primary fontSize200 expand"
                       type="button"
                       onClick={() => setDisplay(!display)}
-                    >{display ? "SHOW LESS" : "SHOW MORE"}</button>
-                 </div>
+                      >{display ? "SHOW LESS" : "SHOW MORE"}
+                    </button> */}
+       
                  
            
 
              </AccordionSummary>
                 <AccordionDetails>
                   <Typography>
-                            <div className="" style={{position:"relative", bottom:"15%", width:"190%" }}>
+                            <div className="" style={{position:"relative", bottom:"15%", width:"200%" }}>
                                  <hr className="solid" ></hr>
                             </div>
                               <TableContainer> 
@@ -77,30 +81,30 @@ function getDate(n){
                                      <TableRow>
                                           <TableCell>Shipment Id:</TableCell>
                                              <div className="">
-                                             <TableCell align="left"><b>{inventory.ProductList[0].shipmentDetails.id}</b></TableCell></div>
+                                             <TableCell align="left"><b>{inventory.shipmentDetails.id}</b></TableCell></div>
                                       </TableRow>
                                       <TableRow>
                                           <TableCell>From Organisation:</TableCell>
                                              <div className="">
-                                             <TableCell align="left"><b>{inventory.ProductList[0].shipmentDetails.supplier.id}</b></TableCell></div>
+                                             <TableCell align="left"><b>{inventory.shipmentDetails.supplier.id}</b></TableCell></div>
                                       </TableRow>
                                       <TableRow>
                                           <TableCell>From Location:</TableCell>
                                           <div className="">
-                                          <TableCell align="left"><b>{(inventory.actorOrgId === inventory.ProductList[0].shipmentDetails.supplier.id) ? inventory.actorOrgAddress : inventory.secondaryOrgAddress}</b></TableCell></div>
+                                          <TableCell align="left"><b>{(inventory.actorOrgId === inventory.shipmentDetails.supplier.id) ? inventory.actorOrgAddress : inventory.secondaryOrgAddress}</b></TableCell></div>
                                       </TableRow>
                                     </div>
                                          :
                                      <TableRow>
                                            <TableCell>Mfg Date</TableCell>
                                               <div className="ml-5">
-                                              <TableCell align="left"><b>{inventory.ProductList[0].mfgDate}</b></TableCell></div>
+                                              <TableCell align="left"><b>{inventory.productDetails.mfgDate}</b></TableCell></div>
                                           <TableCell align="left">Exp Date</TableCell>
                                               <div className="ml-5">
-                                              <TableCell align="left"><b>{inventory.ProductList[0].expDate}</b></TableCell></div>
+                                              <TableCell align="left"><b>{inventory.productDetails.expDate}</b></TableCell></div>
                                           <TableCell align="left">Batch</TableCell>
                                               <div className="ml-5">
-                                              <TableCell align="left"><b>{inventory.ProductList[0].batchNumber}</b></TableCell></div>
+                                              <TableCell align="left"><b>{inventory.productDetails.batchNumber}</b></TableCell></div>
                                     </TableRow> }    
 
                          
@@ -109,7 +113,7 @@ function getDate(n){
                                       <button
                                           type="button" className="btn btn-outline-primary " 
                                           onClick={() => {
-                                            props.history.push(`/viewshipment/${inventory.ProductList[0].shipmentDetails.id}`)
+                                            props.history.push(`/viewshipment/${inventory.payloadData.data.id}`)
                                         }}
                         
                                         >View Shipment</button>: ''}
@@ -117,8 +121,9 @@ function getDate(n){
                                           <div className="mt-3" style={{position:"absolute", left:"78%", bottom:"15%" , width:"20%"}}>
                                         <button
                                         type="button" className="btn btn-outline-warning "
+                                        disabled = {!inventory.payloadData.data.products.batchNumber}
                                         onClick={() => {
-                                          props.history.push(`/transactionproducts`, {data: inventory.ProductList})
+                                          props.history.push(`/productlist/${inventory.payloadData.data.products.batchNumber}`)
                                         }}
                       
                                       >Show Product Details</button></div>

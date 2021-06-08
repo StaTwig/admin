@@ -1,5 +1,6 @@
 import React from 'react';
 import Verifiedpic from '../../assets/icons/Verifiedpic.png';
+import { formatDate } from '../../utils/dateHelper';
 import './style.scss'
 
 const ShipmentSummary = (props) => {
@@ -21,7 +22,7 @@ const ShipmentSummary = (props) => {
             </ul>
             <ul className="elemens">
            <li className="mb-1">{props.shipments.id}</li>
-             <li className="mb-1">  {props.shipments.shippingDate.split('T')[0].split('-')[2]+"/"+props.shipments.shippingDate.split('T')[0].split('-')[1]+"/"+props.shipments.shippingDate.split('T')[0].split('-')[0]} </li>
+             <li className="mb-1"> {props.shipments.shippingDate.length == 10 ? props.shipments.shippingDate : formatDate(props.shipments.shippingDate)} </li>
             <li className="mb-1">{props.shipments.supplier.org.name}</li>
             <li className="mb-1">{props.shipments.receiver.org.name}</li>
             </ul>
