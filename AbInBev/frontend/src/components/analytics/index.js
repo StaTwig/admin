@@ -56,11 +56,20 @@ const Analytics = (props) => {
     setParams(filter);
   };
 
+  const onTPChange = (value) => {
+    const filter = { ...params };
+    filter.date_filter_type = value;
+    setIsActive(value);
+    setParams(filter);
+  };
+
+
+
   const [prop, setProp] = useState({});
   let skuArr = [];
   const [params, setParams] = useState({});
   const [SKU, setSKU] = useState('');
-  const [isActive, setTsActive] = useState('');
+  const [isActive, setIsActive] = useState('');
   const [Otype, setOtype] = useState('All');
   const [selectedViewCode, setSelectedViewCode] = useState('ANNUALREPORT_DASHBOARD');
   const [annualReportButton, setannualReportButton] = useState("btn active");
@@ -205,17 +214,17 @@ const Analytics = (props) => {
                   <label className="filterSubHeading mt-3">Time Period</label>
                   <div class="btn-group filterButton mt-2 mb-4">
                     <a href="#!" class={`btn ${isActive == 'by_monthly' ? `active` : ``}`}
-                      onClick={() => { setTsActive('by_monthly'); setParams({});}}
+                      onClick={() => { onTPChange('by_monthly'); }}
                     >
                       Monthly
                   </a>
                     <a href="#!" class={`btn ${isActive == 'by_quarterly' ? `active` : ``}`}
-                      onClick={() => {setTsActive('by_quarterly'); setParams({});}}
+                      onClick={() => {onTPChange('by_quarterly'); }}
                     >
                       Quarterly
                   </a>
                     <a href="#!" class={`btn ${isActive == 'by_yearly' ? `active` : ``}`}
-                      onClick={() => {setTsActive('by_yearly'); setParams({});}}
+                      onClick={() => {onTPChange('by_yearly');}}
                     >
                       Yearly
                   </a>
@@ -229,7 +238,7 @@ const Analytics = (props) => {
                         className="filterSelect mt-2"
                         onChange={onYearChange}
                       >
-                        <option>Select Year</option>
+                        <option value="">Select Year</option>
                         {allowedYears.map((year, index) => {
                           return (
                             <option key={index} value={year}>
@@ -245,7 +254,7 @@ const Analytics = (props) => {
                           className="filterSelect mt-2"
                           onChange={onMonthChange}
                         >
-                          <option>Select Month</option>
+                          <option value="">Select Month</option>
                           {allowedMonths.map((month, index) => {
                             return (
                               <option key={index} value={index + 1}>
@@ -262,7 +271,7 @@ const Analytics = (props) => {
                           className="filterSelect mt-2"
                           onChange={onQuarterChange}
                         >
-                          <option>Select Quarter</option>
+                          <option value="">Select Quarter</option>
                           {['Jan - Mar', 'Apr - Jun', 'Jul - Sep', 'Oct - Dec'].map((qtr, index) => {
                             return (
                               <option key={index} value={index + 1}>

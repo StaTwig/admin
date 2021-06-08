@@ -12,7 +12,7 @@ import { useDispatch } from 'react-redux';
 const GeographicalView = (props) => {
     const { states, SKUStats, sku, viewName } = props;
 
-    const [analytics, setAnalytics] = useState(SKUStats);
+    const [analytics, setAnalytics] = useState([]);
     const dispatch = useDispatch();
     // const dispatch = useDispatch();
     // useEffect(() => {
@@ -24,21 +24,43 @@ const GeographicalView = (props) => {
     // }, []);
 
     useEffect(() => {
-        if (sku || props.params?.district || props.params?.state) {
-            if (props.params?.district && props.params?.state) {
-                let cond = '?districts=' + props.params?.district;
-                if (sku)
+        console.log(props.params);
+        
+        if (sku || props.params?.district || props.params?.state || props.params?.year) {
+            if ((props.params?.district && props.params?.state) || props.params?.year) {
+                let cond = '';
+                if (props.params?.district)
+                    cond += '?district=' + props.params?.district;
+                
+                if (props.params?.year) {
+                    if (cond)
+                        cond = '&';
+                    else
+                        cond = '?';
+                    cond += 'date_filter_type=' + props.params?.date_filter_type + '&year=' + props.params?.year + '&month=' + props.params?.month + '&quarter=' + props.params?.quarter;
+                }
+                
+                if (sku) {
+                    if (cond)
+                        cond = '&';
+                    else
+                        cond = '?';
                     cond += '&sku=' + sku;
-                (async () => {
-                    const s_result = await dispatch(getAnalyticsByBrand(cond));
-                    let n = [];
-                    for (let a of s_result.data) {
-                        for (let product of a.products) {
-                            n.push(product);
+                }
+                if (cond) {
+                    (async () => {
+                        const s_result = await dispatch(getAnalyticsByBrand(cond));
+                        let n = [];
+                        for (let a of s_result.data) {
+                            for (let product of a.products) {
+                                n.push(product);
+                            }
                         }
-                    }
-                    setAnalytics(n);
-                })();
+                        setAnalytics(n);
+                    })();
+                }
+                else
+                    setAnalytics(SKUStats);
             }
             else {
                 let n = SKUStats.filter(a => a.externalId == sku);
@@ -48,6 +70,8 @@ const GeographicalView = (props) => {
                     setAnalytics(n);
             }
         }
+        else
+            setAnalytics(SKUStats);
     }, [sku, viewName, props])
 
     const showDetailedGeoView = (param) => {
