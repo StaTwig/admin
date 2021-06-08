@@ -97,10 +97,10 @@ const showOrgByType = (value) =>{
               { props.adminAwaiting ?
                 <><img alt="" src={Waiting} height="150" width="150" className="align-self-center mt-5 mb-2" />
               <div className="font-weight-bold align-self-center text-center ml-2 mr-2 mb-3 approve">Request is pending and you will receive an email/sms after approval</div></>
-              
+
               :
-                <div className="card-body">
-                  <Formik
+              <div className="card-body">
+              <Formik
                 enableReinitialize={true}
                 initialValues={{
                   firstName: "",
@@ -146,14 +146,14 @@ const showOrgByType = (value) =>{
                   dirty,
                 }) => (
                   <form onSubmit={handleSubmit} className="mb-5">
-                  <div className="login-form mt-1 pl-5 pr-5">
+                  <div className="login-form mt-1 pl-5 pr-5 ml-5">
                  <div className="card-title p-0">Signup</div>
                   <div className="form-group flex-column ">
                    
                   <div style={{position:"absolute", left:"-10px", top:"20px"}}>
                        <img alt="" src={User} height="20px" width="18px"/>
                   </div>
-                  <form noValidate>
+                  
                   <TextField 
                   id="standard-basic"
                   label="First Name" 
@@ -165,14 +165,13 @@ const showOrgByType = (value) =>{
                   {errors.firstName && touched.firstName && (
                   <span className="error-msg text-danger">{errors.firstName}</span>
                   )}
-                  </form>
                   </div>
                   
+                
                   <div className="form-group flex-column" style={{position:"relative", top:"-10px"}}>
                   <div style={{position:"absolute", left:"-10px", top:"20px"}}>
                         <img alt="" src={User} height="20px" width="18px"/>
                   </div>
-                  <form noValidate>
                   <TextField 
                   id="standard-basic" 
                   label="Last Name" 
@@ -184,7 +183,6 @@ const showOrgByType = (value) =>{
                   {errors.lastName && touched.lastName && (
                     <span className="error-msg text-danger">{errors.lastName}</span>
                   )}
-                  </form>
                   </div>
 
 
@@ -192,7 +190,6 @@ const showOrgByType = (value) =>{
                   <div style={{position:"absolute", left:"-10px", top:"20px"}}>
                         <img alt="Mail Icon" src={Mail} height="15px" width="18px" />
                   </div>
-                  <form>
                   <TextField 
                   id="standard-basic" 
                   label="Email ID" 
@@ -204,14 +201,14 @@ const showOrgByType = (value) =>{
                   />
                   {errors.email && touched.email && (
                     <span className="error-msg text-danger">{errors.email}</span>
-                  )}</form>
+                  )}
                   </div>
 
                   <div className="form-group" style={{position:"relative", left:"-15px", bottom:"20px"}}>
                   <div style={{position:"absolute", left:"4px", top:"10px"}}>
                         <img alt="Phone icon" src={Phone} height="20px" width="19px" />
                   </div>
-                    <PhoneInput
+                  <PhoneInput
                       country={'in'}
                       placeholder='Enter Phone number'
                       inputProps={{
@@ -223,18 +220,19 @@ const showOrgByType = (value) =>{
                       value={props.phone}
 
                       onChange = {props.onphoneChange}
-                    />
+                    /></div>
                    {errors.phone && touched.phone && (
                     <span className="error-msg text-danger">{errors.phone}</span>
                   )}
                   <div className="pb-3"></div>
-                  </div>
+                 
                             
                    
                   <div className="form-group" style={{position:"relative", left:"30px", bottom:"0px"}}>
                   <div style={{position:"absolute", left:"-40px", top:"10px", color:"black"}}>
                         <img alt="Phone icon" src={organisationType} height="30px" width="25px" />
                   </div>  
+                  <div className="form-controll">
                    <DropdownButton
                       isText={true}
                       value={orgType}
@@ -247,20 +245,25 @@ const showOrgByType = (value) =>{
                         setValue('');
                       }}
                       groups={orgTypeArray}
-                      dClass="ml-4"
+                      dClass="ml-1"
                       className="text"
-                    />   
+                    /> 
+                    </div>
                     <div style={{position:"relative", left:"-35px", top:"10px",cursor:"pointer"}}>
-                    <img src={dropdownIcon} width="15" height="10" />
+                        <img src={dropdownIcon} width="15" height="10" />
                     </div>
                     { errors.org && touched.org &&  (
                       <span  className="error-msg text-danger "> {errors.org} </span>
                     )}
-                    </div>                
-                    <div className="form-group" style={{position:"relative", left:"30px", bottom:"0px"}}>
-                    <div style={{position:"absolute ", left:"-40px", top:"10px", color:"black"}}>
-                       <img alt="Phone icon" src={org} height="20px" width="20px" />
+                    </div>  
+                    
+                    
+
+                    <div className="form-group" style={{position:"relative", left:"30px", bottom:"-12px"}}>
+                    <div style={{position:"absolute ", left:"-38px", top:"10px", color:"black"}}>
+                       <img alt="Phone icon" src={org} height="20px" width="23px" />
                     </div>
+                    <div className="form-controll ">
                     <DropdownButton
                     name={props.organisation.organisationId}
                     value={value}
@@ -278,15 +281,16 @@ const showOrgByType = (value) =>{
                         }
                     }}
                     groups={showOrgByType(selectedType)}
-                                                          //   changeFn={(v, e = '') => {
-                                                          //     console.log(v);
-                                                          //     setFieldValue('org', v); 
-                                                          //     changeFn(v, e);
-                                                          //  }}
-                    dClass="ml-4"
+                        //   changeFn={(v, e = '') => {
+                        //     console.log(v);
+                        //     setFieldValue('org', v); 
+                        //     changeFn(v, e);
+                        //  }}
+                    dClass="ml-1"
                     className="text"
                   /> 
-                  <div style={{position:"relative", left:"-30px", top:"10px",cursor:"pointer"}}>
+                  </div>
+                  <div style={{position:"relative", left:"-50px", top:"10px",cursor:"pointer"}}>
                   <img src={dropdownIcon} width="15" height="10" className="ml-3" />
                   </div>
                   {errors.org && touched.org && (
@@ -295,14 +299,15 @@ const showOrgByType = (value) =>{
                   </div>
                   {
                   props.errorMessage && <div className="alert alert-danger">{props.errorMessage}</div>
-              }
+                  }
+                  
                   <div className="text-center" >
                     <br></br>
-                  <button type="submit" className="btn btn-primary" >
+                  <button type="submit" className="btn btn-primary mr-5" >
                   SIGNUP
                   </button>
                     </div>
-                        <div className="signup-link text-center mt-3 mb-4">
+                        <div className="signup-link text-center mt-3 mb-4 mr-5">
                   Already have an Account? <Link to="/login">Login</Link>
                   </div>
                   </div></form>
