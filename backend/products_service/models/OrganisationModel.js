@@ -5,7 +5,7 @@ var OrganisationSchema = new mongoose.Schema(
     name: { type: String },
     postalAddress: {
       type: String,
-      default: 'JNIBF, Gachibowli, Hyderabad, Telanagana, India',
+      default: null,
     },
     region: {
       type: Object,
