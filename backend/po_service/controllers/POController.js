@@ -642,7 +642,7 @@ exports.addPOsFromExcel = [
                       id: warehouseId,
                       warehouseInventory: inventoryId,
                       organisationId: organisationId,
-                      // postalAddress: address,
+                      postalAddress: address,
                       warehouseAddress: {
                         firstLine: address,
                         secondLine: "",
@@ -765,7 +765,7 @@ exports.addPOsFromExcel = [
                       id: warehouseId,
                       warehouseInventory: inventoryId,
                       organisationId: organisationId,
-                      // postalAddress: address,
+                      postalAddress: address,
                       warehouseAddress: {
                         firstLine: address,
                         secondLine: "",
