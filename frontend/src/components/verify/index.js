@@ -99,7 +99,7 @@ const FormVerifyPage = (props) => {
                       
                     }) => (
                       <form onSubmit={handleSubmit}>
-                      <div className="form-group ml-5 mr-5 flex-row d-flex justify-content-center">
+                      <div className="form-group ml-0 mr-5 flex-row d-flex justify-content-center">
                         {[
                           firstInputRef,
                           secondInputRef,
@@ -111,7 +111,7 @@ const FormVerifyPage = (props) => {
                             name={"otp" + index}
                             id={"otp" + index}
                             type="text"
-                            className={`form-control text-center mr-3 ${
+                            className={`form-control text-center mr-5 ${
                               errors.otp0 ||
                               errors.otp1 ||
                               errors.otp2 ||
