@@ -26,29 +26,63 @@ const TrackContainer = props => {
   // }
  
 
-  const searchData = async (id) => {
+  const searchData = async (id,type) => {
     dispatch(turnOn());
-    const result = await getJourneyTrack(id);
+    const result = await chainOfCustody(id);
 
     dispatch(turnOff());
     if (result.status == 200) {
-      setPoChainOfCustodyData(result.data.data.poDetails);
+      
       var arr = [];
       var finalArr = [];
-      if (result.data.data.poDetails) {
-        arr = result.data.data.poDetails;
+      if (result.data.data.poChainOfCustody && (type=="PO"||type=='po')) {
+        setPoChainOfCustodyData(result.data.data.poChainOfCustody);
+        arr = result.data.data.poChainOfCustody;
         arr["shipmentUpdates"] = [{
           // status: result.data.data.poDetails.poStatus,
           status: 'RECEIVED',
-          products: result.data.data.poDetails.products,
-          updatedOn: moment(result.data.data.poDetails.lastUpdatedOn).format('DD/MM/YYYY hh:mm'),
+          products: result.data.data.poChainOfCustody[0].products,
+          updatedOn: moment(result.data.data.poChainOfCustody.lastUpdatedOn).format('DD/MM/YYYY hh:mm'),
           isOrder: 1
         }];
-        finalArr = [arr].concat(result.data.data.inwardShipmentsArray).concat([result.data.data.trackedShipment]).concat(result.data.data.outwardShipmentsArray);
+        finalArr = [arr];
+        setShippmentChainOfCustodyData(finalArr);
       }
-      else if(result.data.data.trackedShipment)
-        finalArr = result.data.data.inwardShipmentsArray.concat([result.data.data.trackedShipment]).concat(result.data.data.outwardShipmentsArray)
-      setShippmentChainOfCustodyData(finalArr);
+      else if(result.data.data.shipmentChainOfCustody &&(type=="SH"||type=='sh'))
+      {
+        setPoChainOfCustodyData(result.data.data.shipmentChainOfCustody);
+        arr = result.data.data.shipmentChainOfCustody;
+        arr["shipmentUpdates"] = [{
+          // status: result.data.data.poDetails.poStatus,
+          status: 'RECEIVED',
+          products: result.data.data.shipmentChainOfCustody[0].products,
+          updatedOn: moment(result.data.data.shipmentChainOfCustody.updatedAt).format('DD/MM/YYYY hh:mm'),
+          isOrder: 1
+        }];
+        finalArr = [arr];
+        setShippmentChainOfCustodyData(finalArr);
+        // finalArr = result.data.data.inwardShipmentsArray.concat([result.data.data.trackedShipment]).concat(result.data.data.outwardShipmentsArray)
+
+      }
+      else if(type=="AO" || type=="ao"){
+        let newarr = [];
+        newarr=result.data.data.shipmentChainOfCustody;
+        newarr.splice(1,newarr.length-1);
+        setPoChainOfCustodyData(newarr);
+        arr = result.data.data.shipmentChainOfCustody;
+        arr["shipmentUpdates"]= [{
+          // status: result.data.data.poDetails.poStatus,
+          status: 'RECEIVED',
+          products: result.data.data.shipmentChainOfCustody[0].products,
+          updatedOn: moment(result.data.data.shipmentChainOfCustody[0].updatedAt).format('DD/MM/YYYY hh:mm'),
+          isOrder: 1
+        }];
+        arr.splice(1,arr.length-1);
+        finalArr = [arr];
+      
+        setShippmentChainOfCustodyData(finalArr);
+      }
+      
     }else{
       setPoChainOfCustodyData([]);
       setShippmentChainOfCustodyData([]);
