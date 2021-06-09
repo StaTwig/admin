@@ -38,8 +38,6 @@ async function calculatePrevReturnRates(filters, analytic) {
 }
 
 function getFilterConditions(filters) {
-	console.log(filters);
-	
 	let matchCondition = {};
 	if (filters.orgType && filters.orgType !== '') {
 		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {

@@ -15,7 +15,7 @@ const SKUView = (props) => {
     //     })();
     // }, []);
     const openDetailView = (sku) => {
-        props.onViewChange(props.prop?.type == 'b' ? 'BREWERY_DETAIL_VIEW' : 'SKU_DETAIL_VIEW', { ...sku, ...props.prop });
+        props.onViewChange(props.prop?.type == 'b' ? 'BREWERY_DETAIL_VIEW' : 'SKU_DETAIL_VIEW', { ...sku });
     }
 
     return (
@@ -38,26 +38,26 @@ const SKUView = (props) => {
                     <div className="row">
                         <div className="col-lg-3 col-md-3 col-sm-12">
                             <div className="productGrid">
-                                <img className="productImage" src={analytic.products[0].image} />
+                                <img className="productImage" src={props.brandsIconArr[props.brands.indexOf(analytic._id.split(' ').join(''))]} />
                             </div>
                         </div>
                     </div>
 
                     <div className="card-container-sku">
                         {analytic.products.map((product, i) =>
-                            <div className="card cursor-pointer" onClick={() => openDetailView(product)}>
+                            <div key={i} className="card cursor-pointer" onClick={() => openDetailView(product)}>
                                 <div className="author mb-2">
-                                    <div className="profile"><img src={bottlesIcon} alt="" width="50" height="100%" /></div>
+                                    <div className="profile"><img src={props.brandsArr[props.brands.indexOf(analytic._id.split(' ').join(''))]} alt=""  height="60" /></div>
                                     <div className="info">
                                         <div className="name">{product.name}</div>
                                         <div className="caption">{product.shortName}</div>
                                         <div className="caption">{product.externalId}</div>
                                     </div>
                                 </div>
-                                <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">{product.returnRate}%</span></span>
+                                <span className="breweryPropertyText">Return Rate <span className="pull-right breweryPropertyValue">{product.returnRate || 0}%</span></span>
                                 <div className="progress progress-line-danger">
-                                    <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: product.returnRate + "%" }}>
-                                        <span className="sr-only">{product.returnRate}% Complete</span>
+                                    <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: (product.returnRate || 0) + "%" }}>
+                                        <span className="sr-only">{product.returnRate || 0}% Complete</span>
                                     </div>
                                 </div>
                                 <div className="captionSubtitle">Compared to ({product.returnRatePrev}% last month)</div>

@@ -5,12 +5,11 @@ import { AreaChart, Area, ResponsiveContainer, Tooltip } from "recharts";
 import "../../style.scss";
 import bottlesIcon from "../../../../assets/becks_330ml.png";
 import DownArrow from "../../../../assets/down_arrow.png";
-import UpArrow from "../../../../assets/up_arrow.png";
 import { getAnalyticsAllStats, getAnalyticsByBrand } from '../../../../actions/analyticsAction';
 import { useDispatch } from 'react-redux';
 
 const GeographicalView = (props) => {
-    const { states, SKUStats, sku, viewName } = props;
+    const { states, SKUStats, sku, viewName, brands, brandsArr } = props;
 
     const [analytics, setAnalytics] = useState([]);
     const dispatch = useDispatch();
@@ -198,11 +197,11 @@ const GeographicalView = (props) => {
                     </thead>
                     <tbody>
                         {analytics?.map((analytic, index) =>
-                            <tr>
+                            <tr key={index}>
                                 <td scope="row">
                                     <div className="tableProfileIconCard justify-content-start">
                                         <div className="profileIcon">
-                                            <img src={analytic.image} alt="" width="50" height="50" />
+                                            <img src={brandsArr[brands.indexOf(analytic.manufacturer.split(' ').join(''))]} alt="" width="50" height="50" />
                                         </div>
                                         <div className="profileName">
                                             <span className="profileTitle" onClick={() => showDetailedGeoView(analytic)}>{analytic.manufacturer + ' - ' + analytic.name}</span>
@@ -211,8 +210,7 @@ const GeographicalView = (props) => {
                                 </td>
                                 <td>{analytic.sales}</td>
                                 <td>{analytic.returns ? analytic.returns : 0}</td>
-                                {/* <td>{analytic.targetSales}</td> */}
-                                <td>{Math.round(analytic.sales * 0.6)}</td>
+                                <td>{analytic.targetSales}</td>
                                 <td>{analytic.returnRate ? analytic.returnRate : 0}%</td>
                             </tr>
                         )}
