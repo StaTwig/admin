@@ -501,7 +501,7 @@ exports.addPOsFromExcel = [
                   "customerOrganisation": po['IP Code'],
                   "name" : po['IP Name'],
                   "country" : po['Country Name'],
-                  "address" : po['Incoterms (Part 2)'],
+                  "address" : 'NA',
                   // "customerIncharge": po['Customer Incharge'],
                   "shippingAddress": {
                     "shippingAddressId": po['Plant'],
@@ -642,7 +642,7 @@ exports.addPOsFromExcel = [
                       id: warehouseId,
                       warehouseInventory: inventoryId,
                       organisationId: organisationId,
-                      // postalAddress: address,
+                      postalAddress: address,
                       warehouseAddress: {
                         firstLine: address,
                         secondLine: "",
@@ -765,7 +765,7 @@ exports.addPOsFromExcel = [
                       id: warehouseId,
                       warehouseInventory: inventoryId,
                       organisationId: organisationId,
-                      // postalAddress: address,
+                      postalAddress: address,
                       warehouseAddress: {
                         firstLine: address,
                         secondLine: "",
