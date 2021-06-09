@@ -1867,6 +1867,7 @@ exports.getProductListCounts = [
   auth,
   async (req, res) => {
     try {
+      
       const { warehouseId } = req.user;
       const InventoryId = await WarehouseModel.find({ id: warehouseId });
       const val = InventoryId[0].warehouseInventory;
@@ -1874,15 +1875,22 @@ exports.getProductListCounts = [
       const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails));
       var productArray = [];
       for (j = 0; j < list.length; j++) {
-        var productId = list[j].productId;
+        var productId = list[j].productId;  
         const product = await ProductModel.find({ id: productId });
-        var product1 = {
-          productName: product[0].name,
-          productId: product[0].id,
-          quantity: list[j].quantity,
-        };
+        if(product && product[0] && product[0].id && product && product[0] && product[0].name )
+        {
+        
+          var product1 = {
+            productName: product && product[0] && product[0].name,
+            productId: product && product[0] && product[0].id,
+            quantity: list && list[0] && list[j].quantity || 0,
+
+          };
+        }   
+
         productArray.push(product1);
       }
+     
       return apiResponse.successResponseWithData(res, productArray);
     } catch (err) {
       logger.log(
