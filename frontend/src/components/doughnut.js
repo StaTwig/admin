@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { MDBContainer } from "mdbreact";
 import { getProductList } from "../actions/productActions";
+import EmptyInventory from "../assets/icons/EmptyInventory.png";
 
 const ChartsPage = (props) => {
   const [doughnut, setDoughnut] = useState({});
@@ -66,10 +67,10 @@ const ChartsPage = (props) => {
     fetchData();
   }, []);
   //const filteredInventoriesKeys = inventoriesKeys.filter(inventory => inventory !== 'tot_qty' && inventory !== 'tot_inv')
-const option = {
-  maintainAspectRatio: true,
-  responsive: true,
-layout: {
+    const option = {
+    maintainAspectRatio: true,
+    responsive: true,
+    layout: {
             padding: {
                 left: 0,
                 right: 0,
@@ -79,18 +80,28 @@ layout: {
         },
   legend: {
   position: 'right',
-padding:10,
+  padding:10,
   labels: {
-   usePointStyle: true,
+  usePointStyle: true,
 
   }
  }
 }
 
   return (
+    <div>
+      {doughnut.length === 0 || doughnut.length === undefined ? (
+        <div className="summaryTable justify-content-center ">
+          <div className="d-flex flex-column ">
+            <img src={EmptyInventory} height="200" width="200" />
+          </div>
+        </div>
+      ) : (
     <MDBContainer>
-      <Doughnut id="doughnut-chart" data={doughnut}  options={option} />
+      <Doughnut id="doughnut-chart" data={doughnut} options={option} />
     </MDBContainer>
+    )}
+  </div>
   );
 };
 
