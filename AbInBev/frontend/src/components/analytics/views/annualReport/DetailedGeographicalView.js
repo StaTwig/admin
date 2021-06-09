@@ -58,7 +58,7 @@ import { useDispatch } from 'react-redux';
 //   ];
 
 const DetailedGeographicalView = (props) => {
-    const { states, prop, sku, SKUStats, params } = props;
+    const { states, prop, sku, SKUStats, params, brandsArr, brands } = props;
 
     const [analytics, setAnalytics] = useState([]);
     const [name, setName] = useState(prop.name);
@@ -117,7 +117,7 @@ const DetailedGeographicalView = (props) => {
 
             <div className="geocard cursor-pointer mb-4">
                 <div className="author mb-2">
-                    <div className="profile"><img src={image} alt="" width="50" height="100%" /></div>
+                    <div className="profile"><img src={brandsArr[brands.indexOf(prop.manufacturer.split(' ').join(''))]} alt="" height="60" /></div>
                     <div className="info">
                         <div className="name">{name}</div>
                         <div className="caption">{shortName}</div>

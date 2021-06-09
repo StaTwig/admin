@@ -4,6 +4,7 @@ const ProductSKUModel = require("../models/ProductSKUModel");
 const ShipmentModel = require("../models/ShipmentModel");
 const auth = require("../middlewares/jwt");
 const OrganisationModel = require("../models/OrganisationModel");
+const WarehouseModel = require("../models/WarehouseModel");
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
 const moment = require('moment');
@@ -57,6 +58,28 @@ function getFilterConditions(filters) {
 	return matchCondition;
 }
 
+function getFilterConditionsWarehouse(filters) {
+	let matchCondition = {};
+	if (filters.orgType && filters.orgType !== '') {
+		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
+			matchCondition.type = filters.orgType;
+		} else if (filters.orgType === 'ALL_VENDORS') {
+			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }];
+		}
+	}
+	if (filters.state && filters.state.length) {
+		matchCondition.state = filters.state;
+	}
+	if (filters.district && filters.district.length) {
+		matchCondition["warehouseAddress.firstLine"] = filters.district;
+	}
+	if (filters.organization && filters.organization.length) {
+		matchCondition.id = filters.organization;
+	}
+	
+	return matchCondition;
+}
+
 const _getWarehouseIdsByOrg = async (org) => {
 	let matchCondition = {};
 	if (org && org.id && org.id !== '') {
@@ -87,28 +110,49 @@ const _getWarehouseIdsByOrg = async (org) => {
 	return warehouseIds;
 }
 
+// const _getWarehouseIds = async (filters) => {
+// 	const warehouses = await OrganisationModel.aggregate([
+// 		{
+// 			$match: getFilterConditions(filters)
+// 		},
+// 		{
+// 			$unwind: {
+// 				path: "$warehouses"
+// 			}
+// 		},
+// 		{
+// 			$group: {
+// 				_id: '$warehouseIds',
+// 				'warehouseIds': {
+// 					$addToSet: "$warehouses"
+// 				}
+// 			}
+// 		}
+// 	]);
+// 	let warehouseIds = [];
+// 	if (warehouses && warehouses[0] && warehouses[0].warehouseIds) {
+// 		warehouseIds = warehouses[0].warehouseIds;
+// 	}
+// 	return warehouseIds;
+// }
+
 const _getWarehouseIds = async (filters) => {
-	const warehouses = await OrganisationModel.aggregate([
+	const warehouses = await WarehouseModel.aggregate([
 		{
-			$match: getFilterConditions(filters)
-		},
-		{
-			$unwind: {
-				path: "$warehouses"
-			}
+			$match: getFilterConditionsWarehouse(filters)
 		},
 		{
 			$group: {
-				_id: '$warehouseIds',
+				_id: '$id',
 				'warehouseIds': {
-					$addToSet: "$warehouses"
+					$addToSet: "$id"
 				}
 			}
 		}
 	]);
 	let warehouseIds = [];
-	if (warehouses && warehouses[0] && warehouses[0].warehouseIds) {
-		warehouseIds = warehouses[0].warehouseIds;
+	if (warehouses.length > 0) {
+		warehouseIds = warehouses.map(a => a._id);
 	}
 	return warehouseIds;
 }
@@ -187,22 +231,22 @@ const aggregateSalesStats = (inputArr) => {
 	};
 }
 
-function dateConversion(filters) {
-	let conversion = {};
-	// if (filters.date_filter_type && filters.date_filter_type.length)
-	{
-		conversion = {
-			"$addFields": {
-				"uploadDate": {
-					"$dateFromString": {
-						"dateString": "$uploadDate"
-					}
-				}
-			}
-		}
-	}
-	return conversion;
-}
+// function dateConversion(filters) {
+// 	let conversion = {};
+// 	// if (filters.date_filter_type && filters.date_filter_type.length)
+// 	{
+// 		conversion = {
+// 			"$addFields": {
+// 				"uploadDate": {
+// 					"$dateFromString": {
+// 						"dateString": "$uploadDate"
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
+// 	return conversion;
+// }
 
 function getSKUAnalyticsFilterConditions(filters) {
 
@@ -227,9 +271,10 @@ function getSKUAnalyticsFilterConditions(filters) {
 
 		} else if (filters.date_filter_type === 'by_monthly') {
 
-			let startDateOfTheYear = moment([filters.year]);
-			let startDateOfTheMonth = moment(startDateOfTheYear).add(filters.month - 1, 'months');
-			let endDateOfTheMonth = moment(startDateOfTheMonth).endOf('month');
+			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
+			let startDateOfTheMonth = moment(startDateOfTheYear).add(filters.month-1, 'months').format(DATE_FORMAT);
+			let endDateOfTheMonth = moment(startDateOfTheMonth).tz("Etc/GMT").add(1, 'months').endOf('month');
+			
 			matchCondition.uploadDate = {
 				$gte: new Date(startDateOfTheMonth),
 				$lte: new Date(endDateOfTheMonth)
@@ -239,7 +284,9 @@ function getSKUAnalyticsFilterConditions(filters) {
 
 			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
 			let startDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).startOf('quarter').format(DATE_FORMAT);
-			let endDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).endOf('quarter').format(DATE_FORMAT);
+			// let endDateOfTheQuarter = moment(startDateOfTheYear).tz("Etc/GMT").quarter(filters.quarter).add(1, 'years').endOf('quarter');
+			let endDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).tz("Etc/GMT").add(3, 'months').endOf('quarter');
+
 			matchCondition.uploadDate = {
 				$gte: new Date(startDateOfTheQuarter),
 				$lte: new Date(endDateOfTheQuarter)
@@ -251,7 +298,7 @@ function getSKUAnalyticsFilterConditions(filters) {
 			const currentYear = moment().year();
 
 			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
-			let endDateOfTheYear = moment([filters.year]).endOf('year')
+			let endDateOfTheYear = moment([filters.year]).tz("Etc/GMT").add(1, 'years').endOf('year');
 
 			if (filters.year === currentYear) {
 				endDateOfTheYear = currentDate;
@@ -280,7 +327,6 @@ function getAnalyticsFilterConditions(filters, warehouseIds) {
 		matchCondition.productId = filters.sku;
 	};
 
-
 	if (filters.date_filter_type && filters.date_filter_type.length) {
 
 		const DATE_FORMAT = 'YYYY-MM-DD';
@@ -289,28 +335,31 @@ function getAnalyticsFilterConditions(filters, warehouseIds) {
 			let startDate = filters.start_date ? filters.start_date : new Date();
 			let endDate = filters.end_date ? filters.end_date : new Date();
 			matchCondition.uploadDate = {
-				$gte: new Date(startDate).toISOString(),
-				$lte: new Date(endDate).toISOString()
+				$gte: new Date(startDate),
+				$lte: new Date(endDate)
 			};
 
 		} else if (filters.date_filter_type === 'by_monthly') {
 
 			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
-			let startDateOfTheMonth = moment(startDateOfTheYear).add(filters.month, 'months').format(DATE_FORMAT);
-			let endDateOfTheMonth = moment(startDateOfTheMonth).endOf('month');
+			let startDateOfTheMonth = moment(startDateOfTheYear).add(filters.month-1, 'months').format(DATE_FORMAT);
+			let endDateOfTheMonth = moment(startDateOfTheMonth).tz("Etc/GMT").add(1, 'months').endOf('month');
+			
 			matchCondition.uploadDate = {
-				$gte: new Date(startDateOfTheMonth).toISOString(),
-				$lte: new Date(endDateOfTheMonth).toISOString()
+				$gte: new Date(startDateOfTheMonth),
+				$lte: new Date(endDateOfTheMonth)
 			};
 
 		} else if (filters.date_filter_type === 'by_quarterly') {
 
 			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
 			let startDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).startOf('quarter').format(DATE_FORMAT);
-			let endDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).endOf('quarter').format(DATE_FORMAT);
+			// let endDateOfTheQuarter = moment(startDateOfTheYear).tz("Etc/GMT").quarter(filters.quarter).add(1, 'years').endOf('quarter');
+			let endDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).tz("Etc/GMT").add(3, 'months').endOf('quarter');
+
 			matchCondition.uploadDate = {
-				$gte: new Date(startDateOfTheQuarter).toISOString(),
-				$lte: new Date(endDateOfTheQuarter).toISOString()
+				$gte: new Date(startDateOfTheQuarter),
+				$lte: new Date(endDateOfTheQuarter)
 			};
 
 		} else if (filters.date_filter_type === 'by_yearly') {
@@ -319,17 +368,16 @@ function getAnalyticsFilterConditions(filters, warehouseIds) {
 			const currentYear = moment().year();
 
 			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
-			let endDateOfTheYear = moment([filters.year]).endOf('year')
+			let endDateOfTheYear = moment([filters.year]).tz("Etc/GMT").add(1, 'years').endOf('year');
 
 			if (filters.year === currentYear) {
 				endDateOfTheYear = currentDate;
 			}
 
 			matchCondition.uploadDate = {
-				$gte: new Date(startDateOfTheYear).toISOString(),
-				$lte: new Date(endDateOfTheYear).toISOString()
+				$gte: new Date(startDateOfTheYear),
+				$lte: new Date(endDateOfTheYear)
 			};
-
 		}
 
 	}
@@ -426,6 +474,7 @@ exports.getStatsByBrand = [
 		try {
 			const filters = req.query;
 			let warehouseIds = await _getWarehouseIds(filters);
+			
 			let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
 			let brandFilter = {};
 			if (filters.brand && filters.brand !== '') {
@@ -465,37 +514,54 @@ exports.getStatsByBrand = [
 				},
 				{
 					$group: {
-						_id: '$productId',
+						_id: '$manufacturer',
 						sales : { $sum: 1 },
 						targetSales : { $sum: 1 },
 						products: {$addToSet: '$$ROOT'}
 						
 					}
-				}
+				},
+				{$sort: { "products.productId": 1 } }
 
 			]);
 			// console.log(Analytics);
 			for (let analytic of Analytics) {
 
-				let products = analytic.products;
+				let products = analytic.products.sort(function (a, b) {
+									return a.productId - b.productId;
+								});
 				let prods = [];
 				let arrIds = [];
 				let salesSum = 0;
 				let targetSum = 0;
-				for (let product of products) {
-					if (arrIds.indexOf(product.externaId) === -1) {
-						salesSum = 0;
-						targetSum = 0;
-						product['returnRate'] = (parseInt(product.returns) / parseInt(product.sales)) * 100;
-						product['returnRatePrev'] = await calculatePrevReturnRates(filters, product);
-						arrIds.push(product.externaId);
-						prods.push(product);
+				let prevProd = '';
+				
+				for (const [index, product] of products.entries()) {
+					if (prevProd == '')
+						prevProd = product.productId;
+					
+					if (prevProd !== product.productId || index === products.length - 1) {
+						if (index === products.length - 1) {
+							salesSum+= parseInt(product.sales);
+							targetSum += parseInt(product.targetSales);
+						}
+							
+						prevProd = product.productId;
+						if (arrIds.indexOf(product.productId) === -1) {
+							product['returnRate'] = (parseInt(product.returns) / parseInt(product.sales)) * 100;
+							product['returnRatePrev'] = await calculatePrevReturnRates(filters, product);
+							arrIds.push(product.productId);
+							
+							product['sales'] = salesSum;
+							product['targetSales'] = targetSum;
+							prods.push(product);
+							salesSum = 0;
+							targetSum = 0;
+						}
 					}
 					salesSum+= parseInt(product.sales);
-					targetSum+= parseInt(product.targetSales);
+					targetSum += parseInt(product.targetSales);
 				}
-				prods[0]['sales'] = salesSum;
-				prods[0]['targetSales'] = targetSum;
 				analytic.products = prods;
 			}
 
@@ -505,6 +571,8 @@ exports.getStatsByBrand = [
 				Analytics
 			);
 		} catch (err) {
+			console.log(err);
+			
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
@@ -1126,7 +1194,7 @@ exports.getStatsBySKU = [
 				"July", "August", "September", "October", "November", "December"
 			];
 			let Analytics = await AnalyticsModel.aggregate([
-				{ ...dateConversion(filters) },
+				// { ...dateConversion(filters) },
 				{
 					$match: getSKUAnalyticsFilterConditions(filters)
 				},
@@ -1160,8 +1228,10 @@ exports.getStatsBySKU = [
 			let response = [];
 			Analytics.forEach(analytic => {
 				if (analytic.data) {
+					console.log(analytic._id);
+					
 					let temp = aggregateSalesStats(analytic.data);
-					temp['groupedBy'] = (analytic._id.toString()).includes('GMT') ? monthNames[new Date(analytic._id).getMonth()] : analytic._id;
+					temp['groupedBy'] = (analytic._id.toString()).includes('GMT') ? monthNames[moment(analytic._id).tz("Etc/GMT").month()] : analytic._id;
 					response.push(temp);
 				}
 			});
