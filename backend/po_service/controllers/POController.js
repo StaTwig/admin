@@ -858,8 +858,10 @@ exports.createOrder = [
       const poId = poCounter.counters[0].format + poCounter.counters[0].value;
 
       const { externalId, supplier, customer, products, creationDate, lastUpdatedOn } = req.body;
-      const { createdBy, lastUpdatedBy } = req.user.id;
-      const purchaseOrder = new RecordModel({
+      console.log("1",req.user.id)
+	    const createdBy =  lastUpdatedBy = req.user.id;
+console.log("c",createdBy);
+	    const purchaseOrder = new RecordModel({
         id: poId,
         externalId,
         creationDate,
