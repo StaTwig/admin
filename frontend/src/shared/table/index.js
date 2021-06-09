@@ -26,6 +26,10 @@ const Table = props => {
 function getDate(n){
     return n.substring(0,10)
 }
+console.log(inventoryDetails)
+inventoryDetails.sort(function(a,b){
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
   return (
     <div className="table">
     <div className="rTable">
