@@ -5,7 +5,7 @@ import Down from '../../assets/icons/up.png';
 import { formatTimeAMPM } from '../../utils/dateHelper';
 import { Link } from 'react-router-dom';
 
-const SoChainOfCustody = (props) => {
+const SoChainOfCustody1 = (props) => {
   const { index, container, pindex, data, update, op, setOp, i, level, v, setV, len, parentIndex } = props;
   const [visible, setVisible] = useState(v);
 
@@ -27,14 +27,14 @@ const SoChainOfCustody = (props) => {
                   <span className="font-weight-bold">{update.status}</span>
                   {(!visible || !v) &&
                     <div className="text-primary mt-2">
-                      <span className=" ">Shipment ID: </span>
+                      <span className=" ">Order ID: </span>
                       <span className=" font-weight-bold">{data[0].id}</span>
                     </div>
                   }
                 </div>
                 {visible && v &&
                   <div className="col-6 text-primary">
-                    <span className=" ">Shipment ID: </span>
+                    <span className=" ">Order ID: </span>
                     <span className=" font-weight-bold">{data[0].id}</span>
                   </div>
                 }
@@ -54,14 +54,14 @@ const SoChainOfCustody = (props) => {
                     )}
                   </div>
                   <div className="col-12 mt-2">
-                    <Link to={`/viewshipment/${data[0].id}`}>
-                      <button className="btn btn-orange fontSize20 font-bold">View Shipment</button>
+                    <Link to={`/vieworder/${data[0].id}`}>
+                      <button className="btn btn-orange fontSize20 font-bold">View Order</button>
                     </Link>
                   </div>
                 </>
               }
               {visible && v ?
-                <div className="arrow bg-primary float-right" onClick={() => { setVisible(false); if(i == 0 && len > 1) setOp(op-1); }}>
+                <div className="arrow bg-primary float-right" onClick={() => {setVisible(false); if(i == 0 && len > 1) setOp(op-1); }}>
                   <img src={Down} alt="actions" height="7" width="12" />
                 </div>
                 :
@@ -84,4 +84,4 @@ const SoChainOfCustody = (props) => {
 }
 
 
-export default SoChainOfCustody;
+export default SoChainOfCustody1;

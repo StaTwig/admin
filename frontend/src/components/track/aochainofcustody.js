@@ -5,15 +5,19 @@ import Down from '../../assets/icons/up.png';
 import { formatTimeAMPM } from '../../utils/dateHelper';
 import { Link } from 'react-router-dom';
 
-const SoChainOfCustody = (props) => {
+const AoChainOfCustody = (props) => {
   const { index, container, pindex, data, update, op, setOp, i, level, v, setV, len, parentIndex } = props;
   const [visible, setVisible] = useState(v);
 
   const isShipment = !update?.isOrder;
-  console.log(data,"data in SO");
+  console.log(data,"data in AO");
+//   console.log(op,"op");
+//   console.log(level,"level");
+// op=1;
+// level=0;
   return (
   <>
-      {op >= level ?
+      {/* {op >= level ? */}
         <div className={`row orderTxt  mr-0 `} style={{marginLeft: (parentIndex == 0 ? 0.5 : parentIndex)+"rem", paddingLeft: (parentIndex == 0 ? 0.5 : 1)+"rem"}}>
           <span className={`pt-${index > 2 ? 2 : index} p-0 ${pindex == 1 && `border-primary border-left`}`} style={{ height: '1rem' }}></span>
           <div className={`pt-${index > 2 ? 2 : index} p-0 col ${pindex > 1 && `border-primary border-left`} `}>
@@ -27,15 +31,15 @@ const SoChainOfCustody = (props) => {
                   <span className="font-weight-bold">{update.status}</span>
                   {(!visible || !v) &&
                     <div className="text-primary mt-2">
-                      <span className=" ">Shipment ID: </span>
-                      <span className=" font-weight-bold">{data[0].id}</span>
+                      <span className=" ">AirWay BillNo: </span>
+                      <span className=" font-weight-bold">{data[0].airWayBillNo}</span>
                     </div>
                   }
                 </div>
                 {visible && v &&
                   <div className="col-6 text-primary">
-                    <span className=" ">Shipment ID: </span>
-                    <span className=" font-weight-bold">{data[0].id}</span>
+                    <span className=" ">AirWay BillNo: </span>
+                    <span className=" font-weight-bold">{data.airWayBillNo}</span>
                   </div>
                 }
                 <div className="text-primary col-2">
@@ -76,12 +80,9 @@ const SoChainOfCustody = (props) => {
             </div>
           </div>
         </div>
-        :
-        <div></div>
-      }
       </>
   )
 }
 
 
-export default SoChainOfCustody;
+export default AoChainOfCustody;

@@ -4,6 +4,7 @@ import Map from './map';
 import CurrentTemperature from '../../assets/icons/thermometer.svg';
 import PoChainOfCustody from './pochainofcustody';
 import SoChainOfCustody from './sochainofcustody';
+import AoChainOfCustody from "./aochainofcustody";
 import Package from '../../assets/icons/package.svg';
 import back from '../../assets/icons/back.png';
 import searchingIcon from '../../assets/icons/searching@2x.png';
@@ -45,7 +46,7 @@ const Track = (props) => {
   };
 
   const onSeach = async () => {
-    await searchData(value);
+    await searchData(value,searchType);
     setIsSubmitted(true);
   };
 
@@ -77,7 +78,7 @@ const Track = (props) => {
                 <div className="search-form">
                   <input
                     type="text"
-                    placeholder="Enter Order ID or Serial No."
+                    placeholder="Enter Order ID,Shipment ID or AirWay BillNo."
                     onChange={onSearchChange}
                     //className="form-control border border-primary search-field"
                       className="form-control search-field border-8"
@@ -109,7 +110,7 @@ const Track = (props) => {
                   <span className="fontSize20">Back to Search</span>
                 </button>{' '}
               </div>
-              {searchType == 'SH' ? (
+              {searchType == 'SH' && (
                 <>
                   <div className=" panel commonpanle  bg-light">
                     <h6 className=" text-primary mb-4">CHAIN OF CUSTODY</h6>
@@ -121,10 +122,10 @@ const Track = (props) => {
                       </div>
                       <div className="col ml-1">
                         <div className="">
-                            <div className="text-muted ">{poChainOfCustodyData ? 'Order ID' : 'Shipment ID'}</div>
+                            <div className="text-muted ">Shipment ID</div>
                           <div className="font-weight-bold ">
                             {shippmentChainOfCustodyData?.length > 0
-                              ? shippmentChainOfCustodyData[0].id
+                              ? poChainOfCustodyData[0].id
                               : 'NA'}
                           </div>
                         </div>
@@ -137,7 +138,7 @@ const Track = (props) => {
                         newArr = shippmentChainOfCustodyData.filter(rw => rw?.taggedShipments?.includes(value));
                         let cIndex = shippmentChainOfCustodyData.map((el) => el.id).indexOf(value) + 1;
                         cIndex = index < cIndex ? index : cIndex;
-                        console.log(row);
+                       
                         return row?.shipmentUpdates?.filter(s => s.status == 'RECEIVED').map((r, i) => (
                           <SoChainOfCustody
                             len={row.shipmentUpdates.length}
@@ -164,7 +165,9 @@ const Track = (props) => {
                     </div>
                   </div>
                 </>
-              ) : (
+              ) }
+              {searchType == "PO"&&
+              (
                 <div className=" panel commonpanle  bg-light">
                   <h6 className=" text-primary mb-4">CHAIN OF CUSTODY</h6>
                   <div className="row orderTxt">
@@ -199,6 +202,63 @@ const Track = (props) => {
                     ))}
                   </div>
                 </div>
+              )}
+              {searchType == "AO"&&
+              (
+                <>
+                  <div className=" panel commonpanle  bg-light">
+                    <h6 className=" text-primary mb-4">CHAIN OF CUSTODY</h6>
+                    <div className="row orderTxt">
+                      <div className="col-1">
+                        <div className="picture recived-bg">
+                          <img src={Package} alt="package" />
+                        </div>
+                      </div>
+                      <div className="col ml-1">
+                        <div className="">
+                            <div className="text-muted ">AirWay BillNo</div>
+                          <div className="font-weight-bold ">
+                            {shippmentChainOfCustodyData?.length > 0
+                              ? poChainOfCustodyData[0].airWayBillNo
+                              : 'NA'}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="pb-4">
+                      {shippmentChainOfCustodyData.map((row, index) => { 
+                        let newArr = [];
+                        // if(row.id == value)
+                        newArr = shippmentChainOfCustodyData.filter(rw => rw?.taggedShipments?.includes(value));
+                        let cIndex = shippmentChainOfCustodyData.map((el) => el.id).indexOf(value) + 1;
+                        cIndex = index < cIndex ? index : cIndex;
+                       
+                        return row?.shipmentUpdates?.filter(s => s.status == 'RECEIVED').map((r, i) => (
+                          <AoChainOfCustody
+                            len={row.shipmentUpdates.length}
+                            i={i}
+                            v={visible}
+                            setV={setVisible}
+                            level={i + 1}
+                            key={i}
+                            op={op}
+                            setOp={setOp}
+                            data={row}
+                            update={r}
+                            index={i + 3}
+                            parentIndex={newArr.length && row.id != value ? cIndex : index }
+                            pindex={
+                              shippmentChainOfCustodyData.length - 1 == index
+                                ? 1
+                                : newArr.length && row.id != value ? newArr.length : 1 
+                            }
+                            container={2 + i}
+                          />
+                        ));
+                      })}
+                    </div>
+                  </div>
+                </>
               )}
             </div>
           )}
