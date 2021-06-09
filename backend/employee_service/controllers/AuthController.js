@@ -263,7 +263,7 @@ exports.register = [
         //create organisation if doesn't exists 
         if (req.body.organisationName) {
           const organisationName = req.body.organisationName;
-          const organisation = await OrganisationModel.findOne({ name: { $regex: organisationName, $options: 'i' } });
+          const organisation = await OrganisationModel.findOne({ name: new RegExp('^'+organisationName+'$', "i") });
           if (organisation) {
             organisationId = organisation.id;
           }
@@ -314,7 +314,7 @@ exports.register = [
                 countryId: '001',
                 countryName: country
               },
-              configuration_id: 'CONF001',
+              configuration_id: 'CONF000',
               authority: req.body?.authority
             });
             await org.save();
@@ -693,13 +693,14 @@ exports.userInfo = [
   auth,
   (req, res) => {
     try {
-      EmployeeModel.findOne({ emailId: req.user.emailId }).then(async user => {
+      EmployeeModel.findOne({ id: req.user.id }).then(async user => {
         if (user) {
           logger.log(
             'info',
             '<<<<< UserService < AuthController < userInfo : user exist',
           );
           const {
+            id,
             firstName,
             lastName,
             emailId,
@@ -714,7 +715,7 @@ exports.userInfo = [
             postalAddress
           } = user;
           const org = await OrganisationModel.findOne({ id: organisationId }, 'name configuration_id');
-          const warehouse = await EmployeeModel.findOne({ emailId }, { _id: 0, warehouseId: 1 });
+          const warehouse = await EmployeeModel.findOne({ id }, { _id: 0, warehouseId: 1 });
           const warehouseArray = await WarehouseModel.find({ id: { "$in": warehouse.warehouseId } })
           let user_data = {
             firstName,

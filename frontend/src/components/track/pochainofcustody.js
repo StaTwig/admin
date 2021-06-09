@@ -3,14 +3,15 @@ import './style.scss';
 import traceDrop from '../../assets/icons/traceDrop.png';
 import Down from '../../assets/icons/up.png';
 import { formatTimeAMPM } from '../../utils/dateHelper';
-import SoChainOfCustody from "./sochainofcustody";
+import SoChainOfCustody1 from "./poExtendedChainOfcustody";
 import { Link } from 'react-router-dom';
+import { compose } from 'redux';
 
 const PoChainOfCustody = (props) => {
   const [op, setOp] = useState(-1);
   const [visible, setVisible] = useState(false);
   const {index,container, pindex, data, shippmentChainOfCustodyData} = props;
-  
+  console.log(shippmentChainOfCustodyData,"data in PO");
   return (
     <>
      <div className={`row orderTxt ml-${index} mr-0 pl-3`}>
@@ -73,9 +74,9 @@ const PoChainOfCustody = (props) => {
       </div>
     </div>
     </div>
-    {shippmentChainOfCustodyData.map((row, index) => {
-      return row.shipmentUpdates.map((r, i) => <SoChainOfCustody len={row.shipmentUpdates.length} i={i} v={visible} setV={setVisible} level={i+1} key={i} op={op} setOp={setOp} data={row} update={r} index={3+i+1} pindex={shippmentChainOfCustodyData.length -1 == index ? 1 : shippmentChainOfCustodyData.length} container={2+i} />)
-    })}
+      {shippmentChainOfCustodyData.map((row, index) => {
+        return row.shipmentUpdates.map((r, i) => <SoChainOfCustody1 len={row.shipmentUpdates.length} i={i} v={visible} setV={setVisible} level={i+1} key={i} op={op} setOp={setOp} data={row} update={r} index={3+i+1} pindex={shippmentChainOfCustodyData.length -1 == index ? 1 : shippmentChainOfCustodyData.length} container={2+i} />)
+      })}
     </>
   )
 }

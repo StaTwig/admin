@@ -11,7 +11,7 @@ var WarehouseSchema = new mongoose.Schema(
     postalAddress: {
       type: String,
       required: true,
-      default: "T-Hub, IIIT, Gachibowli, Hyderabad, Telangana, India",
+      default: null,
     },
     warehouseAddress: {
       type: Object,

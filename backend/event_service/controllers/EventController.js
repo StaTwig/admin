@@ -105,6 +105,7 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 			
 			let currentDate = new Date();
 			let fromDateFilter = 0;
+			let LocalField = 'payloadData.data.products.productId';
 			let category = req.query.category;
 			let productName = req.query.productName ? req.query.productName : undefined;
 			let productManufacturer = req.query.productManufacturer ? req.query.productManufacturer : undefined;
@@ -114,7 +115,7 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 					fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
 					break;
 				case "week":
-					fromDateFilter = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay())).toUTCString();
+					fromDateFilter = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay()));
 					break;
 				case "month":
 					fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
@@ -146,7 +147,9 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 				elementMatchQuery[`productDetails.type`] = category
 			}
 			if(status){
-				elementMatchQuery[`eventTypePrimary`] = status
+				elementMatchQuery[`eventTypePrimary`] = status;
+				if(status === 'RECEIVE')
+					LocalField = 'payloadData.data.products.productID'
 			}
 			if(organisationId){
 				elementMatchQuery[`actorOrgId`] = organisationId
@@ -242,21 +245,23 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 					   as: 'productDetails',
 					} },
 					  { "$unwind": "$productDetails" },
+					  { "$unwind": '$payloadData.data.products' },
 					  { $match: elementMatchQuery},
 					  { $group: { _id: null, myCount: { $sum: 1 } } }
 					  ]).sort({
 				createdAt: -1
 			})
-			inventoryCount = inventoryCount[0].myCount
-			console.log(inventoryCount)
+			inventoryCount = inventoryCount.length > 0 ? inventoryCount[0].myCount : 0
+			console.log(elementMatchQuery)
 			EventModal.aggregate([
 				{ $lookup: {        
 					   from: 'products',
-					   localField: 'payloadData.data.products.productId',
+					   localField: LocalField,
 					   foreignField: 'id',
 					   as: 'productDetails',
 					} },
-					  { "$unwind": "$productDetails" },
+					  { "$unwind": '$payloadData.data.products' },
+					  { "$unwind": '$productDetails' },
 					  { $match: elementMatchQuery},
 					  
 					  ]).skip(parseInt(skip)).limit(parseInt(limit)).sort({
@@ -264,48 +269,26 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 			}).then(async (eventRecords) => {
 				// console.log(eventRecords)
 				let inventoryRecords = [];
-				inventoryCount = eventRecords.length
-				let eventRecordsRes = eventRecords.map(async function (event) {
-					let eventRecords = JSON.parse(JSON.stringify(event))
-					eventRecords[`ProductList`] = [];
+				await Promise.all(eventRecords.map(async function (event) {
+					let eventRecord = JSON.parse(JSON.stringify(event))
 					let payloadRecord = event.payloadData;
+					eventRecord[`inventoryQuantity`] = payloadRecord.data.products.quantity || payloadRecord.data.products.productQuantity ;
 					if (payloadRecord.data.products) {
-						let inventoryQuantity = 0;
-						let productsRes = payloadRecord.data.products.map(async function (product) {
-							let detaildProduct = product;
-							detaildProduct[`productDetails`] = {};
-							detaildProduct[`shipmentDetails`] = {};
-							inventoryQuantity += detaildProduct.quantity ? Number(detaildProduct.quantity): Number(detaildProduct.productQuantity);
-							let whereQuery = {};
-							if (detaildProduct.productId) {
-								whereQuery[`id`] = detaildProduct.productId
-							} else if (detaildProduct.productName) {
-								whereQuery[`name`] = detaildProduct.productName
-							}
-							let productDetails = await ProductModel.findOne(whereQuery);
-							detaildProduct[`productDetails`] = productDetails;
-
-							if (payloadRecord.data.id) {
-								let shipmentDetails = await ShipmentModel.findOne({
-									id: payloadRecord.data.id
-								});
-								detaildProduct[`shipmentDetails`] = shipmentDetails;
-							}
-							return detaildProduct;
-						});
-						let productList = await Promise.all(productsRes);
-						eventRecords[`ProductList`].push(...productList);
-						eventRecords[`inventoryQuantity`] = inventoryQuantity;
-						if(productList.length > 0){
-							inventoryRecords.push(eventRecords);
+						if (payloadRecord.data.id) {
+							let shipmentDetails = await ShipmentModel.findOne({
+								id: payloadRecord.data.id
+							});
+							eventRecord[`shipmentDetails`] = shipmentDetails;
+							eventRecord[`shipmentDetails`].id = payloadRecord.data.id;
 						}
 					}
-				});
-				let inventoryResult = await Promise.all(eventRecordsRes);
+					eventRecord[`payloadData`] = payloadRecord;
+					inventoryRecords.push(eventRecord);
+				}))
 				return apiResponse.successResponseWithData(
 					res,
 					"Inventory Records",
-					{"inventoryRecords":inventoryRecords, "count":inventoryCount}
+					{"inventoryRecords": inventoryRecords, "count":inventoryCount}
 				);
 			});
 		} catch (err) {

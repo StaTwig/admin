@@ -14,6 +14,7 @@ import playstore from '../../assets/icons/googleplay.png';
 import googleStore from '../../assets/brands/Google_store.png'
 import appleStore from '../../assets/brands/Apple_store.png'
 import mobMockup from '../../assets/brands/ship_mockup.png'
+import gitlab from '../../assets/icons/gitlab_logo.png'
 
 const HomeContainer = (props) => {
   const user = useSelector(state => {  
@@ -53,8 +54,12 @@ const HomeContainer = (props) => {
               </Link>
             </li>
             {/*<div className="divider" />*/}
-   
-
+            
+            <li className="nav-item active mr-2">
+               <a href="https://gitlab.com/statwig-public/theledger">
+               <img src={gitlab} width="40" height="35" /></a>
+            </li>
+            <div className="divider" />
             <li className="nav-item active">
               <Link className="nav-link" to="/login">
                 Login <span className="sr-only">(current)</span>
