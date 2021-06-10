@@ -6,24 +6,20 @@ import { formatTimeAMPM } from '../../utils/dateHelper';
 import { Link } from 'react-router-dom';
 
 const AoChainOfCustody = (props) => {
-  const { index, container, pindex, data, update, op, setOp, i, level, v, setV, len, parentIndex } = props;
+  const { index, container, pindex, data, update, op, setOp, i, level, v, setV, len, parentIndex,products } = props;
   const [visible, setVisible] = useState(v);
 
   const isShipment = !update?.isOrder;
-  console.log(data,"data in AO");
-//   console.log(op,"op");
-//   console.log(level,"level");
-// op=1;
-// level=0;
+
   return (
   <>
       {/* {op >= level ? */}
-        <div className={`row orderTxt  mr-0 `} style={{marginLeft: (parentIndex == 0 ? 0.5 : parentIndex)+"rem", paddingLeft: (parentIndex == 0 ? 0.5 : 1)+"rem"}}>
+        <div className={`row orderTxt  mr-0 `} style={{marginLeft: (parentIndex == 0 ? 0.5 : 0.5), paddingLeft: (parentIndex == 0 ? 0.5 : 1)}}>
           <span className={`pt-${index > 2 ? 2 : index} p-0 ${pindex == 1 && `border-primary border-left`}`} style={{ height: '1rem' }}></span>
           <div className={`pt-${index > 2 ? 2 : index} p-0 col ${pindex > 1 && `border-primary border-left`} `}>
             <div className="row dot-pad">
               <div className={`big-dot dot-${container} bg-info`}></div>
-              <span className="text-primary pl-4 pb-1 row col-12 font-weight-bold">{data?.supplier?.warehouse?.title}</span>
+              <span className="text-primary pl-4 pb-1 row col-12 font-weight-bold">{data?.supplier?.warehouse?.postalAddress}</span>
             </div>
             <div className={`panel row container-${container} mr-0 commonpanle`} style={{marginLeft: "0.5rem"}}>
               <div className="col-12 row justify-content-between">
@@ -31,8 +27,8 @@ const AoChainOfCustody = (props) => {
                   <span className="font-weight-bold">{update.status}</span>
                   {(!visible || !v) &&
                     <div className="text-primary mt-2">
-                      <span className=" ">AirWay BillNo: </span>
-                      <span className=" font-weight-bold">{data[0].airWayBillNo}</span>
+                      <span className=" ">Shipment ID: </span>
+                      <span className=" font-weight-bold">{data.id}</span>
                     </div>
                   }
                 </div>
@@ -44,21 +40,21 @@ const AoChainOfCustody = (props) => {
                 }
                 <div className="text-primary col-2">
                   <div className="text-muted">{update.updatedOn.split(' ')[0]}</div>
-                  <div className="text-muted">{formatTimeAMPM(update.updatedOn.split(' ')[1])}</div>
+                  <div className="text-muted">{formatTimeAMPM(update.updatedOn)}</div>
                 </div>
               </div>
               {visible && v &&
                 <>
                   <div className="row mt-1 ml-1 col-5">
-                    {update.products.map((product, index) =>
+                    {/* {update.products.map((product, index) => */}
                       <div key={index} className="col-12 row justify-content-between">
-                        <span className="text-muted">{product?.productName ? product?.productName : product.name}</span>
-                        <span className="text-muted text-weight-bold">{product?.productQuantity ? product.productQuantity : product.quantity}</span>
+                        <span className="text-muted">{products[0]?.productName ? products[0]?.productName : products[0].name}</span>
+                        <span className="text-muted text-weight-bold">{products[0]?.productQuantity ? products[0].productQuantity : products[0].quantity}</span>
                       </div>
-                    )}
+                    {/* )} */}
                   </div>
                   <div className="col-12 mt-2">
-                    <Link to={`/viewshipment/${data[0].id}`}>
+                    <Link to={`/viewshipment/${data.id}`}>
                       <button className="btn btn-orange fontSize20 font-bold">View Shipment</button>
                     </Link>
                   </div>
