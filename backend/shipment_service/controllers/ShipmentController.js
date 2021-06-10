@@ -708,6 +708,7 @@ exports.receiveShipment = [
           totalProducts = totalProducts + shipmentProducts[count].productQuantity;
           totalReturns = totalReturns + products[count].productQuantity;
           shipmentRejectionRate = ((totalProducts - totalReturns) / totalProducts) * 100;
+          data.products[count]["productId"] = data.products[count].productID;
           inventoryUpdate(
             products[count].productID,
             products[count].productQuantity,

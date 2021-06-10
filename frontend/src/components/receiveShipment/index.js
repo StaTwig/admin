@@ -97,7 +97,8 @@ const ReceiveShipment = (props) => {
     data.comment = comment;
     //data.imagesDetails = [];
     qtyArr.map((value, index) => {
-      data.products[index].productQuantity = data.products[index].productQuantity <= parseInt(value) ? parseInt(value) : data.products[index].productQuantity;
+      // data.products[index]["productId"] = data.products[index].productID;
+      data.products[index].productQuantity = data.products[index].productQuantity <= parseInt(value) ? data.products[index].productQuantity : parseInt(value);
     });
     
     //data.products[0].productQuantity = parseInt(delivered);
