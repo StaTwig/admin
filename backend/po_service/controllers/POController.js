@@ -554,10 +554,18 @@ exports.addPOsFromExcel = [
                   if (customerOrganisation) {
                       poDataArray[i].customer.name = customerOrganisation.name;
                       poDataArray[i].customer.customerType = customerOrganisation.type;
+                      if(!customerOrganisation.warehouses.includes(poDataArray[i].customer.shippingAddress.shippingAddressId)){
+                        delete poDataArray[i];
+                        continue;
+                      }
                   }
                   else if(customerOrganisationExternal){
                     poDataArray[i].customer.name = customerOrganisationExternal.name;
                     poDataArray[i].customer.customerType = customerOrganisationExternal.type;
+                    if(!customerOrganisationExternal.warehouses.includes(poDataArray[i].customer.shippingAddress.shippingAddressId)){
+                      delete poDataArray[i];
+                      continue;
+                    }
                   }
                   else {
                     const country = poDataArray[i].customer?.country ? poDataArray[i].customer?.country : 'India';
@@ -684,7 +692,7 @@ exports.addPOsFromExcel = [
                 }
                   else {
                     const country = poDataArray[i].supplier?.country ? poDataArray[i].supplier?.country : 'India';
-                    const address = poDataArray[i].supplier?.address ? poDataArray[i].supplier?.address : '';
+                    const address = poDataArray[i].supplier?.address ? poDataArray[i].supplier?.address : 'Address NA';
                     const incrementCounterOrg = await CounterModel.update({
                       'counters.name': "orgId"
                     }, {
