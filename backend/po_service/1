@@ -33,27 +33,21 @@ const manufacturers = require('../data/manufacturers');
 const init = require('../logging/init');
 const logger = init.getLog();
 
-const userPurchaseOrders = async ( mode,orgMode, organisationId, type, id, skip, limit, callback) => {
+const userPurchaseOrders = async ( mode,orgMode, organisationId, skip, limit, callback) => {
         var matchCondition = {};
+
         if (orgMode != "")
         var criteria = mode + "." + orgMode;
-        else{
+        else
         var criteria = mode;
-        }
-       let newObj = {}
-      if(type=="outbound")
-      {
-            newObj[criteria] = organisationId;
-            matchCondition["$or"] = [newObj,{"createdBy": id }];
-       }
-       else
-       matchCondition[criteria] = organisationId;
-	console.log("mc",matchCondition)
+
+        matchCondition[criteria] = organisationId;
         var  poDetails = [];
+
             poDetails = await RecordModel.aggregate([{
-                $match: matchCondition,
+                $match: matchCondition
             },
-	    {
+            {
                 $lookup: {
                     from: "organisations",
                     localField: "supplier.supplierOrganisation",
@@ -127,24 +121,24 @@ exports.fetchPurchaseOrders = [
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
 
-              const { organisationId, role, id } = req.user;
+              const { organisationId, role } = req.user;
               const { skip, limit, poId } = req.query;
               var inboundPOs, outboundPOs, poDetails;
 
                     try {
                     if ( poId != null)
                     {
-                    const POs = await userPurchaseOrders("id", "", poId, "", id, skip, limit, (error, data) => {
+                    const POs = await userPurchaseOrders("id", "", poId, skip, limit, (error, data) => {
                            poDetails = data ;
                        })
                      }
                     else
                     {
-                    const supplierPOs = await userPurchaseOrders("supplier","supplierOrganisation", organisationId, "inbound", id, skip, limit, (error, data) => {
+                    const supplierPOs = await userPurchaseOrders("supplier","supplierOrganisation", organisationId, skip, limit, (error, data) => {
                            inboundPOs = data;
                         })
 
-                    const customerPOs = await userPurchaseOrders("customer","customerOrganisation", organisationId, "outbound", id, skip, limit, (error, data) => {
+                    const customerPOs = await userPurchaseOrders("customer","customerOrganisation", organisationId, skip, limit, (error, data) => {
                            outboundPOs = data ;
                        })
                     }
@@ -634,7 +628,7 @@ exports.addPOsFromExcel = [
                         countryName: country
                       },
                       configuration_id: 'CONF000',
-                      authority: req.body.authority,
+                      authority: req.body?.authority,
                       externalId : poDataArray[i].customer.customerOrganisation
                     });
                     const createdOrg = await org.save();
@@ -697,8 +691,8 @@ exports.addPOsFromExcel = [
                   }
                 }
                   else {
-                    const country = poDataArray[i].supplier.country ? poDataArray[i].supplier.country : 'India';
-                    const address = poDataArray[i].supplier.address ? poDataArray[i].supplier.address : 'Address NA';
+                    const country = poDataArray[i].supplier?.country ? poDataArray[i].supplier?.country : 'India';
+                    const address = poDataArray[i].supplier?.address ? poDataArray[i].supplier?.address : 'Address NA';
                     const incrementCounterOrg = await CounterModel.update({
                       'counters.name': "orgId"
                     }, {
@@ -757,7 +751,7 @@ exports.addPOsFromExcel = [
                         countryName: country
                       },
                       configuration_id: 'CONF000',
-                      authority: req.body.authority,
+                      authority: req.body?.authority,
                       externalId : poDataArray[i].supplier.supplierOrganisation,
                     });
                     const createdOrg = await org.save();
@@ -911,42 +905,20 @@ exports.getOrderIds = [
      
       const {organisationId } = req.user;
       const orderID = await RecordModel.find({$or:[{"supplier.supplierOrganisation":organisationId},{"customer.customerOrganisation":organisationId}]},'id');
+      /*const orderID = await RecordModel.find( {
+      $and : [
+               { 
+                  "supplier.supplierOrganisation":"BB1001"
+               },
+               { 
+                 "poStatus": {"$in": ["ACCEPTED","PARTIALLYFULFILLED","TRANSIT&PARTIALLYFULFILLED"] }
+               }
+             ]
+    } )*/
     
       return apiResponse.successResponseWithData(
         res,
         'Order Ids',
-        orderID,
-      );
-    } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-
-exports.getOpenOrderIds = [
-  auth,
-  async (req, res) => {
-    try {
-
-      const {organisationId } = req.user;
-      const orderID = await RecordModel.find( {
-      $and : [
-               {
-                  "supplier.supplierOrganisation": organisationId
-               },
-               {
-                 "poStatus": {"$in": ["ACCEPTED","PARTIALLYFULFILLED","TRANSIT&PARTIALLYFULFILLED"] }
-               }
-             ]
-    } )
-
-      return apiResponse.successResponseWithData(
-        res,
-        'Open Order Ids',
         orderID,
       );
     } catch (err) {
@@ -1026,7 +998,7 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
               if (fromCustomer) {
                   whereQuery["customer.customerOrganisation"] = fromCustomer
               }
-console.log("inbound",whereQuery)
+
               if (productName) {
                 whereQuery.products = {
                   $elemMatch: {
@@ -1178,21 +1150,22 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
                   whereQuery["supplier.supplierOrganisation"] = toSupplier;
               }
 	      
-            let whereQueryNew = {};
-            whereQueryNew["$or"] = [whereQuery,{"createdBy": id }];
+	      if (id) {
+                  whereQuery["createdBy"] = id;
+              }
 
               if (productName) {
-                whereQueryNew.products = {
+                whereQuery.products = {
                   $elemMatch: {
                     productId: productName
                   }
                 }
               }
 
-              console.log("whereQuery ======>", whereQueryNew);
+              console.log("whereQuery ======>", whereQuery);
               try {
-                let outboundPOsCount = await RecordModel.count(whereQueryNew);
-                RecordModel.find(whereQueryNew).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((outboundPOList) => {
+                let outboundPOsCount = await RecordModel.count(whereQuery);
+                RecordModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((outboundPOList) => {
                   let outboundPORes = [];
                   let findOutboundPOData = outboundPOList.map(async (outboundPO) => {
                     let outboundPOData = JSON.parse(JSON.stringify(outboundPO))
