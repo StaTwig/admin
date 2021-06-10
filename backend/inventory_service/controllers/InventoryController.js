@@ -1065,8 +1065,8 @@ exports.addProductsToInventory = [
                   // id: `${serialNumberText + uniqid.time()}${i}`,
                   id: `${serialNumberText}${i}`,
                   label: {
-			  labelId: product.label?product.label.labelId:"QR_2D",
-                          labelType: product.label?product.label.labelType:"3232",
+			  labelId: product.label?product?.label?.labelId:"QR_2D",
+                          labelType: product.label?product?.label?.labelType:"3232",
                   },
                   quantity: 1,
                   productId: product.productId,
@@ -1096,8 +1096,8 @@ exports.addProductsToInventory = [
               const atom = {
                 id: uniqid('batch-'),
                 label: {
-                          labelId: product.label?product.label.labelId:"QR_2D",
-                          labelType: product.label?product.label.labelType:"3232",
+                          labelId: product.label?product?.label?.labelId:"QR_2D",
+                          labelType: product.label?product?.label?.labelType:"3232",
 		},
                 quantity: product.quantity,
                 productId: product.productId,
