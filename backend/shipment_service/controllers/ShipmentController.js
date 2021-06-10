@@ -357,8 +357,10 @@ exports.createShipment = [
               let quantityMismatch = false;
               po.products.every((product) => {
                 data.products.every((p) => {
-                  if (
-                    parseInt(p.productQuantity) < parseInt(product.productQuantity)
+                const po_product_quantity = product.productQuantity || product.quantity;
+		const shipment_product_qty = p.productQuantity || p.quantity;
+		if (
+                    parseInt(shipment_product_qty) < parseInt(po_product_quantity)
                   ) {
                     quantityMismatch = true;
                     return false;
@@ -666,12 +668,14 @@ exports.receiveShipment = [
         let quantityMismatch = false;
         po.products.every((product) => {
           data.products.every((p) => {
-            if (
-              parseInt(p.productQuantity) < parseInt(product.quantity)
-            ) {
-              quantityMismatch = true;
-              return false;
-            }
+	        const po_product_quantity = product.productQuantity || product.quantity;
+                const shipment_product_qty = p.productQuantity || p.quantity;
+                if (
+                    parseInt(shipment_product_qty) < parseInt(po_product_quantity)
+                  ) {
+                    quantityMismatch = true;
+                    return false;
+                  }
           });
         });
         if (quantityMismatch) {
