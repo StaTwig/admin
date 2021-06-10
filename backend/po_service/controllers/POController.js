@@ -574,8 +574,8 @@ exports.addPOsFromExcel = [
                     }
                   }
                   else {
-                    const country = poDataArray[i].customer.country ? poDataArray[i].customer.country : 'India';
-                    const address = poDataArray[i].customer.address ? poDataArray[i].customer.address : '';
+                    const country = poDataArray[i].customer?.country ? poDataArray[i].customer?.country : 'India';
+                    const address = poDataArray[i].customer?.address ? poDataArray[i].customer?.address : '';
                     const incrementCounterOrg = await CounterModel.update({
                       'counters.name': "orgId"
                     }, {
@@ -634,7 +634,7 @@ exports.addPOsFromExcel = [
                         countryName: country
                       },
                       configuration_id: 'CONF000',
-                      authority: req.body.authority,
+                      authority: req.body?.authority,
                       externalId : poDataArray[i].customer.customerOrganisation
                     });
                     const createdOrg = await org.save();
@@ -697,8 +697,8 @@ exports.addPOsFromExcel = [
                   }
                 }
                   else {
-                    const country = poDataArray[i].supplier.country ? poDataArray[i].supplier.country : 'India';
-                    const address = poDataArray[i].supplier.address ? poDataArray[i].supplier.address : 'Address NA';
+                    const country = poDataArray[i].supplier?.country ? poDataArray[i].supplier?.country : 'India';
+                    const address = poDataArray[i].supplier?.address ? poDataArray[i].supplier?.address : 'Address NA';
                     const incrementCounterOrg = await CounterModel.update({
                       'counters.name': "orgId"
                     }, {
@@ -757,7 +757,7 @@ exports.addPOsFromExcel = [
                         countryName: country
                       },
                       configuration_id: 'CONF000',
-                      authority: req.body.authority,
+                      authority: req.body?.authority,
                       externalId : poDataArray[i].supplier.supplierOrganisation,
                     });
                     const createdOrg = await org.save();
@@ -1026,7 +1026,6 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
               if (fromCustomer) {
                   whereQuery["customer.customerOrganisation"] = fromCustomer
               }
-console.log("inbound",whereQuery)
               if (productName) {
                 whereQuery.products = {
                   $elemMatch: {
