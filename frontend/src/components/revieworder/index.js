@@ -60,7 +60,7 @@ console.log(data);
       dispatch(turnOff());
 
       if (result.status === 200 ) {
-         //dispatch(resetReviewPos({}));
+        // dispatch(resetReviewPos({}));
           setopenReviewOrder(true);
           //setMessage("Status updated Successfully");
           setModalProps({
@@ -75,11 +75,11 @@ console.log(data);
     //       setErrorMessage("Not able to create order. Try again!");
       }
     }
-  };
-  // console.log("Puneth",openReviewOrder);
+  }; 
   const closeModal = () => {
     setopenReviewOrder(false);
-    props.history.push("/orders");
+    dispatch(resetReviewPos({}));
+    props.history.push("/orders");   
   };
   var arr=[];
   arr.push(order);
