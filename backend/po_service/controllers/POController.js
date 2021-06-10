@@ -518,7 +518,7 @@ exports.addPOsFromExcel = [
                 "lastUpdatedBy" : lastUpdatedBy
               }
             });              
-            const incrementCounter = await CounterModel.update({
+            var incrementCounter = await CounterModel.update({
               'counters.name': "poId"
             }, {
               $inc: {
@@ -756,7 +756,7 @@ exports.addPOsFromExcel = [
                     });
                     const createdOrg = await org.save();
                     poDataArray[i].supplier.supplierOrganisation = organisationId;
-                    const incrementCounterInv = await CounterModel.update({
+                    let incrementCounterInv = await CounterModel.update({
                       'counters.name': "inventoryId"
                     }, {
                       $inc: {
@@ -794,14 +794,11 @@ exports.addPOsFromExcel = [
                         "shipmentReceiverId": "NA"
                       }
                   }
+                  await RecordModel.create(poDataArray[i]);
                 }
               }
             }
-            console.log(poDataArray)
-            if(poDataArray.length > 0){
-            await RecordModel.insertMany(poDataArray,{ ordered: false });
-            console.log("Incrementing Data Rows by ",dataRows)
-            const incrementCounter = await CounterModel.update({
+            incrementCounter = await CounterModel.update({
               'counters.name': "poId"
             }, {
               $inc: {
@@ -809,12 +806,11 @@ exports.addPOsFromExcel = [
               }
             });
             return apiResponse.successResponseWithData(
-                res,
-                'Upload Result',
-                poDataArray
-            );
-            }
-            else return apiResponse.ErrorResponse(res,'Data Already Exists')
+              res,
+              'Upload Result',
+              poDataArray
+          );
+            //else return apiResponse.ErrorResponse(res,'Data Already Exists')
           } catch (e) {
             console.log(e)
             if(e.code=='11000'){
