@@ -2204,14 +2204,17 @@ exports.fetchAllWarehouseShipments = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           const {
-            emailId
+            emailId, phoneNumber
           } = req.user;
           console.log(emailId)
           try {
 
-            const empDetails = await EmployeeModel.findOne({
-              emailId: emailId
-            });
+	if (emailId)
+            empDetails = await EmployeeModel.findOne({ emailId });
+        else {
+            empDetails = await EmployeeModel.findOne({ phoneNumber });
+      }
+
             const warehouses = empDetails.warehouseId;
               const shipments = await ShipmentModel.aggregate([{
                 $match: {

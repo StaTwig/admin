@@ -623,7 +623,6 @@ exports.verifyOtp = [
           let phone = '+' + emailId;
           query = { phoneNumber: phone };
         }
-
         const user = await EmployeeModel.findOne(query);
 
         if (user && user.otp == req.body.otp) {
@@ -659,7 +658,8 @@ exports.verifyOtp = [
             role: user.role,
             warehouseId: user.warehouseId[0],
             organisationId: user.organisationId,
-            walletAddress: address
+            walletAddress: address,
+	    phoneNumber: user.phoneNumber
           };
           //Prepare JWT token for authentication
           const jwtPayload = userData;
@@ -680,11 +680,11 @@ exports.verifyOtp = [
         }
       }
     } catch (err) {
-      logger.log(
+	logger.log(
         'error',
         '<<<<< UserService < AuthController < verifyConfirm : Error (catch block)',
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res,err);
     }
   },
 ];
@@ -791,6 +791,7 @@ exports.updateProfile = [
           emailId: employee.emailId,
           role: employee.role,
           warehouseId: warehouseId,
+          phoneNumber: user.phoneNumber
         };
         //Prepare JWT token for authentication
         const jwtPayload = userData;

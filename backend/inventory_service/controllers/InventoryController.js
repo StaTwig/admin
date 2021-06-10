@@ -944,12 +944,12 @@ exports.addProductsToInventory = [
           const { products } = req.body;
           const { id } = req.user;
           const employee = await EmployeeModel.findOne({ id });
-          var warehouseId = req.user.warehouseId;
-          // if (!req.query.warehouseId)
-          //   warehouseId = employee.warehouseId[0];
-          // else
-          //   warehouseId = req.query.warehouseId;
-          console.log(employee)
+          //var warehouseId = req.user.warehouseId;
+           if (!req.query.warehouseId)
+             warehouseId = employee.warehouseId[0];
+           else
+             warehouseId = req.query.warehouseId;
+          console.log(warehouseId)
           const warehouse = await WarehouseModel.findOne({ id: warehouseId });
 
           if (!warehouse) {
@@ -1065,8 +1065,8 @@ exports.addProductsToInventory = [
                   // id: `${serialNumberText + uniqid.time()}${i}`,
                   id: `${serialNumberText}${i}`,
                   label: {
-                    labelId: product?.label?.labelId,
-                    labelType: product?.label?.labelType,
+			  labelId: product.label?product?.label?.labelId:"QR_2D",
+                          labelType: product.label?product?.label?.labelType:"3232",
                   },
                   quantity: 1,
                   productId: product.productId,
@@ -1096,9 +1096,9 @@ exports.addProductsToInventory = [
               const atom = {
                 id: uniqid('batch-'),
                 label: {
-                  labelId: product?.label?.labelId,
-                  labelType: product?.label?.labelType,
-                },
+                          labelId: product.label?product?.label?.labelId:"QR_2D",
+                          labelType: product.label?product?.label?.labelType:"3232",
+		},
                 quantity: product.quantity,
                 productId: product.productId,
                 inventoryIds: [inventory.id],

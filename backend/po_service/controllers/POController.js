@@ -907,7 +907,17 @@ exports.getOrderIds = [
      
       const {organisationId } = req.user;
       const orderID = await RecordModel.find({$or:[{"supplier.supplierOrganisation":organisationId},{"customer.customerOrganisation":organisationId}]},'id');
-      
+      /*const orderID = await RecordModel.find( {
+      $and : [
+               { 
+                  "supplier.supplierOrganisation":"BB1001"
+               },
+               { 
+                 "poStatus": {"$in": ["ACCEPTED","PARTIALLYFULFILLED","TRANSIT&PARTIALLYFULFILLED"] }
+               }
+             ]
+    } )*/
+    
       return apiResponse.successResponseWithData(
         res,
         'Order Ids',
