@@ -36,7 +36,7 @@ const ViewRow = props => {
         </div>
         <div className="col pl-4 tcell text-center justify-content-center">
           <div className=" mr-5" style={{color:"black"}}>
-            {prod.quantity}
+            {prod.productQuantity}
           </div>
         </div>
       </div>

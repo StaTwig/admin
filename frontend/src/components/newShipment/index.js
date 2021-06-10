@@ -12,7 +12,7 @@ import {
   getAllOrganisations,
   getProductsByInventoryId,
 } from "../../actions/shippingOrderAction";
-import { getOrderIds, getOrder } from "../../actions/poActions";
+import { getOrderIds, getOrder, getOpenOrderIds } from "../../actions/poActions";
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -92,7 +92,7 @@ const NewShipment = (props) => {
     async function fetchData() {
       const { search } = props.location;
       // const result = await getShippingOrderIds();
-      const result = await getOrderIds();
+      const result = await getOpenOrderIds();
       // console.log('IDS');
       // console.log(orderIds);
       // const data1 = await dispatch(getOrder('po-1jpv1enwklta6bf8'));
@@ -516,6 +516,9 @@ const NewShipment = (props) => {
                         styles={customStyles}
                         placeholder="Select Order ID"
                         onChange={async(v) => {
+                          
+                           setProducts(p => []);
+                            setAddProducts(p => []);
                           setOrderIdSelected(true);
                           setFieldValue("OrderId", v.value);
                           setOrderId(v.value);
@@ -548,9 +551,10 @@ const NewShipment = (props) => {
                             "toOrg",
                             result.poDetails[0].customer.organisation.id + "/"+result.poDetails[0].customer.organisation.name
                           );
+                          let wa = result.poDetails[0].customer.warehouse;
                           setFieldValue(
                             "toOrgLoc",
-                            result.poDetails[0].customer.shippingAddress.shippingAddressId+"/"+result.poDetails[0].customer.warehouse.postalAddress
+                            result.poDetails[0].customer.shippingAddress.shippingAddressId + "/" + (wa?.warehouseAddress ? wa?.title + '/' + wa?.warehouseAddress?.firstLine + ", " + wa?.warehouseAddress?.city : wa?.title + '/' + wa.postalAddress)
                           );
                           setFieldValue(
                             "rtype",
@@ -562,9 +566,9 @@ const NewShipment = (props) => {
                           let products_temp = result.poDetails[0].products;
                           for (let i = 0; i < products_temp.length; i++) {
                             products_temp[i].manufacturer =
-                              result.poDetails[0].productDetails[i].manufacturer;
+                              result.poDetails[0].products[i].manufacturer;
                             products_temp[i].productName =
-                              result.poDetails[0].productDetails[i].name;
+                              result.poDetails[0].products[i].name;
                             products_temp[i].productQuantity =
                               result.poDetails[0].products[i].quantity;
                             products_temp[i].productCategory =
@@ -573,9 +577,9 @@ const NewShipment = (props) => {
                               result.poDetails[0].products[i].productId;
                           }
                           
-                         if (result.poDetails[0].productDetails.length > 0) {
-                           setProducts([]);
-                            setAddProducts([]);
+                         if (result.poDetails[0].products.length > 0) {
+                           setProducts(p => []);
+                           setAddProducts(p => []);
                             setFieldValue("products",products_temp);
                           } else setFieldValue("products", []);
                         }}
@@ -698,8 +702,6 @@ const NewShipment = (props) => {
                           isDisabled={false}
                           placeholder="Select Organisation Location"
                           onChange={(v) => {
-                            console.log(v.warehouseInventory);
-                            
                             onWarehouseChange(v.warehouseInventory);
                             setFieldValue("fromOrg", senderOrganisation[0]);
                             setFieldValue("fromOrgLoc", v.value);
@@ -972,9 +974,9 @@ const NewShipment = (props) => {
               <label htmlFor="productDetails" className="headsup">
                 Product Details
               </label>
-              {OrderDetails?.products?.length > 0 && (
+              {values.products?.length > 0 && (
                 <EditTable
-                  product={OrderDetails?.products}
+                  product={values.products}
                   handleQuantityChange={(v, i) => {
                     handleQuantityChange(v, i);
                   }}
