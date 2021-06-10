@@ -2,9 +2,11 @@
 
 
 .profile {
-  overflow: hidden;
-  padding-right: 3rem;
-    padding-left: 5rem;
+  position: relative;
+  top:-22px;
+    padding-right: 25px;
+    padding-left: 55px;
+    overflow: hidden;
     @media (max-width: $md) {
       padding-right: 10px;
       padding-left: 10px;

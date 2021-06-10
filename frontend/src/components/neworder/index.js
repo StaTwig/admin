@@ -356,7 +356,7 @@ const NewOrder = (props) => {
                 <div className="d-flex justify-content-between">
                   <button
                     type="button"
-                    className="btn btn-white bg-white shadow-radius font-bold"
+                    className="btn btn-white bg-white shadow-radius font-bold mb-1"
                     onClick={() => {
                       let newArr = { productId: '', name: '', manufacturer: '', quantity: '', type: '' };
                       setAddProducts(prod => [...prod, newArr]);
@@ -520,7 +520,7 @@ const NewOrder = (props) => {
                     </div>
                   </div>
                 </div>
-                <div className="row mt-4">
+                <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label htmlFor="delLocation">Delivery Location*</label>
@@ -568,14 +568,14 @@ const NewOrder = (props) => {
                 </div>
               </div>
             </div>
-            <div className="d-flex pt-4 justify-content-between">
+            <div className="d-flex pt-4 justify-content-between mb-1">
               <div className="value">{quantity}</div>
               <div className="d-flex">
                 <button type="button" className="btn btn-white shadow-radius font-bold mr-2"onClick={() => props.history.push('/orders')}>
                   Cancel
                 </button>
 
-                <button className="btn btn-primary fontSize20 font-bold">
+                <button className="btn btn-orange fontSize20 font-bold mb-2">
                   <img src={OrderIcon} width="20" height="17" className="mr-2 mb-1" />
                   <span>Review Order</span>
                 </button>
