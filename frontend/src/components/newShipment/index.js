@@ -647,11 +647,11 @@ const NewShipment = (props) => {
                         <Select
                           styles={customStyles}
                           isDisabled={true}
-                          onChange={(v) => {
+                          onChange={(v) => {                   
                           }}
                           placeholder={senderOrganisation[0]}
-                          defaultInputValue={senderOrganisation[0]}
-                          value={senderOrganisation[0]}
+                          defaultInputValue={senderOrganisation[0]}                        
+                          value={senderOrganisation[0]}         
                           options={senderOrganisation.map((v) => { return {
                                         value: v,
                                         label: v
@@ -743,7 +743,7 @@ const NewShipment = (props) => {
                           placeholder={disabled ? values.rtype: "Select Organisation Type"}
                           onChange={(v) => {
                             setFieldValue('rtype', v?.value);
-                            setFieldValue('rtypeName', v?.label);
+                            setFieldValue('rtypeName', v?.label); 
                           }}
                           defaultInputValue={values.rtypeName}
                           options={orgTypes}
@@ -778,11 +778,11 @@ const NewShipment = (props) => {
                         <Select
                           styles={customStyles}
                           isDisabled={disabled}
-                          placeholder={disabled ? (values.toOrg).split("/")[1] : "Select Delivery Location"}
+                          placeholder={disabled ? (values.toOrg).split("/")[1] : "Select Organisation Name"}
                           onChange={(v) => {
                             setFieldValue("toOrgLoc", "");
                             setReceiverOrgId(v.label);
-                            setFieldValue("toOrg", v.value);
+                            setFieldValue("toOrg", v.value);                       
                             onOrgChange(v.value);
                           }}
                          
