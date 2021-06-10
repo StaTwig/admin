@@ -22,7 +22,6 @@ export const STABLE_SERVER_URL_NOTIFICATION = 'http://54.164.66.73:3006';
 export const STABLE_SERVER_URL_PRODUCTS = 'http://54.164.66.73:3010';
 export const DEV_SERVER_URL = 'http://127.0.0.1:9001';
 
-
 /*Shipping order URL needs to be updated for stable server*/
 
 export function config() {
@@ -80,7 +79,7 @@ export function config() {
       getDistrictsByState: `${ABINBEVPROD_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
       getAllSKUs: `${ABINBEVPROD_SERVER_URL}/inventorymanagement/api/inventory/getAllSKUs`,
       getOrganizationInfoByID: `${ABINBEVPROD_SERVER_URL}/inventorymanagement/api/inventory/getOrganizationInfoByID`,
-
+      uploadSalesData: `${ABINBEVPROD_SERVER_URL}/inventorymanagement/api/inventory/uploadSalesData`,
 
       trackShipment: `${ABINBEVPROD_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
       poDetailsByShipmentId: `${ABINBEVPROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
@@ -104,7 +103,6 @@ export function config() {
       getOrganisationStatsurl: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getStatsByOrg`,
       getOverviewStats: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getOverviewStats`,
       getSupplierPerfomance: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getSupplierPerfomance`,
-
     },
     ainbevtest: {
       loginUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -159,7 +157,7 @@ export function config() {
       getDistrictsByState: `${ABINBEVTEST_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
       getAllSKUs: `${ABINBEVTEST_SERVER_URL}/inventorymanagement/api/inventory/getAllSKUs`,
       getOrganizationInfoByID: `${ABINBEVTEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizationInfoByID`,
-
+      uploadSalesData: `${ABINBEVTEST_SERVER_URL}/inventorymanagement/api/inventory/uploadSalesData`,
       trackShipment: `${ABINBEVTEST_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
       poDetailsByShipmentId: `${ABINBEVTEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId: `${ABINBEVTEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
@@ -182,7 +180,6 @@ export function config() {
       getOrganisationStatsurl: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getStatsByOrg`,
       getOverviewStats: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getOverviewStats`,
       getSupplierPerfomance: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getSupplierPerfomance`,
-
     },
   };
 
