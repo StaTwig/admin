@@ -29,7 +29,7 @@ const ReviewOrder = props => {
     let error = false;
     const { fromOrg, fromOrgId, toOrg, toOrgLoc, products, typeName, rtypeName } = order;
     products.forEach((p) => {
-      if (p.quantity < 1)
+      if (p.productQuantity < 1)
         error = true;
     });
     if (!error) {
@@ -54,7 +54,7 @@ const ReviewOrder = props => {
         poStatus: "CREATED",
         products: products,
       };
-console.log(data);
+      
       dispatch(turnOn());
       const result = await createOrder(data);
       dispatch(turnOff());
