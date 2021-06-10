@@ -618,11 +618,12 @@ exports.verifyOtp = [
         );
       } else {
         const emailId = req.body.emailId.toLowerCase();
-        var query = { emailId };
+        var query = { emailIdi };
         if (emailId.indexOf('@') === -1) {
           let phone = '+' + emailId;
           query = { phoneNumber: phone };
         }
+console.log("query",query)
         const user = await EmployeeModel.findOne(query);
 
         if (user && user.otp == req.body.otp) {
@@ -680,7 +681,8 @@ exports.verifyOtp = [
         }
       }
     } catch (err) {
-	logger.log(
+      console.log("err",err)
+	    logger.log(
         'error',
         '<<<<< UserService < AuthController < verifyConfirm : Error (catch block)',
       );
