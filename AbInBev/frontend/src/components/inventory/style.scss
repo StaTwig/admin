@@ -260,12 +260,13 @@ flex-shrink: 0;
     .inventorytable{
         width:100%;
         thead{
-            border-bottom: 1px solid #DCDFF1 ;
+            border-bottom: 2px solid #54265E ;
         }
         .inventoryHeader{
             padding:10px;
             font-size:16px;
-            font-weight: 600;
+            color:#54265E; 
+            font-weight: bolder;
             .tableHeadersubtitle{
                 font-size: 12px;
                 font-weight: 500;     
