@@ -990,8 +990,8 @@ exports.addProductsToInventory = [
             );
           let atoms = [];
           products.forEach((product) => {
-            const serialNumbers = product.serialNumbersRange.split("-");
-            if (serialNumbers.length > 1) {
+            const serialNumbers = product.serialNumbersRange?.split("-");
+            if (serialNumbers?.length > 1) {
               const serialNumbersFrom = parseInt(
                 serialNumbers[0].split(/(\d+)/)[1]
               );
@@ -1048,9 +1048,9 @@ exports.addProductsToInventory = [
               });
             }
 
-            const serialNumbers = product.serialNumbersRange.split("-");
+            const serialNumbers = product.serialNumbersRange?.split("-");
             let atomsArray = [];
-            if (serialNumbers.length > 1) {
+            if (serialNumbers?.length > 1) {
               const serialNumbersFrom = parseInt(
                 serialNumbers[0].split(/(\d+)/)[1]
               );
