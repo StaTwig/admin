@@ -48,7 +48,6 @@ const userPurchaseOrders = async ( mode,orgMode, organisationId, type, id, skip,
        }
        else
        matchCondition[criteria] = organisationId;
-	console.log("mc",matchCondition)
         var  poDetails = [];
             poDetails = await RecordModel.aggregate([{
                 $match: matchCondition,
