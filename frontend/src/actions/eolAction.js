@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { config } from '../config';
+import { turnOn, turnOff } from './spinnerActions';
+
 
 export const GetEOLInfoBySerialNumber = async (data) => {
     try {
@@ -14,14 +16,19 @@ export const GetEOLInfoBySerialNumber = async (data) => {
     return async dispatch => {
       try {
         dispatch(turnOn());
+        console.log('------------------>')
+
         const result = await axios.get(
-          `http://localhost:3017/lastmilemanagement/api/GetEOLInfo?skip=${skip}&limit=${limit}&dateFilter=${dateFilter}&productName=${productName}&category=${productCategory}&status=${status}`
+          `http://127.0.0.1:3017/lastmilemanagement/api/GetEOLInfo?skip=${skip}&limit=${limit}&dateFilter=${dateFilter}&productName=${productName}&category=${productCategory}&status=${status}`
           );
+          console.log(result)
         dispatch(setLastMile(result.data.data.inventoryRecords));
         dispatch(setLastMileCount(result.data.data.count));
         dispatch(turnOff());
         return result.data.data.length;
       }catch(e) {
+        console.log('>------------------>')
+
         dispatch(turnOff());
         return dispatch => {
           dispatch(resetLastMile(e.response));
@@ -79,20 +86,20 @@ export const setLastMile = data => {
 
 export const setLastMileCount = data => {
   return {
-    type: "GET_LAST_MILE",
+    type: "GET_LAST_MILE_COUNT",
     payload: data,
   };
 };
 export const resetLastMileCount = data => {
   return {
-    type: "GET_LAST_MILE",
+    type: "RESET_LAST_MILE",
     payload: data,
   };
 };
 
 export const resetLastMile = data => {
   return {
-    type: "GET_LAST_MILE",
+    type: "RESET_LAST_MILE",
     payload: data,
   };
 };
