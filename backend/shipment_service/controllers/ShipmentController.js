@@ -641,7 +641,7 @@ exports.receiveShipment = [
               (shipmentProducts[productNumber]).rejectionRate = rejectionRate;
               ShipmentModel.updateOne({
                 "id": shipmentID,
-                "products.productID": product.productID
+                "products.productId": product.productID
               }, {
                 $set: {
                   "products.$.rejectionRate": rejectionRate
