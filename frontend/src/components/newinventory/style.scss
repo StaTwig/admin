@@ -1,16 +1,19 @@
 @import "../../assets/styles/global.scss";
 
 .Newinventory {
-  padding-right: 3rem;
-  padding-left: 5rem;
+  position: relative;
+  top:-22px;
+    padding-right: 45px;
+    padding-left: 55px;
+    overflow: hidden;
   @media (max-width: $md) {
     padding-right: 10px;
     padding-left: 10px;
   }
   .menu{
     z-index: 1;
-    top: 7.3rem ;
-    right: 3.2rem !important ;
+    top: 0.5rem ;
+    right: 2.4rem !important ;
     left: unset;
     max-width: 9rem;
     text-align: center;
@@ -77,7 +80,6 @@
     color: $black;
     font: 25px/13px $roboto;
   }
-
   .table {
     .overflow {
       height: 100%;

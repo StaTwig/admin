@@ -10,16 +10,16 @@ const SoChainOfCustody = (props) => {
   const [visible, setVisible] = useState(v);
 
   const isShipment = !update?.isOrder;
-  // console.log(data,"data");
+  
   return (
   <>
- 
+      {op >= level ?
         <div className={`row orderTxt  mr-0 `} style={{marginLeft: (parentIndex == 0 ? 0.5 : parentIndex)+"rem", paddingLeft: (parentIndex == 0 ? 0.5 : 1)+"rem"}}>
           <span className={`pt-${index > 2 ? 2 : index} p-0 ${pindex == 1 && `border-primary border-left`}`} style={{ height: '1rem' }}></span>
           <div className={`pt-${index > 2 ? 2 : index} p-0 col ${pindex > 1 && `border-primary border-left`} `}>
             <div className="row dot-pad">
               <div className={`big-dot dot-${container} bg-info`}></div>
-              <span className="text-primary pl-4 pb-1 row col-12 font-weight-bold">{data?.supplier?.warehouse?.postalAddress}</span>
+              <span className="text-primary pl-4 pb-1 row col-12 font-weight-bold">{data?.supplier?.warehouse?.title}</span>
             </div>
             <div className={`panel row container-${container} mr-0 commonpanle`} style={{marginLeft: "0.5rem"}}>
               <div className="col-12 row justify-content-between">
@@ -76,7 +76,9 @@ const SoChainOfCustody = (props) => {
             </div>
           </div>
         </div>
-
+        :
+        <div></div>
+      }
       </>
   )
 }
