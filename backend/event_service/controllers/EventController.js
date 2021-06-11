@@ -249,7 +249,7 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 					  { $match: elementMatchQuery},
 					  { $group: { _id: null, myCount: { $sum: 1 } } }
 					  ]).sort({
-				createdAt: -1
+				createdAt: 1
 			})
 			inventoryCount = inventoryCount.length > 0 ? inventoryCount[0].myCount : 0
 			console.log(elementMatchQuery)
