@@ -152,7 +152,7 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 			if(status){
 				elementMatchQuery[`eventTypePrimary`] = status;
 				if(status === 'RECEIVE')
-					LocalField = 'payloadData.data.products.productID'
+					LocalField = 'payloadData.data.products.productId'
 			}
 			if(organisationId){
 				elementMatchQuery[`actorOrgId`] = organisationId
