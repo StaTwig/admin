@@ -29,12 +29,12 @@ Event.find().then(async (eventRecords) => {
         let a = 0;
         let b = 0;
         eventRecords.forEach(element => {
-            if(element.payloadData.data)
+            if(element.payloadData.data.products[0].productId)
                { a++;}
             else 
                 { b++;
             Event.updateOne({_id:element._id}, 
-                {payloadData:JSON.parse(element.payloadData)}, function (err, docs) {
+                {'payloadData.data.products.productId' :payloadData.data.products.productID}, function (err, docs) {
                 if (err){
                     console.log(err)
                 }

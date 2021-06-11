@@ -125,7 +125,12 @@ export function config() {
       addPOsFromExcel:`${LOCAL_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
       getTransactions: `${LOCAL_SERVER_URL_EVENT}/eventmanagement/api/event/getAllEventsWithFilter`,
-      getTransactionFilterList: `${LOCAL_SERVER_URL_EVENT}/eventmanagement/api/event/fetchProductDetailsList`
+      getTransactionFilterList: `${LOCAL_SERVER_URL_EVENT}/eventmanagement/api/event/fetchProductDetailsList`,
+      getRegionsUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getRegions`,
+      getCountryByRegionUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
+      getAllStates: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getAllStates`,
+      getDistrictsByState: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getDistrictsByState`,
+
           },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
@@ -218,7 +223,11 @@ export function config() {
        addPOsFromExcel:`${DEV_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
        getOrganizationsTypewithauth:`${DEV_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
        getTransactions: `${DEV_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
-       getTransactionFilterList: `${DEV_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`
+       getTransactionFilterList: `${DEV_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`,
+       getRegionsUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getRegions`,
+       getCountryByRegionUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
+       getAllStates: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getAllStates`,
+       getDistrictsByState: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
       },
     stable: {
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
@@ -312,7 +321,12 @@ export function config() {
        addPOsFromExcel:`${STABLE_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
        getOrganizationsTypewithauth:`${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
        getTransactions: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/getAllEventsWithFilter`,
-       getTransactionFilterList: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/fetchProductDetailsList`
+       getTransactionFilterList: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/fetchProductDetailsList`,
+       getRegionsUrl: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getRegions`,
+       getCountryByRegionUrl: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
+       getAllStates: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getAllStates`,
+       getDistrictsByState: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getDistrictsByState`,
+
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -409,7 +423,11 @@ export function config() {
       addPOsFromExcel:`${TEST_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${TEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
       getTransactions: `${TEST_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
-      getTransactionFilterList: `${TEST_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`
+      getTransactionFilterList: `${TEST_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`,
+      getRegionsUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getRegions`,
+       getCountryByRegionUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
+       getAllStates: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getAllStates`,
+       getDistrictsByState: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
 },
     demo: {
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
@@ -500,7 +518,11 @@ export function config() {
       addPOsFromExcel:`${DEMO_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${DEMO_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
       getTransactions: `${DEMO_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
-      getTransactionFilterList: `${DEMO_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`
+      getTransactionFilterList: `${DEMO_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`,
+      getRegionsUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getRegions`,
+      getCountryByRegionUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
+      getAllStates: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getAllStates`,
+      getDistrictsByState: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
     },
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
@@ -590,7 +612,11 @@ export function config() {
       addPOsFromExcel:`${PROD_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${PROD_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
       getTransactions: `${PROD_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
-      getTransactionFilterList: `${PROD_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`
+      getTransactionFilterList: `${PROD_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`,
+      getRegionsUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getRegions`,
+      getCountryByRegionUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
+      getAllStates: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getAllStates`,
+      getDistrictsByState: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
     },
     
     uniceftest: {
@@ -688,8 +714,11 @@ export function config() {
       fetchProductIdsCustomerLocationsOrganisationsUrl: `${UNICEFTEST_SERVER_URL}/pomanagement/api/po/fetchProductIdsCustomerLocationsOrganisations`,
       fetchInboundShipmentsUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchInboundShipments`,
       fetchOutboundShipmentsUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchOutboundShipments`,
-      fetchSupplierAndReceiverListUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`
-
+      fetchSupplierAndReceiverListUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
+      getRegionsUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getRegions`,
+      getCountryByRegionUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
+      getAllStates: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getAllStates`,
+      getDistrictsByState: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
     },
   };
 

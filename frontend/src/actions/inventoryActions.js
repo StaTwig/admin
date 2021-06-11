@@ -83,6 +83,36 @@ export const getCountryByRegion = async (id) => {
   }
 };
 
+export const getAllStates = () => {
+  return async dispatch => {
+    try {
+      dispatch(turnOn());
+      const result = await axios.get(
+        config().getAllStates,
+      );
+      dispatch(turnOff());
+      return result.data;
+    } catch (e) {
+      dispatch(turnOff());
+    }
+  };
+}
+
+export const getDistrictsByState = (_state) => {
+  return async dispatch => {
+    try {
+      dispatch(turnOn());
+      const result = await axios.get(
+        config().getDistrictsByState + `?state=` + _state,
+      );
+      dispatch(turnOff());
+      return result.data;
+    } catch (e) {
+      dispatch(turnOff());
+    }
+  };
+}
+
 
 export const getWareHousesByCountry = async (id) => {
   try {

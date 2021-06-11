@@ -16,10 +16,14 @@ import {GetEOLInfoByProductId} from '../../actions/eolAction';
 import {GetEOLInfoByIdentityId} from '../../actions/eolAction';
 import {GetEOLInfoByPlaceAdministered} from '../../actions/eolAction';
 import {GetEOLListByDateWindow} from '../../actions/eolAction';
+import {getRegions, getAllStates} from '../../actions/inventoryActions';
+
 import Table from './table'
 const lastMile=(props)=>{
+    const dispatch = useDispatch();
+
     const [region,setRegion]= useState('Select Region')
-    const [regions,setRegions]= useState([])
+    const [regions,setRegions]= useState(['Asia'])
     const [country,setCountry] = useState('Select Country')
     const [state,setstate] = useState('Select State')
     const [district,setdistrict] = useState('Select District')
@@ -42,6 +46,12 @@ const lastMile=(props)=>{
 useEffect(()=>{
     async function fetchData(){
         const eol_ProductID = await GetEOLInfoByProductId("pro123456");
+        const regions = await getRegions();
+        console.log(regions.data[0].country)
+        setCountries(regions.data[0].country)
+        const statess = await dispatch(getAllStates());
+        console.log(statess)
+
         //console.log(eol_ProductID);
     }
     fetchData();
@@ -86,7 +96,7 @@ return (
                     <div className="form-control col">
                         <DropdownButton
                                name={region}
-                               
+                               groups={regions}
                         />
                     </div>
                 </div>
@@ -95,6 +105,8 @@ return (
                     <div className="form-control col">
                         <DropdownButton
                              name={country}
+                             groups={countries}
+
                         />
                     </div>
                 </div>
