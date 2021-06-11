@@ -357,8 +357,10 @@ exports.createShipment = [
               let quantityMismatch = false;
               po.products.every((product) => {
                 data.products.every((p) => {
-                  if (
-                    parseInt(p.productQuantity) < parseInt(product.productQuantity)
+                const po_product_quantity = product.productQuantity || product.quantity;
+		const shipment_product_qty = p.productQuantity || p.quantity;
+		if (
+                    parseInt(shipment_product_qty) < parseInt(po_product_quantity)
                   ) {
                     quantityMismatch = true;
                     return false;
@@ -666,12 +668,14 @@ exports.receiveShipment = [
         let quantityMismatch = false;
         po.products.every((product) => {
           data.products.every((p) => {
-            if (
-              parseInt(p.productQuantity) < parseInt(product.quantity)
-            ) {
-              quantityMismatch = true;
-              return false;
-            }
+	        const po_product_quantity = product.productQuantity || product.quantity;
+                const shipment_product_qty = p.productQuantity || p.quantity;
+                if (
+                    parseInt(shipment_product_qty) < parseInt(po_product_quantity)
+                  ) {
+                    quantityMismatch = true;
+                    return false;
+                  }
           });
         });
         if (quantityMismatch) {
@@ -708,6 +712,7 @@ exports.receiveShipment = [
           totalProducts = totalProducts + shipmentProducts[count].productQuantity;
           totalReturns = totalReturns + products[count].productQuantity;
           shipmentRejectionRate = ((totalProducts - totalReturns) / totalProducts) * 100;
+          data.products[count]["productId"] = data.products[count].productID;
           inventoryUpdate(
             products[count].productID,
             products[count].productQuantity,
@@ -2204,14 +2209,17 @@ exports.fetchAllWarehouseShipments = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           const {
-            emailId
+            emailId, phoneNumber
           } = req.user;
           console.log(emailId)
           try {
 
-            const empDetails = await EmployeeModel.findOne({
-              emailId: emailId
-            });
+	if (emailId)
+            empDetails = await EmployeeModel.findOne({ emailId });
+        else {
+            empDetails = await EmployeeModel.findOne({ phoneNumber });
+      }
+
             const warehouses = empDetails.warehouseId;
               const shipments = await ShipmentModel.aggregate([{
                 $match: {

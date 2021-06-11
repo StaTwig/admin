@@ -170,7 +170,7 @@ body {
 }
 .uploadModal{
     background-color: #E5E0E9;
-    height:400px;
+    height:auto;
     width:600px;
     padding:25px;
     border-radius: 15px;
@@ -925,6 +925,7 @@ body {
         justify-content: flex-start;
         align-items: center;
         .info{
+            margin-left: 1rem;
             .name{
                 font-size: 18px;
                 font-weight: 600;
@@ -946,6 +947,7 @@ body {
     justify-content: flex-start;
     align-items: center;
     .info{
+        margin-left: 1rem;
         .name{
             font-size: 18px;
             font-weight: 600;
@@ -1013,6 +1015,7 @@ body {
         justify-content: flex-start;
         align-items: center;   
         .info{
+            margin-left: 1rem;
             .name{
                 font-size: 18px;
                 font-weight: 600;

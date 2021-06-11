@@ -17,17 +17,17 @@ import FailPopup from "./failPopup";
 
 const ReceiveShipment = (props) => {
   let shipmentDetails = props.trackData.shipmentDetails;
-  console.log("Details");
-  console.log(props);
   const tracking = props.trackData;
   const [menuShip, setMenuShip] = useState(false);
   const [menuProduct, setMenuProduct] = useState(false);
   const [highLight, setHighLight] = useState(false);
   const [productHighLight, setProductHighLight] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
   const [delivered, setDelivered] = useState(0);
   const dispatch = useDispatch();
 
   const [shipmentId, setShipmentId] = useState([]);
+  const [qtyArr, setQtyArr] = useState([...Array(props.trackData?.products?.length).keys()]);
   const [billNo, setBillNo] = useState("");
   const [photo, setPhoto] = useState("");
   const [photoUrl, setPhotoUrl] = useState(undefined);
@@ -95,23 +95,33 @@ const ReceiveShipment = (props) => {
     // formData.append(shipmentDetails[0]);
     // formData.append("billNo", billNo);
     data.comment = comment;
-    data.imagesDetails = [];
-    console.log(delivered);
-    data.products[0].productQuantity = parseInt(delivered);
-
-    console.log("On Button Click");
-    console.log(data);
+    //data.imagesDetails = [];
+    qtyArr.map((value, index) => {
+      // data.products[index]["productId"] = data.products[index].productID;
+      data.products[index].productQuantity = data.products[index].productQuantity <= parseInt(value) ? data.products[index].productQuantity : parseInt(value);
+    });
+    
+    //data.products[0].productQuantity = parseInt(delivered);
     dispatch(turnOn());
     const result = await receiveApi(data);
     if (result.status == 200) {
       //setOpenUpdatedStatus(true);
-      console.log("success add product");
       setreceiveShipmentModal(true);
     } else {
       console.log(result);
     }
     dispatch(turnOff());
   };
+
+  const qtyChange = (index, value) => {
+    let newArr = [...qtyArr];
+    newArr[index] = parseInt(value);
+    setQtyArr(newArr);
+    if(newArr.filter(a => a != undefined && a > 0).length === tracking.products.length)
+      setIsDisabled(false);
+    else
+      setIsDisabled(true);
+  }
 
   const uploadPhoto = async () => {
     const formData = new FormData();
@@ -154,7 +164,7 @@ const ReceiveShipment = (props) => {
               <button
                 className="btn-primary btn fontSize20 font-bold "
                 onClick={receiveShipment}
-                disabled={delivered == 0}
+                disabled={isDisabled}
               >
                 <img
                   src={returnShipment}
@@ -225,6 +235,7 @@ const ReceiveShipment = (props) => {
             setMenuProduct={setMenuProduct}
             setDelivered={setDelivered}
             setIndex={setIndex}
+            onQuantityChange={(index, value) => qtyChange(index, value)}
           />
         </div>
         <div className="col-sm-4">

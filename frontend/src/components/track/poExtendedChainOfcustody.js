@@ -28,14 +28,14 @@ const SoChainOfCustody1 = (props) => {
                   {(!visible || !v) &&
                     <div className="text-primary mt-2">
                       <span className=" ">Order ID: </span>
-                      <span className=" font-weight-bold">{data[0].id}</span>
+                      <span className=" font-weight-bold">{data.id}</span>
                     </div>
                   }
                 </div>
                 {visible && v &&
                   <div className="col-6 text-primary">
                     <span className=" ">Order ID: </span>
-                    <span className=" font-weight-bold">{data[0].id}</span>
+                    <span className=" font-weight-bold">{data.id}</span>
                   </div>
                 }
                 <div className="text-primary col-2">
@@ -54,7 +54,7 @@ const SoChainOfCustody1 = (props) => {
                     )}
                   </div>
                   <div className="col-12 mt-2">
-                    <Link to={`/vieworder/${data[0].id}`}>
+                    <Link to={`/vieworder/${data.id}`}>
                       <button className="btn btn-orange fontSize20 font-bold">View Order</button>
                     </Link>
                   </div>

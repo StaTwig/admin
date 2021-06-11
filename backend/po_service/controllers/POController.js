@@ -33,21 +33,26 @@ const manufacturers = require('../data/manufacturers');
 const init = require('../logging/init');
 const logger = init.getLog();
 
-const userPurchaseOrders = async ( mode,orgMode, organisationId, skip, limit, callback) => {
+const userPurchaseOrders = async ( mode,orgMode, organisationId, type, id, skip, limit, callback) => {
         var matchCondition = {};
-
         if (orgMode != "")
         var criteria = mode + "." + orgMode;
-        else
+        else{
         var criteria = mode;
-
-        matchCondition[criteria] = organisationId;
+        }
+       let newObj = {}
+      if(type=="outbound")
+      {
+            newObj[criteria] = organisationId;
+            matchCondition["$or"] = [newObj,{"createdBy": id }];
+       }
+       else
+       matchCondition[criteria] = organisationId;
         var  poDetails = [];
-
             poDetails = await RecordModel.aggregate([{
-                $match: matchCondition
+                $match: matchCondition,
             },
-            {
+	    {
                 $lookup: {
                     from: "organisations",
                     localField: "supplier.supplierOrganisation",
@@ -121,24 +126,24 @@ exports.fetchPurchaseOrders = [
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
 
-              const { organisationId, role } = req.user;
+              const { organisationId, role, id } = req.user;
               const { skip, limit, poId } = req.query;
               var inboundPOs, outboundPOs, poDetails;
 
                     try {
                     if ( poId != null)
                     {
-                    const POs = await userPurchaseOrders("id", "", poId, skip, limit, (error, data) => {
+                    const POs = await userPurchaseOrders("id", "", poId, "", id, skip, limit, (error, data) => {
                            poDetails = data ;
                        })
                      }
                     else
                     {
-                    const supplierPOs = await userPurchaseOrders("supplier","supplierOrganisation", organisationId, skip, limit, (error, data) => {
+                    const supplierPOs = await userPurchaseOrders("supplier","supplierOrganisation", organisationId, "inbound", id, skip, limit, (error, data) => {
                            inboundPOs = data;
                         })
 
-                    const customerPOs = await userPurchaseOrders("customer","customerOrganisation", organisationId, skip, limit, (error, data) => {
+                    const customerPOs = await userPurchaseOrders("customer","customerOrganisation", organisationId, "outbound", id, skip, limit, (error, data) => {
                            outboundPOs = data ;
                        })
                     }
@@ -518,7 +523,7 @@ exports.addPOsFromExcel = [
                 "lastUpdatedBy" : lastUpdatedBy
               }
             });              
-            const incrementCounter = await CounterModel.update({
+            var incrementCounter = await CounterModel.update({
               'counters.name': "poId"
             }, {
               $inc: {
@@ -554,10 +559,18 @@ exports.addPOsFromExcel = [
                   if (customerOrganisation) {
                       poDataArray[i].customer.name = customerOrganisation.name;
                       poDataArray[i].customer.customerType = customerOrganisation.type;
+                      if(!customerOrganisation.warehouses.includes(poDataArray[i].customer.shippingAddress.shippingAddressId)){
+                        delete poDataArray[i];
+                        continue;
+                      }
                   }
                   else if(customerOrganisationExternal){
                     poDataArray[i].customer.name = customerOrganisationExternal.name;
                     poDataArray[i].customer.customerType = customerOrganisationExternal.type;
+                    if(!customerOrganisationExternal.warehouses.includes(poDataArray[i].customer.shippingAddress.shippingAddressId)){
+                      delete poDataArray[i];
+                      continue;
+                    }
                   }
                   else {
                     const country = poDataArray[i].customer?.country ? poDataArray[i].customer?.country : 'India';
@@ -684,7 +697,7 @@ exports.addPOsFromExcel = [
                 }
                   else {
                     const country = poDataArray[i].supplier?.country ? poDataArray[i].supplier?.country : 'India';
-                    const address = poDataArray[i].supplier?.address ? poDataArray[i].supplier?.address : '';
+                    const address = poDataArray[i].supplier?.address ? poDataArray[i].supplier?.address : 'Address NA';
                     const incrementCounterOrg = await CounterModel.update({
                       'counters.name': "orgId"
                     }, {
@@ -748,7 +761,7 @@ exports.addPOsFromExcel = [
                     });
                     const createdOrg = await org.save();
                     poDataArray[i].supplier.supplierOrganisation = organisationId;
-                    const incrementCounterInv = await CounterModel.update({
+                    let incrementCounterInv = await CounterModel.update({
                       'counters.name': "inventoryId"
                     }, {
                       $inc: {
@@ -786,14 +799,11 @@ exports.addPOsFromExcel = [
                         "shipmentReceiverId": "NA"
                       }
                   }
+                  await RecordModel.create(poDataArray[i]);
                 }
               }
             }
-            console.log(poDataArray)
-            if(poDataArray.length > 0){
-            await RecordModel.insertMany(poDataArray,{ ordered: false });
-            console.log("Incrementing Data Rows by ",dataRows)
-            const incrementCounter = await CounterModel.update({
+            incrementCounter = await CounterModel.update({
               'counters.name': "poId"
             }, {
               $inc: {
@@ -801,12 +811,11 @@ exports.addPOsFromExcel = [
               }
             });
             return apiResponse.successResponseWithData(
-                res,
-                'Upload Result',
-                poDataArray
-            );
-            }
-            else return apiResponse.ErrorResponse(res,'Data Already Exists')
+              res,
+              'Upload Result',
+              poDataArray
+          );
+            //else return apiResponse.ErrorResponse(res,'Data Already Exists')
           } catch (e) {
             console.log(e)
             if(e.code=='11000'){
@@ -858,9 +867,7 @@ exports.createOrder = [
       const poId = poCounter.counters[0].format + poCounter.counters[0].value;
 
       const { externalId, supplier, customer, products, creationDate, lastUpdatedOn } = req.body;
-      console.log("1",req.user.id)
 	    const createdBy =  lastUpdatedBy = req.user.id;
-console.log("c",createdBy);
 	    const purchaseOrder = new RecordModel({
         id: poId,
         externalId,
@@ -899,10 +906,42 @@ exports.getOrderIds = [
      
       const {organisationId } = req.user;
       const orderID = await RecordModel.find({$or:[{"supplier.supplierOrganisation":organisationId},{"customer.customerOrganisation":organisationId}]},'id');
-      
+    
       return apiResponse.successResponseWithData(
         res,
         'Order Ids',
+        orderID,
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getOpenOrderIds = [
+  auth,
+  async (req, res) => {
+    try {
+
+      const {organisationId } = req.user;
+      const orderID = await RecordModel.find( {
+      $and : [
+               {
+                  "supplier.supplierOrganisation": organisationId
+               },
+               {
+                 "poStatus": {"$in": ["ACCEPTED","PARTIALLYFULFILLED","TRANSIT&PARTIALLYFULFILLED"] }
+               }
+             ]
+    } )
+
+      return apiResponse.successResponseWithData(
+        res,
+        'Open Order Ids',
         orderID,
       );
     } catch (err) {
@@ -982,7 +1021,6 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
               if (fromCustomer) {
                   whereQuery["customer.customerOrganisation"] = fromCustomer
               }
-
               if (productName) {
                 whereQuery.products = {
                   $elemMatch: {
@@ -1082,7 +1120,7 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
-              const { organisationId, role } = req.user;
+              const { organisationId, role, id } = req.user;
               const { skip, limit } = req.query;
               let currentDate = new Date();
               let fromDateFilter = 0;
@@ -1133,19 +1171,22 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
               if (toSupplier) {
                   whereQuery["supplier.supplierOrganisation"] = toSupplier;
               }
+	      
+            let whereQueryNew = {};
+            whereQueryNew["$or"] = [whereQuery,{"createdBy": id }];
 
               if (productName) {
-                whereQuery.products = {
+                whereQueryNew.products = {
                   $elemMatch: {
                     productId: productName
                   }
                 }
               }
 
-              console.log("whereQuery ======>", whereQuery);
+              console.log("whereQuery ======>", whereQueryNew);
               try {
-                let outboundPOsCount = await RecordModel.count(whereQuery);
-                RecordModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((outboundPOList) => {
+                let outboundPOsCount = await RecordModel.count(whereQueryNew);
+                RecordModel.find(whereQueryNew).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((outboundPOList) => {
                   let outboundPORes = [];
                   let findOutboundPOData = outboundPOList.map(async (outboundPO) => {
                     let outboundPOData = JSON.parse(JSON.stringify(outboundPO))
@@ -1247,3 +1288,4 @@ exports.fetchProductIdsCustomerLocationsOrganisations = [
     }
   },
 ]
+

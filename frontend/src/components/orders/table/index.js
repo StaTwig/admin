@@ -74,10 +74,11 @@ const Table = props => {
                   {formatDate(order.creationDate)}
                 </div>
                   <div className="rTableCell"><p className="mb-0 bold address mb-0 text-muted">{order.id}</p></div>
-                  <div className="rTableCell mr-4"><p className="mb-0 bold mb-0 address text-muted">{products[0]?.name+(products.length > 1 ? ' + '+(products.length-1)+' more' : '')}</p></div> 
-                <div className="rTableCell d-flex flex-column mr-4"> 
+                  <div className="rTableCell"><p className="mb-0 bold mb-0 address text-muted">{products[0]?.name+(products.length > 1 ? ' + '+(products.length-1)+' more' : '')}</p></div> 
+                <div className="rTableCell d-flex flex-column"> 
                   <span>{customer.warehouse?.warehouseAddress?.city}</span>
-                  <span className="text-muted">{customer.shippingAddress.shippingAddressId}</span>
+                  
+                  <span className="text-muted">{customer.warehouse && customer.warehouse.warehouseAddress ? customer.warehouse.title+ " / "+ customer.warehouse.warehouseAddress.firstLine + " "+customer.warehouse.warehouseAddress.city: null}</span>
                 </div> 
                 <div className="rTableCell pl-5"> 
                 
@@ -86,7 +87,7 @@ const Table = props => {
                 </div>
                 </div>
                 <div >
-                <div className="rTableCell">
+                <div className="rTableCell mt-3 mr-3">
                   <Link to={`/vieworder/${order.id}`}
                     className="button text-right">
                     View

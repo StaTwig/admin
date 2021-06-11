@@ -120,17 +120,17 @@ class Profile extends React.Component {
     if (wareHouseResponse.status === 1) {
       const wareHouseIdResult = wareHouseResponse.data.map((txn) => txn.id);
       const wareHouseAddresses = wareHouseResponse.data;
-      console.log("Results");
-      console.log(wareHouseAddresses);
+      // console.log(wareHouseAddresses,"All warehouses");
       this.setState({
         wareIds: wareHouseIdResult,
         warehouseLocations: wareHouseAddresses,
       });
+
+      this.state.warehouseLocations.map((id)=>{
+        this.state.warehouseLocations= this.state.warehouseLocations.filter((data)=>response.data.data.warehouseId.includes(data.id));
+      })
     }
-    // console.log("Full Data", wareHouseResponse);
-    // console.log("warehouses", this.state.warehouseLocations);
   }
-  //console.log("res",wareHouseIdResult);
 
 
   closeModal() {
@@ -282,7 +282,6 @@ class Profile extends React.Component {
       warehouseAddress_zipcode,
       warehouseAddress_secondline,
       warehouseAddress_state,
-
       title,
     } = this.state;
     const imgs = config().fetchProfileImage;
@@ -375,7 +374,9 @@ class Profile extends React.Component {
                         style={{ position: "absolute", marginLeft: "64%" }}
                         value={this.state.phoneNumber}
                         onChange={(phone) =>
-                          this.setState({ phoneNumber: "+"+phone })
+                          // {phone > 0 &&
+                            this.setState({ phoneNumber: "+"+phone })
+                          // }
                         }  
                       />
                     </div>
@@ -577,7 +578,7 @@ class Profile extends React.Component {
                           height="20"
                           className="mr-3"
                         />
-                        {this.state.phoneNumber ? (
+                        {(this.state.phoneNumber!="+"&&this.state.phoneNumber) ? (
                           <span>{this.state.phoneNumber}</span>
                         ) : (
                           <span>N/A</span>
@@ -605,28 +606,22 @@ class Profile extends React.Component {
                                 </div>
                                 <div className="card-body">
                                   <div className="total">
-                                    {this.state.warehouseLocations[id].warehouseAddress.city ? (
+                                    {this.state.warehouseLocations[id].warehouseAddress.city && (
                                       <span>
                                         {this.state.warehouseLocations[id].warehouseAddress.city}
                                       </span>
-                                    ) : (
-                                      <span>N/A</span>
                                     )}
-                                    ,
-                                    {this.state.warehouseLocations[id].warehouseAddress.state ? (
+                                    
+                                    {this.state.warehouseLocations[id].warehouseAddress.state && (
                                       <span>
-                                        {this.state.warehouseLocations[id].warehouseAddress.state}
+                                        ,{this.state.warehouseLocations[id].warehouseAddress.state}
                                       </span>
-                                    ) : (
-                                      <span>N/A</span>
                                     )}
-                                    ,
-                                    {this.state.warehouseLocations[id].country.countryName ? (
+                                    
+                                    {this.state.warehouseLocations[id].country.countryName && (
                                       <span>
-                                        {this.state.warehouseLocations[id].country.countryName}
+                                        ,{this.state.warehouseLocations[id].country.countryName}
                                       </span>
-                                    ) : (
-                                      <span>N/A</span>
                                     )}
                                   </div>
 

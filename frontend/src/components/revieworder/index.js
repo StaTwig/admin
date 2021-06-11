@@ -29,7 +29,7 @@ const ReviewOrder = props => {
     let error = false;
     const { fromOrg, fromOrgId, toOrg, toOrgLoc, products, typeName, rtypeName } = order;
     products.forEach((p) => {
-      if (p.quantity < 1)
+      if (p.productQuantity < 1)
         error = true;
     });
     if (!error) {
@@ -54,13 +54,13 @@ const ReviewOrder = props => {
         poStatus: "CREATED",
         products: products,
       };
-console.log(data);
+      
       dispatch(turnOn());
       const result = await createOrder(data);
       dispatch(turnOff());
 
       if (result.status === 200 ) {
-         //dispatch(resetReviewPos({}));
+        // dispatch(resetReviewPos({}));
           setopenReviewOrder(true);
           //setMessage("Status updated Successfully");
           setModalProps({
@@ -75,11 +75,11 @@ console.log(data);
     //       setErrorMessage("Not able to create order. Try again!");
       }
     }
-  };
-  // console.log("Puneth",openReviewOrder);
+  }; 
   const closeModal = () => {
     setopenReviewOrder(false);
-    props.history.push("/orders");
+    dispatch(resetReviewPos({}));
+    props.history.push("/orders");   
   };
   var arr=[];
   arr.push(order);

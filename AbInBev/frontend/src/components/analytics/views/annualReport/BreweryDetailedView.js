@@ -7,28 +7,18 @@ import { useDispatch } from 'react-redux';
 import { getAllOrganisationStats } from '../../../../actions/analyticsAction';
 
 const BreweryDetailedView = (props) => {
-    const { states, prop } = props;
+    const { states, prop, brandsIconArr, brands, brandsArr } = props;
     const [name, setName] = useState(prop.name);
     const [shortName, setShortname] = useState(prop.shortName);
     const [image, setImage] = useState(prop.image);
-    const [analytics, setAnalytics] = useState(props.prop.analytics);
+    // const [analytics, setAnalytics] = useState(props.prop.analytics);
+    const [analytics, setAnalytics] = useState([]);
     const dispatch = useDispatch();
     useEffect(() => {
         (async () => {
-            if (props.sku) {
-                let n = props.SKUStats.filter(a => a.externalId == props.sku);
-                setName(n[0].name);
-                setShortname(n[0].shortName);
-                setImage(n[0].image);
-            }
-            if (props.Otype) {
-                let n = props.prop.analytics.filter(a => a.type == props.Otype);
-                if (props.Otype == 'All')
-                    n = rops.prop.analytics;
-                setAnalytics(n);
-            }
-            // const result = await dispatch(getAllOrganisationStats());
-            // setAnalytics(result.data);
+            let cond = "?orgType="+(props?.Otype ? props.Otype : 'ALL_VENDORS')+"&sku=" + (props?.sku ? props.sku : prop.externalId);
+            const result = await dispatch(getAllOrganisationStats(cond));
+            setAnalytics(result.data);
         })();
     }, []);
     return (
@@ -52,13 +42,13 @@ const BreweryDetailedView = (props) => {
                     <div className="col-lg-10 col-md-10 col-sm-12">
                         <div className="productDetailCard">
                             <div className="productGrid">
-                                <img className="productImage" src={image} />
+                                <img className="productImage" src={brandsIconArr[brands.indexOf(prop.manufacturer.split(' ').join(''))]} />
                             </div>
                             <div className="productcard">
                                 <div className="row">
                                     <div className="col-lg-6 col-md-6 col-sm-12">
                                         <div className="productSection mb-2">
-                                            <div className="profile"><img src={image} alt="" width="50" height="100%" /></div>
+                                            <div className="profile"><img src={brandsArr[brands.indexOf(prop.manufacturer.split(' ').join(''))]} alt="" height="60" /></div>
                                             <div className="info">
                                                 <div className="name">{name}</div>
                                                 <div className="caption">{shortName}</div>
@@ -67,11 +57,11 @@ const BreweryDetailedView = (props) => {
                                         </div>
                                     </div>
                                     <div className="col-lg-6 col-md-6 col-sm-12">
-                                        <span className="productText">Return Rate <span className="breweryPropertyValue">{prop.returnRate}%</span></span>
-                                        <div className="captionSubtitle">Compared to ({prop.returnRatePrev}% last month)</div>
+                                        <span className="productText">Return Rate <span className="breweryPropertyValue">{prop.returnRate || 0}%</span></span>
+                                        <div className="captionSubtitle">Compared to ({prop.returnRatePrev || 0}% last month)</div>
                                         <div className="progress progress-line-default">
-                                            <div className="progress-bar progress-bar-default" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: prop.returnRate + "%" }}>
-                                                <span className="sr-only">{prop.returnRate}% Complete</span>
+                                            <div className="progress-bar progress-bar-default" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{ width: (prop.returnRate || 0) + "%" }}>
+                                                <span className="sr-only">{prop.returnRate || 0}% Complete</span>
                                             </div>
                                         </div>
                                     </div>
