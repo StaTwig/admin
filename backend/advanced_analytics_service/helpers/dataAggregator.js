@@ -1,5 +1,7 @@
 const Analytics = require('../models/AnalyticsModel');
+const OrganisationModel = require('../models/OrganisationModel');
 const { calculateReturns } = require('./returnShipments');
+const moment = require('moment');
 
 var today = new Date()
 var lastWeek = new Date()
@@ -38,28 +40,51 @@ async function aggregateData(timeFrame) {
       timeFrame = lastWeek.toISOString()
       break
     case 'month':
-      timeFrame = lastMonth.toISOString()
+      // timeFrame = lastMonth.toISOString()
+      timeFrame = moment().subtract(1, 'months');
       break
     case 'year':
       timeFrame = lastYear.toISOString()
       break
     default:
-      timeFrame = lastMonth.toISOString()
+      // timeFrame = lastMonth.toISOString()
+      timeFrame = moment().subtract(1, 'months');
       break
   }
-  const analytics = await Analytics.find({
-    uploadDate: {
-      $lte: today.toISOString(),
-      $gte: timeFrame,
+  const analytics = await Analytics.aggregate([
+    {
+			"$addFields": {
+				"uploadDate": {
+					"$dateFromString": {
+						"dateString": "$uploadDate"
+					}
+				}
+			}
     },
-  });
+    {
+      $match: {
+        uploadDate: {
+          $lte: today,
+          $gte: new Date(timeFrame),
+        }
+      },
+    }]);
+  
+  const b_arr = [];
+  
+  const brewery = await OrganisationModel.find({ type: 'BREWERY', status: "ACTIVE" }, 'id');
+  
+  for (let b of brewery)
+    b_arr.push(b.id);
+
   for (const row of analytics) {
     let params = {
+      'receiver.id': {$in: b_arr},
       'receiver.locationId': row.warehouseId,
       'products.productID': row.productId,
       shippingDate: {
-        $lte: today.toISOString(),
-        $gte: timeFrame,
+        $lte: today,
+        $gte: new Date(timeFrame),
       },
     }
     const _returns = await calculateReturns(params);

@@ -18,10 +18,10 @@ const ProductInventory = props => {
         product => product.type,
   ).filter((value, index, self) => self.indexOf(value) === index);
   useEffect(() => {
-    if (props.match.params?.category){
+    if (props.match && props.match.params && props.match.params.category){
       let prodArray = [];
       inventories.map((val)=>{
-        if(val.payloadData.data.products){
+        if(val.payloadData && val.payloadData.data && val.payloadData.data.products && val.payloadData.data.products.length){
             val.payloadData.data.products.map((productRecord)=>{
                 if(productRecord.type==props.match.params?.category){
                   prodArray.push(productRecord);

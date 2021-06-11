@@ -10,7 +10,7 @@ const BreweryView = (props) => {
     const dispatch = useDispatch();
     useEffect(() => {
         (async () => {
-            const result = await dispatch(getAllOrganisationStats());
+            const result = await dispatch(getAllOrganisationStats("?orgType=BREWERY"));
             setAnalytics(result.data);
         })();
     }, []);

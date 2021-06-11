@@ -55,9 +55,9 @@ const EditRow = props => {
             </div>
           </div>
         </div>
-        <div className="col tcell text-center justify-content-center p-2">
+        <div className="col tcell text-center justify-content-center">
           <div className="">
-            <div className="d-flex pt-1 flex-row justify-content-between">
+            <div className="d-flex flex-row justify-content-between">
               <div className="title recived-text w-50">
                 {/* <DropdownButton
                   name={prod.name ? prod.name : "Product Name"}
@@ -66,7 +66,7 @@ const EditRow = props => {
                 /> */}
                 <Select
                   className="no-border"
-                  placeholder="Select Product Name"
+                  placeholder="Product Name"
                   defaultInputValue={prod.name}
                   onChange={(v) => handleProductChange(index, v)}
                   options={products}

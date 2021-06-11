@@ -19,10 +19,12 @@ const Track = (props) => {
   const {
     poChainOfCustodyData,
     shippmentChainOfCustodyData,
+    aoChainOfCustodyData,
     searchData,
     resetData,
+    searched,
+    setsearched
   } = props;
-
   const onSearchChange = (e) => {
     setValue(e.target.value);
     setIsSubmitted(false);
@@ -56,14 +58,19 @@ const Track = (props) => {
       onSeach();
     }
   };
-
+  if((poChainOfCustodyData.length != 0 || aoChainOfCustodyData.length != 0 || shippmentChainOfCustodyData.length != 0)){
+    setsearched(true);
+  }
+  else{
+    setsearched(false);
+  }
   return (
     <div className="track">
       <div className="row justify-content-between">
         <h1 className="breadcrumb">Track & Trace</h1>
       </div>
       <div className="row">
-        {shippmentChainOfCustodyData.length > 0 &&
+        {(poChainOfCustodyData.length != 0 || aoChainOfCustodyData.length != 0 || shippmentChainOfCustodyData.length != 0) &&
           <div className="col-6">
             <div className="row mb-4">
               <div className="col" style={{ minHeight: 400 }}>
@@ -72,7 +79,7 @@ const Track = (props) => {
             </div>
           </div>}
         <div className="col row ml-3">
-          {shippmentChainOfCustodyData.length == 0 ? (
+          {!searched ? (
             <>
               <div className="noOutline" tabIndex="-1" onKeyDown={onkeydown}>
                 <div className="search-form">
@@ -103,6 +110,8 @@ const Track = (props) => {
                   onClick={() => {
                     resetData();
                     setIsSubmitted(false);
+                    setsearched(false);
+                    setVisible(false);
                   }}
                   className="btn btn-outline-primary cursorP"
                 >
@@ -125,7 +134,7 @@ const Track = (props) => {
                             <div className="text-muted ">Shipment ID</div>
                           <div className="font-weight-bold ">
                             {shippmentChainOfCustodyData?.length > 0
-                              ? poChainOfCustodyData[0].id
+                              ? shippmentChainOfCustodyData[0].id
                               : 'NA'}
                           </div>
                         </div>
@@ -139,7 +148,7 @@ const Track = (props) => {
                         let cIndex = shippmentChainOfCustodyData.map((el) => el.id).indexOf(value) + 1;
                         cIndex = index < cIndex ? index : cIndex;
                        
-                        return row?.shipmentUpdates?.filter(s => s.status == 'RECEIVED').map((r, i) => (
+                        return row?.shipmentUpdates?.map((r, i) => (
                           <SoChainOfCustody
                             len={row.shipmentUpdates.length}
                             i={i}
@@ -191,8 +200,8 @@ const Track = (props) => {
                     {poChainOfCustodyData.map((row, index) => (
                       <PoChainOfCustody
                         key={index}
-                        shippmentChainOfCustodyData={
-                          shippmentChainOfCustodyData
+                        poChainOfCustodyData={
+                          poChainOfCustodyData
                         }
                         data={row}
                         index="1"
@@ -218,22 +227,22 @@ const Track = (props) => {
                         <div className="">
                             <div className="text-muted ">AirWay BillNo</div>
                           <div className="font-weight-bold ">
-                            {shippmentChainOfCustodyData?.length > 0
-                              ? poChainOfCustodyData[0].airWayBillNo
+                            {aoChainOfCustodyData?.length > 0
+                              ? aoChainOfCustodyData[0].airWayBillNo
                               : 'NA'}
                           </div>
                         </div>
                       </div>
                     </div>
                     <div className="pb-4">
-                      {shippmentChainOfCustodyData.map((row, index) => { 
+                      {aoChainOfCustodyData.map((row, index) => { 
                         let newArr = [];
                         // if(row.id == value)
-                        newArr = shippmentChainOfCustodyData.filter(rw => rw?.taggedShipments?.includes(value));
-                        let cIndex = shippmentChainOfCustodyData.map((el) => el.id).indexOf(value) + 1;
+                        newArr = aoChainOfCustodyData.filter(rw => rw?.taggedShipments?.includes(value));
+                        let cIndex = aoChainOfCustodyData.map((el) => el.id).indexOf(value) + 1;
                         cIndex = index < cIndex ? index : cIndex;
-                       
-                        return row?.shipmentUpdates?.filter(s => s.status == 'RECEIVED').map((r, i) => (
+                        // return row?.shipmentUpdates?.filter(s => s.status == 'RECEIVED').map((r, i) => (
+                        return row?.shipmentUpdates?.map((r, i) => (
                           <AoChainOfCustody
                             len={row.shipmentUpdates.length}
                             i={i}
@@ -243,12 +252,13 @@ const Track = (props) => {
                             key={i}
                             op={op}
                             setOp={setOp}
+                            products = {row.products}
                             data={row}
                             update={r}
                             index={i + 3}
                             parentIndex={newArr.length && row.id != value ? cIndex : index }
                             pindex={
-                              shippmentChainOfCustodyData.length - 1 == index
+                              aoChainOfCustodyData.length - 1 == index
                                 ? 1
                                 : newArr.length && row.id != value ? newArr.length : 1 
                             }

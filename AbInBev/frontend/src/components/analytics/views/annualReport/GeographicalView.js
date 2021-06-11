@@ -5,61 +5,14 @@ import { AreaChart, Area, ResponsiveContainer, Tooltip } from "recharts";
 import "../../style.scss";
 import bottlesIcon from "../../../../assets/becks_330ml.png";
 import DownArrow from "../../../../assets/down_arrow.png";
-import UpArrow from "../../../../assets/up_arrow.png";
 import { getAnalyticsAllStats, getAnalyticsByBrand } from '../../../../actions/analyticsAction';
 import { useDispatch } from 'react-redux';
 
-
-
-const data = [
-    {
-        name: "Page A",
-        uv: 4000,
-        pv: 2400,
-        amt: 2400
-    },
-    {
-        name: "Page B",
-        uv: 3000,
-        pv: 1398,
-        amt: 2210
-    },
-    {
-        name: "Page C",
-        uv: 2000,
-        pv: 9800,
-        amt: 2290
-    },
-    {
-        name: "Page D",
-        uv: 2780,
-        pv: 3908,
-        amt: 2000
-    },
-    {
-        name: "Page E",
-        uv: 1890,
-        pv: 4800,
-        amt: 2181
-    },
-    {
-        name: "Page F",
-        uv: 2390,
-        pv: 3800,
-        amt: 2500
-    },
-    {
-        name: "Page G",
-        uv: 3490,
-        pv: 4300,
-        amt: 2100
-    }
-];
-
 const GeographicalView = (props) => {
-    const { states, SKUStats, sku, viewName } = props;
+    const { states, SKUStats, sku, viewName, brands, brandsArr } = props;
 
-    const [analytics, setAnalytics] = useState(SKUStats);
+    const [analytics, setAnalytics] = useState([]);
+    const dispatch = useDispatch();
     // const dispatch = useDispatch();
     // useEffect(() => {
     //     (async () => {
@@ -70,13 +23,54 @@ const GeographicalView = (props) => {
     // }, []);
 
     useEffect(() => {
-        if (sku) {
-            let n = SKUStats.filter(a => a.externalId == sku);
-            if (sku == '')
-                setAnalytics(SKUStats);
-            else
-                setAnalytics(n);
+        console.log(props.params);
+        
+        if (sku || props.params?.district || props.params?.state || props.params?.year) {
+            if ((props.params?.district && props.params?.state) || props.params?.year) {
+                let cond = '';
+                if (props.params?.district)
+                    cond += '?district=' + props.params?.district;
+                
+                if (props.params?.year) {
+                    if (cond)
+                        cond = '&';
+                    else
+                        cond = '?';
+                    cond += 'date_filter_type=' + props.params?.date_filter_type + '&year=' + props.params?.year + '&month=' + props.params?.month + '&quarter=' + props.params?.quarter;
+                }
+                
+                if (sku) {
+                    if (cond)
+                        cond = '&';
+                    else
+                        cond = '?';
+                    cond += '&sku=' + sku;
+                }
+                if (cond) {
+                    (async () => {
+                        const s_result = await dispatch(getAnalyticsByBrand(cond));
+                        let n = [];
+                        for (let a of s_result.data) {
+                            for (let product of a.products) {
+                                n.push(product);
+                            }
+                        }
+                        setAnalytics(n);
+                    })();
+                }
+                else
+                    setAnalytics(SKUStats);
+            }
+            else {
+                let n = SKUStats.filter(a => a.externalId == sku);
+                if (sku == '')
+                    setAnalytics(SKUStats);
+                else
+                    setAnalytics(n);
+            }
         }
+        else
+            setAnalytics(SKUStats);
     }, [sku, viewName, props])
 
     const showDetailedGeoView = (param) => {
@@ -203,11 +197,11 @@ const GeographicalView = (props) => {
                     </thead>
                     <tbody>
                         {analytics?.map((analytic, index) =>
-                            <tr>
+                            <tr key={index}>
                                 <td scope="row">
                                     <div className="tableProfileIconCard justify-content-start">
                                         <div className="profileIcon">
-                                            <img src={analytic.image} alt="" width="50" height="50" />
+                                            <img src={brandsArr[brands.indexOf(analytic.manufacturer.split(' ').join(''))]} alt="" width="50" height="50" />
                                         </div>
                                         <div className="profileName">
                                             <span className="profileTitle" onClick={() => showDetailedGeoView(analytic)}>{analytic.manufacturer + ' - ' + analytic.name}</span>

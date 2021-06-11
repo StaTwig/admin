@@ -53,12 +53,12 @@ export const getAllStates = () => {
   };
 };
 
-export const getAnalyticsByBrand = () => {
+export const getAnalyticsByBrand = (cond = '') => {
   return async dispatch => {
     try {
       dispatch(turnOn());
       const result = await axios.get(
-        config().getAnalyticsByBrandurl,
+        config().getAnalyticsByBrandurl+cond,
       );
       dispatch(turnOff());
       return result.data;
@@ -87,8 +87,6 @@ export const getAllOrganisationStats = (param = '') => {
   return async dispatch => {
     try {
       dispatch(turnOn());
-      console.log(config().getOrganisationStatsurl + param);
-
       const result = await axios.get(
         config().getOrganisationStatsurl + param,
       );

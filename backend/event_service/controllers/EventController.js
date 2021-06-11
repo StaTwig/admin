@@ -263,11 +263,9 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 					  { "$unwind": '$payloadData.data.products' },
 					  { "$unwind": '$productDetails' },
 					  { $match: elementMatchQuery},
-					  
-					  ]).skip(parseInt(skip)).limit(parseInt(limit)).sort({
-				createdAt: -1
-			}).then(async (eventRecords) => {
-				// console.log(eventRecords)
+					{$sort: {createdAt: -1}}
+				]).skip(parseInt(skip)).limit(parseInt(limit))
+				.then(async (eventRecords) => {
 				let inventoryRecords = [];
 				await Promise.all(eventRecords.map(async function (event) {
 					let eventRecord = JSON.parse(JSON.stringify(event))

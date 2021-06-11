@@ -10,16 +10,16 @@ const SoChainOfCustody = (props) => {
   const [visible, setVisible] = useState(v);
 
   const isShipment = !update?.isOrder;
-  console.log(data,"data in SO");
+  // console.log(data,"data");
   return (
   <>
-      {op >= level ?
+ 
         <div className={`row orderTxt  mr-0 `} style={{marginLeft: (parentIndex == 0 ? 0.5 : parentIndex)+"rem", paddingLeft: (parentIndex == 0 ? 0.5 : 1)+"rem"}}>
           <span className={`pt-${index > 2 ? 2 : index} p-0 ${pindex == 1 && `border-primary border-left`}`} style={{ height: '1rem' }}></span>
           <div className={`pt-${index > 2 ? 2 : index} p-0 col ${pindex > 1 && `border-primary border-left`} `}>
             <div className="row dot-pad">
               <div className={`big-dot dot-${container} bg-info`}></div>
-              <span className="text-primary pl-4 pb-1 row col-12 font-weight-bold">{data?.supplier?.warehouse?.title}</span>
+              <span className="text-primary pl-4 pb-1 row col-12 font-weight-bold">{data?.supplier?.warehouse?.postalAddress}</span>
             </div>
             <div className={`panel row container-${container} mr-0 commonpanle`} style={{marginLeft: "0.5rem"}}>
               <div className="col-12 row justify-content-between">
@@ -27,15 +27,15 @@ const SoChainOfCustody = (props) => {
                   <span className="font-weight-bold">{update.status}</span>
                   {(!visible || !v) &&
                     <div className="text-primary mt-2">
-                      <span className=" ">Shipment ID: </span>
-                      <span className=" font-weight-bold">{data[0].id}</span>
+                      <span className=" ">{isShipment ? 'Shipment' : 'Order'} ID: </span>
+                      <span className=" font-weight-bold">{data.id}</span>
                     </div>
                   }
                 </div>
                 {visible && v &&
                   <div className="col-6 text-primary">
-                    <span className=" ">Shipment ID: </span>
-                    <span className=" font-weight-bold">{data[0].id}</span>
+                    <span className=" ">{isShipment ? 'Shipment' : 'Order'} ID: </span>
+                    <span className=" font-weight-bold">{data.id}</span>
                   </div>
                 }
                 <div className="text-primary col-2">
@@ -54,8 +54,8 @@ const SoChainOfCustody = (props) => {
                     )}
                   </div>
                   <div className="col-12 mt-2">
-                    <Link to={`/viewshipment/${data[0].id}`}>
-                      <button className="btn btn-orange fontSize20 font-bold">View Shipment</button>
+                    <Link to={isShipment?`/viewshipment/${data.id}`:`/vieworder/${data.id}`}>
+                      <button className="btn btn-orange fontSize20 font-bold">View {isShipment ? 'Shipment' : 'Order'}</button>
                     </Link>
                   </div>
                 </>
@@ -76,9 +76,7 @@ const SoChainOfCustody = (props) => {
             </div>
           </div>
         </div>
-        :
-        <div></div>
-      }
+
       </>
   )
 }
