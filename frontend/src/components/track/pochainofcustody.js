@@ -3,16 +3,14 @@ import './style.scss';
 import traceDrop from '../../assets/icons/traceDrop.png';
 import Down from '../../assets/icons/up.png';
 import { formatTimeAMPM } from '../../utils/dateHelper';
-import SoChainOfCustody1 from "./poExtendedChainOfcustody";
+import SoChainOfCustody from "./sochainofcustody";
 import { Link } from 'react-router-dom';
-import { compose } from 'redux';
 
 const PoChainOfCustody = (props) => {
   const [op, setOp] = useState(-1);
   const [visible, setVisible] = useState(false);
-  const {index,container, pindex, data, poChainOfCustodyData} = props;
-  // console.log(shippmentChainOfCustodyData,"data in PO");
-  console.log(poChainOfCustodyData,"poChainOfCustodyData data in PO");
+  const {index,container, pindex, data, shippmentChainOfCustodyData} = props;
+  
   return (
     <>
      <div className={`row orderTxt ml-${index} mr-0 pl-3`}>
@@ -20,7 +18,7 @@ const PoChainOfCustody = (props) => {
       <div className={`pt-${index} p-0 col ${pindex > 1 && `border-primary border-left`} `}>
         <div className="row dot-pad">
           <div className={`big-dot dot-${container} bg-info`}></div>
-          <span className="text-primary pl-4 pb-1 row col-12 font-weight-bold">{data.supplier.name}</span>
+          <span className="text-primary pl-4 pb-1 row col-12 font-weight-bold">{data.supplier.organisation.name}</span>
         </div>
         <div className={`panel row ml-${index} container-${container} mr-0  commonpanle`}>
           {data.poUpdates.map((r, i) =>
@@ -75,9 +73,9 @@ const PoChainOfCustody = (props) => {
       </div>
     </div>
     </div>
-      {poChainOfCustodyData.map((row, index) => {
-        return row.poUpdates.map((r, i) => <SoChainOfCustody1 len={row.poUpdates.length} i={i} v={visible} setV={setVisible} level={i+1} key={i} op={op} setOp={setOp} data={row} update={r} index={3+i+1} pindex={poChainOfCustodyData.length -1 == index ? 1 : poChainOfCustodyData.length} container={2+i} />)
-      })}
+    {shippmentChainOfCustodyData.map((row, index) => {
+      return row.shipmentUpdates.map((r, i) => <SoChainOfCustody len={row.shipmentUpdates.length} i={i} v={visible} setV={setVisible} level={i+1} key={i} op={op} setOp={setOp} data={row} update={r} index={3+i+1} pindex={shippmentChainOfCustodyData.length -1 == index ? 1 : shippmentChainOfCustodyData.length} container={2+i} />)
+    })}
     </>
   )
 }
