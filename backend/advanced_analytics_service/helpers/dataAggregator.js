@@ -52,15 +52,15 @@ async function aggregateData(timeFrame) {
       break
   }
   const analytics = await Analytics.aggregate([
-    {
-			"$addFields": {
-				"uploadDate": {
-					"$dateFromString": {
-						"dateString": "$uploadDate"
-					}
-				}
-			}
-    },
+    // {
+		// 	"$addFields": {
+		// 		"uploadDate": {
+		// 			"$dateFromString": {
+		// 				"dateString": "$uploadDate"
+		// 			}
+		// 		}
+		// 	}
+    // },
     {
       $match: {
         uploadDate: {
