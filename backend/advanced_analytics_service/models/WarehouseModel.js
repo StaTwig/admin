@@ -9,7 +9,7 @@ var WarehouseSchema = new mongoose.Schema(
     },
     postalAddress: {
       type: String,
-      required: true,
+      required: false,
       default: 'T-Hub, IIIT, Gachibowli, Hyderabad, Telangana, India',
     },
     region: {
