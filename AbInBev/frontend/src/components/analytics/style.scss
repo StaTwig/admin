@@ -621,6 +621,15 @@ body {
             min-height: 100vh;
             overflow-y: auto;
         }
+        thead{
+            border-bottom: 2px solid #54265E;    
+        }
+        th{
+            padding: 10px;
+            font-size: 16px;
+            color: #54265E;
+            font-weight: bolder;
+        }
         tr{
             border-bottom: 1px solid #E5E0E9; 
         }

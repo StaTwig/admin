@@ -9,7 +9,7 @@ var WarehouseSchema = new mongoose.Schema(
     },
     postalAddress: {
       type: String,
-      required: true,
+      required: false,
       default: null,
     },
     region: {
