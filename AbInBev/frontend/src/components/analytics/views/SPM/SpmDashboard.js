@@ -4,7 +4,6 @@ import { getSupplierPerformanceByOrgType } from '../../../../actions/analyticsAc
 import { useDispatch } from 'react-redux';
 
 const SpmDashboard = (props) => {
-
   const [selectedRatingIndex, setSelectedRatingIndex] = useState(null);
 
   const [supplierPerformances, setSupplierPerformances] = useState([]);
@@ -27,19 +26,6 @@ const SpmDashboard = (props) => {
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
         <h1 className="h2">Dashboard - SPM</h1>
       </div>
-      <div className="btn-group mainButtonFilter">
-        <a href="#!" className="btn active">
-          Suppliers
-        </a>
-        <select className="btn selectState">
-          <option>Select Suppliers</option>
-          <option>Overall Performance</option>
-          {/* {states?.map((state) => 
-                        <option>{state}</option>
-                    )
-                    } */}
-        </select>
-      </div>
 
       <div className="tableDetals">
         <table className="table text-align-left">
@@ -53,136 +39,148 @@ const SpmDashboard = (props) => {
             </tr>
           </thead>
           <tbody>
-            {
-              supplierPerformances?.map(((perf, index) =>
-                <>
-                  <tr className={`${selectedRatingIndex === index ? "selectedRow noBottomRadius" : ""}`}>
-                    <td scope="row">{index + 1}</td>
-                    <td>
-                      <div className="tableProfileIconCard justify-content-start">
-                        <div className="profileIcon">
-                          <img src={profile} alt="" />
-                        </div>
-                        <div className="profileName">
-                          <span className="profileTitle">{perf.name}</span>
-                          <label className="badge-purple">{perf.type}</label>
-                        </div>
+            {supplierPerformances?.map((perf, index) => (
+              <>
+                <tr
+                  key={index}
+                  className={`${
+                    selectedRatingIndex === index
+                      ? 'selectedRow noBottomRadius'
+                      : ''
+                  }`}
+                >
+                  <td scope="row">{index + 1}</td>
+                  <td>
+                    <div className="tableProfileIconCard justify-content-start">
+                      <div className="profileIcon">
+                        <img src={profile} alt="" />
+                      </div>
+                      <div className="profileName">
+                        <span className="profileTitle">{perf.name}</span>
+                        <label className="badge-purple">{perf.type}</label>
+                      </div>
+                    </div>
+                  </td>
+                  <td>{perf.postalAddress}</td>
+                  <td>{perf.returnRate ? perf.returnRate : 0}</td>
+                  <td>
+                    {selectedRatingIndex !== index ? (
+                      <div
+                        className="round round-lg"
+                        onClick={() => {
+                          setSelectedRatingIndex(index);
+                        }}
+                      >
+                        <span className="fa fa-angle-right marron"></span>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                  </td>
+                </tr>
+                {selectedRatingIndex === index ? (
+                  <tr>
+                    <td colSpan="5" className="selectedSupplier">
+                      <div>
+                        <table className="table text-align-left noBottomRadius mb-0">
+                          <tbody>
+                            <tr>
+                              <td scope="row"></td>
+                              <td>
+                                <div className="spmDetailsUserCard justify-content-start">
+                                  <div className="profileIcon">
+                                    <img src={profile} alt="" />
+                                  </div>
+                                  <div className="profileName">
+                                    <span className="profileTitle">
+                                      {perf.name}
+                                    </span>
+                                    <label className="badge-purple">
+                                      {perf.type}
+                                    </label>
+                                    <label>
+                                      <b>Vendor ID:</b> {perf.id}
+                                    </label>
+                                    <label>
+                                      <b>Mobile No:</b> {perf.primaryContactId}
+                                    </label>
+                                  </div>
+                                </div>
+                              </td>
+                              <td>
+                                <div className="spmAddress">
+                                  <span className="addressTitle">
+                                    Hyd, Telangana
+                                  </span>
+                                  <br />
+                                  <address>{perf.postalAddress}</address>
+                                </div>
+                              </td>
+                              <td>{perf.returnRate ? perf.returnRate : 0}</td>
+                              <td>
+                                <div
+                                  className="round round-lg"
+                                  onClick={() => {
+                                    setSelectedRatingIndex(null);
+                                  }}
+                                >
+                                  <span className="fa fa-angle-left marron"></span>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+                      <div>
+                        <table className="table text-align-left noTopRadius">
+                          <thead>
+                            <tr>
+                              <th scope="col">Criteria</th>
+                              <th scope="col">Details</th>
+                              <th scope="col">Weightage</th>
+                              <th scope="col">Rating</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td scope="row">Return Rate</td>
+                              <td>{perf.returnRate ? perf.returnRate : 0}</td>
+                              <td></td>
+                              <td></td>
+                            </tr>
+                            <tr>
+                              <td scope="row">Lead Time</td>
+                              <td>
+                                {perf.leadTime &&
+                                perf.leadTime[0] &&
+                                perf.leadTime[0].avgLeadTime
+                                  ? perf.leadTime[0].avgLeadTime
+                                  : 0}
+                              </td>
+                              <td></td>
+                              <td></td>
+                            </tr>
+                            <tr>
+                              <td scope="row">Storage Capacity</td>
+                              <td>
+                                {perf.storageCapacity.bottleCapacity}
+                                <br />
+                                {perf.storageCapacity.sqft}
+                              </td>
+                              <td></td>
+                              <td></td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </td>
-                    <td>{perf.postalAddress}</td>
-                    <td>
-                      {perf.returnRate ? perf.returnRate : 0}
-
-                    </td>
-                    <td>
-                      {
-                        selectedRatingIndex !== index ?
-                          <div className="round round-lg" onClick={() => {
-                            setSelectedRatingIndex(index);
-                          }}>
-                            <span className="fa fa-angle-right marron"></span>
-                          </div>
-                          : ""
-                      }
-
-                    </td>
                   </tr>
-                  {
-                    selectedRatingIndex === index ?
-                      <tr>
-                        <td colSpan="5" className="selectedSupplier">
-                          <div>
-                            <table className="table text-align-left noBottomRadius mb-0">
-                              <tbody>
-                                <tr>
-                                  <td scope="row"></td>
-                                  <td>
-                                    <div className="spmDetailsUserCard justify-content-start">
-                                      <div className="profileIcon">
-                                        <img src={profile} alt="" />
-                                      </div>
-                                      <div className="profileName">
-                                        <span className="profileTitle">{perf.name}</span>
-                                        <label className="badge-purple">{perf.type}</label>
-                                        <label>
-                                          <b>Vendor ID:</b> {perf.id}
-                                        </label>
-                                        <label>
-                                          <b>Mobile No:</b> {perf.primaryContactId}
-                                        </label>
-                                      </div>
-                                    </div>
-                                  </td>
-                                  <td>
-                                    <div className="spmAddress">
-                                      <span className="addressTitle">Hyd, Telangana</span>
-                                      <br />
-                                      <address>
-                                        {perf.postalAddress}
-                                      </address>
-                                    </div>
-                                  </td>
-                                  <td>
-                                    {perf.returnRate ? perf.returnRate : 0}
-                                  </td>
-                                  <td>
-                                    <div className="round round-lg" onClick={() => {
-                                      setSelectedRatingIndex(null);
-                                    }}>
-                                      <span className="fa fa-angle-left marron"></span>
-                                    </div>
-                                  </td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-
-                          <div>
-                            <table className="table text-align-left noTopRadius">
-                              <thead>
-                                <tr>
-                                  <th scope="col">Criteria</th>
-                                  <th scope="col">Details</th>
-                                  <th scope="col">Weightage</th>
-                                  <th scope="col">Rating</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                <tr>
-                                  <td scope="row">Return Rate</td>
-                                  <td>
-                                    {perf.returnRate ? perf.returnRate : 0}
-                                  </td>
-                                  <td></td>
-                                  <td></td>
-                                </tr>
-                                <tr>
-                                  <td scope="row">Lead Time</td>
-                                  <td>
-                                    {perf.leadTime && perf.leadTime[0] && perf.leadTime[0].avgLeadTime ? perf.leadTime[0].avgLeadTime : 0}
-                                  </td>
-                                  <td></td>
-                                  <td></td>
-                                </tr>
-                                <tr>
-                                  <td scope="row">Storage Capacity</td>
-                                  <td>
-                                    {perf.storageCapacity.bottleCapacity}<br />
-                                    {perf.storageCapacity.sqft}
-                                  </td>
-                                  <td></td>
-                                  <td></td>
-                                </tr>
-                              </tbody>
-                            </table>
-                          </div>
-                        </td>
-                      </tr>
-                      : ""
-                  }
-                </>
-              ))
-            }
+                ) : (
+                  ''
+                )}
+              </>
+            ))}
           </tbody>
         </table>
       </div>
