@@ -1241,7 +1241,7 @@ exports.getStatsBySKU = [
 ];
 
 /**
- * Gets monthly sales of Sku's based on a particular brand.
+ * Gets monthly sales of Sku's for a particular brand.
  * 
  * @returns {Object}
  */
