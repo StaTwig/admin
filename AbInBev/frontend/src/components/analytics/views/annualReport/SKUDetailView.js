@@ -17,12 +17,12 @@ const SKUDetailView = (props) => {
     const dispatch = useDispatch();
     useEffect(() => {
         (async () => {
-            if (props.sku) {
-                let n = props.SKUStats.filter(a => a.externalId == props.sku);
-                setName(n[0].name);
-                setShortname(n[0].shortName);
-                setImage(n[0].image);
-            }
+            // if (props.sku) {
+            //     let n = props.SKUStats.filter(a => a.externalId == props.sku);
+            //     setName(n[0].name);
+            //     setShortname(n[0].shortName);
+            //     setImage(n[0].image);
+            // }
             const result = await dispatch(getAnalyticsAllStats('?sku=' + (props.sku ? props.sku : prop.externalId) + '&group_by=state'));
             setAnalytics(result.data);
         })();

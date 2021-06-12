@@ -38,7 +38,9 @@ async function calculatePrevReturnRates(filters, analytic) {
 }
 
 function getFilterConditions(filters) {
-	let matchCondition = {};
+
+	console.log(filters);
+	let matchCondition = {status: 'ACTIVE'};
 	if (filters.orgType && filters.orgType !== '') {
 		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
 			matchCondition.type = filters.orgType;
@@ -55,7 +57,9 @@ function getFilterConditions(filters) {
 	if (filters.organization && filters.organization.length) {
 		matchCondition.id = filters.organization;
 	}
-	return {...matchCondition, ...{status: 'ACTIVE'}};
+	console.log(matchCondition);
+	
+	return matchCondition;
 }
 
 function getFilterConditionsWarehouse(filters) {
@@ -689,7 +693,6 @@ exports.getStatsByOrg = [
 	async function (req, res) {
 		try {
 			const filters = req.query;
-
 			let organizations = await OrganisationModel.aggregate([
 				{
 					$match: getFilterConditions(filters)
@@ -758,7 +761,7 @@ function getFilterConditions(filters) {
 	if (filters.organization && filters.organization.length) {
 		matchCondition.id = filters.organization;
 	}
-	return matchCondition;
+	return {...matchCondition, ...{status: 'ACTIVE'}};
 }
 
 /**

@@ -14,6 +14,14 @@ const SKUView = (props) => {
     //     setAnalytics(result.data);
     //     })();
     // }, []);
+    useEffect(() => { 
+        if (props.sku) {
+             console.log(props.bstats);
+             
+             let n = props.bstats.filter(a => a.products.filter(b => b.externalId == props.sku));
+             setAnalytics(n);  
+         }
+    }, [props])
     const openDetailView = (sku) => {
         props.onViewChange(props.prop?.type == 'b' ? 'BREWERY_DETAIL_VIEW' : 'SKU_DETAIL_VIEW', { ...sku });
     }

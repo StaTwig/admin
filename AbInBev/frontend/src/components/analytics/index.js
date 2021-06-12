@@ -39,8 +39,6 @@ const Analytics = (props) => {
   const [spm, setSpmButton] = useState("btn");
 
   useEffect(() => {
-    console.log(props);
-    
     setSKU(props?.sku ? props.sku : prop?.externalId ? prop.externalId : '');
   }, [props, prop])
 
@@ -137,6 +135,10 @@ const Analytics = (props) => {
     setOtype(value);
   }
 
+  const resetFilters = () => {
+    setParams({});
+  }
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -180,13 +182,17 @@ const Analytics = (props) => {
                     SPM
                   </a>
                 </div>
-                <label className="radioButton" for="gv">
-                  <input className="radioInput" type="radio" name="view" id="gv" value={selectedViewCode === 'INVENTORY_DASHBOARD' ? "INVENTORY_DASHBOARD" : 'ANNUALREPORT_DASHBOARD'} onChange={changeView} defaultChecked={filters.view === 'ANNUALREPORT_DASHBOARD' || filters.view === 'INVENTORY_DASHBOARD'} /> Geographical View
+                {selectedViewCode !== 'SPM_DASHBOARD' &&
+                  <>
+                  <label className="radioButton" for="gv">
+                    <input className="radioInput" type="radio" name="view" id="gv" value={selectedViewCode === 'INVENTORY_DASHBOARD' ? "INVENTORY_DASHBOARD" : 'ANNUALREPORT_DASHBOARD'} onChange={changeView} defaultChecked={filters.view === 'ANNUALREPORT_DASHBOARD' || filters.view === 'INVENTORY_DASHBOARD'} /> Geographical View
                     </label>
-                <label className="radioButton" for="sv">
-                  <input className="radioInput" type="radio" name="view" id="sv" value={(selectedViewCode === 'INVENTORY_DASHBOARD' || selectedViewCode === 'INVENTORY_GRAPHICAL') ? "INVENTORY_SKU" : 'SKU_VIEW'} onChange={changeView} defaultChecked={filters.view === 'SKU_VIEW' || filters.view === 'INVENTORY_SKU'} /> SKU View
+                  <label className="radioButton" for="sv">
+                    <input className="radioInput" type="radio" name="view" id="sv" value={(selectedViewCode === 'INVENTORY_DASHBOARD' || selectedViewCode === 'INVENTORY_GRAPHICAL') ? "INVENTORY_SKU" : 'SKU_VIEW'} onChange={changeView} defaultChecked={filters.view === 'SKU_VIEW' || filters.view === 'INVENTORY_SKU'} /> SKU View
                     </label>
-                {selectedViewCode !== 'INVENTORY_DASHBOARD' && selectedViewCode !== 'INVENTORY_SKU'  && selectedViewCode !== 'INVENTORY_GRAPHICAL' && 
+                    </>
+                }
+                {selectedViewCode !== 'SPM_DASHBOARD' && selectedViewCode !== 'INVENTORY_DASHBOARD' && selectedViewCode !== 'INVENTORY_SKU'  && selectedViewCode !== 'INVENTORY_GRAPHICAL' && 
                   <>
                 <label className="radioButton" for="suv">
                   <input className="radioInput" type="radio" name="view"  id="suv" value="SUPPLIER_VIEW" onChange={changeView} defaultChecked={filters.view === 'SUPPLIER_VIEW'} /> Supplier View
@@ -196,7 +202,7 @@ const Analytics = (props) => {
                     </label>
                   </>
                 }
-                {selectedViewCode != 'BREWERY_VIEW' && 
+                {selectedViewCode !== 'SPM_DASHBOARD' && selectedViewCode != 'BREWERY_VIEW' && 
                 <>
                 <label className="filterSubHeading mt-3">Select SKU</label>
                 <select className="filterSelect mt-2" value={SKU} onChange={skuChanged}>
@@ -215,7 +221,7 @@ const Analytics = (props) => {
                   )
                   }
                   </select>
-                  {selectedViewCode != 'BREWERY_DETAIL_VIEW' &&
+                  {(selectedViewCode == 'ANNUALREPORT_DASHBOARD' || selectedViewCode == 'DETAILED_GEO_VIEW') &&
                     <>
                       <label className="filterSubHeading mt-3">Select State</label>
                       <select className="filterSelect mt-2" onChange={onStateChange}>
@@ -312,7 +318,7 @@ const Analytics = (props) => {
                       }
                   </div>
                 }
-                {(selectedViewCode == 'BREWERY_DETAIL_VIEW' || selectedViewCode == 'SUPPLIER_DETAIL_VIEW') && 
+                {(selectedViewCode == 'SUPPLIER_DETAIL_VIEW') && 
                   <>
                   <h3 className="filterSubHeading mt-3">Vendor</h3>
                   <div className="btn-group filterButton mt-2 mb-4">
@@ -323,6 +329,14 @@ const Analytics = (props) => {
                     )}
                   </div>
                   </>
+                }
+                {!!Object.keys(params).length &&
+                  <button
+                    className="btn SearchButton mt-4"
+                    onClick={resetFilters}
+                  >
+                    Clear
+                </button>
                 }
               </div>
             </div>

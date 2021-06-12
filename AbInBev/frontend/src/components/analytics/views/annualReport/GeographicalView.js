@@ -33,17 +33,17 @@ const GeographicalView = (props) => {
                 
                 if (props.params?.year) {
                     if (cond)
-                        cond = '&';
+                        cond+= '&';
                     else
-                        cond = '?';
+                        cond+= '?';
                     cond += 'date_filter_type=' + props.params?.date_filter_type + '&year=' + props.params?.year + '&month=' + props.params?.month + '&quarter=' + props.params?.quarter;
                 }
                 
                 if (sku) {
                     if (cond)
-                        cond = '&';
+                        cond+= '&';
                     else
-                        cond = '?';
+                        cond+= '?';
                     cond += '&sku=' + sku;
                 }
                 if (cond) {
