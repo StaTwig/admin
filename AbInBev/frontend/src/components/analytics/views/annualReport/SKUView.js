@@ -5,13 +5,25 @@ import { getAnalyticsByBrand } from '../../../../actions/analyticsAction';
 import { useDispatch } from 'react-redux';
 
 const SKUView = (props) => {
-  const [analytics, setAnalytics] = useState(props.bstats);
-  const openDetailView = (sku) => {
-    props.onViewChange(
-      props.prop?.type == 'b' ? 'BREWERY_DETAIL_VIEW' : 'SKU_DETAIL_VIEW',
-      { ...sku },
-    );
-  };
+    const [analytics, setAnalytics] = useState(props.bstats);
+    // const dispatch = useDispatch();
+    // useEffect(() => {
+    //     (async () => {
+    //     const result = await dispatch(getAnalyticsByBrand());
+    //     setAnalytics(result.data);
+    //     })();
+    // }, []);
+    useEffect(() => { 
+        if (props.sku) {
+            //  console.log(props.bstats);
+             
+            //  let n = props.bstats.filter(a => a.products.filter(b => b.externalId == props.sku));
+            //  setAnalytics(n);  
+         }
+    }, [props])
+    const openDetailView = (sku) => {
+        props.onViewChange(props.prop?.type == 'b' ? 'BREWERY_DETAIL_VIEW' : 'SKU_DETAIL_VIEW', { ...sku });
+    }
 
   return (
     <div>

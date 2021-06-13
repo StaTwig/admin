@@ -38,7 +38,9 @@ async function calculatePrevReturnRates(filters, analytic) {
 }
 
 function getFilterConditions(filters) {
-	let matchCondition = {};
+
+	console.log(filters);
+	let matchCondition = {status: 'ACTIVE'};
 	if (filters.orgType && filters.orgType !== '') {
 		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
 			matchCondition.type = filters.orgType;
@@ -55,6 +57,8 @@ function getFilterConditions(filters) {
 	if (filters.organization && filters.organization.length) {
 		matchCondition.id = filters.organization;
 	}
+	console.log(matchCondition);
+	
 	return matchCondition;
 }
 
@@ -532,19 +536,23 @@ exports.getStatsByBrand = [
 				let salesSum = 0;
 				let targetSum = 0;
 				let prevProd = '';
+				let sum = 0;
 
 				for (const [index, product] of products.entries()) {
-					if (prevProd == '')
-						prevProd = product.productId;
-
 					if (prevProd !== product.productId || index === products.length - 1) {
 						if (index === products.length - 1) {
 							salesSum += parseInt(product.sales);
 							targetSum += parseInt(product.targetSales);
 						}
-
-						prevProd = product.productId;
-						if (arrIds.indexOf(product.productId) === -1) {
+						if (prevProd == '') {
+							if (product.productId != products[index + 1].productId) 
+								prevProd = product.productId;
+						}
+						else
+							prevProd = product.productId;
+							
+						
+						if (arrIds.indexOf(product.productId) === -1 && prevProd != '') {
 							product['returnRate'] = (parseInt(product.returns) / parseInt(product.sales)) * 100;
 							product['returnRatePrev'] = await calculatePrevReturnRates(filters, product);
 							arrIds.push(product.productId);
@@ -555,9 +563,15 @@ exports.getStatsByBrand = [
 							salesSum = 0;
 							targetSum = 0;
 						}
+						else if (prevProd == '') {
+							salesSum += parseInt(product.sales);
+							targetSum += parseInt(product.targetSales);
+						}
 					}
-					salesSum += parseInt(product.sales);
-					targetSum += parseInt(product.targetSales);
+					if (prevProd != '') {
+						salesSum += parseInt(product.sales);
+						targetSum += parseInt(product.targetSales);
+					}
 				}
 				analytic.products = prods;
 			}
@@ -678,7 +692,6 @@ exports.getStatsByOrg = [
 	async function (req, res) {
 		try {
 			const filters = req.query;
-
 			let organizations = await OrganisationModel.aggregate([
 				{
 					$match: getFilterConditions(filters)
@@ -747,7 +760,7 @@ function getFilterConditions(filters) {
 	if (filters.organization && filters.organization.length) {
 		matchCondition.id = filters.organization;
 	}
-	return matchCondition;
+	return {...matchCondition, ...{status: 'ACTIVE'}};
 }
 
 /**
