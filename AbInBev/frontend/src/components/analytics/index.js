@@ -31,6 +31,11 @@ const Analytics = (props) => {
   let skuArr = [];
   const [params, setParams] = useState({});
   const [SKU, setSKU] = useState('');
+  const [state, setState] = useState('');
+  const [district, setDistrict] = useState('');
+  const [year, setYear] = useState('');
+  const [month, setMonth] = useState('');
+  const [qtr, setQtr] = useState('');
   const [isActive, setIsActive] = useState('');
   const [Otype, setOtype] = useState('All');
   const [selectedViewCode, setSelectedViewCode] = useState('ANNUALREPORT_DASHBOARD');
@@ -73,6 +78,7 @@ const Analytics = (props) => {
 
   const onStateChange = async(event) => {
     const selectedState = event.target.value;
+    setState(selectedState);
     const filter = { ...params };
     filter.state = selectedState;
     const result = await props.getDistricts(selectedState);
@@ -82,6 +88,7 @@ const Analytics = (props) => {
 
   const onDistrictChange = (event) => {
     const selectedDistrict = event.target.value;
+    setDistrict(selectedDistrict);
     const filter = { ...params };
     filter.district = selectedDistrict;
     setParams(filter);
@@ -115,6 +122,8 @@ const Analytics = (props) => {
   }
   const changeView = (event) => {
     setSKU('');
+    setState('');
+    setDistrict('');
     setSelectedViewCode(event.target.value);
   }
   const onViewChange = (viewCode, props) => {
@@ -136,6 +145,14 @@ const Analytics = (props) => {
   }
 
   const resetFilters = () => {
+    setSKU('');
+    setState('');
+    setDistrict('');
+    setIsActive('');
+    setYear('');
+    setMonth('');
+    setQtr('');
+    setOtype('All');
     setParams({});
   }
 
@@ -224,7 +241,7 @@ const Analytics = (props) => {
                   {(selectedViewCode == 'ANNUALREPORT_DASHBOARD' || selectedViewCode == 'DETAILED_GEO_VIEW') &&
                     <>
                       <label className="filterSubHeading mt-3">Select State</label>
-                      <select className="filterSelect mt-2" onChange={onStateChange}>
+                      <select className="filterSelect mt-2" value={state} onChange={onStateChange}>
                         <option value="">Select State</option>
                         {props.states?.map((state) =>
                           <option value={state}>{state}</option>
@@ -232,7 +249,7 @@ const Analytics = (props) => {
                         }
                       </select>
                       <label className="filterSubHeading mt-3">Select District</label>
-                      <select className="filterSelect mt-2" onChange={onDistrictChange}>
+                      <select value={district} className="filterSelect mt-2" onChange={onDistrictChange}>
                         <option value="">Select District</option>
                         {districts?.map((district) =>
                           <option value={district}>{district}</option>
@@ -270,6 +287,7 @@ const Analytics = (props) => {
                     <div className="col-md-5">
                       <select
                         className="filterSelect mt-2"
+                        value={year}
                         onChange={onYearChange}
                       >
                         <option value="">Select Year</option>
@@ -286,6 +304,7 @@ const Analytics = (props) => {
                       <div className="col-md-5">
                         <select
                           className="filterSelect mt-2"
+                          value={month}
                           onChange={onMonthChange}
                         >
                           <option value="">Select Month</option>
@@ -303,6 +322,7 @@ const Analytics = (props) => {
                       <div className="col-md-5">
                         <select
                           className="filterSelect mt-2"
+                          value={qtr}
                           onChange={onQuarterChange}
                         >
                           <option value="">Select Quarter</option>
