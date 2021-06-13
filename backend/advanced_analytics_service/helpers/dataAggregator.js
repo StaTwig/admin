@@ -1,5 +1,6 @@
 const Analytics = require('../models/AnalyticsModel');
 const OrganisationModel = require('../models/OrganisationModel');
+const ProductModel = require("../models/ProductModel");
 const { calculateReturns } = require('./returnShipments');
 const moment = require('moment');
 
@@ -78,18 +79,21 @@ async function aggregateData(timeFrame) {
     b_arr.push(b.id);
 
   for (const row of analytics) {
-    let params = {
-      'receiver.id': {$in: b_arr},
-      'receiver.locationId': row.warehouseId,
-      'products.productID': row.productId,
-      shippingDate: {
-        $lte: today,
-        $gte: new Date(timeFrame),
-      },
+    const Products = await ProductModel.find({ externalId: row.productId, manufacturer: row.brand });
+    for (const prod of Products) {
+      let params = {
+        'receiver.id': { $in: b_arr },
+        // 'receiver.locationId': row.warehouseId,
+        'products.productID': prod.id,
+        shippingDate: {
+          $lte: today,
+          $gte: new Date(timeFrame),
+        },
+      }
+      const _returns = await calculateReturns(params);
+      await Analytics.updateOne({ _id: row._id },
+        { $set: { returns: _returns } });
     }
-    const _returns = await calculateReturns(params);
-    await Analytics.updateOne({ _id: row._id },
-      { $set: { returns: _returns } });
   }
 }
 

@@ -56,6 +56,7 @@ const Analytics = (props) => {
 
   const onYearChange = (event) => {
     const selectedYear = event.target.value;
+    setYear(selectedYear);
     const filter = { ...params };
     filter.year = selectedYear;
     setParams(filter);
@@ -63,6 +64,7 @@ const Analytics = (props) => {
 
   const onMonthChange = (event) => {
     const selectedMonth = event.target.value;
+    setMonth(selectedMonth);
     const filter = { ...params };
     filter.month = selectedMonth;
     setParams(filter);
@@ -71,6 +73,7 @@ const Analytics = (props) => {
 
   const onQuarterChange = (event) => {
     const selectedQuarter = event.target.value;
+    setQtr(selectedQuarter);
     const filter = { ...params };
     filter.quarter = selectedQuarter;
     setParams(filter);
@@ -123,6 +126,7 @@ const Analytics = (props) => {
   const changeView = (event) => {
     setSKU('');
     setState('');
+    setParams({});
     setDistrict('');
     setSelectedViewCode(event.target.value);
   }
@@ -202,7 +206,7 @@ const Analytics = (props) => {
                 {selectedViewCode !== 'SPM_DASHBOARD' &&
                   <>
                   <label className="radioButton" for="gv">
-                    <input className="radioInput" type="radio" name="view" id="gv" value={selectedViewCode === 'INVENTORY_DASHBOARD' ? "INVENTORY_DASHBOARD" : 'ANNUALREPORT_DASHBOARD'} onChange={changeView} defaultChecked={filters.view === 'ANNUALREPORT_DASHBOARD' || filters.view === 'INVENTORY_DASHBOARD'} /> Geographical View
+                    <input className="radioInput" type="radio" name="view" id="gv" value={selectedViewCode === 'INVENTORY_DASHBOARD' || selectedViewCode === 'INVENTORY_SKU' ? "INVENTORY_DASHBOARD" : 'ANNUALREPORT_DASHBOARD'} onChange={changeView} defaultChecked={filters.view === 'ANNUALREPORT_DASHBOARD' || filters.view === 'INVENTORY_DASHBOARD'} /> Geographical View
                     </label>
                   <label className="radioButton" for="sv">
                     <input className="radioInput" type="radio" name="view" id="sv" value={(selectedViewCode === 'INVENTORY_DASHBOARD' || selectedViewCode === 'INVENTORY_GRAPHICAL') ? "INVENTORY_SKU" : 'SKU_VIEW'} onChange={changeView} defaultChecked={filters.view === 'SKU_VIEW' || filters.view === 'INVENTORY_SKU'} /> SKU View

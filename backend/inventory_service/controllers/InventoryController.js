@@ -2680,6 +2680,34 @@ function _spreadHeaders(inputObj) {
   return inputObj;
 }
 
+function getBrand(brand) {
+  const ko = ['Knock Out High Punch', 'IP CINNAMON'];
+  const rc = ['RC_STRONG', 'RC_Q', 'RC_P'];
+  const hy = ['HAYWARDS 5000'];
+  const fo = ['FOSTERS STRONG', "FOSTER'S"];
+  const bud = ['Budweiser'];
+  const budm = ['BUDMAGNUMSTRONG'];
+  const becks = ['BECKS', 'BE Xtra Strong'];
+  
+  let returnBrand = brand;
+  if (ko.includes(brand))
+    returnBrand = "KO";
+  else if (rc.includes(brand))
+    returnBrand = "Royal Challenger";
+  else if (hy.includes(brand))
+    returnBrand = "Haywards 5000";
+  else if (fo.includes(brand))
+    returnBrand = "Fosters";
+  else if (bud.includes(brand))
+    returnBrand = "Budweiser";
+  else if (budm.includes(brand))
+    returnBrand = "Budweiser Magnum";
+  else if (becks.includes(brand))
+    returnBrand = "Becks";
+
+  return returnBrand;
+}
+
 exports.uploadSalesData = [
   auth,
   async (req, res) => {
@@ -2705,20 +2733,20 @@ exports.uploadSalesData = [
       let headerRow3 = _spreadHeaders(sheetJSON[2]);
       let headerRow4 = sheetJSON[3];
       let headerRow5 = sheetJSON[4];
-
       let parsedRows = [];
       sheetJSON.forEach((row, index) => {
         if (index > 4) {
           let rowKeys = Object.keys(row);
           rowKeys.forEach((rowKey) => {
             let prod = {};
-            if (headerRow5[rowKey] && headerRow5[rowKey].length) {
+            if (headerRow5[rowKey] && headerRow5[rowKey].length && headerRow5[rowKey] != 'Stock Code') {
+              prod['brand'] = getBrand(headerRow2[rowKey]);
               prod['productName'] = headerRow4[rowKey];
               prod['productSubName'] = headerRow3[rowKey];
               prod['productId'] = headerRow5[rowKey];
               prod['depot'] = row['__EMPTY_1'];
-              prod['sales'] = row[rowKey];
-              prod['targetSales'] = row[rowKey] * (targetPercentage / 100);
+              prod['sales'] = (row[rowKey] === parseInt(row[rowKey], 10)) ? parseInt(row[rowKey]) : 0;
+              prod['targetSales'] = (row[rowKey] === parseInt(row[rowKey], 10)) ? row[rowKey] * (targetPercentage / 100) : 0;
               prod['uploadDate'] = collectedDate;
               let depot = warehouseDistrictMapping.find(w => w.depot === row['__EMPTY_1']);
               prod['warehouseId'] = (depot && depot.warehouseId) ? depot.warehouseId : '';
@@ -2731,7 +2759,6 @@ exports.uploadSalesData = [
       });
 
       let respObj = await AnalyticsModel.insertMany(parsedRows);
-
       return apiResponse.successResponseWithData(
         res,
         `Uploaded Sales Data successfully. Num Records - ${respObj.length}`

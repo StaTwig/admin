@@ -36,10 +36,10 @@ const SKUDetailView = (props) => {
             //     setShortname(n[0].shortName);
             //     setImage(n[0].image);
             // }
-            const result = await dispatch(getAnalyticsAllStats('?sku=' + (props.sku ? props.sku : prop.externalId) + '&group_by=state'));
+            const result = await dispatch(getAnalyticsAllStats('?sku=' + (props.sku ? props.sku : prop.externalId) + '&group_by='+(isActive ? 'district' : 'state')));
             setAnalytics(result.data);
         })();
-    }, []);
+    }, [isActive]);
 
   return (
     <div>
@@ -120,8 +120,6 @@ const SKUDetailView = (props) => {
         </div>
         <div className="row">
           <div className="col-md-12 col-sm-12">
-            {!isActive ? (
-              <>
                 <div className="productsChart">
                   <label className="productsChartTitle">States</label>
                   <ResponsiveContainer width="100%" height={500}>
@@ -153,7 +151,7 @@ const SKUDetailView = (props) => {
                       />
                     </BarChart>
                   </ResponsiveContainer>
-                </div>
+                
 
                 <div className="tableDetals">
                   <table className="table">
@@ -168,11 +166,11 @@ const SKUDetailView = (props) => {
                     </thead>
                     <tbody>
                       {analytics.map((analytic, index) => (
-                        <tr>
+                        <tr key={index}>
                           <td scope="row">
                             <span
                               className="stateLink"
-                              onClick={() => setIsActive(true)}
+                              onClick={() => setIsActive(!isActive)}
                             >
                               {analytic.groupedBy}
                             </span>
@@ -186,79 +184,7 @@ const SKUDetailView = (props) => {
                     </tbody>
                   </table>
                 </div>
-              </>
-            ) : (
-              <>
-                <div className="productsChart">
-                  <label className="productsChartTitle">Karnataka</label>
-                  <ResponsiveContainer width="100%" height={200}>
-                    <BarChart
-                      width={500}
-                      height={250}
-                      barCategoryGap={1}
-                      data={analytics}
-                      layout="vertical"
-                      margin={{
-                        top: 20,
-                        right: 30,
-                        left: 20,
-                        bottom: 5,
-                      }}
-                      barSize={10}
-                      barGap={10}
-                    >
-                      <XAxis type="number" />
-                      <YAxis dataKey="groupedBy" type="category" scale="band" />
-                      <Tooltip />
-                      <Legend />
-                      <Bar
-                        dataKey="sales"
-                        barCategoryGap={80}
-                        radius={[0, 5, 5, 0]}
-                        fill="#FDAB0F"
-                      />
-                      <Bar
-                        dataKey="returns"
-                        barCategoryGap={80}
-                        radius={[0, 5, 5, 0]}
-                        fill="#A20134"
-                      />
-                      <Bar
-                        dataKey="targetSales"
-                        barCategoryGap={80}
-                        radius={[0, 5, 5, 0]}
-                        fill="#A344B7"
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
                 </div>
-
-                <div className="tableDetals">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">States</th>
-                        <th scope="col">Sales</th>
-                        <th scope="col">Total Bottle Pool</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {analytics.map((analytic, index) => (
-                        <tr key={index}>
-                          <td scope="row">
-                            <span className="stateLink">
-                              {analytic.groupedBy}
-                            </span>
-                          </td>
-                          <td>{analytic.sales}</td>
-                          <td>{analytic.return}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </>
-            )}
           </div>
         </div>
       </div>
