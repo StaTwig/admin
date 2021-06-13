@@ -520,7 +520,6 @@ exports.getStatsByBrand = [
 						sales: { $sum: 1 },
 						targetSales: { $sum: 1 },
 						products: { $addToSet: '$$ROOT' }
-
 					}
 				},
 				{ $sort: { "products.productId": 1 } }
@@ -1252,3 +1251,149 @@ exports.getStatsBySKU = [
 		}
 	}
 ];
+
+/**
+ * getSalesTotalOfAllBrands by district and month
+ * 
+ * @returns {Object}
+ */
+
+exports.getSalesTotalOfAllBrands = [
+	auth,
+	async function (req, res) {
+		try {
+			const filters = req.query;
+			let warehouseIds = await _getWarehouseIds(filters);
+			let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
+			
+			let Analytics = await AnalyticsModel.aggregate([
+				{
+					$match: analyticsFilter
+				},
+				{
+					$lookup: {
+						from: 'products',
+						localField: 'productId',
+						foreignField: 'externalId',
+						as: 'prodDetails'
+					}
+				},
+				{
+					$unwind: {
+						path: '$prodDetails'
+					}
+				},
+				{
+					$replaceRoot: {
+						newRoot: {
+							$mergeObjects: ['$prodDetails', '$$ROOT']
+						}
+					}
+				},
+				{
+					$project: {
+						prodDetails: 0
+					}
+				},
+				{
+					$group: {
+						_id: '$manufacturer',
+						sales: { $sum: 1 },
+					}
+				}
+			]);
+
+			return apiResponse.successResponseWithData(
+				res,
+				"Operation success",
+				Analytics
+			);
+
+		} catch (err) {
+			console.log(err);
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+]
+
+/**
+ * Gets monthly sales of Sku's for a particular brand.
+ * 
+ * @returns {Object}
+ */
+
+ exports.getMonthlySalesOfSkuByBrand = [
+	auth,
+	async function (req, res) {
+		try {
+			const filters = req.query;
+			let warehouseIds = await _getWarehouseIds(filters);
+
+			let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
+			let brandFilter = {};
+
+			if (filters.brand && filters.brand !== '') {
+				brandFilter.manufacturer = filters.brand;
+			}
+
+			let Analytics = await AnalyticsModel.aggregate([
+				{
+					$match: analyticsFilter
+				},
+				{
+					$lookup: {
+						from: 'products',
+						localField: 'productId',
+						foreignField: 'externalId',
+						as: 'prodDetails'
+					}
+				},
+				{
+					$unwind: {
+						path: '$prodDetails'
+					}
+				},
+				{
+					$replaceRoot: {
+						newRoot: {
+							$mergeObjects: ['$prodDetails', '$$ROOT']
+						}
+					}
+				},
+				{
+					$project: {
+						prodDetails: 0
+					}
+				},
+				{
+					$match: brandFilter
+				},
+				{
+					$group: {
+						_id: {
+							name: '$name',
+							month: { $month: '$uploadDate'}
+						},
+						sales: { $sum: 1 },
+					}
+				},
+				{
+					$group: {
+						"_id" : "$_id.name",
+						"overallSales" : { "$push": {"month":"$_id.month", "sales":"$sales" }}
+					}
+				}
+			]);
+
+			return apiResponse.successResponseWithData(
+				res,
+				"Operation success",
+				Analytics
+			);
+		} catch (err) {
+			console.log(err);
+
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+ ]
