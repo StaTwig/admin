@@ -80,7 +80,7 @@ inventoryDetails.sort(function(a,b){
                               <TableContainer> 
                                <Tablee className="table-borderless lg">
                                 <TableBody>
-                                    {(inventory.eventTypePrimary === 'CREATE') ?
+                                    {(inventory.eventTypePrimary === 'CREATE' || inventory.eventTypePrimary === 'RECEIVE') ?
                                     <div>
                                      <TableRow>
                                           <TableCell>Shipment Id:</TableCell>
@@ -102,18 +102,18 @@ inventoryDetails.sort(function(a,b){
                                      <TableRow>
                                            <TableCell>Mfg Date</TableCell>
                                               <div className="ml-5">
-                                              <TableCell align="left"><b>{inventory.productDetails.mfgDate}</b></TableCell></div>
+                                              <TableCell align="left"><b>{formatDate(inventory.payloadData.data.products.mfgDate)}</b></TableCell></div>
                                           <TableCell align="left">Exp Date</TableCell>
                                               <div className="ml-5">
-                                              <TableCell align="left"><b>{inventory.productDetails.expDate}</b></TableCell></div>
+                                              <TableCell align="left"><b>{formatDate(inventory.payloadData.data.products.expDate)}</b></TableCell></div>
                                           <TableCell align="left">Batch</TableCell>
                                               <div className="ml-5">
-                                              <TableCell align="left"><b>{inventory.productDetails.batchNumber}</b></TableCell></div>
+                                              <TableCell align="left"><b>{inventory.payloadData.data.products.batchNumber}</b></TableCell></div>
                                     </TableRow> }    
 
                          
                                       <div className="mt-3" style={{position:"absolute", left:"80%", bottom:"38%" , heigth:"10%", width:"20%"}}>
-                                      {(inventory.eventTypePrimary === 'CREATE') ? 
+                                      {(inventory.eventTypePrimary === 'CREATE' || inventory.eventTypePrimary === 'RECEIVE') ? 
                                       <button
                                           type="button" className="btn btn-outline-primary " 
                                           onClick={() => {

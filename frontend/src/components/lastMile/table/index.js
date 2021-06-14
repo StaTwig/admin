@@ -1,6 +1,5 @@
 import React, { useState} from 'react';
-import './style.scss';
-import Pagination from '@material-ui/lab/Pagination';
+import './style.scss'
 const Table = props => {
   const [ batch, setBatch] = useState('');
   var orgTypeArray = [        {
@@ -244,10 +243,9 @@ const Table = props => {
     "__v": 0
 }];
   return (
-    <div className="producttable">    
-    <div className="table">
-      <div className="rTable mt-3"> 
-           {orgTypeArray.length == 0 && <div className="rTableRow pt-2 pb-2 justify-content-center text-muted shadow-none">No records found</div>}
+    <div className="producttable">
+      <div className="rTable pt-2">
+        <div className="overflow">
            {orgTypeArray.map((lastmile,index) => ( 
             <div onClick={()=>alert(lastmile)}>
               <div className="rTableRow pt-3 pb-3">
@@ -258,7 +256,9 @@ const Table = props => {
               <div className="rTableCell ">{lastmile.productAdministeredInfo[0].administeredData.split('T').join(" ")}</div> 
               </div>
            
-            </div>  
+            </div>
+            
+            
           ))} 
           {orgTypeArray?.length > 0 && (
             <div className="d-flex flex-row-reverse">
@@ -269,9 +269,7 @@ const Table = props => {
         
         </div>
       </div>
-      </div>
-
-    
+    </div>
   );
 };
 

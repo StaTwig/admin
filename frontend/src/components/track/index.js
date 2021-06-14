@@ -4,7 +4,6 @@ import Map from './map';
 import CurrentTemperature from '../../assets/icons/thermometer.svg';
 import PoChainOfCustody from './pochainofcustody';
 import SoChainOfCustody from './sochainofcustody';
-import AoChainOfCustody from "./aochainofcustody";
 import Package from '../../assets/icons/package.svg';
 import back from '../../assets/icons/back.png';
 import searchingIcon from '../../assets/icons/searching@2x.png';
@@ -19,12 +18,10 @@ const Track = (props) => {
   const {
     poChainOfCustodyData,
     shippmentChainOfCustodyData,
-    aoChainOfCustodyData,
     searchData,
     resetData,
-    searched,
-    setsearched
   } = props;
+
   const onSearchChange = (e) => {
     setValue(e.target.value);
     setIsSubmitted(false);
@@ -34,58 +31,67 @@ const Track = (props) => {
     ) {
       setSearchType('SH');
       setOp(1);
-    } else if (
-      e.target.value.substring(0, 2) == 'PO' ||
-      e.target.value.substring(0, 2) == 'po'
-    ) {
+    } else {
       setSearchType('PO');
       setOp(-1);
-    }
-    else{
-      setSearchType("AO");
-      setOp(0);
     }
   };
 
   const onSeach = async () => {
-    await searchData(value,searchType);
+    await searchData(value);
     setIsSubmitted(true);
   };
-
 
   const onkeydown = (event) => {
     if (event.keyCode === 13) {
       onSeach();
     }
   };
-  if((poChainOfCustodyData.length != 0 || aoChainOfCustodyData.length != 0 || shippmentChainOfCustodyData.length != 0)){
-    setsearched(true);
-  }
-  else{
-    setsearched(false);
-  }
+
   return (
     <div className="track">
       <div className="row justify-content-between">
         <h1 className="breadcrumb">Track & Trace</h1>
       </div>
       <div className="row">
-        {(poChainOfCustodyData.length != 0 || aoChainOfCustodyData.length != 0 || shippmentChainOfCustodyData.length != 0) &&
+        {shippmentChainOfCustodyData.length > 0 &&
           <div className="col-6">
             <div className="row mb-4">
               <div className="col" style={{ minHeight: 400 }}>
                 <Map />
               </div>
             </div>
+            {/* <div className="panel commonpanle row shadow bg-white mb-4">
+            <div className="row col-12">
+              <div className="col row ml-3">
+                <div className="arrow col-1 mr-2">
+                  <img src={CurrentTemperature} width="20" height="20" />
+                </div>
+
+                <div className="col">
+                  <div className="info">Current temperature</div>
+                  <div className="info">3°C</div>
+                </div>
+              </div>
+
+              <div className="col">
+                <div className="info col">Last Upadated on</div>
+                <div className="info col">07:00 am</div>
+              </div>
+            </div>
+            <div className="row col-12">
+              <Chart />
+            </div>
+          </div> */}
           </div>}
         <div className="col row ml-3">
-          {!searched ? (
+          {shippmentChainOfCustodyData.length == 0 ? (
             <>
               <div className="noOutline" tabIndex="-1" onKeyDown={onkeydown}>
                 <div className="search-form">
                   <input
                     type="text"
-                    placeholder="Enter Order ID,Shipment ID or AirWay BillNo."
+                    placeholder="Enter Order ID or Serial No."
                     onChange={onSearchChange}
                     //className="form-control border border-primary search-field"
                       className="form-control search-field border-8"
@@ -110,8 +116,6 @@ const Track = (props) => {
                   onClick={() => {
                     resetData();
                     setIsSubmitted(false);
-                    setsearched(false);
-                    setVisible(false);
                   }}
                   className="btn btn-outline-primary cursorP"
                 >
@@ -119,7 +123,7 @@ const Track = (props) => {
                   <span className="fontSize20">Back to Search</span>
                 </button>{' '}
               </div>
-              {searchType == 'SH' && (
+              {searchType == 'SH' ? (
                 <>
                   <div className=" panel commonpanle  bg-light">
                     <h6 className=" text-primary mb-4">CHAIN OF CUSTODY</h6>
@@ -131,7 +135,7 @@ const Track = (props) => {
                       </div>
                       <div className="col ml-1">
                         <div className="">
-                            <div className="text-muted ">Shipment ID</div>
+                            <div className="text-muted ">{poChainOfCustodyData ? 'Order ID' : 'Shipment ID'}</div>
                           <div className="font-weight-bold ">
                             {shippmentChainOfCustodyData?.length > 0
                               ? shippmentChainOfCustodyData[0].id
@@ -147,8 +151,8 @@ const Track = (props) => {
                         newArr = shippmentChainOfCustodyData.filter(rw => rw?.taggedShipments?.includes(value));
                         let cIndex = shippmentChainOfCustodyData.map((el) => el.id).indexOf(value) + 1;
                         cIndex = index < cIndex ? index : cIndex;
-                       
-                        return row?.shipmentUpdates?.map((r, i) => (
+                        
+                        return row?.shipmentUpdates?.filter(s => s.status == 'RECEIVED').map((r, i) => (
                           <SoChainOfCustody
                             len={row.shipmentUpdates.length}
                             i={i}
@@ -174,9 +178,7 @@ const Track = (props) => {
                     </div>
                   </div>
                 </>
-              ) }
-              {searchType == "PO"&&
-              (
+              ) : (
                 <div className=" panel commonpanle  bg-light">
                   <h6 className=" text-primary mb-4">CHAIN OF CUSTODY</h6>
                   <div className="row orderTxt">
@@ -200,8 +202,8 @@ const Track = (props) => {
                     {poChainOfCustodyData.map((row, index) => (
                       <PoChainOfCustody
                         key={index}
-                        poChainOfCustodyData={
-                          poChainOfCustodyData
+                        shippmentChainOfCustodyData={
+                          shippmentChainOfCustodyData
                         }
                         data={row}
                         index="1"
@@ -211,64 +213,6 @@ const Track = (props) => {
                     ))}
                   </div>
                 </div>
-              )}
-              {searchType == "AO"&&
-              (
-                <>
-                  <div className=" panel commonpanle  bg-light">
-                    <h6 className=" text-primary mb-4">CHAIN OF CUSTODY</h6>
-                    <div className="row orderTxt">
-                      <div className="col-1">
-                        <div className="picture recived-bg">
-                          <img src={Package} alt="package" />
-                        </div>
-                      </div>
-                      <div className="col ml-1">
-                        <div className="">
-                            <div className="text-muted ">AirWay BillNo</div>
-                          <div className="font-weight-bold ">
-                            {aoChainOfCustodyData?.length > 0
-                              ? aoChainOfCustodyData[0].airWayBillNo
-                              : 'NA'}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="pb-4">
-                      {aoChainOfCustodyData.map((row, index) => { 
-                        let newArr = [];
-                        // if(row.id == value)
-                        newArr = aoChainOfCustodyData.filter(rw => rw?.taggedShipments?.includes(value));
-                        let cIndex = aoChainOfCustodyData.map((el) => el.id).indexOf(value) + 1;
-                        cIndex = index < cIndex ? index : cIndex;
-                        // return row?.shipmentUpdates?.filter(s => s.status == 'RECEIVED').map((r, i) => (
-                        return row?.shipmentUpdates?.map((r, i) => (
-                          <AoChainOfCustody
-                            len={row.shipmentUpdates.length}
-                            i={i}
-                            v={visible}
-                            setV={setVisible}
-                            level={i + 1}
-                            key={i}
-                            op={op}
-                            setOp={setOp}
-                            products = {row.products}
-                            data={row}
-                            update={r}
-                            index={i + 3}
-                            parentIndex={newArr.length && row.id != value ? cIndex : index }
-                            pindex={
-                              aoChainOfCustodyData.length - 1 == index
-                                ? 1
-                                : newArr.length && row.id != value ? newArr.length : 1 
-                            }
-                            container={2 + i}
-                          />
-                        ));
-                      })}
-                    </div>
-                  </div>
-                </>
               )}
             </div>
           )}

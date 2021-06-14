@@ -160,7 +160,6 @@ const Inventory = (props) => {
     props.applyFilters(_filters);
     if (_filters.inventoryType === 'VENDOR') {
       _getOrganizationById(selectedOrganization).then((response) => {
-        console.log(response);
         setSelectedVendor(response);
       });
     } else {

@@ -32,22 +32,22 @@ const SummaryTable = (props) => {
           </div>
         </div>
       ) : (
-        <div className="summaryTable mt-4">
+        <div className="summaryTable mt-2">
           <div className="rowData">
             <div className="headline">
               <span style={{position:'relative',top:'25%'}}>
-                <img src={shippment} height='17' width='25' className="mr-3"></img>
+                <img src={shippment} height='17' width='25' className="mr-2"></img>
                 <b>Shipment ID</b>                
               </span>
             </div>
             {shipments.map((shipment, index) =>
               index < 5 ? (
-                <div className="combine-data pl-2" key={index}>
+                <div className="combine-data" key={index}>
                   <div>{shipment.id}</div>
                   {shipment?.shipmentAlerts?.length > 0 && (
                     <span
                       style={{ backgroundColor: "#EAEAEA", marginLeft: 5 }}
-                      className="rounded p-1"
+                      className="rounded"
                     >
                       <img style={{ height: 15 }} src={alertShip} />
                     </span>
@@ -59,7 +59,7 @@ const SummaryTable = (props) => {
           <div className="rowData">
             <div className="headline">
             <span style={{position:'relative',top:'25%'}}>
-              <img src={inandoutbound} height='17' width='25' className="mr-3"></img>
+              <img src={inandoutbound} height='17' width='25' className="mr-2"></img>
               <b>Type</b>
             </span>  
             </div>
@@ -78,7 +78,7 @@ const SummaryTable = (props) => {
           <div className="rowData">
             <div className="headline">
             <span style={{position:'relative',top:'25%'}}>
-            <img src={shippmentdate} height='20' width='20' className="mr-3"></img>
+            <img src={shippmentdate} height='20' width='20' className="mr-2"></img>
             <b>Shipping Date</b>
               </span> 
             </div>
@@ -96,14 +96,14 @@ const SummaryTable = (props) => {
           <div className="rowData">
             <div className="headline pr-4">
             <span style={{position:'relative',top:'25%'}}>
-            <img src={received} height='20' width='20' className="mr-3"></img>
+            <img src={received} height='20' width='20' className="mr-2"></img>
             <b>From</b> 
             </span>
             </div>
             {shipments.map((shipment, index) =>
               index < 5 ? (
                 <div className="pl-4" key={index}>
-                  <div className="pr-2">
+                  <div className="rTableCell text-left">
                     <p className="mb-0 pr-1">{shipment.supplier.org.name}</p>
                   </div>
                 </div>
@@ -114,14 +114,14 @@ const SummaryTable = (props) => {
           <div className="rowData">
             <div className="headline">
             <span style={{position:'relative',top:'25%'}}>
-              <img src={sent} height='20' width='20' className="mr-3"></img>
+              <img src={sent} height='20' width='20' className="mr-2"></img>
               <b>To</b>
             </span>  
             </div>
             {shipments.map((shipment, index) =>
               index < 5 ? (
                 <div className="combine-data" key={index}>
-                  <div className="rTableCell">
+                  <div className="rTableCell text-left">
                     <p className="mb-0 bold">{shipment.receiver.org.name}</p>
                   </div>
                 </div>
@@ -131,7 +131,7 @@ const SummaryTable = (props) => {
           <div className="rowData">
             <div className="headline">
             <span style={{position:'relative',top:'25%'}}>
-            <img src={status} height='20' width='20' className="mr-3"></img>
+            <img src={status} height='20' width='20' className="mr-2"></img>
             <b>Status</b>
             </span>  
             </div>
