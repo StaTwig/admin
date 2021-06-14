@@ -378,11 +378,12 @@ const NewOrder = (props) => {
                 <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                        <label htmlFor="organizationName">Organisation Type*</label>
+                        <label htmlFor="organizationName" style={{fontSize:"16px"}}>Organisation Type*</label>
                         <div className="form-control">
                           <Select
                             styles={customStyles}
-                            placeholder="Select Organisation Type"
+                            placeholder={<div className="select-placeholder-text">Select Organisation Type</div>}
+                           
                             onChange={(v) => {
                               setFieldValue('type', v?.value);
                               setFieldValue('typeName', v?.label);
@@ -401,7 +402,7 @@ const NewOrder = (props) => {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="organizationName">Organisation Name*</label>
+                      <label htmlFor="organizationName" style={{fontSize:"16px"}}>Organisation Name*</label>
                       <div className="form-control">
                         {/* <DropdownButton
                           isText={true}
@@ -416,7 +417,8 @@ const NewOrder = (props) => {
                         /> */}
                           <Select
                             styles={customStyles}
-                            placeholder="Select Organisation Name"
+                            placeholder={<div className="select-placeholder-text">Select Organisation Name</div>}
+                          
                             defaultInputValue={values.fromOrgId}
                             onChange={(v) => {
                               setFieldValue('fromOrg', v.value);
@@ -434,7 +436,7 @@ const NewOrder = (props) => {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="orgLocation">Organization ID*</label>
+                      <label htmlFor="orgLocation" style={{fontSize:"16px"}}>Organization ID*</label>
                       <div className="form-control border-0">
                         {values.fromOrg}
                       </div>
@@ -453,11 +455,12 @@ const NewOrder = (props) => {
                  <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                        <label htmlFor="organizationName">Organisation Type*</label>
+                        <label htmlFor="organizationName" style={{fontSize:"16px"}}>Organisation Type*</label>
                         <div className="form-control">
                           <Select
                             styles={customStyles}
-                            placeholder="Select Organisation Type"
+                           
+                            placeholder={<div className="select-placeholder-text">Select Organisation Type</div>}
                             defaultInputValue={values.rtypeName}
                             onChange={(v) => {
                               setFieldValue('rtype', v.value);
@@ -475,7 +478,7 @@ const NewOrder = (props) => {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="organizationName">Organisation Name*</label>
+                      <label htmlFor="organizationName" style={{fontSize:"16px"}}>Organisation Name*</label>
                       <div className="form-control">
                         {/* <DropdownButton
                           isText={true}
@@ -493,7 +496,8 @@ const NewOrder = (props) => {
                         /> */}
                           <Select
                             styles={customStyles}
-                            placeholder="Select Organisation Name"
+                            placeholder={<div className="select-placeholder-text">Select Organisation Name</div>}
+                            
                             defaultInputValue={values.toOrgName}
                             onChange={(v) => {
                               setFieldValue('toOrgLoc', '');
@@ -513,7 +517,7 @@ const NewOrder = (props) => {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="delLocation">Organisation ID*</label>
+                      <label htmlFor="delLocation" style={{fontSize:"16px"}}>Organisation ID*</label>
                       <div className="form-control border-0">
                         {values.toOrg}
                       </div>
@@ -523,7 +527,7 @@ const NewOrder = (props) => {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="delLocation">Delivery Location*</label>
+                      <label htmlFor="delLocation" style={{fontSize:"16px"}}>Delivery Location*</label>
                       <div className="form-control">
                         {/* <DropdownButton
                           isText={true}
@@ -550,7 +554,8 @@ const NewOrder = (props) => {
 
                           <Select
                             styles={customStyles}
-                            placeholder="Select Delivery Location"
+                            placeholder={<div className="select-placeholder-text">Select Delivery Location</div>}
+                           
                             defaultInputValue={values.toOrgLocName}
                             onChange={(v) => {
                               setFieldValue('toOrgLocName', v.label);
