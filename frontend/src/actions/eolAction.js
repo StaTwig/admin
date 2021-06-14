@@ -17,17 +17,18 @@ export const GetEOLInfoBySerialNumber = async (data) => {
       try {
         dispatch(turnOn());
         console.log('------------------>')
+        console.log("inside actions ==>")
 
         const result = await axios.get(
-          `http://127.0.0.1:3017/lastmilemanagement/api/GetEOLInfo?skip=${skip}&limit=${limit}&dateFilter=${dateFilter}&productName=${productName}&category=${productCategory}&status=${status}`
+          `http://127.0.0.1:3017/lastmilemanagement/api/GetEOLInfo?skip=${skip}&limit=${limit}`
           );
-          console.log(result)
-        dispatch(setLastMile(result.data.data.inventoryRecords));
-        dispatch(setLastMileCount(result.data.data.count));
+          console.log(result.data.data)
+        dispatch(setLastMile(result.data.data));
+        // dispatch(setLastMileCount(result.data.data.count));
         dispatch(turnOff());
         return result.data.data.length;
       }catch(e) {
-        console.log('>------------------>')
+        console.log('>------------------>', e)
 
         dispatch(turnOff());
         return dispatch => {

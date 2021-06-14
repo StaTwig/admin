@@ -99,6 +99,8 @@ exports.GetEOLInfoByProductId = [
 exports.getEOLInfo = [
   async (req, res) => {
     try {
+      var i = 0;
+      console.log(++i)
       logger.log(
         "info",
         "<<<<< LastMileService < LastMileController < getEOLInfoBySerialNumber : token verified successfullly, querying data by publisher"
@@ -121,7 +123,7 @@ exports.getEOLInfo = [
           matchQuery[`productAdministeredInfo.productId`] = req.query.product
         }
         console.log(matchQuery)
-      await LastMileModel.find(matchQuery).skip(req.query.skip).limit(req.query.limit)
+      await LastMileModel.find(matchQuery).skip(parseInt(req.query.skip)).limit(parseInt(req.query.limit))
         .then((eolResult) => {
           console.log("eolResult is ====> ", eolResult);
           return apiResponse.successResponseWithData(
@@ -131,6 +133,7 @@ exports.getEOLInfo = [
           );
         })
         .catch((err) => {
+          console.log(err)
           return apiResponse.ErrorResponse(res, err);
         });
     } catch (err) {

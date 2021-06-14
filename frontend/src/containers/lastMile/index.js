@@ -1,5 +1,5 @@
-import { useDispatch} from 'react-redux';
-import React, { useState, useEffect, useSelector } from 'react';
+import { useDispatch, useSelector} from 'react-redux';
+import React, { useState, useEffect } from 'react';
 import LastMile from '../../components/lastMile';
  import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
@@ -12,11 +12,15 @@ const LastMileContainer = props => {
   const dispatch = useDispatch();
   useEffect(() => {
     (async () => {
-      dispatch(getEOLInfo(0, 10, "", "", "", "", "")); //(skip, limit, product, country, state, district, location)
+     dispatch(getEOLInfo(0, 10, "", "", "", "", "")); //(skip, limit, product, country, state, district, location)
   
     })();
   }, []);
 
+  const lastMile = useSelector(state => {
+    return state.lastMile;
+  });
+  // console.log(lastMile)
 
   return (
     <div className="container-fluid p-0">
@@ -24,7 +28,7 @@ const LastMileContainer = props => {
       <div className="d-flex">
         <Sidebar {...props} />
         <div className="content">
-          <LastMile {...props}/>
+          <LastMile {...props} lastMile={lastMile}/>
         </div>
       </div>
     </div>

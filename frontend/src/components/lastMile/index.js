@@ -21,6 +21,7 @@ import {getRegions, getAllStates} from '../../actions/inventoryActions';
 import Table from './table'
 const lastMile=(props)=>{
     const dispatch = useDispatch();
+    // var lastmile = props.lastMile;
 
     const [region,setRegion]= useState('Select Region')
     const [regions,setRegions]= useState(['Asia'])
@@ -30,6 +31,12 @@ const lastMile=(props)=>{
     const [location,setlocation] = useState('Select Location')
     const [product,setproduct] = useState('Select Product')
     const [countries,setCountries] = useState([])
+
+    const [countryId,setcountryId] = useState('')
+    const [locationCountry,setlocationCountry] = useState('')
+    const [locationState,setlocationState] = useState('')
+    const [locationName,setlocationName] = useState('')
+    const [warehouseTitle,setwarehouseTitle] = useState('')
     const headers = {
         coloumn1: 'Beneficiary Details',
         coloumn2: 'ID Proof',
@@ -43,14 +50,21 @@ const lastMile=(props)=>{
         img4: <img src={Product} width="20" height="22" className="pb-1"/>,
         img5: <img src={Date_time} width="19" height="22" className="pb-1"/>,
       };
+
+      function cardFill(obj){
+            setwarehouseTitle(JSON.stringify(obj.productAdministeredInfo[0].locationInfo.warehouseTitle))
+            
+      }
 useEffect(()=>{
     async function fetchData(){
+        // setLastMile(props.lastMile)
+        // console.log(lastmile)
         const eol_ProductID = await GetEOLInfoByProductId("pro123456");
         const regions = await getRegions();
         console.log(regions.data[0].country)
         setCountries(regions.data[0].country)
         const statess = await dispatch(getAllStates());
-        console.log(statess)
+        // console.log(statess)
 
         //console.log(eol_ProductID);
     }
@@ -82,7 +96,7 @@ return (
       </div>
       </div>
       <div className="ribben-space" style={{width:"76%"}}>
-      <Table {...props}/>
+      <Table {...props} cardFill={cardFill} lastMile={props.lastMile}/>
       </div>
 
       </div>
@@ -147,7 +161,7 @@ return (
               <div className="mainsearchwarehouse">
                
                 <div className=" panel  mb-3 searchpanel">
-                    <div>Warehouse Title</div>
+                    <div>{warehouseTitle}</div>
                     <div>
                         <u>
                             <small>
@@ -164,10 +178,10 @@ return (
                         <li className="mb-1">Location Name</li>
                     </ul>
                     <ul class="text-light">
-                        <li className="mb-1">{"123"}</li>
-                        <li className="mb-1">{"India"}</li>
-                        <li className="mb-1">{"TS"}</li>
-                        <li className="mb-1">{"Lumbini park"}</li>
+                        <li className="mb-1">{countryId}</li>
+                        <li className="mb-1">{locationCountry}</li>
+                        <li className="mb-1">{locationState}</li>
+                        <li className="mb-1">{locationName}</li>
                     </ul>
                 </div>
                 </div>
