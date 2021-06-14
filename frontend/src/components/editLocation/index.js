@@ -49,7 +49,7 @@ const editLocation = (props) => {
       setAddressTitle(warehouseInfo.title);
       setAddressLine(warehouseInfo.warehouseAddress.firstLine);
       setCity(warehouseInfo.warehouseAddress.city);
-      setCountry(warehouseInfo.country.countryName);
+      setCountry(warehouseInfo.warehouseAddress.country);
       setPincode(warehouseInfo.warehouseAddress.zipCode);
       setState(warehouseInfo.warehouseAddress.state);
     }

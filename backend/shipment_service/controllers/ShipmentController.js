@@ -357,8 +357,10 @@ exports.createShipment = [
               let quantityMismatch = false;
               po.products.every((product) => {
                 data.products.every((p) => {
-                  if (
-                    parseInt(p.productQuantity) < parseInt(product.productQuantity)
+                const po_product_quantity = product.productQuantity || product.quantity;
+		const shipment_product_qty = p.productQuantity || p.quantity;
+		if (
+                    parseInt(shipment_product_qty) < parseInt(po_product_quantity)
                   ) {
                     quantityMismatch = true;
                     return false;
@@ -559,7 +561,7 @@ exports.createShipment = [
                 result
               );
             }
-          } catch(err){
+          } catch (err) {
             return apiResponse.ErrorResponse(res,err);
           } 
       } 
@@ -600,21 +602,24 @@ exports.receiveShipment = [
       const confData = await ConfigurationModel.findOne({ id: confId });
       const supplierID = req.body.supplier.id;
       const receiverId = req.body.receiver.id;
-
+      let supplierName = '';
+      let supplierAddress = '';
+      let receiverName = '';
+      let receiverAddress = '';
       if(supplierID) {
       const supplierOrgData = await OrganisationModel.findOne({
         id: req.body.supplier.id,
       });
-      const supplierName = supplierOrgData.name;
-      const supplierAddress = supplierOrgData.postalAddress;
+      supplierName = supplierOrgData.name;
+      supplierAddress = supplierOrgData.postalAddress;
     }
 
     if(receiverId){
       const receiverOrgData = await OrganisationModel.findOne({
         id: req.body.receiver.id,
       });
-      const receiverName = receiverOrgData.name;
-      const receiverAddress = receiverOrgData.postalAddress;
+      receiverName = receiverOrgData.name;
+      receiverAddress = receiverOrgData.postalAddress;
     }
 
   
@@ -663,12 +668,14 @@ exports.receiveShipment = [
         let quantityMismatch = false;
         po.products.every((product) => {
           data.products.every((p) => {
-            if (
-              parseInt(p.productQuantity) < parseInt(product.quantity)
-            ) {
-              quantityMismatch = true;
-              return false;
-            }
+	        const po_product_quantity = product.productQuantity || product.quantity;
+                const shipment_product_qty = p.productQuantity || p.quantity;
+                if (
+                    parseInt(shipment_product_qty) < parseInt(po_product_quantity)
+                  ) {
+                    quantityMismatch = true;
+                    return false;
+                  }
           });
         });
         if (quantityMismatch) {
@@ -705,6 +712,7 @@ exports.receiveShipment = [
           totalProducts = totalProducts + shipmentProducts[count].productQuantity;
           totalReturns = totalReturns + products[count].productQuantity;
           shipmentRejectionRate = ((totalProducts - totalReturns) / totalProducts) * 100;
+          data.products[count]["productId"] = data.products[count].productID;
           inventoryUpdate(
             products[count].productID,
             products[count].productQuantity,
@@ -1491,7 +1499,8 @@ exports.getProductsByInventory = [
         {
           $group: {
             _id: "$inventoryDetails.productId",
-            productName: { $first: "$products.name" },
+            productCategory: { $first: "$products.type" },
+	    productName: { $first: "$products.name" },
             manufacturer: { $first: "$products.manufacturer" },
             productQuantity: { $sum: "$inventoryDetails.quantity" },
             quantity: { $sum: "$inventoryDetails.quantity" },
@@ -2200,14 +2209,17 @@ exports.fetchAllWarehouseShipments = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           const {
-            emailId
+            emailId, phoneNumber
           } = req.user;
           console.log(emailId)
           try {
 
-            const empDetails = await EmployeeModel.findOne({
-              emailId: emailId
-            });
+	if (emailId)
+            empDetails = await EmployeeModel.findOne({ emailId });
+        else {
+            empDetails = await EmployeeModel.findOne({ phoneNumber });
+      }
+
             const warehouses = empDetails.warehouseId;
               const shipments = await ShipmentModel.aggregate([{
                 $match: {
@@ -2318,59 +2330,288 @@ exports.trackJourney = [
                     const trackingId = req.query.trackingId;
                     if (!trackingId.includes("PO")) {
                         const inwardShipments = await ShipmentModel.findOne({
-                        $or: [{
+                            $or: [{
                                 id: trackingId
                             }, {
                                 airWayBillNo: trackingId
                             }]
-			}, {
+                        }, {
                             _id: 0,
                             "taggedShipments": 1,
                             poId: 1
-                        }
-			)
+                        })
                         shipmentsArray = inwardShipments.taggedShipments;
                         shipmentsArray.push(trackingId)
                         poDetails = await RecordModel.find({
-			    shipments: { "$in" : shipmentsArray }
+                            shipments: {
+                                "$in": shipmentsArray
+                            }
                         })
-
+console.log("1",inwardShipments.taggedShipments)
                         if (inwardShipments.taggedShipments) {
                             if (inwardShipments.taggedShipments.length > 0 && inwardShipments.taggedShipments[0] !== '')
-                                inwardShipmentsArray = await ShipmentModel.find({
-                                    "$and": [{
-                                        id: inwardShipments.taggedShipments
-                                    }, {
-                                        status: "RECEIVED"
-                                    }]
-                                })
-                        }
-                        trackedShipment = await ShipmentModel.findOne({
-                        $or: [{
-                                id: trackingId
-                            }, {
-                                airWayBillNo: trackingId
-                            }]
-			})
+                                inwardShipmentsArray = await ShipmentModel.aggregate([{
+                                        $match: {
+                                            "$and": [{
+						    id: { "$in" : inwardShipments.taggedShipments }
+                                            }, {
+                                                status: "RECEIVED"
+                                            }]
+                                        }
+                                    },
+                                    {
+                                        $lookup: {
+                                            from: "warehouses",
+                                            localField: "supplier.locationId",
+                                            foreignField: "id",
+                                            as: "supplier.warehouse",
+                                        },
+                                    },
+                                    {
+                                        $unwind: {
+                                            path: "$supplier.warehouse",
+                                        },
+                                    },
+                                    {
+                                        $lookup: {
+                                            from: "organisations",
+                                            localField: "supplier.warehouse.organisationId",
+                                            foreignField: "id",
+                                            as: "supplier.org",
+                                        },
+                                    },
+                                    {
+                                        $unwind: {
+                                            path: "$supplier.org",
+                                        },
+                                    },
+                                    {
+                                        $lookup: {
+                                            from: "warehouses",
+                                            localField: "receiver.locationId",
+                                            foreignField: "id",
+                                            as: "receiver.warehouse",
+                                        },
+                                    },
+                                    {
+                                        $unwind: {
+                                            path: "$receiver.warehouse",
+                                        },
+                                    },
+                                    {
+                                        $lookup: {
+                                            from: "organisations",
+                                            localField: "receiver.warehouse.organisationId",
+                                            foreignField: "id",
+                                            as: "receiver.org",
+                                        },
+                                    },
+                                    {
+                                        $unwind: {
+                                            path: "$receiver.org",
+                                        },
+                                    },
+                                ])
 
-                        outwardShipmentsArray = await ShipmentModel.find({
-                            "$and": [{
+                        }
+                        trackedShipment = await ShipmentModel.aggregate([{
+                                $match:
+
+                                {
+                                    $or: [{
+                                        id: trackingId
+                                    }, {
+                                        airWayBillNo: trackingId
+                                    }]
+
+                                }
+                            },
+                            {
+                                $lookup: {
+                                    from: "warehouses",
+                                    localField: "supplier.locationId",
+                                    foreignField: "id",
+                                    as: "supplier.warehouse",
+                                },
+                            },
+                            {
+                                $unwind: {
+                                    path: "$supplier.warehouse",
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: "organisations",
+                                    localField: "supplier.warehouse.organisationId",
+                                    foreignField: "id",
+                                    as: "supplier.org",
+                                },
+                            },
+                            {
+                                $unwind: {
+                                    path: "$supplier.org",
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: "warehouses",
+                                    localField: "receiver.locationId",
+                                    foreignField: "id",
+                                    as: "receiver.warehouse",
+                                },
+                            },
+                            {
+                                $unwind: {
+                                    path: "$receiver.warehouse",
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: "organisations",
+                                    localField: "receiver.warehouse.organisationId",
+                                    foreignField: "id",
+                                    as: "receiver.org",
+                                },
+                            },
+                            {
+                                $unwind: {
+                                    path: "$receiver.org",
+                                },
+                            },
+                        ])
+
+                        outwardShipmentsArray = await ShipmentModel.aggregate([
+		{
+		  $match: 
+			{ "$and": [{
                                 taggedShipments: trackingId
                             }, {
                                 status: "RECEIVED"
                             }]
-                        })
+	 }
+		},
+		{
+		  $lookup: {
+			from: "warehouses",
+			localField: "supplier.locationId",
+			foreignField: "id",
+			as: "supplier.warehouse",
+		  },
+		},
+		{
+		  $unwind: {
+			path: "$supplier.warehouse",
+		  },
+		},
+		{
+		  $lookup: {
+			from: "organisations",
+        localField: "supplier.warehouse.organisationId",
+        foreignField: "id",
+        as: "supplier.org",
+      },
+    },
+    {
+      $unwind: {
+        path: "$supplier.org",
+      },
+    },
+    {
+      $lookup: {
+        from: "warehouses",
+        localField: "receiver.locationId",
+        foreignField: "id",
+        as: "receiver.warehouse",
+      },
+    },
+    {
+      $unwind: {
+        path: "$receiver.warehouse",
+      },
+    },
+    {
+      $lookup: {
+        from: "organisations",
+          localField: "receiver.warehouse.organisationId",
+        foreignField: "id",
+        as: "receiver.org",
+      },
+    },
+    {
+      $unwind: {
+        path: "$receiver.org",
+      },
+    },
+  ])
                     } else if (trackingId.includes("PO")) {
                         poDetails = await RecordModel.findOne({
                             id: trackingId
                         })
-                        outwardShipmentsArray = await ShipmentModel.find({
-                            "$or": [{
-                                id: poDetails.shipments.toString()
-                            }, {
-                                taggedShipments: poDetails.shipments.toString()
-                            }]
-                        })
+                        outwardShipmentsArray = await ShipmentModel.aggregate([{
+                                $match:
+
+                                {
+                                    "$or": [{
+                                        id: poDetails.shipments.toString()
+                                    }, {
+                                        taggedShipments: poDetails.shipments.toString()
+                                    }]
+
+                                }
+                            },
+                            {
+                                $lookup: {
+                                    from: "warehouses",
+                                    localField: "supplier.locationId",
+                                    foreignField: "id",
+                                    as: "supplier.warehouse",
+                                },
+                            },
+                            {
+                                $unwind: {
+                                    path: "$supplier.warehouse",
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: "organisations",
+                                    localField: "supplier.warehouse.organisationId",
+                                    foreignField: "id",
+                                    as: "supplier.org",
+                                },
+                            },
+                            {
+                                $unwind: {
+                                    path: "$supplier.org",
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: "warehouses",
+                                    localField: "receiver.locationId",
+                                    foreignField: "id",
+                                    as: "receiver.warehouse",
+                                },
+                            },
+                            {
+                                $unwind: {
+                                    path: "$receiver.warehouse",
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: "organisations",
+                                    localField: "receiver.warehouse.organisationId",
+                                    foreignField: "id",
+                                    as: "receiver.org",
+                                },
+                            },
+                            {
+                                $unwind: {
+                                    path: "$receiver.org",
+                                },
+                            },
+                        ])
                     }
                     return apiResponse.successResponseWithData(
                         res,

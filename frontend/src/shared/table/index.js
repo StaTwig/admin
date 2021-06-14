@@ -53,13 +53,13 @@ inventoryDetails.sort(function(a,b){
                   </div>
                   <div className="rTableCell" style={{position:"relative",left:'6%'}}>{inventory.productDetails.type}</div>
                   {/* <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.manufacturer}</div> */}
-                  <div className="rTableCell" style={{position:"relative",left:'12%'}}>{formatDate(inventory.createdAt)}</div>
-                  <div className="rTableCell" style={{position:"relative",left:'19%', fontWeight:"600"}}>{inventory.inventoryQuantity}</div>                                 
-                  <div className="rTableCell" style={{position:"relative",left:'22%', fontWeight:"600"}}> {(inventory.eventTypePrimary !== 'ADD') ? (inventory.eventTypePrimary === 'RECEIVED' ? 'RECEIVED' :  'SENT') : 'ADDED'} </div>
+                  <div className="rTableCell " style={{position:"relative",left:'12%'}}> {formatDate(inventory.createdAt)}</div>
+                  <div className="rTableCell"  style={{position:"relative",left:'19%', fontWeight:"600"}}>{inventory.inventoryQuantity}</div>                                 
+                  <div className="rTableCell" style={{position:"relative", left:"22%", fontWeight:"600"}}> {(inventory.eventTypePrimary !== 'ADD') ? (inventory.eventTypePrimary === 'RECEIVED' ? 'RECEIVED' :  'SENT') : 'ADDED'} </div>
                  <div className=" rTableCell m-2" 
                          style={{position:"relative",left:'12%'}}>
-                         <span className="drop-pad shadow rounded-circle">
-                         <img src={dropdownIcon} height="12" width="18"/></span>
+                         <span className="drop-pad shadow rounded-circle ">
+                         <img src={dropdownIcon} height="12" width="18" /> </span>
                   </div>                  
               {  /* <button
                       className="btn btn-outline-primary fontSize200 expand"
@@ -80,7 +80,7 @@ inventoryDetails.sort(function(a,b){
                               <TableContainer> 
                                <Tablee className="table-borderless lg">
                                 <TableBody>
-                                    {(inventory.eventTypePrimary === 'CREATE') ?
+                                    {(inventory.eventTypePrimary === 'CREATE' || inventory.eventTypePrimary === 'RECEIVE') ?
                                     <div>
                                      <TableRow>
                                           <TableCell>Shipment Id:</TableCell>
@@ -102,18 +102,17 @@ inventoryDetails.sort(function(a,b){
                                      <TableRow>
                                            <TableCell>Mfg Date</TableCell>
                                               <div className="ml-5">
-                                              <TableCell align="left"><b>{inventory.productDetails.mfgDate}</b></TableCell></div>
+                                              <TableCell align="left"><b>{formatDate(inventory.payloadData.data.products.mfgDate)}</b></TableCell></div>
                                           <TableCell align="left">Exp Date</TableCell>
                                               <div className="ml-5">
-                                              <TableCell align="left"><b>{inventory.productDetails.expDate}</b></TableCell></div>
+                                              <TableCell align="left"><b>{formatDate(inventory.payloadData.data.products.expDate)}</b></TableCell></div>
                                           <TableCell align="left">Batch</TableCell>
                                               <div className="ml-5">
-                                              <TableCell align="left"><b>{inventory.productDetails.batchNumber}</b></TableCell></div>
+                                              <TableCell align="left"><b>{inventory.payloadData.data.products.batchNumber}</b></TableCell></div>
                                     </TableRow> }    
 
-                         
-                                      <div className="mt-3" style={{position:"absolute", left:"79%", bottom:"38%", width:"20%"}}>
-                                      {(inventory.eventTypePrimary === 'CREATE') ? 
+                                      <div className="mt-3" style={{position:"absolute ", left:"79% ", bottom:"38% ", width:"20% "}}>
+                                      {(inventory.eventTypePrimary === 'CREATE')  ? 
                                       <button
                                           type="button" className="btn btn-outline-primary"  
                                           onClick={() => {

@@ -2,7 +2,7 @@ export const TEST_SERVER_URL = 'https://test.vaccineledger.com';
 export const PROD_SERVER_URL = 'http://api.vaccineledger.com:9001';
 export const ABINBEVPROD_SERVER_URL = 'http://abinbev.statledger.io:9001';
 export const ABINBEVTEST_SERVER_URL = 'http://test.abinbev.statledger.io:9001';
-export const UNICEFTEST_SERVER_URL = 'http://unicef.vaccineledger.com:9001';
+export const UNICEFTEST_SERVER_URL = 'https://unicef.vaccineledger.com';
 export const DEMO_SERVER_URL = 'http://vaccineledger.com:9001';
 export const LOCAL_SERVER_URL_USER = 'http://localhost:3001';
 export const LOCAL_SERVER_URL_SHIPPINGORDER ='http://localhost:3013';
@@ -93,7 +93,7 @@ export function config() {
       fetchAllPurchaseOrderUrl: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
       getPOsUrl: `${LOCAL_SERVER_URL_PO}/pomanagement/api/po/purchaseOrderStatistics`,
       trackShipment: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
-      trackJourney: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/trackJourney?id=`,
+      trackJourney: `${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/trackJourney?trackingId=`,
       poDetailsByShipmentId:`${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
       trackTemperature: `${LOCAL_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/track/fetchTemp`,
@@ -106,6 +106,7 @@ export function config() {
       deleteNotificationUrl: `${LOCAL_SERVER_URL_NOTIFICATION}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/updateTrackingStatus`,
       getOrderIds:`${LOCAL_SERVER_URL_PO}/pomanagement/api/po/getOrderIds`,
+      getOpenOrderIds:`${LOCAL_SERVER_URL_PO}/pomanagement/api/po/getOpenOrderIds`,
       fetchOutboundPurchaseOrderUrl: `${LOCAL_SERVER_URL_PO}/pomanagement/api/po/fetchOutboundPurchaseOrders`,
       fetchInboundPurchaseOrderUrl: `${LOCAL_SERVER_URL_PO}/pomanagement/api/po/fetchInboundPurchaseOrders`,
       getOrganizationsByType:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsByType?id=`,
@@ -186,7 +187,7 @@ export function config() {
       fetchAllPurchaseOrderUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/fetchpurchaseOrder?key=`,
       getPOsUrl: `${DEV_SERVER_URL}/pomanagement/api/po/purchaseOrderStatistics`,
       trackShipment: `${DEV_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
-      trackJourney: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/trackJourney?id=`,
+      trackJourney: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/trackJourney?trackingId=`,
       poDetailsByShipmentId:`${DEV_SERVER_URL}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${DEV_SERVER_URL}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
       trackTemperature: `${DEV_SERVER_URL}/tracktracemanagement/api/track/fetchTemp`,
@@ -201,6 +202,7 @@ export function config() {
       deleteNotificationUrl: `${DEV_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${DEV_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
       getOrderIds:`${DEV_SERVER_URL}/pomanagement/api/po/getOrderIds`,
+      getOpenOrderIds:`${DEV_SERVER_URL}/pomanagement/api/po/getOpenOrderIds`,
       GetEOLInfoBySerialNumber:`${DEV_SERVER_URL}/lastmilemanagement/api/GetEOLInfoBySerialNumber?serial_number=`,
       GetEOLInfoByProductId:`${DEV_SERVER_URL}/lastmilemanagement/api/GetEOLInfoByProductId?id=`,
       GetEOLInfoByIdentityId:`${DEV_SERVER_URL}/lastmilemanagement/api/GetEOLInfoByIdentityId?id=`,
@@ -279,7 +281,7 @@ export function config() {
       getWareHousesByCountryUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?country=`,
       getWareHousesByRegionUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getWarehouseDetailsByRegion?region=`,
       trackShipment: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
-      trackJourney: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/trackJourney?id=`,
+      trackJourney: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/trackJourney?trackingId=`,
       poDetailsByShipmentId:`${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
       trackTemperature: `${STABLE_SERVER_URL_TRACKANDTRACE}/tracktracemanagement/api/track/fetchTemp`,
@@ -294,6 +296,7 @@ export function config() {
       deleteNotificationUrl: `${STABLE_SERVER_URL_PRODUCTS}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/updateTrackingStatus`,
       getOrderIds:`${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/getOrderIds`,
+      getOpenOrderIds:`${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/getOpenOrderIds`,
       updateWarehouse: `${STABLE_SERVER_URL_SHIPMENT}/usermanagement/api/auth/updateWarehouse?warehouseId=`,
       GetEOLInfoBySerialNumber:`${STABLE_SERVER_URL_SHIPMENT}/lastmilemanagement/api/GetEOLInfoBySerialNumber?serial_number=`,
       GetEOLInfoByProductId:`${STABLE_SERVER_URL_SHIPMENT}/lastmilemanagement/api/GetEOLInfoByProductId?id=`,
@@ -369,7 +372,7 @@ export function config() {
       getWarehouseDetailsByCountryUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?name=`,
       getWareHousesByRegionUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByRegion?region=`,
       trackShipment: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
-      trackJourney: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/trackJourney?id=`,
+      trackJourney: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/trackJourney?trackingId=`,
       poDetailsByShipmentId:`${TEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${TEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
       trackTemperature: `${TEST_SERVER_URL}/tracktracemanagement/api/track/fetchTemp`,
@@ -387,7 +390,8 @@ export function config() {
       getNotificationsUrl: `${TEST_SERVER_URL}/notificationmanagement/api/notification/getNotifications`,
       deleteNotificationUrl: `${TEST_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${TEST_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
-       getOrderIds:`${TEST_SERVER_URL}/pomanagement/api/po/getOrderIds`,
+      getOrderIds:`${TEST_SERVER_URL}/pomanagement/api/po/getOrderIds`,
+      getOpenOrderIds:`${TEST_SERVER_URL}/pomanagement/api/po/getOpenOrderIds`,
       fetchOutboundPurchaseOrderUrl: `${TEST_SERVER_URL}/pomanagement/api/po/fetchOutboundPurchaseOrders`,
       fetchInboundPurchaseOrderUrl: `${TEST_SERVER_URL}/pomanagement/api/po/fetchInboundPurchaseOrders`,
       fetchProductIdsCustomerLocationsOrganisationsUrl: `${TEST_SERVER_URL}/pomanagement/api/po/fetchProductIdsCustomerLocationsOrganisations`,
@@ -465,7 +469,7 @@ export function config() {
       getWarehouseDetailsByCountryUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?name=`,
       getWareHousesByRegionUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByRegion?region=`,
       trackShipment: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
-      trackJourney: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipment/trackJourney?id=`,
+      trackJourney: `${DEMO_SERVER_URL}/shipmentmanagement/api/shipment/trackJourney?trackingId=`,
       poDetailsByShipmentId:`${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${DEMO_SERVER_URL}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
       trackTemperature: `${DEMO_SERVER_URL}/tracktracemanagement/api/track/fetchTemp`,
@@ -484,6 +488,7 @@ export function config() {
       deleteNotificationUrl: `${DEMO_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${DEMO_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
       getOrderIds:`${DEMO_SERVER_URL}/pomanagement/api/po/getOrderIds`,
+      getOpenOrderIds:`${DEMO_SERVER_URL}/pomanagement/api/po/getOpenOrderIds`,
       addWarehouse: `${DEMO_SERVER_URL}/usermanagement/api/auth/addWarehouse`, 
       updateWarehouse: `${DEMO_SERVER_URL}/usermanagement/api/auth/updateWarehouse?warehouseId=`,
       GetEOLInfoBySerialNumber:`${DEMO_SERVER_URL}/lastmilemanagement/api/GetEOLInfoBySerialNumber?serial_number=`,
@@ -558,7 +563,7 @@ export function config() {
       getWarehouseDetailsByCountryUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?name=`,
       getWareHousesByCountryUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?country=`,
       trackShipment: `${PROD_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
-      trackJourney: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/trackJourney?id=`,
+      trackJourney: `${PROD_SERVER_URL}/shipmentmanagement/api/shipment/trackJourney?trackingId=`,
       poDetailsByShipmentId:`${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${PROD_SERVER_URL}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
       trackTemperature: `${PROD_SERVER_URL}/tracktracemanagement/api/track/fetchTemp`,
@@ -573,6 +578,7 @@ export function config() {
       deleteNotificationUrl: `${PROD_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${PROD_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
       getOrderIds:`${PROD_SERVER_URL}/pomanagement/api/po/getOrderIds`,
+      getOpenOrderIds:`${PROD_SERVER_URL}/pomanagement/api/po/getOpenOrderIds`,
       addWarehouse: `${PROD_SERVER_URL}/usermanagement/api/auth/addWarehouse`, 
       updateWarehouse: `${PROD_SERVER_URL}/usermanagement/api/auth/updateWarehouse?warehouseId=`,
       GetEOLInfoBySerialNumber:`${PROD_SERVER_URL}/lastmilemanagement/api/GetEOLInfoBySerialNumber?serial_number=`,
@@ -645,7 +651,7 @@ export function config() {
       getWarehouseDetailsByCountryUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByCountry?name=`,
       getWareHousesByRegionUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehouseDetailsByRegion?region=`,
       trackShipment: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipping/trackShipment?shipmentId=`,
-      trackJourney: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/trackJourney?id=`,
+      trackJourney: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/trackJourney?trackingId=`,
       poDetailsByShipmentId:`${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
       trackTemperature: `${UNICEFTEST_SERVER_URL}/tracktracemanagement/api/track/fetchTemp`,
@@ -664,6 +670,7 @@ export function config() {
       deleteNotificationUrl: `${UNICEFTEST_SERVER_URL}/notificationmanagement/api/notification/deleteNotification`,
       updateTrackingStatusUrl:`${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/updateTrackingStatus`,
       getOrderIds:`${UNICEFTEST_SERVER_URL}/pomanagement/api/po/getOrderIds`,
+      getOpenOrderIds:`${UNICEFTEST_SERVER_URL}/pomanagement/api/po/getOpenOrderIds`,
       addWarehouse: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/addWarehouse`, 
       updateWarehouse: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/updateWarehouse?warehouseId=`,
       GetEOLInfoBySerialNumber:`${UNICEFTEST_SERVER_URL}/lastmilemanagement/api/GetEOLInfoBySerialNumber?serial_number=`,
@@ -686,7 +693,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || `test`; // change prod to test, local,stable, dev for respective environments
+  const environment = process.env.ENVIRONMENT || `uniceftest`; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
   return conf;
 }

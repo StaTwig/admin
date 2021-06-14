@@ -104,6 +104,13 @@ const Home = (props) => {
       emailId: values.mobileemail,
       organisationName: values.organisation,
       organisationId: 0,
+      address: {
+        line1: values.line1,
+        city: values.district,
+        state: values.state,
+        country: '',
+        pincode: values.pincode,
+      },
     };
     dispatch(turnOn());
     const result = await registerUser(data);
@@ -178,14 +185,14 @@ const Home = (props) => {
                       Request is pending and you will receive an email/sms after
                       approval
                     </div>
-                    <h4 className="mb-5 text-dark text-center">
+                    <h4 className="mb-5 text-center">
                       Click{' '}
                       <a
                         href="#"
                         onClick={() => {
                           setSteps(2);
                         }}
-                        className="signUpLink text-primary"
+                        className="signUpLink"
                       >
                         here
                       </a>

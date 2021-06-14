@@ -189,6 +189,15 @@ export const getOrderIds = async () => {
   }
 };
 
+export const getOpenOrderIds = async () => {
+  try {
+    const result = await axios.get(config().getOpenOrderIds);
+    return result.data.data;
+  } catch (e) {
+    return [];
+  }
+};
+
 const setPurchaseOrders = data => {
   return {
     type: SET_POS,

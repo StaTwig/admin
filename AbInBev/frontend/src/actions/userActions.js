@@ -3,10 +3,10 @@ import {
   AUTH_ERROR,
   PROFILE_SUCCESS,
   GET_ALL_USERS_SUCCESS,
-} from "../constants/userConstants";
-import { config } from "../config";
+} from '../constants/userConstants';
+import { config } from '../config';
 import { turnOff, turnOn } from './spinnerActions';
-import axios from "axios";
+import axios from 'axios';
 
 export const updateProfile = async (data) => {
   try {
@@ -36,17 +36,19 @@ export const registerUser = async (data) => {
 };
 
 export const getAllBreweries = () => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       dispatch(turnOn());
-      const result = await axios.get(config().getOrganizationsByTypeAbInBev + 'BREWERY');
+      const result = await axios.get(
+        config().getOrganizationsByTypeAbInBev + 'BREWERY',
+      );
       dispatch(turnOff());
       return result.data;
     } catch (e) {
       dispatch(turnOff());
     }
   };
-}
+};
 
 export const sendOtp = async (data) => {
   try {
@@ -97,9 +99,9 @@ export const setCurrentUser = (decoded) => {
 
 // Set logged in user
 export const logoutUser = () => {
-  localStorage.removeItem("theAbInBevToken");
-  localStorage.removeItem("name");
-  localStorage.removeItem("organisation");
+  localStorage.removeItem('theAbInBevToken');
+  localStorage.removeItem('name');
+  localStorage.removeItem('organisation');
   return {
     type: AUTH_ERROR,
   };
@@ -131,4 +133,18 @@ export const getAllUsers = () => {
   } catch (e) {
     return e.response;
   }
+};
+
+export const postUploadExcelData = (data) => {
+  return async (dispatch) => {
+    try {
+      dispatch(turnOn());
+      const result = await axios.post(config().uploadSalesData, data);
+      dispatch(turnOff());
+      return result;
+    } catch (e) {
+      dispatch(turnOff());
+      return e.response;
+    }
+  };
 };

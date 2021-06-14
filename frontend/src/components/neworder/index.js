@@ -29,7 +29,7 @@ const NewOrder = (props) => {
   const editPo = useSelector(state => {
     return state?.reviewPo;
   });
-
+  
   const profile = useSelector((state) => {
     return state.user;
   });
@@ -58,7 +58,7 @@ const NewOrder = (props) => {
   const [category, setCategory] = useState([]);
   const [openExcel, setOpenExcel] = useState(false);
   const [menu, setMenu] = useState(false);
-  const [addProducts, setAddProducts] = useState(editPo !== null ? editPo.products : [{"productId": "","quantity": "","name": "","manufacturer": "","type": ""}]);
+  const [addProducts, setAddProducts] = useState(editPo !== null ? editPo.products : [{"productId": "","id": "","productQuantity": "","name": "","manufacturer": "","type": ""}]);
   const dispatch = useDispatch();
   const [senderOrgId, setSenderOrgId] = useState(
     editPo !== null ? editPo.fromOrgId : "Select Organisation Name"
@@ -173,7 +173,7 @@ const NewOrder = (props) => {
     addProducts.splice(index, 1);
     let newArr = [...addProducts];
     newArr.push(item);
-    setFieldValue('products', newArr.map(row => ({"productId": row.id,"quantity": row?.quantity ? row?.quantity : 0,"name": row.name,"type": row.type,"manufacturer": row.manufacturer})));
+    setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": row?.productQuantity ? row?.productQuantity : 0,"name": row.name,"type": row.type,"manufacturer": row.manufacturer})));
     setAddProducts(prod => [...newArr]);
 
     const prodIndex = products.findIndex(p => p.id === item.id);
@@ -190,7 +190,7 @@ const NewOrder = (props) => {
     addProducts.splice(index, 1);
     let newArr = [...addProducts];
     if (newArr.length > 0)
-      setFieldValue('products', newArr.map(row => ({"productId": row.id,"quantity": row?.quantity,"name": row.name,"type": row.type,"manufacturer": row.manufacturer})));
+      setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": row?.productQuantity,"name": row.name,"type": row.type,"manufacturer": row.manufacturer})));
     else
       setFieldValue('products', []);
     setAddProducts(prod => [...newArr]);
@@ -198,16 +198,16 @@ const NewOrder = (props) => {
 
   const onQuantityChange = (v, i, setFieldValue) => {
     let newArr = [...addProducts];
-    newArr[i].quantity = v;
-    setFieldValue('products', newArr.map(row => ({"productId": row.id,"quantity": row.quantity,"name": row.name,"type": row.type,"manufacturer": row.manufacturer})));
+    newArr[i].productQuantity = v;
+    setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": row.productQuantity,"name": row.name,"type": row.type,"manufacturer": row.manufacturer})));
     setAddProducts(prod => [...newArr]);
   }
 
   const onAssign = async (values) => {
     let error = false;
-    const { fromOrg, toOrg, toOrgLoc, products,toOrgLocName } = values;
+    const { fromOrg, toOrg, toOrgLoc, products, toOrgLocName } = values;
     products.forEach((p) => {
-      if (p.quantity < 1)
+      if (p.productQuantity < 1)
         error = true;
     });
 
@@ -358,7 +358,7 @@ const NewOrder = (props) => {
                     type="button"
                     className="btn btn-white bg-white shadow-radius font-bold mb-1"
                     onClick={() => {
-                      let newArr = { productId: '', name: '', manufacturer: '', quantity: '', type: '' };
+                      let newArr = { productId: '', id: '', name: '', manufacturer: '', productQuantity: '', type: '' };
                       setAddProducts(prod => [...prod, newArr]);
                     }}
                   >
@@ -571,7 +571,7 @@ const NewOrder = (props) => {
             <div className="d-flex pt-4 justify-content-between mb-1">
               <div className="value">{quantity}</div>
               <div className="d-flex">
-                <button type="button" className="btn btn-white shadow-radius font-bold mr-2"onClick={() => props.history.push('/orders')}>
+                <button type="button" className="btn btn-white shadow-radius font-bold mr-2"onClick={() => {dispatch(resetReviewPos({})); props.history.push('/orders')}}>
                   Cancel
                 </button>
 

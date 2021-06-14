@@ -8,19 +8,7 @@ const SpmDashboardDetails = (props) => {
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
         <h1 className="h2">Dashboard - SPM Details</h1>
       </div>
-      <div className="btn-group mainButtonFilter">
-        <a href="#!" className="btn active">
-          Suppliers
-        </a>
-        <select className="btn selectState">
-          <option>Select Suppliers</option>
-          <option>Overall Performance</option>
-          {/* {states?.map((state) => 
-                        <option>{state}</option>
-                    )
-                    } */}
-        </select>
-      </div>
+
       <div className="tableDetals spmDetail">
         <table className="table text-align-left">
           <tbody>
