@@ -46,17 +46,21 @@ inventoryDetails.sort(function(a,b){
                   //className="rTableRow"
                   >
                                    
-                  <div className="rTableCell" style={{position:"relative",left:'0%', fontWeight:"600"}}>
-                    <div className="d-flex flex-column txtBlue ">
-                      <div>{inventory.productDetails.name}</div>
+                  <div className="rTableCell" style={{position:"relative",left:'0%', fontWeight:" 600 "}}>
+                    <div className="d-flex flex-column txtBlue">
+                      <div> 
+                          {inventory.productDetails.name}
+                      </div>
                     </div>
                   </div>
                   <div className="rTableCell" style={{position:"relative",left:'6%'}}>{inventory.productDetails.type}</div>
                   {/* <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.manufacturer}</div> */}
                   <div className="rTableCell " style={{position:"relative",left:'12%'}}> {formatDate(inventory.createdAt)}</div>
-                  <div className="rTableCell"  style={{position:"relative",left:'19%', fontWeight:"600"}}>{inventory.inventoryQuantity}</div>                                 
-                  <div className="rTableCell" style={{position:"relative", left:"22%", fontWeight:"600"}}> {(inventory.eventTypePrimary !== 'ADD') ? (inventory.eventTypePrimary === 'RECEIVED' ? 'RECEIVED' :  'SENT') : 'ADDED'} </div>
-                 <div className=" rTableCell m-2" 
+                  <div className="rTableCell"  style={{position:"relative",left:'19%', fontWeight:" 600 "}}>{inventory.inventoryQuantity}</div>                                 
+                  <div className="rTableCell" style={{position:"relative", left:"22%", fontWeight:" 600 "}}>
+                        {(inventory.eventTypePrimary !== 'ADD') ? (inventory.eventTypePrimary === 'RECEIVED' ? 'RECEIVED' :  'SENT') : 'ADDED'} 
+                   </div>
+                    <div className=" rTableCell m-2" 
                          style={{position:"relative",left:'12%'}}>
                          <span className="drop-pad shadow rounded-circle ">
                          <img src={dropdownIcon} height="12" width="18" /> </span>
