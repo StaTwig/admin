@@ -21,8 +21,10 @@ const BreweryDetailedView = (props) => {
         (props?.Otype ? props.Otype : 'ALL_VENDORS') +
         '&sku=' +
         (props?.sku ? props.sku : prop.externalId);
-      const result = await dispatch(getAllOrganisationStats(cond));
-      setAnalytics(result.data);
+        const result = await dispatch(getAllOrganisationStats(cond));
+        let n = result.data.filter((a) => a.type == 'S1' || a.type == 'S2' || a.type == 'S3');
+        result.data = n;
+        setAnalytics(n);
     })();
   }, []);
   return (
@@ -123,8 +125,8 @@ const BreweryDetailedView = (props) => {
                         </div>
                       </td>
                       <td>Karnataka</td>
-                      <td>{analytic.analytics.sales}</td>
-                      <td>{analytic.analytics.returns}</td>
+                      <td>{analytic.analytics.sales.toLocaleString('en-IN')}</td>
+                      <td>{analytic.analytics.returns.toLocaleString('en-IN')}</td>
                     </tr>
                   ))}
                 </tbody>

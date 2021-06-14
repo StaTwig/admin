@@ -20,26 +20,44 @@ import {
 import { useDispatch } from 'react-redux';
 
 const SKUDetailView = (props) => {
-  const { states, prop, brandsIconArr, brandsArr, brands } = props;
+  const { states, brandsIconArr, brandsArr, brands } = props;
 
     const [analytics, setAnalytics] = useState([]);
+    const [prop, setProp] = useState(props.prop);
     const [isActive, setIsActive] = useState(false);
     const [name, setName] = useState(prop.name);
+    const [dText, setDText] = useState('State');
     const [shortName, setShortname] = useState(prop.shortName);
     const [image, setImage] = useState(prop.image);
     const dispatch = useDispatch();
     useEffect(() => {
         (async () => {
-            // if (props.sku) {
-            //     let n = props.SKUStats.filter(a => a.externalId == props.sku);
-            //     setName(n[0].name);
-            //     setShortname(n[0].shortName);
-            //     setImage(n[0].image);
-            // }
-            const result = await dispatch(getAnalyticsAllStats('?sku=' + (props.sku ? props.sku : prop.externalId) + '&group_by='+(isActive ? 'district' : 'state')));
+            let qry = '';
+            let act = isActive;
+            if (props.sku) {
+                let n = props.SKUStats.filter(a => a.externalId == props.sku);
+                setProp(n[0]);
+                setName(n[0].name);
+                setShortname(n[0].shortName);
+                setImage(n[0].image);
+            }
+            if (props.params) {
+                if (props.params?.state)
+                    qry += "&state=" + props.params.state;
+                if (props.params?.district) {
+                    act = true;
+                    setDText('District');
+                    qry += "&district=" + props.params.district;
+                }
+                else {
+                    setDText('State');
+                    act = false;
+                }
+            }
+            const result = await dispatch(getAnalyticsAllStats('?sku=' + (props.sku ? props.sku : prop.externalId) + '&group_by='+(act ? 'district' : 'state')+qry));
             setAnalytics(result.data);
         })();
-    }, [isActive]);
+    }, [isActive, prop, props]);
 
   return (
     <div>
@@ -121,7 +139,7 @@ const SKUDetailView = (props) => {
         <div className="row">
           <div className="col-md-12 col-sm-12">
                 <div className="productsChart">
-                  <label className="productsChartTitle">States</label>
+                  <label className="productsChartTitle">{dText}</label>
                   <ResponsiveContainer width="100%" height={500}>
                     <BarChart
                       width={500}
@@ -157,7 +175,7 @@ const SKUDetailView = (props) => {
                   <table className="table">
                     <thead>
                       <tr>
-                        <th scope="col">States</th>
+                        <th scope="col">{dText}</th>
                         <th scope="col">Sales</th>
                         <th scope="col">Returned</th>
                         <th scope="col">Target</th>
@@ -175,9 +193,9 @@ const SKUDetailView = (props) => {
                               {analytic.groupedBy}
                             </span>
                           </td>
-                          <td>{analytic.sales}</td>
-                          <td>{analytic.returns}</td>
-                          <td>{analytic.targetSales}</td>
+                          <td>{analytic.sales.toLocaleString('en-IN')}</td>
+                          <td>{analytic.returns.toLocaleString('en-IN')}</td>
+                          <td>{analytic.targetSales.toLocaleString('en-IN')}</td>
                           <td>{analytic.actualReturns}%</td>
                         </tr>
                       ))}
