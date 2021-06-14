@@ -46,20 +46,24 @@ inventoryDetails.sort(function(a,b){
                   //className="rTableRow"
                   >
                                    
-                  <div className="rTableCell" style={{position:"relative",left:'0%'}}>
+                  <div className="rTableCell" style={{position:"relative",left:'0%', fontWeight:" 600 "}}>
                     <div className="d-flex flex-column txtBlue">
-                      <div>{inventory.productDetails.name}</div>
+                      <div> 
+                          {inventory.productDetails.name}
+                      </div>
                     </div>
                   </div>
                   <div className="rTableCell" style={{position:"relative",left:'6%'}}>{inventory.productDetails.type}</div>
                   {/* <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.manufacturer}</div> */}
-                  <div className="rTableCell" style={{position:"relative",left:'12%'}}>{formatDate(inventory.createdAt)}</div>
-                  <div className="rTableCell" style={{position:"relative",left:'19%'}}>{inventory.inventoryQuantity}</div>                                 
-                  <div className="rTableCell" style={{position:"relative",left:'22%'}}> {(inventory.eventTypePrimary !== 'ADD') ? (inventory.eventTypePrimary === 'RECEIVE' ? 'RECEIVED' :  'SENT') : 'ADDED'} </div>
-                 <div className=" rTableCell m-2" 
+                  <div className="rTableCell " style={{position:"relative",left:'12%'}}> {formatDate(inventory.createdAt)}</div>
+                  <div className="rTableCell"  style={{position:"relative",left:'19%', fontWeight:" 600 "}}>{inventory.inventoryQuantity}</div>                                 
+                  <div className="rTableCell" style={{position:"relative", left:"22%", fontWeight:" 600 "}}>
+                        {(inventory.eventTypePrimary !== 'ADD') ? (inventory.eventTypePrimary === 'RECEIVED' ? 'RECEIVED' :  'SENT') : 'ADDED'} 
+                   </div>
+                    <div className=" rTableCell m-2" 
                          style={{position:"relative",left:'12%'}}>
-                         <span className="drop-pad shadow rounded-circle">
-                         <img src={dropdownIcon} height="12" width="18"/></span>
+                         <span className="drop-pad shadow rounded-circle ">
+                         <img src={dropdownIcon} height="12" width="18" /> </span>
                   </div>                  
               {  /* <button
                       className="btn btn-outline-primary fontSize200 expand"
@@ -74,9 +78,9 @@ inventoryDetails.sort(function(a,b){
              </AccordionSummary>
                 <AccordionDetails>
                   <Typography>
-                            <div className="" style={{position:"relative", bottom:"15%", width:"200%" }}>
+                            {/* <div className="" style={{position:"relative", bottom:"15%", width:"200%" }}>
                                  <hr className="solid" ></hr>
-                            </div>
+                  </div> */}
                               <TableContainer> 
                                <Tablee className="table-borderless lg">
                                 <TableBody>
@@ -111,20 +115,19 @@ inventoryDetails.sort(function(a,b){
                                               <TableCell align="left"><b>{inventory.payloadData.data.products.batchNumber}</b></TableCell></div>
                                     </TableRow> }    
 
-                         
-                                      <div className="mt-3" style={{position:"absolute", left:"80%", bottom:"38%" , heigth:"10%", width:"20%"}}>
-                                      {(inventory.eventTypePrimary === 'CREATE' || inventory.eventTypePrimary === 'RECEIVE') ? 
+                                      <div className="mt-3" style={{position:"absolute ", left:"79% ", bottom:"38% ", width:"20% "}}>
+                                      {(inventory.eventTypePrimary === 'CREATE')  ? 
                                       <button
-                                          type="button" className="btn btn-outline-primary " 
+                                          type="button" className="btn btn-outline-primary"  
                                           onClick={() => {
                                             props.history.push(`/viewshipment/${inventory.payloadData.data.id}`)
                                         }}
                         
                                         >View Shipment</button>: ''}
                                         </div>
-                                          <div className="mt-3" style={{position:"absolute", left:"78%", bottom:"15%" , width:"20%"}}>
+                                          <div className="mt-3" style={{position:"absolute", left:"75%", bottom:"15%" , width:"25%"}}>
                                         <button
-                                        type="button" className="btn btn-outline-warning "
+                                        type="button" className="btn btn-info"
                                         disabled = {!inventory.payloadData.data.products.batchNumber}
                                         onClick={() => {
                                           props.history.push(`/productlist/${inventory.payloadData.data.products.batchNumber}`)

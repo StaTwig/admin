@@ -33,17 +33,17 @@ const GeographicalView = (props) => {
                 
                 if (props.params?.year) {
                     if (cond)
-                        cond = '&';
+                        cond+= '&';
                     else
-                        cond = '?';
+                        cond+= '?';
                     cond += 'date_filter_type=' + props.params?.date_filter_type + '&year=' + props.params?.year + '&month=' + props.params?.month + '&quarter=' + props.params?.quarter;
                 }
                 
                 if (sku) {
                     if (cond)
-                        cond = '&';
+                        cond+= '&';
                     else
-                        cond = '?';
+                        cond+= '?';
                     cond += '&sku=' + sku;
                 }
                 if (cond) {
@@ -81,7 +81,7 @@ const GeographicalView = (props) => {
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
                 <h1 className="h2">Analytics</h1>
             </div>
-            <div className="btn-group mainButtonFilter">
+            {/*<div className="btn-group mainButtonFilter">
                 <a href="#!" className="btn active">State</a>
                 <select className="btn selectState" onChange="getSKUByState($event)">
                     <option>Select state</option>
@@ -92,7 +92,7 @@ const GeographicalView = (props) => {
                 </select>
             </div>
 
-            {/* <div className="row">
+             <div className="row">
                 <div className="col-md-3 ">
                     <div className="analyticsCard">
                         <span className="analyticsTitle">Sales</span>

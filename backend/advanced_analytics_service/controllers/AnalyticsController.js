@@ -5,9 +5,11 @@ const ShipmentModel = require("../models/ShipmentModel");
 const auth = require("../middlewares/jwt");
 const OrganisationModel = require("../models/OrganisationModel");
 const WarehouseModel = require("../models/WarehouseModel");
+const ProductModel = require("../models/ProductModel");
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
 const moment = require('moment');
+const { parse } = require("ipaddr.js");
 
 require("dotenv").config();
 
@@ -37,8 +39,29 @@ async function calculatePrevReturnRates(filters, analytic) {
 	}
 }
 
+
+async function calculatePrevReturnRatesNew(filters, analytic) {
+
+	const lastMonthStart = moment().subtract(1, 'months').startOf('month').format(DATE_FORMAT);
+	const lastMonthEnd = moment().subtract(1, 'months').endOf('month').format(DATE_FORMAT);
+	let prevAnalytic = await AnalyticsModel.findOne({
+		uploadDate: {
+			$lte: lastMonthEnd,
+			$gte: lastMonthStart,
+		},
+		brand: analytic._id.manufacturer,
+		productId: analytic._id.id
+	});
+	if (prevAnalytic && parseInt(prevAnalytic.sales)) {
+		return (parseInt(prevAnalytic.returns) / parseInt(prevAnalytic.sales)) * 100;
+	} else {
+		return 0;
+	}
+}
+
 function getFilterConditions(filters) {
-	let matchCondition = {};
+
+	let matchCondition = { status: 'ACTIVE' };
 	if (filters.orgType && filters.orgType !== '') {
 		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
 			matchCondition.type = filters.orgType;
@@ -55,6 +78,7 @@ function getFilterConditions(filters) {
 	if (filters.organization && filters.organization.length) {
 		matchCondition.id = filters.organization;
 	}
+
 	return matchCondition;
 }
 
@@ -216,8 +240,8 @@ const aggregateSalesStats = (inputArr) => {
 		}
 	}
 	let sales = inputArr.map(item => parseInt(item.sales) || 0).reduce((prev, next) => prev + next);
-	let targetSales = inputArr.map(item => parseInt(item.sales) || 0).reduce((prev, next) => prev + next);
-	let returns = inputArr.map(item => parseInt(item.sales) || 0).reduce((prev, next) => prev + next);
+	let targetSales = inputArr.map(item => parseInt(item.targetSales) || 0).reduce((prev, next) => prev + next);
+	let returns = inputArr.map(item => parseInt(item.returns) || 0).reduce((prev, next) => prev + next);
 	let actualReturns = 0;
 	if (returns) {
 		actualReturns = (returns / sales) * 100;
@@ -325,6 +349,10 @@ function getAnalyticsFilterConditions(filters, warehouseIds) {
 	if (filters.sku && filters.sku !== '') {
 		matchCondition.productId = filters.sku;
 	};
+
+	if (filters.brand && filters.brand !== '') {
+		matchCondition.brand = filters.brand;
+	}
 
 	if (filters.date_filter_type && filters.date_filter_type.length) {
 
@@ -466,6 +494,130 @@ exports.getAllBrands = [
  *
  * @returns {Object}
  */
+// exports.getStatsByBrand = [
+// 	auth,
+// 	async function (req, res) {
+// 		try {
+// 			const filters = req.query;
+// 			let warehouseIds = await _getWarehouseIds(filters);
+
+// 			let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
+// 			let brandFilter = {};
+// 			if (filters.brand && filters.brand !== '') {
+// 				brandFilter.manufacturer = filters.brand;
+// 			}
+// 			let Analytics = await AnalyticsModel.aggregate([
+// 				{
+// 					$match: analyticsFilter
+// 				},
+// 				{
+// 					$lookup: {
+// 						from: 'products',
+// 						localField: 'productId',
+// 						foreignField: 'externalId',
+// 						as: 'prodDetails'
+// 					}
+// 				},
+// 				{
+// 					$unwind: {
+// 						path: '$prodDetails'
+// 					}
+// 				},
+// 				{
+// 					$replaceRoot: {
+// 						newRoot: {
+// 							$mergeObjects: ['$prodDetails', '$$ROOT']
+// 						}
+// 					}
+// 				},
+// 				{
+// 					$project: {
+// 						prodDetails: 0
+// 					}
+// 				},
+// 				{
+// 					$match: brandFilter
+// 				},
+// 				{
+// 					$group: {
+// 						_id: '$manufacturer',
+// 						sales: { $sum: 1 },
+// 						targetSales: { $sum: 1 },
+// 						products: { $addToSet: '$$ROOT' }
+// 					}
+// 				},
+// 				{ $sort: { "$products.productId": 1 } }
+
+// 			]);
+
+// 			for (let analytic of Analytics) {
+
+// 				let products = analytic.products.sort(function (a, b) {
+// 					return a.productId - b.productId;
+// 				});
+// 				let prods = [];
+// 				let arrIds = [];
+// 				let salesSum = 0;
+// 				let targetSum = 0;
+// 				let prevProd = '';
+// 				let sum = 0;
+
+// 				for (const [index, product] of products.entries()) {
+// 					if (prevProd !== product.productId || index === products.length - 1) {
+// 						if (index === products.length - 1) {
+// 							salesSum += parseInt(product.sales);
+// 							targetSum += parseInt(product.targetSales);
+// 						}
+// 						if (prevProd == '') {
+// 							if (product.productId != products[index + 1].productId) 
+// 								prevProd = product.productId;
+// 						}
+// 						else
+// 							prevProd = product.productId;
+
+
+// 						if (arrIds.indexOf(product.productId) === -1 && prevProd != '') {
+// 							product['returnRate'] = (parseInt(product.returns) / parseInt(product.sales)) * 100;
+// 							product['returnRatePrev'] = await calculatePrevReturnRates(filters, product);
+// 							arrIds.push(product.productId);
+
+// 							product['sales'] = salesSum;
+// 							product['targetSales'] = targetSum;
+// 							prods.push(product);
+// 							salesSum = 0;
+// 							targetSum = 0;
+// 						}
+// 						else if (prevProd == '') {
+// 							salesSum += parseInt(product.sales);
+// 							targetSum += parseInt(product.targetSales);
+// 						}
+// 					}
+// 					if (prevProd != '') {
+// 						salesSum += parseInt(product.sales);
+// 						targetSum += parseInt(product.targetSales);
+// 					}
+// 				}
+// 				analytic.products = prods;
+// 			}
+
+// 			return apiResponse.successResponseWithData(
+// 				res,
+// 				"Operation success",
+// 				Analytics
+// 			);
+// 		} catch (err) {
+// 			console.log(err);
+
+// 			return apiResponse.ErrorResponse(res, err);
+// 		}
+// 	}
+// ];
+
+/**
+ * getStatsByBrand.
+ *
+ * @returns {Object}
+ */
 exports.getStatsByBrand = [
 	auth,
 	async function (req, res) {
@@ -474,93 +626,59 @@ exports.getStatsByBrand = [
 			let warehouseIds = await _getWarehouseIds(filters);
 
 			let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
-			let brandFilter = {};
-			if (filters.brand && filters.brand !== '') {
-				brandFilter.manufacturer = filters.brand;
-			}
-			let Analytics = await AnalyticsModel.aggregate([
+			const Products = await AnalyticsModel.aggregate([
 				{
 					$match: analyticsFilter
 				},
 				{
-					$lookup: {
-						from: 'products',
-						localField: 'productId',
-						foreignField: 'externalId',
-						as: 'prodDetails'
-					}
-				},
-				{
-					$unwind: {
-						path: '$prodDetails'
-					}
-				},
-				{
-					$replaceRoot: {
-						newRoot: {
-							$mergeObjects: ['$prodDetails', '$$ROOT']
-						}
-					}
-				},
-				{
-					$project: {
-						prodDetails: 0
-					}
-				},
-				{
-					$match: brandFilter
-				},
-				{
 					$group: {
-						_id: '$manufacturer',
-						sales: { $sum: 1 },
-						targetSales: { $sum: 1 },
-						products: { $addToSet: '$$ROOT' }
-
+						_id: {
+							id: '$productId',
+							manufacturer: '$brand',
+						},
+						sales: { $sum: "$sales" },
+						targetSales: { $sum: "$targetSales" },
+						returns: { $sum: "$returns" },
+						product: { "$first": { "productName": "$productName", "productSubName": "$productSubName", "productId": "$productId", "externalId": "$productId" } }
 					}
 				},
-				{ $sort: { "products.productId": 1 } }
-
+				{ $sort: { "_id.manufacturer": 1 } }
 			]);
 
-			for (let analytic of Analytics) {
+			const MasterProducts = await ProductModel.find({});
 
-				let products = analytic.products.sort(function (a, b) {
-					return a.productId - b.productId;
-				});
-				let prods = [];
-				let arrIds = [];
-				let salesSum = 0;
-				let targetSum = 0;
-				let prevProd = '';
+			let Analytics = [];
+			let arr = {};
+			let prevBrand = '';
 
-				for (const [index, product] of products.entries()) {
-					if (prevProd == '')
-						prevProd = product.productId;
-
-					if (prevProd !== product.productId || index === products.length - 1) {
-						if (index === products.length - 1) {
-							salesSum += parseInt(product.sales);
-							targetSum += parseInt(product.targetSales);
-						}
-
-						prevProd = product.productId;
-						if (arrIds.indexOf(product.productId) === -1) {
-							product['returnRate'] = (parseInt(product.returns) / parseInt(product.sales)) * 100;
-							product['returnRatePrev'] = await calculatePrevReturnRates(filters, product);
-							arrIds.push(product.productId);
-
-							product['sales'] = salesSum;
-							product['targetSales'] = targetSum;
-							prods.push(product);
-							salesSum = 0;
-							targetSum = 0;
-						}
+			for (const [index, product] of Products.entries()) {
+				if (prevBrand != product._id.manufacturer) {
+					if (!!Object.keys(arr).length) {
+						Analytics.push(arr);
 					}
-					salesSum += parseInt(product.sales);
-					targetSum += parseInt(product.targetSales);
+					arr = {
+						_id: product._id.manufacturer,
+						sales: product.sales,
+						targetSales: parseInt(product.targetSales),
+						returns: product.returns,
+						products: []
+					};
+					prevBrand = product._id.manufacturer;
 				}
-				analytic.products = prods;
+				let prods = MasterProducts.filter(prod => (prod.externalId == product._id.id && prod.manufacturer == product._id.manufacturer));
+				if (prods.length) {
+					for (const [i, prod] of prods.entries()) {
+						let p = prod.toObject();
+						p['sales'] = product.sales;
+						p['targetSales'] = parseInt(product.targetSales);
+						p['productId'] = product._id.id;
+						p['returns'] = product.returns;
+						p['returnRate'] = (parseInt(product.returns) / parseInt(product.sales)) * 100;
+						p['returnRatePrev'] = await calculatePrevReturnRatesNew(filters, product);
+						product.product = p;
+					}
+				}
+				arr.products.push(product.product);
 			}
 
 			return apiResponse.successResponseWithData(
@@ -569,8 +687,6 @@ exports.getStatsByBrand = [
 				Analytics
 			);
 		} catch (err) {
-			console.log(err);
-
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
@@ -679,7 +795,6 @@ exports.getStatsByOrg = [
 	async function (req, res) {
 		try {
 			const filters = req.query;
-
 			let organizations = await OrganisationModel.aggregate([
 				{
 					$match: getFilterConditions(filters)
@@ -748,7 +863,7 @@ function getFilterConditions(filters) {
 	if (filters.organization && filters.organization.length) {
 		matchCondition.id = filters.organization;
 	}
-	return matchCondition;
+	return { ...matchCondition, ...{ status: 'ACTIVE' } };
 }
 
 /**
@@ -1027,20 +1142,127 @@ async function calculateReturnRateByOrg(supplierOrg) {
 
 }
 
+async function calculateDirtyBottlesAndBreakage(supplierOrg) {
+	const warehouses = await OrganisationModel.aggregate([
+		{
+			$match: {
+				id: supplierOrg.id
+			}
+		},
+		{
+			$group: {
+				_id: 'warehouses',
+				warehouses: {
+					$addToSet: '$warehouses'
+				}
+			}
+		},
+		{
+			$unwind: {
+				path: '$warehouses'
+			}
+		},
+		{
+			$unwind: {
+				path: '$warehouses'
+			}
+		},
+		{
+			$group: {
+				_id: 'warehouses',
+				warehouseIds: {
+					$addToSet: '$warehouses'
+				}
+			}
+		}
+	]);
+	let warehouseIds = [];
+	if (warehouses[0] && warehouses[0].warehouseIds) {
+		warehouseIds = warehouses[0].warehouseIds;
+	}
+	let shipments = await ShipmentModel.aggregate([
+		{
+			$match: {
+				"supplier.locationId": { $in: warehouseIds },
+				"supplier.id": supplierOrg.id,
+				"status": "RECEIVED"
+			}
+		},
+		{
+			$project: {
+				shipmentUpdates: 1
+			}
+		}
+	]);
+
+	let dirtyBottles = 0;
+	let breakage = 0;
+	for (let shipment of shipments) {
+		let shipmentUpdates = shipment.shipmentUpdates.filter(sh => sh.status === 'RECEIVED');
+		shipmentUpdates.map(update => {
+			let products = update.products;
+			products.forEach(prod => {
+				dirtyBottles = dirtyBottles + prod.rejectionRate;
+			});
+		});
+		let damagedShipments = shipment.shipmentUpdates.filter(sh => sh.updateComment === 'Receive_comment_5');
+		damagedShipments.map(dsh => {
+			let products = dsh.products;
+			products.forEach(prod => {
+				breakage = breakage + prod.rejectionRate;
+			});
+		});
+	}
+	return { dirtyBottles: dirtyBottles, breakage: breakage };
+}
+
 async function calculateStorageCapacityByOrg(supplierOrg) {
 	const warehouses = await OrganisationModel.aggregate([
 		{
 			$match: {
 				id: supplierOrg.id
 			}
-		}]);
+		},
+		{
+			$unwind: {
+				path: '$warehouses'
+			}
+		},
+		{
+			$lookup: {
+				from: 'warehouses',
+				localField: 'warehouses',
+				foreignField: 'id',
+				as: 'war'
+			}
+		},
+		{
+			$unwind: {
+				path: '$war'
+			}
+		},
+		{
+			$replaceRoot: {
+				newRoot: {
+					$mergeObjects: ['$war', '$$ROOT']
+				}
+			}
+		}
+	]);
 	let bottleCapacity = 0;
 	let sqft = 0;
-	warehouses.forEach(w => {
-		bottleCapacity = bottleCapacity + (w.bottleCapacity ? w.bottleCapacity : 0);
-		sqft = sqft + (w.sqft ? w.sqft : 0);
-	});
-	return { bottleCapacity, sqft };
+	for (let w of warehouses) {
+		let newBottleCapacity = parseInt(w.bottleCapacity) ? parseInt(w.bottleCapacity) : 0;
+		bottleCapacity = bottleCapacity + newBottleCapacity;
+		let newSQFT = parseInt(w.sqft) ? parseInt(w.sqft) : 0;
+		sqft = sqft + newSQFT;
+	}
+
+	let storageCapacity = {
+		bottleCapacity: bottleCapacity,
+		sqft: sqft
+	};
+	return storageCapacity;
 }
 
 /**
@@ -1064,10 +1286,14 @@ exports.getSupplierPerformance = [
 					$match: matchCondition
 				}
 			]);
+
 			for (const supplier of supplierOrgs) {
 				supplier.leadTime = await calculateLeadTimeByOrg(supplier);
 				supplier.returnRate = await calculateReturnRateByOrg(supplier);
 				supplier.storageCapacity = await calculateStorageCapacityByOrg(supplier);
+				let dirtyBreakage = await calculateDirtyBottlesAndBreakage(supplier);
+				supplier.dirtyBottles = dirtyBreakage.dirtyBottles;
+				supplier.breakage = dirtyBreakage.breakage;
 			}
 
 			return apiResponse.successResponseWithData(
@@ -1075,6 +1301,7 @@ exports.getSupplierPerformance = [
 				"Operation success",
 				supplierOrgs
 			);
+
 		} catch (err) {
 			return apiResponse.ErrorResponse(res, err);
 		}
@@ -1239,3 +1466,149 @@ exports.getStatsBySKU = [
 		}
 	}
 ];
+
+/**
+ * getSalesTotalOfAllBrands by district and month
+ * 
+ * @returns {Object}
+ */
+
+exports.getSalesTotalOfAllBrands = [
+	auth,
+	async function (req, res) {
+		try {
+			const filters = req.query;
+			let warehouseIds = await _getWarehouseIds(filters);
+			let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
+
+			let Analytics = await AnalyticsModel.aggregate([
+				{
+					$match: analyticsFilter
+				},
+				{
+					$lookup: {
+						from: 'products',
+						localField: 'productId',
+						foreignField: 'externalId',
+						as: 'prodDetails'
+					}
+				},
+				{
+					$unwind: {
+						path: '$prodDetails'
+					}
+				},
+				{
+					$replaceRoot: {
+						newRoot: {
+							$mergeObjects: ['$prodDetails', '$$ROOT']
+						}
+					}
+				},
+				{
+					$project: {
+						prodDetails: 0
+					}
+				},
+				{
+					$group: {
+						_id: '$manufacturer',
+						sales: { $sum: "$sales" },
+					}
+				}
+			]);
+
+			return apiResponse.successResponseWithData(
+				res,
+				"Operation success",
+				Analytics
+			);
+
+		} catch (err) {
+			console.log(err);
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+]
+
+/**
+ * Gets monthly sales of Sku's for a particular brand.
+ * 
+ * @returns {Object}
+ */
+
+exports.getMonthlySalesOfSkuByBrand = [
+	auth,
+	async function (req, res) {
+		try {
+			const filters = req.query;
+			let warehouseIds = await _getWarehouseIds(filters);
+
+			let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
+			let brandFilter = {};
+
+			if (filters.brand && filters.brand !== '') {
+				brandFilter.manufacturer = filters.brand;
+			}
+
+			let Analytics = await AnalyticsModel.aggregate([
+				{
+					$match: analyticsFilter
+				},
+				{
+					$lookup: {
+						from: 'products',
+						localField: 'productId',
+						foreignField: 'externalId',
+						as: 'prodDetails'
+					}
+				},
+				{
+					$unwind: {
+						path: '$prodDetails'
+					}
+				},
+				{
+					$replaceRoot: {
+						newRoot: {
+							$mergeObjects: ['$prodDetails', '$$ROOT']
+						}
+					}
+				},
+				{
+					$project: {
+						prodDetails: 0
+					}
+				},
+				{
+					$match: brandFilter
+				},
+				{
+					$group: {
+						_id: {
+							name: '$name',
+							month: { $month: '$uploadDate' }
+						},
+						sales: { $sum: 1 },
+					}
+				},
+				{
+					$group: {
+						"_id": "$_id.name",
+						"overallSales": { "$push": { "month": "$_id.month", "sales": "$sales" } }
+					}
+				}
+			]);
+
+			return apiResponse.successResponseWithData(
+				res,
+				"Operation success",
+				Analytics
+			);
+		} catch (err) {
+			console.log(err);
+
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+]

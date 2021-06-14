@@ -31,6 +31,11 @@ const Analytics = (props) => {
   let skuArr = [];
   const [params, setParams] = useState({});
   const [SKU, setSKU] = useState('');
+  const [state, setState] = useState('');
+  const [district, setDistrict] = useState('');
+  const [year, setYear] = useState('');
+  const [month, setMonth] = useState('');
+  const [qtr, setQtr] = useState('');
   const [isActive, setIsActive] = useState('');
   const [Otype, setOtype] = useState('All');
   const [selectedViewCode, setSelectedViewCode] = useState('ANNUALREPORT_DASHBOARD');
@@ -39,8 +44,6 @@ const Analytics = (props) => {
   const [spm, setSpmButton] = useState("btn");
 
   useEffect(() => {
-    console.log(props);
-    
     setSKU(props?.sku ? props.sku : prop?.externalId ? prop.externalId : '');
   }, [props, prop])
 
@@ -53,6 +56,7 @@ const Analytics = (props) => {
 
   const onYearChange = (event) => {
     const selectedYear = event.target.value;
+    setYear(selectedYear);
     const filter = { ...params };
     filter.year = selectedYear;
     setParams(filter);
@@ -60,6 +64,7 @@ const Analytics = (props) => {
 
   const onMonthChange = (event) => {
     const selectedMonth = event.target.value;
+    setMonth(selectedMonth);
     const filter = { ...params };
     filter.month = selectedMonth;
     setParams(filter);
@@ -68,6 +73,7 @@ const Analytics = (props) => {
 
   const onQuarterChange = (event) => {
     const selectedQuarter = event.target.value;
+    setQtr(selectedQuarter);
     const filter = { ...params };
     filter.quarter = selectedQuarter;
     setParams(filter);
@@ -75,6 +81,7 @@ const Analytics = (props) => {
 
   const onStateChange = async(event) => {
     const selectedState = event.target.value;
+    setState(selectedState);
     const filter = { ...params };
     filter.state = selectedState;
     const result = await props.getDistricts(selectedState);
@@ -84,6 +91,7 @@ const Analytics = (props) => {
 
   const onDistrictChange = (event) => {
     const selectedDistrict = event.target.value;
+    setDistrict(selectedDistrict);
     const filter = { ...params };
     filter.district = selectedDistrict;
     setParams(filter);
@@ -117,6 +125,9 @@ const Analytics = (props) => {
   }
   const changeView = (event) => {
     setSKU('');
+    setState('');
+    setParams({});
+    setDistrict('');
     setSelectedViewCode(event.target.value);
   }
   const onViewChange = (viewCode, props) => {
@@ -135,6 +146,18 @@ const Analytics = (props) => {
 
   const changeOType = (value) => {
     setOtype(value);
+  }
+
+  const resetFilters = () => {
+    setSKU('');
+    setState('');
+    setDistrict('');
+    setIsActive('');
+    setYear('');
+    setMonth('');
+    setQtr('');
+    setOtype('All');
+    setParams({});
   }
 
   return (
@@ -180,13 +203,17 @@ const Analytics = (props) => {
                     SPM
                   </a>
                 </div>
-                <label className="radioButton" for="gv">
-                  <input className="radioInput" type="radio" name="view" id="gv" value={selectedViewCode === 'INVENTORY_DASHBOARD' ? "INVENTORY_DASHBOARD" : 'ANNUALREPORT_DASHBOARD'} onChange={changeView} defaultChecked={filters.view === 'ANNUALREPORT_DASHBOARD' || filters.view === 'INVENTORY_DASHBOARD'} /> Geographical View
+                {selectedViewCode !== 'SPM_DASHBOARD' &&
+                  <>
+                  <label className="radioButton" for="gv">
+                    <input className="radioInput" type="radio" name="view" id="gv" value={selectedViewCode === 'INVENTORY_DASHBOARD' || selectedViewCode === 'INVENTORY_SKU' ? "INVENTORY_DASHBOARD" : 'ANNUALREPORT_DASHBOARD'} onChange={changeView} defaultChecked={filters.view === 'ANNUALREPORT_DASHBOARD' || filters.view === 'INVENTORY_DASHBOARD'} /> Geographical View
                     </label>
-                <label className="radioButton" for="sv">
-                  <input className="radioInput" type="radio" name="view" id="sv" value={(selectedViewCode === 'INVENTORY_DASHBOARD' || selectedViewCode === 'INVENTORY_GRAPHICAL') ? "INVENTORY_SKU" : 'SKU_VIEW'} onChange={changeView} defaultChecked={filters.view === 'SKU_VIEW' || filters.view === 'INVENTORY_SKU'} /> SKU View
+                  <label className="radioButton" for="sv">
+                    <input className="radioInput" type="radio" name="view" id="sv" value={(selectedViewCode === 'INVENTORY_DASHBOARD' || selectedViewCode === 'INVENTORY_GRAPHICAL') ? "INVENTORY_SKU" : 'SKU_VIEW'} onChange={changeView} defaultChecked={filters.view === 'SKU_VIEW' || filters.view === 'INVENTORY_SKU'} /> SKU View
                     </label>
-                {selectedViewCode !== 'INVENTORY_DASHBOARD' && selectedViewCode !== 'INVENTORY_SKU'  && selectedViewCode !== 'INVENTORY_GRAPHICAL' && 
+                    </>
+                }
+                {selectedViewCode !== 'SPM_DASHBOARD' && selectedViewCode !== 'INVENTORY_DASHBOARD' && selectedViewCode !== 'INVENTORY_SKU'  && selectedViewCode !== 'INVENTORY_GRAPHICAL' && 
                   <>
                 <label className="radioButton" for="suv">
                   <input className="radioInput" type="radio" name="view"  id="suv" value="SUPPLIER_VIEW" onChange={changeView} defaultChecked={filters.view === 'SUPPLIER_VIEW'} /> Supplier View
@@ -196,7 +223,7 @@ const Analytics = (props) => {
                     </label>
                   </>
                 }
-                {selectedViewCode != 'BREWERY_VIEW' && 
+                {selectedViewCode !== 'SPM_DASHBOARD' && selectedViewCode != 'BREWERY_VIEW' && 
                 <>
                 <label className="filterSubHeading mt-3">Select SKU</label>
                 <select className="filterSelect mt-2" value={SKU} onChange={skuChanged}>
@@ -215,10 +242,10 @@ const Analytics = (props) => {
                   )
                   }
                   </select>
-                  {selectedViewCode != 'BREWERY_DETAIL_VIEW' &&
+                  {(selectedViewCode == 'ANNUALREPORT_DASHBOARD' || selectedViewCode == 'DETAILED_GEO_VIEW') &&
                     <>
                       <label className="filterSubHeading mt-3">Select State</label>
-                      <select className="filterSelect mt-2" onChange={onStateChange}>
+                      <select className="filterSelect mt-2" value={state} onChange={onStateChange}>
                         <option value="">Select State</option>
                         {props.states?.map((state) =>
                           <option value={state}>{state}</option>
@@ -226,7 +253,7 @@ const Analytics = (props) => {
                         }
                       </select>
                       <label className="filterSubHeading mt-3">Select District</label>
-                      <select className="filterSelect mt-2" onChange={onDistrictChange}>
+                      <select value={district} className="filterSelect mt-2" onChange={onDistrictChange}>
                         <option value="">Select District</option>
                         {districts?.map((district) =>
                           <option value={district}>{district}</option>
@@ -264,6 +291,7 @@ const Analytics = (props) => {
                     <div className="col-md-5">
                       <select
                         className="filterSelect mt-2"
+                        value={year}
                         onChange={onYearChange}
                       >
                         <option value="">Select Year</option>
@@ -280,6 +308,7 @@ const Analytics = (props) => {
                       <div className="col-md-5">
                         <select
                           className="filterSelect mt-2"
+                          value={month}
                           onChange={onMonthChange}
                         >
                           <option value="">Select Month</option>
@@ -297,6 +326,7 @@ const Analytics = (props) => {
                       <div className="col-md-5">
                         <select
                           className="filterSelect mt-2"
+                          value={qtr}
                           onChange={onQuarterChange}
                         >
                           <option value="">Select Quarter</option>
@@ -312,7 +342,7 @@ const Analytics = (props) => {
                       }
                   </div>
                 }
-                {(selectedViewCode == 'BREWERY_DETAIL_VIEW' || selectedViewCode == 'SUPPLIER_DETAIL_VIEW') && 
+                {(selectedViewCode == 'SUPPLIER_DETAIL_VIEW') && 
                   <>
                   <h3 className="filterSubHeading mt-3">Vendor</h3>
                   <div className="btn-group filterButton mt-2 mb-4">
@@ -323,6 +353,14 @@ const Analytics = (props) => {
                     )}
                   </div>
                   </>
+                }
+                {!!Object.keys(params).length &&
+                  <button
+                    className="btn SearchButton mt-4"
+                    onClick={resetFilters}
+                  >
+                    Clear
+                </button>
                 }
               </div>
             </div>
