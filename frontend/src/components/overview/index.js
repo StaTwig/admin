@@ -25,6 +25,10 @@ const DashBoard = (props) => {
     addresses,
   } = props;
 
+  requestsPending.sort(function(a,b){
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
+  
   return (
     <div className="dashboard">
       {showModal && (
