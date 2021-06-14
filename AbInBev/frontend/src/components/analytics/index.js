@@ -206,7 +206,7 @@ const Analytics = (props) => {
                 {selectedViewCode !== 'SPM_DASHBOARD' &&
                   <>
                   <label className="radioButton" for="gv">
-                    <input className="radioInput" type="radio" name="view" id="gv" value={selectedViewCode === 'INVENTORY_DASHBOARD' || selectedViewCode === 'INVENTORY_SKU' ? "INVENTORY_DASHBOARD" : 'ANNUALREPORT_DASHBOARD'} onChange={changeView} defaultChecked={filters.view === 'ANNUALREPORT_DASHBOARD' || filters.view === 'INVENTORY_DASHBOARD'} /> Geographical View
+                    <input className="radioInput" type="radio" name="view" id="gv" value={selectedViewCode === 'INVENTORY_DASHBOARD' || selectedViewCode === 'INVENTORY_SKU' || filters.view === 'INVENTORY_SKU_DETAILS' ? "INVENTORY_DASHBOARD" : 'ANNUALREPORT_DASHBOARD'} onChange={changeView} defaultChecked={filters.view === 'ANNUALREPORT_DASHBOARD' || filters.view === 'INVENTORY_DASHBOARD'} /> Geographical View
                     </label>
                   <label className="radioButton" for="sv">
                     <input className="radioInput" type="radio" name="view" id="sv" value={(selectedViewCode === 'INVENTORY_DASHBOARD' || selectedViewCode === 'INVENTORY_GRAPHICAL') ? "INVENTORY_SKU" : 'SKU_VIEW'} onChange={changeView} defaultChecked={filters.view === 'SKU_VIEW' || filters.view === 'INVENTORY_SKU' || filters.view === 'INVENTORY_SKU_DETAILS'} /> SKU View
