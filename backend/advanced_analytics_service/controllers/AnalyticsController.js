@@ -60,8 +60,7 @@ async function calculatePrevReturnRatesNew(filters, analytic) {
 }
 
 function getFilterConditions(filters) {
-
-	let matchCondition = { status: 'ACTIVE' };
+	let matchCondition = {status: 'ACTIVE'};
 	if (filters.orgType && filters.orgType !== '') {
 		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
 			matchCondition.type = filters.orgType;
@@ -78,7 +77,7 @@ function getFilterConditions(filters) {
 	if (filters.organization && filters.organization.length) {
 		matchCondition.id = filters.organization;
 	}
-
+	
 	return matchCondition;
 }
 
@@ -95,7 +94,7 @@ function getFilterConditionsWarehouse(filters) {
 		matchCondition.state = filters.state;
 	}
 	if (filters.district && filters.district.length) {
-		matchCondition["warehouseAddress.firstLine"] = filters.district;
+		matchCondition["warehouseAddress.city"] = filters.district;
 	}
 	if (filters.organization && filters.organization.length) {
 		matchCondition.id = filters.organization;
@@ -106,30 +105,27 @@ function getFilterConditionsWarehouse(filters) {
 const _getWarehouseIdsByOrg = async (org) => {
 	let matchCondition = {};
 	if (org && org.id && org.id !== '') {
-		matchCondition.id = org.id;
+		matchCondition.organisationId = org.id;
 	}
-	const warehouses = await OrganisationModel.aggregate([
-		{
-			$match: matchCondition
-		},
-		{
-			$unwind: {
-				path: "$warehouses"
-			}
-		},
-		{
-			$group: {
-				_id: '$warehouseIds',
-				'warehouseIds': {
-					$addToSet: "$warehouses"
+	let warehouseIds = [];
+	
+	const warehouse = await WarehouseModel.findOne({ organisationId: org.id });
+	
+	if (warehouse) {
+		const warehouses = await WarehouseModel.aggregate([
+			{
+				$match: { "warehouseAddress.city": warehouse?.warehouseAddress.city }
+			},
+			{
+				$group: {
+					_id: '$id'
 				}
 			}
-		}
-	]);
-	let warehouseIds = [];
-	if (warehouses && warehouses[0] && warehouses[0].warehouseIds) {
-		warehouseIds = warehouses[0].warehouseIds;
+		]);
+		for (const wh of warehouses) 
+			warehouseIds.push(wh._id);
 	}
+	
 	return warehouseIds;
 }
 
@@ -244,7 +240,7 @@ const aggregateSalesStats = (inputArr) => {
 	let returns = inputArr.map(item => parseInt(item.returns) || 0).reduce((prev, next) => prev + next);
 	let actualReturns = 0;
 	if (returns) {
-		actualReturns = (returns / sales) * 100;
+		actualReturns = parseFloat( ((returns / sales) * 100) ).toFixed(2);
 	}
 	return {
 		sales: sales,
@@ -279,6 +275,9 @@ function getSKUAnalyticsFilterConditions(filters) {
 		matchCondition.productId = filters.sku;
 	};
 
+	// if (filters.district && filters.district !== '') {
+	// 	matchCondition.district = filters.district;
+	// }
 
 	if (filters.date_filter_type && filters.date_filter_type.length) {
 
@@ -673,7 +672,7 @@ exports.getStatsByBrand = [
 						p['targetSales'] = parseInt(product.targetSales);
 						p['productId'] = product._id.id;
 						p['returns'] = product.returns;
-						p['returnRate'] = (parseInt(product.returns) / parseInt(product.sales)) * 100;
+						p['returnRate'] = parseFloat(((parseInt(product.returns) / parseInt(product.sales)) * 100)).toFixed(2);
 						p['returnRatePrev'] = await calculatePrevReturnRatesNew(filters, product);
 						product.product = p;
 					}
@@ -1137,7 +1136,7 @@ async function calculateReturnRateByOrg(supplierOrg) {
 		totalReturns = totalReturns + parseInt(analytic.returns);
 		totalSales = totalSales + parseInt(analytic.sales);
 	}
-	returnRate = totalReturns / totalSales * 100;
+	returnRate = parseFloat(((totalReturns / totalSales) * 100)).toFixed(2);
 	return returnRate;
 
 }
@@ -1332,7 +1331,7 @@ exports.getAllStats = [
 				.skip((resPerPage * page) - resPerPage)
 				.limit(resPerPage);
 			for (let analytic of Analytics) {
-				analytic['returnRate'] = (parseInt(analytic.returns) / parseInt(analytic.sales)) * 100;
+				analytic['returnRate'] = parseFloat(((parseInt(analytic.returns) / parseInt(analytic.sales)) * 100)).toFixed(2);
 				analytic['returnRatePrev'] = await calculatePrevReturnRates(filters, analytic);
 			}
 
@@ -1384,6 +1383,11 @@ function getSKUGroupByFilters(filters) {
 				});
 
 		} else if (filters.group_by === 'district') {
+			matchCondition.push({
+					$match: {
+						district: filters.district
+					}
+				});
 			matchCondition.push(
 				{
 					$group: {
@@ -1485,34 +1489,34 @@ exports.getSalesTotalOfAllBrands = [
 				{
 					$match: analyticsFilter
 				},
-				{
-					$lookup: {
-						from: 'products',
-						localField: 'productId',
-						foreignField: 'externalId',
-						as: 'prodDetails'
-					}
-				},
-				{
-					$unwind: {
-						path: '$prodDetails'
-					}
-				},
-				{
-					$replaceRoot: {
-						newRoot: {
-							$mergeObjects: ['$prodDetails', '$$ROOT']
-						}
-					}
-				},
-				{
-					$project: {
-						prodDetails: 0
-					}
-				},
+				// {
+				// 	$lookup: {
+				// 		from: 'products',
+				// 		localField: 'productId',
+				// 		foreignField: 'externalId',
+				// 		as: 'prodDetails'
+				// 	}
+				// },
+				// {
+				// 	$unwind: {
+				// 		path: '$prodDetails'
+				// 	}
+				// },
+				// {
+				// 	$replaceRoot: {
+				// 		newRoot: {
+				// 			$mergeObjects: ['$prodDetails', '$$ROOT']
+				// 		}
+				// 	}
+				// },
+				// {
+				// 	$project: {
+				// 		prodDetails: 0
+				// 	}
+				// },
 				{
 					$group: {
-						_id: '$manufacturer',
+						_id: '$brand',
 						sales: { $sum: "$sales" },
 					}
 				}
@@ -1589,7 +1593,7 @@ exports.getMonthlySalesOfSkuByBrand = [
 							name: '$name',
 							month: { $month: '$uploadDate' }
 						},
-						sales: { $sum: 1 },
+						sales: { $sum: "$sales" },
 					}
 				},
 				{

@@ -50,6 +50,11 @@ const componentMappings = [
     moduleName: 'Inventory',
   },
   {
+    componentName: 'skuViewDetails',
+    componentCode: 'INVENTORY_SKU_DETAILS',
+    moduleName: 'Inventory',
+  },
+  {
     componentName: 'InventoryDashboard',
     componentCode: 'INVENTORY_DASHBOARD',
     moduleName: 'Inventory',

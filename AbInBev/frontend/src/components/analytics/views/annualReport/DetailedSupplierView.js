@@ -62,9 +62,12 @@ const DetailedSupplierView = (props) => {
           '?sku=' + (props.sku ? props.sku : prop.externalId),
         ),
       );
+      
+        let n = result.data.filter((a) => a.type == 'S1' || a.type == 'S2' || a.type == 'S3');
+        result.data = n;
       if (props.Otype) {
         if (props.Otype != 'All') {
-          let n = result.data.filter((a) => a.type == props.Otype);
+          n = result.data.filter((a) => a.type == props.Otype);
           result.data = n;
         }
       }
@@ -243,12 +246,7 @@ const DetailedSupplierView = (props) => {
                       </td>
                       <td>Karnataka</td>
                       <td>
-                        {(analytic.analytics.actualReturns /
-                          (analytic.analytics.returns > 0
-                            ? analytic.analytics.returns
-                            : 1)) *
-                          100}
-                        %
+                        {analytic.analytics.actualReturns}%
                       </td>
                     </tr>
                   ))}

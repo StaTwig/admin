@@ -208,9 +208,9 @@ const GeographicalView = (props) => {
                                         </div>
                                     </div>
                                 </td>
-                                <td>{analytic.sales}</td>
-                                <td>{analytic.returns ? analytic.returns : 0}</td>
-                                <td>{analytic.targetSales}</td>
+                                <td>{analytic.sales.toLocaleString('en-IN')}</td>
+                                <td>{analytic.returns ? analytic.returns.toLocaleString('en-IN') : 0}</td>
+                                <td>{analytic.targetSales.toLocaleString('en-IN')}</td>
                                 <td>{analytic.returnRate ? analytic.returnRate : 0}%</td>
                             </tr>
                         )}

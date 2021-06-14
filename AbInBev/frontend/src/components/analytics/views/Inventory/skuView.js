@@ -1,148 +1,113 @@
 import React, { useState, useEffect } from 'react';
-import becks from '../../../../assets/images/becks.png';
-import bottlesIcon from '../../../../assets/becks_330ml.png';
-import { getAnalyticsByBrand } from '../../../../actions/analyticsAction';
-import { useDispatch } from 'react-redux';
-import {
-  BarChart,
-  AreaChart,
-  Area,
-  Bar,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-} from 'recharts';
-import { getAnalyticsAllStats } from '../../../../actions/analyticsAction';
 
 const iSKUView = (props) => {
-  const [analytics, setAnalytics] = useState([]);
-  const dispatch = useDispatch();
-  let skuArr = [];
+  const [visible, setVisible] = useState(false);
+  const [analytics, setAnalytics] = useState(props.bstats);
 
-  useEffect(() => {
-    (async () => {
-      if (props.sku) {
-        let n = props.SKUStats.filter((a) => a.externalId == props.sku);
-        setName(n[0].name);
-        setShortname(n[0].shortName);
-        setImage(n[0].image);
-      }
-      const result = await dispatch(
-        getAnalyticsAllStats(
-          '?group_by=state' + (props.sku ? '&sku=' + props.sku : ''),
-        ),
-      );
-      setAnalytics(result.data);
-    })();
-  }, []);
-
+  const [old, setOld] = useState(props.bstats);
+  const [show, setShow] = useState(false);
   const openDetailView = (sku) => {
-    props.onViewChange('SKU_DETAIL_VIEW', { sku: sku });
+    props.onViewChange('INVENTORY_SKU_DETAILS', { ...sku });
   };
 
-  const changeSku = async (event) => {
-    let sku = event.target.value;
-    const result = await dispatch(
-      getAnalyticsAllStats('?group_by=state' + (sku ? '&sku=' + sku : '')),
-    );
-    setAnalytics(result.data);
+  const toggleBrand = (brand) => {
+    setVisible(true);
+    setAnalytics(old.filter((a) => a._id == brand));
+    setShow(true);
+  };
+
+  const goBack = () => {
+    setAnalytics(old);
+    setVisible(false);
+    setShow(false);
   };
 
   return (
-    <>
+    <div className="inventoryDashboard">
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
-        <h1 className="h2">SKU View - Inventory</h1>
+        <h1 className="h2">Inventory SKU</h1>
       </div>
-      <div className="productDetailedView">
-        <div className="row">
-          <div className="col-md-6 col-lg-6 col-sm-12">
-            <div className="productsChart">
-              <label className="productsChartTitle">Overall Sales</label>
-              <ResponsiveContainer width="100%" height={180}>
-                <AreaChart
-                  width={500}
-                  height={400}
-                  data={analytics}
-                  margin={{
-                    top: 10,
-                    right: 30,
-                    left: 0,
-                    bottom: 0,
-                  }}
-                >
-                  <XAxis dataKey="groupBy" />
-                  <YAxis />
-                  <Tooltip />
-                  <Area
-                    type="monotone"
-                    dataKey="sales"
-                    stroke="#8884d8"
-                    strokeWidth={2}
-                    fill="#8884d8"
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
-          <div className="col-md-6 col-lg-6 col-sm-12">
-            <div className="productsChart">
-              <label className="productsChartTitle">Overall Inventory</label>
-              <ResponsiveContainer width="100%" height={180}>
-                <AreaChart
-                  width={500}
-                  height={400}
-                  data={analytics}
-                  margin={{
-                    top: 10,
-                    right: 30,
-                    left: 0,
-                    bottom: 0,
-                  }}
-                >
-                  <XAxis dataKey="groupBy" />
-                  <YAxis />
-                  <Tooltip />
-                  <Area
-                    type="monotone"
-                    dataKey="returns"
-                    stroke="#FAAB10"
-                    strokeWidth={2}
-                    fill="#FAAB10"
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
-            </div>
-          </div>
 
-          <div className="tableDetals">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th scope="col">States</th>
-                  <th scope="col">Sales</th>
-                  <th scope="col">Total Bottle Pool</th>
-                </tr>
-              </thead>
-              <tbody>
-                {analytics.map((analytic, index) => (
-                  <tr>
-                    <td scope="row">
-                      <span className="stateLink">{analytic.groupedBy}</span>
-                    </td>
-                    <td>{analytic.sales}</td>
-                    <td>{analytic.returns}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
+      <div className="row">
+        {show && <span onClick={goBack}>Back</span>}
+        {analytics.map((analytic, index) => {
+          return (
+            <>
+              <div className="col-lg-3 col-md-3 col-sm-12">
+                <div
+                  className="productGrid"
+                  onClick={() => toggleBrand(analytic._id)}
+                >
+                  <img
+                    className="productImage"
+                    src={
+                      props.brandsIconArr[
+                        props.brands.indexOf(analytic._id.split(' ').join(''))
+                      ]
+                    }
+                  />
+                </div>
+              </div>
+
+              {visible && (
+                <div className="card-container">
+                  {analytic.products.map((product, i) => (
+                    <div
+                      className="card"
+                      onClick={() => openDetailView(product)}
+                    >
+                      <div className="author mb-2">
+                        <div className="profile">
+                          <img
+                            src={
+                              props.brandsArr[
+                                props.brands.indexOf(
+                                  product.manufacturer.split(' ').join(''),
+                                )
+                              ]
+                            }
+                            alt=""
+                            height="60"
+                          />
+                        </div>
+                        <div className="info">
+                          <div className="name">{product.name}</div>
+                          <div className="caption">{product.shortName}</div>
+                          <div className="caption">{product.externalId}</div>
+                        </div>
+                      </div>
+                      <span className="breweryPropertyText">
+                        Return Rate{' '}
+                        <span className="pull-right breweryPropertyValue">
+                          {product.returnRate || 0}%
+                        </span>
+                      </span>
+                      <div className="progress progress-line-danger">
+                        <div
+                          className="progress-bar progress-bar-danger"
+                          role="progressbar"
+                          aria-valuenow="60"
+                          aria-valuemin="0"
+                          aria-valuemax="100"
+                          style={{ width: (product.returnRate || 0) + '%' }}
+                        >
+                          <span className="sr-only">
+                            {product.returnRate || 0}% Complete
+                          </span>
+                        </div>
+                      </div>
+                      <div className="captionSubtitle">
+                        Compared to ({product.returnRatePrev || 0}% last month)
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
+          );
+        })}
       </div>
-    </>
+    </div>
   );
 };
 
