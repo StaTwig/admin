@@ -762,6 +762,73 @@ exports.getAllStates = [
   },
 ];
 
+exports.getStatesByCountry = [
+  auth,
+  async (req, res) => {
+    try {
+      const allStates = await WarehouseModel.aggregate([{ $match :{'warehouseAddress.country': req.query.country}},
+      {
+         $group:
+           {
+             _id: "$warehouseAddress.state",
+           }
+       }
+  ]);
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allStates
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+exports.getCitiesByState = [
+  auth,
+  async (req, res) => {
+    try {
+      const allCities = await WarehouseModel.aggregate([{ $match :{'warehouseAddress.state': req.query.state}},
+      {
+         $group:
+           {
+             _id: "$warehouseAddress.city",
+           }
+       }
+  ]);
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allCities
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+exports.getWarehousesByCity = [
+  auth,
+  async (req, res) => {
+    try {
+      var allWarehouses = await WarehouseModel.aggregate([{ $match :{'warehouseAddress.city': req.query.city}},
+      {
+         $group:
+           {
+             _id: "$warehouseInventory",
+           }
+       }
+  ]);
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allWarehouses
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
 exports.getDistrictsByState = [
   auth,
   async (req, res) => {
