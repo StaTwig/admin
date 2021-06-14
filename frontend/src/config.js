@@ -693,7 +693,7 @@ export function config() {
     },
   };
 
-  const environment = process.env.ENVIRONMENT || `uniceftest`; // change prod to test, local,stable, dev for respective environments
+  const environment = process.env.ENVIRONMENT || `test`; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
   return conf;
 }

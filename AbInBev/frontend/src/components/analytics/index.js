@@ -206,14 +206,14 @@ const Analytics = (props) => {
                 {selectedViewCode !== 'SPM_DASHBOARD' &&
                   <>
                   <label className="radioButton" for="gv">
-                    <input className="radioInput" type="radio" name="view" id="gv" value={selectedViewCode === 'INVENTORY_DASHBOARD' || selectedViewCode === 'INVENTORY_SKU' ? "INVENTORY_DASHBOARD" : 'ANNUALREPORT_DASHBOARD'} onChange={changeView} defaultChecked={filters.view === 'ANNUALREPORT_DASHBOARD' || filters.view === 'INVENTORY_DASHBOARD'} /> Geographical View
+                    <input className="radioInput" type="radio" name="view" id="gv" value={selectedViewCode === 'INVENTORY_DASHBOARD' || selectedViewCode === 'INVENTORY_SKU' || filters.view === 'INVENTORY_SKU_DETAILS' ? "INVENTORY_DASHBOARD" : 'ANNUALREPORT_DASHBOARD'} onChange={changeView} defaultChecked={filters.view === 'ANNUALREPORT_DASHBOARD' || filters.view === 'INVENTORY_DASHBOARD'} /> Geographical View
                     </label>
                   <label className="radioButton" for="sv">
-                    <input className="radioInput" type="radio" name="view" id="sv" value={(selectedViewCode === 'INVENTORY_DASHBOARD' || selectedViewCode === 'INVENTORY_GRAPHICAL') ? "INVENTORY_SKU" : 'SKU_VIEW'} onChange={changeView} defaultChecked={filters.view === 'SKU_VIEW' || filters.view === 'INVENTORY_SKU'} /> SKU View
+                    <input className="radioInput" type="radio" name="view" id="sv" value={(selectedViewCode === 'INVENTORY_DASHBOARD' || selectedViewCode === 'INVENTORY_GRAPHICAL') ? "INVENTORY_SKU" : 'SKU_VIEW'} onChange={changeView} defaultChecked={filters.view === 'SKU_VIEW' || filters.view === 'INVENTORY_SKU' || filters.view === 'INVENTORY_SKU_DETAILS'} /> SKU View
                     </label>
                     </>
                 }
-                {selectedViewCode !== 'SPM_DASHBOARD' && selectedViewCode !== 'INVENTORY_DASHBOARD' && selectedViewCode !== 'INVENTORY_SKU'  && selectedViewCode !== 'INVENTORY_GRAPHICAL' && 
+                {selectedViewCode !== 'SPM_DASHBOARD' && selectedViewCode !== 'INVENTORY_DASHBOARD' && selectedViewCode !== 'INVENTORY_SKU' && selectedViewCode !== 'INVENTORY_GRAPHICAL' && selectedViewCode !== 'INVENTORY_SKU_DETAILS' && 
                   <>
                 <label className="radioButton" for="suv">
                   <input className="radioInput" type="radio" name="view"  id="suv" value="SUPPLIER_VIEW" onChange={changeView} defaultChecked={filters.view === 'SUPPLIER_VIEW'} /> Supplier View
@@ -242,7 +242,7 @@ const Analytics = (props) => {
                   )
                   }
                   </select>
-                  {(selectedViewCode == 'ANNUALREPORT_DASHBOARD' || selectedViewCode == 'DETAILED_GEO_VIEW') &&
+                  {(selectedViewCode == 'ANNUALREPORT_DASHBOARD' || selectedViewCode == 'DETAILED_GEO_VIEW' || selectedViewCode == 'SKU_DETAIL_VIEW') &&
                     <>
                       <label className="filterSubHeading mt-3">Select State</label>
                       <select className="filterSelect mt-2" value={state} onChange={onStateChange}>

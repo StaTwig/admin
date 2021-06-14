@@ -238,8 +238,8 @@ const iGraphicalDetailedView = (props) => {
                     <td scope="row">
                       <span className="stateLink">{analytic.groupedBy}</span>
                     </td>
-                    <td>{analytic.sales}</td>
-                    <td>{analytic.returns}</td>
+                    <td>{analytic.sales.toLocaleString('en-IN')}</td>
+                    <td>{analytic.returns.toLocaleString('en-IN')}</td>
                   </tr>
                 ))}
               </tbody>

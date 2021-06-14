@@ -43,11 +43,10 @@ const SpmDashboard = (props) => {
               <>
                 <tr
                   key={index}
-                  className={`${
-                    selectedRatingIndex === index
+                  className={`${selectedRatingIndex === index
                       ? 'selectedRow noBottomRadius'
                       : ''
-                  }`}
+                    }`}
                 >
                   <td scope="row">{index + 1}</td>
                   <td>
@@ -153,8 +152,8 @@ const SpmDashboard = (props) => {
                               <td scope="row">Lead Time</td>
                               <td>
                                 {perf.leadTime &&
-                                perf.leadTime[0] &&
-                                perf.leadTime[0].avgLeadTime
+                                  perf.leadTime[0] &&
+                                  perf.leadTime[0].avgLeadTime
                                   ? perf.leadTime[0].avgLeadTime
                                   : 0}
                               </td>
@@ -167,6 +166,22 @@ const SpmDashboard = (props) => {
                                 {perf.storageCapacity.bottleCapacity}
                                 <br />
                                 {perf.storageCapacity.sqft}
+                              </td>
+                              <td></td>
+                              <td></td>
+                            </tr>
+                            <tr>
+                              <td scope="row">Dirty Bottles</td>
+                              <td>
+                                {perf.dirtyBottles}
+                              </td>
+                              <td></td>
+                              <td></td>
+                            </tr>
+                            <tr>
+                              <td scope="row">Breakage</td>
+                              <td>
+                                {perf.breakage}
                               </td>
                               <td></td>
                               <td></td>

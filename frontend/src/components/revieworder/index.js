@@ -111,12 +111,12 @@ const ReviewOrder = props => {
             <div>
               <div className=" row p-3">
                 <div className="col row">
-                  <span className="col-4">Organisation Name: </span>
-                  <span className="col" style={{color: "black"}} >{order.fromOrgId}</span>
+                  <span className="col-4">Organisation Name12: </span>
+                  <span className="col" style={{color: "black",fontSize:"14px"}} >{order.fromOrgId}</span>
                 </div>
                 <div className="col row">
                   <span className="col-4">Organisation ID: </span>
-                  <span className="col" style={{color: "black"}} >{order.typeName}/{order.fromOrg}</span>
+                  <span className="col" style={{color: "black",fontSize:"14px"}} >{order.typeName}/{order.fromOrg}</span>
                 </div>
               </div>
             </div>
@@ -129,16 +129,16 @@ const ReviewOrder = props => {
               <div className=" row p-3">
                 <div className="col row">
                   <span className="col-4">Organisation Name: </span>
-                  <span className="col" style={{color: "black"}} >{order.toOrgName}</span>
+                  <span className="col" style={{color: "black",fontSize:"14px"}} >{order.toOrgName}</span>
                 </div>
                 <div className="col row">
                   <span className="col-4">Organisation ID: </span>
-                  <span className="col" style={{color: "black"}} >{order.rtypeName}/{order.toOrg}</span>
+                  <span className="col" style={{color: "black",fontSize:"14px"}} >{order.rtypeName}/{order.toOrg}</span>
                 </div>
                 <div className="w-100"></div>
                 <div className="col row col-6 mt-5">
                   <span className="col-4">Delivery Location:</span>
-                  <span className="col ml-2 " style={{color: "black"}} >{order.toOrgLocName}</span>
+                  <span className="col ml-2 " style={{color: "black",fontSize:"14px"}} >{order.toOrgLocName}</span>
                 </div>
               </div>
             </div>
