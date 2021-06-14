@@ -119,7 +119,9 @@ const TransactionHistory = (props) => {
     setSelectedOrganizationType(organizationType);
     const _filters = { ...filters };
     _filters.organizationType = organizationType;
-    _getOrganizationsByType(_filters);
+    _filters.state = '';
+    _filters.district = '';
+    _filters.organization = '';
     setFilters(_filters);
     applyFilters(_filters);
   };
@@ -185,6 +187,7 @@ const TransactionHistory = (props) => {
 
     const _filterVisibility = { ...filterVisibility };
     _filterVisibility.district = true;
+    _filterVisibility.organization = true;
     setFilterVisibility(_filterVisibility);
   };
   const onDistrictSelection = (event) => {
@@ -346,7 +349,6 @@ const TransactionHistory = (props) => {
   useEffect(() => {
     (async () => {
       _getAllStates();
-      _getOrganizationsByType(filters);
       const results = await dispatch(getTransactions(filters));
       let addedarray = [];
       let date;
@@ -982,6 +984,7 @@ const TransactionHistory = (props) => {
                   className="filterSelect mt-2"
                   value={filters.organization}
                   onChange={onOrganizationChange}
+                  disabled={!filterVisibility.organization}
                 >
                   <option>
                     Select

@@ -573,8 +573,8 @@ exports.getAllBrands = [
 // 						}
 // 						else
 // 							prevProd = product.productId;
-							
-						
+
+
 // 						if (arrIds.indexOf(product.productId) === -1 && prevProd != '') {
 // 							product['returnRate'] = (parseInt(product.returns) / parseInt(product.sales)) * 100;
 // 							product['returnRatePrev'] = await calculatePrevReturnRates(filters, product);
@@ -638,7 +638,7 @@ exports.getStatsByBrand = [
 						sales: { $sum: "$sales" },
 						targetSales: { $sum: "$targetSales" },
 						returns: { $sum: "$returns" },
-						product : { "$first": {"productName":"$productName", "productSubName":"$productSubName", "productId":"$productId", "externalId":"$productId" }}
+						product: { "$first": { "productName": "$productName", "productSubName": "$productSubName", "productId": "$productId", "externalId": "$productId" } }
 					}
 				},
 				{ $sort: { "_id.manufacturer": 1 } }
@@ -862,7 +862,7 @@ function getFilterConditions(filters) {
 	if (filters.organization && filters.organization.length) {
 		matchCondition.id = filters.organization;
 	}
-	return {...matchCondition, ...{status: 'ACTIVE'}};
+	return { ...matchCondition, ...{ status: 'ACTIVE' } };
 }
 
 /**
@@ -1141,20 +1141,127 @@ async function calculateReturnRateByOrg(supplierOrg) {
 
 }
 
+async function calculateDirtyBottlesAndBreakage(supplierOrg) {
+	const warehouses = await OrganisationModel.aggregate([
+		{
+			$match: {
+				id: supplierOrg.id
+			}
+		},
+		{
+			$group: {
+				_id: 'warehouses',
+				warehouses: {
+					$addToSet: '$warehouses'
+				}
+			}
+		},
+		{
+			$unwind: {
+				path: '$warehouses'
+			}
+		},
+		{
+			$unwind: {
+				path: '$warehouses'
+			}
+		},
+		{
+			$group: {
+				_id: 'warehouses',
+				warehouseIds: {
+					$addToSet: '$warehouses'
+				}
+			}
+		}
+	]);
+	let warehouseIds = [];
+	if (warehouses[0] && warehouses[0].warehouseIds) {
+		warehouseIds = warehouses[0].warehouseIds;
+	}
+	let shipments = await ShipmentModel.aggregate([
+		{
+			$match: {
+				"supplier.locationId": { $in: warehouseIds },
+				"supplier.id": supplierOrg.id,
+				"status": "RECEIVED"
+			}
+		},
+		{
+			$project: {
+				shipmentUpdates: 1
+			}
+		}
+	]);
+
+	let dirtyBottles = 0;
+	let breakage = 0;
+	for (let shipment of shipments) {
+		let shipmentUpdates = shipment.shipmentUpdates.filter(sh => sh.status === 'RECEIVED');
+		shipmentUpdates.map(update => {
+			let products = update.products;
+			products.forEach(prod => {
+				dirtyBottles = dirtyBottles + prod.rejectionRate;
+			});
+		});
+		let damagedShipments = shipment.shipmentUpdates.filter(sh => sh.updateComment === 'Receive_comment_5');
+		damagedShipments.map(dsh => {
+			let products = dsh.products;
+			products.forEach(prod => {
+				breakage = breakage + prod.rejectionRate;
+			});
+		});
+	}
+	return { dirtyBottles: dirtyBottles, breakage: breakage };
+}
+
 async function calculateStorageCapacityByOrg(supplierOrg) {
 	const warehouses = await OrganisationModel.aggregate([
 		{
 			$match: {
 				id: supplierOrg.id
 			}
-		}]);
+		},
+		{
+			$unwind: {
+				path: '$warehouses'
+			}
+		},
+		{
+			$lookup: {
+				from: 'warehouses',
+				localField: 'warehouses',
+				foreignField: 'id',
+				as: 'war'
+			}
+		},
+		{
+			$unwind: {
+				path: '$war'
+			}
+		},
+		{
+			$replaceRoot: {
+				newRoot: {
+					$mergeObjects: ['$war', '$$ROOT']
+				}
+			}
+		}
+	]);
 	let bottleCapacity = 0;
 	let sqft = 0;
-	warehouses.forEach(w => {
-		bottleCapacity = bottleCapacity + (w.bottleCapacity ? w.bottleCapacity : 0);
-		sqft = sqft + (w.sqft ? w.sqft : 0);
-	});
-	return { bottleCapacity, sqft };
+	for (let w of warehouses) {
+		let newBottleCapacity = parseInt(w.bottleCapacity) ? parseInt(w.bottleCapacity) : 0;
+		bottleCapacity = bottleCapacity + newBottleCapacity;
+		let newSQFT = parseInt(w.sqft) ? parseInt(w.sqft) : 0;
+		sqft = sqft + newSQFT;
+	}
+
+	let storageCapacity = {
+		bottleCapacity: bottleCapacity,
+		sqft: sqft
+	};
+	return storageCapacity;
 }
 
 /**
@@ -1178,10 +1285,14 @@ exports.getSupplierPerformance = [
 					$match: matchCondition
 				}
 			]);
+
 			for (const supplier of supplierOrgs) {
 				supplier.leadTime = await calculateLeadTimeByOrg(supplier);
 				supplier.returnRate = await calculateReturnRateByOrg(supplier);
 				supplier.storageCapacity = await calculateStorageCapacityByOrg(supplier);
+				let dirtyBreakage = await calculateDirtyBottlesAndBreakage(supplier);
+				supplier.dirtyBottles = dirtyBreakage.dirtyBottles;
+				supplier.breakage = dirtyBreakage.breakage;
 			}
 
 			return apiResponse.successResponseWithData(
@@ -1189,6 +1300,7 @@ exports.getSupplierPerformance = [
 				"Operation success",
 				supplierOrgs
 			);
+
 		} catch (err) {
 			return apiResponse.ErrorResponse(res, err);
 		}
@@ -1372,7 +1484,7 @@ exports.getSalesTotalOfAllBrands = [
 			const filters = req.query;
 			let warehouseIds = await _getWarehouseIds(filters);
 			let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
-			
+
 			let Analytics = await AnalyticsModel.aggregate([
 				{
 					$match: analyticsFilter
@@ -1429,7 +1541,7 @@ exports.getSalesTotalOfAllBrands = [
  * @returns {Object}
  */
 
- exports.getMonthlySalesOfSkuByBrand = [
+exports.getMonthlySalesOfSkuByBrand = [
 	auth,
 	async function (req, res) {
 		try {
@@ -1479,15 +1591,15 @@ exports.getSalesTotalOfAllBrands = [
 					$group: {
 						_id: {
 							name: '$name',
-							month: { $month: '$uploadDate'}
+							month: { $month: '$uploadDate' }
 						},
 						sales: { $sum: "$sales" },
 					}
 				},
 				{
 					$group: {
-						"_id" : "$_id.name",
-						"overallSales" : { "$push": {"month":"$_id.month", "sales":"$sales" }}
+						"_id": "$_id.name",
+						"overallSales": { "$push": { "month": "$_id.month", "sales": "$sales" } }
 					}
 				}
 			]);
@@ -1503,4 +1615,4 @@ exports.getSalesTotalOfAllBrands = [
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
- ]
+]

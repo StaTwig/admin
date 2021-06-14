@@ -46,8 +46,9 @@
   .table .rTable .rTableCell {
       color: $black;
       text-align: left;
-      font-weight: 600;
+      //font-weight: 600;
  }
+  
   .list-container {
     h4 {
       color: $OBBlue;
@@ -195,7 +196,7 @@
     .title {
       font-size: 13px;
       line-height: 8px;
-      font-weight: bold;
+      //font-weight: bold;
       color: #707070;
       margin-bottom: 8px;
       @media (min-width: $xl) {
@@ -209,7 +210,7 @@
     .count {
       font-size: 26px;
       margin-top: 12px;
-      font-weight: bold;
+      //font-weight: bold;
       color: #2BA3AE;
     }
 

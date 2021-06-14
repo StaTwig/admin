@@ -46,7 +46,8 @@ const EditRow = props => {
                 /> */}
                 <Select
                   className="no-border"
-                  placeholder="Select Product Category"
+                  placeholder={<div className="select-placeholder-text">Select Product Category</div>} 
+                  
                   defaultInputValue={prod.type}
                   onChange={(v) => handleCategoryChange(index, v.value)}
                   options={category}
@@ -66,22 +67,22 @@ const EditRow = props => {
                 /> */}
                 <Select
                   className="no-border"
-                  placeholder="Product Name"
+                  placeholder={<div className="select-placeholder-text">Product Name</div>} 
                   defaultInputValue={prod.name}
                   onChange={(v) => handleProductChange(index, v)}
                   options={products}
                 />
               </div>
-              <div className="title recived-text align-self-center">{prod.id ? prod.id : "Product ID"}</div>
+              <div className="title recived-text align-self-center">{prod.id ? prod.id : <div className="placeholder_id">Product ID</div>}</div>
             </div>
           </div>
         </div>
-        <div className="col tcell text-center justify-content-center p-2">&nbsp;&nbsp;{prod.manufacturer ? prod.manufacturer : "Manufacturer"}</div>
+        <div className="col text-center justify-content-center ">&nbsp;&nbsp;{prod.manufacturer ? prod.manufacturer : <div className="placeholder_manufacture">Manufacturer</div>}</div>
         <div className="col tcell text-center justify-content-center p-2">
           <div className="">
             <input
               className="form-control text-center"
-              placeholder="Quantity"
+              placeholder="Enter Quantity"
               onKeyPress={numbersOnly}
               value={prod.productQuantity ? prod.productQuantity : prod.quantity}
               onChange={e => handleQuantityChange(e.target.value, index)}
