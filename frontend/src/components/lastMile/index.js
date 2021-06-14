@@ -22,14 +22,17 @@ import Table from './table'
 const lastMile=(props)=>{
     const dispatch = useDispatch();
     // var lastmile = props.lastMile;
+    const lastMileCount = useSelector(state => {
+        return state.lastMileCount;
+      });
 
-    const [region,setRegion]= useState('Select Region')
+    const [region,setRegion]= useState('')
     const [regions,setRegions]= useState(['Asia'])
-    const [country,setCountry] = useState('Select Country')
-    const [state,setstate] = useState('Select State')
-    const [district,setdistrict] = useState('Select District')
-    const [location,setlocation] = useState('Select Location')
-    const [product,setproduct] = useState('Select Product')
+    const [country,setCountry] = useState('')
+    const [state,setstate] = useState('')
+    const [district,setdistrict] = useState('')
+    const [location,setlocation] = useState('')
+    const [product,setproduct] = useState('')
     const [countries,setCountries] = useState([])
 
     const [countryId,setcountryId] = useState('')
@@ -57,8 +60,7 @@ const lastMile=(props)=>{
       }
 useEffect(()=>{
     async function fetchData(){
-        // setLastMile(props.lastMile)
-        // console.log(lastmile)
+        // setLastMile(props)
         const eol_ProductID = await GetEOLInfoByProductId("pro123456");
         const regions = await getRegions();
         console.log(regions.data[0].country)
@@ -71,7 +73,12 @@ useEffect(()=>{
     fetchData();
 },[]);
       
-
+const onPageChange = async (pageNum) => {
+    console.log("onPageChange =========>", pageNum)
+    const recordSkip = (pageNum-1)*limit;
+    setSkip(recordSkip);
+    dispatch(getEOLInfo(recordSkip, limit, product, country, state, district, location));  //(skip, limit, dateFilter, productName, productCategoryFilter, status)
+  };
   
 return (
       
@@ -96,7 +103,7 @@ return (
       </div>
       </div>
       <div className="ribben-space" style={{width:"76%"}}>
-      <Table {...props} cardFill={cardFill} lastMile={props.lastMile}/>
+      <Table {...props} cardFill={cardFill} lastMile={props.lastMile} count={lastMileCount} onPageChange={onPageChange}/>
       </div>
 
       </div>

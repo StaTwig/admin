@@ -23,8 +23,9 @@ export const GetEOLInfoBySerialNumber = async (data) => {
           `http://127.0.0.1:3017/lastmilemanagement/api/GetEOLInfo?skip=${skip}&limit=${limit}`
           );
           console.log(result.data.data)
-        dispatch(setLastMile(result.data.data));
-        // dispatch(setLastMileCount(result.data.data.count));
+        dispatch(setLastMile(result.data.data.eolResult));
+        dispatch(setLastMileCount(result.data.data[`count`]));
+        console.log(result.data.data[`count`])
         dispatch(turnOff());
         return result.data.data.length;
       }catch(e) {

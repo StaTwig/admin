@@ -3,7 +3,9 @@ import Pagination from '@material-ui/lab/Pagination';
 import './style.scss'
 const Table = props => {
   const [ batch, setBatch] = useState('');
-
+  const handlePageChange  = (event, value) => {
+    props.onPageChange(value)
+  };
 var orgTypeArray = [...props.lastMile]
   return (
     <div className="producttable">
@@ -25,7 +27,7 @@ var orgTypeArray = [...props.lastMile]
           ))} 
           {orgTypeArray?.length > 0 && (
             <div className="d-flex flex-row-reverse">
-            <Pagination showFirstButton showLastButton color="primary" count={Math.ceil(props.count/10)} onChange={console.log(1)} />
+            <Pagination showFirstButton showLastButton color="primary" count={Math.ceil(props.count/10)} onChange={handlePageChange} />
             <span className="mx-5 my-1 rounded text-primary">Total Records {props.count} </span>
           </div> 
           )}

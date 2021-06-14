@@ -124,12 +124,14 @@ exports.getEOLInfo = [
         }
         console.log(matchQuery)
       await LastMileModel.find(matchQuery).skip(parseInt(req.query.skip)).limit(parseInt(req.query.limit))
-        .then((eolResult) => {
+        .then(async (eolResult) => {
           console.log("eolResult is ====> ", eolResult);
+          let count = await LastMileModel.find(matchQuery).countDocuments()
+          console.log(count)
           return apiResponse.successResponseWithData(
             res,
             "EOL Info with filters",
-            eolResult
+            {eolResult, count}
           );
         })
         .catch((err) => {

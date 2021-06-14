@@ -9,9 +9,8 @@ export const lastMileReducer = (state = initialState, action) => {
         // ...state, ...inventories
         ...lastmile
       ];
-    case 'GET_LAST_MILE_COUNT':
-      const lastmileCount = action.payload;
-      return lastmileCount
+      case 'GET_LAST_MILE_FAILURE':
+        return initialState
     default:
       return state;
   }

@@ -12,7 +12,7 @@ const LastMileContainer = props => {
   const dispatch = useDispatch();
   useEffect(() => {
     (async () => {
-     dispatch(getEOLInfo(0, 10, "", "", "", "", "")); //(skip, limit, product, country, state, district, location)
+     dispatch(getEOLInfo(0, 10, "", "", "", "", "", "", "")); //(skip, limit, product, country, state, district, location)
   
     })();
   }, []);
@@ -20,15 +20,18 @@ const LastMileContainer = props => {
   const lastMile = useSelector(state => {
     return state.lastMile;
   });
-  // console.log(lastMile)
+  const lastMileCount = useSelector(state => {
+    return state.lastMileCount;
+  });
 
+  console.log('count is ' + lastMileCount)
   return (
     <div className="container-fluid p-0">
       <Header {...props} />
       <div className="d-flex">
         <Sidebar {...props} />
         <div className="content">
-          <LastMile {...props} lastMile={lastMile}/>
+          <LastMile {...props} lastMile={lastMile} count={lastMileCount}/>
         </div>
       </div>
     </div>
