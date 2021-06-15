@@ -510,9 +510,9 @@ exports.createShipment = [
                 return apiResponse.ErrorResponse(res,"Shipment Not saved")
               }
   
-  
+ console.log("bb") 
   //Blockchain Integration
-  const userData = {
+  /*const userData = {
     stream: shipment_stream,
     key:  shipmentId,
     address: req.user.walletAddress,
@@ -528,7 +528,8 @@ exports.createShipment = [
     $push: {
       transactionIds: response.data.transactionId
     }
-  });          
+  });         console.log("33")
+*/
               if (data.taggedShipments) {
                 const prevTaggedShipments = await ShipmentModel.findOne({
                   id: data.taggedShipments
@@ -545,7 +546,6 @@ exports.createShipment = [
                   }
                 });   
               }
-
               async function compute(event_data) {
                 resultt = await logEvent(event_data);
                 return resultt;     
@@ -622,10 +622,6 @@ exports.receiveShipment = [
       receiverAddress = receiverOrgData.postalAddress;
     }
 
-  
-
-
-
       var actuallyShippedQuantity = 0;
       var productNumber = -1;
       if (shipmentInfo != null) {
@@ -637,7 +633,11 @@ exports.receiveShipment = [
             if (product.productName === reqProduct.productName) {
               actuallyShippedQuantity = product.productQuantity;
               var receivedQuantity = reqProduct.productQuantity;
-              var quantityDifference = actuallyShippedQuantity - receivedQuantity;
+	      
+	        if ( receivedQuantity > actuallyShippedQuantity)
+	           throw new Error("Received quantity cannot be greater than Actual quantity");
+		
+	      var quantityDifference = actuallyShippedQuantity - receivedQuantity;
               var rejectionRate = (quantityDifference / actuallyShippedQuantity) * 100;
               (shipmentProducts[productNumber]).quantityDelivered = receivedQuantity;
               (shipmentProducts[productNumber]).rejectionRate = rejectionRate;
@@ -844,7 +844,7 @@ exports.receiveShipment = [
         "error",
         "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2219,9 +2219,8 @@ exports.fetchAllWarehouseShipments = [
         else {
             empDetails = await EmployeeModel.findOne({ phoneNumber });
       }
-
             const warehouses = empDetails.warehouseId;
-              const shipments = await ShipmentModel.aggregate([{
+            const shipments = await ShipmentModel.aggregate([{
                 $match: {
                   $or: [{
 			  "supplier.locationId": { "$in" : warehouses},
@@ -2290,7 +2289,7 @@ exports.fetchAllWarehouseShipments = [
                 })
                 .skip(parseInt(skip))
                 .limit(parseInt(limit));
-
+console.log("res",shipments)
             return apiResponse.successResponseWithData(
               res,
               "Shipments Table",
@@ -2639,3 +2638,29 @@ console.log("1",inwardShipments.taggedShipments)
         }
     },
 ];
+
+exports.checkShipmentID = [
+  auth,
+  async (req, res) => {
+    try {
+      const { shipmentId } = req.query;
+      const checkShipment = await ShipmentModel.find(
+        { id: shipmentId },
+      );
+      if (checkShipment.length > 0)
+      return apiResponse.successResponse(
+        res,
+        "Shipment found"
+      );
+      else
+      return apiResponse.ErrorResponse(
+        res,
+        "Shipment not found"
+      );
+
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
