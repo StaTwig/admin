@@ -95,6 +95,62 @@ exports.GetEOLInfoByProductId = [
   },
 ];
 
+
+exports.getEOLInfo = [
+  async (req, res) => {
+    try {
+      var i = 0;
+      console.log(++i)
+      logger.log(
+        "info",
+        "<<<<< LastMileService < LastMileController < getEOLInfoBySerialNumber : token verified successfullly, querying data by publisher"
+      );
+      // console.log(req.query);
+        let matchQuery = {}
+        if(req.query.country){
+          matchQuery[`eol_info.contact_address.country`] = req.query.country
+        }
+        // if(req.query.region){
+        //   matchQuery[`eol_info.contact_address.country`] = req.query.region
+        // }
+        if(req.query.state){
+          matchQuery[`eol_info.contact_address.state`] = req.query.state
+        }
+        if(req.query.city){
+          matchQuery[`eol_info.contact_address.district`] = req.query.city
+        }
+        if(req.query.location){
+          matchQuery[`productAdministeredInfo.locationInfo.warehouseId`] = req.query.location
+        }
+        if(req.query.product){
+          matchQuery[`productAdministeredInfo.productId`] = req.query.product
+        }
+        console.log(matchQuery)
+      await LastMileModel.find(matchQuery).skip(parseInt(req.query.skip)).limit(parseInt(req.query.limit))
+        .then(async (eolResult) => {
+          console.log("eolResult is ====> ", eolResult);
+          let count = await LastMileModel.find(matchQuery).countDocuments()
+          console.log(count)
+          return apiResponse.successResponseWithData(
+            res,
+            "EOL Info with filters",
+            {eolResult, count}
+          );
+        })
+        .catch((err) => {
+          console.log(err)
+          return apiResponse.ErrorResponse(res, err);
+        });
+    } catch (err) {
+      logger.log(
+        "error",
+        "<<<<< LastMileService < LastMileController < getEOLInfoBySerialNumber : error (catch block)"
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
 exports.GetEOLInfoByIdentityId = [
   async (req, res) => {
     try {
@@ -159,7 +215,29 @@ exports.GetEOLInfoByPlaceAdministered = [
     }
   },
 ];
-
+exports.getProductsByWarehouse = [
+  auth,
+  async (req, res) => {
+    try {
+      var products = await LastMileModel.aggregate([{ $match :{'productAdministeredInfo.locationInfo.warehouseId': req.query.location}},
+      {
+         $group:
+           {
+             _id: "$productAdministeredInfo.productId",
+           }
+       },
+       {'$unwind': '$_id'}
+  ]);
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        products
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
 exports.GetEOLListByDateWindow = [
   async (req, res) => {
     try {

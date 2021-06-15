@@ -23,7 +23,8 @@ router.get("/GetEOLInfoByPlaceAdministered", LastMileController.GetEOLInfoByPlac
 router.get("/GetEOLListByDateWindow", LastMileController.GetEOLListByDateWindow);
 router.post("/AddNewEOL", LastMileController.AddNewEOL);
 router.post("/UpdateExistingEOLByID", LastMileController.UpdateExistingEOLByID);
-// router.get("/GetEOLInfoBySelectedRegion", LastMileController.getEOLInfoBySelectedRegion);
+router.get("/GetEOLInfo", LastMileController.getEOLInfo);
+router.get("/getProductsByWarehouse", LastMileController.getProductsByWarehouse);
 
 
 module.exports = router;
