@@ -125,7 +125,8 @@ export function config() {
       addPOsFromExcel:`${LOCAL_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
       getTransactions: `${LOCAL_SERVER_URL_EVENT}/eventmanagement/api/event/getAllEventsWithFilter`,
-      getTransactionFilterList: `${LOCAL_SERVER_URL_EVENT}/eventmanagement/api/event/fetchProductDetailsList`
+      getTransactionFilterList: `${LOCAL_SERVER_URL_EVENT}/eventmanagement/api/event/fetchProductDetailsList`,
+      emailverify:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/emailverify`
           },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
@@ -218,7 +219,8 @@ export function config() {
        addPOsFromExcel:`${DEV_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
        getOrganizationsTypewithauth:`${DEV_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
        getTransactions: `${DEV_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
-       getTransactionFilterList: `${DEV_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`
+       getTransactionFilterList: `${DEV_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`,
+       emailverify:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/emailverify`
       },
     stable: {
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
@@ -304,15 +306,16 @@ export function config() {
       GetEOLInfoByPlaceAdministered:`${STABLE_SERVER_URL_SHIPMENT}/lastmilemanagement/api/GetEOLInfoByPlaceAdministered?place=`,
       GetEOLListByDateWindow:`${STABLE_SERVER_URL_SHIPMENT}/lastmilemanagement/api/GetEOLListByDateWindow`,
       getWarehouseById: `${STABLE_SERVER_URL_SHIPMENT}/usermanagement/api/auth/getwarehouseinfo?id=`,
-       fetchOutboundPurchaseOrderUrl: `${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/fetchOutboundPurchaseOrders`,
-       fetchInboundPurchaseOrderUrl: `${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/fetchInboundPurchaseOrders`,
-       fetchInboundShipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchInboundShipments`,
-       fetchOutboundShipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchOutboundShipments`,
-       fetchSupplierAndReceiverListUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
-       addPOsFromExcel:`${STABLE_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
-       getOrganizationsTypewithauth:`${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-       getTransactions: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/getAllEventsWithFilter`,
-       getTransactionFilterList: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/fetchProductDetailsList`
+      fetchOutboundPurchaseOrderUrl: `${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/fetchOutboundPurchaseOrders`,
+      fetchInboundPurchaseOrderUrl: `${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/fetchInboundPurchaseOrders`,
+      fetchInboundShipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchInboundShipments`,
+      fetchOutboundShipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchOutboundShipments`,
+      fetchSupplierAndReceiverListUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
+      addPOsFromExcel:`${STABLE_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
+      getOrganizationsTypewithauth:`${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
+      getTransactions: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/getAllEventsWithFilter`,
+      getTransactionFilterList: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/fetchProductDetailsList`,
+      emailverify:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/emailverify`
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -409,7 +412,8 @@ export function config() {
       addPOsFromExcel:`${TEST_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${TEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
       getTransactions: `${TEST_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
-      getTransactionFilterList: `${TEST_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`
+      getTransactionFilterList: `${TEST_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`,
+      emailverify:`${TEST_SERVER_URL}/usermanagement/api/auth/emailverify`
 },
     demo: {
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
@@ -500,7 +504,8 @@ export function config() {
       addPOsFromExcel:`${DEMO_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${DEMO_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
       getTransactions: `${DEMO_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
-      getTransactionFilterList: `${DEMO_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`
+      getTransactionFilterList: `${DEMO_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`,
+      emailverify:`${DEMO_SERVER_URL}/usermanagement/api/auth/emailverify`
     },
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
@@ -590,7 +595,8 @@ export function config() {
       addPOsFromExcel:`${PROD_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${PROD_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
       getTransactions: `${PROD_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
-      getTransactionFilterList: `${PROD_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`
+      getTransactionFilterList: `${PROD_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`,
+      emailverify:`${PROD_SERVER_URL}/usermanagement/api/auth/emailverify`
     },
     
     uniceftest: {
@@ -688,8 +694,8 @@ export function config() {
       fetchProductIdsCustomerLocationsOrganisationsUrl: `${UNICEFTEST_SERVER_URL}/pomanagement/api/po/fetchProductIdsCustomerLocationsOrganisations`,
       fetchInboundShipmentsUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchInboundShipments`,
       fetchOutboundShipmentsUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchOutboundShipments`,
-      fetchSupplierAndReceiverListUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`
-
+      fetchSupplierAndReceiverListUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
+      emailverify:`${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/emailverify`
     },
   };
 
