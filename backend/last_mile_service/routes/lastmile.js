@@ -24,8 +24,7 @@ router.get("/GetEOLListByDateWindow", LastMileController.GetEOLListByDateWindow)
 router.post("/AddNewEOL", LastMileController.AddNewEOL);
 router.post("/UpdateExistingEOLByID", LastMileController.UpdateExistingEOLByID);
 router.get("/GetEOLInfo", LastMileController.getEOLInfo);
-
-// router.get("/GetEOLInfoBySelectedRegion", LastMileController.getEOLInfoBySelectedRegion);
+router.get("/getProductsByWarehouse", LastMileController.getProductsByWarehouse);
 
 
 module.exports = router;

@@ -83,35 +83,44 @@ export const getCountryByRegion = async (id) => {
   }
 };
 
-export const getAllStates = () => {
-  return async dispatch => {
-    try {
-      dispatch(turnOn());
-      const result = await axios.get(
-        config().getAllStates,
-      );
-      dispatch(turnOff());
-      return result.data;
-    } catch (e) {
-      dispatch(turnOff());
-    }
-  };
-}
 
-export const getDistrictsByState = (_state) => {
-  return async dispatch => {
-    try {
-      dispatch(turnOn());
-      const result = await axios.get(
-        config().getDistrictsByState + `?state=` + _state,
-      );
-      dispatch(turnOff());
-      return result.data;
-    } catch (e) {
-      dispatch(turnOff());
-    }
-  };
-}
+export const GetCountriesFromWarehouses = async (id) => {
+  try {
+    const result = await axios.get(`http://localhost:3007/inventorymanagement/api/inventory/getCountries?region=${id}`);
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
+export const GetStatesFromWarehouses = async (id) => {
+  try {
+    const result = await axios.get(`http://localhost:3007/inventorymanagement/api/inventory/getStatesByCountry?country=${id}`);
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
+export const GetCitiesFromWarehouses = async (id) => {
+  try {
+    const result = await axios.get(`http://localhost:3007/inventorymanagement/api/inventory/getCitiesByState?state=${id}`);
+    console.log(result)
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
+export const GetWarehousesWithCity = async (id) => {
+  try {
+    const result = await axios.get(`http://localhost:3007/inventorymanagement/api/inventory/getWarehousesByCity?city=${id}`);
+    console.log(result)
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
 
 
 export const getWareHousesByCountry = async (id) => {
@@ -269,7 +278,9 @@ export const getInventoryByBatchNumber = id => {
     return async dispatch => {
       const url = config().getInventoryByBatchNumber + id;
       const result = await axios.get(url);
-      dispatch(setInventories(result.data));
+      console.log(result)
+      // dispatch(setInventories(result.data));
+      return result.sata
     };
   } catch (e) {
     return e.response;

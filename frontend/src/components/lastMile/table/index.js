@@ -6,13 +6,14 @@ const Table = props => {
   const handlePageChange  = (event, value) => {
     props.onPageChange(value)
   };
+  console.log(props)
 var orgTypeArray = [...props.lastMile]
   return (
     <div className="producttable">
       <div className="rTable pt-2">
         <div>
            {orgTypeArray.map((lastmile,index) => ( 
-            <div onClick={()=>props.cardFill(lastmile)}>
+            <div key={index} onClick={()=>props.cardFill(lastmile)}>
               <div className="rTableRow pt-3 pb-3">
               <div className="rTableCell" >{lastmile.eol_info.first_name +" "+  lastmile.eol_info.last_name}</div>
               <div className="rTableCell ml-2" >{lastmile.eol_info.idProof.idNo}</div>

@@ -1,5 +1,5 @@
 
-export const initialState = {counts: {currentInventory: {}, inventoryAdded:{}, vaccinesExpired:{}, vaccinesNearExpiration:{}}, dict:{}, data:{}};
+export const initialState = 0;
 
 export const lastMileCountReducer = (state = initialState, action) => {
   switch (action.type) {

@@ -761,7 +761,28 @@ exports.getAllStates = [
     }
   },
 ];
-
+exports.getCountries = [
+  auth,
+  async (req, res) => {
+    try {
+      const countries = await WarehouseModel.aggregate([{ $match :{'warehouseAddress.region' : req.query.region}},
+      {
+         $group:
+           {
+             _id: "$warehouseAddress.country",
+           }
+       }
+  ]);
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        countries
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
 exports.getStatesByCountry = [
   auth,
   async (req, res) => {
@@ -814,7 +835,7 @@ exports.getWarehousesByCity = [
       {
          $group:
            {
-             _id: "$warehouseInventory",
+             _id: "$id",
            }
        }
   ]);

@@ -110,11 +110,14 @@ exports.getEOLInfo = [
         if(req.query.country){
           matchQuery[`eol_info.contact_address.country`] = req.query.country
         }
+        // if(req.query.region){
+        //   matchQuery[`eol_info.contact_address.country`] = req.query.region
+        // }
         if(req.query.state){
           matchQuery[`eol_info.contact_address.state`] = req.query.state
         }
-        if(req.query.district){
-          matchQuery[`eol_info.contact_address.district`] = req.query.district
+        if(req.query.city){
+          matchQuery[`eol_info.contact_address.district`] = req.query.city
         }
         if(req.query.location){
           matchQuery[`productAdministeredInfo.locationInfo.warehouseId`] = req.query.location
@@ -212,7 +215,29 @@ exports.GetEOLInfoByPlaceAdministered = [
     }
   },
 ];
-
+exports.getProductsByWarehouse = [
+  auth,
+  async (req, res) => {
+    try {
+      var products = await LastMileModel.aggregate([{ $match :{'productAdministeredInfo.locationInfo.warehouseId': req.query.location}},
+      {
+         $group:
+           {
+             _id: "$productAdministeredInfo.productId",
+           }
+       },
+       {'$unwind': '$_id'}
+  ]);
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        products
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
 exports.GetEOLListByDateWindow = [
   async (req, res) => {
     try {
