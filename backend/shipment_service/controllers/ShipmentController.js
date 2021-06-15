@@ -510,9 +510,8 @@ exports.createShipment = [
                 return apiResponse.ErrorResponse(res,"Shipment Not saved")
               }
   
- console.log("bb") 
   //Blockchain Integration
-  /*const userData = {
+  const userData = {
     stream: shipment_stream,
     key:  shipmentId,
     address: req.user.walletAddress,
@@ -528,8 +527,8 @@ exports.createShipment = [
     $push: {
       transactionIds: response.data.transactionId
     }
-  });         console.log("33")
-*/
+  });         
+
               if (data.taggedShipments) {
                 const prevTaggedShipments = await ShipmentModel.findOne({
                   id: data.taggedShipments
@@ -2220,7 +2219,7 @@ exports.fetchAllWarehouseShipments = [
             empDetails = await EmployeeModel.findOne({ phoneNumber });
       }
             const warehouses = empDetails.warehouseId;
-            const shipments = await ShipmentModel.aggregate([{
+              const shipments = await ShipmentModel.aggregate([{
                 $match: {
                   $or: [{
 			  "supplier.locationId": { "$in" : warehouses},
@@ -2289,7 +2288,6 @@ exports.fetchAllWarehouseShipments = [
                 })
                 .skip(parseInt(skip))
                 .limit(parseInt(limit));
-console.log("res",shipments)
             return apiResponse.successResponseWithData(
               res,
               "Shipments Table",
