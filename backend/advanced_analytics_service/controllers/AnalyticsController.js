@@ -60,7 +60,7 @@ async function calculatePrevReturnRatesNew(filters, analytic) {
 }
 
 function getFilterConditions(filters) {
-	let matchCondition = {status: 'ACTIVE'};
+	let matchCondition = { status: 'ACTIVE' };
 	if (filters.orgType && filters.orgType !== '') {
 		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
 			matchCondition.type = filters.orgType;
@@ -77,7 +77,7 @@ function getFilterConditions(filters) {
 	if (filters.organization && filters.organization.length) {
 		matchCondition.id = filters.organization;
 	}
-	
+
 	return matchCondition;
 }
 
@@ -108,9 +108,9 @@ const _getWarehouseIdsByOrg = async (org) => {
 		matchCondition.organisationId = org.id;
 	}
 	let warehouseIds = [];
-	
+
 	const warehouse = await WarehouseModel.findOne({ organisationId: org.id });
-	
+
 	if (warehouse) {
 		const warehouses = await WarehouseModel.aggregate([
 			{
@@ -122,10 +122,10 @@ const _getWarehouseIdsByOrg = async (org) => {
 				}
 			}
 		]);
-		for (const wh of warehouses) 
+		for (const wh of warehouses)
 			warehouseIds.push(wh._id);
 	}
-	
+
 	return warehouseIds;
 }
 
@@ -239,8 +239,8 @@ const aggregateSalesStats = (inputArr) => {
 	let targetSales = inputArr.map(item => parseInt(item.targetSales) || 0).reduce((prev, next) => prev + next);
 	let returns = inputArr.map(item => parseInt(item.returns) || 0).reduce((prev, next) => prev + next);
 	let actualReturns = 0;
-	if (returns) {
-		actualReturns = parseFloat( ((returns / sales) * 100) ).toFixed(2);
+	if (returns && sales) {
+		actualReturns = parseFloat(((returns / sales) * 100)).toFixed(2);
 	}
 	return {
 		sales: sales,
@@ -1020,10 +1020,29 @@ async function calculateLeadTimeByOrg(supplierOrg) {
 	if (warehouses[0] && warehouses[0].warehouseIds) {
 		warehouseIds = warehouses[0].warehouseIds;
 	}
+
 	let shipmentLeadTimes = await ShipmentModel.aggregate([
 		{
 			$match: {
 				"supplier.locationId": { $in: warehouseIds }
+			}
+		},
+		{
+			$lookup: {
+				from: 'organisations',
+				localField: 'receiver.id',
+				foreignField: 'id',
+				as: 'receiverOrg'
+			}
+		},
+		{
+			$unwind: {
+				path: '$receiverOrg'
+			}
+		},
+		{
+			$match: {
+				"receiverOrg.type": 'BREWERY'
 			}
 		},
 		{
@@ -1129,6 +1148,7 @@ async function calculateReturnRateByOrg(supplierOrg) {
 				$in: [...warehouseIds]
 			}
 		});
+
 	let totalReturns = 0;
 	let totalSales = 0;
 	let returnRate = 0;
@@ -1136,7 +1156,10 @@ async function calculateReturnRateByOrg(supplierOrg) {
 		totalReturns = totalReturns + parseInt(analytic.returns);
 		totalSales = totalSales + parseInt(analytic.sales);
 	}
-	returnRate = parseFloat(((totalReturns / totalSales) * 100)).toFixed(2);
+
+	if (totalReturns && totalSales) {
+		returnRate = parseFloat(((totalReturns / totalSales) * 100)).toFixed(2);
+	}
 	return returnRate;
 
 }
@@ -1198,19 +1221,14 @@ async function calculateDirtyBottlesAndBreakage(supplierOrg) {
 	let breakage = 0;
 	for (let shipment of shipments) {
 		let shipmentUpdates = shipment.shipmentUpdates.filter(sh => sh.status === 'RECEIVED');
-		shipmentUpdates.map(update => {
-			let products = update.products;
-			products.forEach(prod => {
-				dirtyBottles = dirtyBottles + prod.rejectionRate;
-			});
-		});
+		if (shipmentUpdates.length) {
+			dirtyBottles = dirtyBottles + (shipment.rejectionRate ? shipment.rejectionRate : 0);
+		}
+
 		let damagedShipments = shipment.shipmentUpdates.filter(sh => sh.updateComment === 'Receive_comment_5');
-		damagedShipments.map(dsh => {
-			let products = dsh.products;
-			products.forEach(prod => {
-				breakage = breakage + prod.rejectionRate;
-			});
-		});
+		if (damagedShipments.length) {
+			breakage = breakage + (shipment.rejectionRate ? shipment.rejectionRate : 0);
+		}
 	}
 	return { dirtyBottles: dirtyBottles, breakage: breakage };
 }
@@ -1280,6 +1298,7 @@ exports.getSupplierPerformance = [
 			} else {
 				matchCondition.type = orgType;
 			}
+			matchCondition.status = 'ACTIVE';
 			const supplierOrgs = await OrganisationModel.aggregate([
 				{
 					$match: matchCondition
@@ -1383,7 +1402,7 @@ function getSKUGroupByFilters(filters) {
 				});
 
 		} else if (filters.group_by === 'district') {
-			if (filters.district && filters.district.length){
+			if (filters.district && filters.district.length) {
 				matchCondition.push({
 					$match: {
 						district: filters.district
