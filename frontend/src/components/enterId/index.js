@@ -1,13 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./style.scss";
 import { Formik } from "formik";
 import update from '../../assets/icons/Update_Status.png';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import {getShipmentIds} from '../../actions/shipmentActions';
 
 const EnterId = (props) => {
+
   const { id } = props.match.params;
-  const [shipmentId, setShipmentId] = useState(null);
   const [billid, setbillid] = useState(null);
+  const [shipmentArray,setShipmentArray] = useState([]);
   const [shipdisabled, setshipdisabled] = useState(true);
+  useEffect(()=>{
+    async function getShipmentArray(){
+      let arr = await getShipmentIds();
+      shipmentArray.push(arr.data);
+    }
+    getShipmentArray();
+  },[]);
+  
+  const defaultProps = {
+    options: shipmentArray[0],
+    getOptionLabel: (option) => option.id,
+  };
+  const flatProps = {
+    options: shipmentArray.map((option) => option.id),
+  };
+  const [shipmentId, setShipmentId] = useState(null);
+  const [value, setValue] = React.useState();
+  const [inputValue, setInputValue] = React.useState('');
+
   return (
     <div className="updateStatus">
       <div className="d-flex justify-content-between">
@@ -59,16 +82,38 @@ const EnterId = (props) => {
               <div className="">
                 <div className="row" >
                   <div className="" >
-                    <div className="panel commonpanle ml-4" style={{height:"80%",width:"114%" }}>
+                    <div className="panel commonpanle ml-4" style={{height:"70%",width:"114%" }}>
                       <div
                         className={`form-group ${
                           errors.shipmentId && touched.shipmentId && ``
                         }`}
                       >
-                        <label className="mt-3 text-secondary">
+                        <label className="mt-1 text-secondary">
                           Shipment ID
                         </label>
-                        <input
+                        <div className="mb-2" style={{width: 300 }}>
+                        <Autocomplete
+                          {...defaultProps}
+                          // id="auto-complete"
+                          value={value}
+                          onChange={(event, newValue) => {
+                            setValue(newValue);
+                          }}
+                          inputValue={inputValue}
+                          onInputChange={(event, newInputValue) => {
+                            setShipmentId(newInputValue);
+                            setInputValue(newInputValue);
+                            newInputValue?setshipdisabled(false):setshipdisabled(true);
+                          }}
+                          id="controllable-states-demo"
+                  
+                         
+                          autoComplete
+                          renderInput={(params) => <TextField {...params}  name="shipmentId" label="Enter Shipment ID" margin="normal"                     
+                          />}
+                        />
+                        </div>
+                        {/* <input
                           type="text"
                           placeholder="Enter Shipment ID"
                           className="form-control ml-5 "
@@ -81,7 +126,7 @@ const EnterId = (props) => {
                             else setshipdisabled(false);
                           }}
                           value={values.shipmentId}
-                        />
+                        /> */}
                       </div>
 
                       {/* {errors.shipmentId && touched.shipmentId && (
@@ -96,14 +141,28 @@ const EnterId = (props) => {
                   </div>
 
                   <div className="" >
-                    <div className="panel commonpanle ml-5" style={{height:"80%", width:"114%" }}>
+                    <div className="panel commonpanle ml-5" style={{height:"70%", width:"140%" }}>
                       <div
                         className={`form-group ${
                           errors.shipmentId && touched.shipmentId && ``
                         }`}
                       >
                         <label className="mt-3 text-secondary">Bill No.</label>
-                        <input
+                        <TextField id="standard-basic" label="Enter Bill No." 
+                          type="text"
+                          className="form-controll ml-5 mt-1 "
+                          // placeholder=" Enter Bill No."
+                          name="shipmentId"
+                          onBlur={handleBlur}
+                          onChange={(e) => {
+                            setbillid(e.target.value);
+                            if (e.target.value.length === 0)
+                              setshipdisabled(true);
+                            else setshipdisabled(false);
+                          }}
+                          value={values.billno}
+                        />
+                        {/* <input
                           type="text"
                           className="form-control ml-5 "
                           placeholder=" Enter Bill No."
@@ -116,7 +175,7 @@ const EnterId = (props) => {
                             else setshipdisabled(false);
                           }}
                           value={values.billno}
-                        />
+                        /> */}
                       </div>
 
                       {/* {errors.billno && touched.billno && (
@@ -125,7 +184,7 @@ const EnterId = (props) => {
                         </span>
                       )} */}
                     </div>
-                    <div className="row mt-5 bottom">
+                    <div className="row" style={{position:"relative",left:"20rem",top:"300px"}}>
                       <button
                         type="button"
                         className="btn btn-outline-primary mr-4 "

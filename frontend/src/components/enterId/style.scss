@@ -55,13 +55,17 @@
       .form-control {
         border: none;
         background: transparent;
-        border-bottom: 2px solid #d6d6d6;
+        // border-bottom: 2px solid #d6d6d6;
         border-radius: 0;
-        color:#000000;
+        // color:#000000;
         flex-basis: 55%;
         flex-grow: inherit;
         font-size: 14px;
         margin-bottom: -16px;
+
+      }
+      .form-controll {
+        width: 100%;
 
       }
 
