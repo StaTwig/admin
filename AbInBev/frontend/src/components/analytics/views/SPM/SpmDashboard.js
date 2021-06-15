@@ -44,8 +44,8 @@ const SpmDashboard = (props) => {
                 <tr
                   key={index}
                   className={`${selectedRatingIndex === index
-                      ? 'selectedRow noBottomRadius'
-                      : ''
+                    ? 'selectedRow noBottomRadius'
+                    : ''
                     }`}
                 >
                   <td scope="row">{index + 1}</td>
@@ -100,9 +100,9 @@ const SpmDashboard = (props) => {
                                     <label>
                                       <b>Vendor ID:</b> {perf.id}
                                     </label>
-                                    <label>
+                                    {/* <label>
                                       <b>Mobile No:</b> {perf.primaryContactId}
-                                    </label>
+                                    </label> */}
                                   </div>
                                 </div>
                               </td>

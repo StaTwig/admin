@@ -1767,3 +1767,26 @@ exports.getOrganizationsTypewithauth = [
     }
   },
 ];
+
+exports.emailverify=[
+  auth,
+  async (req,res)=>{
+    try{
+      const emailId= req.query.emailId;
+      const phoneNumber=req.query.phoneNumber;   
+      const email= await EmployeeModel.find({$or:[{"phoneNumber":"+"+phoneNumber},{"emailId":emailId}]},'emailId phoneNumber')
+      
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        email
+      );
+    } catch(err){
+      logger.log(
+        'error',
+        '<<<<< EmployeeService < AuthController < emailverify : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];

@@ -14,8 +14,6 @@ var http = require("http");
 
 var port = normalizePort(process.env.PORT || "3016");
 app.set("port", port);
-console.log(port);
-
 
 /**
  * Create HTTP server.
@@ -89,4 +87,5 @@ function onListening() {
         ? "pipe " + addr
         : "port " + addr.port;
     debug("Listening on " + bind);
+    console.log("Listening on " + bind);
 }

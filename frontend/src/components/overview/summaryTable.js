@@ -65,7 +65,7 @@ const SummaryTable = (props) => {
             </div>
             {shipments.map((shipment, index) =>
               index < 5 ? (
-                <div className="pl-5" key={index}>
+                <div className="pl-5 text-center mr-4" key={index}>
                   <div>
                     {profile.warehouseId == shipment.supplier.locationId
                       ? "Outbound"
@@ -79,7 +79,7 @@ const SummaryTable = (props) => {
             <div className="headline">
             <span style={{position:'relative',top:'25%'}}>
             <img src={shippmentdate} height='20' width='20' className="mr-2"></img>
-            <b>Shipping Date</b>
+            <span style={{fontWeight:600}}>Shipping Date</span>
               </span> 
             </div>
              
@@ -94,7 +94,7 @@ const SummaryTable = (props) => {
             )}
           </div>
           <div className="rowData">
-            <div className="headline pr-4">
+            <div className="headline pr-5">
             <span style={{position:'relative',top:'25%'}}>
             <img src={received} height='20' width='20' className="mr-2"></img>
             <b>From</b> 
@@ -102,9 +102,9 @@ const SummaryTable = (props) => {
             </div>
             {shipments.map((shipment, index) =>
               index < 5 ? (
-                <div className="pl-4" key={index}>
+                <div className="pl-0 pr-2" key={index}>
                   <div className="rTableCell text-left">
-                    <p className="mb-0 pr-1">{shipment.supplier.org.name}</p>
+                    <p className="mb-0">{shipment.supplier.org.name}</p>
                   </div>
                 </div>
               ) : null
@@ -112,7 +112,7 @@ const SummaryTable = (props) => {
           </div>
 
           <div className="rowData">
-            <div className="headline">
+            <div className="headline pr-5">
             <span style={{position:'relative',top:'25%'}}>
               <img src={sent} height='20' width='20' className="mr-2"></img>
               <b>To</b>
@@ -120,7 +120,7 @@ const SummaryTable = (props) => {
             </div>
             {shipments.map((shipment, index) =>
               index < 5 ? (
-                <div className="combine-data" key={index}>
+                <div className="pl-0" key={index}>
                   <div className="rTableCell text-left">
                     <p className="mb-0 bold">{shipment.receiver.org.name}</p>
                   </div>

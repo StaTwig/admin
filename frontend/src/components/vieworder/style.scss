@@ -1,11 +1,17 @@
 @import '../../assets/styles/global.scss';
 
 .vieworder {
-    padding-right: 3rem;
-    padding-left: 5rem;
+  position: relative;
+  top:-22px;
+    padding-right: 20px;
+    padding-left: 55px;
+    overflow: hidden;
     @media (max-width: $md) {
       padding-right: 10px;
       padding-left: 10px;
+    }
+    .breadcrumb{
+      margin-left:-25px;
     }
     .trackBtn{
       padding: 0.7rem 3rem;

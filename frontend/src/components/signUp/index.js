@@ -233,6 +233,19 @@ const showOrgByType = (value) =>{
                         <img alt="Phone icon" src={organisationType} height="30px" width="25px" />
                   </div>  
                   <div className="form-controll">
+                  {/* <Select
+                      isText={true}
+                      value={orgType}
+                      placeholder='Organisation Type'
+                      onChange={item =>{
+                        setFieldValue('type', item);
+                        props.onOrgTypeChange(item);
+                        setselectedType(item);
+                        setorgType(item);
+                        setValue('');
+                      }}
+                      options={orgTypeArray}
+                        /> */}
                    <DropdownButton
                       isText={true}
                       value={orgType}
