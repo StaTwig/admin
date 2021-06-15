@@ -22,8 +22,14 @@ const BreweryDetailedView = (props) => {
         '&sku=' +
         (props?.sku ? props.sku : prop.externalId);
         const result = await dispatch(getAllOrganisationStats(cond));
-        let n = result.data.filter((a) => a.type == 'S1' || a.type == 'S2' || a.type == 'S3');
-        result.data = n;
+        let n = result.data.filter((a) => a.type == 'S1');
+        for(let org of n){
+          let cc = result.data.filter((a) => a.authority == org.id && (a.type == 'S2' || a.type == 'S3'));
+          for (const c of cc) {
+            org.sales += parseInt(c.sales);  
+            org.return += parseInt(c.return);  
+          }
+        }
         setAnalytics(n);
     })();
   }, []);

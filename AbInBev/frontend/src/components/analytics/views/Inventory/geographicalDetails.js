@@ -32,6 +32,7 @@ const iGraphicalDetailedView = (props) => {
     },
   ]);
   const [active, setActive] = useState(false);
+  const [isActive, setIsActive] = useState(false);
   const [name, setName] = useState(prop.name);
   const [shortName, setShortname] = useState(prop.shortName);
   const [image, setImage] = useState(prop.image);
@@ -66,6 +67,7 @@ const iGraphicalDetailedView = (props) => {
             sku,
         ),
       );
+      setIsActive(true);
       setAnalytics(result.data);
       setOld(result.data);
     } else {
@@ -164,7 +166,7 @@ const iGraphicalDetailedView = (props) => {
         <div className="col-md-12 col-sm-12">
           {!active ? (
             <div className="productsChart">
-              <label className="productsChartTitle">States</label>
+              <label className="productsChartTitle">{isActive ? 'District' : 'State'}</label>
               <ResponsiveContainer width="100%" height={500}>
                 <BarChart
                   width={500}
@@ -224,7 +226,7 @@ const iGraphicalDetailedView = (props) => {
             <table className="table">
               <thead>
                 <tr>
-                  <th scope="col">States</th>
+                  <th scope="col">{isActive ? 'District' : 'State'}</th>
                   <th scope="col">Sales</th>
                   <th scope="col">Total Bottle Pool</th>
                 </tr>
@@ -233,7 +235,7 @@ const iGraphicalDetailedView = (props) => {
                 {analytics.map((analytic, index) => (
                   <tr
                     key={index}
-                    onClick={() => openDetailView(analytic.groupedBy)}
+                    onClick={() => { setIsActive(i => !i); openDetailView(analytic.groupedBy);}}
                   >
                     <td scope="row">
                       <span className="stateLink">{analytic.groupedBy}</span>

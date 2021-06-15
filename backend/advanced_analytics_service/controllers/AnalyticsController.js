@@ -678,8 +678,9 @@ exports.getStatsByBrand = [
 					}
 				}
 				arr.products.push(product.product);
+				if (index == Products.length - 1) 
+					Analytics.push(arr);
 			}
-
 			return apiResponse.successResponseWithData(
 				res,
 				"Operation success",
@@ -838,6 +839,88 @@ exports.getStatsByOrg = [
 				organizations
 			);
 		} catch (err) {
+			return apiResponse.ErrorResponse(res, err);
+		}
+	}
+];
+
+/**
+ * getAllStats.
+ *
+ * @returns {Object}
+ */
+exports.getStatsByOrgType = [
+	auth,
+	async function (req, res) {
+		try {
+			const filters = req.query;
+			const organizations = await OrganisationModel.aggregate([
+				{
+					$lookup: {
+						from: 'warehouses',
+						localField: 'id',
+						foreignField: 'organisationId',
+						as: 'warehouseDetails'
+					}
+				},
+				{
+					$unwind: {
+						path: '$warehouseDetails'
+					}
+				},
+				{
+					$lookup: {
+						from: 'abinbevstaticdata',
+						localField: 'warehouseDetails.warehouseAddress.city',
+						foreignField: 'district',
+						as: 'staticData'
+					}
+				},
+				{
+					$unwind: {
+						path: '$staticData'
+					}
+				},
+				{
+					$lookup: {
+						from: 'advanced_analytics',
+						localField: 'staticData.depot',
+						foreignField: 'depot',
+						as: 'aanalytics'
+					}
+				},
+				{
+					$unwind: {
+						path: '$aanalytics'
+					}
+				},
+				{
+					$match: {"aanalytics.productId": filters.sku, "staticData.district": filters.district}
+				},
+				{
+					$group: {
+						_id: { OrgType: '$type', product: "$aanalytics.productId" },
+						sales: { $sum: "$aanalytics.sales" },
+						targetSales: { $sum: "$aanalytics.targetSales" },
+						returns: { $sum: "$aanalytics.returns" },
+						// product: { "$first": { "productName": "$productName", "productSubName": "$productSubName", "productId": "$productId", "externalId": "$productId" } }
+					
+						// analytic: { "$first": { "sales": "$aanalytics.sales", "targetSales": "$aanalytics.targetSales", "returns": "$aanalytics.returns", "externalId": "$aanalytics.productId" } }
+					}
+				}
+
+			]);
+			// for (let organization of organizations) 
+			// 	organization.analytics = aggregateSalesStats(organization.analytic);
+
+			return apiResponse.successResponseWithData(
+				res,
+				"Operation success",
+				organizations
+			);
+		} catch (err) {
+			console.log(err);
+			
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
