@@ -39,5 +39,5 @@ router.get("/getOrganizationsByType", AuthController.getOrganizationsByType);
 router.get("/getwarehouseByType", AuthController.getwarehouseByType);
 router.get("/getwarehouseinfo", AuthController.getwarehouseinfo);
 router.get("/getOrganizationsTypewithauth", AuthController.getOrganizationsTypewithauth);
-
+router.get("/emailverify", AuthController.emailverify);
 module.exports = router;
