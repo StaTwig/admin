@@ -20,7 +20,7 @@ export const GetEOLInfoBySerialNumber = async (data) => {
         console.log("inside actions ==>")
 
         const result = await axios.get(
-          `http://127.0.0.1:3017/lastmilemanagement/api/GetEOLInfo?skip=${skip}&limit=${limit}&country=${country}&state=${state}&city=${district}&location=${location}&product=${product}`
+          `${config().GetEOLInfo}?skip=${skip}&limit=${limit}&country=${country}&state=${state}&city=${district}&location=${location}&product=${product}`
           );
           let resarr = [...result.data.data.eolResult]
           console.log(resarr)
@@ -47,7 +47,7 @@ export const GetEOLInfoBySerialNumber = async (data) => {
 export const getProductsByWarehouse = async (id) => {
     try {
       const result = await axios.get(
-        `http://127.0.0.1:3017/lastmilemanagement/api/getProductsByWarehouse?location=${id}`
+        `${config().GetProductsByWarehouse}?location=${id}`
         );
       return result.data;
     }catch(e) {

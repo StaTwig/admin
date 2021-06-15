@@ -130,6 +130,8 @@ export function config() {
       getCountryByRegionUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
       getAllStates: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getAllStates`,
       getDistrictsByState: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getDistrictsByState`,
+      GetEOLInfo:`${LOCAL_SERVER_URL_EOL}/lastmilemanagement/api/GetEOLInfo`,
+      GetProductsByWarehouse:`${LOCAL_SERVER_URL_EOL}/lastmilemanagement/api/getProductsByWarehouse`,
 
           },
     dev: {
@@ -228,6 +230,9 @@ export function config() {
        getCountryByRegionUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
        getAllStates: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getAllStates`,
        getDistrictsByState: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
+      GetEOLInfo:`${DEV_SERVER_URL}/lastmilemanagement/api/GetEOLInfo`,
+      GetProductsByWarehouse:`${DEV_SERVER_URL}/lastmilemanagement/api/getProductsByWarehouse`,
+
       },
     stable: {
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
@@ -326,6 +331,8 @@ export function config() {
        getCountryByRegionUrl: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
        getAllStates: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getAllStates`,
        getDistrictsByState: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getDistrictsByState`,
+      GetEOLInfo:`${STABLE_SERVER_URL_USER}/lastmilemanagement/api/GetEOLInfo`,
+      GetProductsByWarehouse:`${STABLE_SERVER_URL_USER}/lastmilemanagement/api/getProductsByWarehouse`,
 
     },
     test: {
@@ -428,7 +435,10 @@ export function config() {
        getCountryByRegionUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
        getAllStates: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getAllStates`,
        getDistrictsByState: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
-},
+      GetEOLInfo:`${TEST_SERVER_URL}/lastmilemanagement/api/GetEOLInfo`,
+              GetProductsByWarehouse:`${TEST_SERVER_URL}/lastmilemanagement/api/getProductsByWarehouse`,
+
+    },
     demo: {
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/sendOtp`,
@@ -523,7 +533,10 @@ export function config() {
       getCountryByRegionUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
       getAllStates: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getAllStates`,
       getDistrictsByState: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
-    },
+       GetEOLInfo:`${DEMO_SERVER_URL}/lastmilemanagement/api/GetEOLInfo`,
+            GetProductsByWarehouse:`${DEMO_SERVER_URL}/lastmilemanagement/api/getProductsByWarehouse`,
+
+      }  ,
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/sendOtp`,
@@ -617,6 +630,8 @@ export function config() {
       getCountryByRegionUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
       getAllStates: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getAllStates`,
       getDistrictsByState: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
+      GetProductsByWarehouse:`${PROD_SERVER_URL}/lastmilemanagement/api/getProductsByWarehouse`,
+      GetEOLInfo:`${PROD_SERVER_URL}/lastmilemanagement/api/GetEOLInfo`,
     },
     
     uniceftest: {
@@ -719,7 +734,9 @@ export function config() {
       getCountryByRegionUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
       getAllStates: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getAllStates`,
       getDistrictsByState: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
-    },
+      GetProductsByWarehouse:`${UNICEFTEST_SERVER_URL}/lastmilemanagement/api/getProductsByWarehouse`,
+      GetEOLInfo:`${UNICEFTEST_SERVER_URL}/lastmilemanagement/api/GetEOLInfo`,
+    }
   };
 
   const environment = process.env.ENVIRONMENT || `uniceftest`; // change prod to test, local,stable, dev for respective environments
