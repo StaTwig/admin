@@ -42,7 +42,10 @@ const PopUpLocation = (props) => {
     if(result.status = 200){
       console.log('Added Location');
       console.log(result);
-      setAddedLocationModal(true);
+      if (result.data.data.status!=0)
+      { 
+        setAddedLocationModal(true);
+      }
     }
     else{
       console.log("Error in add location");
