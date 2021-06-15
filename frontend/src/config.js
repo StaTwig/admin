@@ -132,6 +132,10 @@ export function config() {
       getDistrictsByState: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getDistrictsByState`,
       GetEOLInfo:`${LOCAL_SERVER_URL_EOL}/lastmilemanagement/api/GetEOLInfo`,
       GetProductsByWarehouse:`${LOCAL_SERVER_URL_EOL}/lastmilemanagement/api/getProductsByWarehouse`,
+      getCountries: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getCountries`,
+      getStatesByCountry: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getStatesByCountry`,
+      getCitiesByState: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getCitiesByState`,
+      getWarehousesByCity: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getWarehousesByCity`,
 
           },
     dev: {
@@ -232,6 +236,10 @@ export function config() {
        getDistrictsByState: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
       GetEOLInfo:`${DEV_SERVER_URL}/lastmilemanagement/api/GetEOLInfo`,
       GetProductsByWarehouse:`${DEV_SERVER_URL}/lastmilemanagement/api/getProductsByWarehouse`,
+      getCountries: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getCountries`,
+      getStatesByCountry: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getStatesByCountry`,
+      getCitiesByState: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getCitiesByState`,
+      getWarehousesByCity: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getWarehousesByCity`,
 
       },
     stable: {
@@ -333,7 +341,10 @@ export function config() {
        getDistrictsByState: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getDistrictsByState`,
       GetEOLInfo:`${STABLE_SERVER_URL_USER}/lastmilemanagement/api/GetEOLInfo`,
       GetProductsByWarehouse:`${STABLE_SERVER_URL_USER}/lastmilemanagement/api/getProductsByWarehouse`,
-
+      getCountries: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getCountries`,
+      getStatesByCountry: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getStatesByCountry`,
+      getCitiesByState: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getCitiesByState`,
+      getWarehousesByCity: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getWarehousesByCity`,
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -437,6 +448,10 @@ export function config() {
        getDistrictsByState: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
       GetEOLInfo:`${TEST_SERVER_URL}/lastmilemanagement/api/GetEOLInfo`,
               GetProductsByWarehouse:`${TEST_SERVER_URL}/lastmilemanagement/api/getProductsByWarehouse`,
+              getCountries: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getCountries`,
+              getStatesByCountry: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getStatesByCountry`,
+              getCitiesByState: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getCitiesByState`,
+              getWarehousesByCity: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehousesByCity`,
 
     },
     demo: {
@@ -535,6 +550,10 @@ export function config() {
       getDistrictsByState: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
        GetEOLInfo:`${DEMO_SERVER_URL}/lastmilemanagement/api/GetEOLInfo`,
             GetProductsByWarehouse:`${DEMO_SERVER_URL}/lastmilemanagement/api/getProductsByWarehouse`,
+            getCountries: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getCountries`,
+            getStatesByCountry: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getStatesByCountry`,
+            getCitiesByState: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getCitiesByState`,
+            getWarehousesByCity: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getWarehousesByCity`,
 
       }  ,
     prod: {
@@ -632,6 +651,10 @@ export function config() {
       getDistrictsByState: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
       GetProductsByWarehouse:`${PROD_SERVER_URL}/lastmilemanagement/api/getProductsByWarehouse`,
       GetEOLInfo:`${PROD_SERVER_URL}/lastmilemanagement/api/GetEOLInfo`,
+      getCountries: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getCountries`,
+      getStatesByCountry: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getStatesByCountry`,
+      getCitiesByState: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getCitiesByState`,
+      getWarehousesByCity: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getWarehousesByCity`,
     },
     
     uniceftest: {
@@ -736,6 +759,11 @@ export function config() {
       getDistrictsByState: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
       GetProductsByWarehouse:`${UNICEFTEST_SERVER_URL}/lastmilemanagement/api/getProductsByWarehouse`,
       GetEOLInfo:`${UNICEFTEST_SERVER_URL}/lastmilemanagement/api/GetEOLInfo`,
+      getCountries: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getCountries`,
+      getStatesByCountry: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getStatesByCountry`,
+      getCitiesByState: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getCitiesByState`,
+      getWarehousesByCity: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehousesByCity`,
+      
     }
   };
 

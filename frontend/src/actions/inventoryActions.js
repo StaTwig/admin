@@ -86,7 +86,7 @@ export const getCountryByRegion = async (id) => {
 
 export const GetCountriesFromWarehouses = async (id) => {
   try {
-    const result = await axios.get(`http://localhost:3007/inventorymanagement/api/inventory/getCountries?region=${id}`);
+    const result = await axios.get(`${config().getCountries}?region=${id}`);
     return result.data;
   } catch (e) {
     return [];
@@ -95,7 +95,7 @@ export const GetCountriesFromWarehouses = async (id) => {
 
 export const GetStatesFromWarehouses = async (id) => {
   try {
-    const result = await axios.get(`http://localhost:3007/inventorymanagement/api/inventory/getStatesByCountry?country=${id}`);
+    const result = await axios.get(`${config().getStatesByCountry}?country=${id}`);
     return result.data;
   } catch (e) {
     return [];
@@ -104,7 +104,7 @@ export const GetStatesFromWarehouses = async (id) => {
 
 export const GetCitiesFromWarehouses = async (id) => {
   try {
-    const result = await axios.get(`http://localhost:3007/inventorymanagement/api/inventory/getCitiesByState?state=${id}`);
+    const result = await axios.get(`${config().getCitiesByState}?state=${id}`);
     console.log(result)
     return result.data;
   } catch (e) {
@@ -114,7 +114,7 @@ export const GetCitiesFromWarehouses = async (id) => {
 
 export const GetWarehousesWithCity = async (id) => {
   try {
-    const result = await axios.get(`http://localhost:3007/inventorymanagement/api/inventory/getWarehousesByCity?city=${id}`);
+    const result = await axios.get(`${config().getWarehousesByCity}?city=${id}`);
     console.log(result)
     return result.data;
   } catch (e) {
