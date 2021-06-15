@@ -57,9 +57,9 @@ inventoryDetails.sort(function(a,b){
                   {/* <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.manufacturer}</div> */}
                   <div className="rTableCell " style={{position:"relative",left:'12%'}}> {formatDate(inventory.createdAt)}</div>
                   <div className="rTableCell"  style={{position:"relative",left:'19%'}}>{inventory.inventoryQuantity}</div>                                 
-                  <div className="rTableCell" style={{position:"relative", left:"22%"}}>
-                        {(inventory.eventTypePrimary !== 'ADD') ? (inventory.eventTypePrimary === 'RECEIVED' ? 'RECEIVED' :  'SENT') : 'ADDED'} 
-                   </div>
+                  <div className="rTableCell" style={{position:"relative", left:"19%", fontWeight:" 600 "}}>
+                         {(inventory.eventTypePrimary !== 'ADD') ? (inventory.eventTypePrimary === 'RECEIVED' ? <div className="status secondary-bg bg-success"> RECEIVED</div> :  <div className="status secondary-bg bg-warning">SENT</div>) :  <div className="status secondary-bg bg-primary">ADDED</div>} 
+                  </div>
                     <div className=" rTableCell m-2" 
                          style={{position:"relative",left:'12%'}}>
                          <span className="drop-pad shadow rounded-circle ">
