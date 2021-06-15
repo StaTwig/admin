@@ -574,7 +574,7 @@ exports.createShipment = [
         "error",
         "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1071,7 +1071,7 @@ exports.fetchShipmentsForAbInBev = [
               shipments
             );
           } catch (err) {
-            return apiResponse.ErrorResponse(res, err);
+            return apiResponse.ErrorResponse(res, err.message);
           }
         } else {
           logger.log(
@@ -1086,7 +1086,7 @@ exports.fetchShipmentsForAbInBev = [
         "error",
         "<<<<< ShipmentService < ShipmentController < fetchShipmentsForAbInBev : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1200,7 +1200,7 @@ exports.fetchShipments = [
               outboundShipments
             );
           } catch (err) {
-            return apiResponse.ErrorResponse(res, err);
+            return apiResponse.ErrorResponse(res, err.message);
           }
         } else {
           logger.log(
@@ -1215,7 +1215,7 @@ exports.fetchShipments = [
         "error",
         "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1300,7 +1300,7 @@ exports.viewShipment = [
               );
             })
             .catch((err) => {
-              return apiResponse.ErrorResponse(res, err);
+              return apiResponse.ErrorResponse(res, err.message);
             });
         } else {
           logger.log(
@@ -1315,7 +1315,7 @@ exports.viewShipment = [
         "error",
         "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1336,7 +1336,7 @@ exports.fetchAllShipments = [
               );
             })
             .catch((err) => {
-              return apiResponse.ErrorResponse(res, err);
+              return apiResponse.ErrorResponse(res, err.message);
             });
         } else {
           logger.log(
@@ -1351,7 +1351,7 @@ exports.fetchAllShipments = [
         "error",
         "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1375,7 +1375,7 @@ exports.fetch_po_Shipments = [
               );
             })
             .catch((err) => {
-              return apiResponse.ErrorResponse(res, err);
+              return apiResponse.ErrorResponse(res, err.message);
             });
         } else {
           logger.log(
@@ -1390,7 +1390,7 @@ exports.fetch_po_Shipments = [
         "error",
         "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1458,7 +1458,7 @@ exports.updateStatus = [
               );
             })
             .catch((err) => {
-              return apiResponse.ErrorResponse(res, err);
+              return apiResponse.ErrorResponse(res, err.message);
             });
         } else {
           logger.log(
@@ -1473,7 +1473,7 @@ exports.updateStatus = [
         "error",
         "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1516,7 +1516,7 @@ exports.getProductsByInventory = [
         inventories
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1557,7 +1557,7 @@ exports.uploadImage = async function (req, res) {
         );
         return apiResponse.successResponseWithData(res, "Image uploaded successfullly", update);
       } catch (e) {
-        return apiResponse.ErrorResponse(res, e);
+        return apiResponse.ErrorResponse(res, e.message);
       }
     } else {
       return apiResponse.unauthorizedResponse(res, result);
@@ -1576,7 +1576,7 @@ exports.fetchImage = async function (req, res) {
         })
         .catch((e) => {
           console.log("Err", e);
-          return apiResponse.ErrorResponse(res, e);
+          return apiResponse.ErrorResponse(res, e.message);
         });
 
       var resArray = [];
@@ -1624,7 +1624,7 @@ exports.updateTrackingStatus = [
         "error",
         "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1856,7 +1856,7 @@ exports.chainOfCustody = [
                 "error",
                 "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
             );
-            return apiResponse.ErrorResponse(res, err);
+            return apiResponse.ErrorResponse(res, err.message);
         }
     },
 ];
@@ -1889,7 +1889,7 @@ exports.fetchShipmentIds = [
               );
             })
             .catch((err) => {
-              return apiResponse.ErrorResponse(res, err);
+              return apiResponse.ErrorResponse(res, err.message);
             });
         } else {
           logger.log(
@@ -1904,7 +1904,7 @@ exports.fetchShipmentIds = [
         "error",
         "<<<<< ShipmentService < ShipmentController < fetchShipmentIds : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2015,7 +2015,7 @@ exports.fetchInboundShipments = [//inbound shipments with filter(shipmentId, fro
               });
             });
           } catch (err) {
-            return apiResponse.ErrorResponse(res, err);
+            return apiResponse.ErrorResponse(res, err.message);
           }
         } else {
           logger.log(
@@ -2030,7 +2030,7 @@ exports.fetchInboundShipments = [//inbound shipments with filter(shipmentId, fro
         "error",
         "<<<<< ShipmentService < ShipmentController < fetchInboundShipments : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2137,7 +2137,7 @@ exports.fetchOutboundShipments = [ //outbound shipments with filter(shipmentId, 
               });
             });
           } catch (err) {
-            return apiResponse.ErrorResponse(res, err);
+            return apiResponse.ErrorResponse(res, err.message);
           }
         } else {
           logger.log(
@@ -2152,7 +2152,7 @@ exports.fetchOutboundShipments = [ //outbound shipments with filter(shipmentId, 
         "error",
         "<<<<< ShipmentService < ShipmentController < fetchOutboundShipments : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2177,7 +2177,7 @@ exports.fetchSupplierAndReceiverList = [
               );
             }
           } catch (err) {
-            return apiResponse.ErrorResponse(res, err);
+            return apiResponse.ErrorResponse(res, err.message);
           }
         } else {
           logger.log(
@@ -2192,7 +2192,7 @@ exports.fetchSupplierAndReceiverList = [
         "error",
         "<<<<< ShipmentService < ShipmentController < fetchSupplierAndReceiverList : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2294,7 +2294,7 @@ exports.fetchAllWarehouseShipments = [
               shipments
             );
           } catch (err) {
-            return apiResponse.ErrorResponse(res, err);
+            return apiResponse.ErrorResponse(res, err.message);
           }
         } else {
           logger.log(
@@ -2309,7 +2309,7 @@ exports.fetchAllWarehouseShipments = [
         "error",
         "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2632,7 +2632,7 @@ console.log("1",inwardShipments.taggedShipments)
                 "error",
                 "<<<<< ShipmentService < ShipmentController < fetchShipmentIds : error (catch block)"
             );
-            return apiResponse.ErrorResponse(res, err);
+            return apiResponse.ErrorResponse(res, err.message);
         }
     },
 ];
@@ -2657,7 +2657,7 @@ exports.checkShipmentID = [
       );
 
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
