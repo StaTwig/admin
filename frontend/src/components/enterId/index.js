@@ -15,13 +15,13 @@ const EnterId = (props) => {
   useEffect(()=>{
     async function getShipmentArray(){
       let arr = await getShipmentIds();
-      shipmentArray.push(arr.data);
+      setShipmentArray(arr.data);
     }
     getShipmentArray();
   },[]);
-  
+
   const defaultProps = {
-    options: shipmentArray[0],
+    options: shipmentArray,
     getOptionLabel: (option) => option.id,
   };
   const flatProps = {
@@ -94,7 +94,7 @@ const EnterId = (props) => {
                         <div className="mb-2" style={{width: 300 }}>
                         <Autocomplete
                           {...defaultProps}
-                          // id="auto-complete"
+                          id="auto-complete"
                           value={value}
                           onChange={(event, newValue) => {
                             setValue(newValue);
@@ -198,9 +198,14 @@ const EnterId = (props) => {
                         disabled={shipdisabled}
                         className="btn btn-orange fontSize20 font-bold mr-4 product"
                         onClick={() => {
-                          shipmentId
-                            ? props.history.push(`/updatestatus/${shipmentId}`)
-                            : props.history.push(`/updatestatus/${billid}`);
+                          
+                        if(shipmentId){
+                          if(shipmentArray.filter(e=>e.id === shipmentId).length>0){
+                              props.history.push(`/updatestatus/${shipmentId}`)
+                          }}
+                        else{
+                           props.history.push(`/updatestatus/${billid}`);
+                        }
                         }}
                       >
                         <img src={update} width="20" height="17" className="mr-2 mb-1" />
