@@ -25,16 +25,17 @@ const Track = (props) => {
   const onSearchChange = (e) => {
     setValue(e.target.value);
     setIsSubmitted(false);
-    if (
-      e.target.value.substring(0, 2) == 'SH' ||
-      e.target.value.substring(0, 2) == 'sh'
-    ) {
-      setSearchType('SH');
-      setOp(1);
-    } else {
-      setSearchType('PO');
-      setOp(-1);
-    }
+    setOp(1);
+    // if (
+    //   e.target.value.substring(0, 2) == 'SH' ||
+    //   e.target.value.substring(0, 2) == 'sh'
+    // ) {
+    //   setSearchType('SH');
+    //   setOp(1);
+    // } else {
+    //   setSearchType('PO');
+    //   setOp(-1);
+    // }
   };
 
   const onSeach = async () => {
@@ -123,62 +124,6 @@ const Track = (props) => {
                   <span className="fontSize20">Back to Search</span>
                 </button>{' '}
               </div>
-              {searchType == 'SH' ? (
-                <>
-                  <div className=" panel commonpanle  bg-light">
-                    <h6 className=" text-primary mb-4">CHAIN OF CUSTODY</h6>
-                    <div className="row orderTxt">
-                      <div className="col-1">
-                        <div className="picture recived-bg">
-                          <img src={Package} alt="package" />
-                        </div>
-                      </div>
-                      <div className="col ml-1">
-                        <div className="">
-                            <div className="text-muted ">{poChainOfCustodyData ? 'Order ID' : 'Shipment ID'}</div>
-                          <div className="font-weight-bold ">
-                            {shippmentChainOfCustodyData?.length > 0
-                              ? shippmentChainOfCustodyData[0].id
-                              : 'NA'}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="pb-4">
-                      {shippmentChainOfCustodyData.map((row, index) => { 
-                        let newArr = [];
-                        // if(row.id == value)
-                        newArr = shippmentChainOfCustodyData.filter(rw => rw?.taggedShipments?.includes(value));
-                        let cIndex = shippmentChainOfCustodyData.map((el) => el.id).indexOf(value) + 1;
-                        cIndex = index < cIndex ? index : cIndex;
-                        
-                        return row?.shipmentUpdates?.filter(s => s.status == 'RECEIVED').map((r, i) => (
-                          <SoChainOfCustody
-                            len={row.shipmentUpdates.length}
-                            i={i}
-                            v={visible}
-                            setV={setVisible}
-                            level={i + 1}
-                            key={i}
-                            op={op}
-                            setOp={setOp}
-                            data={row}
-                            update={r}
-                            index={i + 3}
-                            parentIndex={newArr.length && row.id != value ? cIndex : index }
-                            pindex={
-                              shippmentChainOfCustodyData.length - 1 == index
-                                ? 1
-                                : newArr.length && row.id != value ? newArr.length : 1 
-                            }
-                            container={2 + i}
-                          />
-                        ));
-                      })}
-                    </div>
-                  </div>
-                </>
-              ) : (
                 <div className=" panel commonpanle  bg-light">
                   <h6 className=" text-primary mb-4">CHAIN OF CUSTODY</h6>
                   <div className="row orderTxt">
@@ -189,31 +134,49 @@ const Track = (props) => {
                     </div>
                     <div className="col ml-1">
                       <div className="">
-                        <div className="text-muted ">Order ID</div>
+                          <div className="text-muted ">{!!Object.keys(poChainOfCustodyData).length ? 'Order ID' : 'Shipment ID'}</div>
                         <div className="font-weight-bold ">
-                          {poChainOfCustodyData?.length > 0
-                            ? poChainOfCustodyData[0].id
+                          {shippmentChainOfCustodyData?.length > 0
+                            ? shippmentChainOfCustodyData[0].id
                             : 'NA'}
                         </div>
                       </div>
                     </div>
                   </div>
                   <div className="pb-4">
-                    {poChainOfCustodyData.map((row, index) => (
-                      <PoChainOfCustody
-                        key={index}
-                        shippmentChainOfCustodyData={
-                          shippmentChainOfCustodyData
-                        }
-                        data={row}
-                        index="1"
-                        pindex="1"
-                        container="0"
-                      />
-                    ))}
+                    {shippmentChainOfCustodyData.map((row, index) => { 
+                      let newArr = [];
+                      // if(row.id == value)
+                      newArr = shippmentChainOfCustodyData.filter(rw => rw?.taggedShipments?.includes(value));
+                      let cIndex = shippmentChainOfCustodyData.map((el) => el.id).indexOf(value) + 1;
+                      cIndex = index < cIndex ? index : cIndex;
+                      
+                      return row?.shipmentUpdates?.filter(s => s.status == 'RECEIVED').map((r, i) => (
+                        <SoChainOfCustody
+                          len={row.shipmentUpdates.length}
+                          i={i}
+                          v={visible}
+                          setV={setVisible}
+                          level={i + 1}
+                          key={i}
+                          op={op}
+                          setOp={setOp}
+                          data={row}
+                          update={r}
+                          index={i + 3}
+                          parentIndex={newArr.length && row.id != value ? cIndex : index }
+                          pindex={
+                            shippmentChainOfCustodyData.length - 1 == index
+                              ? 1
+                              : newArr.length && row.id != value ? newArr.length : 1 
+                          }
+                          container={2 + i}
+                        />
+                      ));
+                    })}
                   </div>
                 </div>
-              )}
+               
             </div>
           )}
         </div>

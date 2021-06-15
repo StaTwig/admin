@@ -77,7 +77,7 @@ const SoChainOfCustody = (props) => {
           </div>
         </div>
         :
-        <div></div>
+        <div>ss</div>
       }
       </>
   )
