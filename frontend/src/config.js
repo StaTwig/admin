@@ -137,6 +137,7 @@ export function config() {
       getCitiesByState: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getCitiesByState`,
       getWarehousesByCity: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getWarehousesByCity`,
 
+      emailverify:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/emailverify`
           },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
@@ -241,6 +242,7 @@ export function config() {
       getCitiesByState: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getCitiesByState`,
       getWarehousesByCity: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getWarehousesByCity`,
 
+       emailverify:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/emailverify`
       },
     stable: {
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
@@ -345,6 +347,16 @@ export function config() {
       getStatesByCountry: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getStatesByCountry`,
       getCitiesByState: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getCitiesByState`,
       getWarehousesByCity: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getWarehousesByCity`,
+      fetchOutboundPurchaseOrderUrl: `${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/fetchOutboundPurchaseOrders`,
+      fetchInboundPurchaseOrderUrl: `${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/fetchInboundPurchaseOrders`,
+      fetchInboundShipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchInboundShipments`,
+      fetchOutboundShipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchOutboundShipments`,
+      fetchSupplierAndReceiverListUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
+      addPOsFromExcel:`${STABLE_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
+      getOrganizationsTypewithauth:`${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
+      getTransactions: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/getAllEventsWithFilter`,
+      getTransactionFilterList: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/fetchProductDetailsList`,
+      emailverify:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/emailverify`
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -452,8 +464,8 @@ export function config() {
               getStatesByCountry: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getStatesByCountry`,
               getCitiesByState: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getCitiesByState`,
               getWarehousesByCity: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehousesByCity`,
-
-    },
+              emailverify:`${TEST_SERVER_URL}/usermanagement/api/auth/emailverify`
+},
     demo: {
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/sendOtp`,
@@ -554,8 +566,8 @@ export function config() {
             getStatesByCountry: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getStatesByCountry`,
             getCitiesByState: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getCitiesByState`,
             getWarehousesByCity: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getWarehousesByCity`,
-
-      }  ,
+      emailverify:`${DEMO_SERVER_URL}/usermanagement/api/auth/emailverify`
+    },
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/sendOtp`,
@@ -655,6 +667,7 @@ export function config() {
       getStatesByCountry: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getStatesByCountry`,
       getCitiesByState: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getCitiesByState`,
       getWarehousesByCity: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getWarehousesByCity`,
+      emailverify:`${PROD_SERVER_URL}/usermanagement/api/auth/emailverify`
     },
     
     uniceftest: {
@@ -763,11 +776,11 @@ export function config() {
       getStatesByCountry: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getStatesByCountry`,
       getCitiesByState: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getCitiesByState`,
       getWarehousesByCity: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehousesByCity`,
-      
-    }
+      emailverify:`${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/emailverify`
+    },
   };
 
-  const environment = process.env.ENVIRONMENT || `uniceftest`; // change prod to test, local,stable, dev for respective environments
+  const environment = process.env.ENVIRONMENT || `test`; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
   return conf;
 }

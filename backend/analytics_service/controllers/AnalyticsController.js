@@ -872,8 +872,10 @@ exports.getOrderAnalytics = [
       order.inboundPO = inboundPO;
 
       const outboundPO = await RecordModel.count(
-        { $and : [
-          {"customer.customerOrganisation": organisationId}
+        { $or : [
+          {"customer.customerOrganisation": organisationId},
+            {"createdBy": req.user.id}
+
         ]
       } );
       order.outboundPO = outboundPO;

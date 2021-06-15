@@ -2,6 +2,7 @@ var mongoose = require('mongoose');
 var WarehouseSchema = new mongoose.Schema(
   {
     id: { type: String, required: true, unique: true },
+    title: { type: String, required: true, default: "Warehouse" },
     organisationId: {
       type: String,
       required: true,
@@ -10,7 +11,20 @@ var WarehouseSchema = new mongoose.Schema(
     postalAddress: {
       type: String,
       required: false,
-      default: 'T-Hub, IIIT, Gachibowli, Hyderabad, Telangana, India',
+      default: null,
+    },
+    warehouseAddress: {
+      type: Object,
+      required: true,
+      properties: {
+        firstLine: { type: String },
+        secondLine: { type: String },
+        city: { type: String },
+        state: { type: String },
+        country: { type: String },
+        landmark: { type: String },
+        zipCode: { type: String }
+      }
     },
     region: {
       type: Object,
@@ -36,6 +50,7 @@ var WarehouseSchema = new mongoose.Schema(
         geohash: '1231nejf923453',
       },
     },
+    status: String,
     supervisors: {
       type: Array,
       default: []
@@ -49,6 +64,14 @@ var WarehouseSchema = new mongoose.Schema(
       required: true,
       unique: true
     },
+    bottleCapacity: {
+      type: Number,
+      default: 0
+    },
+    sqft: {
+      type: Number,
+      default: 0
+    }
   },
   { timestamps: true },
 );

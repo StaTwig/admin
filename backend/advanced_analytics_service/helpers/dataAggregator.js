@@ -1,6 +1,7 @@
 const Analytics = require('../models/AnalyticsModel');
 const OrganisationModel = require('../models/OrganisationModel');
 const ProductModel = require("../models/ProductModel");
+const WarehouseModel = require("../models/WarehouseModel");
 const { calculateReturns } = require('./returnShipments');
 const moment = require('moment');
 
@@ -73,6 +74,16 @@ async function aggregateData(timeFrame) {
   
   const b_arr = [];
   
+  // const warehouses = await WarehouseModel.find({ organisationId: 'ORG10018' });
+
+  // for (const w of warehouses) {
+  //   let wh = w.toObject();
+  //   console.log(wh.warehouseAddress.firstLine, wh.id, wh._id);
+    
+  //   await WarehouseModel.updateOne({ _id: wh._id },
+  //       { $set: { "warehouseAddress.city": wh.warehouseAddress.firstLine } });
+  // }
+
   const brewery = await OrganisationModel.find({ type: 'BREWERY', status: "ACTIVE" }, 'id');
   
   for (let b of brewery)
@@ -85,7 +96,7 @@ async function aggregateData(timeFrame) {
         'receiver.id': { $in: b_arr },
         // 'receiver.locationId': row.warehouseId,
         'products.productID': prod.id,
-        shippingDate: {
+        createdAt: {
           $lte: today,
           $gte: new Date(timeFrame),
         },

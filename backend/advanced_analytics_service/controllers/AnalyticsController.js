@@ -60,8 +60,6 @@ async function calculatePrevReturnRatesNew(filters, analytic) {
 }
 
 function getFilterConditions(filters) {
-
-	console.log(filters);
 	let matchCondition = {status: 'ACTIVE'};
 	if (filters.orgType && filters.orgType !== '') {
 		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
@@ -79,7 +77,6 @@ function getFilterConditions(filters) {
 	if (filters.organization && filters.organization.length) {
 		matchCondition.id = filters.organization;
 	}
-	console.log(matchCondition);
 	
 	return matchCondition;
 }
@@ -97,7 +94,7 @@ function getFilterConditionsWarehouse(filters) {
 		matchCondition.state = filters.state;
 	}
 	if (filters.district && filters.district.length) {
-		matchCondition["warehouseAddress.firstLine"] = filters.district;
+		matchCondition["warehouseAddress.city"] = filters.district;
 	}
 	if (filters.organization && filters.organization.length) {
 		matchCondition.id = filters.organization;
@@ -108,30 +105,27 @@ function getFilterConditionsWarehouse(filters) {
 const _getWarehouseIdsByOrg = async (org) => {
 	let matchCondition = {};
 	if (org && org.id && org.id !== '') {
-		matchCondition.id = org.id;
+		matchCondition.organisationId = org.id;
 	}
-	const warehouses = await OrganisationModel.aggregate([
-		{
-			$match: matchCondition
-		},
-		{
-			$unwind: {
-				path: "$warehouses"
-			}
-		},
-		{
-			$group: {
-				_id: '$warehouseIds',
-				'warehouseIds': {
-					$addToSet: "$warehouses"
+	let warehouseIds = [];
+	
+	const warehouse = await WarehouseModel.findOne({ organisationId: org.id });
+	
+	if (warehouse) {
+		const warehouses = await WarehouseModel.aggregate([
+			{
+				$match: { "warehouseAddress.city": warehouse?.warehouseAddress.city }
+			},
+			{
+				$group: {
+					_id: '$id'
 				}
 			}
-		}
-	]);
-	let warehouseIds = [];
-	if (warehouses && warehouses[0] && warehouses[0].warehouseIds) {
-		warehouseIds = warehouses[0].warehouseIds;
+		]);
+		for (const wh of warehouses) 
+			warehouseIds.push(wh._id);
 	}
+	
 	return warehouseIds;
 }
 
@@ -246,7 +240,7 @@ const aggregateSalesStats = (inputArr) => {
 	let returns = inputArr.map(item => parseInt(item.returns) || 0).reduce((prev, next) => prev + next);
 	let actualReturns = 0;
 	if (returns) {
-		actualReturns = (returns / sales) * 100;
+		actualReturns = parseFloat( ((returns / sales) * 100) ).toFixed(2);
 	}
 	return {
 		sales: sales,
@@ -281,6 +275,9 @@ function getSKUAnalyticsFilterConditions(filters) {
 		matchCondition.productId = filters.sku;
 	};
 
+	// if (filters.district && filters.district !== '') {
+	// 	matchCondition.district = filters.district;
+	// }
 
 	if (filters.date_filter_type && filters.date_filter_type.length) {
 
@@ -576,8 +573,8 @@ exports.getAllBrands = [
 // 						}
 // 						else
 // 							prevProd = product.productId;
-							
-						
+
+
 // 						if (arrIds.indexOf(product.productId) === -1 && prevProd != '') {
 // 							product['returnRate'] = (parseInt(product.returns) / parseInt(product.sales)) * 100;
 // 							product['returnRatePrev'] = await calculatePrevReturnRates(filters, product);
@@ -641,7 +638,7 @@ exports.getStatsByBrand = [
 						sales: { $sum: "$sales" },
 						targetSales: { $sum: "$targetSales" },
 						returns: { $sum: "$returns" },
-						product : { "$first": {"productName":"$productName", "productSubName":"$productSubName", "productId":"$productId", "externalId":"$productId" }}
+						product: { "$first": { "productName": "$productName", "productSubName": "$productSubName", "productId": "$productId", "externalId": "$productId" } }
 					}
 				},
 				{ $sort: { "_id.manufacturer": 1 } }
@@ -675,7 +672,7 @@ exports.getStatsByBrand = [
 						p['targetSales'] = parseInt(product.targetSales);
 						p['productId'] = product._id.id;
 						p['returns'] = product.returns;
-						p['returnRate'] = (parseInt(product.returns) / parseInt(product.sales)) * 100;
+						p['returnRate'] = parseFloat(((parseInt(product.returns) / parseInt(product.sales)) * 100)).toFixed(2);
 						p['returnRatePrev'] = await calculatePrevReturnRatesNew(filters, product);
 						product.product = p;
 					}
@@ -865,7 +862,7 @@ function getFilterConditions(filters) {
 	if (filters.organization && filters.organization.length) {
 		matchCondition.id = filters.organization;
 	}
-	return {...matchCondition, ...{status: 'ACTIVE'}};
+	return { ...matchCondition, ...{ status: 'ACTIVE' } };
 }
 
 /**
@@ -1139,9 +1136,83 @@ async function calculateReturnRateByOrg(supplierOrg) {
 		totalReturns = totalReturns + parseInt(analytic.returns);
 		totalSales = totalSales + parseInt(analytic.sales);
 	}
-	returnRate = totalReturns / totalSales * 100;
+	returnRate = parseFloat(((totalReturns / totalSales) * 100)).toFixed(2);
 	return returnRate;
 
+}
+
+async function calculateDirtyBottlesAndBreakage(supplierOrg) {
+	const warehouses = await OrganisationModel.aggregate([
+		{
+			$match: {
+				id: supplierOrg.id
+			}
+		},
+		{
+			$group: {
+				_id: 'warehouses',
+				warehouses: {
+					$addToSet: '$warehouses'
+				}
+			}
+		},
+		{
+			$unwind: {
+				path: '$warehouses'
+			}
+		},
+		{
+			$unwind: {
+				path: '$warehouses'
+			}
+		},
+		{
+			$group: {
+				_id: 'warehouses',
+				warehouseIds: {
+					$addToSet: '$warehouses'
+				}
+			}
+		}
+	]);
+	let warehouseIds = [];
+	if (warehouses[0] && warehouses[0].warehouseIds) {
+		warehouseIds = warehouses[0].warehouseIds;
+	}
+	let shipments = await ShipmentModel.aggregate([
+		{
+			$match: {
+				"supplier.locationId": { $in: warehouseIds },
+				"supplier.id": supplierOrg.id,
+				"status": "RECEIVED"
+			}
+		},
+		{
+			$project: {
+				shipmentUpdates: 1
+			}
+		}
+	]);
+
+	let dirtyBottles = 0;
+	let breakage = 0;
+	for (let shipment of shipments) {
+		let shipmentUpdates = shipment.shipmentUpdates.filter(sh => sh.status === 'RECEIVED');
+		shipmentUpdates.map(update => {
+			let products = update.products;
+			products.forEach(prod => {
+				dirtyBottles = dirtyBottles + prod.rejectionRate;
+			});
+		});
+		let damagedShipments = shipment.shipmentUpdates.filter(sh => sh.updateComment === 'Receive_comment_5');
+		damagedShipments.map(dsh => {
+			let products = dsh.products;
+			products.forEach(prod => {
+				breakage = breakage + prod.rejectionRate;
+			});
+		});
+	}
+	return { dirtyBottles: dirtyBottles, breakage: breakage };
 }
 
 async function calculateStorageCapacityByOrg(supplierOrg) {
@@ -1150,14 +1221,47 @@ async function calculateStorageCapacityByOrg(supplierOrg) {
 			$match: {
 				id: supplierOrg.id
 			}
-		}]);
+		},
+		{
+			$unwind: {
+				path: '$warehouses'
+			}
+		},
+		{
+			$lookup: {
+				from: 'warehouses',
+				localField: 'warehouses',
+				foreignField: 'id',
+				as: 'war'
+			}
+		},
+		{
+			$unwind: {
+				path: '$war'
+			}
+		},
+		{
+			$replaceRoot: {
+				newRoot: {
+					$mergeObjects: ['$war', '$$ROOT']
+				}
+			}
+		}
+	]);
 	let bottleCapacity = 0;
 	let sqft = 0;
-	warehouses.forEach(w => {
-		bottleCapacity = bottleCapacity + (w.bottleCapacity ? w.bottleCapacity : 0);
-		sqft = sqft + (w.sqft ? w.sqft : 0);
-	});
-	return { bottleCapacity, sqft };
+	for (let w of warehouses) {
+		let newBottleCapacity = parseInt(w.bottleCapacity) ? parseInt(w.bottleCapacity) : 0;
+		bottleCapacity = bottleCapacity + newBottleCapacity;
+		let newSQFT = parseInt(w.sqft) ? parseInt(w.sqft) : 0;
+		sqft = sqft + newSQFT;
+	}
+
+	let storageCapacity = {
+		bottleCapacity: bottleCapacity,
+		sqft: sqft
+	};
+	return storageCapacity;
 }
 
 /**
@@ -1181,10 +1285,14 @@ exports.getSupplierPerformance = [
 					$match: matchCondition
 				}
 			]);
+
 			for (const supplier of supplierOrgs) {
 				supplier.leadTime = await calculateLeadTimeByOrg(supplier);
 				supplier.returnRate = await calculateReturnRateByOrg(supplier);
 				supplier.storageCapacity = await calculateStorageCapacityByOrg(supplier);
+				let dirtyBreakage = await calculateDirtyBottlesAndBreakage(supplier);
+				supplier.dirtyBottles = dirtyBreakage.dirtyBottles;
+				supplier.breakage = dirtyBreakage.breakage;
 			}
 
 			return apiResponse.successResponseWithData(
@@ -1192,6 +1300,7 @@ exports.getSupplierPerformance = [
 				"Operation success",
 				supplierOrgs
 			);
+
 		} catch (err) {
 			return apiResponse.ErrorResponse(res, err);
 		}
@@ -1222,7 +1331,7 @@ exports.getAllStats = [
 				.skip((resPerPage * page) - resPerPage)
 				.limit(resPerPage);
 			for (let analytic of Analytics) {
-				analytic['returnRate'] = (parseInt(analytic.returns) / parseInt(analytic.sales)) * 100;
+				analytic['returnRate'] = parseFloat(((parseInt(analytic.returns) / parseInt(analytic.sales)) * 100)).toFixed(2);
 				analytic['returnRatePrev'] = await calculatePrevReturnRates(filters, analytic);
 			}
 
@@ -1274,6 +1383,13 @@ function getSKUGroupByFilters(filters) {
 				});
 
 		} else if (filters.group_by === 'district') {
+			if (filters.district && filters.district.length){
+				matchCondition.push({
+					$match: {
+						district: filters.district
+					}
+				});
+			}
 			matchCondition.push(
 				{
 					$group: {
@@ -1370,39 +1486,39 @@ exports.getSalesTotalOfAllBrands = [
 			const filters = req.query;
 			let warehouseIds = await _getWarehouseIds(filters);
 			let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
-			
+
 			let Analytics = await AnalyticsModel.aggregate([
 				{
 					$match: analyticsFilter
 				},
-				{
-					$lookup: {
-						from: 'products',
-						localField: 'productId',
-						foreignField: 'externalId',
-						as: 'prodDetails'
-					}
-				},
-				{
-					$unwind: {
-						path: '$prodDetails'
-					}
-				},
-				{
-					$replaceRoot: {
-						newRoot: {
-							$mergeObjects: ['$prodDetails', '$$ROOT']
-						}
-					}
-				},
-				{
-					$project: {
-						prodDetails: 0
-					}
-				},
+				// {
+				// 	$lookup: {
+				// 		from: 'products',
+				// 		localField: 'productId',
+				// 		foreignField: 'externalId',
+				// 		as: 'prodDetails'
+				// 	}
+				// },
+				// {
+				// 	$unwind: {
+				// 		path: '$prodDetails'
+				// 	}
+				// },
+				// {
+				// 	$replaceRoot: {
+				// 		newRoot: {
+				// 			$mergeObjects: ['$prodDetails', '$$ROOT']
+				// 		}
+				// 	}
+				// },
+				// {
+				// 	$project: {
+				// 		prodDetails: 0
+				// 	}
+				// },
 				{
 					$group: {
-						_id: '$manufacturer',
+						_id: '$brand',
 						sales: { $sum: "$sales" },
 					}
 				}
@@ -1427,7 +1543,7 @@ exports.getSalesTotalOfAllBrands = [
  * @returns {Object}
  */
 
- exports.getMonthlySalesOfSkuByBrand = [
+exports.getMonthlySalesOfSkuByBrand = [
 	auth,
 	async function (req, res) {
 		try {
@@ -1477,15 +1593,15 @@ exports.getSalesTotalOfAllBrands = [
 					$group: {
 						_id: {
 							name: '$name',
-							month: { $month: '$uploadDate'}
+							month: { $month: '$uploadDate' }
 						},
-						sales: { $sum: 1 },
+						sales: { $sum: "$sales" },
 					}
 				},
 				{
 					$group: {
-						"_id" : "$_id.name",
-						"overallSales" : { "$push": {"month":"$_id.month", "sales":"$sales" }}
+						"_id": "$_id.name",
+						"overallSales": { "$push": { "month": "$_id.month", "sales": "$sales" } }
 					}
 				}
 			]);
@@ -1501,4 +1617,4 @@ exports.getSalesTotalOfAllBrands = [
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
- ]
+]
