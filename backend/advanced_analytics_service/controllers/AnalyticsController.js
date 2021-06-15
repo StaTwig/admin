@@ -1383,11 +1383,13 @@ function getSKUGroupByFilters(filters) {
 				});
 
 		} else if (filters.group_by === 'district') {
-			matchCondition.push({
+			if (filters.district && filters.district.length){
+				matchCondition.push({
 					$match: {
 						district: filters.district
 					}
 				});
+			}
 			matchCondition.push(
 				{
 					$group: {

@@ -33,7 +33,7 @@ const SKUDetailView = (props) => {
     useEffect(() => {
         (async () => {
             let qry = '';
-            let act = isActive;
+            let act = true;
             if (props.sku) {
                 let n = props.SKUStats.filter(a => a.externalId == props.sku);
                 setProp(n[0]);
@@ -54,7 +54,7 @@ const SKUDetailView = (props) => {
                     act = false;
                 }
             }
-            const result = await dispatch(getAnalyticsAllStats('?sku=' + (props.sku ? props.sku : prop.externalId) + '&group_by='+(act ? 'district' : 'state')+qry));
+            const result = await dispatch(getAnalyticsAllStats('?sku=' + (props.sku ? props.sku : prop.externalId) + '&group_by='+(act || isActive ? 'district' : 'state')+qry));
             setAnalytics(result.data);
         })();
     }, [isActive, prop, props]);
