@@ -1,28 +1,27 @@
-#!/bin/bash
-
-cd ..
-
-#Installing nginx
 sudo apt update
-sudo apt install -y nginx
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
 
-#Installing Traefik
-wget https://github.com/containous/traefik/releases/download/v2.2.0/traefik_v2.2.0_linux_amd64.tar.gz
-tar -xvf traefik_v2.2.0_linux_amd64.tar.gz
-sudo mv traefik /usr/bin/
-rm traefik_v2.2.0_linux_amd64.tar.gz
-rm CHANGELOG.md LICENSE.md traefik
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+sudo apt update
+apt-cache policy docker-ce
+sudo apt install docker-ce
 
-#Installing Node Js
-wget https://nodejs.org/dist/v12.16.2/node-v12.16.2-linux-x64.tar.xz
-tar -xvf node-v12.16.2-linux-x64.tar.xz
-mv node-v12.16.2-linux-x64 node
-echo "PATH=$PATH:/home/ubuntu/node/bin" >> .bashrc
-source .bashrc
-npm install pm2 -g
-rm -rf node-v12.16.2-linux-x64.tar.xz
+sudo curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 
+sudo chmod +x /usr/local/bin/docker-compose
+docker-compose --version
+
+sudo apt-get install build-essential -y
+
+sudo docker network create proxy
 
 
 #Installing build essentials
 sudo apt-get install build-essential -y
+
+cd theledger
+
+touch acme.json
+
+sudo chmod 600 acme.json

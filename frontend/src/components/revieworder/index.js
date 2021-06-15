@@ -29,7 +29,7 @@ const ReviewOrder = props => {
     let error = false;
     const { fromOrg, fromOrgId, toOrg, toOrgLoc, products, typeName, rtypeName } = order;
     products.forEach((p) => {
-      if (p.quantity < 1)
+      if (p.productQuantity < 1)
         error = true;
     });
     if (!error) {
@@ -54,13 +54,13 @@ const ReviewOrder = props => {
         poStatus: "CREATED",
         products: products,
       };
-console.log(data);
+      
       dispatch(turnOn());
       const result = await createOrder(data);
       dispatch(turnOff());
 
       if (result.status === 200 ) {
-         //dispatch(resetReviewPos({}));
+        // dispatch(resetReviewPos({}));
           setopenReviewOrder(true);
           //setMessage("Status updated Successfully");
           setModalProps({
@@ -75,11 +75,11 @@ console.log(data);
     //       setErrorMessage("Not able to create order. Try again!");
       }
     }
-  };
-  // console.log("Puneth",openReviewOrder);
+  }; 
   const closeModal = () => {
     setopenReviewOrder(false);
-    props.history.push("/orders");
+    dispatch(resetReviewPos({}));
+    props.history.push("/orders");   
   };
   var arr=[];
   arr.push(order);
@@ -111,12 +111,12 @@ console.log(data);
             <div>
               <div className=" row p-3">
                 <div className="col row">
-                  <span className="col-4">Organisation Name: </span>
-                  <span className="col" style={{color: "black"}} >{order.fromOrgId}</span>
+                  <span className="col-4">Organisation Name12: </span>
+                  <span className="col" style={{color: "black",fontSize:"14px"}} >{order.fromOrgId}</span>
                 </div>
                 <div className="col row">
                   <span className="col-4">Organisation ID: </span>
-                  <span className="col" style={{color: "black"}} >{order.typeName}/{order.fromOrg}</span>
+                  <span className="col" style={{color: "black",fontSize:"14px"}} >{order.typeName}/{order.fromOrg}</span>
                 </div>
               </div>
             </div>
@@ -129,16 +129,16 @@ console.log(data);
               <div className=" row p-3">
                 <div className="col row">
                   <span className="col-4">Organisation Name: </span>
-                  <span className="col" style={{color: "black"}} >{order.toOrgName}</span>
+                  <span className="col" style={{color: "black",fontSize:"14px"}} >{order.toOrgName}</span>
                 </div>
                 <div className="col row">
                   <span className="col-4">Organisation ID: </span>
-                  <span className="col" style={{color: "black"}} >{order.rtypeName}/{order.toOrg}</span>
+                  <span className="col" style={{color: "black",fontSize:"14px"}} >{order.rtypeName}/{order.toOrg}</span>
                 </div>
                 <div className="w-100"></div>
                 <div className="col row col-6 mt-5">
                   <span className="col-4">Delivery Location:</span>
-                  <span className="col ml-2 " style={{color: "black"}} >{order.toOrgLocName}</span>
+                  <span className="col ml-2 " style={{color: "black",fontSize:"14px"}} >{order.toOrgLocName}</span>
                 </div>
               </div>
             </div>

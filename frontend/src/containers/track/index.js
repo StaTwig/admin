@@ -3,7 +3,7 @@ import Track from '../../components/track';
 import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
 import {useDispatch} from "react-redux";
-import { chainOfCustody, chainOfCustodyTrack, getShipmentJourney } from "../../actions/shipmentActions";
+import { chainOfCustody, chainOfCustodyTrack, getJourneyTrack } from "../../actions/shipmentActions";
 import { turnOff, turnOn } from '../../actions/spinnerActions';
 import moment from 'moment';
 
@@ -27,7 +27,7 @@ const TrackContainer = props => {
 
   const searchData = async (id) => {
     dispatch(turnOn());
-    const result = await getShipmentJourney(id);
+    const result = await getJourneyTrack(id);
     
     dispatch(turnOff());
     if (result.status == 200) {

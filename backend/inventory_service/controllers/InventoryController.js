@@ -36,6 +36,9 @@ const StateDistrictStaticDataModel = require("../models/StateDistrictStaticDataM
 const { request } = require("http");
 const { match } = require("assert");
 const logger = init.getLog();
+const CENTRAL_AUTHORITY_ID = null;
+const CENTRAL_AUTHORITY_NAME = null;
+const CENTRAL_AUTHORITY_ADDRESS = null;
 
 exports.getTotalCount = [
   auth,
@@ -904,9 +907,16 @@ exports.addProductsToInventory = [
     .withMessage("Products  must be specified."),
   async (req, res) => {
     try {
-      console.log(req.user);
       const email = req.user.emailId;
       const user_id = req.user.id;
+      const empData = await EmployeeModel.findOne({
+        emailId: req.user.emailId,
+      });
+      const orgId = empData.organisationId;
+      const orgName = empData.name;
+      const orgData = await OrganisationModel.findOne({ id: orgId });
+      const address = orgData.postalAddress;
+
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
         logger.log(
@@ -934,12 +944,12 @@ exports.addProductsToInventory = [
           const { products } = req.body;
           const { id } = req.user;
           const employee = await EmployeeModel.findOne({ id });
-          var warehouseId = req.user.warehouseId;
-          // if (!req.query.warehouseId)
-          //   warehouseId = employee.warehouseId[0];
-          // else
-          //   warehouseId = req.query.warehouseId;
-          console.log(employee)
+          //var warehouseId = req.user.warehouseId;
+           if (!req.query.warehouseId)
+             warehouseId = employee.warehouseId[0];
+           else
+             warehouseId = req.query.warehouseId;
+          console.log(warehouseId)
           const warehouse = await WarehouseModel.findOne({ id: warehouseId });
 
           if (!warehouse) {
@@ -1055,8 +1065,8 @@ exports.addProductsToInventory = [
                   // id: `${serialNumberText + uniqid.time()}${i}`,
                   id: `${serialNumberText}${i}`,
                   label: {
-                    labelId: product?.label?.labelId,
-                    labelType: product?.label?.labelType,
+			  labelId: product.label?product?.label?.labelId:"QR_2D",
+                          labelType: product.label?product?.label?.labelType:"3232",
                   },
                   quantity: 1,
                   productId: product.productId,
@@ -1086,9 +1096,9 @@ exports.addProductsToInventory = [
               const atom = {
                 id: uniqid('batch-'),
                 label: {
-                  labelId: product?.label?.labelId,
-                  labelType: product?.label?.labelType,
-                },
+                          labelId: product.label?product?.label?.labelId:"QR_2D",
+                          labelType: product.label?product?.label?.labelType:"3232",
+		},
                 quantity: product.quantity,
                 productId: product.productId,
                 inventoryIds: [inventory.id],
@@ -1171,6 +1181,12 @@ exports.addProductsToInventory = [
           event_data.eventType.description = "INVENTORY";
           event_data.actor.actorid = user_id || "null";
           event_data.actor.actoruserid = email || "null";
+          event_data.stackholders.actororg.id = orgId || "null";
+          event_data.stackholders.actororg.name = orgName || "null";
+          event_data.stackholders.actororg.address = address || "null";
+          event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+          event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+          event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
           event_data.payload.data = payload;
           console.log(event_data);
           async function compute(event_data) {
@@ -1210,6 +1226,13 @@ exports.addInventoriesFromExcel = [
           };
           const email = req.user.emailId;
           const user_id = req.user.id;
+          const empData = await EmployeeModel.findOne({
+            emailId: req.user.emailId,
+          });
+          const orgId = empData.organisationId;
+          const orgName = empData.name;
+          const orgData = await OrganisationModel.findOne({ id: orgId });
+          const address = orgData.postalAddress;
           checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
               const dir = `uploads`;
@@ -1360,6 +1383,12 @@ exports.addInventoriesFromExcel = [
               event_data.eventType.description = "INVENTORY";
               event_data.actor.actorid = user_id || "null";
               event_data.actor.actoruserid = email || "null";
+              event_data.stackholders.actororg.id = orgId || req.user.organisationId || "null";
+              event_data.stackholders.actororg.name = orgName || "null";
+              event_data.stackholders.actororg.address = address || "null";
+              event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+              event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+              event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
               event_data.payload.data.products = [...data];
               console.log(event_data);
               async function compute(event_data) {
@@ -1838,6 +1867,7 @@ exports.getProductListCounts = [
   auth,
   async (req, res) => {
     try {
+      
       const { warehouseId } = req.user;
       const InventoryId = await WarehouseModel.find({ id: warehouseId });
       const val = InventoryId[0].warehouseInventory;
@@ -1845,15 +1875,22 @@ exports.getProductListCounts = [
       const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails));
       var productArray = [];
       for (j = 0; j < list.length; j++) {
-        var productId = list[j].productId;
+        var productId = list[j].productId;  
         const product = await ProductModel.find({ id: productId });
-        var product1 = {
-          productName: product[0].name,
-          productId: product[0].id,
-          quantity: list[j].quantity,
-        };
+        if(product && product[0] && product[0].id && product && product[0] && product[0].name )
+        {
+        
+          var product1 = {
+            productName: product && product[0] && product[0].name,
+            productId: product && product[0] && product[0].id,
+            quantity: list && list[0] && list[j].quantity || 0,
+
+          };
+        }   
+
         productArray.push(product1);
       }
+     
       return apiResponse.successResponseWithData(res, productArray);
     } catch (err) {
       logger.log(
@@ -2643,6 +2680,34 @@ function _spreadHeaders(inputObj) {
   return inputObj;
 }
 
+function getBrand(brand) {
+  const ko = ['Knock Out High Punch', 'IP CINNAMON'];
+  const rc = ['RC_STRONG', 'RC_Q', 'RC_P'];
+  const hy = ['HAYWARDS 5000'];
+  const fo = ['FOSTERS STRONG', "FOSTER'S"];
+  const bud = ['Budweiser'];
+  const budm = ['BUDMAGNUMSTRONG'];
+  const becks = ['BECKS', 'BE Xtra Strong'];
+  
+  let returnBrand = brand;
+  if (ko.includes(brand))
+    returnBrand = "KO";
+  else if (rc.includes(brand))
+    returnBrand = "Royal Challenger";
+  else if (hy.includes(brand))
+    returnBrand = "Haywards 5000";
+  else if (fo.includes(brand))
+    returnBrand = "Fosters";
+  else if (bud.includes(brand))
+    returnBrand = "Budweiser";
+  else if (budm.includes(brand))
+    returnBrand = "Budweiser Magnum";
+  else if (becks.includes(brand))
+    returnBrand = "Becks";
+
+  return returnBrand;
+}
+
 exports.uploadSalesData = [
   auth,
   async (req, res) => {
@@ -2668,20 +2733,20 @@ exports.uploadSalesData = [
       let headerRow3 = _spreadHeaders(sheetJSON[2]);
       let headerRow4 = sheetJSON[3];
       let headerRow5 = sheetJSON[4];
-
       let parsedRows = [];
       sheetJSON.forEach((row, index) => {
         if (index > 4) {
           let rowKeys = Object.keys(row);
           rowKeys.forEach((rowKey) => {
             let prod = {};
-            if (headerRow5[rowKey] && headerRow5[rowKey].length) {
+            if (headerRow5[rowKey] && headerRow5[rowKey].length && headerRow5[rowKey] != 'Stock Code') {
+              prod['brand'] = getBrand(headerRow2[rowKey]);
               prod['productName'] = headerRow4[rowKey];
               prod['productSubName'] = headerRow3[rowKey];
               prod['productId'] = headerRow5[rowKey];
               prod['depot'] = row['__EMPTY_1'];
-              prod['sales'] = row[rowKey];
-              prod['targetSales'] = row[rowKey] * (targetPercentage / 100);
+              prod['sales'] = (row[rowKey] === parseInt(row[rowKey], 10)) ? parseInt(row[rowKey]) : 0;
+              prod['targetSales'] = (row[rowKey] === parseInt(row[rowKey], 10)) ? row[rowKey] * (targetPercentage / 100) : 0;
               prod['uploadDate'] = collectedDate;
               let depot = warehouseDistrictMapping.find(w => w.depot === row['__EMPTY_1']);
               prod['warehouseId'] = (depot && depot.warehouseId) ? depot.warehouseId : '';
@@ -2694,7 +2759,6 @@ exports.uploadSalesData = [
       });
 
       let respObj = await AnalyticsModel.insertMany(parsedRows);
-
       return apiResponse.successResponseWithData(
         res,
         `Uploaded Sales Data successfully. Num Records - ${respObj.length}`

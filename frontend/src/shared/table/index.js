@@ -26,6 +26,10 @@ const Table = props => {
 function getDate(n){
     return n.substring(0,10)
 }
+console.log(inventoryDetails)
+inventoryDetails.sort(function(a,b){
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
   return (
     <div className="table">
     <div className="rTable">
@@ -42,20 +46,24 @@ function getDate(n){
                   //className="rTableRow"
                   >
                                    
-                  <div className="rTableCell" style={{position:"relative",left:'0%'}}>
+                  <div className="rTableCell" style={{position:"relative",left:'0%', fontWeight:" 600 "}}>
                     <div className="d-flex flex-column txtBlue">
-                      <div>{inventory.ProductList[0].productDetails.name}</div>
+                      <div> 
+                          {inventory.productDetails.name}
+                      </div>
                     </div>
                   </div>
-                  <div className="rTableCell" style={{position:"relative",left:'6%'}}>{inventory.ProductList[0].productDetails.type}</div>
+                  <div className="rTableCell" style={{position:"relative",left:'6%'}}>{inventory.productDetails.type}</div>
                   {/* <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.manufacturer}</div> */}
-                  <div className="rTableCell" style={{position:"relative",left:'12%'}}>{formatDate(inventory.ProductList[0].productDetails.createdAt)}</div>
-                  <div className="rTableCell" style={{position:"relative",left:'19%'}}>{inventory.inventoryQuantity}</div>                                 
-                  <div className="rTableCell" style={{position:"relative",left:'22%'}}> {(inventory.eventTypePrimary !== 'ADD') ? (inventory.eventTypePrimary === 'RECEIVED' ? 'RECEIVED' :  'SENT') : 'ADDED'} </div>
-                 <div className=" rTableCell m-2" 
+                  <div className="rTableCell " style={{position:"relative",left:'12%'}}> {formatDate(inventory.createdAt)}</div>
+                  <div className="rTableCell"  style={{position:"relative",left:'19%', fontWeight:" 600 "}}>{inventory.inventoryQuantity}</div>                                 
+                  <div className="rTableCell" style={{position:"relative", left:"22%", fontWeight:" 600 "}}>
+                        {(inventory.eventTypePrimary !== 'ADD') ? (inventory.eventTypePrimary === 'RECEIVED' ? 'RECEIVED' :  'SENT') : 'ADDED'} 
+                   </div>
+                    <div className=" rTableCell m-2" 
                          style={{position:"relative",left:'12%'}}>
-                         <span className="drop-pad shadow rounded-circle">
-                         <img src={dropdownIcon} height="12" width="18"/></span>
+                         <span className="drop-pad shadow rounded-circle ">
+                         <img src={dropdownIcon} height="12" width="18" /> </span>
                   </div>                  
               {  /* <button
                       className="btn btn-outline-primary fontSize200 expand"
@@ -70,60 +78,59 @@ function getDate(n){
              </AccordionSummary>
                 <AccordionDetails>
                   <Typography>
-                            <div className="" style={{position:"relative", bottom:"15%", width:"200%" }}>
+                            {/* <div className="" style={{position:"relative", bottom:"15%", width:"200%" }}>
                                  <hr className="solid" ></hr>
-                            </div>
+                  </div> */}
                               <TableContainer> 
                                <Tablee className="table-borderless lg">
                                 <TableBody>
-                                    {(inventory.eventTypePrimary === 'CREATE') ?
+                                    {(inventory.eventTypePrimary === 'CREATE' || inventory.eventTypePrimary === 'RECEIVE') ?
                                     <div>
                                      <TableRow>
                                           <TableCell>Shipment Id:</TableCell>
                                              <div className="">
-                                             <TableCell align="left"><b>{inventory.ProductList[0].shipmentDetails.id}</b></TableCell></div>
+                                             <TableCell align="left"><b>{inventory.shipmentDetails.id}</b></TableCell></div>
                                       </TableRow>
                                       <TableRow>
                                           <TableCell>From Organisation:</TableCell>
                                              <div className="">
-                                             <TableCell align="left"><b>{inventory.ProductList[0].shipmentDetails.supplier.id}</b></TableCell></div>
+                                             <TableCell align="left"><b>{inventory.shipmentDetails.supplier.id}</b></TableCell></div>
                                       </TableRow>
                                       <TableRow>
                                           <TableCell>From Location:</TableCell>
                                           <div className="">
-                                          <TableCell align="left"><b>{(inventory.actorOrgId === inventory.ProductList[0].shipmentDetails.supplier.id) ? inventory.actorOrgAddress : inventory.secondaryOrgAddress}</b></TableCell></div>
+                                          <TableCell align="left"><b>{(inventory.actorOrgId === inventory.shipmentDetails.supplier.id) ? inventory.actorOrgAddress : inventory.secondaryOrgAddress}</b></TableCell></div>
                                       </TableRow>
                                     </div>
                                          :
                                      <TableRow>
                                            <TableCell>Mfg Date</TableCell>
                                               <div className="ml-5">
-                                              <TableCell align="left"><b>{inventory.ProductList[0].mfgDate}</b></TableCell></div>
+                                              <TableCell align="left"><b>{formatDate(inventory.payloadData.data.products.mfgDate)}</b></TableCell></div>
                                           <TableCell align="left">Exp Date</TableCell>
                                               <div className="ml-5">
-                                              <TableCell align="left"><b>{inventory.ProductList[0].expDate}</b></TableCell></div>
+                                              <TableCell align="left"><b>{formatDate(inventory.payloadData.data.products.expDate)}</b></TableCell></div>
                                           <TableCell align="left">Batch</TableCell>
                                               <div className="ml-5">
-                                              <TableCell align="left"><b>{inventory.ProductList[0].batchNumber}</b></TableCell></div>
+                                              <TableCell align="left"><b>{inventory.payloadData.data.products.batchNumber}</b></TableCell></div>
                                     </TableRow> }    
 
-                         
-                                      <div className="mt-3" style={{position:"absolute", left:"80%", bottom:"38%" , heigth:"10%", width:"20%"}}>
-                                      {(inventory.eventTypePrimary === 'CREATE') ? 
+                                      <div className="mt-3" style={{position:"absolute ", left:"79% ", bottom:"38% ", width:"20% "}}>
+                                      {(inventory.eventTypePrimary === 'CREATE')  ? 
                                       <button
-                                          type="button" className="btn btn-outline-primary " 
+                                          type="button" className="btn btn-outline-primary"  
                                           onClick={() => {
                                             props.history.push(`/viewshipment/${inventory.payloadData.data.id}`)
                                         }}
                         
                                         >View Shipment</button>: ''}
                                         </div>
-                                          <div className="mt-3" style={{position:"absolute", left:"78%", bottom:"15%" , width:"20%"}}>
+                                          <div className="mt-3" style={{position:"absolute", left:"75%", bottom:"15%" , width:"25%"}}>
                                         <button
-                                        type="button" className="btn btn-outline-warning "
-                                        disabled = {!inventory.payloadData.data.products[0].batchNumber}
+                                        type="button" className="btn btn-info"
+                                        disabled = {!inventory.payloadData.data.products.batchNumber}
                                         onClick={() => {
-                                          props.history.push(`/productlist/${inventory.payloadData.data.products[0].batchNumber}`)
+                                          props.history.push(`/productlist/${inventory.payloadData.data.products.batchNumber}`)
                                         }}
                       
                                       >Show Product Details</button></div>

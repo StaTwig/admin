@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Analytics from "../../components/analytics";
 import { useDispatch } from 'react-redux';
 import { getAllStates, getAllBrands, getAnalyticsByBrand } from '../../actions/analyticsAction';
-import { getAllSKUs } from '../../actions/inventoryAction';
+import { getAllSKUs, getDistrictsByState } from '../../actions/inventoryAction';
 
 const AnalyticsContainer = (props) => {
   const [states, setStates] = useState([]);
@@ -33,7 +33,13 @@ const AnalyticsContainer = (props) => {
     })();
   }, []);
 
-  return <Analytics states={states} SKUStats={SKUStats} brands={brands} SKUs={SKUs} bstats={brandStats} {...props} />;
+
+  const getDistricts = async (state) => {
+    const result = await dispatch(getDistrictsByState(state));
+    return result;
+  };
+
+  return <Analytics getDistricts={getDistricts} states={states} SKUStats={SKUStats} brands={brands} SKUs={SKUs} bstats={brandStats} {...props} />;
 };
 
 export default AnalyticsContainer;

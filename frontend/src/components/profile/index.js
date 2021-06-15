@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import ProfilePic from "../../assets/brands/user-image/Image73@2x.png";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
@@ -120,17 +120,17 @@ class Profile extends React.Component {
     if (wareHouseResponse.status === 1) {
       const wareHouseIdResult = wareHouseResponse.data.map((txn) => txn.id);
       const wareHouseAddresses = wareHouseResponse.data;
-      console.log("Results");
-      console.log(wareHouseAddresses);
+      // console.log(wareHouseAddresses,"All warehouses");
       this.setState({
         wareIds: wareHouseIdResult,
         warehouseLocations: wareHouseAddresses,
       });
+
+      this.state.warehouseLocations.map((id)=>{
+        this.state.warehouseLocations= this.state.warehouseLocations.filter((data)=>response.data.data.warehouseId.includes(data.id));
+      })
     }
-    console.log("Full Data", wareHouseResponse);
-    console.log("warehouses", this.state.warehouseLocations);
   }
-  //console.log("res",wareHouseIdResult);
 
 
   closeModal() {
@@ -197,7 +197,7 @@ class Profile extends React.Component {
       },
     };
 
-    if (event.target.files[0]) {
+    if (event.target.files[0] && event.target.files[0].type.match('image.*')) {
       axios
         .post(config().upload, formData, configs)
         .then((response) => {
@@ -208,8 +208,11 @@ class Profile extends React.Component {
           alert(error);
         });
       this.setState({ selectedFile: null });
-    } else {
-      alert("File not selected, please try again");
+    }else if(!event.target.files[0].type.match('image.*')){
+      alert("Please Select only image file");
+    }
+     else {
+      alert("File not selected, Please try again");
     }
   }
 
@@ -279,7 +282,6 @@ class Profile extends React.Component {
       warehouseAddress_zipcode,
       warehouseAddress_secondline,
       warehouseAddress_state,
-
       title,
     } = this.state;
     const imgs = config().fetchProfileImage;
@@ -372,8 +374,10 @@ class Profile extends React.Component {
                         style={{ position: "absolute", marginLeft: "64%" }}
                         value={this.state.phoneNumber}
                         onChange={(phone) =>
-                          this.setState({ phoneNumber: phone })
-                        }
+                          // {phone > 0 &&
+                            this.setState({ phoneNumber: "+"+phone })
+                          // }
+                        }  
                       />
                     </div>
 
@@ -574,7 +578,7 @@ class Profile extends React.Component {
                           height="20"
                           className="mr-3"
                         />
-                        {this.state.phoneNumber ? (
+                        {(this.state.phoneNumber!="+"&&this.state.phoneNumber) ? (
                           <span>{this.state.phoneNumber}</span>
                         ) : (
                           <span>N/A</span>
@@ -589,8 +593,6 @@ class Profile extends React.Component {
                       style={{ width: "50vw", overflow: "hidden" }}
                     >
                       {Object.keys(this.state.warehouseLocations).map((id) => {
-                          // const result = getWarehouseById(warehouseId[id]);
-                          // console.log(result);
                         return (
                           <div className="col">
                             <div className="location-cards">
@@ -604,28 +606,22 @@ class Profile extends React.Component {
                                 </div>
                                 <div className="card-body">
                                   <div className="total">
-                                    {this.state.warehouseLocations[id].warehouseAddress.city ? (
+                                    {this.state.warehouseLocations[id].warehouseAddress.city && (
                                       <span>
                                         {this.state.warehouseLocations[id].warehouseAddress.city}
                                       </span>
-                                    ) : (
-                                      <span>N/A</span>
                                     )}
-                                    ,
-                                    {this.state.warehouseLocations[id].warehouseAddress.state ? (
+                                    
+                                    {this.state.warehouseLocations[id].warehouseAddress.state && (
                                       <span>
-                                        {this.state.warehouseLocations[id].warehouseAddress.state}
+                                        ,{this.state.warehouseLocations[id].warehouseAddress.state}
                                       </span>
-                                    ) : (
-                                      <span>N/A</span>
                                     )}
-                                    ,
-                                    {this.state.warehouseLocations[id].country.countryName ? (
+                                    
+                                    {this.state.warehouseLocations[id].country.countryName && (
                                       <span>
-                                        {this.state.warehouseLocations[id].country.countryName}
+                                        ,{this.state.warehouseLocations[id].country.countryName}
                                       </span>
-                                    ) : (
-                                      <span>N/A</span>
                                     )}
                                   </div>
 
@@ -641,19 +637,17 @@ class Profile extends React.Component {
                                   </div>
                                   <div className="full-address">
                                     {/* 50 /b/, Takshila Apt, Mahakali Caves Road, Chakala, Andheri (west) Mumbai, Maharashtra, */}
-                                    {this.state.warehouseAddress_secondline ? (
+                                    {this.state.warehouseLocations[id].warehouseAddress.secondLine ? (
                                       <span>
-                                        {this.state.warehouseAddress_secondline}
+                                        {this.state.warehouseLocations[id].warehouseAddress.secondLine}
                                       </span>
-                                    ) : (
-                                      <span>N/A</span>
-                                    )}
+                                    ) : null}
                                   </div>
                                   <div className="pin-code">
                                     Zipcode :{" "}
-                                    {this.state.warehouseAddress_zipcode ? (
+                                    {this.state.warehouseLocations[id].warehouseAddress.zipCode ? (
                                       <span>
-                                        {this.state.warehouseAddress_zipcode}
+                                        {this.state.warehouseLocations[id].warehouseAddress.zipCode}
                                       </span>
                                     ) : (
                                       <span>N/A</span>

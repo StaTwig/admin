@@ -2,16 +2,22 @@
 
 
 .NewOrder {
-  padding-right: 3rem;
-    padding-left: 5rem;
+  position: relative;
+  top:-35px;
+    padding-right: 20px;
+    padding-left: 50px;
+    overflow: hidden;
     @media (max-width: $md) {
       padding-right: 10px;
       padding-left: 10px;
     }
+    .breadcrumb{
+      margin-left: -0.7rem;
+    }
     .menu{
       z-index: 1;
-      top: 8.2rem ;
-      right: 4.2rem !important ;
+      top: 0.4rem ;
+      right: 1.5rem !important ;
       left: unset;
       max-width: 9rem;
       text-align: center;
@@ -90,7 +96,7 @@
       color: $black;
       flex-basis: 55%;
       flex-grow: inherit;
-      font-size: 15px;
+      font-size: 14px;
     }
 
     @media (min-width: $xl) {
@@ -108,7 +114,7 @@
         color: $black;
         flex-basis: 65%;
         flex-grow: inherit;
-        font-size: 13px;
+        font-size: 14px;
        
         
       }
@@ -136,9 +142,10 @@
   .headsup1{
     font-size: 16px;
     font-weight: 1000;
-    padding-top:-1rem;
+    margin-top: -1rem;
     padding-bottom: 0rem;
-    padding-left:1rem 
+    padding-left: 1.5rem 
+    
   }
   .headsup{
     font-size: 15px;
@@ -217,3 +224,10 @@
 
 
 }
+.select-placeholder-text {
+  color: #A8A8A8;
+  }
+ .sidename
+ {
+   font-size: 16px;
+ }

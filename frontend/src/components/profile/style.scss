@@ -2,8 +2,11 @@
 
 
 .profile {
-  padding-right: 3rem;
-    padding-left: 5rem;
+  position: relative;
+  top:-22px;
+    padding-right: 25px;
+    padding-left: 55px;
+    overflow: hidden;
     @media (max-width: $md) {
       padding-right: 10px;
       padding-left: 10px;
@@ -211,10 +214,12 @@ padding-left:100px;
       border: 0vh;    
   }      
     .pin-code {
+      position: relative;
       width: 30vh;
       font-size: 14px;
       color: #707070;
-      padding-bottom: 2vh;      
+      margin-top: auto;
+      padding-bottom: 2vh;
   }   
   .pin-code-input {
     width: 30vh;

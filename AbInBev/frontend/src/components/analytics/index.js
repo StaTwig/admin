@@ -1,15 +1,51 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import "./style.scss";
 import SideBar from "../../components/sidebar";
 import filterIcon from "../../assets/icons/funnel.svg"
+import Becks from "../../assets/bottles/Becks.png";
+import Fosters from "../../assets/bottles/Fosters.png";
+import Budweiser from "../../assets/bottles/Budweiser.png";
+import BudweiserMagnum from "../../assets/bottles/BudweiserMagnum.png";
+import Haywards5000 from "../../assets/bottles/Haywards5000.png";
+import KO from "../../assets/bottles/KnockOut.png";
+import RoyalChallenger from "../../assets/bottles/RoyalChallenger.png";
+import BBecks from "../../assets/brands/Becks.png";
+import BFosters from "../../assets/brands/Fosters.png";
+import BBudweiser from "../../assets/brands/Budweiser.png";
+import BBudweiserMagnum from "../../assets/brands/BudweiserMagnum.png";
+import BHaywards5000 from "../../assets/brands/Haywards5000.png";
+import BKO from "../../assets/brands/KnockOut.png";
+import BRoyalChallenger from "../../assets/brands/RoyalChallenger.png";
 import ViewRenderer from "./viewRenderer";
 
 const Analytics = (props) => {
 
+  const brands = ['Becks', 'Fosters', 'Budweiser', 'BudweiserMagnum', 'Haywards5000', 'RoyalChallenger', 'KO'];
+  const brandsArr = [Becks, Fosters, Budweiser, BudweiserMagnum, Haywards5000, RoyalChallenger, KO];
+  const brandsIconArr = [BBecks, BFosters, BBudweiser, BBudweiserMagnum, BHaywards5000, BRoyalChallenger, BKO];
   const [filters, setFilters] = useState({
     view: 'ANNUALREPORT_DASHBOARD'
   });
+  const [districts, setDistricts] = useState([]);
+  const [prop, setProp] = useState({});
+  let skuArr = [];
+  const [params, setParams] = useState({});
+  const [SKU, setSKU] = useState('');
+  const [state, setState] = useState('');
+  const [district, setDistrict] = useState('');
+  const [year, setYear] = useState('');
+  const [month, setMonth] = useState('');
+  const [qtr, setQtr] = useState('');
+  const [isActive, setIsActive] = useState('');
+  const [Otype, setOtype] = useState('All');
+  const [selectedViewCode, setSelectedViewCode] = useState('ANNUALREPORT_DASHBOARD');
+  const [annualReportButton, setannualReportButton] = useState("btn active");
+  const [inventoryButton, setInventoryButton] = useState("btn");
+  const [spm, setSpmButton] = useState("btn");
 
+  useEffect(() => {
+    setSKU(props?.sku ? props.sku : prop?.externalId ? prop.externalId : '');
+  }, [props, prop])
 
   const allowedMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   let thisYear = new Date().getFullYear();
@@ -20,6 +56,7 @@ const Analytics = (props) => {
 
   const onYearChange = (event) => {
     const selectedYear = event.target.value;
+    setYear(selectedYear);
     const filter = { ...params };
     filter.year = selectedYear;
     setParams(filter);
@@ -27,6 +64,7 @@ const Analytics = (props) => {
 
   const onMonthChange = (event) => {
     const selectedMonth = event.target.value;
+    setMonth(selectedMonth);
     const filter = { ...params };
     filter.month = selectedMonth;
     setParams(filter);
@@ -35,28 +73,37 @@ const Analytics = (props) => {
 
   const onQuarterChange = (event) => {
     const selectedQuarter = event.target.value;
+    setQtr(selectedQuarter);
     const filter = { ...params };
     filter.quarter = selectedQuarter;
     setParams(filter);
   };
 
-  const onStateChange = (event) => {
+  const onStateChange = async(event) => {
     const selectedState = event.target.value;
+    setState(selectedState);
     const filter = { ...params };
     filter.state = selectedState;
+    const result = await props.getDistricts(selectedState);
+    setDistricts(result.data);
     setParams(filter);
   };
 
-  const [prop, setProp] = useState({});
-  let skuArr = [];
-  const [params, setParams] = useState({});
-  const [SKU, setSKU] = useState('');
-  const [isActive, setTsActive] = useState('');
-  const [Otype, setOtype] = useState('All');
-  const [selectedViewCode, setSelectedViewCode] = useState('ANNUALREPORT_DASHBOARD');
-  const [annualReportButton, setannualReportButton] = useState("btn active");
-  const [inventoryButton, setInventoryButton] = useState("btn");
-  const [spm, setSpmButton] = useState("btn");
+  const onDistrictChange = (event) => {
+    const selectedDistrict = event.target.value;
+    setDistrict(selectedDistrict);
+    const filter = { ...params };
+    filter.district = selectedDistrict;
+    setParams(filter);
+  };
+
+  const onTPChange = (value) => {
+    const filter = { ...params };
+    filter.date_filter_type = value;
+    setIsActive(value);
+    setParams(filter);
+  };
+
   function selectModule(module){
     setSKU('');
     if (module === "ANNUALREPORT_DASHBOARD") {
@@ -78,6 +125,9 @@ const Analytics = (props) => {
   }
   const changeView = (event) => {
     setSKU('');
+    setState('');
+    setParams({});
+    setDistrict('');
     setSelectedViewCode(event.target.value);
   }
   const onViewChange = (viewCode, props) => {
@@ -98,6 +148,18 @@ const Analytics = (props) => {
     setOtype(value);
   }
 
+  const resetFilters = () => {
+    setSKU('');
+    setState('');
+    setDistrict('');
+    setIsActive('');
+    setYear('');
+    setMonth('');
+    setQtr('');
+    setOtype('All');
+    setParams({});
+  }
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -107,7 +169,7 @@ const Analytics = (props) => {
         <main role="main" className="col-md-9 ml-sm-auto col-lg-10">
           <div className="row">
             <div className="col-md-9 mainContainer pt-3 px-4">
-              <ViewRenderer {...props} prop={prop} params={params} Otype={Otype} sku={SKU} viewName={selectedViewCode} onViewChange={onViewChange}></ViewRenderer>
+              <ViewRenderer {...props} brandsArr={brandsArr} brands={brands} brandsIconArr={brandsIconArr} prop={prop} params={params} Otype={Otype} sku={SKU} viewName={selectedViewCode} onViewChange={onViewChange}></ViewRenderer>
             </div>
             <div className="col-md-3 rightSideMenu pt-4 px-2">
               <div className="filterSection">
@@ -117,7 +179,8 @@ const Analytics = (props) => {
                 {/* TODO Tabs for for Module load  */}
                 <div className="btn-group filterButton mt-2 mb-4">
                   <a href="#!" className={annualReportButton}
-                  onClick={() => {
+                    onClick={() => {
+                    setSelectedViewCode("ANNUALREPORT_DASHBOARD");
                     selectModule("ANNUALREPORT_DASHBOARD");
                     onModuleChange("ANNUALREPORT_DASHBOARD");
                   }}>
@@ -125,6 +188,7 @@ const Analytics = (props) => {
                   </a>
                   <a href="#!" className={inventoryButton}
                   onClick={() => {
+                    setSelectedViewCode("INVENTORY_DASHBOARD");
                     selectModule("INVENTORY_DASHBOARD");
                     onModuleChange("INVENTORY_DASHBOARD");
                   }}>
@@ -132,87 +196,105 @@ const Analytics = (props) => {
                   </a>
                   <a href="#!" className={spm}
                   onClick={() => {
+                    setSelectedViewCode("SPM_DASHBOARD");
                     selectModule("SPM_DASHBOARD");
                     onModuleChange("SPM_DASHBOARD");
                   }}>
                     SPM
                   </a>
                 </div>
-                <label className="radioButton" for="gv">
-                  <input className="radioInput" type="radio" name="view" value="gv" id="gv" value={selectedViewCode === 'INVENTORY_DASHBOARD' ? "INVENTORY_DASHBOARD" : 'ANNUALREPORT_DASHBOARD'} onChange={changeView} defaultChecked={filters.view === 'ANNUALREPORT_DASHBOARD'} /> Geographical View
+                {selectedViewCode !== 'SPM_DASHBOARD' &&
+                  <>
+                  <label className="radioButton" for="gv">
+                    <input className="radioInput" type="radio" name="view" id="gv" value={selectedViewCode === 'INVENTORY_DASHBOARD' || selectedViewCode === 'INVENTORY_SKU' ? "INVENTORY_DASHBOARD" : 'ANNUALREPORT_DASHBOARD'} onChange={changeView} defaultChecked={filters.view === 'ANNUALREPORT_DASHBOARD' || filters.view === 'INVENTORY_DASHBOARD'} /> Geographical View
                     </label>
-                <label className="radioButton" for="sv">
-                  <input className="radioInput" type="radio" name="view" value="sv" id="sv" value={selectedViewCode === 'INVENTORY_DASHBOARD' ? "INVENTORY_SKU" : 'SKU_VIEW'} onChange={changeView} defaultChecked={filters.view === 'SKU_VIEW' || filters.view === 'INVENTORY_SKU'} /> SKU View
+                  <label className="radioButton" for="sv">
+                    <input className="radioInput" type="radio" name="view" id="sv" value={(selectedViewCode === 'INVENTORY_DASHBOARD' || selectedViewCode === 'INVENTORY_GRAPHICAL') ? "INVENTORY_SKU" : 'SKU_VIEW'} onChange={changeView} defaultChecked={filters.view === 'SKU_VIEW' || filters.view === 'INVENTORY_SKU'} /> SKU View
                     </label>
-                {selectedViewCode !== 'INVENTORY_DASHBOARD' && selectedViewCode !== 'INVENTORY_SKU' && 
+                    </>
+                }
+                {selectedViewCode !== 'SPM_DASHBOARD' && selectedViewCode !== 'INVENTORY_DASHBOARD' && selectedViewCode !== 'INVENTORY_SKU'  && selectedViewCode !== 'INVENTORY_GRAPHICAL' && 
                   <>
                 <label className="radioButton" for="suv">
-                  <input className="radioInput" type="radio" name="view" value="suv" id="suv" value="SUPPLIER_VIEW" onChange={changeView} defaultChecked={filters.view === 'SUPPLIER_VIEW'} /> Supplier View
+                  <input className="radioInput" type="radio" name="view"  id="suv" value="SUPPLIER_VIEW" onChange={changeView} defaultChecked={filters.view === 'SUPPLIER_VIEW'} /> Supplier View
                     </label>
                 <label className="radioButton" for="bv">
-                  <input className="radioInput" type="radio" name="view" value="bv" id="bv" value="BREWERY_VIEW" onChange={changeView} defaultChecked={filters.view === 'BREWERY_VIEW'} /> Brewery View
+                  <input className="radioInput" type="radio" name="view" id="bv" value="BREWERY_VIEW" onChange={changeView} defaultChecked={filters.view === 'BREWERY_VIEW'} /> Brewery View
                     </label>
                   </>
                 }
-                {selectedViewCode != 'BREWERY_VIEW' && 
+                {selectedViewCode !== 'SPM_DASHBOARD' && selectedViewCode != 'BREWERY_VIEW' && 
                 <>
                 <label className="filterSubHeading mt-3">Select SKU</label>
                 <select className="filterSelect mt-2" value={SKU} onChange={skuChanged}>
-                  <option>Select SKU</option>
+                  <option value="">Select SKU</option>
                   {props.SKUs?.map((sku) => {
                     let enable = true;
-                    if (!skuArr.includes(sku.externalId)) 
-                      skuArr.push(sku.externalId);
+                    if (!skuArr.includes(sku.id)) 
+                      skuArr.push(sku.id);
                     else 
                       enable = false;
                     
                     return ( enable ? 
-                      <option value={sku.externalId}>{sku.name}</option> : ''
+                      <option value={sku.id}>{sku.name}</option> : ''
                     )
                   }
                   )
                   }
-                </select>
-                <label className="filterSubHeading mt-3">Select State</label>
-                <select className="filterSelect mt-2" onChange={onStateChange}>
-                  <option>Select State</option>
-                  {props.states?.map((state) => 
-                      <option value={state}>{state}</option>
-                    )
+                  </select>
+                  {(selectedViewCode == 'ANNUALREPORT_DASHBOARD' || selectedViewCode == 'DETAILED_GEO_VIEW') &&
+                    <>
+                      <label className="filterSubHeading mt-3">Select State</label>
+                      <select className="filterSelect mt-2" value={state} onChange={onStateChange}>
+                        <option value="">Select State</option>
+                        {props.states?.map((state) =>
+                          <option value={state}>{state}</option>
+                        )
+                        }
+                      </select>
+                      <label className="filterSubHeading mt-3">Select District</label>
+                      <select value={district} className="filterSelect mt-2" onChange={onDistrictChange}>
+                        <option value="">Select District</option>
+                        {districts?.map((district) =>
+                          <option value={district}>{district}</option>
+                        )
+                        }
+                      </select>
+                    </>
                   }
-                </select>
                 </>
                 }
-                {selectedViewCode == 'DETAILED_GEO_VIEW' &&
+                {(selectedViewCode == 'DETAILED_GEO_VIEW' || selectedViewCode == 'ANNUALREPORT_DASHBOARD') &&
                   <>
                   <label className="filterSubHeading mt-3">Time Period</label>
                   <div class="btn-group filterButton mt-2 mb-4">
                     <a href="#!" class={`btn ${isActive == 'by_monthly' ? `active` : ``}`}
-                      onClick={() => { setTsActive('by_monthly'); setParams({});}}
+                      onClick={() => { onTPChange('by_monthly'); }}
                     >
                       Monthly
                   </a>
                     <a href="#!" class={`btn ${isActive == 'by_quarterly' ? `active` : ``}`}
-                      onClick={() => {setTsActive('by_quarterly'); setParams({});}}
+                      onClick={() => {onTPChange('by_quarterly'); }}
                     >
                       Quarterly
                   </a>
                     <a href="#!" class={`btn ${isActive == 'by_yearly' ? `active` : ``}`}
-                      onClick={() => {setTsActive('by_yearly'); setParams({});}}
+                      onClick={() => {onTPChange('by_yearly');}}
                     >
                       Yearly
                   </a>
                   </div>
                   </>
                 }
-                {(isActive == 'by_monthly' || isActive == 'by_yearly' || isActive == 'by_quarterly') &&
+                {(selectedViewCode == 'DETAILED_GEO_VIEW' || selectedViewCode == 'ANNUALREPORT_DASHBOARD') && (isActive == 'by_monthly' || isActive == 'by_yearly' || isActive == 'by_quarterly') &&
                   <div className="row">
                     <div className="col-md-5">
                       <select
                         className="filterSelect mt-2"
+                        value={year}
                         onChange={onYearChange}
                       >
-                        <option>Select Year</option>
+                        <option value="">Select Year</option>
                         {allowedYears.map((year, index) => {
                           return (
                             <option key={index} value={year}>
@@ -226,9 +308,10 @@ const Analytics = (props) => {
                       <div className="col-md-5">
                         <select
                           className="filterSelect mt-2"
+                          value={month}
                           onChange={onMonthChange}
                         >
-                          <option>Select Month</option>
+                          <option value="">Select Month</option>
                           {allowedMonths.map((month, index) => {
                             return (
                               <option key={index} value={index + 1}>
@@ -239,13 +322,14 @@ const Analytics = (props) => {
                         </select>
                       </div>
                       }
-                    {isActive == 'by_quarterly' &&
+                    {(selectedViewCode == 'DETAILED_GEO_VIEW' || selectedViewCode == 'ANNUALREPORT_DASHBOARD') && isActive == 'by_quarterly' &&
                       <div className="col-md-5">
                         <select
                           className="filterSelect mt-2"
+                          value={qtr}
                           onChange={onQuarterChange}
                         >
-                          <option>Select Quarter</option>
+                          <option value="">Select Quarter</option>
                           {['Jan - Mar', 'Apr - Jun', 'Jul - Sep', 'Oct - Dec'].map((qtr, index) => {
                             return (
                               <option key={index} value={index + 1}>
@@ -258,7 +342,7 @@ const Analytics = (props) => {
                       }
                   </div>
                 }
-                {selectedViewCode == 'BREWERY_DETAIL_VIEW' || selectedViewCode == 'SUPPLIER_DETAIL_VIEW' && 
+                {(selectedViewCode == 'SUPPLIER_DETAIL_VIEW') && 
                   <>
                   <h3 className="filterSubHeading mt-3">Vendor</h3>
                   <div className="btn-group filterButton mt-2 mb-4">
@@ -269,6 +353,14 @@ const Analytics = (props) => {
                     )}
                   </div>
                   </>
+                }
+                {!!Object.keys(params).length &&
+                  <button
+                    className="btn SearchButton mt-4"
+                    onClick={resetFilters}
+                  >
+                    Clear
+                </button>
                 }
               </div>
             </div>

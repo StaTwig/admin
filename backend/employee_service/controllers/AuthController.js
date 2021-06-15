@@ -490,7 +490,7 @@ exports.sendOtp = [
               '<<<<< UserService < AuthController < login : user is active',
             );
             let otp = utility.randomNumber(4);
-            if (process.env.EMAIL_APPSTORE.includes(user.emailId))
+            if (process.env.EMAIL_APPSTORE.includes(user.emailId) && user.emailId != '')
               otp = process.env.OTP_APPSTORE;
 
             await EmployeeModel.updateOne({ id: user.id }, { otp });
@@ -623,7 +623,6 @@ exports.verifyOtp = [
           let phone = '+' + emailId;
           query = { phoneNumber: phone };
         }
-
         const user = await EmployeeModel.findOne(query);
 
         if (user && user.otp == req.body.otp) {
@@ -659,7 +658,8 @@ exports.verifyOtp = [
             role: user.role,
             warehouseId: user.warehouseId[0],
             organisationId: user.organisationId,
-            walletAddress: address
+            walletAddress: address,
+	    phoneNumber: user.phoneNumber
           };
           //Prepare JWT token for authentication
           const jwtPayload = userData;
@@ -680,11 +680,11 @@ exports.verifyOtp = [
         }
       }
     } catch (err) {
-      logger.log(
+	logger.log(
         'error',
         '<<<<< UserService < AuthController < verifyConfirm : Error (catch block)',
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res,err);
     }
   },
 ];
@@ -693,13 +693,14 @@ exports.userInfo = [
   auth,
   (req, res) => {
     try {
-      EmployeeModel.findOne({ emailId: req.user.emailId }).then(async user => {
+      EmployeeModel.findOne({ id: req.user.id }).then(async user => {
         if (user) {
           logger.log(
             'info',
             '<<<<< UserService < AuthController < userInfo : user exist',
           );
           const {
+            id,
             firstName,
             lastName,
             emailId,
@@ -714,7 +715,7 @@ exports.userInfo = [
             postalAddress
           } = user;
           const org = await OrganisationModel.findOne({ id: organisationId }, 'name configuration_id');
-          const warehouse = await EmployeeModel.findOne({ emailId }, { _id: 0, warehouseId: 1 });
+          const warehouse = await EmployeeModel.findOne({ id }, { _id: 0, warehouseId: 1 });
           const warehouseArray = await WarehouseModel.find({ id: { "$in": warehouse.warehouseId } })
           let user_data = {
             firstName,
@@ -790,6 +791,7 @@ exports.updateProfile = [
           emailId: employee.emailId,
           role: employee.role,
           warehouseId: warehouseId,
+          phoneNumber: user.phoneNumber
         };
         //Prepare JWT token for authentication
         const jwtPayload = userData;
