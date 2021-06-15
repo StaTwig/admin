@@ -1767,3 +1767,25 @@ exports.getOrganizationsTypewithauth = [
     }
   },
 ];
+
+exports.emailverify=[
+  auth,
+  async (req,res)=>{
+    try{
+      const emailId= req.query.emailId;
+      console.log(emailId)
+      const email= await EmployeeModel.find({emailId},'emailId')
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        email
+      );
+    } catch(err){
+      logger.log(
+        'error',
+        '<<<<< EmployeeService < AuthController < emailverify : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
