@@ -1773,8 +1773,9 @@ exports.emailverify=[
   async (req,res)=>{
     try{
       const emailId= req.query.emailId;
-      console.log(emailId)
-      const email= await EmployeeModel.find({emailId},'emailId')
+      const phoneNumber=req.query.phoneNumber;   
+      const email= await EmployeeModel.find({$or:[{"phoneNumber":"+"+phoneNumber},{"emailId":emailId}]},'emailId phoneNumber')
+      
       return apiResponse.successResponseWithData(
         res,
         "Operation success",
