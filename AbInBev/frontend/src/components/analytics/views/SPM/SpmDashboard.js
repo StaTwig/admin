@@ -100,9 +100,9 @@ const SpmDashboard = (props) => {
                                     <label>
                                       <b>Vendor ID:</b> {perf.id}
                                     </label>
-                                    {/* <label>
-                                      <b>Mobile No:</b> {perf.primaryContactId}
-                                    </label> */}
+                                    <label>
+                                      <b>Mobile No:</b> {perf.phoneNumber}
+                                    </label>
                                   </div>
                                 </div>
                               </td>
