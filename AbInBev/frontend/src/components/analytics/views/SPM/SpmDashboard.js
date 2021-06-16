@@ -161,11 +161,14 @@ const SpmDashboard = (props) => {
                               <td></td>
                             </tr>
                             <tr>
-                              <td scope="row">Storage Capacity</td>
+                              <td scope="row">Storage Capacity
+                              <br />
+                                <span className="subTitle">Sqft</span>
+                              </td>
                               <td>
                                 {perf.storageCapacity.bottleCapacity}
                                 <br />
-                                {perf.storageCapacity.sqft}
+                                <span className="subTitle">{perf.storageCapacity.sqft}</span>
                               </td>
                               <td></td>
                               <td></td>
