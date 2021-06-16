@@ -59,7 +59,7 @@ const SupplierView = (props) => {
                 <span className="breweryPropertyText">
                   Return Rate{' '}
                   <span className="pull-right breweryPropertyValue">
-                    {product.returnRate || 0}%
+                    {!isNaN(product.returnRate) ? product.returnRate : 0}%
                   </span>
                 </span>
                 <div className="progress progress-line-danger">
@@ -69,10 +69,10 @@ const SupplierView = (props) => {
                     aria-valuenow="60"
                     aria-valuemin="0"
                     aria-valuemax="100"
-                    style={{ width: (product.returnRate || 0) + '%' }}
+                    style={{ width: (!isNaN(product.returnRate) ? product.returnRate : 0) + '%' }}
                   >
                     <span className="sr-only">
-                      {product.returnRate || 0}% Complete
+                      {!isNaN(product.returnRate) ? product.returnRate : 0}% Complete
                     </span>
                   </div>
                 </div>

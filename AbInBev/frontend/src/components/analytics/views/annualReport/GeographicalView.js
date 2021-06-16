@@ -211,7 +211,7 @@ const GeographicalView = (props) => {
                                 <td>{analytic.sales.toLocaleString('en-IN')}</td>
                                 <td>{analytic.returns ? analytic.returns.toLocaleString('en-IN') : 0}</td>
                                 <td>{analytic.targetSales.toLocaleString('en-IN')}</td>
-                                <td>{analytic.returnRate ? analytic.returnRate : 0}%</td>
+                                <td>{!isNaN(analytic.returnRate) ? analytic.returnRate : 0}%</td>
                             </tr>
                         )}
                     </tbody>

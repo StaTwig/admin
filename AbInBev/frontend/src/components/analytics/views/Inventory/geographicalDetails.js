@@ -136,11 +136,11 @@ const iGraphicalDetailedView = (props) => {
                   <span className="productText">
                     Return Rate{' '}
                     <span className="breweryPropertyValue">
-                      {prop.returnRate || 0}%
+                      {!isNaN(prop.returnRate) ? prop.returnRate : 0}%
                     </span>
                   </span>
                   <div className="captionSubtitle">
-                    Compared to ({prop.returnRatePrev || 0}% last month)
+                    Compared to ({!isNaN(prop.returnRatePrev) ? prop.returnRatePrev : 0}% last month)
                   </div>
                   <div className="progress progress-line-default">
                     <div
@@ -149,10 +149,10 @@ const iGraphicalDetailedView = (props) => {
                       aria-valuenow="60"
                       aria-valuemin="0"
                       aria-valuemax="100"
-                      style={{ width: (prop.returnRate || 0) + '%' }}
+                      style={{ width: (!isNaN(prop.returnRate) ? prop.returnRate : 0) + '%' }}
                     >
                       <span className="sr-only">
-                        {prop.returnRate || 0}% Complete
+                        {!isNaN(prop.returnRate) ? prop.returnRate : 0}% Complete
                       </span>
                     </div>
                   </div>
