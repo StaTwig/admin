@@ -638,8 +638,8 @@ const NewShipment = (props) => {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="organizationName">
-                        Organisation Name*
+                      <label className="required-field" htmlFor="organizationName">
+                        Organisation Name
                       </label>
                       <div className="form-control">
                         {/* <DropdownButton
@@ -667,8 +667,8 @@ const NewShipment = (props) => {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="orgLocation">
-                        Organisation Location*
+                      <label className="required-field" htmlFor="orgLocation">
+                        Organisation Location
                       </label>
                       <div className="form-control">
                         {/* <DropdownButton
@@ -736,7 +736,7 @@ const NewShipment = (props) => {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="organizationType">Organisation Type*</label>
+                      <label className="required-field" htmlFor="organizationType">Organisation Type</label>
                       <div className="form-control">
                         <Select
                           styles={customStyles}
@@ -760,8 +760,8 @@ const NewShipment = (props) => {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="organizationName">
-                        Organisation Name*
+                      <label className="required-field" htmlFor="organizationName">
+                        Organisation Name
                       </label>
                       <div className="form-control">
                         {/* <DropdownButton
@@ -802,7 +802,7 @@ const NewShipment = (props) => {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="delLocation">Delivery Location*</label>
+                      <label className="required-field" htmlFor="delLocation">Delivery Location</label>
                       <div className="form-control">
                         {/* <DropdownButton
                           name={receiverOrgLoc}
@@ -850,7 +850,7 @@ const NewShipment = (props) => {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="organizationName">Airway Bill*</label>
+                      <label className="required-field" htmlFor="organizationName">Airway Bill</label>
                       <input
                         type="text"
                         className="form-control"
@@ -871,7 +871,7 @@ const NewShipment = (props) => {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="delLocation">Shipment Date*</label>
+                      <label className="required-field" htmlFor="delLocation">Shipment Date</label>
                       <div className="form-control">
                         <DatePicker
                           className="date"
@@ -908,7 +908,7 @@ const NewShipment = (props) => {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="Label code">Label Code*</label>
+                      <label className="required-field" htmlFor="Label code">Label Code</label>
                       <input
                         type="text"
                         className="form-control"
