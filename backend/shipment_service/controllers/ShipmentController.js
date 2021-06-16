@@ -587,7 +587,7 @@ exports.receiveShipment = [
       const data = req.body;
       const shipmentID = data.id;
       const shipmentInfo = await ShipmentModel.find({ id: shipmentID });
-      
+
 
       const email = req.user.emailId;
       const user_id = req.user.id;
@@ -630,10 +630,10 @@ exports.receiveShipment = [
         shipmentProducts.forEach(product => {
           productNumber = productNumber + 1;
           receivedProducts.forEach(reqProduct => {
-            if (product.productName === reqProduct.productName) {
+            if (product.productID === reqProduct.productID) {
               actuallyShippedQuantity = product.productQuantity;
               var receivedQuantity = reqProduct.productQuantity;
-	      
+        
 	        if ( receivedQuantity > actuallyShippedQuantity)
 	           throw new Error("Received quantity cannot be greater than Actual quantity");
 		
