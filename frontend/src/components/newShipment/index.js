@@ -112,8 +112,10 @@ const NewShipment = (props) => {
       const orgs = await getAllOrganisations();
       
       const orgSplit = user.organisation?.split("/");
+      console.log(orgSplit,"sender");
       setSenderOrganisation([orgSplit[0]]);
-      const organisations = orgs.data.filter((org) => org.id != orgSplit[1]);
+      // const organisations = orgs.data.filter((org) => org.id != orgSplit[1]);
+      const organisations = orgs.data;
       setAllOrganisations(organisations.map(item => {
                                       return {
                                         ...item,
@@ -367,7 +369,7 @@ const NewShipment = (props) => {
     newArray[prodIndex] = { ...newArray[prodIndex], isSelected: true };
     setProducts((prod) => [...newArray]);
   };
-
+console.log(allOrganisations,"All org");
   return (
     <div className="NewShipment">
       <h1 className="breadcrumb">CREATE SHIPMENT</h1>
