@@ -86,7 +86,7 @@ const ShipmentAnalytic = props => {
     coloumn2: 'Shipment Date',
     coloumn3: 'From',
     coloumn4: 'To',
-    coloumn5: 'Status',
+    coloumn5: 'Status ',
 
     img1: <img src={mon} width="16" height="16" />,
     img2: <img src={calender} width="16" height="16" />,
