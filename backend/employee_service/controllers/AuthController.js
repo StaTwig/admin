@@ -1769,7 +1769,7 @@ exports.getOrganizationsTypewithauth = [
 ];
 
 exports.emailverify=[
-  auth,
+  // auth,
   async (req,res)=>{
     try{
       const emailId= req.query.emailId;
