@@ -33,6 +33,7 @@ router.get("/trackJourney", ShipmentController.trackJourney);
 router.post("/uploadImage", upload.single('photo'), ShipmentController.uploadImage);
 router.get("/fetchImage", ShipmentController.fetchImage);
 router.get("/fetchShipmentIds", ShipmentController.fetchShipmentIds);
+router.get("/checkShipmentID", ShipmentController.checkShipmentID);
 
 router.get("/abinbev/fetchShipments", ShipmentController.fetchShipmentsForAbInBev);
 
