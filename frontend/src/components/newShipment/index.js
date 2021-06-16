@@ -976,9 +976,9 @@ console.log(allOrganisations,"All org");
               <label htmlFor="productDetails" className="headsup">
                 Product Details
               </label>
-              {values.products?.length > 0 && (
+              {OrderDetails?.products?.length > 0 && (
                 <EditTable
-                  product={values.products}
+                  product={OrderDetails?.products}
                   handleQuantityChange={(v, i) => {
                     handleQuantityChange(v, i);
                   }}

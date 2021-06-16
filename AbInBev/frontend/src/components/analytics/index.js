@@ -131,6 +131,7 @@ const Analytics = (props) => {
     setSelectedViewCode(event.target.value);
   }
   const onViewChange = (viewCode, props) => {
+    setSKU('');
     setProp(props);
     setSelectedViewCode(viewCode);
   }
