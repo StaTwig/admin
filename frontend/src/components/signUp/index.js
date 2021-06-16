@@ -20,6 +20,7 @@ import organisationType from "../../assets/icons/organisationType.png";
 import logo from "../../assets/brands/VaccineLedgerlogo.svg";
 import dropdownIcon from '../../assets/icons/dropdown_selected.png';
 import TextField from '@material-ui/core/TextField';
+import {verifyEmailAndPhoneNo} from "../../actions/userActions";
 
 const FormPage = (props) => {
 const [organisations, setOrganisations] = useState([]);
@@ -28,6 +29,8 @@ const [organisationsArr, setOrganisationsArr] = useState([]);
 const [value, setValue] = useState('');
 const [orgType, setorgType] = useState('');
 const [selectedType,setselectedType] = useState();
+const [emailError,setemailerror] = useState(false);
+const [phoneError,setphoneerror] = useState(false);
   useEffect(() => {
     async function fetchData() {
       const orgs = await getOrganisations();
@@ -42,6 +45,11 @@ const [selectedType,setselectedType] = useState();
       arr.push(orgsType.data[0].organisationTypes);
       setOrganisationsType(arr);
     }
+    // async function check(){
+    //   const data = await verifyEmailAndPhoneNo("phoneNumber=919461132817");
+    //   console.log(data);
+    // }
+    // check();
     fetchOrganisationType();
     fetchData();
   }, []);
@@ -56,7 +64,12 @@ const showOrgByType = (value) =>{
   arr.push({name:'Other'});
   return arr;
 }
-  const changeFn = (value_new,e) => {
+
+async function verifyEmailandPhoneNo(value){
+  let result = await verifyEmailAndPhoneNo(value); 
+  return result.data;
+}
+const changeFn = (value_new,e) => {
     setValue(value_new);
     let orgs = organisationsArr.filter(org => org.name.toLowerCase().includes(value_new.toLowerCase()));
     // orgs.push({ id: 0, name: 'Other' });
@@ -166,8 +179,6 @@ const showOrgByType = (value) =>{
                   <span className="error-msg text-danger">{errors.firstName}</span>
                   )}
                   </div>
-                  
-                
                   <div className="form-group flex-column" style={{position:"relative", top:"-10px"}}>
                   <div style={{position:"absolute", left:"-10px", top:"20px"}}>
                         <img alt="" src={User} height="20px" width="18px"/>
@@ -198,9 +209,16 @@ const showOrgByType = (value) =>{
                   autoCapitalize = 'none'
                   value={(props.email).toLowerCase()}
                   onChange={(e) => { props.onEmailChange(e); handleChange(e);}}
+                  // onBlur={console.log("Deepak")}
+                  handleBlur={props.email?verifyEmailAndPhoneNo(`emailId=${props.email}`).then((v)=>{if(v.data.length){
+                      setemailerror(true);
+                  }else{setemailerror(false)}}):null}
                   />
                   {errors.email && touched.email && (
                     <span className="error-msg text-danger">{errors.email}</span>
+                  )}
+                  {emailError && (
+                    <span className="error-msg text-danger">Email ID Already registered</span>
                   )}
                   </div>
 
@@ -218,11 +236,17 @@ const showOrgByType = (value) =>{
                         enableSearch: true,
                       }}
                       value={props.phone}
-
+                      onChange={(e)=>{props.onphoneChange(e)}}
+                      handleBlur={props.phone?verifyEmailAndPhoneNo(`phoneNumber=${props.phone}`).then((v)=>{if(v.data.length){
+                        setphoneerror(true);
+                    }else{setphoneerror(false);console.log(props.phone)}}):null}
                       onChange = {props.onphoneChange}
                     /></div>
                    {errors.phone && touched.phone && (
                     <span className="error-msg text-danger">{errors.phone}</span>
+                  )}
+                  {phoneError && (
+                    <span className="error-msg text-danger">Mobile No. Already registered</span>
                   )}
                   <div className="pb-3"></div>
                  
