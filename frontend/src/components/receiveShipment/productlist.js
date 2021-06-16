@@ -38,7 +38,7 @@ const ProductList = (props) => {
                                         props.setDelivered(deliveredProductList);
                                         props.setIndex(index);
                                         if(deliveredProduct)
-                                        setIsVisible(false);
+                                            setIsVisible(false);
                                     }}
                                 style={{width:'7vw',height:'3vh', fontSize:'2vh',paddingTop:"0"}}
                                 >
@@ -57,16 +57,20 @@ const ProductList = (props) => {
                                             style={{ height: '3vh', width: '10vw', fontSize: '12px', marginTop: '0', marginBottom: '0' }} 
                                             className="form-control"
                                             value={deliveredProduct}
-                                            maxLength={product.productQuantity.length}
+                                            // maxLength={product.productQuantity.length}
                                             onChange={e => {
                                                 setDeliveredProduct(e.target.value);
                                                 if (e.target.value <= product.productQuantity) {
                                                     setError(false);
                                                     props.onQuantityChange(index, e.target.value);
                                                 }
-                                                else
+                                                else{
+                                                    e.target.value=0;
+                                                    setDeliveredProduct(0);
+                                                    props.onQuantityChange(index, e.target.value);
                                                     setError(true);
-                                                setIsVisible(true);
+  
+                                                }
                                             }
                                             }
                                         />
