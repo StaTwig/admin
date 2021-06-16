@@ -976,7 +976,7 @@ console.log(allOrganisations,"All org");
               <label htmlFor="productDetails" className="headsup">
                 Product Details
               </label>
-              {values.products?.length > 0 && (
+              {/* {values.products?.length > 0 && (
                 <EditTable
                   product={values.products}
                   handleQuantityChange={(v, i) => {
@@ -986,7 +986,7 @@ console.log(allOrganisations,"All org");
                   onRemoveRow={(index) => {}}
                   handleLabelIdChange={handleLabelIdChange}
                 />
-              )}
+              )} */}
               {!orderIdSelected && products?.length > 0 && (
                 <>
                   <EditTable

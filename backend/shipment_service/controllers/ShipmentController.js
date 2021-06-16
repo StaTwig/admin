@@ -420,6 +420,7 @@ exports.createShipment = [
               }
               var products = data.products;
               for (count = 0; count < products.length; count++) {
+                data.products[count]["productId"] = data.products[count].productID;
                 inventoryUpdate(
                   products[count].productID,
                   products[count].productQuantity,
