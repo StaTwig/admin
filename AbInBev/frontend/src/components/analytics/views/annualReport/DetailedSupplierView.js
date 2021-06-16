@@ -129,12 +129,6 @@ const DetailedSupplierView = (props) => {
         <h1 className="h2">Dashboard - Supplier</h1>
       </div>
 
-      <div className="btn-group mainButtonFilter">
-        <a href="#!" className="btn active">
-          Brand
-        </a>
-      </div>
-
       <div className="productDetailedView">
         <div className="row">
           <div className="col-lg-10 col-md-10 col-sm-12">

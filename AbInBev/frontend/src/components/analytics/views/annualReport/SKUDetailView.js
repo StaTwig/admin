@@ -16,6 +16,7 @@ import bottlesIcon from '../../../../assets/becks_330ml.png';
 import {
   getAnalyticsAllStats,
   getAnalyticsByBrand,
+  getOrgTypeStats
 } from '../../../../actions/analyticsAction';
 import { useDispatch } from 'react-redux';
 
@@ -50,7 +51,7 @@ const SKUDetailView = (props) => {
                     qry += "&district=" + props.params.district;
                 }
                 else {
-                    setDText('State');
+                    if(!isActive) setDText('State');
                     act = false;
                 }
             }
@@ -58,6 +59,13 @@ const SKUDetailView = (props) => {
             setAnalytics(result.data);
         })();
     }, [isActive, prop, props]);
+  
+  const getAnalyticsByType = async(district) => {
+    const result = await dispatch(getOrgTypeStats('?sku=' + (props.sku ? props.sku : prop.externalId) + "&district=" + district));
+    console.log(result);
+    
+    setAnalytics(result.data);
+  }
 
   return (
     <div>
@@ -183,12 +191,14 @@ const SKUDetailView = (props) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {analytics.map((analytic, index) => (
+                    {analytics.map((analytic, index) => (
+                        <>
                         <tr key={index}>
                           <td scope="row">
                             <span
                               className="stateLink"
-                              onClick={() => setIsActive(!isActive)}
+                              // onClick={() => { if (isActive) getAnalyticsByType(analytic.groupedBy); else { setIsActive(!isActive); setDText('District'); }}}
+                              onClick={() => { setIsActive(!isActive); setDText('District'); }}
                             >
                               {analytic.groupedBy}
                             </span>
@@ -198,6 +208,10 @@ const SKUDetailView = (props) => {
                           <td>{analytic.targetSales.toLocaleString('en-IN')}</td>
                           <td>{analytic.actualReturns}%</td>
                         </tr>
+                        <tr>
+
+                        </tr>
+                        </>
                       ))}
                     </tbody>
                   </table>
