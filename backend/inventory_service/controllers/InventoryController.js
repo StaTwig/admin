@@ -1898,7 +1898,7 @@ exports.getBatchDetailsByBatchNumber = [
           );
 
           permission_request = {
-            role: req.user.role,,
+            role: req.user.role,
             permissionRequired: "viewInventory",
           };
           checkPermissions(permission_request, async (permissionResult) => {
