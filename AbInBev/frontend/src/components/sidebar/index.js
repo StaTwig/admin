@@ -31,7 +31,7 @@ const Sidebar = (props) => {
       </div>
       <div className="sidebar-sticky">
         <div className="grid" style={{ rowGap: "20px", alignContent: "end" }}>
-          <div
+          {/* <div
             className={
               history.location.pathname.includes("overview")
                 ? "gds-links bord-white"
@@ -45,7 +45,7 @@ const Sidebar = (props) => {
               } />
               <div onClick={() => history.push("/overview")}>Overview</div>
             </div>
-          </div>
+          </div> */}
 
           <div
             className={
