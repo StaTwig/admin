@@ -857,7 +857,7 @@ exports.getStatsByBrand = [
 						sales: { $sum: "$sales" },
 						targetSales: { $sum: "$targetSales" },
 						returns: { $sum: "$returns" },
-						product: { "$first": { "productName": "$productName", "productSubName": "$productSubName", "productId": "$productId", "externalId": "$productId" } }
+						product: { "$first": { "productName": "$productName", "manufacturer": '$brand', "productSubName": "$productSubName", "productId": "$productId", "externalId": "$productId" } }
 					}
 				},
 				{ $sort: { "_id.manufacturer": 1 } }
