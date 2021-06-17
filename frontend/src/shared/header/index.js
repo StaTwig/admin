@@ -43,6 +43,7 @@ const Header = props => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [orderIds, setOrderIds] = useState([]);
   const [airWayBillNo,setairWayBillNo] = useState([]);
+  const [airWayBillNowithshipmentID,setairWayBillNowithshipmentID] = useState([]);
   const [shippingIds, setShippingIds] = useState([]);
   const [wareHouse, setWareHouse]= useState({});
   const [selectLocation, setSelectLocation] = useState("");
@@ -65,29 +66,23 @@ const ref = useOnclickOutside(() => {
       const resultShippingIds = await getShippingOrderIds();
       const resultOrderIds = await getOrderIds();
       const resultAirwayBillNo = await fetchAllairwayBillNumber();
+      setairWayBillNowithshipmentID(resultAirwayBillNo.data);
+
       setOrderIds(resultOrderIds.map((so)=>so.id));
       setShippingIds(resultShippingIds.map((so)=>so.id));
-      setairWayBillNo(resultAirwayBillNo.map((so)=>so.id))
+      setairWayBillNo(resultAirwayBillNo.data.map((so)=>so.airWayBillNo))
     }
-    async function getAirwayBillNo(){
-      const result = await fetchAllairwayBillNumber();
-      console.log(result,"Air way bill no");
-    }
-    getAirwayBillNo()
     getIds();
   }, []);
-
+        // console.log(airWayBillNowithshipmentID.data);
   const onSeach = () => {
-    console.log('Check');
-    // console(context);
-    console.log(orderIds);
-    console.log(orderIds.indexOf(search));
     if(orderIds.indexOf(search)!=-1)
     props.history.push(`/vieworder/${search}`);
     else if(shippingIds.indexOf(search)!=-1)
     props.history.push(`/viewshipment/${search}`);
     else if(airWayBillNo.indexOf(search)!=-1){
-      props.history.push(`/viewshipment/${search}`)
+      let index = airWayBillNo.indexOf(search);
+      props.history.push(`/viewshipment/${airWayBillNowithshipmentID[index].id}`)
     }
     else
     setInvalidSearch(true);
@@ -137,9 +132,9 @@ const imgs = config().fetchProfileImage;
           <input
             type="text"
             // value={search}
-            placeholder="Search by PO ID/Shipment ID/ Product ID"
+            placeholder="Search PO ID/ Shipment ID/ Airway Bill No."
             onFocus={(e) => e.target.placeholder = ''}
-            onBlur={(e) => e.target.placeholder = 'Search PO ID/ Shipment ID/ Product ID'}
+            onBlur={(e) => e.target.placeholder = 'Search PO ID/ Shipment ID/ Airway Bill No.'}
             onChange={onSearchChange}
             className= "form-control search-field"
           />
