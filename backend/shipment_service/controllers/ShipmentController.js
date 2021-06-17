@@ -2326,6 +2326,8 @@ exports.trackJourney = [
                     var outwardShipmentsArray = [];
                     var poDetails, trackedShipment;
                     const trackingId = req.query.trackingId;
+		    try
+		    {
                     if (!trackingId.includes("PO")) {
                         const inwardShipments = await ShipmentModel.findOne({
                             $or: [{
@@ -2338,20 +2340,23 @@ exports.trackJourney = [
                             "taggedShipments": 1,
                             poId: 1
                         })
+
+			if(inwardShipments == null)
+                        throw new Error("ID does not exists..Please try searching with existing IDs");
+
                         shipmentsArray = inwardShipments.taggedShipments;
                         shipmentsArray.push(trackingId)
-                        poDetails = await RecordModel.find({
+                        poDetails = await RecordModel.findOne({
                             shipments: {
                                 "$in": shipmentsArray
                             }
                         })
-console.log("1",inwardShipments.taggedShipments)
                         if (inwardShipments.taggedShipments) {
                             if (inwardShipments.taggedShipments.length > 0 && inwardShipments.taggedShipments[0] !== '')
                                 inwardShipmentsArray = await ShipmentModel.aggregate([{
                                         $match: {
                                             "$and": [{
-						    id: { "$in" : inwardShipments.taggedShipments }
+						    id: { "$in" : shipmentsArray.pull(trackingId) }
                                             }, {
                                                 status: "RECEIVED"
                                             }]
@@ -2545,6 +2550,10 @@ console.log("1",inwardShipments.taggedShipments)
                         poDetails = await RecordModel.findOne({
                             id: trackingId
                         })
+
+			if( poDetails == null)
+                        throw new Error("Order ID does not exists..Please try searching with existing IDs");
+
                         outwardShipmentsArray = await ShipmentModel.aggregate([{
                                 $match:
 
@@ -2620,6 +2629,10 @@ console.log("1",inwardShipments.taggedShipments)
                             "outwardShipmentsArray": outwardShipmentsArray
                         }
                     );
+	   	 } catch (err) {
+                     return apiResponse.ErrorResponse(res, err.message);
+	        }
+
                 } else {
                     logger.log(
                         "warn",
