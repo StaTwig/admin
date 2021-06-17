@@ -43,7 +43,9 @@ const lastMile=(props)=>{
     const [locationCountry,setlocationCountry] = useState('')
     const [locationState,setlocationState] = useState('')
     const [locationName,setlocationName] = useState('')
+    const [limit, setLimit] = useState(10);
     const [warehouseTitle,setwarehouseTitle] = useState('')
+    const [skip, setSkip] = useState(0);
     const headers = {
         coloumn1: 'Beneficiary Details',
         coloumn2: 'ID Proof',
@@ -92,11 +94,16 @@ const onPageChange = async (pageNum) => {
         console.log(region)
         const countries = await GetCountriesFromWarehouses(item)
         let arr = [];
+        setstate('')
+        setlocation('')
+        setproduct('')
         countries.data.forEach(element => {
             if(element._id)
             arr.push(element._id)
         });
         setCountries(arr);
+        setCountry('')
+        setdistrict('')
         // dispatch(getEOLInfo(0, 10, product, country, state, district, location, region)); 
 
     }
@@ -110,6 +117,11 @@ const onPageChange = async (pageNum) => {
             arr.push(element._id)
         });
         setStates(arr)
+        setstate('')
+        setlocation('')
+        setproduct('')
+        setdistrict('')
+
         dispatch(getEOLInfo(0, 10, country, state, district, location, product,region)); 
 
     }
@@ -122,6 +134,9 @@ const onPageChange = async (pageNum) => {
             arr.push(element._id)
         });
         setCities(arr)
+        setlocation('')
+        setproduct('')
+        setdistrict('')
         // console.log(country, state, district, location, product,region);
         dispatch(getEOLInfo(0, 10, country, state, district, location, product,region)); 
 
@@ -135,6 +150,8 @@ const onPageChange = async (pageNum) => {
             arr.push(element._id)
         });
         setLocations(arr)
+        setlocation('')
+        setproduct('')
         // console.log(country, state, district, location, product,region);
         dispatch(getEOLInfo(0, 10, country, state, district, location, product,region)); 
 
@@ -149,6 +166,8 @@ const onPageChange = async (pageNum) => {
             arr.push(element._id)
         });
         setProducts(arr)
+        setproduct('')
+
         // console.log(country, state, district, location, product,region);
         dispatch(getEOLInfo(0, 10, country, state, district, location, product,region)); 
 

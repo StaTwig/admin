@@ -785,6 +785,7 @@ export function config() {
     },
   };
 
+  // const environment = 'local';
   const environment = process.env.ENVIRONMENT || `test`; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
   return conf;
