@@ -791,7 +791,7 @@ exports.updateProfile = [
           emailId: employee.emailId,
           role: employee.role,
           warehouseId: warehouseId,
-          phoneNumber: user.phoneNumber
+          phoneNumber: employee.phoneNumber
         };
         //Prepare JWT token for authentication
         const jwtPayload = userData;
