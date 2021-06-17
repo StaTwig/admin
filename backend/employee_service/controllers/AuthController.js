@@ -791,7 +791,7 @@ exports.updateProfile = [
           emailId: employee.emailId,
           role: employee.role,
           warehouseId: warehouseId,
-          phoneNumber: user.phoneNumber
+          phoneNumber: employee.phoneNumber
         };
         //Prepare JWT token for authentication
         const jwtPayload = userData;
@@ -1769,7 +1769,7 @@ exports.getOrganizationsTypewithauth = [
 ];
 
 exports.emailverify=[
-  auth,
+  // auth,
   async (req,res)=>{
     try{
       const emailId= req.query.emailId;

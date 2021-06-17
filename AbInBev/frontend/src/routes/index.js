@@ -13,7 +13,7 @@ import "./style.scss";
 const routes = (
   <Switch>
     <Route exact path="/" component={Home} />
-    <Route path="/overview" component={requireAuth(OverviewContainer)} />
+    {/* <Route path="/overview" component={requireAuth(OverviewContainer)} /> */}
     <Route path="/analytics" component={requireAuth(AnalyticsContainer)} />
     <Route
       path="/transactionHistory"

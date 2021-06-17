@@ -16,6 +16,7 @@ import bottlesIcon from '../../../../assets/becks_330ml.png';
 import {
   getAnalyticsAllStats,
   getAnalyticsByBrand,
+  getOrgTypeStats
 } from '../../../../actions/analyticsAction';
 import { useDispatch } from 'react-redux';
 
@@ -50,7 +51,7 @@ const SKUDetailView = (props) => {
                     qry += "&district=" + props.params.district;
                 }
                 else {
-                    setDText('State');
+                    if(!isActive) setDText('State');
                     act = false;
                 }
             }
@@ -58,6 +59,13 @@ const SKUDetailView = (props) => {
             setAnalytics(result.data);
         })();
     }, [isActive, prop, props]);
+  
+  const getAnalyticsByType = async(district) => {
+    const result = await dispatch(getOrgTypeStats('?sku=' + (props.sku ? props.sku : prop.externalId) + "&district=" + district));
+    console.log(result);
+    
+    setAnalytics(result.data);
+  }
 
   return (
     <div>
@@ -110,11 +118,11 @@ const SKUDetailView = (props) => {
                     <span className="productText">
                       Return Rate{' '}
                       <span className="breweryPropertyValue">
-                        {prop.returnRate || 0}%
+                        {!isNaN(prop.returnRate) ? prop.returnRate : 0}%
                       </span>
                     </span>
                     <div className="captionSubtitle">
-                      Compared to ({prop.returnRatePrev || 0}% last month)
+                      Compared to ({!isNaN(prop.returnRatePrev) ? prop.returnRatePrev : 0}% last month)
                     </div>
                     <div className="progress progress-line-default">
                       <div
@@ -123,10 +131,10 @@ const SKUDetailView = (props) => {
                         aria-valuenow="60"
                         aria-valuemin="0"
                         aria-valuemax="100"
-                        style={{ width: (prop.returnRate || 0) + '%' }}
+                        style={{ width: (!isNaN(prop.returnRate) ? prop.returnRate : 0) + '%' }}
                       >
                         <span className="sr-only">
-                          {prop.returnRate || 0}% Complete
+                          {!isNaN(prop.returnRate) ? prop.returnRate : 0}% Complete
                         </span>
                       </div>
                     </div>
@@ -183,12 +191,14 @@ const SKUDetailView = (props) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {analytics.map((analytic, index) => (
+                    {analytics.map((analytic, index) => (
+                        <>
                         <tr key={index}>
                           <td scope="row">
                             <span
                               className="stateLink"
-                              onClick={() => setIsActive(!isActive)}
+                              // onClick={() => { if (isActive) getAnalyticsByType(analytic.groupedBy); else { setIsActive(!isActive); setDText('District'); }}}
+                              onClick={() => { setIsActive(!isActive); setDText('District'); }}
                             >
                               {analytic.groupedBy}
                             </span>
@@ -196,8 +206,12 @@ const SKUDetailView = (props) => {
                           <td>{analytic.sales.toLocaleString('en-IN')}</td>
                           <td>{analytic.returns.toLocaleString('en-IN')}</td>
                           <td>{analytic.targetSales.toLocaleString('en-IN')}</td>
-                          <td>{analytic.actualReturns}%</td>
+                          <td>{!isNaN(analytic.actualReturns) ? analytic.actualReturns : 0}%</td>
                         </tr>
+                        <tr>
+
+                        </tr>
+                        </>
                       ))}
                     </tbody>
                   </table>

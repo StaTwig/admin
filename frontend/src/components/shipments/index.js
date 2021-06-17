@@ -86,7 +86,7 @@ const ShipmentAnalytic = props => {
     coloumn2: 'Shipment Date',
     coloumn3: 'From',
     coloumn4: 'To',
-    coloumn5: 'Status',
+    coloumn5: 'Status ',
 
     img1: <img src={mon} width="16" height="16" />,
     img2: <img src={calender} width="16" height="16" />,
@@ -208,7 +208,7 @@ const ShipmentAnalytic = props => {
         <Tabs {...props} setvisible={setvisible} visible={visible} />
       </div>
       <div className="full-width-ribben mt-4">
-        <TableFilter data={headers} shipmentIdList={shipmentIdList} supplierReceiverList={supplierReceiverList} setShipmentIdFilterOnSelect={setShipmentIdFilterOnSelect} setFromShipmentFilterOnSelect={setFromShipmentFilterOnSelect} setToShipmentFilterOnSelect={setToShipmentFilterOnSelect} setStatusFilterOnSelect={setStatusFilterOnSelect} setDateFilterOnSelect={setDateFilterOnSelect} fb="74%" />
+        <TableFilter data={headers} shipmentIdList={shipmentIdList} supplierReceiverList={supplierReceiverList} setShipmentIdFilterOnSelect={setShipmentIdFilterOnSelect} setFromShipmentFilterOnSelect={setFromShipmentFilterOnSelect} setToShipmentFilterOnSelect={setToShipmentFilterOnSelect} setStatusFilterOnSelect={setStatusFilterOnSelect} setDateFilterOnSelect={setDateFilterOnSelect} fb="80%" />
       </div>
       <div className="ribben-space">
         <Table {...props} skip={skip} shpmnts={sendData} count={count} onPageChange={onPageChange} />

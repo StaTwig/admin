@@ -4,10 +4,11 @@ import { Formik } from "formik";
 import update from '../../assets/icons/Update_Status.png';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import {getShipmentIds} from '../../actions/shipmentActions';
+import {getShipmentIds,getViewShipment} from '../../actions/shipmentActions';
+import { useDispatch, useSelector } from 'react-redux';
+import { func } from "prop-types";
 
 const EnterId = (props) => {
-
   const { id } = props.match.params;
   const [billid, setbillid] = useState(null);
   const [shipmentArray,setShipmentArray] = useState([]);
@@ -15,21 +16,43 @@ const EnterId = (props) => {
   useEffect(()=>{
     async function getShipmentArray(){
       let arr = await getShipmentIds();
-      shipmentArray.push(arr.data);
+      setShipmentArray(arr.data);
     }
     getShipmentArray();
   },[]);
-  
+
   const defaultProps = {
-    options: shipmentArray[0],
+    options: shipmentArray,
     getOptionLabel: (option) => option.id,
   };
   const flatProps = {
     options: shipmentArray.map((option) => option.id),
   };
   const [shipmentId, setShipmentId] = useState(null);
+  const [enableSearch,setenableSearch] = useState(false);
+  const [errorShipment,seterrorShipment] = useState(false);
   const [value, setValue] = React.useState();
   const [inputValue, setInputValue] = React.useState('');
+  const dispatch = useDispatch();
+  async function getShipmentStatus(id){
+    let result = await dispatch(getViewShipment(id));
+    console.log(result);
+    return result;
+  }
+  if(shipmentId){
+    var val = getShipmentStatus(shipmentId).then((data)=>{return data.status});
+    val.then((val)=>{
+      if(val=="RECEIVED"){
+        setshipdisabled(true);
+        seterrorShipment(true);
+      }
+      else{
+        setshipdisabled(false);
+        seterrorShipment(false);
+      }
+    })
+    console.log(val);
+  }
 
   return (
     <div className="updateStatus">
@@ -94,7 +117,7 @@ const EnterId = (props) => {
                         <div className="mb-2" style={{width: 300 }}>
                         <Autocomplete
                           {...defaultProps}
-                          // id="auto-complete"
+                          id="auto-complete"
                           value={value}
                           onChange={(event, newValue) => {
                             setValue(newValue);
@@ -112,7 +135,11 @@ const EnterId = (props) => {
                           renderInput={(params) => <TextField {...params}  name="shipmentId" label="Enter Shipment ID" margin="normal"                     
                           />}
                         />
+                                              {errorShipment && (
+                    <span className="error-msg text-danger mt-3">This shipment has been already delivered.</span>
+                  )}
                         </div>
+
                         {/* <input
                           type="text"
                           placeholder="Enter Shipment ID"
@@ -198,9 +225,13 @@ const EnterId = (props) => {
                         disabled={shipdisabled}
                         className="btn btn-orange fontSize20 font-bold mr-4 product"
                         onClick={() => {
-                          shipmentId
-                            ? props.history.push(`/updatestatus/${shipmentId}`)
-                            : props.history.push(`/updatestatus/${billid}`);
+                        if(shipmentId){
+                          if(shipmentArray.filter(e=>e.id === shipmentId).length>0){
+                              props.history.push(`/updatestatus/${shipmentId}`)
+                          }}
+                        else{
+                           props.history.push(`/updatestatus/${billid}`);
+                        }
                         }}
                       >
                         <img src={update} width="20" height="17" className="mr-2 mb-1" />

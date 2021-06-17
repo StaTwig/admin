@@ -32,6 +32,7 @@ const iGraphicalDetailedView = (props) => {
     },
   ]);
   const [active, setActive] = useState(false);
+  const [isActive, setIsActive] = useState(false);
   const [name, setName] = useState(prop.name);
   const [shortName, setShortname] = useState(prop.shortName);
   const [image, setImage] = useState(prop.image);
@@ -66,6 +67,7 @@ const iGraphicalDetailedView = (props) => {
             sku,
         ),
       );
+      setIsActive(true);
       setAnalytics(result.data);
       setOld(result.data);
     } else {
@@ -134,11 +136,11 @@ const iGraphicalDetailedView = (props) => {
                   <span className="productText">
                     Return Rate{' '}
                     <span className="breweryPropertyValue">
-                      {prop.returnRate || 0}%
+                      {!isNaN(prop.returnRate) ? prop.returnRate : 0}%
                     </span>
                   </span>
                   <div className="captionSubtitle">
-                    Compared to ({prop.returnRatePrev || 0}% last month)
+                    Compared to ({!isNaN(prop.returnRatePrev) ? prop.returnRatePrev : 0}% last month)
                   </div>
                   <div className="progress progress-line-default">
                     <div
@@ -147,10 +149,10 @@ const iGraphicalDetailedView = (props) => {
                       aria-valuenow="60"
                       aria-valuemin="0"
                       aria-valuemax="100"
-                      style={{ width: (prop.returnRate || 0) + '%' }}
+                      style={{ width: (!isNaN(prop.returnRate) ? prop.returnRate : 0) + '%' }}
                     >
                       <span className="sr-only">
-                        {prop.returnRate || 0}% Complete
+                        {!isNaN(prop.returnRate) ? prop.returnRate : 0}% Complete
                       </span>
                     </div>
                   </div>
@@ -164,7 +166,7 @@ const iGraphicalDetailedView = (props) => {
         <div className="col-md-12 col-sm-12">
           {!active ? (
             <div className="productsChart">
-              <label className="productsChartTitle">States</label>
+              <label className="productsChartTitle">{isActive ? 'District' : 'State'}</label>
               <ResponsiveContainer width="100%" height={500}>
                 <BarChart
                   width={500}
@@ -224,7 +226,7 @@ const iGraphicalDetailedView = (props) => {
             <table className="table">
               <thead>
                 <tr>
-                  <th scope="col">States</th>
+                  <th scope="col">{isActive ? 'District' : 'State'}</th>
                   <th scope="col">Sales</th>
                   <th scope="col">Total Bottle Pool</th>
                 </tr>
@@ -233,7 +235,7 @@ const iGraphicalDetailedView = (props) => {
                 {analytics.map((analytic, index) => (
                   <tr
                     key={index}
-                    onClick={() => openDetailView(analytic.groupedBy)}
+                    onClick={() => { setIsActive(i => !i); openDetailView(analytic.groupedBy);}}
                   >
                     <td scope="row">
                       <span className="stateLink">{analytic.groupedBy}</span>

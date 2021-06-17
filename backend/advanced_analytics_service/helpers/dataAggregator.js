@@ -1,6 +1,7 @@
 const Analytics = require('../models/AnalyticsModel');
 const OrganisationModel = require('../models/OrganisationModel');
 const ProductModel = require("../models/ProductModel");
+const ShipmentsModel = require('../models/ShipmentModel');
 const WarehouseModel = require("../models/WarehouseModel");
 const { calculateReturns } = require('./returnShipments');
 const moment = require('moment');
@@ -85,7 +86,6 @@ async function aggregateData(timeFrame) {
   // }
 
   const brewery = await OrganisationModel.find({ type: 'BREWERY', status: "ACTIVE" }, 'id');
-  
   for (let b of brewery)
     b_arr.push(b.id);
 

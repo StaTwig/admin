@@ -44,8 +44,8 @@ const SpmDashboard = (props) => {
                 <tr
                   key={index}
                   className={`${selectedRatingIndex === index
-                      ? 'selectedRow noBottomRadius'
-                      : ''
+                    ? 'selectedRow noBottomRadius'
+                    : ''
                     }`}
                 >
                   <td scope="row">{index + 1}</td>
@@ -101,7 +101,7 @@ const SpmDashboard = (props) => {
                                       <b>Vendor ID:</b> {perf.id}
                                     </label>
                                     <label>
-                                      <b>Mobile No:</b> {perf.primaryContactId}
+                                      <b>Mobile No:</b> {perf.phoneNumber}
                                     </label>
                                   </div>
                                 </div>
@@ -161,11 +161,14 @@ const SpmDashboard = (props) => {
                               <td></td>
                             </tr>
                             <tr>
-                              <td scope="row">Storage Capacity</td>
+                              <td scope="row">Storage Capacity
+                              <br />
+                                <span className="subTitle">Sqft</span>
+                              </td>
                               <td>
                                 {perf.storageCapacity.bottleCapacity}
                                 <br />
-                                {perf.storageCapacity.sqft}
+                                <span className="subTitle">{perf.storageCapacity.sqft}</span>
                               </td>
                               <td></td>
                               <td></td>
