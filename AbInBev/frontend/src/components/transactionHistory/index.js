@@ -968,6 +968,16 @@ const TransactionHistory = (props) => {
                       >
                         S2
                       </a>
+                      <a
+                        className={`btn ${
+                          selectedVendorType === 'S3' ? 'active' : ''
+                        }`}
+                        onClick={() => {
+                          onVendorTypeChange('S3');
+                        }}
+                      >
+                        S3
+                      </a>
                     </div>
                   </>
                 ) : (

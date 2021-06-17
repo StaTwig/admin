@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import Inventory from "../../components/inventory";
+import React, { useEffect, useState } from 'react';
+import Inventory from '../../components/inventory';
 import { useDispatch } from 'react-redux';
 import { getProductsInventory } from '../../actions/inventoryAction';
 
@@ -13,7 +13,7 @@ const InventoryContainer = (props) => {
     vendorType: 'ALL_VENDORS',
     state: '',
     district: '',
-    sku: ''
+    sku: '',
   });
 
   async function _getProductsInventory(_filters) {
@@ -30,9 +30,16 @@ const InventoryContainer = (props) => {
 
   const applyFilters = async (_filters) => {
     await _getProductsInventory(_filters);
-  }
+  };
 
-  return <Inventory inventories={inventories} totalStock={totalStock} {...props} applyFilters={applyFilters} />;
+  return (
+    <Inventory
+      inventories={inventories}
+      totalStock={totalStock}
+      {...props}
+      applyFilters={applyFilters}
+    />
+  );
 };
 
 export default InventoryContainer;

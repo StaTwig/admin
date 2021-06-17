@@ -183,8 +183,12 @@ const iGraphicalDetailedView = (props) => {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="returns" fill="#FDAB0F" />
-                  <Bar dataKey="sales" fill="#A344B7" />
+                  <Bar name="Sales" dataKey="sales" fill="#A344B7" />
+                  <Bar
+                    name="Total Bottle Pool"
+                    dataKey="returns"
+                    fill="#FDAB0F"
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -224,7 +228,7 @@ const iGraphicalDetailedView = (props) => {
             <table className="table">
               <thead>
                 <tr>
-                  <th scope="col">States</th>
+                  <th scope="col">District</th>
                   <th scope="col">Sales</th>
                   <th scope="col">Total Bottle Pool</th>
                 </tr>

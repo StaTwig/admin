@@ -22,42 +22,49 @@ import { useDispatch } from 'react-redux';
 const SKUDetailView = (props) => {
   const { states, brandsIconArr, brandsArr, brands } = props;
 
-    const [analytics, setAnalytics] = useState([]);
-    const [prop, setProp] = useState(props.prop);
-    const [isActive, setIsActive] = useState(false);
-    const [name, setName] = useState(prop.name);
-    const [dText, setDText] = useState('State');
-    const [shortName, setShortname] = useState(prop.shortName);
-    const [image, setImage] = useState(prop.image);
-    const dispatch = useDispatch();
-    useEffect(() => {
-        (async () => {
-            let qry = '';
-            let act = true;
-            if (props.sku) {
-                let n = props.SKUStats.filter(a => a.externalId == props.sku);
-                setProp(n[0]);
-                setName(n[0].name);
-                setShortname(n[0].shortName);
-                setImage(n[0].image);
-            }
-            if (props.params) {
-                if (props.params?.state)
-                    qry += "&state=" + props.params.state;
-                if (props.params?.district) {
-                    act = true;
-                    setDText('District');
-                    qry += "&district=" + props.params.district;
-                }
-                else {
-                    setDText('State');
-                    act = false;
-                }
-            }
-            const result = await dispatch(getAnalyticsAllStats('?sku=' + (props.sku ? props.sku : prop.externalId) + '&group_by='+(act || isActive ? 'district' : 'state')+qry));
-            setAnalytics(result.data);
-        })();
-    }, [isActive, prop, props]);
+  const [analytics, setAnalytics] = useState([]);
+  const [prop, setProp] = useState(props.prop);
+  const [isActive, setIsActive] = useState(false);
+  const [name, setName] = useState(prop.name);
+  const [dText, setDText] = useState('State');
+  const [chartHeight, setchartHeight] = useState('State');
+  const [shortName, setShortname] = useState(prop.shortName);
+  const [image, setImage] = useState(prop.image);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    (async () => {
+      let qry = '';
+      let act = true;
+      if (props.sku) {
+        let n = props.SKUStats.filter((a) => a.externalId == props.sku);
+        setProp(n[0]);
+        setName(n[0].name);
+        setShortname(n[0].shortName);
+        setImage(n[0].image);
+      }
+      if (props.params) {
+        if (props.params?.state) qry += '&state=' + props.params.state;
+        if (props.params?.district) {
+          act = true;
+          setDText('District');
+          qry += '&district=' + props.params.district;
+        } else {
+          setDText('State');
+          act = false;
+        }
+      }
+      const result = await dispatch(
+        getAnalyticsAllStats(
+          '?sku=' +
+            (props.sku ? props.sku : prop.externalId) +
+            '&group_by=' +
+            (act || isActive ? 'district' : 'state') +
+            qry,
+        ),
+      );
+      setAnalytics(result.data);
+    })();
+  }, [isActive, prop, props]);
 
   return (
     <div>
@@ -138,71 +145,78 @@ const SKUDetailView = (props) => {
         </div>
         <div className="row">
           <div className="col-md-12 col-sm-12">
-                <div className="productsChart">
-                  <label className="productsChartTitle">{dText}</label>
-                  <ResponsiveContainer width="100%" height={500}>
-                    <BarChart
-                      width={500}
-                      height={300}
-                      data={analytics}
-                      layout="vertical"
-                      margin={{
-                        top: 10,
-                        right: 10,
-                        left: 10,
-                        bottom: 5,
-                      }}
-                      barSize={10}
-                      barGap={1}
-                    >
-                      <XAxis type="number" />
-                      <YAxis dataKey="groupedBy" type="category" scale="band" />
-                      <Tooltip />
-                      <Legend />
-                      <Bar dataKey="sales" stackId="a" fill="#FDAB0F" />
-                      <Bar dataKey="returns" stackId="a" fill="#A20134" />
-                      <Bar
-                        dataKey="targetSales"
-                        radius={[0, 5, 5, 0]}
-                        stackId="a"
-                        fill="#A344B7"
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                
-
-                <div className="tableDetals">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th scope="col">{dText}</th>
-                        <th scope="col">Sales</th>
-                        <th scope="col">Returned</th>
-                        <th scope="col">Target</th>
-                        <th scope="col">Actual Returns</th>
+            <div className="productsChart">
+              <label className="productsChartTitle">{dText}</label>
+              <ResponsiveContainer
+                width="100%"
+                height={analytics.length >= 15 ? 1000 : 500}
+              >
+                <BarChart
+                  width={500}
+                  height={300}
+                  data={analytics}
+                  layout="vertical"
+                  margin={{
+                    top: 10,
+                    right: 10,
+                    left: 10,
+                    bottom: 5,
+                  }}
+                  barSize={10}
+                  barGap={1}
+                >
+                  <XAxis type="number" />
+                  <YAxis
+                    dataKey="groupedBy"
+                    height="40"
+                    type="category"
+                    scale="band"
+                    axisLine={false}
+                  />
+                  <Tooltip />
+                  <Legend />
+                  <Bar name="Sales" dataKey="sales" fill="#FDAB0F" />
+                  <Bar name="Returns" dataKey="returns" fill="#A20134" />
+                  <Bar
+                    name="Target Sales"
+                    dataKey="targetSales"
+                    radius={[0, 5, 5, 0]}
+                    fill="#A344B7"
+                  />
+                </BarChart>
+              </ResponsiveContainer>
+              <div className="tableDetals">
+                <table className="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">{dText}</th>
+                      <th scope="col">Sales</th>
+                      <th scope="col">Returned</th>
+                      <th scope="col">Target</th>
+                      <th scope="col">Actual Returns</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {analytics.map((analytic, index) => (
+                      <tr key={index}>
+                        <td scope="row">
+                          <span
+                            className="stateLink"
+                            onClick={() => setIsActive(!isActive)}
+                          >
+                            {analytic.groupedBy}
+                          </span>
+                        </td>
+                        <td>{analytic.sales.toLocaleString('en-IN')}</td>
+                        <td>{analytic.returns.toLocaleString('en-IN')}</td>
+                        <td>{analytic.targetSales.toLocaleString('en-IN')}</td>
+                        <td>{analytic.actualReturns}%</td>
                       </tr>
-                    </thead>
-                    <tbody>
-                      {analytics.map((analytic, index) => (
-                        <tr key={index}>
-                          <td scope="row">
-                            <span
-                              className="stateLink"
-                              onClick={() => setIsActive(!isActive)}
-                            >
-                              {analytic.groupedBy}
-                            </span>
-                          </td>
-                          <td>{analytic.sales.toLocaleString('en-IN')}</td>
-                          <td>{analytic.returns.toLocaleString('en-IN')}</td>
-                          <td>{analytic.targetSales.toLocaleString('en-IN')}</td>
-                          <td>{analytic.actualReturns}%</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-                </div>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
