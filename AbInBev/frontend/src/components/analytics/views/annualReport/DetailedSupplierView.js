@@ -62,9 +62,12 @@ const DetailedSupplierView = (props) => {
           '?sku=' + (props.sku ? props.sku : prop.externalId),
         ),
       );
+      
+        let n = result.data.filter((a) => a.type == 'S1' || a.type == 'S2' || a.type == 'S3');
+        result.data = n;
       if (props.Otype) {
         if (props.Otype != 'All') {
-          let n = result.data.filter((a) => a.type == props.Otype);
+          n = result.data.filter((a) => a.type == props.Otype);
           result.data = n;
         }
       }
@@ -126,12 +129,6 @@ const DetailedSupplierView = (props) => {
         <h1 className="h2">Dashboard - Supplier</h1>
       </div>
 
-      <div className="btn-group mainButtonFilter">
-        <a href="#!" className="btn active">
-          Brand
-        </a>
-      </div>
-
       <div className="productDetailedView">
         <div className="row">
           <div className="col-lg-10 col-md-10 col-sm-12">
@@ -176,11 +173,11 @@ const DetailedSupplierView = (props) => {
                     <span className="productText">
                       Return Rate{' '}
                       <span className="breweryPropertyValue">
-                        {prop.returnRate || 0}%
+                        {!isNaN(prop.returnRate) ? prop.returnRate : 0}%
                       </span>
                     </span>
                     <div className="captionSubtitle">
-                      Compared to ({prop.returnRatePrev || 0}% last month)
+                      Compared to ({!isNaN(prop.returnRatePrev) ?  prop.returnRatePrev : 0}% last month)
                     </div>
                     <div className="progress progress-line-default">
                       <div
@@ -189,10 +186,10 @@ const DetailedSupplierView = (props) => {
                         aria-valuenow="60"
                         aria-valuemin="0"
                         aria-valuemax="100"
-                        style={{ width: (prop.returnRate || 0) + '%' }}
+                        style={{ width: (!isNaN(prop.returnRate) ? prop.returnRate : 0) + '%' }}
                       >
                         <span className="sr-only">
-                          {prop.returnRate || 0}% Complete
+                          {!isNaN(prop.returnRate) ? prop.returnRate : 0}% Complete
                         </span>
                       </div>
                     </div>
@@ -243,12 +240,7 @@ const DetailedSupplierView = (props) => {
                       </td>
                       <td>Karnataka</td>
                       <td>
-                        {(analytic.analytics.actualReturns /
-                          (analytic.analytics.returns > 0
-                            ? analytic.analytics.returns
-                            : 1)) *
-                          100}
-                        %
+                        {!isNaN(analytic.analytics.actualReturns) ? analytic.analytics.actualReturns : 0}%
                       </td>
                     </tr>
                   ))}

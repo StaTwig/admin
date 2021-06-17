@@ -1,7 +1,7 @@
 export const TEST_SERVER_URL = 'https://test.vaccineledger.com';
 export const PROD_SERVER_URL = 'http://api.vaccineledger.com:9001';
-export const ABINBEVPROD_SERVER_URL = 'http://abinbev.statledger.io:9001';
-export const ABINBEVTEST_SERVER_URL = 'http://test.abinbev.statledger.io:9001';
+export const ABINBEVPROD_SERVER_URL = 'https://abinbev.statledger.io';
+export const ABINBEVTEST_SERVER_URL = 'https://test.abinbev.statledger.io';
 export const UNICEFTEST_SERVER_URL = 'https://unicef.vaccineledger.com';
 export const DEMO_SERVER_URL = 'http://vaccineledger.com:9001';
 export const LOCAL_SERVER_URL_USER = 'http://localhost:3001';
@@ -126,8 +126,20 @@ export function config() {
       addPOsFromExcel:`${LOCAL_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
       getTransactions: `${LOCAL_SERVER_URL_EVENT}/eventmanagement/api/event/getAllEventsWithFilter`,
-      getTransactionFilterList: `${LOCAL_SERVER_URL_EVENT}/eventmanagement/api/event/fetchProductDetailsList`
-          },
+      getTransactionFilterList: `${LOCAL_SERVER_URL_EVENT}/eventmanagement/api/event/fetchProductDetailsList`,
+      getRegionsUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getRegions`,
+      getCountryByRegionUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
+      getAllStates: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getAllStates`,
+      getDistrictsByState: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getDistrictsByState`,
+      GetEOLInfo:`${LOCAL_SERVER_URL_EOL}/lastmilemanagement/api/GetEOLInfo`,
+      GetProductsByWarehouse:`${LOCAL_SERVER_URL_EOL}/lastmilemanagement/api/getProductsByWarehouse`,
+      getCountries: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getCountries`,
+      getStatesByCountry: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getStatesByCountry`,
+      getCitiesByState: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getCitiesByState`,
+      getWarehousesByCity: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getWarehousesByCity`,
+      emailverify:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/emailverify`,
+      fetchairwayBillNumber:`${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchairwayBillNumber`
+},
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/sendOtp`,
@@ -212,15 +224,27 @@ export function config() {
       GetEOLListByDateWindow:`${DEV_SERVER_URL}/lastmilemanagement/api/GetEOLListByDateWindow`,
       updateWarehouse: `${DEV_SERVER_URL}/usermanagement/api/auth/updateWarehouse?warehouseId=`,
       getWarehouseById: `${DEV_SERVER_URL}/usermanagement/api/auth/getwarehouseinfo?id=`,
-       fetchOutboundPurchaseOrderUrl: `${DEV_SERVER_URL}/pomanagement/api/po/fetchOutboundPurchaseOrders`,
-       fetchInboundPurchaseOrderUrl: `${DEV_SERVER_URL}/pomanagement/api/po/fetchInboundPurchaseOrders`,
-       fetchInboundShipmentsUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/fetchInboundShipments`,
-       fetchOutboundShipmentsUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/fetchOutboundShipments`,
-       fetchSupplierAndReceiverListUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
-       addPOsFromExcel:`${DEV_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
-       getOrganizationsTypewithauth:`${DEV_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-       getTransactions: `${DEV_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
-       getTransactionFilterList: `${DEV_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`
+      fetchOutboundPurchaseOrderUrl: `${DEV_SERVER_URL}/pomanagement/api/po/fetchOutboundPurchaseOrders`,
+      fetchInboundPurchaseOrderUrl: `${DEV_SERVER_URL}/pomanagement/api/po/fetchInboundPurchaseOrders`,
+      fetchInboundShipmentsUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/fetchInboundShipments`,
+      fetchOutboundShipmentsUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/fetchOutboundShipments`,
+      fetchSupplierAndReceiverListUrl: `${DEV_SERVER_URL}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
+      addPOsFromExcel:`${DEV_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
+      getOrganizationsTypewithauth:`${DEV_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
+      getTransactions: `${DEV_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
+      getTransactionFilterList: `${DEV_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`,
+      getRegionsUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getRegions`,
+      getCountryByRegionUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
+      getAllStates: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getAllStates`,
+      getDistrictsByState: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
+      GetEOLInfo:`${DEV_SERVER_URL}/lastmilemanagement/api/GetEOLInfo`,
+      GetProductsByWarehouse:`${DEV_SERVER_URL}/lastmilemanagement/api/getProductsByWarehouse`,
+      getCountries: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getCountries`,
+      getStatesByCountry: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getStatesByCountry`,
+      getCitiesByState: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getCitiesByState`,
+      getWarehousesByCity: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getWarehousesByCity`,
+      emailverify:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/emailverify`,
+      fetchairwayBillNumber:`${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchairwayBillNumber`
       },
     stable: {
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
@@ -307,15 +331,36 @@ export function config() {
       GetEOLInfoByPlaceAdministered:`${STABLE_SERVER_URL_SHIPMENT}/lastmilemanagement/api/GetEOLInfoByPlaceAdministered?place=`,
       GetEOLListByDateWindow:`${STABLE_SERVER_URL_SHIPMENT}/lastmilemanagement/api/GetEOLListByDateWindow`,
       getWarehouseById: `${STABLE_SERVER_URL_SHIPMENT}/usermanagement/api/auth/getwarehouseinfo?id=`,
-       fetchOutboundPurchaseOrderUrl: `${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/fetchOutboundPurchaseOrders`,
-       fetchInboundPurchaseOrderUrl: `${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/fetchInboundPurchaseOrders`,
-       fetchInboundShipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchInboundShipments`,
-       fetchOutboundShipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchOutboundShipments`,
-       fetchSupplierAndReceiverListUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
-       addPOsFromExcel:`${STABLE_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
-       getOrganizationsTypewithauth:`${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
-       getTransactions: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/getAllEventsWithFilter`,
-       getTransactionFilterList: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/fetchProductDetailsList`
+      fetchOutboundPurchaseOrderUrl: `${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/fetchOutboundPurchaseOrders`,
+      fetchInboundPurchaseOrderUrl: `${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/fetchInboundPurchaseOrders`,
+      fetchInboundShipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchInboundShipments`,
+      fetchOutboundShipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchOutboundShipments`,
+      fetchSupplierAndReceiverListUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
+      addPOsFromExcel:`${STABLE_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
+      getOrganizationsTypewithauth:`${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
+      getTransactions: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/getAllEventsWithFilter`,
+      getTransactionFilterList: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/fetchProductDetailsList`,
+      getRegionsUrl: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getRegions`,
+      getCountryByRegionUrl: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
+      getAllStates: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getAllStates`,
+      getDistrictsByState: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getDistrictsByState`,
+      GetEOLInfo:`${STABLE_SERVER_URL_USER}/lastmilemanagement/api/GetEOLInfo`,
+      GetProductsByWarehouse:`${STABLE_SERVER_URL_USER}/lastmilemanagement/api/getProductsByWarehouse`,
+      getCountries: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getCountries`,
+      getStatesByCountry: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getStatesByCountry`,
+      getCitiesByState: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getCitiesByState`,
+      getWarehousesByCity: `${STABLE_SERVER_URL_USER}/inventorymanagement/api/inventory/getWarehousesByCity`,
+      fetchOutboundPurchaseOrderUrl: `${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/fetchOutboundPurchaseOrders`,
+      fetchInboundPurchaseOrderUrl: `${STABLE_SERVER_URL_SHIPMENT}/pomanagement/api/po/fetchInboundPurchaseOrders`,
+      fetchInboundShipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchInboundShipments`,
+      fetchOutboundShipmentsUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchOutboundShipments`,
+      fetchSupplierAndReceiverListUrl: `${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
+      addPOsFromExcel:`${STABLE_SERVER_URL_PO}/pomanagement/api/po/addPOsFromExcel`,
+      getOrganizationsTypewithauth:`${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
+      getTransactions: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/getAllEventsWithFilter`,
+      getTransactionFilterList: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/fetchProductDetailsList`,
+      emailverify:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/emailverify`,
+      fetchairwayBillNumber:`${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchairwayBillNumber`
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -413,7 +458,19 @@ export function config() {
       addPOsFromExcel:`${TEST_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${TEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
       getTransactions: `${TEST_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
-      getTransactionFilterList: `${TEST_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`
+      getTransactionFilterList: `${TEST_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`,
+      getRegionsUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getRegions`,
+      getCountryByRegionUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
+      getAllStates: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getAllStates`,
+      getDistrictsByState: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
+      GetEOLInfo:`${TEST_SERVER_URL}/lastmilemanagement/api/GetEOLInfo`,
+      GetProductsByWarehouse:`${TEST_SERVER_URL}/lastmilemanagement/api/getProductsByWarehouse`,
+      getCountries: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getCountries`,
+      getStatesByCountry: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getStatesByCountry`,
+      getCitiesByState: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getCitiesByState`,
+      getWarehousesByCity: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehousesByCity`,
+      emailverify:`${TEST_SERVER_URL}/usermanagement/api/auth/emailverify`,
+      fetchairwayBillNumber:`${TEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchairwayBillNumber`
 },
     demo: {
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
@@ -505,7 +562,19 @@ export function config() {
       addPOsFromExcel:`${DEMO_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${DEMO_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
       getTransactions: `${DEMO_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
-      getTransactionFilterList: `${DEMO_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`
+      getTransactionFilterList: `${DEMO_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`,
+      getRegionsUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getRegions`,
+      getCountryByRegionUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
+      getAllStates: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getAllStates`,
+      getDistrictsByState: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
+      GetEOLInfo:`${DEMO_SERVER_URL}/lastmilemanagement/api/GetEOLInfo`,
+      GetProductsByWarehouse:`${DEMO_SERVER_URL}/lastmilemanagement/api/getProductsByWarehouse`,
+      getCountries: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getCountries`,
+      getStatesByCountry: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getStatesByCountry`,
+      getCitiesByState: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getCitiesByState`,
+      getWarehousesByCity: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getWarehousesByCity`,
+      emailverify:`${DEMO_SERVER_URL}/usermanagement/api/auth/emailverify`,
+      fetchairwayBillNumber:`${DEMO_SERVER_URL}/shipmentmanagement/api/shipment/fetchairwayBillNumber`
     },
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
@@ -596,7 +665,19 @@ export function config() {
       addPOsFromExcel:`${PROD_SERVER_URL}/pomanagement/api/po/addPOsFromExcel`,
       getOrganizationsTypewithauth:`${PROD_SERVER_URL}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
       getTransactions: `${PROD_SERVER_URL}/eventmanagement/api/event/getAllEventsWithFilter`,
-      getTransactionFilterList: `${PROD_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`
+      getTransactionFilterList: `${PROD_SERVER_URL}/eventmanagement/api/event/fetchProductDetailsList`,
+      getRegionsUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getRegions`,
+      getCountryByRegionUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
+      getAllStates: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getAllStates`,
+      getDistrictsByState: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
+      GetProductsByWarehouse:`${PROD_SERVER_URL}/lastmilemanagement/api/getProductsByWarehouse`,
+      GetEOLInfo:`${PROD_SERVER_URL}/lastmilemanagement/api/GetEOLInfo`,
+      getCountries: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getCountries`,
+      getStatesByCountry: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getStatesByCountry`,
+      getCitiesByState: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getCitiesByState`,
+      getWarehousesByCity: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getWarehousesByCity`,
+      emailverify:`${PROD_SERVER_URL}/usermanagement/api/auth/emailverify`,
+      fetchairwayBillNumber:`${PROD_SERVER_URL}/shipmentmanagement/api/shipment/fetchairwayBillNumber`
     },
     
     uniceftest: {
@@ -695,11 +776,23 @@ export function config() {
       fetchProductIdsCustomerLocationsOrganisationsUrl: `${UNICEFTEST_SERVER_URL}/pomanagement/api/po/fetchProductIdsCustomerLocationsOrganisations`,
       fetchInboundShipmentsUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchInboundShipments`,
       fetchOutboundShipmentsUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchOutboundShipments`,
-      fetchSupplierAndReceiverListUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`
-
+      fetchSupplierAndReceiverListUrl: `${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchSupplierAndReceiverList`,
+      getRegionsUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getRegions`,
+      getCountryByRegionUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getCountryDetailsByRegion?region=`,
+      getAllStates: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getAllStates`,
+      getDistrictsByState: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getDistrictsByState`,
+      GetProductsByWarehouse:`${UNICEFTEST_SERVER_URL}/lastmilemanagement/api/getProductsByWarehouse`,
+      GetEOLInfo:`${UNICEFTEST_SERVER_URL}/lastmilemanagement/api/GetEOLInfo`,
+      getCountries: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getCountries`,
+      getStatesByCountry: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getStatesByCountry`,
+      getCitiesByState: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getCitiesByState`,
+      getWarehousesByCity: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehousesByCity`,
+      emailverify:`${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/emailverify`,
+      fetchairwayBillNumber:`${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchairwayBillNumber`
     },
   };
 
+  // const environment = 'local';
   const environment = process.env.ENVIRONMENT || `test`; // change prod to test, local,stable, dev for respective environments
   const conf = confs[environment];
   return conf;

@@ -167,7 +167,6 @@ const UpdateStatus = (props) => {
                           className="form-control"
                           name="shipmentId"
                           onBlur={handleBlur}
-                          onChange={handleChange}
                           value={values.shipmentId}
                         />
                       </div>

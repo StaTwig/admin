@@ -9,7 +9,7 @@
   .rTable {
     display: flex;
     flex-direction: column;
-    width: 100%;
+    width: 105%;
 
     .rTableHeading {
       display: flex;
@@ -50,7 +50,7 @@
       background-color: #ddd;
     }
 
-    .rTableCell,
+    // .rTableCell,
     .rTableHead {
       flex: 1;
       padding: 3px 10px;
@@ -67,7 +67,12 @@
     .rTableCell {
       color: $black;
       text-align: left;
-      font-weight: 400;
+      //font-weight: 600;
+      position:relative;
+      // padding-top: 0px;
+      // padding-right: 0px;
+      // padding-bottom: 0px;
+      // padding-left: 0px;
       a {
         color: $black;
         font-weight: 400;

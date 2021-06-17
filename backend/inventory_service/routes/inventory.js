@@ -64,6 +64,11 @@ router.get("/getAllSKUs", InventoryController.getAllSKUs);
 router.get("/getOrganizationsByType", InventoryController.getOrganizationsByType);
 router.get("/getOrganizationInfoByID", InventoryController.getOrganizationInfoByID);
 
+router.get("/getStatesByCountry", InventoryController.getStatesByCountry);
+router.get("/getCitiesByState", InventoryController.getCitiesByState);
+router.get("/getWarehousesByCity", InventoryController.getWarehousesByCity);
+router.get("/getCountries", InventoryController.getCountries);
+
 
 
 router.post(

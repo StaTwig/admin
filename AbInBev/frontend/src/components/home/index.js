@@ -66,7 +66,7 @@ const Home = (props) => {
       const decoded = jwt_decode(token);
       localStorage.setItem('theAbInBevToken', token);
       dispatch(setCurrentUser(decoded));
-      props.history.push('/overview');
+      props.history.push('/analytics');
     } else {
       const err = result.data.message;
       setErrorMessage(err);

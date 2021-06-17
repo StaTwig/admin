@@ -113,6 +113,38 @@ var LastMileSchema = new mongoose.Schema({
                 type: String,
                 required: true,
               },
+              firstLine: {
+                type: String,
+                default: 'Fourth Floor, T-Hub'
+              },
+              secondLine: {
+                type: String,
+                default: 'IIIT Campus, Gachibowli'
+              },
+              city: {
+                type: String,
+                default: 'Hyderabad'
+              },
+              state: {
+                type: String,
+                default: 'Telangana'
+              },
+              country: {
+                type: String,
+                default: 'India'
+              },
+              region: {
+                type: String,
+                default: 'Asia'
+              },
+              landmark: {
+                type: String,
+                default: 'opposite to TCS'
+              },
+              zipCode: {
+                type: Number,
+                default: 500032
+              }
             },
           },
           labelId: {

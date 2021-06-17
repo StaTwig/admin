@@ -201,17 +201,17 @@ const GeographicalView = (props) => {
                                 <td scope="row">
                                     <div className="tableProfileIconCard justify-content-start">
                                         <div className="profileIcon">
-                                            <img src={brandsArr[brands.indexOf(analytic.manufacturer.split(' ').join(''))]} alt="" width="50" height="50" />
+                                            <img src={brandsArr[brands.indexOf(analytic.manufacturer?.split(' ').join(''))]} alt="" width="50" height="50" />
                                         </div>
                                         <div className="profileName">
                                             <span className="profileTitle" onClick={() => showDetailedGeoView(analytic)}>{analytic.manufacturer + ' - ' + analytic.name}</span>
                                         </div>
                                     </div>
                                 </td>
-                                <td>{analytic.sales}</td>
-                                <td>{analytic.returns ? analytic.returns : 0}</td>
-                                <td>{analytic.targetSales}</td>
-                                <td>{analytic.returnRate ? analytic.returnRate : 0}%</td>
+                                <td>{analytic.sales.toLocaleString('en-IN')}</td>
+                                <td>{analytic.returns ? analytic.returns.toLocaleString('en-IN') : 0}</td>
+                                <td>{analytic.targetSales.toLocaleString('en-IN')}</td>
+                                <td>{!isNaN(analytic.returnRate) ? analytic.returnRate : 0}%</td>
                             </tr>
                         )}
                     </tbody>

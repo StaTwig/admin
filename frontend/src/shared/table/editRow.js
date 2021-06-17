@@ -65,11 +65,11 @@ const EditRow = (props) => {
           <div className={`row ${!addMore ? `col-10` : `col-12`}`}>
             <div className="col theader text-center pro">
               <img src={Package} width="16" height="16" />
-              <span className="pl-3 text-muted">Product Category*</span>
+              <span className="pl-3 text-muted required-field">Product Category</span>
             </div>
             <div className="col-4 theader text-center pro">
               <img src={Package} width="16" height="16" />
-              <span className="pl-3 text-muted">Product*</span>
+              <span className="pl-3 text-muted required-field">Product</span>
             </div>
             <div className="col theader text-center pro">
               <img src={mon} width="16" height="16" />
@@ -77,7 +77,7 @@ const EditRow = (props) => {
             </div>
             <div className="col theader text-center pro">
               <img src={qty} width="25" height="16" />
-              <span className="pl-3 text-muted">Quantity*</span>
+              <span className="pl-3 text-muted required-field">Quantity</span>
             </div>
           </div>
         </div>

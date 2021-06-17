@@ -21,8 +21,16 @@ const BreweryDetailedView = (props) => {
         (props?.Otype ? props.Otype : 'ALL_VENDORS') +
         '&sku=' +
         (props?.sku ? props.sku : prop.externalId);
-      const result = await dispatch(getAllOrganisationStats(cond));
-      setAnalytics(result.data);
+        const result = await dispatch(getAllOrganisationStats(cond));
+        let n = result.data.filter((a) => a.type == 'S1');
+        for(let org of n){
+          let cc = result.data.filter((a) => a.authority == org.id && (a.type == 'S2' || a.type == 'S3'));
+          for (const c of cc) {
+            org.sales += parseInt(c.sales);  
+            org.return += parseInt(c.return);  
+          }
+        }
+        setAnalytics(n);
     })();
   }, []);
   return (
@@ -75,11 +83,11 @@ const BreweryDetailedView = (props) => {
                     <span className="productText">
                       Return Rate{' '}
                       <span className="breweryPropertyValue">
-                        {prop.returnRate || 0}%
+                        {!isNaN(prop.returnRate) ? prop.returnRate : 0}%
                       </span>
                     </span>
                     <div className="captionSubtitle">
-                      Compared to ({prop.returnRatePrev || 0}% last month)
+                      Compared to ({!isNaN(prop.returnRatePrev) ? prop.returnRatePrev : 0}% last month)
                     </div>
                     <div className="progress progress-line-default">
                       <div
@@ -88,10 +96,10 @@ const BreweryDetailedView = (props) => {
                         aria-valuenow="60"
                         aria-valuemin="0"
                         aria-valuemax="100"
-                        style={{ width: (prop.returnRate || 0) + '%' }}
+                        style={{ width: (!isNaN(prop.returnRate) ? prop.returnRate : 0) + '%' }}
                       >
                         <span className="sr-only">
-                          {prop.returnRate || 0}% Complete
+                          {!isNaN(prop.returnRate) ? prop.returnRate : 0}% Complete
                         </span>
                       </div>
                     </div>
@@ -123,8 +131,8 @@ const BreweryDetailedView = (props) => {
                         </div>
                       </td>
                       <td>Karnataka</td>
-                      <td>{analytic.analytics.sales}</td>
-                      <td>{analytic.analytics.returns}</td>
+                      <td>{analytic.analytics.sales.toLocaleString('en-IN')}</td>
+                      <td>{analytic.analytics.returns.toLocaleString('en-IN')}</td>
                     </tr>
                   ))}
                 </tbody>

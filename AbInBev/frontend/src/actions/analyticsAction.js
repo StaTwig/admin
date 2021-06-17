@@ -17,6 +17,23 @@ export const getAnalyticsAllStats = (param) => {
   };
 };
 
+export const getOrgTypeStats = (param) => {
+  return async dispatch => {
+    try {
+      console.log(config().getOrganisationTypeStatsurl + param);
+      
+      dispatch(turnOn());
+      const result = await axios.get(
+        config().getOrganisationTypeStatsurl + param,
+      );
+      dispatch(turnOff());
+      return result.data;
+    } catch (e) {
+      dispatch(turnOff());
+    }
+  };
+};
+
 export const getSupplierPerformanceByOrgType = (orgType) => {
   let queryParam = '';
   if (orgType && orgType.length && orgType !== '') {

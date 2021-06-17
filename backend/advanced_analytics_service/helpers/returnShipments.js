@@ -37,8 +37,6 @@ async function calculateReturns(params) {
   try {
     var quantity = 0
     // let connect = await connectDB()
-    console.log(params);
-    
     for await (const Shipment of Shipments.find(
       params
     )) {

@@ -84,6 +84,45 @@ export const getCountryByRegion = async (id) => {
 };
 
 
+export const GetCountriesFromWarehouses = async (id) => {
+  try {
+    const result = await axios.get(`${config().getCountries}?region=${id}`);
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
+export const GetStatesFromWarehouses = async (id) => {
+  try {
+    const result = await axios.get(`${config().getStatesByCountry}?country=${id}`);
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
+export const GetCitiesFromWarehouses = async (id) => {
+  try {
+    const result = await axios.get(`${config().getCitiesByState}?state=${id}`);
+    console.log(result)
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
+export const GetWarehousesWithCity = async (id) => {
+  try {
+    const result = await axios.get(`${config().getWarehousesByCity}?city=${id}`);
+    console.log(result)
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
+
 export const getWareHousesByCountry = async (id) => {
   try {
     const result = await axios.get(config().getWareHousesByCountryUrl+id);
@@ -239,7 +278,9 @@ export const getInventoryByBatchNumber = id => {
     return async dispatch => {
       const url = config().getInventoryByBatchNumber + id;
       const result = await axios.get(url);
-      dispatch(setInventories(result.data));
+      console.log(result)
+      // dispatch(setInventories(result.data));
+      return result.sata
     };
   } catch (e) {
     return e.response;

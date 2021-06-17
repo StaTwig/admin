@@ -10,11 +10,11 @@
     & > div {
       margin-bottom: 15px;
       text-align: left;
-      margin-right: 5px;
+      margin-right: 0px;
       font-size: 10px;
       color: #000000;
       @media (min-width: $xl) {
-        font-size: 11px;
+        font-size: 10px;
       }
     }
 
@@ -38,8 +38,8 @@
         font-size: 9px;
         @media (min-width: $xl) {
           font-size: 11px;
-
-}        }
+      }
+     }
 
  .status[target=RECEIVED]{
                                 background: #28a745 0% 0% no-repeat padding-box;

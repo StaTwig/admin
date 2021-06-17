@@ -532,12 +532,12 @@ exports.getInventoryAnalytics = [
       inventory.totalProductCategory = totalProductCategory.length;
       const warehouse = await WarehouseModel.findOne({ id: warehouseId });
 
-      const stockOut = await InventoryModel.count({
+      const stockOut = await InventoryModel.find({
         id: warehouse.warehouseInventory,
         "inventoryDetails.quantity": { $lte: 0 }
-      });
+      },'inventoryDetails');
 
-      inventory.stockOut = stockOut;
+      inventory.stockOut = stockOut.length ? stockOut[0].inventoryDetails.filter(i => i.quantity < 1).length : 0;
       // console.log("Products with zero Inventory (stockOut) ", stockOut);
 
 
@@ -778,7 +778,6 @@ exports.getInventoryAnalytics = [
 
       data.inventory = inventory;
 
-      console.log("Response", data);
       return apiResponse.successResponseWithData(
         res,
         'Analytics',
@@ -872,8 +871,10 @@ exports.getOrderAnalytics = [
       order.inboundPO = inboundPO;
 
       const outboundPO = await RecordModel.count(
-        { $and : [
-          {"customer.customerOrganisation": organisationId}
+        { $or : [
+          {"customer.customerOrganisation": organisationId},
+            {"createdBy": req.user.id}
+
         ]
       } );
       order.outboundPO = outboundPO;
