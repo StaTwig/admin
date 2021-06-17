@@ -184,6 +184,7 @@ const NewInventory = (props) => {
     dispatch(setReviewinventories(inventoryState));
 
     //Redirect to review page.
+    
     props.history.push('/reviewinventory');
   };
 

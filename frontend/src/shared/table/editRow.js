@@ -16,6 +16,7 @@ import Select from 'react-select';
 import './style.scss';
 
 const EditRow = (props) => {
+  console.log(props);
   const {
     manufacturer,
     productName,
@@ -92,20 +93,24 @@ const EditRow = (props) => {
                 }}
                 groups={category}
               /> */}
+              {
+                console.log(categories,productName)
+              }
               <Select
-                className="no-border"
-                placeholder="Select Product Category"
-                defaultInputValue={inventories.type}
-                onChange={(item) => handleCategoryChange(idx, item.value)}
-                options={category}
-              />
+                  className="no-border"
+                  placeholder={categories}
+                  defaultInputValue={inventories.type}
+                  onChange={(item) => handleCategoryChange(idx, item.value)}
+                  options={category}
+                  />
+             
             </div>
             <div className="col-4 align-self-center pt-1 pb-1 border-right bg-white">
               <div className="d-flex pt-1 flex-row justify-content-between">
                 <div className="title col-8 recived-text">
                   <Select
                     className="no-border"
-                    placeholder="Select Product Name"
+                    placeholder={productName}
                     defaultInputValue={inventories.type}
                     onChange={(item) =>
                       handleInventoryChange(idx, 'productName', item.name)
