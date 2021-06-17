@@ -10,7 +10,6 @@ const SoChainOfCustody = (props) => {
   const [visible, setVisible] = useState(v);
 
   const isShipment = !update?.isOrder;
-  
   return (
   <>
       {op >= level ?
