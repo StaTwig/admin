@@ -38,11 +38,11 @@ const BreweryView = (props) => {
             <div className="breweryCard">
               <h4 className="breweryTitle">{analytic.name}</h4>
               <h6 className="brewerySubtitle">&nbsp;</h6>
-              <p className="breweryLocationText">
+              {/* <p className="breweryLocationText">
                 {' '}
                 <i className="fa fa-map-marker breweryLoc"></i>{' '}
                 {analytic.postalAddress}
-              </p>
+              </p> */}
 
               <span className="breweryPropertyText">
                 Sales{' '}
@@ -93,20 +93,12 @@ const BreweryView = (props) => {
                   aria-valuemax="100"
                   style={{
                     width:
-                      (analytic.analytics.actualReturns /
-                        (analytic.analytics.returns > 0
-                          ? analytic.analytics.returns
-                          : 1)) *
-                        100 +
+                      analytic.analytics.actualReturns +
                       '%',
                   }}
                 >
                   <span className="sr-only">
-                    {(analytic.analytics.actualReturns /
-                      (analytic.analytics.returns > 0
-                        ? analytic.analytics.returns
-                        : 1)) *
-                      100}
+                    {analytic.analytics.actualReturns}
                     % Complete
                   </span>
                 </div>
@@ -114,11 +106,7 @@ const BreweryView = (props) => {
               <span className="breweryPropertyText">
                 Return Rate{' '}
                 <span className="pull-right breweryPropertyValue">
-                  {(analytic.analytics.actualReturns /
-                    (analytic.analytics.returns > 0
-                      ? analytic.analytics.returns
-                      : 1)) *
-                    100}
+                  {analytic.analytics.actualReturns}
                   %
                 </span>
               </span>
@@ -131,20 +119,12 @@ const BreweryView = (props) => {
                   aria-valuemax="100"
                   style={{
                     width:
-                      (analytic.analytics.actualReturns /
-                        (analytic.analytics.returns > 0
-                          ? analytic.analytics.returns
-                          : 1)) *
-                        100 +
+                      analytic.analytics.actualReturns +
                       '%',
                   }}
                 >
                   <span className="sr-only">
-                    {(analytic.analytics.actualReturns /
-                      (analytic.analytics.returns > 0
-                        ? analytic.analytics.returns
-                        : 1)) *
-                      100}
+                    {analytic.analytics.actualReturns}
                     % Complete
                   </span>
                 </div>

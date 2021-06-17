@@ -20,9 +20,11 @@ import './style.scss';
 const VerifyInventory = props => {
   const dispatch = useDispatch();
   const reviewInventories = useSelector(state => {
+
+   
     return state.reviewInventory;
   });
-  console.log(props);
+ console.log(reviewInventories);
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [ successMessage, setSuccessMessage ] = useState('');
   const [ errorMessage, setErrorMessage ] = useState('');

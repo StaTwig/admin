@@ -16,6 +16,7 @@ import bottlesIcon from '../../../../assets/becks_330ml.png';
 import {
   getAnalyticsAllStats,
   getAnalyticsByBrand,
+  getOrgTypeStats,
 } from '../../../../actions/analyticsAction';
 import { useDispatch } from 'react-redux';
 
@@ -23,11 +24,12 @@ const SKUDetailView = (props) => {
   const { states, brandsIconArr, brandsArr, brands } = props;
 
   const [analytics, setAnalytics] = useState([]);
+  const [subAnalytics, setSubAnalytics] = useState([]);
   const [prop, setProp] = useState(props.prop);
   const [isActive, setIsActive] = useState(false);
   const [name, setName] = useState(prop.name);
+  const [arrIndex, setArrIndex] = useState(-1);
   const [dText, setDText] = useState('State');
-  const [chartHeight, setchartHeight] = useState('State');
   const [shortName, setShortname] = useState(prop.shortName);
   const [image, setImage] = useState(prop.image);
   const dispatch = useDispatch();
@@ -49,7 +51,7 @@ const SKUDetailView = (props) => {
           setDText('District');
           qry += '&district=' + props.params.district;
         } else {
-          setDText('State');
+          if (!isActive) setDText('State');
           act = false;
         }
       }
@@ -65,6 +67,21 @@ const SKUDetailView = (props) => {
       setAnalytics(result.data);
     })();
   }, [isActive, prop, props]);
+
+  const getAnalyticsByType = async (district, i) => {
+    setArrIndex(i);
+    const result = await dispatch(
+      getOrgTypeStats(
+        '?sku=' +
+          (props.sku ? props.sku : prop.externalId) +
+          '&district=' +
+          district,
+      ),
+    );
+    console.log(result.data);
+
+    setSubAnalytics(result.data);
+  };
 
   return (
     <div>
@@ -117,11 +134,13 @@ const SKUDetailView = (props) => {
                     <span className="productText">
                       Return Rate{' '}
                       <span className="breweryPropertyValue">
-                        {prop.returnRate || 0}%
+                        {!isNaN(prop.returnRate) ? prop.returnRate : 0}%
                       </span>
                     </span>
                     <div className="captionSubtitle">
-                      Compared to ({prop.returnRatePrev || 0}% last month)
+                      Compared to (
+                      {!isNaN(prop.returnRatePrev) ? prop.returnRatePrev : 0}%
+                      last month)
                     </div>
                     <div className="progress progress-line-default">
                       <div
@@ -130,10 +149,15 @@ const SKUDetailView = (props) => {
                         aria-valuenow="60"
                         aria-valuemin="0"
                         aria-valuemax="100"
-                        style={{ width: (prop.returnRate || 0) + '%' }}
+                        style={{
+                          width:
+                            (!isNaN(prop.returnRate) ? prop.returnRate : 0) +
+                            '%',
+                        }}
                       >
                         <span className="sr-only">
-                          {prop.returnRate || 0}% Complete
+                          {!isNaN(prop.returnRate) ? prop.returnRate : 0}%
+                          Complete
                         </span>
                       </div>
                     </div>
@@ -147,10 +171,7 @@ const SKUDetailView = (props) => {
           <div className="col-md-12 col-sm-12">
             <div className="productsChart">
               <label className="productsChartTitle">{dText}</label>
-              <ResponsiveContainer
-                width="100%"
-                height={analytics.length >= 15 ? 1000 : 500}
-              >
+              <ResponsiveContainer width="100%" height={500}>
                 <BarChart
                   width={500}
                   height={300}
@@ -166,25 +187,25 @@ const SKUDetailView = (props) => {
                   barGap={1}
                 >
                   <XAxis type="number" />
-                  <YAxis
-                    dataKey="groupedBy"
-                    height="40"
-                    type="category"
-                    scale="band"
-                    axisLine={false}
-                  />
+                  <YAxis dataKey="groupedBy" type="category" scale="band" />
                   <Tooltip />
                   <Legend />
-                  <Bar name="Sales" dataKey="sales" fill="#FDAB0F" />
-                  <Bar name="Returns" dataKey="returns" fill="#A20134" />
+                  <Bar dataKey="returns" stackId="a" fill="#A20134" />
                   <Bar
-                    name="Target Sales"
                     dataKey="targetSales"
-                    radius={[0, 5, 5, 0]}
+                    // radius={[0, 5, 5, 0]}
+                    stackId="a"
                     fill="#A344B7"
+                  />
+                  <Bar
+                    dataKey="sales"
+                    radius={[0, 5, 5, 0]}
+                    stackId="a"
+                    fill="#FDAB0F"
                   />
                 </BarChart>
               </ResponsiveContainer>
+
               <div className="tableDetals">
                 <table className="table">
                   <thead>
@@ -198,20 +219,49 @@ const SKUDetailView = (props) => {
                   </thead>
                   <tbody>
                     {analytics.map((analytic, index) => (
-                      <tr key={index}>
-                        <td scope="row">
-                          <span
-                            className="stateLink"
-                            onClick={() => setIsActive(!isActive)}
-                          >
-                            {analytic.groupedBy}
-                          </span>
-                        </td>
-                        <td>{analytic.sales.toLocaleString('en-IN')}</td>
-                        <td>{analytic.returns.toLocaleString('en-IN')}</td>
-                        <td>{analytic.targetSales.toLocaleString('en-IN')}</td>
-                        <td>{analytic.actualReturns}%</td>
-                      </tr>
+                      <>
+                        <tr key={index}>
+                          <td scope="row">
+                            <span
+                              className="stateLink"
+                              onClick={() => {
+                                if (isActive)
+                                  getAnalyticsByType(analytic.groupedBy, index);
+                                else {
+                                  setIsActive(!isActive);
+                                  setDText('District');
+                                }
+                              }}
+                              // onClick={() => { setIsActive(!isActive); setDText('District'); }}
+                            >
+                              {analytic.groupedBy}
+                            </span>
+                          </td>
+                          <td>{analytic.sales.toLocaleString('en-IN')}</td>
+                          <td>{analytic.returns.toLocaleString('en-IN')}</td>
+                          <td>
+                            {analytic.targetSales.toLocaleString('en-IN')}
+                          </td>
+                          <td>
+                            {!isNaN(analytic.actualReturns)
+                              ? analytic.actualReturns
+                              : 0}
+                            %
+                          </td>
+                        </tr>
+                        {arrIndex === index &&
+                          subAnalytics?.map((sub, i) => (
+                            <tr key={i}>
+                              <td scope="row">{sub._id}</td>
+                              <td scope="row">&nbsp;</td>
+                              <td scope="row">
+                                {sub.returns.toLocaleString('en-IN')}
+                              </td>
+                              <td scope="row">&nbsp;</td>
+                              <td scope="row">&nbsp;</td>
+                            </tr>
+                          ))}
+                      </>
                     ))}
                   </tbody>
                 </table>

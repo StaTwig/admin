@@ -106,6 +106,7 @@ const Analytics = (props) => {
 
   function selectModule(module){
     setSKU('');
+    setProp({});
     if (module === "ANNUALREPORT_DASHBOARD") {
       setannualReportButton("btn active"); 
       setInventoryButton("btn");
@@ -125,12 +126,15 @@ const Analytics = (props) => {
   }
   const changeView = (event) => {
     setSKU('');
+    setProp({});
     setState('');
     setParams({});
     setDistrict('');
     setSelectedViewCode(event.target.value);
   }
   const onViewChange = (viewCode, props) => {
+    setSKU('');
+    setProp({});
     setProp(props);
     setSelectedViewCode(viewCode);
   }
@@ -150,6 +154,7 @@ const Analytics = (props) => {
 
   const resetFilters = () => {
     setSKU('');
+    setProp({});
     setState('');
     setDistrict('');
     setIsActive('');

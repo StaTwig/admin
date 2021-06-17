@@ -54,6 +54,7 @@ class Profile extends React.Component {
       warehouseAddress_secondline: "",
       warehouseAddress_state: "",
       title: "",
+      warehouseLocByOrg: [],
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -106,7 +107,6 @@ class Profile extends React.Component {
         warehouseAddress_zipcode,
         warehouseAddress_secondline,
         warehouseAddress_state,
-
         title,
       });
     } else {
@@ -124,8 +124,10 @@ class Profile extends React.Component {
       this.setState({
         wareIds: wareHouseIdResult,
         warehouseLocations: wareHouseAddresses,
+        warehouseLocByOrg:wareHouseAddresses
       });
-
+      console.log(this.state.warehouseLocByOrg,"warehouseLocByOrg");
+      // warehouseLocByOrg.push(this.state.warehouseLocations);
       this.state.warehouseLocations.map((id)=>{
         this.state.warehouseLocations= this.state.warehouseLocations.filter((data)=>response.data.data.warehouseId.includes(data.id));
       })
@@ -408,7 +410,7 @@ class Profile extends React.Component {
                                 size="" //for other size's use `modal-lg, modal-md, modal-sm`
                               >
                                 <PopUpLocation
-                                  wareHouses={this.state.warehouseLocations}
+                                  wareHouses={this.state.warehouseLocByOrg}
                                 />
                               </Modal>
                             )}

@@ -211,7 +211,21 @@
   padding: 0.5rem 0.3rem;
   
 }
- 
+
+.required-field::after {
+  content: "*";
+  color: red;
+  margin-left:2px;
+}
+.css-yk16xz-control
+{
+  border : none !important;
+  outline: none;
+}
+ .css-1okebmr-indicatorSeparator
+ {
+   display:none;
+ }
 
 /* .btn{
       width: 60px;

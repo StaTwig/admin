@@ -28,6 +28,14 @@ export const getShippingOrderIds = async () => {
     return [];
   }
 };
+export const fetchAllairwayBillNumber = async () => {
+  try {
+    const result = await axios.get(config().fetchairwayBillNumber);
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
 
 export const getShippingOrderById = async (id) => {
   try {

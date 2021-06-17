@@ -31,22 +31,33 @@ const TrackContainer = props => {
     
     dispatch(turnOff());
     if (result.status == 200) {
-      setPoChainOfCustodyData(result.data.data.poDetails);
       var arr = [];
       var finalArr = [];
-      if (result.data.data.poDetails) {
-        arr = result.data.data.poDetails;
-        arr["shipmentUpdates"] = [{
-          // status: result.data.data.poDetails.poStatus,
-          status: 'RECEIVED',
-          products: result.data.data.poDetails.products,
-          updatedOn: moment(result.data.data.poDetails.lastUpdatedOn).format('DD/MM/YYYY hh:mm'),
-          isOrder: 1
-        }];
-        finalArr = [arr].concat(result.data.data.inwardShipmentsArray).concat([result.data.data.trackedShipment]).concat(result.data.data.outwardShipmentsArray);
+      if (result.data.data?.poDetails) {
+        if (!!Object.keys(result.data.data?.poDetails).length) {
+          setPoChainOfCustodyData(result.data.data?.poDetails);
+          arr = result.data.data.poDetails;
+          console.log(result.data.data.poDetails.poStatus);
+        
+          arr["shipmentUpdates"] = [{
+            // status: result.data.data.poDetails.poStatus,
+            status: 'RECEIVED',
+            products: result.data.data.poDetails.products,
+            updatedOn: moment(result.data.data.poDetails.lastUpdatedOn).format('DD/MM/YYYY hh:mm'),
+            isOrder: 1
+          }];
+          if (result.data.data?.trackedShipment?.length)
+            finalArr = [arr].concat(result.data.data.inwardShipmentsArray).concat(result.data.data.trackedShipment).concat(result.data.data.outwardShipmentsArray);
+          else
+            finalArr = [arr].concat(result.data.data.inwardShipmentsArray).concat(result.data.data.outwardShipmentsArray);
+        }
       }
-      else if(result.data.data.trackedShipment)
-        finalArr = result.data.data.inwardShipmentsArray.concat([result.data.data.trackedShipment]).concat(result.data.data.outwardShipmentsArray)
+      
+      if (finalArr.length == 0) {
+        if (result.data.data?.trackedShipment?.length)
+          finalArr = result.data.data.inwardShipmentsArray.concat(result.data.data.trackedShipment).concat(result.data.data.outwardShipmentsArray);
+      }
+      
       setShippmentChainOfCustodyData(finalArr);
     }else{
       setPoChainOfCustodyData([]);

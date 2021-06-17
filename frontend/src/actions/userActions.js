@@ -46,6 +46,14 @@ export const getOrganizationsTypewithauth = async (data) => {
     return [];
   }
 };
+export const verifyEmailAndPhoneNo = async (data) => {
+  try {
+    const result = await axios.get(`${config().emailverify}?${data}`);
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
 
 export const checkUser = async data => {
   try {

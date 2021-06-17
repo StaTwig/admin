@@ -12,20 +12,40 @@ import TableFilter from './tablefilter.js';
 import ExportIcon from '../../assets/icons/Export.svg';
 import dropdownIcon from '../../assets/icons/drop-down.svg';
 import {GetEOLInfoBySerialNumber} from '../../actions/eolAction';
-import {GetEOLInfoByProductId} from '../../actions/eolAction';
+import {GetEOLInfoByProductId, getEOLInfo} from '../../actions/eolAction';
 import {GetEOLInfoByIdentityId} from '../../actions/eolAction';
-import {GetEOLInfoByPlaceAdministered} from '../../actions/eolAction';
+import {GetEOLInfoByPlaceAdministered, getProductsByWarehouse} from '../../actions/eolAction';
 import {GetEOLListByDateWindow} from '../../actions/eolAction';
+import {getRegions,  GetCountriesFromWarehouses, GetStatesFromWarehouses, GetCitiesFromWarehouses, GetWarehousesWithCity} from '../../actions/inventoryActions';
+
 import Table from './table'
 const lastMile=(props)=>{
-    const [region,setRegion]= useState('Select Region')
-    const [regions,setRegions]= useState([])
-    const [country,setCountry] = useState('Select Country')
-    const [state,setstate] = useState('Select State')
-    const [district,setdistrict] = useState('Select District')
-    const [location,setlocation] = useState('Select Location')
-    const [product,setproduct] = useState('Select Product')
+    const dispatch = useDispatch();
+    // var lastmile = props.lastMile;
+    const lastMileCount = useSelector(state => {
+        return state.lastMileCount;
+      });
+
+    const [region,setRegion]= useState('')
+    const [regions,setRegions]= useState(['Asia'])
+    const [country,setCountry] = useState('')
+    const [state,setstate] = useState('')
+    const [states,setStates] = useState([])
+    const [cities,setCities] = useState([])
+    const [district,setdistrict] = useState('')
+    const [location,setlocation] = useState('')
+    const [locations,setLocations] = useState('')
+    const [product,setproduct] = useState('')
+    const [products,setProducts] = useState([])
     const [countries,setCountries] = useState([])
+    const [Address, setAddress] = useState('')
+    const [countryId,setcountryId] = useState('')
+    const [locationCountry,setlocationCountry] = useState('')
+    const [locationState,setlocationState] = useState('')
+    const [locationName,setlocationName] = useState('')
+    const [limit, setLimit] = useState(10);
+    const [warehouseTitle,setwarehouseTitle] = useState('')
+    const [skip, setSkip] = useState(0);
     const headers = {
         coloumn1: 'Beneficiary Details',
         coloumn2: 'ID Proof',
@@ -39,15 +59,125 @@ const lastMile=(props)=>{
         img4: <img src={Product} width="20" height="22" className="pb-1"/>,
         img5: <img src={Date_time} width="19" height="22" className="pb-1"/>,
       };
+
+      function cardFill(obj){
+            setwarehouseTitle(JSON.stringify(obj.productAdministeredInfo[0].locationInfo.warehouseTitle))
+            setlocationCountry(obj.eol_info.contact_address.country)
+            setlocationState(obj.eol_info.contact_address.state)
+            setlocationName(obj.eol_info.contact_address.firstLine+ " " + obj.eol_info.contact_address.secondLine)
+            setAddress(obj.eol_info.contact_address.firstLine+ " " + obj.eol_info.contact_address.secondLine+ " " + obj.eol_info.contact_address.landmark + " " +obj.eol_info.contact_address.state + " " + obj.eol_info.contact_address.country + " "+obj.eol_info.contact_address.zipcode)
+      }
 useEffect(()=>{
     async function fetchData(){
+        // setLastMile(props)
         const eol_ProductID = await GetEOLInfoByProductId("pro123456");
+        // const regions = await getRegions();
+        // console.log(regions.data[0].country)
+        // setCountries(regions.data[0].country)
+        // const statess = await dispatch(getAllStates());
+        // console.log(statess)
+
         //console.log(eol_ProductID);
     }
     fetchData();
 },[]);
       
+const onPageChange = async (pageNum) => {
+    console.log("onPageChange =========>", pageNum)
+    const recordSkip = (pageNum-1)*limit;
+    setSkip(recordSkip);
+    dispatch(getEOLInfo(recordSkip, limit, product, country, state, district, location)); 
+  };
 
+  const onFilter = async (type, item) =>{
+    if(type === 'region'){
+        console.log(region)
+        const countries = await GetCountriesFromWarehouses(item)
+        let arr = [];
+        setstate('')
+        setlocation('')
+        setproduct('')
+        countries.data.forEach(element => {
+            if(element._id)
+            arr.push(element._id)
+        });
+        setCountries(arr);
+        setCountry('')
+        setdistrict('')
+        // dispatch(getEOLInfo(0, 10, product, country, state, district, location, region)); 
+
+    }
+    if(type === 'country'){
+        console.log(region)
+        const states = await GetStatesFromWarehouses(item)
+        let arr = [];
+        const country = item;
+        states.data.forEach(element => {
+            if(element._id)
+            arr.push(element._id)
+        });
+        setStates(arr)
+        setstate('')
+        setlocation('')
+        setproduct('')
+        setdistrict('')
+
+        dispatch(getEOLInfo(0, 10, country, state, district, location, product,region)); 
+
+    }
+    if(type === 'state'){
+        const cities = await GetCitiesFromWarehouses(item)
+        let arr = [];
+        const state = item;
+        cities.data.forEach(element => {
+            if(element._id)
+            arr.push(element._id)
+        });
+        setCities(arr)
+        setlocation('')
+        setproduct('')
+        setdistrict('')
+        // console.log(country, state, district, location, product,region);
+        dispatch(getEOLInfo(0, 10, country, state, district, location, product,region)); 
+
+    }
+    if(type === 'city'){
+        const cities = await GetWarehousesWithCity(item)
+        let arr = [];
+        const district = item;
+        cities.data.forEach(element => {
+            if(element._id)
+            arr.push(element._id)
+        });
+        setLocations(arr)
+        setlocation('')
+        setproduct('')
+        // console.log(country, state, district, location, product,region);
+        dispatch(getEOLInfo(0, 10, country, state, district, location, product,region)); 
+
+    }
+    if(type === 'location'){
+        const products = await getProductsByWarehouse(item)
+        console.log(products)
+        let arr = [];
+        const location = item;
+        products.data.forEach(element => {
+            if(element._id)
+            arr.push(element._id)
+        });
+        setProducts(arr)
+        setproduct('')
+
+        // console.log(country, state, district, location, product,region);
+        dispatch(getEOLInfo(0, 10, country, state, district, location, product,region)); 
+
+    }
+    if(type === 'product'){
+        const product = item;
+        dispatch(getEOLInfo(0, 10, country, state, district, location, product,region)); 
+
+    }
+  }
   
 return (
       
@@ -72,7 +202,7 @@ return (
       </div>
       </div>
       <div className="ribben-space" style={{width:"76%"}}>
-      <Table {...props}/>
+      <Table {...props} cardFill={cardFill} lastMile={props.lastMile} count={lastMileCount} onPageChange={onPageChange}/>
       </div>
 
       </div>
@@ -85,8 +215,12 @@ return (
                   <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">Region</label>
                     <div className="form-control col">
                         <DropdownButton
-                               name={region}
-                               
+                               name={region===''?'Region':region}
+                               groups={regions}
+                               onSelect={item => {
+                                setRegion(item)
+                                onFilter("region", item);
+                              }}
                         />
                     </div>
                 </div>
@@ -94,7 +228,12 @@ return (
                     <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">Country</label>
                     <div className="form-control col">
                         <DropdownButton
-                             name={country}
+                             name={country===''?'Select Country':country}
+                             groups={countries}
+                             onSelect={item => {
+                                setCountry(item)
+                                onFilter("country", item);
+                              }}
                         />
                     </div>
                 </div>
@@ -102,15 +241,25 @@ return (
                     <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">State</label>
                     <div className="form-control col">
                         <DropdownButton
-                             name={state}
+                             name={state===''?'Select state':state}
+                             groups={states}
+                             onSelect={item => {
+                                setstate(item)
+                                onFilter("state", item);
+                              }}
                         />
                     </div>
                 </div>
                 <div className="form-group row mr-1">
-                    <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">District</label>
+                    <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">City</label>
                     <div className="form-control col">
                         <DropdownButton
-                             name={district}
+                             name={district===''?'Select district':district}
+                             groups={cities}
+                             onSelect={item => {
+                                setdistrict(item)
+                                onFilter("city", item);
+                              }}
                         />
                     </div>
                 </div>
@@ -118,7 +267,12 @@ return (
                     <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">Location</label>
                     <div className="form-control col">
                         <DropdownButton
-                             name={location}
+                             name={location===''?'Select location': location}
+                             groups={locations}
+                             onSelect={item => {
+                                setlocation(item)
+                                onFilter("location", item);
+                              }}
                         />
                     </div>
                 </div>
@@ -126,8 +280,12 @@ return (
                     <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">Product</label>
                     <div className="form-control col">
                         <DropdownButton
-                            name={product}
-                           
+                            name={product===''?'Select Product':product}
+                            groups={products}
+                            onSelect={item => {
+                               setproduct(item)
+                               onFilter("product", item);
+                             }}
                         />
                     </div>
                 </div>
@@ -135,27 +293,27 @@ return (
               <div className="mainsearchwarehouse">
                
                 <div className=" panel  mb-3 searchpanel">
-                    <div>Warehouse Title</div>
-                    <div>
+                    <div>{warehouseTitle}</div>
+                    {/* <div>
                         <u>
                             <small>
                                 "wallet1234 Address"  
                                 &nbsp;
                             </small>
                         </u>
-                    </div>
+                    </div> */}
                 <div className="d-flex text-white mt-2 flex-row " >
                     <ul className="mr-3 text-light">
-                        <li className="mb-1">Country ID</li>
+                        {/* <li className="mb-1">Country ID</li> */}
                         <li className="mb-1">Country</li>
                         <li className="mb-1">Location</li>
                         <li className="mb-1">Location Name</li>
                     </ul>
                     <ul class="text-light">
-                        <li className="mb-1">{"123"}</li>
-                        <li className="mb-1">{"India"}</li>
-                        <li className="mb-1">{"TS"}</li>
-                        <li className="mb-1">{"Lumbini park"}</li>
+                        {/* <li className="mb-1">{countryId}</li> */}
+                        <li className="mb-1">{locationCountry}</li>
+                        <li className="mb-1">{locationState}</li>
+                        <li className="mb-1">{locationName}</li>
                     </ul>
                 </div>
                 </div>
@@ -165,7 +323,7 @@ return (
                         <div className="ml-2">Address</div>
 
                         </div>
-                        <div>JNIBF gachibowli,hyderabad,Telangana</div>
+                        <div>{Address}</div>
                     </div>
                 </div>
                 </div>

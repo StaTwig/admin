@@ -111,7 +111,7 @@ const ReviewOrder = props => {
             <div>
               <div className=" row p-3">
                 <div className="col row">
-                  <span className="col-4">Organisation Name12: </span>
+                  <span className="col-4">Organisation Name: </span>
                   <span className="col" style={{color: "black",fontSize:"14px"}} >{order.fromOrgId}</span>
                 </div>
                 <div className="col row">
