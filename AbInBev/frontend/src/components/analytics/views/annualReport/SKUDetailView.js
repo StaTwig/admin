@@ -190,18 +190,23 @@ const SKUDetailView = (props) => {
                   <YAxis dataKey="groupedBy" type="category" scale="band" />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="returns" stackId="a" fill="#A20134" />
                   <Bar
-                    dataKey="targetSales"
-                    // radius={[0, 5, 5, 0]}
-                    stackId="a"
-                    fill="#A344B7"
-                  />
-                  <Bar
+                    name="Sales"
                     dataKey="sales"
                     radius={[0, 5, 5, 0]}
-                    stackId="a"
                     fill="#FDAB0F"
+                  />
+                  <Bar
+                    name="Returns"
+                    dataKey="returns"
+                    fill="#A20134"
+                    radius={[0, 5, 5, 0]}
+                  />
+                  <Bar
+                    name="Target Sales"
+                    dataKey="targetSales"
+                    fill="#A344B7"
+                    radius={[0, 5, 5, 0]}
                   />
                 </BarChart>
               </ResponsiveContainer>

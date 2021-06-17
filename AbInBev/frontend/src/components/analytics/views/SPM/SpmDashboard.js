@@ -43,10 +43,11 @@ const SpmDashboard = (props) => {
               <>
                 <tr
                   key={index}
-                  className={`${selectedRatingIndex === index
-                    ? 'selectedRow noBottomRadius'
-                    : ''
-                    }`}
+                  className={`${
+                    selectedRatingIndex === index
+                      ? 'selectedRow noBottomRadius'
+                      : ''
+                  }`}
                 >
                   <td scope="row">{index + 1}</td>
                   <td>
@@ -56,7 +57,15 @@ const SpmDashboard = (props) => {
                       </div>
                       <div className="profileName">
                         <span className="profileTitle">{perf.name}</span>
-                        <label className="badge-purple">{perf.type}</label>
+                        <label
+                          className={`
+                            ${perf.type === 'S1' ? 'boldGreen' : ''}
+                            ${perf.type === 'S2' ? 'boldPurple' : ''}
+                            ${perf.type === 'S3' ? 'boldblue' : ''}
+                          `}
+                        >
+                          {perf.type}
+                        </label>
                       </div>
                     </div>
                   </td>
@@ -94,7 +103,13 @@ const SpmDashboard = (props) => {
                                     <span className="profileTitle">
                                       {perf.name}
                                     </span>
-                                    <label className="badge-purple">
+                                    <label
+                                      className={`
+                            ${perf.type === 'S1' ? 'boldGreen' : ''}
+                            ${perf.type === 'S2' ? 'boldPurple' : ''}
+                            ${perf.type === 'S3' ? 'boldblue' : ''}
+                          `}
+                                    >
                                       {perf.type}
                                     </label>
                                     <label>
@@ -152,8 +167,8 @@ const SpmDashboard = (props) => {
                               <td scope="row">Lead Time</td>
                               <td>
                                 {perf.leadTime &&
-                                  perf.leadTime[0] &&
-                                  perf.leadTime[0].avgLeadTime
+                                perf.leadTime[0] &&
+                                perf.leadTime[0].avgLeadTime
                                   ? perf.leadTime[0].avgLeadTime
                                   : 0}
                               </td>
@@ -161,31 +176,30 @@ const SpmDashboard = (props) => {
                               <td></td>
                             </tr>
                             <tr>
-                              <td scope="row">Storage Capacity
-                              <br />
+                              <td scope="row">
+                                Storage Capacity
+                                <br />
                                 <span className="subTitle">Sqft</span>
                               </td>
                               <td>
                                 {perf.storageCapacity.bottleCapacity}
                                 <br />
-                                <span className="subTitle">{perf.storageCapacity.sqft}</span>
+                                <span className="subTitle">
+                                  {perf.storageCapacity.sqft}
+                                </span>
                               </td>
                               <td></td>
                               <td></td>
                             </tr>
                             <tr>
                               <td scope="row">Dirty Bottles</td>
-                              <td>
-                                {perf.dirtyBottles}
-                              </td>
+                              <td>{perf.dirtyBottles}</td>
                               <td></td>
                               <td></td>
                             </tr>
                             <tr>
                               <td scope="row">Breakage</td>
-                              <td>
-                                {perf.breakage}
-                              </td>
+                              <td>{perf.breakage}</td>
                               <td></td>
                               <td></td>
                             </tr>
