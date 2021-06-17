@@ -20,7 +20,7 @@ import useOnclickOutside from 'react-cool-onclickoutside';
 import { config } from "../../config";
 import Modal from "../modal/index";
 import FailedPopUp from "../PopUp/failedPopUp";
-import {getShippingOrderIds} from "../../actions/shippingOrderAction";
+import {getShippingOrderIds,fetchAllairwayBillNumber} from "../../actions/shippingOrderAction";
 import { getOrderIds} from "../../actions/poActions";
 //import Badge from '@material-ui/core/Badge';
 //import MailIcon from '@material-ui/icons/Mail';
@@ -30,6 +30,7 @@ import { getOrderIds} from "../../actions/poActions";
 //import ListItemText from '@material-ui/core/ListItemText';
 import Select from '@material-ui/core/Select';
 import DropdownButton from "../../shared/dropdownButtonGroup";
+import { resetShipments } from '../../actions/shipmentActions';
 
 
 const Header = props => {
@@ -41,6 +42,8 @@ const Header = props => {
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [orderIds, setOrderIds] = useState([]);
+  const [airWayBillNo,setairWayBillNo] = useState([]);
+  const [airWayBillNowithshipmentID,setairWayBillNowithshipmentID] = useState([]);
   const [shippingIds, setShippingIds] = useState([]);
   const [wareHouse, setWareHouse]= useState({});
   const [selectLocation, setSelectLocation] = useState("");
@@ -62,22 +65,25 @@ const ref = useOnclickOutside(() => {
     async function getIds(){
       const resultShippingIds = await getShippingOrderIds();
       const resultOrderIds = await getOrderIds();
+      const resultAirwayBillNo = await fetchAllairwayBillNumber();
+      setairWayBillNowithshipmentID(resultAirwayBillNo.data);
+
       setOrderIds(resultOrderIds.map((so)=>so.id));
       setShippingIds(resultShippingIds.map((so)=>so.id));
+      setairWayBillNo(resultAirwayBillNo.data.map((so)=>so.airWayBillNo))
     }
-
     getIds();
   }, []);
-
+        // console.log(airWayBillNowithshipmentID.data);
   const onSeach = () => {
-    console.log('Check');
-    // console(context);
-    console.log(orderIds);
-    console.log(orderIds.indexOf(search));
     if(orderIds.indexOf(search)!=-1)
     props.history.push(`/vieworder/${search}`);
     else if(shippingIds.indexOf(search)!=-1)
     props.history.push(`/viewshipment/${search}`);
+    else if(airWayBillNo.indexOf(search)!=-1){
+      let index = airWayBillNo.indexOf(search);
+      props.history.push(`/viewshipment/${airWayBillNowithshipmentID[index].id}`)
+    }
     else
     setInvalidSearch(true);
   };
@@ -126,9 +132,9 @@ const imgs = config().fetchProfileImage;
           <input
             type="text"
             // value={search}
-            placeholder="Search by PO ID/Shipment ID/ Product ID"
+            placeholder="Search PO ID/ Shipment ID/ Airway Bill No."
             onFocus={(e) => e.target.placeholder = ''}
-            onBlur={(e) => e.target.placeholder = 'Search PO ID/ Shipment ID/ Product ID'}
+            onBlur={(e) => e.target.placeholder = 'Search PO ID/ Shipment ID/ Airway Bill No.'}
             onChange={onSearchChange}
             className= "form-control search-field"
           />

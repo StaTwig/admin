@@ -900,7 +900,7 @@ exports.getStatsByBrand = [
 					}
 				}
 				arr.products.push(product.product);
-				if (index == Products.length - 1) 
+				if (index == Products.length - 1)
 					Analytics.push(arr);
 			}
 			return apiResponse.successResponseWithData(
@@ -1173,7 +1173,7 @@ exports.getStatsByOrgType = [
 			);
 		} catch (err) {
 			console.log(err);
-			
+
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
@@ -1638,6 +1638,43 @@ exports.getSupplierPerformance = [
 			const supplierOrgs = await OrganisationModel.aggregate([
 				{
 					$match: matchCondition
+				},
+				{
+					$lookup: {
+						from: 'employees',
+						localField: 'id',
+						foreignField: 'organisationId',
+						as: 'employeeDetails'
+					}
+				},
+				{
+					$project: {
+						"postalAddress": 1,
+						"region": 1,
+						"country": 1,
+						"location": 1,
+						"warehouses": 1,
+						"supervisors": 1,
+						"warehouseEmployees": 1,
+						"primaryContactId": 1,
+						"name": 1,
+						"id": 1,
+						"type": 1,
+						"status": 1,
+						"configuration_id": 1,
+						"typeId": 1,
+						"createdAt": 1,
+						"updatedAt": 1,
+						"affiliations": 1,
+						"employeeDetails": { "$arrayElemAt": ["$employeeDetails", 0] }
+					}
+				},
+				{
+					$replaceRoot: {
+						newRoot: {
+							$mergeObjects: ['$employeeDetails', '$$ROOT']
+						}
+					}
 				}
 			]);
 

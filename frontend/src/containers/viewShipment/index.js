@@ -6,25 +6,25 @@ import {trackProduct, getViewShipment} from "../../actions/shipmentActions";
 import { useDispatch, useSelector } from 'react-redux';
 import { chainOfCustody, updateStatus, fetchImage } from "../../actions/shipmentActions";
 const ViewShipmentContainer = props => {
-  const[trackData,setTrackData]=useState({});
+const[trackData,setTrackData]=useState({});
 const [shippmentChainOfCustodyData, setShippmentChainOfCustodyData] = useState([]);
 const [imagesData, setImagesData] = useState([]);
 const dispatch = useDispatch();
-   useEffect(() => {
-    async function fetchData() {
-      const result = await dispatch(getViewShipment(props.match.params.id));
-      console.log('Test');
-      console.log(result);
-       if (result)
-       {
+    useEffect(() => {
+      async function fetchData() {
+        const result = await dispatch(getViewShipment(props.match.params.id));
+        console.log('Test');
         console.log(result);
-       setTrackData(result);
-       }else{
-         setTrackData({});
-       }
-}
-    fetchData();
-  },[]);
+        if (result)
+        {
+          console.log(result);
+        setTrackData(result);
+        }else{
+          setTrackData({});
+        }
+  }
+      fetchData();
+    },[]);
 
  useEffect(() => {
     async function fetchData() {
