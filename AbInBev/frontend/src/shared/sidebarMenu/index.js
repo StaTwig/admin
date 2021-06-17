@@ -16,7 +16,7 @@ const SideBar = ({ match, location }) => {
   return (
     <div className="sidebar">
       <ul>
-        <li className={url === "/overview" ? "active" : ""}>
+        {/* <li className={url === "/overview" ? "active" : ""}>
           <Link to="/overview">
             <img
               src={url === "/overview" ? HomeSelectedIcon : HomeIcon}
@@ -24,7 +24,7 @@ const SideBar = ({ match, location }) => {
             />
             <span className="pt-2 text-center">Overview</span>
           </Link>
-        </li>
+        </li> */}
         <li
           className={
             url === "/address" || url === "/newaddress" ? "active" : ""

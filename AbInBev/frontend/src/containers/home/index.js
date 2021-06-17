@@ -11,7 +11,7 @@ const HomeContainer = (props) => {
 
   useEffect(() => {
     if (user) {
-      props.history.push("/overview");
+      props.history.push("/analytics");
     }
   }, []);
 

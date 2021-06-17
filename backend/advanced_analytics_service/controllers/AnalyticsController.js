@@ -79,6 +79,37 @@ async function getReturns( analytics, from, to, warehouseIds) {
 	};
 }
 
+async function getReturnsByExternalId(externalId, from, to, orgIds) {
+	let b_arr = [];
+	const breweries = await OrganisationModel.find({ "type": 'BREWERY', "status": "ACTIVE" }, 'id');
+	for (let b of breweries)
+		b_arr.push(b.id);
+	
+	let quantity = 0;
+	const Products = await ProductModel.find({ externalId: externalId });
+	for (const prod of Products) {
+		let params = {
+			'receiver.id': { $in: b_arr },
+			'products.productID': prod.id,
+			'supplier.id': {$in: orgIds},
+			'status': 'RECEIVED',
+			createdAt: {
+				$lte: new Date(to),
+				$gte: new Date(from),
+			},
+		}
+	
+		const shipments = await ShipmentModel.find(params);
+		for (const Shipment of shipments) {
+			for (let product in Shipment.products) 
+				if (Shipment['products'][product].productID == params['products.productID'])
+					quantity += Shipment['products'][product].productQuantityDelivered;
+		}
+	}
+	
+	return quantity;
+}
+
 async function getOnlyReturns( prod_id, from, to, warehouseIds) {
 	let b_arr = [];
 	const breweries = await OrganisationModel.find({ "type": 'BREWERY', "status": "ACTIVE" }, 'id');
@@ -826,7 +857,7 @@ exports.getStatsByBrand = [
 						sales: { $sum: "$sales" },
 						targetSales: { $sum: "$targetSales" },
 						returns: { $sum: "$returns" },
-						product: { "$first": { "productName": "$productName", "productSubName": "$productSubName", "productId": "$productId", "externalId": "$productId" } }
+						product: { "$first": { "productName": "$productName", "manufacturer": '$brand', "productSubName": "$productSubName", "productId": "$productId", "externalId": "$productId" } }
 					}
 				},
 				{ $sort: { "_id.manufacturer": 1 } }
@@ -1047,7 +1078,67 @@ exports.getStatsByOrgType = [
 	async function (req, res) {
 		try {
 			const filters = req.query;
+			// const organizations = await OrganisationModel.aggregate([
+			// 	{
+			// 		$lookup: {
+			// 			from: 'warehouses',
+			// 			localField: 'id',
+			// 			foreignField: 'organisationId',
+			// 			as: 'warehouseDetails'
+			// 		}
+			// 	},
+			// 	// {
+			// 	// 	$unwind: {
+			// 	// 		path: '$warehouseDetails'
+			// 	// 	}
+			// 	// },
+			// 	{
+			// 		$lookup: {
+			// 			from: 'abinbevstaticdata',
+			// 			localField: 'warehouseDetails.warehouseAddress.city',
+			// 			foreignField: 'district',
+			// 			as: 'staticData'
+			// 		}
+			// 	},
+			// 	// {
+			// 	// 	$unwind: {
+			// 	// 		path: '$staticData'
+			// 	// 	}
+			// 	// },
+			// 	{
+			// 		$lookup: {
+			// 			from: 'advanced_analytics',
+			// 			localField: 'staticData.depot',
+			// 			foreignField: 'depot',
+			// 			as: 'aanalytics'
+			// 		}
+			// 	},
+			// 	// {
+			// 	// 	$unwind: {
+			// 	// 		path: '$aanalytics'
+			// 	// 	}
+			// 	// },
+			// 	{
+			// 		$match: {"aanalytics.productId": filters.sku, "staticData.district": filters.district}
+			// 	},
+			// 	{
+			// 		$group: {
+			// 			_id: { OrgType: '$type', product: "$aanalytics.productId" },
+			// 			sales: { $sum: "$aanalytics.sales" },
+			// 			targetSales: { $sum: "$aanalytics.targetSales" },
+			// 			returns: { $sum: "$aanalytics.returns" },
+			// 			// product: { "$first": { "productName": "$productName", "productSubName": "$productSubName", "productId": "$productId", "externalId": "$productId" } }
+					
+			// 			// analytic: { "$first": { "sales": "$aanalytics.sales", "targetSales": "$aanalytics.targetSales", "returns": "$aanalytics.returns", "externalId": "$aanalytics.productId" } }
+			// 		}
+			// 	}
+
+			// ]);
+
 			const organizations = await OrganisationModel.aggregate([
+				{
+					$match: { $or: [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }] }
+				},
 				{
 					$lookup: {
 						from: 'warehouses',
@@ -1057,54 +1148,23 @@ exports.getStatsByOrgType = [
 					}
 				},
 				{
-					$unwind: {
-						path: '$warehouseDetails'
-					}
-				},
-				{
-					$lookup: {
-						from: 'abinbevstaticdata',
-						localField: 'warehouseDetails.warehouseAddress.city',
-						foreignField: 'district',
-						as: 'staticData'
-					}
-				},
-				{
-					$unwind: {
-						path: '$staticData'
-					}
-				},
-				{
-					$lookup: {
-						from: 'advanced_analytics',
-						localField: 'staticData.depot',
-						foreignField: 'depot',
-						as: 'aanalytics'
-					}
-				},
-				{
-					$unwind: {
-						path: '$aanalytics'
-					}
-				},
-				{
-					$match: { "aanalytics.productId": filters.sku, "staticData.district": filters.district }
+					$match: { "warehouseDetails.warehouseAddress.city": filters.district }
 				},
 				{
 					$group: {
-						_id: { OrgType: '$type', product: "$aanalytics.productId" },
-						sales: { $sum: "$aanalytics.sales" },
-						targetSales: { $sum: "$aanalytics.targetSales" },
-						returns: { $sum: "$aanalytics.returns" },
-						// product: { "$first": { "productName": "$productName", "productSubName": "$productSubName", "productId": "$productId", "externalId": "$productId" } }
-
-						// analytic: { "$first": { "sales": "$aanalytics.sales", "targetSales": "$aanalytics.targetSales", "returns": "$aanalytics.returns", "externalId": "$aanalytics.productId" } }
+						_id: "$type",
+						orgIds: {
+							$addToSet: "$id"
+						}
 					}
 				}
-
 			]);
-			// for (let organization of organizations) 
-			// 	organization.analytics = aggregateSalesStats(organization.analytic);
+
+			if (organizations) {
+				// const warehouseIds = await _getWarehouseIdsByDistrict(filters.district);
+				for (const organization of organizations)
+					organization.returns = await getReturnsByExternalId(filters.sku, moment().startOf('month'), today, organization.orgIds);
+			}
 
 			return apiResponse.successResponseWithData(
 				res,
@@ -1799,9 +1859,11 @@ exports.getStatsBySKU = [
 			for (const analytic of Analytics) {
 				if (analytic.data) {
 					// let temp = aggregateSalesStats(analytic.data);
-					const wIds = await _getWarehouseIdsByDistrict(filters.district);
-					console.log(wIds);
-					
+					let wIds;
+					if (filters.group_by === 'district')
+						wIds = await _getWarehouseIdsByDistrict(analytic._id);
+					else
+						wIds = await _getWarehouseIdsByDistrict(filters.district);
 					let temp = await getReturns(analytic.data, moment().startOf('month'), today, wIds);
 					temp['groupedBy'] = (analytic._id.toString()).includes('GMT') ? monthNames[moment(analytic._id).tz("Etc/GMT").month()] : analytic._id;
 					response.push(temp);

@@ -24,9 +24,11 @@ const SKUDetailView = (props) => {
   const { states, brandsIconArr, brandsArr, brands } = props;
 
     const [analytics, setAnalytics] = useState([]);
+    const [subAnalytics, setSubAnalytics] = useState([]);
     const [prop, setProp] = useState(props.prop);
     const [isActive, setIsActive] = useState(false);
     const [name, setName] = useState(prop.name);
+    const [arrIndex, setArrIndex] = useState(-1);
     const [dText, setDText] = useState('State');
     const [shortName, setShortname] = useState(prop.shortName);
     const [image, setImage] = useState(prop.image);
@@ -60,11 +62,12 @@ const SKUDetailView = (props) => {
         })();
     }, [isActive, prop, props]);
   
-  const getAnalyticsByType = async(district) => {
+  const getAnalyticsByType = async (district, i) => {
+    setArrIndex(i);
     const result = await dispatch(getOrgTypeStats('?sku=' + (props.sku ? props.sku : prop.externalId) + "&district=" + district));
-    console.log(result);
+    console.log(result.data);
     
-    setAnalytics(result.data);
+    setSubAnalytics(result.data);
   }
 
   return (
@@ -167,14 +170,14 @@ const SKUDetailView = (props) => {
                       <YAxis dataKey="groupedBy" type="category" scale="band" />
                       <Tooltip />
                       <Legend />
-                      <Bar dataKey="sales" stackId="a" fill="#FDAB0F" />
                       <Bar dataKey="returns" stackId="a" fill="#A20134" />
                       <Bar
                         dataKey="targetSales"
-                        radius={[0, 5, 5, 0]}
+                        // radius={[0, 5, 5, 0]}
                         stackId="a"
                         fill="#A344B7"
                       />
+                      <Bar dataKey="sales" radius={[0, 5, 5, 0]} stackId="a" fill="#FDAB0F" />
                     </BarChart>
                   </ResponsiveContainer>
                 
@@ -197,8 +200,8 @@ const SKUDetailView = (props) => {
                           <td scope="row">
                             <span
                               className="stateLink"
-                              // onClick={() => { if (isActive) getAnalyticsByType(analytic.groupedBy); else { setIsActive(!isActive); setDText('District'); }}}
-                              onClick={() => { setIsActive(!isActive); setDText('District'); }}
+                              onClick={() => { if (isActive) getAnalyticsByType(analytic.groupedBy, index); else { setIsActive(!isActive); setDText('District'); }}}
+                              // onClick={() => { setIsActive(!isActive); setDText('District'); }}
                             >
                               {analytic.groupedBy}
                             </span>
@@ -208,9 +211,16 @@ const SKUDetailView = (props) => {
                           <td>{analytic.targetSales.toLocaleString('en-IN')}</td>
                           <td>{!isNaN(analytic.actualReturns) ? analytic.actualReturns : 0}%</td>
                         </tr>
-                        <tr>
-
-                        </tr>
+                        {arrIndex === index &&
+                        subAnalytics?.map((sub, i) => (
+                          <tr key={i}>
+                            <td scope="row">{sub._id}</td>
+                            <td scope="row">&nbsp;</td>
+                            <td scope="row">{sub.returns.toLocaleString('en-IN')}</td>
+                            <td scope="row">&nbsp;</td>
+                            <td scope="row">&nbsp;</td>
+                          </tr>
+                        ))}
                         </>
                       ))}
                     </tbody>

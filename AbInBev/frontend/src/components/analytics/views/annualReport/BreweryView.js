@@ -38,11 +38,11 @@ const BreweryView = (props) => {
             <div className="breweryCard">
               <h4 className="breweryTitle">{analytic.name}</h4>
               <h6 className="brewerySubtitle">&nbsp;</h6>
-              <p className="breweryLocationText">
+              {/* <p className="breweryLocationText">
                 {' '}
                 <i className="fa fa-map-marker breweryLoc"></i>{' '}
                 {analytic.postalAddress}
-              </p>
+              </p> */}
 
               <span className="breweryPropertyText">
                 Sales{' '}
