@@ -37,6 +37,7 @@ const DetailedGeographicalView = (props) => {
         if (p.month) qp += '&month=' + p.month;
         if (p.quarter) qp += '&quarter=' + p.quarter;
         if (p.state) qp += '&state=' + p.state;
+        if (p.district) qp += '&district=' + p.district;
 
         if (p.year && p.month) qp += '&date_filter_type=by_monthly';
         else if (p.year && p.quarter) qp += '&date_filter_type=by_quarterly';

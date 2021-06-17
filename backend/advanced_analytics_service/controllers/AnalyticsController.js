@@ -18,7 +18,161 @@ const S1_ORG = 'S1';
 const S2_ORG = 'S2';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
+var today = new Date()
+var lastWeek = new Date()
+lastWeek.setDate(today.getDate() - 7)
+var lastMonth = new Date()
+lastMonth.setDate(today.getDate() - 30)
+var lastYear = new Date()
+lastYear.setDate(today.getDate() - 365)
 
+var timeFrame = moment().subtract(1, 'months');
+
+async function getReturns( analytics, from, to) {
+	if (!analytics.length) {
+		return {
+			sales: 0,
+			targetSales: 0,
+			returns: 0,
+			actualReturns: 0
+		}
+	}
+	let b_arr = [];
+	const breweries = await OrganisationModel.find({ "type": 'BREWERY', "status": "ACTIVE" }, 'id');
+	for (let b of breweries)
+		b_arr.push(b.id);
+	
+	let quantity = 0;
+	const row = analytics[0];
+	const Products = await ProductModel.find({ externalId: row.productId, manufacturer: row.brand });
+	for (const prod of Products) {
+		let params = {
+			'receiver.id': { $in: b_arr },
+			'products.productID': prod.id,
+			'status': 'RECEIVED',
+			createdAt: {
+				$lte: new Date(to),
+				$gte: new Date(from),
+			},
+		}
+	
+		const shipments = await ShipmentModel.find(params);
+		for (const Shipment of shipments) {
+			for (let product in Shipment.products) 
+				if (Shipment['products'][product].productID == params['products.productID'])
+					quantity += Shipment['products'][product].productQuantityDelivered;
+		}
+	}
+	let sales = analytics.map(item => parseInt(item.sales) || 0).reduce((prev, next) => prev + next);
+	let targetSales = analytics.map(item => parseInt(item.targetSales) || 0).reduce((prev, next) => prev + next);
+	let returns = quantity;
+	let actualReturns = 0;
+	if (returns && sales) {
+		actualReturns = parseFloat(((returns / sales) * 100)).toFixed(2);
+	}
+	return {
+		sales: sales,
+		targetSales: targetSales,
+		returns: returns,
+		actualReturns: actualReturns
+	};
+}
+
+async function getOnlyReturns( prod_id, from, to) {
+	let b_arr = [];
+	const breweries = await OrganisationModel.find({ "type": 'BREWERY', "status": "ACTIVE" }, 'id');
+	for (let b of breweries)
+		b_arr.push(b.id);
+	
+	let quantity = 0;
+	let params = {
+		'receiver.id': { $in: b_arr },
+		'products.productID': prod_id,
+		'status': 'RECEIVED',
+		createdAt: {
+			$lte: new Date(to),
+			$gte: new Date(from),
+		},
+	}
+
+	const shipments = await ShipmentModel.find(params);
+	for (const Shipment of shipments) {
+		for (let product in Shipment.products) 
+			if (Shipment['products'][product].productID == params['products.productID'])
+				quantity += Shipment['products'][product].productQuantityDelivered;
+	}
+
+	return quantity;
+}
+
+async function getReturnsOrg(org, analytics) {
+	if (!analytics.length) {
+		return {
+			sales: 0,
+			targetSales: 0,
+			returns: 0,
+			actualReturns: 0
+		}
+	}
+	let b_arr = [];
+	const breweries = await OrganisationModel.find({ "type": 'BREWERY', "status": "ACTIVE" }, 'id');
+	for (let b of breweries)
+		b_arr.push(b.id);
+	
+	let quantity = 0;
+	if (org.type != 'BREWERY') {
+		const row = analytics[0];
+		const Products = await ProductModel.find({ externalId: row.productId, manufacturer: row.brand });
+		for (const prod of Products) {
+			let params = {
+				'receiver.id': { $in: b_arr },
+				'supplier.id': org.id,
+				'products.productID': prod.id,
+				'status': 'RECEIVED',
+				createdAt: {
+					$lte: today,
+					$gte: new Date(timeFrame),
+				},
+			}
+		
+			const shipments = await ShipmentModel.find(params);
+			for (const Shipment of shipments) {
+				for (let product in Shipment.products)
+					if (Shipment['products'][product].productID == params['products.productID'])
+						quantity += Shipment['products'][product].productQuantityDelivered;
+			}
+		}
+	}
+	else {
+		const shipments = await ShipmentModel.find({
+			'receiver.id': org.id,
+			'status': 'RECEIVED',
+			createdAt: {
+				$lte: today,
+				$gte: new Date(timeFrame),
+			}
+		});
+		for (const Shipment of shipments) {
+			for (let product in Shipment.products)
+				quantity += Shipment['products'][product].productQuantityDelivered;
+		}
+	}
+	let sales = analytics.map(item => parseInt(item.sales) || 0).reduce((prev, next) => prev + next);
+	let targetSales = analytics.map(item => parseInt(item.targetSales) || 0).reduce((prev, next) => prev + next);
+	// let returns = analytics.map(item => parseInt(item.returns) || 0).reduce((prev, next) => prev + next);
+	let returns = quantity;
+	let actualReturns = 0;
+	if (returns && sales) {
+		actualReturns = parseFloat(((returns / sales) * 100)).toFixed(2);
+	}
+	return {
+		sales: sales,
+		targetSales: targetSales,
+		returns: returns,
+		actualReturns: actualReturns
+	};
+	
+}
 
 async function calculatePrevReturnRates(filters, analytic) {
 
@@ -649,6 +803,8 @@ exports.getStatsByBrand = [
 			let Analytics = [];
 			let arr = {};
 			let prevBrand = '';
+			const lastMonthStart = moment().subtract(1, 'months').startOf('month').format(DATE_FORMAT);
+			const lastMonthEnd = moment().subtract(1, 'months').endOf('month').format(DATE_FORMAT);
 
 			for (const [index, product] of Products.entries()) {
 				if (prevBrand != product._id.manufacturer) {
@@ -671,9 +827,10 @@ exports.getStatsByBrand = [
 						p['sales'] = product.sales;
 						p['targetSales'] = parseInt(product.targetSales);
 						p['productId'] = product._id.id;
-						p['returns'] = product.returns;
-						p['returnRate'] = parseFloat(((parseInt(product.returns) / parseInt(product.sales)) * 100)).toFixed(2);
-						p['returnRatePrev'] = await calculatePrevReturnRatesNew(filters, product);
+						p['returns'] = await getOnlyReturns(prod.id, moment().startOf('month'), today);
+						p['returnRate'] = parseFloat(((parseInt(p['returns']) / parseInt(product.sales)) * 100)).toFixed(2);
+						// p['returnRatePrev'] = await calculatePrevReturnRatesNew(filters, product);
+						p['returnRatePrev'] = await getOnlyReturns(prod.id, lastMonthEnd, lastMonthStart);
 						product.product = p;
 					}
 				}
@@ -791,7 +948,7 @@ exports.getSalesStatsByBrand = [
  * @returns {Object}
  */
 exports.getStatsByOrg = [
-	auth,
+	// auth,
 	async function (req, res) {
 		try {
 			const filters = req.query;
@@ -808,7 +965,9 @@ exports.getStatsByOrg = [
 						$match: analyticsFilter
 					}
 				]);
-				organization.analytics = aggregateSalesStats(Analytics);
+				
+				organization.analytics = await getReturnsOrg(organization, Analytics);
+				// organization.analytics = aggregateSalesStats(Analytics);
 
 				const lastMonthStart = moment().subtract(1, 'months').startOf('month').format(DATE_FORMAT);
 				const lastMonthEnd = moment().subtract(1, 'months').endOf('month').format(DATE_FORMAT);
@@ -1563,7 +1722,7 @@ exports.getStatsBySKU = [
 			const monthNames = ["January", "February", "March", "April", "May", "June",
 				"July", "August", "September", "October", "November", "December"
 			];
-			let Analytics = await AnalyticsModel.aggregate([
+			const Analytics = await AnalyticsModel.aggregate([
 				// { ...dateConversion(filters) },
 				{
 					$match: getSKUAnalyticsFilterConditions(filters)
@@ -1596,13 +1755,14 @@ exports.getStatsBySKU = [
 				...getSKUGroupByFilters(filters)
 			]);
 			let response = [];
-			Analytics.forEach(analytic => {
+			for (const analytic of Analytics) {
 				if (analytic.data) {
-					let temp = aggregateSalesStats(analytic.data);
+					// let temp = aggregateSalesStats(analytic.data);
+					let temp = await getReturns(analytic.data, moment().startOf('month'), today);
 					temp['groupedBy'] = (analytic._id.toString()).includes('GMT') ? monthNames[moment(analytic._id).tz("Etc/GMT").month()] : analytic._id;
 					response.push(temp);
 				}
-			});
+			}
 
 			return apiResponse.successResponseWithData(res, "Operation Success", response);
 
