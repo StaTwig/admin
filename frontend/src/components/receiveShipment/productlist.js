@@ -6,7 +6,7 @@ import FailPopup from "./failPopup";
 import './style.scss'
 
 const ProductList = (props) => {
-    const [deliveredProduct, setDeliveredProduct] = useState(0);
+    const [deliveredProduct, setDeliveredProduct] = useState();
     const [isVisible, setIsVisible] = useState(true);
     const [error, setError] = useState(false);
     let deliveredProductList = [];
@@ -57,6 +57,7 @@ const ProductList = (props) => {
                                             style={{ height: '3vh', width: '10vw', fontSize: '12px', marginTop: '0', marginBottom: '0' }} 
                                             className="form-control"
                                             value={deliveredProduct}
+                                            placeholder="Enter the Quantity"
                                             // maxLength={product.productQuantity.length}
                                             onChange={e => {
                                                 setDeliveredProduct(e.target.value);
@@ -65,8 +66,8 @@ const ProductList = (props) => {
                                                     props.onQuantityChange(index, e.target.value);
                                                 }
                                                 else{
-                                                    e.target.value=0;
-                                                    setDeliveredProduct(0);
+                                                    e.target.value="";
+                                                    setDeliveredProduct();
                                                     props.onQuantityChange(index, e.target.value);
                                                     setError(true);
   
