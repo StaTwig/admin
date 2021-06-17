@@ -28,7 +28,7 @@ lastYear.setDate(today.getDate() - 365)
 
 var timeFrame = moment().subtract(1, 'months');
 
-async function getReturns( analytics, from, to) {
+async function getReturns( analytics, from, to, warehouseIds) {
 	if (!analytics.length) {
 		return {
 			sales: 0,
@@ -49,6 +49,7 @@ async function getReturns( analytics, from, to) {
 		let params = {
 			'receiver.id': { $in: b_arr },
 			'products.productID': prod.id,
+			'supplier.locationId': {$in: warehouseIds},
 			'status': 'RECEIVED',
 			createdAt: {
 				$lte: new Date(to),
@@ -78,7 +79,7 @@ async function getReturns( analytics, from, to) {
 	};
 }
 
-async function getOnlyReturns( prod_id, from, to) {
+async function getOnlyReturns( prod_id, from, to, warehouseIds) {
 	let b_arr = [];
 	const breweries = await OrganisationModel.find({ "type": 'BREWERY', "status": "ACTIVE" }, 'id');
 	for (let b of breweries)
@@ -88,6 +89,7 @@ async function getOnlyReturns( prod_id, from, to) {
 	let params = {
 		'receiver.id': { $in: b_arr },
 		'products.productID': prod_id,
+		'supplier.locationId': {$in: warehouseIds},
 		'status': 'RECEIVED',
 		createdAt: {
 			$lte: new Date(to),
@@ -314,6 +316,38 @@ const _getWarehouseIds = async (filters) => {
 	const warehouses = await WarehouseModel.aggregate([
 		{
 			$match: getFilterConditionsWarehouse(filters)
+		},
+		{
+			$group: {
+				_id: '$id',
+				'warehouseIds': {
+					$addToSet: "$id"
+				}
+			}
+		}
+	]);
+	let warehouseIds = [];
+	if (warehouses.length > 0) {
+		warehouseIds = warehouses.map(a => a._id);
+	}
+	return warehouseIds;
+}
+
+
+function getDistrictConditionsWarehouse(district) {
+	let matchCondition = {};
+	if (district && district.length) {
+		matchCondition["warehouseAddress.city"] = district;
+	}
+	
+	return matchCondition;
+}
+
+
+const _getWarehouseIdsByDistrict = async (district) => {
+	const warehouses = await WarehouseModel.aggregate([
+		{
+			$match: getDistrictConditionsWarehouse(district)
 		},
 		{
 			$group: {
@@ -827,10 +861,10 @@ exports.getStatsByBrand = [
 						p['sales'] = product.sales;
 						p['targetSales'] = parseInt(product.targetSales);
 						p['productId'] = product._id.id;
-						p['returns'] = await getOnlyReturns(prod.id, moment().startOf('month'), today);
+						p['returns'] = await getOnlyReturns(prod.id, moment().startOf('month'), today, warehouseIds);
 						p['returnRate'] = parseFloat(((parseInt(p['returns']) / parseInt(product.sales)) * 100)).toFixed(2);
 						// p['returnRatePrev'] = await calculatePrevReturnRatesNew(filters, product);
-						p['returnRatePrev'] = await getOnlyReturns(prod.id, lastMonthEnd, lastMonthStart);
+						p['returnRatePrev'] = await getOnlyReturns(prod.id, lastMonthEnd, lastMonthStart, warehouseIds);
 						product.product = p;
 					}
 				}
@@ -1670,6 +1704,13 @@ function getSKUGroupByFilters(filters) {
 						state: filters.state
 					}
 				});
+			if (filters.district && filters.district.length) {
+				matchCondition.push({
+					$match: {
+						district: filters.district
+					}
+				});
+			}
 			matchCondition.push(
 				{
 					$group: {
@@ -1758,7 +1799,10 @@ exports.getStatsBySKU = [
 			for (const analytic of Analytics) {
 				if (analytic.data) {
 					// let temp = aggregateSalesStats(analytic.data);
-					let temp = await getReturns(analytic.data, moment().startOf('month'), today);
+					const wIds = await _getWarehouseIdsByDistrict(filters.district);
+					console.log(wIds);
+					
+					let temp = await getReturns(analytic.data, moment().startOf('month'), today, wIds);
 					temp['groupedBy'] = (analytic._id.toString()).includes('GMT') ? monthNames[moment(analytic._id).tz("Etc/GMT").month()] : analytic._id;
 					response.push(temp);
 				}
