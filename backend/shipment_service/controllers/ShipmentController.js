@@ -2663,3 +2663,51 @@ exports.checkShipmentID = [
   },
 ];
 
+exports.fetchairwayBillNumber = [
+  auth,
+  async (req, res) => {
+    try {
+      checkToken(req, res, async (result) => {
+        if (result.success) {
+          const { warehouseId } = req.user;
+          await ShipmentModel.find(
+            {
+              $or: [
+                {
+                  "supplier.locationId": warehouseId,
+                },
+                {
+                  "receiver.locationId": warehouseId,
+                },
+              ],
+            },
+            'airWayBillNo'
+          )
+            .then((shipments) => {
+              return apiResponse.successResponseWithData(
+                res,
+                "All Shipments",
+                shipments
+              );
+            })
+            .catch((err) => {
+              return apiResponse.ErrorResponse(res, err.message);
+            });
+        } else {
+          logger.log(
+            "warn",
+            "<<<<< ShipmentService < ShipmentController < fetchairwayBillNumber : refuted token"
+          );
+          res.status(403).json("Auth failed");
+        }
+      });
+    } catch (err) {
+      logger.log(
+        "error",
+        "<<<<< ShipmentService < ShipmentController < fetchairwayBillNumber : error (catch block)"
+      );
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
