@@ -20,7 +20,7 @@ import useOnclickOutside from 'react-cool-onclickoutside';
 import { config } from "../../config";
 import Modal from "../modal/index";
 import FailedPopUp from "../PopUp/failedPopUp";
-import {getShippingOrderIds} from "../../actions/shippingOrderAction";
+import {getShippingOrderIds,fetchAllairwayBillNumber} from "../../actions/shippingOrderAction";
 import { getOrderIds} from "../../actions/poActions";
 //import Badge from '@material-ui/core/Badge';
 //import MailIcon from '@material-ui/icons/Mail';
@@ -30,6 +30,7 @@ import { getOrderIds} from "../../actions/poActions";
 //import ListItemText from '@material-ui/core/ListItemText';
 import Select from '@material-ui/core/Select';
 import DropdownButton from "../../shared/dropdownButtonGroup";
+import { resetShipments } from '../../actions/shipmentActions';
 
 
 const Header = props => {
@@ -41,6 +42,7 @@ const Header = props => {
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
   const [orderIds, setOrderIds] = useState([]);
+  const [airWayBillNo,setairWayBillNo] = useState([]);
   const [shippingIds, setShippingIds] = useState([]);
   const [wareHouse, setWareHouse]= useState({});
   const [selectLocation, setSelectLocation] = useState("");
@@ -62,10 +64,16 @@ const ref = useOnclickOutside(() => {
     async function getIds(){
       const resultShippingIds = await getShippingOrderIds();
       const resultOrderIds = await getOrderIds();
+      const resultAirwayBillNo = await fetchAllairwayBillNumber();
       setOrderIds(resultOrderIds.map((so)=>so.id));
       setShippingIds(resultShippingIds.map((so)=>so.id));
+      setairWayBillNo(resultAirwayBillNo.map((so)=>so.id))
     }
-
+    async function getAirwayBillNo(){
+      const result = await fetchAllairwayBillNumber();
+      console.log(result,"Air way bill no");
+    }
+    getAirwayBillNo()
     getIds();
   }, []);
 
@@ -78,6 +86,9 @@ const ref = useOnclickOutside(() => {
     props.history.push(`/vieworder/${search}`);
     else if(shippingIds.indexOf(search)!=-1)
     props.history.push(`/viewshipment/${search}`);
+    else if(airWayBillNo.indexOf(search)!=-1){
+      props.history.push(`/viewshipment/${search}`)
+    }
     else
     setInvalidSearch(true);
   };
