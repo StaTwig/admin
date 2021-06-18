@@ -24,11 +24,11 @@ const ChainOfCustody = (props) => {
   }
 
   const [op, setOp] = useState("");
-  console.log("From View Shipment");
-  console.log(props.imagesData);
+  // console.log("From View Shipment");
+  // console.log(props.imagesData);
   const shipmentData = props.shipments[0];
-  console.log("Shipment Data");
-  console.log(shipmentData);
+  // console.log("Shipment Data");
+  // console.log(shipmentData);
   const profile = useSelector((state) => {
     return state.user;
   });

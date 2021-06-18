@@ -13,11 +13,11 @@ const dispatch = useDispatch();
     useEffect(() => {
       async function fetchData() {
         const result = await dispatch(getViewShipment(props.match.params.id));
-        console.log('Test');
-        console.log(result);
+        // console.log('Test');
+        // console.log(result);
         if (result)
         {
-          console.log(result);
+          // console.log(result);
         setTrackData(result);
         }else{
           setTrackData({});
@@ -44,8 +44,8 @@ const dispatch = useDispatch();
       const result = await fetchImage(props.match.params.id);
        if (result.status==200)
        {
-       console.log('Data Image');
-       console.log(result.data.data);
+      //  console.log('Data Image');
+      //  console.log(result.data.data);
        setImagesData(result.data.data);
        }else{
         setImageData([]);

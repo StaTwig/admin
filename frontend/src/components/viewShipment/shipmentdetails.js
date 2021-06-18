@@ -6,8 +6,8 @@ import { formatDate } from '../../utils/dateHelper';
 import './style.scss'
 
 const ShipmentDetails = (props) => {
-  console.log('Shipment Details');
-  console.log(props.shipments);
+  // console.log('Shipment Details');
+  // console.log(props.shipments);
     return (
     Object.keys(props.shipments).length === 0 ? <div className="row panel justify-content-between">N/A</div> :
         <div className=  { props.highLight ? "col panel commonpanle highlight" : "col panel commonpanle"}>
