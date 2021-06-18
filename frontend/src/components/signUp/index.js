@@ -210,9 +210,13 @@ const changeFn = (value_new,e) => {
                   value={(props.email).toLowerCase()}
                   onChange={(e) => { props.onEmailChange(e); handleChange(e);}}
                   // onBlur={console.log("Deepak")}
-                  handleBlur={props.email?verifyEmailAndPhoneNo(`emailId=${props.email}`).then((v)=>{if(v.data.length){
+                  handleBlur={props.email?verifyEmailAndPhoneNo(`emailId=${props.email}`).then((v)=>{
+                    if(v.data.length){
                       setemailerror(true);
-                  }else{setemailerror(false)}}):null}
+                  }else{
+                    setemailerror(false)
+                  }
+                }):null}
                   />
                   {errors.email && touched.email && (
                     <span className="error-msg text-danger">{errors.email}</span>
@@ -237,9 +241,9 @@ const changeFn = (value_new,e) => {
                       }}
                       value={props.phone}
                       onChange={(e)=>{props.onphoneChange(e)}}
-                      handleBlur={props.phone?verifyEmailAndPhoneNo(`phoneNumber=${props.phone}`).then((v)=>{if(v.data.length){
+                      handleBlur={props.phone?verifyEmailAndPhoneNo(`phoneNumber=${props.phone}`).then((v)=>{if(v.data[0].phoneNumber=="+"+props.phone){
                         setphoneerror(true);
-                    }else{setphoneerror(false);console.log(props.phone)}}):null}
+                    }else{setphoneerror(false);}}):null}
                       onChange = {props.onphoneChange}
                     /></div>
                    {errors.phone && touched.phone && (
