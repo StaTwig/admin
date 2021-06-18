@@ -34,7 +34,21 @@ const EditRow = props => {
     }
   }
 
-console.log("yyyy",prod);
+//console.log("yyyy",prod);
+
+// const handlee = () =>
+// {
+//   console.log("Hi");
+//     const value = document.getElementById("checker").value;
+//     console.log("value is " + value);
+//     if(value)
+//     {
+//       this.props.checkAndTrace(true);
+//     }
+//     else{
+//       this.props.checkAndTrace(false);
+//     }
+// };
 
   return (
     <div className="row ml-3 mr-1">
@@ -94,6 +108,7 @@ console.log("yyyy",prod);
           <div className="">
             <input
               className="form-control text-center"
+              id="checker"
               placeholder="Quantity"
               onKeyPress={numbersOnly}
               value={prod.productQuantity}

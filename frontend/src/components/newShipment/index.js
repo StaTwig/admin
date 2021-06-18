@@ -294,7 +294,23 @@ const NewShipment = (props) => {
       const result = await createShipment(data);
       dispatch(turnOff());
       console.log("data", data);
-      if (result?.id) {
+      var check = false;
+
+      for(var i=0;i<data.products.length;i++)
+      {
+        if(typeof data.products[i].productQuantity==='undefined')
+        {
+          check = true;
+          break;
+        }
+      }
+      if(check===true)
+      {
+        console.log("Hi");
+        setShipmentError("Check product quantity");
+        setOpenShipmentFail(true);
+      }
+      else if (result?.id) {
         setMessage("Created Shipment Success");
         setOpenCreatedInventory(true);
         setModalProps({
@@ -302,7 +318,8 @@ const NewShipment = (props) => {
           id: result?.id,
           type: "Success",
         });
-      } else {
+      } 
+      else  {
         setOpenShipmentFail(true);
         setErrorMessage("Create Shipment Failed");
       }
@@ -319,12 +336,15 @@ const NewShipment = (props) => {
     setOrderDetails(result);
     dispatch(turnOff());
   };
-
+ 
   const handleQuantityChange = (value, i) => {
+    
     const soDetailsClone = { ...OrderDetails };
     soDetailsClone.products[i].productQuantity = value;
     setOrderDetails(soDetailsClone);
   };
+
+  
 
   const handleLabelIdChange = (value, i) => {
     const soDetailsClone = { ...OrderDetails };
@@ -369,7 +389,10 @@ const NewShipment = (props) => {
     newArray[prodIndex] = { ...newArray[prodIndex], isSelected: true };
     setProducts((prod) => [...newArray]);
   };
-console.log(allOrganisations,"All org");
+//console.log(allOrganisations,"All org");
+
+  
+  
   return (
     <div className="NewShipment">
       <h1 className="breadcrumb">CREATE SHIPMENT</h1>
