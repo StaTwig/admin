@@ -243,6 +243,7 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 			// }
 
 			let inventoryCount = await EventModal.aggregate([
+				{ "$unwind": '$payloadData.data.products' },
 				{ $lookup: {        
 					   from: 'products',
 					   localField: 'payloadData.data.products.productId',
@@ -250,7 +251,6 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 					   as: 'productDetails',
 					} },
 					  { "$unwind": "$productDetails" },
-					  { "$unwind": '$payloadData.data.products' },
 					  { $match: elementMatchQuery},
 					  { $group: { _id: null, myCount: { $sum: 1 } } }
 					  ]).sort({
@@ -259,13 +259,13 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 			inventoryCount = inventoryCount.length > 0 ? inventoryCount[0].myCount : 0
 			console.log(elementMatchQuery)
 			EventModal.aggregate([
+				{ "$unwind": '$payloadData.data.products' },
 				{ $lookup: {        
 					   from: 'products',
 					   localField: LocalField,
 					   foreignField: 'id',
 					   as: 'productDetails',
 					} },
-					  { "$unwind": '$payloadData.data.products' },
 					  { "$unwind": '$productDetails' },
 					  { $match: elementMatchQuery},
 					{$sort: {createdAt: -1}}
