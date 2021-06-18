@@ -538,7 +538,6 @@ body {
 }
 .geoAnalyticsCard{
     position: relative;
-    height: 500px;
     background: #FFFFFF 0% 0% no-repeat padding-box;
     box-shadow: 0px 3px 6px #54265E26;
     border-radius: 25px;
@@ -1156,7 +1155,21 @@ body {
     font-size: 1.5em;
 }
 
-    
+    .boldGreen{
+        color:green;
+        font-weight: bolder;
+        font-size: 16px;
+    }
+    .boldPurple{
+        color:purple;
+        font-weight: bolder;
+        font-size: 16px;    
+    }
+    .boldblue{
+        color:blue;
+        font-weight: bolder;
+        font-size: 16px;    
+    }
     .badge-purple{
         padding: 2px 10px;
         border-radius: 10px;

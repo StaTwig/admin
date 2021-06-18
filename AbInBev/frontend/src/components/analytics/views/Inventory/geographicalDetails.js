@@ -140,7 +140,9 @@ const iGraphicalDetailedView = (props) => {
                     </span>
                   </span>
                   <div className="captionSubtitle">
-                    Compared to ({!isNaN(prop.returnRatePrev) ? prop.returnRatePrev : 0}% last month)
+                    Compared to (
+                    {!isNaN(prop.returnRatePrev) ? prop.returnRatePrev : 0}%
+                    last month)
                   </div>
                   <div className="progress progress-line-default">
                     <div
@@ -149,10 +151,14 @@ const iGraphicalDetailedView = (props) => {
                       aria-valuenow="60"
                       aria-valuemin="0"
                       aria-valuemax="100"
-                      style={{ width: (!isNaN(prop.returnRate) ? prop.returnRate : 0) + '%' }}
+                      style={{
+                        width:
+                          (!isNaN(prop.returnRate) ? prop.returnRate : 0) + '%',
+                      }}
                     >
                       <span className="sr-only">
-                        {!isNaN(prop.returnRate) ? prop.returnRate : 0}% Complete
+                        {!isNaN(prop.returnRate) ? prop.returnRate : 0}%
+                        Complete
                       </span>
                     </div>
                   </div>
@@ -166,7 +172,9 @@ const iGraphicalDetailedView = (props) => {
         <div className="col-md-12 col-sm-12">
           {!active ? (
             <div className="productsChart">
-              <label className="productsChartTitle">{isActive ? 'District' : 'State'}</label>
+              <label className="productsChartTitle">
+                {isActive ? 'District' : 'State'}
+              </label>
               <ResponsiveContainer width="100%" height={500}>
                 <BarChart
                   width={500}
@@ -185,8 +193,12 @@ const iGraphicalDetailedView = (props) => {
                   <YAxis />
                   <Tooltip />
                   <Legend />
-                  <Bar dataKey="returns" fill="#FDAB0F" />
-                  <Bar dataKey="sales" fill="#A344B7" />
+                  <Bar name="Sales" dataKey="sales" fill="#A344B7" />
+                  <Bar
+                    name="Total Bottle Pool"
+                    dataKey="returns"
+                    fill="#FDAB0F"
+                  />
                 </BarChart>
               </ResponsiveContainer>
             </div>
@@ -235,7 +247,10 @@ const iGraphicalDetailedView = (props) => {
                 {analytics.map((analytic, index) => (
                   <tr
                     key={index}
-                    onClick={() => { setIsActive(i => !i); openDetailView(analytic.groupedBy);}}
+                    onClick={() => {
+                      setIsActive((i) => !i);
+                      openDetailView(analytic.groupedBy);
+                    }}
                   >
                     <td scope="row">
                       <span className="stateLink">{analytic.groupedBy}</span>

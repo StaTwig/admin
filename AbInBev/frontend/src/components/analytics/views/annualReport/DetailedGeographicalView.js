@@ -103,6 +103,7 @@ const DetailedGeographicalView = (props) => {
                 <Line
                   type="monotone"
                   dataKey="sales"
+                  name="Sales"
                   stroke="#FBBD0E"
                   strokeWidth={3}
                   dot={false}
@@ -110,6 +111,7 @@ const DetailedGeographicalView = (props) => {
                 <Line
                   type="monotone"
                   dataKey="returns"
+                  name="Returns"
                   stroke="#A344B7"
                   strokeWidth={3}
                   dot={false}
@@ -117,6 +119,7 @@ const DetailedGeographicalView = (props) => {
                 <Line
                   type="monotone"
                   dataKey="targetSales"
+                  name="Target Sales"
                   stroke="#A21233"
                   strokeWidth={3}
                   dot={false}
@@ -124,12 +127,39 @@ const DetailedGeographicalView = (props) => {
                 <Line
                   type="monotone"
                   dataKey="actualReturns"
+                  name="Actual Returns"
                   stroke="#E36141"
                   strokeWidth={3}
                   dot={false}
                 />
               </LineChart>
             </ResponsiveContainer>
+            <div className="tableDetals">
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th scope="col">State</th>
+                    <th scope="col">Sales</th>
+                    <th scope="col">Returns</th>
+                    <th scope="col">Target Sales</th>
+                    <th scope="col">Actual Returns</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {analytics.map((analytic, index) => (
+                    <tr key={index}>
+                      <td scope="row">
+                        <span className="stateLink">Karnataka</span>
+                      </td>
+                      <td>{analytic.sales}</td>
+                      <td>{analytic.returns}</td>
+                      <td>{analytic.targetSales}</td>
+                      <td>{analytic.actualReturns}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
