@@ -145,7 +145,7 @@ exports.checkEmail = [
  *
  * @returns {Object}
  */
-exports.register = [
+ exports.register = [
   // Validate fields.
   body('firstName')
     .isLength({ min: 1 })
@@ -164,35 +164,71 @@ exports.register = [
     .trim()
     .withMessage('Organisation must be specified.'),
   body('emailId')
-    .isLength({ min: 1 })
-    .trim()
-    .withMessage('Email must be specified.')
-    // .isEmail()
-    // .withMessage('Email must be a valid email address.')
-    .custom(async (value) => {
-      const emailId = value.toLowerCase().replace(' ', '');
-      let user;
-      let phone = '';
-      if (!emailId.match(phoneRgex) && !emailId.match(emailRegex))
-        return Promise.reject('E-mail/Mobile not in valid');
-
-      if (emailId.indexOf('@') > -1)
-        user = await EmployeeModel.findOne({ emailId });
-      else {
-        phone = '+' + emailId;
-        user = await EmployeeModel.findOne({ phoneNumber: phone });
-      }
-
-      // return EmployeeModel.findOne({ emailId: value.toLowerCase() }).then(user => {
-      if (user) {
-        logger.log(
-          'info',
-          '<<<<< UserService < AuthController < register : Entered email is already present in EmployeeModel',
-        );
-        return Promise.reject('E-mail/Mobile already in use');
-      }
-      // });
-    }),
+    .custom(async(value)=>{
+      if(value){
+      const emailId=value.toLowerCase().replace('','');
+       let user;
+       if(!emailId.match(emailRegex))
+         return Promise.reject('E-mail not in valid');
+       if(emailId.indexOf('@')>-1)
+          user= await EmployeeModel.findOne({emailId});
+          if (user) {
+                  logger.log(
+                    'info',
+                    '<<<<< UserService < AuthController < register : Entered email is already present in EmployeeModel',
+                  );
+                  return Promise.reject('E-mail/Mobile already in use');
+                }
+              }
+      }),
+  body('phoneNumber')
+    .custom(async(value)=>{
+      if(value){
+      const emailId = value.toLowerCase().replace('','');
+       let phone='';
+       let user;
+        if(!emailId.match(phoneRgex))
+          return Promise.reject('Mobile not in valid');
+         phone='+'+ value;
+         console.log(phone)
+         user = await EmployeeModel.findOne({phoneNumber:phone});
+        if (user) {
+                logger.log(
+                  'info',
+                  '<<<<< UserService < AuthController < register : Phone Number is already present in EmployeeModel',
+                );
+                return Promise.reject('Mobile already in use');
+              }
+            }
+      }),
+  // body('emailId')
+  //   .isLength({ min: 1 })
+  //   .trim()
+  //   .withMessage('Email must be specified.')
+  //   // .isEmail()
+  //   // .withMessage('Email must be a valid email address.')
+  //   .custom(async (value) => {
+  //     const emailId = value.toLowerCase().replace(' ', '');
+  //     let user;
+  //     let phone = '';
+  //     if (!emailId.match(phoneRgex) && !emailId.match(emailRegex))
+  //       return Promise.reject('E-mail/Mobile not in valid');
+  //     if (emailId.indexOf('@') > -1)
+  //       user = await EmployeeModel.findOne({ emailId });
+  //     else {
+  //       phone = '+' + emailId;
+  //       user = await EmployeeModel.findOne({ phoneNumber: phone });
+  //     }
+  //     // return EmployeeModel.findOne({ emailId: value.toLowerCase() }).then(user => {
+  //     if (user) {
+  //       logger.log(
+  //         'info',
+  //         '<<<<< UserService < AuthController < register : Entered email is already present in EmployeeModel',
+  //       );
+  //       return Promise.reject('E-mail/Mobile already in use');
+  //     }
+  //     // });
+  //   }),
   // Process request after validation and sanitization.
   async (req, res) => {
     try {
@@ -241,10 +277,8 @@ exports.register = [
           'info',
           '<<<<< UserService < AuthController < register : Generating Hash for Input Password',
         );
-
         var organisationId = req.body.organisationId;
         var warehouseId = 'NA';
-
         const incrementCounterEmp = await CounterModel.update({
           'counters.name': "employeeId"
         }, {
@@ -252,14 +286,11 @@ exports.register = [
             "counters.$.value": 1
           }
         })
-
         const empCounter = await CounterModel.findOne({ 'counters.name': "employeeId" }, { "counters.name.$": 1 })
         var employeeId = empCounter.counters[0].format + empCounter.counters[0].value;
-
         //var employeeId = uniqid('emp-');
         var employeeStatus = 'NOTAPPROVED';
         let addr = '';
-
         //create organisation if doesn't exists 
         if (req.body.organisationName) {
           const organisationName = req.body.organisationName;
@@ -272,7 +303,6 @@ exports.register = [
             // const centralOrg = await OrganisationModel.findOne({ type: 'CENTRAL_AUTHORITY' });
             // if (centralOrg) {
             //   if (centralOrg.configuration_id) {
-
             //   }
             // }
             const country = req.body?.address?.country ? req.body.address?.country : 'India';
@@ -285,10 +315,8 @@ exports.register = [
                 "counters.$.value": 1
               }
             })
-
             const orgCounter = await CounterModel.findOne({ 'counters.name': "orgId" }, { "counters.name.$": 1 })
             organisationId = orgCounter.counters[0].format + orgCounter.counters[0].value;
-
             //organisationId = uniqid('org-');
             const incrementCounterWarehouse = await CounterModel.update({
               'counters.name': "warehouseId"
@@ -297,7 +325,6 @@ exports.register = [
                 "counters.$.value": 1
               }
             })
-
             const warehouseCounter = await CounterModel.findOne({ 'counters.name': "warehouseId" }, { "counters.name.$": 1 })
             warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
             //warehouseId = uniqid('war-');
@@ -318,7 +345,6 @@ exports.register = [
               authority: req.body?.authority
             });
             await org.save();
-
             const incrementCounterInv = await CounterModel.update({
               'counters.name': "inventoryId"
             }, {
@@ -326,14 +352,11 @@ exports.register = [
                 "counters.$.value": 1
               }
             })
-
             const invCounter = await CounterModel.findOne({ 'counters.name': "inventoryId" }, { "counters.name.$": 1 })
             const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
-
             //const inventoryId = uniqid('inv-');
             const inventoryResult = new InventoryModel({ id: inventoryId });
             await inventoryResult.save();
-
             const warehouse = new WarehouseModel({
               title: 'Office',
               id: warehouseId,
@@ -357,17 +380,25 @@ exports.register = [
             await warehouse.save();
           }
         }
-
-        const emailId = req.body.emailId.toLowerCase().replace(' ', '');
-        let phone = '';
-        if (emailId.indexOf('@') === -1)
-          phone = '+' + emailId;
+        let emailId = null
+        if(req.body?.emailId)
+          emailId=req.body.emailId.toLowerCase().replace(' ', '');
+        console.log(emailId)
+        
+       let phoneNumber = null
+        if(req.body?.phoneNumber)
+           phoneNumber='+'+req.body?.phoneNumber;
+        
+        // if (emailId.indexOf('@') === -1)
+        //   phoneNumber = '+' + emailId;
+        // if(phoneNumber.indexOf('+')===-1)
+        //    phone='+' + phoneNumber;
         // Create User object with escaped and trimmed data
         const user = new EmployeeModel({
           firstName: req.body.firstName,
           lastName: req.body.lastName,
-          emailId: phone ? '' : req.body.emailId.toLowerCase(),
-          phoneNumber: phone,
+          emailId: emailId,
+          phoneNumber:phoneNumber,
           organisationId: organisationId,
           id: employeeId,
           postalAddress: addr,
@@ -427,12 +458,13 @@ exports.register = [
            });*/
       }
     } catch (err) {
+      console.log(err);
       //throw error in json response with status 500.
       logger.log(
         'error',
         '<<<<< UserService < AuthController < register : Error in catch block 2',
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
