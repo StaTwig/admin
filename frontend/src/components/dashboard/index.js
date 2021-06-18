@@ -10,8 +10,8 @@ const DashBoard = props => {
 
   const onWarehouseChange = v => {
     setWarehouseText(v);
-    if(!visible)
-      setRefArr(warehouses?.filter(w => w.title.toLowerCase().includes(v.toLowerCase())));
+    if (!visible) 
+      setRefArr(warehouses?.filter(w => w.title ? (w.title.toLowerCase().includes(v.toLowerCase()) || w.id.toLowerCase().includes(v.toLowerCase())) : w.id.toLowerCase().includes(v.toLowerCase())));
     else
       setRefArr(shipmentIds?.filter(s => s.id.toLowerCase().includes(v.toLowerCase())));
   };

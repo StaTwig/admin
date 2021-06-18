@@ -28,7 +28,7 @@ const Tabs = props => {
            {warehouseText != '' && !isClicked && 
              <div className="bg-white m-1 p-2 position-absolute rounded" style={{width:250}}>
                {filteredWareHouses?.map((warehouse, index) => (
-                 <p key={index} className="p-2 m-1 cursorP border-bottom" onClick={() => { setIsClicked(true); onWarehouseChange(visible ? warehouse.id : warehouse.title); onSearchClick(warehouse.id); }}>{visible ? warehouse.id : warehouse.title}</p>
+                 <p key={index} className="p-2 m-1 cursorP border-bottom" onClick={() => { setIsClicked(true); onWarehouseChange(visible ? warehouse.id : warehouse.title); onSearchClick(warehouse.id); }}>{visible ? warehouse.id : (warehouse.title ? warehouse.title : warehouse.id)}</p>
                ))}
              </div>
            }

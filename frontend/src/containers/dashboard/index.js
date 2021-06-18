@@ -5,7 +5,7 @@ import Header from '../../shared/header';
 import Sidebar from '../../shared/sidebarMenu';
 import './style.scss';
 import DashBar from '../../shared/dashbar/index';
-import { getProductDetailsByWarehouseId, getWarehouseByOrgId, getShipmentIds } from '../../actions/inventoryActions';
+import { getProductDetailsByWarehouseId, getWarehouseByOrgId, getAllWarehouses, getShipmentIds } from '../../actions/inventoryActions';
 import { useSelector } from "react-redux";
 import { turnOn, turnOff } from '../../actions/spinnerActions';
 import { getViewShipment } from '../../actions/shipmentActions';
@@ -26,7 +26,8 @@ const DashBoardContainer = props => {
 
    useEffect(() => {
     (async () => {
-      const warehouse = await getWarehouseByOrgId(user?.organisationId);
+      // const warehouse = await getWarehouseByOrgId(user?.organisationId);
+      const warehouse = await getAllWarehouses();
       setWareHouses(warehouse.data);
       const shipments = await getShipmentIds();
       setShipmentIds(shipments);

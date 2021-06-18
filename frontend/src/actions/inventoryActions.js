@@ -153,6 +153,15 @@ export const getWarehouseByOrgId = async (id) => {
   }
 };
 
+export const getAllWarehouses = async () => {
+  try {
+    const result = await axios.get(config().getAllWarehouses);
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
 export const getInventoriesById = query => {
   try {
     return async dispatch => {

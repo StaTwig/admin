@@ -37,3 +37,22 @@ exports.getWarehouses = [
     }
   },
 ];
+
+exports.getAllWarehouses = [
+  auth,
+  async (req, res) => {
+    try {
+      const organisations = await WarehouseModel.find({});
+      return apiResponse.successResponseWithData(
+        res,
+        'All Warehouses',
+        organisations,
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(
+        res,
+        `Organization of id ${req.query.id} not found`,
+      );
+    }
+  },
+];
