@@ -17,7 +17,7 @@ const EditTable = props => {
         
         </div>
         <div className="">
-          {props.product.map((product, index) => (
+          {props.product && props.product.map((product, index) => (
             <EditRow
               key={index}
               prod={product}
