@@ -384,10 +384,11 @@ exports.checkEmail = [
         if(req.body?.emailId)
           emailId=req.body.emailId.toLowerCase().replace(' ', '');
         console.log(emailId)
-        //let phoneNumber = '';
-        const phoneNumber='+'+req.body?.phoneNumber;
-        console.log(phoneNumber)
-        console.log(emailId)
+        
+       let phoneNumber = null
+        if(req.body?.phoneNumber)
+           phoneNumber='+'+req.body?.phoneNumber;
+        
         // if (emailId.indexOf('@') === -1)
         //   phoneNumber = '+' + emailId;
         // if(phoneNumber.indexOf('+')===-1)
@@ -397,7 +398,7 @@ exports.checkEmail = [
           firstName: req.body.firstName,
           lastName: req.body.lastName,
           emailId: emailId,
-          phoneNumber:'+'+ req.body.phoneNumber,
+          phoneNumber:phoneNumber,
           organisationId: organisationId,
           id: employeeId,
           postalAddress: addr,
