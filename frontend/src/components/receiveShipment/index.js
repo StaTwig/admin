@@ -251,11 +251,12 @@ const ReceiveShipment = (props) => {
                 type="text"
                 className="form-control"
                 name="Comment"
-                onChange={(e) => setComment(e)}
+                onChange={(e) => setComment(e.target.value)}
                 size="40"
                 cols="120"
                 rows="7"
                 placeholder="Enter Comment Here"
+                value={comment}
               />
             </div>
           </div>
