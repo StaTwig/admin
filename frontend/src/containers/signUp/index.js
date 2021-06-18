@@ -31,7 +31,8 @@ const SignupContainer = (props) => {
     setInnerwidth(window.innerWidth);
   }
   const onSignup = useCallback(async (values) => {
-    let data = { firstName, lastName, emailId: email != '' ? email : phone, organisationId: organisation.id };
+    let data = { firstName, lastName, emailId: email, phoneNumber : phone, organisationId: organisation.id };
+    // let data = { firstName, lastName, emailId: email != '' ? email : phone, organisationId: organisation.id };
     if (isNewOrg) {
       // data.organisationName = organisation.name;
       data.organisationName = values.name;
