@@ -864,7 +864,7 @@ console.log(allOrganisations,"All org");
                       />
 
                       {errors.airWayBillNo && touched.airWayBillNo && (
-                        <span className="error-msg text-danger">
+                        <span className="error-msg text-danger1">
                           {errors.airWayBillNo}
                         </span>
                       )}
@@ -898,7 +898,7 @@ console.log(allOrganisations,"All org");
                           scrollableYearDropdown
                         />
                         {errors.shipmentDate && touched.shipmentDate && (
-                          <span className="error-msg text-danger">
+                          <span className="error-msg text-danger1">
                             {errors.shipmentDate}
                           </span>
                         )}
@@ -921,7 +921,7 @@ console.log(allOrganisations,"All org");
                         value={values.labelCode}
                       />
                       {errors.labelCode && touched.labelCode && (
-                        <span className="error-msg text-danger">
+                        <span className="error-msg text-danger1">
                           {errors.labelCode}
                         </span>
                       )}
@@ -1100,7 +1100,7 @@ console.log(allOrganisations,"All org");
               </div> */}
             </div>
             {errors.products && touched.products && (
-              <span className="error-msg text-danger">{errors.products}</span>
+              <span className="error-msg text-danger1">{errors.products}</span>
             )}
             <div className="d-flex justify-content-between">
               <div className="value">{productQuantity}</div>
