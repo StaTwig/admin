@@ -205,16 +205,28 @@ const NewOrder = (props) => {
 
   const onAssign = async (values) => {
     let error = false;
+    let nameError=false;
+    let typeError=false;
     const { fromOrg, toOrg, toOrgLoc, products, toOrgLocName } = values;
+    console.log("products------",products);
     products.forEach((p) => {
-      if (p.productQuantity < 1)
+      if(!p.name)
+      {
+        nameError=true;  
+      }
+      if(!p.type)
+      {
+        typeError=true; 
+      }
+      if(p.productQuantity < 1)
+      {
         error = true;
+      }
     });
-
-    if (!error) {
+    if (!error &&  !nameError && !typeError) {
       dispatch(setReviewPos(values));
       props.history.push('/revieworder');
-      // const data = {
+            // const data = {
       //   externalId: "",
       //   supplier: {
       //     supplierIncharge: user.id,
@@ -245,12 +257,23 @@ const NewOrder = (props) => {
       //   setFailedPop(true);
       //   setErrorMessage("Not able to create order. Try again!");
       // }
+
     }
-    else {
+    else if(error) {
       setOrderError("Check product quantity");
       setFailedPop(true);
     }
+    else if(nameError) {
+      setOrderError("Check Product Category");
+      setFailedPop(true);
+    }
+    else if(typeError) {
+      setOrderError("Check Product Type");
+      setFailedPop(true);
+    }
+    
   };
+
 
   return (
     <div className="NewOrder m-3">
