@@ -128,10 +128,29 @@ const Home = (props) => {
     }
   });
 
+  const goBackButton = () => {
+    if (steps == 2 || steps == 5) {
+      setSteps(1);
+      setButtonActive(0);
+    }
+    if (steps == 3 || steps == 4) {
+      setSteps(2);
+    }
+  };
+
   return (
     <div className="home">
       <div className="container centered scroll-y">
         <div className="selectUser centered">
+          {steps != 1 && (
+            <button
+              type="button"
+              className="btn btn-primary btn-circle btn-lg back-button"
+              onClick={goBackButton}
+            >
+              <i className="fa fa-angle-left"></i>
+            </button>
+          )}
           {steps == 1 && (
             <Selection
               setContinueClick={setContinueClick}
