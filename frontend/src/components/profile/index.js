@@ -377,7 +377,7 @@ class Profile extends React.Component {
                         value={this.state.phoneNumber}
                         onChange={(phone) =>
                           // {phone > 0 &&
-                            this.setState({ phoneNumber: "+"+phone })
+                            this.setState({ phoneNumber: phone })
                           // }
                         }  
                       />
@@ -580,8 +580,8 @@ class Profile extends React.Component {
                           height="20"
                           className="mr-3"
                         />
-                        {(this.state.phoneNumber!="+"&&this.state.phoneNumber) ? (
-                          <span>{this.state.phoneNumber}</span>
+                        {(this.state.phoneNumber) ? (
+                          <span>{"+"+this.state.phoneNumber}</span>
                         ) : (
                           <span>N/A</span>
                         )}

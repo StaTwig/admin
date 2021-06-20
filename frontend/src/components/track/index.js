@@ -7,6 +7,7 @@ import SoChainOfCustody from './sochainofcustody';
 import Package from '../../assets/icons/package.svg';
 import back from '../../assets/icons/back.png';
 import searchingIcon from '../../assets/icons/searching@2x.png';
+import {useDispatch} from "react-redux";
 import './style.scss';
 
 const Track = (props) => {

@@ -22,8 +22,9 @@ import { Link } from 'react-router-dom';
 import { chainOfCustody, updateStatus } from "../../actions/shipmentActions";
 import { receiveShipment } from "../../actions/shipmentActions";
 const Tracing = (props) => {
-  console.log('Props');
-  console.log(props);  const [menu, setMenu] = useState(false);
+  // console.log('Props');
+  // console.log(props);  
+  const [menu, setMenu] = useState(false);
   const [menuShip, setMenuShip] = useState(false);
   const [menuProduct, setMenuProduct] = useState(false);
   const [chain, setChain] = useState(false);
@@ -34,12 +35,12 @@ const Tracing = (props) => {
   const tracking = props.trackData;
   const status = tracking.status;
   const shippmentChainOfCustodyData = props.shippmentChainOfCustodyData;
-  console.log(shippmentChainOfCustodyData)
+  // console.log(shippmentChainOfCustodyData)
   // console.log(tracking);
   const productCard = props.productDetails;
   const poCard = props.poDetails;
   const {id} = props.match.params;
-  console.log(id);
+  // console.log(id);
 
   const closeModal = () => {
     setOpenPurchase(false);
