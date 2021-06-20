@@ -1035,6 +1035,20 @@ exports.fetchShipmentsForAbInBev = [
               },
               {
                 $lookup: {
+                  from: "organisations",
+                  localField: "supplier.org.authority",
+                  foreignField: "id",
+                  as: "supplier.org.S1",
+                },
+              },
+              {
+                $unwind: {
+                  path: "$supplier.org.S1",
+                  preserveNullAndEmptyArrays: true
+                },
+              },
+              {
+                $lookup: {
                   from: "warehouses",
                   localField: "receiver.locationId",
                   foreignField: "id",
@@ -1065,7 +1079,7 @@ exports.fetchShipmentsForAbInBev = [
               })
               .skip(parseInt(skip))
               .limit(parseInt(limit));
-
+            
             return apiResponse.successResponseWithMultipleData(
               res,
               "Shipments Table",
