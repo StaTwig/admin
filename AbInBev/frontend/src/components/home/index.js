@@ -103,6 +103,7 @@ const Home = (props) => {
       lastName: values.lastName,
       emailId: values.mobileemail,
       organisationName: values.organisation,
+      authority: values.authority,
       organisationId: 0,
       address: {
         line1: values.line1,
