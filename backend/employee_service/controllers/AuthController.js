@@ -1683,6 +1683,28 @@ exports.getAllUsersByOrganisation = [
 ];
 
 
+exports.createTwilioBinding = [
+  auth,
+  async (req, res) => {
+    try {
+      console.log("REGISTERING")
+      console.log(req.user)
+      client.notify.services(serviceID)
+                      .bindings
+                      .create({
+                      identity: req.user.id,
+                      bindingType: req.body.device_type == 'ios' ? 'apn' : 'fcm',
+                      address: req.body.token_id
+                      })
+                      .then(binding => console.log(binding));
+      res.send("Succesfully Registered") 
+    } catch (err) {
+      console.log(err)
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
 exports.getOrganizationsByType = [
 //without auth for new user register 
   async (req, res) => {

@@ -40,4 +40,5 @@ router.get("/getwarehouseByType", AuthController.getwarehouseByType);
 router.get("/getwarehouseinfo", AuthController.getwarehouseinfo);
 router.get("/getOrganizationsTypewithauth", AuthController.getOrganizationsTypewithauth);
 router.get("/emailverify", AuthController.emailverify);
+router.get("/registerTwillio", AuthController.createTwilioBinding);
 module.exports = router;
