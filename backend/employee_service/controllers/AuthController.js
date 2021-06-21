@@ -1697,7 +1697,7 @@ exports.createTwilioBinding = [
                       address: req.body.token_id
                       })
                       .then(binding => console.log(binding));
-      res.send("Succesfully Registered") 
+      return apiResponse.successResponse(res,"Succesfully Registered") 
     } catch (err) {
       console.log(err)
       return apiResponse.ErrorResponse(res, err);
