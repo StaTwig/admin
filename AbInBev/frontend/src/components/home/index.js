@@ -98,20 +98,45 @@ const Home = (props) => {
   });
 
   const onSignUpClick = useCallback(async (values) => {
-    let data = {
-      firstName: values.firstName,
-      lastName: values.lastName,
-      emailId: values.mobileemail,
-      organisationName: values.organisation,
-      organisationId: 0,
-      address: {
-        line1: values.line1,
-        city: values.district,
-        state: values.state,
-        country: '',
-        pincode: values.pincode,
-      },
-    };
+    let isEmail = false;
+    let regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (values.mobileemail.match(regexEmail)) {
+      isEmail = true;
+    } else {
+      isEmail = false;
+    }
+    if(isEmail){
+      var data = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        emailId: values.mobileemail,
+        organisationName: values.organisation,
+        organisationId: 0,
+        address: {
+          line1: values.line1,
+          city: values.district,
+          state: values.state,
+          country: '',
+          pincode: values.pincode,
+        },
+      };
+    }
+    else{
+      var data = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        phoneNumber: values.mobileemail,
+        organisationName: values.organisation,
+        organisationId: 0,
+        address: {
+          line1: values.line1,
+          city: values.district,
+          state: values.state,
+          country: '',
+          pincode: values.pincode,
+        },
+      };
+    }
     dispatch(turnOn());
     const result = await registerUser(data);
     dispatch(turnOff());
