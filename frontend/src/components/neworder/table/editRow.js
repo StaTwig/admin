@@ -68,6 +68,7 @@ const EditRow = props => {
                 <Select
                   className="no-border"
                   placeholder={<div className="select-placeholder-text">Product Name</div>} 
+                  value={{value: prod.id, label: prod.name}}
                   defaultInputValue={prod.name}
                   onChange={(v) => handleProductChange(index, v)}
                   options={products}

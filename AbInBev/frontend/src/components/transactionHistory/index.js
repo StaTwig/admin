@@ -502,7 +502,7 @@ const TransactionHistory = (props) => {
                                 <br />
                                 <span className="transactionDate">
                                   <span>FROM:</span>{' '}
-                                  {transaction.supplier.org.name} - TO:{' '}
+                                  {transaction.receiver.org.type === 'BREWERY' && transaction.supplier.org.type === 'S2' ? transaction.supplier.org?.S1?.name : transaction.supplier.org.name} - TO:{' '}
                                   {transaction.receiver.org.name}
                                 </span>
                               </div>

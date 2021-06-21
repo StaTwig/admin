@@ -40,7 +40,7 @@ export const getAllBreweries = () => {
     try {
       dispatch(turnOn());
       const result = await axios.get(
-        config().getOrganizationsByTypeAbInBev + 'BREWERY',
+        config().getOrganizationsByTypeAbInBev + 'S1',
       );
       dispatch(turnOff());
       return result.data;

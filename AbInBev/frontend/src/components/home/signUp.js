@@ -87,7 +87,7 @@ const SignUp = (props) => {
             errors.mobileemail = 'Mobile/Email Required';
           }
           if (!values.authority) {
-            errors.authority = 'Select Brewery';
+            errors.authority = 'Select S1';
           }
           if (!values.organisation) {
             errors.organisation = 'Organisation Required';
@@ -198,7 +198,7 @@ const SignUp = (props) => {
                       htmlFor="authority"
                       className="organisationLabel mb-1"
                     >
-                      Brewery
+                      Select S1
                     </label>
                     <select
                       name="authority"
@@ -208,14 +208,14 @@ const SignUp = (props) => {
                       value={values.authority}
                       onChange={handleChange}
                     >
-                      <option value="">Select Brewery</option>
+                      <option value="">Select S1</option>
                       {allBreweries &&
                         allBreweries.map((brewery, index) => (
                           <option key={index} value={brewery.id}>
                             {brewery.name}
                           </option>
                         ))}
-                      <option value="BREWERY">I am a Brewery</option>
+                      {/* <option value="S1">I am a S1</option> */}
                     </select>
                     <div className="errorDisplay">
                       {errors.authority && touched.authority && (

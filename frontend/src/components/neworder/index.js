@@ -154,8 +154,11 @@ const NewOrder = (props) => {
     try {
       const warehouse = await getProductsByCategory(value);
       let newArr = [...addProducts];
-      newArr[index]['type'] = value;
+      newArr[index] = {"productId": "", "id": "", "productQuantity": "", "name": "", "type": value, "manufacturer": ""};
+      newArr[index]['quantity'] = '';
       setAddProducts(prod => [...newArr]);
+      setFieldValue('products', newArr.map(row => ({ "productId": row.id, "id": row.id, "productQuantity": row?.productQuantity ? row?.productQuantity : 0, "name": row.name, "type": row.type, "manufacturer": row.manufacturer })));
+    
       setProducts(warehouse.data.map(item => {
                                       return {
                                         value: item.name,
@@ -173,7 +176,8 @@ const NewOrder = (props) => {
     addProducts.splice(index, 1);
     let newArr = [...addProducts];
     newArr.push(item);
-    setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": row?.productQuantity ? row?.productQuantity : 0,"name": row.name,"type": row.type,"manufacturer": row.manufacturer})));
+    
+    setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": row?.productQuantity ? row?.productQuantity : '',"quantity": row?.productQuantity ? row?.productQuantity : '',"name": row.name,"type": row.type,"manufacturer": row.manufacturer})));
     setAddProducts(prod => [...newArr]);
 
     const prodIndex = products.findIndex(p => p.id === item.id);
@@ -374,15 +378,18 @@ const NewOrder = (props) => {
                   handleQuantityChange={(v, i) => onQuantityChange(v, i, setFieldValue)}
                   onRemoveRow={(index) => onRemoveProduct(index, setFieldValue)}
                   handleProductChange={(index, item) => onProductChange(index, item, setFieldValue)}
-                  handleCategoryChange={onCategoryChange}
+                  handleCategoryChange={(index, item) => onCategoryChange(index, item, setFieldValue)}
                 />
                 <div className="d-flex justify-content-between">
                   <button
                     type="button"
                     className="btn btn-white bg-white shadow-radius font-bold mb-1"
                     onClick={() => {
-                      let newArr = { productId: '', id: '', name: '', manufacturer: '', productQuantity: '', type: '' };
-                      setAddProducts(prod => [...prod, newArr]);
+                      let arr = addProducts.filter(p => p.productId != '' && p.id != '' && p.name != '' && p.manufacturer != '' && p.productQuantity != '' && p.type != '');
+                      if (arr.length == addProducts.length) {
+                        let newArr = { productId: '', id: '', name: '', manufacturer: '', productQuantity: '', type: '' };
+                        setAddProducts(prod => [...prod, newArr]);
+                      }
                     }}
                   >
                     +<span> Add Another Product</span>
