@@ -98,21 +98,33 @@ const Home = (props) => {
   });
 
   const onSignUpClick = useCallback(async (values) => {
-    let data = {
-      firstName: values.firstName,
-      lastName: values.lastName,
-      emailId: values.mobileemail,
-      organisationName: values.organisation,
-      authority: values.authority,
-      organisationId: 0,
-      address: {
-        line1: values.line1,
-        city: values.district,
-        state: values.state,
-        country: '',
-        pincode: values.pincode,
-      },
+    let isEmail = false;
+    let regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (values.mobileemail.match(regexEmail)) {
+      isEmail = true;
+    } else {
+      isEmail = false;
+    }
+    var data = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        authority: values.authority,
+        organisationName: values.organisation,
+        organisationId: 0,
+        address: {
+          line1: values.line1,
+          city: values.district,
+          state: values.state,
+          country: '',
+          pincode: values.pincode,
+        },
     };
+    
+    if(isEmail)
+      data.emailId = values.mobileemail;
+    else
+      data.phoneNumber = values.mobileemail;
+    
     dispatch(turnOn());
     const result = await registerUser(data);
     dispatch(turnOff());
@@ -129,10 +141,29 @@ const Home = (props) => {
     }
   });
 
+  const goBackButton = () => {
+    if (steps == 2 || steps == 5) {
+      setSteps(1);
+      setButtonActive(0);
+    }
+    if (steps == 3 || steps == 4) {
+      setSteps(2);
+    }
+  };
+
   return (
     <div className="home">
       <div className="container centered scroll-y">
         <div className="selectUser centered">
+          {steps != 1 && (
+            <button
+              type="button"
+              className="btn btn-primary btn-circle btn-lg back-button"
+              onClick={goBackButton}
+            >
+              <i className="fa fa-angle-left"></i>
+            </button>
+          )}
           {steps == 1 && (
             <Selection
               setContinueClick={setContinueClick}
