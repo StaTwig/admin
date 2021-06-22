@@ -88,8 +88,8 @@ class Profile extends React.Component {
 
         title,
       } = response.data.data;
-      console.log("User Data");
-      console.log(response.data.data);
+      // console.log("User Data");
+      // console.log(response.data.data);
       this.setState({
         profile_picture,
         email,
@@ -111,6 +111,10 @@ class Profile extends React.Component {
         warehouseAddress_state,
         title,
       });
+      if((this.state.profileData.phoneNumber).includes("+")){
+        this.setState({phoneNumber:(this.state.profileData.phoneNumber).slice(1,(this.state.profileData.phoneNumber).length)});
+      }
+      console.log(this.state.profileData.phoneNumber,"Profile Data");
     } else {
       //error
     }
@@ -126,9 +130,7 @@ class Profile extends React.Component {
         warehouseLocations: wareHouseAddresses,
         warehouseLocByOrg:wareHouseAddresses
       });
-      console.log(this.state.warehouseLocByOrg,"warehouseLocByOrg");
     
-      // warehouseLocByOrg.push(this.state.warehouseLocations);;
      this.state.warehouseLocations.map((id)=>{
         this.state.warehouseLocations= this.state.warehouseLocations.filter((data)=>response.data.data.warehouseId.includes(data.id));
       })
@@ -395,9 +397,7 @@ class Profile extends React.Component {
                         style={{ position: "absolute", marginLeft: "64%" }}
                         value={this.state.phoneNumber}
                         onChange={(phone) =>
-                          // {phone > 0 &&
-                            this.setState({ phoneNumber: phone })
-                          // }
+                            this.setState({phoneNumber:phone})  
                         }  
                       />
                     </div>
@@ -600,7 +600,7 @@ class Profile extends React.Component {
                           className="mr-3"
                         />
                         {(this.state.phoneNumber) ? (
-                          <span>{this.state.phoneNumber}</span>
+                          <span>+{this.state.phoneNumber}</span>
                         ) : (
                           <span>N/A</span>
                         )}
