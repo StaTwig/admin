@@ -28,7 +28,7 @@ lastYear.setDate(today.getDate() - 365)
 
 var timeFrame = moment().subtract(1, 'months');
 
-async function getReturns( analytics, from, to, warehouseIds) {
+async function getReturns(analytics, from, to, warehouseIds) {
 	if (!analytics.length) {
 		return {
 			sales: 0,
@@ -41,7 +41,7 @@ async function getReturns( analytics, from, to, warehouseIds) {
 	const breweries = await OrganisationModel.find({ "type": 'BREWERY', "status": "ACTIVE" }, 'id');
 	for (let b of breweries)
 		b_arr.push(b.id);
-	
+
 	let quantity = 0;
 	const row = analytics[0];
 	const Products = await ProductModel.find({ externalId: row.productId, manufacturer: row.brand });
@@ -49,17 +49,17 @@ async function getReturns( analytics, from, to, warehouseIds) {
 		let params = {
 			'receiver.id': { $in: b_arr },
 			'products.productID': prod.id,
-			'supplier.locationId': {$in: warehouseIds},
+			'supplier.locationId': { $in: warehouseIds },
 			'status': 'RECEIVED',
 			createdAt: {
 				$lte: new Date(to),
 				$gte: new Date(from),
 			},
 		}
-	
+
 		const shipments = await ShipmentModel.find(params);
 		for (const Shipment of shipments) {
-			for (let product in Shipment.products) 
+			for (let product in Shipment.products)
 				if (Shipment['products'][product].productID == params['products.productID'])
 					quantity += Shipment['products'][product].productQuantityDelivered;
 		}
@@ -84,43 +84,43 @@ async function getReturnsByExternalId(externalId, from, to, orgIds) {
 	const breweries = await OrganisationModel.find({ "type": 'BREWERY', "status": "ACTIVE" }, 'id');
 	for (let b of breweries)
 		b_arr.push(b.id);
-	
+
 	let quantity = 0;
 	const Products = await ProductModel.find({ externalId: externalId });
 	for (const prod of Products) {
 		let params = {
 			'receiver.id': { $in: b_arr },
 			'products.productID': prod.id,
-			'supplier.id': {$in: orgIds},
+			'supplier.id': { $in: orgIds },
 			'status': 'RECEIVED',
 			createdAt: {
 				$lte: new Date(to),
 				$gte: new Date(from),
 			},
 		}
-	
+
 		const shipments = await ShipmentModel.find(params);
 		for (const Shipment of shipments) {
-			for (let product in Shipment.products) 
+			for (let product in Shipment.products)
 				if (Shipment['products'][product].productID == params['products.productID'])
 					quantity += Shipment['products'][product].productQuantityDelivered;
 		}
 	}
-	
+
 	return quantity;
 }
 
-async function getOnlyReturns( prod_id, from, to, warehouseIds) {
+async function getOnlyReturns(prod_id, from, to, warehouseIds) {
 	let b_arr = [];
 	const breweries = await OrganisationModel.find({ "type": 'BREWERY', "status": "ACTIVE" }, 'id');
 	for (let b of breweries)
 		b_arr.push(b.id);
-	
+
 	let quantity = 0;
 	let params = {
 		'receiver.id': { $in: b_arr },
 		'products.productID': prod_id,
-		'supplier.locationId': {$in: warehouseIds},
+		'supplier.locationId': { $in: warehouseIds },
 		'status': 'RECEIVED',
 		createdAt: {
 			$lte: new Date(to),
@@ -130,7 +130,7 @@ async function getOnlyReturns( prod_id, from, to, warehouseIds) {
 
 	const shipments = await ShipmentModel.find(params);
 	for (const Shipment of shipments) {
-		for (let product in Shipment.products) 
+		for (let product in Shipment.products)
 			if (Shipment['products'][product].productID == params['products.productID'])
 				quantity += Shipment['products'][product].productQuantityDelivered;
 	}
@@ -150,7 +150,7 @@ async function getReturnsOrg(org, analytics) {
 	const breweries = await OrganisationModel.find({ "type": 'BREWERY', "status": "ACTIVE" }, 'id');
 	for (let b of breweries)
 		b_arr.push(b.id);
-	
+
 	let quantity = 0;
 	if (org.type != 'BREWERY') {
 		const row = analytics[0];
@@ -166,7 +166,7 @@ async function getReturnsOrg(org, analytics) {
 					$gte: new Date(timeFrame),
 				},
 			}
-		
+
 			const shipments = await ShipmentModel.find(params);
 			for (const Shipment of shipments) {
 				for (let product in Shipment.products)
@@ -203,7 +203,7 @@ async function getReturnsOrg(org, analytics) {
 		returns: returns,
 		actualReturns: actualReturns
 	};
-	
+
 }
 
 async function calculatePrevReturnRates(filters, analytic) {
@@ -369,7 +369,7 @@ function getDistrictConditionsWarehouse(district) {
 	if (district && district.length) {
 		matchCondition["warehouseAddress.city"] = district;
 	}
-	
+
 	return matchCondition;
 }
 
@@ -1029,7 +1029,7 @@ exports.getStatsByOrg = [
 						$match: analyticsFilter
 					}
 				]);
-				
+
 				organization.analytics = await getReturnsOrg(organization, Analytics);
 				// organization.analytics = aggregateSalesStats(Analytics);
 
@@ -1127,7 +1127,7 @@ exports.getStatsByOrgType = [
 			// 			targetSales: { $sum: "$aanalytics.targetSales" },
 			// 			returns: { $sum: "$aanalytics.returns" },
 			// 			// product: { "$first": { "productName": "$productName", "productSubName": "$productSubName", "productId": "$productId", "externalId": "$productId" } }
-					
+
 			// 			// analytic: { "$first": { "sales": "$aanalytics.sales", "targetSales": "$aanalytics.targetSales", "returns": "$aanalytics.returns", "externalId": "$aanalytics.productId" } }
 			// 		}
 			// 	}
@@ -1555,12 +1555,12 @@ async function calculateDirtyBottlesAndBreakage(supplierOrg) {
 	let dirtyBottles = 0;
 	let breakage = 0;
 	for (let shipment of shipments) {
-		let shipmentUpdates = shipment.shipmentUpdates.filter(sh => sh.status === 'RECEIVED');
+		let shipmentUpdates = shipment.shipmentUpdates.filter(sh => sh.updateComment === 'Receive_comment_3');
 		if (shipmentUpdates.length) {
 			dirtyBottles = dirtyBottles + (shipment.rejectionRate ? shipment.rejectionRate : 0);
 		}
 
-		let damagedShipments = shipment.shipmentUpdates.filter(sh => sh.updateComment === 'Receive_comment_5');
+		let damagedShipments = shipment.shipmentUpdates.filter(sh => sh.updateComment === 'Receive_comment_1' || sh.updateComment === 'Receive_comment_2');
 		if (damagedShipments.length) {
 			breakage = breakage + (shipment.rejectionRate ? shipment.rejectionRate : 0);
 		}
