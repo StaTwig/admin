@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch, batch } from "react-redux";
 import OrderIcon from '../../assets/icons/order.svg';
 import EditTable from "./table/editTable";
 import "./style.scss";
@@ -397,7 +397,7 @@ const NewOrder = (props) => {
                 </div>
             </div>
             {errors.products && touched.products && (
-              <span className="error-msg text-danger1">{errors.products}</span>
+              <span className="error-msg text-danger">{errors.products}</span>
             )}
 
             <div className="row mb-3">
@@ -413,14 +413,15 @@ const NewOrder = (props) => {
                           <Select
                             styles={customStyles}
                             placeholder={<div className="select-placeholder-text">Select Organisation Type</div>}
-                           
+                          
                             onChange={(v) => {
                               setFieldValue('type', v?.value);
                               setFieldValue('typeName', v?.label);
+                              setFieldValue('fromOrgId',"");
+                              setFieldValue('fromOrg',"");
                             }}
                             defaultInputValue={values.typeName}
                             options={orgTypes}
-                            
                           />
                           {errors.type && touched.type && (
                             <span className="error-msg text-danger">{errors.type}</span>
@@ -445,10 +446,11 @@ const NewOrder = (props) => {
                           }}
                           groups={allOrganisations}
                         /> */}
+                        
                           <Select
                             styles={customStyles}
                             placeholder={<div className="select-placeholder-text">Select Organisation Name</div>}
-                          
+                            value={values.fromOrg==""?"Select Organisation Name":{value: values.fromOrg, label: values.fromOrgId}}
                             defaultInputValue={values.fromOrgId}
                             onChange={(v) => {
                               setFieldValue('fromOrg', v.value);
@@ -495,6 +497,10 @@ const NewOrder = (props) => {
                             onChange={(v) => {
                               setFieldValue('rtype', v.value);
                               setFieldValue('rtypeName', v.label);
+                              setFieldValue('toOrg',"");
+                              setFieldValue('toOrgName',"");
+                              setFieldValue('toOrgLocName',"");
+                              setFieldValue('toOrgLoc',"");
                             }}
                             options={orgTypes}
                           />
@@ -527,7 +533,7 @@ const NewOrder = (props) => {
                           <Select
                             styles={customStyles}
                             placeholder={<div className="select-placeholder-text">Select Organisation Name</div>}
-                            
+                            value={values.toOrg==""?"Select Organisation Name":{value: values.toOrg, label: values.toOrgName}}
                             defaultInputValue={values.toOrgName}
                             onChange={(v) => {
                               setFieldValue('toOrgLoc', '');
@@ -585,7 +591,7 @@ const NewOrder = (props) => {
                           <Select
                             styles={customStyles}
                             placeholder={<div className="select-placeholder-text">Select Delivery Location</div>}
-                           
+                            value={values.toOrgLoc==""?"Select Delivery Location":{value: values.toOrgLoc, label: values.toOrgLocName}}
                             defaultInputValue={values.toOrgLocName}
                             onChange={(v) => {
                               setFieldValue('toOrgLocName', v.label);
