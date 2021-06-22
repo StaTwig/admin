@@ -1728,15 +1728,16 @@ exports.getOrganizationsByTypeForAbInBev = [
     try {
       const filters = req.query;
       let matchCondition = {};
+      let matchWarehouseCondition = {};
       matchCondition.status = 'ACTIVE';
       if (filters.status && filters.status !== '') {
         matchCondition.status = filters.status;
       }
       if (filters.state && filters.state !== '') {
-        matchCondition.state = filters.state;
+        matchWarehouseCondition["warehouseDetails.warehouseAddress.state"] = new RegExp('^'+filters.state+'$', "i");
       }
       if (filters.district && filters.district !== '') {
-        matchCondition.district = filters.district;
+        matchWarehouseCondition["warehouseDetails.warehouseAddress.city"] = new RegExp('^'+filters.district+'$', "i");
       }
 
       if (filters.type === "SUPPLIER") {
@@ -1744,11 +1745,24 @@ exports.getOrganizationsByTypeForAbInBev = [
       } else {
         matchCondition.type = filters.type;
       }
-      console.log(matchCondition);
+      console.log(matchCondition, matchWarehouseCondition);
       const organisations = await OrganisationModel.aggregate([
         {
           $match: matchCondition,
         },
+        {
+					$lookup: {
+						from: 'warehouses',
+						localField: 'id',
+						foreignField: 'organisationId',
+						as: 'warehouseDetails'
+					}
+        }, {
+          $unwind: '$warehouseDetails'
+        },
+				{
+					$match: matchWarehouseCondition
+			 	},
         {
           $project: {
             id: 1,

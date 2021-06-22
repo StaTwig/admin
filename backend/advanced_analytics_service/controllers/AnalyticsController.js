@@ -134,7 +134,6 @@ async function getOnlyReturns( prod_id, from, to, warehouseIds) {
 			if (Shipment['products'][product].productID == params['products.productID'])
 				quantity += Shipment['products'][product].productQuantityDelivered;
 	}
-
 	return quantity;
 }
 
