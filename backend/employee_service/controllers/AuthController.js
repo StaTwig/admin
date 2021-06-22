@@ -814,7 +814,7 @@ exports.updateProfile = [
       const organisationName = organisation.split('/')[0];
       employee.firstName = firstName;
       employee.lastName = lastName;
-      employee.phoneNumber = phoneNumber;
+      employee.phoneNumber = "+"+phoneNumber;
       employee.organisationId = organisationId;
       employee.warehouseId = warehouseId;
       await employee.save();
