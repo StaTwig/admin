@@ -236,7 +236,7 @@ const UpdateStatus = (props) => {
                       </div>
                       {errors.updateStatusLocation &&
                         touched.updateStatusLocation && (
-                          <span className="error-msg text-danger row justify-content-end col-8">
+                          <span className="error-msg text-danger-US row justify-content-end col-8">
                             {errors.updateStatusLocation}
                           </span>
                         )}

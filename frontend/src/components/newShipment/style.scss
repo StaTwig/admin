@@ -206,7 +206,24 @@
   position: relative;
   top:-30px;
   left:220px;
+  font-size: 15px;
 }
-.text-danger1{
+.text-danger-DD{
   color:rgb(223, 7, 7);
+  right:10px;
+  font-size: 15px;
+}
+.text-danger-SD{
+  color:rgb(216, 9, 9);
+  position:relative;
+  left: 3rem;
+  top:px;
+  font-size: 15px;
+}
+.text-danger-AB{
+  color:rgb(216, 9, 9);
+  position:relative;
+  left:-8rem;
+  top:px;
+  font-size: 15px;
 }
