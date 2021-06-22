@@ -25,6 +25,7 @@
     "multer": "^1.4.2",
     "nodemailer": "^6.6.1",
     "swagger-ui-express": "^4.1.6",
+    "twilio": "^3.64.0",
     "winston": "^3.3.3",
     "winston-logzio": "^5.1.2"
   },
