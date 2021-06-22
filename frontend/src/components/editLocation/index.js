@@ -23,17 +23,17 @@ const editLocation = (props) => {
   const [country, setCountry] = useState("");
   const [pincode, setPincode] = useState("");
   const [addedLocationModal, setAddedLocationModal] = useState(false);
-
   const closeModalAddedLocation = ()=>{
     setAddedLocationModal(false);
-    props.history.push('/profile');
+    props.history.push({
+      pathname:'/profile',
+      state:{
+        // props.location.state.editMode=true,
+        editMode:true
+      }
+    })
   };
 
-
-  // async getDataForWareHouse(id){
-    // const result = await getWarehouseById(id);
-    // return result;
-  // }
 
   const getDataForWareHouse = async(id) => {
     const result = await getWarehouseById(id);

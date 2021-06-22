@@ -24,14 +24,16 @@ import { getWarehouseByOrgId } from "../../actions/productActions";
 import PopUpLocation from "./popuplocation";
 
 import Modal from "../../shared/modal";
+import { turnOff, turnOn } from "../../actions/spinnerActions";
 class Profile extends React.Component {
   constructor(props) {
+    console.log(props);
     super(props);
     this.state = {
       openModal: false,
       selectedFile: null,
       profile: null,
-      editMode: false,
+      editMode: props.location.state?props.location.state.editMode:false,
       role: "",
       organisation: "",
       warehouseId: "",
@@ -112,9 +114,7 @@ class Profile extends React.Component {
     } else {
       //error
     }
-
-    //const [photo, setPhoto] = useState("");
-
+  
     const item = this.state.organisation.split("/")[1];
     const wareHouseResponse = await getWarehouseByOrgId(item);
     if (wareHouseResponse.status === 1) {
@@ -127,10 +127,12 @@ class Profile extends React.Component {
         warehouseLocByOrg:wareHouseAddresses
       });
       console.log(this.state.warehouseLocByOrg,"warehouseLocByOrg");
-      // warehouseLocByOrg.push(this.state.warehouseLocations);
-      this.state.warehouseLocations.map((id)=>{
+    
+      // warehouseLocByOrg.push(this.state.warehouseLocations);;
+     this.state.warehouseLocations.map((id)=>{
         this.state.warehouseLocations= this.state.warehouseLocations.filter((data)=>response.data.data.warehouseId.includes(data.id));
       })
+
     }
   }
 
@@ -180,16 +182,14 @@ class Profile extends React.Component {
       warehouseAddress_zipcode,
       warehouseAddress_secondline,
       warehouseAddress_state,
-
+      selectedFile:null,
       title,
     });
   }
-
-  onChange(e) {
-    this.setState({ selectedFile: event.target.files[0] });
-    e.preventDefault();
+  onChange() {
+    console.log(this.state.selectedFile,"selected");
     const formData = new FormData();
-    formData.append("photo", event.target.files[0]);
+    formData.append("photo", this.state.selectedFile);
     const configs = {
       headers: {
         "content-type": "multipart/form-data",
@@ -198,8 +198,8 @@ class Profile extends React.Component {
         action: "PROFILE",
       },
     };
-
-    if (event.target.files[0] && event.target.files[0].type.match('image.*')) {
+    if(this.state.selectedFile!=null){
+    if(this.state.selectedFile && (this.state.selectedFile).type.match('image.*')) {
       axios
         .post(config().upload, formData, configs)
         .then((response) => {
@@ -209,16 +209,20 @@ class Profile extends React.Component {
         .catch((error) => {
           alert(error);
         });
-      this.setState({ selectedFile: null });
-    }else if(!event.target.files[0].type.match('image.*')){
-      alert("Please Select only image file");
+      // this.setState({ selectedFile: null });
     }
-     else {
-      alert("File not selected, Please try again");
+    // else if(!(this.state.selectedFile).type.match('image.*')){
+    //   alert("Please Select only image file");
+    // };'
+    
+    //  else {
+    //   alert("File not selected, Please try again");
+    //  }
     }
   }
 
   async onSubmit() {
+    this.onChange();
     const {
       firstName,
       lastName,
@@ -233,6 +237,7 @@ class Profile extends React.Component {
       warehouseAddress_secondline,
       warehouseAddress_state,
       title,
+      editMode
     } = this.state;
     const data = {
       firstName,
@@ -249,8 +254,9 @@ class Profile extends React.Component {
       warehouseAddress_state,
       title,
     };
+    
     const result = await updateProfile(data);
-
+    
     if (result.status === 200) {
       this.setState({ message: result.data.message, editMode: false });
       const dispatch = useDispatch();
@@ -265,6 +271,7 @@ class Profile extends React.Component {
     const {
       editMode,
       role,
+      selectedFile,
       organisation,
       warehouseId,
       walletAddress,
@@ -295,15 +302,27 @@ class Profile extends React.Component {
             <div className="d-flex flex-row justify-content-between">
               <div className="col-2">
                 <div className="userPic mb-4 mr-2">
+                { selectedFile ?
+                  <img
+                    name="photo"
+                    src={`${URL.createObjectURL(selectedFile)}`}
+                    className="rounded rounded-circle"
+                  />:
                   <img
                     name="photo"
                     src={`${imgs}${this.props.user.photoId}`}
                     className="rounded rounded-circle"
-                  />
+                  />}
                 </div>
                 <input
                   id="profile"
-                  onChange={this.onChange}
+                  onChange={(e)=>{this.setState({selectedFile:e.target.files[0]})
+                      if(!e.target.files[0].type.match('image.*')){
+                        alert("Please Select only image file");
+                        this.setState({selectedFile:null});
+                      }
+                    }
+                }
                   type="file"
                   ref={(ref) => (this.upload = ref)}
                   style={{ display: "none" }}
@@ -431,7 +450,7 @@ class Profile extends React.Component {
                                 <Link
                                   to={{
                                     pathname: `/editLocation/${this.state.warehouseLocations[id]['id']}`,
-                                    state: { message: "hellow" },
+                                    state: {editMode:this.state.editMode},
                                   }}
                                 >
                                   <button
@@ -581,7 +600,7 @@ class Profile extends React.Component {
                           className="mr-3"
                         />
                         {(this.state.phoneNumber) ? (
-                          <span>{"+"+this.state.phoneNumber}</span>
+                          <span>{this.state.phoneNumber}</span>
                         ) : (
                           <span>N/A</span>
                         )}
@@ -595,7 +614,6 @@ class Profile extends React.Component {
                       style={{ width: "50vw", overflow: "hidden" }}
                     >
                       {Object.keys(this.state.warehouseLocations).map((id) => {
-                        console.log(this.state.warehouseLocations,"this.state.warehouseLocations");
                         return (
                           <div className="col">
                             <div className="location-cards">
@@ -688,6 +706,7 @@ class Profile extends React.Component {
                     <span>CANCEL</span>
                   </button>
                   <button className="btn-primary btn" onClick={this.onSubmit}>
+                  {/* <button className="btn-primary btn" onClick={this.onSubmit(),()=>{this.onChange()}}> */}
                     <span>SAVE</span>
                   </button>
                 </div>
