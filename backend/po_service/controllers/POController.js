@@ -573,8 +573,8 @@ exports.addPOsFromExcel = [
                     }
                   }
                   else {
-                    const country = poDataArray[i].customer?.country ? poDataArray[i].customer.country : 'India';
-                    const address = poDataArray[i].customer?.address ? poDataArray[i].customer.address : '';
+                    const country = poDataArray[i].customer?.country ? poDataArray[i].customer?.country : 'India';
+                    const address = poDataArray[i].customer?.address ? poDataArray[i].customer?.address : '';
                     const incrementCounterOrg = await CounterModel.update({
                       'counters.name': "orgId"
                     }, {
@@ -696,8 +696,8 @@ exports.addPOsFromExcel = [
                   }
                 }
                   else {
-                    const country = poDataArray[i].supplier?.country ? poDataArray[i].supplier.country : 'India';
-                    const address = poDataArray[i].supplier?.address ? poDataArray[i].supplier.address : 'Address NA';
+                    const country = poDataArray[i].supplier?.country ? poDataArray[i].supplier?.country : 'India';
+                    const address = poDataArray[i].supplier?.address ? poDataArray[i].supplier?.address : 'Address NA';
                     const incrementCounterOrg = await CounterModel.update({
                       'counters.name': "orgId"
                     }, {
