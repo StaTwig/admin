@@ -241,6 +241,33 @@ background-color: $white;
       outline: none;
   }
 }
+  .text-danger{
+    position:relative;
+    left:-45px;
+    top:-10px;
+    font-size: 15px;
+  }
+  .text-dangerS{
+    color:rgb(216, 9, 9);
+    position:relative;
+    left:25px;
+    top:0px;    
+    font-size: 15px;
+  }
+  .text-dangerO{
+    color:rgb(216, 9, 9);
+    position:relative;
+    right:375px;
+    top:40px;
+    font-size: 15px;
+  }
+  .text-dangerON{
+    color:rgb(216, 9, 9);
+    position:relative;
+    right:390px;
+    top:40px;
+    font-size: 15px;
+  }
 }
 
 

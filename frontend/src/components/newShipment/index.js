@@ -887,7 +887,7 @@ const NewShipment = (props) => {
                       />
 
                       {errors.airWayBillNo && touched.airWayBillNo && (
-                        <span className="error-msg text-danger1">
+                        <span className="error-msg text-danger-AB">
                           {errors.airWayBillNo}
                         </span>
                       )}
@@ -921,7 +921,7 @@ const NewShipment = (props) => {
                           scrollableYearDropdown
                         />
                         {errors.shipmentDate && touched.shipmentDate && (
-                          <span className="error-msg text-danger1">
+                          <span className="error-msg text-danger-SD">
                             {errors.shipmentDate}
                           </span>
                         )}
@@ -944,7 +944,7 @@ const NewShipment = (props) => {
                         value={values.labelCode}
                       />
                       {errors.labelCode && touched.labelCode && (
-                        <span className="error-msg text-danger1">
+                        <span className="error-msg text-danger-AB">
                           {errors.labelCode}
                         </span>
                       )}
@@ -983,7 +983,7 @@ const NewShipment = (props) => {
                         />
                         {errors.estimateDeliveryDate &&
                           touched.estimateDeliveryDate && (
-                            <span className="error-msg text-danger">
+                            <span className="error-msg text-danger-DD">
                               {errors.estimateDeliveryDate}
                             </span>
                           )}
@@ -1123,7 +1123,7 @@ const NewShipment = (props) => {
               </div> */}
             </div>
             {errors.products && touched.products && (
-              <span className="error-msg text-danger1">{errors.products}</span>
+              <span className="error-msg text-danger-DD">{errors.products}</span>
             )}
             <div className="d-flex justify-content-between">
               <div className="value">{productQuantity}</div>

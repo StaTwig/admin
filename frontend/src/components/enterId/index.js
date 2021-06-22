@@ -136,7 +136,7 @@ const EnterId = (props) => {
                           />}
                         />
                                               {errorShipment && (
-                    <span className="error-msg text-danger mt-3">This shipment has been already delivered.</span>
+                    <span className="error-msg text-danger-USE mt-3">This shipment has been already delivered.</span>
                   )}
                         </div>
 
