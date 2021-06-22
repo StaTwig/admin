@@ -47,7 +47,7 @@ const BreweryView = (props) => {
               <span className="breweryPropertyText">
                 Sales{' '}
                 <span className="pull-right breweryPropertyValue">
-                  {analytic.analytics.sales}
+                  {analytic.analytics.sales.toLocaleString('en-IN')}
                 </span>
               </span>
               <div className="progress progress-line-warning">
@@ -81,7 +81,7 @@ const BreweryView = (props) => {
               <span className="breweryPropertyText">
                 Returns{' '}
                 <span className="pull-right breweryPropertyValue">
-                  {analytic.analytics.returns}
+                  {analytic.analytics.returns.toLocaleString('en-IN')}
                 </span>
               </span>
               <div className="progress progress-line-danger">

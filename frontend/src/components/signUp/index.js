@@ -176,7 +176,7 @@ const changeFn = (value_new,e) => {
                   onChange={(e) => { props.onfirstNameChange(e); handleChange(e);}}
                   />
                   {errors.firstName && touched.firstName && (
-                  <span className="error-msg text-danger">{errors.firstName}</span>
+                  <span className="error-msg text-dangerS">{errors.firstName}</span>
                   )}
                   </div>
                   <div className="form-group flex-column" style={{position:"relative", top:"-10px"}}>
@@ -192,7 +192,7 @@ const changeFn = (value_new,e) => {
                   onChange={(e) => { props.onlastNameChange(e); handleChange(e);}}
                   />
                   {errors.lastName && touched.lastName && (
-                    <span className="error-msg text-danger">{errors.lastName}</span>
+                    <span className="error-msg text-dangerS">{errors.lastName}</span>
                   )}
                   </div>
 
@@ -219,10 +219,10 @@ const changeFn = (value_new,e) => {
                 }):null}
                   />
                   {errors.email && touched.email && (
-                    <span className="error-msg text-danger">{errors.email}</span>
+                    <span className="error-msg text-dangerS">{errors.email}</span>
                   )}
                   {emailError && (
-                    <span className="error-msg text-danger">Email ID Already registered</span>
+                    <span className="error-msg text-dangerS">Email ID Already registered</span>
                   )}
                   </div>
 
@@ -247,10 +247,10 @@ const changeFn = (value_new,e) => {
                       onChange = {props.onphoneChange}
                     /></div>
                    {errors.phone && touched.phone && (
-                    <span className="error-msg text-danger">{errors.phone}</span>
+                    <span className="error-msg text-dangerS">{errors.phone}</span>
                   )}
                   {phoneError && (
-                    <span className="error-msg text-danger">Mobile No. Already registered</span>
+                    <span className="error-msg text-dangerS">Mobile No. Already registered</span>
                   )}
                   <div className="pb-3"></div>
                  
@@ -294,7 +294,7 @@ const changeFn = (value_new,e) => {
                         <img src={dropdownIcon} width="15" height="10" />
                     </div>
                     { errors.org && touched.org &&  (
-                      <span  className="error-msg text-danger "> {errors.org} </span>
+                      <span  className="error-msg text-dangerO "> {errors.org} </span>
                     )}
                     </div>  
                     
@@ -335,7 +335,7 @@ const changeFn = (value_new,e) => {
                   <img src={dropdownIcon} width="15" height="10" className="ml-3" />
                   </div>
                   {errors.org && touched.org && (
-                    <span className="error-msg text-danger">{errors.org}</span>
+                    <span className="error-msg text-dangerON">{errors.org}</span>
                   )}
                   </div>
                   {

@@ -105,11 +105,10 @@ const Home = (props) => {
     } else {
       isEmail = false;
     }
-    if(isEmail){
-      var data = {
+    var data = {
         firstName: values.firstName,
         lastName: values.lastName,
-        emailId: values.mobileemail,
+        authority: values.authority,
         organisationName: values.organisation,
         organisationId: 0,
         address: {
@@ -119,24 +118,13 @@ const Home = (props) => {
           country: '',
           pincode: values.pincode,
         },
-      };
-    }
-    else{
-      var data = {
-        firstName: values.firstName,
-        lastName: values.lastName,
-        phoneNumber: values.mobileemail,
-        organisationName: values.organisation,
-        organisationId: 0,
-        address: {
-          line1: values.line1,
-          city: values.district,
-          state: values.state,
-          country: '',
-          pincode: values.pincode,
-        },
-      };
-    }
+    };
+    
+    if(isEmail)
+      data.emailId = values.mobileemail;
+    else
+      data.phoneNumber = values.mobileemail;
+    
     dispatch(turnOn());
     const result = await registerUser(data);
     dispatch(turnOff());
