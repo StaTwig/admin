@@ -8,7 +8,7 @@ import {changePOStatus} from '../../actions/poActions';
 
 const ViewOrder = props => {
   const { order, id } = props;
-  console.log("order-----",order);
+  // console.log("order-----",order);
   const [alertMessage, setAlertMessage] = useState({});
   const user = useSelector((state) => {
     return state.user;
