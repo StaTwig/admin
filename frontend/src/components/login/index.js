@@ -11,9 +11,11 @@ import logo from '../../assets/brands/VaccineLedgerlogo.svg';
 import eye from '../../assets/icons/eye.png';
 import Phone from "../../assets/icons/phone.png";
 import TextField from '@material-ui/core/TextField';
+import { Hidden } from '@material-ui/core';
 
 const FormLoginPage = (props) => {
-  const { email, onEmailChange, errorMessage, onSendOtp, phone, onPhoneChange } = props;
+  const { email, onEmailChange, errorMessage, onSendOtp, phone, onPhoneChange,emailFieldDisable,phoneFieldDisable } = props;
+  console.log(emailFieldDisable,"emailFieldDisable");
   const onkeydown = (event) => {
     if (event.keyCode  === 13) {
         onSendOtp();
@@ -41,16 +43,18 @@ const FormLoginPage = (props) => {
                 <div className="login-form mt-2">
                   <div className="card-title mb-4">Login</div>
                   <div className="form-group mb-3 mt-1 ml-5 mr-5 p-1">
-                  <div style={{position:"absolute", left:"-5px", top:"25px"}}>
+                  <div style={{position:"absolute", left:"-5px", top:"10px"}}>
                         <img alt="Mail Icon" src={User} height="15px" width="18px" />
                   </div>      
                   <TextField 
-                        label="Email ID" 
+                        // label="Email ID" 
+                        placeholder={emailFieldDisable?" ":"Email ID"}
                         className="form-controlll ml-4"
                         name="email"
                         autoCapitalize = 'none'
                         value={email}
                         onChange={onEmailChange}
+                        disabled={emailFieldDisable}
                       />
                   </div>
                   <div className="card-title ml-3 mb-0 mt-3"><h5 style={{color:"#0093E9"}}>OR</h5></div>
@@ -58,16 +62,17 @@ const FormLoginPage = (props) => {
                   <div className="form-group mt-0 ml-3 p-1" style={{position:"relative", left:"-15px"}}>
                         <img alt="Phone icon" src={Phone} height="20px" width="20px" /></div>
                       <PhoneInput
-                        country={'in'}
-                        placeholder='Enter Phone number'
+                        // country={phoneFieldDisable?"":"in"}
+                        preferredCountries={['in']}
+                        placeholder={phoneFieldDisable?"":'Enter Phone number'}
                         inputProps={{
                           name: 'phone',
                           required: true,
-                          // autoFocus: true,
                           enableSearch: true,
                         }}
 						            value={phone}
                         onChange={onPhoneChange}
+                        disabled={phoneFieldDisable}
                       />
                    </div>
                     
