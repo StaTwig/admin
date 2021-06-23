@@ -162,7 +162,7 @@ const ReceiveShipment = (props) => {
             </div>
             <div>
               <button
-                className="btn-primary btn fontSize20 font-bold "
+                className="btn-primary btn fontSize20 font-bold mr-2 "
                 onClick={receiveShipment}
                 disabled={isDisabled}
               >

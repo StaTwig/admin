@@ -11,10 +11,10 @@ const ShipmentDetails = (props) => {
           <div className="d-flex flex-row  ">
           <ul className="mr-3 elemens w-50">
           <li className="mb-1 text-secondary">Shipment Date</li>
-          <h6 className="poheads potext mt-3 mb-3">From</h6>
+          <h6 className="poheads potext mt-3 mb-3 ml-2">From</h6>
             <li className="mb-1 text-secondary">Organisation Name</li>
            <li className="mb-1 text-secondary">Organisation Location</li>
-           <h6 className="poheads potext mt-3 mb-3">To</h6>
+           <h6 className="poheads potext mt-3 mb-3 ml-2">To</h6>
            <li className="mb-1 text-secondary">Organisation Name</li>
            <li className="mb-1 text-secondary">Organisation Location</li>
           </ul>
