@@ -154,7 +154,7 @@ const Analytics = (props) => {
 
   const resetFilters = () => {
     setSKU('');
-    setProp({});
+    // setProp({});
     setState('');
     setDistrict('');
     setIsActive('');

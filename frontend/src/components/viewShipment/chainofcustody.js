@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import traceDrop from "../../assets/icons/traceDrop.png";
 import Down from "../../assets/icons/up.png";
 import { config } from "../../config";
+import { getAddress } from '../../utils/commonHelper';
 
 const ChainOfCustody = (props) => {
   const configObject = config();
@@ -56,35 +57,35 @@ const ChainOfCustody = (props) => {
                     </div>
                     <h6 className="poheads potext mt-3 mb-3">From</h6>
                     <div className=" d-flex flex-row p-1">
-                      <span class="w-75  text-secondary">
+                      <span class="w-100  text-secondary">
                         Organisation Name{" "}
                       </span>
-                      <span class="w-75">{shipmentData.supplier.org.name}</span>
+                      <span class="w-100 pl-2">{shipmentData.supplier.org.name}</span>
                     </div>
                     <div className=" d-flex flex-row p-1">
-                      <span class="w-75 text-secondary">
+                      <span class="w-100 text-secondary">
                         Organisation Location{" "}
                       </span>
-                      <span class="w-75 ">
-                        {shipmentData.supplier.warehouse.postalAddress}
+                      <span class="w-100 pl-2 ">
+                        {getAddress(shipmentData.supplier.warehouse.warehouseAddress)}
                       </span>
                     </div>
                     <h6 className="poheads potext mt-3 mb-3">To</h6>
 
                     <div className=" d-flex flex-row p-1">
-                      <span class="w-75 text-secondary">
+                      <span class="w-100 text-secondary">
                         {" "}
                         Organisation Name{" "}
                       </span>
-                      <span class="w-75">{shipmentData.receiver.org.name}</span>
+                      <span class="w-100 pl-2">{shipmentData.receiver.org.name}</span>
                     </div>
                     <div className=" d-flex flex-row p-1">
-                      <span class="w-75 text-secondary">
+                      <span class="w-100 text-secondary">
                         {" "}
                         Organisation Location{" "}
                       </span>
-                      <span class="w-75">
-                        {shipmentData.receiver.warehouse.postalAddress}
+                      <span class="w-100 pl-2">
+                        {getAddress(shipmentData.receiver.warehouse.warehouseAddress)}
                       </span>
                     </div>
                   </div>

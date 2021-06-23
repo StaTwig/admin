@@ -199,6 +199,12 @@ const NewInventory = (props) => {
     );
     updatedInventoryState[index]['manufacturer'] = product?.manufacturer;
     updatedInventoryState[index]['productId'] = product?.id;
+    
+    if(key=="categories"){
+      updatedInventoryState[index]['productName'] ="";
+      updatedInventoryState[index]['manufacturer'] = "";
+      updatedInventoryState[index]['productId'] = "";
+    }
     let total = 0;
     updatedInventoryState.forEach((inv) => (total += parseInt(inv.quantity)));
     setInventoryState(updatedInventoryState);

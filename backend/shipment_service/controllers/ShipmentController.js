@@ -60,7 +60,8 @@ const inventoryUpdate = async (
       },
       {
         $inc: {
-          "inventoryDetails.$.quantityInTransit": quantity,
+          "inventoryDetails.$.quantityInTransit": parseInt(quantity),
+
         },
       }
     );
@@ -562,15 +563,18 @@ exports.createShipment = [
               );
             }
           } catch (err) {
+            console.log(err)
             return apiResponse.ErrorResponse(res,err);
           } 
       } 
      
     });
       }  catch (err) { 
-            return apiResponse.ErrorResponse(res, "Shipment not created");
+        console.log(err)
+        return apiResponse.ErrorResponse(res, "Shipment not created");
           }
     } catch (err) {
+      console.log(err)
       logger.log(
         "error",
         "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"

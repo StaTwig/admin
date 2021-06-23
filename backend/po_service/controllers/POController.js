@@ -905,7 +905,7 @@ exports.getOrderIds = [
     try {
      
       const {organisationId } = req.user;
-      const orderID = await RecordModel.find({$or:[{"supplier.supplierOrganisation":organisationId},{"customer.customerOrganisation":organisationId}]},'id');
+      const orderID = await RecordModel.find({$or:[{"supplier.supplierOrganisation":organisationId},{"customer.customerOrganisation":organisationId},{"createdBy":req.user.id}]},'id');
     
       return apiResponse.successResponseWithData(
         res,
@@ -1161,7 +1161,8 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
               }
 
               if (organisationId) {
-                whereQuery["customer.customerOrganisation"] = organisationId
+                //whereQuery["customer.customerOrganisation"] = organisationId
+		whereQuery["$or"] = [{"customer.customerOrganisation":organisationId},{'createdBy': id }]
               }
 
               if (deliveryLocation) {
@@ -1172,21 +1173,18 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
                   whereQuery["supplier.supplierOrganisation"] = toSupplier;
               }
 	      
-            let whereQueryNew = {};
-            whereQueryNew["$or"] = [whereQuery,{"createdBy": id }];
-
               if (productName) {
-                whereQueryNew.products = {
+                whereQuery.products = {
                   $elemMatch: {
                     productId: productName
                   }
                 }
               }
 
-              console.log("whereQuery ======>", whereQueryNew);
+              console.log("whereQuery ======>", whereQuery);
               try {
-                let outboundPOsCount = await RecordModel.count(whereQueryNew);
-                RecordModel.find(whereQueryNew).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((outboundPOList) => {
+                let outboundPOsCount = await RecordModel.count(whereQuery);
+                RecordModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((outboundPOList) => {
                   let outboundPORes = [];
                   let findOutboundPOData = outboundPOList.map(async (outboundPO) => {
                     let outboundPOData = JSON.parse(JSON.stringify(outboundPO))

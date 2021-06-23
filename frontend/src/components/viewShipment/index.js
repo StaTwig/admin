@@ -21,6 +21,8 @@ import Modal from "../../shared/modal";
 import { Link } from 'react-router-dom';
 import { chainOfCustody, updateStatus } from "../../actions/shipmentActions";
 import { receiveShipment } from "../../actions/shipmentActions";
+import { getAddress } from '../../utils/commonHelper';
+
 const Tracing = (props) => {
   // console.log('Props');
   // console.log(props);  
@@ -49,6 +51,7 @@ const Tracing = (props) => {
   const closeModalShipping = () => {
     setOpenShipping(false);
   };
+
   return (
     <div className="tracing">
       <div className="row justify-content-between">
@@ -168,11 +171,11 @@ const Tracing = (props) => {
               </div>
               <div className="col">
                 <div className="chain">
-                  <strong>{shippmentChainOfCustodyData[0].supplier.org.postalAddress}</strong>
+                  <strong>{getAddress(shippmentChainOfCustodyData[0].supplier.warehouse.warehouseAddress)}</strong>
                 </div>
                 <div className="chainhead mb-4">{shippmentChainOfCustodyData[0].supplier.org.name}</div>
                 <div className="chain">
-                  <strong>{shippmentChainOfCustodyData[0].receiver.org.postalAddress}</strong>
+                  <strong>{getAddress(shippmentChainOfCustodyData[0].receiver.warehouse.warehouseAddress)}</strong>
                 </div>
                 <div className="chainhead">{shippmentChainOfCustodyData[0].receiver.org.name}</div>
               </div>
