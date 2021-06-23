@@ -32,6 +32,8 @@ const EditRow = props => {
     }
   }
 
+
+
   return (
     <div className="row ml-3">
       <div className="trow row text-dark col">
@@ -44,7 +46,7 @@ const EditRow = props => {
                   onSelect={item => { handleCategoryChange(index, item) }}
                   groups={category}
                 /> */}
-                <Select
+                <Select 
                   className="no-border"
                   placeholder={<div className="select-placeholder-text">Select Product Category</div>} 
                   
@@ -65,11 +67,15 @@ const EditRow = props => {
                   onSelect={item => { handleProductChange(index, item) }}
                   groups={products}
                 /> */}
+
+                {
+                  console.log(prod.name==="")
+                }
                 <Select
                   className="no-border"
-                  placeholder={<div className="select-placeholder-text">Product Name</div>} 
-                  value={{value: prod.id, label: prod.name}}
-                  defaultInputValue={prod.name}
+                  placeholder={prod.name?prod.name:<div className="select-placeholder-text">Product Name</div>} 
+                  // value={{value: prod.id, label: prod.name}}
+                  defaultInputValue={prod.name?prod.name:""}
                   onChange={(v) => handleProductChange(index, v)}
                   options={products}
                 />

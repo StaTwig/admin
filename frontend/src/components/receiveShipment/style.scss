@@ -4,6 +4,10 @@
   color:$darkBlue; 
   font-weight:700;
 }
+.breadcrumb{
+  margin-left:10px;
+
+}
 
 .select{
   display: none;
@@ -86,9 +90,16 @@ border-radius:8px;
   }
   }
 
+
+
 .receiveShipment {
-  padding-right: 3rem;
-    padding-left: 4rem;
+  position:relative;
+  top:-22px;
+  //left:-px;
+  //margin-right:-10px;
+  overflow:hidden;
+   padding-right: 3rem;
+    padding-left: 3rem;
     @media (max-width: $md) {
       padding-right: 10px;
       padding-left: 10px;
@@ -199,5 +210,6 @@ color: #4A4A4A;
     }
 
 
-      }
+   }
+   
 
