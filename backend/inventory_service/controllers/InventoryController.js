@@ -2000,6 +2000,8 @@ exports.getProductDetailsByWarehouseId = [
       });
       const val = warehouseDetails.warehouseInventory;
       const productList = await InventoryModel.find({ id: val });
+      console.log(warehouseDetails);
+      
       const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails));
       var productArray = [];
       for (j = 0; j < list.length; j++) {
@@ -2009,16 +2011,18 @@ exports.getProductDetailsByWarehouseId = [
           productName: product[0].name,
           productId: product[0].id,
           manufacturer: product[0].manufacturer,
-          quantity: list[j].quantity,
+          quantity: list[j].quantity ? list[j].quantity : 0,
         };
         productArray.push(product1);
       }
+      let { firstLine, secondLine, city, state, country, zipCode } = warehouseDetails.warehouseAddress;
+      let address = firstLine +" "+(secondLine ? secondLine + ' ' : '') + city +' '+ state+' '+zipCode+' '+country;
       var warehouse = {
-        warehouseCountryId: warehouseDetails.country.id,
-        warehouseCountryName: warehouseDetails.country.name,
+        warehouseCountryId: warehouseDetails.country.countryId,
+        warehouseCountryName: warehouseDetails.country.countryName,
         warehouseId: warehouseDetails.id,
         warehouseName: warehouseDetails.title,
-        warehouseAddress: warehouseDetails.postalAddress,
+        warehouseAddress: address,
         warehouseLocation: warehouseDetails.location,
       };
 
@@ -2103,7 +2107,7 @@ exports.getWarehouseDetailsByRegion = [
     try {
       const { region } = req.query;
       const warehouseDetails = await WarehouseModel.find({
-        "region.name": region,
+        "region.regionName": region,
       });
 
       var warehouseArray = [];
@@ -2133,7 +2137,7 @@ exports.getWarehouseDetailsByCountry = [
     try {
       const { country } = req.query;
       const warehouseDetails = await WarehouseModel.find({
-        "country.name": country,
+        "country.countryName": country,
       });
 
       var warehouseArray = [];
