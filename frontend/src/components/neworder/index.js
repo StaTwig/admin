@@ -397,7 +397,7 @@ const NewOrder = (props) => {
                 </div>
             </div>
             {errors.products && touched.products && (
-              <span className="error-msg text-danger">{errors.products}</span>
+              <span className="error-msg text-danger1">{errors.products}</span>
             )}
 
             <div className="row mb-3">

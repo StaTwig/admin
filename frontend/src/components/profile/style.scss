@@ -53,6 +53,16 @@
     flex-grow: inherit;
     font-size: 16px;
   }
+  .form-controll {
+    border: none;
+    background: transparent;
+    border-bottom: 2px solid #d6d6d6;
+    border-radius: 0;
+    color: $black;
+    flex-basis: 43%;
+    margin-right: 55px;
+    margin-top: 10px;
+  }
   .wallet{
     border-bottom:none;
     
@@ -121,8 +131,9 @@ padding-left:100px;
 }
 .wrapper1 {
   text-align: center;
-  padding:25px;
-  top: 0px;
+  padding:20px;
+  margin-bottom: 40px;
+  
 }
 
 .slectloc1
@@ -258,4 +269,14 @@ padding-left:100px;
   font-weight: bold;
   padding-top: 3vh;
   padding-bottom: 2vh;
+}
+
+.addLocationText{
+  text-align: center;
+  font-size: 30px;
+  margin-top: -20px;
+  margin-bottom: 50px;
+}
+.line{
+  color:#707070;
 }
