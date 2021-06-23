@@ -23,6 +23,8 @@ import { Formik } from "formik";
 import Select from 'react-select';
 import {getOrganizationsTypewithauth} from '../../actions/userActions';
 import { getProducts, getProductsByCategory } from "../../actions/poActions";
+import {getProductList} from '../../actions/productActions';
+
 
 const NewShipment = (props) => {
   const [OrderIds, setOrderIds] = useState([]);
@@ -62,7 +64,7 @@ const NewShipment = (props) => {
   const [formatedDate, setformatedDate] = "4-21-2021";
   const [modalProps, setModalProps] = useState({});
   const [orgTypes, setOrgTypes] = useState([]);
-
+  const [productsList,setProductsList] = useState([]);
   const profile = useSelector((state) => {
     return state.user;
   });
@@ -90,7 +92,13 @@ const NewShipment = (props) => {
     // let date = new Date();
 
     // setformatedDate(`${date.getMonth()+1}-${date.getDate()}-${date.getFullYear()}`);
+    
     async function fetchData() {
+
+      const result111 = await getProductList();
+      console.log(result111);
+      setProductsList(result111.message);
+
       const { search } = props.location;
       // const result = await getShippingOrderIds();
       const result = await getOpenOrderIds();
@@ -311,7 +319,50 @@ const NewShipment = (props) => {
         setShipmentError("Check product quantity");
         setOpenShipmentFail(true);
       }
-      else if (result?.id) {
+      else{
+
+        console.log(productsList);
+        ////////////////////////////////
+        let i,j;
+        let check = true;
+        let nn = data.products.length;
+        for(i=0;i<data.products.length;i++)
+        {
+          let prdctName = data.products[i].productName;
+          let qty = parseInt(data.products[i].productQuantity);
+          console.log("typed quantity is " + qty);
+          let flag = false;
+          
+          for(j=0;j<productsList.length;j++)
+          {
+            console.log("product list name is " + productsList[j].productName);
+            console.log("dataProductName is " + prdctName);
+            if(productsList[j].productName===prdctName)
+            {
+              console.log("typed quantity is " + qty + " product quantity is " + productsList[j].quantity);
+              if(qty > productsList[j].quantity)
+              {
+                
+                flag = false;
+                break;
+              }
+              else{
+                flag = true;
+              }
+            }
+          }
+
+          if(!flag)
+          {
+            setShipmentError("Not enough quantity of the selected product available");
+            //setShipmentError("Check product quantity");
+            setOpenShipmentFail(true);
+            break;
+          }
+        }
+
+        if(i >=nn){
+         if (result?.id) {
         setMessage("Created Shipment Success");
         setOpenCreatedInventory(true);
         setModalProps({
@@ -324,10 +375,15 @@ const NewShipment = (props) => {
         setOpenShipmentFail(true);
         setErrorMessage("Create Shipment Failed");
       }
-    } else {
+    }
+    } 
+  }
+    else {
       setShipmentError("Check product quantity");
       setOpenShipmentFail(true);
     }
+
+    
   };
 
   const handleSOChange = async (item) => {
@@ -416,7 +472,7 @@ const NewShipment = (props) => {
           estimateDeliveryDate: "",
           products: [],
         }}
-        validate={(values) => {
+        validate={(values) => { 
           const errors = {};
           if (!values.fromOrg) {
             errors.fromOrg = "Required";

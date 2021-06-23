@@ -78,6 +78,7 @@ const Inventory = props => {
      useEffect(() => {
     async function fetchData() {
       const result = await getProductList();
+      console.log(result);
       setProductsList(result.message);
       const resultAnalytics = await getInventoryAnalytics();
       
@@ -358,6 +359,9 @@ const Inventory = props => {
                   <button className="btn btn-link mr-3"><b>View all</b></button>
                 </Link>
               </div>
+              {
+                console.log(productsList)
+              }
               <div className="row overflow">
                 {productsList?.map((product, index) => (
                   <div className="col-sm-6" key={index}>
