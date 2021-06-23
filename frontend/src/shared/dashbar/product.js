@@ -11,7 +11,7 @@ const Product = props => {
             <div className="d-flex flex-column mb-2">
                 <div className="row pb-1 pt-1">
                     <span className="col text-secondary">Product ID: </span>
-                    <span className="col font-weight-bold">{product.productID}</span>
+                    <span className="col font-weight-bold">{product.productID ? product.productID : product.productId}</span>
                 </div>
                 <div className="row pb-1 pt-1">
                     <span className="col text-secondary">Product Name: </span>
@@ -19,7 +19,7 @@ const Product = props => {
                 </div>
                 <div className="row pb-1 pt-1">
                     <span className="col text-secondary">Quantity: </span>
-                    <span className="col font-weight-bold">{product.productQuantity}</span>
+                    <span className="col font-weight-bold">{product.productQuantity ? product.productQuantity : product.quantity}</span>
                 </div>
             </div>
         </div>

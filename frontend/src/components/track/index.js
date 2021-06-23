@@ -106,7 +106,7 @@ const Track = (props) => {
                   />
                 </div>
                 {isSubmitted && (
-                  <span className="text-danger">No data found</span>
+                  <span className="redTxt">No data found</span>
                 )}
               </div>
             </>
