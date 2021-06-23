@@ -712,7 +712,7 @@ exports.verifyOtp = [
           );
           return apiResponse.successResponseWithData(res, 'Login Success', userData);
         } else {
-          return apiResponse.ErrorResponse(res, `Otp doesn't match`);
+          return apiResponse.ErrorResponse(res, `OTP doesn't match`);
         }
       }
     } catch (err) {
