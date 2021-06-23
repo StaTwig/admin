@@ -44,6 +44,7 @@ const NewShipment = (props) => {
   const [receiverOrgId, setReceiverOrgId] = useState(
     "Select Organisation Name"
   );
+  const [toOrgLocLabel,settoOrgLocLabel] = useState("");
   const [receiverOrgLoc, setReceiverOrgLoc] = useState(
     "Select Delivery Location"
   );
@@ -112,7 +113,7 @@ const NewShipment = (props) => {
       const orgs = await getAllOrganisations();
       
       const orgSplit = user.organisation?.split("/");
-      console.log(orgSplit,"sender");
+      // console.log(orgSplit,"sender");
       setSenderOrganisation([orgSplit[0]]);
       // const organisations = orgs.data.filter((org) => org.id != orgSplit[1]);
       const organisations = orgs.data;
@@ -549,11 +550,13 @@ const NewShipment = (props) => {
                           setOrderId(v.value);
                           dispatch(turnOn());
                           const result = await dispatch(getOrder(v.value));
+                          console.log(result);
                           setReceiverOrgLoc(
                              result.poDetails[0].customer.warehouse.title + '/' + result.poDetails[0].customer.warehouse.postalAddress
                           );
                           setReceiverOrgId(
-                            result.poDetails[0].customer.organisation.id
+                            result.poDetails[0].customer.organisation.name
+                            // result.poDetails[0].customer.organisation.id
                           );
                           setOrderDetails(result.poDetails[0]);
 
@@ -576,11 +579,13 @@ const NewShipment = (props) => {
                             "toOrg",
                             result.poDetails[0].customer.organisation.id + "/"+result.poDetails[0].customer.organisation.name
                           );
+                          settoOrgLocLabel(result.poDetails[0].customer.organisation.id + "/"+result.poDetails[0].customer.organisation.name)
                           let wa = result.poDetails[0].customer.warehouse;
                           setFieldValue(
                             "toOrgLoc",
                             result.poDetails[0].customer.shippingAddress.shippingAddressId + "/" + (wa?.warehouseAddress ? wa?.title + '/' + wa?.warehouseAddress?.firstLine + ", " + wa?.warehouseAddress?.city : wa?.title + '/' + wa.postalAddress)
                           );
+                          settoOrgLocLabel(wa?.warehouseAddress ? wa?.title + '/' + wa?.warehouseAddress?.firstLine + ", " + wa?.warehouseAddress?.city : wa?.title + '/' + wa.postalAddress)
                           setFieldValue(
                             "rtype",
                             result.poDetails[0].customer.organisation
@@ -771,6 +776,8 @@ const NewShipment = (props) => {
                           onChange={(v) => {
                             setFieldValue('rtype', v?.value);
                             setFieldValue('rtypeName', v?.label); 
+                            setFieldValue("toOrg","");  
+                            setFieldValue("toOrgLoc", ""); 
                           }}
                           defaultInputValue={values.rtypeName}
                           options={orgTypes}
@@ -805,7 +812,9 @@ const NewShipment = (props) => {
                         <Select
                           styles={customStyles}
                           isDisabled={disabled}
-                          placeholder={disabled ? (values.toOrg).split("/")[1] : "Select Organisation Name"}
+                          // placeholder={disabled ? (values.toOrg).split("/")[1] : "Select Organisation Name"}
+                          placeholder={"Select Organisation Name"}
+                          value={values.toOrg==""?"Select Organisation Name":{value: values.toOrg, label: receiverOrgId}}
                           onChange={(v) => {
                             setFieldValue("toOrgLoc", "");
                             setReceiverOrgId(v.label);
@@ -848,9 +857,13 @@ const NewShipment = (props) => {
                         <Select
                           styles={customStyles}
                           isDisabled={disabled}
-                          placeholder={disabled ? values.toOrgLoc.split("/")[1] : "Select Delivery Location"}
+                          // placeholder={disabled ? values.toOrgLoc.split("/")[1] : "Select Delivery Location"}
+                          placeholder={"Select Delivery Location"}
+                          value={values.toOrgLoc==""?"Select Delivery Loction":{value: values.toOrgLoc, label:toOrgLocLabel}}
                           onChange={(v) => {
                             setFieldValue("toOrgLoc", v.value);
+                            settoOrgLocLabel(v.label)
+                            console.log(v.label);
                           }}
                           defaultInputValue={values.toOrgLoc}
                           options={receiverWarehouses}
