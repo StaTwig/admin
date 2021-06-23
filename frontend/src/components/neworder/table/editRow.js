@@ -73,8 +73,8 @@ const EditRow = props => {
                 }
                 <Select
                   className="no-border"
-                  placeholder={prod.name ? prod.name: <div className="select-placeholder-text"> 
-                  Product Name
+                  placeholder= {prod.name ? prod.name : <div className= "select-placeholder-text" > 
+                   Product Name
                   </div>} 
                   // value={{value: prod.id, label: prod.name}}
                   defaultInputValue={prod.name?prod.name:" "}
