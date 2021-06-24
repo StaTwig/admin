@@ -17,7 +17,7 @@ const ProductList = (props) => {
         Object.keys(props.shipments).length === 0? <div className="row panel justify-content-between">N/A</div> :
             <div>
                 {props.shipments.products.map((product,index) =>(
-                 <div className={props.productHighLight ? "col panel commonpanle highlight " : "col panel commonpanle "}>
+                 <div className={props.productHighLight ? "col panel commonpanle highlight mb-5 " : "col panel commonpanle mb-5"}>
                     <div className="d-flex flex-row " >
                         <ul className="mr-2 w-75 elemens">
                             <li className="mb-3 productheading" style={{fontSize:'3vh',color:"#0093E9", fontWeight:700}}>{product.productName}</li>

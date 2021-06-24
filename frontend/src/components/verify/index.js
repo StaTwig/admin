@@ -154,6 +154,7 @@ const FormVerifyPage = (props) => {
                         </div>
                         <div
                           className="text-center mb-5 text-primary resend"
+                          style={{cursor: "pointer"}}
                           onClick={onResendOtp}
                         >
                           RESEND CODE

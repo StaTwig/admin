@@ -30,7 +30,6 @@ services:
     build: './backend/alert_service'
     image: 'alert_service1.0'
     container_name: 'alert_service1.0'
-    restart: always
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
