@@ -9,6 +9,9 @@ const Organisations = (props) => {
   const [data, setData] = useState([]);
   const closeModal = () => setShowModal(false);
   const { orgList, modifyOrg, setShowModals, addOrg, orgTypes } = props;
+  orgList.sort(function (a, b) {
+    return new Date(b.createdAt) < new Date(a.createdAt) ? -1 : 0;
+  });
   // console.log("org" + orgTypes)
   return (
     <div className="users">

@@ -31,8 +31,7 @@ export const organisationReducer = (state = initialState, action) => {
     case SET_ORGANISATION_ADDRESSES:
       return { ...state, addresses: action.payload.data };
     case SET_ORGANISATION_TYPES:
-      console.log(action.payload)
-        return { ...state, types: action.payload };      
+      return { ...state, types: action.payload };
     case SET_ORGANISATION_USERS:
       return { ...state, users: action.payload.data };
     case SET_ORGANISATION_REQ_SENT:

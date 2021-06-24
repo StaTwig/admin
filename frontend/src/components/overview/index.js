@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "leaflet/dist/leaflet.css";
 import NewRequests from "./newrequests";
+import LocationRequests from "./locationrequests";
 import SentRequests from "./sentrequests";
 import RecentRequests from "./recentrequests";
 import Modal from "../../shared/modal";
@@ -22,9 +23,11 @@ const DashBoard = (props) => {
     organisationsList,
     sendAffiliate,
     users,
+    modifyLocations,
     addresses,
+    locationApprovals,
   } = props;
-  requestsPending.sort(function(a,b){
+  requestsPending.sort(function (a, b) {
     return new Date(b.createdAt) - new Date(a.createdAt);
   });
 
@@ -87,7 +90,7 @@ const DashBoard = (props) => {
           {requestsPending.length == 0 && <NoRecordsFound />}
         </div>
         <div className="panel w-50 mt-3">
-          <div>
+          {/* <div>
             <h5 className="sub-header">Send Request</h5>
             <SentRequests
               sendAffiliate={sendAffiliate}
@@ -108,6 +111,23 @@ const DashBoard = (props) => {
               <RecentRequests reqSent={row} key={index} />
             ))}
             {recentRequestsSent.length == 0 && <NoRecordsFound />}
+          </div> */}
+          <div className="">
+            <h5 className="sub-header">Location approvals</h5>
+            {locationApprovals.map((row, index) => (
+              <LocationRequests
+                row={row}
+                key={index}
+                rindex={index}
+                setShowModal={setShowModal}
+                setData={setData}
+                rejectApproval={rejectApproval}
+                setTitle={setTitle}
+                setBtnTxt={setBtnTxt}
+                modifyLocations={modifyLocations}
+              />
+            ))}
+            {locationApprovals.length == 0 && <NoRecordsFound />}
           </div>
         </div>
       </div>

@@ -1,13 +1,13 @@
-import React ,{useState} from 'react';
-import './style.scss';
-import {updateOrgTypesUrl} from "../../../actions/organisationActions";
-import {addNewOrgTypesUrl} from "../../../actions/organisationActions";
+import React, { useState } from "react";
+import "./style.scss";
+import { updateOrgTypesUrl } from "../../../actions/organisationActions";
+import { addNewOrgTypesUrl } from "../../../actions/organisationActions";
 
-const EditRow = props => {
-  const [editButtonStatus,setEditButtonStatus]=useState(false);
-  const [changeValue,setValue]=useState("");
-  const [changebtn,setbtn]=useState(false);
-  const [addnew,setAddnew]=useState(!props.category);
+const EditRow = (props) => {
+  const [editButtonStatus, setEditButtonStatus] = useState(false);
+  const [changeValue, setValue] = useState("");
+  const [changebtn, setbtn] = useState(false);
+  const [addnew, setAddnew] = useState(!props.category);
   const [disabled, setDisabled] = useState(true);
   const {
     prod,
@@ -22,7 +22,7 @@ const EditRow = props => {
   } = props;
 
   //console.log(add,"9999999999999999");
-  console.log(props.category, "wwwwqqqqqqqqq");
+  // console.log(props.category, "wwwwqqqqqqqqq");
 
   const onEditClick = (e) => {
     setDisabled(!disabled);

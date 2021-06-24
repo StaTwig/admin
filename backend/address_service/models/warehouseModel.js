@@ -50,6 +50,7 @@ var WarehouseSchema = new mongoose.Schema(
         geohash: "1231nejf923453",
       },
     },
+    status: String,
     supervisors: {
       type: Array,
       default: [],

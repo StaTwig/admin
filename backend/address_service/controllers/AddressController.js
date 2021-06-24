@@ -4,6 +4,7 @@ const Warehouse = require("../models/warehouseModel");
 const Inventory = require("../models/inventoryModel");
 const CounterModel = require("../models/CounterModel");
 const EmployeeModel = require("../models/EmployeeModel");
+const ConfigurationModel = require("../models/ConfigurationModel");
 const auth = require("../middlewares/jwt");
 const { customAlphabet } = require("nanoid");
 const nanoid = customAlphabet("1234567890abcdef", 10);
@@ -49,6 +50,61 @@ exports.addressesOfOrgWarehouses = [
           return apiResponse.ErrorResponse(res, err);
         });
     } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+function getConditionForLocationApprovals(type, id) {
+  let matchConditions = { status: "NOTVERIFIED" };
+  if (type != "CENTRAL_AUTHORITY") matchConditions.organisationId = id;
+  return matchConditions;
+}
+
+exports.getLocationApprovals = [
+  auth,
+  async (req, res) => {
+    try {
+      const orgType = req.user.organisationType;
+      await Warehouse.aggregate([
+        {
+          $match: getConditionForLocationApprovals(
+            orgType,
+            req.user.organisationId
+          ),
+        },
+        {
+          $lookup: {
+            from: "employees",
+            let: {
+              wid: "$id",
+            },
+            pipeline: [
+              {
+                $match: {
+                  $expr: { $in: ["$$wid", "$warehouseId"] },
+                },
+              },
+            ],
+            as: "employee",
+          },
+        },
+        { $unwind: "$employee" },
+      ])
+        .then((warehouses) => {
+          return apiResponse.successResponseWithData(
+            res,
+            "Warehouses details",
+            warehouses
+          );
+        })
+        .catch((err) => {
+          console.log(err);
+          return apiResponse.ErrorResponse(res, err);
+        });
+    } catch (err) {
+      console.log(err);
+
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -169,6 +225,7 @@ exports.AddWarehouse = [
         supervisors,
         employees,
         warehouseAddress,
+        status: "ACTIVE",
         warehouseInventory: inventoryResult.id,
       });
       await warehouse.save();
@@ -355,6 +412,72 @@ exports.addAddressesFromExcel = [
       return apiResponse.successResponseWithData(res, "Success", data);
     } catch (e) {
       return apiResponse.ErrorResponse(res, e);
+    }
+  },
+];
+
+exports.modifyLocation = [
+  auth,
+  async (req, res) => {
+    try {
+      const { id, eid, type } = req.body;
+
+      await Warehouse.updateOne(
+        { id: id },
+        { status: type === 1 ? "ACTIVE" : "REJECTED" }
+      )
+        .then(async (warehouse) => {
+          await ConfigurationModel.findOne({ id: "CONF000" })
+            .select("active_locations")
+            .then(async (conf) => {
+              if (conf?.active_locations === 1 && type == 1) {
+                await EmployeeModel.updateOne(
+                  {
+                    id: eid,
+                  },
+                  {
+                    $set: {
+                      warehouseId: [id],
+                    },
+                  }
+                );
+              }
+              // if (type == 2) {
+              //   await EmployeeModel.updateOne(
+              //     {
+              //       id: eid,
+              //     },
+              //     {
+              //       $push: {
+              //         warehouseId: id,
+              //       },
+              //     }
+              //   );
+              // } else {
+              //   await EmployeeModel.updateOne(
+              //     {
+              //       id: eid,
+              //     },
+              //     {
+              //       $pull: {
+              //         warehouseId: id,
+              //       },
+              //     }
+              //   );
+              // }
+            });
+
+          return apiResponse.successResponseWithData(
+            res,
+            "Location " + (type == 1 ? "approved" : "rejected"),
+            []
+          );
+        })
+        .catch((err) => {
+          return apiResponse.ErrorResponse(res, err);
+        });
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
     }
   },
 ];

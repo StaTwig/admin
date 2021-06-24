@@ -10,22 +10,24 @@ exports.getOrgs = [
   auth,
   async (req, res) => {
     try {
-        const users = await OrganisationModel.find({
-          // status: "NOTVERIFIED",
-        }).select(
-          "name postalAddress country primaryContactId createdAt type status logoId id"
-        );
-      for(var c = 0; c < users.length; c++){
-        if(EmployeeIdMap.has(users[c].primaryContactId)){
-          users[c].primaryContactId = EmployeeIdMap.get(users[c].primaryContactId);
-        }
-        else{
+      const users = await OrganisationModel.find({
+        // status: "NOTVERIFIED",
+      }).select(
+        "name postalAddress country primaryContactId createdAt type status logoId id"
+      );
+      for (var c = 0; c < users.length; c++) {
+        if (EmployeeIdMap.has(users[c].primaryContactId)) {
+          users[c].primaryContactId = EmployeeIdMap.get(
+            users[c].primaryContactId
+          );
+        } else {
           try {
-            const employeeEmail = await EmployeeModel.findOne({id:users[c].primaryContactId}).select("emailId");
+            const employeeEmail = await EmployeeModel.findOne({
+              id: users[c].primaryContactId,
+            }).select("emailId");
             EmployeeIdMap.set(users[c].primaryContactId, employeeEmail.emailId);
             users[c].primaryContactId = employeeEmail.emailId;
-          } catch (err) {
-          }
+          } catch (err) {}
         }
       }
       return apiResponse.successResponseWithData(
@@ -53,12 +55,12 @@ exports.updateOrg = [
             {
               $set: {
                 status: status,
-                type:type,
-                typeId : typeId || ""
+                type: type,
+                typeId: typeId || "",
               },
             },
             {
-              new: true
+              new: true,
             }
           )
             .then(async (org) => {
@@ -70,14 +72,18 @@ exports.updateOrg = [
                   },
                 }
               );
-              return apiResponse.successResponseWithData(res,"Organisation updated ", org);
+              return apiResponse.successResponseWithData(
+                res,
+                "Organisation updated ",
+                org
+              );
             })
             .catch((err) => {
               console.log(err);
               return apiResponse.ErrorResponse(res, err);
             });
         } else {
-          return apiResponse.unauthorizedResponse(res , result)
+          return apiResponse.unauthorizedResponse(res, result);
         }
       });
     } catch (err) {
