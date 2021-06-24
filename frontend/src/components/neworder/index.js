@@ -78,6 +78,7 @@ const NewOrder = (props) => {
   const [openOrder, setOpenOrder] = useState(false);
   const [failedPop, setFailedPop] = useState(false);
   const [shipmentError, setOrderError] = useState("");
+  const [addAnotherProductFailed, setAddAnotherProductFailed] = useState(false);
   const [orgTypes, setOrgTypes] = useState([]);
 
   useEffect(() => {
@@ -130,6 +131,11 @@ const NewOrder = (props) => {
   const closeModalFail = () => {
     setFailedPop(false);
   };
+
+  const closeModalFailedAddAnotherProduct = ()=>{
+    setAddAnotherProductFailed(false);
+  };
+
   const closeModal = () => {
     setOpenCreatedOrder(false);
   };
@@ -390,6 +396,10 @@ const NewOrder = (props) => {
                         let newArr = { productId: '', id: '', name: '', manufacturer: '', productQuantity: '', type: '' };
                         setAddProducts(prod => [...prod, newArr]);
                       }
+                      else{
+                        setOrderError("Fill all the required Product Details");
+                        setAddAnotherProductFailed(true);
+                      }
                     }}
                   >
                     +<span> Add Another Product</span>
@@ -644,6 +654,18 @@ const NewOrder = (props) => {
         >
           <ShipmentFailPopUp
             onHide={closeModalFail} //FailurePopUp
+            shipmentError={shipmentError}
+          />
+        </Modal>
+      )}
+
+      {addAnotherProductFailed && (
+        <Modal
+          close={()=>closeModalFailedAddAnotherProduct()}
+          size="modal-md"
+          >
+          <ShipmentFailPopUp
+            onHide={closeModalFailedAddAnotherProduct} //FailurePopUp
             shipmentError={shipmentError}
           />
         </Modal>
