@@ -4,6 +4,7 @@ const Warehouse = require("../models/warehouseModel");
 const Inventory = require("../models/inventoryModel");
 const CounterModel = require("../models/CounterModel");
 const EmployeeModel = require("../models/EmployeeModel");
+const ConfigurationModel = require("../models/ConfigurationModel");
 const auth = require("../middlewares/jwt");
 const { customAlphabet } = require("nanoid");
 const nanoid = customAlphabet("1234567890abcdef", 10);
@@ -420,34 +421,52 @@ exports.modifyLocation = [
   async (req, res) => {
     try {
       const { id, eid, type } = req.body;
+
       await Warehouse.updateOne(
         { id: id },
-        { status: type === 1 ? "STATUS" : "REJECTED" }
+        { status: type === 1 ? "ACTIVE" : "REJECTED" }
       )
         .then(async (warehouse) => {
-          // if (type == 2) {
-          //   await EmployeeModel.updateOne(
-          //     {
-          //       id: eid,
-          //     },
-          //     {
-          //       $push: {
-          //         warehouseId: id,
-          //       },
-          //     }
-          //   );
-          // } else {
-          //   await EmployeeModel.updateOne(
-          //     {
-          //       id: eid,
-          //     },
-          //     {
-          //       $pull: {
-          //         warehouseId: id,
-          //       },
-          //     }
-          //   );
-          // }
+          await ConfigurationModel.findOne({ id: "CONF000" })
+            .select("active_locations")
+            .then(async (conf) => {
+              if (conf?.active_locations === 1 && type == 1) {
+                await EmployeeModel.updateOne(
+                  {
+                    id: eid,
+                  },
+                  {
+                    $set: {
+                      warehouseId: [id],
+                    },
+                  }
+                );
+              }
+              // if (type == 2) {
+              //   await EmployeeModel.updateOne(
+              //     {
+              //       id: eid,
+              //     },
+              //     {
+              //       $push: {
+              //         warehouseId: id,
+              //       },
+              //     }
+              //   );
+              // } else {
+              //   await EmployeeModel.updateOne(
+              //     {
+              //       id: eid,
+              //     },
+              //     {
+              //       $pull: {
+              //         warehouseId: id,
+              //       },
+              //     }
+              //   );
+              // }
+            });
+
           return apiResponse.successResponseWithData(
             res,
             "Location " + (type == 1 ? "approved" : "rejected"),
