@@ -93,7 +93,7 @@ const Track = (props) => {
                 <div className="search-form">
                   <input
                     type="text"
-                    placeholder="Enter Order ID or Serial No."
+                    placeholder="Enter Order ID or Serial No. or Shipment No. or Airway Bill No."
                     onChange={onSearchChange}
                     //className="form-control border border-primary search-field"
                       className="form-control search-field border-8"
