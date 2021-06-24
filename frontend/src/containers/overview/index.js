@@ -108,11 +108,7 @@ const DashBoardContainer = (props) => {
   };
 
   const modifyLocations = async (data) => {
-    console.log(data);
-
     const result = await modifyLocation(data);
-    console.log(result);
-
     if (result?.status === 200) {
       let newArr = [...locationApprovals];
       newArr.splice(data.rindex, 1);

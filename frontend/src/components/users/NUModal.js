@@ -27,7 +27,7 @@ const NUModal = (props) => {
         initialValues={{ email: data?.ref, role: "", warehouse: "" }}
         validate={(values) => {
           const errors = {};
-          console.log(values);
+          // console.log(values);
 
           if (!values.email) {
             errors.email = "Required";

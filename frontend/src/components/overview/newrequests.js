@@ -30,13 +30,13 @@ const NewRequests = (props) => {
           </div>
           <div className="pb-2 d-flex">
             <span className="txtColor">
-              {requestRow?.phoneNumber == "" ? "Email: " : "Mobile: "}
+              {requestRow?.phoneNumber ? "Mobile: " : "Email: "}
             </span>
             <span className="txtWrapR">
               &nbsp;
-              {requestRow?.phoneNumber == ""
-                ? requestRow?.emailId
-                : requestRow?.phoneNumber}
+              {requestRow?.phoneNumber
+                ? requestRow?.phoneNumber
+                : requestRow?.emailId}
             </span>
           </div>
           {/* <div className="pb-2">

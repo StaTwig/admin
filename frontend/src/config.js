@@ -61,7 +61,7 @@ export function config() {
       activateOrgUserUrl: `${TEST_SERVER_URL}/api/employee_service/activateUser`,
       deactivateOrgUserUrl: `${TEST_SERVER_URL}/api/employee_service/deactivateUser`,
       getOrgUsersUrl: `${TEST_SERVER_URL}/api/employee_service/auth/getOrgUsers`,
-      getOrgUrl: `${TEST_SERVER_URL}/api/employee_service/getOrgs`,
+      getOrgUrl: `${LOCAL_SERVER_URL_EMPLOYEE}/api/employee_service/getOrgs`,
       getOrgActiveUsers: `${TEST_SERVER_URL}/api/employee_service/auth/getOrgActiveUsers`,
       addOrgUserUrl: `${TEST_SERVER_URL}/api/employee_service/addUser`,
       recentRequestsSentUrl: `${TEST_SERVER_URL}/api/affliation_service/fetchSentRequests`,

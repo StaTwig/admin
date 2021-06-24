@@ -1,35 +1,28 @@
-import React, { useState,useEffect } from 'react';
-import EditRow from './editRow';
-import {getOrgTypeiIdsUrl} from "../../../actions/organisationActions"
+import React, { useState, useEffect } from "react";
+import EditRow from "./editRow";
+import { getOrgTypeiIdsUrl } from "../../../actions/organisationActions";
 
+import "./style.scss";
 
-import './style.scss';
-
-const EditTable = props => { 
-  const [add,setAdd]=useState(false);
+const EditTable = (props) => {
+  const [add, setAdd] = useState(false);
 
   //console.log(props.products,"0000");
-  console.log(props.category);
-  
+  // console.log(props.category);
 
- return (
+  return (
     <div className="table productTable mb-0 mt-2">
-     <div className="d-flex flex-column">
-      
+      <div className="d-flex flex-column">
         <div className="">
-        
           {props.products[0].map((product, index) => (
-           
             <EditRow
-                key={index}
-                prod={product}
-                {...props}
-                index={index}
-                category={props.category}
-                
+              key={index}
+              prod={product}
+              {...props}
+              index={index}
+              category={props.category}
             />
           ))}
-          
         </div>
         <div className="">
           {props.product.map((product, index) => (
@@ -41,9 +34,7 @@ const EditTable = props => {
               category={props.category}
             />
           ))}
-          
         </div>
-       
       </div>
     </div>
   );
@@ -51,13 +42,9 @@ const EditTable = props => {
 
 export default EditTable;
 
-
 /*<div className="input-group-append">
 <img src={downArrow} alt="downarrow" width="9" height="9" />
 </div>*/
-
-
-
 
 // import React, { useState } from 'react';
 // import EditRow from './editRow';
@@ -66,7 +53,7 @@ export default EditTable;
 // // import quantity from '../../../assets/icons/TotalInventoryAdded_2.png';
 // import './style.scss';
 
-// const EditTable = props => {  
+// const EditTable = props => {
 //  return (
 //     <div className="table productTable mb-0 mt-2">
 //      <div className="d-flex flex-column">
@@ -93,7 +80,6 @@ export default EditTable;
 // };
 
 // export default EditTable;
-
 
 // /*<div className="input-group-append">
 // <img src={downArrow} alt="downarrow" width="9" height="9" />
