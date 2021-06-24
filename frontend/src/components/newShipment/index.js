@@ -1208,7 +1208,7 @@ const NewShipment = (props) => {
                   Cancel
                 </button>
 
-                <button className="btn btn-yellow fontSize20 font-bold">
+                <button className="btn btn-orange fontSize20 font-bold">
                   <img src={Add} width="20" height="17" className="mr-2 mb-1" />
                   <span>Create Shipment</span>
                 </button>
