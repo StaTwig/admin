@@ -111,10 +111,11 @@ class Profile extends React.Component {
         warehouseAddress_state,
         title,
       });
-      if((this.state.profileData.phoneNumber).includes("+")){
-        this.setState({phoneNumber:(this.state.profileData.phoneNumber).slice(1,(this.state.profileData.phoneNumber).length)});
-      }
-      console.log(this.state.profileData.phoneNumber,"Profile Data");
+      // if((this.state.profileData.phoneNumber).includes("+")){
+      //   this.setState({phoneNumber:(this.state.profileData.phoneNumber).replace('+','')});
+      //   // this.setState({phoneNumber:(this.state.profileData.phoneNumber).slice(1,(this.state.profileData.phoneNumber).length)});
+      // }
+      // console.log(this.state.profileData.phoneNumber.replace('+',''),"Profile Data");
     } else {
       //error
     }
@@ -600,7 +601,7 @@ class Profile extends React.Component {
                           className="mr-3"
                         />
                         {(this.state.phoneNumber) ? (
-                          <span>+{this.state.phoneNumber}</span>
+                          <span>+{(this.state.phoneNumber).replaceAll('+','')}</span>
                         ) : (
                           <span>N/A</span>
                         )}
