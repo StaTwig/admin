@@ -59,7 +59,7 @@ const ProductInventory = props => {
       <div className="d-flex justify-content-between">
         <h1 className="breadcrumb">{enable ? 'PRODUCT CATEGORY' : 'PRODUCTS OUT OF STOCK'}</h1>
         <div className="d-flex">
-          <Link to="/newinventory">
+        <Link to="/addNewCategory">
             <button className="btn btn-yellow">
               <img src={Add} width="13" height="13" className="mr-2" />
               <span>Add New Category</span>
