@@ -9,7 +9,7 @@ const ShipmentFailPopUp = (props) => {
       <div className="d-flex  flex-column align-items-center">
         <img src={Cancel} width='60' height='60'className="mb-3" />
         <div className="alert font-weight-bolder"> Fail! </div>
-        <div className="font-weight-bolder error">' {props.shipmentError} '</div>
+        <div className="font-weight-bolder error text-center">' {props.shipmentError} '</div>
         <div className="data">{props.shipmentError=='Check deliveryDate'? null :"cannot be Empty"}</div>
         <div className="data mb-3"> Please Try Again </div>
         <button className="btn-primary btn" onClick={props.onHide}>TRY AGAIN</button>

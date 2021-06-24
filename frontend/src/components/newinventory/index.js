@@ -294,14 +294,20 @@ const NewInventory = (props) => {
         </button>
       </div>
       <hr />
-      <div className="d-flex flex-row-reverse justify-content-between">
-        {/* <div className="total">Grand Total</div>
-        <span className="value">{grandTotal}</span> */}
 
-        <button className="btn-primary btn" onClick={onProceedToReview}>
-          <img src={review} width="20" className="" />
-          <span className="ml-1">Review</span>
-        </button>
+      <div className="d-flex flex-row-reverse">
+      {/* <div className="total">Grand Total</div>
+      <span className="value">{grandTotal}</span> */}
+      <button className="btn-orange btn" onClick={onProceedToReview}>
+        <img src={review} width="20" className="" />
+        <span className="ml-1">Review Product</span>
+      </button>
+      <button 
+      type="button"
+      className="btn btn-white shadow-radius font-bold mr-3" 
+      onClick={() => props.history.push("/inventory")}
+      >Cancle
+      </button>
       </div>
       {openCreatedInventory && (
         <Modal
