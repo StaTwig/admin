@@ -36,5 +36,8 @@ router.get("/getSalesTotalOfAllBrands", AnalyticsController.getSalesTotalOfAllBr
 /getAllBrands [ { brandId } ] --> Product to brand mapping : TODO
 */
 
+router.get("/", function (req, res) {
+    res.json({ status: "OK", Message:"Advanced Analytics servie is up" });
+  });
 
 module.exports = router;
