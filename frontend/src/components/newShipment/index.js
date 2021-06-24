@@ -96,7 +96,7 @@ const NewShipment = (props) => {
     async function fetchData() {
 
       const result111 = await getProductList();
-      console.log(result111);
+      //console.log(result111);
       setProductsList(result111.message);
 
       const { search } = props.location;
@@ -153,6 +153,10 @@ const NewShipment = (props) => {
                                         label: v?.warehouseAddress ? v?.title + '/' + v?.warehouseAddress?.firstLine + ", " + v?.warehouseAddress?.city : v?.title + '/' + v.postalAddress
                                       };
                                     }));
+    
+      
+     
+      
 
       const orgType = await getOrganizationsTypewithauth('CONF000');
       setOrgTypes(orgType.data.length > 0 ? orgType.data[0].organisationTypes.map(item => {
@@ -303,7 +307,7 @@ const NewShipment = (props) => {
       const result = await createShipment(data);
       dispatch(turnOff());
       console.log("data", data);
-      var check = false;
+      var check = false; 
 
       for(var i=0;i<data.products.length;i++)
       {
@@ -315,7 +319,6 @@ const NewShipment = (props) => {
       }
       if(check===true)
       {
-        console.log("Hi");
         setShipmentError("Check product quantity");
         setOpenShipmentFail(true);
       }
@@ -800,7 +803,7 @@ const NewShipment = (props) => {
                             setAddProducts((prod) => [...prod, newArr]);
                           }}
                           defaultInputValue={values.fromOrgLoc}
-                          options={senderWarehouses}
+                          options={senderWarehouses.filter( (ele, ind) => ind === senderWarehouses.findIndex( elem => elem.label===ele.label))}
                         />
                         {errors.fromOrgLoc && touched.fromOrgLoc && (
                           <span className="error-msg text-danger">
@@ -922,7 +925,7 @@ const NewShipment = (props) => {
                             console.log(v.label);
                           }}
                           defaultInputValue={values.toOrgLoc}
-                          options={receiverWarehouses}
+                          options={receiverWarehouses.filter( (ele, ind) => ind === receiverWarehouses.findIndex( elem => elem.label===ele.label))}
                         />
                         {errors.toOrgLoc && touched.toOrgLoc && (
                           <span className="error-msg text-danger">
