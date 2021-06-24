@@ -8,6 +8,8 @@ const {
   AddWarehouse,
   AddOffice,
   addAddressesFromExcel,
+  getLocationApprovals,
+  modifyLocation,
 } = require("../controllers/AddressController");
 const Storage = multer.diskStorage({
   destination(req, file, callback) {
@@ -26,6 +28,8 @@ router.post("/updateOrganisation", updateAddressOrg); // --> /updateOrganisation
 router.post("/updateWarehouse", updateWarehouseAddress); // --> /updateWarehouse?warehouseId=war-123
 router.post("/addWarehouse", AddWarehouse); // --> /addWarehouse
 router.post("/addOffice", AddOffice); // --> /addOffice
+router.get("/getLocationApprovals", getLocationApprovals);
+router.post("/modifyLocation", modifyLocation);
 
 router.get("/", function (req, res) {
   res.json({ status: "OK" });

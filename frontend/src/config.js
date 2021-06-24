@@ -10,7 +10,6 @@ export const LOCAL_SERVER_URL_EMPLOYEE = "//localhost:3003";
 export const LOCAL_SERVER_URL_RBAC = "//localhost:3004";
 export const LOCAL_SERVER_URL_CONFIG = "//localhost:3005";
 
-
 export function config() {
   const confs = {
     local: {
@@ -39,19 +38,20 @@ export function config() {
       rejectAffiliateUrl: `${LOCAL_SERVER_URL_AFFILIATION}/api/affliation_service/rejectAffiliate`,
       addAffiliateUrl: `${LOCAL_SERVER_URL_AFFILIATION}/api/affliation_service/addAffiliate`,
       addOrgAddressrUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/addWarehouse`,
+      getLocationApprovalUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/getLocationApprovals`,
       updateOrgAddressrUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/updateWarehouse`,
       addAddressesFromExcelUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/addAddressesFromExcel`,
+      modifyLocationUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/modifyLocation`,
       getOrgTypesUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/configuration_service/getOrganizationsByType?id=CONF001`,
 
       getOrgTypeiIdsUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/configuration_service/getOrganizationsByType?id=`,
       updateOrgTypesUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/configuration_service/updateOrganizationsByType`,
       addNewOrgTypesUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/configuration_service/addNewOrgType`,
-
-
+      imgDomainUrl: `${TEST_SERVER_URL}`,
     },
     test: {
       sendOtpUrl: `${TEST_SERVER_URL}/api/employee_service/auth/sendOtp`,
-      verifyOtpUrl: `${TEST_SERVER_URL}/api/employee_service/auth/verifyOtp`,
+      verifyOtpUrl: `${LOCAL_SERVER_URL_EMPLOYEE}/api/employee_service/auth/verifyOtp`,
       getApprovalsUrl: `${TEST_SERVER_URL}/api/employee_service/getApprovals`,
       getPermissionsUrl: `${TEST_SERVER_URL}/api/rbac_service/getPermissions`,
       getWareHousesUrl: `${TEST_SERVER_URL}/api/address_service/fetchWarehouses`,
@@ -81,6 +81,9 @@ export function config() {
       getOrgTypeiIdsUrl: `${TEST_SERVER_URL}/api/configuration_service/getOrganizationsByType?id=`,
       updateOrgTypesUrl: `${TEST_SERVER_URL}/api/configuration_service/updateOrganizationsByType`,
       addNewOrgTypesUrl: `${TEST_SERVER_URL}/api/configuration_service/addNewOrgType`,
+      getLocationApprovalUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/getLocationApprovals`,
+      modifyLocationUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/modifyLocation`,
+      imgDomainUrl: `${TEST_SERVER_URL}`,
     },
     prod: {
       sendOtpUrl: `${PROD_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -114,6 +117,9 @@ export function config() {
       getOrgTypeiIdsUrl: `${PROD_SERVER_URL}/api/configuration_service/getOrganizationsByType?id=`,
       updateOrgTypesUrl: `${PROD_SERVER_URL}/api/configuration_service/updateOrganizationsByType`,
       addNewOrgTypesUrl: `${PROD_SERVER_URL}/api/configuration_service/addNewOrgType`,
+      getLocationApprovalUrl: `${PROD_SERVER_URL}/api/address_service/getLocationApprovals`,
+      modifyLocationUrl: `${PROD_SERVER_URL}/api/address_service/modifyLocation`,
+      imgDomainUrl: `${PROD_SERVER_URL}`,
     },
     abinbevtest: {
       sendOtpUrl: `${ABINBEV_TEST_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -147,6 +153,9 @@ export function config() {
       getOrgTypeiIdsUrl: `${ABINBEV_TEST_SERVER_URL}/api/configuration_service/getOrganizationsByType?id=`,
       updateOrgTypesUrl: `${ABINBEV_TEST_SERVER_URL}/api/configuration_service/updateOrganizationsByType`,
       addNewOrgTypesUrl: `${ABINBEV_TEST_SERVER_URL}/api/configuration_service/addNewOrgType`,
+      getLocationApprovalUrl: `${ABINBEV_TEST_SERVER_URL}/api/address_service/getLocationApprovals`,
+      modifyLocationUrl: `${ABINBEV_TEST_SERVER_URL}/api/address_service/modifyLocation`,
+      imgDomainUrl: `${ABINBEV_TEST_SERVER_URL}`,
     },
     abinbevprod: {
       sendOtpUrl: `${ABINBEV_PROD_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -180,7 +189,9 @@ export function config() {
       getOrgTypeiIdsUrl: `${ABINBEV_PROD_SERVER_URL}/api/configuration_service/getOrganizationsByType?id=`,
       updateOrgTypesUrl: `${ABINBEV_PROD_SERVER_URL}/api/configuration_service/updateOrganizationsByType`,
       addNewOrgTypesUrl: `${ABINBEV_PROD_SERVER_URL}/api/configuration_service/addNewOrgType`,
-      
+      getLocationApprovalUrl: `${ABINBEV_PROD_SERVER_URL}/api/address_service/getLocationApprovals`,
+      modifyLocationUrl: `${ABINBEV_PROD_SERVER_URL}/api/address_service/modifyLocation`,
+      imgDomainUrl: `${ABINBEV_PROD_SERVER_URL}`,
     },
   };
 

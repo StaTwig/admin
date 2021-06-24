@@ -15,6 +15,8 @@ import {
   addAffiliate,
   getOrgActiveUsers,
   getWareHouses,
+  getLocationApproval,
+  modifyLocation,
 } from "../../actions/organisationActions";
 
 const DashBoardContainer = (props) => {
@@ -22,6 +24,7 @@ const DashBoardContainer = (props) => {
   const [error, setError] = useState("");
   const [requestsPending, setRequestsPending] = useState([]);
   const [recentRequestsSent, setRecentRequestsSent] = useState([]);
+  const [locationApprovals, setLocationApprovals] = useState([]);
   const dispatch = useDispatch();
 
   const addresses = useSelector((state) => {
@@ -55,6 +58,11 @@ const DashBoardContainer = (props) => {
     dispatch(getAllOrganisations());
     dispatch(getOrgActiveUsers());
     dispatch(getWareHouses());
+    async function loadData() {
+      const result = await getLocationApproval();
+      setLocationApprovals(result.data);
+    }
+    loadData();
   }, []);
 
   useEffect(() => {
@@ -87,6 +95,28 @@ const DashBoardContainer = (props) => {
     const result = await rejectOrgUser(data);
     if (result.status === 200) {
       reqPending.splice(data.rindex, 1);
+      setMessage(result.data.message);
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
+    } else {
+      setError(result.data.message);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+    }
+  };
+
+  const modifyLocations = async (data) => {
+    console.log(data);
+
+    const result = await modifyLocation(data);
+    console.log(result);
+
+    if (result?.status === 200) {
+      let newArr = [...locationApprovals];
+      newArr.splice(data.rindex, 1);
+      setLocationApprovals((l) => [...newArr]);
       setMessage(result.data.message);
       setTimeout(() => {
         setMessage("");
@@ -152,6 +182,8 @@ const DashBoardContainer = (props) => {
             sendAffiliate={sendAffiliate}
             users={usersList}
             addresses={addresses}
+            locationApprovals={locationApprovals}
+            modifyLocations={modifyLocations}
           />
         </div>
       </div>

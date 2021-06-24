@@ -10,11 +10,9 @@ import {
   SET_AFFILATED_PENDING_REQ,
   SET_AFFILATED_ORGS,
   SET_ORGANISATIONS,
-  SET_ORGANISATION_TYPES
+  SET_ORGANISATION_TYPES,
 } from "../constants/organisationConstants";
 import { turnOn, turnOff } from "./spinnerActions";
-
-
 
 export const getOrgTypeiIdsUrl = async (data) => {
   try {
@@ -25,33 +23,33 @@ export const getOrgTypeiIdsUrl = async (data) => {
   }
 };
 
-
-
 export const updateOrgTypesUrl = async (data) => {
   try {
     //console.log(data,"------------");
-    const id="CONF000"
-    const result = await axios.put(`${config().updateOrgTypesUrl}?id=${id}`, data);
-   // console.log(result,"+++++++++++++");
+    const id = "CONF000";
+    const result = await axios.put(
+      `${config().updateOrgTypesUrl}?id=${id}`,
+      data
+    );
+    // console.log(result,"+++++++++++++");
     return result;
   } catch (e) {
     return e.response;
   }
 };
 
-
-
 export const addNewOrgTypesUrl = async (data) => {
   try {
-    const id="CONF000"
-      const result = await axios.post(`${config().addNewOrgTypesUrl}?id=${id}`, data);
-      return result;
-    }
-   catch (e) {
+    const id = "CONF000";
+    const result = await axios.post(
+      `${config().addNewOrgTypesUrl}?id=${id}`,
+      data
+    );
+    return result;
+  } catch (e) {
     return e.response;
   }
 };
-
 
 export const getRequestsPending = (skip = 0, limit = 5) => {
   try {
@@ -357,6 +355,15 @@ export const addOrgUser = async (data) => {
   }
 };
 
+export const getLocationApproval = async () => {
+  try {
+    const result = await axios.get(config().getLocationApprovalUrl);
+    return result.data;
+  } catch (e) {
+    return e.response;
+  }
+};
+
 export const addAddress = async (data) => {
   try {
     const reqData = {
@@ -379,6 +386,7 @@ export const addAddress = async (data) => {
         landmark: data.landmark,
         zipCode: data.pincode,
       },
+      status: "ACTIVE",
       country: {
         countryId: "001",
         countryName: data.country,
@@ -432,6 +440,15 @@ export const addAddressesFromExcel = async (data) => {
     const result = await axios.post(url, data, {
       headers: { "Content-Type": "multipart/form-data" },
     });
+    return result;
+  } catch (e) {
+    return e.response;
+  }
+};
+
+export const modifyLocation = async (data) => {
+  try {
+    const result = await axios.post(config().modifyLocationUrl, data);
     return result;
   } catch (e) {
     return e.response;
