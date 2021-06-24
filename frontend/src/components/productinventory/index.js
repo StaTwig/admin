@@ -12,21 +12,23 @@ const ProductInventory = props => {
   const [data, setData] = useState([]);
   const [enable, setEnable] = useState(true);
   const { products, inventories } = props;
-  console.log(products,"products");
-  console.log(inventories,"inventories");
+  // console.log(products,"products");
+  // console.log(inventories,"inventories");
   const categoryArray = products.map(
         product => product.type,
   ).filter((value, index, self) => self.indexOf(value) === index);
   useEffect(() => {
     if (props.match && props.match.params && props.match.params.category){
       let prodArray = [];
-      inventories.map((val)=>{
-        if(val.payloadData && val.payloadData.data && val.payloadData.data.products && val.payloadData.data.products.length){
-            val.payloadData.data.products.map((productRecord)=>{
-                if(productRecord.type==props.match.params?.category){
-                  prodArray.push(productRecord);
-                }
-            })
+      inventories.map((val) => {
+        console.log(val.type,props.match.params?.category);
+        
+        // if(val.payloadData && val.payloadData.data && val.payloadData.data.products && val.payloadData.data.products.length){
+        //     val.payloadData.data.products.map((productRecord)=>{
+                if(val.products.type==props.match.params?.category){
+                  prodArray.push(val);
+            //     }
+            // })
         }
         
       });
@@ -36,19 +38,19 @@ const ProductInventory = props => {
     //   setEnable(false);
     //   setData(inventories.filter(r => r.inventoryQuantity <= 0));
     // }
-  }, [props]);
+  }, [inventories, props]);
 
   const changeType = (cat) => {
     setCategory(cat);
       let prodArray = [];
       inventories.map((val)=>{
-        if(val.payloadData.data.products){
-            val.payloadData.data.products.map((productRecord)=>{
-                if(productRecord.type==cat){
-                  prodArray.push(productRecord);
+        // if(val.payloadData.data.products){
+            // val.payloadData.data.products.map((productRecord)=>{
+                if(val.products.type==cat){
+                  prodArray.push(val);
                 }
-            })
-        }
+            // })
+        // }
         
       });
       setData(prodArray);
@@ -105,12 +107,17 @@ const ProductInventory = props => {
         <div className="ribbon-space col-12">
           {data.map((inv, i) => 
             <div key={i} className="col-12 p-3 mb-3 rounded row bg-white shadow">
-              <div className="col-3 txt txtBlue">{inv.name?inv.name:"N/A"}</div>
-              <div className="col-3 txt ">{inv.type ? inv.type:"N/A"}</div>
-              <div className="col-3 txt ">{inv.manufacturer?inv.manufacturer:"N/A"}</div>
-              <div className="col-3 txt ">{inv.quantity?inv.quantity:"N/A"}</div>
+              <div className="col-3 txt txtBlue">{inv.products.name?inv.products.name:"N/A"}</div>
+              <div className="col-3 txt ">{inv.products.type ? inv.products.type:"N/A"}</div>
+              <div className="col-3 txt ">{inv.products.manufacturer?inv.products.manufacturer:"N/A"}</div>
+              <div className="col-3 txt ">{inv.inventoryDetails.quantity?inv.inventoryDetails.quantity:"N/A"}</div>
             </div>
           )}
+          {data?.length === 0 && 
+            <div className="col-12 p-3 mb-3 rounded row bg-white shadow">
+              <div className="col-12 txt text-center txtBlue">No records found</div>
+            </div>
+          }
         </div>
       </div>
     </div>

@@ -27,7 +27,6 @@ import Modal from "../../shared/modal";
 import { turnOff, turnOn } from "../../actions/spinnerActions";
 class Profile extends React.Component {
   constructor(props) {
-    console.log(props);
     super(props);
     this.state = {
       openModal: false,
@@ -111,7 +110,7 @@ class Profile extends React.Component {
         warehouseAddress_state,
         title,
       });
-      if((this.state.profileData.phoneNumber).includes("+")){
+      if(this.state.profileData.phoneNumber?.includes("+")){
         this.setState({phoneNumber:(this.state.profileData.phoneNumber).slice(1,(this.state.profileData.phoneNumber).length)});
       }
       console.log(this.state.profileData.phoneNumber,"Profile Data");

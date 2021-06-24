@@ -103,7 +103,7 @@ const Tracing = (props) => {
         <div className="col-sm-7">
           <div className="row mb-4 mt-4">
             <div className="panel col mr-2 geo commonpanle">
-              <p className="heading">Geographical Tracking</p> <Map />{" "}
+              <p className="heading">Geographical Tracking</p> <Map data={shippmentChainOfCustodyData} />{" "}
             </div>
             <div className="panel commonpanle col">
               <div className="d-flex justify-content-between">
