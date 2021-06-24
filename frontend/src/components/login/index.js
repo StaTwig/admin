@@ -42,27 +42,27 @@ const FormLoginPage = (props) => {
               <div className="card-body">
                 <div className="login-form mt-2">
                   <div className="card-title mb-4">Login</div>
-                  <div className="form-group mb-3 mt-1 ml-5 mr-5 p-1">
+                  <div className="form-group mb-3 mt-1 ml-5 mr-5 p-1" style={emailFieldDisable ? {pointerEvents: "none", opacity: "0.5"} : {}}>
                   <div style={{position:"absolute", left:"-5px", top:"10px"}}>
                         <img alt="Mail Icon" src={User} height="15px" width="18px" />
                   </div>      
                   <TextField 
                         // label="Email ID" 
-                        placeholder={emailFieldDisable?" ":"Email ID"}
+                        placeholder={"Email ID"}
                         className="form-controlll ml-4"
                         name="email"
                         autoCapitalize = 'none'
                         value={email}
                         onChange={onEmailChange}
-                        disabled={emailFieldDisable}
+                        // disabled={emailFieldDisable}
                       />
                   </div>
                   <div className="card-title ml-3 mb-0 mt-3"><h5 style={{color:"#0093E9"}}>OR</h5></div>
-                  <div className="form-group mt-0 ml-5 mr-3 p-1" style={{position:"relative", left:"-15px"}}>
+                  <div className="form-group mt-0 ml-5 mr-3 p-1" style={{position:"relative", left:"-15px"},phoneFieldDisable ? {pointerEvents: "none", opacity: "0.5"} : {}}>
                   <div className="form-group mt-0 ml-3 p-1" style={{position:"relative", left:"-15px"}}>
                         <img alt="Phone icon" src={Phone} height="20px" width="20px" /></div>
                       <PhoneInput
-                        // country={phoneFieldDisable?"":"in"}
+                        country={"in"}
                         preferredCountries={['in']}
                         placeholder={phoneFieldDisable?"":'Enter Phone number'}
                         inputProps={{
@@ -72,7 +72,6 @@ const FormLoginPage = (props) => {
                         }}
 						            value={phone}
                         onChange={onPhoneChange}
-                        disabled={phoneFieldDisable}
                       />
                    </div>
                     
