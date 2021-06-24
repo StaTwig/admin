@@ -35,6 +35,7 @@ const EditRow = props => {
 
   const new_products = [];
 
+  if(typeof(products)!="undefined"){
   for(var i=0;i<products.length;i++)
   {
     console.log(productsList);
@@ -52,6 +53,7 @@ const EditRow = props => {
       new_products.push(products[i]);
     }
   }
+}
   const numbersOnly = (e) => {
     // Handle paste
     if (e.type === 'paste') {
