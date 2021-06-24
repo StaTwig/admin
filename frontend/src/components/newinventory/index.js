@@ -300,7 +300,7 @@ const NewInventory = (props) => {
       <span className="value">{grandTotal}</span> */}
       <button className="btn-orange btn" onClick={onProceedToReview}>
         <img src={review} width="20" className="" />
-        <span className="ml-1">Review</span>
+        <span className="ml-1">Review Product</span>
       </button>
       <button 
       type="button"
