@@ -362,7 +362,8 @@ const Inventory = props => {
               {
                 console.log(productsList)
               }
-              <div className="row overflow">
+              <div className="overflow" style={{height:"800px",overflowX:"hidden"}}>
+              <div className="row">
                 {productsList?.map((product, index) => (
                   <div className="col-sm-6" key={index}>
                     <div className="d-flex card flex-column align-items-center ml-4"  style={{backgroundColor: colors[index]}}>
@@ -373,6 +374,7 @@ const Inventory = props => {
                     </div>
                   </div>
                 ))}
+                </div>
 
               </div>
             </div>
