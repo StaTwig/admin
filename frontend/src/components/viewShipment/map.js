@@ -19,36 +19,49 @@ for (var i = 0; i < points.length; i++) {
  
 export class MapContainer extends Component {
   render() {
+    var points = [];
+    const { data } = this.props;
+    data.forEach(s => {
+      // s?.shipmentUpdates?.filter(s => s.status == 'RECEIVED').forEach(rs => {
+        if (s?.receiver?.warehouse?.location?.latitude && s?.receiver?.warehouse?.location?.longitude && s?.receiver?.warehouse?.location?.latitude != "0" && s?.receiver?.warehouse?.location?.longitude != "0")
+          points.push({ lat: parseFloat(s?.receiver?.warehouse?.location?.latitude), lng: parseFloat(s?.receiver?.warehouse?.location?.longitude) });
+      // })
+    });
+    var bounds = new this.props.google.maps.LatLngBounds();
+    for (var i = 0; i < points.length; i++) 
+      bounds.extend(points[i]);
+    
     return (
-      <Map google={this.props.google} zoom={10}
- 
+      <Map google={this.props.google} zoom={15}
         style = {style} 
-            
-       /* initialCenter={{
-            lat: 42.39,
-            lng: -72.52
+        initialCenter={{
+            lat: points.length ? points[0].lat : 42.02,
+            lng: points.length ? points[0].lng : -77.01
         }}
-        bounds={bounds}*/
- 
+        bounds={bounds}
       >
         {this.props.data.map((row, index) => {
-          return row?.shipmentUpdates.map((r, i) => {
+          // return row?.shipmentUpdates.map((r, i) => {
             return (
-              row?.receiver?.warehouse?.location?.latitude && row?.receiver?.warehouse?.location?.longitude ?
-              <Marker
-                title={row.receiver.warehouse.title}
-                name={row.receiver.warehouse.warehouseAddress.city}
-                position={{ lat: row.receiver.warehouse.location.latitude, lng: row.receiver.warehouse.location.longitude }} />
-              : null)
-            
-          }
-          )
+                row?.receiver?.warehouse?.location?.latitude && row?.receiver?.warehouse?.location?.longitude &&
+                  <Marker
+                    title={row.receiver.warehouse.title}
+                    name={row.receiver.warehouse.warehouseAddress.city}
+                  position={{ lat: row.receiver.warehouse.location.latitude, lng: row.receiver.warehouse.location.longitude }} />
+            )
+          // })
         })}
       </Map>
     );
   }
 }
- 
+// { 
+//                 row?.supplier?.warehouse?.location?.latitude && row?.supplier?.warehouse?.location?.longitude &&
+//                   <Marker
+//                     title={row.supplier.warehouse.title}
+//                     name={row.supplier.warehouse.warehouseAddress.city}
+//                     position={{ lat: row.supplier.warehouse.location.latitude, lng: row.supplier.warehouse.location.longitude }} />} 
+
 export default GoogleApiWrapper({
   apiKey: ("AIzaSyBLwFrIrQx_0UUAIaUwt6wfItNMIIvXJ78")
 })(MapContainer)

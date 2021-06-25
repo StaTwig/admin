@@ -16,6 +16,7 @@ const EditRow = props => {
     category,
     handleCategoryChange,
     handleProductChange,
+    handleBatchChange,
     products
   } = props;
   // console.log("propsinshipment",prod.unitofMeasure[0]==undefined ? null: "vi");
@@ -25,7 +26,7 @@ const EditRow = props => {
     async function fetchData() {
   
       const result111 = await getProductList();
-      console.log(result111);
+      // console.log(result111);
       setProductsList(result111.message);
   
     }
@@ -39,7 +40,7 @@ const EditRow = props => {
   if(typeof(products)!="undefined"){
   for(var i=0;i<products.length;i++)
   {
-    console.log(productsList);
+    // console.log(productsList);
     let check = false;
     for(var j=0;j<productsList.length;j++)
     {
@@ -96,7 +97,7 @@ const handleChange = (value) =>
     console.log(value);
 }
 //console.log("yyyy",prod);
-console.log(products);
+// console.log(products);
 // const handlee = () =>
 // {
 //   console.log("Hi");
@@ -166,6 +167,19 @@ console.log(products);
           </div>
         </div>
         <div className="col tcell text-center justify-content-center p-2">{prod.manufacturer ? prod.manufacturer : "Manufacturer"}</div>
+        <div className="col tcell text-center justify-content-center p-2">
+          <div className="">
+            <input
+              className="form-control text-center"
+              id="checker"
+              placeholder="Batch number"
+              value={prod.batchNumber}
+              onChange={(e) => {
+                handleBatchChange(e.target.value, index);
+              }}
+            />
+          </div>
+        </div>
         <div className="col tcell text-center justify-content-center p-2">
           <div className="">
             <input
