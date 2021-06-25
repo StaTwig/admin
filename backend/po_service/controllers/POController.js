@@ -875,8 +875,8 @@ exports.createOrder = [
       const poId = poCounter.counters[0].format + poCounter.counters[0].value;
 
       let { externalId, supplier, customer, products, creationDate, lastUpdatedOn } = req.body;
-      products.forEach(element => {
-        var product = ProductModel.findOne({ id: element.productId });
+      products.forEach(async element => {
+        var product = await ProductModel.findOne({ id: element.productId });
         element.type = product.type
         element.unitofMeasure= product.unitofMeasure.name
         console.log(product)
