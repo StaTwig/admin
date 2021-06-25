@@ -23,6 +23,17 @@ var ProductSchema = new mongoose.Schema(
       required: false,
       default: 'Mobile Phone',
     },
+    unitofMeasure: {
+      type: Array,
+          items: {type: Object,
+            properties: {
+              id: {type:String},
+              name: {
+                type:String
+              }    
+          }
+        }   
+      },
     manufacturer: {
       type: String,
       required: false,

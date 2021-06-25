@@ -130,7 +130,7 @@ const AddLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                        <label htmlFor="addressTitle">Address Title</label>
+                        <label className="required-field col-sm-6" htmlFor="addressTitle">Address Title</label>
 
                         <input
                           type="text"
@@ -144,7 +144,7 @@ const AddLocation = (props) => {
                           }}
                         />
                         {errors.addressTitle && touched.addressTitle && (
-                          <span className="error-msg text-danger">
+                          <span className="error-msg text-danger-ANL">
                             {errors.addressTitle}
                           </span>
                         )}
@@ -154,7 +154,7 @@ const AddLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                        <label htmlFor="addressLine">Address Line</label>
+                        <label className="required-field col-sm-6" htmlFor="addressLine">Address Line</label>
                         <input
                           type="text"
                           className="form-control"
@@ -167,7 +167,7 @@ const AddLocation = (props) => {
                           }}
                         />
                         {errors.addressLine && touched.addressLine && (
-                          <span className="error-msg text-danger">
+                          <span className="error-msg text-danger-ANL">
                             {errors.addressLine}
                           </span>
                         )}
@@ -177,7 +177,7 @@ const AddLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                        <label htmlFor="city">City/Town</label>
+                        <label className="required-field col-sm-6" htmlFor="city">City/Town</label>
                         <input
                           type="text"
                           className="form-control"
@@ -190,7 +190,7 @@ const AddLocation = (props) => {
                           }}
                         />
                         {errors.city && touched.city && (
-                          <span className="error-msg text-danger">
+                          <span className="error-msg text-danger-ANL">
                             {errors.city}
                           </span>
                         )}
@@ -201,7 +201,7 @@ const AddLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                        <label htmlFor="state">State</label>
+                        <label className="required-field col-sm-6" htmlFor="state">State</label>
                         <input
                           type="text"
                           className="form-control"
@@ -214,7 +214,7 @@ const AddLocation = (props) => {
                           }}
                         />
                         {errors.State && touched.State && (
-                          <span className="error-msg text-danger">
+                          <span className="error-msg text-danger-ANL">
                             {errors.State}
                           </span>
                         )}
@@ -225,7 +225,7 @@ const AddLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                        <label htmlFor="country">Country</label>
+                        <label className="required-field col-sm-6" htmlFor="country">Country</label>
                         <input
                           type="text"
                           className="form-control"
@@ -238,7 +238,7 @@ const AddLocation = (props) => {
                           }}
                         />
                         {errors.country && touched.country && (
-                          <span className="error-msg text-danger">
+                          <span className="error-msg text-danger-ANL">
                             {errors.country}
                           </span>
                         )}
@@ -248,7 +248,7 @@ const AddLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-16">
                       <div className="form-group">
-                        <label htmlFor="Select Location">Pincode</label>
+                        <label className="required-field col-sm-6" htmlFor="Select Location">Pincode</label>
                         <input
                           type="text"
                           className="form-control"
@@ -261,14 +261,14 @@ const AddLocation = (props) => {
                           }}
                         />
                         {errors.pincode && touched.pincode && (
-                          <span className="error-msg text-danger">
+                          <span className="error-msg text-danger-ANL">
                             {errors.pincode}
                           </span>
                         )}
                       </div>
                     </div>
                   </div>
-                  <div>
+                  <div className="d-flex flex-row-reverse">
                     <button
                       class="close"
                       className="btn btn-yellow btn-lg float-right"
@@ -277,6 +277,12 @@ const AddLocation = (props) => {
                     >
                       <span>Request Admin For Approval</span>
                     </button>
+                    <button 
+                        type="button"
+                        className="btn btn-white shadow-radius font-bold mr-3" 
+                        onClick={() => props.history.push("/profile")}
+                        >Cancle
+                     </button>
                   </div>
                 </form>
               )}
