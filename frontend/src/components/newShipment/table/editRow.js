@@ -18,6 +18,7 @@ const EditRow = props => {
     handleProductChange,
     products
   } = props;
+  // console.log("propsinshipment",prod.unitofMeasure[0]==undefined ? null: "vi");
   const [productsList,setProductsList] = useState([]);
   useEffect(() => {
 
@@ -163,6 +164,10 @@ console.log(products);
             />
           </div>
         </div>
+        {/* <div className="title recived-text align-self-center" style={{position:"absolute",right:"20px"}}>
+          {prod.unitofMeasure && prod.unitofMeasure.name  ? <div>{prod.unitofMeasure.name}</div>:
+          <div className="placeholder_id">Unit</div>}
+        </div> */}
       </div>
         {enableDelete && props.product.length > 1 &&
           <div className="m-3 bg-light">

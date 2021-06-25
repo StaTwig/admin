@@ -26,7 +26,7 @@ const ReviewOrder = props => {
   const [ modalProps, setModalProps ] = useState({});
 
   const onAssign = async () => {
-    let error = false;
+    let error = false;  
     const { fromOrg, fromOrgId, toOrg, toOrgLoc, products, typeName, rtypeName } = order;
     products.forEach((p) => {
       if (p.productQuantity < 1)

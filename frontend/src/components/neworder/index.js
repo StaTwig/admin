@@ -58,7 +58,7 @@ const NewOrder = (props) => {
   const [category, setCategory] = useState([]);
   const [openExcel, setOpenExcel] = useState(false);
   const [menu, setMenu] = useState(false);
-  const [addProducts, setAddProducts] = useState(editPo !== null ? editPo.products : [{"productId": "","id": "","productQuantity": "","name": "","manufacturer": "","type": ""}]);
+  const [addProducts, setAddProducts] = useState(editPo !== null ? editPo.products : [{"productId": "","id": "","productQuantity": "","name": "","manufacturer": "","type": "","unitofMeasure":""}]);
   const dispatch = useDispatch();
   const [senderOrgId, setSenderOrgId] = useState(
     editPo !== null ? editPo.fromOrgId : "Select Organisation Name"
@@ -160,10 +160,10 @@ const NewOrder = (props) => {
     try {
       const warehouse = await getProductsByCategory(value);
       let newArr = [...addProducts];
-      newArr[index] = {"productId": "", "id": "", "productQuantity": "", "name": "", "type": value, "manufacturer": ""};
+      newArr[index] = {"productId": "", "id": "", "productQuantity": "", "name": "", "type": value, "manufacturer": "","unitofMeasure":""};
       newArr[index]['quantity'] = '';
       setAddProducts(prod => [...newArr]);
-      setFieldValue('products', newArr.map(row => ({ "productId": row.id, "id": row.id, "productQuantity": row?.productQuantity ? row?.productQuantity : 0, "name": row.name, "type": row.type, "manufacturer": row.manufacturer })));
+      setFieldValue('products', newArr.map(row => ({ "productId": row.id, "id": row.id, "productQuantity": row?.productQuantity ? row?.productQuantity : 0, "name": row.name, "type": row.type, "manufacturer": row.manufacturer,"unitofMeasure":row.unitofMeasure })));
     
       setProducts(warehouse.data.map(item => {
                                       return {
@@ -182,8 +182,9 @@ const NewOrder = (props) => {
     addProducts.splice(index, 1);
     let newArr = [...addProducts];
     newArr.push(item);
-    
-    setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": row?.productQuantity ? row?.productQuantity : '',"quantity": row?.productQuantity ? row?.productQuantity : '',"name": row.name,"type": row.type,"manufacturer": row.manufacturer})));
+    //console.log("rowUnitofMeasure",newArr);
+    setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": row?.productQuantity ? row?.productQuantity : '',"quantity": row?.productQuantity ? row?.productQuantity : '',"name": row.name,"type": row.type,"manufacturer": row.manufacturer,"unitofMeasure":row.unitofMeasure})));
+    //console.log("rowUnitofMeasureAfter set",newArr);
     setAddProducts(prod => [...newArr]);
 
     const prodIndex = products.findIndex(p => p.id === item.id);
@@ -200,7 +201,7 @@ const NewOrder = (props) => {
     addProducts.splice(index, 1);
     let newArr = [...addProducts];
     if (newArr.length > 0)
-      setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": row?.productQuantity,"name": row.name,"type": row.type,"manufacturer": row.manufacturer})));
+      setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": row?.productQuantity,"name": row.name,"type": row.type,"manufacturer": row.manufacture,"unitofMeasure":row.unitofMeasurer})));
     else
       setFieldValue('products', []);
     setAddProducts(prod => [...newArr]);
@@ -209,7 +210,7 @@ const NewOrder = (props) => {
   const onQuantityChange = (v, i, setFieldValue) => {
     let newArr = [...addProducts];
     newArr[i].productQuantity = v;
-    setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": row.productQuantity,"name": row.name,"type": row.type,"manufacturer": row.manufacturer})));
+    setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": row.productQuantity,"name": row.name,"type": row.type,"manufacturer": row.manufacturer,"unitofMeasure":row.unitofMeasure})));
     setAddProducts(prod => [...newArr]);
   }
 
@@ -218,7 +219,7 @@ const NewOrder = (props) => {
     let nameError=false;
     let typeError=false;
     const { fromOrg, toOrg, toOrgLoc, products, toOrgLocName } = values;
-    console.log("products------",products);
+    //console.log("values------",values);
     products.forEach((p) => {
       if(!p.name)
       {
