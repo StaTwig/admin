@@ -1,7 +1,7 @@
 const Alert = require('../models/AlertModel')
 const Event = require('../models/EventModal')
 const User = require('../models/UserModel')
-const { alertMobile, alertEmail, alertWebPush } = require('./alertSender')
+const { alertMobile, alertEmail, alertPushNotification } = require('./alertSender')
 
 
 async function connectDB() {
@@ -49,9 +49,8 @@ async function generateAlert(event) {
            alertEmail(event,row.user.emailId)
         }
         if(row.alertMode.web_push){
-            let user = await User.find({id:row.user.user_id})
-            console.log("****************WEB PUSH ID****************",user.web_push)
-            alertWebPush(event,user.web_push)
+            console.log("****************WEB PUSH ID****************",row.user.user_id)
+            alertPushNotification(event,row.user.user_id)
         }        
         console.log("****************ROW ENDS HERE *****************************")
     }

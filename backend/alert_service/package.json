@@ -19,7 +19,8 @@
     "express-swagger-generator": "^1.1.17",
     "express-validator": "^6.11.1",
     "mongoose": "^5.7.6",
-    "morgan": "~1.9.0"
+    "morgan": "~1.9.0",
+    "twilio": "^3.64.0"
   },
   "devDependencies": {}
 }
