@@ -52,8 +52,7 @@ const NewOrder = (props) => {
   const [receiverWarehouses, setReceiverWarehouses] = useState([]);
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState([]);
-  const [addProducts, setAddProducts] = useState (editPo !== null ? editPo.products : [ { "productId": " ", "id": " ", "productQuantity": "",    
-  "name": "","manufacturer": "","type": ""}]);
+  const [addProducts, setAddProducts] = useState(editPo !== null ? editPo.products : [{"productId": "", "id": "", "productQuantity": "", "name": "","manufacturer": " ", "type": ""}]);
   const dispatch = useDispatch();
   const [senderOrgId, setSenderOrgId] = useState(
     editPo !== null ? editPo.fromOrgId : "Select Organisation Name"
