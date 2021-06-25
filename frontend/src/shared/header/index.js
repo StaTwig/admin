@@ -187,7 +187,7 @@ const imgs = config().fetchProfileImage;
           <input
             type="text"
             // value={search}
-            placeholder="Search PO ID/ Shipment ID/ Airway Bill No."
+            placeholder="Search PO ID/ Shipment ID/ Transit No."
             onFocus={(e) => e.target.placeholder = ''}
             onBlur={(e) => e.target.placeholder = 'Search PO ID/ Shipment ID/ Airway Bill No.'}
             onChange={onSearchChange}
