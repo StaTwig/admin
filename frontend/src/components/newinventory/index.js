@@ -32,6 +32,7 @@ const NewInventory = (props) => {
       dispatch(turnOn());
       const result = await getProducts();
       const productsArray = result.map((product) => product.name);
+      //console.log("result inventory",result);
       setProducts(result);
 
       const categoryArray = result.map((product) => product.type);
@@ -79,6 +80,7 @@ const NewInventory = (props) => {
     expiryDate: '',
     batchNumber: '',
     serialNumber: '',
+    unitofMeasure: '',
     products: [],
   });
   const closeModal = () => {
@@ -104,6 +106,7 @@ const NewInventory = (props) => {
     'productName',
     'manufacturer',
     'quantity',
+    'unitofMeasure',
     // 'manufacturingDate',
     // 'expiryDate',
     // 'batchNumber',
@@ -199,12 +202,14 @@ const NewInventory = (props) => {
     );
     updatedInventoryState[index]['manufacturer'] = product?.manufacturer;
     updatedInventoryState[index]['productId'] = product?.id;
+    updatedInventoryState[index]['unitofMeasure'] = product?.unitofMeasure
     
     if(key=="categories"){
       updatedInventoryState[index]['productName'] ="";
       updatedInventoryState[index]['manufacturer'] = "";
       updatedInventoryState[index]['productId'] = "";
       updatedInventoryState[index]['quantity'] = "";
+      updatedInventoryState[index]['unitofMeasure'] = "";
     }
     let total = 0;
     updatedInventoryState.forEach((inv) => (total += parseInt(inv.quantity)));
