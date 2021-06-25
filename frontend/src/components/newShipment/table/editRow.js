@@ -55,6 +55,27 @@ const EditRow = props => {
     }
   }
 }
+
+if(typeof(prod)!="undefined" && typeof(prod.name!="undefined") && typeof(productsList)!="undefined")
+  {
+                     let qty;
+                    for(var i=0;i<productsList.length;i++)
+                    {
+                      if(prod.name===productsList[i].productName)
+                      {
+                        console.log("Hi");
+                        qty = String(productsList[i].quantity);
+                        console.log(typeof(qty));
+                        break;
+                      }
+                    }
+                    if(i < productsList.length){
+                    prod.productQuantity = qty;
+                    console.log("productQuantity is " + prod.productQuantity);
+                    }
+  }
+
+
   const numbersOnly = (e) => {
     // Handle paste
     if (e.type === 'paste') {
