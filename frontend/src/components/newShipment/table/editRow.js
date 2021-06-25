@@ -16,6 +16,7 @@ const EditRow = props => {
     category,
     handleCategoryChange,
     handleProductChange,
+    handleBatchChange,
     products
   } = props;
   const [productsList,setProductsList] = useState([]);
@@ -143,6 +144,19 @@ const handleChange = (value) =>
           </div>
         </div>
         <div className="col tcell text-center justify-content-center p-2">{prod.manufacturer ? prod.manufacturer : "Manufacturer"}</div>
+        <div className="col tcell text-center justify-content-center p-2">
+          <div className="">
+            <input
+              className="form-control text-center"
+              id="checker"
+              placeholder="Batch number"
+              value={prod.batchNumber}
+              onChange={(e) => {
+                handleBatchChange(e.target.value, index);
+              }}
+            />
+          </div>
+        </div>
         <div className="col tcell text-center justify-content-center p-2">
           <div className="">
             <input

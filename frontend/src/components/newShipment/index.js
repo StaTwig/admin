@@ -393,6 +393,13 @@ const NewShipment = (props) => {
     soDetailsClone.products[i].productQuantity = value;
     setOrderDetails(soDetailsClone);
   };
+ 
+  const handleBatchChange = (value, i) => {
+    
+    const soDetailsClone = { ...OrderDetails };
+    soDetailsClone.products[i].batchNumber = value;
+    setOrderDetails(soDetailsClone);
+  };
 
   
 
@@ -654,6 +661,7 @@ const NewShipment = (props) => {
                               result.poDetails[0].products[i].type;
                             products_temp[i].productID =
                               result.poDetails[0].products[i].productId;
+                            products_temp[i].batchNumber = '';
                           }
                           
                          if (result.poDetails[0].products.length > 0) {
@@ -1067,6 +1075,9 @@ const NewShipment = (props) => {
                   handleQuantityChange={(v, i) => {
                     handleQuantityChange(v, i);
                   }}
+                  handleBatchChange={(v, i) => {
+                    handleBatchChange(v, i);
+                  }}
                   enableDelete={false}
                   onRemoveRow={(index) => {}}
                   handleLabelIdChange={handleLabelIdChange}
@@ -1087,6 +1098,24 @@ const NewShipment = (props) => {
                           productCategory: row.type,
                           productID: row.id,
                           productQuantity: row.productQuantity,
+                          batchNumber: row.batchNumber,
+                          productName: row.name,
+                          manufacturer: row.manufacturer,
+                          quantity: row.quantity,
+                        }))
+                      );
+                      setAddProducts((prod) => [...newArr]);
+                    }}
+                    handleBatchChange={(v, i) => {
+                      let newArr = [...addProducts];
+                      newArr[i].batchNumber = v;
+                      setFieldValue(
+                        "products",
+                        newArr.map((row) => ({
+                          productCategory: row.type,
+                          productID: row.id,
+                          productQuantity: row.productQuantity,
+                          batchNumber: row.batchNumber,
                           productName: row.name,
                           manufacturer: row.manufacturer,
                           quantity: row.quantity,
@@ -1115,6 +1144,7 @@ const NewShipment = (props) => {
                             productCategory: row.type,
                             productID: row.id,
                             productQuantity: row.productQuantity,
+                            batchNumber: row.batchNumber,
                             productName: row.name,
                             manufacturer: row.manufacturer,
                             quantity: row.quantity,
@@ -1133,6 +1163,7 @@ const NewShipment = (props) => {
                           productCategory: row.type,
                           productID: row.id,
                           productQuantity: row.productQuantity,
+                          batchNumber: row.batchNumber,
                           productName: row.name,
                           manufacturer: row.manufacturer,
                           quantity: row.quantity,
@@ -1162,6 +1193,7 @@ const NewShipment = (props) => {
                           productName: "",
                           manufacturer: "",
                           productQuantity: "",
+                          batchNumber: "",
                         };
                         setAddProducts((prod) => [...prod, newArr]);
                       }}
