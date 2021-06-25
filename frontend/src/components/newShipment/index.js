@@ -303,10 +303,6 @@ const NewShipment = (props) => {
         // poId: OrderDetails.purchaseOrderId ? OrderDetails.purchaseOrderId : null,
       };
 
-      dispatch(turnOn());
-      const result = await createShipment(data);
-      dispatch(turnOff());
-      console.log("data", data);
       var check = false; 
 
       for(var i=0;i<data.products.length;i++)
@@ -323,9 +319,6 @@ const NewShipment = (props) => {
         setOpenShipmentFail(true);
       }
       else{
-
-        console.log(productsList);
-        ////////////////////////////////
         let i,j;
         let check = true;
         let nn = data.products.length;
@@ -333,16 +326,12 @@ const NewShipment = (props) => {
         {
           let prdctName = data.products[i].productName;
           let qty = parseInt(data.products[i].productQuantity);
-          console.log("typed quantity is " + qty);
           let flag = false;
           
           for(j=0;j<productsList.length;j++)
           {
-            console.log("product list name is " + productsList[j].productName);
-            console.log("dataProductName is " + prdctName);
             if(productsList[j].productName===prdctName)
             {
-              console.log("typed quantity is " + qty + " product quantity is " + productsList[j].quantity);
               if(qty > productsList[j].quantity)
               {
                 
@@ -364,29 +353,30 @@ const NewShipment = (props) => {
           }
         }
 
-        if(i >=nn){
-         if (result?.id) {
-        setMessage("Created Shipment Success");
-        setOpenCreatedInventory(true);
-        setModalProps({
-          message: "Created Successfully!",
-          id: result?.id,
-          type: "Success",
-        });
-      } 
-      else  {
-        setOpenShipmentFail(true);
-        setErrorMessage("Create Shipment Failed");
+        if (i >= nn) {
+          dispatch(turnOn());
+          const result = await createShipment(data);
+          dispatch(turnOff());
+          if (result?.id) {
+            setMessage("Created Shipment Success");
+            setOpenCreatedInventory(true);
+            setModalProps({
+              message: "Created Successfully!",
+              id: result?.id,
+              type: "Success",
+            });
+          }
+          else  {
+            setOpenShipmentFail(true);
+            setErrorMessage("Create Shipment Failed");
+          }
+        }
       }
     }
-    } 
-  }
     else {
       setShipmentError("Check product quantity");
       setOpenShipmentFail(true);
     }
-
-    
   };
 
   const handleSOChange = async (item) => {
@@ -609,7 +599,7 @@ const NewShipment = (props) => {
                           setOrderId(v.value);
                           dispatch(turnOn());
                           const result = await dispatch(getOrder(v.value));
-                          console.log(result);
+                          // console.log(result);
                           setReceiverOrgLoc(
                              result.poDetails[0].customer.warehouse.title + '/' + result.poDetails[0].customer.warehouse.postalAddress
                           );
@@ -659,7 +649,7 @@ const NewShipment = (props) => {
                             products_temp[i].productName =
                               result.poDetails[0].products[i].name;
                             products_temp[i].productQuantity =
-                              result.poDetails[0].products[i].quantity;
+                              result.poDetails[0].products[i].quantity ? result.poDetails[0].products[i].quantity : result.poDetails[0].products[i].productQuantity;
                             products_temp[i].productCategory =
                               result.poDetails[0].products[i].type;
                             products_temp[i].productID =
@@ -922,7 +912,7 @@ const NewShipment = (props) => {
                           onChange={(v) => {
                             setFieldValue("toOrgLoc", v.value);
                             settoOrgLocLabel(v.label)
-                            console.log(v.label);
+                            // console.log(v.label);
                           }}
                           defaultInputValue={values.toOrgLoc}
                           options={receiverWarehouses.filter( (ele, ind) => ind === receiverWarehouses.findIndex( elem => elem.label===ele.label))}

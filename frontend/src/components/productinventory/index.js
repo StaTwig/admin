@@ -21,7 +21,6 @@ const ProductInventory = props => {
     if (props.match && props.match.params && props.match.params.category){
       let prodArray = [];
       inventories.map((val) => {
-        console.log(val.type,props.match.params?.category);
         
         // if(val.payloadData && val.payloadData.data && val.payloadData.data.products && val.payloadData.data.products.length){
         //     val.payloadData.data.products.map((productRecord)=>{
@@ -34,10 +33,12 @@ const ProductInventory = props => {
       });
       setData(prodArray);
     }
-    // else {
-    //   setEnable(false);
-    //   setData(inventories.filter(r => r.inventoryQuantity <= 0));
-    // }
+    else {
+      setEnable(false);
+      console.log(inventories);
+      
+      setData(inventories.filter(r => r.inventoryQuantity <= 0));
+    }
   }, [inventories, props]);
 
   const changeType = (cat) => {

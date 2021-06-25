@@ -14,27 +14,27 @@ const style = {
  
 export class MapContainer extends Component {
   render() {
-   /*  var points = [
-    { lat: 42.02, lng: -77.01 },
-    { lat: 42.03, lng: -77.02 },
-    { lat: 41.03, lng: -77.04 },
-    { lat: 42.05, lng: -77.02 }
-]
-var bounds = new this.props.google.maps.LatLngBounds();
-for (var i = 0; i < points.length; i++) {
-  bounds.extend(points[i]);
-} */
+    var points = [];
+    const { data } = this.props;
+    data.forEach(s => {
+      s?.shipmentUpdates?.filter(s => s.status == 'RECEIVED').forEach(rs => {
+        if (s?.receiver?.warehouse?.location?.latitude && s?.receiver?.warehouse?.location?.longitude && s?.receiver?.warehouse?.location?.latitude != "0" && s?.receiver?.warehouse?.location?.longitude != "0")
+          points.push({ lat: parseFloat(s?.receiver?.warehouse?.location?.latitude), lng: parseFloat(s?.receiver?.warehouse?.location?.longitude) });
+      })
+    });
+    var bounds = new this.props.google.maps.LatLngBounds();
+    // console.log(points);
+    for (var i = 0; i < points.length; i++) 
+      bounds.extend(points[i]);
+    
     return (
-      <Map google={this.props.google} zoom={10}
- 
+      <Map google={this.props.google} zoom={14}
         style = {style} 
-            
-        /*initialCenter={{
-            lat: 42.02,
-            lng: -77.01
+        initialCenter={{
+            lat: points.length ? points[0].lat : 42.02,
+            lng: points.length ? points[0].lng : -77.01
         }}
-        bounds={bounds}*/
- 
+        bounds={bounds}
       >
         {this.props.data.map((row, index) => {
           return row?.shipmentUpdates?.filter(s => s.status == 'RECEIVED').map((r, i) => {
@@ -42,7 +42,8 @@ for (var i = 0; i < points.length; i++) {
               row?.receiver?.warehouse?.location?.latitude && row?.receiver?.warehouse?.location?.longitude ?
               <Marker
                 title={row.receiver.warehouse.title}
-                name={row.receiver.warehouse.warehouseAddress.city}
+                  name={row.receiver.warehouse.warehouseAddress.city}
+                  label={index}
                 position={{ lat: row.receiver.warehouse.location.latitude, lng: row.receiver.warehouse.location.longitude }} />
               : null)
             

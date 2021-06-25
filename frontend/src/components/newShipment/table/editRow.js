@@ -24,7 +24,7 @@ const EditRow = props => {
     async function fetchData() {
   
       const result111 = await getProductList();
-      console.log(result111);
+      // console.log(result111);
       setProductsList(result111.message);
   
     }
@@ -38,7 +38,7 @@ const EditRow = props => {
   if(typeof(products)!="undefined"){
   for(var i=0;i<products.length;i++)
   {
-    console.log(productsList);
+    // console.log(productsList);
     let check = false;
     for(var j=0;j<productsList.length;j++)
     {
@@ -74,7 +74,7 @@ const handleChange = (value) =>
     console.log(value);
 }
 //console.log("yyyy",prod);
-console.log(products);
+// console.log(products);
 // const handlee = () =>
 // {
 //   console.log("Hi");
