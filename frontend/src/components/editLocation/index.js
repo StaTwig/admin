@@ -312,7 +312,7 @@ const editLocation = (props) => {
                     type="button"
                     className="btn btn-white shadow-radius font-bold mr-3" 
                     onClick={() => props.history.push("/profile")}
-                    >Cancle
+                    >Cancel
                    </button>
                 </div>
               </form>
