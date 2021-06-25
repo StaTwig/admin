@@ -20,7 +20,7 @@ for (var i = 0; i < points.length; i++) {
 export class MapContainer extends Component {
   render() {
     return (
-      <Map google={this.props.google} zoom={14}
+      <Map google={this.props.google} zoom={10}
  
         style = {style} 
             
@@ -30,7 +30,20 @@ export class MapContainer extends Component {
         }}
         bounds={bounds}*/
  
-        >
+      >
+        {this.props.data.map((row, index) => {
+          return row?.shipmentUpdates.map((r, i) => {
+            return (
+              row?.receiver?.warehouse?.location?.latitude && row?.receiver?.warehouse?.location?.longitude ?
+              <Marker
+                title={row.receiver.warehouse.title}
+                name={row.receiver.warehouse.warehouseAddress.city}
+                position={{ lat: row.receiver.warehouse.location.latitude, lng: row.receiver.warehouse.location.longitude }} />
+              : null)
+            
+          }
+          )
+        })}
       </Map>
     );
   }

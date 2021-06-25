@@ -57,10 +57,10 @@ const Track = (props) => {
       </div>
       <div className="row">
         {shippmentChainOfCustodyData.length > 0 &&
-          <div className="col-6">
+          <div className="col">
             <div className="row mb-4">
               <div className="col" style={{ minHeight: 400 }}>
-                <Map />
+                <Map data={shippmentChainOfCustodyData} />
               </div>
             </div>
             {/* <div className="panel commonpanle row shadow bg-white mb-4">
@@ -86,14 +86,14 @@ const Track = (props) => {
             </div>
           </div> */}
           </div>}
-        <div className="col row ml-3">
+        <div className="col-6 ml-3">
           {shippmentChainOfCustodyData.length == 0 ? (
             <>
               <div className="noOutline" tabIndex="-1" onKeyDown={onkeydown}>
                 <div className="search-form">
                   <input
                     type="text"
-                    placeholder="Enter Order ID or Serial No."
+                    placeholder="Enter Order ID or Serial No. or Shipment No. or Transit No."
                     onChange={onSearchChange}
                     //className="form-control border border-primary search-field"
                       className="form-control search-field border-8"
@@ -111,7 +111,7 @@ const Track = (props) => {
               </div>
             </>
           ) : (
-            <div className="col-12 noOutline">
+            <div className="col noOutline">
               <div className="d-flex flex-row-reverse mb-2">
                 {' '}
                 <button
@@ -145,7 +145,7 @@ const Track = (props) => {
                     </div>
                   </div>
                   <div className="pb-4">
-                    {shippmentChainOfCustodyData.map((row, index) => { 
+                    {shippmentChainOfCustodyData.map((row, index) => {
                       let newArr = [];
                       // if(row.id == value)
                       newArr = shippmentChainOfCustodyData.filter(rw => rw?.taggedShipments?.includes(value));
@@ -154,7 +154,7 @@ const Track = (props) => {
                       
                       return row?.shipmentUpdates?.filter(s => s.status == 'RECEIVED').map((r, i) => (
                         <SoChainOfCustody
-                          len={row.shipmentUpdates.length}
+                          len={row.shipmentUpdates.filter(s => s.status == 'RECEIVED').length}
                           i={i}
                           v={visible}
                           setV={setVisible}

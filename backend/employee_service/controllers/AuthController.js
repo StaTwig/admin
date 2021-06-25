@@ -21,7 +21,7 @@ const dotenv = require('dotenv').config();
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilio_service_id = process.env.TWILIO_SERVICE_ID;
-const client = require('twilio')(accountSid, authToken);
+const client = require('twilio');
 // const fs = require("fs");
 const moveFile = require("move-file");
 const blockchain_service_url = process.env.URL;
@@ -361,11 +361,13 @@ exports.checkEmail = [
             //const inventoryId = uniqid('inv-');
             const inventoryResult = new InventoryModel({ id: inventoryId });
             await inventoryResult.save();
+            const loc = await getLatLongByCity(address.city + ',' + address.country);
             const warehouse = new WarehouseModel({
               title: 'Office',
               id: warehouseId,
               warehouseInventory: inventoryId,
               organisationId: organisationId,
+              location: loc,
               // postalAddress: address,
               warehouseAddress: {
                 firstLine: address.line1,
@@ -379,7 +381,8 @@ exports.checkEmail = [
               country: {
                 countryId: '001',
                 countryName: country
-              }
+              },
+              status: "ACTIVE"
             });
             await warehouse.save();
           }
@@ -752,7 +755,7 @@ exports.userInfo = [
           } = user;
           const org = await OrganisationModel.findOne({ id: organisationId }, 'name configuration_id');
           const warehouse = await EmployeeModel.findOne({ id }, { _id: 0, warehouseId: 1 });
-          const warehouseArray = await WarehouseModel.find({ id: { "$in": warehouse.warehouseId } })
+          const warehouseArray = await WarehouseModel.find({ id: { "$in": warehouse.warehouseId },$or:[{status: 'ACTIVE'}, {status: {$exists: false}}] })
           let user_data = {
             firstName,
             lastName,
@@ -1161,6 +1164,8 @@ exports.addWarehouse = [
 
       const warehouseCounter = await CounterModel.findOne({ 'counters.name': "warehouseId" }, { "counters.name.$": 1 })
       const warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
+
+      const loc = await getLatLongByCity(warehouseAddress.city+','+warehouseAddress.country);
       const warehouse = new WarehouseModel({
         id: warehouseId,
         organisationId,
@@ -1168,7 +1173,7 @@ exports.addWarehouse = [
         title,
         region,
         country,
-        location,
+        location: loc,
         bottleCapacity,
         sqft,
         supervisors,
@@ -1205,6 +1210,17 @@ exports.addWarehouse = [
 
   },
 ];
+
+const getLatLongByCity = async(param) => {
+  try {
+    const result = await axios.get(
+      `https://geocode.search.hereapi.com/v1/geocode?q=${param}&apiKey=BCRdhsq4jB8NxBG7vTWpVbNxCb6b50j98_f_bwiy7Qw`
+    );
+    return result.data.items.length ? {latitude: result.data.items[0].position.lat, longitude: result.data.items[0].position.lng} : {latitude: 0,longitude: 0};
+  } catch (e) {
+    return e.response;
+  }
+}
 
 exports.updateWarehouseAddress = [
   auth,
@@ -1691,6 +1707,7 @@ exports.createTwilioBinding = [
   auth,
   async (req, res) => {
     try {
+      client(accountSid, authToken);
       console.log("REGISTERING")
       console.log(req.user)
       client.notify.services(twilio_service_id)

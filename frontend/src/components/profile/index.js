@@ -27,7 +27,6 @@ import Modal from "../../shared/modal";
 import { turnOff, turnOn } from "../../actions/spinnerActions";
 class Profile extends React.Component {
   constructor(props) {
-    console.log(props);
     super(props);
     this.state = {
       openModal: false,
