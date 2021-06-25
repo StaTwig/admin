@@ -704,7 +704,7 @@ const NewShipment = (props) => {
                       onChange={handleChange}
                       value={values.shipmentID}
                     />
-                  <span
+                  <span style={{height:"30px"}}
                     className="btn btn-outline-info mr-2"
                     disabled={fetchdisabled}
                     onClick={async()=>{
@@ -768,7 +768,7 @@ const NewShipment = (props) => {
                     }
                   }
                   >
-                    <span className="mt-2" style={{position:"relative",top:"5px"}}>Fetch</span>
+                    <span style={{position:"relative",top:"-2px"}}>Fetch</span>
                   </span>
                   </div>
                 </div>
