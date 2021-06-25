@@ -158,163 +158,169 @@ const editLocation = (props) => {
                 dirty,
               }) => (
                 <form onSubmit={handleSubmit} className="mb-3">
-                  <div className="row">
-                    <div className="col-md-6 com-sm-12">
-                      <div className="form-group">
-                        <label htmlFor="addressTitle">Address Title</label>
+                <div className="row">
+                  <div className="col-md-6 com-sm-12">
+                    <div className="form-group">
+                      <label className="required-field col-sm-6" htmlFor="addressTitle">Address Title</label>
 
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="addressTitle"
-                          placeholder="Enter Address Title"
-                          value={values.addressTitle}
-                          onBlur={handleBlur}
-                          onChange={(e) => {
-                            setAddressTitle(e.target.value);
-                          }}
-                        />
-                        {errors.addressTitle && touched.addressTitle && (
-                          <span className="error-msg text-danger">
-                            {errors.addressTitle}
-                          </span>
-                        )}
-                      </div>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="addressTitle"
+                        placeholder="Enter Address Title"
+                        value={values.addressTitle}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          setAddressTitle(e.target.value);
+                        }}
+                      />
+                      {errors.addressTitle && touched.addressTitle && (
+                        <span className="error-msg text-danger-EL">
+                          {errors.addressTitle}
+                        </span>
+                      )}
                     </div>
                   </div>
-                  <div className="row">
-                    <div className="col-md-6 com-sm-12">
-                      <div className="form-group">
-                        <label htmlFor="addressLine">Address Line</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="addressLine"
-                          placeholder="Enter Address Line"
-                          value={values.addressLine}
-                          onBlur={handleBlur}
-                          onChange={(e) => {
-                            setAddressLine(e.target.value);
-                          }}
-                        />
-                        {errors.addressLine && touched.addressLine && (
-                          <span className="error-msg text-danger">
-                            {errors.addressLine}
-                          </span>
-                        )}
-                      </div>
+                </div>
+                <div className="row">
+                  <div className="col-md-6 com-sm-12">
+                    <div className="form-group">
+                      <label className="required-field col-sm-6" htmlFor="addressLine">Address Line</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="addressLine"
+                        placeholder="Enter Address Line"
+                        value={values.addressLine}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          setAddressLine(e.target.value);
+                        }}
+                      />
+                      {errors.addressLine && touched.addressLine && (
+                        <span className="error-msg text-danger-EL">
+                          {errors.addressLine}
+                        </span>
+                      )}
                     </div>
                   </div>
-                  <div className="row">
-                    <div className="col-md-6 com-sm-12">
-                      <div className="form-group">
-                        <label htmlFor="city">City/Town</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="city"
-                          placeholder="Enter City/Town"
-                          value={values.city}
-                          onBlur={handleBlur}
-                          onChange={(e) => {
-                            setCity(e.target.value);
-                          }}
-                        />
-                        {errors.city && touched.city && (
-                          <span className="error-msg text-danger">
-                            {errors.city}
-                          </span>
-                        )}
-                      </div>
+                </div>
+                <div className="row">
+                  <div className="col-md-6 com-sm-12">
+                    <div className="form-group">
+                      <label className="required-field col-sm-6" htmlFor="city">City/Town</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="city"
+                        placeholder="Enter City/Town"
+                        value={values.city}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          setCity(e.target.value);
+                        }}
+                      />
+                      {errors.city && touched.city && (
+                        <span className="error-msg text-danger-EL">
+                          {errors.city}
+                        </span>
+                      )}
                     </div>
                   </div>
+                </div>
 
-                  <div className="row">
-                    <div className="col-md-6 com-sm-12">
-                      <div className="form-group">
-                        <label htmlFor="state">State</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="state"
-                          placeholder="Enter State"
-                          value={values.state}
-                          onBlur={handleBlur}
-                          onChange={(e) => {
-                            setState(e.target.value);
-                          }}
-                        />
-                        {errors.State && touched.State && (
-                          <span className="error-msg text-danger">
-                            {errors.State}
-                          </span>
-                        )}
-                      </div>
+                <div className="row">
+                  <div className="col-md-6 com-sm-12">
+                    <div className="form-group">
+                      <label className="required-field col-sm-6" htmlFor="state">State</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="state"
+                        placeholder="Enter State"
+                        value={values.state}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          setState(e.target.value);
+                        }}
+                      />
+                      {errors.State && touched.State && (
+                        <span className="error-msg text-danger-EL">
+                          {errors.State}
+                        </span>
+                      )}
                     </div>
                   </div>
+                </div>
 
-                  <div className="row">
-                    <div className="col-md-6 com-sm-12">
-                      <div className="form-group">
-                        <label htmlFor="country">Country</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="country"
-                          placeholder="Enter Country"
-                          value={values.country}
-                          onBlur={handleBlur}
-                          onChange={(e) => {
-                            setCountry(e.target.value);
-                          }}
-                        />
-                        {errors.country && touched.country && (
-                          <span className="error-msg text-danger">
-                            {errors.country}
-                          </span>
-                        )}
-                      </div>
+                <div className="row">
+                  <div className="col-md-6 com-sm-12">
+                    <div className="form-group">
+                      <label className="required-field col-sm-6" htmlFor="country">Country</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="country"
+                        placeholder="Enter Country"
+                        value={values.country}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          setCountry(e.target.value);
+                        }}
+                      />
+                      {errors.country && touched.country && (
+                        <span className="error-msg text-danger-EL">
+                          {errors.country}
+                        </span>
+                      )}
                     </div>
                   </div>
-                  <div className="row">
-                    <div className="col-md-6 com-sm-16">
-                      <div className="form-group">
-                        <label htmlFor="Select Location">Pincode</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="pincode"
-                          placeholder="Select Pincode"
-                          value={values.pincode}
-                          onBlur={handleBlur}
-                          onChange={(e) => {
-                            setPincode(e.target.value);
-                          }}
-                        />
-                        {errors.pincode && touched.pincode && (
-                          <span className="error-msg text-danger">
-                            {errors.pincode}
-                          </span>
-                        )}
-                      </div>
+                </div>
+                <div className="row">
+                  <div className="col-md-6 com-sm-16">
+                    <div className="form-group">
+                      <label className="required-field col-sm-6" htmlFor="Select Location">Pincode</label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        name="pincode"
+                        placeholder="Select Pincode"
+                        value={values.pincode}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          setPincode(e.target.value);
+                        }}
+                      />
+                      {errors.pincode && touched.pincode && (
+                        <span className="error-msg text-danger-EL">
+                          {errors.pincode}
+                        </span>
+                      )}
                     </div>
                   </div>
-                  <div>
-                    <button
-                      class="close"
-                      className="btn btn-yellow btn-lg float-right"
-                      disabled={!((values.country)&&(values.addressLine)&&(values.addressTitle)&&(values.city)&&(values.state)&&(values.pincode))}
-                      type="submit"
-                    >
-                      <span>Request Admin For Approval</span>
-                    </button>
-                  </div>
-                </form>
-              )}
-            </Formik>
-          </div>
+                </div>
+                <div className="d-flex flex-row-reverse">
+                  <button
+                    class="close"
+                    className="btn btn-yellow btn-lg float-right"
+                    disabled={!((values.country)&&(values.addressLine)&&(values.addressTitle)&&(values.city)&&(values.state)&&(values.pincode))}
+                    type="submit"
+                  >
+                    <span>Request Admin For Approval</span>
+                  </button>
+                  <button 
+                    type="button"
+                    className="btn btn-white shadow-radius font-bold mr-3" 
+                    onClick={() => props.history.push("/profile")}
+                    >Cancle
+                   </button>
+                </div>
+              </form>
+            )}
+          </Formik>
         </div>
-        <div>
+      </div>
+      <div>
           {/* <button
             class="close"
             className="btn btn-blue btn-lg float-right"
