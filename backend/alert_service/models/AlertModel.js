@@ -15,11 +15,12 @@ AlertSchema = new mongoose.Schema(
     transactionIds: [String],
     alerts: [
       {
+        id : String,
         productID: String,
         actorOrgId : String,
         event_type_primary: String,
         event_type_secondary: String, 
-        createdBy: String,     
+        createdBy: String,    
       },
     ],
     alertMode: {
