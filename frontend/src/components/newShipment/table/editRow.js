@@ -106,6 +106,7 @@ console.log(products);
                 <Select
                   className="no-border"
                   placeholder="Select Product Category"
+                  value={{label:prod.type}}
                   defaultInputValue={prod.type}
                   onChange={(v) => handleCategoryChange(index, v.value)}
                   options={category}
