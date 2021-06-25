@@ -17,7 +17,6 @@ router.get("/getAllAlerts/:username", AlertController.getAllAlerts);
 * @group Alerts - Will Return All the Alerts Created by the User 
 * @param {object} Data.body - Sample: 
 *{ 
-*"user" : "sanath@statwig.com",
 *"transactionId":"tss001",
 *"productId":"prood001",
 *"productName":"COVAXINE",
@@ -25,9 +24,9 @@ router.get("/getAllAlerts/:username", AlertController.getAllAlerts);
 *"eventPrimary" : "CREATE",
 *"eventSecondary" : "ORGANIZATION",
 *"actorOrgId" : "org002",
-*"createdBy" :"sanath@statwig.com",
 *"alertMobile" : true,
-*"alertEmail" : true
+*"alertEmail" : true,
+*"alertWebPush" : false
 *}
 * @returns {object} 200 - An array of Alerts 
 * @returns {Error}  default - Unexpected error 
