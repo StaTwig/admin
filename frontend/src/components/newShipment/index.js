@@ -1028,13 +1028,13 @@ const NewShipment = (props) => {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="required-field" htmlFor="organizationName">Airway Bill</label>
+                      <label className="required-field" htmlFor="organizationName">Transit Number</label>
                       <input
                         type="text"
                         className="form-control"
                         name="airWayBillNo"
                         onBlur={handleBlur}
-                        placeholder="Enter Airway Bill No"
+                        placeholder="Enter Transit Number"
                         onChange={handleChange}
                         value={values.airWayBillNo}
                       />

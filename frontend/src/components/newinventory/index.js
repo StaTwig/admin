@@ -306,7 +306,7 @@ const NewInventory = (props) => {
       type="button"
       className="btn btn-white shadow-radius font-bold mr-3" 
       onClick={() => props.history.push("/inventory")}
-      >Cancle
+      >Cancel
       </button>
       </div>
       {openCreatedInventory && (
