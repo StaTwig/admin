@@ -136,6 +136,12 @@ exports.fetchPurchaseOrders = [
                     const POs = await userPurchaseOrders("id", "", poId, "", id, skip, limit, (error, data) => {
                            poDetails = data ;
                        })
+                      //  console.log(poDetails[0].products)
+                       await Promise.all(poDetails[0].products.map(async (element )=> {
+                        var product = await ProductModel.findOne({ id: element.id });
+                        element.unitofMeasure = product.unitofMeasure;
+                       }))
+                      //  console.log(poDetails[0].products)
                      }
                     else
                     {
@@ -159,6 +165,7 @@ exports.fetchPurchaseOrders = [
 
                     );
                 } catch (err) {
+                  console.log(err)
                     return apiResponse.ErrorResponse(res, err);
                 }
 
@@ -867,7 +874,13 @@ exports.createOrder = [
       const poCounter = await CounterModel.findOne({'counters.name':"poId"},{"counters.name.$":1})
       const poId = poCounter.counters[0].format + poCounter.counters[0].value;
 
-      const { externalId, supplier, customer, products, creationDate, lastUpdatedOn } = req.body;
+      let { externalId, supplier, customer, products, creationDate, lastUpdatedOn } = req.body;
+      products.forEach(element => {
+        var product = ProductModel.findOne({ id: element.productId });
+        element.type = product.type
+        element.unitofMeasure= product.unitofMeasure.name
+        console.log(product)
+      });
 	    const createdBy =  lastUpdatedBy = req.user.id;
 	    const purchaseOrder = new RecordModel({
         id: poId,
@@ -895,7 +908,7 @@ exports.createOrder = [
           'error',
           '<<<<< POService < POController < createOrder : error (catch block)',
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];

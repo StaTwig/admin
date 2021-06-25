@@ -29,6 +29,17 @@ var ProductSchema = new mongoose.Schema(
       required: false,
       default: 'organization_id 1',
     },
+    unitofMeasure: {
+      type: Array,
+          items: {type: Object,
+            properties: {
+              id: {type:String},
+              name: {
+                type:String
+              }    
+          }
+        }   
+      },
     photoId:{
       type:String,
       default:"No Image"

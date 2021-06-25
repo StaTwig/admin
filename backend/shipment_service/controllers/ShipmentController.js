@@ -268,8 +268,10 @@ exports.createShipment = [
         if (result.success) {  
           try{
             data.products.forEach(element => {
-              var product = ProductModel.findOne({ id: element.productId });
+              var product = ProductModel.findOne({ id: element.productID });
               element.type = product.type
+              element.unitofMeasure= product.unitofMeasure
+              console.log(product)
             });
             var i = 0;
             const incrementCounter = await CounterModel.update(
@@ -1311,11 +1313,18 @@ exports.viewShipment = [
               },
             },
           ])
-            .then((shipment) => {
-              return apiResponse.successResponseWithData(
+            .then(async (shipment) => {
+              var Shipment = shipment.length ? shipment[0] : [] 
+              // var result = []
+              let prom = await Promise.all(Shipment.products.map(async (element )=> {
+                var product = await ProductModel.findOne({ id: element.productID });
+                element.unitofMeasure = product.unitofMeasure;
+               }))
+               console.log(Shipment.products)
+               return apiResponse.successResponseWithData(
                 res,
                 "Shipment",
-                shipment.length ? shipment[0] : []
+                Shipment
               );
             })
             .catch((err) => {
