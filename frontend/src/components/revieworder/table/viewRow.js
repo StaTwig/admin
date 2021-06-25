@@ -5,7 +5,7 @@ const ViewRow = props => {
   const {
     prod
   } = props;
-
+//console.log("prodUnitofmeasure+++",prod);
   return (
       <div className=" row text-center text-dark col" >
         <div className="col pl-5 tcell p-2" >
@@ -36,8 +36,13 @@ const ViewRow = props => {
         </div>
         <div className="col pl-4 tcell text-center justify-content-center">
           <div className=" mr-5" style={{color:"black",fontSize:"14px"}}>
-            {prod.productQuantity}
+            {prod.productQuantity} <span>{"("}</span> { prod.unitofMeasure[0] ?<span>{ prod.unitofMeasure[0]==undefined ? null: prod.unitofMeasure[0].name}</span>:
+          <span className="placeholder_id">Unit</span>}<span>{")"}</span>
           </div>
+        
+           
+          
+          
         </div>
       </div>
   );

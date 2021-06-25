@@ -16,15 +16,17 @@ const EditRow = props => {
     category,
     handleCategoryChange,
     handleProductChange,
+    handleBatchChange,
     products
   } = props;
+  // console.log("propsinshipment",prod.unitofMeasure[0]==undefined ? null: "vi");
   const [productsList,setProductsList] = useState([]);
   useEffect(() => {
 
     async function fetchData() {
   
       const result111 = await getProductList();
-      console.log(result111);
+      // console.log(result111);
       setProductsList(result111.message);
   
     }
@@ -38,7 +40,7 @@ const EditRow = props => {
   if(typeof(products)!="undefined"){
   for(var i=0;i<products.length;i++)
   {
-    console.log(productsList);
+    // console.log(productsList);
     let check = false;
     for(var j=0;j<productsList.length;j++)
     {
@@ -54,6 +56,27 @@ const EditRow = props => {
     }
   }
 }
+
+if(typeof(prod)!="undefined" && typeof(prod.name!="undefined") && typeof(productsList)!="undefined")
+  {
+                     let qty;
+                    for(var i=0;i<productsList.length;i++)
+                    {
+                      if(prod.name===productsList[i].productName)
+                      {
+                        console.log("Hi");
+                        qty = String(productsList[i].quantity);
+                        console.log(typeof(qty));
+                        break;
+                      }
+                    }
+                    if(i < productsList.length){
+                    prod.productQuantity = qty;
+                    console.log("productQuantity is " + prod.productQuantity);
+                    }
+  }
+
+
   const numbersOnly = (e) => {
     // Handle paste
     if (e.type === 'paste') {
@@ -74,7 +97,7 @@ const handleChange = (value) =>
     console.log(value);
 }
 //console.log("yyyy",prod);
-console.log(products);
+// console.log(products);
 // const handlee = () =>
 // {
 //   console.log("Hi");
@@ -149,6 +172,19 @@ console.log(products);
             <input
               className="form-control text-center"
               id="checker"
+              placeholder="Batch number"
+              value={prod.batchNumber}
+              onChange={(e) => {
+                handleBatchChange(e.target.value, index);
+              }}
+            />
+          </div>
+        </div>
+        <div className="col tcell text-center justify-content-center p-2">
+          <div className="">
+            <input
+              className="form-control text-center"
+              id="checker"
               placeholder="Quantity"
               onKeyPress={numbersOnly}
               value={prod.productQuantity}
@@ -163,6 +199,10 @@ console.log(products);
             />
           </div>
         </div>
+        {/* <div className="title recived-text align-self-center" style={{position:"absolute",right:"20px"}}>
+          {prod.unitofMeasure && prod.unitofMeasure.name  ? <div>{prod.unitofMeasure.name}</div>:
+          <div className="placeholder_id">Unit</div>}
+        </div> */}
       </div>
         {enableDelete && props.product.length > 1 &&
           <div className="m-3 bg-light">

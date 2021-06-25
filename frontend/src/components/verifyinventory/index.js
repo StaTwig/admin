@@ -24,7 +24,7 @@ const VerifyInventory = props => {
    
     return state.reviewInventory;
   });
- console.log(reviewInventories);
+ //console.log("reviewInventories",reviewInventories);
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
   const [ successMessage, setSuccessMessage ] = useState('');
   const [ errorMessage, setErrorMessage ] = useState('');
@@ -41,7 +41,8 @@ const VerifyInventory = props => {
         mfgDate: inventory.manufacturingDate,
         expDate: inventory.expiryDate,
         quantity: parseInt(inventory.quantity),
-        serialNumbersRange: inventory.serialNumber
+        serialNumbersRange: inventory.serialNumber,
+        // unitofMeasure:unitofMeasure.name
       }
     });
     const result = await addProductsToInventory({
@@ -85,7 +86,7 @@ const VerifyInventory = props => {
             <div className="row pl-4 p-3">
               <span className="col-2 pl-4 text-left">{reviewInventory.productName}</span>
               <span className="col-2 pl-4 text-left">{reviewInventory.manufacturer ? reviewInventory.manufacturer : reviewInventory.manufacturerName}</span>
-              <span className="col pl-5 text-left">{reviewInventory.quantity}</span>
+              <span className="col pl-5 text-left">{reviewInventory.quantity}<span>{"("}</span>{reviewInventory.unitofMeasure[0].name}<span>{")"}</span></span>
               <span className="col pl-4 text-left">{reviewInventory.manufacturingDate ? `0${new Date(
                 Date.parse(reviewInventory.manufacturingDate),
               ).getMonth() + 1}`.slice(-2) +

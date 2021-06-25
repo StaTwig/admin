@@ -308,10 +308,6 @@ const NewShipment = (props) => {
         // poId: OrderDetails.purchaseOrderId ? OrderDetails.purchaseOrderId : null,
       };
 
-      dispatch(turnOn());
-      const result = await createShipment(data);
-      dispatch(turnOff());
-      console.log("data", data);
       var check = false; 
 
       for(var i=0;i<data.products.length;i++)
@@ -328,9 +324,6 @@ const NewShipment = (props) => {
         setOpenShipmentFail(true);
       }
       else{
-
-        console.log(productsList);
-        ////////////////////////////////
         let i,j;
         let check = true;
         let nn = data.products.length;
@@ -338,16 +331,12 @@ const NewShipment = (props) => {
         {
           let prdctName = data.products[i].productName;
           let qty = parseInt(data.products[i].productQuantity);
-          console.log("typed quantity is " + qty);
           let flag = false;
           
           for(j=0;j<productsList.length;j++)
           {
-            console.log("product list name is " + productsList[j].productName);
-            console.log("dataProductName is " + prdctName);
             if(productsList[j].productName===prdctName)
             {
-              console.log("typed quantity is " + qty + " product quantity is " + productsList[j].quantity);
               if(qty > productsList[j].quantity)
               {
                 
@@ -369,29 +358,30 @@ const NewShipment = (props) => {
           }
         }
 
-        if(i >=nn){
-         if (result?.id) {
-        setMessage("Created Shipment Success");
-        setOpenCreatedInventory(true);
-        setModalProps({
-          message: "Created Successfully!",
-          id: result?.id,
-          type: "Success",
-        });
-      } 
-      else  {
-        setOpenShipmentFail(true);
-        setErrorMessage("Create Shipment Failed");
+        if (i >= nn) {
+          dispatch(turnOn());
+          const result = await createShipment(data);
+          dispatch(turnOff());
+          if (result?.id) {
+            setMessage("Created Shipment Success");
+            setOpenCreatedInventory(true);
+            setModalProps({
+              message: "Created Successfully!",
+              id: result?.id,
+              type: "Success",
+            });
+          }
+          else  {
+            setOpenShipmentFail(true);
+            setErrorMessage("Create Shipment Failed");
+          }
+        }
       }
     }
-    } 
-  }
     else {
       setShipmentError("Check product quantity");
       setOpenShipmentFail(true);
     }
-
-    
   };
 
   const handleSOChange = async (item) => {
@@ -406,6 +396,13 @@ const NewShipment = (props) => {
     
     const soDetailsClone = { ...OrderDetails };
     soDetailsClone.products[i].productQuantity = value;
+    setOrderDetails(soDetailsClone);
+  };
+ 
+  const handleBatchChange = (value, i) => {
+    
+    const soDetailsClone = { ...OrderDetails };
+    soDetailsClone.products[i].batchNumber = value;
     setOrderDetails(soDetailsClone);
   };
 
@@ -623,7 +620,7 @@ const NewShipment = (props) => {
                           setOrderId(v.value);
                           dispatch(turnOn());
                           const result = await dispatch(getOrder(v.value));
-                          console.log(result.poDetails[0]);
+                          // console.log(result);
                           setReceiverOrgLoc(
                              result.poDetails[0].customer.warehouse.title + '/' + result.poDetails[0].customer.warehouse.postalAddress
                           );
@@ -678,6 +675,7 @@ const NewShipment = (props) => {
                               result.poDetails[0].products[i].type;
                             products_temp[i].productID = 
                               result.poDetails[0].products[i].productId;
+                            products_temp[i].batchNumber = '';
                           }
                           console.log(products_temp);
                          if (result.poDetails[0].products.length > 0) {
@@ -1003,7 +1001,7 @@ const NewShipment = (props) => {
                           onChange={(v) => {
                             setFieldValue("toOrgLoc", v.value);
                             settoOrgLocLabel(v.label)
-                            console.log(v.label);
+                            // console.log(v.label);
                           }}
                           defaultInputValue={values.toOrgLoc}
                           options={receiverWarehouses.filter( (ele, ind) => ind === receiverWarehouses.findIndex( elem => elem.label===ele.label))}
@@ -1158,6 +1156,9 @@ const NewShipment = (props) => {
                   handleQuantityChange={(v, i) => {
                     handleQuantityChange(v, i);
                   }}
+                  handleBatchChange={(v, i) => {
+                    handleBatchChange(v, i);
+                  }}
                   enableDelete={false}
                   onRemoveRow={(index) => {}}
                   handleLabelIdChange={handleLabelIdChange}
@@ -1178,6 +1179,24 @@ const NewShipment = (props) => {
                           productCategory: row.type,
                           productID: row.id,
                           productQuantity: row.productQuantity,
+                          batchNumber: row.batchNumber,
+                          productName: row.name,
+                          manufacturer: row.manufacturer,
+                          quantity: row.quantity,
+                        }))
+                      );
+                      setAddProducts((prod) => [...newArr]);
+                    }}
+                    handleBatchChange={(v, i) => {
+                      let newArr = [...addProducts];
+                      newArr[i].batchNumber = v;
+                      setFieldValue(
+                        "products",
+                        newArr.map((row) => ({
+                          productCategory: row.type,
+                          productID: row.id,
+                          productQuantity: row.productQuantity,
+                          batchNumber: row.batchNumber,
                           productName: row.name,
                           manufacturer: row.manufacturer,
                           quantity: row.quantity,
@@ -1206,6 +1225,7 @@ const NewShipment = (props) => {
                             productCategory: row.type,
                             productID: row.id,
                             productQuantity: row.productQuantity,
+                            batchNumber: row.batchNumber,
                             productName: row.name,
                             manufacturer: row.manufacturer,
                             quantity: row.quantity,
@@ -1224,6 +1244,7 @@ const NewShipment = (props) => {
                           productCategory: row.type,
                           productID: row.id,
                           productQuantity: row.productQuantity,
+                          batchNumber: row.batchNumber,
                           productName: row.name,
                           manufacturer: row.manufacturer,
                           quantity: row.quantity,
@@ -1253,6 +1274,7 @@ const NewShipment = (props) => {
                           productName: "",
                           manufacturer: "",
                           productQuantity: "",
+                          batchNumber: "",
                         };
                         setAddProducts((prod) => [...prod, newArr]);
                       }}

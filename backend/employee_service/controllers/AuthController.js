@@ -390,7 +390,6 @@ exports.checkEmail = [
         let emailId = null
         if(req.body?.emailId)
           emailId=req.body.emailId.toLowerCase().replace(' ', '');
-        console.log(emailId)
         
        let phoneNumber = null
         if(req.body?.phoneNumber)
@@ -410,7 +409,7 @@ exports.checkEmail = [
           id: employeeId,
           postalAddress: addr,
           accountStatus: employeeStatus,
-          warehouseId: warehouseId
+          warehouseId: warehouseId == 'NA' ? [] : [warehouseId]
         });
         await user.save()
         return apiResponse.successResponse(res, 'User registered Success');

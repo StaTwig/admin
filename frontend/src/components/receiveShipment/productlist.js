@@ -4,7 +4,6 @@ import Down from '../../assets/icons/up.png';
 import Modal from "../../shared/modal";
 import FailPopup from "./failPopup";
 import './style.scss'
-
 const ProductList = (props) => {
     const [deliveredProduct, setDeliveredProduct] = useState();
     const [isVisible, setIsVisible] = useState(true);
@@ -17,70 +16,161 @@ const ProductList = (props) => {
         Object.keys(props.shipments).length === 0? <div className="row panel justify-content-between">N/A</div> :
             <div>
                 {props.shipments.products.map((product,index) =>(
-                 <div className={props.productHighLight ? "col panel commonpanle highlight mb-5 " : "col panel commonpanle mb-5"}>
-                    <div className="d-flex flex-row " >
-                        <ul className="mr-2 w-75 elemens">
-                            <li className="mb-3 productheading" style={{fontSize:'3vh',color:"#0093E9", fontWeight:700}}>{product.productName}</li>
-                            <li className="mb-2 text-secondary">Product Name</li>
-                            <li className="mb-2 text-secondary">Manufacturer</li>
-                            <li className="mb-3 text-secondary">Quantity Sent</li>
-                            <li className="mb-3 text-secondary">Quantity Received</li>
-                            <li className="mb-2 text-secondary">Label ID</li>
-                        </ul>
-                        <ul className="elemens w-75">
-                        <li className="mb-3 text-secondary" style={{padding:'0',textAlign:'right'}}>
-                            {isVisible ? 
-                            <button
-                                className="btn btn-outline-primary"
-                                onClick={() => 
-                                    {
-                                        deliveredProductList.push(deliveredProduct);
-                                        props.setDelivered(deliveredProductList);
-                                        props.setIndex(index);
-                                        if(deliveredProduct)
-                                            setIsVisible(false);
-                                    }}
-                                style={{width:'7vw',height:'3vh', fontSize:'2vh',paddingTop:"0"}}
-                                >
-                                Save
-                            </button>
-                            : <span> &nbsp;</span>}
-                            </li>                        
-                            <li className="mb-2 text-secondary">{product.productName}</li>
-                            <li className="mb-2 text-secondary">{product.manufacturer}</li>
-                            <li className="mb-2 text-secondary">{product.productQuantity}</li>
-                            <li className="text-secondary" style={{paddingTop:'0.2vh'}}>
-                                {
-                                    product['productQuantityDelivered'] ?
-                                        product['productQuantityDelivered'] :
-                                        <input
-                                            style={{ height: '3vh', width: '10vw', fontSize: '12px', marginTop: '0', marginBottom: '0' }} 
-                                            className="form-control"
-                                            value={deliveredProduct}
-                                            placeholder="Enter the Quantity"
-                                            // maxLength={product.productQuantity.length}
-                                            onChange={e => {
-                                                setDeliveredProduct(e.target.value);
-                                                if (e.target.value <= product.productQuantity) {
-                                                    setError(false);
-                                                    props.onQuantityChange(index, e.target.value);
-                                                }
-                                                else{
-                                                    e.target.value="";
-                                                    setDeliveredProduct();
-                                                    props.onQuantityChange(index, e.target.value);
-                                                    setError(true);
-  
-                                                }
-                                            }
-                                            }
-                                        />
-                                }
-                            </li>
-                            <li className="mb-2 text-secondary">{props.shipments.label.labelId}</li>
-                    </ul>
-                        <div></div>
+                 <div className={props.productHighLight ? "col panel commonpanle highlight mb-5 " : "col panel commonpanle mb-5"} style={{padding:0}}>
+                   { 
+                       //<div className="d-flex flex-row " >
+                //         <ul className="mr-2 w-75 elemens">
+                //             <li className="mb-3 productheading" style={{fontSize:'3vh',color:"#0093E9", fontWeight:700}}>{product.productName}</li>
+                //             <li className="mb-2 text-secondary">Product Name</li>
+                //             <li className="mb-2 text-secondary">Manufacturer</li>
+                //             <li className="mb-3 text-secondary">Quantity Sent</li>
+                //             <li className="mb-3 text-secondary">Quantity Received</li>
+                //             <li className="mb-2 text-secondary">Label ID</li>
+                //         </ul>
+                //         <ul className="elemens w-75">
+                //         <li className="mb-3 text-secondary" style={{padding:'0',textAlign:'right'}}>
+                //             {isVisible ? 
+                //             <button
+                //                 className="btn btn-outline-primary"
+                //                 onClick={() => 
+                //                     {
+                //                         deliveredProductList.push(deliveredProduct);
+                //                         props.setDelivered(deliveredProductList);
+                //                         props.setIndex(index);
+                //                         if(deliveredProduct)
+                //                             setIsVisible(false);
+                //                     }}
+                //                 style={{width:'7vw',height:'3vh', fontSize:'2vh',paddingTop:"0"}}
+                //                 >
+                //                 Save
+                //             </button>
+                //             : <span> &nbsp;</span>}
+                //             </li>                        
+                //             <li className="mb-2 text-secondary">{product.productName}</li>
+                //             <li className="mb-2 text-secondary">{product.manufacturer}</li>
+                //             <li className="mb-2 text-secondary">{product.productQuantity}</li>
+                //             <li className="text-secondary" style={{paddingTop:'0.2vh'}}>
+                //                 {
+                //                     product['productQuantityDelivered'] ?
+                //                         product['productQuantityDelivered'] :
+                //                         <input
+                //                             style={{ height: '3vh', width: '10vw', fontSize: '12px', marginTop: '0', marginBottom: '0' }} 
+                //                             className="form-control"
+                //                             value={deliveredProduct}
+                //                             placeholder="Enter the Quantity"
+                //                             // maxLength={product.productQuantity.length}
+                //                             onChange={e => {
+                //                                 setDeliveredProduct(e.target.value);
+                //                                 if (e.target.value <= product.productQuantity) {
+                //                                     setError(false);
+                //                                     props.onQuantityChange(index, e.target.value);
+                //                                 }
+                //                                 else{
+                //                                     e.target.value="";
+                //                                     setDeliveredProduct();
+                //                                     props.onQuantityChange(index, e.target.value);
+                //                                     setError(true);
+                //                                 }
+                //                             }
+                //                             }
+                //                         />
+                //                 }
+                //             </li>
+                //             <li className="mb-2 text-secondary">{props.shipments.label.labelId}</li>
+                //     </ul>
+                //         <div>
+                        // </div>
+                    //   </div>
+                   }
+                   <div className="container">
+                        <div className="row">
+                        <div className="col-sm mb-3 productheading" style={{fontSize:'3vh',color:"#0093E9", fontWeight:700}}>
+                        {product.productName}
                         </div>
+                        <div className="col-sm mb-3 text-secondary" style={{padding:'0',textAlign:'right'}}>
+                        {isVisible ? 
+                                        <button
+                                            className="btn btn-outline-primary"
+                                            onClick={() => 
+                                                {
+                                                    deliveredProductList.push(deliveredProduct);
+                                                    props.setDelivered(deliveredProductList);
+                                                    props.setIndex(index);
+                                                    if(deliveredProduct)
+                                                        setIsVisible(false);
+                                                }}
+                                            style={{width:'7vw',height:'3vh', fontSize:'2vh',paddingTop:"0"}}
+                                            >
+                                            Save
+                                        </button>
+                                        : <span> &nbsp;</span>}
+                        </div>
+                        </div>
+                        <div className="row">
+                        <div className="col-sm mb-2 text-secondary styler">
+                        Product Name
+                        </div>
+                        <div className="col-sm mb-2 text-secondary styler">
+                        {product.productName}
+                        </div>
+                        </div>
+                        <div className="row">
+                        <div className="col-sm mb-2 text-secondary styler">
+                        Manufacturer
+                        </div>
+                        <div className="col-sm mb-2 text-secondary styler">
+                        {product.manufacturer}
+                        </div>
+                        </div>
+                        <div className="row">
+                        <div className="col-sm mb-3 text-secondary styler">
+                        Quantity Sent
+                        </div>
+                        <div className="col-sm mb-2 text-secondary styler">
+                        {product.productQuantity}
+                        </div>
+                        </div>
+                        <div className="row">
+                        <div className="col-sm mb-3 text-secondary styler">
+                        Quantity Received
+                        </div>
+                        <div className="col-sm text-secondary styler" >
+                                     {
+                                                product['productQuantityDelivered'] ?
+                                                    product['productQuantityDelivered'] :
+                                                    <input
+                                                        style={{ height: '3vh', width: '10vw', fontSize: '12px', marginTop: '0', marginBottom: '0' }} 
+                                                        className="form-control"
+                                                        value={deliveredProduct}
+                                                        placeholder="Enter the Quantity"
+                                                        // maxLength={product.productQuantity.length}
+                                                        onChange={e => {
+                                                            setDeliveredProduct(e.target.value);
+                                                            if (e.target.value <= product.productQuantity) {
+                                                                setError(false);
+                                                                props.onQuantityChange(index, e.target.value);
+                                                            }
+                                                            else{
+                                                                e.target.value="";
+                                                                setDeliveredProduct();
+                                                                props.onQuantityChange(index, e.target.value);
+                                                                setError(true);
+                                                            }
+                                                        }
+                                                        }
+                                                    />
+                                            }
+                        </div>
+                        </div>
+                        <div className="row">
+                        <div className="col-sm mb-2 text-secondary styler">
+                        Label ID
+                        </div>
+                        <div className="col-sm mb-2 text-secondary styler">
+                        {props.shipments.label.labelId}
+                        </div>
+                        </div>
+                   </div>
                     </div>
                     ))}
                 {/* <div className="arrow float-right" onClick={() => {
@@ -100,9 +190,6 @@ const ProductList = (props) => {
                     </Modal>
                 )} 
             </div>
-
     )
 }
-
-
 export default ProductList;

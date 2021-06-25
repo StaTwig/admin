@@ -16,13 +16,14 @@ import Select from 'react-select';
 import './style.scss';
 
 const EditRow = (props) => {
-  console.log(props);
+  //console.log("propsinvinventorynitofmeasureprops", props.prods[0].unitofMeasure.name);
   const {
     manufacturer,
     productName,
     quantity,
     categories,
     manufacturingDate,
+    unitofMeasure,
     expiryDate,
     batchNumber,
     serialNumber,
@@ -35,7 +36,10 @@ const EditRow = (props) => {
     productId,
     inventories,
   } = props;
-
+  //console.log("props in Inventory",unitofMeasure)
+  
+    
+  
   const [addMore, setAddMore] = useState(
     manufacturingDate || expiryDate || batchNumber || serialNumber
       ? true
@@ -115,6 +119,7 @@ const EditRow = (props) => {
                     onChange={(item) =>
                       handleInventoryChange(idx, 'productName', item.name)
                     }
+                    
                     options={prods}
                   />
                 </div>
@@ -146,6 +151,8 @@ const EditRow = (props) => {
                 />
               </div>
             </div>
+            <div className="title recived-text align-self-center" style={{position:"absolute",right:"20px",display:"block"}}>
+              {unitofMeasure[0] ? <div>{unitofMeasure[0].name}</div> :<div className="placeholder_name">Unit</div>}</div>
           </div>
           {inventories.length > 1 && (
             <div className="m-2 pl-3 pt-1">
