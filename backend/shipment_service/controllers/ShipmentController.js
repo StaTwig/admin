@@ -268,8 +268,10 @@ exports.createShipment = [
         if (result.success) {  
           try{
             data.products.forEach(element => {
-              var product = ProductModel.findOne({ id: element.productId });
+              var product =ProductModel.findOne({ id: element.productId });
               element.type = product.type
+              element.unitofMeasure= product.unitofMeasure.name
+              console.log(product)
             });
             var i = 0;
             const incrementCounter = await CounterModel.update(
