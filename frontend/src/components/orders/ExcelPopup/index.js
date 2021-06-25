@@ -44,11 +44,11 @@ const ExcelPopUp = props => {
 
   const closeModal = () => {
     setopenSuccesfulOrder(false);
-    props.history.push("/orders");
+    // props.history.push("/orders");
   };
   const closeModalFailedPopUp = () => {
     setopenFailedPop(false);
-    props.history.push("/neworder");
+    // props.history.push("/orders");
   };
   return (
     <div className="excelpopup col">

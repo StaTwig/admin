@@ -93,7 +93,11 @@ const EditRow = props => {
               placeholder="Enter Quantity"
               onKeyPress={numbersOnly}
               value={prod.productQuantity ? prod.productQuantity : prod.quantity}
-              onChange={e => handleQuantityChange(e.target.value, index)}
+              onChange={(e) =>{
+                handleQuantityChange(e.target.value, index);
+                if(e.target.value==="0")
+                  prod.productQuantity="";
+              }}
             />
           </div>
         </div>
