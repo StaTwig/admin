@@ -136,6 +136,12 @@ exports.fetchPurchaseOrders = [
                     const POs = await userPurchaseOrders("id", "", poId, "", id, skip, limit, (error, data) => {
                            poDetails = data ;
                        })
+                      //  console.log(poDetails[0].products)
+                       await Promise.all(poDetails[0].products.map(async (element )=> {
+                        var product = await ProductModel.findOne({ id: element.id });
+                        element.unitofMeasure = product.unitofMeasure;
+                       }))
+                      //  console.log(poDetails[0].products)
                      }
                     else
                     {
@@ -159,6 +165,7 @@ exports.fetchPurchaseOrders = [
 
                     );
                 } catch (err) {
+                  console.log(err)
                     return apiResponse.ErrorResponse(res, err);
                 }
 
