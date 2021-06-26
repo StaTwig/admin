@@ -14,12 +14,12 @@ const ExcelPopUp = props => {
   const dispatch = useDispatch();
   const [openSuccesfulOrder, setopenSuccesfulOrder] = useState(false);
   const [openFailedPopup,setopenFailedPop] = useState(false);
-  const [ modalProps, setModalProps ] = useState({});
-
+  const [modalProps, setModalProps] = useState({});
+   
   const setExcelFile = evt => {
     setExcel(evt.target.files[0]);
   };
-
+  props.setMenu(false);
   const uploadExcel = async () => {
     let formData = new FormData();
     formData.append('excel', excel);
@@ -30,6 +30,7 @@ const ExcelPopUp = props => {
       console.log('success add PO');
       // dispatch(setReviewPos(result.data.data));
       setopenSuccesfulOrder(true);
+      // props.setOpenExcel(false);
       setModalProps({
     message: 'Created Successfully!',
     OrderLength: result.data.data.length,
@@ -44,11 +45,10 @@ const ExcelPopUp = props => {
 
   const closeModal = () => {
     setopenSuccesfulOrder(false);
-    // props.history.push("/orders");
+    props.setOpenExcel(false);
   };
   const closeModalFailedPopUp = () => {
     setopenFailedPop(false);
-    // props.history.push("/orders");
   };
   return (
     <div className="excelpopup col">
