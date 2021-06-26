@@ -266,7 +266,7 @@ const NewShipment = (props) => {
     products.forEach((p) => {
       if (p.productQuantity < 1) error = true;
     });
-    console.log(products);
+    console.log(products);  
 
     if (!error) {
       const data = {
@@ -308,19 +308,31 @@ const NewShipment = (props) => {
         // poId: OrderDetails.purchaseOrderId ? OrderDetails.purchaseOrderId : null,
       };
 
-      var check = false; 
-
+    
+      var check = 0; 
+      console.log(data.products);
       for(var i=0;i<data.products.length;i++)
       {
         if(typeof data.products[i].productQuantity==='undefined')
         {
-          check = true;
+          check = 1;
           break;
         }
+        if(typeof data.products[i].batchNumber==='undefined')
+        {
+          check = 2;
+          break;
+        }
+        
       }
-      if(check===true)
+      if(check===1)
       {
         setShipmentError("Check product quantity");
+        setOpenShipmentFail(true);
+      }
+      else if(check===2)
+      {
+        setShipmentError("Check Batch Number");
         setOpenShipmentFail(true);
       }
       else{
@@ -377,7 +389,8 @@ const NewShipment = (props) => {
           }
         }
       }
-    }
+    
+  }
     else {
       setShipmentError("Check product quantity");
       setOpenShipmentFail(true);
