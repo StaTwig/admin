@@ -226,6 +226,8 @@ const Orders = props => {
                 {...props}
                 onHide={closeExcelModal} //FailurePopUp
                 setOpenCreatedOrder={setOpenCreatedOrder}
+                setOpenExcel={setOpenExcel}
+                setMenu={setMenu}
               />
             </Modal>
           )}
