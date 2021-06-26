@@ -841,7 +841,7 @@ exports.getStatsByBrand = [
 		try {
 			const filters = req.query;
 			let warehouseIds = await _getWarehouseIds(filters);
-
+			today = new Date()
 			let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
 			const Products = await AnalyticsModel.aggregate([
 				{
