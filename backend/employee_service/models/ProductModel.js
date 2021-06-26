@@ -30,7 +30,7 @@ var ProductSchema = new mongoose.Schema(
     },
     
     unitofMeasure: {
-      type: Array,
+      type: Object,
           items: {type: Object,
             properties: {
               id: {type:String},
