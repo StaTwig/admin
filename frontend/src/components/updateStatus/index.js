@@ -397,7 +397,7 @@ const UpdateStatus = (props) => {
                       className="btn btn-outline-primary mr-3"
                       onClick={() => props.history.push(`/viewshipment/${id}`)}
                     >
-                      CANCEL
+                      Cancel
                     </button>
                     <button
                       className="btn btn-orange fontSize20 font-bold mr-4 product"
