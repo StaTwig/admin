@@ -82,15 +82,15 @@ const ProductList = (props) => {
                         // </div>
                     //   </div>
                    }
-                   <div className="container">
+                   <div className="container ml-2">
                         <div className="row">
-                        <div className="col-sm mb-3 productheading" style={{fontSize:'3vh',color:"#0093E9", fontWeight:700}}>
+                        <div className="col-sm mt-2 productheading" style={{fontSize:'2vh',color:"#0093E9", fontWeight:600}}>
                         {product.productName}
                         </div>
-                        <div className="col-sm mb-3 text-secondary" style={{padding:'0',textAlign:'right'}}>
+                        <div className="col-sm mb-2 text-secondary" style={{textAlign:'right'}}>
                         {isVisible ? 
                                         <button
-                                            className="btn btn-outline-primary"
+                                            className="btn btn-outline-dark mt-2 mr-1 p-1"
                                             onClick={() => 
                                                 {
                                                     deliveredProductList.push(deliveredProduct);
@@ -99,7 +99,7 @@ const ProductList = (props) => {
                                                     if(deliveredProduct)
                                                         setIsVisible(false);
                                                 }}
-                                            style={{width:'7vw',height:'3vh', fontSize:'2vh',paddingTop:"0"}}
+                                            style={{width:'3vw',height:'4vh', fontSize:'12px'}}
                                             >
                                             Save
                                         </button>
@@ -139,7 +139,7 @@ const ProductList = (props) => {
                                                 product['productQuantityDelivered'] ?
                                                     product['productQuantityDelivered'] :
                                                     <input
-                                                        style={{ height: '3vh', width: '10vw', fontSize: '12px', marginTop: '0', marginBottom: '0' }} 
+                                                        style={{ position:"relative", bottom:"6px",height: '3vh', width: '10vw', fontSize: '12px', marginTop: '0', marginBottom: '0px' }} 
                                                         className="form-control"
                                                         value={deliveredProduct}
                                                         placeholder="Enter the Quantity"
@@ -160,6 +160,14 @@ const ProductList = (props) => {
                                                         }
                                                     />
                                             }
+                        </div>
+                        </div>
+                        <div className="row">
+                        <div className="col-sm mb-2 text-secondary styler">
+                        Batch Number
+                        </div>
+                        <div className="col-sm mb-2 text-secondary styler">
+                        {props.shipments.label.labelId}
                         </div>
                         </div>
                         <div className="row">
