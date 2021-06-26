@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
+import {Map, InfoWindow, Marker, GoogleApiWrapper, Polygon} from 'google-maps-react';
 
 const style = {
     width: '90%',
@@ -32,7 +32,7 @@ export class MapContainer extends Component {
       bounds.extend(points[i]);
     
     return (
-      <Map google={this.props.google} zoom={15}
+      <Map google={this.props.google} zoom={4}
         style = {style} 
         initialCenter={{
             lat: points.length ? points[0].lat : 42.02,
@@ -40,6 +40,13 @@ export class MapContainer extends Component {
         }}
         bounds={bounds}
       >
+        <Polygon
+          paths={points}
+          strokeColor="#0000FF"
+          strokeOpacity={0.8}
+          strokeWeight={2}
+          fillColor="#0000FF"
+          fillOpacity={0.35} />
         {this.props.data.map((row, index) => {
           // return row?.shipmentUpdates.map((r, i) => {
             return (
@@ -48,6 +55,17 @@ export class MapContainer extends Component {
                     title={row.receiver.warehouse.title}
                     name={row.receiver.warehouse.warehouseAddress.city}
                   position={{ lat: row.receiver.warehouse.location.latitude, lng: row.receiver.warehouse.location.longitude }} />
+            )
+          // })
+        })}
+        {this.props.data.map((row, index) => {
+          // return row?.shipmentUpdates.map((r, i) => {
+            return (
+                row?.supplier?.warehouse?.location?.latitude && row?.supplier?.warehouse?.location?.longitude &&
+                  <Marker
+                    title={row.supplier.warehouse.title}
+                    name={row.supplier.warehouse.warehouseAddress.city}
+                  position={{ lat: row.supplier.warehouse.location.latitude, lng: row.supplier.warehouse.location.longitude }} />
             )
           // })
         })}

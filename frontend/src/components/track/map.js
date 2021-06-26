@@ -1,6 +1,6 @@
 
 import React, {Component} from 'react';
-import {Map, InfoWindow, Marker, GoogleApiWrapper} from 'google-maps-react';
+import {Map, InfoWindow, Marker, GoogleApiWrapper, Polygon} from 'google-maps-react';
 
 const style = {
     width: '95%',
@@ -36,6 +36,13 @@ export class MapContainer extends Component {
         }}
         bounds={bounds}
       >
+        <Polygon
+          paths={points}
+          strokeColor="#0000FF"
+          strokeOpacity={0.8}
+          strokeWeight={2}
+          fillColor="#0000FF"
+          fillOpacity={0.35} />
         {this.props.data.map((row, index) => {
           return row?.shipmentUpdates?.filter(s => s.status == 'RECEIVED').map((r, i) => {
             return (
