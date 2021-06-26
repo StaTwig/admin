@@ -152,7 +152,7 @@ const EditRow = (props) => {
               </div>
             </div>
             <div className="title recived-text align-self-center" style={{position:"absolute",right:"20px",display:"block"}}>
-              {unitofMeasure[0] ? <div>{unitofMeasure[0].name}</div> :<div className="placeholder_name">Unit</div>}</div>
+              {unitofMeasure.name ? <div>{unitofMeasure.name}</div> :<div className="placeholder_name">Unit</div>}</div>
           </div>
           {inventories.length > 1 && (
             <div className="m-2 pl-3 pt-1">
