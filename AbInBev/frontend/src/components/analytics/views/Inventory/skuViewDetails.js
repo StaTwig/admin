@@ -133,7 +133,7 @@ const iSKUViewDetails = (props) => {
               </thead>
               <tbody>
                 {analytics.map((analytic, index) => (
-                  <tr>
+                  <tr key={index}>
                     <td scope="row">
                       <span className="stateLink">{analytic.groupedBy}</span>
                     </td>
