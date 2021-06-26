@@ -523,8 +523,16 @@ exports.addPOsFromExcel = [
                 "products": [
                   {
                     "productId": po['Material'],
+                    "id":  po['Material'],
                     "productQuantity": po['Order Quantity'],
-                    "quantity": po['Order Quantity']
+                    "quantity": po['Order Quantity'],
+                    "unitofMeasure":
+                        {
+                        "id": po['Unit Id'],
+                        "name": po['Order Unit']
+
+                        }
+
                   }
                 ],
                 "createdBy" : createdBy,
@@ -551,7 +559,7 @@ exports.addPOsFromExcel = [
                   poDataArray[i].id = poCounter.counters[0].format + poCounter.counters[0].value++;  
                   let productDetails = await ProductModel.findOne(
                     {
-                      externalId: poDataArray[i].products[0].productId
+                      id: poDataArray[i].products[0].productId
                     });
                     console.log("PRODUCT DETAILS",productDetails)
                     if(productDetails){
