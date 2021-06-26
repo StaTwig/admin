@@ -28,13 +28,13 @@ export class MapContainer extends Component {
       bounds.extend(points[i]);
     
     return (
-      <Map google={this.props.google} zoom={14}
+      <Map google={this.props.google} zoom={5}
         style = {style} 
-        initialCenter={{
+        center={{
             lat: points.length ? points[0].lat : 42.02,
             lng: points.length ? points[0].lng : -77.01
         }}
-        bounds={bounds}
+        // bounds={bounds}
       >
         <Polygon
           paths={points}
@@ -53,7 +53,6 @@ export class MapContainer extends Component {
                   label={index}
                 position={{ lat: row.receiver.warehouse.location.latitude, lng: row.receiver.warehouse.location.longitude }} />
               : null)
-            
           }
           )
         })}

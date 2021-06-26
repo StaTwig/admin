@@ -25,6 +25,8 @@ export class MapContainer extends Component {
       // s?.shipmentUpdates?.filter(s => s.status == 'RECEIVED').forEach(rs => {
         if (s?.receiver?.warehouse?.location?.latitude && s?.receiver?.warehouse?.location?.longitude && s?.receiver?.warehouse?.location?.latitude != "0" && s?.receiver?.warehouse?.location?.longitude != "0")
           points.push({ lat: parseFloat(s?.receiver?.warehouse?.location?.latitude), lng: parseFloat(s?.receiver?.warehouse?.location?.longitude) });
+      if (s?.supplier?.warehouse?.location?.latitude && s?.supplier?.warehouse?.location?.longitude && s?.supplier?.warehouse?.location?.latitude != "0" && s?.supplier?.warehouse?.location?.longitude != "0")
+          points.push({ lat: parseFloat(s?.supplier?.warehouse?.location?.latitude), lng: parseFloat(s?.supplier?.warehouse?.location?.longitude) });
       // })
     });
     var bounds = new this.props.google.maps.LatLngBounds();
@@ -32,13 +34,13 @@ export class MapContainer extends Component {
       bounds.extend(points[i]);
     
     return (
-      <Map google={this.props.google} zoom={4}
+      <Map google={this.props.google} zoom={5}
         style = {style} 
-        initialCenter={{
+        center={{
             lat: points.length ? points[0].lat : 42.02,
             lng: points.length ? points[0].lng : -77.01
         }}
-        bounds={bounds}
+        // bounds={bounds}
       >
         <Polygon
           paths={points}
@@ -50,7 +52,7 @@ export class MapContainer extends Component {
         {this.props.data.map((row, index) => {
           // return row?.shipmentUpdates.map((r, i) => {
             return (
-                row?.receiver?.warehouse?.location?.latitude && row?.receiver?.warehouse?.location?.longitude &&
+              row?.receiver?.warehouse?.location?.latitude && row?.receiver?.warehouse?.location?.longitude &&
                   <Marker
                     title={row.receiver.warehouse.title}
                     name={row.receiver.warehouse.warehouseAddress.city}
