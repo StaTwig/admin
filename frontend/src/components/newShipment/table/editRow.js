@@ -20,7 +20,9 @@ const EditRow = props => {
     products
   } = props;
   // console.log("propsinshipment",prod.unitofMeasure[0]==undefined ? null: "vi");
+  
   const [productsList,setProductsList] = useState([]);
+  const [quantityChecker,setQuantityChecker] = useState(1);
   useEffect(() => {
 
     async function fetchData() {
@@ -34,10 +36,9 @@ const EditRow = props => {
     fetchData();
   }, []);
 
-
   const new_products = [];
 
-  if(typeof(products)!="undefined"){
+  if(typeof(products)!="undefined" && typeof(productsList)!="undefined"){
   for(var i=0;i<products.length;i++)
   {
     // console.log(productsList);
@@ -57,7 +58,14 @@ const EditRow = props => {
   }
 }
 
-if(typeof(prod)!="undefined" && typeof(prod.name!="undefined") && typeof(productsList)!="undefined")
+var defaultQuantity  =  "Quantity";
+
+const updateQuantity = () =>
+{
+  setQuantityChecker(0);
+}
+
+if(quantityChecker===1 && typeof(prod)!="undefined" && typeof(prod.name!="undefined") && typeof(productsList)!="undefined")
   {
                      let qty;
                     for(var i=0;i<productsList.length;i++)
@@ -73,8 +81,10 @@ if(typeof(prod)!="undefined" && typeof(prod.name!="undefined") && typeof(product
                     if(i < productsList.length){
                     prod.productQuantity = qty;
                     console.log("productQuantity is " + prod.productQuantity);
+                    updateQuantity();
                     }
   }
+
 
 
   const numbersOnly = (e) => {
@@ -157,7 +167,11 @@ const handleChange = (value) =>
                   className="no-border"
                   placeholder="Select Product Name"
                   defaultInputValue={prod.name}
-                  onChange={(v) => handleProductChange(index, v)}
+                  onChange={(v) => {
+                    handleProductChange(index, v);
+                    setQuantityChecker(1);
+                  }
+                }
                   options={new_products}
                 /> : prod.name
                 }
@@ -188,7 +202,9 @@ const handleChange = (value) =>
               placeholder="Quantity"
               onKeyPress={numbersOnly}
               value={prod.productQuantity}
+              
               onChange={(e) => {
+              
                 handleQuantityChange(e.target.value, index);
                  console.log(e.target.value);
                   if(e.target.value==="0")
