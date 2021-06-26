@@ -280,8 +280,8 @@ const AddLocation = (props) => {
                     <button 
                         type="button"
                         className="btn btn-white shadow-radius font-bold mr-3" 
-                        onClick={() => props.history.push("/profile")}
-                        >Cancle
+                        onClick={() => {props.history.push({pathname:'/profile',state:{editMode:true}})}}
+                        >Cancel
                      </button>
                   </div>
                 </form>

@@ -28,6 +28,17 @@ var ProductSchema = new mongoose.Schema(
       required: false,
       default: "organization_id 1",
     },
+    unitofMeasure: {
+      type: Object,
+          items: {type: Object,
+            properties: {
+              id: {type:String},
+              name: {
+                type:String
+              }    
+          }
+        }   
+      },
     characteristicSet: {
       type: Object
     }

@@ -12,9 +12,16 @@ import calender from '../../assets/icons/calendar.svg';
 import Order from '../../assets/icons/orders.svg';
 import Totalshipments from "../../assets/icons/TotalShipment.svg";
 import { useDispatch, useSelector } from 'react-redux';
+import ExportIcon from '../../assets/icons/Export.svg';
+import dropdownIcon from '../../assets/icons/drop-down.svg';
+import ExcelPopUp from './ExcelPopup';
+import Modal from '../../shared/modal';
 import { getSentPOs, getReceivedPOs, getOrderIds, getProductIdDeliveryLocationsOrganisations, getPOs, resetPOs, resetReviewPos } from '../../actions/poActions';
 
 const Orders = props => {
+  const [menu, setMenu] = useState(false);
+  const [openCreatedOrder, setOpenCreatedOrder] = useState(false);
+  const [openExcel, setOpenExcel] = useState(false);
   const [visible, setvisible] = useState('one');
   const [skip, setSkip] = useState(0);
   const [limit, setLimit] = useState(10);
@@ -85,6 +92,14 @@ const Orders = props => {
     img3: <img src={Order} width="18" height="16" />,
     img4: <img src={Package} width="16" height="16" />,
     img5: <img src={Totalshipments} width="18" height="18" />,
+  };
+
+  const closeExcelModal = () => {
+    setOpenExcel(false);
+  };
+
+  const closeModal = () => {
+    setOpenCreatedOrder(false);
   };
 
   const setData = (v, a = false) => {
@@ -180,6 +195,42 @@ const Orders = props => {
               <span style={{ color: 'white' }}>Create New Order</span>
             </button>
           </Link>
+          
+          {/* <div className="d-flex flex-column align-items-center"> */}
+            <button className="btn-primary btn fontSize20 font-bold mt-1 ml-2" onClick={() => setMenu(!menu)}>
+              <div className="d-flex align-items-center">
+                <img src={ExportIcon} width="16" height="16" className="mr-3" />
+                <span>Import</span>
+                <img src={dropdownIcon} width="16" height="16" className="ml-3" />
+            </div>
+            </button>
+            {menu ? (
+              <div class="menu">
+                <button
+                className=" btn btn-outline-info mb-2 "
+                onClick={() => setOpenExcel(true)}
+              >
+                {' '}
+                Excel
+              </button>
+              <button className=" btn btn-outline-info" > Other</button>
+            </div>
+          ) : null}
+              {openExcel && (
+            <Modal
+              title="Import"
+              close={() => closeExcelModal()}
+              size="modal-md" //for other size's use `modal-lg, modal-md, modal-sm`
+            >
+              <ExcelPopUp
+                {...props}
+                onHide={closeExcelModal} //FailurePopUp
+                setOpenCreatedOrder={setOpenCreatedOrder}
+              />
+            </Modal>
+          )}
+          {/* </div> */}
+
         </div>
       </div>
       <Tiles {...props} setData={setData} />

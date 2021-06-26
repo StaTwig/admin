@@ -19,7 +19,7 @@ const Product = props => {
                 </div>
                 <div className="row pb-1 pt-1">
                     <span className="col text-secondary">Quantity: </span>
-                    <span className="col font-weight-bold">{product.productQuantity ? product.productQuantity : product.quantity}</span>
+                    <span className="col font-weight-bold">{product.productQuantity ? product.productQuantity : product.quantity}<span>{"  ("}</span>{product.unitofMeasure && product.unitofMeasure.name ? <span>{product.unitofMeasure.name}</span>:""}<span>{")"}</span></span>
                 </div>
             </div>
         </div>

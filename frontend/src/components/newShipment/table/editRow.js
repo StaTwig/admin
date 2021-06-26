@@ -19,7 +19,10 @@ const EditRow = props => {
     handleBatchChange,
     products
   } = props;
+  // console.log("propsinshipment",prod.unitofMeasure[0]==undefined ? null: "vi");
+  
   const [productsList,setProductsList] = useState([]);
+  const [quantityChecker,setQuantityChecker] = useState(1);
   useEffect(() => {
 
     async function fetchData() {
@@ -33,10 +36,9 @@ const EditRow = props => {
     fetchData();
   }, []);
 
-
   const new_products = [];
 
-  if(typeof(products)!="undefined"){
+  if(typeof(products)!="undefined" && typeof(productsList)!="undefined"){
   for(var i=0;i<products.length;i++)
   {
     // console.log(productsList);
@@ -55,6 +57,36 @@ const EditRow = props => {
     }
   }
 }
+
+var defaultQuantity  =  "Quantity";
+
+const updateQuantity = () =>
+{
+  setQuantityChecker(0);
+}
+
+if(quantityChecker===1 && typeof(prod)!="undefined" && typeof(prod.name!="undefined") && typeof(productsList)!="undefined")
+  {
+                     let qty;
+                    for(var i=0;i<productsList.length;i++)
+                    {
+                      if(prod.name===productsList[i].productName)
+                      {
+                        console.log("Hi");
+                        qty = String(productsList[i].quantity);
+                        console.log(typeof(qty));
+                        break;
+                      }
+                    }
+                    if(i < productsList.length){
+                    prod.productQuantity = qty;
+                    console.log("productQuantity is " + prod.productQuantity);
+                    updateQuantity();
+                    }
+  }
+
+
+
   const numbersOnly = (e) => {
     // Handle paste
     if (e.type === 'paste') {
@@ -135,7 +167,11 @@ const handleChange = (value) =>
                   className="no-border"
                   placeholder="Select Product Name"
                   defaultInputValue={prod.name}
-                  onChange={(v) => handleProductChange(index, v)}
+                  onChange={(v) => {
+                    handleProductChange(index, v);
+                    setQuantityChecker(1);
+                  }
+                }
                   options={new_products}
                 /> : prod.name
                 }
@@ -166,7 +202,9 @@ const handleChange = (value) =>
               placeholder="Quantity"
               onKeyPress={numbersOnly}
               value={prod.productQuantity}
+              
               onChange={(e) => {
+              
                 handleQuantityChange(e.target.value, index);
                  console.log(e.target.value);
                   if(e.target.value==="0")
@@ -176,6 +214,10 @@ const handleChange = (value) =>
                 }}
             />
           </div>
+        </div>
+        <div className="title recived-text align-self-center" style={{position:"absolute",right:"20px"}}>
+          {prod.unitofMeasure && prod.unitofMeasure.name  ? <div>{prod.unitofMeasure.name}</div>:
+          <div className="placeholder_id">Unit</div>}
         </div>
       </div>
         {enableDelete && props.product.length > 1 &&

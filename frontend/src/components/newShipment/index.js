@@ -266,7 +266,7 @@ const NewShipment = (props) => {
     products.forEach((p) => {
       if (p.productQuantity < 1) error = true;
     });
-    console.log(products);
+    console.log(products);  
 
     if (!error) {
       const data = {
@@ -308,19 +308,31 @@ const NewShipment = (props) => {
         // poId: OrderDetails.purchaseOrderId ? OrderDetails.purchaseOrderId : null,
       };
 
-      var check = false; 
-
+    
+      var check = 0; 
+      console.log(data.products);
       for(var i=0;i<data.products.length;i++)
       {
         if(typeof data.products[i].productQuantity==='undefined')
         {
-          check = true;
+          check = 1;
           break;
         }
+        if(typeof data.products[i].batchNumber==='undefined')
+        {
+          check = 2;
+          break;
+        }
+        
       }
-      if(check===true)
+      if(check===1)
       {
         setShipmentError("Check product quantity");
+        setOpenShipmentFail(true);
+      }
+      else if(check===2)
+      {
+        setShipmentError("Check Batch Number");
         setOpenShipmentFail(true);
       }
       else{
@@ -377,7 +389,8 @@ const NewShipment = (props) => {
           }
         }
       }
-    }
+    
+  }
     else {
       setShipmentError("Check product quantity");
       setOpenShipmentFail(true);
@@ -691,10 +704,11 @@ const NewShipment = (props) => {
                   </div>
                 </div>
                <div className="col-md-6 com-sm-12">
-                  <div className="form-group">
-                    <label htmlFor="shipmentID">Ref. Shipment ID</label>
+                  <div className="form-group mr-3">
+                    <label htmlFor="shipmentID">Reference Shipment ID</label>
                     <input
                       type="text"
+                      style={{position:"relative", left:"70px" }}
                       className="form-control"
                       name="shipmentID"
                       onBlur={handleBlur}
@@ -702,8 +716,8 @@ const NewShipment = (props) => {
                       onChange={handleChange}
                       value={values.shipmentID}
                     />
-                  <span style={{height:"30px"}}
-                    className="btn btn-outline-info mr-2"
+                  <span style={{height:"25px",width:"50px"}}
+                    className="btn btn-outline-info"
                     disabled={fetchdisabled}
                     onClick={async()=>{
                       // setpofetchdisabled(true);
@@ -766,7 +780,7 @@ const NewShipment = (props) => {
                     }
                   }
                   >
-                    <span style={{position:"relative",top:"-2px"}}>Fetch</span>
+                    <span style={{position:"relative",top:"-7px",fontSize:"12px",left:"-10px"}}>Fetch</span>
                   </span>
                   </div>
                 </div>

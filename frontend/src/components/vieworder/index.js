@@ -8,7 +8,7 @@ import {changePOStatus} from '../../actions/poActions';
 
 const ViewOrder = props => {
   const { order, id } = props;
-  // console.log("order-----",order);
+  //console.log("vieworder",order);
   const [alertMessage, setAlertMessage] = useState({});
   const user = useSelector((state) => {
     return state.user;
@@ -139,7 +139,7 @@ const onPOStatusChange = async status => {
               </div>
               <div className="row  p-1">
                 <span className="col">Quantity:</span>
-                <span className= " col text-dark ">{product.productQuantity}</span>
+                <span className= " col text-dark ">{product.productQuantity}<span>{"("}</span>{product.unitofMeasure && product.unitofMeasure.name ? <span>{product.unitofMeasure.name}</span>:""}<span>{")"}</span></span>
               </div>
             </div>
             )}

@@ -14,11 +14,13 @@ const ViewInventory = props => {
   const { inventories } = props;
   const [more, setMore] = useState([]);
   const dispatch = useDispatch();
+  //console.log("inventories",inventories);
   
   const toggleShowMore = async (inventory_id, product_id, index, enable) => {
     if (!enable) {
       dispatch(turnOn());
       let result = await getBatchDetailsByWareHouse(inventory_id, product_id);
+      //console.log("resultinviewInventory",result);
       setData(result);
       dispatch(turnOff());
     }
