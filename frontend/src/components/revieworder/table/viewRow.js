@@ -7,7 +7,7 @@ const ViewRow = props => {
   } = props;
 //console.log("prodUnitofmeasure+++",prod);
   return (
-      <div className=" row text-center text-dark col" >
+      <div className=" row text-center text-dark col ml-5" >
         <div className="col pl-5 tcell p-2" >
           <div className=" p-0">
             <div className="d-flex pl-3 text-center flex-column">
@@ -35,8 +35,8 @@ const ViewRow = props => {
         </div>
         </div>
         <div className="col pl-4 tcell text-center justify-content-center">
-          <div className=" mr-5" style={{color:"black",fontSize:"14px"}}>
-            {prod.productQuantity} <span>{"("}</span> { prod.unitofMeasure[0] ?<span>{ prod.unitofMeasure[0]==undefined ? null: prod.unitofMeasure[0].name}</span>:
+          <div className="mr-4" style={{color:"black",fontSize:"14px"}}>
+            {prod.productQuantity} <span>{"("}</span> { prod.unitofMeasure ?<span>{ prod.unitofMeasure==undefined ? null: prod.unitofMeasure.name}</span>:
           <span className="placeholder_id">Unit</span>}<span>{")"}</span>
           </div>
         

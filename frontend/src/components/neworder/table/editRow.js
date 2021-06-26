@@ -15,7 +15,7 @@ const EditRow = props => {
     products,
     handleCategoryChange,
   } = props;
-  console.log("propsEditrow",prod.unitofMeasure[0]==undefined ? null: prod.unitofMeasure[0].name);
+  //console.log("propsEditrow",prod.unitofMeasure? prod.unitofMeasure.name:null );
 
   const numbersOnly = (e) => {
     // Handle paste
@@ -103,8 +103,8 @@ const EditRow = props => {
           </div>
         </div>
         <div className="title recived-text align-self-center" style={{position:"absolute",right:"20px"}}>
-       
-          { prod.unitofMeasure[0] ?<div>{ prod.unitofMeasure[0]==undefined ? null: prod.unitofMeasure[0].name}</div>:
+        {/* prod.unitofMeasure? prod.unitofMeasure.name:null */}
+          { prod.unitofMeasure ?<div>{ prod.unitofMeasure ==undefined ? null: prod.unitofMeasure.name}</div>:
           <div className="placeholder_id">Unit</div>}
         </div>
       </div>
