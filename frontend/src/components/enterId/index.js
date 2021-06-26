@@ -221,7 +221,7 @@ const EnterId = (props) => {
                           
                         }
                       >
-                        CANCEL
+                        Cancel
                       </button>
                       <button
                         disabled={shipdisabled}

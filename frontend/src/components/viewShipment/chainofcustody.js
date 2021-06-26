@@ -182,7 +182,7 @@ const ChainOfCustody = (props) => {
                             Organisation Location{" "}
                           </span>
                           <span class="w-75">
-                            {shipmentData.receiver.warehouse.postalAddress}
+                          {shipmentData.receiver.warehouse.warehouseAddress.firstLine+" "+shipmentData.receiver.warehouse.warehouseAddress.city+" "+shipmentData.receiver.warehouse.warehouseAddress.state+" "+shipmentData.receiver.warehouse.warehouseAddress.zipCode+" "+shipmentData.receiver.warehouse.warehouseAddress.country}
                           </span>
                         </div>
                       </div>

@@ -44,11 +44,11 @@ const ExcelPopUp = props => {
 
   const closeModal = () => {
     setopenSuccesfulOrder(false);
-    props.history.push("/orders");
+    // props.history.push("/orders");
   };
   const closeModalFailedPopUp = () => {
     setopenFailedPop(false);
-    props.history.push("/neworder");
+    // props.history.push("/orders");
   };
   return (
     <div className="excelpopup col">
@@ -71,10 +71,10 @@ const ExcelPopUp = props => {
             className="btn-outline-primary btn mr-3"
             onClick={props.onHide}
           >
-            CANCEL
+            Cancel
           </button>
           <button className="btn-primary btn mr-4" onClick={uploadExcel}>
-            IMPORT
+            Import
           </button>
           {openSuccesfulOrder && (
                 <Modal

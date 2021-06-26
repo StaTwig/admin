@@ -16,15 +16,19 @@ const EditRow = props => {
     category,
     handleCategoryChange,
     handleProductChange,
+    handleBatchChange,
     products
   } = props;
+  // console.log("propsinshipment",prod.unitofMeasure[0]==undefined ? null: "vi");
+  
   const [productsList,setProductsList] = useState([]);
+  const [quantityChecker,setQuantityChecker] = useState(1);
   useEffect(() => {
 
     async function fetchData() {
   
       const result111 = await getProductList();
-      console.log(result111);
+      // console.log(result111);
       setProductsList(result111.message);
   
     }
@@ -32,12 +36,12 @@ const EditRow = props => {
     fetchData();
   }, []);
 
-
   const new_products = [];
 
+  if(typeof(products)!="undefined" && typeof(productsList)!="undefined"){
   for(var i=0;i<products.length;i++)
   {
-    console.log(productsList);
+    // console.log(productsList);
     let check = false;
     for(var j=0;j<productsList.length;j++)
     {
@@ -52,6 +56,37 @@ const EditRow = props => {
       new_products.push(products[i]);
     }
   }
+}
+
+var defaultQuantity  =  "Quantity";
+
+const updateQuantity = () =>
+{
+  setQuantityChecker(0);
+}
+
+if(quantityChecker===1 && typeof(prod)!="undefined" && typeof(prod.name!="undefined") && typeof(productsList)!="undefined")
+  {
+                     let qty;
+                    for(var i=0;i<productsList.length;i++)
+                    {
+                      if(prod.name===productsList[i].productName)
+                      {
+                        console.log("Hi");
+                        qty = String(productsList[i].quantity);
+                        console.log(typeof(qty));
+                        break;
+                      }
+                    }
+                    if(i < productsList.length){
+                    prod.productQuantity = qty;
+                    console.log("productQuantity is " + prod.productQuantity);
+                    updateQuantity();
+                    }
+  }
+
+
+
   const numbersOnly = (e) => {
     // Handle paste
     if (e.type === 'paste') {
@@ -72,7 +107,7 @@ const handleChange = (value) =>
     console.log(value);
 }
 //console.log("yyyy",prod);
-console.log(products);
+// console.log(products);
 // const handlee = () =>
 // {
 //   console.log("Hi");
@@ -104,6 +139,7 @@ console.log(products);
                 <Select
                   className="no-border"
                   placeholder="Select Product Category"
+                  value={{label:prod.type?prod.type:"Select Product Category"}}
                   defaultInputValue={prod.type}
                   onChange={(v) => handleCategoryChange(index, v.value)}
                   options={category}
@@ -131,7 +167,11 @@ console.log(products);
                   className="no-border"
                   placeholder="Select Product Name"
                   defaultInputValue={prod.name}
-                  onChange={(v) => handleProductChange(index, v)}
+                  onChange={(v) => {
+                    handleProductChange(index, v);
+                    setQuantityChecker(1);
+                  }
+                }
                   options={new_products}
                 /> : prod.name
                 }
@@ -146,10 +186,25 @@ console.log(products);
             <input
               className="form-control text-center"
               id="checker"
+              placeholder="Batch number"
+              value={prod.batchNumber}
+              onChange={(e) => {
+                handleBatchChange(e.target.value, index);
+              }}
+            />
+          </div>
+        </div>
+        <div className="col tcell text-center justify-content-center p-2">
+          <div className="">
+            <input
+              className="form-control text-center"
+              id="checker"
               placeholder="Quantity"
               onKeyPress={numbersOnly}
               value={prod.productQuantity}
+              
               onChange={(e) => {
+              
                 handleQuantityChange(e.target.value, index);
                  console.log(e.target.value);
                   if(e.target.value==="0")
@@ -159,6 +214,10 @@ console.log(products);
                 }}
             />
           </div>
+        </div>
+        <div className="title recived-text align-self-center" style={{position:"absolute",right:"20px"}}>
+          {prod.unitofMeasure && prod.unitofMeasure.name  ? <div>{prod.unitofMeasure.name}</div>:
+          <div className="placeholder_id">Unit</div>}
         </div>
       </div>
         {enableDelete && props.product.length > 1 &&

@@ -1,4 +1,8 @@
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const serviceId = process.env.TWILIO_SERVICE_ID;
 const axios = require('axios');
+const client = require('twilio')(accountSid, authToken);
 
 function eventToData(event,type){
     switch(type){
@@ -6,7 +10,7 @@ function eventToData(event,type){
         return eventToHtml(event);
     case "mobile" :
         return eventToPlainText(event);     
-    case "web_push" :
+    case "push" :
         return eventToPlainText(event); 
     }
 }
@@ -62,10 +66,19 @@ function alertEmail(event,email){
 }
 }
 
-function alertWebPush(){
-
+function alertPushNotification(event,userIdentity){
+    const content = eventToData(event,"push")
+    console.log(userIdentity)
+    client.notify.services(serviceId)
+    .notifications
+    .create({
+        fcm:{"notification" : {      "body" : content,      "title": "New Notification"  }},
+        apn:{"notification" : {      "body" : content,      "title": "New Notification"  }},
+        identity: userIdentity
+    })
+    .then(notification => console.log(notification));
 }
 
 exports.alertMobile = alertMobile;
 exports.alertEmail = alertEmail;
-exports.alertWebPush = alertWebPush;
+exports.alertPushNotification = alertPushNotification;

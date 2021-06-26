@@ -18,10 +18,7 @@ import ShipmentPopUp from "./shipmentPopUp";
 import ShipmentFailPopUp from "./shipmentFailPopUp";
 import { Formik } from "formik";
 import Select from 'react-select';
-import Modal from '../../shared/modal';
-import ExcelPopUp from './ExcelPopup/index';
-import ExportIcon from '../../assets/icons/Export.svg';
-import dropdownIcon from '../../assets/icons/drop-down.svg';
+import Modal from '../../shared/modal'
 
 import { getProducts, getProductsByCategory, setReviewPos, resetReviewPos , getOrganizationsByTypes} from '../../actions/poActions';
 
@@ -51,14 +48,11 @@ const NewOrder = (props) => {
       return { ...provided, opacity, transition };
     }
   }
-  const [openCreatedOrder, setOpenCreatedOrder] = useState(false);
   const [allOrganisations, setAllOrganisations] = useState([]);
   const [receiverWarehouses, setReceiverWarehouses] = useState([]);
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState([]);
-  const [openExcel, setOpenExcel] = useState(false);
-  const [menu, setMenu] = useState(false);
-  const [addProducts, setAddProducts] = useState(editPo !== null ? editPo.products : [{"productId": "","id": "","productQuantity": "","name": "","manufacturer": "","type": ""}]);
+  const [addProducts, setAddProducts] = useState(editPo !== null ? editPo.products : [{"productId": "", "id": "", "productQuantity": "", "name": "","manufacturer": " ", "type": ""}]);
   const dispatch = useDispatch();
   const [senderOrgId, setSenderOrgId] = useState(
     editPo !== null ? editPo.fromOrgId : "Select Organisation Name"
@@ -124,10 +118,6 @@ const NewOrder = (props) => {
     fetchData();
   }, []);
 
-  const closeExcelModal = () => {
-    setOpenExcel(false);
-  };
-
   const closeModalFail = () => {
     setFailedPop(false);
   };
@@ -136,9 +126,7 @@ const NewOrder = (props) => {
     setAddAnotherProductFailed(false);
   };
 
-  const closeModal = () => {
-    setOpenCreatedOrder(false);
-  };
+  
 
   const onOrgChange = async (value) => {
     try {
@@ -160,10 +148,10 @@ const NewOrder = (props) => {
     try {
       const warehouse = await getProductsByCategory(value);
       let newArr = [...addProducts];
-      newArr[index] = {"productId": "", "id": "", "productQuantity": "", "name": "", "type": value, "manufacturer": ""};
+      newArr[index] = {"productId": "", "id": "", "productQuantity": "", "name": "", "type": value, "manufacturer": "","unitofMeasure":""};
       newArr[index]['quantity'] = '';
       setAddProducts(prod => [...newArr]);
-      setFieldValue('products', newArr.map(row => ({ "productId": row.id, "id": row.id, "productQuantity": row?.productQuantity ? row?.productQuantity : 0, "name": row.name, "type": row.type, "manufacturer": row.manufacturer })));
+      setFieldValue('products', newArr.map(row => ({ "productId": row.id, "id": row.id, "productQuantity": row?.productQuantity ? row?.productQuantity : 0, "name": row.name, "type": row.type, "manufacturer": row.manufacturer,"unitofMeasure":row.unitofMeasure })));
     
       setProducts(warehouse.data.map(item => {
                                       return {
@@ -182,8 +170,9 @@ const NewOrder = (props) => {
     addProducts.splice(index, 1);
     let newArr = [...addProducts];
     newArr.push(item);
-    
-    setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": row?.productQuantity ? row?.productQuantity : '',"quantity": row?.productQuantity ? row?.productQuantity : '',"name": row.name,"type": row.type,"manufacturer": row.manufacturer})));
+    //console.log("rowUnitofMeasure",newArr);
+    setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": row?.productQuantity ? row?.productQuantity : '',"quantity": row?.productQuantity ? row?.productQuantity : '',"name": row.name,"type": row.type,"manufacturer": row.manufacturer,"unitofMeasure":row.unitofMeasure})));
+    //console.log("rowUnitofMeasureAfter set",newArr);
     setAddProducts(prod => [...newArr]);
 
     const prodIndex = products.findIndex(p => p.id === item.id);
@@ -200,7 +189,7 @@ const NewOrder = (props) => {
     addProducts.splice(index, 1);
     let newArr = [...addProducts];
     if (newArr.length > 0)
-      setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": row?.productQuantity,"name": row.name,"type": row.type,"manufacturer": row.manufacturer})));
+      setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": row?.productQuantity,"name": row.name,"type": row.type,"manufacturer": row.manufacture,"unitofMeasure":row.unitofMeasurer})));
     else
       setFieldValue('products', []);
     setAddProducts(prod => [...newArr]);
@@ -209,7 +198,7 @@ const NewOrder = (props) => {
   const onQuantityChange = (v, i, setFieldValue) => {
     let newArr = [...addProducts];
     newArr[i].productQuantity = v;
-    setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": row.productQuantity,"name": row.name,"type": row.type,"manufacturer": row.manufacturer})));
+    setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": row.productQuantity,"name": row.name,"type": row.type,"manufacturer": row.manufacturer,"unitofMeasure":row.unitofMeasure})));
     setAddProducts(prod => [...newArr]);
   }
 
@@ -218,7 +207,7 @@ const NewOrder = (props) => {
     let nameError=false;
     let typeError=false;
     const { fromOrg, toOrg, toOrgLoc, products, toOrgLocName } = values;
-    console.log("products------",products);
+    //console.log("values------",values);
     products.forEach((p) => {
       if(!p.name)
       {
@@ -289,40 +278,7 @@ const NewOrder = (props) => {
     <div className="NewOrder m-3">
     <div className="d-flex justify-content-between mb-3">
       <h1 className="breadcrumb">CREATE NEW ORDER</h1>
-      <div className="d-flex flex-column align-items-center">
-    <button className="btn-primary btn" onClick={() => setMenu(!menu)}>
-            <div className="d-flex align-items-center">
-              <img src={ExportIcon} width="16" height="16" className="mr-3" />
-              <span>Import</span>
-              <img src={dropdownIcon} width="16" height="16" className="ml-3" />
-            </div>
-          </button>
-          {menu ? (
-            <div class="menu">
-              <button
-                className=" btn btn-outline-info mb-2 "
-                onClick={() => setOpenExcel(true)}
-              >
-                {' '}
-                Excel
-              </button>
-              <button className=" btn btn-outline-info" > Other</button>
-            </div>
-          ) : null}
-              {openExcel && (
-            <Modal
-              title="Import"
-              close={() => closeExcelModal()}
-              size="modal-md" //for other size's use `modal-lg, modal-md, modal-sm`
-            >
-              <ExcelPopUp
-                {...props}
-                onHide={closeExcelModal} //FailurePopUp
-                setOpenCreatedOrder={setOpenCreatedOrder}
-              />
-            </Modal>
-          )}
-          </div>
+      
           </div>
       <Formik
         // enableReinitialize={true}
@@ -391,13 +347,13 @@ const NewOrder = (props) => {
                     type="button"
                     className="btn btn-white bg-white shadow-radius font-bold mb-1"
                     onClick={() => {
-                      let arr = addProducts.filter(p => p.productId != '' && p.id != '' && p.name != '' && p.manufacturer != '' && p.productQuantity != '' && p.type != '');
+                      let arr = addProducts.filter(p => p.productId != '' && p.id != '' && p.name != '' && p.manufacturer != '' && p.productQuantity != '' && p.productQuantity!=null && p.type != '');
                       if (arr.length == addProducts.length) {
                         let newArr = { productId: '', id: '', name: '', manufacturer: '', productQuantity: '', type: '' };
                         setAddProducts(prod => [...prod, newArr]);
                       }
                       else{
-                        setOrderError("Fill all the required Product Details");
+                        setOrderError("Fill the required Product Details carefully");
                         setAddAnotherProductFailed(true);
                       }
                     }}
@@ -478,7 +434,7 @@ const NewOrder = (props) => {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="required-field" htmlFor="orgLocation" style={{fontSize:"16px"}}>Organization ID</label>
+                      <label className="required-field" htmlFor="orgLocation" style={{fontSize:"16px"}}>Organisation ID</label>
                       <div className="form-control border-0">
                         {values.fromOrg}
                       </div>

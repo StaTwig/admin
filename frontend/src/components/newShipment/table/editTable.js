@@ -3,8 +3,7 @@ import EditRow from './editRow';
 import './style.scss';
 
 const EditTable = props => {
-
-  
+  // console.log(props.product,"Table");
  return (
     <div className="table productTable mt-2">
      <div className="d-flex flex-column">
@@ -12,6 +11,7 @@ const EditTable = props => {
        <div className="col theader text-center pro required-field">Product Category</div>
          <div className="col theader text-center pro required-field">Product Name</div>
          <div className="col theader text-center pro">Manufacturer</div>
+         <div className="col theader text-center pro required-field">Batch Number</div>
          <div className="col theader text-center pro required-field">Quantity</div>
          {props.enableDelete &&
            <div className=" ml-2 bg-light align-self-center ">&nbsp;</div>

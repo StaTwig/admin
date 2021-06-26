@@ -23,7 +23,7 @@ exports.getWarehouses = [
   auth,
   async (req, res) => {
     try {
-      const organisations = await WarehouseModel.find({organisationId: req.query.id});
+      const organisations = await WarehouseModel.find({organisationId: req.query.id, $or:[{status: 'ACTIVE'}, {status: {$exists: false}}]});
       return apiResponse.successResponseWithData(
         res,
         'Warehouses',
@@ -42,7 +42,7 @@ exports.getAllWarehouses = [
   auth,
   async (req, res) => {
     try {
-      const organisations = await WarehouseModel.find({});
+      const organisations = await WarehouseModel.find({$or:[{status: 'ACTIVE'}, {status: {$exists: false}}]});
       return apiResponse.successResponseWithData(
         res,
         'All Warehouses',

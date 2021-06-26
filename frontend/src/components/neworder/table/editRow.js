@@ -15,6 +15,7 @@ const EditRow = props => {
     products,
     handleCategoryChange,
   } = props;
+  //console.log("propsEditrow",prod.unitofMeasure? prod.unitofMeasure.name:null );
 
   const numbersOnly = (e) => {
     // Handle paste
@@ -93,9 +94,18 @@ const EditRow = props => {
               placeholder="Enter Quantity"
               onKeyPress={numbersOnly}
               value={prod.productQuantity ? prod.productQuantity : prod.quantity}
-              onChange={e => handleQuantityChange(e.target.value, index)}
+              onChange={(e) =>{
+                handleQuantityChange(e.target.value, index);
+                if(e.target.value==="0")
+                  prod.productQuantity="";
+              }}
             />
           </div>
+        </div>
+        <div className="title recived-text align-self-center" style={{position:"absolute",right:"20px"}}>
+        {/* prod.unitofMeasure? prod.unitofMeasure.name:null */}
+          { prod.unitofMeasure ?<div>{ prod.unitofMeasure ==undefined ? null: prod.unitofMeasure.name}</div>:
+          <div className="placeholder_id">Unit</div>}
         </div>
       </div>
       {props.product.length > 0 &&

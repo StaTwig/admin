@@ -14,6 +14,7 @@ const ProductList = (props) => {
                         <ul className="w-75 elemens">
                             <li className="mb-1 text-secondary">Product Name</li>
                             <li className="mb-1 text-secondary">Manufacturer</li>
+                            <li className="mb-1 text-secondary">Batch Number</li>
                             <li className="mb-1 text-secondary">Quantity Sent</li>
                             <li className="mb-1 text-secondary">Quantity Received</li>
                             <li className="mb-1 text-secondary">Label ID</li>
@@ -21,7 +22,8 @@ const ProductList = (props) => {
                         <ul className="elemens w-75">
                             <li className="mb-1">{product.productName}</li>
                             <li className="mb-1">{product.manufacturer}</li>
-                            <li className="mb-1">{product.productQuantity}</li>
+                            <li className="mb-1">{product?.batchNumber}</li>
+                            <li className="mb-1">{product.productQuantity}<span>{"  ("}</span>{product.unitofMeasure && product.unitofMeasure.name ? <span>{product.unitofMeasure.name}</span>:""}<span>{")"}</span></li>
                             <li className="mb-1">
                             {
                             product['productQuantityDelivered']
@@ -30,6 +32,7 @@ const ProductList = (props) => {
                             :
                             ''
                             }
+                            {/* <span>{"  ("}</span>{product.unitofMeasure && product.unitofMeasure.name ? <span>{product.unitofMeasure.name}</span>:""}<span>{")"}</span> */}
                             </li>
                             <li className="mb-1">{props.shipments.label.labelId}</li>
                     </ul>

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Add from "../../assets/icons/createshipment.png";
 import EditTable from "./table/editTable";
 import "./style.scss";
-import { createShipment } from "../../actions/shipmentActions";
+import { createShipment,getViewShipment } from "../../actions/shipmentActions";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
 import {
   getShippingOrderIds,
@@ -33,6 +33,9 @@ const NewShipment = (props) => {
   const [senderWarehouses, setSenderWarehouses] = useState([]);
   const [receiverWarehouses, setReceiverWarehouses] = useState([]);
   const [disabled, setDisabled] = useState(false);
+  const [fetchdisabled, setfetchdisabled] = useState(false);
+  const [pofetchdisabled, setpofetchdisabled] = useState(false);
+  
   const [products, setProducts] = useState([]);
   const [addProducts, setAddProducts] = useState([]);
   const dispatch = useDispatch();
@@ -68,7 +71,6 @@ const NewShipment = (props) => {
   const profile = useSelector((state) => {
     return state.user;
   });
-
   const customStyles = {
     option: (provided, state) => ({
       ...provided,
@@ -87,6 +89,8 @@ const NewShipment = (props) => {
       return { ...provided, opacity, transition };
     }
   }
+
+
 
   useEffect(() => {
     // let date = new Date();
@@ -262,6 +266,7 @@ const NewShipment = (props) => {
     products.forEach((p) => {
       if (p.productQuantity < 1) error = true;
     });
+    console.log(products);  
 
     if (!error) {
       const data = {
@@ -303,29 +308,34 @@ const NewShipment = (props) => {
         // poId: OrderDetails.purchaseOrderId ? OrderDetails.purchaseOrderId : null,
       };
 
-      dispatch(turnOn());
-      const result = await createShipment(data);
-      dispatch(turnOff());
-      console.log("data", data);
-      var check = false; 
-
+    
+      var check = 0; 
+      console.log(data.products);
       for(var i=0;i<data.products.length;i++)
       {
         if(typeof data.products[i].productQuantity==='undefined')
         {
-          check = true;
+          check = 1;
           break;
         }
+        if(typeof data.products[i].batchNumber==='undefined')
+        {
+          check = 2;
+          break;
+        }
+        
       }
-      if(check===true)
+      if(check===1)
       {
         setShipmentError("Check product quantity");
         setOpenShipmentFail(true);
       }
+      else if(check===2)
+      {
+        setShipmentError("Check Batch Number");
+        setOpenShipmentFail(true);
+      }
       else{
-
-        console.log(productsList);
-        ////////////////////////////////
         let i,j;
         let check = true;
         let nn = data.products.length;
@@ -333,16 +343,12 @@ const NewShipment = (props) => {
         {
           let prdctName = data.products[i].productName;
           let qty = parseInt(data.products[i].productQuantity);
-          console.log("typed quantity is " + qty);
           let flag = false;
           
           for(j=0;j<productsList.length;j++)
           {
-            console.log("product list name is " + productsList[j].productName);
-            console.log("dataProductName is " + prdctName);
             if(productsList[j].productName===prdctName)
             {
-              console.log("typed quantity is " + qty + " product quantity is " + productsList[j].quantity);
               if(qty > productsList[j].quantity)
               {
                 
@@ -364,29 +370,31 @@ const NewShipment = (props) => {
           }
         }
 
-        if(i >=nn){
-         if (result?.id) {
-        setMessage("Created Shipment Success");
-        setOpenCreatedInventory(true);
-        setModalProps({
-          message: "Created Successfully!",
-          id: result?.id,
-          type: "Success",
-        });
-      } 
-      else  {
-        setOpenShipmentFail(true);
-        setErrorMessage("Create Shipment Failed");
+        if (i >= nn) {
+          dispatch(turnOn());
+          const result = await createShipment(data);
+          dispatch(turnOff());
+          if (result?.id) {
+            setMessage("Created Shipment Success");
+            setOpenCreatedInventory(true);
+            setModalProps({
+              message: "Created Successfully!",
+              id: result?.id,
+              type: "Success",
+            });
+          }
+          else  {
+            setOpenShipmentFail(true);
+            setErrorMessage("Create Shipment Failed");
+          }
+        }
       }
-    }
-    } 
+    
   }
     else {
       setShipmentError("Check product quantity");
       setOpenShipmentFail(true);
     }
-
-    
   };
 
   const handleSOChange = async (item) => {
@@ -401,6 +409,13 @@ const NewShipment = (props) => {
     
     const soDetailsClone = { ...OrderDetails };
     soDetailsClone.products[i].productQuantity = value;
+    setOrderDetails(soDetailsClone);
+  };
+ 
+  const handleBatchChange = (value, i) => {
+    
+    const soDetailsClone = { ...OrderDetails };
+    soDetailsClone.products[i].batchNumber = value;
     setOrderDetails(soDetailsClone);
   };
 
@@ -428,6 +443,8 @@ const NewShipment = (props) => {
       setErrorMessage(err);
     }
   };
+  // console.log(values.toOrgLoc,"To org");
+
   const onProductChange = (index, item, setFieldValue) => {
     addProducts.splice(index, 1);
     let newArr = [...addProducts];
@@ -449,9 +466,15 @@ const NewShipment = (props) => {
     newArray[prodIndex] = { ...newArray[prodIndex], isSelected: true };
     setProducts((prod) => [...newArray]);
   };
-//console.log(allOrganisations,"All org");
-
-  
+// //console.log(allOrganisations,"All org");
+// async function fetchShipmentDetails(id){
+//   const result = await dispatch(getViewShipment(id));
+//   return result;
+// }
+   
+// console.log(products,"1");
+// console.log(addProducts,"2");
+// console.log(category,"3");
   
   return (
     <div className="NewShipment">
@@ -600,16 +623,17 @@ const NewShipment = (props) => {
                       <Select
                         styles={customStyles}
                         placeholder="Select Order ID"
-                        onChange={async(v) => {
-                          
-                           setProducts(p => []);
-                            setAddProducts(p => []);
+                
+                        onChange={async(v) => {    
+                          // setfetchdisabled(true);
+                          setProducts(p => []);
+                          setAddProducts(p => []);
                           setOrderIdSelected(true);
                           setFieldValue("OrderId", v.value);
                           setOrderId(v.value);
                           dispatch(turnOn());
                           const result = await dispatch(getOrder(v.value));
-                          console.log(result);
+                          // console.log(result);
                           setReceiverOrgLoc(
                              result.poDetails[0].customer.warehouse.title + '/' + result.poDetails[0].customer.warehouse.postalAddress
                           );
@@ -638,7 +662,7 @@ const NewShipment = (props) => {
                             "toOrg",
                             result.poDetails[0].customer.organisation.id + "/"+result.poDetails[0].customer.organisation.name
                           );
-                          settoOrgLocLabel(result.poDetails[0].customer.organisation.id + "/"+result.poDetails[0].customer.organisation.name)
+                          // settoOrgLocLabel(result.poDetails[0].customer.organisation.id + "/"+result.poDetails[0].customer.organisation.name)
                           let wa = result.poDetails[0].customer.warehouse;
                           setFieldValue(
                             "toOrgLoc",
@@ -659,13 +683,14 @@ const NewShipment = (props) => {
                             products_temp[i].productName =
                               result.poDetails[0].products[i].name;
                             products_temp[i].productQuantity =
-                              result.poDetails[0].products[i].quantity;
+                              result.poDetails[0].products[i].productQuantity;
                             products_temp[i].productCategory =
                               result.poDetails[0].products[i].type;
-                            products_temp[i].productID =
+                            products_temp[i].productID = 
                               result.poDetails[0].products[i].productId;
+                            products_temp[i].batchNumber = '';
                           }
-                          
+                          console.log(products_temp);
                          if (result.poDetails[0].products.length > 0) {
                            setProducts(p => []);
                            setAddProducts(p => []);
@@ -673,16 +698,17 @@ const NewShipment = (props) => {
                           } else setFieldValue("products", []);
                         }}
                         defaultInputValue={values.OrderId}
-                        options={OrderIds}
+                        options={pofetchdisabled?"":OrderIds}
                       />
                     </div>
                   </div>
                 </div>
                <div className="col-md-6 com-sm-12">
-                  <div className="form-group">
+                  <div className="form-group mr-3">
                     <label htmlFor="shipmentID">Reference Shipment ID</label>
                     <input
                       type="text"
+                      style={{position:"relative", left:"70px" }}
                       className="form-control"
                       name="shipmentID"
                       onBlur={handleBlur}
@@ -690,6 +716,72 @@ const NewShipment = (props) => {
                       onChange={handleChange}
                       value={values.shipmentID}
                     />
+                  <span style={{height:"25px",width:"50px"}}
+                    className="btn btn-outline-info"
+                    disabled={fetchdisabled}
+                    onClick={async()=>{
+                      // setpofetchdisabled(true);
+                      setProducts(p => []);
+                      setAddProducts(p => []);
+                      setOrderIdSelected(true);
+                      dispatch(turnOn());
+                      setDisabled(false);
+                      const result = await dispatch(getViewShipment(values.shipmentID));
+                      dispatch(turnOff());
+                      console.log(result)
+                      // setReceiverOrgLoc(result.receiver.warehouse.title);
+                      //   setReceiverOrgId(result.receiver.org.name);
+                      //   console.log(senderOrganisation[0]);
+                      //   setFieldValue("fromOrg", senderOrganisation[0]);
+                      //   setFieldValue("fromOrgLoc", result.receiver.org.id);     
+                      //   setFieldValue("rtype",result.receiver.org.type);
+                      //   setFieldValue("toOrg",result.receiver.org.id);
+                      // setFieldValue('rtypeName',"Deepak"); 
+                        setReceiverOrgLoc();
+                        setReceiverOrgId();
+                        setFieldValue("fromOrg","");
+                        setFieldValue("fromOrgLoc","" );     
+                        setFieldValue("rtype",);
+                        setFieldValue("toOrg","");
+                        setOrderDetails(result);        
+                        let wa = result.receiver.warehouse;
+                        setFieldValue(
+                          "toOrgLoc",""
+                         
+                        );
+                        settoOrgLocLabel("");
+                        // settoOrgLocLabel(wa?.warehouseAddress ? wa?.title + '/' + wa?.warehouseAddress?.firstLine + ", " + wa?.warehouseAddress?.city : wa?.title + '/' + wa.postalAddress)
+
+                        let products_temp = result.products;
+
+                        for (let i = 0; i < products_temp.length; i++) {
+                          products_temp[i].manufacturer =
+                            result.products[i].manufacturer;
+                          products_temp[i].name =
+                            result.products[i].productName;
+                          products_temp[i].productQuantity =
+                            result.products[i].productQuantity;
+                          products_temp[i].type =
+                            result.products[i].productCategory;
+                          // products_temp[i].productID ="COM3";
+                          // products_temp[i].productId ="COM3";
+                          // products_temp[i].id ="COM3";
+                          // products_temp[i].name ="Comvac 3";
+                          // products_temp[i].type ="Vaccine";
+                            // result.products[i].productId;
+                        }
+                        console.log(products_temp);
+                       if (result.products.length > 0) {
+                         setProducts(p => []);
+                         setAddProducts(p => []);
+                          setFieldValue("products",products_temp);
+                        } else setFieldValue("products", []);
+                        console.log(values.products);
+                    }
+                  }
+                  >
+                    <span style={{position:"relative",top:"-7px",fontSize:"12px",left:"-10px"}}>Fetch</span>
+                  </span>
                   </div>
                 </div>
                 </div>
@@ -838,7 +930,8 @@ const NewShipment = (props) => {
                             setFieldValue("toOrg","");  
                             setFieldValue("toOrgLoc", ""); 
                           }}
-                          defaultInputValue={values.rtypeName}
+                          // defaultInputValue={values.rtypeName}
+                          defaultInputValue={values.rtype}
                           options={orgTypes}
                         />
                         {errors.rtype && touched.rtype && (
@@ -922,7 +1015,7 @@ const NewShipment = (props) => {
                           onChange={(v) => {
                             setFieldValue("toOrgLoc", v.value);
                             settoOrgLocLabel(v.label)
-                            console.log(v.label);
+                            // console.log(v.label);
                           }}
                           defaultInputValue={values.toOrgLoc}
                           options={receiverWarehouses.filter( (ele, ind) => ind === receiverWarehouses.findIndex( elem => elem.label===ele.label))}
@@ -947,13 +1040,13 @@ const NewShipment = (props) => {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="required-field" htmlFor="organizationName">Airway Bill</label>
+                      <label className="required-field" htmlFor="organizationName">Transit Number</label>
                       <input
                         type="text"
                         className="form-control"
                         name="airWayBillNo"
                         onBlur={handleBlur}
-                        placeholder="Enter Airway Bill No"
+                        placeholder="Enter Transit Number"
                         onChange={handleChange}
                         value={values.airWayBillNo}
                       />
@@ -1077,6 +1170,9 @@ const NewShipment = (props) => {
                   handleQuantityChange={(v, i) => {
                     handleQuantityChange(v, i);
                   }}
+                  handleBatchChange={(v, i) => {
+                    handleBatchChange(v, i);
+                  }}
                   enableDelete={false}
                   onRemoveRow={(index) => {}}
                   handleLabelIdChange={handleLabelIdChange}
@@ -1097,6 +1193,24 @@ const NewShipment = (props) => {
                           productCategory: row.type,
                           productID: row.id,
                           productQuantity: row.productQuantity,
+                          batchNumber: row.batchNumber,
+                          productName: row.name,
+                          manufacturer: row.manufacturer,
+                          quantity: row.quantity,
+                        }))
+                      );
+                      setAddProducts((prod) => [...newArr]);
+                    }}
+                    handleBatchChange={(v, i) => {
+                      let newArr = [...addProducts];
+                      newArr[i].batchNumber = v;
+                      setFieldValue(
+                        "products",
+                        newArr.map((row) => ({
+                          productCategory: row.type,
+                          productID: row.id,
+                          productQuantity: row.productQuantity,
+                          batchNumber: row.batchNumber,
                           productName: row.name,
                           manufacturer: row.manufacturer,
                           quantity: row.quantity,
@@ -1125,6 +1239,7 @@ const NewShipment = (props) => {
                             productCategory: row.type,
                             productID: row.id,
                             productQuantity: row.productQuantity,
+                            batchNumber: row.batchNumber,
                             productName: row.name,
                             manufacturer: row.manufacturer,
                             quantity: row.quantity,
@@ -1143,6 +1258,7 @@ const NewShipment = (props) => {
                           productCategory: row.type,
                           productID: row.id,
                           productQuantity: row.productQuantity,
+                          batchNumber: row.batchNumber,
                           productName: row.name,
                           manufacturer: row.manufacturer,
                           quantity: row.quantity,
@@ -1172,6 +1288,7 @@ const NewShipment = (props) => {
                           productName: "",
                           manufacturer: "",
                           productQuantity: "",
+                          batchNumber: "",
                         };
                         setAddProducts((prod) => [...prod, newArr]);
                       }}

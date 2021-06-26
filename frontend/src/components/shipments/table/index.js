@@ -56,7 +56,7 @@ const Table = props => {
                 statusStyle = 'bg-success';
                 status = 'Delivered';
               }
-              let supplierAddress = shipment.supplier.warehouse.postalAddress;
+              let supplierAddress = shipment.supplier.warehouse.warehouseAddress;
               let wLocation = shipment.supplier.warehouse?.location;
               if (wLocation?.length) {
                 supplierAddress = wLocation.firstLine + wLocation.secondLine + wLocation.city;
@@ -78,7 +78,7 @@ const Table = props => {
                   }
                 </div>
                 <div className="rTableCell text-center" style={{paddingLeft:0, left:"30px"}}>{shipment.shippingDate.length == 10 ? shipment.shippingDate : formatDate(shipment.shippingDate)}</div>
-                <div className="rTableCell" style={{paddingRight:10,paddingLeft:0, left:"60px"}}><p className="mb-0">{shipment.supplier.org ? shipment.supplier.org.name: "-"}</p><p className="address mb-0 text-muted">{supplierAddress}</p></div>
+                <div className="rTableCell" style={{paddingRight:10,paddingLeft:0, left:"60px"}}><p className="mb-0">{shipment.supplier.org ? shipment.supplier.org.name: "-"}</p><p className="address mb-0 text-muted">{`${supplierAddress.firstLine ? supplierAddress.firstLine: ''} ${supplierAddress.secondLine ? supplierAddress.secondLine : ''} ${supplierAddress.city ? supplierAddress.city : ''}\n ${supplierAddress.state ? supplierAddress.state : ''}\n ${supplierAddress.country ? supplierAddress.country : ''} `}</p></div>
                 <div className="rTableCell" style={{paddingRight:0,paddingLeft:10, left:"80px"}}><p className="mb-0">{shipment.receiver.org ? shipment.receiver.org.name : "-"}</p><p className="mb-0 address text-muted">{`${receiverAddress.firstLine ? receiverAddress.firstLine : ''}  ${receiverAddress.secondLine ? receiverAddress.secondLine : ''} ${receiverAddress.city ? receiverAddress.city : ''} \n ${receiverAddress.state ? receiverAddress.state : ''} \n ${receiverAddress.country ? receiverAddress.country : ''} `}</p></div>
                 <div className="rTableCell text-center" style={{padding:0, left:"120px"}}>
                 <div className={`status secondary-bg ${statusStyle}`}>
