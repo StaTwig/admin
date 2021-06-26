@@ -46,7 +46,7 @@ export class MapContainer extends Component {
           paths={points}
           strokeColor="#0000FF"
           strokeOpacity={0.8}
-          strokeWeight={2}
+          strokeWeight={3}
           fillColor="#0000FF"
           fillOpacity={0.35} />
         {this.props.data.map((row, index) => {
