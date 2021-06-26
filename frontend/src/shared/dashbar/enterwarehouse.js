@@ -103,7 +103,7 @@ const EnterWareHouse = props => {
             </div>
             <h6 className="pt-2">Delivery Details</h6>
             <div className="row pt-1 pb-1">
-              <div className="col text-muted">Airway Bill</div>
+              <div className="col text-muted">Transit Number</div>
               <div className="col">{dashBarData.airWayBillNo}</div>
             </div>
             <div className="row pt-1 pb-1">
