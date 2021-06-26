@@ -199,10 +199,10 @@ const handleChange = (value) =>
             />
           </div>
         </div>
-        {/* <div className="title recived-text align-self-center" style={{position:"absolute",right:"20px"}}>
+        <div className="title recived-text align-self-center" style={{position:"absolute",right:"20px"}}>
           {prod.unitofMeasure && prod.unitofMeasure.name  ? <div>{prod.unitofMeasure.name}</div>:
           <div className="placeholder_id">Unit</div>}
-        </div> */}
+        </div>
       </div>
         {enableDelete && props.product.length > 1 &&
           <div className="m-3 bg-light">

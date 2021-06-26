@@ -127,7 +127,7 @@ const ProductList = (props) => {
                         Quantity Sent
                         </div>
                         <div className="col-sm mb-2 text-secondary styler">
-                        {product.productQuantity}
+                        {product.productQuantity}<span>{"  ("}</span>{product.unitofMeasure && product.unitofMeasure.name ? <span>{product.unitofMeasure.name}</span>:""}<span>{")"}</span>
                         </div>
                         </div>
                         <div className="row">

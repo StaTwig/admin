@@ -370,7 +370,7 @@ const Inventory = props => {
                     <div className="round-sign">{product.productName}</div>
                       <p className="product">&nbsp;</p>
                       {/* <p className="product">{product.productName}</p> */}
-                      <h3>Qty : {product.quantity}</h3>
+                      <h3>Qty : {product.quantity}<span>{"  ("}</span>{product.unitofMeasure && product.unitofMeasure.name ? <span>{product.unitofMeasure.name}</span>:""}<span>{")"}</span></h3>
                     </div>
                   </div>
                 ))}
