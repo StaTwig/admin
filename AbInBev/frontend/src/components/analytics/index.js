@@ -56,12 +56,15 @@ const Analytics = (props) => {
   const [SKU, setSKU] = useState('');
   const [state, setState] = useState('');
   const [district, setDistrict] = useState('');
-  const [year, setYear] = useState('');
+  const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState('');
   const [qtr, setQtr] = useState('');
-  const [isActive, setIsActive] = useState('');
+  const [isActive, setIsActive] = useState('by_yearly');
   const [Otype, setOtype] = useState('All');
   const [selectedViewCode, setSelectedViewCode] = useState(
+    'ANNUALREPORT_DASHBOARD',
+  );
+  const [selectedModule, setSelectedModule] = useState(
     'ANNUALREPORT_DASHBOARD',
   );
   const [annualReportButton, setannualReportButton] = useState('btn active');
@@ -159,6 +162,8 @@ const Analytics = (props) => {
       setInventoryButton('btn');
       setSpmButton('btn active');
     }
+    setSelectedModule(module);
+    setParams({});
   }
   const changeView = (event) => {
     setSKU('');
@@ -177,6 +182,7 @@ const Analytics = (props) => {
 
   const onModuleChange = (moduleCode, props) => {
     setFilters(moduleCode);
+
     setSelectedViewCode(moduleCode);
   };
 
@@ -193,8 +199,8 @@ const Analytics = (props) => {
     // setProp({});
     setState('');
     setDistrict('');
-    setIsActive('');
-    setYear('');
+    setIsActive('by_yearly');
+    setYear(new Date().getFullYear());
     setMonth('');
     setQtr('');
     setOtype('All');
@@ -228,7 +234,6 @@ const Analytics = (props) => {
                 <div className="filterHeader mb-3">
                   <img src={filterIcon} className="filterIcon" /> FILTERS
                 </div>
-                {/* TODO Tabs for for Module load  */}
                 <div className="btn-group filterButton mt-2 mb-4">
                   <a
                     href="#!"
@@ -264,7 +269,9 @@ const Analytics = (props) => {
                     SPM
                   </a>
                 </div>
-                {selectedViewCode !== 'SPM_DASHBOARD' && (
+
+                {/* =================== New Filter Code starts ================================ */}
+                {selectedModule == 'ANNUALREPORT_DASHBOARD' && (
                   <>
                     <label className="radioButton" htmlFor="gv">
                       <input
@@ -272,17 +279,10 @@ const Analytics = (props) => {
                         type="radio"
                         name="view"
                         id="gv"
-                        value={
-                          selectedViewCode === 'INVENTORY_DASHBOARD' ||
-                          selectedViewCode === 'INVENTORY_SKU' ||
-                          filters.view === 'INVENTORY_SKU_DETAILS'
-                            ? 'INVENTORY_DASHBOARD'
-                            : 'ANNUALREPORT_DASHBOARD'
-                        }
+                        value="ANNUALREPORT_DASHBOARD"
                         onChange={changeView}
                         defaultChecked={
-                          filters.view === 'ANNUALREPORT_DASHBOARD' ||
-                          filters.view === 'INVENTORY_DASHBOARD'
+                          selectedViewCode == 'ANNUALREPORT_DASHBOARD'
                         }
                       />{' '}
                       Geographical View
@@ -293,223 +293,306 @@ const Analytics = (props) => {
                         type="radio"
                         name="view"
                         id="sv"
-                        value={
-                          selectedViewCode === 'INVENTORY_DASHBOARD' ||
-                          selectedViewCode === 'INVENTORY_GRAPHICAL'
-                            ? 'INVENTORY_SKU'
-                            : 'SKU_VIEW'
-                        }
+                        value="SKU_VIEW"
                         onChange={changeView}
-                        defaultChecked={
-                          filters.view === 'SKU_VIEW' ||
-                          filters.view === 'INVENTORY_SKU' ||
-                          filters.view === 'INVENTORY_SKU_DETAILS'
-                        }
                       />{' '}
                       SKU View
                     </label>
-                  </>
-                )}
-                {selectedViewCode !== 'SPM_DASHBOARD' &&
-                  selectedViewCode !== 'INVENTORY_DASHBOARD' &&
-                  selectedViewCode !== 'INVENTORY_SKU' &&
-                  selectedViewCode !== 'INVENTORY_GRAPHICAL' &&
-                  selectedViewCode !== 'INVENTORY_SKU_DETAILS' && (
-                    <>
-                      <label className="radioButton" htmlFor="suv">
-                        <input
-                          className="radioInput"
-                          type="radio"
-                          name="view"
-                          id="suv"
-                          value="SUPPLIER_VIEW"
-                          onChange={changeView}
-                          defaultChecked={filters.view === 'SUPPLIER_VIEW'}
-                        />{' '}
-                        Supplier View
-                      </label>
-                      <label className="radioButton" htmlFor="bv">
-                        <input
-                          className="radioInput"
-                          type="radio"
-                          name="view"
-                          id="bv"
-                          value="BREWERY_VIEW"
-                          onChange={changeView}
-                          defaultChecked={filters.view === 'BREWERY_VIEW'}
-                        />{' '}
-                        Brewery View
-                      </label>
-                    </>
-                  )}
-                {selectedViewCode !== 'SPM_DASHBOARD' &&
-                  selectedViewCode != 'BREWERY_VIEW' && (
-                    <>
-                      <label className="filterSubHeading mt-3">
-                        Select SKU
-                      </label>
-                      <select
-                        className="filterSelect mt-2"
-                        value={SKU}
-                        onChange={skuChanged}
-                      >
-                        <option value="">Select SKU</option>
-                        {props.SKUs?.map((sku) => {
-                          let enable = true;
-                          if (!skuArr.includes(sku.id)) skuArr.push(sku.id);
-                          else enable = false;
-
-                          return enable ? (
-                            <option value={sku.id}>{sku.name}</option>
-                          ) : (
-                            ''
-                          );
-                        })}
-                      </select>
-                      {(selectedViewCode == 'ANNUALREPORT_DASHBOARD' ||
-                        selectedViewCode == 'DETAILED_GEO_VIEW' ||
-                        selectedViewCode == 'SKU_DETAIL_VIEW') && (
-                        <>
-                          <label className="filterSubHeading mt-3">
-                            Select State
-                          </label>
-                          <select
-                            className="filterSelect mt-2"
-                            value={state}
-                            onChange={onStateChange}
-                          >
-                            <option value="">Select State</option>
-                            {props.states?.map((state) => (
-                              <option value={state}>{state}</option>
-                            ))}
-                          </select>
-                          <label className="filterSubHeading mt-3">
-                            Select District
-                          </label>
-                          <select
-                            value={district}
-                            className="filterSelect mt-2"
-                            onChange={onDistrictChange}
-                          >
-                            <option value="">Select District</option>
-                            {districts?.map((district) => (
-                              <option value={district}>{district}</option>
-                            ))}
-                          </select>
-                        </>
-                      )}
-                    </>
-                  )}
-                {(selectedViewCode == 'DETAILED_GEO_VIEW' ||
-                  selectedViewCode == 'ANNUALREPORT_DASHBOARD') && (
-                  <>
-                    <label className="filterSubHeading mt-3">Time Period</label>
-                    <div className="btn-group filterButton mt-2 mb-4">
-                      <a
-                        href="#!"
-                        className={`btn ${
-                          isActive == 'by_monthly' ? `active` : ``
-                        }`}
-                        onClick={() => {
-                          onTPChange('by_monthly');
-                        }}
-                      >
-                        Monthly
-                      </a>
-                      <a
-                        href="#!"
-                        className={`btn ${
-                          isActive == 'by_quarterly' ? `active` : ``
-                        }`}
-                        onClick={() => {
-                          onTPChange('by_quarterly');
-                        }}
-                      >
-                        Quarterly
-                      </a>
-                      <a
-                        href="#!"
-                        className={`btn ${
-                          isActive == 'by_yearly' ? `active` : ``
-                        }`}
-                        onClick={() => {
-                          onTPChange('by_yearly');
-                        }}
-                      >
-                        Yearly
-                      </a>
-                    </div>
-                  </>
-                )}
-                {(selectedViewCode == 'DETAILED_GEO_VIEW' ||
-                  selectedViewCode == 'ANNUALREPORT_DASHBOARD') &&
-                  (isActive == 'by_monthly' ||
-                    isActive == 'by_yearly' ||
-                    isActive == 'by_quarterly') && (
-                    <div className="row">
-                      <div className="col-md-5">
+                    <label className="radioButton" htmlFor="suv">
+                      <input
+                        className="radioInput"
+                        type="radio"
+                        name="view"
+                        id="suv"
+                        value="SUPPLIER_VIEW"
+                        onChange={changeView}
+                      />{' '}
+                      Supplier View
+                    </label>
+                    <label className="radioButton" htmlFor="bv">
+                      <input
+                        className="radioInput"
+                        type="radio"
+                        name="view"
+                        id="bv"
+                        value="BREWERY_VIEW"
+                        onChange={changeView}
+                      />{' '}
+                      Brewery View
+                    </label>
+                    <label className="filterSubHeading mt-3">
+                      Select State
+                    </label>
+                    <select
+                      className="filterSelect mt-2"
+                      value={state}
+                      onChange={onStateChange}
+                    >
+                      <option value="">Select State</option>
+                      {props.states?.map((state, index) => (
+                        <option key={index} value={state}>
+                          {state}
+                        </option>
+                      ))}
+                    </select>
+                    <label className="filterSubHeading mt-3">
+                      Select District
+                    </label>
+                    <select
+                      value={district}
+                      className="filterSelect mt-2"
+                      onChange={onDistrictChange}
+                    >
+                      <option value="">Select District</option>
+                      {districts?.map((district, index) => (
+                        <option key={index} value={district}>
+                          {district}
+                        </option>
+                      ))}
+                    </select>
+                    {selectedViewCode == 'SKU_VIEW' && (
+                      <>
+                        <label className="filterSubHeading mt-3">
+                          Select SKU
+                        </label>
                         <select
                           className="filterSelect mt-2"
-                          value={year}
-                          onChange={onYearChange}
+                          value={SKU}
+                          onChange={skuChanged}
                         >
-                          <option value="">Select Year</option>
-                          {allowedYears.map((year, index) => {
-                            return (
-                              <option key={index} value={year}>
-                                {year}
+                          <option value="">Select SKU</option>
+                          {props.SKUs?.map((sku, index) => {
+                            let enable = true;
+                            if (!skuArr.includes(sku.id)) skuArr.push(sku.id);
+                            else enable = false;
+
+                            return enable ? (
+                              <option key={index} value={sku.id}>
+                                {sku.name}
                               </option>
+                            ) : (
+                              ''
                             );
                           })}
                         </select>
-                      </div>
-                      {isActive == 'by_monthly' && (
-                        <div className="col-md-5">
-                          <select
-                            className="filterSelect mt-2"
-                            value={month}
-                            onChange={onMonthChange}
+                      </>
+                    )}
+                    {(selectedViewCode == 'DETAILED_GEO_VIEW' ||
+                      selectedViewCode == 'ANNUALREPORT_DASHBOARD') && (
+                      <>
+                        <label className="filterSubHeading mt-3">
+                          Time Period
+                        </label>
+                        <div className="btn-group filterButton mt-2 mb-4">
+                          <a
+                            href="#!"
+                            className={`btn ${
+                              isActive == 'by_monthly' ? `active` : ``
+                            }`}
+                            onClick={() => {
+                              onTPChange('by_monthly');
+                            }}
                           >
-                            <option value="">Select Month</option>
-                            {allowedMonths.map((month, index) => {
-                              return (
-                                <option key={index} value={index + 1}>
-                                  {month}
-                                </option>
-                              );
-                            })}
-                          </select>
+                            Monthly
+                          </a>
+                          <a
+                            href="#!"
+                            className={`btn ${
+                              isActive == 'by_quarterly' ? `active` : ``
+                            }`}
+                            onClick={() => {
+                              onTPChange('by_quarterly');
+                            }}
+                          >
+                            Quarterly
+                          </a>
+                          <a
+                            href="#!"
+                            className={`btn ${
+                              isActive == 'by_yearly' ? `active` : ``
+                            }`}
+                            onClick={() => {
+                              onTPChange('by_yearly');
+                            }}
+                          >
+                            Yearly
+                          </a>
                         </div>
-                      )}
-                      {(selectedViewCode == 'DETAILED_GEO_VIEW' ||
-                        selectedViewCode == 'ANNUALREPORT_DASHBOARD') &&
-                        isActive == 'by_quarterly' && (
+                      </>
+                    )}
+                    {(selectedViewCode == 'DETAILED_GEO_VIEW' ||
+                      selectedViewCode == 'ANNUALREPORT_DASHBOARD') &&
+                      (isActive == 'by_monthly' ||
+                        isActive == 'by_yearly' ||
+                        isActive == 'by_quarterly') && (
+                        <div className="row">
                           <div className="col-md-5">
                             <select
                               className="filterSelect mt-2"
-                              value={qtr}
-                              onChange={onQuarterChange}
+                              value={year}
+                              onChange={onYearChange}
                             >
-                              <option value="">Select Quarter</option>
-                              {[
-                                'Jan - Mar',
-                                'Apr - Jun',
-                                'Jul - Sep',
-                                'Oct - Dec',
-                              ].map((qtr, index) => {
+                              <option value="">Select Year</option>
+                              {allowedYears.map((year, index) => {
                                 return (
-                                  <option key={index} value={index + 1}>
-                                    {qtr}
+                                  <option key={index} value={year}>
+                                    {year}
                                   </option>
                                 );
                               })}
                             </select>
                           </div>
-                        )}
-                    </div>
-                  )}
-                {selectedViewCode == 'SUPPLIER_DETAIL_VIEW' && (
+                          {isActive == 'by_monthly' && (
+                            <div className="col-md-5">
+                              <select
+                                className="filterSelect mt-2"
+                                value={month}
+                                onChange={onMonthChange}
+                              >
+                                <option value="">Select Month</option>
+                                {allowedMonths.map((month, index) => {
+                                  return (
+                                    <option key={index} value={index + 1}>
+                                      {month}
+                                    </option>
+                                  );
+                                })}
+                              </select>
+                            </div>
+                          )}
+                          {(selectedViewCode == 'DETAILED_GEO_VIEW' ||
+                            selectedViewCode == 'ANNUALREPORT_DASHBOARD') &&
+                            isActive == 'by_quarterly' && (
+                              <div className="col-md-5">
+                                <select
+                                  className="filterSelect mt-2"
+                                  value={qtr}
+                                  onChange={onQuarterChange}
+                                >
+                                  <option value="">Select Quarter</option>
+                                  {[
+                                    'Jan - Mar',
+                                    'Apr - Jun',
+                                    'Jul - Sep',
+                                    'Oct - Dec',
+                                  ].map((qtr, index) => {
+                                    return (
+                                      <option key={index} value={index + 1}>
+                                        {qtr}
+                                      </option>
+                                    );
+                                  })}
+                                </select>
+                              </div>
+                            )}
+                        </div>
+                      )}
+                    {selectedViewCode == 'SUPPLIER_DETAIL_VIEW' ||
+                      selectedViewCode == 'SKU_DETAIL_VIEW' ||
+                      (selectedViewCode == 'DETAILED_GEO_VIEW' && (
+                        <>
+                          <h3 className="filterSubHeading mt-3">Vendor</h3>
+                          <div className="btn-group filterButton mt-2 mb-4">
+                            {['All', 'S1', 'S2', 'S3'].map((otype, index) => (
+                              <span
+                                key={index}
+                                className={`btn p-2 ${
+                                  Otype == otype ? `active` : ``
+                                }`}
+                                htmlFor={otype}
+                                onClick={() => changeOType(otype)}
+                              >
+                                {otype}
+                              </span>
+                            ))}
+                          </div>
+                        </>
+                      ))}
+                  </>
+                )}
+
+                {selectedModule == 'INVENTORY_DASHBOARD' && (
                   <>
+                    <label className="radioButton" htmlFor="gv">
+                      <input
+                        className="radioInput"
+                        type="radio"
+                        name="view"
+                        id="gv"
+                        value="INVENTORY_DASHBOARD"
+                        onChange={changeView}
+                        defaultChecked={
+                          selectedViewCode == 'INVENTORY_DASHBOARD'
+                        }
+                      />{' '}
+                      Geographical View
+                    </label>
+
+                    <label className="radioButton" htmlFor="sv">
+                      <input
+                        className="radioInput"
+                        type="radio"
+                        name="view"
+                        id="sv"
+                        value="INVENTORY_SKU"
+                        onChange={changeView}
+                      />{' '}
+                      SKU View
+                    </label>
+
+                    <label className="filterSubHeading mt-3">
+                      Select State
+                    </label>
+                    <select
+                      className="filterSelect mt-2"
+                      value={state}
+                      onChange={onStateChange}
+                    >
+                      <option value="">Select State</option>
+                      {props.states?.map((state, index) => (
+                        <option key={index} value={state}>
+                          {state}
+                        </option>
+                      ))}
+                    </select>
+                    <label className="filterSubHeading mt-3">
+                      Select District
+                    </label>
+                    <select
+                      value={district}
+                      className="filterSelect mt-2"
+                      onChange={onDistrictChange}
+                    >
+                      <option value="">Select District</option>
+                      {districts?.map((district, index) => (
+                        <option key={index} value={district}>
+                          {district}
+                        </option>
+                      ))}
+                    </select>
+
+                    <label className="filterSubHeading mt-3">Select SKU</label>
+                    <select
+                      className="filterSelect mt-2"
+                      value={SKU}
+                      onChange={skuChanged}
+                    >
+                      <option value="">Select SKU</option>
+                      {props.SKUs?.map((sku, index) => {
+                        let enable = true;
+                        if (!skuArr.includes(sku.id)) skuArr.push(sku.id);
+                        else enable = false;
+
+                        return enable ? (
+                          <option key={index} value={sku.id}>
+                            {sku.name}
+                          </option>
+                        ) : (
+                          ''
+                        );
+                      })}
+                    </select>
+
                     <h3 className="filterSubHeading mt-3">Vendor</h3>
                     <div className="btn-group filterButton mt-2 mb-4">
                       {['All', 'S1', 'S2', 'S3'].map((otype, index) => (
@@ -527,6 +610,11 @@ const Analytics = (props) => {
                     </div>
                   </>
                 )}
+
+                {selectedModule == 'SPM_DASHBOARD' && <>SPM Filter Section</>}
+
+                {/* =================== New Filter Code Ends ================================ */}
+
                 {!!Object.keys(params).length && (
                   <button
                     className="btn SearchButton mt-4"
