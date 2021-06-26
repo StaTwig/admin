@@ -1972,6 +1972,7 @@ exports.getProductListCounts = [
             productName: product && product[0] && product[0].name,
             productId: product && product[0] && product[0].id,
             quantity: list && list[0] && list[j].quantity || 0,
+            unitofMeasure: product && product[0] && product[0].unitofMeasure,
 
           };
         }   
