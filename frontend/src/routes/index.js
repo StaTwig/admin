@@ -73,7 +73,7 @@ const routes = (
     <Route path="/reviewinventory" component={requireAuth(VerifyInventory)} />
     <Route path="/track" component={requireAuth(Track)} />
     <Route path="/trackAndTrace" component={requireAuth(trackAndTrace)} />
-    <Route path="/tracing/:id" component={requireAuth(Tracing)} />
+    <Route path="/tracing/:id" component={requireAuth(Track)} />
     <Route path="/producttracing" component={requireAuth(ProductTracing)} />
     <Route path="/network" component={requireAuth(Network)} />
     <Route path="/transactionHistory" component={requireAuth(TransactionHistory)} />

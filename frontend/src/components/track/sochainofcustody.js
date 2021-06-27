@@ -23,7 +23,7 @@ const SoChainOfCustody = (props) => {
             <div className={`panel row container-${container} mr-0 commonpanle`} style={{marginLeft: "0.5rem"}}>
               <div className="col-12 row justify-content-between">
                 <div className={`${visible && v ? `col` : `col-10`}`}>
-                  <span className="font-weight-bold">{update.status}</span>
+                  <span className="font-weight-bold">{isShipment? update.status : update.poStatus}</span>
                   {(!visible || !v) &&
                     <div className="text-primary mt-2">
                       <span className=" ">{isShipment ? 'Shipment' : 'Order'} ID: </span>
