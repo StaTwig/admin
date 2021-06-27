@@ -420,6 +420,19 @@ export const addAddress = async (data) => {
   }
 };
 
+export const getLatLongByCity = async (param) => {
+  try {
+    const result = await axios.get(
+      `https://geocode.search.hereapi.com/v1/geocode?q=${param}&apiKey=BCRdhsq4jB8NxBG7vTWpVbNxCb6b50j98_f_bwiy7Qw`
+    );
+    console.log(result);
+
+    return result.length > 0 ? result.items[0].Location.Address : {};
+  } catch (e) {
+    return e.response;
+  }
+};
+
 export const getAddressByLatLong = async (data) => {
   const { latitude, longitude } = data.coords;
   try {

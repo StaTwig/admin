@@ -28,17 +28,28 @@ const NewRequests = (props) => {
               {requestRow?.walletAddress}
             </span>
           </div>
-          <div className="pb-2 d-flex">
-            <span className="txtColor">
-              {requestRow?.phoneNumber ? "Mobile: " : "Email: "}
-            </span>
-            <span className="txtWrapR">
-              &nbsp;
-              {requestRow?.phoneNumber
-                ? requestRow?.phoneNumber
-                : requestRow?.emailId}
-            </span>
-          </div>
+          {requestRow?.phoneNumber && (
+            <div className="pb-2 d-flex">
+              <span className="txtColor">
+                {requestRow?.phoneNumber && "Mobile: "}
+              </span>
+              <span className="txtWrapR">
+                &nbsp;
+                {requestRow?.phoneNumber && requestRow?.phoneNumber}
+              </span>
+            </div>
+          )}
+          {requestRow?.emailId && (
+            <div className="pb-2 d-flex">
+              <span className="txtColor">
+                {requestRow?.emailId && "Email: "}
+              </span>
+              <span className="txtWrapR">
+                &nbsp;
+                {requestRow?.emailId && requestRow?.emailId}
+              </span>
+            </div>
+          )}
           {/* <div className="pb-2">
             <span>Organisation: </span>
             <span>{requestRow?.organisationId} </span>

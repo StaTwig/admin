@@ -51,7 +51,7 @@ export function config() {
     },
     test: {
       sendOtpUrl: `${TEST_SERVER_URL}/api/employee_service/auth/sendOtp`,
-      verifyOtpUrl: `${LOCAL_SERVER_URL_EMPLOYEE}/api/employee_service/auth/verifyOtp`,
+      verifyOtpUrl: `${TEST_SERVER_URL}/api/employee_service/auth/verifyOtp`,
       getApprovalsUrl: `${TEST_SERVER_URL}/api/employee_service/getApprovals`,
       getPermissionsUrl: `${TEST_SERVER_URL}/api/rbac_service/getPermissions`,
       getWareHousesUrl: `${TEST_SERVER_URL}/api/address_service/fetchWarehouses`,
@@ -61,7 +61,7 @@ export function config() {
       activateOrgUserUrl: `${TEST_SERVER_URL}/api/employee_service/activateUser`,
       deactivateOrgUserUrl: `${TEST_SERVER_URL}/api/employee_service/deactivateUser`,
       getOrgUsersUrl: `${TEST_SERVER_URL}/api/employee_service/auth/getOrgUsers`,
-      getOrgUrl: `${LOCAL_SERVER_URL_EMPLOYEE}/api/employee_service/getOrgs`,
+      getOrgUrl: `${TEST_SERVER_URL}/api/employee_service/getOrgs`,
       getOrgActiveUsers: `${TEST_SERVER_URL}/api/employee_service/auth/getOrgActiveUsers`,
       addOrgUserUrl: `${TEST_SERVER_URL}/api/employee_service/addUser`,
       recentRequestsSentUrl: `${TEST_SERVER_URL}/api/affliation_service/fetchSentRequests`,
@@ -81,8 +81,8 @@ export function config() {
       getOrgTypeiIdsUrl: `${TEST_SERVER_URL}/api/configuration_service/getOrganizationsByType?id=`,
       updateOrgTypesUrl: `${TEST_SERVER_URL}/api/configuration_service/updateOrganizationsByType`,
       addNewOrgTypesUrl: `${TEST_SERVER_URL}/api/configuration_service/addNewOrgType`,
-      getLocationApprovalUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/getLocationApprovals`,
-      modifyLocationUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/address_service/modifyLocation`,
+      getLocationApprovalUrl: `${TEST_SERVER_URL}/api/address_service/getLocationApprovals`,
+      modifyLocationUrl: `${TEST_SERVER_URL}/api/address_service/modifyLocation`,
       imgDomainUrl: `${TEST_SERVER_URL}`,
     },
     prod: {
