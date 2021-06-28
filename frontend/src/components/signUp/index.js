@@ -31,6 +31,7 @@ const [orgType, setorgType] = useState('');
 const [selectedType,setselectedType] = useState();
 const [emailError,setemailerror] = useState(false);
 const [phoneError,setphoneerror] = useState(false);
+const [signupDisable,setsignupDisable]=useState(false);
   useEffect(() => {
     async function fetchData() {
       const orgs = await getOrganisations();
@@ -213,9 +214,11 @@ const changeFn = (value_new,e) => {
                   handleBlur={props.email?verifyEmailAndPhoneNo(`emailId=${props.email}`).then((v)=>{
                     if(v.data.length){
                       setemailerror(true);
-                  }else{
-                    setemailerror(false)
-                  }
+                      setsignupDisable(true);
+                    }else{
+                      setemailerror(false);
+                      setsignupDisable(false);
+                    }
                 }):null}
                   />
                   {errors.email && touched.email && (
@@ -241,9 +244,17 @@ const changeFn = (value_new,e) => {
                       }}
                       value={props.phone}
                       onChange={(e)=>{props.onphoneChange(e)}}
-                      handleBlur={props.phone?verifyEmailAndPhoneNo(`phoneNumber=${props.phone}`).then((v)=>{if(v.data[0].phoneNumber=="+"+props.phone){
-                        setphoneerror(true);
-                    }else{setphoneerror(false);}}):null}
+                      handleBlur={props.phone?verifyEmailAndPhoneNo(`phoneNumber=${props.phone}`).then((v)=>{
+                        console.log(v.data.length);
+                        if(v.data.length){
+                          setphoneerror(true);
+                          setsignupDisable(true);
+                        }
+                        else{
+                          setphoneerror(false);
+                          setsignupDisable(false);
+                        }}
+                        ):null}
                       onChange = {props.onphoneChange}
                     /></div>
                    {errors.phone && touched.phone && (
@@ -344,7 +355,7 @@ const changeFn = (value_new,e) => {
                   
                   <div className="text-center" >
                     <br></br>
-                  <button type="submit" className="btn btn-primary mr-5" >
+                  <button type="submit" className="btn btn-primary mr-5" disabled={signupDisable}>
                   SIGNUP
                   </button>
                     </div>
