@@ -172,7 +172,7 @@ export const getShipmentsById = query => {
 
 export const createShipment = async data => {
   try {
-    const result = await axios.post(config().createShipmentUrl, data);
+    const result = await axios.post(`http://localhost:3002/shipmentmanagement/api/shipment/createShipment`, data);
     return result.data.data;
   } catch (e) {
     return e.response;

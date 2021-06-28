@@ -372,9 +372,27 @@ exports.createShipment = [
               });
 
               if (quantityMismatch) {
+                if(po.poStatus === 'CREATED' || po.poStatus === 'ACCEPTED'){
+                  let date = new Date(po.createdAt)
+                  let milliseconds = date.getTime(); 
+                  let d = new Date();
+                  let currentTime = d.getTime();
+                  let orderProcessingTime = currentTime - milliseconds;
+                  let shippedCount = await OrganisationModel.find({id: req.user.organisationId}).shippedCount;
+                  OrganisationModel.updateOne({id: req.user.organisationId}, { $set: {totalProcessingTime: orderProcessingTime, shippedCount: shippedCount + 1}})
+                }
                 po.poStatus = "TRANSIT&PARTIALLYFULFILLED";
               } else {
-                po.poStatus = "TRANSIT&FULLYFULFILLED";
+                if(po.poStatus === 'CREATED' || po.poStatus === 'ACCEPTED'){
+                  let date = new Date(po.createdAt)
+                  let milliseconds = date.getTime(); 
+                  let d = new Date();
+                  let currentTime = d.getTime();
+                  let orderProcessingTime = currentTime - milliseconds;
+                  let shippedCount = await OrganisationModel.find({id: req.user.organisationId}).shippedCount;
+                  OrganisationModel.updateOne({id: req.user.organisationId}, { $set: {totalProcessingTime: orderProcessingTime, shippedCount: shippedCount + 1}})
+                }
+                po.poStatus = "TRANSIT&FULLYFULFILLED";                        
               }
               await po.save();
               const poidupdate=await RecordModel.findOneAndUpdate({
@@ -1527,9 +1545,8 @@ exports.getProductsByInventory = [
           $group: {
             _id: "$inventoryDetails.productId",
             productCategory: { $first: "$products.type" },
-	          productName: { $first: "$products.name" },
+	    productName: { $first: "$products.name" },
             manufacturer: { $first: "$products.manufacturer" },
-            unitofMeasure:{$first:"$products.unitofMeasure"},
             productQuantity: { $sum: "$inventoryDetails.quantity" },
             quantity: { $sum: "$inventoryDetails.quantity" },
           },
