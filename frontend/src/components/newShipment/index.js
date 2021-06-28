@@ -625,7 +625,7 @@ const NewShipment = (props) => {
                         placeholder="Select Order ID"
                 
                         onChange={async(v) => {    
-                          // setfetchdisabled(true);
+                          setfetchdisabled(true);
                           setProducts(p => []);
                           setAddProducts(p => []);
                           setOrderIdSelected(true);
@@ -716,9 +716,9 @@ const NewShipment = (props) => {
                       onChange={handleChange}
                       value={values.shipmentID}
                     />
+                    <div  style={fetchdisabled? {pointerEvents: "none", opacity: "0.6"} : {}}>
                   <span style={{height:"25px",width:"50px"}}
                     className="btn btn-outline-info"
-                    disabled={fetchdisabled}
                     onClick={async()=>{
                       // setpofetchdisabled(true);
                       setProducts(p => []);
@@ -782,6 +782,7 @@ const NewShipment = (props) => {
                   >
                     <span style={{position:"relative",top:"-7px",fontSize:"12px",left:"-10px"}}>Fetch</span>
                   </span>
+                  </div>
                   </div>
                 </div>
                 </div>

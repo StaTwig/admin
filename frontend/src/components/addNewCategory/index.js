@@ -1,19 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect} from "react";
 import "./style.scss";
 import { Formik } from "formik";
 import uploadBlue from '../../assets/icons/UploadBlue.svg';
-
+import { Link } from "react-router-dom";
 const AddCategory = (props) => {
     const [editMode,setEditMode]=useState(true);
-  
-  
+  console.log(props);
   return (
     <div>
       <div className="addproduct" style={{overflow:"hidden"}}>
         <h1 className="breadcrumb">ADD NEW CATEGORY</h1>
-            <button className="btn btn-orange fontSize20 font-bold mt-1" style={{position:"relative ",left:"880px" }}> 
+            {/* <button className="btn btn-orange fontSize20 font-bold mt-1" style={{position:"relative ",left:"805px" }}> 
               <span style={{ color: 'white'}}>+ Add New Category</span>
-            </button>
+            </button> */}
       
         <div className="card">
             <div className="card-body">
@@ -23,45 +22,29 @@ const AddCategory = (props) => {
                   <img
                     name="photo"
                     src={uploadBlue}
-                    style={{height:"150px",width:"100px"}}
+                    style={{height:"150px",width:"100px",marginLeft:"38px"}}
                     className="rounded rounded-circle"
                   />
                 </div>
-                <input
-                  id="profile"  
-                  type="file"
-                  style={{ display: "none" }}
-                />
-                {editMode ? (
-                  <button
-                    type="button"
-                    // onClick={(e) => this.upload.click()}
-                    className="btn btn-outline-info br-2"
-                    style={{boarder:"20px 20px 20px 20px"}}
-                  >
-                    + ADD Photo
-                  </button>
-                ) : (
-                  ""
-                )}
+                <label class="btn-primary btn browse pl-5">ADD IMAGE<input type='file' class="select"/> </label>
                 </div>
              
-                <div className="col-8 mt-5">
+                <div className="col-7 mt-5">
                     <div className="form-group">
-                        <label htmlFor="shipmentId"> Category Name</label>
+                        <label htmlFor="shipmentId" style={{textAlign:"right",paddingRight:"50px"}}> Category Name</label>
                         <input
                         type="text"
                         
-                        className="form-control1"
+                        className="form-control"
                         name="product"
                         placeholder="Enter Category Title"
                         />
                     </div>
               <div className="form-group">
-                    <label htmlFor="shipmentId"> Description</label>
+                    <label htmlFor="shipmentId" style={{textAlign:"right",paddingRight:"50px"}}> Description</label>
                     <input
                     type="text"
-                    className="form-control1"
+                    className="form-control"
                     name="product"
                     placeholder="Enter Category Description"
                     />
@@ -72,14 +55,16 @@ const AddCategory = (props) => {
                 </div>
           </div>
         </div> 
-        <div className="d-flex mt-3 " style={{position:"relative",left:"1030px"}}>
-                <button type="button" className="btn btn-white shadow-radius font-bold mr-4">
+        <div className="d-flex mt-3 " style={{position:"relative",left:"1005px"}}>
+          <Link to="/productcategory">
+                <button type="button" className="btn btn-white shadow-radius font-bold mr-3">
                   Cancel
 
                 </button>
-                <button className="btn btn-orange fontSize20 font-bold mb-2">
+                <button className="btn btn-orange fontSize20 font-bold mb-0 mt-1">
                     <span>+ Add New Category</span>
                 </button>
+                </Link>
         </div>
              
        </div>

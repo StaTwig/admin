@@ -79,7 +79,7 @@ if(quantityChecker===1 && typeof(prod)!="undefined" && typeof(prod.name!="undefi
                       }
                     }
                     if(i < productsList.length){
-                    prod.productQuantity = qty;
+                    // prod.productQuantity = qty;
                     console.log("productQuantity is " + prod.productQuantity);
                     updateQuantity();
                     }
