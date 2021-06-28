@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import './style.scss';
 import Checked from "../../../../assets/icons/checked.svg";
 const SuccessOrderPopUp = (props) => {
-  console.log(props);
   return (
     <div className="inventorypopup">
       <div className="d-flex  flex-column align-items-center">

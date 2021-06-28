@@ -43,6 +43,7 @@ import ProductCategory from '../containers/productcategory';
 import ProductInventory from '../containers/productinventory';
 import BatchExpiry from '../containers/batchexpiry';
 import ViewInventory from '../containers/viewInventory';
+import AddNewCategory from '../containers/addNewCategory';
 import NoMatch from '../components/NoMatch';
 
 import './style.scss';
@@ -72,7 +73,7 @@ const routes = (
     <Route path="/reviewinventory" component={requireAuth(VerifyInventory)} />
     <Route path="/track" component={requireAuth(Track)} />
     <Route path="/trackAndTrace" component={requireAuth(trackAndTrace)} />
-    <Route path="/tracing/:id" component={requireAuth(Tracing)} />
+    <Route path="/tracing/:id" component={requireAuth(Track)} />
     <Route path="/producttracing" component={requireAuth(ProductTracing)} />
     <Route path="/network" component={requireAuth(Network)} />
     <Route path="/transactionHistory" component={requireAuth(TransactionHistory)} />
@@ -93,6 +94,7 @@ const routes = (
     <Route path="/batchnearexpiry/:category" component={requireAuth(BatchExpiry)} />
     <Route path="/batchexpired" component={requireAuth(BatchExpiry)} />
     <Route path="/viewinventory/:warehouseId" component={requireAuth(ViewInventory)} />
+    <Route path="/addNewCategory" component={requireAuth(AddNewCategory)} />
     <Route component={NoMatch} />
   </Switch>
 );

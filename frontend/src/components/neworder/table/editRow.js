@@ -15,6 +15,7 @@ const EditRow = props => {
     products,
     handleCategoryChange,
   } = props;
+  //console.log("propsEditrow",prod.unitofMeasure? prod.unitofMeasure.name:null );
 
   const numbersOnly = (e) => {
     // Handle paste
@@ -32,6 +33,8 @@ const EditRow = props => {
     }
   }
 
+
+
   return (
     <div className="row ml-3">
       <div className="trow row text-dark col">
@@ -44,7 +47,7 @@ const EditRow = props => {
                   onSelect={item => { handleCategoryChange(index, item) }}
                   groups={category}
                 /> */}
-                <Select
+                <Select 
                   className="no-border"
                   placeholder={<div className="select-placeholder-text">Select Product Category</div>} 
                   
@@ -65,11 +68,16 @@ const EditRow = props => {
                   onSelect={item => { handleProductChange(index, item) }}
                   groups={products}
                 /> */}
+
+                {
+                  console.log(prod.name==="")
+                }
                 <Select
                   className="no-border"
-                  placeholder={<div className="select-placeholder-text">Product Name</div>} 
+                  placeholder= {<div className= "select-placeholder-text" > Product Name </div>} 
                   value={{value: prod.id, label: prod.name}}
-                  defaultInputValue={prod.name}
+                  placeholder="Product Name"
+                  // defaultInputValue={prod.name?prod.name:"Product Name"}
                   onChange={(v) => handleProductChange(index, v)}
                   options={products}
                 />
@@ -86,9 +94,18 @@ const EditRow = props => {
               placeholder="Enter Quantity"
               onKeyPress={numbersOnly}
               value={prod.productQuantity ? prod.productQuantity : prod.quantity}
-              onChange={e => handleQuantityChange(e.target.value, index)}
+              onChange={(e) =>{
+                handleQuantityChange(e.target.value, index);
+                if(e.target.value==="0")
+                  prod.productQuantity="";
+              }}
             />
           </div>
+        </div>
+        <div className="title recived-text align-self-center" style={{position:"absolute",right:"20px"}}>
+        {/* prod.unitofMeasure? prod.unitofMeasure.name:null */}
+          { prod.unitofMeasure ?<div>{ prod.unitofMeasure ==undefined ? null: prod.unitofMeasure.name}</div>:
+          <div className="placeholder_id">Unit</div>}
         </div>
       </div>
       {props.product.length > 0 &&

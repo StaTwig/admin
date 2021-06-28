@@ -27,7 +27,6 @@ import Modal from "../../shared/modal";
 import { turnOff, turnOn } from "../../actions/spinnerActions";
 class Profile extends React.Component {
   constructor(props) {
-    console.log(props);
     super(props);
     this.state = {
       openModal: false,
@@ -111,10 +110,11 @@ class Profile extends React.Component {
         warehouseAddress_state,
         title,
       });
-      if((this.state.profileData.phoneNumber).includes("+")){
-        this.setState({phoneNumber:(this.state.profileData.phoneNumber).slice(1,(this.state.profileData.phoneNumber).length)});
-      }
-      console.log(this.state.profileData.phoneNumber,"Profile Data");
+      // if((this.state.profileData.phoneNumber).includes("+")){
+      //   this.setState({phoneNumber:(this.state.profileData.phoneNumber).replace('+','')});
+      //   // this.setState({phoneNumber:(this.state.profileData.phoneNumber).slice(1,(this.state.profileData.phoneNumber).length)});
+      // }
+      // console.log(this.state.profileData.phoneNumber.replace('+',''),"Profile Data");
     } else {
       //error
     }
@@ -463,7 +463,7 @@ class Profile extends React.Component {
                                       height="15"
                                       className="mr-2"
                                     />
-                                    <span>EDIT</span>
+                                    <span>Edit</span>
                                   </button>
                                 </Link>
                                 {/* <button
@@ -600,7 +600,7 @@ class Profile extends React.Component {
                           className="mr-3"
                         />
                         {(this.state.phoneNumber) ? (
-                          <span>+{this.state.phoneNumber}</span>
+                          <span>+{(this.state.phoneNumber).replaceAll('+','')}</span>
                         ) : (
                           <span>N/A</span>
                         )}
@@ -693,8 +693,8 @@ class Profile extends React.Component {
                     this.onOrganisation();
                   }}
                 >
-                  <img src={Pen} width="15" height="15" className="mr-3" />
-                  <span>EDIT</span>
+                  <img src={Pen} width="15" height="15" className="mr-2 mb-1" />
+                  <span>Edit</span>
                 </button>
               ) : (
                 // </div>
@@ -703,11 +703,11 @@ class Profile extends React.Component {
                     className="btn btn-outline-info mr-2"
                     onClick={this.onCancel}
                   >
-                    <span>CANCEL</span>
+                    <span>Cancel</span>
                   </button>
                   <button className="btn-primary btn" onClick={this.onSubmit}>
                   {/* <button className="btn-primary btn" onClick={this.onSubmit(),()=>{this.onChange()}}> */}
-                    <span>SAVE</span>
+                    <span>Save</span>
                   </button>
                 </div>
               )}

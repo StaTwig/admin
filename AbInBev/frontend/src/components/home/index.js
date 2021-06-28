@@ -106,25 +106,23 @@ const Home = (props) => {
       isEmail = false;
     }
     var data = {
-        firstName: values.firstName,
-        lastName: values.lastName,
-        authority: values.authority,
-        organisationName: values.organisation,
-        organisationId: 0,
-        address: {
-          line1: values.line1,
-          city: values.district,
-          state: values.state,
-          country: '',
-          pincode: values.pincode,
-        },
+      firstName: values.firstName,
+      lastName: values.lastName,
+      authority: values.authority,
+      organisationName: values.organisation,
+      organisationId: 0,
+      address: {
+        line1: values.line1,
+        city: values.district,
+        state: values.state,
+        country: '',
+        pincode: values.pincode,
+      },
     };
-    
-    if(isEmail)
-      data.emailId = values.mobileemail;
-    else
-      data.phoneNumber = values.mobileemail;
-    
+
+    if (isEmail) data.emailId = values.mobileemail;
+    else data.phoneNumber = values.mobileemail;
+
     dispatch(turnOn());
     const result = await registerUser(data);
     dispatch(turnOff());
@@ -224,7 +222,7 @@ const Home = (props) => {
                         onClick={() => {
                           setSteps(2);
                         }}
-                        className="signUpLink"
+                        className="btn btn-warning loginButton signUpLink"
                       >
                         here
                       </a>

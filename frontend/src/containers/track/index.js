@@ -37,10 +37,9 @@ const TrackContainer = props => {
         if (!!Object.keys(result.data.data?.poDetails).length) {
           setPoChainOfCustodyData(result.data.data?.poDetails);
           arr = result.data.data.poDetails;
-          console.log(result.data.data.poDetails.poStatus);
         
           arr["shipmentUpdates"] = [{
-            // status: result.data.data.poDetails.poStatus,
+            poStatus: result.data.data.poDetails.poStatus,
             status: 'RECEIVED',
             products: result.data.data.poDetails.products,
             updatedOn: moment(result.data.data.poDetails.lastUpdatedOn).format('DD/MM/YYYY hh:mm'),

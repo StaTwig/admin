@@ -5,20 +5,20 @@ import Sidebar from '../../shared/sidebarMenu';
 import { useDispatch, useSelector } from 'react-redux';
 import { turnOn, turnOff } from '../../actions/spinnerActions';
 import { getProducts } from '../../actions/poActions';
-import { getInventories } from "../../actions/inventoryActions";
+import { getInventories, getInventory } from "../../actions/inventoryActions";
 
 const ProductInventoryContainer = props => {
   const [products, setProducts] = useState([]);
   const dispatch = useDispatch();
   const inventories = useSelector(state => {
-    return state.inventories;
+    return state.inventoryDetails;
   });
   useEffect(() => {
     async function fetchData() {
       dispatch(turnOn());
       const result = await getProducts();
       setProducts(result);
-      dispatch(getInventories(0, 10000));
+      dispatch(getInventory(0, 10000));
       dispatch(turnOff());
     }
     fetchData();

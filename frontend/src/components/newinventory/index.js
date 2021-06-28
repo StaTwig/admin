@@ -32,6 +32,7 @@ const NewInventory = (props) => {
       dispatch(turnOn());
       const result = await getProducts();
       const productsArray = result.map((product) => product.name);
+      //console.log("result inventory",result);
       setProducts(result);
 
       const categoryArray = result.map((product) => product.type);
@@ -79,6 +80,7 @@ const NewInventory = (props) => {
     expiryDate: '',
     batchNumber: '',
     serialNumber: '',
+    unitofMeasure: '',
     products: [],
   });
   const closeModal = () => {
@@ -104,6 +106,7 @@ const NewInventory = (props) => {
     'productName',
     'manufacturer',
     'quantity',
+    'unitofMeasure',
     // 'manufacturingDate',
     // 'expiryDate',
     // 'batchNumber',
@@ -199,6 +202,15 @@ const NewInventory = (props) => {
     );
     updatedInventoryState[index]['manufacturer'] = product?.manufacturer;
     updatedInventoryState[index]['productId'] = product?.id;
+    updatedInventoryState[index]['unitofMeasure'] = product?.unitofMeasure
+    
+    if(key=="categories"){
+      updatedInventoryState[index]['productName'] ="";
+      updatedInventoryState[index]['manufacturer'] = "";
+      updatedInventoryState[index]['productId'] = "";
+      updatedInventoryState[index]['quantity'] = "";
+      updatedInventoryState[index]['unitofMeasure'] = "";
+    }
     let total = 0;
     updatedInventoryState.forEach((inv) => (total += parseInt(inv.quantity)));
     setInventoryState(updatedInventoryState);
@@ -287,14 +299,20 @@ const NewInventory = (props) => {
         </button>
       </div>
       <hr />
-      <div className="d-flex flex-row-reverse justify-content-between">
-        {/* <div className="total">Grand Total</div>
-        <span className="value">{grandTotal}</span> */}
 
-        <button className="btn-primary btn" onClick={onProceedToReview}>
-          <img src={review} width="20" className="" />
-          <span className="ml-1">Review</span>
-        </button>
+      <div className="d-flex flex-row-reverse">
+      {/* <div className="total">Grand Total</div>
+      <span className="value">{grandTotal}</span> */}
+      <button className="btn-orange btn" onClick={onProceedToReview}>
+        <img src={review} width="20" className="" />
+        <span className="ml-1">Review Product</span>
+      </button>
+      <button 
+      type="button"
+      className="btn btn-white shadow-radius font-bold mr-3" 
+      onClick={() => props.history.push("/inventory")}
+      >Cancel
+      </button>
       </div>
       {openCreatedInventory && (
         <Modal

@@ -108,16 +108,19 @@
         font-size: 15px;
   }
   .activeTxnContainer{
-    background-color: #cccccc2e;
+    background-color: #ffc40570;
       border-radius: 15px;
       box-shadow: 0px 3px 6px #54265E26;
       margin-bottom:10px;
+      font-size: 14px;
+      font-weight: bolder;
+      color: black;
   }
   .transactionListContainer{
     margin-top: 15px;
     padding:5px 0px 0px 5px;
     &:hover{
-      background-color: #cccccc2e;
+      background-color: #ffc40570;
       border-radius: 15px;
       box-shadow: 0px 3px 6px #54265E26;
     }
@@ -207,9 +210,9 @@
       font-weight: bold;
     }
     .transactionDate{
-      color: #414141 !important;
+      color: #000!important;
       font-size: 10px;
-      font-weight: lighter;
+      font-weight: bold;
       margin-bottom: 10px;
     }
     .icon-thumbnail-img {

@@ -10,12 +10,12 @@ var { aggregateData } = require("./helpers/dataAggregator");
 var cors = require("cors");
 var cron = require('node-cron');
 
-const CALCULATE_RETURNS_CRON_TIME = `*/15 * * * *`;
+// const CALCULATE_RETURNS_CRON_TIME = `*/15 * * * *`;
 
-cron.schedule(CALCULATE_RETURNS_CRON_TIME, () => {
-	console.log('running calculateReturns job');
-	aggregateData("month");
-});
+// cron.schedule(CALCULATE_RETURNS_CRON_TIME, () => {
+// 	console.log('running calculateReturns job');
+// 	aggregateData("month");
+// });
 
 // DB connection
 var MONGODB_URL = process.env.MONGODB_URL;
@@ -62,5 +62,8 @@ app.use((err, req, res) => {
 		return apiResponse.unauthorizedResponse(res, err.message);
 	}
 });
-
+// setTimeout(function () {
+// 	console.log("Exiting ...")
+// 	return process.exit(1);
+// }, 45000);
 module.exports = app;

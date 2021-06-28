@@ -14,7 +14,7 @@ const SupplierView = (props) => {
       </div>
 
       {analytics?.map((analytic, index) => (
-        <>
+        <div key={index}>
           <div className="row">
             <div className="col-lg-3 col-md-3 col-sm-12">
               <div className="productGrid">
@@ -33,6 +33,7 @@ const SupplierView = (props) => {
           <div className="card-container-sku">
             {analytic.products.map((product, i) => (
               <div
+                key={i}
                 className="card cursor-pointer"
                 onClick={() => openDetailView(product)}
               >
@@ -69,10 +70,15 @@ const SupplierView = (props) => {
                     aria-valuenow="60"
                     aria-valuemin="0"
                     aria-valuemax="100"
-                    style={{ width: (!isNaN(product.returnRate) ? product.returnRate : 0) + '%' }}
+                    style={{
+                      width:
+                        (!isNaN(product.returnRate) ? product.returnRate : 0) +
+                        '%',
+                    }}
                   >
                     <span className="sr-only">
-                      {!isNaN(product.returnRate) ? product.returnRate : 0}% Complete
+                      {!isNaN(product.returnRate) ? product.returnRate : 0}%
+                      Complete
                     </span>
                   </div>
                 </div>
@@ -82,7 +88,7 @@ const SupplierView = (props) => {
               </div>
             ))}
           </div>
-        </>
+        </div>
       ))}
     </div>
   );

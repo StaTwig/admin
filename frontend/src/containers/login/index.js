@@ -13,6 +13,8 @@ const LoginContainer = props => {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [emailFieldDisable,setemailFieldDisable] = useState(false);
+  const [phoneFieldDisable,setphoneFieldDisable] = useState(false);
   const dispatch = useDispatch();
   const [innerWidth,setInnerwidth] = useState(window.innerWidth);
 
@@ -61,6 +63,8 @@ const LoginContainer = props => {
     }
    }
 
+// console.log(phone,"Phone");
+// console.log(email,"email");
   return(
     <div className="container-fluid p-0" tabIndex="-1" onKeyDown={onkeydown}>
     <MobileHeader {...props} />  
@@ -74,13 +78,27 @@ const LoginContainer = props => {
  <Login
         errorMessage={errorMessage}
         onSendOtp={onSendOtp}
-         
-       
-      onEmailChange={e => setEmail((e.target.value).toLowerCase())}
-       onPhoneChange={value=> setPhone(value)}
-      
-      
+        onEmailChange={(e) => {
+          setEmail((e.target.value).toLowerCase())
+          let temp_email = (e.target.value).toLowerCase();
+          if(temp_email!="")
+            setphoneFieldDisable(true);
+          else
+            setphoneFieldDisable(false);
+        }}
+        onPhoneChange={(value)=>{
+          setPhone(value)
+          let temp_phone = value.slice(2,value.length);
+          if(temp_phone!="")
+            setemailFieldDisable(true);
+          else 
+            setemailFieldDisable(false);
 
+        }}
+        email={email}
+        phone={phone}
+        emailFieldDisable = {emailFieldDisable}
+        phoneFieldDisable = {phoneFieldDisable}
       />
     </div>
   );

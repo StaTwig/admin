@@ -162,7 +162,7 @@ const ReceiveShipment = (props) => {
             </div>
             <div>
               <button
-                className="btn-primary btn fontSize20 font-bold "
+                className="btn-primary btn fontSize20 font-bold mr-2 "
                 onClick={receiveShipment}
                 disabled={isDisabled}
               >
@@ -185,7 +185,7 @@ const ReceiveShipment = (props) => {
           </div>
         </div>
         <div className="d-flex  flex-auto">
-          <div className="panel commonpanle">
+          <div className="panel commonpanle" style={{width:"32%"}}>
             <div className="form-group"> 
               <label className="mb-1 text-secondary pt-2">Shipment ID:</label>
               <input
@@ -198,7 +198,7 @@ const ReceiveShipment = (props) => {
               />
             </div>
           </div>
-          <div className="panel commonpanle ml-3">
+          <div className="panel commonpanle ml-3" style={{width:"32%"}}>
             <div className="form-group">
             <label className="mb-1 text-secondary pt-2">Bill No:</label>
               <input
@@ -239,8 +239,8 @@ const ReceiveShipment = (props) => {
           />
         </div>
         <div className="col-sm-4">
-          <h6 className="heading mt-3 mb-3 ml-3">Comments</h6>
-          <div className="panel commonpanle" style={{ height: "45%" }}>
+          <h6 className="heading mt-3 mb-3 ml-3" style={{padding:4}}>Comments</h6>
+          <div className="col panel commonpanle" style={{ height: "45%"}}>
             <div className="form-group" style={{ width: "150%" }}>
               <textarea
                 style={{

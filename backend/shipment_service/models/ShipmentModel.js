@@ -39,6 +39,7 @@ ShipmentSchema = new mongoose.Schema(
         productID: String,
         productName: String,
         manufacturer: String,
+        batchNumber: String,
         productQuantity: Number,
         productQuantityDelivered: Number,
         rejectionRate:{type:Number, default:0.00},

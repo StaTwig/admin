@@ -15,7 +15,7 @@ const ProductCategory = props => {
       <div className="d-flex justify-content-between">
         <h1 className="breadcrumb">PRODUCT CATEGORY</h1>
         <div className="d-flex">
-          <Link to="/newinventory">
+          <Link to="/addNewCategory">
             <button className="btn btn-yellow">
               <img src={Add} width="13" height="13" className="mr-2" />
               <span>Add New Category</span>

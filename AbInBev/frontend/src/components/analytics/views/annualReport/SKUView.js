@@ -5,25 +5,27 @@ import { getAnalyticsByBrand } from '../../../../actions/analyticsAction';
 import { useDispatch } from 'react-redux';
 
 const SKUView = (props) => {
-    const [analytics, setAnalytics] = useState(props.bstats);
-    // const dispatch = useDispatch();
-    // useEffect(() => {
-    //     (async () => {
-    //     const result = await dispatch(getAnalyticsByBrand());
-    //     setAnalytics(result.data);
-    //     })();
-    // }, []);
-    useEffect(() => { 
-        if (props.sku) {
-            //  console.log(props.bstats);
-             
-            //  let n = props.bstats.filter(a => a.products.filter(b => b.externalId == props.sku));
-            //  setAnalytics(n);  
-         }
-    }, [props])
-    const openDetailView = (sku) => {
-        props.onViewChange(props.prop?.type == 'b' ? 'BREWERY_DETAIL_VIEW' : 'SKU_DETAIL_VIEW', { ...sku });
+  const [analytics, setAnalytics] = useState(props.bstats);
+  // const dispatch = useDispatch();
+  // useEffect(() => {
+  //     (async () => {
+  //     const result = await dispatch(getAnalyticsByBrand());
+  //     setAnalytics(result.data);
+  //     })();
+  // }, []);
+  useEffect(() => {
+    if (props.sku) {
+      //  console.log(props.bstats);
+      //  let n = props.bstats.filter(a => a.products.filter(b => b.externalId == props.sku));
+      //  setAnalytics(n);
     }
+  }, [props]);
+  const openDetailView = (sku) => {
+    props.onViewChange(
+      props.prop?.type == 'b' ? 'BREWERY_DETAIL_VIEW' : 'SKU_DETAIL_VIEW',
+      { ...sku },
+    );
+  };
 
   return (
     <div>
@@ -32,7 +34,7 @@ const SKUView = (props) => {
       </div>
 
       {analytics?.map((analytic, index) => (
-        <>
+        <div key={index}>
           <div className="row">
             <div className="col-lg-3 col-md-3 col-sm-12">
               <div className="productGrid">
@@ -86,10 +88,15 @@ const SKUView = (props) => {
                     aria-valuenow="60"
                     aria-valuemin="0"
                     aria-valuemax="100"
-                    style={{ width: (!isNaN(product.returnRate) ? product.returnRate : 0) + '%' }}
+                    style={{
+                      width:
+                        (!isNaN(product.returnRate) ? product.returnRate : 0) +
+                        '%',
+                    }}
                   >
                     <span className="sr-only">
-                      {!isNaN(product.returnRate) ? product.returnRate : 0}% Complete
+                      {!isNaN(product.returnRate) ? product.returnRate : 0}%
+                      Complete
                     </span>
                   </div>
                 </div>
@@ -99,7 +106,7 @@ const SKUView = (props) => {
               </div>
             ))}
           </div>
-        </>
+        </div>
       ))}
     </div>
   );
