@@ -48,7 +48,7 @@ const SoChainOfCustody = (props) => {
                     {update.products.map((product, index) =>
                       <div key={index} className="col-12 row justify-content-between">
                         <span className="text-muted">{product?.productName ? product?.productName : product.name}</span>
-                        <span className="text-muted text-weight-bold">{product?.productQuantity ? product.productQuantity : product.quantity}</span>
+                        <span className="text-muted text-weight-bold">{product?.productQuantity ? product.productQuantity : product.quantity}{" ("}{product.unitofMeasure?product.unitofMeasure.name:"N/A"}{")"}</span>
                       </div>
                     )}
                   </div>
