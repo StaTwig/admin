@@ -2014,6 +2014,7 @@ exports.getProductDetailsByWarehouseId = [
           productId: product[0].id,
           manufacturer: product[0].manufacturer,
           quantity: list[j].quantity ? list[j].quantity : 0,
+          unitofMeasure:product[0].unitofMeasure
         };
         productArray.push(product1);
       }
