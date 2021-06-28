@@ -19,6 +19,7 @@ router.get("/getProducts", ProductController.getProducts);
 router.get("/getProductsByCategory", ProductController.getProductsByCategory);
 router.get("/generateCodes", ProductController.generateCodes);
 router.get("/productInfo", ProductController.getProductInfo);
+router.get("/getManufacturer", ProductController.getManufacturer);
 
 //router.post("/addProduct", ProductController.addProduct);
 router.post(
