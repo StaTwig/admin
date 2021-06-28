@@ -75,15 +75,19 @@ const NewAddress = (props) => {
     dispatch(turnOff());
   };
 
-  if (addArr && addr?.length == 0 && props.match.params.address) {
+  if (addArr && Object.keys(addr).length === 0 && props.match.params.address) {
     editAddress = addArr.filter(
       (row) => row.id == JSON.parse(props.match.params.address)
     );
-    if (editAddress?.length) setAdd(editAddress[0]);
+    if (editAddress?.length) setAdd((a) => editAddress[0]);
   }
 
   useEffect(() => {
-    if (addArr && addr?.length == 0 && props.match.params.address) {
+    if (
+      addArr.length &&
+      Object.keys(addr).length === 0 &&
+      props.match.params.address
+    ) {
       editAddress = addArr.filter(
         (row) => row.id == JSON.parse(props.match.params.address)
       );
@@ -119,36 +123,36 @@ const NewAddress = (props) => {
               <Formik
                 enableReinitialize={true}
                 initialValues={{
-                  title: addr?.length ? addr?.title : "Warehouse",
+                  title: Object.keys(addr).length ? addr?.title : "Warehouse",
                   // flatno: addr?.length ? addr[0] : "",
                   pincode: address?.PostalCode
                     ? address?.PostalCode
-                    : addr?.length
-                    ? addr?.warehouseAddress?.pinCode
+                    : Object.keys(addr).length
+                    ? addr?.warehouseAddress?.zipCode
                     : "",
                   area: address?.Subdistrict
                     ? address?.Subdistrict
-                    : addr?.length
+                    : Object.keys(addr).length
                     ? addr?.warehouseAddress?.firstLine
                     : "",
                   // landmark: addr?.length ? addr[2] : "",
                   town: address?.City
                     ? address?.City
-                    : addr?.length
+                    : Object.keys(addr).length
                     ? addr?.warehouseAddress?.city
                     : "",
                   state: address?.AdditionalData?.length
                     ? address?.AdditionalData?.filter(
                         (row) => row.key == "StateName"
                       )[0].value
-                    : addr?.length
+                    : Object.keys(addr).length
                     ? addr?.warehouseAddress?.state
                     : "",
                   country: address?.AdditionalData?.length
                     ? address?.AdditionalData?.filter(
                         (row) => row.key == "CountryName"
                       )[0].value
-                    : addr?.length
+                    : Object.keys(addr).length
                     ? addr?.warehouseAddress?.country
                     : "",
                 }}

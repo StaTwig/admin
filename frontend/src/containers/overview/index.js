@@ -60,6 +60,9 @@ const DashBoardContainer = (props) => {
     dispatch(getWareHouses());
     async function loadData() {
       const result = await getLocationApproval();
+      result.data.sort(function (a, b) {
+        return new Date(b.createdAt) < new Date(a.createdAt) ? -1 : 0;
+      });
       setLocationApprovals(result.data);
     }
     loadData();
