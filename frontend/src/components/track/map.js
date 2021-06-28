@@ -49,8 +49,8 @@ export class MapContainer extends Component {
               row?.receiver?.warehouse?.location?.latitude && row?.receiver?.warehouse?.location?.longitude ?
               <Marker
                 title={row.receiver.warehouse.title}
-                  name={row.receiver.warehouse.warehouseAddress.city}
-                  label={index}
+                name={row.receiver.warehouse.warehouseAddress.city}
+                // label={index}
                 position={{ lat: row.receiver.warehouse.location.latitude, lng: row.receiver.warehouse.location.longitude }} />
               : null)
           }
