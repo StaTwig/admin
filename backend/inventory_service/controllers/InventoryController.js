@@ -1969,6 +1969,7 @@ exports.getProductListCounts = [
         {
         
           var product1 = {
+            productCategory:product && product[0] && product[0].type,
             productName: product && product[0] && product[0].name,
             productId: product && product[0] && product[0].id,
             quantity: list && list[0] && list[j].quantity || 0,
