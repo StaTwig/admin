@@ -64,7 +64,7 @@ const EditRow = (props) => {
 
   return (
     <div className={`${idx > 0 ? `borderTop` : ``}`}>
-      <h6 className="ml-3 text-primary font-weight-bold">Product {idx + 1}</h6>
+      <h6 className="ml-3 text-info font-weight-bold">Product {idx + 1}</h6><br/>
       <div className="d-flex flex-column ml-5 itable">
         <div className="row mb-3">
           <div className={`row ${!addMore ? `col-10` : `col-12`}`}>
@@ -155,7 +155,7 @@ const EditRow = (props) => {
               {unitofMeasure.name ? <div>{unitofMeasure.name}</div> :<div className="placeholder_name">Unit</div>}</div>
           </div>
           {inventories.length > 1 && (
-            <div className="m-2 pl-3 pt-1">
+            <div className="m-2 pl-3 pt-1" style={{position:"relative", left:"10px"}}>
               <span
                 className="del-pad shadow border-none rounded-circle mr-1"
                 onClick={() => props.onRemoveRow(idx)}
@@ -182,7 +182,7 @@ const EditRow = (props) => {
         </div>
       </div>
       {addMore && (
-        <div className="d-flex ml-4 pl-2 itable w-100">
+        <div className="d-flex ml-4 pl-2 itable w-90">
           <div className=" rTable row col-12">
             <div className="row col-12 mb-2">
               <div className="col theader text-center pro">

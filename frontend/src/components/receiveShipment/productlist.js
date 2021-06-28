@@ -12,6 +12,7 @@ const ProductList = (props) => {
     const closeModalFail = () => {
         setError(false);
     };
+    //console.log("props in receive shipment",props);
     return (
         Object.keys(props.shipments).length === 0? <div className="row panel justify-content-between">N/A</div> :
             <div>
@@ -167,7 +168,7 @@ const ProductList = (props) => {
                         Batch Number
                         </div>
                         <div className="col-sm mb-2 text-secondary styler">
-                        {props.shipments.label.labelId}
+                        {props.shipments.products[0].batchNumber}
                         </div>
                         </div>
                         <div className="row">

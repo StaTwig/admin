@@ -507,3 +507,26 @@ exports.generateCodes = async function (req, res) {
     console.error(err);
   }
 };
+
+exports.getManufacturer =[
+  auth,
+  async (req, res) => {
+    try {
+      const name  = req.user.name;
+      const externalId=req.query.id
+      const manufacturer = await ProductModel.find({},'manufacturer').distinct('manufacturer');
+      console.log(manufacturer)
+      return apiResponse.successResponseWithData(
+        res,
+        'manufacturer',
+        manufacturer,
+      );
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< ShippingOrderService < ShippingController < getManufacturer : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];

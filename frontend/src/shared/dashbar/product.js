@@ -2,7 +2,7 @@ import React from 'react';
 
 const Product = props => {
     const { product, index } = props;
-
+//console.log("network",unitofMeasure)
     return (
         <div key={index} className="mb-1 subprod">
             <div className="text-primary mt-2" key={product.productId}>
@@ -25,7 +25,7 @@ const Product = props => {
                 }
                 <div className="row pb-1 pt-1">
                     <span className="col text-secondary">Quantity: </span>
-                    <span className="col font-weight-bold">{product.productQuantity ? product.productQuantity : product.quantity}<span>{"  ("}</span>{product.unitofMeasure && product.unitofMeasure.name ? <span>{product.unitofMeasure.name}</span>:""}<span>{")"}</span></span>
+                    <span className="col font-weight-bold">{product.productQuantity ? product.productQuantity : product.quantity}{" ("}{product.unitofMeasure?product.unitofMeasure.name:"N/A"}{")"}</span>
                 </div>
             </div>
         </div>

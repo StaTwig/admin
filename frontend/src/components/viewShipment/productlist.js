@@ -32,7 +32,7 @@ const ProductList = (props) => {
                             :
                             ''
                             }
-                            {/* <span>{"  ("}</span>{product.unitofMeasure && product.unitofMeasure.name ? <span>{product.unitofMeasure.name}</span>:""}<span>{")"}</span> */}
+                            <span>{"  ("}</span>{product.unitofMeasure && product.unitofMeasure.name ? <span>{product.unitofMeasure.name}</span>:""}<span>{")"}</span>
                             </li>
                             <li className="mb-1">{props.shipments.label.labelId}</li>
                     </ul>

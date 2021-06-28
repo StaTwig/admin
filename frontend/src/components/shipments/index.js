@@ -190,7 +190,7 @@ const ShipmentAnalytic = props => {
             <span>Create Purchase Order</span>
           </button> */}
           <Link to='/enterid'>
-            <button className="btn btn-orange fontSize20 font-bold mr-5 chain mt-2" disabled={status == "RECEIVED"}>
+            <button className="btn btn-orange fontSize20 font-bold mr-3 chain mt-2" disabled={status == "RECEIVED"}>
               <img src={update} width="20" height="17" className="mr-2 mb-1" />
               <span>Update Shipment</span>
             </button>

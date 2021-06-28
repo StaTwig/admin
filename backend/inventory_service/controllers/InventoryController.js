@@ -1969,6 +1969,7 @@ exports.getProductListCounts = [
         {
         
           var product1 = {
+            productCategory:product && product[0] && product[0].type,
             productName: product && product[0] && product[0].name,
             productId: product && product[0] && product[0].id,
             quantity: list && list[0] && list[j].quantity || 0,
@@ -2013,6 +2014,7 @@ exports.getProductDetailsByWarehouseId = [
           productId: product[0].id,
           manufacturer: product[0].manufacturer,
           quantity: list[j].quantity ? list[j].quantity : 0,
+          unitofMeasure:product[0].unitofMeasure
         };
         productArray.push(product1);
       }

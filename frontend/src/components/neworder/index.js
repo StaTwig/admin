@@ -105,6 +105,13 @@ const NewOrder = (props) => {
       // setSenderWarehouses(warehouses.data);
 
       const result = await getProducts();
+      setProducts(result.map(item => {
+        return {
+          value: item.name,
+          label: item.name,
+          ...item
+        };
+      }));
       const categoryArray = result.map(
         product => product.type,
       );
@@ -152,14 +159,7 @@ const NewOrder = (props) => {
       newArr[index]['quantity'] = '';
       setAddProducts(prod => [...newArr]);
       setFieldValue('products', newArr.map(row => ({ "productId": row.id, "id": row.id, "productQuantity": row?.productQuantity ? row?.productQuantity : 0, "name": row.name, "type": row.type, "manufacturer": row.manufacturer,"unitofMeasure":row.unitofMeasure })));
-    
-      setProducts(warehouse.data.map(item => {
-                                      return {
-                                        value: item.name,
-                                        label: item.name,
-                                        ...item
-                                      };
-                                    }));
+
     }
     catch (err) {
       setErrorMessage(err);
@@ -178,14 +178,14 @@ const NewOrder = (props) => {
     const prodIndex = products.findIndex(p => p.id === item.id);
     let newArray = [...products];
     newArray[prodIndex] = { ...newArray[prodIndex], isSelected: true };
-    setProducts(prod => [...newArray]);
+    // setProducts(prod => [...newArray]);
   }
 
   const onRemoveProduct = (index, setFieldValue) => {
     const prodIndex = products.findIndex(p => p.id === addProducts[index].id);
     let newArray = [...products];
     newArray[prodIndex] = { ...newArray[prodIndex], isSelected: false };
-    setProducts(prod => [...newArray]);
+    // setProducts(prod => [...newArray]);
     addProducts.splice(index, 1);
     let newArr = [...addProducts];
     if (newArr.length > 0)
