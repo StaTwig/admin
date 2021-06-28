@@ -10,7 +10,6 @@ RUN yarn run build
 
 FROM nginx:1.19-alpine
 
-
 COPY --from=react_build /app /usr/share/nginx/html
 
 # COPY . /usr/share/nginx/html

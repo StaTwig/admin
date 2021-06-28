@@ -17,6 +17,8 @@ services:
     image: 'address_service2.0'
     container_name: 'address_service'
     restart: always
+    env_file:
+      - ./env/admin.env
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -29,6 +31,8 @@ services:
     image: 'affliation_service2.0'
     container_name: 'affliate_service'
     restart: always
+    env_file:
+      - ./env/admin.env
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -42,6 +46,8 @@ services:
     image: 'rbac_service2.0'
     container_name: 'rbac_service'
     restart: always
+    env_file:
+      - ./env/admin.env
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -55,6 +61,8 @@ services:
     image: 'employee_service2.0'
     container_name: 'employee_service'
     restart: always
+    env_file:
+      - ./env/admin.env
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -68,6 +76,8 @@ services:
     image: 'configuration_service1.0'
     container_name: 'configuration_service'
     restart: always
+    env_file:
+      - ./env/admin.env
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
