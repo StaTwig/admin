@@ -337,6 +337,18 @@ const _getWarehouseIdsByOrgType = async (filters) => {
 	return warehouseIds;
 }
 
+function getFilterConditionsSkuOrgType(filters) {
+	let matchCondition = { status: 'ACTIVE' };
+	if (filters.orgType && filters.orgType !== '') {
+		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
+			matchCondition.type = filters.orgType;
+		} else if (filters.orgType === 'ALL_VENDORS') {
+			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }, { type: 'BREWERY' }];
+		}
+	}
+	return matchCondition;
+}
+
 function getFilterConditionsOrgType(filters) {
 	let matchCondition = { status: 'ACTIVE' };
 	if (filters.orgType && filters.orgType !== '') {
@@ -361,7 +373,7 @@ function getFilterConditionsOrgType(filters) {
 const _getWarehousesByOrgType = async (filters) => {
 	const warehouses = await OrganisationModel.aggregate([
 		{
-			$match: getFilterConditionsOrgType(filters)
+			$match: getFilterConditionsSkuOrgType(filters)
 		},
 		{
 			$unwind: {
@@ -442,7 +454,8 @@ function getDistrictConditionsWarehouse(filters) {
 
 const _getWarehouseIdsByDistrict = async (filters) => {
 	if(filters.orgType && filters.orgType !== '')
-	filters.warehouseIds = await _getWarehousesByOrgType(filters.orgType)
+		filters.warehouseIds = await _getWarehousesByOrgType(filters)
+	console.log(filters)
 	const warehouses = await WarehouseModel.aggregate([
 		{
 			$match: getDistrictConditionsWarehouse(filters)
@@ -1926,9 +1939,9 @@ exports.getStatsBySKU = [
 				if (analytic.data) {
 					// let temp = aggregateSalesStats(analytic.data);
 					let wIds;
-					if (filters.group_by === 'district')
-						wIds = await _getWarehouseIdsByDistrict({ district : analytic._id ,...filters});
-					else
+					if (filters.group_by === 'district'){
+						filters.district = analytic._id
+					}
 						wIds = await _getWarehouseIdsByDistrict(filters);
 					let temp = await getReturns(analytic.data, moment().startOf('month'), today, wIds);
 					temp['groupedBy'] = (analytic._id.toString()).includes('GMT') ? monthNames[moment(analytic._id).tz("Etc/GMT").month()] : analytic._id;
