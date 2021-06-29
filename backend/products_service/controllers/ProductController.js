@@ -341,7 +341,7 @@ exports.addProduct = [
                   shortName: req.body.shortName,
                   type: req.body.type,
                   manufacturer: req.body.manufacturer,
-                  //pricing:req.body.pricing,
+                  pricing:req.body.pricing,
                   //photoId: `http://${req.headers.host}/images/${req.body.name}.png`,
                   unitofMeasure:{
                     id:req.body.unitofMeasure.id,
