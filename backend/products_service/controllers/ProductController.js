@@ -146,7 +146,7 @@ exports.getProductInfo = [
             "<<<<< ProductService < ProductController < getProducts : token verifed successfully"
           );
           permission_request = {
-            result: result,
+            result: req.user.role,
             permissionRequired: "viewProductInfo",
           };
           checkPermissions(permission_request, async (permissionResult) => {
@@ -192,7 +192,7 @@ exports.addMultipleProducts = [
       checkToken(req, res, async (result) => {
         if (result.success) {
           permission_request = {
-            result: result,
+            result: req.user.role,
             permissionRequired: "addNewProduct",
           };
           checkPermissions(permission_request, async (permissionResult) => {
@@ -314,7 +314,7 @@ exports.addProduct = [
           );
 
           permission_request = {
-            result: result,
+            result: req.user.role,
             permissionRequired: "addNewProduct",
           };
           checkPermissions(permission_request, async (permissionResult) => {
@@ -393,7 +393,7 @@ exports.uploadImage = async function (req, res) {
   checkToken(req, res, async (result) => {
     if (result.success) {
       permission_request = {
-        result: result,
+        result: req.user.role,
         permissionRequired: "addProduct",
       };
       checkPermissions(permission_request, async (permissionResult) => {
