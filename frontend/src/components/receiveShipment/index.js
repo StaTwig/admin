@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { useSelector } from "react-redux";
 import { receiveApi, uploadImage } from "../../actions/shipmentActions";
 import { turnOn , turnOff } from '../../actions/spinnerActions';
@@ -14,6 +14,9 @@ import uploadWhite from "../../assets/icons/UploadWhite.svg";
 import { LOCAL_SERVER_URL_SHIPPINGORDER } from "../../config";
 import SuccessPopup from "./successPopup";
 import FailPopup from "./failPopup";
+import {fetchairwayBillNumber} from '../../actions/shipmentActions';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const ReceiveShipment = (props) => {
   let shipmentDetails = props.trackData.shipmentDetails;
@@ -35,9 +38,27 @@ const ReceiveShipment = (props) => {
   const [index, setIndex] = useState(0);
   const [message, setMessage] = useState("");
   const id = props.match.params.id;
-
+  const [inputValue, setInputValue] = React.useState('');
   const [openUpdatedStatus, setOpenUpdatedStatus] = useState(false);
   const [receiveShipmentModal, setreceiveShipmentModal] = useState(false);
+  const [transitNumberArray,settransitNumberArray] = useState([]);
+  useEffect(()=>{
+    async function fetchairwayBill(){
+      let temp_arr = await fetchairwayBillNumber();
+      settransitNumberArray(temp_arr.data);
+      console.log(temp_arr.data);
+    }
+    fetchairwayBill();
+  },[]);
+  const defaultProps = {
+    options: transitNumberArray,
+    getOptionLabel: (option) => option.airWayBillNo,
+  };
+  const flatProps = {
+    options: transitNumberArray.map((option) => option.airWayBillNo),
+  };
+  const [value, setValue] = React.useState(null);
+  
   const setFile = (evt) => {
     setPhotoUrl(URL.createObjectURL(event.target.files[0]));
     setPhoto(evt.target.files[0]);
@@ -135,7 +156,6 @@ const ReceiveShipment = (props) => {
       console.log(result.status);
     }
   };
-
   const closeModal = () => {
     setOpenUpdatedStatus(false);
     props.history.push("/viewshipment/" + id);
@@ -186,21 +206,39 @@ const ReceiveShipment = (props) => {
         </div>
         <div className="d-flex  flex-auto">
           <div className="panel commonpanle" style={{width:"32%"}}>
-            <div className="form-group"> 
+            <div className="form-group pt-2"> 
               <label className="mb-1 text-secondary pt-2">Shipment ID:</label>
               <input
                 name="id"
                 type="text"
-                className="form-control ml-5"
+                className="form-control ml-5 "
                 onChange={(e) => setshipmentId(e.target.value)}
                 size="35"
                 value={id}
               />
             </div>
           </div>
-          <div className="panel commonpanle ml-3" style={{width:"32%"}}>
+          <div className="panel commonpanle ml-3" style={{width:"32%",height:"100px"}}>
             <div className="form-group">
-            <label className="mb-1 text-secondary pt-2">Bill No:</label>
+            <label className="text-secondary mt-3 mr-3 pr-2">Transit No.</label>
+                        <div className="mb-2" style={{width: 300 }}>
+                        <Autocomplete 
+                          {...defaultProps}
+                          id="billNo"
+                          style={{position:"relative",top:"-20px"}}
+                          value={value}
+                          onChange={(event, newValue) => {
+                            setValue(newValue);
+                          }}
+                          billNo={billNo}
+                          onInputChange={(event, newInputValue) => {
+                            setBillNo(newInputValue);
+                          }}
+                          debug
+                          renderInput={(params) => <TextField {...params} name="billNo" label="Transit No." margin="normal" />}
+                        />
+                        </div>
+            {/* <label className="mb-1 text-secondary pt-2">Bill No:</label>
               <input
                 type="text"
                 className="form-control ml-5"
@@ -208,7 +246,7 @@ const ReceiveShipment = (props) => {
                 onChange={(e) => setBillNo(e.target.value)}
                 size="39"
                 value={billNo}
-              />
+              /> */}
             </div>
           </div>
         </div>
