@@ -19,8 +19,8 @@ const EditRow = props => {
     handleBatchChange,
     products
   } = props;
-  // console.log("propsinshipment",prod.unitofMeasure[0]==undefined ? null: "vi");
   
+  console.log(prod,"Edit rowt")
   const [productsList,setProductsList] = useState([]);
   const [quantityChecker,setQuantityChecker] = useState(1);
   useEffect(() => {
@@ -201,7 +201,7 @@ const handleChange = (value) =>
               id="checker"
               placeholder="Quantity"
               onKeyPress={numbersOnly}
-              value={prod.productQuantity}
+              value={prod.productQuantity-(prod.productQuantityDelivered==undefined?"0":prod.productQuantityDelivered)}
               
               onChange={(e) => {
               
