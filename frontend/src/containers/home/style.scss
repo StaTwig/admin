@@ -96,7 +96,7 @@
     background-repeat: no-repeat;
     background-position: top;
     background-size: 110%;
-    
+        
    
     @media (max-width: 1024px) {
       background: #fafafa;
@@ -106,7 +106,10 @@
     }
 
     h2 {
-      margin-bottom: 80px;
+      margin-top:0px;
+      margin-bottom: 50px;
+      position: relative;
+      top:-45px;
     }
 
     .rounded-images {
@@ -120,11 +123,16 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      position: relative;
+      top:-45px;
     }
 
     p {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 400;
+      position: relative;
+      top:-45px;
+      left:5px;
     }
 
     @media (max-width: 768px) {
@@ -136,7 +144,7 @@
 
       h2 {
         margin-bottom: 30px;
-        font-size: 25px;
+        font-size: 12px;
         text-align: center;
       }
     }
@@ -166,7 +174,7 @@
     }
   }
   .How_it_works {
-    margin-top: -20%;
+    margin-top: -10%;
     margin-left: -3%;
     margin-bottom: 12%;
     
@@ -185,6 +193,7 @@
       background-repeat: no-repeat;
       background-size: 100%;
       background-position: center;
+      margin-bottom: 50px;
 
       @media (max-width: 1024px) {
         height: 400px;
