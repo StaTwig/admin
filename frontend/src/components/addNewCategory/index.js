@@ -9,11 +9,10 @@ const AddCategory = (props) => {
   return (
     <div>
       <div className="addproduct" style={{overflow:"hidden"}}>
-        <h1 className="breadcrumb">ADD NEW CATEGORY</h1>
-            {/* <button className="btn btn-orange fontSize20 font-bold mt-1" style={{position:"relative ",left:"805px" }}> 
+        <h1 className="breadcrumb">ADD NEW CATEGORY</h1>         
+           {/* <button className="btn btn-orange fontSize20 font-bold mt-1" style={{position:"relative ",left:"805px" }}> 
               <span style={{ color: 'white'}}>+ Add New Category</span>
             </button> */}
-      
         <div className="card">
             <div className="card-body">
                 <div className="d-flex flex-row justify-content-left">         
@@ -22,11 +21,11 @@ const AddCategory = (props) => {
                   <img
                     name="photo"
                     src={uploadBlue}
-                    style={{height:"150px",width:"100px",marginLeft:"38px"}}
+                    style={{height:"150px",width:"100px",marginLeft:"43px"}}
                     className="rounded rounded-circle"
                   />
                 </div>
-                <label class="btn-primary btn browse pl-5">ADD IMAGE<input type='file' class="select"/> </label>
+                <label class="btn-primary btn browse pl-5 ml-2">ADD IMAGE<input type='file' class="select"/> </label>
                 </div>
              
                 <div className="col-7 mt-5">
@@ -61,10 +60,10 @@ const AddCategory = (props) => {
                   Cancel
 
                 </button>
-                <button className="btn btn-orange fontSize20 font-bold mb-0 mt-1">
+                </Link>
+                <button className="btn btn-orange fontSize20 font-bold mb-2 mt-0">
                     <span>+ Add New Category</span>
                 </button>
-                </Link>
         </div>
              
        </div>

@@ -9,7 +9,7 @@ import './style.scss';
 import ProductPopUp from './productPopUp'
 
 const AddProduct = props => {
-  const [manufacturer, setManufacturer] = useState('Select Manufacturer');
+  const [manufacturer, setManufacturer] = useState("Select Manufacturer");
   const [manufacturers, setManufacturers] = useState([]);
   const [productName, setProductName] = useState('');
   const [category, setCategory] = useState('');
@@ -24,7 +24,6 @@ const AddProduct = props => {
     setOpenCreatedInventory(false);
     props.history.push('/inventory');
   };
-
   useEffect(() => {
     async function fetchData() {
       const manufacturerResult = await getManufacturers();
@@ -32,7 +31,6 @@ const AddProduct = props => {
     }
     fetchData();
   }, []);
-
   const addProduct = async () => {
     const data = { manufacturer, productName, productCategory: category, productSubCategory: subCategory, storageConditions, description };
     let formData = new FormData();
@@ -89,7 +87,7 @@ const AddProduct = props => {
                   <DropdownButton
                     name={manufacturer}
                     onSelect={item => setManufacturer(item)}
-                    groups={[]}
+                    groups={manufacturers}
                   />
                 </div>
               </div>

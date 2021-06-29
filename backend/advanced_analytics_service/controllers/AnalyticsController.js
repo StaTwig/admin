@@ -115,7 +115,7 @@ async function getOnlyReturns(prod_id, from, to, warehouseIds) {
 	const breweries = await OrganisationModel.find({ "type": 'BREWERY', "status": "ACTIVE" }, 'id');
 	for (let b of breweries)
 		b_arr.push(b.id);
-
+	
 	let quantity = 0;
 	let params = {
 		'receiver.id': { $in: b_arr },
@@ -269,12 +269,8 @@ function getFilterConditions(filters) {
 
 function getFilterConditionsWarehouse(filters) {
 	let matchCondition = {};
-	if (filters.orgType && filters.orgType !== '') {
-		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
-			matchCondition.type = filters.orgType;
-		} else if (filters.orgType === 'ALL_VENDORS') {
-			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }];
-		}
+	if (filters.orgType && filters.orgType !== '' && filters.warehouseIds) {
+			matchCondition.id = { $in: [...filters.warehouseIds] };
 	}
 	if (filters.state && filters.state.length) {
 		matchCondition.state = filters.state;
@@ -341,6 +337,52 @@ const _getWarehouseIdsByOrgType = async (filters) => {
 	return warehouseIds;
 }
 
+function getFilterConditionsOrgType(filters) {
+	let matchCondition = { status: 'ACTIVE' };
+	if (filters.orgType && filters.orgType !== '') {
+		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
+			matchCondition.type = filters.orgType;
+		} else if (filters.orgType === 'ALL_VENDORS') {
+			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }, { type: 'BREWERY' }];
+		}
+	}
+	if (filters.state && filters.state.length) {
+		matchCondition.state = filters.state;
+	}
+	if (filters.district && filters.district.length) {
+		matchCondition["warehouseAddress.city"] = filters.district;
+	}
+	if (filters.organization && filters.organization.length) {
+		matchCondition.id = filters.organization;
+	}
+	return matchCondition;
+}
+
+const _getWarehousesByOrgType = async (filters) => {
+	const warehouses = await OrganisationModel.aggregate([
+		{
+			$match: getFilterConditionsOrgType(filters)
+		},
+		{
+			$unwind: {
+				path: "$warehouses"
+			}
+		},
+		{
+			$group: {
+				_id: '$warehouseIds',
+				'warehouseIds': {
+					$addToSet: "$warehouses"
+				}
+			}
+		}
+	]);
+	let warehouseIds = [];
+	if (warehouses && warehouses[0] && warehouses[0].warehouseIds) {
+		warehouseIds = warehouses[0].warehouseIds;
+	}
+	return warehouseIds;
+}
 
 const _getWarehouseIds = async (filters) => {
 	const warehouses = await WarehouseModel.aggregate([
@@ -363,21 +405,47 @@ const _getWarehouseIds = async (filters) => {
 	return warehouseIds;
 }
 
-
-function getDistrictConditionsWarehouse(district) {
-	let matchCondition = {};
-	if (district && district.length) {
-		matchCondition["warehouseAddress.city"] = district;
+const _getWarehouseIdByOrgType = async (filters) => {
+	if(filters.orgType && filters.orgType !== '')
+		filters.warehouseIds = await _getWarehousesByOrgType(filters)
+	const warehouses = await WarehouseModel.aggregate([
+		{
+			$match: getFilterConditionsWarehouse(filters)
+		},
+		{
+			$group: {
+				_id: '$id',
+				'warehouseIds': {
+					$addToSet: "$id"
+				}
+			}
+		}
+	]);
+	let warehouseIds = [];
+	if (warehouses.length > 0) {
+		warehouseIds = warehouses.map(a => a._id);
 	}
+	return warehouseIds;
+}
 
+function getDistrictConditionsWarehouse(filters) {
+	let matchCondition = {};
+	if (filters.district && filters.district.length) {
+		matchCondition["warehouseAddress.city"] = filters.district;
+	}
+	if (filters.orgType && filters.orgType !== '' && filters.warehouseIds) {
+		matchCondition.id = { $in: [...filters.warehouseIds] };
+}
 	return matchCondition;
 }
 
 
-const _getWarehouseIdsByDistrict = async (district) => {
+const _getWarehouseIdsByDistrict = async (filters) => {
+	if(filters.orgType && filters.orgType !== '')
+	filters.warehouseIds = await _getWarehousesByOrgType(filters.orgType)
 	const warehouses = await WarehouseModel.aggregate([
 		{
-			$match: getDistrictConditionsWarehouse(district)
+			$match: getDistrictConditionsWarehouse(filters)
 		},
 		{
 			$group: {
@@ -559,7 +627,7 @@ function getAnalyticsFilterConditions(filters, warehouseIds) {
 
 	let matchCondition = {
 		warehouseId: {
-			$in: [...warehouseIds]
+			$in: [...warehouseIds ]
 		}
 	};
 
@@ -861,7 +929,6 @@ exports.getStatsByBrand = [
 				},
 				{ $sort: { "_id.manufacturer": 1 } }
 			]);
-
 			const MasterProducts = await ProductModel.find({});
 
 			let Analytics = [];
@@ -869,7 +936,7 @@ exports.getStatsByBrand = [
 			let prevBrand = '';
 			const lastMonthStart = moment().subtract(1, 'months').startOf('month').format(DATE_FORMAT);
 			const lastMonthEnd = moment().subtract(1, 'months').endOf('month').format(DATE_FORMAT);
-
+			warehouseIds = await _getWarehouseIdByOrgType(filters);
 			for (const [index, product] of Products.entries()) {
 				if (prevBrand != product._id.manufacturer) {
 					if (!!Object.keys(arr).length) {
@@ -1860,9 +1927,9 @@ exports.getStatsBySKU = [
 					// let temp = aggregateSalesStats(analytic.data);
 					let wIds;
 					if (filters.group_by === 'district')
-						wIds = await _getWarehouseIdsByDistrict(analytic._id);
+						wIds = await _getWarehouseIdsByDistrict({ district : analytic._id ,...filters});
 					else
-						wIds = await _getWarehouseIdsByDistrict(filters.district);
+						wIds = await _getWarehouseIdsByDistrict(filters);
 					let temp = await getReturns(analytic.data, moment().startOf('month'), today, wIds);
 					temp['groupedBy'] = (analytic._id.toString()).includes('GMT') ? monthNames[moment(analytic._id).tz("Etc/GMT").month()] : analytic._id;
 					response.push(temp);
