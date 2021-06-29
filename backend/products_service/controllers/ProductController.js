@@ -320,18 +320,18 @@ exports.addProduct = [
           checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
               try {
-                console.log("file", req.file);
-                console.log("body", req.body);
-                const dir = `uploads`;
-                if (!fs.existsSync(dir)) {
-                  fs.mkdirSync(dir);
-                }
-                if (req.file) {
-                  await moveFile(
-                    req.file.path,
-                    `${dir}/${req.body.productName}.png`
-                  );
-                }
+                // console.log("file", req.file);
+                // console.log("body", req.body);
+                // const dir = `uploads`;
+                // if (!fs.existsSync(dir)) {
+                //   fs.mkdirSync(dir);
+                // }
+                // if (req.file) {
+                //   await moveFile(
+                //     req.file.path,
+                //     `${dir}/${req.body.productName}.png`
+                //   );
+                // }
 
                 const product_unique = uniqid("prod-");
                 const product = new ProductModel({
@@ -342,7 +342,11 @@ exports.addProduct = [
                   type: req.body.type,
                   manufacturer: req.body.manufacturer,
                   pricing:req.body.pricing,
-                  photoId: `http://${req.headers.host}/images/${req.body.name}.png`,
+                  //photoId: `http://${req.headers.host}/images/${req.body.name}.png`,
+                  unitofMeasure:{
+                    id:req.body.unitofMeasure.id,
+                    name:req.body.unitofMeasure.name
+                  },
                   characteristicSet: {
                     temperature_max: req.body.characteristicSet.temperature_max,
                     temperature_min: req.body.characteristicSet.temperature_min,
@@ -350,9 +354,10 @@ exports.addProduct = [
                     humidity_min: req.body.characteristicSet.humidity_min,
                     pressure_max: req.body.characteristicSet.pressure_max,
                     pressure_min: req.body.characteristicSet.pressure_min,
-                  },
+                  },                  
                 });
                 await product.save();
+                console.log(product)
 
                 return apiResponse.successResponseWithData(
                   res,
@@ -360,7 +365,7 @@ exports.addProduct = [
                   product
                 );
               } catch (e) {
-                return apiResponse.ErrorResponse(res, e);
+                return apiResponse.ErrorResponse(res, e.message);
               }
             } else {
               res.json("Sorry! User does not have enough Permissions");
@@ -379,7 +384,7 @@ exports.addProduct = [
         "error",
         "<<<<< ProductService < ProductController < addProduct : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
