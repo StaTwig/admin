@@ -442,7 +442,7 @@ function getDistrictConditionsWarehouse(filters) {
 
 const _getWarehouseIdsByDistrict = async (filters) => {
 	if(filters.orgType && filters.orgType !== '')
-	filters.warehouseIds = await _getWarehousesByOrgType(filters.orgType)
+	filters.warehouseIds = await _getWarehousesByOrgType(filters)
 	const warehouses = await WarehouseModel.aggregate([
 		{
 			$match: getDistrictConditionsWarehouse(filters)
@@ -1926,9 +1926,9 @@ exports.getStatsBySKU = [
 				if (analytic.data) {
 					// let temp = aggregateSalesStats(analytic.data);
 					let wIds;
-					if (filters.group_by === 'district')
-						wIds = await _getWarehouseIdsByDistrict({ district : analytic._id ,...filters});
-					else
+					if (filters.group_by === 'district'){
+						filters.district = analytic._id
+					}
 						wIds = await _getWarehouseIdsByDistrict(filters);
 					let temp = await getReturns(analytic.data, moment().startOf('month'), today, wIds);
 					temp['groupedBy'] = (analytic._id.toString()).includes('GMT') ? monthNames[moment(analytic._id).tz("Etc/GMT").month()] : analytic._id;
