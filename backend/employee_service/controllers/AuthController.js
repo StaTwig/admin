@@ -22,7 +22,6 @@ const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilio_service_id = process.env.TWILIO_SERVICE_ID;
 const client = require('twilio');
-// const fs = require("fs");
 const moveFile = require("move-file");
 const blockchain_service_url = process.env.URL;
 const stream_name = process.env.INV_STREAM;
@@ -33,7 +32,7 @@ const EmailContent = require('../components/EmailContent');
 const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const phoneRgex = /^\d{12}$/;
 
-const { uploadFile } = require("../helpers/s3");
+const { uploadFile , getFileStream } = require("../helpers/s3");
 const fs = require('fs');
 const util = require('util');
 const unlinkFile = util.promisify(fs.unlink);
@@ -1249,10 +1248,7 @@ exports.updateWarehouseAddress = [
 exports.uploadImage = async function (req, res) {
   checkToken(req, res, async (result) => {
     if (result.success) {
-      const {
-        data
-      } = result;
-      // var filename;
+      const {data} = result;
       const {
         id,
         type,
@@ -1260,38 +1256,8 @@ exports.uploadImage = async function (req, res) {
         action
       } = req.query;
 
-      //     const incrementCounter = await CounterModel.updateOne({
-      //       'counters.name': "employeeImage"
-      //     }, {
-      //       $inc: {
-      //         "counters.$.value": 1
-      //       }
-      //     })
-
-      //     const poCounter = await CounterModel.find({
-      //       "counters.name": "employeeImage"
-      //     }, {
-      //       "counters.name.$": 1
-      //     })
-      //     const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]))
-      //     try {
-      //       if (action == "STOREID")
-      //   filename = t.value + "-" + req.file.filename;
-      //       else if (action == "PROFILE")
-      //   filename = "PROFILE" + "-" +  data.id + ".png"
-      // else
-      //          filename = id + "-" + type + imageSide + "-" + t.format + t.value + ".png";	
-
-      // let dir = `/home/ubuntu/userimages`;
-      //       await moveFile(req.file.path, `${dir}/${filename}`);
-      //     } catch (e) {
-      //       console.log("Error in image upload", e);
-      //       res.status(403).json(e);
-      //     }
-
       try {
         const Upload = await uploadFile(req.file)
-        console.log(Upload)
         await unlinkFile(req.file.path)
         if (action == "KYCUPLOAD") {
           const update = await EmployeeModel.findOneAndUpdate({
@@ -1878,3 +1844,11 @@ exports.emailverify=[
     }
   },
 ];
+
+exports.Image=[
+  auth,
+  async(req,res)=>{
+  const FileStream = getFileStream(req.params.key);
+	FileStream.pipe(res)
+  }
+]
