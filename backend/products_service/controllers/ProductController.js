@@ -1,4 +1,5 @@
 const ProductModel = require("../models/ProductModel");
+const ConfigurationModel=require("../models/ConfigurationModel")
 const { body, validationResult } = require("express-validator");
 const checkPermissions = require("../middlewares/rbac_middleware")
   .checkPermissions;
@@ -529,9 +530,34 @@ exports.getManufacturer =[
     } catch (err) {
       logger.log(
         'error',
-        '<<<<< ShippingOrderService < ShippingController < getManufacturer : error (catch block)',
+        '<<<<< products_service < ProductController <getManufacturer : error (catch block)',
       );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
+
+exports.getIotEnabledStatus =[
+  auth,
+  async (req,res) =>{
+      try{
+          //const confId=req.query.id
+          const config= await ConfigurationModel.find({},'iot_enabled')
+          return apiResponse.successResponseWithData(
+            res,
+            'IotEnabledStatus',
+           config,
+          );
+
+
+      }catch(err){
+        logger.log(
+          'error',
+          '<<<<< products_service < ProductController < getIotEnabledStatus : error (catch block)',
+        );
+        return apiResponse.ErrorResponse(res, err.message);
+
+      }
+
+  }
+]
