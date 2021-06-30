@@ -37,7 +37,8 @@ const iSKUViewDetails = (props) => {
       }
       const result = await dispatch(
         getAnalyticsAllStats(
-          '?group_by=state' + (props.sku ? '&sku=' + props.sku : ''),
+          '?group_by=state' + (props.sku ? '&sku=' + props.sku : '')+'&brand=' + prop.manufacturer +'&pid=' +
+            (prop.id),
         ),
       );
       setAnalytics(result.data);
@@ -51,7 +52,7 @@ const iSKUViewDetails = (props) => {
   const changeSku = async (event) => {
     let sku = event.target.value;
     const result = await dispatch(
-      getAnalyticsAllStats('?group_by=state' + (sku ? '&sku=' + sku : '')),
+      getAnalyticsAllStats('?group_by=state' +'&brand=' + prop.manufacturer + (sku ? '&sku=' + sku : '')+'&pid=' + prop.id),
     );
     setAnalytics(result.data);
   };

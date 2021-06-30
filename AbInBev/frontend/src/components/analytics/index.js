@@ -56,7 +56,8 @@ const Analytics = (props) => {
   const [SKU, setSKU] = useState('');
   const [state, setState] = useState('');
   const [district, setDistrict] = useState('');
-  const [year, setYear] = useState(new Date().getFullYear());
+  // const [year, setYear] = useState(new Date().getFullYear());
+  const [year, setYear] = useState("");
   const [month, setMonth] = useState('');
   const [qtr, setQtr] = useState('');
   const [isActive, setIsActive] = useState('by_yearly');
