@@ -25,7 +25,7 @@ const CENTRAL_AUTHORITY_ADDRESS = null
 const blockchain_service_url = process.env.URL;
 const shipment_stream = process.env.SHIP_STREAM;
 const axios = require("axios");
-const { uploadFile } = require("../helpers/s3");
+const { uploadFile , getFileStream} = require("../helpers/s3");
 const fs = require('fs');
 const util = require('util');
 const unlinkFile = util.promisify(fs.unlink);
@@ -1554,32 +1554,9 @@ exports.uploadImage = async function (req, res) {
   checkToken(req, res, async (result) => {
     if (result.success) {
       const Id = req.query.id;
-      // const incrementCounter = await CounterModel.updateOne(
-      //   {
-      //     "counters.name": "shipmentImage",
-      //   },
-      //   {
-      //     $inc: {
-      //       "counters.$.value": 1,
-      //     },
-      //   }
-      // );
-      // console.log(incrementCounter)
-      // const poCounter = await CounterModel.find(
-      //   { "counters.name": "shipmentImage" },
-      //   { "counters.name.$": 1 }
-      // );
-      // console.log(poCounter)
-      // const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]));
       try {
-        // const filename = Id + "-" + t.format + t.value + ".png";
-        // let dir = `/home/ubuntu/shipmentimages`;
-
-        // await moveFile(req.file.path, `${dir}/${filename}`);
         const Upload = await uploadFile(req.file)
-        console.log(Upload)
         await unlinkFile(req.file.path)
-        console.log("Unlinked")
         const update = await ShipmentModel.findOneAndUpdate(
           { id: Id },
           { $push: { imageDetails: `${Upload.key}` } }, { new: true }
@@ -2752,3 +2729,10 @@ exports.fetchairwayBillNumber = [
   },
 ];
 
+exports.Image=[
+  auth,
+  async(req,res)=>{
+    const FileStream = getFileStream(req.params.key);
+    FileStream.pipe(res);
+  }
+]

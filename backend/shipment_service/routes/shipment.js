@@ -1,17 +1,16 @@
 const express = require("express");
 const multer = require("multer");
 const ShipmentController = require("../controllers/ShipmentController");
-var upload = multer({ dest: "uploads/" });
-// const Storage = multer.diskStorage({
-//   destination(req, file, callback) {
-//     callback(null, "/home/ubuntu/shipmentimages");
-//   },
-//   filename(req, file, callback) {
-//     callback(null, file.originalname);
-//   },
-// });
+const Storage = multer.diskStorage({
+  destination(req, file, callback) {
+    callback(null, "uploads/");
+  },
+  filename(req, file, callback) {
+    callback(null, Date.now() + '.jpg');
+  },
+});
 
-// const upload = multer({ storage: Storage });
+const upload = multer({ storage: Storage });
 
 const router = express.Router();
 
@@ -41,4 +40,5 @@ router.get("/fetchInboundShipments", ShipmentController.fetchInboundShipments); 
 router.get("/fetchOutboundShipments", ShipmentController.fetchOutboundShipments); // /fetchInboundShipments => Takes warehouseId from req.user header and filter based on the query params {date,to,from,status}
 router.get("/fetchSupplierAndReceiverList", ShipmentController.fetchSupplierAndReceiverList);
 router.get("/fetchairwayBillNumber", ShipmentController.fetchairwayBillNumber);
+router.get("/images/:key", ShipmentController.Image);
 module.exports = router;

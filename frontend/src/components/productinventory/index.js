@@ -72,9 +72,9 @@ const ProductInventory = props => {
         </div>
       </div>
       {enable && 
-      <div className="row mb-4">
+      <div className="row mb-4"> 
         {categoryArray.map(cat => 
-          <div className={`panel m-2 ${category == cat && `active`}`} onClick={() => changeType(cat)}>
+          <div className={`panel m-2 ${category == cat && `active`}`}style={{width:"15%"}} onClick={() => changeType(cat)}>
             <div className="flex flex-column">
               <div className=" picture truck-bg">
                 <img src={TotalInventoryAdded} alt="truck" />

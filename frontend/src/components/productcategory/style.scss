@@ -1,13 +1,18 @@
 @import "../../assets/styles/global.scss";
 
 .productcategory {
-  padding-right: 3rem;
-  padding-left: 5rem;
+  position:relative;
+  top:-22px;
+  margin-right: 0rem;
+  padding-left: 4rem;
+  overflow: hidden;
   @media (max-width: $md) {
     padding-right: 10px;
     padding-left: 10px;
   }
-
+  .breadcrumb{
+    margin-left: -0.5rem;
+  }
   .bg-grey{
     background-color: #d6d6d6 !important;
   }
