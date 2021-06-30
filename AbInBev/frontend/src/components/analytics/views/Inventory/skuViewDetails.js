@@ -37,8 +37,12 @@ const iSKUViewDetails = (props) => {
       }
       const result = await dispatch(
         getAnalyticsAllStats(
-          '?group_by=state' + (props.sku ? '&sku=' + props.sku : '')+'&brand=' + prop.manufacturer +'&pid=' +
-            (prop.id),
+          '?group_by=state' +
+            (props.sku ? '&sku=' + props.sku : '') +
+            '&brand=' +
+            prop.manufacturer +
+            '&pid=' +
+            prop.id,
         ),
       );
       setAnalytics(result.data);
@@ -52,7 +56,14 @@ const iSKUViewDetails = (props) => {
   const changeSku = async (event) => {
     let sku = event.target.value;
     const result = await dispatch(
-      getAnalyticsAllStats('?group_by=state' +'&brand=' + prop.manufacturer + (sku ? '&sku=' + sku : '')+'&pid=' + prop.id),
+      getAnalyticsAllStats(
+        '?group_by=state' +
+          '&brand=' +
+          prop.manufacturer +
+          (sku ? '&sku=' + sku : '') +
+          '&pid=' +
+          prop.id,
+      ),
     );
     setAnalytics(result.data);
   };
@@ -133,15 +144,21 @@ const iSKUViewDetails = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {analytics.map((analytic, index) => (
-                  <tr key={index}>
-                    <td scope="row">
-                      <span className="stateLink">{analytic.groupedBy}</span>
-                    </td>
-                    <td>{analytic.sales.toLocaleString('en-IN')}</td>
-                    <td>{analytic.returns.toLocaleString('en-IN')}</td>
+                {analytics.length == 0 ? (
+                  <tr>
+                    <td colspan="3">No Data found</td>
                   </tr>
-                ))}
+                ) : (
+                  analytics.map((analytic, index) => (
+                    <tr key={index}>
+                      <td scope="row">
+                        <span className="stateLink">{analytic.groupedBy}</span>
+                      </td>
+                      <td>{analytic.sales.toLocaleString('en-IN')}</td>
+                      <td>{analytic.returns.toLocaleString('en-IN')}</td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

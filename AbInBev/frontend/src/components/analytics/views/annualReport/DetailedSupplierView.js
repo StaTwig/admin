@@ -66,7 +66,12 @@ const DetailedSupplierView = (props) => {
         getAllOrganisationStats(
           '?orgType=' +
             (props?.Otype ? props.Otype : 'ALL_VENDORS') +
-            '&sku=' + (props.sku ? props.sku : prop.externalId) + '&pid=' + prop.id +'&brand=' + prop.manufacturer,
+            '&sku=' +
+            (props.sku ? props.sku : prop.externalId) +
+            '&pid=' +
+            prop.id +
+            '&brand=' +
+            prop.manufacturer,
         ),
       );
 
@@ -236,31 +241,37 @@ const DetailedSupplierView = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {analytics.map((analytic, index) => (
-                    <tr key={index}>
-                      <td scope="row">
-                        <div className="supplierImage justify-content-start">
-                          <img src={profile} className="displayImage" />
-                          <div className="supplierNames justify-content-start">
-                            <span>{analytic.name}</span>
-                            <br />
-                            <span
-                              className={`group ${analytic?.type?.toLowerCase()}group`}
-                            >
-                              {analytic.type} Vendor
-                            </span>
-                          </div>
-                        </div>
-                      </td>
-                      <td>Karnataka</td>
-                      <td>
-                        {!isNaN(analytic.analytics.actualReturns)
-                          ? analytic.analytics.actualReturns
-                          : 0}
-                        %
-                      </td>
+                  {analytics.length == 0 ? (
+                    <tr>
+                      <td colspan="3">No Data found</td>
                     </tr>
-                  ))}
+                  ) : (
+                    analytics.map((analytic, index) => (
+                      <tr key={index}>
+                        <td scope="row">
+                          <div className="supplierImage justify-content-start">
+                            <img src={profile} className="displayImage" />
+                            <div className="supplierNames justify-content-start">
+                              <span>{analytic.name}</span>
+                              <br />
+                              <span
+                                className={`group ${analytic?.type?.toLowerCase()}group`}
+                              >
+                                {analytic.type} Vendor
+                              </span>
+                            </div>
+                          </div>
+                        </td>
+                        <td>Karnataka</td>
+                        <td>
+                          {!isNaN(analytic.analytics.actualReturns)
+                            ? analytic.analytics.actualReturns
+                            : 0}
+                          %
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
