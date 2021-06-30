@@ -202,6 +202,9 @@ ConfigurationSchema = new mongoose.Schema(
         }
       },
     },
+    iot_enabled:{
+      type: Boolean
+    },
     integrations: {
       type: Object,
       properties: {

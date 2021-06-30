@@ -537,15 +537,15 @@ exports.getManufacturer =[
   },
 ];
 
-exports.getConfiguration =[
+exports.getIotEnabledStatus =[
   auth,
   async (req,res) =>{
       try{
-          const confId=req.query.id
-          const config= await ConfigurationModel.find({id:confId},'id monitoring.iot_sensors ')
+          //const confId=req.query.id
+          const config= await ConfigurationModel.find({},'iot_enabled')
           return apiResponse.successResponseWithData(
             res,
-            'Configuration',
+            'IotEnabledStatus',
            config,
           );
 
@@ -553,7 +553,7 @@ exports.getConfiguration =[
       }catch(err){
         logger.log(
           'error',
-          '<<<<< products_serrvice < ProductController < getConfiguration : error (catch block)',
+          '<<<<< products_serrvice < ProductController < getIotEnabledStatus : error (catch block)',
         );
         return apiResponse.ErrorResponse(res, err.message);
 
