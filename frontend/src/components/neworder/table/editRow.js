@@ -26,11 +26,23 @@ const EditRow = props => {
       var key = e.keyCode || e.which;
       key = String.fromCharCode(key);
     }
-    var regex = /[0-9]/;
-    if (!regex.test(key)) {
+    // console.log(e);
+    if(!e.target.value && key==0){
+      e.stopPropagation();
+      e.preventDefault();  
       e.returnValue = false;
-      if (e.preventDefault) e.preventDefault();
+      e.cancelBubble = true;
+      return false; 
     }
+    else{
+      var regex = /^\d*[0-9]\d*$/;
+      if (!regex.test(key)) {
+        e.returnValue = false;
+        if (e.preventDefault) e.preventDefault();
+      }
+    }
+    
+    
   }
 
 
@@ -79,7 +91,7 @@ const EditRow = props => {
                   placeholder="Product Name"
                   // defaultInputValue={prod.name?prod.name:"Product Name"}
                   onChange={(v) => handleProductChange(index, v)}
-                  options={products}
+                  options={products.filter(p=>p.type==prod.type)}
                 />
               </div>
               <div className="title recived-text align-self-center">{prod.id ? prod.id : <div className="placeholder_id">Product ID</div>}</div>

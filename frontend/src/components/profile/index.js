@@ -23,7 +23,7 @@ import {
 import { getWarehouseByOrgId } from "../../actions/productActions";
 import PopUpLocation from "./popuplocation";
 
-import Modal from "../../shared/modal";
+import Modal from "./modal/index";
 import { turnOff, turnOn } from "../../actions/spinnerActions";
 class Profile extends React.Component {
   constructor(props) {

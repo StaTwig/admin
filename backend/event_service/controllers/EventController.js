@@ -145,7 +145,9 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 			if (productManufacturer) {
 				elementMatchQuery[`productDetails.manufacturer`] = productManufacturer;
 			}
-
+			if(req.user.warehouseId){
+				elementMatchQuery[`employeeDetails.warehouseId`] = req.user.warehouseId;
+			}
 			if(category){
 				elementMatchQuery[`productDetails.type`] = category
 			}
@@ -154,9 +156,9 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 				if(status === 'RECEIVE')
 					LocalField = 'payloadData.data.products.productId'
 			}
-			if(organisationId){
-				elementMatchQuery[`actorOrgId`] = organisationId
-			}
+			// if(organisationId){
+			// 	elementMatchQuery[`actorOrgId`] = organisationId
+			// }
 			if(fromDateFilter){
 				elementMatchQuery[`createdAt`] = {
 					$gte: fromDateFilter
@@ -243,6 +245,13 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 			// }
 
 			let inventoryCount = await EventModal.aggregate([
+				{ $lookup: {        
+					from: 'employees',
+					localField: 'actorUserId',
+					foreignField: 'emailId',
+					as: 'employeeDetails',
+				 } },
+			{ "$unwind": '$employeeDetails' },
 				{ "$unwind": '$payloadData.data.products' },
 				{ $lookup: {        
 					   from: 'products',
@@ -259,6 +268,13 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 			inventoryCount = inventoryCount.length > 0 ? inventoryCount[0].myCount : 0
 			console.log(elementMatchQuery)
 			EventModal.aggregate([
+				{ $lookup: {        
+					from: 'employees',
+					localField: 'actorUserId',
+					foreignField: 'emailId',
+					as: 'employeeDetails',
+				 } },
+			{ "$unwind": '$employeeDetails' },
 				{ "$unwind": '$payloadData.data.products' },
 				{ $lookup: {        
 					   from: 'products',

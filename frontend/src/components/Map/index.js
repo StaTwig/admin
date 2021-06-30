@@ -59,12 +59,12 @@ const Map = (props) => {
       map = new mapboxgl.Map({
         container: mapContainerRef.current,
         style: 'mapbox://styles/mapbox/light-v10',
-        center: [ warehouseLocation.latitude, warehouseLocation.longitude],
-        zoom: 10
+        center: [parseFloat(warehouseLocation.longitude), parseFloat(warehouseLocation.latitude)],
+        zoom: 2
       });
       setLng(warehouseLocation.longitude);
-      setLat(warehouseLocation.latitude);
-      const coords = [warehouseLocation.latitude, warehouseLocation.longitude];
+      setLat(parseFloat(warehouseLocation.latitude));
+      const coords = [parseFloat(warehouseLocation.longitude), parseFloat(warehouseLocation.latitude)];
       newMarker = new mapboxgl.Marker().setLngLat(coords).addTo(map);
       markers.push(newMarker);
     }
@@ -76,13 +76,13 @@ const Map = (props) => {
             map = new mapboxgl.Map({
               container: mapContainerRef.current,
               style: 'mapbox://styles/mapbox/light-v10',
-              center: [w.location.latitude, w.location.longitude],
-              zoom: 10
+              center: [parseFloat(w.location.longitude), parseFloat(w.location.latitude)],
+              zoom: 2
             });
-            setLng(w.location.longitude);
-            setLat(w.location.latitude);
+            setLng(parseFloat(w.location.longitude));
+            setLat(parseFloat(w.location.latitude));
           }
-          const coords = [w.location.latitude, w.location.longitude];
+          const coords = [parseFloat(w.location.longitude), parseFloat(w.location.latitude) ];
           let color = colors[Math.floor(Math.random() * 3) + 1];
           let options = { color: color };
           if (warehouseLocation) {
@@ -92,7 +92,7 @@ const Map = (props) => {
               options.scale = 2;
             }
           }
-
+          
           newMarker = new mapboxgl.Marker(options).setLngLat(coords).addTo(map);
           markers.push(newMarker);
         }
@@ -109,8 +109,8 @@ const Map = (props) => {
               'type': 'LineString',
               'properties': {},
               'coordinates': [
-                [shipment?.receiver?.warehouse?.location?.latitude, shipment?.receiver?.warehouse?.location?.longitude],
-                [shipment?.supplier?.warehouse?.location?.latitude, shipment?.supplier?.warehouse?.location?.longitude]
+                [parseFloat(shipment?.receiver?.warehouse?.location?.longitude), parseFloat(shipment?.receiver?.warehouse?.location?.latitude)],
+                [parseFloat(shipment?.supplier?.warehouse?.location?.longitude), parseFloat(shipment?.supplier?.warehouse?.location?.latitude)]
               ]
             }
           }
@@ -139,19 +139,19 @@ const Map = (props) => {
       });
 
       newMarker = new mapboxgl.Marker()
-        .setLngLat([shipment?.receiver?.warehouse?.location?.latitude, shipment?.receiver?.warehouse?.location?.longitude])
+        .setLngLat([parseFloat(shipment?.receiver?.warehouse?.location?.longitude), parseFloat(shipment?.receiver?.warehouse?.location?.latitude)])
         .addTo(map);
         markers.push(newMarker);
       newMarker = new mapboxgl.Marker()
-        .setLngLat([shipment?.supplier?.warehouse?.location?.latitude, shipment?.supplier?.warehouse?.location?.longitude])
+        .setLngLat([parseFloat(shipment?.supplier?.warehouse?.location?.longitude), parseFloat(shipment?.supplier?.warehouse?.location?.latitude)])
         .addTo(map);
       markers.push(newMarker);
       
-      let popL = midPoint(shipment?.receiver?.warehouse?.location?.latitude, shipment?.receiver?.warehouse?.location?.longitude, shipment?.supplier?.warehouse?.location?.latitude, shipment?.supplier?.warehouse?.location?.longitude);
+      let popL = midPoint(parseFloat(shipment?.receiver?.warehouse?.location?.latitude), parseFloat(shipment?.receiver?.warehouse?.location?.longitude), parseFloat(shipment?.supplier?.warehouse?.location?.latitude), parseFloat(shipment?.supplier?.warehouse?.location?.longitude));
       setLng(popL.long);
       setLat(popL.lat);
       new mapboxgl.Popup({ offset: 25, className: 'popUp', closeOnClick: false })
-          .setLngLat([popL.lat, popL.long])
+          .setLngLat([popL.long, popL.lat])
           .setHTML(
             `<div class="pt-1 text-white pb-1 pl-2 pr-2">
               <div class="row"><span class="col-5 disabled">Shipment ID:</span> <span class=" col-3 font-weight-bold">${shipment.id}</span></div>

@@ -76,6 +76,16 @@ export const getShipmentIds = async () => {
     return [];
   }
 };
+export const fetchairwayBillNumber = async () => {
+  try {
+    const result = await axios.get(
+      `${config().fetchairwayBillNumber}`,
+    );
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
 
 export const getJourneyTrack = async (id) => {
   try {

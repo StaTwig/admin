@@ -74,7 +74,7 @@ const BatchExpiry = props => {
               <div className="col-2 txt txtBlue">{exp.products.name}</div>
               <div className="col-2 txt ">{exp.products.type}</div>
               <div className="col-2 txt ">{exp.products.manufacturer}</div>
-              <div className="col-1 txt ">{exp?.quantity ? exp.quantity : 0}</div>
+              <div className="col-1 txt ">{exp?.quantity ? exp.quantity : 0}{" ("}{exp.products.unitofMeasure? exp.products.unitofMeasure.name:"N/A"}{")"}</div>
               <div className="col-2 txt ">{exp.batchNumbers[0]}</div>
               <div className="col-2 txt ">{exp.attributeSet.mfgDate ? formatDate(exp.attributeSet.mfgDate) : ''}</div>
               <div className="col-1 txt ">{exp.attributeSet.expDate ? formatDate(exp.attributeSet.expDate) : ''}</div>

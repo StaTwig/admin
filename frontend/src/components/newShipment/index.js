@@ -625,7 +625,7 @@ const NewShipment = (props) => {
                         placeholder="Select Order ID"
                 
                         onChange={async(v) => {    
-                          // setfetchdisabled(true);
+                          setfetchdisabled(true);
                           setProducts(p => []);
                           setAddProducts(p => []);
                           setOrderIdSelected(true);
@@ -689,6 +689,10 @@ const NewShipment = (props) => {
                             products_temp[i].productID = 
                               result.poDetails[0].products[i].productId;
                             products_temp[i].batchNumber = '';
+                            products_temp[i].productQuantityDelivered = 
+                              result.poDetails[0].products[i].productQuantityDelivered;
+                            products_temp[i].productQuantityShipped = 
+                            result.poDetails[0].products[i].productQuantityShipped;
                           }
                           console.log(products_temp);
                          if (result.poDetails[0].products.length > 0) {
@@ -716,9 +720,9 @@ const NewShipment = (props) => {
                       onChange={handleChange}
                       value={values.shipmentID}
                     />
+                    <div  style={fetchdisabled? {pointerEvents: "none", opacity: "0.6"} : {}}>
                   <span style={{height:"25px",width:"50px"}}
                     className="btn btn-outline-info"
-                    disabled={fetchdisabled}
                     onClick={async()=>{
                       // setpofetchdisabled(true);
                       setProducts(p => []);
@@ -753,7 +757,7 @@ const NewShipment = (props) => {
                         // settoOrgLocLabel(wa?.warehouseAddress ? wa?.title + '/' + wa?.warehouseAddress?.firstLine + ", " + wa?.warehouseAddress?.city : wa?.title + '/' + wa.postalAddress)
 
                         let products_temp = result.products;
-
+                        
                         for (let i = 0; i < products_temp.length; i++) {
                           products_temp[i].manufacturer =
                             result.products[i].manufacturer;
@@ -763,12 +767,7 @@ const NewShipment = (props) => {
                             result.products[i].productQuantity;
                           products_temp[i].type =
                             result.products[i].productCategory;
-                          // products_temp[i].productID ="COM3";
-                          // products_temp[i].productId ="COM3";
-                          // products_temp[i].id ="COM3";
-                          // products_temp[i].name ="Comvac 3";
-                          // products_temp[i].type ="Vaccine";
-                            // result.products[i].productId;
+                          
                         }
                         console.log(products_temp);
                        if (result.products.length > 0) {
@@ -782,6 +781,7 @@ const NewShipment = (props) => {
                   >
                     <span style={{position:"relative",top:"-7px",fontSize:"12px",left:"-10px"}}>Fetch</span>
                   </span>
+                  </div>
                   </div>
                 </div>
                 </div>

@@ -1,9 +1,11 @@
 @import '../../assets/styles/global.scss';
 
-.vieworder {
-    padding-right: 3rem;
-    padding-left: 5rem;
-    @media (max-width: $md) {
+.revieworder {
+    position:relative;
+    top:-22px;
+    padding-right: 1rem;
+    padding-left: 2.5rem;
+      @media (max-width: $md) {
       padding-right: 10px;
       padding-left: 10px;
     }
@@ -14,8 +16,8 @@
       border-radius: 1rem;
     }
     .btn-outline-primary:hover{
-     color: #0093E9 !important;
-     border-color: #0093E9 !important;
+     color: white !important;
+     border-color:white !important;
     }
     .col{
       text-align: left;

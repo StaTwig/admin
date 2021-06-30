@@ -60,7 +60,7 @@ const Analytics = (props) => {
   const [month, setMonth] = useState('');
   const [qtr, setQtr] = useState('');
   const [isActive, setIsActive] = useState('by_yearly');
-  const [Otype, setOtype] = useState('All');
+  const [Otype, setOtype] = useState('ALL_VENDORS');
   const [selectedViewCode, setSelectedViewCode] = useState(
     'ANNUALREPORT_DASHBOARD',
   );
@@ -182,7 +182,6 @@ const Analytics = (props) => {
 
   const onModuleChange = (moduleCode, props) => {
     setFilters(moduleCode);
-
     setSelectedViewCode(moduleCode);
   };
 
@@ -203,7 +202,7 @@ const Analytics = (props) => {
     setYear(new Date().getFullYear());
     setMonth('');
     setQtr('');
-    setOtype('All');
+    setOtype('ALL_VENDORS');
     setParams({});
   };
 
@@ -487,13 +486,13 @@ const Analytics = (props) => {
                             )}
                         </div>
                       )}
-                    {selectedViewCode == 'SUPPLIER_DETAIL_VIEW' ||
-                      selectedViewCode == 'SKU_DETAIL_VIEW' ||
-                      (selectedViewCode == 'DETAILED_GEO_VIEW' && (
-                        <>
-                          <h3 className="filterSubHeading mt-3">Vendor</h3>
-                          <div className="btn-group filterButton mt-2 mb-4">
-                            {['All', 'S1', 'S2', 'S3'].map((otype, index) => (
+                    {(selectedViewCode == 'SUPPLIER_DETAIL_VIEW' ||
+                      selectedViewCode == 'BREWERY_DETAIL_VIEW') && (
+                      <>
+                        <h3 className="filterSubHeading mt-3">Vendor</h3>
+                        <div className="btn-group filterButton mt-2 mb-4">
+                          {['ALL_VENDORS', 'S1', 'S2', 'S3'].map(
+                            (otype, index) => (
                               <span
                                 key={index}
                                 className={`btn p-2 ${
@@ -502,12 +501,13 @@ const Analytics = (props) => {
                                 htmlFor={otype}
                                 onClick={() => changeOType(otype)}
                               >
-                                {otype}
+                                {otype == 'ALL_VENDORS' ? 'All' : otype}
                               </span>
-                            ))}
-                          </div>
-                        </>
-                      ))}
+                            ),
+                          )}
+                        </div>
+                      </>
+                    )}
                   </>
                 )}
 
@@ -595,7 +595,7 @@ const Analytics = (props) => {
 
                     <h3 className="filterSubHeading mt-3">Vendor</h3>
                     <div className="btn-group filterButton mt-2 mb-4">
-                      {['All', 'S1', 'S2', 'S3'].map((otype, index) => (
+                      {['ALL_VENDORS', 'S1', 'S2', 'S3'].map((otype, index) => (
                         <span
                           key={index}
                           className={`btn p-2 ${
@@ -604,7 +604,7 @@ const Analytics = (props) => {
                           htmlFor={otype}
                           onClick={() => changeOType(otype)}
                         >
-                          {otype}
+                          {otype == 'ALL_VENDORS' ? 'All' : otype}
                         </span>
                       ))}
                     </div>

@@ -20,6 +20,8 @@ export class MapContainer extends Component {
       s?.shipmentUpdates?.filter(s => s.status == 'RECEIVED').forEach(rs => {
         if (s?.receiver?.warehouse?.location?.latitude && s?.receiver?.warehouse?.location?.longitude && s?.receiver?.warehouse?.location?.latitude != "0" && s?.receiver?.warehouse?.location?.longitude != "0")
           points.push({ lat: parseFloat(s?.receiver?.warehouse?.location?.latitude), lng: parseFloat(s?.receiver?.warehouse?.location?.longitude) });
+        if (s?.supplier?.warehouse?.location?.latitude && s?.supplier?.warehouse?.location?.longitude && s?.supplier?.warehouse?.location?.latitude != "0" && s?.supplier?.warehouse?.location?.longitude != "0")
+          points.push({ lat: parseFloat(s?.supplier?.warehouse?.location?.latitude), lng: parseFloat(s?.supplier?.warehouse?.location?.longitude) });
       })
     });
     var bounds = new this.props.google.maps.LatLngBounds();
@@ -52,6 +54,19 @@ export class MapContainer extends Component {
                 name={row.receiver.warehouse.warehouseAddress.city}
                 // label={index}
                 position={{ lat: row.receiver.warehouse.location.latitude, lng: row.receiver.warehouse.location.longitude }} />
+              : null)
+          }
+          )
+        })}
+        {this.props.data.map((row, index) => {
+          return row?.shipmentUpdates?.filter(s => s.status == 'RECEIVED').map((r, i) => {
+            return (
+              row?.supplier?.warehouse?.location?.latitude && row?.supplier?.warehouse?.location?.longitude ?
+              <Marker
+                title={row.supplier.warehouse.title}
+                name={row.supplier.warehouse.warehouseAddress.city}
+                // label={index}
+                position={{ lat: row.supplier.warehouse.location.latitude, lng: row.supplier.warehouse.location.longitude }} />
               : null)
           }
           )

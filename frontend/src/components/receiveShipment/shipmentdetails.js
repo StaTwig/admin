@@ -57,7 +57,7 @@ const ShipmentDetails = (props) => {
      Organisation Location
      </div>
      <div class="col-sm mb-1 styler">
-     {props.shipments.supplier.org.postalAddress.split(',')[0]}
+     {props.shipments.supplier.warehouse.title}
      </div>
    </div>
    <div class="row">
@@ -80,7 +80,9 @@ const ShipmentDetails = (props) => {
 Organisation Location
 </div>
 <div class="col-sm mb-1 styler">
-{props.shipments.receiver.org.postalAddress.split(',')[0]}
+{/* {props.shipments.receiver.org.postalAddress.split(',')[0]} */}
+{props.shipments.receiver.warehouse.title}
+
 </div>
 </div>
            </div>

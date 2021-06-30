@@ -85,14 +85,14 @@ const ReviewOrder = props => {
   arr.push(order);
 
   return (
-    <div className="vieworder text-muted">
+    <div className="revieworder text-muted">
       <div className="d-flex justify-content-between">
         <h1 className="breadcrumb">REVIEW NEW ORDER</h1>
       </div>
-      <div className="mt-4">
+      <div className="">
         <div className=" p-3 m-3 bg-white shadow">
 
-          <span className="p-0 font-weight-bold" style={{color:"black"}}>Product Details</span>
+          <span className="mt-5 ml-3 font-weight-bold" style={{color:"black"}}>Product Details</span>
           <div className="row mt-3">
            {arr[0].length!=undefined?arr[0].map(element => {
                          return(  
@@ -100,7 +100,8 @@ const ReviewOrder = props => {
                           product={element?.products}
                         />
                          );
-            }):                         <ViewTable
+            }):                         
+            <ViewTable
             product={order?.products}
           />} 
           </div>

@@ -56,7 +56,7 @@ inventoryDetails.sort(function(a,b){
                   <div className="rTableCell" style={{position:"relative",left:'6%'}}>{inventory.productDetails.type}</div>
                   {/* <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.manufacturer}</div> */}
                   <div className="rTableCell " style={{position:"relative",left:'12%'}}> {formatDate(inventory.createdAt)}</div>
-                  <div className="rTableCell"  style={{position:"relative",left:'19%'}}>{inventory.inventoryQuantity}{"  "}<span>{inventory.productDetails.unitofMeasure.name}</span></div>                                 
+                  <div className="rTableCell"  style={{position:"relative",left:'19%'}}>{inventory.inventoryQuantity}{inventory.productDetails.unitofMeasure ? inventory.productDetails.unitofMeasure.name ? <span>{" ("}{inventory.productDetails.unitofMeasure.name}{")"}</span>: null:null}</div>                                 
                   <div className="rTableCell" style={{position:"relative", left:"19%", fontWeight:" 600 "}}>
                          {(inventory.eventTypePrimary !== 'ADD') ? (inventory.eventTypePrimary === 'RECEIVE' ? <div className="status secondary-bg bg-success"> Received</div> :  <div className="status secondary-bg bg-warning">Sent</div>) :  <div className="status secondary-bg bg-primary">Added</div>} 
                   </div>
@@ -92,12 +92,12 @@ inventoryDetails.sort(function(a,b){
                                              <TableCell align="left">{inventory.shipmentDetails.id}</TableCell></div>
                                       </TableRow>
                                       <TableRow>
-                                          <TableCell>From Organisation:</TableCell>
+                                          <TableCell>{inventory.eventTypePrimary === 'CREATE'?"To Organisation:":"From Organisation:" }</TableCell>
                                              <div className="">
                                              <TableCell align="left">{inventory.shipmentDetails.supplier.id}</TableCell></div>
                                       </TableRow>
                                       <TableRow>
-                                          <TableCell>From Location:</TableCell>
+                                          <TableCell>{inventory.eventTypePrimary === 'CREATE'?"To Location:":"From Location:" }</TableCell>
                                           <div className="">
                                           <TableCell align="left">{(inventory.actorOrgId === inventory.shipmentDetails.supplier.id) ? inventory.actorOrgAddress : inventory.secondaryOrgAddress}</TableCell></div>
                                       </TableRow>

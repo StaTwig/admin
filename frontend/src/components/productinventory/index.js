@@ -40,6 +40,7 @@ const ProductInventory = props => {
       setData(inventories.filter(r => r.inventoryQuantity <= 0));
     }
   }, [inventories, props]);
+  console.log("propscategory ",data)
 
   const changeType = (cat) => {
     setCategory(cat);
@@ -111,7 +112,7 @@ const ProductInventory = props => {
               <div className="col-3 txt txtBlue">{inv.products.name?inv.products.name:"N/A"}</div>
               <div className="col-3 txt ">{inv.products.type ? inv.products.type:"N/A"}</div>
               <div className="col-3 txt ">{inv.products.manufacturer?inv.products.manufacturer:"N/A"}</div>
-              <div className="col-3 txt ">{inv.inventoryDetails.quantity?inv.inventoryDetails.quantity:"N/A"}</div>
+              <div className="col-3 txt ">{inv.inventoryDetails.quantity?inv.inventoryDetails.quantity:"N/A"}{"  ("}{inv.products.unitofMeasure?inv.products.unitofMeasure.name:"N/A"}{")"}</div>
             </div>
           )}
           {data?.length === 0 && 

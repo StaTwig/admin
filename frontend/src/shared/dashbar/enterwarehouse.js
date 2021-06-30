@@ -16,7 +16,7 @@ const EnterWareHouse = props => {
   });
   const { warehouse, productArray } = props?.dashBarData;
   const { dashBarData } = props;
-
+  
   return (
     <div className="dashbar">
       <div>
