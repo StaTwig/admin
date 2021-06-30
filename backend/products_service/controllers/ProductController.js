@@ -530,7 +530,7 @@ exports.getManufacturer =[
     } catch (err) {
       logger.log(
         'error',
-        '<<<<< products_serrvice < ProductController <getManufacturer : error (catch block)',
+        '<<<<< products_service < ProductController <getManufacturer : error (catch block)',
       );
       return apiResponse.ErrorResponse(res, err.message);
     }
@@ -553,7 +553,7 @@ exports.getIotEnabledStatus =[
       }catch(err){
         logger.log(
           'error',
-          '<<<<< products_serrvice < ProductController < getIotEnabledStatus : error (catch block)',
+          '<<<<< products_service < ProductController < getIotEnabledStatus : error (catch block)',
         );
         return apiResponse.ErrorResponse(res, err.message);
 
