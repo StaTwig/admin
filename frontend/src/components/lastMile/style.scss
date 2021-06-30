@@ -1,5 +1,13 @@
 @import '../../assets/styles/global.scss';
-
+.lastmile{
+  position:relative;
+  margin-left:70px;
+  padding-right: 2rem;
+}
+.breadcrumb{
+  margin-left: 20px;
+  
+}
 .filter {
   .filter-item {
     flex: 1;
