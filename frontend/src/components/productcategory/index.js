@@ -14,7 +14,7 @@ const ProductCategory = props => {
     <div className="productcategory">
       <div className="d-flex justify-content-between">
         <h1 className="breadcrumb">PRODUCT CATEGORY</h1>
-        <div className="d-flex">
+        <div className="d-flex mr-5">
           <Link to="/addNewCategory">
             <button className="btn btn-yellow">
               <img src={Add} width="13" height="13" className="mr-2" />
@@ -55,7 +55,9 @@ const ProductCategory = props => {
         <div className="panel m-2 bg-grey align-items-center justify-content-center">
           <div className="flex flex-column">
             <div className=" pt-2 pb-2 d-flex row text-light">
+            <Link to="/addNewCategory">
               + Add New Category
+              </Link>
             </div>
           </div>
         </div>

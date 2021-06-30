@@ -72,7 +72,7 @@ const VerifyInventory = props => {
       </div>
       <div className="card">
         <div className="card-body">
-          <h5 className="head ml-3">Description Of Goods </h5>
+          <h5 className="head ml-1">Description Of Goods </h5>
           <div className="row  mt-4 pl-2">
             <span className="col-2 text-left"><img src={Product} width="16" height="16" /><span className="pl-1 text-muted">Product Name</span></span>
             <span className="col-2 text-left"><img src={Manufacturer} width="16" height="16" /><span className="pl-1 text-muted">Manufacturer</span></span>
