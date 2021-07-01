@@ -541,12 +541,12 @@ exports.getIotEnabledStatus =[
   auth,
   async (req,res) =>{
       try{
-          //const confId=req.query.id
-          const config= await ConfigurationModel.find({},'iot_enabled')
+          const confId="CONF000"
+          const config= await ConfigurationModel.find({id:confId},'iot_enabled')
           return apiResponse.successResponseWithData(
             res,
             'IotEnabledStatus',
-           config,
+           config[0],
           );
 
 
