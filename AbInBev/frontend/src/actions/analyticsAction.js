@@ -3,12 +3,10 @@ import { turnOff, turnOn } from './spinnerActions';
 import { config } from '../config';
 
 export const getAnalyticsAllStats = (param) => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       dispatch(turnOn());
-      const result = await axios.get(
-        config().getAnalyticsBySKUurl + param,
-      );
+      const result = await axios.get(config().getAnalyticsBySKUurl + param);
       dispatch(turnOff());
       return result.data;
     } catch (e) {
@@ -18,10 +16,8 @@ export const getAnalyticsAllStats = (param) => {
 };
 
 export const getOrgTypeStats = (param) => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
-      console.log(config().getOrganisationTypeStatsurl + param);
-      
       dispatch(turnOn());
       const result = await axios.get(
         config().getOrganisationTypeStatsurl + param,
@@ -41,7 +37,7 @@ export const getSupplierPerformanceByOrgType = (orgType) => {
   } else {
     queryParam = queryParam + '?supplierType=ALL';
   }
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       dispatch(turnOn());
       const result = await axios.get(
@@ -56,12 +52,10 @@ export const getSupplierPerformanceByOrgType = (orgType) => {
 };
 
 export const getAllStates = () => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       dispatch(turnOn());
-      const result = await axios.get(
-        config().getAllStates,
-      );
+      const result = await axios.get(config().getAllStates);
       dispatch(turnOff());
       return result.data;
     } catch (e) {
@@ -71,12 +65,10 @@ export const getAllStates = () => {
 };
 
 export const getAnalyticsByBrand = (cond = '') => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       dispatch(turnOn());
-      const result = await axios.get(
-        config().getAnalyticsByBrandurl+cond,
-      );
+      const result = await axios.get(config().getAnalyticsByBrandurl + cond);
       dispatch(turnOff());
       return result.data;
     } catch (e) {
@@ -86,12 +78,10 @@ export const getAnalyticsByBrand = (cond = '') => {
 };
 
 export const getAllBrands = () => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       dispatch(turnOn());
-      const result = await axios.get(
-        config().getAllBrandsurl,
-      );
+      const result = await axios.get(config().getAllBrandsurl);
       dispatch(turnOff());
       return result.data;
     } catch (e) {
@@ -101,12 +91,10 @@ export const getAllBrands = () => {
 };
 
 export const getAllOrganisationStats = (param = '') => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       dispatch(turnOn());
-      const result = await axios.get(
-        config().getOrganisationStatsurl + param,
-      );
+      const result = await axios.get(config().getOrganisationStatsurl + param);
       dispatch(turnOff());
       return result.data;
     } catch (e) {

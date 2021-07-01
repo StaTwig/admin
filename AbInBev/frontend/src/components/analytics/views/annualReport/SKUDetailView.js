@@ -60,8 +60,11 @@ const SKUDetailView = (props) => {
           '?sku=' +
             (props.sku ? props.sku : prop.externalId) +
             '&group_by=' +
-            (act || isActive ? 'district' : 'state') +'&pid=' +
-            (prop.id) +'&brand=' + prop.manufacturer +
+            (act || isActive ? 'district' : 'state') +
+            '&pid=' +
+            prop.id +
+            '&brand=' +
+            prop.manufacturer +
             qry,
         ),
       );
@@ -79,8 +82,6 @@ const SKUDetailView = (props) => {
           district,
       ),
     );
-    console.log(result.data);
-
     setSubAnalytics(result.data);
   };
 
@@ -224,51 +225,60 @@ const SKUDetailView = (props) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {analytics.map((analytic, index) => (
-                      <>
-                        <tr key={index}>
-                          <td scope="row">
-                            <span
-                              className="stateLink"
-                              onClick={() => {
-                                if (isActive)
-                                  getAnalyticsByType(analytic.groupedBy, index);
-                                else {
-                                  setIsActive(!isActive);
-                                  setDText('District');
-                                }
-                              }}
-                              // onClick={() => { setIsActive(!isActive); setDText('District'); }}
-                            >
-                              {analytic.groupedBy}
-                            </span>
-                          </td>
-                          <td>{analytic.sales.toLocaleString('en-IN')}</td>
-                          <td>{analytic.returns.toLocaleString('en-IN')}</td>
-                          <td>
-                            {analytic.targetSales.toLocaleString('en-IN')}
-                          </td>
-                          <td>
-                            {!isNaN(analytic.actualReturns)
-                              ? analytic.actualReturns
-                              : 0}
-                            %
-                          </td>
-                        </tr>
-                        {arrIndex === index &&
-                          subAnalytics?.map((sub, i) => (
-                            <tr key={i}>
-                              <td scope="row">{sub._id}</td>
-                              <td scope="row">&nbsp;</td>
-                              <td scope="row">
-                                {sub.returns.toLocaleString('en-IN')}
-                              </td>
-                              <td scope="row">&nbsp;</td>
-                              <td scope="row">&nbsp;</td>
-                            </tr>
-                          ))}
-                      </>
-                    ))}
+                    {analytics.length == 0 ? (
+                      <tr>
+                        <td colspan="5">No Data found</td>
+                      </tr>
+                    ) : (
+                      analytics.map((analytic, index) => (
+                        <>
+                          <tr key={index}>
+                            <td scope="row">
+                              <span
+                                className="stateLink"
+                                onClick={() => {
+                                  if (isActive)
+                                    getAnalyticsByType(
+                                      analytic.groupedBy,
+                                      index,
+                                    );
+                                  else {
+                                    setIsActive(!isActive);
+                                    setDText('District');
+                                  }
+                                }}
+                                // onClick={() => { setIsActive(!isActive); setDText('District'); }}
+                              >
+                                {analytic.groupedBy}
+                              </span>
+                            </td>
+                            <td>{analytic.sales.toLocaleString('en-IN')}</td>
+                            <td>{analytic.returns.toLocaleString('en-IN')}</td>
+                            <td>
+                              {analytic.targetSales.toLocaleString('en-IN')}
+                            </td>
+                            <td>
+                              {!isNaN(analytic.actualReturns)
+                                ? analytic.actualReturns
+                                : 0}
+                              %
+                            </td>
+                          </tr>
+                          {arrIndex === index &&
+                            subAnalytics?.map((sub, i) => (
+                              <tr key={i}>
+                                <td scope="row">{sub._id}</td>
+                                <td scope="row">&nbsp;</td>
+                                <td scope="row">
+                                  {sub.returns.toLocaleString('en-IN')}
+                                </td>
+                                <td scope="row">&nbsp;</td>
+                                <td scope="row">&nbsp;</td>
+                              </tr>
+                            ))}
+                        </>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
