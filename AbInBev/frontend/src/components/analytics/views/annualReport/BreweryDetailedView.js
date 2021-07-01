@@ -20,14 +20,14 @@ const BreweryDetailedView = (props) => {
         '?orgType=' +
         (props?.Otype ? props.Otype : 'ALL_VENDORS') +
         '&sku=' +
-        (props?.sku ? props.sku : prop.externalId);
+        (props?.sku ? props.sku : prop.externalId) + '&pid=' + prop.id +'&brand=' + prop.manufacturer;
         const result = await dispatch(getAllOrganisationStats(cond));
         let n = result.data.filter((a) => a.type == 'S1');
         for(let org of n){
           let cc = result.data.filter((a) => a.authority == org.id && (a.type == 'S2' || a.type == 'S3'));
           for (const c of cc) {
-            org.sales += parseInt(c.sales);  
-            org.return += parseInt(c.return);  
+            org.analytics.sales += parseInt(c.analytics.sales);
+            org.analytics.returns += parseInt(c.analytics.returns);
           }
         }
         setAnalytics(n);

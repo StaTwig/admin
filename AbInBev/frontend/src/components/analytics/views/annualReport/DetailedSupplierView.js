@@ -66,8 +66,7 @@ const DetailedSupplierView = (props) => {
         getAllOrganisationStats(
           '?orgType=' +
             (props?.Otype ? props.Otype : 'ALL_VENDORS') +
-            '?sku=' +
-            (props.sku ? props.sku : prop.externalId),
+            '&sku=' + (props.sku ? props.sku : prop.externalId) + '&pid=' + prop.id +'&brand=' + prop.manufacturer,
         ),
       );
 

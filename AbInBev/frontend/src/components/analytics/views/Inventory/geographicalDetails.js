@@ -48,7 +48,8 @@ const iGraphicalDetailedView = (props) => {
       const result = await dispatch(
         getAnalyticsAllStats(
           '?sku=' +
-            (props.sku ? props.sku : prop.externalId) +
+            (props.sku ? props.sku : prop.externalId) +'&pid=' +
+            (prop.id) +'&brand=' + prop.manufacturer +
             '&group_by=state',
         ),
       );
@@ -62,7 +63,8 @@ const iGraphicalDetailedView = (props) => {
       const result = await dispatch(
         getAnalyticsAllStats(
           '?sku=' +
-            (props.sku ? props.sku : prop.externalId) +
+            (props.sku ? props.sku : prop.externalId) +'&pid=' +
+            (prop.id) +'&brand=' + prop.manufacturer +
             '&group_by=district&state=' +
             sku,
         ),

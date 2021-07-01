@@ -60,7 +60,8 @@ const SKUDetailView = (props) => {
           '?sku=' +
             (props.sku ? props.sku : prop.externalId) +
             '&group_by=' +
-            (act || isActive ? 'district' : 'state') +
+            (act || isActive ? 'district' : 'state') +'&pid=' +
+            (prop.id) +'&brand=' + prop.manufacturer +
             qry,
         ),
       );
