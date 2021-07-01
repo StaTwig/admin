@@ -111,6 +111,7 @@ const Analytics = (props) => {
     setMonth(selectedMonth);
     const filter = { ...params };
     filter.month = selectedMonth;
+    filter.quarter = undefined;
     setParams(filter);
   };
 
@@ -119,6 +120,7 @@ const Analytics = (props) => {
     setQtr(selectedQuarter);
     const filter = { ...params };
     filter.quarter = selectedQuarter;
+    filter.month = undefined;
     setParams(filter);
   };
 
