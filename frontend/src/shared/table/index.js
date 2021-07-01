@@ -94,12 +94,14 @@ inventoryDetails.sort(function(a,b){
                                       <TableRow>
                                           <TableCell>{inventory.eventTypePrimary === 'CREATE'?"To Organisation:":"From Organisation:" }</TableCell>
                                              <div className="">
-                                             <TableCell align="left">{inventory.shipmentDetails.supplier.id}</TableCell></div>
+                                               <TableCell align="left">{inventory.eventTypePrimary === 'CREATE'?(inventory.shipmentDetails.receiver.id):(inventory.shipmentDetails.supplier.id)}</TableCell></div>
+
                                       </TableRow>
                                       <TableRow>
                                           <TableCell>{inventory.eventTypePrimary === 'CREATE'?"To Location:":"From Location:" }</TableCell>
                                           <div className="">
-                                          <TableCell align="left">{(inventory.actorOrgId === inventory.shipmentDetails.supplier.id) ? inventory.actorOrgAddress : inventory.secondaryOrgAddress}</TableCell></div>
+                                             <TableCell align="left">{inventory.eventTypePrimary === 'CREATE' ? (inventory.secondaryOrgAddress) : (inventory.secondaryOrgAddress)}</TableCell></div>
+
                                       </TableRow>
                                     </div>
                                          :
