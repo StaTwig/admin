@@ -55,7 +55,7 @@ const iGraphicalDetailedView = (props) => {
             props.Otype +
             '&brand=' +
             prop.manufacturer +
-            '&group_by=state',
+            '&group_by=state&inventory=true',
         ),
       );
       setAnalytics(result.data);
@@ -73,7 +73,7 @@ const iGraphicalDetailedView = (props) => {
             prop.id +
             '&brand=' +
             prop.manufacturer +
-            '&group_by=district&state=' +
+            '&group_by=district&inventory=true&state=' +
             sku,
         ),
       );
@@ -90,7 +90,7 @@ const iGraphicalDetailedView = (props) => {
         },
         {
           name: 'Total Bottle Pool',
-          count: n[0].returns,
+          count: n[0].inventory,
         },
       ]);
     }
@@ -205,7 +205,7 @@ const iGraphicalDetailedView = (props) => {
                   <Bar name="Sales" dataKey="sales" fill="#A344B7" />
                   <Bar
                     name="Total Bottle Pool"
-                    dataKey="returns"
+                    dataKey="inventory"
                     fill="#FDAB0F"
                   />
                 </BarChart>
@@ -270,7 +270,7 @@ const iGraphicalDetailedView = (props) => {
                         <span className="stateLink">{analytic.groupedBy}</span>
                       </td>
                       <td>{analytic.sales.toLocaleString('en-IN')}</td>
-                      <td>{analytic.returns.toLocaleString('en-IN')}</td>
+                      <td>{analytic.inventory.toLocaleString('en-IN')}</td>
                     </tr>
                   ))
                 )}

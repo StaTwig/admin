@@ -44,7 +44,7 @@ const GeographicalView = (props) => {
           else cond += '?';
           cond +=
             'date_filter_type=' +
-            props.params?.date_filter_type +
+            (props.params?.date_filter_type ? props.params?.date_filter_type : 'by_yearly') +
             '&year=' +
             props.params?.year +
             '&month=' +

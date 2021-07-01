@@ -2,6 +2,7 @@
 const AnalyticsModel = require("../models/AnalyticsModel");
 const ProductSKUModel = require("../models/ProductSKUModel");
 const ShipmentModel = require("../models/ShipmentModel");
+const InventoryModel = require("../models/InventoryModel");
 const auth = require("../middlewares/jwt");
 const OrganisationModel = require("../models/OrganisationModel");
 const WarehouseModel = require("../models/WarehouseModel");
@@ -10,6 +11,7 @@ const ProductModel = require("../models/ProductModel");
 const apiResponse = require("../helpers/apiResponse");
 const moment = require('moment');
 const { parse } = require("ipaddr.js");
+const { update } = require("../models/ProductSKUModel");
 
 require("dotenv").config();
 
@@ -128,8 +130,10 @@ async function getOnlyReturns(prod_id, from, to, warehouseIds) {
 			$gte: new Date(from),
 		},
 	}
+		
+	const shipments = await ShipmentModel.find(params);
 
-	const shipments = await ShipmentModel.find(params);		
+	
 	for (const Shipment of shipments) {
 		for (const product of Shipment.products)
 				if (product.productID == params['products.productID'])
@@ -140,6 +144,7 @@ async function getOnlyReturns(prod_id, from, to, warehouseIds) {
 
 async function getReturnsOrg(org, analytics, filters, from, to) {
 	if (!analytics.length) {
+		console.log("EMPTY ANALYTICS")
 		return {
 			sales: 0,
 			targetSales: 0,
@@ -458,7 +463,6 @@ function getDistrictConditionsWarehouse(filters) {
 const _getWarehouseIdsByDistrict = async (filters) => {
 	if(filters.orgType && filters.orgType !== '')
 		filters.warehouseIds = await _getWarehousesByOrgType(filters)
-	console.log(filters)
 	const warehouses = await WarehouseModel.aggregate([
 		{
 			$match: getDistrictConditionsWarehouse(filters)
@@ -911,8 +915,6 @@ exports.getAllBrands = [
 // 				Analytics
 // 			);
 // 		} catch (err) {
-// 			console.log(err);
-
 // 			return apiResponse.ErrorResponse(res, err);
 // 		}
 // 	}
@@ -954,8 +956,14 @@ exports.getStatsByBrand = [
 			let Analytics = [];
 			let arr = {};
 			let prevBrand = '';
-			const lastMonthStart = moment().subtract(1, 'months').startOf('month').format(DATE_FORMAT);
-			const lastMonthEnd = moment().subtract(1, 'months').endOf('month').format(DATE_FORMAT);
+			
+			let lastMonthStart = moment().subtract(1, 'months').tz("Etc/GMT").startOf('month');
+			let lastMonthEnd = moment().subtract(1, 'months').tz("Etc/GMT").endOf('month');
+			if (analyticsFilter?.uploadDate)
+				lastMonthStart = moment(analyticsFilter.uploadDate['$gte']).tz("Etc/GMT").subtract(1, 'months').startOf('month');
+			if (analyticsFilter?.uploadDate)
+				lastMonthEnd = moment(analyticsFilter.uploadDate['$lte']).tz("Etc/GMT").subtract(1, 'months').endOf('month');
+			
 			warehouseIds = await _getWarehouseIdByOrgType(filters);
 			for (const [index, product] of Products.entries()) {
 				if (prevBrand != product._id.manufacturer) {
@@ -978,10 +986,43 @@ exports.getStatsByBrand = [
 						p['sales'] = product.sales;
 						p['targetSales'] = parseInt(product.targetSales);
 						p['productId'] = product._id.id;
-						p['returns'] = await getOnlyReturns(prod.id, moment().startOf('month'), today, warehouseIds);
+						let to = today;
+						let from = moment().startOf('month');
+						if (analyticsFilter?.uploadDate)
+							to = analyticsFilter.uploadDate['$lte'];
+						if (analyticsFilter?.uploadDate)
+							from = analyticsFilter.uploadDate['$gte'];
+						p['returns'] = await getOnlyReturns(prod.id, from, to, warehouseIds);
 						p['returnRate'] = parseFloat(((parseInt(p['returns']) / parseInt(product.sales)) * 100)).toFixed(2);
 						// p['returnRatePrev'] = await calculatePrevReturnRatesNew(filters, product);
-						p['returnRatePrev'] = await getOnlyReturns(prod.id, lastMonthEnd, lastMonthStart, warehouseIds);
+						let prevAnalytic = await AnalyticsModel.aggregate([
+							{
+								$match: {
+									uploadDate: {
+										$lte: new Date(lastMonthEnd),
+										$gte: new Date(lastMonthStart),
+									},
+									brand: product._id.manufacturer,
+									productId: product._id.id
+								}
+							},
+							{
+								$group: {
+									_id: {
+										id: '$productId',
+										manufacturer: '$brand',
+									},
+									sales: { $sum: "$sales" },
+								}
+							}
+						]);
+						let prevSales = 0;
+						p['returnRatePrev'] = 0;
+						if (prevAnalytic.length) {
+							prevSales = prevAnalytic[0].sales;
+							let returnRatePrev = await getOnlyReturns(prod.id, lastMonthStart, lastMonthEnd, warehouseIds);
+							p['returnRatePrev'] = parseFloat(((parseInt(returnRatePrev) / parseInt(prevSales)) * 100)).toFixed(2);
+						}
 						product.product = p;
 					}
 				}
@@ -1258,8 +1299,6 @@ exports.getStatsByOrgType = [
 				organizations
 			);
 		} catch (err) {
-			console.log(err);
-
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
@@ -1526,6 +1565,7 @@ async function calculateLeadTimeByOrg(supplierOrg) {
 }
 
 async function calculateReturnRateByOrg(supplierOrg) {
+	try {
 	const warehouses = await OrganisationModel.aggregate([
 		{
 			$match: {
@@ -1563,7 +1603,7 @@ async function calculateReturnRateByOrg(supplierOrg) {
 	if (warehouses[0] && warehouses[0].warehouseIds) {
 		warehouseIds = warehouses[0].warehouseIds;
 	}
-
+	console.log("Warehouses",warehouseIds)
 	let Analytics = await AnalyticsModel
 		.find({
 			warehouseId: {
@@ -1574,16 +1614,22 @@ async function calculateReturnRateByOrg(supplierOrg) {
 	let totalReturns = 0;
 	let totalSales = 0;
 	let returnRate = 0;
+	today = new Date()
 	for (let analytic of Analytics) {
-		totalReturns = totalReturns + parseInt(analytic.returns);
+		//totalReturns = await getReturns(analytic.data, moment().startOf('month'), today, warehouseIds);
 		totalSales = totalSales + parseInt(analytic.sales);
 	}
-
+	console.log(Analytics)
+	totalReturns = await getReturnsOrg(supplierOrg, Analytics);
+	console.log(totalReturns)
 	if (totalReturns && totalSales) {
 		returnRate = parseFloat(((totalReturns / totalSales) * 100)).toFixed(2);
 	}
 	return returnRate;
+}
+catch(e) { console.log(e)
 
+}
 }
 
 async function calculateDirtyBottlesAndBreakage(supplierOrg) {
@@ -1642,16 +1688,28 @@ async function calculateDirtyBottlesAndBreakage(supplierOrg) {
 	let dirtyBottles = 0;
 	let breakage = 0;
 	for (let shipment of shipments) {
+		//console.log(shipment)
 		let shipmentUpdates = shipment.shipmentUpdates.filter(sh => sh.updateComment === 'Receive_comment_3');
 		if (shipmentUpdates.length) {
-			dirtyBottles = dirtyBottles + (shipment.rejectionRate ? shipment.rejectionRate : 0);
+			for(shipmentUpdate of shipmentUpdates) {
+			for(let product of shipmentUpdate.products){
+				console.log(product)
+			dirtyBottles = dirtyBottles + (product.rejectionRate ? product.rejectionRate : 0);
+				}
+			}
 		}
 
 		let damagedShipments = shipment.shipmentUpdates.filter(sh => sh.updateComment === 'Receive_comment_1' || sh.updateComment === 'Receive_comment_2');
 		if (damagedShipments.length) {
-			breakage = breakage + (shipment.rejectionRate ? shipment.rejectionRate : 0);
+			for(shipmentUpdate of shipmentUpdates) {
+			for(let product of shipmentUpdate.products){
+				console.log(product)
+			breakage = breakage + (product.rejectionRate ? product.rejectionRate : 0);
+			}
 		}
 	}
+	}
+	//console.log({ dirtyBottles: dirtyBottles, breakage: breakage })
 	return { dirtyBottles: dirtyBottles, breakage: breakage };
 }
 
@@ -1962,7 +2020,26 @@ exports.getStatsBySKU = [
 					}
 					let temp = await getReturns(analytic.data, from, to, wIds, filters);
 					temp['groupedBy'] = (analytic._id.toString()).includes('GMT') ? monthNames[moment(analytic._id).tz("Etc/GMT").month()]+' - '+moment(analytic._id).tz("Etc/GMT").year() : analytic._id;
-					temp['sortBy'] = (analytic._id.toString()).includes('GMT') ? y + (m < 10 ? '0'+m : m) : analytic._id;
+					temp['sortBy'] = (analytic._id.toString()).includes('GMT') ? y + (m < 10 ? '0' + m : m) : analytic._id;
+					if (filters?.inventory) {
+						let inventory = await InventoryModel.aggregate([
+							{
+								$unwind: "$inventoryDetails"
+							},
+							{
+								$match: {
+									'inventoryDetails.productId': filters.pid
+								}
+							},
+							{
+								$group: {
+									_id: '$inventoryDetails.productId',
+									quantity: { $sum: "$inventoryDetails.quantity" },
+								}
+							}
+						]);
+						temp['inventory'] = inventory.length ? inventory[0].quantity : 0;
+					}
 					response.push(temp);
 				}
 			}
@@ -1976,8 +2053,6 @@ exports.getStatsBySKU = [
 			return apiResponse.successResponseWithData(res, "Operation Success", response);
 
 		} catch (err) {
-			console.log(err);
-			
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
@@ -2041,7 +2116,6 @@ exports.getSalesTotalOfAllBrands = [
 			);
 
 		} catch (err) {
-			console.log(err);
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
@@ -2122,8 +2196,6 @@ exports.getMonthlySalesOfSkuByBrand = [
 				Analytics
 			);
 		} catch (err) {
-			console.log(err);
-
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}

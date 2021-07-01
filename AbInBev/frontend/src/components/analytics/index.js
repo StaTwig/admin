@@ -101,6 +101,8 @@ const Analytics = (props) => {
     setYear(selectedYear);
     const filter = { ...params };
     filter.year = selectedYear;
+    filter.quarter = undefined;
+    filter.month = undefined;
     setParams(filter);
   };
 
@@ -109,6 +111,7 @@ const Analytics = (props) => {
     setMonth(selectedMonth);
     const filter = { ...params };
     filter.month = selectedMonth;
+    filter.quarter = undefined;
     setParams(filter);
   };
 
@@ -117,6 +120,7 @@ const Analytics = (props) => {
     setQtr(selectedQuarter);
     const filter = { ...params };
     filter.quarter = selectedQuarter;
+    filter.month = undefined;
     setParams(filter);
   };
 
@@ -141,6 +145,8 @@ const Analytics = (props) => {
   const onTPChange = (value) => {
     const filter = { ...params };
     filter.date_filter_type = value;
+    filter.quarter = undefined;
+    filter.month = undefined;
     setIsActive(value);
     setParams(filter);
   };

@@ -2603,7 +2603,7 @@ exports.getInventoryProductsByOrganisation = [
   },
 ];
 
-function getFilterConditions(filters) {
+async function getFilterConditions(filters) {
   let matchCondition = {};
   if (filters.orgType && filters.orgType !== "") {
     if (
@@ -2616,11 +2616,57 @@ function getFilterConditions(filters) {
       matchCondition.$or = [{ type: "S1" }, { type: "S2" }];
     }
   }
-  if (filters.state && filters.state.length) {
-    matchCondition.state = filters.state;
-  }
-  if (filters.district && filters.district.length) {
-    matchCondition.district = filters.district;
+  if (filters.district && filters.district.length && !filters.organization) {
+    let matchWarehouseCondition = {};
+    matchCondition.status = 'ACTIVE';
+    if (filters.status && filters.status !== '') {
+      matchCondition.status = filters.status;
+    }
+    if (filters.state && filters.state !== '') {
+      matchWarehouseCondition["warehouseDetails.warehouseAddress.state"] = new RegExp('^'+filters.state+'$', "i");
+    }
+    if (filters.district && filters.district !== '') {
+      matchWarehouseCondition["warehouseDetails.warehouseAddress.city"] = new RegExp('^'+filters.district+'$', "i");
+    }
+
+    if (filters.orgType === "ALL_VENDORS") {
+      matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }];
+    } else {
+      matchCondition.orgType = filters.orgType;
+    }
+    console.log(matchCondition, matchWarehouseCondition);
+    const organisations = await OrganisationModel.aggregate([
+      {
+        $match: matchCondition,
+      },
+      {
+        $lookup: {
+          from: 'warehouses',
+          localField: 'id',
+          foreignField: 'organisationId',
+          as: 'warehouseDetails'
+        }
+      }, {
+        $unwind: '$warehouseDetails'
+      },
+      {
+        $match: matchWarehouseCondition
+       },
+      {
+        $project: {
+          id: 1,
+          name: 1,
+          type: 1
+        }
+      }
+    ]);
+      
+      let orgs = [];
+      console.log(organisations)
+      for(let org in organisations){
+        orgs.push(organisations[org]['id'])
+      }
+      matchCondition.id = { $in : [...orgs] }
   }
   if (filters.organization && filters.organization.length) {
     matchCondition.id = filters.organization;

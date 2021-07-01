@@ -37,13 +37,13 @@ const SKUDetailView = (props) => {
     (async () => {
       let qry = '';
       let act = true;
-      if (props.sku) {
-        let n = props.SKUStats.filter((a) => a.externalId == props.sku);
-        setProp(n[0]);
-        setName(n[0].name);
-        setShortname(n[0].shortName);
-        setImage(n[0].image);
-      }
+      // if (props.sku) {
+      //   let n = props.SKUStats.filter((a) => a.externalId == props.sku);
+      //   setProp(n[0]);
+      //   setName(n[0].name);
+      //   setShortname(n[0].shortName);
+      //   setImage(n[0].image);
+      // }
       if (props.params) {
         if (props.params?.state) qry += '&state=' + props.params.state;
         if (props.params?.district) {
