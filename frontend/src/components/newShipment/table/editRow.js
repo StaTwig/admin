@@ -138,8 +138,7 @@ const handleChange = (value) =>
                 /> */}
                 <Select
                   className="no-border"
-                  placeholder="Select Product Category"
-                  value={{label:prod.type?prod.type:"Select Product Category"}}
+                  placeholder={<div className="select-placeholder-text">Select Product Category</div>} 
                   defaultInputValue={prod.type}
                   onChange={(v) => handleCategoryChange(index, v.value)}
                   options={category}
@@ -164,9 +163,11 @@ const handleChange = (value) =>
                 } */}
                 {enableDelete ?
                 <Select
-                  className="no-border"
-                  placeholder="Select Product Name"
-                  defaultInputValue={prod.name}
+                className="no-border"
+                placeholder= {<div className= "select-placeholder-text" > Product Name </div>} 
+                value={{value: prod.id, label: prod.name}}
+                placeholder="Product Name"
+                   defaultInputValue={prod.name}
                   onChange={(v) => {
                     handleProductChange(index, v);
                     setQuantityChecker(1);
