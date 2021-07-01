@@ -21,6 +21,7 @@ import logo from "../../assets/brands/VaccineLedgerlogo.svg";
 import dropdownIcon from '../../assets/icons/dropdown_selected.png';
 import TextField from '@material-ui/core/TextField';
 import {verifyEmailAndPhoneNo} from "../../actions/userActions";
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 const FormPage = (props) => {
 const [organisations, setOrganisations] = useState([]);
@@ -350,7 +351,7 @@ const changeFn = (value_new,e) => {
                   )}
                   </div>
                   {
-                  props.errorMessage && <div className="alert alert-danger">{props.errorMessage}</div>
+                  props.errorMessage && <div className="mt-3 mr-4"> <Alert variant="filled" severity="error"><AlertTitle>Error</AlertTitle>{props.errorMessage}</Alert></div>
                   }
                   
                   <div className="text-center" >

@@ -378,7 +378,7 @@ const UpdateStatus = (props) => {
                 >
                   <label
                     class="btn btn-primary"
-                    style={{ margin: 0, height: "4vh" }}
+                    style={{ margin: 0, height: "5vh" }}
                   >
                     Browse Files
                     <input type="file" class="select" onChange={setFile} />{" "}
@@ -403,7 +403,7 @@ const UpdateStatus = (props) => {
                       className="btn btn-orange fontSize20 font-bold mr-4 product"
                       onClick={updateStatus}
                     >
-                      <span>UPDATE STATUS</span>
+                      <span>Update Status</span>
                     </button>
                   </div>
                 </div>

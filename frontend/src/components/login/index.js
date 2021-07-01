@@ -12,6 +12,8 @@ import eye from '../../assets/icons/eye.png';
 import Phone from "../../assets/icons/phone.png";
 import TextField from '@material-ui/core/TextField';
 import { Hidden } from '@material-ui/core';
+import { Alert, AlertTitle } from '@material-ui/lab';
+
 
 const FormLoginPage = (props) => {
   const { email, onEmailChange, errorMessage, onSendOtp, phone, onPhoneChange,emailFieldDisable,phoneFieldDisable } = props;
@@ -58,10 +60,10 @@ const FormLoginPage = (props) => {
                   </div>
                   <div className="card-title ml-3 mb-0 mt-3"><h5 style={{color:"#0093E9"}}>OR</h5></div>
                   <div className="form-group mt-0 ml-5 mr-3 p-1" style={{position:"relative", left:"-15px"},phoneFieldDisable ? {pointerEvents: "none", opacity: "0.5"} : {}}>
-                  <div className="form-group mt-0 ml-3 p-1" style={{position:"relative", left:"-25px"}}>
+                  <div className="form-group mt-0 ml-3 p-1" style={{position:"relative", left:"-30px"}}>
                         <img alt="Phone icon" src={Phone} height="20px" width="20px" />
                         </div>
-                        <div style={{position:"absolute", left:"-12px"}}>
+                        <div style={{position:"absolute", left:"-20px"}}>
                       <PhoneInput
                         country={"in"}
                         preferredCountries={['in']}
@@ -79,7 +81,8 @@ const FormLoginPage = (props) => {
                     
 
                   {
-                    errorMessage && <div className="alert alert-danger">{errorMessage}</div>
+                    errorMessage && 
+                    <div className="mb-3 ml-5 mr-4"> <Alert variant="filled" severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
                   }
                   <div className="text-center mt-2">
                     <button type="button" className="btn btn-primary" onClick={onSendOtp}>
