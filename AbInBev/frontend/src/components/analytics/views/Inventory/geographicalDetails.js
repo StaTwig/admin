@@ -48,8 +48,13 @@ const iGraphicalDetailedView = (props) => {
       const result = await dispatch(
         getAnalyticsAllStats(
           '?sku=' +
-            (props.sku ? props.sku : prop.externalId) +'&pid=' +
-            (prop.id) +'&brand=' + prop.manufacturer +
+            (props.sku ? props.sku : prop.externalId) +
+            '&pid=' +
+            prop.id +
+            '&orgType=' +
+            props.Otype +
+            '&brand=' +
+            prop.manufacturer +
             '&group_by=state',
         ),
       );
@@ -63,8 +68,11 @@ const iGraphicalDetailedView = (props) => {
       const result = await dispatch(
         getAnalyticsAllStats(
           '?sku=' +
-            (props.sku ? props.sku : prop.externalId) +'&pid=' +
-            (prop.id) +'&brand=' + prop.manufacturer +
+            (props.sku ? props.sku : prop.externalId) +
+            '&pid=' +
+            prop.id +
+            '&brand=' +
+            prop.manufacturer +
             '&group_by=district&state=' +
             sku,
         ),
@@ -87,7 +95,6 @@ const iGraphicalDetailedView = (props) => {
       ]);
     }
     setActive(!active);
-    // props.onViewChange('SKU_DETAIL_VIEW', { sku: sku });
   };
 
   return (
@@ -246,21 +253,27 @@ const iGraphicalDetailedView = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {analytics.map((analytic, index) => (
-                  <tr
-                    key={index}
-                    onClick={() => {
-                      setIsActive((i) => !i);
-                      openDetailView(analytic.groupedBy);
-                    }}
-                  >
-                    <td scope="row">
-                      <span className="stateLink">{analytic.groupedBy}</span>
-                    </td>
-                    <td>{analytic.sales.toLocaleString('en-IN')}</td>
-                    <td>{analytic.returns.toLocaleString('en-IN')}</td>
+                {analytics.length == 0 ? (
+                  <tr>
+                    <td colspan="3">No Data found</td>
                   </tr>
-                ))}
+                ) : (
+                  analytics.map((analytic, index) => (
+                    <tr
+                      key={index}
+                      onClick={() => {
+                        setIsActive((i) => !i);
+                        openDetailView(analytic.groupedBy);
+                      }}
+                    >
+                      <td scope="row">
+                        <span className="stateLink">{analytic.groupedBy}</span>
+                      </td>
+                      <td>{analytic.sales.toLocaleString('en-IN')}</td>
+                      <td>{analytic.returns.toLocaleString('en-IN')}</td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
