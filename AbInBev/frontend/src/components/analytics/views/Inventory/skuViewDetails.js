@@ -37,7 +37,7 @@ const iSKUViewDetails = (props) => {
       }
       const result = await dispatch(
         getAnalyticsAllStats(
-          '?group_by=state' +
+          '?group_by=state&inventory=true' +
             (props.sku ? '&sku=' + props.sku : '') +
             '&brand=' +
             prop.manufacturer +
@@ -57,7 +57,7 @@ const iSKUViewDetails = (props) => {
     let sku = event.target.value;
     const result = await dispatch(
       getAnalyticsAllStats(
-        '?group_by=state' +
+        '?group_by=state&inventory=true' +
           '&brand=' +
           prop.manufacturer +
           (sku ? '&sku=' + sku : '') +
@@ -155,7 +155,7 @@ const iSKUViewDetails = (props) => {
                         <span className="stateLink">{analytic.groupedBy}</span>
                       </td>
                       <td>{analytic.sales.toLocaleString('en-IN')}</td>
-                      <td>{analytic.returns.toLocaleString('en-IN')}</td>
+                      <td>{analytic.inventory.toLocaleString('en-IN')}</td>
                     </tr>
                   ))
                 )}

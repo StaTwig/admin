@@ -2,6 +2,7 @@
 const AnalyticsModel = require("../models/AnalyticsModel");
 const ProductSKUModel = require("../models/ProductSKUModel");
 const ShipmentModel = require("../models/ShipmentModel");
+const InventoryModel = require("../models/InventoryModel");
 const auth = require("../middlewares/jwt");
 const OrganisationModel = require("../models/OrganisationModel");
 const WarehouseModel = require("../models/WarehouseModel");
@@ -128,8 +129,10 @@ async function getOnlyReturns(prod_id, from, to, warehouseIds) {
 			$gte: new Date(from),
 		},
 	}
+		
+	const shipments = await ShipmentModel.find(params);
 
-	const shipments = await ShipmentModel.find(params);		
+	
 	for (const Shipment of shipments) {
 		for (const product of Shipment.products)
 				if (product.productID == params['products.productID'])
@@ -458,7 +461,6 @@ function getDistrictConditionsWarehouse(filters) {
 const _getWarehouseIdsByDistrict = async (filters) => {
 	if(filters.orgType && filters.orgType !== '')
 		filters.warehouseIds = await _getWarehousesByOrgType(filters)
-	console.log(filters)
 	const warehouses = await WarehouseModel.aggregate([
 		{
 			$match: getDistrictConditionsWarehouse(filters)
@@ -911,8 +913,6 @@ exports.getAllBrands = [
 // 				Analytics
 // 			);
 // 		} catch (err) {
-// 			console.log(err);
-
 // 			return apiResponse.ErrorResponse(res, err);
 // 		}
 // 	}
@@ -987,9 +987,9 @@ exports.getStatsByBrand = [
 						let to = today;
 						let from = moment().startOf('month');
 						if (analyticsFilter?.uploadDate)
-							to = analyticsFilter.uploadDate['$gte'];
+							to = analyticsFilter.uploadDate['$lte'];
 						if (analyticsFilter?.uploadDate)
-							from = analyticsFilter.uploadDate['$lte'];
+							from = analyticsFilter.uploadDate['$gte'];
 						p['returns'] = await getOnlyReturns(prod.id, from, to, warehouseIds);
 						p['returnRate'] = parseFloat(((parseInt(p['returns']) / parseInt(product.sales)) * 100)).toFixed(2);
 						// p['returnRatePrev'] = await calculatePrevReturnRatesNew(filters, product);
@@ -1019,7 +1019,7 @@ exports.getStatsByBrand = [
 						if (prevAnalytic.length) {
 							prevSales = prevAnalytic[0].sales;
 							let returnRatePrev = await getOnlyReturns(prod.id, lastMonthStart, lastMonthEnd, warehouseIds);
-							p['returnRatePrev'] = (returnRatePrev/prevSales) * 100;
+							p['returnRatePrev'] = parseFloat(((parseInt(returnRatePrev) / parseInt(prevSales)) * 100)).toFixed(2);
 						}
 						product.product = p;
 					}
@@ -1297,8 +1297,6 @@ exports.getStatsByOrgType = [
 				organizations
 			);
 		} catch (err) {
-			console.log(err);
-
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
@@ -2001,7 +1999,26 @@ exports.getStatsBySKU = [
 					}
 					let temp = await getReturns(analytic.data, from, to, wIds, filters);
 					temp['groupedBy'] = (analytic._id.toString()).includes('GMT') ? monthNames[moment(analytic._id).tz("Etc/GMT").month()]+' - '+moment(analytic._id).tz("Etc/GMT").year() : analytic._id;
-					temp['sortBy'] = (analytic._id.toString()).includes('GMT') ? y + (m < 10 ? '0'+m : m) : analytic._id;
+					temp['sortBy'] = (analytic._id.toString()).includes('GMT') ? y + (m < 10 ? '0' + m : m) : analytic._id;
+					if (filters?.inventory) {
+						let inventory = await InventoryModel.aggregate([
+							{
+								$unwind: "$inventoryDetails"
+							},
+							{
+								$match: {
+									'inventoryDetails.productId': filters.pid
+								}
+							},
+							{
+								$group: {
+									_id: '$inventoryDetails.productId',
+									quantity: { $sum: "$inventoryDetails.quantity" },
+								}
+							}
+						]);
+						temp['inventory'] = inventory.length ? inventory[0].quantity : 0;
+					}
 					response.push(temp);
 				}
 			}
@@ -2015,8 +2032,6 @@ exports.getStatsBySKU = [
 			return apiResponse.successResponseWithData(res, "Operation Success", response);
 
 		} catch (err) {
-			console.log(err);
-			
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
@@ -2080,7 +2095,6 @@ exports.getSalesTotalOfAllBrands = [
 			);
 
 		} catch (err) {
-			console.log(err);
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
@@ -2161,8 +2175,6 @@ exports.getMonthlySalesOfSkuByBrand = [
 				Analytics
 			);
 		} catch (err) {
-			console.log(err);
-
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
