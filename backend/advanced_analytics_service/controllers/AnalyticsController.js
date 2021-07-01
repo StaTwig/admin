@@ -954,8 +954,14 @@ exports.getStatsByBrand = [
 			let Analytics = [];
 			let arr = {};
 			let prevBrand = '';
-			const lastMonthStart = moment().subtract(1, 'months').startOf('month').format(DATE_FORMAT);
-			const lastMonthEnd = moment().subtract(1, 'months').endOf('month').format(DATE_FORMAT);
+			
+			let lastMonthStart = moment().subtract(1, 'months').tz("Etc/GMT").startOf('month');
+			let lastMonthEnd = moment().subtract(1, 'months').tz("Etc/GMT").endOf('month');
+			if (analyticsFilter?.uploadDate)
+				lastMonthStart = moment(analyticsFilter.uploadDate['$gte']).tz("Etc/GMT").subtract(1, 'months').startOf('month');
+			if (analyticsFilter?.uploadDate)
+				lastMonthEnd = moment(analyticsFilter.uploadDate['$lte']).tz("Etc/GMT").subtract(1, 'months').endOf('month');
+			
 			warehouseIds = await _getWarehouseIdByOrgType(filters);
 			for (const [index, product] of Products.entries()) {
 				if (prevBrand != product._id.manufacturer) {
@@ -978,10 +984,43 @@ exports.getStatsByBrand = [
 						p['sales'] = product.sales;
 						p['targetSales'] = parseInt(product.targetSales);
 						p['productId'] = product._id.id;
-						p['returns'] = await getOnlyReturns(prod.id, moment().startOf('month'), today, warehouseIds);
+						let to = today;
+						let from = moment().startOf('month');
+						if (analyticsFilter?.uploadDate)
+							to = analyticsFilter.uploadDate['$gte'];
+						if (analyticsFilter?.uploadDate)
+							from = analyticsFilter.uploadDate['$lte'];
+						p['returns'] = await getOnlyReturns(prod.id, from, to, warehouseIds);
 						p['returnRate'] = parseFloat(((parseInt(p['returns']) / parseInt(product.sales)) * 100)).toFixed(2);
 						// p['returnRatePrev'] = await calculatePrevReturnRatesNew(filters, product);
-						p['returnRatePrev'] = await getOnlyReturns(prod.id, lastMonthEnd, lastMonthStart, warehouseIds);
+						let prevAnalytic = await AnalyticsModel.aggregate([
+							{
+								$match: {
+									uploadDate: {
+										$lte: new Date(lastMonthEnd),
+										$gte: new Date(lastMonthStart),
+									},
+									brand: product._id.manufacturer,
+									productId: product._id.id
+								}
+							},
+							{
+								$group: {
+									_id: {
+										id: '$productId',
+										manufacturer: '$brand',
+									},
+									sales: { $sum: "$sales" },
+								}
+							}
+						]);
+						let prevSales = 0;
+						p['returnRatePrev'] = 0;
+						if (prevAnalytic.length) {
+							prevSales = prevAnalytic[0].sales;
+							let returnRatePrev = await getOnlyReturns(prod.id, lastMonthStart, lastMonthEnd, warehouseIds);
+							p['returnRatePrev'] = (returnRatePrev/prevSales) * 100;
+						}
 						product.product = p;
 					}
 				}
