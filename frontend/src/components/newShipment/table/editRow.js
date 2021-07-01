@@ -20,7 +20,7 @@ const EditRow = props => {
     products
   } = props;
   
-  console.log(prod,"Edit rowt")
+  console.log(prod,"Edit rowt");
   const [productsList,setProductsList] = useState([]);
   const [quantityChecker,setQuantityChecker] = useState(1);
   useEffect(() => {
@@ -220,11 +220,23 @@ const handleChange = (value) =>
           <div className="placeholder_id">Unit</div>}
         </div>
       </div>
-        {enableDelete && props.product.length > 1 &&
-          <div className="m-3 bg-light">
-          <span className="del-pad shadow border-none rounded-circle ml-2 " onClick={() => onRemoveRow(index)}><img className=" cursorP  p-1" height="30" src={Delete} /></span>
-          </div>
-        }
+      {
+        // enableDelete && props.product.length > 1 &&
+       //   <div className="m-3 bg-light">
+       //   <span className="del-pad shadow border-none rounded-circle ml-2 " onClick={() => onRemoveRow(index)}><img className=" cursorP  p-1" height="30" src={Delete} /></span>
+       //   </div>
+       }
+
+       {props.product.length > 1 && (
+         <div className="m-2 pl-3 pt-1" style={{position:"relative", left:"10px"}}>
+           <span
+             className="del-pad shadow border-none rounded-circle mr-1"
+             onClick={() => props.onRemoveRow(index)}
+           >
+             <img className="cursorP p-1" height="30" src={Delete} />
+           </span>
+         </div>
+       )}
       </div>
     // <div className="rTableRow"
     //   <div className="rTableCell">

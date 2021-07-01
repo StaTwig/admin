@@ -55,6 +55,7 @@ const NewShipment = (props) => {
   );
   const user = useSelector((state) => state.user);
   const [OrderDetails, setOrderDetails] = useState({});
+  const  [OrderProduct,setOrderProduct] = useState([]);
   const [po, setPo] = useState("");
   // const [shipmentDate, setShipmentDate] = useState("");
   // const [estimateDeliveryDate, setEstimateDeliveryDate] = useState("");
@@ -466,6 +467,26 @@ const NewShipment = (props) => {
     newArray[prodIndex] = { ...newArray[prodIndex], isSelected: true };
     setProducts((prod) => [...newArray]);
   };
+
+  const onRemoveRow = (index) => {
+
+    console.log(OrderDetails);
+    console.log("Hello!!");
+   // console.log(OrderDetails?.products);
+    const inventoryStateClone = JSON.parse(JSON.stringify(OrderDetails?.products));
+    inventoryStateClone.splice(index, 1);
+   // console.log(inventoryStateClone);
+    const cloneOrder = OrderDetails;
+    cloneOrder.products = inventoryStateClone; 
+    setOrderDetails(cloneOrder); 
+    setOrderProduct(inventoryStateClone);
+    console.log(OrderDetails);
+    
+  };
+
+
+
+
 // //console.log(allOrganisations,"All org");
 // async function fetchShipmentDetails(id){
 //   const result = await dispatch(getViewShipment(id));
@@ -1159,7 +1180,7 @@ const NewShipment = (props) => {
                 </div>
               </div>
             </div>
-
+                 
             <div className="row mb-3">
               <label htmlFor="productDetails" className="headsup">
                 Product Details
@@ -1174,7 +1195,7 @@ const NewShipment = (props) => {
                     handleBatchChange(v, i);
                   }}
                   enableDelete={false}
-                  onRemoveRow={(index) => {}}
+                  onRemoveRow={onRemoveRow}
                   handleLabelIdChange={handleLabelIdChange}
                 />
               )}
