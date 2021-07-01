@@ -11,6 +11,7 @@ const ProductModel = require("../models/ProductModel");
 const apiResponse = require("../helpers/apiResponse");
 const moment = require('moment');
 const { parse } = require("ipaddr.js");
+const { update } = require("../models/ProductSKUModel");
 
 require("dotenv").config();
 
@@ -143,6 +144,7 @@ async function getOnlyReturns(prod_id, from, to, warehouseIds) {
 
 async function getReturnsOrg(org, analytics, filters, from, to) {
 	if (!analytics.length) {
+		console.log("EMPTY ANALYTICS")
 		return {
 			sales: 0,
 			targetSales: 0,
@@ -1563,6 +1565,7 @@ async function calculateLeadTimeByOrg(supplierOrg) {
 }
 
 async function calculateReturnRateByOrg(supplierOrg) {
+	try {
 	const warehouses = await OrganisationModel.aggregate([
 		{
 			$match: {
@@ -1600,7 +1603,7 @@ async function calculateReturnRateByOrg(supplierOrg) {
 	if (warehouses[0] && warehouses[0].warehouseIds) {
 		warehouseIds = warehouses[0].warehouseIds;
 	}
-
+	console.log("Warehouses",warehouseIds)
 	let Analytics = await AnalyticsModel
 		.find({
 			warehouseId: {
@@ -1611,16 +1614,22 @@ async function calculateReturnRateByOrg(supplierOrg) {
 	let totalReturns = 0;
 	let totalSales = 0;
 	let returnRate = 0;
+	today = new Date()
 	for (let analytic of Analytics) {
-		totalReturns = totalReturns + parseInt(analytic.returns);
+		//totalReturns = await getReturns(analytic.data, moment().startOf('month'), today, warehouseIds);
 		totalSales = totalSales + parseInt(analytic.sales);
 	}
-
+	console.log(Analytics)
+	totalReturns = await getReturnsOrg(supplierOrg, Analytics);
+	console.log(totalReturns)
 	if (totalReturns && totalSales) {
 		returnRate = parseFloat(((totalReturns / totalSales) * 100)).toFixed(2);
 	}
 	return returnRate;
+}
+catch(e) { console.log(e)
 
+}
 }
 
 async function calculateDirtyBottlesAndBreakage(supplierOrg) {
@@ -1679,16 +1688,28 @@ async function calculateDirtyBottlesAndBreakage(supplierOrg) {
 	let dirtyBottles = 0;
 	let breakage = 0;
 	for (let shipment of shipments) {
+		//console.log(shipment)
 		let shipmentUpdates = shipment.shipmentUpdates.filter(sh => sh.updateComment === 'Receive_comment_3');
 		if (shipmentUpdates.length) {
-			dirtyBottles = dirtyBottles + (shipment.rejectionRate ? shipment.rejectionRate : 0);
+			for(shipmentUpdate of shipmentUpdates) {
+			for(let product of shipmentUpdate.products){
+				console.log(product)
+			dirtyBottles = dirtyBottles + (product.rejectionRate ? product.rejectionRate : 0);
+				}
+			}
 		}
 
 		let damagedShipments = shipment.shipmentUpdates.filter(sh => sh.updateComment === 'Receive_comment_1' || sh.updateComment === 'Receive_comment_2');
 		if (damagedShipments.length) {
-			breakage = breakage + (shipment.rejectionRate ? shipment.rejectionRate : 0);
+			for(shipmentUpdate of shipmentUpdates) {
+			for(let product of shipmentUpdate.products){
+				console.log(product)
+			breakage = breakage + (product.rejectionRate ? product.rejectionRate : 0);
+			}
 		}
 	}
+	}
+	//console.log({ dirtyBottles: dirtyBottles, breakage: breakage })
 	return { dirtyBottles: dirtyBottles, breakage: breakage };
 }
 
