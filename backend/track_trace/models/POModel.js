@@ -20,7 +20,7 @@ var POSchema = new mongoose.Schema({
   plant: {type: String},
   poItem: {type: String},
   products: {type: Array},
-  quantity: {type: String},
+  quantity: {type: Number},
   reference: {type: String},
   unit: {type: String},
   vendor: {type: String},
