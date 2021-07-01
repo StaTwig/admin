@@ -185,7 +185,7 @@ async function getReturnsOrg(org, analytics, filters, from, to) {
 	}
 	else {
 		const shipments = await ShipmentModel.find({
-			'receiver.id': org.id,
+			'supplier.id': org.id,
 			'status': 'RECEIVED',
 			createdAt: {
 				$lte: today,
@@ -1512,6 +1512,7 @@ async function calculateLeadTimeByOrg(supplierOrg) {
 				id: 1,
 				shippingDate: 1,
 				createdAt: 1,
+				updatedAt: 1,
 				actualDeliveryDate: {
 					$dateFromString: {
 						dateString: '$actualDeliveryDate'
@@ -1530,8 +1531,8 @@ async function calculateLeadTimeByOrg(supplierOrg) {
 				id: 1,
 				"leadtime": {
 					"$divide": [
-						{ "$subtract": ["$actualDeliveryDate", "$shippingDate"] },
-						60 * 1000 * 60
+						 {"$subtract": ["$updatedAt", "$createdAt"]},
+						60000
 					]
 				},
 
@@ -1566,44 +1567,45 @@ async function calculateLeadTimeByOrg(supplierOrg) {
 
 async function calculateReturnRateByOrg(supplierOrg) {
 	try {
-	const warehouses = await OrganisationModel.aggregate([
-		{
-			$match: {
-				id: supplierOrg.id
-			}
-		},
-		{
-			$group: {
-				_id: 'warehouses',
-				warehouses: {
-					$addToSet: '$warehouses'
-				}
-			}
-		},
-		{
-			$unwind: {
-				path: '$warehouses'
-			}
-		},
-		{
-			$unwind: {
-				path: '$warehouses'
-			}
-		},
-		{
-			$group: {
-				_id: 'warehouses',
-				warehouseIds: {
-					$addToSet: '$warehouses'
-				}
-			}
-		}
-	]);
-	let warehouseIds = [];
-	if (warehouses[0] && warehouses[0].warehouseIds) {
-		warehouseIds = warehouses[0].warehouseIds;
-	}
-	console.log("Warehouses",warehouseIds)
+	// const warehouses = await OrganisationModel.aggregate([
+	// 	{
+	// 		$match: {
+	// 			id: supplierOrg.id
+	// 		}
+	// 	},
+	// 	{
+	// 		$group: {
+	// 			_id: 'warehouses',
+	// 			warehouses: {
+	// 				$addToSet: '$warehouses'
+	// 			}
+	// 		}
+	// 	},
+	// 	{
+	// 		$unwind: {
+	// 			path: '$warehouses'
+	// 		}
+	// 	},
+	// 	{
+	// 		$unwind: {
+	// 			path: '$warehouses'
+	// 		}
+	// 	},
+	// 	{
+	// 		$group: {
+	// 			_id: 'warehouses',
+	// 			warehouseIds: {
+	// 				$addToSet: '$warehouses'
+	// 			}
+	// 		}
+	// 	}
+	// ]);
+	// let warehouseIds = [];
+	// if (warehouses[0] && warehouses[0].warehouseIds) {
+	// 	warehouseIds = warehouses[0].warehouseIds;
+	// }
+	let warehouseIds = await _getWarehouseIdsByOrg(supplierOrg);
+	// console.log("Warehouses",warehouseIds)
 	let Analytics = await AnalyticsModel
 		.find({
 			warehouseId: {
@@ -1619,9 +1621,26 @@ async function calculateReturnRateByOrg(supplierOrg) {
 		//totalReturns = await getReturns(analytic.data, moment().startOf('month'), today, warehouseIds);
 		totalSales = totalSales + parseInt(analytic.sales);
 	}
-	console.log(Analytics)
-	totalReturns = await getReturnsOrg(supplierOrg, Analytics);
-	console.log(totalReturns)
+	// console.log(Analytics)
+	let b_arr = [];
+	const breweries = await OrganisationModel.find({ "type": 'BREWERY', "status": "ACTIVE" }, 'id');
+	for (let b of breweries)
+		b_arr.push(b.id);
+
+	let quantity = 0;
+	let params = {
+		'receiver.id': { $in: b_arr },
+		'supplier.id': supplierOrg.id,
+		'status': 'RECEIVED'
+	}
+	const shipments = await ShipmentModel.find(params);
+	for (const Shipment of shipments) {
+		for (const product of Shipment.products)
+			quantity += product.productQuantityDelivered;
+	}
+	// totalReturns = await getReturnsOrg(supplierOrg, Analytics);
+	totalReturns = quantity;
+	// console.log(totalReturns)
 	if (totalReturns && totalSales) {
 		returnRate = parseFloat(((totalReturns / totalSales) * 100)).toFixed(2);
 	}
@@ -1701,7 +1720,7 @@ async function calculateDirtyBottlesAndBreakage(supplierOrg) {
 
 		let damagedShipments = shipment.shipmentUpdates.filter(sh => sh.updateComment === 'Receive_comment_1' || sh.updateComment === 'Receive_comment_2');
 		if (damagedShipments.length) {
-			for(shipmentUpdate of shipmentUpdates) {
+			for(shipmentUpdate of damagedShipments) {
 			for(let product of shipmentUpdate.products){
 				console.log(product)
 			breakage = breakage + (product.rejectionRate ? product.rejectionRate : 0);
@@ -1709,7 +1728,7 @@ async function calculateDirtyBottlesAndBreakage(supplierOrg) {
 		}
 	}
 	}
-	//console.log({ dirtyBottles: dirtyBottles, breakage: breakage })
+	console.log({ dirtyBottles: dirtyBottles, breakage: breakage })
 	return { dirtyBottles: dirtyBottles, breakage: breakage };
 }
 
@@ -1750,9 +1769,11 @@ async function calculateStorageCapacityByOrg(supplierOrg) {
 	let sqft = 0;
 	for (let w of warehouses) {
 		let newBottleCapacity = parseInt(w.bottleCapacity) ? parseInt(w.bottleCapacity) : 0;
-		bottleCapacity = bottleCapacity + newBottleCapacity;
+		bottleCapacity = newBottleCapacity;
+		// bottleCapacity = bottleCapacity + newBottleCapacity;
 		let newSQFT = parseInt(w.sqft) ? parseInt(w.sqft) : 0;
-		sqft = sqft + newSQFT;
+		// sqft = sqft + newSQFT;
+		sqft = newSQFT;
 	}
 
 	let storageCapacity = {
@@ -1768,7 +1789,7 @@ async function calculateStorageCapacityByOrg(supplierOrg) {
  * @returns {Object}
  */
 exports.getSupplierPerformance = [
-	auth,
+	// auth,
 	async function (req, res) {
 		try {
 			const orgType = req.query.supplierType;
