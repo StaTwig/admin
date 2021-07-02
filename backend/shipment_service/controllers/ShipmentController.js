@@ -373,24 +373,36 @@ exports.createShipment = [
 
               if (quantityMismatch) {
                 if(po.poStatus === 'CREATED' || po.poStatus === 'ACCEPTED'){
-                  let date = new Date(po.createdAt)
-                  let milliseconds = date.getTime(); 
-                  let d = new Date();
-                  let currentTime = d.getTime();
-                  let orderProcessingTime = currentTime - milliseconds;
-                  let shippedCount = await OrganisationModel.find({id: req.user.organisationId}).shippedCount;
-                  OrganisationModel.updateOne({id: req.user.organisationId}, { $set: {totalProcessingTime: orderProcessingTime, shippedCount: shippedCount + 1}})
+                  try{
+                    let date = new Date(po.createdAt)
+                    let milliseconds = date.getTime(); 
+                    let d = new Date();
+                    let currentTime = d.getTime();
+                    let orderProcessingTime = currentTime - milliseconds;
+                    let prevOrderCount = await OrganisationModel.find({id: req.user.organisationId});
+                    prevOrderCount = prevOrderCount.totalProcessingTime ? prevOrderCount.totalProcessingTime : 0;
+                    OrganisationModel.updateOne({id: req.user.organisationId}, { $set: {totalProcessingTime: prevOrderCount + orderProcessingTime}})  
+                  } catch (err){
+                    console.log('failed to set orderprocesstime')
+                    console.log(err);                  
+                  }
                 }
                 po.poStatus = "TRANSIT&PARTIALLYFULFILLED";
               } else {
                 if(po.poStatus === 'CREATED' || po.poStatus === 'ACCEPTED'){
-                  let date = new Date(po.createdAt)
-                  let milliseconds = date.getTime(); 
-                  let d = new Date();
-                  let currentTime = d.getTime();
-                  let orderProcessingTime = currentTime - milliseconds;
-                  let shippedCount = await OrganisationModel.find({id: req.user.organisationId}).shippedCount;
-                  OrganisationModel.updateOne({id: req.user.organisationId}, { $set: {totalProcessingTime: orderProcessingTime, shippedCount: shippedCount + 1}})
+                  try{
+                    let date = new Date(po.createdAt)
+                    let milliseconds = date.getTime(); 
+                    let d = new Date();
+                    let currentTime = d.getTime();
+                    let orderProcessingTime = currentTime - milliseconds;
+                    let prevOrderCount = await OrganisationModel.find({id: req.user.organisationId});
+                    prevOrderCount = prevOrderCount.totalProcessingTime ? prevOrderCount.totalProcessingTime : 0;
+                    OrganisationModel.updateOne({id: req.user.organisationId}, { $set: {totalProcessingTime: prevOrderCount + orderProcessingTime}})  
+                  } catch (err){
+                    console.log('failed to set orderpror')
+                    console.log(err);                  
+                  }
                 }
                 po.poStatus = "TRANSIT&FULLYFULFILLED";                        
               }
