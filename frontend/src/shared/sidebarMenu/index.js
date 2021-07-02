@@ -28,6 +28,25 @@ const SideBar = ({ match, location, user }) => {
             <span className="pt-2 text-center">Overview</span>
           </Link>
         </li>
+        {user.type == "CENTRAL_AUTHORITY" && (
+          <li className={url === "/organisation" ? "active" : ""}>
+            <Link to="/organisation">
+              <img
+                src={
+                  url === "/organisation"
+                    ? AffiliatedOrganisationSelectedIcon
+                    : AffiliatedOrganisationIcon
+                }
+                alt="Organisation"
+              />
+              <span className="pt-2 text-center">
+                Manage
+                <br />
+                Organisation
+              </span>
+            </Link>
+          </li>
+        )}
         <li
           className={
             url === "/address" || url === "/newaddress" ? "active" : ""
@@ -83,25 +102,6 @@ const SideBar = ({ match, location, user }) => {
             </span>
           </Link>
         </li>
-        {user.type == "CENTRAL_AUTHORITY" && (
-          <li className={url === "/organisation" ? "active" : ""}>
-            <Link to="/organisation">
-              <img
-                src={
-                  url === "/organisation"
-                    ? AffiliatedOrganisationSelectedIcon
-                    : AffiliatedOrganisationIcon
-                }
-                alt="Organisation"
-              />
-              <span className="pt-2 text-center">
-                Manage
-                <br />
-                Organisation
-              </span>
-            </Link>
-          </li>
-        )}
         <li className={url === "/configuration" ? "active" : ""}>
           <Link to="/configuration">
             <img

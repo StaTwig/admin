@@ -57,7 +57,7 @@ const Configurationpart = (props) => {
       orgTypeArray.push(data[i].name);
     }
   });
-
+  
   const onQuantityChange = (v, i, setFieldValue) => {
     let newArr = [...addProducts];
     newArr[i].quantity = v;
