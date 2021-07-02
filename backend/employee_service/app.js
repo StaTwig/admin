@@ -10,7 +10,7 @@ const apiResponse = require("./helpers/apiResponse");
 const cors = require("cors");
 const swaggerUi = require('swagger-ui-express');
 const openApiDocumentation = require('./openApiDocumentation');
-const {getFileStream} = require("./helpers/s3")
+// const {getFileStream} = require("./helpers/s3");
 // DB connection
 const MONGODB_URL = process.env.MONGODB_URL;
 const mongoose = require("mongoose");
@@ -50,10 +50,10 @@ app.use(cors());
 //Route Prefixes
 app.use("/", indexRouter);
 app.use("/usermanagement/api/", apiRouter);
-app.get('/usermanagement/api/auth/images/:key', (req, res) => {
-	const FileStream = getFileStream(req.params.key);
-	FileStream.pipe(res)
-	});
+// app.get('/usermanagement/api/auth/images/:key', (req, res) => {
+// 	const FileStream = getFileStream(req.params.key);
+// 	FileStream.pipe(res)
+// 	});
 
 // throw 404 if URL not found
 app.all("*", function(req, res) {

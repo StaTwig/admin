@@ -183,16 +183,13 @@ return (
       
 <div> 
 <div>
-<div className="addproduct" style={{position:"relative",left:"-22px",top:"-20px"}}>
+<div className="lastmile" style={{position:"relative",left:"-22px",top:"-20px"}}>
     <h1 className="breadcrumb">LAST MILE</h1>
-    <div className="float-right" style={{position:"absolute",left:"55rem",top:"0vh"}}>
-    <button className="btn btn-md btn-main-blue ml-5">
-            <div className="d-flex align-items-center">
+    {/* <button className="btn btn-md btn-main-blue float-center ml-5"> 
               <img src={ExportIcon} width="16" height="16" className="mr-3" />
               <span>Export</span>
               <img src={dropdownIcon} width="12" height="12" className="ml-3" />
-            </div>
-          </button></div>
+</button> */}
     <div className="row">
     <div className="col tab" style={{width:"100%"}}>
     <div className="">

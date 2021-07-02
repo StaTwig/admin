@@ -62,8 +62,8 @@ const EditRow = props => {
                 <Select 
                   className="no-border"
                   placeholder={<div className="select-placeholder-text">Select Product Category</div>} 
-                  
-                  defaultInputValue={prod.type}
+                  value={{value: prod.type, label: prod.type}}
+
                   onChange={(v) => handleCategoryChange(index, v.value)}
                   options={category}
                 />
@@ -80,10 +80,8 @@ const EditRow = props => {
                   onSelect={item => { handleProductChange(index, item) }}
                   groups={products}
                 /> */}
-
-                {
-                  console.log(prod.name==="")
-                }
+                
+                             
                 <Select
                   className="no-border"
                   placeholder= {<div className= "select-placeholder-text" > Product Name </div>} 
@@ -105,12 +103,8 @@ const EditRow = props => {
               className="form-control text-center"
               placeholder="Enter Quantity"
               onKeyPress={numbersOnly}
-              value={prod.productQuantity ? prod.productQuantity : prod.quantity}
-              onChange={(e) =>{
-                handleQuantityChange(e.target.value, index);
-                if(e.target.value==="0")
-                  prod.productQuantity="";
-              }}
+              value={prod.productQuantity ? prod.productQuantity : ""}
+              onChange={(e) =>{handleQuantityChange(e.target.value, index)}}
             />
           </div>
         </div>

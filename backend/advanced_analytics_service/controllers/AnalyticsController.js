@@ -2,6 +2,7 @@
 const AnalyticsModel = require("../models/AnalyticsModel");
 const ProductSKUModel = require("../models/ProductSKUModel");
 const ShipmentModel = require("../models/ShipmentModel");
+const InventoryModel = require("../models/InventoryModel");
 const auth = require("../middlewares/jwt");
 const OrganisationModel = require("../models/OrganisationModel");
 const WarehouseModel = require("../models/WarehouseModel");
@@ -10,6 +11,7 @@ const ProductModel = require("../models/ProductModel");
 const apiResponse = require("../helpers/apiResponse");
 const moment = require('moment');
 const { parse } = require("ipaddr.js");
+const { update } = require("../models/ProductSKUModel");
 
 require("dotenv").config();
 
@@ -28,7 +30,7 @@ lastYear.setDate(today.getDate() - 365)
 
 var timeFrame = moment().subtract(1, 'months');
 
-async function getReturns(analytics, from, to, warehouseIds) {
+async function getReturns(analytics, from, to, warehouseIds, filters) {
 	if (!analytics.length) {
 		return {
 			sales: 0,
@@ -44,11 +46,12 @@ async function getReturns(analytics, from, to, warehouseIds) {
 
 	let quantity = 0;
 	const row = analytics[0];
-	const Products = await ProductModel.find({ externalId: row.productId, manufacturer: row.brand });
-	for (const prod of Products) {
+	// const Products = await ProductModel.find({ externalId: row.productId, manufacturer: row.brand });
+	// const Products = await ProductModel.find({ id: filters.pid });
+	// for (const prod of Products) {
 		let params = {
 			'receiver.id': { $in: b_arr },
-			'products.productID': prod.id,
+			'products.productID': filters.pid,
 			'supplier.locationId': { $in: warehouseIds },
 			'status': 'RECEIVED',
 			createdAt: {
@@ -59,11 +62,11 @@ async function getReturns(analytics, from, to, warehouseIds) {
 
 		const shipments = await ShipmentModel.find(params);
 		for (const Shipment of shipments) {
-			for (let product in Shipment.products)
-				if (Shipment['products'][product].productID == params['products.productID'])
-					quantity += Shipment['products'][product].productQuantityDelivered;
+			for (const product of Shipment.products)
+				if (product.productID == params['products.productID'])
+				quantity += product.productQuantityDelivered;
 		}
-	}
+	// }
 	let sales = analytics.map(item => parseInt(item.sales) || 0).reduce((prev, next) => prev + next);
 	let targetSales = analytics.map(item => parseInt(item.targetSales) || 0).reduce((prev, next) => prev + next);
 	let returns = quantity;
@@ -101,9 +104,9 @@ async function getReturnsByExternalId(externalId, from, to, orgIds) {
 
 		const shipments = await ShipmentModel.find(params);
 		for (const Shipment of shipments) {
-			for (let product in Shipment.products)
-				if (Shipment['products'][product].productID == params['products.productID'])
-					quantity += Shipment['products'][product].productQuantityDelivered;
+			for (const product of Shipment.products)
+				if (product.productID == params['products.productID'])
+				quantity += product.productQuantityDelivered;
 		}
 	}
 
@@ -127,18 +130,21 @@ async function getOnlyReturns(prod_id, from, to, warehouseIds) {
 			$gte: new Date(from),
 		},
 	}
-
+		
 	const shipments = await ShipmentModel.find(params);
+
+	
 	for (const Shipment of shipments) {
-		for (let product in Shipment.products)
-			if (Shipment['products'][product].productID == params['products.productID'])
-				quantity += Shipment['products'][product].productQuantityDelivered;
+		for (const product of Shipment.products)
+				if (product.productID == params['products.productID'])
+				quantity += product.productQuantityDelivered;
 	}
 	return quantity;
 }
 
-async function getReturnsOrg(org, analytics) {
+async function getReturnsOrg(org, analytics, filters, from, to) {
 	if (!analytics.length) {
+		console.log("EMPTY ANALYTICS")
 		return {
 			sales: 0,
 			targetSales: 0,
@@ -153,31 +159,33 @@ async function getReturnsOrg(org, analytics) {
 
 	let quantity = 0;
 	if (org.type != 'BREWERY') {
-		const row = analytics[0];
-		const Products = await ProductModel.find({ externalId: row.productId, manufacturer: row.brand });
-		for (const prod of Products) {
-			let params = {
-				'receiver.id': { $in: b_arr },
-				'supplier.id': org.id,
-				'products.productID': prod.id,
-				'status': 'RECEIVED',
-				createdAt: {
-					$lte: today,
-					$gte: new Date(timeFrame),
-				},
-			}
+		// for (const row of analytics) {
+			// const Products = await ProductModel.find({ externalId: row.productId, manufacturer: row.brand });
+			// const Products = await ProductModel.find({ id: filters.pid });
+			// for (const prod of Products) {
+				let params = {
+					'receiver.id': { $in: b_arr },
+					'supplier.id': org.id,
+					'products.productID': filters.pid,
+					'status': 'RECEIVED',
+					createdAt: {
+						$lte: today,
+						$gte: new Date(timeFrame),
+					},
+				}
 
-			const shipments = await ShipmentModel.find(params);
-			for (const Shipment of shipments) {
-				for (let product in Shipment.products)
-					if (Shipment['products'][product].productID == params['products.productID'])
-						quantity += Shipment['products'][product].productQuantityDelivered;
-			}
-		}
+				const shipments = await ShipmentModel.find(params);
+				for (const Shipment of shipments) {
+					for (const product of Shipment.products)
+						if (product.productID == params['products.productID']) 
+							quantity += product.productQuantityDelivered;
+				}
+			// }
+		// }
 	}
 	else {
 		const shipments = await ShipmentModel.find({
-			'receiver.id': org.id,
+			'supplier.id': org.id,
 			'status': 'RECEIVED',
 			createdAt: {
 				$lte: today,
@@ -185,8 +193,8 @@ async function getReturnsOrg(org, analytics) {
 			}
 		});
 		for (const Shipment of shipments) {
-			for (let product in Shipment.products)
-				quantity += Shipment['products'][product].productQuantityDelivered;
+			for (const product of Shipment.products)
+				quantity += product.productQuantityDelivered;
 		}
 	}
 	let sales = analytics.map(item => parseInt(item.sales) || 0).reduce((prev, next) => prev + next);
@@ -455,7 +463,6 @@ function getDistrictConditionsWarehouse(filters) {
 const _getWarehouseIdsByDistrict = async (filters) => {
 	if(filters.orgType && filters.orgType !== '')
 		filters.warehouseIds = await _getWarehousesByOrgType(filters)
-	console.log(filters)
 	const warehouses = await WarehouseModel.aggregate([
 		{
 			$match: getDistrictConditionsWarehouse(filters)
@@ -577,6 +584,10 @@ function getSKUAnalyticsFilterConditions(filters) {
 	// if (filters.district && filters.district !== '') {
 	// 	matchCondition.district = filters.district;
 	// }
+
+	if (filters.brand && filters.brand !== '') {
+		matchCondition.brand = filters.brand;
+	}
 
 	if (filters.date_filter_type && filters.date_filter_type.length) {
 
@@ -904,8 +915,6 @@ exports.getAllBrands = [
 // 				Analytics
 // 			);
 // 		} catch (err) {
-// 			console.log(err);
-
 // 			return apiResponse.ErrorResponse(res, err);
 // 		}
 // 	}
@@ -947,8 +956,14 @@ exports.getStatsByBrand = [
 			let Analytics = [];
 			let arr = {};
 			let prevBrand = '';
-			const lastMonthStart = moment().subtract(1, 'months').startOf('month').format(DATE_FORMAT);
-			const lastMonthEnd = moment().subtract(1, 'months').endOf('month').format(DATE_FORMAT);
+			
+			let lastMonthStart = moment().subtract(1, 'months').tz("Etc/GMT").startOf('month');
+			let lastMonthEnd = moment().subtract(1, 'months').tz("Etc/GMT").endOf('month');
+			if (analyticsFilter?.uploadDate)
+				lastMonthStart = moment(analyticsFilter.uploadDate['$gte']).tz("Etc/GMT").subtract(1, 'months').startOf('month');
+			if (analyticsFilter?.uploadDate)
+				lastMonthEnd = moment(analyticsFilter.uploadDate['$lte']).tz("Etc/GMT").subtract(1, 'months').endOf('month');
+			
 			warehouseIds = await _getWarehouseIdByOrgType(filters);
 			for (const [index, product] of Products.entries()) {
 				if (prevBrand != product._id.manufacturer) {
@@ -971,10 +986,43 @@ exports.getStatsByBrand = [
 						p['sales'] = product.sales;
 						p['targetSales'] = parseInt(product.targetSales);
 						p['productId'] = product._id.id;
-						p['returns'] = await getOnlyReturns(prod.id, moment().startOf('month'), today, warehouseIds);
+						let to = today;
+						let from = moment().startOf('month');
+						if (analyticsFilter?.uploadDate)
+							to = analyticsFilter.uploadDate['$lte'];
+						if (analyticsFilter?.uploadDate)
+							from = analyticsFilter.uploadDate['$gte'];
+						p['returns'] = await getOnlyReturns(prod.id, from, to, warehouseIds);
 						p['returnRate'] = parseFloat(((parseInt(p['returns']) / parseInt(product.sales)) * 100)).toFixed(2);
 						// p['returnRatePrev'] = await calculatePrevReturnRatesNew(filters, product);
-						p['returnRatePrev'] = await getOnlyReturns(prod.id, lastMonthEnd, lastMonthStart, warehouseIds);
+						let prevAnalytic = await AnalyticsModel.aggregate([
+							{
+								$match: {
+									uploadDate: {
+										$lte: new Date(lastMonthEnd),
+										$gte: new Date(lastMonthStart),
+									},
+									brand: product._id.manufacturer,
+									productId: product._id.id
+								}
+							},
+							{
+								$group: {
+									_id: {
+										id: '$productId',
+										manufacturer: '$brand',
+									},
+									sales: { $sum: "$sales" },
+								}
+							}
+						]);
+						let prevSales = 0;
+						p['returnRatePrev'] = 0;
+						if (prevAnalytic.length) {
+							prevSales = prevAnalytic[0].sales;
+							let returnRatePrev = await getOnlyReturns(prod.id, lastMonthStart, lastMonthEnd, warehouseIds);
+							p['returnRatePrev'] = parseFloat(((parseInt(returnRatePrev) / parseInt(prevSales)) * 100)).toFixed(2);
+						}
 						product.product = p;
 					}
 				}
@@ -1110,7 +1158,7 @@ exports.getStatsByOrg = [
 					}
 				]);
 
-				organization.analytics = await getReturnsOrg(organization, Analytics);
+				organization.analytics = await getReturnsOrg(organization, Analytics, filters);
 				// organization.analytics = aggregateSalesStats(Analytics);
 
 				const lastMonthStart = moment().subtract(1, 'months').startOf('month').format(DATE_FORMAT);
@@ -1251,8 +1299,6 @@ exports.getStatsByOrgType = [
 				organizations
 			);
 		} catch (err) {
-			console.log(err);
-
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
@@ -1466,6 +1512,7 @@ async function calculateLeadTimeByOrg(supplierOrg) {
 				id: 1,
 				shippingDate: 1,
 				createdAt: 1,
+				updatedAt: 1,
 				actualDeliveryDate: {
 					$dateFromString: {
 						dateString: '$actualDeliveryDate'
@@ -1484,8 +1531,8 @@ async function calculateLeadTimeByOrg(supplierOrg) {
 				id: 1,
 				"leadtime": {
 					"$divide": [
-						{ "$subtract": ["$actualDeliveryDate", "$shippingDate"] },
-						60 * 1000 * 60
+						 {"$subtract": ["$updatedAt", "$createdAt"]},
+						60000
 					]
 				},
 
@@ -1519,44 +1566,46 @@ async function calculateLeadTimeByOrg(supplierOrg) {
 }
 
 async function calculateReturnRateByOrg(supplierOrg) {
-	const warehouses = await OrganisationModel.aggregate([
-		{
-			$match: {
-				id: supplierOrg.id
-			}
-		},
-		{
-			$group: {
-				_id: 'warehouses',
-				warehouses: {
-					$addToSet: '$warehouses'
-				}
-			}
-		},
-		{
-			$unwind: {
-				path: '$warehouses'
-			}
-		},
-		{
-			$unwind: {
-				path: '$warehouses'
-			}
-		},
-		{
-			$group: {
-				_id: 'warehouses',
-				warehouseIds: {
-					$addToSet: '$warehouses'
-				}
-			}
-		}
-	]);
-	let warehouseIds = [];
-	if (warehouses[0] && warehouses[0].warehouseIds) {
-		warehouseIds = warehouses[0].warehouseIds;
-	}
-
+	try {
+	// const warehouses = await OrganisationModel.aggregate([
+	// 	{
+	// 		$match: {
+	// 			id: supplierOrg.id
+	// 		}
+	// 	},
+	// 	{
+	// 		$group: {
+	// 			_id: 'warehouses',
+	// 			warehouses: {
+	// 				$addToSet: '$warehouses'
+	// 			}
+	// 		}
+	// 	},
+	// 	{
+	// 		$unwind: {
+	// 			path: '$warehouses'
+	// 		}
+	// 	},
+	// 	{
+	// 		$unwind: {
+	// 			path: '$warehouses'
+	// 		}
+	// 	},
+	// 	{
+	// 		$group: {
+	// 			_id: 'warehouses',
+	// 			warehouseIds: {
+	// 				$addToSet: '$warehouses'
+	// 			}
+	// 		}
+	// 	}
+	// ]);
+	// let warehouseIds = [];
+	// if (warehouses[0] && warehouses[0].warehouseIds) {
+	// 	warehouseIds = warehouses[0].warehouseIds;
+	// }
+	let warehouseIds = await _getWarehouseIdsByOrg(supplierOrg);
+	// console.log("Warehouses",warehouseIds)
 	let Analytics = await AnalyticsModel
 		.find({
 			warehouseId: {
@@ -1567,16 +1616,39 @@ async function calculateReturnRateByOrg(supplierOrg) {
 	let totalReturns = 0;
 	let totalSales = 0;
 	let returnRate = 0;
+	today = new Date()
 	for (let analytic of Analytics) {
-		totalReturns = totalReturns + parseInt(analytic.returns);
+		//totalReturns = await getReturns(analytic.data, moment().startOf('month'), today, warehouseIds);
 		totalSales = totalSales + parseInt(analytic.sales);
 	}
+	// console.log(Analytics)
+	let b_arr = [];
+	const breweries = await OrganisationModel.find({ "type": 'BREWERY', "status": "ACTIVE" }, 'id');
+	for (let b of breweries)
+		b_arr.push(b.id);
 
+	let quantity = 0;
+	let params = {
+		'receiver.id': { $in: b_arr },
+		'supplier.id': supplierOrg.id,
+		'status': 'RECEIVED'
+	}
+	const shipments = await ShipmentModel.find(params);
+	for (const Shipment of shipments) {
+		for (const product of Shipment.products)
+			quantity += product.productQuantityDelivered;
+	}
+	// totalReturns = await getReturnsOrg(supplierOrg, Analytics);
+	totalReturns = quantity;
+	// console.log(totalReturns)
 	if (totalReturns && totalSales) {
 		returnRate = parseFloat(((totalReturns / totalSales) * 100)).toFixed(2);
 	}
 	return returnRate;
+}
+catch(e) { console.log(e)
 
+}
 }
 
 async function calculateDirtyBottlesAndBreakage(supplierOrg) {
@@ -1635,16 +1707,28 @@ async function calculateDirtyBottlesAndBreakage(supplierOrg) {
 	let dirtyBottles = 0;
 	let breakage = 0;
 	for (let shipment of shipments) {
+		//console.log(shipment)
 		let shipmentUpdates = shipment.shipmentUpdates.filter(sh => sh.updateComment === 'Receive_comment_3');
 		if (shipmentUpdates.length) {
-			dirtyBottles = dirtyBottles + (shipment.rejectionRate ? shipment.rejectionRate : 0);
+			for(shipmentUpdate of shipmentUpdates) {
+			for(let product of shipmentUpdate.products){
+				console.log(product)
+			dirtyBottles = dirtyBottles + (product.rejectionRate ? product.rejectionRate : 0);
+				}
+			}
 		}
 
 		let damagedShipments = shipment.shipmentUpdates.filter(sh => sh.updateComment === 'Receive_comment_1' || sh.updateComment === 'Receive_comment_2');
 		if (damagedShipments.length) {
-			breakage = breakage + (shipment.rejectionRate ? shipment.rejectionRate : 0);
+			for(shipmentUpdate of damagedShipments) {
+			for(let product of shipmentUpdate.products){
+				console.log(product)
+			breakage = breakage + (product.rejectionRate ? product.rejectionRate : 0);
+			}
 		}
 	}
+	}
+	console.log({ dirtyBottles: dirtyBottles, breakage: breakage })
 	return { dirtyBottles: dirtyBottles, breakage: breakage };
 }
 
@@ -1685,9 +1769,11 @@ async function calculateStorageCapacityByOrg(supplierOrg) {
 	let sqft = 0;
 	for (let w of warehouses) {
 		let newBottleCapacity = parseInt(w.bottleCapacity) ? parseInt(w.bottleCapacity) : 0;
-		bottleCapacity = bottleCapacity + newBottleCapacity;
+		bottleCapacity = newBottleCapacity;
+		// bottleCapacity = bottleCapacity + newBottleCapacity;
 		let newSQFT = parseInt(w.sqft) ? parseInt(w.sqft) : 0;
-		sqft = sqft + newSQFT;
+		// sqft = sqft + newSQFT;
+		sqft = newSQFT;
 	}
 
 	let storageCapacity = {
@@ -1703,7 +1789,7 @@ async function calculateStorageCapacityByOrg(supplierOrg) {
  * @returns {Object}
  */
 exports.getSupplierPerformance = [
-	auth,
+	// auth,
 	async function (req, res) {
 		try {
 			const orgType = req.query.supplierType;
@@ -1935,6 +2021,7 @@ exports.getStatsBySKU = [
 				...getSKUGroupByFilters(filters)
 			]);
 			let response = [];
+			let enableSort = false;
 			for (const analytic of Analytics) {
 				if (analytic.data) {
 					// let temp = aggregateSalesStats(analytic.data);
@@ -1942,11 +2029,46 @@ exports.getStatsBySKU = [
 					if (filters.group_by === 'district'){
 						filters.district = analytic._id
 					}
-						wIds = await _getWarehouseIdsByDistrict(filters);
-					let temp = await getReturns(analytic.data, moment().startOf('month'), today, wIds);
-					temp['groupedBy'] = (analytic._id.toString()).includes('GMT') ? monthNames[moment(analytic._id).tz("Etc/GMT").month()] : analytic._id;
+					wIds = await _getWarehouseIdsByDistrict(filters);
+					const y = (analytic._id.toString()).includes('GMT') ? moment(analytic._id).tz("Etc/GMT").year() : 0;
+					const m = (analytic._id.toString()).includes('GMT') ? moment(analytic._id).tz("Etc/GMT").month() : 0;
+					let from = moment().startOf('month');
+					let to = moment().endOf('month');
+					if ((analytic._id.toString()).includes('GMT')) {
+						enableSort = true;
+						from = moment(analytic._id).startOf('month');
+						to = moment(analytic._id).endOf('month');
+					}
+					let temp = await getReturns(analytic.data, from, to, wIds, filters);
+					temp['groupedBy'] = (analytic._id.toString()).includes('GMT') ? monthNames[moment(analytic._id).tz("Etc/GMT").month()]+' - '+moment(analytic._id).tz("Etc/GMT").year() : analytic._id;
+					temp['sortBy'] = (analytic._id.toString()).includes('GMT') ? y + (m < 10 ? '0' + m : m) : analytic._id;
+					if (filters?.inventory) {
+						let inventory = await InventoryModel.aggregate([
+							{
+								$unwind: "$inventoryDetails"
+							},
+							{
+								$match: {
+									'inventoryDetails.productId': filters.pid
+								}
+							},
+							{
+								$group: {
+									_id: '$inventoryDetails.productId',
+									quantity: { $sum: "$inventoryDetails.quantity" },
+								}
+							}
+						]);
+						temp['inventory'] = inventory.length ? inventory[0].quantity : 0;
+					}
 					response.push(temp);
 				}
+			}
+
+			if (enableSort) {
+				response.sort(function (a, b) {
+					return a.sortBy - b.sortBy;
+				});
 			}
 
 			return apiResponse.successResponseWithData(res, "Operation Success", response);
@@ -2015,7 +2137,6 @@ exports.getSalesTotalOfAllBrands = [
 			);
 
 		} catch (err) {
-			console.log(err);
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
@@ -2096,8 +2217,6 @@ exports.getMonthlySalesOfSkuByBrand = [
 				Analytics
 			);
 		} catch (err) {
-			console.log(err);
-
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}

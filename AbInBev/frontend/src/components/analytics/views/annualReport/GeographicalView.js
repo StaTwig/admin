@@ -25,8 +25,6 @@ const GeographicalView = (props) => {
   // }, []);
 
   useEffect(() => {
-    console.log(props.params);
-
     if (
       sku ||
       props.params?.district ||
@@ -46,7 +44,7 @@ const GeographicalView = (props) => {
           else cond += '?';
           cond +=
             'date_filter_type=' +
-            props.params?.date_filter_type +
+            (props.params?.date_filter_type ? props.params?.date_filter_type : 'by_yearly') +
             '&year=' +
             props.params?.year +
             '&month=' +
@@ -93,109 +91,7 @@ const GeographicalView = (props) => {
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
         <h1 className="h2">Analytics</h1>
       </div>
-      {/*<div className="btn-group mainButtonFilter">
-                <a href="#!" className="btn active">State</a>
-                <select className="btn selectState" onChange="getSKUByState($event)">
-                    <option>Select state</option>
-                    {states?.map((state) =>
-                        <option>{state}</option>
-                    )
-                    }
-                </select>
-            </div>
 
-             <div className="row">
-                <div className="col-md-3 ">
-                    <div className="analyticsCard">
-                        <span className="analyticsTitle">Sales</span>
-                        <span className="analyticsPercentage yellow">82% <img className="arrowIcon" src={UpArrow} /></span>
-                        <div className="chartAnalytics">
-                            <ResponsiveContainer width="100%" height={100}>
-                                <AreaChart
-
-                                    data={data}
-                                    margin={{
-                                        top: 5,
-                                        right: 0,
-                                        left: 0,
-                                        bottom: 5
-                                    }}
-                                >
-                                    <Area type="monotone" dataKey="uv" stroke="#F49C00" fill="#F49C00" />
-                                    <Tooltip />
-                                </AreaChart>
-                            </ResponsiveContainer>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-3">
-                    <div className="analyticsCard">
-                        <span className="analyticsTitle">Returns</span>
-                        <span className="analyticsPercentage">78%</span>
-                        <div className="chartAnalytics">
-                            <ResponsiveContainer width="100%" height={100}>
-                                <AreaChart
-                                    data={data}
-                                    margin={{
-                                        top: 5,
-                                        right: 0,
-                                        left: 0,
-                                        bottom: 5
-                                    }}
-                                >
-                                    <Area type="monotone" dataKey="uv" stroke="#C8F4E1" fill="#C8F4E1" />
-                                    <Tooltip />
-                                </AreaChart>
-                            </ResponsiveContainer>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-3 ">
-                    <div className="analyticsCard">
-                        <span className="analyticsTitle">Target</span>
-                        <span className="analyticsPercentage pink">65% <img className="arrowIcon" src={DownArrow} /></span>
-                        <div className="chartAnalytics">
-                            <ResponsiveContainer width="100%" height={100}>
-                                <AreaChart
-                                    data={data}
-                                    margin={{
-                                        top: 5,
-                                        right: 0,
-                                        left: 0,
-                                        bottom: 5
-                                    }}
-                                >
-                                    <Area type="monotone" dataKey="uv" stroke="#F85566" fill="#F85566" />
-                                    <Tooltip />
-                                </AreaChart>
-                            </ResponsiveContainer>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-3">
-                    <div className="analyticsCard">
-                        <span className="analyticsTitle">Actual Returns</span>
-                        <span className="analyticsPercentage blue">70%</span>
-                        <div className="chartAnalytics">
-                            <ResponsiveContainer width="100%" height={100}>
-                                <AreaChart
-                                    data={data}
-                                    margin={{
-                                        top: 5,
-                                        right: 0,
-                                        left: 0,
-                                        bottom: 5
-                                    }}
-                                >
-                                    <Area type="monotone" dataKey="uv" stroke="#20BECB" fill="#20BECB" />
-                                    <Tooltip />
-                                </AreaChart>
-                            </ResponsiveContainer>
-                        </div>
-                    </div>
-                </div>
-            </div>
-             */}
       <div className="tableDetals">
         <table className="table text-align-left">
           <thead>
@@ -208,46 +104,52 @@ const GeographicalView = (props) => {
             </tr>
           </thead>
           <tbody>
-            {analytics?.map((analytic, index) => (
-              <tr key={index}>
-                <td scope="row">
-                  <div className="tableProfileIconCard justify-content-start">
-                    <div className="profileIcon">
-                      <img
-                        src={
-                          brandsArr[
-                            brands.indexOf(
-                              analytic.manufacturer?.split(' ').join(''),
-                            )
-                          ]
-                        }
-                        alt=""
-                        width="50"
-                        height="50"
-                      />
-                    </div>
-                    <div className="profileName">
-                      <span
-                        className="profileTitle"
-                        onClick={() => showDetailedGeoView(analytic)}
-                      >
-                        {analytic.manufacturer + ' - ' + analytic.name}
-                      </span>
-                    </div>
-                  </div>
-                </td>
-                <td>{analytic.sales.toLocaleString('en-IN')}</td>
-                <td>
-                  {analytic.returns
-                    ? analytic.returns.toLocaleString('en-IN')
-                    : 0}
-                </td>
-                <td>{analytic.targetSales.toLocaleString('en-IN')}</td>
-                <td>
-                  {!isNaN(analytic.returnRate) ? analytic.returnRate : 0}%
-                </td>
+            {analytics.length == 0 ? (
+              <tr>
+                <td colSpan="5">No Data found</td>
               </tr>
-            ))}
+            ) : (
+              analytics?.map((analytic, index) => (
+                <tr key={index}>
+                  <td scope="row">
+                    <div className="tableProfileIconCard justify-content-start">
+                      <div className="profileIcon">
+                        <img
+                          src={
+                            brandsArr[
+                              brands.indexOf(
+                                analytic.manufacturer?.split(' ').join(''),
+                              )
+                            ]
+                          }
+                          alt=""
+                          width="50"
+                          height="50"
+                        />
+                      </div>
+                      <div className="profileName">
+                        <span
+                          className="profileTitle"
+                          onClick={() => showDetailedGeoView(analytic)}
+                        >
+                          {analytic.manufacturer + ' - ' + analytic.name}
+                        </span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>{analytic.sales.toLocaleString('en-IN')}</td>
+                  <td>
+                    {analytic.returns
+                      ? analytic.returns.toLocaleString('en-IN')
+                      : 0}
+                  </td>
+                  <td>{analytic.targetSales.toLocaleString('en-IN')}</td>
+                  <td>
+                    {!isNaN(analytic.returnRate) ? analytic.returnRate : 0}%
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

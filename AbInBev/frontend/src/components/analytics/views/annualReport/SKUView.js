@@ -15,7 +15,6 @@ const SKUView = (props) => {
   // }, []);
   useEffect(() => {
     if (props.sku) {
-      //  console.log(props.bstats);
       //  let n = props.bstats.filter(a => a.products.filter(b => b.externalId == props.sku));
       //  setAnalytics(n);
     }

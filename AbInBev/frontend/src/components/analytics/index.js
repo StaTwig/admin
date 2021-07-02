@@ -56,7 +56,8 @@ const Analytics = (props) => {
   const [SKU, setSKU] = useState('');
   const [state, setState] = useState('');
   const [district, setDistrict] = useState('');
-  const [year, setYear] = useState(new Date().getFullYear());
+  // const [year, setYear] = useState(new Date().getFullYear());
+  const [year, setYear] = useState('');
   const [month, setMonth] = useState('');
   const [qtr, setQtr] = useState('');
   const [isActive, setIsActive] = useState('by_yearly');
@@ -100,6 +101,8 @@ const Analytics = (props) => {
     setYear(selectedYear);
     const filter = { ...params };
     filter.year = selectedYear;
+    filter.quarter = undefined;
+    filter.month = undefined;
     setParams(filter);
   };
 
@@ -108,6 +111,7 @@ const Analytics = (props) => {
     setMonth(selectedMonth);
     const filter = { ...params };
     filter.month = selectedMonth;
+    filter.quarter = undefined;
     setParams(filter);
   };
 
@@ -116,6 +120,7 @@ const Analytics = (props) => {
     setQtr(selectedQuarter);
     const filter = { ...params };
     filter.quarter = selectedQuarter;
+    filter.month = undefined;
     setParams(filter);
   };
 
@@ -140,6 +145,8 @@ const Analytics = (props) => {
   const onTPChange = (value) => {
     const filter = { ...params };
     filter.date_filter_type = value;
+    filter.quarter = undefined;
+    filter.month = undefined;
     setIsActive(value);
     setParams(filter);
   };
@@ -486,8 +493,7 @@ const Analytics = (props) => {
                             )}
                         </div>
                       )}
-                    {(selectedViewCode == 'SUPPLIER_DETAIL_VIEW' ||
-                      selectedViewCode == 'BREWERY_DETAIL_VIEW') && (
+                    {selectedViewCode == 'SUPPLIER_DETAIL_VIEW' && (
                       <>
                         <h3 className="filterSubHeading mt-3">Vendor</h3>
                         <div className="btn-group filterButton mt-2 mb-4">
@@ -558,12 +564,18 @@ const Analytics = (props) => {
                     <label className="filterSubHeading mt-3">
                       Select District
                     </label>
+
                     <select
                       value={district}
                       className="filterSelect mt-2"
                       onChange={onDistrictChange}
                     >
-                      <option value="">Select District</option>
+                      {state == '' && <option value="">Select District</option>}
+                      {(selectedViewCode == 'INVENTORY_GRAPHICAL' ||
+                        (selectedViewCode == 'INVENTORY_SKU_DETAILS' &&
+                          state != '')) && (
+                        <option value="">All District</option>
+                      )}
                       {districts?.map((district, index) => (
                         <option key={index} value={district}>
                           {district}
@@ -592,22 +604,6 @@ const Analytics = (props) => {
                         );
                       })}
                     </select>
-
-                    <h3 className="filterSubHeading mt-3">Vendor</h3>
-                    <div className="btn-group filterButton mt-2 mb-4">
-                      {['ALL_VENDORS', 'S1', 'S2', 'S3'].map((otype, index) => (
-                        <span
-                          key={index}
-                          className={`btn p-2 ${
-                            Otype == otype ? `active` : ``
-                          }`}
-                          htmlFor={otype}
-                          onClick={() => changeOType(otype)}
-                        >
-                          {otype == 'ALL_VENDORS' ? 'All' : otype}
-                        </span>
-                      ))}
-                    </div>
                   </>
                 )}
 

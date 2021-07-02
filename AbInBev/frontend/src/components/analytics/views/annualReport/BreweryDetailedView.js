@@ -20,17 +20,23 @@ const BreweryDetailedView = (props) => {
         '?orgType=' +
         (props?.Otype ? props.Otype : 'ALL_VENDORS') +
         '&sku=' +
-        (props?.sku ? props.sku : prop.externalId);
-        const result = await dispatch(getAllOrganisationStats(cond));
-        let n = result.data.filter((a) => a.type == 'S1');
-        for(let org of n){
-          let cc = result.data.filter((a) => a.authority == org.id && (a.type == 'S2' || a.type == 'S3'));
-          for (const c of cc) {
-            org.sales += parseInt(c.sales);  
-            org.return += parseInt(c.return);  
-          }
+        (props?.sku ? props.sku : prop.externalId) +
+        '&pid=' +
+        prop.id +
+        '&brand=' +
+        prop.manufacturer;
+      const result = await dispatch(getAllOrganisationStats(cond));
+      let n = result.data.filter((a) => a.type == 'S1');
+      for (let org of n) {
+        let cc = result.data.filter(
+          (a) => a.authority == org.id && (a.type == 'S2' || a.type == 'S3'),
+        );
+        for (const c of cc) {
+          org.analytics.sales += parseInt(c.analytics.sales);
+          org.analytics.returns += parseInt(c.analytics.returns);
         }
-        setAnalytics(n);
+      }
+      setAnalytics(n);
     })();
   }, []);
   return (
@@ -87,7 +93,9 @@ const BreweryDetailedView = (props) => {
                       </span>
                     </span>
                     <div className="captionSubtitle">
-                      Compared to ({!isNaN(prop.returnRatePrev) ? prop.returnRatePrev : 0}% last month)
+                      Compared to (
+                      {!isNaN(prop.returnRatePrev) ? prop.returnRatePrev : 0}%
+                      last month)
                     </div>
                     <div className="progress progress-line-default">
                       <div
@@ -96,10 +104,15 @@ const BreweryDetailedView = (props) => {
                         aria-valuenow="60"
                         aria-valuemin="0"
                         aria-valuemax="100"
-                        style={{ width: (!isNaN(prop.returnRate) ? prop.returnRate : 0) + '%' }}
+                        style={{
+                          width:
+                            (!isNaN(prop.returnRate) ? prop.returnRate : 0) +
+                            '%',
+                        }}
                       >
                         <span className="sr-only">
-                          {!isNaN(prop.returnRate) ? prop.returnRate : 0}% Complete
+                          {!isNaN(prop.returnRate) ? prop.returnRate : 0}%
+                          Complete
                         </span>
                       </div>
                     </div>
@@ -122,19 +135,29 @@ const BreweryDetailedView = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {analytics.map((analytic, index) => (
-                    <tr key={index}>
-                      <td scope="row">
-                        <div className="displayImageName justify-content-start">
-                          <img src={profile} className="displayImage" />
-                          {analytic.name}
-                        </div>
-                      </td>
-                      <td>Karnataka</td>
-                      <td>{analytic.analytics.sales.toLocaleString('en-IN')}</td>
-                      <td>{analytic.analytics.returns.toLocaleString('en-IN')}</td>
+                  {analytics.length == 0 ? (
+                    <tr>
+                      <td colspan="4">No Data found</td>
                     </tr>
-                  ))}
+                  ) : (
+                    analytics.map((analytic, index) => (
+                      <tr key={index}>
+                        <td scope="row">
+                          <div className="displayImageName justify-content-start">
+                            <img src={profile} className="displayImage" />
+                            {analytic.name}
+                          </div>
+                        </td>
+                        <td>Karnataka</td>
+                        <td>
+                          {analytic.analytics.sales.toLocaleString('en-IN')}
+                        </td>
+                        <td>
+                          {analytic.analytics.returns.toLocaleString('en-IN')}
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

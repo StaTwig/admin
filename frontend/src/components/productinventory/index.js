@@ -64,17 +64,17 @@ const ProductInventory = props => {
         <h1 className="breadcrumb">{enable ? 'PRODUCT CATEGORY' : 'PRODUCTS OUT OF STOCK'}</h1>
         <div className="d-flex">
         <Link to="/addNewCategory">
-            <button className="btn btn-yellow">
-              <img src={Add} width="13" height="13" className="mr-2" />
+            <button className="btn btn-yellow mr-4" style={{position:"relative", top:"-15px"}}>
+              <img src={Add} width="13" height="13" className="mr-2 mb-1" />
               <span>Add New Category</span>
             </button>
           </Link>
         </div>
       </div>
       {enable && 
-      <div className="row mb-4">
+      <div className="row mb-4"> 
         {categoryArray.map(cat => 
-          <div className={`panel m-2 ${category == cat && `active`}`} onClick={() => changeType(cat)}>
+          <div className={`panel m-2 ${category == cat && `active`}`}style={{width:"15%"}} onClick={() => changeType(cat)}>
             <div className="flex flex-column">
               <div className=" picture truck-bg">
                 <img src={TotalInventoryAdded} alt="truck" />

@@ -306,12 +306,12 @@ const UpdateStatus = (props) => {
                   </div>
                   <div className="col ">
                     <div className="row">
-                      <h6 className="col font-weight-bold mb-4">
+                      <h6 className="col font-weight-bold mt-4">
                         Upload Image
                       </h6>
                       <button
                         type="button"
-                        className="col col-3 btn btn-primary font-weight-bold"
+                        className="col col-3 btn btn-primary font-weight-bold mr-5 mb-3"
                         onClick={uploadPhoto}
                       >
                         <img
@@ -362,7 +362,7 @@ const UpdateStatus = (props) => {
                   </label>
                 </div>
                 <div
-                  className="row"
+                  className="row mb-3"
                   style={{ margin: "auto", display: "table" }}
                 >
                   OR
@@ -403,7 +403,7 @@ const UpdateStatus = (props) => {
                       className="btn btn-orange fontSize20 font-bold mr-4 product"
                       onClick={updateStatus}
                     >
-                      <span>UPDATE STATUS</span>
+                      <span>Update Status</span>
                     </button>
                   </div>
                 </div>

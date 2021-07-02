@@ -123,7 +123,7 @@ const onPOStatusChange = async status => {
           <span className="p-1 text-info font-weight-bold">Product Details</span>
           <div className="row mt-3">
             {order?.products?.map((product, index) =>
-            <div className={`bg-white shadow ${index >= 0 ? 'ml-5 mb-5' : ''}  p-3`}>
+            <div className={`bg-white shadow ${index >= 0 ? 'ml-5 mb-5' : ''}  p-3`} style={{width:"25%"}}>
               <span className= " p-1 font-weight-normal text-primary ">{product.name}</span>
               <div className="row  p-1">
                 <span className="col">Product ID:</span>

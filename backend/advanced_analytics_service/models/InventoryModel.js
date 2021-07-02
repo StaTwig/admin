@@ -2,12 +2,11 @@ const mongoose = require('mongoose');
 
 const InventorySchema = new mongoose.Schema(
   {
-    manufacturingDate: { type: String },
-    expiryDate: { type: String },
-    
-    owner: { type: String },
-    transactionIds: { type: Array },
-    productName: { type: String },
+    id: { type: String, required: true },
+    inventoryDetails: {
+      type: Array,
+      default: []
+    },
   },
   { timestamps: true },
 );
