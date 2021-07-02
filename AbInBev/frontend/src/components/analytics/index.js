@@ -110,6 +110,9 @@ const Analytics = (props) => {
     const selectedMonth = event.target.value;
     setMonth(selectedMonth);
     const filter = { ...params };
+    if (!filter.year)
+      filter.year = year;
+    
     filter.month = selectedMonth;
     filter.quarter = undefined;
     setParams(filter);
