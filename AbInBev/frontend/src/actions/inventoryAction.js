@@ -13,12 +13,12 @@ function getQueryStringFromFilters(filters) {
     } else {
       queryStr = '?orgType=' + filters.inventoryType;
     }
-    // if (filters.state && filters.state.length) {
-    //   queryStr = queryStr + '&state=' + filters.state;
-    // }
-    // if (filters.district && filters.district.length) {
-    //   queryStr = queryStr + '&district=' + filters.district;
-    // }
+    if (filters.state && filters.state.length) {
+      queryStr = queryStr + '&state=' + filters.state;
+    }
+    if (filters.district && filters.district.length) {
+      queryStr = queryStr + '&district=' + filters.district;
+    }
     if (filters.organization && filters.organization.length) {
       queryStr = queryStr + '&organization=' + filters.organization;
     }

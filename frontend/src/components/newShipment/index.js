@@ -432,6 +432,8 @@ const NewShipment = (props) => {
       const warehouse = await getProductsByCategory(value);
       let newArr = [...addProducts];
       newArr[index]["type"] = value;
+      newArr[index] = {"productId": "", "id": "", "productQuantity": "", "name": "", "type": value, "manufacturer": "","unitofMeasure":""};
+      newArr[index]['quantity'] = '';
       setAddProducts((prod) => [...newArr]);
       setProducts(warehouse.data.map(item => {
                                       return {

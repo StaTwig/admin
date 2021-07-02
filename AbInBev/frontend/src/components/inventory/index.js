@@ -253,7 +253,7 @@ const Inventory = (props) => {
                   </div>
                 </>
               ) : (
-                <div className="btn-group mainButtonFilter">
+                <div className="btn-group mainSortingButton">
                   <a
                     className={`btn ${
                       selectedInventoryType === 'BREWERY' ? 'active' : ''

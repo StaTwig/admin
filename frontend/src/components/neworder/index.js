@@ -167,12 +167,9 @@ const NewOrder = (props) => {
   }
 
   const onProductChange = (index, item, setFieldValue) => {
-    addProducts.splice(index, 1);
+    addProducts.splice(index, 1,item);
     let newArr = [...addProducts];
-    newArr.push(item);
-    //console.log("rowUnitofMeasure",newArr);
-    setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": row?.productQuantity ? row?.productQuantity : '',"quantity": row?.productQuantity ? row?.productQuantity : '',"name": row.name,"type": row.type,"manufacturer": row.manufacturer,"unitofMeasure":row.unitofMeasure})));
-    //console.log("rowUnitofMeasureAfter set",newArr);
+    setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": '',"quantity": '',"name": row.name,"type": row.type,"manufacturer": row.manufacturer,"unitofMeasure":row.unitofMeasure})));
     setAddProducts(prod => [...newArr]);
 
     const prodIndex = products.findIndex(p => p.id === item.id);
@@ -347,13 +344,13 @@ const NewOrder = (props) => {
                     type="button"
                     className="btn btn-white bg-white shadow-radius font-bold mb-1"
                     onClick={() => {
-                      let arr = addProducts.filter(p => p.productId != '' && p.id != '' && p.name != '' && p.manufacturer != '' && p.productQuantity != '' && p.productQuantity!=null && p.type != '');
+                      let arr = addProducts.filter(p => p.productId != '' && p.id != '' && p.name != '' && p.manufacturer != '' && p.type != '');
                       if (arr.length == addProducts.length) {
                         let newArr = { productId: '', id: '', name: '', manufacturer: '', productQuantity: '', type: '' };
                         setAddProducts(prod => [...prod, newArr]);
                       }
                       else{
-                        setOrderError("Fill the required Product Details carefully");
+                        setOrderError("Fill all the required Product Details");
                         setAddAnotherProductFailed(true);
                       }
                     }}

@@ -49,11 +49,11 @@ exports.checkEmail = [
   body('firstName')
     .isLength({ min: 1 })
     .trim()
-    .withMessage('name must be specified.'),
+    .withMessage('Name must be specified.'),
   body('lastName')
     .isLength({ min: 1 })
     .trim()
-    .withMessage('name must be specified.'),
+    .withMessage('Name must be specified.'),
   body('organisationId')
     .isLength({ min: 1 })
     .trim()
@@ -69,7 +69,7 @@ exports.checkEmail = [
       let user;
       let phone = '';
       if (!emailId.match(phoneRgex) && !emailId.match(emailRegex))
-        return Promise.reject('E-mail/Mobile not in valid');
+        return Promise.reject('E-mail/Mobile is not valid');
 
       if (emailId.indexOf('@') > -1)
         user = await EmployeeModel.findOne({ emailId });
@@ -91,8 +91,8 @@ exports.checkEmail = [
   async (req, res) => {
     try {
       if (
-        !req.body.firstName.match('[A-Za-z]') ||
-        !req.body.lastName.match('[A-Za-z]')
+        !req.body.firstName.match('[A-Za-z0-9]') ||
+        !req.body.lastName.match('[A-Za-z0-9]')
       ) {
         logger.log(
           'warn',
@@ -153,11 +153,11 @@ exports.checkEmail = [
   body('firstName')
     .isLength({ min: 1 })
     .trim()
-    .withMessage('name must be specified.'),
+    .withMessage('Name must be specified.'),
   body('lastName')
     .isLength({ min: 1 })
     .trim()
-    .withMessage('name must be specified.'),
+    .withMessage('Name must be specified.'),
   // body('authority')
   //   .isLength({ min: 1 })
   //   .trim()
@@ -172,7 +172,7 @@ exports.checkEmail = [
       const emailId=value.toLowerCase().replace('','');
        let user;
        if(!emailId.match(emailRegex))
-         return Promise.reject('E-mail not in valid');
+         return Promise.reject('E-MailId is not valid');
        if(emailId.indexOf('@')>-1)
           user= await EmployeeModel.findOne({emailId});
           if (user) {
@@ -191,7 +191,7 @@ exports.checkEmail = [
        let phone='';
        let user;
         if(!emailId.match(phoneRgex))
-          return Promise.reject('Mobile not in valid');
+          return Promise.reject('Mobile number is not valid');
          phone='+'+ value;
          console.log(phone)
          user = await EmployeeModel.findOne({phoneNumber:phone});
@@ -236,8 +236,8 @@ exports.checkEmail = [
   async (req, res) => {
     try {
       if (
-        !req.body.firstName.match('[A-Za-z]') ||
-        !req.body.lastName.match('[A-Za-z]')
+        !req.body.firstName.match('[A-Za-z0-9]') ||
+        !req.body.lastName.match('[A-Za-z0-9]')
       ) {
         logger.log(
           'warn',
