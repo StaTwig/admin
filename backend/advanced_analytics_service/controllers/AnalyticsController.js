@@ -262,12 +262,12 @@ function getFilterConditions(filters) {
 			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }];
 		}
 	}
-	if (filters.state && filters.state.length) {
-		matchCondition.state = filters.state;
-	}
-	if (filters.district && filters.district.length) {
-		matchCondition.district = filters.district;
-	}
+	// if (filters.state && filters.state.length) {
+	// 	matchCondition.state = filters.state;
+	// }
+	// if (filters.district && filters.district.length) {
+	// 	matchCondition.district = filters.district;
+	// }
 	if (filters.organization && filters.organization.length) {
 		matchCondition.id = filters.organization;
 	}
@@ -348,7 +348,7 @@ const _getWarehouseIdsByOrgType = async (filters) => {
 function getFilterConditionsSkuOrgType(filters) {
 	let matchCondition = { status: 'ACTIVE' };
 	if (filters.orgType && filters.orgType !== '') {
-		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
+		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2'|| filters.orgType === 'S3') {
 			matchCondition.type = filters.orgType;
 		} else if (filters.orgType === 'ALL_VENDORS') {
 			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }, { type: 'BREWERY' }];
@@ -360,7 +360,7 @@ function getFilterConditionsSkuOrgType(filters) {
 function getFilterConditionsOrgType(filters) {
 	let matchCondition = { status: 'ACTIVE' };
 	if (filters.orgType && filters.orgType !== '') {
-		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
+		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2'|| filters.orgType === 'S3') {
 			matchCondition.type = filters.orgType;
 		} else if (filters.orgType === 'ALL_VENDORS') {
 			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }, { type: 'BREWERY' }];
@@ -1134,6 +1134,19 @@ exports.getSalesStatsByBrand = [
 	}
 ];
 
+function getConditionsOrgWarehouse(filters) {
+	let matchCondition = {};
+	if (filters.state && filters.state.length) {
+		matchCondition["warehouseDetails.warehouseAddress.state"] = filters.state.toUpperCase();
+	}
+	if (filters.district && filters.district.length) {
+		matchCondition["warehouseDetails.warehouseAddress.city"] = filters.district;
+	}
+	console.log(matchCondition);
+	
+	return matchCondition;
+}
+
 /**
  * getAllStats.
  *
@@ -1147,8 +1160,23 @@ exports.getStatsByOrg = [
 			let organizations = await OrganisationModel.aggregate([
 				{
 					$match: getFilterConditions(filters)
-				}
+				},
+				{
+					$lookup: {
+						from: 'warehouses',
+						localField: 'id',
+						foreignField: 'organisationId',
+						as: 'warehouseDetails'
+					}
+				},
+				// {
+				// 	$unwind: '$warehouseDetails'
+				// },
+				{ $match: getConditionsOrgWarehouse(filters)}
 			]);
+			// organizations = organizations.filter(o => o.warehouseDetails.warehouseAddress.state == filters.state && o.warehouseDetails.warehouseAddress.city == filters.district);
+			// console.log(organizations);
+			
 			for (let organization of organizations) {
 				let warehouseIds = await _getWarehouseIdsByOrg(organization);
 				let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
@@ -1181,7 +1209,6 @@ exports.getStatsByOrg = [
 						$match: prevMonthmatchCondition
 					}]);
 				organization.analyticsPrevMonth = aggregateSalesStats(prevMonthAnalytics);
-
 			}
 
 			return apiResponse.successResponseWithData(
@@ -1190,6 +1217,8 @@ exports.getStatsByOrg = [
 				organizations
 			);
 		} catch (err) {
+			console.log(err);
+			
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
@@ -1307,19 +1336,19 @@ exports.getStatsByOrgType = [
 function getFilterConditions(filters) {
 	let matchCondition = {};
 	if (filters.orgType && filters.orgType !== '') {
-		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
+		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2' || filters.orgType === 'S3') {
 			matchCondition.type = filters.orgType;
 		} else if (filters.orgType === 'ALL_VENDORS') {
-			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }];
+			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }];
 		}
 	}
 
-	if (filters.state && filters.state.length) {
-		matchCondition.state = filters.state;
-	}
-	if (filters.district && filters.district.length) {
-		matchCondition.district = filters.district;
-	}
+	// if (filters.state && filters.state.length) {
+	// 	matchCondition.state = filters.state;
+	// }
+	// if (filters.district && filters.district.length) {
+	// 	matchCondition.district = filters.district;
+	// }
 	if (filters.organization && filters.organization.length) {
 		matchCondition.id = filters.organization;
 	}

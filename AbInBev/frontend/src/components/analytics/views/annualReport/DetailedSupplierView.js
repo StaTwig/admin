@@ -61,6 +61,14 @@ const DetailedSupplierView = (props) => {
         setShortname(n[0].shortName);
         setImage(n[0].image);
       }
+      let cond = '';
+      if (props.params) {
+        if(props.params.state)
+          cond = '&state='+props.params.state;
+        if (props.params.district)
+          cond+= '&district=' + props.params.district;
+      }
+      
 
       let result = await dispatch(
         getAllOrganisationStats(
@@ -71,7 +79,7 @@ const DetailedSupplierView = (props) => {
             '&pid=' +
             prop.id +
             '&brand=' +
-            prop.manufacturer,
+            prop.manufacturer + cond,
         ),
       );
 
