@@ -6,13 +6,24 @@ import Popover from "react-popover";
 const UserDetails = (props) => {
   const [visible, setVisible] = useState(false);
   const [display, setDisplay] = useState(false);
+  const [statusStyle,setStatusStyle]=useState("");
   const { user, activateUser, deactivateUser, unaffiliate, permission } = props;
+ // console.log("user",user);
 
   const [status, setStatus] = useState("");
 
   useEffect(() => {
     setVisible(false);
-    setStatus(user?.accountStatus);
+    let statusStyle = 'bg-primary';
+    if(user?.accountStatus == "ACTIVE"){
+      setStatusStyle('bg-primary');
+      setStatus(user?.accountStatus);
+    }
+    else if(user?.accountStatus == "REJECTED"){
+      setStatusStyle('bg-warning');
+      setStatus(user?.accountStatus);
+    }
+    
   }, [setStatus, setVisible, user]);
 
   const changeStatus = (status) => {
@@ -117,13 +128,15 @@ const UserDetails = (props) => {
         >
           {user?.emailId}
         </span>
-        <span
-          className={`txtWrapu text-center  w-10 ${
-            display ? `align-self-start` : ` align-self-center`
-          } `}
-        >
+        <button
+          className={`status secondary-bg w-10  ${statusStyle} ${
+            display ? `align-self-start` : `align-self-center`
+          } ` } style={{position:"relative",marginLeft:"50px",borderRadius:"8px", width:"95px",color:"white"}}>
+        
           {status}
-        </span>
+          </button>
+        
+      
         <div
           className={`w-10  ${
             display ? `align-self-start` : ` align-self-center`

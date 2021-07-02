@@ -22,7 +22,7 @@ const EditRow = (props) => {
   } = props;
 
   //console.log(add,"9999999999999999");
-  // console.log(props.category, "wwwwqqqqqqqqq");
+  // console.log( "Prod",props);
 
   const onEditClick = (e) => {
     setDisabled(!disabled);
