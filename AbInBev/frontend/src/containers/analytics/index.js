@@ -20,7 +20,7 @@ const AnalyticsContainer = (props) => {
       setSKUs(results.data);
       const b_results = await dispatch(getAllBrands());
       setBrands(b_results.data);
-      const s_result = await dispatch(getAnalyticsByBrand());
+      const s_result = await dispatch(getAnalyticsByBrand('?date_filter_type=by_yearly&year='+new Date().getFullYear()));
       setBrandstat(s_result.data);
       let n = [];
       for (let a of s_result.data) {

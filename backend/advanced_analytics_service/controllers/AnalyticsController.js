@@ -1652,84 +1652,94 @@ catch(e) { console.log(e)
 }
 
 async function calculateDirtyBottlesAndBreakage(supplierOrg) {
-	const warehouses = await OrganisationModel.aggregate([
-		{
-			$match: {
-				id: supplierOrg.id
-			}
-		},
-		{
-			$group: {
-				_id: 'warehouses',
-				warehouses: {
-					$addToSet: '$warehouses'
+	try {
+		const warehouses = await OrganisationModel.aggregate([
+			{
+				$match: {
+					id: supplierOrg.id
+				}
+			},
+			{
+				$group: {
+					_id: 'warehouses',
+					warehouses: {
+						$addToSet: '$warehouses'
+					}
+				}
+			},
+			{
+				$unwind: {
+					path: '$warehouses'
+				}
+			},
+			{
+				$unwind: {
+					path: '$warehouses'
+				}
+			},
+			{
+				$group: {
+					_id: 'warehouses',
+					warehouseIds: {
+						$addToSet: '$warehouses'
+					}
 				}
 			}
-		},
-		{
-			$unwind: {
-				path: '$warehouses'
-			}
-		},
-		{
-			$unwind: {
-				path: '$warehouses'
-			}
-		},
-		{
-			$group: {
-				_id: 'warehouses',
-				warehouseIds: {
-					$addToSet: '$warehouses'
+		]);
+		let warehouseIds = [];
+		if (warehouses[0] && warehouses[0].warehouseIds) {
+			warehouseIds = warehouses[0].warehouseIds;
+		}
+		let shipments = await ShipmentModel.aggregate([
+			{
+				$match: {
+					"supplier.locationId": { $in: warehouseIds },
+					"supplier.id": supplierOrg.id,
+					"status": "RECEIVED"
+				}
+			},
+			{
+				$project: {
+					shipmentUpdates: 1,
+					products: 1
 				}
 			}
-		}
-	]);
-	let warehouseIds = [];
-	if (warehouses[0] && warehouses[0].warehouseIds) {
-		warehouseIds = warehouses[0].warehouseIds;
-	}
-	let shipments = await ShipmentModel.aggregate([
-		{
-			$match: {
-				"supplier.locationId": { $in: warehouseIds },
-				"supplier.id": supplierOrg.id,
-				"status": "RECEIVED"
-			}
-		},
-		{
-			$project: {
-				shipmentUpdates: 1
-			}
-		}
-	]);
+		]);
 
-	let dirtyBottles = 0;
-	let breakage = 0;
-	for (let shipment of shipments) {
-		//console.log(shipment)
-		let shipmentUpdates = shipment.shipmentUpdates.filter(sh => sh.updateComment === 'Receive_comment_3');
-		if (shipmentUpdates.length) {
-			for(shipmentUpdate of shipmentUpdates) {
-			for(let product of shipmentUpdate.products){
-				console.log(product)
-			dirtyBottles = dirtyBottles + (product.rejectionRate ? product.rejectionRate : 0);
+		let dirtyBottles = 0;
+		let breakage = 0;
+		// for (let shipment of shipments) {
+			//console.log(shipment)
+			let totalProductd = 0;
+			// let shipmentUpdates = shipment.shipmentUpdates.filter(sh => sh.updateComment === 'Receive_comment_3');
+			let shipmentUpdates = shipments.filter(sh => sh.shipmentUpdates.filter(s => s.updateComment === 'Receive_comment_3').length);
+			if (shipmentUpdates.length) {
+				for (shipmentUpdate of shipmentUpdates) {
+					for (let product of shipmentUpdate.products) {
+						totalProductd = totalProductd + (product.rejectionRate ? 1 : 0);
+						dirtyBottles = dirtyBottles + (product.rejectionRate ? product.rejectionRate : 0);
+					}
 				}
 			}
-		}
 
-		let damagedShipments = shipment.shipmentUpdates.filter(sh => sh.updateComment === 'Receive_comment_1' || sh.updateComment === 'Receive_comment_2');
-		if (damagedShipments.length) {
-			for(shipmentUpdate of damagedShipments) {
-			for(let product of shipmentUpdate.products){
-				console.log(product)
-			breakage = breakage + (product.rejectionRate ? product.rejectionRate : 0);
+			let totalProductb = 0;
+			// let damagedShipments = shipment.shipmentUpdates.filter(sh => sh.updateComment === 'Receive_comment_1' || sh.updateComment === 'Receive_comment_2');
+			let damagedShipments = shipments.filter(sh => sh.shipmentUpdates.filter(s => s.updateComment === 'Receive_comment_1' || s.updateComment === 'Receive_comment_2').length);
+			if (damagedShipments.length) {
+				for (shipmentUpdate of damagedShipments) {
+					for (let product of shipmentUpdate.products) {
+						totalProductb = totalProductb + (product.rejectionRate ? 1 : 0);
+						breakage = breakage + (product.rejectionRate ? product.rejectionRate : 0);
+					}
+				}
 			}
-		}
+		// }
+		// console.log({ dirtyBottles: dirtyBottles > 0 ? dirtyBottles / totalProductd : 0, breakage: breakage > 0 ? breakage / totalProductb : 0 });
+		return { dirtyBottles: dirtyBottles > 0 ? parseFloat(dirtyBottles/totalProductd) : 0, breakage: breakage > 0 ? parseFloat(breakage/totalProductb) : 0 };
 	}
+	catch (err) {
+		console.log(err);
 	}
-	console.log({ dirtyBottles: dirtyBottles, breakage: breakage })
-	return { dirtyBottles: dirtyBottles, breakage: breakage };
 }
 
 async function calculateStorageCapacityByOrg(supplierOrg) {
@@ -1789,7 +1799,7 @@ async function calculateStorageCapacityByOrg(supplierOrg) {
  * @returns {Object}
  */
 exports.getSupplierPerformance = [
-	// auth,
+	auth,
 	async function (req, res) {
 		try {
 			const orgType = req.query.supplierType;
