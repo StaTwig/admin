@@ -1174,7 +1174,6 @@ exports.getStatsByOrg = [
 				// },
 				{ $match: getConditionsOrgWarehouse(filters)}
 			]);
-			console.log(organizations);
 			// organizations = organizations.filter(o => o.warehouseDetails.warehouseAddress.state == filters.state && o.warehouseDetails.warehouseAddress.city == filters.district);
 			// console.log(organizations);
 			
