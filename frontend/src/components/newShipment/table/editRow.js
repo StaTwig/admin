@@ -17,7 +17,8 @@ const EditRow = props => {
     handleCategoryChange,
     handleProductChange,
     handleBatchChange,
-    products
+    products,
+    check
   } = props;
   
   console.log(prod,"Edit rowt");
@@ -65,7 +66,7 @@ const updateQuantity = () =>
   setQuantityChecker(0);
 }
 
-if(quantityChecker===1 && typeof(prod)!="undefined" && typeof(prod.name!="undefined") && typeof(productsList)!="undefined")
+if(check==="0" && quantityChecker===1 && typeof(prod)!="undefined" && typeof(prod.name!="undefined") && typeof(productsList)!="undefined")
   {
                      let qty;
                     for(var i=0;i<productsList.length;i++)
@@ -79,7 +80,7 @@ if(quantityChecker===1 && typeof(prod)!="undefined" && typeof(prod.name!="undefi
                       }
                     }
                     if(i < productsList.length){
-                    // prod.productQuantity = qty;
+                     prod.productQuantity = qty;
                     console.log("productQuantity is " + prod.productQuantity);
                     updateQuantity();
                     }
@@ -202,7 +203,7 @@ const handleChange = (value) =>
               id="checker"
               placeholder="Quantity"
               onKeyPress={numbersOnly}
-              value={prod.productQuantity-(prod.productQuantityDelivered==undefined?"0":prod.productQuantityDelivered)}
+              value={prod.productQuantity}
               
               onChange={(e) => {
               
