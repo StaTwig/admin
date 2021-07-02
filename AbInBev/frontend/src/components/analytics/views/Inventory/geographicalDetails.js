@@ -64,7 +64,7 @@ const iGraphicalDetailedView = (props) => {
   }, []);
 
   const openDetailView = async (sku) => {
-    if (active) {
+    if (!active) {
       const result = await dispatch(
         getAnalyticsAllStats(
           '?sku=' +
@@ -179,10 +179,10 @@ const iGraphicalDetailedView = (props) => {
       </div>
       <div className="row">
         <div className="col-md-12 col-sm-12">
-          {!active ? (
+          {active ? (
             <div className="productsChart">
               <label className="productsChartTitle">
-                {isActive ? 'District' : 'State'}
+                {isActive ? 'Districts' : 'State'}
               </label>
               <ResponsiveContainer width="100%" height={500}>
                 <BarChart
@@ -213,7 +213,7 @@ const iGraphicalDetailedView = (props) => {
             </div>
           ) : (
             <div className="stateandDistrictCard mb-4">
-              <h2>{analytics[0].groupedBy}</h2>
+              <h2>{analytics.length ? analytics[0].groupedBy : isActive ? 'District' : 'State'}</h2>
               <ResponsiveContainer width="100%" height={200}>
                 <BarChart
                   width={200}

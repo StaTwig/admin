@@ -124,7 +124,7 @@ const iSKUViewDetails = (props) => {
                   <Tooltip />
                   <Area
                     type="monotone"
-                    dataKey="returns"
+                    dataKey="inventory"
                     stroke="#FAAB10"
                     strokeWidth={2}
                     fill="#FAAB10"
