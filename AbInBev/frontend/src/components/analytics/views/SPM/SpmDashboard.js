@@ -159,7 +159,7 @@ const SpmDashboard = (props) => {
                           <tbody>
                             <tr>
                               <td scope="row">Return Rate</td>
-                              <td>{perf.returnRate ? perf.returnRate+"%" : 0}</td>
+                              <td>{perf.returnRate ? perf.returnRate : 0}%</td>
                               <td></td>
                               <td></td>
                             </tr>
@@ -189,13 +189,13 @@ const SpmDashboard = (props) => {
                             </tr>
                             <tr>
                               <td scope="row">Dirty Bottles</td>
-                              <td>{perf.dirtyBottles}</td>
+                              <td>{perf.dirtyBottles}%</td>
                               <td></td>
                               <td></td>
                             </tr>
                             <tr>
                               <td scope="row">Breakage</td>
-                              <td>{perf.breakage}</td>
+                              <td>{perf.breakage}%</td>
                               <td></td>
                               <td></td>
                             </tr>
