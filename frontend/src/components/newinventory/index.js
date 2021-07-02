@@ -33,7 +33,13 @@ const NewInventory = (props) => {
       const result = await getProducts();
       const productsArray = result.map((product) => product.name);
       //console.log("result inventory",result);
-      setProducts(result);
+      setProducts(result.map((item) => {
+        return {
+          value: item.name,
+          label: item.name,
+          ...item,
+        };
+      }));
 
       const categoryArray = result.map((product) => product.type);
 
@@ -226,17 +232,7 @@ const NewInventory = (props) => {
 
   const onCategoryChange = async (index, value) => {
     try {
-      const warehouse = await getProductsByCategory(value);
       handleInventoryChange(index, 'categories', value);
-      setProducts(
-        warehouse.data.map((item) => {
-          return {
-            value: item.name,
-            label: item.name,
-            ...item,
-          };
-        }),
-      );
     } catch (err) {
       setErrorMessage(err);
     }
