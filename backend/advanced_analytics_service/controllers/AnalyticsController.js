@@ -256,10 +256,10 @@ async function calculatePrevReturnRatesNew(filters, analytic) {
 function getFilterConditions(filters) {
 	let matchCondition = { status: 'ACTIVE' };
 	if (filters.orgType && filters.orgType !== '') {
-		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
+		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2' || filters.orgType === 'S3') {
 			matchCondition.type = filters.orgType;
 		} else if (filters.orgType === 'ALL_VENDORS') {
-			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }];
+			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }];
 		}
 	}
 	if (filters.state && filters.state.length) {
@@ -453,7 +453,7 @@ function getDistrictConditionsWarehouse(filters) {
 	if (filters.district && filters.district.length) {
 		matchCondition["warehouseAddress.city"] = filters.district;
 	}
-	if (filters.orgType && filters.orgType !== '' && filters.warehouseIds) {
+	if (filters.orgType && filters.orgType !== '' && filters.orgType !== 'ALL_VENDORS' && filters.warehouseIds) {
 		matchCondition.id = { $in: [...filters.warehouseIds] };
 }
 	return matchCondition;
@@ -461,7 +461,7 @@ function getDistrictConditionsWarehouse(filters) {
 
 
 const _getWarehouseIdsByDistrict = async (filters) => {
-	if(filters.orgType && filters.orgType !== '')
+	if(filters.orgType && filters.orgType !== '' && filters.orgType !== 'ALL_VENDORS')
 		filters.warehouseIds = await _getWarehousesByOrgType(filters)
 	const warehouses = await WarehouseModel.aggregate([
 		{
@@ -1991,7 +1991,7 @@ function getSKUGroupByFilters(filters) {
  * @returns {Object}
  */
 exports.getStatsBySKU = [
-	auth,
+	// auth,
 	async function (req, res) {
 		try {
 			const filters = req.query;
@@ -2053,19 +2053,33 @@ exports.getStatsBySKU = [
 					temp['groupedBy'] = (analytic._id.toString()).includes('GMT') ? monthNames[moment(analytic._id).tz("Etc/GMT").month()]+' - '+moment(analytic._id).tz("Etc/GMT").year() : analytic._id;
 					temp['sortBy'] = (analytic._id.toString()).includes('GMT') ? y + (m < 10 ? '0' + m : m) : analytic._id;
 					if (filters?.inventory) {
-						let inventory = await InventoryModel.aggregate([
+						let inventory = await WarehouseModel.aggregate([
 							{
-								$unwind: "$inventoryDetails"
+								$match: {id: {$in: wIds}}
+							},
+							{
+								$lookup: {
+									from: 'inventories',
+									localField: 'warehouseInventory',
+									foreignField: 'id',
+									as: 'inventories'
+								}
+							},
+							{
+								$unwind: "$inventories"
+							},
+							{
+								$unwind: "$inventories.inventoryDetails"
 							},
 							{
 								$match: {
-									'inventoryDetails.productId': filters.pid
+									'inventories.inventoryDetails.productId': filters.pid
 								}
 							},
 							{
 								$group: {
-									_id: '$inventoryDetails.productId',
-									quantity: { $sum: "$inventoryDetails.quantity" },
+									_id: '$inventories.inventoryDetails.productId',
+									quantity: { $sum: "$inventories.inventoryDetails.quantity" },
 								}
 							}
 						]);
