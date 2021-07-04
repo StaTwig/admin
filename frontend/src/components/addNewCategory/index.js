@@ -30,7 +30,7 @@ const AddCategory = (props) => {
              
                 <div className="col-7 mt-5">
                     <div className="form-group">
-                        <label htmlFor="shipmentId" style={{textAlign:"right",paddingRight:"50px"}}> Category Name</label>
+                        <label className="required-field" htmlFor="shipmentId" style={{textAlign:"right",paddingRight:"50px"}}> Category Name</label>
                         <input
                         type="text"
                         
@@ -40,7 +40,7 @@ const AddCategory = (props) => {
                         />
                     </div>
               <div className="form-group">
-                    <label htmlFor="shipmentId" style={{textAlign:"right",paddingRight:"50px"}}> Description</label>
+                    <label className="required-field" htmlFor="shipmentId" style={{textAlign:"right",paddingRight:"50px"}}> Description</label>
                     <input
                     type="text"
                     className="form-control"
