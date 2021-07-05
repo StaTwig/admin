@@ -49,11 +49,11 @@ const Table = props => {
                 status = 'Rejected';
               }
               else if (order.poStatus === 'TRANSIT&FULLYFULFILLED') {
-                statusStyle = 'bg-secondary';
-                status = 'Transit&FullyFilled';
+                statusStyle = 'bg-primary';
+                status = 'Transit and FullyFilled';
               }
               else if (order.poStatus === 'FULLYFULFILLED') {
-                statusStyle = 'bg-secondary';
+                statusStyle = 'bg-primary';
                 status = 'FullyFilled';
               }
 
