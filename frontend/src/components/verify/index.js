@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import logo from '../../assets/brands/VaccineLedgerlogo.svg';
 import '../login/style.scss';
 import { Formik } from "formik";
+import { Alert, AlertTitle } from '@material-ui/lab';
+
 
 const FormVerifyPage = (props) => {
   const { otp, onOtpChange, onVerifyOtp, errorMessage, onResendOtp } = props;
@@ -161,9 +163,7 @@ const FormVerifyPage = (props) => {
                         </div>
 
                         {errorMessage && (
-                          <div className="alert alert-danger">
-                            {errorMessage}
-                          </div>
+                          <div> <Alert severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
                         )}
                         <div className="text-center">
                           <button type="submit" className="btn btn-primary">

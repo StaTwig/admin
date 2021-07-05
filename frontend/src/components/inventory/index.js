@@ -57,8 +57,7 @@ const Inventory = props => {
   /* const colors = ["#ffbcc4", "#c1e3f2", "#ffc18c", "#ffef83",
         "#d4e7ff", "#e0b0ff", "#F1EFCE", "#D7FAF1", "#F2B6AF" ];*/
   const colors = ["#94d2bd", "#d9ed92", "#ffe5d9", "#d8e2dc",
-                   "#FFE194", "#E8F6EF", "#B8DFD8", "#4C4C6D",
-                   "#01A9B4", "#87DFD6", "#FBFD8A", ];
+                   "#FFE194", "#E8F6EF", "#B8DFD8","#87DFD6", "#FBFD8A", ];
 
   const [inventoryAnalytics,setInventoryAnalytics]= useState({})
         // useEffect(() => {

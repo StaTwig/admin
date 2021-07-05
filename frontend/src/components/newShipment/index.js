@@ -24,6 +24,8 @@ import Select from 'react-select';
 import {getOrganizationsTypewithauth} from '../../actions/userActions';
 import { getProducts, getProductsByCategory } from "../../actions/poActions";
 import {getProductList} from '../../actions/productActions';
+import { Alert, AlertTitle } from '@material-ui/lab';
+
 
 
 const NewShipment = (props) => {
@@ -1368,15 +1370,11 @@ const NewShipment = (props) => {
       )}
 
       {message && (
-        <div className="alert alert-success d-flex justify-content-center mt-3">
-          {message}
-        </div>
+        <div className="d-flex justify-content-center mt-3"> <Alert severity="success"><AlertTitle>Success</AlertTitle>{message}</Alert></div>
       )}
 
       {errorMessage && (
-        <div className="alert alert-danger d-flex justify-content-center mt-3">
-          {errorMessage}
-        </div>
+        <div className="d-flex justify-content-center mt-3"> <Alert severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
       )}
     </div>
   );

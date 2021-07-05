@@ -17,6 +17,7 @@ import FailPopup from "./failPopup";
 import {fetchairwayBillNumber} from '../../actions/shipmentActions';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 const ReceiveShipment = (props) => {
   let shipmentDetails = props.trackData.shipmentDetails;
@@ -403,9 +404,7 @@ const ReceiveShipment = (props) => {
           </Modal>
         )}   */}
       {message && (
-        <div className="alert alert-success d-flex justify-content-center mt-3">
-          {message}
-        </div>
+        <div className="d-flex justify-content-center mt-3"> <Alert severity="success"><AlertTitle>Success</AlertTitle>{message}</Alert></div>
       )}
     </div>
   );

@@ -81,7 +81,7 @@ const OrganisationPopUp = (props) => {
             </button>
         </div> */}
         </div>
-        <div className="card w-100 rounded border border-white bg-white ">
+        <div className="mr-4">
             <div className="card-body flex-column d-flex">
             <div className="flex-row text-muted justify-content-between">
               <Formik
