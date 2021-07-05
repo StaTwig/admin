@@ -1189,7 +1189,7 @@ const NewShipment = (props) => {
               </label>
               {OrderDetails?.products?.length > 0 && (
                 <EditTable
-                check="1"
+                  check="1"
                   product={OrderDetails?.products}
                   handleQuantityChange={(v, i) => {
                     handleQuantityChange(v, i);
@@ -1204,7 +1204,7 @@ const NewShipment = (props) => {
               )}
               {!orderIdSelected && products?.length > 0 && (
                 <>
-                  <EditTable  
+                  <EditTable
                     check="0"
                     product={addProducts}
                     products={products}

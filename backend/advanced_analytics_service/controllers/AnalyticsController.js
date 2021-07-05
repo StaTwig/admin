@@ -256,18 +256,18 @@ async function calculatePrevReturnRatesNew(filters, analytic) {
 function getFilterConditions(filters) {
 	let matchCondition = { status: 'ACTIVE' };
 	if (filters.orgType && filters.orgType !== '') {
-		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
+		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2' || filters.orgType === 'S3') {
 			matchCondition.type = filters.orgType;
 		} else if (filters.orgType === 'ALL_VENDORS') {
-			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }];
+			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }];
 		}
 	}
-	if (filters.state && filters.state.length) {
-		matchCondition.state = filters.state;
-	}
-	if (filters.district && filters.district.length) {
-		matchCondition.district = filters.district;
-	}
+	// if (filters.state && filters.state.length) {
+	// 	matchCondition.state = filters.state;
+	// }
+	// if (filters.district && filters.district.length) {
+	// 	matchCondition.district = filters.district;
+	// }
 	if (filters.organization && filters.organization.length) {
 		matchCondition.id = filters.organization;
 	}
@@ -348,7 +348,7 @@ const _getWarehouseIdsByOrgType = async (filters) => {
 function getFilterConditionsSkuOrgType(filters) {
 	let matchCondition = { status: 'ACTIVE' };
 	if (filters.orgType && filters.orgType !== '') {
-		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
+		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2'|| filters.orgType === 'S3') {
 			matchCondition.type = filters.orgType;
 		} else if (filters.orgType === 'ALL_VENDORS') {
 			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }, { type: 'BREWERY' }];
@@ -360,7 +360,7 @@ function getFilterConditionsSkuOrgType(filters) {
 function getFilterConditionsOrgType(filters) {
 	let matchCondition = { status: 'ACTIVE' };
 	if (filters.orgType && filters.orgType !== '') {
-		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
+		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2'|| filters.orgType === 'S3') {
 			matchCondition.type = filters.orgType;
 		} else if (filters.orgType === 'ALL_VENDORS') {
 			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }, { type: 'BREWERY' }];
@@ -453,7 +453,7 @@ function getDistrictConditionsWarehouse(filters) {
 	if (filters.district && filters.district.length) {
 		matchCondition["warehouseAddress.city"] = filters.district;
 	}
-	if (filters.orgType && filters.orgType !== '' && filters.warehouseIds) {
+	if (filters.orgType && filters.orgType !== '' && filters.orgType !== 'ALL_VENDORS' && filters.warehouseIds) {
 		matchCondition.id = { $in: [...filters.warehouseIds] };
 }
 	return matchCondition;
@@ -461,7 +461,7 @@ function getDistrictConditionsWarehouse(filters) {
 
 
 const _getWarehouseIdsByDistrict = async (filters) => {
-	if(filters.orgType && filters.orgType !== '')
+	if(filters.orgType && filters.orgType !== '' && filters.orgType !== 'ALL_VENDORS')
 		filters.warehouseIds = await _getWarehousesByOrgType(filters)
 	const warehouses = await WarehouseModel.aggregate([
 		{
@@ -1134,6 +1134,19 @@ exports.getSalesStatsByBrand = [
 	}
 ];
 
+function getConditionsOrgWarehouse(filters) {
+	let matchCondition = {};
+	if (filters.state && filters.state.length) {
+		matchCondition["warehouseDetails.warehouseAddress.state"] = filters.state.toUpperCase();
+	}
+	if (filters.district && filters.district.length) {
+		matchCondition["warehouseDetails.warehouseAddress.city"] = filters.district;
+	}
+	console.log(matchCondition);
+	
+	return matchCondition;
+}
+
 /**
  * getAllStats.
  *
@@ -1147,8 +1160,23 @@ exports.getStatsByOrg = [
 			let organizations = await OrganisationModel.aggregate([
 				{
 					$match: getFilterConditions(filters)
-				}
+				},
+				{
+					$lookup: {
+						from: 'warehouses',
+						localField: 'id',
+						foreignField: 'organisationId',
+						as: 'warehouseDetails'
+					}
+				},
+				// {
+				// 	$unwind: '$warehouseDetails'
+				// },
+				{ $match: getConditionsOrgWarehouse(filters)}
 			]);
+			// organizations = organizations.filter(o => o.warehouseDetails.warehouseAddress.state == filters.state && o.warehouseDetails.warehouseAddress.city == filters.district);
+			// console.log(organizations);
+			
 			for (let organization of organizations) {
 				let warehouseIds = await _getWarehouseIdsByOrg(organization);
 				let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
@@ -1181,7 +1209,6 @@ exports.getStatsByOrg = [
 						$match: prevMonthmatchCondition
 					}]);
 				organization.analyticsPrevMonth = aggregateSalesStats(prevMonthAnalytics);
-
 			}
 
 			return apiResponse.successResponseWithData(
@@ -1190,6 +1217,8 @@ exports.getStatsByOrg = [
 				organizations
 			);
 		} catch (err) {
+			console.log(err);
+			
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
@@ -1307,19 +1336,19 @@ exports.getStatsByOrgType = [
 function getFilterConditions(filters) {
 	let matchCondition = {};
 	if (filters.orgType && filters.orgType !== '') {
-		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
+		if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2' || filters.orgType === 'S3') {
 			matchCondition.type = filters.orgType;
 		} else if (filters.orgType === 'ALL_VENDORS') {
-			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }];
+			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }];
 		}
 	}
 
-	if (filters.state && filters.state.length) {
-		matchCondition.state = filters.state;
-	}
-	if (filters.district && filters.district.length) {
-		matchCondition.district = filters.district;
-	}
+	// if (filters.state && filters.state.length) {
+	// 	matchCondition.state = filters.state;
+	// }
+	// if (filters.district && filters.district.length) {
+	// 	matchCondition.district = filters.district;
+	// }
 	if (filters.organization && filters.organization.length) {
 		matchCondition.id = filters.organization;
 	}
@@ -1991,7 +2020,7 @@ function getSKUGroupByFilters(filters) {
  * @returns {Object}
  */
 exports.getStatsBySKU = [
-	auth,
+	// auth,
 	async function (req, res) {
 		try {
 			const filters = req.query;
@@ -2053,19 +2082,33 @@ exports.getStatsBySKU = [
 					temp['groupedBy'] = (analytic._id.toString()).includes('GMT') ? monthNames[moment(analytic._id).tz("Etc/GMT").month()]+' - '+moment(analytic._id).tz("Etc/GMT").year() : analytic._id;
 					temp['sortBy'] = (analytic._id.toString()).includes('GMT') ? y + (m < 10 ? '0' + m : m) : analytic._id;
 					if (filters?.inventory) {
-						let inventory = await InventoryModel.aggregate([
+						let inventory = await WarehouseModel.aggregate([
 							{
-								$unwind: "$inventoryDetails"
+								$match: {id: {$in: wIds}}
+							},
+							{
+								$lookup: {
+									from: 'inventories',
+									localField: 'warehouseInventory',
+									foreignField: 'id',
+									as: 'inventories'
+								}
+							},
+							{
+								$unwind: "$inventories"
+							},
+							{
+								$unwind: "$inventories.inventoryDetails"
 							},
 							{
 								$match: {
-									'inventoryDetails.productId': filters.pid
+									'inventories.inventoryDetails.productId': filters.pid
 								}
 							},
 							{
 								$group: {
-									_id: '$inventoryDetails.productId',
-									quantity: { $sum: "$inventoryDetails.quantity" },
+									_id: '$inventories.inventoryDetails.productId',
+									quantity: { $sum: "$inventories.inventoryDetails.quantity" },
 								}
 							}
 						]);
