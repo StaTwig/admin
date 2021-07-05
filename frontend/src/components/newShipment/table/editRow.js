@@ -140,6 +140,7 @@ const handleChange = (value) =>
                 <Select
                   className="no-border"
                   placeholder={<div className="select-placeholder-text">Select Product Category</div>} 
+                  value={{value: prod.id, label: prod.type}}
                   defaultInputValue={prod.type}
                   onChange={(v) => handleCategoryChange(index, v.value)}
                   options={category}
