@@ -1957,6 +1957,7 @@ exports.getProductListCounts = [
     try {
       
       const { warehouseId } = req.user;
+      // const warehouseId  = req.query.id;
       const InventoryId = await WarehouseModel.find({ id: warehouseId });
       const val = InventoryId[0].warehouseInventory;
       const productList = await InventoryModel.find({ id: val });
@@ -1976,10 +1977,22 @@ exports.getProductListCounts = [
             unitofMeasure: product && product[0] && product[0].unitofMeasure,
 
           };
+         
+          
         }   
+        
 
         productArray.push(product1);
       }
+
+      productArray.sort(function(a,b){
+          if(a.quantity>b.quantity){
+            return -1;
+          }
+          else{
+            return 1;
+          }
+        })
      
       return apiResponse.successResponseWithData(res, productArray);
     } catch (err) {
@@ -1987,7 +2000,7 @@ exports.getProductListCounts = [
         "error",
         "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
