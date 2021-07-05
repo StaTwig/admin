@@ -55,10 +55,19 @@ const EditRow = (props) => {
       var key = e.keyCode || e.which;
       key = String.fromCharCode(key);
     }
-    var regex = /[0-9]/;
-    if (!regex.test(key)) {
-      e.returnValue = false;
-      if (e.preventDefault) e.preventDefault();
+    if(!e.target.value && key==0){
+      e.stopPropagation();
+      e.preventDefault();
+      e.returnValue=false;
+      e.cancelBubble=true;
+      return false;
+    }
+    else{
+      var regex = /[0-9]/;
+      if (!regex.test(key)) {
+        e.returnValue = false;
+        if (e.preventDefault) e.preventDefault();
+      }
     }
   };
 
