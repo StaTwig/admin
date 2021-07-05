@@ -64,6 +64,21 @@ export const getInventoryDetails = (skip = 0, limit = 5) => {
     };
 };
 
+export const getInventory = (skip = 0, limit = 5) => {
+    return async dispatch => {
+      dispatch(turnOn());
+      try {
+        const result = await axios.get(`${config().inventoriesUrl}?skip=${skip}&limit=${limit}`);
+        dispatch(setInventoryDetails(result.data));
+        dispatch(turnOff());
+      }catch(e) {
+        dispatch(turnOff());
+        dispatch(resetInventoryDetails());
+      }
+
+    };
+};
+
 export const getRegions = async () => {
   try {
     const result = await axios.get(config().getRegionsUrl);

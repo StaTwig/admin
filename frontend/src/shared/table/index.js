@@ -26,7 +26,7 @@ const Table = props => {
 function getDate(n){
     return n.substring(0,10)
 }
-console.log(inventoryDetails)
+//console.log("inventoryDetailsTable",inventoryDetails)
 inventoryDetails.sort(function(a,b){
     return new Date(b.createdAt) - new Date(a.createdAt);
   });
@@ -56,9 +56,9 @@ inventoryDetails.sort(function(a,b){
                   <div className="rTableCell" style={{position:"relative",left:'6%'}}>{inventory.productDetails.type}</div>
                   {/* <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.manufacturer}</div> */}
                   <div className="rTableCell " style={{position:"relative",left:'12%'}}> {formatDate(inventory.createdAt)}</div>
-                  <div className="rTableCell"  style={{position:"relative",left:'19%'}}>{inventory.inventoryQuantity}</div>                                 
+                  <div className="rTableCell"  style={{position:"relative",left:'19%'}}>{inventory.inventoryQuantity}{inventory.productDetails.unitofMeasure ? inventory.productDetails.unitofMeasure.name ? <span>{" ("}{inventory.productDetails.unitofMeasure.name}{")"}</span>: null:null}</div>                                 
                   <div className="rTableCell" style={{position:"relative", left:"19%", fontWeight:" 600 "}}>
-                         {(inventory.eventTypePrimary !== 'ADD') ? (inventory.eventTypePrimary === 'RECEIVE' ? <div className="status secondary-bg bg-success"> RECEIVED</div> :  <div className="status secondary-bg bg-warning">SENT</div>) :  <div className="status secondary-bg bg-primary">ADDED</div>} 
+                         {(inventory.eventTypePrimary !== 'ADD') ? (inventory.eventTypePrimary === 'RECEIVE' ? <div className="status secondary-bg bg-success"> Received</div> :  <div className="status secondary-bg bg-warning">Sent</div>) :  <div className="status secondary-bg bg-primary">Added</div>} 
                   </div>
                     <div className=" rTableCell m-2" 
                          style={{position:"relative",left:'12%'}}>
@@ -92,14 +92,16 @@ inventoryDetails.sort(function(a,b){
                                              <TableCell align="left">{inventory.shipmentDetails.id}</TableCell></div>
                                       </TableRow>
                                       <TableRow>
-                                          <TableCell>From Organisation:</TableCell>
+                                          <TableCell>{inventory.eventTypePrimary === 'CREATE'?"To Organisation:":"From Organisation:" }</TableCell>
                                              <div className="">
-                                             <TableCell align="left">{inventory.shipmentDetails.supplier.id}</TableCell></div>
+                                               <TableCell align="left">{inventory.eventTypePrimary === 'CREATE'?(inventory.shipmentDetails.receiver.id):(inventory.shipmentDetails.supplier.id)}</TableCell></div>
+
                                       </TableRow>
                                       <TableRow>
-                                          <TableCell>From Location:</TableCell>
+                                          <TableCell>{inventory.eventTypePrimary === 'CREATE'?"To Location:":"From Location:" }</TableCell>
                                           <div className="">
-                                          <TableCell align="left">{(inventory.actorOrgId === inventory.shipmentDetails.supplier.id) ? inventory.actorOrgAddress : inventory.secondaryOrgAddress}</TableCell></div>
+                                             <TableCell align="left">{inventory.eventTypePrimary === 'CREATE' ? (inventory.secondaryOrgAddress) : (inventory.secondaryOrgAddress)}</TableCell></div>
+
                                       </TableRow>
                                     </div>
                                          :

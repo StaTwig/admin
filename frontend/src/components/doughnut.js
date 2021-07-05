@@ -25,6 +25,19 @@ const ChartsPage = (props) => {
             {
               data: quantity,
               backgroundColor: [
+                "#63B7AF",
+                "#FFCB91",
+                "#FFEFA1",
+                "#94EBCD",
+                "#6DDCCF",
+                "#FFE194",
+                "#E8F6EF",
+                "#B8DFD8",
+                "#4C4C6D",
+                "#01A9B4",
+                "#87DFD6",
+                "#FBFD8A",
+                
                 "#ffbcc4",
                 "#c1e3f2",
                 "#ffc18c",
@@ -45,6 +58,20 @@ const ChartsPage = (props) => {
                 "#455A64",
               ],
               hoverBackgroundColor: [
+                "#63B7AF",
+                "#F7A440",
+                "#FFCB91",
+                "#FFEFA1",
+                "#94EBCD",
+                "#6DDCCF",
+                "#FFE194",
+                "#E8F6EF",
+                "#B8DFD8",
+                "#4C4C6D",
+                "#01A9B4",
+                "#87DFD6",
+                "#FBFD8A",
+                
                 "#ffbcc4",
                 "#c1e3f2",
                 "#ffc18c",
@@ -54,7 +81,6 @@ const ChartsPage = (props) => {
                 "#EDE7F6",
                 "#D1C4E9",
                 "#B39DDB",
-                "#9575CD",
                 "#9575CD",
                 "#E0F7FA",
                 "#B2EBF2",
@@ -92,6 +118,7 @@ const ChartsPage = (props) => {
   padding:10,
   labels: {
   usePointStyle: true,
+  fontFamily: 'Source Sans Pro',
 
   }
  }

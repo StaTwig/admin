@@ -253,7 +253,7 @@ const Inventory = (props) => {
                   </div>
                 </>
               ) : (
-                <div className="btn-group mainButtonFilter">
+                <div className="btn-group mainSortingButton">
                   <a
                     className={`btn ${
                       selectedInventoryType === 'BREWERY' ? 'active' : ''
@@ -297,23 +297,36 @@ const Inventory = (props) => {
                     </tr>
                   </thead>
                   <tbody>
-                    {inventories.map((inventory, index) => (
-                      <tr key={index}>
-                        <td className="inventorydesc">
-                          {inventory.manufacturer} <br />
-                          <span className="inventorydescsubtitle">&nbsp;</span>
+                    {inventories.length == 0 ? (
+                      <tr>
+                        <td
+                          colspan="4"
+                          style={{ textAlign: 'center', padding: '20px' }}
+                        >
+                          No Data found
                         </td>
-                        <td className="inventorydesc">
-                          {inventory.name}
-                          <br />
-                          <span className="inventorydescsubtitle">
-                            {inventory.externalId}
-                          </span>
-                        </td>
-                        <td>{inventory.shortName}</td>
-                        <td>{inventory.quantity}</td>
                       </tr>
-                    ))}
+                    ) : (
+                      inventories.map((inventory, index) => (
+                        <tr key={index}>
+                          <td className="inventorydesc">
+                            {inventory.manufacturer} <br />
+                            <span className="inventorydescsubtitle">
+                              &nbsp;
+                            </span>
+                          </td>
+                          <td className="inventorydesc">
+                            {inventory.name}
+                            <br />
+                            <span className="inventorydescsubtitle">
+                              {inventory.externalId}
+                            </span>
+                          </td>
+                          <td>{inventory.shortName}</td>
+                          <td>{inventory.quantity}</td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -433,7 +446,7 @@ const Inventory = (props) => {
                   value={filters.sku}
                   onChange={onSKUChange}
                 >
-                  <option>Select SKU</option>
+                  <option value="">Select SKU</option>
                   {SKUs.map((sku, index) => {
                     return (
                       <option key={index} value={sku.id}>

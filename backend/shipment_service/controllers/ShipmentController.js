@@ -25,7 +25,7 @@ const CENTRAL_AUTHORITY_ADDRESS = null
 const blockchain_service_url = process.env.URL;
 const shipment_stream = process.env.SHIP_STREAM;
 const axios = require("axios");
-const { uploadFile } = require("../helpers/s3");
+const { uploadFile , getFileStream} = require("../helpers/s3");
 const fs = require('fs');
 const util = require('util');
 const unlinkFile = util.promisify(fs.unlink);
@@ -60,7 +60,8 @@ const inventoryUpdate = async (
       },
       {
         $inc: {
-          "inventoryDetails.$.quantityInTransit": quantity,
+          "inventoryDetails.$.quantityInTransit": parseInt(quantity),
+
         },
       }
     );
@@ -267,8 +268,10 @@ exports.createShipment = [
         if (result.success) {  
           try{
             data.products.forEach(element => {
-              var product = ProductModel.findOne({ id: element.productId });
+              var product = ProductModel.findOne({ id: element.productID });
               element.type = product.type
+              element.unitofMeasure= product.unitofMeasure
+              console.log(product)
             });
             var i = 0;
             const incrementCounter = await CounterModel.update(
@@ -562,15 +565,18 @@ exports.createShipment = [
               );
             }
           } catch (err) {
+            console.log(err)
             return apiResponse.ErrorResponse(res,err);
           } 
       } 
      
     });
       }  catch (err) { 
-            return apiResponse.ErrorResponse(res, "Shipment not created");
+        console.log(err)
+        return apiResponse.ErrorResponse(res, "Shipment not created");
           }
     } catch (err) {
+      console.log(err)
       logger.log(
         "error",
         "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
@@ -1307,11 +1313,18 @@ exports.viewShipment = [
               },
             },
           ])
-            .then((shipment) => {
-              return apiResponse.successResponseWithData(
+            .then(async (shipment) => {
+              var Shipment = shipment.length ? shipment[0] : [] 
+              // var result = []
+              let prom = await Promise.all(Shipment.products.map(async (element )=> {
+                var product = await ProductModel.findOne({ id: element.productID });
+                element.unitofMeasure = product.unitofMeasure;
+               }))
+               console.log(Shipment.products)
+               return apiResponse.successResponseWithData(
                 res,
                 "Shipment",
-                shipment.length ? shipment[0] : []
+                Shipment
               );
             })
             .catch((err) => {
@@ -1514,8 +1527,9 @@ exports.getProductsByInventory = [
           $group: {
             _id: "$inventoryDetails.productId",
             productCategory: { $first: "$products.type" },
-	    productName: { $first: "$products.name" },
+	          productName: { $first: "$products.name" },
             manufacturer: { $first: "$products.manufacturer" },
+            unitofMeasure:{$first:"$products.unitofMeasure"},
             productQuantity: { $sum: "$inventoryDetails.quantity" },
             quantity: { $sum: "$inventoryDetails.quantity" },
           },
@@ -1540,32 +1554,9 @@ exports.uploadImage = async function (req, res) {
   checkToken(req, res, async (result) => {
     if (result.success) {
       const Id = req.query.id;
-      // const incrementCounter = await CounterModel.updateOne(
-      //   {
-      //     "counters.name": "shipmentImage",
-      //   },
-      //   {
-      //     $inc: {
-      //       "counters.$.value": 1,
-      //     },
-      //   }
-      // );
-      // console.log(incrementCounter)
-      // const poCounter = await CounterModel.find(
-      //   { "counters.name": "shipmentImage" },
-      //   { "counters.name.$": 1 }
-      // );
-      // console.log(poCounter)
-      // const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]));
       try {
-        // const filename = Id + "-" + t.format + t.value + ".png";
-        // let dir = `/home/ubuntu/shipmentimages`;
-
-        // await moveFile(req.file.path, `${dir}/${filename}`);
         const Upload = await uploadFile(req.file)
-        console.log(Upload)
         await unlinkFile(req.file.path)
-        console.log("Unlinked")
         const update = await ShipmentModel.findOneAndUpdate(
           { id: Id },
           { $push: { imageDetails: `${Upload.key}` } }, { new: true }
@@ -2738,3 +2729,10 @@ exports.fetchairwayBillNumber = [
   },
 ];
 
+exports.Image=[
+  auth,
+  async(req,res)=>{
+    const FileStream = getFileStream(req.params.key);
+    FileStream.pipe(res);
+  }
+]

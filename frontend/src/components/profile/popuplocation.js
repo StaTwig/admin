@@ -54,57 +54,60 @@ const PopUpLocation = (props) => {
   };
 
   return (
-    <div class="">
+    <div className="addLocation">
       <center>
-        <h1 className="">
+        <h1 className="addLocationText">
           <b>Add Location</b>
         </h1>
       </center>
-      <br></br>
-
-      <div className="slectloc1">
-        <div className="row">
-          <div className="col-md-6 com-sm-12">
-            <div className="form-group">
-              <img src={Location} height="30" width="20" className="pt-2"></img>
-              <label htmlFor="Select Location" className="pt-3">
-                <b>Select Location</b>
-              </label>
-              <div className="form-control">
-                <DropdownButton
-                  name={selectLocation}
-                  // name2="Select Location"
-                  onSelect={(v)=>{
-                    console.log('Location Selected');
-                    console.log(v);
-                    setWareHouse({...v});
-                    setSelectLocation(v.warehouseAddress.firstLine);
-                    console.log(wareHouse);
-                  }}
-                  groups={props.wareHouses}
-                />.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <br></br>
-      <center>
-        <h7>------------------------- Or -------------------------</h7>
-      </center>
-      <div class="wrapper1">
+     
+    
+      <div className="wrapper1">
         <Link to={"/Addlocation"}>
-          <button className="btn btn-orange fontSize18 font-bold">
-            <img src={Location1} width="23" height="23" className="mr-2 mb-1" />
+          <button className="btn btn-orange fontSize18" type="button">
+            <img src={Location1} width="20" height="20" className="mr-2 mb-1" />
             <span>
               <b>Add New Location</b>
             </span>
           </button>
         </Link>
       </div>
+      
+      <div className="line">
+      <center>
+      <h6> ━━━━━━━ &nbsp;&nbsp;&nbsp; Or &nbsp;&nbsp;&nbsp;    ━━━━━━━ </h6>
+      </center>
+      </div>
+      <br></br>
+      <div className="ml-5">
+      <div className="col-md-12">
+          <div className="form-group">
+            <img src={Location} height="35" width="20" className="pt-2"></img>
+            <label htmlFor="Select Location" className="pt-3">
+              <b>Select Location</b>
+            </label>
+            <div className="form-controll">
+              <DropdownButton
+                name={selectLocation}
+                // name2="Select Location"
+                onSelect={(v)=>{
+                console.log('Location Selected');
+                console.log(v);
+                setWareHouse({...v});
+                setSelectLocation(v.warehouseAddress.firstLine);
+                console.log(wareHouse);
+                }}
+                groups={props.wareHouses}
+              />
+            </div>
+          </div>
+        </div>
+      
+    </div>
+
 
       <div class="wrapper1">
-        <button className="btn btn-orange fontSize20 font-bold mr-4" onClick={()=>{updateStatus(wareHouse);}}>
+        <button className="btn btn-primary mt-5" onClick={()=>{updateStatus(wareHouse);}}>
           <span>Continue</span>
         </button>
       </div>

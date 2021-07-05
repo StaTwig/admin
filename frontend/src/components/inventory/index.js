@@ -54,8 +54,11 @@ const Inventory = props => {
   const [currentInventoriesCount, setCurrentInventoriesCount] = useState('');
   const [productsList,setProductsList] = useState([]);
   const dispatch = useDispatch();
-  const colors = ["#ffbcc4", "#c1e3f2", "#ffc18c", "#ffef83",
-        "#d4e7ff", "#e0b0ff", "#F1EFCE", "#D7FAF1", "#F2B6AF" ];
+  /* const colors = ["#ffbcc4", "#c1e3f2", "#ffc18c", "#ffef83",
+        "#d4e7ff", "#e0b0ff", "#F1EFCE", "#D7FAF1", "#F2B6AF" ];*/
+  const colors = ["#94d2bd", "#d9ed92", "#ffe5d9", "#d8e2dc",
+                   "#FFE194", "#E8F6EF", "#B8DFD8", "#4C4C6D",
+                   "#01A9B4", "#87DFD6", "#FBFD8A", ];
 
   const [inventoryAnalytics,setInventoryAnalytics]= useState({})
         // useEffect(() => {
@@ -78,6 +81,7 @@ const Inventory = props => {
      useEffect(() => {
     async function fetchData() {
       const result = await getProductList();
+      console.log(result);
       setProductsList(result.message);
       const resultAnalytics = await getInventoryAnalytics();
       
@@ -358,17 +362,22 @@ const Inventory = props => {
                   <button className="btn btn-link mr-3"><b>View all</b></button>
                 </Link>
               </div>
-              <div className="row overflow">
+              {
+                console.log(productsList)
+              }
+              <div className="overflow" style={{height:"800px",overflowX:"hidden"}}>
+              <div className="row">
                 {productsList?.map((product, index) => (
                   <div className="col-sm-6" key={index}>
                     <div className="d-flex card flex-column align-items-center ml-4"  style={{backgroundColor: colors[index]}}>
                     <div className="round-sign">{product.productName}</div>
                       <p className="product">&nbsp;</p>
                       {/* <p className="product">{product.productName}</p> */}
-                      <h3>Qty : {product.quantity}</h3>
+                      <h3>Qty : {product.quantity}<span>{"  ("}</span>{product.unitofMeasure && product.unitofMeasure.name ? <span>{product.unitofMeasure.name}</span>:""}<span>{")"}</span></h3>
                     </div>
                   </div>
                 ))}
+                </div>
 
               </div>
             </div>

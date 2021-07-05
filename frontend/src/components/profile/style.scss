@@ -6,7 +6,7 @@
   top:-22px;
     padding-right: 25px;
     padding-left: 55px;
-    overflow: hidden;
+    //overflow: hidden;
     @media (max-width: $md) {
       padding-right: 10px;
       padding-left: 10px;
@@ -53,6 +53,16 @@
     flex-grow: inherit;
     font-size: 16px;
   }
+  .form-controll {
+    border: none;
+    background: transparent;
+    border-bottom: 2px solid #d6d6d6;
+    border-radius: 0;
+    color: $black;
+    flex-basis: 43%;
+    margin-right: 55px;
+    margin-top: 10px;
+  }
   .wallet{
     border-bottom:none;
     
@@ -85,7 +95,7 @@
       width:160px;
     }
     .pincode {
-      text-security: disc;
+      //text-security: disc;
       -webkit-text-security: disc;
       -moz-text-security: disc;
   }
@@ -121,8 +131,9 @@ padding-left:100px;
 }
 .wrapper1 {
   text-align: center;
-  padding:25px;
-  top: 0px;
+  padding:20px;
+  margin-bottom: 40px;
+  
 }
 
 .slectloc1
@@ -162,7 +173,7 @@ padding-left:100px;
   flex-direction: column;
   .card-title {
     padding: 0;    
-    font-size: 12px;
+    font-size: 14px;
     font-weight: 500;
     color: #0093E9;
     margin-bottom: 0%;
@@ -191,39 +202,41 @@ padding-left:100px;
     display: flex;
     flex-direction: column;
     padding-top: 0% !important;
+    margin-top:20px;
+
     .total {
-        font-size: 14px;
+        font-size: 13px;
         font-weight: bold;
         padding-bottom: 2vh;        
     }
     .total-input {
-      font-size: 14px;
+      font-size: 13px;
       font-weight: bold;
       border: 0vh;           
   }    
     .full-address {
         width: 30vh;
-        font-size: 14px;
+        font-size: 13px;
         color: #707070;
         padding-bottom: 2vh;
     }  
     .full-address-input {
       width: 30vh;
-      font-size: 14px;
+      font-size: 13px;
       color: #707070;
       border: 0vh;    
   }      
     .pin-code {
       position: relative;
       width: 30vh;
-      font-size: 14px;
+      font-size: 13px;
       color: #707070;
       margin-top: auto;
       padding-bottom: 2vh;
   }   
   .pin-code-input {
     width: 30vh;
-    font-size: 14px;
+    font-size: 13px;
     color: #707070;
     border: 0vh;          
 }       
@@ -258,4 +271,14 @@ padding-left:100px;
   font-weight: bold;
   padding-top: 3vh;
   padding-bottom: 2vh;
+}
+
+.addLocationText{
+  text-align: center;
+  font-size: 30px;
+  margin-top: -20px;
+  margin-bottom: 50px;
+}
+.line{
+  color:#707070;
 }

@@ -33,7 +33,7 @@ const InventoryDashboard = (props) => {
         {analytics.map((analytic, index) => {
           return (
             <>
-              <div className="col-lg-3 col-md-3 col-sm-12">
+              <div key={index} className="col-lg-3 col-md-3 col-sm-12">
                 <div
                   className="productGrid"
                   onClick={() => toggleBrand(analytic._id)}
@@ -53,6 +53,7 @@ const InventoryDashboard = (props) => {
                 <div className="card-container">
                   {analytic.products.map((product, i) => (
                     <div
+                      key={i}
                       className="card"
                       onClick={() => openDetailView(product)}
                     >
@@ -89,15 +90,27 @@ const InventoryDashboard = (props) => {
                           aria-valuenow="60"
                           aria-valuemin="0"
                           aria-valuemax="100"
-                          style={{ width: (!isNaN(product.returnRate) ? product.returnRate : 0) + '%' }}
+                          style={{
+                            width:
+                              (!isNaN(product.returnRate)
+                                ? product.returnRate
+                                : 0) + '%',
+                          }}
                         >
                           <span className="sr-only">
-                            {!isNaN(product.returnRate) ? product.returnRate : 0}% Complete
+                            {!isNaN(product.returnRate)
+                              ? product.returnRate
+                              : 0}
+                            % Complete
                           </span>
                         </div>
                       </div>
                       <div className="captionSubtitle">
-                        Compared to ({!isNaN(product.returnRatePrev) ? product.returnRatePrev : 0}% last month)
+                        Compared to (
+                        {!isNaN(product.returnRatePrev)
+                          ? product.returnRatePrev
+                          : 0}
+                        % last month)
                       </div>
                     </div>
                   ))}

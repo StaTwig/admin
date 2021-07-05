@@ -14,14 +14,22 @@ const Track = (props) => {
   const [value, setValue] = useState('');
   const [searchType, setSearchType] = useState('PO');
   const [visible, setVisible] = useState(false);
-  const [op, setOp] = useState(-1);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [op, setOp] = useState(props.match.params.id ? 1 : -1);
+  const [isSubmitted, setIsSubmitted] = useState(props.match.params.id ? true : false);
   const {
     poChainOfCustodyData,
     shippmentChainOfCustodyData,
     searchData,
     resetData,
   } = props;
+
+  React.useEffect(() => {
+    if (props.match.params.id && shippmentChainOfCustodyData.length == 0) {
+      setValue(props.match.params.id);
+      setOp(1);
+      onSeach(props.match.params.id);
+    }
+  },[props, shippmentChainOfCustodyData])
 
   const onSearchChange = (e) => {
     setValue(e.target.value);
@@ -39,8 +47,8 @@ const Track = (props) => {
     // }
   };
 
-  const onSeach = async () => {
-    await searchData(value);
+  const onSeach = async (v = value) => {
+    await searchData(v);
     setIsSubmitted(true);
   };
 
@@ -57,10 +65,10 @@ const Track = (props) => {
       </div>
       <div className="row">
         {shippmentChainOfCustodyData.length > 0 &&
-          <div className="col-6">
+          <div className="col">
             <div className="row mb-4">
               <div className="col" style={{ minHeight: 400 }}>
-                <Map />
+                <Map data={shippmentChainOfCustodyData} />
               </div>
             </div>
             {/* <div className="panel commonpanle row shadow bg-white mb-4">
@@ -86,14 +94,14 @@ const Track = (props) => {
             </div>
           </div> */}
           </div>}
-        <div className="col row ml-3">
+        <div className="col-6 ml-3">
           {shippmentChainOfCustodyData.length == 0 ? (
             <>
               <div className="noOutline" tabIndex="-1" onKeyDown={onkeydown}>
                 <div className="search-form">
                   <input
                     type="text"
-                    placeholder="Enter Order ID or Serial No."
+                    placeholder="Enter Order ID or Serial No. or Shipment No. or Transit No."
                     onChange={onSearchChange}
                     //className="form-control border border-primary search-field"
                       className="form-control search-field border-8"
@@ -106,24 +114,24 @@ const Track = (props) => {
                   />
                 </div>
                 {isSubmitted && (
-                  <span className="text-danger">No data found</span>
+                  <span className="redTxt">No data found</span>
                 )}
               </div>
             </>
           ) : (
-            <div className="col-12 noOutline">
+            <div className="col noOutline">
               <div className="d-flex flex-row-reverse mb-2">
-                {' '}
-                <button
-                  onClick={() => {
-                    resetData();
-                    setIsSubmitted(false);
-                  }}
-                  className="btn btn-outline-primary cursorP"
-                >
-                  <img src={back} height="17" className="mr-2 mb-1" />
-                  <span className="fontSize20">Back to Search</span>
-                </button>{' '}
+                  {!props.match.params.id &&
+                    <button
+                      onClick={() => {
+                        resetData();
+                        setIsSubmitted(false);
+                      }}
+                      className="btn btn-outline-primary cursorP"
+                    >
+                      <img src={back} height="17" className="mr-2 mb-1" />
+                      <span className="fontSize20">Back to Search</span>
+                    </button>}
               </div>
                 <div className=" panel commonpanle  bg-light">
                   <h6 className=" text-primary mb-4">CHAIN OF CUSTODY</h6>
@@ -145,7 +153,7 @@ const Track = (props) => {
                     </div>
                   </div>
                   <div className="pb-4">
-                    {shippmentChainOfCustodyData.map((row, index) => { 
+                    {shippmentChainOfCustodyData.map((row, index) => {
                       let newArr = [];
                       // if(row.id == value)
                       newArr = shippmentChainOfCustodyData.filter(rw => rw?.taggedShipments?.includes(value));
@@ -154,7 +162,7 @@ const Track = (props) => {
                       
                       return row?.shipmentUpdates?.filter(s => s.status == 'RECEIVED').map((r, i) => (
                         <SoChainOfCustody
-                          len={row.shipmentUpdates.length}
+                          len={row.shipmentUpdates.filter(s => s.status == 'RECEIVED').length}
                           i={i}
                           v={visible}
                           setV={setVisible}

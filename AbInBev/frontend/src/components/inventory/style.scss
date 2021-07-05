@@ -1,3 +1,4 @@
+@import "../../assets/styles/colors.scss";
     * {
         margin: 0;
         padding: 0;
@@ -253,6 +254,29 @@ flex-shrink: 0;
         padding:0px 20px;
     }
 }
+.mainSortingButton{
+    background: #E5E0E9 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 6px #54265E2E;
+    border-radius: 30px;
+    color: #707070;
+    opacity: 1;
+    margin-bottom: 50px;
+    .active{
+      background: #53265d 0% 0% no-repeat padding-box;
+      border-radius: 30px !important;
+      color: $white;
+      font-weight: 500;
+      min-width: 80px;
+      outline:none !important;
+    }
+    a{
+      outline:none; 
+      padding: 8px 20px;
+    }
+    a:focus{
+      outline:none !important;
+    }
+  }
 .inventoryDetails{
     height:800px;
     overflow-y: auto;

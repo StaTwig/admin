@@ -4,8 +4,11 @@ import { config } from '../config';
 function getQueryStringFromFilters(filters) {
   let queryStr = '';
   if (filters.inventoryType && filters.inventoryType.length) {
-
-    if (filters.inventoryType === 'VENDOR' && filters.vendorType && filters.vendorType.length) {
+    if (
+      filters.inventoryType === 'VENDOR' &&
+      filters.vendorType &&
+      filters.vendorType.length
+    ) {
       queryStr = '?orgType=' + filters.vendorType;
     } else {
       queryStr = '?orgType=' + filters.inventoryType;
@@ -28,7 +31,7 @@ function getQueryStringFromFilters(filters) {
 }
 export const getProductsInventory = (_filters) => {
   const queryString = getQueryStringFromFilters(_filters);
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       dispatch(turnOn());
       const result = await axios.get(
@@ -43,22 +46,20 @@ export const getProductsInventory = (_filters) => {
 };
 
 export const getAllStates = () => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       dispatch(turnOn());
-      const result = await axios.get(
-        config().getAllStates,
-      );
+      const result = await axios.get(config().getAllStates);
       dispatch(turnOff());
       return result.data;
     } catch (e) {
       dispatch(turnOff());
     }
   };
-}
+};
 
 export const getDistrictsByState = (_state) => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       dispatch(turnOn());
       const result = await axios.get(
@@ -70,27 +71,24 @@ export const getDistrictsByState = (_state) => {
       dispatch(turnOff());
     }
   };
-}
+};
 
 export const getAllSKUs = () => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       dispatch(turnOn());
-      const result = await axios.get(
-        config().getAllSKUs,
-      );
+      const result = await axios.get(config().getAllSKUs);
       dispatch(turnOff());
       return result.data;
     } catch (e) {
       dispatch(turnOff());
     }
   };
-}
+};
 
 export const getOrganizationsByType = (filters) => {
   let queryStr = '';
   if (filters.organizationType && filters.organizationType.length) {
-
     if (filters.organizationType === 'VENDOR') {
       if (filters.vendorType === 'ALL_VENDORS') {
         queryStr = 'SUPPLIER';
@@ -101,7 +99,6 @@ export const getOrganizationsByType = (filters) => {
       queryStr = filters.organizationType;
     }
 
-
     if (filters.state && filters.state !== '') {
       queryStr = queryStr + '&state=' + filters.state;
     }
@@ -109,11 +106,9 @@ export const getOrganizationsByType = (filters) => {
     if (filters.district && filters.district !== '') {
       queryStr = queryStr + '&district=' + filters.district;
     }
-
-
   }
 
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       dispatch(turnOn());
       const result = await axios.get(
@@ -125,11 +120,10 @@ export const getOrganizationsByType = (filters) => {
       dispatch(turnOff());
     }
   };
-}
+};
 
 export const getOrganizationByID = (orgId) => {
-
-  return async dispatch => {
+  return async (dispatch) => {
     try {
       dispatch(turnOn());
       const result = await axios.get(
@@ -141,4 +135,4 @@ export const getOrganizationByID = (orgId) => {
       dispatch(turnOff());
     }
   };
-}
+};

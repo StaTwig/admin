@@ -34,7 +34,7 @@ const EmailContent = require('../components/EmailContent');
 const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const phoneRgex = /^\d{12}$/;
 
-const { uploadFile } = require("../helpers/s3");
+const { uploadFile , getFileStream } = require("../helpers/s3");
 const fs = require('fs');
 const util = require('util');
 const unlinkFile = util.promisify(fs.unlink);
@@ -51,11 +51,11 @@ exports.checkEmail = [
   body('firstName')
     .isLength({ min: 1 })
     .trim()
-    .withMessage('name must be specified.'),
+    .withMessage('Name must be specified.'),
   body('lastName')
     .isLength({ min: 1 })
     .trim()
-    .withMessage('name must be specified.'),
+    .withMessage('Name must be specified.'),
   body('organisationId')
     .isLength({ min: 1 })
     .trim()
@@ -71,7 +71,7 @@ exports.checkEmail = [
       let user;
       let phone = '';
       if (!emailId.match(phoneRgex) && !emailId.match(emailRegex))
-        return Promise.reject('E-mail/Mobile not in valid');
+        return Promise.reject('E-mail/Mobile is not valid');
 
       if (emailId.indexOf('@') > -1)
         user = await EmployeeModel.findOne({ emailId });
@@ -93,8 +93,8 @@ exports.checkEmail = [
   async (req, res) => {
     try {
       if (
-        !req.body.firstName.match('[A-Za-z]') ||
-        !req.body.lastName.match('[A-Za-z]')
+        !req.body.firstName.match('[A-Za-z0-9]') ||
+        !req.body.lastName.match('[A-Za-z0-9]')
       ) {
         logger.log(
           'warn',
@@ -155,11 +155,11 @@ exports.checkEmail = [
   body('firstName')
     .isLength({ min: 1 })
     .trim()
-    .withMessage('name must be specified.'),
+    .withMessage('Name must be specified.'),
   body('lastName')
     .isLength({ min: 1 })
     .trim()
-    .withMessage('name must be specified.'),
+    .withMessage('Name must be specified.'),
   // body('authority')
   //   .isLength({ min: 1 })
   //   .trim()
@@ -174,7 +174,7 @@ exports.checkEmail = [
       const emailId=value.toLowerCase().replace('','');
        let user;
        if(!emailId.match(emailRegex))
-         return Promise.reject('E-mail not in valid');
+         return Promise.reject('E-MailId is not valid');
        if(emailId.indexOf('@')>-1)
           user= await EmployeeModel.findOne({emailId});
           if (user) {
@@ -193,7 +193,7 @@ exports.checkEmail = [
        let phone='';
        let user;
         if(!emailId.match(phoneRgex))
-          return Promise.reject('Mobile not in valid');
+          return Promise.reject('Mobile number is not valid');
          phone='+'+ value;
          console.log(phone)
          user = await EmployeeModel.findOne({phoneNumber:phone});
@@ -238,8 +238,8 @@ exports.checkEmail = [
   async (req, res) => {
     try {
       if (
-        !req.body.firstName.match('[A-Za-z]') ||
-        !req.body.lastName.match('[A-Za-z]')
+        !req.body.firstName.match('[A-Za-z0-9]') ||
+        !req.body.lastName.match('[A-Za-z0-9]')
       ) {
         logger.log(
           'warn',
@@ -362,11 +362,13 @@ exports.checkEmail = [
             //const inventoryId = uniqid('inv-');
             const inventoryResult = new InventoryModel({ id: inventoryId });
             await inventoryResult.save();
+            const loc = await getLatLongByCity(address.city + ',' + address.country);
             const warehouse = new WarehouseModel({
               title: 'Office',
               id: warehouseId,
               warehouseInventory: inventoryId,
               organisationId: organisationId,
+              location: loc,
               // postalAddress: address,
               warehouseAddress: {
                 firstLine: address.line1,
@@ -380,7 +382,8 @@ exports.checkEmail = [
               country: {
                 countryId: '001',
                 countryName: country
-              }
+              },
+              status: "ACTIVE"
             });
             await warehouse.save();
           }
@@ -388,7 +391,6 @@ exports.checkEmail = [
         let emailId = null
         if(req.body?.emailId)
           emailId=req.body.emailId.toLowerCase().replace(' ', '');
-        console.log(emailId)
         
        let phoneNumber = null
         if(req.body?.phoneNumber)
@@ -408,7 +410,7 @@ exports.checkEmail = [
           id: employeeId,
           postalAddress: addr,
           accountStatus: employeeStatus,
-          warehouseId: warehouseId
+          warehouseId: warehouseId == 'NA' ? [] : [warehouseId]
         });
         await user.save()
         return apiResponse.successResponse(res, 'User registered Success');
@@ -713,7 +715,7 @@ exports.verifyOtp = [
           );
           return apiResponse.successResponseWithData(res, 'Login Success', userData);
         } else {
-          return apiResponse.ErrorResponse(res, `Otp doesn't match`);
+          return apiResponse.ErrorResponse(res, `OTP doesn't match`);
         }
       }
     } catch (err) {
@@ -753,7 +755,7 @@ exports.userInfo = [
           } = user;
           const org = await OrganisationModel.findOne({ id: organisationId }, 'name configuration_id');
           const warehouse = await EmployeeModel.findOne({ id }, { _id: 0, warehouseId: 1 });
-          const warehouseArray = await WarehouseModel.find({ id: { "$in": warehouse.warehouseId } })
+          const warehouseArray = await WarehouseModel.find({ id: { "$in": warehouse.warehouseId },$or:[{status: 'ACTIVE'}, {status: {$exists: false}}] })
           let user_data = {
             firstName,
             lastName,
@@ -815,7 +817,7 @@ exports.updateProfile = [
       const organisationName = organisation.split('/')[0];
       employee.firstName = firstName;
       employee.lastName = lastName;
-      employee.phoneNumber = phoneNumber;
+      employee.phoneNumber = "+"+phoneNumber;
       employee.organisationId = organisationId;
       employee.warehouseId = warehouseId;
       await employee.save();
@@ -1162,6 +1164,8 @@ exports.addWarehouse = [
 
       const warehouseCounter = await CounterModel.findOne({ 'counters.name': "warehouseId" }, { "counters.name.$": 1 })
       const warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
+
+      const loc = await getLatLongByCity(warehouseAddress.city+','+warehouseAddress.country);
       const warehouse = new WarehouseModel({
         id: warehouseId,
         organisationId,
@@ -1169,7 +1173,7 @@ exports.addWarehouse = [
         title,
         region,
         country,
-        location,
+        location: loc,
         bottleCapacity,
         sqft,
         supervisors,
@@ -1207,6 +1211,17 @@ exports.addWarehouse = [
   },
 ];
 
+const getLatLongByCity = async(param) => {
+  try {
+    const result = await axios.get(
+      `https://geocode.search.hereapi.com/v1/geocode?q=${param}&apiKey=BCRdhsq4jB8NxBG7vTWpVbNxCb6b50j98_f_bwiy7Qw`
+    );
+    return result.data.items.length ? {latitude: result.data.items[0].position.lat, longitude: result.data.items[0].position.lng} : {latitude: 0,longitude: 0};
+  } catch (e) {
+    return e.response;
+  }
+}
+
 exports.updateWarehouseAddress = [
   auth,
   async (req, res) => {
@@ -1235,10 +1250,7 @@ exports.updateWarehouseAddress = [
 exports.uploadImage = async function (req, res) {
   checkToken(req, res, async (result) => {
     if (result.success) {
-      const {
-        data
-      } = result;
-      // var filename;
+      const {data} = result;
       const {
         id,
         type,
@@ -1246,38 +1258,8 @@ exports.uploadImage = async function (req, res) {
         action
       } = req.query;
 
-      //     const incrementCounter = await CounterModel.updateOne({
-      //       'counters.name': "employeeImage"
-      //     }, {
-      //       $inc: {
-      //         "counters.$.value": 1
-      //       }
-      //     })
-
-      //     const poCounter = await CounterModel.find({
-      //       "counters.name": "employeeImage"
-      //     }, {
-      //       "counters.name.$": 1
-      //     })
-      //     const t = JSON.parse(JSON.stringify(poCounter[0].counters[0]))
-      //     try {
-      //       if (action == "STOREID")
-      //   filename = t.value + "-" + req.file.filename;
-      //       else if (action == "PROFILE")
-      //   filename = "PROFILE" + "-" +  data.id + ".png"
-      // else
-      //          filename = id + "-" + type + imageSide + "-" + t.format + t.value + ".png";	
-
-      // let dir = `/home/ubuntu/userimages`;
-      //       await moveFile(req.file.path, `${dir}/${filename}`);
-      //     } catch (e) {
-      //       console.log("Error in image upload", e);
-      //       res.status(403).json(e);
-      //     }
-
       try {
         const Upload = await uploadFile(req.file)
-        console.log(Upload)
         await unlinkFile(req.file.path)
         if (action == "KYCUPLOAD") {
           const update = await EmployeeModel.findOneAndUpdate({
@@ -1692,6 +1674,7 @@ exports.createTwilioBinding = [
   auth,
   async (req, res) => {
     try {
+      client(accountSid, authToken);
       console.log("REGISTERING")
       console.log(req.user)
       client.notify.services(twilio_service_id)
@@ -1733,15 +1716,16 @@ exports.getOrganizationsByTypeForAbInBev = [
     try {
       const filters = req.query;
       let matchCondition = {};
+      let matchWarehouseCondition = {};
       matchCondition.status = 'ACTIVE';
       if (filters.status && filters.status !== '') {
         matchCondition.status = filters.status;
       }
       if (filters.state && filters.state !== '') {
-        matchCondition.state = filters.state;
+        matchWarehouseCondition["warehouseDetails.warehouseAddress.state"] = new RegExp('^'+filters.state+'$', "i");
       }
       if (filters.district && filters.district !== '') {
-        matchCondition.district = filters.district;
+        matchWarehouseCondition["warehouseDetails.warehouseAddress.city"] = new RegExp('^'+filters.district+'$', "i");
       }
 
       if (filters.type === "SUPPLIER") {
@@ -1749,11 +1733,24 @@ exports.getOrganizationsByTypeForAbInBev = [
       } else {
         matchCondition.type = filters.type;
       }
-      console.log(matchCondition);
+      console.log(matchCondition, matchWarehouseCondition);
       const organisations = await OrganisationModel.aggregate([
         {
           $match: matchCondition,
         },
+        {
+					$lookup: {
+						from: 'warehouses',
+						localField: 'id',
+						foreignField: 'organisationId',
+						as: 'warehouseDetails'
+					}
+        }, {
+          $unwind: '$warehouseDetails'
+        },
+				{
+					$match: matchWarehouseCondition
+			 	},
         {
           $project: {
             id: 1,
@@ -1849,3 +1846,11 @@ exports.emailverify=[
     }
   },
 ];
+
+exports.Image=[
+  auth,
+  async(req,res)=>{
+  const FileStream = getFileStream(req.params.key);
+	FileStream.pipe(res)
+  }
+]

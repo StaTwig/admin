@@ -14,11 +14,13 @@ const ViewInventory = props => {
   const { inventories } = props;
   const [more, setMore] = useState([]);
   const dispatch = useDispatch();
+  //console.log("inventories",inventories);
   
   const toggleShowMore = async (inventory_id, product_id, index, enable) => {
     if (!enable) {
       dispatch(turnOn());
       let result = await getBatchDetailsByWareHouse(inventory_id, product_id);
+      //console.log("resultinviewInventory",result);
       setData(result);
       dispatch(turnOff());
     }
@@ -61,7 +63,7 @@ const ViewInventory = props => {
                 <div className="col-3 txt txtBlue">{inv.products.name}</div>
                 <div className="col-3 txt ">{inv.products.type}</div>
                 <div className="col-2 txt ">{inv.products.manufacturer}</div>
-                <div className="col-2 txt ">{inv.inventoryDetails.quantity}</div>
+                <div className="col-2 txt ">{inv.inventoryDetails.quantity ? inv.inventoryDetails.quantity : 0}{" ("}{inv.products.unitofMeasure? inv.products.unitofMeasure.name:"N/A"}{")"}</div>
                 <div className="col-2 txt "><button type="button" onClick={() => toggleShowMore(inv.id, inv.products.id, i, more[i])} className="btn btn-outline-primary">Show {more[i] ? `less` :`more`}</button></div>
               </div>
               {more[i] &&

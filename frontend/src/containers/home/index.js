@@ -133,8 +133,9 @@ const HomeContainer = (props) => {
             </div>
           </div>
         </div>
-        <img src={mobMockup} width="500" height="650"  style={{position:"absolute", top:"160%", left:"-13%"}}/>      
         </section>
+        {/* <img src={mobMockup} width="500" height="650"  style={{position:"absolute", top:"160%", left:"-13%"}}/>      
+       
       <section className="what_we_do pt-0">
         <div className="container">
           <div className="row">
@@ -153,7 +154,7 @@ const HomeContainer = (props) => {
          </div>
         </div>
         <img src={mob} width="50%" height="1000" style={{position:"absolute", marginLeft:"48.4%", marginTop:"-60%",}} />
-      </section>
+  </section> */}
       <section className="How_it_works">
         <div className="container">
           <div className="row">

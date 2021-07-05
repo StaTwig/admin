@@ -23,6 +23,7 @@
     "move-file": "^2.0.0",
     "multer": "^1.4.2",
     "nodemailer": "^6.3.1",
+    "sharp": "^0.28.3",
     "swagger-ui-express": "^4.1.6",
     "winston": "^3.3.3",
     "winston-logzio": "^5.1.2"

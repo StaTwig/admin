@@ -1969,9 +1969,11 @@ exports.getProductListCounts = [
         {
         
           var product1 = {
+            productCategory:product && product[0] && product[0].type,
             productName: product && product[0] && product[0].name,
             productId: product && product[0] && product[0].id,
             quantity: list && list[0] && list[j].quantity || 0,
+            unitofMeasure: product && product[0] && product[0].unitofMeasure,
 
           };
         }   
@@ -2000,6 +2002,8 @@ exports.getProductDetailsByWarehouseId = [
       });
       const val = warehouseDetails.warehouseInventory;
       const productList = await InventoryModel.find({ id: val });
+      console.log(warehouseDetails);
+      
       const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails));
       var productArray = [];
       for (j = 0; j < list.length; j++) {
@@ -2009,16 +2013,19 @@ exports.getProductDetailsByWarehouseId = [
           productName: product[0].name,
           productId: product[0].id,
           manufacturer: product[0].manufacturer,
-          quantity: list[j].quantity,
+          quantity: list[j].quantity ? list[j].quantity : 0,
+          unitofMeasure:product[0].unitofMeasure
         };
         productArray.push(product1);
       }
+      let { firstLine, secondLine, city, state, country, zipCode } = warehouseDetails.warehouseAddress;
+      let address = firstLine +" "+(secondLine ? secondLine + ' ' : '') + city +' '+ state+' '+zipCode+' '+country;
       var warehouse = {
-        warehouseCountryId: warehouseDetails.country.id,
-        warehouseCountryName: warehouseDetails.country.name,
+        warehouseCountryId: warehouseDetails.country.countryId,
+        warehouseCountryName: warehouseDetails.country.countryName,
         warehouseId: warehouseDetails.id,
         warehouseName: warehouseDetails.title,
-        warehouseAddress: warehouseDetails.postalAddress,
+        warehouseAddress: address,
         warehouseLocation: warehouseDetails.location,
       };
 
@@ -2103,7 +2110,7 @@ exports.getWarehouseDetailsByRegion = [
     try {
       const { region } = req.query;
       const warehouseDetails = await WarehouseModel.find({
-        "region.name": region,
+        "region.regionName": region,
       });
 
       var warehouseArray = [];
@@ -2133,7 +2140,7 @@ exports.getWarehouseDetailsByCountry = [
     try {
       const { country } = req.query;
       const warehouseDetails = await WarehouseModel.find({
-        "country.name": country,
+        "country.countryName": country,
       });
 
       var warehouseArray = [];
@@ -2596,7 +2603,7 @@ exports.getInventoryProductsByOrganisation = [
   },
 ];
 
-function getFilterConditions(filters) {
+async function getFilterConditions(filters) {
   let matchCondition = {};
   if (filters.orgType && filters.orgType !== "") {
     if (
@@ -2609,11 +2616,57 @@ function getFilterConditions(filters) {
       matchCondition.$or = [{ type: "S1" }, { type: "S2" }];
     }
   }
-  if (filters.state && filters.state.length) {
-    matchCondition.state = filters.state;
-  }
-  if (filters.district && filters.district.length) {
-    matchCondition.district = filters.district;
+  if (filters.district && filters.district.length && !filters.organization) {
+    let matchWarehouseCondition = {};
+    matchCondition.status = 'ACTIVE';
+    if (filters.status && filters.status !== '') {
+      matchCondition.status = filters.status;
+    }
+    if (filters.state && filters.state !== '') {
+      matchWarehouseCondition["warehouseDetails.warehouseAddress.state"] = new RegExp('^'+filters.state+'$', "i");
+    }
+    if (filters.district && filters.district !== '') {
+      matchWarehouseCondition["warehouseDetails.warehouseAddress.city"] = new RegExp('^'+filters.district+'$', "i");
+    }
+
+    if (filters.orgType === "ALL_VENDORS") {
+      matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }];
+    } else {
+      matchCondition.orgType = filters.orgType;
+    }
+    console.log(matchCondition, matchWarehouseCondition);
+    const organisations = await OrganisationModel.aggregate([
+      {
+        $match: matchCondition,
+      },
+      {
+        $lookup: {
+          from: 'warehouses',
+          localField: 'id',
+          foreignField: 'organisationId',
+          as: 'warehouseDetails'
+        }
+      }, {
+        $unwind: '$warehouseDetails'
+      },
+      {
+        $match: matchWarehouseCondition
+       },
+      {
+        $project: {
+          id: 1,
+          name: 1,
+          type: 1
+        }
+      }
+    ]);
+      
+      let orgs = [];
+      console.log(organisations)
+      for(let org in organisations){
+        orgs.push(organisations[org]['id'])
+      }
+      matchCondition.id = { $in : [...orgs] }
   }
   if (filters.organization && filters.organization.length) {
     matchCondition.id = filters.organization;

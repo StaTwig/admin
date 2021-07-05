@@ -37,7 +37,12 @@ const iSKUViewDetails = (props) => {
       }
       const result = await dispatch(
         getAnalyticsAllStats(
-          '?group_by=state' + (props.sku ? '&sku=' + props.sku : ''),
+          '?group_by=state&inventory=true' +
+            (props.sku ? '&sku=' + props.sku : '') +
+            '&brand=' +
+            prop.manufacturer +
+            '&pid=' +
+            prop.id,
         ),
       );
       setAnalytics(result.data);
@@ -51,7 +56,14 @@ const iSKUViewDetails = (props) => {
   const changeSku = async (event) => {
     let sku = event.target.value;
     const result = await dispatch(
-      getAnalyticsAllStats('?group_by=state' + (sku ? '&sku=' + sku : '')),
+      getAnalyticsAllStats(
+        '?group_by=state&inventory=true' +
+          '&brand=' +
+          prop.manufacturer +
+          (sku ? '&sku=' + sku : '') +
+          '&pid=' +
+          prop.id,
+      ),
     );
     setAnalytics(result.data);
   };
@@ -112,7 +124,7 @@ const iSKUViewDetails = (props) => {
                   <Tooltip />
                   <Area
                     type="monotone"
-                    dataKey="returns"
+                    dataKey="inventory"
                     stroke="#FAAB10"
                     strokeWidth={2}
                     fill="#FAAB10"
@@ -132,15 +144,21 @@ const iSKUViewDetails = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {analytics.map((analytic, index) => (
+                {analytics.length == 0 ? (
                   <tr>
-                    <td scope="row">
-                      <span className="stateLink">{analytic.groupedBy}</span>
-                    </td>
-                    <td>{analytic.sales.toLocaleString('en-IN')}</td>
-                    <td>{analytic.returns.toLocaleString('en-IN')}</td>
+                    <td colspan="3">No Data found</td>
                   </tr>
-                ))}
+                ) : (
+                  analytics.map((analytic, index) => (
+                    <tr key={index}>
+                      <td scope="row">
+                        <span className="stateLink">{analytic.groupedBy}</span>
+                      </td>
+                      <td>{analytic.sales.toLocaleString('en-IN')}</td>
+                      <td>{analytic.inventory.toLocaleString('en-IN')}</td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

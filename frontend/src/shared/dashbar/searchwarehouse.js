@@ -135,8 +135,8 @@ import './style.scss'
                         <li className="mb-1 text-secondary">Location Name</li>
                     </ul>
                     <ul>
-                        <li className="mb-2">{w.country.id}</li>
-                        <li className="mb-2">{w.country.name}</li>
+                        <li className="mb-2">{w.country.id ? w.country.id : w.country.countryId}</li>
+                        <li className="mb-2">{w.country.name ? w.country.name : w.country.countryName}</li>
                         <li className="mb-2">{w.id}</li>
                         <li className="mb-1">{w.title}</li>
                     </ul>

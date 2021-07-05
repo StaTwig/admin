@@ -15,6 +15,7 @@ const EditRow = props => {
     products,
     handleCategoryChange,
   } = props;
+  //console.log("propsEditrow",prod.unitofMeasure? prod.unitofMeasure.name:null );
 
   const numbersOnly = (e) => {
     // Handle paste
@@ -25,12 +26,26 @@ const EditRow = props => {
       var key = e.keyCode || e.which;
       key = String.fromCharCode(key);
     }
-    var regex = /[0-9]/;
-    if (!regex.test(key)) {
+    // console.log(e);
+    if(!e.target.value && key==0){
+      e.stopPropagation();
+      e.preventDefault();  
       e.returnValue = false;
-      if (e.preventDefault) e.preventDefault();
+      e.cancelBubble = true;
+      return false; 
     }
+    else{
+      var regex = /^\d*[0-9]\d*$/;
+      if (!regex.test(key)) {
+        e.returnValue = false;
+        if (e.preventDefault) e.preventDefault();
+      }
+    }
+    
+    
   }
+
+
 
   return (
     <div className="row ml-3">
@@ -44,11 +59,11 @@ const EditRow = props => {
                   onSelect={item => { handleCategoryChange(index, item) }}
                   groups={category}
                 /> */}
-                <Select
+                <Select 
                   className="no-border"
                   placeholder={<div className="select-placeholder-text">Select Product Category</div>} 
-                  
-                  defaultInputValue={prod.type}
+                  value={{value: prod.type, label: prod.type}}
+
                   onChange={(v) => handleCategoryChange(index, v.value)}
                   options={category}
                 />
@@ -65,13 +80,16 @@ const EditRow = props => {
                   onSelect={item => { handleProductChange(index, item) }}
                   groups={products}
                 /> */}
+                
+                             
                 <Select
                   className="no-border"
-                  placeholder={<div className="select-placeholder-text">Product Name</div>} 
+                  placeholder= {<div className= "select-placeholder-text" > Product Name </div>} 
                   value={{value: prod.id, label: prod.name}}
-                  defaultInputValue={prod.name}
+                  placeholder="Product Name"
+                  // defaultInputValue={prod.name?prod.name:"Product Name"}
                   onChange={(v) => handleProductChange(index, v)}
-                  options={products}
+                  options={products.filter(p=>p.type==prod.type)}
                 />
               </div>
               <div className="title recived-text align-self-center">{prod.id ? prod.id : <div className="placeholder_id">Product ID</div>}</div>
@@ -85,10 +103,15 @@ const EditRow = props => {
               className="form-control text-center"
               placeholder="Enter Quantity"
               onKeyPress={numbersOnly}
-              value={prod.productQuantity ? prod.productQuantity : prod.quantity}
-              onChange={e => handleQuantityChange(e.target.value, index)}
+              value={prod.productQuantity ? prod.productQuantity : ""}
+              onChange={(e) =>{handleQuantityChange(e.target.value, index)}}
             />
           </div>
+        </div>
+        <div className="title recived-text align-self-center" style={{position:"absolute",right:"20px"}}>
+        {/* prod.unitofMeasure? prod.unitofMeasure.name:null */}
+          { prod.unitofMeasure ?<div>{ prod.unitofMeasure ==undefined ? null: prod.unitofMeasure.name}</div>:
+          <div className="placeholder_id">Unit</div>}
         </div>
       </div>
       {props.product.length > 0 &&

@@ -48,6 +48,10 @@ const DetailedGeographicalView = (props) => {
         getAnalyticsAllStats(
           '?sku=' +
             (props.sku ? props.sku : prop.externalId) +
+            '&pid=' +
+            prop.id +
+            '&brand=' +
+            prop.manufacturer +
             '&group_by=date' +
             qp,
         ),
@@ -82,7 +86,7 @@ const DetailedGeographicalView = (props) => {
       <div className="row">
         <div className="col-md-12 col-sm-12">
           <div className="geoAnalyticsCard">
-            <div className="geoanalyticsTitle">Karnataka</div>
+            <div className="geoanalyticsTitle"></div>
             <div className="geosubTitle mb-4">Return Rate</div>
             <ResponsiveContainer width="100%" height={380}>
               <LineChart
@@ -138,7 +142,7 @@ const DetailedGeographicalView = (props) => {
               <table className="table">
                 <thead>
                   <tr>
-                    <th scope="col">State</th>
+                    <th scope="col">Month</th>
                     <th scope="col">Sales</th>
                     <th scope="col">Returns</th>
                     <th scope="col">Target Sales</th>
@@ -146,17 +150,25 @@ const DetailedGeographicalView = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {analytics.map((analytic, index) => (
-                    <tr key={index}>
-                      <td scope="row">
-                        <span className="stateLink">Karnataka</span>
-                      </td>
-                      <td>{analytic.sales}</td>
-                      <td>{analytic.returns}</td>
-                      <td>{analytic.targetSales}</td>
-                      <td>{analytic.actualReturns}%</td>
+                  {analytics.length == 0 ? (
+                    <tr>
+                      <td colspan="5">No Data found</td>
                     </tr>
-                  ))}
+                  ) : (
+                    analytics.map((analytic, index) => (
+                      <tr key={index}>
+                        <td scope="row">
+                          <span className="stateLink">
+                            {analytic.groupedBy}
+                          </span>
+                        </td>
+                        <td>{analytic.sales}</td>
+                        <td>{analytic.returns}</td>
+                        <td>{analytic.targetSales}</td>
+                        <td>{analytic.actualReturns}%</td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

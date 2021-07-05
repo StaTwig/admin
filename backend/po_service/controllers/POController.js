@@ -136,6 +136,12 @@ exports.fetchPurchaseOrders = [
                     const POs = await userPurchaseOrders("id", "", poId, "", id, skip, limit, (error, data) => {
                            poDetails = data ;
                        })
+                      //  console.log(poDetails[0].products)
+                       await Promise.all(poDetails[0].products.map(async (element )=> {
+                        var product = await ProductModel.findOne({ id: element.id });
+                        element.unitofMeasure = product.unitofMeasure;
+                       }))
+                      //  console.log(poDetails[0].products)
                      }
                     else
                     {
@@ -159,6 +165,7 @@ exports.fetchPurchaseOrders = [
 
                     );
                 } catch (err) {
+                  console.log(err)
                     return apiResponse.ErrorResponse(res, err);
                 }
 
@@ -516,7 +523,16 @@ exports.addPOsFromExcel = [
                 "products": [
                   {
                     "productId": po['Material'],
-                    "quantity": po['Order Quantity']
+                    "id":  po['Material'],
+                    "productQuantity": po['Order Quantity'],
+                    "quantity": po['Order Quantity'],
+                    "unitofMeasure":
+                        {
+                        "id": po['Unit Id'],
+                        "name": po['Order Unit']
+
+                        }
+
                   }
                 ],
                 "createdBy" : createdBy,
@@ -543,7 +559,7 @@ exports.addPOsFromExcel = [
                   poDataArray[i].id = poCounter.counters[0].format + poCounter.counters[0].value++;  
                   let productDetails = await ProductModel.findOne(
                     {
-                      externalId: poDataArray[i].products[0].productId
+                      id: poDataArray[i].products[0].productId
                     });
                     console.log("PRODUCT DETAILS",productDetails)
                     if(productDetails){
@@ -866,7 +882,13 @@ exports.createOrder = [
       const poCounter = await CounterModel.findOne({'counters.name':"poId"},{"counters.name.$":1})
       const poId = poCounter.counters[0].format + poCounter.counters[0].value;
 
-      const { externalId, supplier, customer, products, creationDate, lastUpdatedOn } = req.body;
+      let { externalId, supplier, customer, products, creationDate, lastUpdatedOn } = req.body;
+      products.forEach(async element => {
+        var product = await ProductModel.findOne({ id: element.productId });
+        element.type = product.type
+        element.unitofMeasure= product.unitofMeasure.name
+        console.log(product)
+      });
 	    const createdBy =  lastUpdatedBy = req.user.id;
 	    const purchaseOrder = new RecordModel({
         id: poId,
@@ -894,7 +916,7 @@ exports.createOrder = [
           'error',
           '<<<<< POService < POController < createOrder : error (catch block)',
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -905,7 +927,7 @@ exports.getOrderIds = [
     try {
      
       const {organisationId } = req.user;
-      const orderID = await RecordModel.find({$or:[{"supplier.supplierOrganisation":organisationId},{"customer.customerOrganisation":organisationId}]},'id');
+      const orderID = await RecordModel.find({$or:[{"supplier.supplierOrganisation":organisationId},{"customer.customerOrganisation":organisationId},{"createdBy":req.user.id}]},'id');
     
       return apiResponse.successResponseWithData(
         res,
@@ -1161,7 +1183,8 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
               }
 
               if (organisationId) {
-                whereQuery["customer.customerOrganisation"] = organisationId
+                //whereQuery["customer.customerOrganisation"] = organisationId
+		whereQuery["$or"] = [{"customer.customerOrganisation":organisationId},{'createdBy': id }]
               }
 
               if (deliveryLocation) {
@@ -1172,21 +1195,18 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
                   whereQuery["supplier.supplierOrganisation"] = toSupplier;
               }
 	      
-            let whereQueryNew = {};
-            whereQueryNew["$or"] = [whereQuery,{"createdBy": id }];
-
               if (productName) {
-                whereQueryNew.products = {
+                whereQuery.products = {
                   $elemMatch: {
                     productId: productName
                   }
                 }
               }
 
-              console.log("whereQuery ======>", whereQueryNew);
+              console.log("whereQuery ======>", whereQuery);
               try {
-                let outboundPOsCount = await RecordModel.count(whereQueryNew);
-                RecordModel.find(whereQueryNew).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((outboundPOList) => {
+                let outboundPOsCount = await RecordModel.count(whereQuery);
+                RecordModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((outboundPOList) => {
                   let outboundPORes = [];
                   let findOutboundPOData = outboundPOList.map(async (outboundPO) => {
                     let outboundPOData = JSON.parse(JSON.stringify(outboundPO))

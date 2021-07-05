@@ -3,13 +3,16 @@ const apiResponse = require("../helpers/apiResponse");
 const { body, sanitizeBody, oneOf, check } = require('express-validator');
 const auth = require("../middlewares/jwt");
 //models
+const utility = require('../helpers/utility');
 const Alerts = require('../models/AlertModel')
 const EmployeeModel = require('../models/EmployeeModel')
 
 exports.getAllAlerts = [
-  (req, res) => {
+  //auth,
+  async function (req, res) {
     try {
-      res.json('Alert Received')
+      let alerts = await Alerts.find({ ...req.params })
+      return apiResponse.successResponseWithData(res, 'Alerts fetched successfully', alerts)
     } catch (err) {
       return apiResponse.ErrorResponse(res, err)
     }
@@ -23,10 +26,11 @@ exports.createNewAlert = [
   async function (req, res) {
     try {
       let Alert
-      Alert = await Alerts.findOne({ username: req.body.user })
+      Alert = await Alerts.findOne({ username: req.user.id })
       console.log(Alert)
       if (Alert) {
         const newAlert = {
+          id: utility.randomNumber(10),
           productId: req.body.productId,
           productName: req.body.productName,
           manufacturer: req.body.manufacturer,
@@ -46,22 +50,24 @@ exports.createNewAlert = [
           }
         })
       } else {
-        EmployeeModel.findOne({ emailId: req.body.user }).then(async (user) => {
+        EmployeeModel.findOne({ id : req.user.id }).then(async (user) => {
           if (user) {
+            console.log(user)
             const { id, firstName, lastName, emailId, phoneNumber } = user
             const alertData = {
+              id: utility.randomNumber(10),
               productId: req.body.productId,
               productName: req.body.productName,
               manufacturer: req.body.manufacturer,
               event_type_primary: req.body.eventPrimary,
               event_type_secondary: req.body.eventSecondary,
               actorOrgId: req.body.actorOrgId,
-              createdBy: req.body.createdBy,
+              createdBy: req.user.id,
             }
             console.log(alertData)
             const alert = new Alerts({
               id: utility.randomNumber(10),
-              username: req.body.user,
+              username: req.user.id,
               label: { labelId: req.body.label || null },
               user: {
                 user_id: id,
@@ -84,16 +90,34 @@ exports.createNewAlert = [
                 apiResponse.ErrorResponse(res, err)
               } else {
                 return apiResponse.successResponse(
-                  result,
+                  res,
                   'Alert Added successfully',
                 )
               }
             })
           }
+          else return apiResponse.ErrorResponse(res,"NO USER FOUND")
         })
       }
     } catch (err) {
       apiResponse.ErrorResponse(res, err)
+    }
+  },
+]
+
+exports.deleteAlert= [
+  auth,
+  async function (req, res) {
+    try {
+      let alerts = await Alerts.updateOne({ username : req.user.id , "alerts.id" : req.params.alertId }, {
+        $unset: {
+          "alerts.$" : ""
+        }
+      })
+
+      return apiResponse.successResponseWithData(res, 'Alerts fetched successfully', alerts)
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err)
     }
   },
 ]

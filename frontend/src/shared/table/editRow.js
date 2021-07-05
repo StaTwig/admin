@@ -16,13 +16,14 @@ import Select from 'react-select';
 import './style.scss';
 
 const EditRow = (props) => {
-  console.log(props);
+  //console.log("propsinvinventorynitofmeasureprops", props.prods[0].unitofMeasure.name);
   const {
     manufacturer,
     productName,
     quantity,
     categories,
     manufacturingDate,
+    unitofMeasure,
     expiryDate,
     batchNumber,
     serialNumber,
@@ -35,7 +36,10 @@ const EditRow = (props) => {
     productId,
     inventories,
   } = props;
-
+  //console.log("props in Inventory",unitofMeasure)
+  
+    
+  
   const [addMore, setAddMore] = useState(
     manufacturingDate || expiryDate || batchNumber || serialNumber
       ? true
@@ -60,7 +64,7 @@ const EditRow = (props) => {
 
   return (
     <div className={`${idx > 0 ? `borderTop` : ``}`}>
-      <h6 className="ml-3 text-primary font-weight-bold">Product {idx + 1}</h6>
+      <h6 className="ml-3 text-info font-weight-bold">Product {idx + 1}</h6><br/>
       <div className="d-flex flex-column ml-5 itable">
         <div className="row mb-3">
           <div className={`row ${!addMore ? `col-10` : `col-12`}`}>
@@ -115,6 +119,7 @@ const EditRow = (props) => {
                     onChange={(item) =>
                       handleInventoryChange(idx, 'productName', item.name)
                     }
+                    
                     options={prods}
                   />
                 </div>
@@ -146,9 +151,11 @@ const EditRow = (props) => {
                 />
               </div>
             </div>
+            <div className="title recived-text align-self-center" style={{position:"absolute",right:"20px",display:"block"}}>
+              {unitofMeasure.name ? <div>{unitofMeasure.name}</div> :<div className="placeholder_name">Unit</div>}</div>
           </div>
           {inventories.length > 1 && (
-            <div className="m-2 pl-3 pt-1">
+            <div className="m-2 pl-3 pt-1" style={{position:"relative", left:"10px"}}>
               <span
                 className="del-pad shadow border-none rounded-circle mr-1"
                 onClick={() => props.onRemoveRow(idx)}
@@ -175,7 +182,7 @@ const EditRow = (props) => {
         </div>
       </div>
       {addMore && (
-        <div className="d-flex ml-4 pl-2 itable w-100">
+        <div className="d-flex ml-4 pl-2 itable w-90">
           <div className=" rTable row col-12">
             <div className="row col-12 mb-2">
               <div className="col theader text-center pro">

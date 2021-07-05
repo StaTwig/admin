@@ -49,7 +49,13 @@ const iGraphicalDetailedView = (props) => {
         getAnalyticsAllStats(
           '?sku=' +
             (props.sku ? props.sku : prop.externalId) +
-            '&group_by=state',
+            '&pid=' +
+            prop.id +
+            '&orgType=' +
+            props.Otype +
+            '&brand=' +
+            prop.manufacturer +
+            '&group_by=state&inventory=true',
         ),
       );
       setAnalytics(result.data);
@@ -58,12 +64,16 @@ const iGraphicalDetailedView = (props) => {
   }, []);
 
   const openDetailView = async (sku) => {
-    if (active) {
+    if (!active) {
       const result = await dispatch(
         getAnalyticsAllStats(
           '?sku=' +
             (props.sku ? props.sku : prop.externalId) +
-            '&group_by=district&state=' +
+            '&pid=' +
+            prop.id +
+            '&brand=' +
+            prop.manufacturer +
+            '&group_by=district&inventory=true&state=' +
             sku,
         ),
       );
@@ -80,12 +90,11 @@ const iGraphicalDetailedView = (props) => {
         },
         {
           name: 'Total Bottle Pool',
-          count: n[0].returns,
+          count: n[0].inventory,
         },
       ]);
     }
     setActive(!active);
-    // props.onViewChange('SKU_DETAIL_VIEW', { sku: sku });
   };
 
   return (
@@ -170,10 +179,10 @@ const iGraphicalDetailedView = (props) => {
       </div>
       <div className="row">
         <div className="col-md-12 col-sm-12">
-          {!active ? (
+          {active ? (
             <div className="productsChart">
               <label className="productsChartTitle">
-                {isActive ? 'District' : 'State'}
+                {isActive ? 'Districts' : 'State'}
               </label>
               <ResponsiveContainer width="100%" height={500}>
                 <BarChart
@@ -196,7 +205,7 @@ const iGraphicalDetailedView = (props) => {
                   <Bar name="Sales" dataKey="sales" fill="#A344B7" />
                   <Bar
                     name="Total Bottle Pool"
-                    dataKey="returns"
+                    dataKey="inventory"
                     fill="#FDAB0F"
                   />
                 </BarChart>
@@ -204,7 +213,7 @@ const iGraphicalDetailedView = (props) => {
             </div>
           ) : (
             <div className="stateandDistrictCard mb-4">
-              <h2>{analytics[0].groupedBy}</h2>
+              <h2>{analytics.length ? analytics[0].groupedBy : isActive ? 'District' : 'State'}</h2>
               <ResponsiveContainer width="100%" height={200}>
                 <BarChart
                   width={200}
@@ -244,21 +253,27 @@ const iGraphicalDetailedView = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {analytics.map((analytic, index) => (
-                  <tr
-                    key={index}
-                    onClick={() => {
-                      setIsActive((i) => !i);
-                      openDetailView(analytic.groupedBy);
-                    }}
-                  >
-                    <td scope="row">
-                      <span className="stateLink">{analytic.groupedBy}</span>
-                    </td>
-                    <td>{analytic.sales.toLocaleString('en-IN')}</td>
-                    <td>{analytic.returns.toLocaleString('en-IN')}</td>
+                {analytics.length == 0 ? (
+                  <tr>
+                    <td colspan="3">No Data found</td>
                   </tr>
-                ))}
+                ) : (
+                  analytics.map((analytic, index) => (
+                    <tr
+                      key={index}
+                      onClick={() => {
+                        setIsActive((i) => !i);
+                        openDetailView(analytic.groupedBy);
+                      }}
+                    >
+                      <td scope="row">
+                        <span className="stateLink">{analytic.groupedBy}</span>
+                      </td>
+                      <td>{analytic.sales.toLocaleString('en-IN')}</td>
+                      <td>{analytic.inventory.toLocaleString('en-IN')}</td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
