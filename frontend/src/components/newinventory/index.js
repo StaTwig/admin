@@ -15,7 +15,9 @@ import ShipmentFailPopUp from '../neworder/shipmentFailPopUp';
 import {
   addMultipleInventories,
   setReviewinventories,
+  resetInventories,
   addInventoriesFromExcel,
+  resetReviewInventories,
 } from '../../actions/inventoryActions';
 import { turnOn, turnOff } from '../../actions/spinnerActions';
 import { getProducts, getProductsByCategory } from '../../actions/poActions';
@@ -306,7 +308,7 @@ const NewInventory = (props) => {
       <button 
       type="button"
       className="btn btn-white shadow-radius font-bold mr-3" 
-      onClick={() => props.history.push("/inventory")}
+      onClick={() => {dispatch(resetReviewInventories([]));props.history.push("/inventory")}}
       >Cancel
       </button>
       </div>
