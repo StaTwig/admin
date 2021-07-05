@@ -267,8 +267,8 @@ exports.createShipment = [
       checkToken(req, res, async (result) => {
         if (result.success) {  
           try{
-            data.products.forEach(element => {
-              var product = ProductModel.findOne({ id: element.productID });
+            data.products.forEach(async element => {
+              var product = await ProductModel.findOne({ id: element.productID });
               element.type = product.type
               element.unitofMeasure= product.unitofMeasure
               console.log(product)
