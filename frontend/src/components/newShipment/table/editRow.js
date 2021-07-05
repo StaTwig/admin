@@ -21,7 +21,7 @@ const EditRow = props => {
     check
   } = props;
   
-  console.log(prod,"Edit rowt");
+  console.log(prod,"Edit rowt",index);
   const [productsList,setProductsList] = useState([]);
   const [quantityChecker,setQuantityChecker] = useState(1);
   useEffect(() => {

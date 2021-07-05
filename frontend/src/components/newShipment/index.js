@@ -1274,32 +1274,15 @@ const NewShipment = (props) => {
                       setAddProducts((prod) => [...newArr]);
                     }}
                     handleProductChange={(index, item) => {
-                      addProducts.splice(index, 1);
+                      addProducts.splice(index, 1,item);
                       let newArr = [...addProducts];
-                      newArr.push(item);
-                      setFieldValue(
-                        "products",
-                        newArr.map((row) => ({
-                          productCategory: row.type,
-                          productID: row.id,
-                          productQuantity: row.productQuantity,
-                          batchNumber: row.batchNumber,
-                          productName: row.name,
-                          manufacturer: row.manufacturer,
-                          quantity: row.quantity,
-                        }))
-                      );
-                      setAddProducts((prod) => [...newArr]);
+                      setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": '',"quantity": '',"name": row.name,"type": row.type,"manufacturer": row.manufacturer,"unitofMeasure":row.unitofMeasure})));
+                      setAddProducts(prod => [...newArr]);
 
-                      const prodIndex = products.findIndex(
-                        (p) => p.id === item.id
-                      );
+                      const prodIndex = products.findIndex(p => p.id === item.id);
                       let newArray = [...products];
-                      newArray[prodIndex] = {
-                        ...newArray[prodIndex],
-                        isSelected: true,
-                      };
-                      setProducts((prod) => [...newArray]);
+                      newArray[prodIndex] = { ...newArray[prodIndex], isSelected: true };
+                      // setProducts(prod => [...newArray]);
                     }}
                     handleLabelIdChange={handleLabelIdChange}
                     handleCategoryChange={onCategoryChange}
