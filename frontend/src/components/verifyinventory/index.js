@@ -73,21 +73,21 @@ const VerifyInventory = props => {
       <div className="card">
         <div className="card-body">
           <h5 className="head ml-1">Description Of Goods </h5>
-          <div className="row  mt-4 pl-2">
-            <span className="col-2 text-left"><img src={Product} width="16" height="16" /><span className="pl-1 text-muted">Product Name</span></span>
-            <span className="col-2 text-left"><img src={Manufacturer} width="16" height="16" /><span className="pl-1 text-muted">Manufacturer</span></span>
-            <span className="col pl-3 text-left"><img src={Quantity} width="25" height="16" /><span className="pl-1 text-muted">Quantity</span></span>
-            <span className="col  text-center text-muted"><img src={Mfg_date} width="16" height="16" /><span className="pl-1 text-muted">Mfg Date </span></span>
-            <span className="col  text-right text-muted"><img src={Expire} width="16" height="16" /><span className="pl-1 text-muted">Expiry Date</span></span>
-            <span className="col pl-5 text-right text-muted"><img src={Batch} width="16" height="16" /><span className="pl-1 text-muted">Batch Number</span></span>
-            <span className="col-2 pl-5 text-left text-muted"><img src={Serial} width="16" height="16" /><span className="pl-1 text-muted">Serial Numbers</span></span>
+          <div className="row  mt-4 pl-1">
+            <span className="col"><img src={Product} width="16" height="16" /><span className="ml-1 text-muted">Product Name</span></span>
+            <span className="col"><img src={Manufacturer} width="16" height="16" /><span className="ml-1 text-muted">Manufacturer</span></span>
+            <span className="col"><img src={Quantity} width="25" height="16" /><span className="ml-1 text-muted">Quantity</span></span>
+            <span className="col"><img src={Mfg_date} width="16" height="16" /><span className="ml-1 text-muted">Mfg Date </span></span>
+            <span className="col"><img src={Expire} width="16" height="16" /><span className="ml-1 text-muted">Expiry Date</span></span>
+            <span className="col"><img src={Batch} width="16" height="16" /><span className="ml-1 text-muted">Batch Number</span></span>
+            <span className="col"><img src={Serial} width="16" height="16" /><span className="ml-1 text-muted">Serial Numbers</span></span>
           </div>
           {reviewInventories.map(reviewInventory => (
-            <div className="row pl-4 p-3">
-              <span className="col-2 pl-4 text-left">{reviewInventory.productName}</span>
-              <span className="col-2 pl-4 text-left">{reviewInventory.manufacturer ? reviewInventory.manufacturer : reviewInventory.manufacturerName}</span>
-              <span className="col pl-5 text-left">{reviewInventory.quantity}<span>{"("}</span>{reviewInventory.unitofMeasure.name}<span>{")"}</span></span>
-              <span className="col pl-4 text-left">{reviewInventory.manufacturingDate ? `0${new Date(
+            <div className="row p-1 mt-4">
+              <span className="col mr-4 ml-3">{reviewInventory.productName}</span>
+              <span className="col ml-3">{reviewInventory.manufacturer ? reviewInventory.manufacturer : reviewInventory.manufacturerName}</span>
+              <span className="col ml-4">{reviewInventory.quantity}<span>{"("}</span>{reviewInventory.unitofMeasure.name}<span>{")"}</span></span>
+              <span className="col ml-5">{reviewInventory.manufacturingDate ? `0${new Date(
                 Date.parse(reviewInventory.manufacturingDate),
               ).getMonth() + 1}`.slice(-2) +
                 '/' +
@@ -95,7 +95,7 @@ const VerifyInventory = props => {
                   Date.parse(reviewInventory.manufacturingDate),
                 ).getFullYear() : ''}
               </span>
-              <span className="col pl-3 text-center">{reviewInventory.expiryDate ? `0${new Date(
+              <span className="col ml-5">{reviewInventory.expiryDate ? `0${new Date(
                 Date.parse(reviewInventory.expiryDate),
               ).getMonth() + 1}`.slice(-2) +
                 '/' +
@@ -103,8 +103,8 @@ const VerifyInventory = props => {
                   Date.parse(reviewInventory.expiryDate),
                 ).getFullYear() : ''}
                </span>
-              <span className="col pl-5 text-center">{reviewInventory.batchNumber}</span>
-              <span className="col-2 pl-5 text-center">{reviewInventory.serialNumber}</span>
+              <span className="col ml-5 ">{reviewInventory.batchNumber}</span>
+              <span className="col ml-5 ">{reviewInventory.serialNumber}</span>
             </div>
           ))}
           <hr />
