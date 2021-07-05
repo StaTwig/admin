@@ -19,6 +19,8 @@ import ShipmentFailPopUp from "./shipmentFailPopUp";
 import { Formik } from "formik";
 import Select from 'react-select';
 import Modal from '../../shared/modal'
+import { Alert, AlertTitle } from '@material-ui/lab';
+
 
 import { getProducts, getProductsByCategory, setReviewPos, resetReviewPos , getOrganizationsByTypes} from '../../actions/poActions';
 
@@ -625,15 +627,11 @@ const NewOrder = (props) => {
       )}
 
       {message && (
-        <div className="alert alert-success d-flex justify-content-center mt-3">
-          {message}
-        </div>
+        <div className="d-flex justify-content-center mt-3"> <Alert severity="success"><AlertTitle>Success</AlertTitle>{message}</Alert></div>
       )}
 
       {errorMessage && (
-        <div className="alert alert-danger d-flex justify-content-center mt-3">
-          {errorMessage}
-        </div>
+        <div className="d-flex justify-content-center mt-3"> <Alert severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
       )}
     </div>
   );

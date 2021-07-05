@@ -13,6 +13,7 @@ import {
 import Modal from "../../shared/modal";
 import "./style.scss";
 import { Formik } from "formik";
+import { Alert, AlertTitle } from '@material-ui/lab';
 const UpdateStatus = (props) => {
   const profile = useSelector((state) => {
     return state.user;
@@ -433,15 +434,11 @@ const UpdateStatus = (props) => {
         </Modal>
       )}
       {message && (
-        <div className="alert alert-success d-flex justify-content-center mt-3">
-          {message}
-        </div>
+        <div className="d-flex justify-content-center mt-3"> <Alert severity="success"><AlertTitle>Success</AlertTitle>{message}</Alert></div>
       )}
 
       {errorMessage && (
-        <div className="alert alert-danger d-flex justify-content-center mt-3">
-          {errorMessage}
-        </div>
+        <div className="d-flex justify-content-center mt-3"> <Alert severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
       )}
     </div>
   );

@@ -11,6 +11,7 @@ import ExportIcon from '../../assets/icons/Export.svg';
 import dropdownIcon from '../../assets/icons/drop-down.svg';
 import review from '../../assets/icons/review.png';
 import ShipmentFailPopUp from '../neworder/shipmentFailPopUp';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 import {
   addMultipleInventories,
@@ -345,7 +346,9 @@ const NewInventory = (props) => {
           />
         </Modal>
       )}
-      {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+      {errorMessage && 
+        <div className=""> <Alert severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
+        }
     </div>
   );
 };

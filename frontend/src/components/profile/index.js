@@ -11,6 +11,7 @@ import "./style.scss";
 import { config } from "../../config";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 
 const axios = require("axios");
@@ -268,7 +269,7 @@ class Profile extends React.Component {
       this.setState({ message: "Error while updating please try again." });
     }
   }
-
+  
   render() {
     const {
       editMode,
@@ -714,7 +715,8 @@ class Profile extends React.Component {
             </div>
           </div>
         </div>
-        {message && <div className="alert alert-success">{message}</div>}
+        {message && <div> <Alert severity="success"><AlertTitle>Success</AlertTitle>{message}</Alert></div>
+    }
       </div>
     );
   }
