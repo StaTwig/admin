@@ -211,7 +211,6 @@ const changeFn = (value_new,e) => {
                   autoCapitalize = 'none'
                   value={(props.email).toLowerCase()}
                   onChange={(e) => { props.onEmailChange(e); handleChange(e);}}
-                  // onBlur={console.log("Deepak")}
                   handleBlur={props.email?verifyEmailAndPhoneNo(`emailId=${props.email}`).then((v)=>{
                     if(v.data.length){
                       setemailerror(true);
@@ -246,8 +245,8 @@ const changeFn = (value_new,e) => {
                       value={props.phone}
                       onChange={(e)=>{props.onphoneChange(e)}}
                       handleBlur={props.phone?verifyEmailAndPhoneNo(`phoneNumber=${props.phone}`).then((v)=>{
-                        console.log(v.data.length);
-                        if(v.data.length){
+                        console.log(v.data,"Data");
+                        if(v.data[0].phoneNumber){
                           setphoneerror(true);
                           setsignupDisable(true);
                         }
