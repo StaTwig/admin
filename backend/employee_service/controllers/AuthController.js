@@ -21,7 +21,9 @@ const dotenv = require('dotenv').config();
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilio_service_id = process.env.TWILIO_SERVICE_ID;
-const client = require('twilio');
+const client = require('twilio')(accountSid, authToken, {
+  lazyLoading: true
+});
 const moveFile = require("move-file");
 const blockchain_service_url = process.env.URL;
 const stream_name = process.env.INV_STREAM;
