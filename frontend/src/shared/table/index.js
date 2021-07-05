@@ -22,11 +22,10 @@ const Table = props => {
   const handlePageChange  = (event, value) => {
     props.onPageChange(value)
   };
-//   console.log(props.inventoryDetails)
 function getDate(n){
     return n.substring(0,10)
 }
-//console.log("inventoryDetailsTable",inventoryDetails)
+// console.log("inventoryDetailsTable",inventoryDetails)
 inventoryDetails.sort(function(a,b){
     return new Date(b.createdAt) - new Date(a.createdAt);
   });
@@ -94,13 +93,13 @@ inventoryDetails.sort(function(a,b){
                                       <TableRow>
                                           <TableCell>{inventory.eventTypePrimary === 'CREATE'?"To Organisation:":"From Organisation:" }</TableCell>
                                              <div className="">
-                                               <TableCell align="left">{inventory.eventTypePrimary === 'CREATE'?(inventory.shipmentDetails.receiver.id):(inventory.shipmentDetails.supplier.id)}</TableCell></div>
+                                               <TableCell align="left">{inventory.eventTypePrimary === 'CREATE'?(inventory.receiverDetails[0].name):(inventory.senderDetails[0].name)}</TableCell></div>
 
                                       </TableRow>
                                       <TableRow>
                                           <TableCell>{inventory.eventTypePrimary === 'CREATE'?"To Location:":"From Location:" }</TableCell>
                                           <div className="">
-                                             <TableCell align="left">{inventory.eventTypePrimary === 'CREATE' ? (inventory.secondaryOrgAddress) : (inventory.secondaryOrgAddress)}</TableCell></div>
+                                             <TableCell align="left">{inventory.eventTypePrimary === 'CREATE' ? (inventory.receiverDetails[0].postalAddress) : (inventory.senderDetails[0].postalAddress)}</TableCell></div>
 
                                       </TableRow>
                                     </div>

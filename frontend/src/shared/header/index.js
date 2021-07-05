@@ -124,7 +124,10 @@ const ref = useOnclickOutside(() => {
           dispatch(turnOff());
           if(airWayBillNo.indexOf(search)!=-1){
             let index = airWayBillNo.indexOf(search);
-            props.history.push(`/viewshipment/${airWayBillNowithshipmentID[index].id}`)
+            props.history.push(
+              `/tracing/${airWayBillNowithshipmentID[index].id}`,
+            );
+            // props.history.push(`/viewshipment/${airWayBillNowithshipmentID[index].id}`)
           }
           else
             setInvalidSearch(true); 
