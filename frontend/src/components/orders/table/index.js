@@ -17,7 +17,6 @@ const Table = props => {
   const handlePageChange  = (event, value) => {
     props.onPageChange(value)
   };
-  console.log(orders);
   orders.sort(function(a,b){
     if(a.id>b.id){
       return -1;
