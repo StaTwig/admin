@@ -719,6 +719,7 @@ exports.verifyOtp = [
         }
       }
     } catch (err) {
+      console.log(err);
 	logger.log(
         'error',
         '<<<<< UserService < AuthController < verifyConfirm : Error (catch block)',
