@@ -62,8 +62,8 @@ const Details = (props) => {
         <span className="txtWrapu text-center w-10 align-self-center">
           {org?.country?.countryName}
         </span>
-        <span className="txtWrapu text-center w-10 align-self-center">
-          {status}
+        <span className="txtWrapu text-center w-10 align-self-center font-weight-bold text-secondory">
+            {(status) ? (status === 'ACTIVE' ? <div className="status text-success"> ACTIVE </div> :  <div className="status text-danger">REJECTED</div>) :  <div className="status text-warning">DEACTIVATED</div>} 
         </span>
         <span className="txtWrapu text-center w-15 align-self-center">
           {org?.createdAt ? formatDate(org?.createdAt) : ""}
