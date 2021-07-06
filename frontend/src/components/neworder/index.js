@@ -125,6 +125,7 @@ const NewOrder = (props) => {
                                     }));
     }
     fetchData();
+    dispatch(resetReviewPos({}));
   }, []);
 
   const closeModalFail = () => {

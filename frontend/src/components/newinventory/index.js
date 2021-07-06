@@ -67,6 +67,7 @@ const NewInventory = (props) => {
     }
 
     fetchData();
+    dispatch(resetReviewInventories([]));
   }, []);
 
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
@@ -225,6 +226,15 @@ const NewInventory = (props) => {
     setInventoryState(updatedInventoryState);
   };
 
+  const handleAddMore=(index)=>{
+    const updatedInventoryState = JSON.parse(JSON.stringify(inventoryState));
+    updatedInventoryState[index]['serialNumber'] = '';
+    updatedInventoryState[index]['batchNumber'] = '';
+    updatedInventoryState[index]['manufacturingDate'] = '';
+    updatedInventoryState[index]['expiryDate'] = '';
+    setInventoryState(updatedInventoryState);
+  }
+
   const onRemoveRow = (index) => {
     const inventoryStateClone = JSON.parse(JSON.stringify(inventoryState));
     inventoryStateClone.splice(index, 1);
@@ -283,6 +293,7 @@ const NewInventory = (props) => {
       <EditTable
         inventories={inventoryState}
         handleInventoryChange={handleInventoryChange}
+        handleAddMore={handleAddMore}
         onRemoveRow={onRemoveRow}
         category={category}
         handleCategoryChange={onCategoryChange}
