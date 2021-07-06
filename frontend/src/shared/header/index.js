@@ -118,7 +118,6 @@ const ref = useOnclickOutside(() => {
     else{
         getAllAirwayBillNo().then((result)=>{
           dispatch(turnOn());
-          console.log(result,"data");
           let airWayBillNowithshipmentID = result.data;
           let airWayBillNo = result.data.map((so)=>so.airWayBillNo)
           dispatch(turnOff());

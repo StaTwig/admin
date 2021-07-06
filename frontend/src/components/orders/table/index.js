@@ -57,15 +57,14 @@ const Table = props => {
               }
 
               const { customer, products, supplier } = order;
-
               return (
               <div className="rTableRow pt-2 pb-2 shadow-none" key={index}>
                     <div className="rTableCell">
                       <div className="userPic text-right rounded d-flex flex-row">
                         <img src={user} width="30" height="20" alt="User" className="rounded mr-1 align-self-center" />
                         <div className="flex-column d-flex">
-                          <span className="text-primary bold">{visible == 'one' ? supplier.organisation.name : customer.organisation.name}</span>
-                          <p className="address mb-0 text-primary">{visible == 'one' ? supplier.organisation.id : customer.organisation.id}</p>
+                          <span className="text-primary bold">{visible == 'two' ? supplier.organisation.name : customer.organisation.name}</span>
+                          <p className="address mb-0 text-primary">{visible == 'two' ? supplier.organisation.id : customer.organisation.id}</p>
                       </div>
                       </div>
                     </div>
