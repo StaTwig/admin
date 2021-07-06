@@ -28,6 +28,7 @@ const EditRow = (props) => {
     batchNumber,
     serialNumber,
     products,
+    handleAddMore,
     handleInventoryChange,
     idx,
     prods,
@@ -279,7 +280,7 @@ const EditRow = (props) => {
           <div className="mt-4 pt-4">
             <span
               className="del-pad shadow border-none rounded-circle mr-1"
-              onClick={() => setAddMore(false)}
+              onClick={() => {handleAddMore(idx);setAddMore(false)}}
             >
               <img className="cursorP p-1" height="30" src={Delete} />
             </span>
