@@ -13,6 +13,7 @@ footer {
 
   p {
     margin-bottom: 0;
+    font-size: 12px;
   }
 
   .footer-branding {
@@ -20,7 +21,8 @@ footer {
     margin-top: .5rem;
 
     img {
-      width: 80px;
+      width: 90px;
+      height: 12px;
     }
 
     @media screen and (max-width: 768px){

@@ -131,7 +131,7 @@ const UserDetails = (props) => {
         <button
           className={`status secondary-bg w-10  ${statusStyle} ${
             display ? `align-self-start` : `align-self-center`
-          } ` } style={{position:"relative",marginLeft:"50px",borderRadius:"8px", width:"95px",color:"white"}}>
+          } ` } style={{position:"relative",marginLeft:"50px",borderRadius:"8px", width:"95px",color:"white",border:"none"}}>
         
           {status}
           </button>
