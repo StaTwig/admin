@@ -447,6 +447,10 @@ exports.fetchDataByQRCode = [
                                         name: "$productDetails.type",
                                         type: "$productDetails.name",
                                         manufacturer: "$productDetails.manufacturer",
+					unitofMeasure : {
+                                                id : "$productDetails.unitofMeasure.id",
+                                                name : "$productDetails.unitofMeasure.name",
+                                        },
                                     }
                                 }
                             ])
