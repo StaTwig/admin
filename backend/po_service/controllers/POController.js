@@ -632,7 +632,7 @@ exports.addPOsFromExcel = [
                             id: employeeId,
                             postalAddress: address,
                             accountStatus: employeeStatus,
-                            warehouseId: warehouseId
+                            warehouseId: [warehouseId]
                     });
                     await user.save()
                     const org = new OrganisationModel({
@@ -755,7 +755,7 @@ exports.addPOsFromExcel = [
                             id: employeeId,
                             postalAddress: address,
                             accountStatus: employeeStatus,
-                            warehouseId: warehouseId
+                            warehouseId: [warehouseId]
                     });
                     await user.save()
                     const org = new OrganisationModel({
