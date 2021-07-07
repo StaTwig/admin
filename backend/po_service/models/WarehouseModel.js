@@ -12,6 +12,19 @@ var WarehouseSchema = new mongoose.Schema(
       required: false,
       default: null,
     },
+    warehouseAddress: {
+      type: Object,
+      required: true,
+      properties: {
+        firstLine: { type: String },
+        secondLine: { type: String },
+        city: { type: String },
+        state: { type: String },
+        country: { type: String },
+        landmark: { type: String },
+        zipCode: { type: String }
+      }
+    },
     region: {
       type: Object,
       required: true,
