@@ -576,7 +576,7 @@ exports.getInventoryAnalytics = [
         {
           $group: {
             _id: "$batchNumbers", 
-            total: {$sum: {$size: "$quantity"}}
+            total: {$sum: {size: "$quantity"}}
           }
         }
       ]);
