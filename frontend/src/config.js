@@ -139,7 +139,11 @@ export function config() {
       getCitiesByState: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getCitiesByState`,
       getWarehousesByCity: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getWarehousesByCity`,
       emailverify:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/emailverify`,
-      fetchairwayBillNumber:`${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchairwayBillNumber`
+      fetchairwayBillNumber:`${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchairwayBillNumber`,
+      fetchAllRegions:`${LOCAL_SERVER_URL_PRODUCTS}/productManagement/api/location?region=all`,
+      fetchCountriesByRegion:`${LOCAL_SERVER_URL_PRODUCTS}/productManagement/api/location?region=`,
+      fetchStateByCountry:`${LOCAL_SERVER_URL_PRODUCTS}/productManagement/api/location?country_id=`,
+      fetchCitiesByState:`${LOCAL_SERVER_URL_PRODUCTS}/productManagement/api/location?state_id=`
 },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
@@ -245,8 +249,12 @@ export function config() {
       getStatesByCountry: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getStatesByCountry`,
       getCitiesByState: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getCitiesByState`,
       getWarehousesByCity: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getWarehousesByCity`,
-      emailverify:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/emailverify`,
-      fetchairwayBillNumber:`${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchairwayBillNumber`
+      emailverify:`${DEV_SERVER_URL}/usermanagement/api/auth/emailverify`,
+      fetchairwayBillNumber:`${DEV_SERVER_URL}/shipmentmanagement/api/shipment/fetchairwayBillNumber`,
+      fetchAllRegions:`${DEV_SERVER_URL}/productManagement/api/location?region=all`,
+      fetchCountriesByRegion:`${DEV_SERVER_URL}/productManagement/api/location?region=`,
+      fetchStateByCountry:`${DEV_SERVER_URL}/productManagement/api/location?country_id=`,
+      fetchCitiesByState:`${DEV_SERVER_URL}/productManagement/api/location?state_id=`
       },
     stable: {
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
@@ -362,8 +370,12 @@ export function config() {
       getOrganizationsTypewithauth:`${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getOrganizationsTypewithauth?id=`,
       getTransactions: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/getAllEventsWithFilter`,
       getTransactionFilterList: `${STABLE_SERVER_URL_USER}/eventmanagement/api/event/fetchProductDetailsList`,
-      emailverify:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/emailverify`,
-      fetchairwayBillNumber:`${LOCAL_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchairwayBillNumber`
+      emailverify:`${STABLE_SERVER_URL_USER}/usermanagement/api/auth/emailverify`,
+      fetchairwayBillNumber:`${STABLE_SERVER_URL_SHIPMENT}/shipmentmanagement/api/shipment/fetchairwayBillNumber`,
+      fetchAllRegions:`${STABLE_SERVER_URL_PRODUCTS}/productManagement/api/location?region=all`,
+      fetchCountriesByRegion:`${STABLE_SERVER_URL_PRODUCTS}/productManagement/api/location?region=`,
+      fetchStateByCountry:`${STABLE_SERVER_URL_PRODUCTS}/productManagement/api/location?country_id=`,
+      fetchCitiesByState:`${STABLE_SERVER_URL_PRODUCTS}/productManagement/api/location?state_id=`
     },
     test: {
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -474,7 +486,11 @@ export function config() {
       getCitiesByState: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getCitiesByState`,
       getWarehousesByCity: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehousesByCity`,
       emailverify:`${TEST_SERVER_URL}/usermanagement/api/auth/emailverify`,
-      fetchairwayBillNumber:`${TEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchairwayBillNumber`
+      fetchairwayBillNumber:`${TEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchairwayBillNumber`,
+      fetchAllRegions:`${TEST_SERVER_URL}/productManagement/api/location?region=all`,
+      fetchCountriesByRegion:`${TEST_SERVER_URL}/productManagement/api/location?region=`,
+      fetchStateByCountry:`${TEST_SERVER_URL}/productManagement/api/location?country_id=`,
+      fetchCitiesByState:`${TEST_SERVER_URL}/productManagement/api/location?state_id=`
 },
     demo: {
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
@@ -579,7 +595,11 @@ export function config() {
       getCitiesByState: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getCitiesByState`,
       getWarehousesByCity: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getWarehousesByCity`,
       emailverify:`${DEMO_SERVER_URL}/usermanagement/api/auth/emailverify`,
-      fetchairwayBillNumber:`${DEMO_SERVER_URL}/shipmentmanagement/api/shipment/fetchairwayBillNumber`
+      fetchairwayBillNumber:`${DEMO_SERVER_URL}/shipmentmanagement/api/shipment/fetchairwayBillNumber`,
+      fetchAllRegions:`${DEMO_SERVER_URL}/productManagement/api/location?region=all`,
+      fetchCountriesByRegion:`${DEMO_SERVER_URL}/productManagement/api/location?region=`,
+      fetchStateByCountry:`${DEMO_SERVER_URL}/productManagement/api/location?country_id=`,
+      fetchCitiesByState:`${DEMO_SERVER_URL}/productManagement/api/location?state_id=`
     },
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
@@ -683,7 +703,11 @@ export function config() {
       getCitiesByState: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getCitiesByState`,
       getWarehousesByCity: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getWarehousesByCity`,
       emailverify:`${PROD_SERVER_URL}/usermanagement/api/auth/emailverify`,
-      fetchairwayBillNumber:`${PROD_SERVER_URL}/shipmentmanagement/api/shipment/fetchairwayBillNumber`
+      fetchairwayBillNumber:`${PROD_SERVER_URL}/shipmentmanagement/api/shipment/fetchairwayBillNumber`,
+      fetchAllRegions:`${PROD_SERVER_URL}/productManagement/api/location?region=all`,
+      fetchCountriesByRegion:`${PROD_SERVER_URL}/productManagement/api/location?region=`,
+      fetchStateByCountry:`${PROD_SERVER_URL}/productManagement/api/location?country_id=`,
+      fetchCitiesByState:`${PROD_SERVER_URL}/productManagement/api/location?state_id=`
     },
     
     uniceftest: {
@@ -795,7 +819,11 @@ export function config() {
       getCitiesByState: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getCitiesByState`,
       getWarehousesByCity: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getWarehousesByCity`,
       emailverify:`${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/emailverify`,
-      fetchairwayBillNumber:`${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchairwayBillNumber`
+      fetchairwayBillNumber:`${UNICEFTEST_SERVER_URL}/shipmentmanagement/api/shipment/fetchairwayBillNumber`,
+      fetchAllRegions:`${UNICEFTEST_SERVER_URL}/productManagement/api/location?region=all`,
+      fetchCountriesByRegion:`${UNICEFTEST_SERVER_URL}/productManagement/api/location?region=`,
+      fetchStateByCountry:`${UNICEFTEST_SERVER_URL}/productManagement/api/location?country_id=`,
+      fetchCitiesByState:`${UNICEFTEST_SERVER_URL}/productManagement/api/location?state_id=`
     },
   };
 
