@@ -37,22 +37,22 @@ const Table = props => {
                 status = visible == 'one' ? 'Sent' : 'Received';
               }
               else if (order.poStatus === 'Received') {
-                statusStyle = 'bg-info';
+                statusStyle = 'bg-primary';
                 status = 'Received';
               }
               else if (order.poStatus === 'ACCEPTED') {
                 statusStyle = 'bg-success';
                 status = 'Accepted';
               }else if (order.poStatus === 'REJECTED') {
-                statusStyle = 'bg-warning';
+                statusStyle = 'bg-danger';
                 status = 'Rejected';
               }
               else if (order.poStatus === 'TRANSIT&FULLYFULFILLED') {
-                statusStyle = 'bg-primary';
+                statusStyle = 'bg-info';
                 status = 'Transit and FullyFilled';
               }
               else if (order.poStatus === 'FULLYFULFILLED') {
-                statusStyle = 'bg-primary';
+                statusStyle = 'bg-warning';
                 status = 'FullyFilled';
               }
 

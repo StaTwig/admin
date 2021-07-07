@@ -213,16 +213,16 @@ const ReceiveShipment = (props) => {
                 name="id"
                 type="text"
                 className="form-control ml-5 "
-                onChange={(e) => setshipmentId(e.target.value)}
+                //onChange={(e) => setshipmentId(e.target.value)}
                 size="35"
                 value={id}
               />
             </div>
           </div>
-          <div className="panel commonpanle ml-3" style={{width:"32%",height:"100px"}}>
-            <div className="form-group">
-            <label className="text-secondary mt-3 mr-3 pr-2">Transit No.</label>
-                        <div className="mb-2" style={{width: 300 }}>
+          <div className="panel commonpanle" style={{width:"32%",height:"100px"}}>
+            <div className="form-group pt-2">
+            <label className="text-secondary pt-2">Transit No.</label>
+                        {/* <div className="mb-2" style={{width: 300 }}>
                         <Autocomplete 
                           {...defaultProps}
                           id="billNo"
@@ -238,16 +238,15 @@ const ReceiveShipment = (props) => {
                           debug
                           renderInput={(params) => <TextField {...params} name="billNo" label="Transit No." margin="normal" />}
                         />
-                        </div>
-            {/* <label className="mb-1 text-secondary pt-2">Bill No:</label>
-              <input
+                        </div> */}
+                <input
                 type="text"
                 className="form-control ml-5"
                 name="billNo"
-                onChange={(e) => setBillNo(e.target.value)}
-                size="39"
-                value={billNo}
-              /> */}
+                //onChange={(e) => setBillNo(e.target.value)}
+                size="35"
+                value={props.trackData.airWayBillNo}
+              />
             </div>
           </div>
         </div>
