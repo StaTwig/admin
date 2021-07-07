@@ -387,7 +387,7 @@ exports.getAnalytics = [
         let org = await OrganisationModel.find({id: req.user.organisationId});
         totalmilliseconds = org.totalProcessingTime ? org.totalProcessingTime : 0;
 
-        let count = await POModel.aggregate([
+        count = await POModel.aggregate([
           { $match: {'poStatus': {$ne : 'CREATED'}, 'poStatus': {$ne : 'ACCEPTED'}}},
           { $group: { _id: null, myCount: { $sum: 1 } } }
               ]).sort({
