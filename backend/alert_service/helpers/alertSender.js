@@ -3,6 +3,7 @@ const authToken = process.env.TWILIO_AUTH_TOKEN;
 const serviceId = process.env.TWILIO_SERVICE_ID;
 const axios = require('axios');
 const client = require('twilio')(accountSid, authToken);
+const Notification = require('../models/NotificationsModel')
 
 function eventToData(event,type){
     switch(type){
@@ -21,6 +22,20 @@ function eventToPlainText(event){
 
 function eventToHtml(event){
     return `<html><p>New alert from ${event.actorOrgId}, Event "${event.eventTypePrimary}" applied on ${event.eventTypeDesc}</p></html>`
+}
+
+function pushNotification(event,userId){
+    try{
+        const content = eventToData(event,"mobile")
+        var notification = new Notification({ title: "VaccineLedger alert", message: content, user: userId});
+        console.log(notification);
+        notification.save(function(err, doc) {
+            if (err) return console.error(err);
+            console.log("Document inserted succussfully!",doc);
+          });
+    }catch(err){
+        console.log(err)
+    }
 }
 
 function alertMobile(event,mobile){    
@@ -82,3 +97,4 @@ function alertPushNotification(event,userIdentity){
 exports.alertMobile = alertMobile;
 exports.alertEmail = alertEmail;
 exports.alertPushNotification = alertPushNotification;
+exports.pushNotification = pushNotification;
