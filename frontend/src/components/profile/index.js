@@ -131,11 +131,11 @@ class Profile extends React.Component {
         warehouseLocations: wareHouseAddresses,
         warehouseLocByOrg:wareHouseAddresses
       });
-    
+
      this.state.warehouseLocations.map((id)=>{
         this.state.warehouseLocations= this.state.warehouseLocations.filter((data)=>response.data.data.warehouseId.includes(data.id));
       })
-
+      
     }
   }
 

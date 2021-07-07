@@ -17,7 +17,10 @@ const ProductInventory = props => {
   const categoryArray = products.map(
         product => product.type,
   ).filter((value, index, self) => self.indexOf(value) === index);
+
+   console.log(inventories);
   useEffect(() => {
+    //console.log(props.match);
     if (props.match && props.match.params && props.match.params.category){
       let prodArray = [];
       inventories.map((val) => {
@@ -35,12 +38,12 @@ const ProductInventory = props => {
     }
     else {
       setEnable(false);
-      console.log(inventories);
-      
-      setData(inventories.filter(r => r.inventoryQuantity <= 0));
+      const inv = inventories.filter(r => r.inventoryDetails.quantity <= 0);
+      console.log(inv);
+      setData(inventories.filter(r =>  r.inventoryDetails.quantity <= 0));
     }
   }, [inventories, props]);
-  console.log("propscategory ",data)
+  //console.log("propscategory ",data)
 
   const changeType = (cat) => {
     setCategory(cat);
@@ -106,6 +109,9 @@ const ProductInventory = props => {
             </div>
           </div>
         </div>
+        {
+          console.log(data)
+        }
         <div className="ribbon-space col-12">
           {data.map((inv, i) => 
             <div key={i} className="col-12 p-3 mb-3 rounded row bg-white shadow">
