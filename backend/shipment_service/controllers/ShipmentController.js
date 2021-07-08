@@ -267,8 +267,8 @@ exports.createShipment = [
       checkToken(req, res, async (result) => {
         if (result.success) {  
           try{
-            data.products.forEach(element => {
-              var product = ProductModel.findOne({ id: element.productID });
+            data.products.forEach(async element => {
+              var product = await ProductModel.findOne({ id: element.productID });
               element.type = product.type
               element.unitofMeasure= product.unitofMeasure
               console.log(product)
@@ -372,9 +372,39 @@ exports.createShipment = [
               });
 
               if (quantityMismatch) {
+                if(po.poStatus === 'CREATED' || po.poStatus === 'ACCEPTED'){
+                  try{
+                    let date = new Date(po.createdAt)
+                    let milliseconds = date.getTime(); 
+                    let d = new Date();
+                    let currentTime = d.getTime();
+                    let orderProcessingTime = currentTime - milliseconds;
+                    let prevOrderCount = await OrganisationModel.find({id: req.user.organisationId});
+                    prevOrderCount = prevOrderCount.totalProcessingTime ? prevOrderCount.totalProcessingTime : 0;
+                    OrganisationModel.updateOne({id: req.user.organisationId}, { $set: {totalProcessingTime: prevOrderCount + orderProcessingTime}})  
+                  } catch (err){
+                    console.log('failed to set orderprocesstime')
+                    console.log(err);                  
+                  }
+                }
                 po.poStatus = "TRANSIT&PARTIALLYFULFILLED";
               } else {
-                po.poStatus = "TRANSIT&FULLYFULFILLED";
+                if(po.poStatus === 'CREATED' || po.poStatus === 'ACCEPTED'){
+                  try{
+                    let date = new Date(po.createdAt)
+                    let milliseconds = date.getTime(); 
+                    let d = new Date();
+                    let currentTime = d.getTime();
+                    let orderProcessingTime = currentTime - milliseconds;
+                    let prevOrderCount = await OrganisationModel.find({id: req.user.organisationId});
+                    prevOrderCount = prevOrderCount.totalProcessingTime ? prevOrderCount.totalProcessingTime : 0;
+                    OrganisationModel.updateOne({id: req.user.organisationId}, { $set: {totalProcessingTime: prevOrderCount + orderProcessingTime}})  
+                  } catch (err){
+                    console.log('failed to set orderpror')
+                    console.log(err);                  
+                  }
+                }
+                po.poStatus = "TRANSIT&FULLYFULFILLED";                        
               }
               await po.save();
               const poidupdate=await RecordModel.findOneAndUpdate({
@@ -1550,9 +1580,8 @@ exports.getProductsByInventory = [
           $group: {
             _id: "$inventoryDetails.productId",
             productCategory: { $first: "$products.type" },
-	          productName: { $first: "$products.name" },
+	    productName: { $first: "$products.name" },
             manufacturer: { $first: "$products.manufacturer" },
-            unitofMeasure:{$first:"$products.unitofMeasure"},
             productQuantity: { $sum: "$inventoryDetails.quantity" },
             quantity: { $sum: "$inventoryDetails.quantity" },
           },

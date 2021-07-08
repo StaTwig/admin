@@ -25,15 +25,22 @@ const ExcelPopUp = props => {
     formData.append('excel', excel);
     dispatch(turnOn());
     const result = await addPOsFromExcel(formData);
-    console.log(result);
-    if (result && result.status === 200) {
+    let arr = result.data.data;
+    let notNullValues = 0;
+    for(let i=0;i<arr.length;i++){
+      if(arr[i]!=null){
+        notNullValues++;
+      }
+    }
+    
+    if (result && result.status === 200 && notNullValues!=0) {
       console.log('success add PO');
       // dispatch(setReviewPos(result.data.data));
       setopenSuccesfulOrder(true);
       // props.setOpenExcel(false);
       setModalProps({
     message: 'Created Successfully!',
-    OrderLength: result.data.data.length,
+    OrderLength: notNullValues,
     type: 'Success'
   })
     }

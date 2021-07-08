@@ -11,11 +11,14 @@ import ExportIcon from '../../assets/icons/Export.svg';
 import dropdownIcon from '../../assets/icons/drop-down.svg';
 import review from '../../assets/icons/review.png';
 import ShipmentFailPopUp from '../neworder/shipmentFailPopUp';
+import { Alert, AlertTitle } from '@material-ui/lab';
 
 import {
   addMultipleInventories,
   setReviewinventories,
+  resetInventories,
   addInventoriesFromExcel,
+  resetReviewInventories,
 } from '../../actions/inventoryActions';
 import { turnOn, turnOff } from '../../actions/spinnerActions';
 import { getProducts, getProductsByCategory } from '../../actions/poActions';
@@ -33,7 +36,13 @@ const NewInventory = (props) => {
       const result = await getProducts();
       const productsArray = result.map((product) => product.name);
       //console.log("result inventory",result);
-      setProducts(result);
+      setProducts(result.map((item) => {
+        return {
+          value: item.name,
+          label: item.name,
+          ...item,
+        };
+      }));
 
       const categoryArray = result.map((product) => product.type);
 
@@ -58,6 +67,7 @@ const NewInventory = (props) => {
     }
 
     fetchData();
+    dispatch(resetReviewInventories([]));
   }, []);
 
   const [openCreatedInventory, setOpenCreatedInventory] = useState(false);
@@ -216,6 +226,15 @@ const NewInventory = (props) => {
     setInventoryState(updatedInventoryState);
   };
 
+  const handleAddMore=(index)=>{
+    const updatedInventoryState = JSON.parse(JSON.stringify(inventoryState));
+    updatedInventoryState[index]['serialNumber'] = '';
+    updatedInventoryState[index]['batchNumber'] = '';
+    updatedInventoryState[index]['manufacturingDate'] = '';
+    updatedInventoryState[index]['expiryDate'] = '';
+    setInventoryState(updatedInventoryState);
+  }
+
   const onRemoveRow = (index) => {
     const inventoryStateClone = JSON.parse(JSON.stringify(inventoryState));
     inventoryStateClone.splice(index, 1);
@@ -226,17 +245,7 @@ const NewInventory = (props) => {
 
   const onCategoryChange = async (index, value) => {
     try {
-      const warehouse = await getProductsByCategory(value);
       handleInventoryChange(index, 'categories', value);
-      setProducts(
-        warehouse.data.map((item) => {
-          return {
-            value: item.name,
-            label: item.name,
-            ...item,
-          };
-        }),
-      );
     } catch (err) {
       setErrorMessage(err);
     }
@@ -284,6 +293,7 @@ const NewInventory = (props) => {
       <EditTable
         inventories={inventoryState}
         handleInventoryChange={handleInventoryChange}
+        handleAddMore={handleAddMore}
         onRemoveRow={onRemoveRow}
         category={category}
         handleCategoryChange={onCategoryChange}
@@ -310,7 +320,7 @@ const NewInventory = (props) => {
       <button 
       type="button"
       className="btn btn-white shadow-radius font-bold mr-3" 
-      onClick={() => props.history.push("/inventory")}
+      onClick={() => {dispatch(resetReviewInventories([]));props.history.push("/inventory")}}
       >Cancel
       </button>
       </div>
@@ -347,7 +357,9 @@ const NewInventory = (props) => {
           />
         </Modal>
       )}
-      {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+      {errorMessage && 
+        <div className=""> <Alert severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
+        }
     </div>
   );
 };

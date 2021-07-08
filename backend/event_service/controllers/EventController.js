@@ -246,6 +246,18 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 
 			let inventoryCount = await EventModal.aggregate([
 				{ $lookup: {        
+					from: 'organisations',
+					localField: 'payloadData.data.supplier.id',
+					foreignField: 'id',
+					as: 'senderDetails',
+				 } },
+									 { $lookup: {        
+					from: 'organisations',
+					localField: 'payloadData.data.receiver.id',
+					foreignField: 'id',
+					as: 'receiverDetails',
+				 } },
+				{ $lookup: {        
 					from: 'employees',
 					localField: 'actorUserId',
 					foreignField: 'emailId',
@@ -268,6 +280,18 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 			inventoryCount = inventoryCount.length > 0 ? inventoryCount[0].myCount : 0
 			console.log(elementMatchQuery)
 			EventModal.aggregate([
+				{ $lookup: {        
+					from: 'organisations',
+					localField: 'payloadData.data.supplier.id',
+					foreignField: 'id',
+					as: 'senderDetails',
+				 } },
+									 { $lookup: {        
+					from: 'organisations',
+					localField: 'payloadData.data.receiver.id',
+					foreignField: 'id',
+					as: 'receiverDetails',
+				 } },
 				{ $lookup: {        
 					from: 'employees',
 					localField: 'actorUserId',

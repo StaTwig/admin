@@ -45,6 +45,12 @@ ShipmentSchema = new mongoose.Schema(
         rejectionRate:{type:Number, default:0.00},
         labelId: String,
         productCategory: String,
+	unitofMeasure: {
+              id: {type:String},
+              name: {
+                type:String
+              }
+      },
       },
     ],
   },

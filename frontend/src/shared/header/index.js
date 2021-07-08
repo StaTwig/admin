@@ -118,13 +118,15 @@ const ref = useOnclickOutside(() => {
     else{
         getAllAirwayBillNo().then((result)=>{
           dispatch(turnOn());
-          console.log(result,"data");
           let airWayBillNowithshipmentID = result.data;
           let airWayBillNo = result.data.map((so)=>so.airWayBillNo)
           dispatch(turnOff());
           if(airWayBillNo.indexOf(search)!=-1){
             let index = airWayBillNo.indexOf(search);
-            props.history.push(`/viewshipment/${airWayBillNowithshipmentID[index].id}`)
+            props.history.push(
+              `/tracing/${airWayBillNowithshipmentID[index].id}`,
+            );
+            // props.history.push(`/viewshipment/${airWayBillNowithshipmentID[index].id}`)
           }
           else
             setInvalidSearch(true); 

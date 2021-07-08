@@ -21,7 +21,9 @@ const dotenv = require('dotenv').config();
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilio_service_id = process.env.TWILIO_SERVICE_ID;
-const client = require('twilio');
+const client = require('twilio')(accountSid, authToken, {
+  lazyLoading: true
+});
 const moveFile = require("move-file");
 const blockchain_service_url = process.env.URL;
 const stream_name = process.env.INV_STREAM;
@@ -717,6 +719,7 @@ exports.verifyOtp = [
         }
       }
     } catch (err) {
+      console.log(err);
 	logger.log(
         'error',
         '<<<<< UserService < AuthController < verifyConfirm : Error (catch block)',
@@ -804,18 +807,24 @@ exports.updateProfile = [
       const employee = await EmployeeModel.findOne({
         emailId: req.user.emailId,
       });
+      // let phoneNumber = null
+      // if(req.body?.phoneNumber)
+      //    phoneNumber='+'+req.body?.phoneNumber;
       const {
         firstName,
         lastName,
-        phoneNumber,
+        phoneNumber='',
         warehouseId,
         organisation
       } = req.body;
+
       const organisationId = organisation.split('/')[1];
       const organisationName = organisation.split('/')[0];
+
       employee.firstName = firstName;
       employee.lastName = lastName;
-      employee.phoneNumber = "+"+phoneNumber;
+      //employee.phoneNumber = phoneNumber;
+      employee.phoneNumber = phoneNumber?'+'+phoneNumber:null;
       employee.organisationId = organisationId;
       employee.warehouseId = warehouseId;
       await employee.save();
@@ -846,7 +855,7 @@ exports.updateProfile = [
         'error',
         '<<<<< UserService < AuthController < updateProfile : error (catch block)',
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];

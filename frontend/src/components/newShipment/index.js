@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Add from "../../assets/icons/createshipment.png";
 import EditTable from "./table/editTable";
 import "./style.scss";
+import Cancel from "../../assets/icons/cancel.svg";
 import { createShipment,getViewShipment } from "../../actions/shipmentActions";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
 import {
@@ -24,6 +25,8 @@ import Select from 'react-select';
 import {getOrganizationsTypewithauth} from '../../actions/userActions';
 import { getProducts, getProductsByCategory } from "../../actions/poActions";
 import {getProductList} from '../../actions/productActions';
+import { Alert, AlertTitle } from '@material-ui/lab';
+
 
 
 const NewShipment = (props) => {
@@ -755,7 +758,7 @@ const NewShipment = (props) => {
                       setDisabled(false);
                       const result = await dispatch(getViewShipment(values.shipmentID));
                       dispatch(turnOff());
-                      console.log(result)
+                      
                       // setReceiverOrgLoc(result.receiver.warehouse.title);
                       //   setReceiverOrgId(result.receiver.org.name);
                       //   console.log(senderOrganisation[0]);
@@ -770,6 +773,13 @@ const NewShipment = (props) => {
                         setFieldValue("fromOrgLoc","" );     
                         setFieldValue("rtype",);
                         setFieldValue("toOrg","");
+                        console.log(result);
+                        if(result.status==500)
+                        {
+                          setShipmentError('Check Shipment Reference ID');
+                          setOpenShipmentFail(true); 
+
+                        }else{
                         setOrderDetails(result);        
                         let wa = result.receiver.warehouse;
                         setFieldValue(
@@ -780,7 +790,7 @@ const NewShipment = (props) => {
                         // settoOrgLocLabel(wa?.warehouseAddress ? wa?.title + '/' + wa?.warehouseAddress?.firstLine + ", " + wa?.warehouseAddress?.city : wa?.title + '/' + wa.postalAddress)
 
                         let products_temp = result.products;
-                        
+                        console.log(products_temp);
                         for (let i = 0; i < products_temp.length; i++) {
                           products_temp[i].manufacturer =
                             result.products[i].manufacturer;
@@ -792,13 +802,14 @@ const NewShipment = (props) => {
                             result.products[i].productCategory;
                           
                         }
-                        console.log(products_temp);
+                        //console.log(products_temp);
                        if (result.products.length > 0) {
                          setProducts(p => []);
                          setAddProducts(p => []);
                           setFieldValue("products",products_temp);
                         } else setFieldValue("products", []);
                         console.log(values.products);
+                      }
                     }
                   }
                   >
@@ -1189,6 +1200,7 @@ const NewShipment = (props) => {
               </label>
               {OrderDetails?.products?.length > 0 && (
                 <EditTable
+                check="1"
                   product={OrderDetails?.products}
                   handleQuantityChange={(v, i) => {
                     handleQuantityChange(v, i);
@@ -1204,6 +1216,7 @@ const NewShipment = (props) => {
               {!orderIdSelected && products?.length > 0 && (
                 <>
                   <EditTable
+                    check="0"
                     product={addProducts}
                     products={products}
                     category={category}
@@ -1272,32 +1285,15 @@ const NewShipment = (props) => {
                       setAddProducts((prod) => [...newArr]);
                     }}
                     handleProductChange={(index, item) => {
-                      addProducts.splice(index, 1);
+                      addProducts.splice(index, 1,item);
                       let newArr = [...addProducts];
-                      newArr.push(item);
-                      setFieldValue(
-                        "products",
-                        newArr.map((row) => ({
-                          productCategory: row.type,
-                          productID: row.id,
-                          productQuantity: row.productQuantity,
-                          batchNumber: row.batchNumber,
-                          productName: row.name,
-                          manufacturer: row.manufacturer,
-                          quantity: row.quantity,
-                        }))
-                      );
-                      setAddProducts((prod) => [...newArr]);
+                      setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": '',"quantity": '',"name": row.name,"type": row.type,"manufacturer": row.manufacturer,"unitofMeasure":row.unitofMeasure})));
+                      setAddProducts(prod => [...newArr]);
 
-                      const prodIndex = products.findIndex(
-                        (p) => p.id === item.id
-                      );
+                      const prodIndex = products.findIndex(p => p.id === item.id);
                       let newArray = [...products];
-                      newArray[prodIndex] = {
-                        ...newArray[prodIndex],
-                        isSelected: true,
-                      };
-                      setProducts((prod) => [...newArray]);
+                      newArray[prodIndex] = { ...newArray[prodIndex], isSelected: true };
+                      // setProducts(prod => [...newArray]);
                     }}
                     handleLabelIdChange={handleLabelIdChange}
                     handleCategoryChange={onCategoryChange}
@@ -1383,15 +1379,11 @@ const NewShipment = (props) => {
       )}
 
       {message && (
-        <div className="alert alert-success d-flex justify-content-center mt-3">
-          {message}
-        </div>
+        <div className="d-flex justify-content-center mt-3"> <Alert severity="success"><AlertTitle>Success</AlertTitle>{message}</Alert></div>
       )}
 
       {errorMessage && (
-        <div className="alert alert-danger d-flex justify-content-center mt-3">
-          {errorMessage}
-        </div>
+        <div className="d-flex justify-content-center mt-3"> <Alert severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
       )}
     </div>
   );

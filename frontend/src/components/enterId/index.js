@@ -119,7 +119,7 @@ const EnterId = (props) => {
           setFieldValue,
           dirty,
         }) => (
-          <form onSubmit={handleSubmit} className="">
+          <form onSubmit={handleSubmit} className="" style={{height:"600px"}}>
               <div className="">
                 <div className="row" >
                   <div className="" >
@@ -221,7 +221,7 @@ const EnterId = (props) => {
               /> */}
             </div>
                     </div>
-                    <div className="row" style={{position:"relative",left:"20rem",top:"300px"}}>
+                    <div className="row" style={{position:"relative",left:"20rem",top:"340px"}}>
                       <button
                         type="button"
                         className="btn btn-outline-primary mr-4 "

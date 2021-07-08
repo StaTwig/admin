@@ -17,7 +17,6 @@ const Table = props => {
   const handlePageChange  = (event, value) => {
     props.onPageChange(value)
   };
-  console.log(orders);
   orders.sort(function(a,b){
     if(a.id>b.id){
       return -1;
@@ -49,24 +48,23 @@ const Table = props => {
                 status = 'Rejected';
               }
               else if (order.poStatus === 'TRANSIT&FULLYFULFILLED') {
-                statusStyle = 'bg-secondary';
-                status = 'Transit&FullyFilled';
+                statusStyle = 'bg-primary';
+                status = 'Transit and FullyFilled';
               }
               else if (order.poStatus === 'FULLYFULFILLED') {
-                statusStyle = 'bg-secondary';
+                statusStyle = 'bg-primary';
                 status = 'FullyFilled';
               }
 
               const { customer, products, supplier } = order;
-
               return (
               <div className="rTableRow pt-2 pb-2 shadow-none" key={index}>
                     <div className="rTableCell">
                       <div className="userPic text-right rounded d-flex flex-row">
                         <img src={user} width="30" height="20" alt="User" className="rounded mr-1 align-self-center" />
                         <div className="flex-column d-flex">
-                          <span className="text-primary bold">{visible == 'one' ? supplier.organisation.name : customer.organisation.name}</span>
-                          <p className="address mb-0 text-primary">{visible == 'one' ? supplier.organisation.id : customer.organisation.id}</p>
+                          <span className="text-primary bold">{visible == 'two' ? supplier.organisation.name : customer.organisation.name}</span>
+                          <p className="address mb-0 text-primary">{visible == 'two' ? supplier.organisation.id : customer.organisation.id}</p>
                       </div>
                       </div>
                     </div>

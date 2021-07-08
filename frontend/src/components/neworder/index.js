@@ -19,6 +19,8 @@ import ShipmentFailPopUp from "./shipmentFailPopUp";
 import { Formik } from "formik";
 import Select from 'react-select';
 import Modal from '../../shared/modal'
+import { Alert, AlertTitle } from '@material-ui/lab';
+
 
 import { getProducts, getProductsByCategory, setReviewPos, resetReviewPos , getOrganizationsByTypes} from '../../actions/poActions';
 
@@ -123,6 +125,7 @@ const NewOrder = (props) => {
                                     }));
     }
     fetchData();
+    dispatch(resetReviewPos({}));
   }, []);
 
   const closeModalFail = () => {
@@ -155,7 +158,7 @@ const NewOrder = (props) => {
     try {
       const warehouse = await getProductsByCategory(value);
       let newArr = [...addProducts];
-      newArr[index] = {"productId": "", "id": "", "productQuantity": "", "name": "", "type": value, "manufacturer": "","unitofMeasure":""};
+      newArr[index] = {"productId": "", "id": "", "productQuantity": "", "name": "null", "type": value, "manufacturer": "","unitofMeasure":""};
       newArr[index]['quantity'] = '';
       setAddProducts(prod => [...newArr]);
       setFieldValue('products', newArr.map(row => ({ "productId": row.id, "id": row.id, "productQuantity": row?.productQuantity ? row?.productQuantity : 0, "name": row.name, "type": row.type, "manufacturer": row.manufacturer,"unitofMeasure":row.unitofMeasure })));
@@ -625,15 +628,11 @@ const NewOrder = (props) => {
       )}
 
       {message && (
-        <div className="alert alert-success d-flex justify-content-center mt-3">
-          {message}
-        </div>
+        <div className="d-flex justify-content-center mt-3"> <Alert severity="success"><AlertTitle>Success</AlertTitle>{message}</Alert></div>
       )}
 
       {errorMessage && (
-        <div className="alert alert-danger d-flex justify-content-center mt-3">
-          {errorMessage}
-        </div>
+        <div className="d-flex justify-content-center mt-3"> <Alert severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
       )}
     </div>
   );

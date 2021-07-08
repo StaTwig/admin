@@ -28,6 +28,7 @@ const EditRow = (props) => {
     batchNumber,
     serialNumber,
     products,
+    handleAddMore,
     handleInventoryChange,
     idx,
     prods,
@@ -55,10 +56,19 @@ const EditRow = (props) => {
       var key = e.keyCode || e.which;
       key = String.fromCharCode(key);
     }
-    var regex = /[0-9]/;
-    if (!regex.test(key)) {
-      e.returnValue = false;
-      if (e.preventDefault) e.preventDefault();
+    if(!e.target.value && key==0){
+      e.stopPropagation();
+      e.preventDefault();
+      e.returnValue=false;
+      e.cancelBubble=true;
+      return false;
+    }
+    else{
+      var regex = /[0-9]/;
+      if (!regex.test(key)) {
+        e.returnValue = false;
+        if (e.preventDefault) e.preventDefault();
+      }
     }
   };
 
@@ -97,13 +107,11 @@ const EditRow = (props) => {
                 }}
                 groups={category}
               /> */}
-              {
-                console.log(categories,productName)
-              }
               <Select
                   className="no-border"
                   placeholder={categories}
-                  defaultInputValue={inventories.type}
+                  value={{value: categories, label: categories}}
+                  // defaultInputValue={inventories.type}
                   onChange={(item) => handleCategoryChange(idx, item.value)}
                   options={category}
                   />
@@ -115,12 +123,12 @@ const EditRow = (props) => {
                   <Select
                     className="no-border"
                     placeholder={productName}
-                    defaultInputValue={inventories.type}
+                    value={{value: productName, label: productName}}
+                    // defaultInputValue={inventories.type}
                     onChange={(item) =>
                       handleInventoryChange(idx, 'productName', item.name)
                     }
-                    
-                    options={prods}
+                    options={prods.filter(p=>p.type==categories)}
                   />
                 </div>
                 <div className="title recived-text">{productId}</div>
@@ -272,7 +280,7 @@ const EditRow = (props) => {
           <div className="mt-4 pt-4">
             <span
               className="del-pad shadow border-none rounded-circle mr-1"
-              onClick={() => setAddMore(false)}
+              onClick={() => {handleAddMore(idx);setAddMore(false)}}
             >
               <img className="cursorP p-1" height="30" src={Delete} />
             </span>

@@ -369,22 +369,34 @@ exports.getAnalytics = [
         var count = 0;
         var sum = 0;
         console.log("Records : ", records.length);
-        for(var i=0;  i<records.length; i++){
-          for(var j=0; j<shipments.length; j++){
-            if(records[i].id === shipments[j].poId){
-              count++;
-              var shipmentCreationTime = shipments[j].createdAt; 
-              var poCreationTime = records[i].createdAt;
-              console.log(shipmentCreationTime);
-              sum = sum + ( shipmentCreationTime - poCreationTime)
-            }
-          }
-        }
-        var totalmilliseconds = 0;
-        if(count !== 0){
-          totalmilliseconds = sum/count;
-        }
-  
+        // for(var i=0;  i<records.length; i++){
+        //   for(var j=0; j<shipments.length; j++){
+        //     if(records[i].id === shipments[j].poId){
+        //       count++;
+        //       var shipmentCreationTime = shipments[j].createdAt; 
+        //       var poCreationTime = records[i].createdAt;
+        //       console.log(shipmentCreationTime);
+        //       sum = sum + ( shipmentCreationTime - poCreationTime)
+        //     }
+        //   }
+        // }
+        // var totalmilliseconds = 0;
+        // if(count !== 0){
+        //   totalmilliseconds = sum/count;
+        // }
+        let org = await OrganisationModel.find({id: req.user.organisationId});
+        totalmilliseconds = org.totalProcessingTime ? org.totalProcessingTime : 0;
+
+        count = await POModel.aggregate([
+          { $match: {'poStatus': {$ne : 'CREATED'}, 'poStatus': {$ne : 'ACCEPTED'}}},
+          { $group: { _id: null, myCount: { $sum: 1 } } }
+              ]).sort({
+          createdAt: -1
+        }) 
+        if(count.myCount > 0)
+        totalmilliseconds = totalmilliseconds/ count.myCount;
+
+        
         var seconds = totalmilliseconds/1000;
         var numdays = Math.floor(seconds / 86400);
   
@@ -564,7 +576,7 @@ exports.getInventoryAnalytics = [
         {
           $group: {
             _id: "$batchNumbers", 
-            total: {$sum: {$size: "$quantity"}}
+            total: {$sum: {size: "$quantity"}}
           }
         }
       ]);
