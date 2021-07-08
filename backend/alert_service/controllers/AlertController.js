@@ -5,6 +5,7 @@ const auth = require("../middlewares/jwt");
 //models
 const utility = require('../helpers/utility');
 const Alerts = require('../models/AlertModel')
+const Notification = require('../models/NotificationsModel')
 const EmployeeModel = require('../models/EmployeeModel')
 
 exports.getAllAlerts = [
@@ -17,6 +18,18 @@ exports.getAllAlerts = [
       return apiResponse.ErrorResponse(res, err)
     }
   },
+]
+
+exports.getNotifications = [
+  auth,
+  async function (req, res) {
+    try {
+      let notifications = await Notification.find({ user : req.user.id})
+      return apiResponse.successResponseWithData(res, 'Notifications fetched successfully', notifications)
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err)
+    }
+  }
 ]
 
 exports.createNewAlert = [

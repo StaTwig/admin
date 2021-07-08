@@ -1681,7 +1681,6 @@ exports.createTwilioBinding = [
   auth,
   async (req, res) => {
     try {
-      client(accountSid, authToken);
       console.log("REGISTERING")
       console.log(req.user)
       client.notify.services(twilio_service_id)

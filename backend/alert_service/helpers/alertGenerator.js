@@ -1,30 +1,9 @@
 const Alert = require('../models/AlertModel')
 const Event = require('../models/EventModal')
 const User = require('../models/UserModel')
-const { alertMobile, alertEmail, alertPushNotification } = require('./alertSender')
+const { alertMobile, alertEmail, alertPushNotification, pushNotification } = require('./alertSender')
 
 
-async function connectDB() {
-  var MONGODB_URL = process.env.MONGODB_URL;
-  console.log(MONGODB_URL)
-  var mongoose = require('mongoose')
-  mongoose
-    .connect(MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => {
-      //don't show the log when it is test
-      if (process.env.NODE_ENV !== 'test') {
-        console.log('Connected to %s', MONGODB_URL)
-        console.log('App is running ... \n')
-        console.log('Press CTRL + C to stop the process. \n')
-        var db = mongoose.connection
-        return db
-      }
-    })
-    .catch((err) => {
-      console.error('App starting error:', err.message)
-      process.exit(1)
-    })
-}
 
 async function generateAlert(event) {
     try{
@@ -38,6 +17,7 @@ async function generateAlert(event) {
 	for await(const row of Alert.find({
         ...params
     })){
+        pushNotification(event,row.user.user_id)
         console.log("*****************ROW STARTS HERE**********************",row)
         console.log("**************** ALERTS MODE *****************", row.alertMode)
         if(row.alertMode.mobile){
@@ -56,8 +36,8 @@ async function generateAlert(event) {
     }
 }
 catch(err){
-    console.log(err)
-}
+        console.log(err)
+    }
 }
 
 exports.generateAlert = generateAlert;
