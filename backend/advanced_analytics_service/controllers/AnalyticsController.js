@@ -185,7 +185,7 @@ async function getReturnsOrg(org, analytics, filters, from, to) {
 	}
 	else {
 		const shipments = await ShipmentModel.find({
-			'supplier.id': org.id,
+			'receiver.id': org.id,
 			'status': 'RECEIVED',
 			createdAt: {
 				$lte: today,
@@ -1142,7 +1142,6 @@ function getConditionsOrgWarehouse(filters) {
 	if (filters.district && filters.district.length) {
 		matchCondition["warehouseDetails.warehouseAddress.city"] = filters.district;
 	}
-	console.log(matchCondition);
 	
 	return matchCondition;
 }
@@ -1217,8 +1216,6 @@ exports.getStatsByOrg = [
 				organizations
 			);
 		} catch (err) {
-			console.log(err);
-			
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
@@ -1764,7 +1761,7 @@ async function calculateDirtyBottlesAndBreakage(supplierOrg) {
 			}
 		// }
 		// console.log({ dirtyBottles: dirtyBottles > 0 ? dirtyBottles / totalProductd : 0, breakage: breakage > 0 ? breakage / totalProductb : 0 });
-		return { dirtyBottles: dirtyBottles > 0 ? parseFloat(dirtyBottles/totalProductd) : 0, breakage: breakage > 0 ? parseFloat(breakage/totalProductb) : 0 };
+		return { dirtyBottles: dirtyBottles > 0 ? parseFloat(dirtyBottles/totalProductd).toFixed(2) : 0, breakage: breakage > 0 ? parseFloat(breakage/totalProductb).toFixed(2) : 0 };
 	}
 	catch (err) {
 		console.log(err);
@@ -1952,9 +1949,22 @@ function getSKUGroupByFilters(filters) {
 	let matchCondition = [];
 	if (filters.group_by && filters.group_by !== '') {
 		if (filters.group_by === 'state') {
+			if (filters.state)
+				matchCondition.push({
+					$match: {
+						state: filters.state
+					}
+				});
+			if (filters.district && filters.district.length) {
+				matchCondition.push({
+					$match: {
+						district: filters.district
+					}
+				});
+			}
 			matchCondition.push({
 				$group: {
-					_id: '$state',
+					_id: filters.district ? '$district' : '$state',
 					data: {
 						$addToSet: "$$ROOT"
 					}
@@ -2059,6 +2069,7 @@ exports.getStatsBySKU = [
 				},
 				...getSKUGroupByFilters(filters)
 			]);
+			
 			let response = [];
 			let enableSort = false;
 			for (const analytic of Analytics) {

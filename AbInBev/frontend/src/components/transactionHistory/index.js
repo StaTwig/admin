@@ -559,31 +559,49 @@ const TransactionHistory = (props) => {
                               <div className="row">
                                 <div className="col-md-3">
                                   <span className="productHeader">
-                                    Transaction ID:&nbsp;&nbsp;
-                                  </span>{' '}
+                                    Transaction ID:&nbsp;
+                                  </span>
                                   <span>
                                     {selectedTransaction.externalShipmentId}
                                   </span>
                                 </div>
                                 <div className="col-md-3">
                                   <span className="productHeader">
-                                    Status: &nbsp;&nbsp;
+                                    Status: &nbsp;
                                   </span>
                                   <span>{selectedTransaction.status}</span>
                                 </div>
                                 <div className="col-md-3">
                                   <span className="productHeader">
-                                    Date: &nbsp;&nbsp;
+                                    Sent Date: &nbsp;
                                   </span>
                                   <span>
-                                    {new Date(selectedTransaction.shippingDate)
+                                    <Moment format="DD/MM/YY">
+                                      {selectedTransaction.createdAt}
+                                    </Moment>
+                                    {/* {new Date(selectedTransaction.createdAt)
                                       .toISOString()
-                                      .slice(0, 10)}
+                                      .slice(0, 10)} */}
                                   </span>
                                 </div>
-                                <div className="col-md-3">
+                                {selectedTransaction.status == 'RECEIVED' &&
+                                  <div className="col-md-3 p-0">
+                                    <span className="productHeader">
+                                      Received Date: &nbsp;
+                                  </span>
+                                    <span>
+                                      <Moment format="DD/MM/YY">
+                                        {selectedTransaction.updatedAt}
+                                      </Moment>
+                                      {/* {new Date(selectedTransaction.createdAt)
+                                      .toISOString()
+                                      .slice(0, 10)} */}
+                                    </span>
+                                  </div>
+                                }
+                                <div className={`col-md-3 ${selectedTransaction.status == `RECEIVED` ? `pt-3` : `` }`}>
                                   <span className="productHeader">
-                                    Challan No: &nbsp;&nbsp;
+                                    Challan No: &nbsp;
                                   </span>
                                   <span>
                                     {selectedTransaction.airWayBillNo}

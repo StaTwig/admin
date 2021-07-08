@@ -39,6 +39,16 @@ const iGraphicalDetailedView = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {
     (async () => {
+      let cond = '';
+      if (props.params) {
+        if(props.params.state)
+          cond = '&state=' + props.params.state;
+        if (props.params.district) {
+          setIsActive(true);
+          cond += '&district=' + props.params.district;
+        }
+      }
+      
       if (props.sku) {
         let n = props.SKUStats.filter((a) => a.externalId == props.sku);
         setName(n[0].name);
@@ -55,20 +65,39 @@ const iGraphicalDetailedView = (props) => {
             props.Otype +
             '&brand=' +
             prop.manufacturer +
-            '&group_by=state&inventory=true',
+            '&group_by=state&inventory=true'+cond,
         ),
       );
       setAnalytics(result.data);
       setOld(result.data);
+      setData([
+        {
+          name: 'Total Sales',
+          count: result.data[0].sales,
+        },
+        {
+          name: 'Total Bottle Pool',
+          count: result.data[0].inventory,
+        },
+      ]);
     })();
   }, []);
 
   const openDetailView = async (sku) => {
     if (!active) {
+      let cond = '';
+      if (props.params) {
+        if(props.params.state)
+          cond = '&state=' + props.params.state;
+        if (props.params.district) {
+          setIsActive(true);
+          cond += '&district=' + props.params.district;
+        }
+      }
       const result = await dispatch(
         getAnalyticsAllStats(
           '?sku=' +
-            (props.sku ? props.sku : prop.externalId) +
+            (props.sku ? props.sku : prop.externalId) + cond +
             '&pid=' +
             prop.id +
             '&brand=' +
@@ -80,6 +109,16 @@ const iGraphicalDetailedView = (props) => {
       setIsActive(true);
       setAnalytics(result.data);
       setOld(result.data);
+      setData([
+        {
+          name: 'Total Sales',
+          count: result.data[0].sales,
+        },
+        {
+          name: 'Total Bottle Pool',
+          count: result.data[0].inventory,
+        },
+      ]);
     } else {
       let n = old.filter((a) => a.groupedBy == sku);
       setAnalytics(n);

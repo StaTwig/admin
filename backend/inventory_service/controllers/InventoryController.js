@@ -2622,11 +2622,12 @@ async function getFilterConditions(filters) {
     if (
       filters.orgType === "BREWERY" ||
       filters.orgType === "S1" ||
-      filters.orgType === "S2"
+      filters.orgType === "S2" ||
+      filters.orgType === "S3"
     ) {
       matchCondition.type = filters.orgType;
     } else if (filters.orgType === "ALL_VENDORS") {
-      matchCondition.$or = [{ type: "S1" }, { type: "S2" }];
+      matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }];
     }
   }
   if (filters.district && filters.district.length && !filters.organization) {
@@ -2694,119 +2695,177 @@ exports.getInventoryProductsByPlatform = [
     try {
       const filters = req.query;
       const skuFilter = {};
-      if (filters.sku && filters.sku.length) {
-        skuFilter.externalId = filters.sku;
+      if (filters.invDetails && filters.invDetails.length) {
+        skuFilter["productDetails.id"] = filters.invDetails;
       }
+      
       const platformInventory = await OrganisationModel.aggregate([
-        {
-          $match: getFilterConditions(filters),
-        },
-        {
-          $unwind: {
-            path: "$warehouses",
-          },
-        },
-        {
-          $project: {
-            warehouses: 1,
-          },
-        },
-        {
-          $lookup: {
-            from: "warehouses",
-            localField: "warehouses",
-            foreignField: "id",
-            as: "warehouseinv",
-          },
-        },
-        {
-          $unwind: {
-            path: "$warehouseinv",
-          },
-        },
-        {
-          $replaceRoot: {
-            newRoot: {
-              $mergeObjects: ["$warehouseinv", "$$ROOT"],
-            },
-          },
-        },
-        {
-          $project: {
-            id: 1,
-            title: 1,
-            warehouseInventory: 1,
-          },
-        },
-        {
-          $lookup: {
-            from: "inventories",
-            localField: "warehouseInventory",
-            foreignField: "id",
-            as: "inv",
-          },
-        },
-        {
-          $unwind: {
-            path: "$inv",
-          },
-        },
-        {
-          $replaceRoot: {
-            newRoot: {
-              $mergeObjects: ["$inv", "$$ROOT"],
-            },
-          },
-        },
-        {
-          $unwind: {
-            path: "$inventoryDetails",
-          },
-        },
-        {
-          $replaceRoot: {
-            newRoot: {
-              $mergeObjects: ["$inventoryDetails", "$$ROOT"],
-            },
-          },
-        },
-        {
-          $group: {
-            _id: "$productId",
-            quantity: {
-              $sum: "$quantity",
-            },
-          },
-        },
-        {
-          $lookup: {
-            from: "products",
-            localField: "_id",
-            foreignField: "id",
-            as: "productDetails",
-          },
-        },
-        {
-          $unwind: {
-            path: "$productDetails",
-          },
-        },
-        {
-          $replaceRoot: {
-            newRoot: {
-              $mergeObjects: ["$productDetails", "$$ROOT"],
-            },
-          },
-        },
-        {
-          $project: {
-            productDetails: 0,
-          },
-        },
-        {
-          $match: skuFilter,
-        },
+              {
+                $match: getFilterConditions(filters),
+              },
+							{
+								$unwind: "$warehouses"
+							},
+              {
+								$lookup: {
+									from: 'warehouses',
+									localField: 'warehouses',
+									foreignField: 'id',
+									as: 'warehouse'
+								}
+              },
+              {
+								$unwind: "$warehouse"
+							},
+							{
+								$lookup: {
+									from: 'inventories',
+									localField: 'warehouse.warehouseInventory',
+									foreignField: 'id',
+									as: 'inventories'
+								}
+							},
+							{
+								$unwind: "$inventories"
+							},
+							{
+								$unwind: "$inventories.inventoryDetails"
+              },
+              {
+                $lookup: {
+                  from: "products",
+                  localField: "inventories.inventoryDetails.productId",
+                  foreignField: "id",
+                  as: "productDetails",
+                },
+              },
+              {
+                $unwind: {
+                  path: "$productDetails",
+                },
+              },
+              {
+                $match: skuFilter,
+              },
+							{
+								$group: {
+									_id: filters.invDetails ? {id: '$id', pid: '$inventories.inventoryDetails.productId'} : '$inventories.inventoryDetails.productId',
+                  quantity: { $sum: "$inventories.inventoryDetails.quantity" },
+                  org: { "$first": {'name': "$name", 'type': "$type", 'externalId': "$productDetails.externalId", 'product_name': "$productDetails.name", 'shortName': "$productDetails.shortName", 'manufacturer': "$productDetails.manufacturer", 'state': "$warehouse.warehouseAddress.state", 'district': "$warehouse.warehouseAddress.city"} }
+								}
+              },
       ]);
+      
+      // const platformInventory = await OrganisationModel.aggregate([
+      //   {
+      //     $match: getFilterConditions(filters),
+      //   },
+      //   {
+      //     $unwind: {
+      //       path: "$warehouses",
+      //     },
+      //   },
+      //   {
+      //     $project: {
+      //       warehouses: 1,
+      //     },
+      //   },
+      //   {
+      //     $lookup: {
+      //       from: "warehouses",
+      //       localField: "warehouses",
+      //       foreignField: "id",
+      //       as: "warehouseinv",
+      //     },
+      //   },
+      //   {
+      //     $unwind: {
+      //       path: "$warehouseinv",
+      //     },
+      //   },
+      //   {
+      //     $replaceRoot: {
+      //       newRoot: {
+      //         $mergeObjects: ["$warehouseinv", "$$ROOT"],
+      //       },
+      //     },
+      //   },
+      //   {
+      //     $project: {
+      //       id: 1,
+      //       title: 1,
+      //       warehouseInventory: 1,
+      //     },
+      //   },
+      //   {
+      //     $lookup: {
+      //       from: "inventories",
+      //       localField: "warehouseInventory",
+      //       foreignField: "id",
+      //       as: "inv",
+      //     },
+      //   },
+      //   {
+      //     $unwind: {
+      //       path: "$inv",
+      //     },
+      //   },
+      //   {
+      //     $replaceRoot: {
+      //       newRoot: {
+      //         $mergeObjects: ["$inv", "$$ROOT"],
+      //       },
+      //     },
+      //   },
+      //   {
+      //     $unwind: {
+      //       path: "$inventoryDetails",
+      //     },
+      //   },
+      //   {
+      //     $replaceRoot: {
+      //       newRoot: {
+      //         $mergeObjects: ["$inventoryDetails", "$$ROOT"],
+      //       },
+      //     },
+      //   },
+      //   {
+      //     $group: {
+      //       _id: "$productId",
+      //       quantity: {
+      //         $sum: "$quantity",
+      //       },
+      //     },
+      //   },
+      //   {
+      //     $lookup: {
+      //       from: "products",
+      //       localField: "_id",
+      //       foreignField: "id",
+      //       as: "productDetails",
+      //     },
+      //   },
+      //   {
+      //     $unwind: {
+      //       path: "$productDetails",
+      //     },
+      //   },
+      //   {
+      //     $replaceRoot: {
+      //       newRoot: {
+      //         $mergeObjects: ["$productDetails", "$$ROOT"],
+      //       },
+      //     },
+      //   },
+      //   {
+      //     $project: {
+      //       productDetails: 0,
+      //     },
+      //   },
+      //   {
+      //     $match: skuFilter,
+      //   },
+      // ]);
       return apiResponse.successResponseWithData(res, platformInventory);
     } catch (err) {
       logger.log(

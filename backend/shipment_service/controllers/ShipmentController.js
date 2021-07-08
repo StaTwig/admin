@@ -889,10 +889,10 @@ exports.receiveShipment = [
 function getFilterConditions(filters) {
   let matchCondition = {};
   if (filters.orgType && filters.orgType !== '') {
-    if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2') {
+    if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2' || filters.orgType === 'S3') {
       matchCondition.type = filters.orgType;
     } else if (filters.orgType === 'ALL_VENDORS') {
-      matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }];
+      matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }];
     }
   }
 
@@ -908,6 +908,26 @@ function getFilterConditions(filters) {
   return matchCondition;
 }
 
+function matchConditionShipment(filters) {
+  let matchCondition = {$and: []};
+  if (filters.orgType && filters.orgType !== '') {
+    if (filters.orgType === 'BREWERY' || filters.orgType === 'S1' || filters.orgType === 'S2' || filters.orgType === 'S3') {
+      matchCondition.$and.push({ $or: [{ "supplier.org.type": filters.orgType }, { "receiver.org.type": filters.orgType }] });
+    } else if (filters.orgType === 'ALL_VENDORS') {
+      matchCondition.$and.push({ $or: [{ "supplier.org.type": 'S1' }, { "supplier.org.type": 'S2' }, { "supplier.org.type": 'S3' }, { "receiver.org.type": 'S1' }, { "receiver.org.type": 'S2' }, { "receiver.org.type": 'S3' }] } );
+    }
+  }
+
+  if (filters.state && filters.state.length) {
+    matchCondition.$and.push( { $or: [{ "supplier.warehouse.warehouseAddress.state": filters.state.toUpperCase() }, { "receiver.warehouse.warehouseAddress.state": filters.state.toUpperCase() }] } );
+  }
+  if (filters.district && filters.district.length) {
+    matchCondition.$and.push( { $or: [{ "supplier.warehouse.warehouseAddress.city": filters.district.toUpperCase() }, { "receiver.warehouse.warehouseAddress.city": filters.district.toUpperCase() }] } );
+  }
+  
+  return matchCondition;
+}
+
 function getShipmentFilterCondition(filters, warehouseIds) {
   let matchCondition = {};
   if (filters.organization && filters.organization !== '') {
@@ -920,21 +940,23 @@ function getShipmentFilterCondition(filters, warehouseIds) {
           "receiver.id": filters.organization,
         },
       ];
-
     } else if (filters.txn_type === 'SENT') {
-
-      matchCondition = {
-        "supplier.id": filters.organization,
-        status: 'RECEIVED'
+      matchCondition.supplier = {
+        id: filters.organization,
       };
 
     } else if (filters.txn_type === 'RECEIVED') {
-
-      matchCondition = {
-        "receiver.id": filters.organization,
-        status: 'RECEIVED'
+      matchCondition.receiver = {
+        id: filters.organization
       };
+    }
+  }
 
+  if (filters.txn_type && filters.txn_type !== '') {
+    if (filters.txn_type === 'SENT') {
+      matchCondition.status = {$in: ['CREATED', 'SENT']};
+    } else if (filters.txn_type === 'RECEIVED') {
+      matchCondition.status = 'RECEIVED';
     }
   }
 
@@ -1004,41 +1026,41 @@ exports.fetchShipmentsForAbInBev = [
           // const { warehouseId } = req.user;
           const filters = req.query;
           try {
-            const warehouses = await OrganisationModel.aggregate([
-              {
-                $match: getFilterConditions(filters)
-              },
-              {
-                $group: {
-                  _id: 'warehouses',
-                  warehouses: {
-                    $addToSet: '$warehouses'
-                  }
-                }
-              },
-              {
-                $unwind: {
-                  path: '$warehouses'
-                }
-              },
-              {
-                $unwind: {
-                  path: '$warehouses'
-                }
-              },
-              {
-                $group: {
-                  _id: 'warehouses',
-                  warehouseIds: {
-                    $addToSet: '$warehouses'
-                  }
-                }
-              }
-            ]);
+            // const warehouses = await OrganisationModel.aggregate([
+            //   {
+            //     $match: getFilterConditions(filters)
+            //   },
+            //   {
+            //     $group: {
+            //       _id: 'warehouses',
+            //       warehouses: {
+            //         $addToSet: '$warehouses'
+            //       }
+            //     }
+            //   },
+            //   {
+            //     $unwind: {
+            //       path: '$warehouses'
+            //     }
+            //   },
+            //   {
+            //     $unwind: {
+            //       path: '$warehouses'
+            //     }
+            //   },
+            //   {
+            //     $group: {
+            //       _id: 'warehouses',
+            //       warehouseIds: {
+            //         $addToSet: '$warehouses'
+            //       }
+            //     }
+            //   }
+            // ]);
             let warehouseIds = [];
-            if (warehouses[0] && warehouses[0].warehouseIds) {
-              warehouseIds = warehouses[0].warehouseIds;
-            }
+            // if (warehouses[0] && warehouses[0].warehouseIds) {
+            //   warehouseIds = warehouses[0].warehouseIds;
+            // }
             const shipments = await ShipmentModel.aggregate([
               {
                 $match: getShipmentFilterCondition(filters, warehouseIds),
@@ -1109,6 +1131,7 @@ exports.fetchShipmentsForAbInBev = [
                   path: "$receiver.org",
                 },
               },
+              {$match: matchConditionShipment(filters)}
             ])
               .sort({
                 createdAt: -1,
