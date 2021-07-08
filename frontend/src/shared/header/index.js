@@ -8,7 +8,7 @@ import dropdownIcon from '../../assets/icons/dropdown_selected.png';
 import Location from '../../assets/icons/location_blue.png';
 import { Redirect } from 'react-router-dom';
 import DrawerMenu from './drawerMenu';
-import { getUserInfo, logoutUser, registerUser } from '../../actions/userActions';
+import { getActiveWareHouses, getUserInfo, logoutUser, registerUser } from '../../actions/userActions';
 import logo from '../../assets/brands/VACCINELEDGER.png';
 //import searchingIcon from '../../assets/icons/searching@2x.png';
 //import bellIcon from '../../assets/icons/bellwhite.png';
@@ -45,7 +45,7 @@ const Header = props => {
   // const [airWayBillNo,setairWayBillNo] = useState([]);
   // const [airWayBillNowithshipmentID,setairWayBillNowithshipmentID] = useState([]);
   // const [shippingIds, setShippingIds] = useState([]);
-  const [wareHouse, setWareHouse]= useState({});
+  const [activeWarehouses, setActiveWarehouses]= useState([]);
   const [selectLocation, setSelectLocation] = useState("");
   
 const ref = useOnclickOutside(() => {
@@ -154,6 +154,17 @@ const ref = useOnclickOutside(() => {
     async function fetchApi() {
       const response = await getNotifications();
       setNotifications(response.data);
+      
+      const warehouses = await getActiveWareHouses();
+      setActiveWarehouses(warehouses.map(item=>{
+        return{
+          value: item.name,
+          label: item.name,
+          ...item
+        };
+      }));
+      console.log("activeWarehouses",activeWarehouses);
+      console.log("warehouses",warehouses);
     }
     fetchApi();
   }, []);
@@ -236,8 +247,8 @@ const imgs = config().fetchProfileImage;
            </div>  
           <div className="userName" style={{fontSize: "13px", marginBottom:"0px"}}
           onClick={() => setLocation(!location)}> 
-          <p className="cname1"><b>Location 1</b></p>
-          <p className="uname"> Location Address </p>
+          <p className="cname1"><b>{activeWarehouses[0]?.title}</b></p>
+          <p className="uname"> {activeWarehouses[0]?.warehouseAddress.firstLine}</p>
           </div>
                            
            <div className="userActions mr-3"> 
@@ -248,28 +259,15 @@ const imgs = config().fetchProfileImage;
            </div>
            {location && (
             <div className="slider-menu1">
-              {
-                <React.Fragment>
-                <div
-                    className="slider-item1 border-top-0" 
-                    >
-                    Location 1
-                    </div>
-
-                 <div
-                    className="slider-item1"
-                   
-                  >
-                    Location 2
-                  </div>
-                  <div
-                    className="slider-item1"
-                   
-                  >
-                    Location 3
-                  </div>
-                </React.Fragment>
-              }
+              {activeWarehouses.map(item=>{
+                  return(
+                    <React.Fragment>
+                      <div className="slider-item1">
+                        {item.title}
+                      </div>
+                    </React.Fragment>
+                  )
+              })}
             </div>
           )}
            
