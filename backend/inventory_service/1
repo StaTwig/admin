@@ -1078,8 +1078,8 @@ exports.addProductsToInventory = [
             );
           let atoms = [];
           products.forEach((product) => {
-            const serialNumbers = product.serialNumbersRange.split("-");
-            if (serialNumbers.length > 1) {
+            const serialNumbers = product.serialNumbersRange?.split("-");
+            if (serialNumbers?.length > 1) {
               const serialNumbersFrom = parseInt(
                 serialNumbers[0].split(/(\d+)/)[1]
               );
@@ -1136,9 +1136,9 @@ exports.addProductsToInventory = [
               });
             }
 
-            const serialNumbers = product.serialNumbersRange.split("-");
+            const serialNumbers = product.serialNumbersRange?.split("-");
             let atomsArray = [];
-            if (serialNumbers.length > 1) {
+            if (serialNumbers?.length > 1) {
               const serialNumbersFrom = parseInt(
                 serialNumbers[0].split(/(\d+)/)[1]
               );
@@ -1153,8 +1153,8 @@ exports.addProductsToInventory = [
                   // id: `${serialNumberText + uniqid.time()}${i}`,
                   id: `${serialNumberText}${i}`,
                   label: {
-			  labelId: product.label?product.label.labelId:"QR_2D",
-                          labelType: product.label?product.label.labelType:"3232",
+			  labelId: product.label?product?.label?.labelId:"QR_2D",
+                          labelType: product.label?product?.label?.labelType:"3232",
                   },
                   quantity: 1,
                   productId: product.productId,
@@ -1184,8 +1184,8 @@ exports.addProductsToInventory = [
               const atom = {
                 id: uniqid('batch-'),
                 label: {
-                          labelId: product.label?product.label.labelId:"QR_2D",
-                          labelType: product.label?product.label.labelType:"3232",
+                          labelId: product.label?product?.label?.labelId:"QR_2D",
+                          labelType: product.label?product?.label?.labelType:"3232",
 		},
                 quantity: product.quantity,
                 productId: product.productId,
@@ -3140,197 +3140,212 @@ exports.getBatchWarehouse = [
 ];
 
 exports.deleteProductsFromInventory = [
-    auth,
-    async (req, res) => {
-        try {
+  auth,
+  async (req, res) => {
+    try {
 
-            const inventoryTransfer = async (
-                id,
-                quantity,
-                suppId,
-                recvId,
-                next
-            ) => {
-		    console.log("1",id,quantity,suppId,recvId)
-                const checkProduct = await InventoryModel.find({
-                    $and: [{
-                        id: recvId
-                    }, {
-                        "inventoryDetails.productId": id
-                    }],
-                });
-                if (checkProduct != "") {
-                    const recvUpdate = await InventoryModel.update({
-                        id: recvId,
-                        "inventoryDetails.productId": id,
-                    }, {
-                        $inc: {
-                            "inventoryDetails.$.quantity": quantity,
-                        },
-                    });
-                    const suppUpdateRecvTransit = await InventoryModel.update({
-                        id: suppId,
-                        "inventoryDetails.productId": id,
-                    }, {
-                        $inc: {
-                            "inventoryDetails.$.quantity": -quantity,
-                        },
-                    });
-                } else if (checkProduct == "") {
-                    const s = await InventoryModel.update({
-                        id: recvId
-                    }, {
-                        $addToSet: {
-                            inventoryDetails: {
-                                productId: id,
-                                quantity: quantity
-                            }
-                        }
-                    });
-                    const suppUpdateRecvTransit = await InventoryModel.update({
-                        id: suppId,
-                        "inventoryDetails.productId": id,
-                    }, {
-                        $inc: {
-                            "inventoryDetails.$.quantity": -quantity,
-                        },
-                    });
-                }
-                // next("Success")
-            };
+const inventoryTransfer = async (
+  id,
+  quantity,
+  suppId,
+  recvId,
+  next
+) => {
+        console.log("inside",id,
+  quantity,
+  suppId,
+  recvId)
 
-            const data = req.body;
-            const suppWarehouseDetails = await WarehouseModel.findOne({
+  const checkProduct = await InventoryModel.find({
+    $and: [{ id: recvId }, { "inventoryDetails.productId": id }],
+  });
+  if (checkProduct != "") {
+          console.log("available")
+    const recvUpdate = await InventoryModel.update(
+      {
+        id: recvId,
+        "inventoryDetails.productId": id,
+      },
+      {
+        $inc: {
+          "inventoryDetails.$.quantity": quantity,
+        },
+      }
+    );
+    const suppUpdateRecvTransit = await InventoryModel.update(
+      {
+        id: suppId,
+        "inventoryDetails.productId": id,
+      },
+      {
+        $inc: {
+          "inventoryDetails.$.quantity": -quantity,
+        },
+      }
+    );
+  } else if (checkProduct == "") {
+    const s = await InventoryModel.update(
+      { id: recvId },
+      { $addToSet: { inventoryDetails: { productId: id, quantity: quantity } } }
+    );
+    const suppUpdateRecvTransit = await InventoryModel.update(
+      {
+        id: suppId,
+        "inventoryDetails.productId": id,
+      },
+      {
+        $inc: {
+          "inventoryDetails.$.quantity": -quantity,
+        },
+      }
+    );
+  }
+  // next("Success")
+};
+
+const data = req.body;
+ const suppWarehouseDetails = await WarehouseModel.findOne({
                 id: data.supplier.locationId,
-            });
-            if (suppWarehouseDetails == null) {
-                return apiResponse.ErrorResponse(res, "suppWarehouseDetails not Found");
-            }
-            var suppInventoryId = suppWarehouseDetails.warehouseInventory;
-            const suppInventoryDetails = await InventoryModel.findOne({
+              });
+              if(suppWarehouseDetails==null)
+              {
+                return apiResponse.ErrorResponse(res,"suppWarehouseDetails not Found");
+              }
+              var suppInventoryId = suppWarehouseDetails.warehouseInventory;
+              const suppInventoryDetails = await InventoryModel.findOne({
                 id: suppInventoryId,
-            });
-            if (suppInventoryDetails == null) {
-                return apiResponse.ErrorResponse(res, "suppInventoryDetails not Found");
-            }
-            const recvWarehouseDetails = await WarehouseModel.findOne({
+              });
+              if(suppInventoryDetails==null)
+              {
+                return apiResponse.ErrorResponse(res,"suppInventoryDetails not Found");
+              }
+              const recvWarehouseDetails = await WarehouseModel.findOne({
                 id: data.receiver.locationId,
-            });
-            if (recvWarehouseDetails == null) {
-                return apiResponse.ErrorResponse(res, "recvWarehouseDetails not Found");
-            }
-            var recvInventoryId = recvWarehouseDetails.warehouseInventory;
-            const recvInventoryDetails = await InventoryModel.findOne({
+              });
+              if(recvWarehouseDetails==null)
+              {
+                return apiResponse.ErrorResponse(res,"recvWarehouseDetails not Found");
+              }
+              var recvInventoryId = recvWarehouseDetails.warehouseInventory;
+              const recvInventoryDetails = await InventoryModel.findOne({
                 id: recvInventoryId,
-            });
-            if (recvInventoryDetails == null) {
-                return apiResponse.ErrorResponse(res, "recvInventoryDetails not Found");
-            }
-
-            const user_id = req.user.id;
-            const email = req.user.emailId;
-            const empData = await EmployeeModel.findOne({
-                emailId: req.user.emailId,
-            });
-            const orgId = empData.organisationId;
-            const orgData = await OrganisationModel.findOne({
-                id: orgId
-            });
-            const orgName = empData.name;
-            const address = orgData.postalAddress;
-            const supplierOrgData = await OrganisationModel.findOne({
-                id: req.body.supplier.id,
-            });
-            const supplierName = supplierOrgData.name;
-            const supplierAddress = supplierOrgData.postalAddress;
-            const receiverId = req.body.receiver.id;
-            const receiverOrgData = await OrganisationModel.findOne({
-                id: req.body.receiver.id,
-            });
-            const receiverName = receiverOrgData.name;
-            const receiverAddress = receiverOrgData.postalAddress;
-            let payload = req.body;
+              });
+              if(recvInventoryDetails==null)
+              {
+                return apiResponse.ErrorResponse(res,"recvInventoryDetails not Found");
+              }
 
 
-            var products = data.products;
-            for (count = 0; count < products.length; count++) {
+
+const user_id = req.user.id;
+const email = req.user.emailId;
+const empData = await EmployeeModel.findOne({
+          emailId: req.user.emailId,
+});
+const orgId = empData.organisationId;
+const orgName = empData.name;
+const orgData = await OrganisationModel.findOne({ id: orgId });
+const address = orgData.postalAddress;
+console.log("1")
+const supplierOrgData = await OrganisationModel.findOne({
+        id: req.body.supplier.id,
+      });
+const supplierName = supplierOrgData.name;
+const supplierAddress = supplierOrgData.postalAddress;
+console.log("2")
+const receiverId = req.body.receiver.id;
+const receiverOrgData = await OrganisationModel.findOne({
+        id: req.body.receiver.id,
+      });
+const receiverName = receiverOrgData.name;
+const receiverAddress = receiverOrgData.postalAddress;
+let payload = req.body;
+
+
+              var products = data.products;
+              for (count = 0; count < products.length; count++) {
                 inventoryTransfer(
-                    products[count].productID,
-                    products[count].productQuantity,
-                    suppInventoryId,
-                    recvInventoryId
+                  products[count].productID,
+                  products[count].productQuantity,
+                  suppInventoryId,
+                  recvInventoryId
                 );
-            }
+           }
 
 
-            var datee = new Date();
-            datee = datee.toISOString();
-            var evid = Math.random().toString(36).slice(2);
-            let event_data = {
-                eventID: null,
-                eventTime: null,
-                eventType: {
-                    primary: "CREATE",
-                    description: "SHIPMENT_CREATION",
-                },
-                actor: {
-                    actorid: null,
-                    actoruserid: null,
-                },
-                stackholders: {
-                    ca: {
-                        id: "null",
-                        name: "null",
-                        address: "null",
-                    },
-                    actororg: {
-                        id: "null",
-                        name: "null",
-                        address: "null",
-                    },
-                    secondorg: {
-                        id: "null",
-                        name: "null",
-                        address: "null",
-                    },
-                },
-                payload: {
-                    data: {
-                        abc: 123,
-                    },
-                },
-            };
-            event_data.eventID = "ev0000" + evid;
-            event_data.eventTime = datee;
-            event_data.eventType.primary = "DELETE";
-            event_data.eventType.description = "INVENTORY";
-            event_data.actor.actorid = user_id || "null";
-            event_data.actor.actoruserid = email || "null";
-            event_data.stackholders.actororg.id = orgId || "null";
-            event_data.stackholders.actororg.name = orgName || "null";
-            event_data.stackholders.actororg.address = address || "null";
-            event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
-            event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
-            event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
-            event_data.stackholders.secondorg.id = receiverId || "null";
-            event_data.stackholders.secondorg.name = receiverName || "null";
-            event_data.stackholders.secondorg.address = receiverAddress || "null";
+var datee = new Date();
+          datee = datee.toISOString();
+          var evid = Math.random().toString(36).slice(2);
+          let event_data = {
+            eventID: null,
+            eventTime: null,
+            eventType: {
+              primary: "CREATE",
+              description: "SHIPMENT_CREATION",
+            },
+            actor: {
+              actorid: null,
+              actoruserid: null,
+            },
+            stackholders: {
+              ca: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+              actororg: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+              secondorg: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+            },
+            payload: {
+              data: {
+                abc: 123,
+              },
+            },
+          };
+          event_data.eventID = "ev0000" + evid;
+          event_data.eventTime = datee;
+          event_data.eventType.primary = "DELETE";
+          event_data.eventType.description = "INVENTORY";
+          event_data.actor.actorid = user_id || "null";
+          event_data.actor.actoruserid = email || "null";
+          event_data.stackholders.actororg.id = orgId || "null";
+          event_data.stackholders.actororg.name = orgName || "null";
+          event_data.stackholders.actororg.address = address || "null";
+          event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+          event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+          event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
+                  event_data.stackholders.secondorg.id = receiverId || "null";
+          event_data.stackholders.secondorg.name = receiverName || "null";
+          event_data.stackholders.secondorg.address = receiverAddress || "null";
 
-            event_data.payload.data = payload;
-            async function compute(event_data) {
-                result = await logEvent(event_data);
-                return result;
-            }
-            compute(event_data).then((response) => {
-		    console.log("res",response)
-            });
+          event_data.payload.data = payload;
+          console.log(event_data);
+          async function compute(event_data) {
+            result = await logEvent(event_data);
+            return result;
+          }
+          compute(event_data).then((response) => {
+            console.log(response);
+          });
 
-            return apiResponse.successResponse(
-                res,
-                "Operation success"
-            );
-        } catch (err) {
-            return apiResponse.ErrorResponse(res, err.message);
-        }
-    },
+
+
+
+      return apiResponse.successResponse(
+        res,
+        "Operation success"
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
 ];
+
