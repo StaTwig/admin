@@ -610,7 +610,7 @@ const Analytics = (props) => {
                   </>
                 )}
 
-                {selectedModule == 'SPM_DASHBOARD' && <>SPM Filter Section</>}
+                {/* {selectedModule == 'SPM_DASHBOARD' && <>SPM Filter Section</>} */}
 
                 {/* =================== New Filter Code Ends ================================ */}
 

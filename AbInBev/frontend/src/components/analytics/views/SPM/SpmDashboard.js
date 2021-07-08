@@ -70,7 +70,8 @@ const SpmDashboard = (props) => {
                     </div>
                   </td>
                   <td>{perf.postalAddress}</td>
-                  <td>{perf.returnRate ? perf.returnRate : 0}</td>
+                  {/* <td>{perf.returnRate ? perf.returnRate : 0}</td> */}
+                  <td>{0}</td>
                   <td>
                     {selectedRatingIndex !== index ? (
                       <div

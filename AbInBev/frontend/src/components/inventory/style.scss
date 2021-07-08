@@ -320,6 +320,91 @@ flex-shrink: 0;
     }
 }
 
+.vCard{
+    .progress.progress-line-default {
+        background: #F7F6F4 ;
+    }
+    
+    .progress .progress-bar.progress-bar-default {
+        background: #54265E;
+    }
+    .productDetailCard{
+        width:100%;
+        background: #FFFFFF;
+        box-shadow: 0px 3px 6px #54265E26;
+        border-radius: 15px;  
+        margin:20px 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;  
+    }
+    .productGrid{
+        width: 210px;
+        height: 120px;   
+        margin: 0px; 
+    }
+    .productcard {
+        width: 100%;
+        padding: 0px 30px; 
+        .productText{
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            padding-top:15px;
+        }
+        .breweryPropertyValue{
+            font-size: 16px;
+            font-weight: 600;
+            color:#FDAB0F;
+            display:block;
+            padding:5px 0px;
+        } 
+        .captionSubtitle{
+            font-size: 12px;
+            font-weight: 400;
+            color:#737373;
+            padding-bottom: 10px;     
+        }          
+    }
+    .productSection{
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;   
+        .info{
+            margin-left: 1rem;
+            .name{
+                font-size: 18px;
+                font-weight: 600;
+                padding: 10px 0px;    
+            }
+            .caption{
+                font-size: 12px;
+                font-weight: 400;
+                padding: 3px 0px;
+                color:#737373;        
+            }
+        } 
+    }
+    .productsChart{
+        background: #FFFFFF;
+        box-shadow: 0px 3px 6px #54265E26;
+        border-radius: 15px;
+        padding:20px;
+        margin-bottom: 20px;
+        .productsChartTitle{
+            color: #A20134;
+            font-size: 16px;
+            font-weight: 600;
+            padding:10px 20px;
+            margin-bottom: 20px;
+        }
+    }
+    .stateLink{
+        text-decoration: underline;
+        color: #000;
+        font-weight: 600;
+    }
+}
 
 .vendorDetailCard {
   background: #ffffff;
@@ -363,3 +448,29 @@ margin-bottom: 10px;
     font-weight: 600;
     font-size: medium;
 }
+
+.cursorP{
+    cursor: pointer;
+}
+
+.group{
+        font-size: 12px;
+        font-weight: 500;
+        border-radius: 5px;
+        padding:0px 2px;
+        color:#FFFFFF;
+        
+    }
+    .s1group{
+        background-color: orange;
+    }
+    .s2group{
+        background-color: blueviolet;
+
+    }
+    .s3group{
+        background-color: darkcyan;
+    }
+    .brewerygroup{
+        background-color: red;
+    }

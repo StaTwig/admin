@@ -7,9 +7,9 @@ function getQueryString(filters) {
   let queryStr = '';
   if (filters.organizationType && filters.organizationType.length) {
     if (filters.organizationType === 'VENDOR' && filters.vendorType && filters.vendorType.length) {
-      queryStr = '?orgType=' + filters.vendorType;
+      queryStr = '&orgType=' + filters.vendorType;
     } else {
-      queryStr = '?orgType=' + filters.organizationType;
+      queryStr = '&orgType=' + filters.organizationType;
     }
   }
   if (filters.transactionType && filters.transactionType.length) {

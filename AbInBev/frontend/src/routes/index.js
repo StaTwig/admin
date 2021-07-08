@@ -8,6 +8,7 @@ import InventoryContainer from "../containers/inventory";
 import Home from "../containers/home";
 
 import NoMatch from "../components/NoMatch";
+import InventoryDetailsView from "../components/inventory/InventoryDetails";
 
 import "./style.scss";
 const routes = (
@@ -20,6 +21,7 @@ const routes = (
       component={requireAuth(TransactionHistoryContainer)}
     />
     <Route path="/inventory" component={requireAuth(InventoryContainer)} />
+    <Route path="/inventorydetails/:sku" component={requireAuth(InventoryDetailsView)} />
     <Route component={NoMatch} />
   </Switch>
 );

@@ -26,6 +26,10 @@ function getQueryStringFromFilters(filters) {
     if (filters.sku && filters.sku.length) {
       queryStr = queryStr + '&sku=' + filters.sku;
     }
+
+    if (filters.invDetails && filters.invDetails.length) {
+      queryStr = queryStr + '&invDetails=' + filters.invDetails;
+    }
   }
   return queryStr;
 }
