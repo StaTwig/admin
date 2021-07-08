@@ -13,10 +13,10 @@ const ViewOrder = props => {
   const user = useSelector((state) => {
     return state.user;
   });
-  let statusStyle = 'bg-info';
+  let statusStyle = 'bg-primary';
   let status = order.poStatus;
   if  (order?.supplier?.supplierOrganisation === user?.organisationId && order.poStatus === 'CREATED'){
-    statusStyle = 'bg-info';
+    statusStyle = 'bg-primary';
     status = 'Received'
 }
 else if (order?.customer?.customerOrganisation && order.poStatus === 'CREATED'){
@@ -28,8 +28,16 @@ else if (order.poStatus === 'ACCEPTED') {
     statusStyle = 'bg-success';
     status = 'Accepted';
   }else if (order.poStatus === 'REJECTED') {
-    statusStyle = 'bg-warning';
+    statusStyle = 'bg-danger';
     status = 'Rejected';
+  }
+  else if (order.poStatus === 'TRANSIT&FULLYFULFILLED') {
+    statusStyle = 'bg-info';
+    status = 'Transit and FullyFilled';
+  }
+  else if (order.poStatus === 'FULLYFULFILLED') {
+    statusStyle = 'bg-warning';
+    status = 'FullyFilled';
   }
 
 
