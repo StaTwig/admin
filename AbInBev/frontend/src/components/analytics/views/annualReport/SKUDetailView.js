@@ -8,6 +8,7 @@ import {
   CartesianGrid,
   Tooltip,
   Legend,
+  Label,
   ResponsiveContainer,
 } from 'recharts';
 
@@ -19,6 +20,7 @@ import {
   getOrgTypeStats,
 } from '../../../../actions/analyticsAction';
 import { useDispatch } from 'react-redux';
+import abbreviate from "number-abbreviate";
 
 const SKUDetailView = (props) => {
   const { states, brandsIconArr, brandsArr, brands } = props;
@@ -58,14 +60,14 @@ const SKUDetailView = (props) => {
       const result = await dispatch(
         getAnalyticsAllStats(
           '?sku=' +
-            (props.sku ? props.sku : prop.externalId) +
-            '&group_by=' +
-            (act || isActive ? 'district' : 'state') +
-            '&pid=' +
-            prop.id +
-            '&brand=' +
-            prop.manufacturer +
-            qry,
+          (props.sku ? props.sku : prop.externalId) +
+          '&group_by=' +
+          (act || isActive ? 'district' : 'state') +
+          '&pid=' +
+          prop.id +
+          '&brand=' +
+          prop.manufacturer +
+          qry,
         ),
       );
       setAnalytics(result.data);
@@ -77,13 +79,14 @@ const SKUDetailView = (props) => {
     const result = await dispatch(
       getOrgTypeStats(
         '?sku=' +
-          (props.sku ? props.sku : prop.externalId) +
-          '&district=' +
-          district,
+        (props.sku ? props.sku : prop.externalId) +
+        '&district=' +
+        district,
       ),
     );
     setSubAnalytics(result.data);
   };
+
 
   return (
     <div>
@@ -101,7 +104,7 @@ const SKUDetailView = (props) => {
                   className="productImage"
                   src={
                     brandsIconArr[
-                      brands.indexOf(prop.manufacturer.split(' ').join(''))
+                    brands.indexOf(prop.manufacturer.split(' ').join(''))
                     ]
                   }
                 />
@@ -114,9 +117,9 @@ const SKUDetailView = (props) => {
                         <img
                           src={
                             brandsArr[
-                              brands.indexOf(
-                                prop.manufacturer.split(' ').join(''),
-                              )
+                            brands.indexOf(
+                              prop.manufacturer.split(' ').join(''),
+                            )
                             ]
                           }
                           alt=""
@@ -172,7 +175,6 @@ const SKUDetailView = (props) => {
         <div className="row">
           <div className="col-md-12 col-sm-12">
             <div className="productsChart">
-              <label className="productsChartTitle">{dText}</label>
               <ResponsiveContainer width="100%" height={500}>
                 <BarChart
                   width={500}
@@ -180,16 +182,43 @@ const SKUDetailView = (props) => {
                   data={analytics}
                   layout="vertical"
                   margin={{
-                    top: 10,
-                    right: 10,
-                    left: 10,
-                    bottom: 5,
+                    top: 15,
+                    right: 30,
+                    left: 70,
+                    bottom: 15,
                   }}
                   barSize={10}
                   barGap={1}
                 >
-                  <XAxis type="number" />
-                  <YAxis dataKey="groupedBy" type="category" scale="band" />
+                  <Legend verticalAlign="top" height={36} />
+                  <XAxis
+                    offset={0}
+                    type="number"
+                    tickFormatter={abbreviate}
+                  >
+                    <Label value="Volume" dy={10} position="insideBottom" />
+                  </XAxis>
+                  <YAxis
+                    dataKey="groupedBy"
+                    type="category"
+                    scale="band"
+                    offset={0}
+                    tickLine={false}
+                    dx={-8}
+                    style={{ fontSize: '12px', fontWeight: '600'}}
+                  >
+                    <Label 
+                      value={dText} 
+                      dx={-15} 
+                      dy={-20} 
+                      offset={10} 
+                      position="top"
+                      style={{
+                        fontSize: '16px',
+                        color: 'red',
+                        fontWeight: '600'
+                      }} />
+                  </YAxis>
                   <Tooltip />
                   <Legend />
                   <Bar
@@ -230,55 +259,55 @@ const SKUDetailView = (props) => {
                         <td colspan="5">No Data found</td>
                       </tr>
                     ) : (
-                      analytics.map((analytic, index) => (
-                        <>
-                          <tr key={index}>
-                            <td scope="row">
-                              <span
-                                className="stateLink"
-                                onClick={() => {
-                                  if (isActive)
-                                    getAnalyticsByType(
-                                      analytic.groupedBy,
-                                      index,
-                                    );
-                                  else {
-                                    setIsActive(!isActive);
-                                    setDText('District');
-                                  }
-                                }}
+                        analytics.map((analytic, index) => (
+                          <>
+                            <tr key={index}>
+                              <td scope="row">
+                                <span
+                                  className="stateLink"
+                                  onClick={() => {
+                                    if (isActive)
+                                      getAnalyticsByType(
+                                        analytic.groupedBy,
+                                        index,
+                                      );
+                                    else {
+                                      setIsActive(!isActive);
+                                      setDText('District');
+                                    }
+                                  }}
                                 // onClick={() => { setIsActive(!isActive); setDText('District'); }}
-                              >
-                                {analytic.groupedBy}
-                              </span>
-                            </td>
-                            <td>{analytic.sales.toLocaleString('en-IN')}</td>
-                            <td>{analytic.returns.toLocaleString('en-IN')}</td>
-                            <td>
-                              {analytic.targetSales.toLocaleString('en-IN')}
-                            </td>
-                            <td>
-                              {!isNaN(analytic.actualReturns)
-                                ? analytic.actualReturns
-                                : 0}
+                                >
+                                  {analytic.groupedBy}
+                                </span>
+                              </td>
+                              <td>{analytic.sales.toLocaleString('en-IN')}</td>
+                              <td>{analytic.returns.toLocaleString('en-IN')}</td>
+                              <td>
+                                {analytic.targetSales.toLocaleString('en-IN')}
+                              </td>
+                              <td>
+                                {!isNaN(analytic.actualReturns)
+                                  ? analytic.actualReturns
+                                  : 0}
                               %
                             </td>
-                          </tr>
-                          {arrIndex === index &&
-                            subAnalytics?.map((sub, i) => (
-                              <tr key={i}>
-                                <td scope="row">{sub._id}</td>
-                                <td scope="row">&nbsp;</td>
-                                <td scope="row">
-                                  {sub.returns.toLocaleString('en-IN')}
-                                </td>
-                                <td scope="row">&nbsp;</td>
-                                <td scope="row">&nbsp;</td>
-                              </tr>
-                            ))}
-                        </>
-                      ))
-                    )}
+                            </tr>
+                            {arrIndex === index &&
+                              subAnalytics?.map((sub, i) => (
+                                <tr key={i}>
+                                  <td scope="row">{sub._id}</td>
+                                  <td scope="row">&nbsp;</td>
+                                  <td scope="row">
+                                    {sub.returns.toLocaleString('en-IN')}
+                                  </td>
+                                  <td scope="row">&nbsp;</td>
+                                  <td scope="row">&nbsp;</td>
+                                </tr>
+                              ))}
+                          </>
+                        ))
+                      )}
                   </tbody>
                 </table>
               </div>
