@@ -894,7 +894,6 @@ function matchConditionShipment(filters) {
   if (filters.district && filters.district.length) {
     matchCondition.$and.push( { $or: [{ "supplier.warehouse.warehouseAddress.city": filters.district.toUpperCase() }, { "receiver.warehouse.warehouseAddress.city": filters.district.toUpperCase() }] } );
   }
-  console.log(JSON.stringify(matchCondition));
   
   return matchCondition;
 }
