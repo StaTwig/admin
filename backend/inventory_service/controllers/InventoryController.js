@@ -1078,8 +1078,8 @@ exports.addProductsToInventory = [
             );
           let atoms = [];
           products.forEach((product) => {
-            const serialNumbers = product.serialNumbersRange.split("-");
-            if (serialNumbers.length > 1) {
+            const serialNumbers = product.serialNumbersRange?.split("-");
+            if (serialNumbers?.length > 1) {
               const serialNumbersFrom = parseInt(
                 serialNumbers[0].split(/(\d+)/)[1]
               );
@@ -1136,9 +1136,9 @@ exports.addProductsToInventory = [
               });
             }
 
-            const serialNumbers = product.serialNumbersRange.split("-");
+            const serialNumbers = product.serialNumbersRange?.split("-");
             let atomsArray = [];
-            if (serialNumbers.length > 1) {
+            if (serialNumbers?.length > 1) {
               const serialNumbersFrom = parseInt(
                 serialNumbers[0].split(/(\d+)/)[1]
               );
@@ -1153,8 +1153,8 @@ exports.addProductsToInventory = [
                   // id: `${serialNumberText + uniqid.time()}${i}`,
                   id: `${serialNumberText}${i}`,
                   label: {
-			  labelId: product.label?product.label.labelId:"QR_2D",
-                          labelType: product.label?product.label.labelType:"3232",
+			  labelId: product.label?product?.label?.labelId:"QR_2D",
+                          labelType: product.label?product?.label?.labelType:"3232",
                   },
                   quantity: 1,
                   productId: product.productId,
@@ -1184,8 +1184,8 @@ exports.addProductsToInventory = [
               const atom = {
                 id: uniqid('batch-'),
                 label: {
-                          labelId: product.label?product.label.labelId:"QR_2D",
-                          labelType: product.label?product.label.labelType:"3232",
+                          labelId: product.label?product?.label?.labelId:"QR_2D",
+                          labelType: product.label?product?.label?.labelType:"3232",
 		},
                 quantity: product.quantity,
                 productId: product.productId,
