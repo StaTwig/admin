@@ -56,8 +56,8 @@ const Inventory = props => {
   const dispatch = useDispatch();
   /* const colors = ["#ffbcc4", "#c1e3f2", "#ffc18c", "#ffef83",
         "#d4e7ff", "#e0b0ff", "#F1EFCE", "#D7FAF1", "#F2B6AF" ];*/
-  const colors = ["#94d2bd", "#d9ed92", "#ffe5d9", "#d8e2dc",
-                   "#FFE194", "#E8F6EF", "#B8DFD8","#87DFD6", "#FBFD8A", ];
+  const colors = ["#94d2bd", "#d9ed92", "#ffe5d9", "#d8e2dc","#FFE194", "#E8F6EF", "#B8DFD8","#87DFD6", "#FBFD8A","#94d2bd", "#d9ed92", "#ffe5d9", "#d8e2dc",
+                   "#FFE194", "#E8F6EF", "#B8DFD8","#87DFD6", "#FBFD8A","#94d2bd", "#d9ed92", "#ffe5d9", "#d8e2dc","#FFE194", "#E8F6EF", "#B8DFD8","#87DFD6", "#FBFD8A" ];
 
   const [inventoryAnalytics,setInventoryAnalytics]= useState({})
         // useEffect(() => {
@@ -368,11 +368,11 @@ const Inventory = props => {
               <div className="row">
                 {productsList?.map((product, index) => (
                   <div className="col-sm-6" key={index}>
-                    <div className="d-flex card flex-column align-items-center ml-4"  style={{backgroundColor: colors[index]}}>
+                    <div className="d-flex card flex-column align-items-center"  style={{backgroundColor: colors[index]}}>
                     <div className="round-sign">{product.productName}</div>
                       <p className="product">&nbsp;</p>
                       {/* <p className="product">{product.productName}</p> */}
-                      <h3>Qty : {product.quantity}<span>{"  ("}</span>{product.unitofMeasure && product.unitofMeasure.name ? <span>{product.unitofMeasure.name}</span>:""}<span>{")"}</span></h3>
+                      <h3 className="qty">Qty : {product.quantity}<span>{"  ("}</span>{product.unitofMeasure && product.unitofMeasure.name ? <span>{product.unitofMeasure.name}</span>:""}<span>{")"}</span></h3>
                     </div>
                   </div>
                 ))}
