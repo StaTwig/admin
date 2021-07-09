@@ -1287,7 +1287,7 @@ exports.fetchProductIdsCustomerLocationsOrganisations = [
       let responseData = {};
       ProductModel.find({},'id name').then (function (productIds){
         WarehouseModel.find({},'id title').then (function (locations){
-          OrganisationModel.find({},'id name').then (function (organisation){
+          OrganisationModel.find({'status':'ACTIVE'},'id name').then (function (organisation){
             responseData[`organisations`] = organisation;
             responseData[`deliveryLocations`] = locations;
             responseData[`productIds`] = productIds;
@@ -1304,7 +1304,7 @@ exports.fetchProductIdsCustomerLocationsOrganisations = [
         'error',
         '<<<<< POService < POController < fetchProductIdsCustomerLocations : error (catch block)',
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ]
