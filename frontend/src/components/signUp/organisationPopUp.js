@@ -33,8 +33,8 @@ const OrganisationPopUp = (props) => {
     const [pincode, setPincode] = useState("");
     const [region,setregion] = useState("");
     const [country, setcountry] = useState("");
-    const [city, setCity] = useState("City");
-    const [state, setState] = useState("State");
+    const [city, setCity] = useState("");
+    const [state, setState] = useState("");
     const [addressLine, setAddressLine] = useState("");
 
     const [inputValue1, setInputValue1] = React.useState('');
@@ -86,7 +86,13 @@ const OrganisationPopUp = (props) => {
       setShowModal(true);
     }
     };
-    
+    function search(name, myArray){
+      for (var i=0; i < myArray.length; i++) {
+          if (myArray[i].name === name) {
+              return myArray[i].id;
+          }
+      }
+  }
   return (
       <div className="inventorypopup">
           {showModal && (
@@ -190,12 +196,15 @@ const OrganisationPopUp = (props) => {
                           onChange={(event, newValue) => {
                             fetchAllCountries1(newValue);
                             setregion(newValue);
+                            setcountry("");
+                            setState("");
+                            setCity("");
                           }}
                           id="controllable-states-demo"
-                          inputValue={inputValue1}
-                          onInputChange={(event, newInputValue) => {
-                            setInputValue1(newInputValue);
-                          }}                 
+                          // inputValue={inputValue1}
+                          // onInputChange={(event, newInputValue) => {
+                          //   setInputValue1(newInputValue);
+                          // }}                 
                           options={allregions}
                           style={{ width: 425 }}
                           renderInput={(params) => <TextField {...params} label="Select Region"  />}
@@ -234,20 +243,14 @@ const OrganisationPopUp = (props) => {
                         <Autocomplete
                           value={country}
                           onChange={(event, newValue) => {
-                            fetchAllState1(newValue.id);
-                            setcountry(newValue.name);
+                            let v = search(newValue,allCountries);
+                            fetchAllState1(v);
+                            setcountry(newValue);
+                            setState("");
+                            setCity("");
                           }}
                           id="controllable-states-demo"
-                          options={allCountries}
-                          getOptionLabel = {
-                            (option) => option.name
-                          }
-                          inputValue={country}
-                          // onInputChange={(event, newInputValue) => {
-                          //   console.log(event,"event");
-                          //   console.log(newInputValue,'New input value');
-                          //   setInputValue2(newInputValue.name);
-                          // }} 
+                          options={allCountries.map((option)=>option.name)}
                           style={{ width: 425 }}
                           renderInput={(params) => <TextField {...params} label="Select Country"  />}
                         />
@@ -266,15 +269,13 @@ const OrganisationPopUp = (props) => {
                         <Autocomplete
                           value={state}
                           onChange={(event, newValue) => {
-                            fetchAllCity1(newValue.id);
-                            setState(newValue.name);
+                            let v = search(newValue,allState);
+                            fetchAllCity1(v);
+                            setState(newValue);
+                            setCity("");
                           }}
                           id="controllable-states-demo"
-                          options={allState}
-                          getOptionLabel = {
-                            (option) => option.name
-                          }
-                          inputValue={state}
+                          options={allState.map((option)=>option.name)}
                           style={{ width: 425 }}
                           renderInput={(params) => <TextField {...params} label="Select State"  />}
                         />
@@ -294,14 +295,10 @@ const OrganisationPopUp = (props) => {
                         <Autocomplete
                           value={city}
                           onChange={(event, newValue) => {
-                            setCity(newValue.name);
+                            setCity(newValue);
                           }}
                           id="controllable-states-demo"
-                          options={allCity}
-                          getOptionLabel = {
-                            (option) => option.name
-                          }
-                          inputValue={city}
+                          options={allCity.map((Option)=>Option.name)}
                           style={{ width: 425 }}
                           renderInput={(params) => <TextField {...params} label="Select City"  />}
                         />
