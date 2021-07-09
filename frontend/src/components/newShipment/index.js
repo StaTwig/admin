@@ -271,7 +271,7 @@ const NewShipment = (props) => {
       if (p.productQuantity < 1) error = true;
     });
     console.log(products);  
-
+    console.log("error is there");
     if (!error) {
       const data = {
         airWayBillNo,
@@ -331,6 +331,7 @@ const NewShipment = (props) => {
       }
       if(check===1)
       {
+        console.log("product quantity is undefined ");
         setShipmentError("Check product quantity");
         setOpenShipmentFail(true);
       }
@@ -472,24 +473,6 @@ const NewShipment = (props) => {
     newArray[prodIndex] = { ...newArray[prodIndex], isSelected: true };
     setProducts((prod) => [...newArray]);
   };
-
-  const onRemoveRow = (index) => {
-
-    console.log(OrderDetails);
-    console.log("Hello!!");
-   // console.log(OrderDetails?.products);
-    const inventoryStateClone = JSON.parse(JSON.stringify(OrderDetails?.products));
-    inventoryStateClone.splice(index, 1);
-   // console.log(inventoryStateClone);
-    const cloneOrder = OrderDetails;
-    cloneOrder.products = inventoryStateClone; 
-    setOrderDetails(cloneOrder); 
-    setOrderProduct(inventoryStateClone);
-    console.log(OrderDetails);
-    
-  };
-
-
 
 
 // //console.log(allOrganisations,"All org");
@@ -1209,7 +1192,35 @@ const NewShipment = (props) => {
                     handleBatchChange(v, i);
                   }}
                   enableDelete={false}
-                  onRemoveRow={onRemoveRow}
+                  onRemoveRow={(index) => {
+                    const prodIndex = products.findIndex(
+                      (p) => p.id === OrderDetails?.products[index].id
+                    );
+                    let newArray = [...products];
+                    newArray[prodIndex] = {
+                      ...newArray[prodIndex],
+                      isSelected: false,
+                    };
+                    setProducts((prod) => [...newArray]);
+
+                    OrderDetails?.products.splice(index, 1);
+                    let newArr = [...OrderDetails?.products];
+                    if (newArr.length > 0)
+                      setFieldValue(
+                        "products",
+                        newArr.map((row) => ({
+                          productCategory: row.type,
+                          productID: row.id,
+                          productQuantity: row.productQuantity,
+                          batchNumber: row.batchNumber,
+                          productName: row.name,
+                          manufacturer: row.manufacturer,
+                          quantity: row.quantity,
+                        }))
+                      );
+                    else setFieldValue("products", []);
+                    setAddProducts((prod) => [...newArr]);
+                  }}
                   handleLabelIdChange={handleLabelIdChange}
                 />
               )}
