@@ -56,7 +56,7 @@ const Table = props => {
                 status = 'Transit and Partially Fulfilled';
               }
               else if (order.poStatus === 'PARTIALLYFULFILLED') {
-                statusStyle = 'bg-dark';
+                statusStyle = 'bg-secondary';
                 status = 'Partially Fulfilled';
               }
 
