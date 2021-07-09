@@ -44,7 +44,7 @@ else if (order.poStatus === 'ACCEPTED') {
     status = 'Transit and Partially Fulfilled';
   }
   else if (order.poStatus === 'PARTIALLYFULFILLED') {
-    statusStyle = 'bg-dark';
+    statusStyle = 'bg-secondary';
     status = 'Partially Fulfilled';
   }
 
