@@ -75,8 +75,8 @@ const Table = props => {
                   <div className="rTableCell text-center"><p className="mb-0 bold mb-0 address text-muted">{products[0]?.name+(products.length > 1 ? ' + '+(products.length-1)+' more' : '')}</p></div> 
                 
                 <div className="rTableCell  d-flex flex-column" style={{position:'relative',left:"45px"}}> 
-                  <span>{customer.warehouse?.warehouseAddress?.city}</span> 
-                  <span className="text-muted ">{customer.warehouse && customer.warehouse.warehouseAddress ? customer.organisation.name+ " / "+ customer.warehouse.warehouseAddress.firstLine + " "+customer.warehouse.warehouseAddress.city: null}</span>
+                  <span>{customer.organisation.name}</span> 
+                  <span className="text-muted ">{customer.warehouse && customer.warehouse.warehouseAddress ?  customer.warehouse.warehouseAddress.firstLine + " "+customer.warehouse.warehouseAddress.city: null}</span>
                 </div> 
 
                 <div className="rTableCell " style={{position:'relative',left:"110px"}}> 
