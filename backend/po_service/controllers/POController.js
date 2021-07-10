@@ -1070,6 +1070,15 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
                     Promise.all(productRes).then(async function (productList) {
                       inboundPOData[`productDetails`] = await productList;
                     });
+                    
+                           let creator = await EmployeeModel.findOne(
+                      {
+                        id: inboundPO.createdBy
+                      });
+                           let creatorOrganisation = await OrganisationModel.findOne(
+                      {
+                              id: creator.organisationId
+                      });
 
                     let supplierOrganisation = await OrganisationModel.findOne(
                       {
@@ -1083,6 +1092,7 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
                       {
                         organisationId: inboundPOData.customer.customerOrganisation
                       });
+                    inboundPOData.creatorOrganisation= creatorOrganisation;
                     inboundPOData.supplier[`organisation`] = supplierOrganisation;
                     inboundPOData.customer[`organisation`] = customerOrganisation;
                     inboundPOData.customer[`warehouse`] = customerWareHouse;
@@ -1222,14 +1232,6 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
                     Promise.all(productRes).then(async function (productList) {
                       outboundPOData[`productDetails`] = await productList;
                     });
-                    let creator = await EmployeeModel.findOne(
-                      {
-                        id: outboundPO.createdBy
-                      });
-                           let creatorOrganisation = await OrganisationModel.findOne(
-                      {
-                              id: creator.organisationId
-                      });
 
                     let supplierOrganisation = await OrganisationModel.findOne(
                       {
@@ -1242,8 +1244,7 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
                     let customerWareHouse = await WarehouseModel.findOne(
                       {
                         organisationId: outboundPOData.customer.customerOrganisation
-                      });
-                    outboundPOData.creatorOrganisation = creatorOrganisation;  
+                      }); 
                     outboundPOData.supplier[`organisation`] = supplierOrganisation;
                     outboundPOData.customer[`organisation`] = customerOrganisation;
                     outboundPOData.customer[`warehouse`] = customerWareHouse;
