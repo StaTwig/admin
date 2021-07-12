@@ -35,7 +35,7 @@ import { resetShipments } from '../../actions/shipmentActions';
 const Header = props => {
   const dispatch = useDispatch();
   const [menu, setMenu] = useState(false);
-  const [location, setLocation] = useState(false);
+  const [location, setLocation] = useState({});
   const [sidebar, openSidebar] = useState(false);
   const [search, setSearch] = useState('');
   const [invalidSearch, setInvalidSearch] = useState(false);
@@ -50,7 +50,6 @@ const Header = props => {
   
 const ref = useOnclickOutside(() => {
     setMenu(false);
-    setLocation(false);
   });
   function onSearchChange(e) {
     setSearch(e.target.value);
@@ -158,16 +157,28 @@ const ref = useOnclickOutside(() => {
       const warehouses = await getActiveWareHouses();
       setActiveWarehouses(warehouses.map(item=>{
         return{
-          value: item.name,
-          label: item.name,
+          title: item.name,
+          organisationId: item.name,
           ...item
         };
       }));
+      setLocation(warehouses[0]);
+      
+      localStorage.setItem('key','value');
       console.log("activeWarehouses",activeWarehouses);
       console.log("warehouses",warehouses);
+      console.log("location",location);
     }
     fetchApi();
   }, []);
+  
+  useEffect(()=>{
+    localStorage.setItem('location',JSON.stringify(location.id));
+  },[location]);
+
+  const handleLocation=(item)=>{
+    setLocation(item);
+  }
 
   const clearNotification = async notification => {
     const response = await deleteNotification(notification._id);
@@ -245,31 +256,18 @@ const imgs = config().fetchProfileImage;
            <div className="location">
               <img src={Location} width="20" height="26" /> 
            </div>  
-          <div className="userName" style={{fontSize: "13px", marginBottom:"0px"}}
-          onClick={() => setLocation(!location)}> 
+          {/* <div className="userName" style={{fontSize: "13px", marginBottom:"0px"}}> 
           <p className="cname1"><b>{activeWarehouses[0]?.title}</b></p>
           <p className="uname"> {activeWarehouses[0]?.warehouseAddress.firstLine}</p>
-          </div>
-                           
-           <div className="userActions mr-3"> 
-              <img src={dropdownIcon} 
-              alt="actions"
-              onClick={() => setLocation(!location)}
-                />
+          </div> */}
+
+            <div className="userName" style={{fontSize: "4px", marginBottom:"0px"}}>               
+           <DropdownButton
+            name={location.title+"\n Address-"+location?.warehouseAddress?.firstLine}
+            onSelect={item=>{handleLocation(item)}}
+            groups={activeWarehouses}
+           />
            </div>
-           {location && (
-            <div className="slider-menu1">
-              {activeWarehouses.map(item=>{
-                  return(
-                    <React.Fragment>
-                      <div className="slider-item1">
-                        {item.title}
-                      </div>
-                    </React.Fragment>
-                  )
-              })}
-            </div>
-          )}
            
           <div className="userName">
             <p className="cname">{profile?.organisation?.split('/')[0]}</p>

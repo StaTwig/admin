@@ -3,6 +3,12 @@ import axios from "axios";
 const setAuthToken = token => {
   axios.defaults.headers.post['Content-Type'] = 'application/json';
    axios.defaults.headers.common['Access-Control-Allow-Origin'] = '*'
+   if(axios.defaults.params)
+    axios.defaults.params['warehouseId'] = localStorage.getItem("location");
+  else{
+    axios.defaults.params = {};
+     axios.defaults.params['warehouseId'] = localStorage.getItem("location");
+  }
  
   if (token) {
     // Apply to every request
