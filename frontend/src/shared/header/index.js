@@ -61,7 +61,6 @@ const ref = useOnclickOutside(() => {
   };
 
   const usersLocation=useSelector((state)=>{
-    console.log("state",state);
     return state.userLocation;
   });
   // useEffect(() => {
@@ -168,28 +167,33 @@ const ref = useOnclickOutside(() => {
           ...item
         };
       }));
-      console.log("usersLocation",usersLocation);
-      setLocation(prod=>warehouses[0]);
-      
-      // localStorage.setItem('key','value');
-      console.log("activeWarehouses",activeWarehouses);
-      console.log("warehouses",warehouses);
-      if(Object.keys(usersLocation).length===0)
-        setLocation(warehouses?warehouses[0]:{});
-      else
-        setLocation(usersLocation);
-      
+      // console.log("usersLocation",usersLocation);
+      setLocation(prod => warehouses[0]);
+      if (warehouses.length > 0)
+        if(warehouses[0].id)
+          localStorage.setItem('location', warehouses[0].id);
+    
+      if (Object.keys(usersLocation).length === 0) {
+        if (warehouses.length > 0)
+          if (warehouses[0].id) {
+            setLocation(warehouses[0]);
+            localStorage.setItem('location', warehouses[0].id);
+          }
+      }
+      else {
+        if (usersLocation.id) {
+          localStorage.setItem('location', usersLocation.id);
+          setLocation(usersLocation);
+        }
+      }
     }
     fetchApi();
     
   }, []);
   
-  useEffect(()=>{
-    console.log("usersLocation",usersLocation);
-    
-    console.log("location",location);
-    localStorage.removeItem('location');
-    localStorage.setItem('location',location?.id);
+  useEffect(() => {
+    if(location?.id)
+    localStorage.setItem('location', location?.id);
   },[location]);
 
   const handleLocation=(item)=>{
