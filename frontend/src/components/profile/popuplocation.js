@@ -8,6 +8,7 @@ import { Link } from "react-router-dom";
 import SuccessPopup from "../../shared/PopUp/successPopUp";
 import FailPopup from "../../shared/PopUp/failedPopUp";
 import Modal from "../../shared/modal";
+import { Alert,AlertTitle } from "@material-ui/lab";
 
 const PopUpLocation = (props) => {
   console.log("Pop Up Detail");
@@ -17,6 +18,7 @@ const PopUpLocation = (props) => {
   const [selectLocation, setSelectLocation] = useState("Select Location");
   const [addedLocationModal, setAddedLocationModal] = useState(false);
   const [openLocationFail, setOpenLocationFail] = useState(false);
+  const [alertFlag,setAlertFlag]=useState(false);
 
   const closeModalAddedLocation = ()=>{
     setAddedLocationModal(false);
@@ -42,14 +44,16 @@ const PopUpLocation = (props) => {
     if(result.status = 200){
       console.log('Added Location');
       console.log(result);
-      if (result.data.data.status!=0)
+      if (result.data.data)
       { 
         setAddedLocationModal(true);
       }
-    }
-    else{
-      console.log("Error in add location");
-      console.log(result);
+    
+      else{
+        setAlertFlag(true);
+        console.log("Error in add location");
+        console.log(result);
+      }
     }
   };
 
@@ -91,6 +95,7 @@ const PopUpLocation = (props) => {
                 name={selectLocation}
                 // name2="Select Location"
                 onSelect={(v)=>{
+                setAlertFlag(false);
                 console.log('Location Selected');
                 console.log(v);
                 setWareHouse({...v});
@@ -131,6 +136,11 @@ const PopUpLocation = (props) => {
             />
           </Modal>
         )}   */}
+        {alertFlag && 
+        <Alert variant="filled" severity="error">
+          <AlertTitle>Error</AlertTitle>
+          Please select Location
+        </Alert>}
     </div>
   );
 };
