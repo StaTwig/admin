@@ -334,11 +334,11 @@ const NewShipment = (props) => {
         setShipmentError("Check product quantity");
         setOpenShipmentFail(true);
       }
-      else if(check===2)
+      /* else if(check===2)
       {
         setShipmentError("Check Batch Number");
         setOpenShipmentFail(true);
-      }
+      } */
       else{
         let i,j;
         let check = true;
