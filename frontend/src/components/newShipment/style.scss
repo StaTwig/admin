@@ -92,13 +92,11 @@
         color: $black;
         flex-basis: 65%;
         flex-grow: inherit;
-        font-size: 15.5px;       
-        
+        font-size: 15.5px;      
       }
 
     }
   }
- 
   .input-group {
     position: relative;
     margin-bottom: 1rem;
@@ -216,14 +214,22 @@
 .text-danger-SD{
   color:rgb(216, 9, 9);
   position:relative;
-  left: 10px;
-  top:px;
+  left: 3rem;
+  top:0px;
   font-size: 15px;
 }
 .text-danger-AB{
   color:rgb(216, 9, 9);
   position:relative;
-  left:-8rem;
-  top:px;
+  left: 2.5rem;
+  top:0rem;
   font-size: 15px;
+}
+.input[type=text] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  border: none;
+  border-bottom: 2px solid red;
 }

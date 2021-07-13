@@ -26,6 +26,7 @@ import {getOrganizationsTypewithauth} from '../../actions/userActions';
 import { getProducts, getProductsByCategory } from "../../actions/poActions";
 import {getProductList} from '../../actions/productActions';
 import { Alert, AlertTitle } from '@material-ui/lab';
+import { TextField } from "@material-ui/core";
 
 
 
@@ -1046,23 +1047,25 @@ const NewShipment = (props) => {
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label className="required-field" htmlFor="organizationName">Transit Number</label>
+                      <div  className="form-control">
                       <input
                         type="text"
-                        className="form-control"
                         name="airWayBillNo"
                         onBlur={handleBlur}
                         placeholder="Enter Transit Number"
                         onChange={handleChange}
                         value={values.airWayBillNo}
                       />
-
+                      
                       {errors.airWayBillNo && touched.airWayBillNo && (
                         <span className="error-msg text-danger-AB">
                           {errors.airWayBillNo}
                         </span>
                       )}
+                      </div>
                     </div>
                   </div>
+                  
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
@@ -1104,9 +1107,9 @@ const NewShipment = (props) => {
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label className="required-field" htmlFor="Label code">Label Code</label>
+                     <div className="form-control">
                       <input
                         type="text"
-                        className="form-control"
                         name="labelCode"
                         placeholder="Enter Label Code"
                         onBlur={handleBlur}
@@ -1119,6 +1122,7 @@ const NewShipment = (props) => {
                         </span>
                       )}
                     </div>
+                  </div>
                   </div>
 
                   <div className="col-md-6 com-sm-12">
