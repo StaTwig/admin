@@ -36,10 +36,6 @@ const Table = props => {
               if (order.poStatus === 'CREATED') {
                 status = visible == 'one' ? 'Sent' : 'Received';
               }
-              else if (order.poStatus === 'Received') {
-                statusStyle = 'bg-primary';
-                status = 'Received';
-              }
               else if (order.poStatus === 'ACCEPTED') {
                 statusStyle = 'bg-success';
                 status = 'Accepted';
@@ -54,6 +50,14 @@ const Table = props => {
               else if (order.poStatus === 'FULLYFULFILLED') {
                 statusStyle = 'bg-warning';
                 status = 'FullyFilled';
+              }
+              else if (order.poStatus === 'TRANSIT&PARTIALLYFULFILLED') {
+                statusStyle = 'bg-info';
+                status = 'Transit and Partially Fulfilled';
+              }
+              else if (order.poStatus === 'PARTIALLYFULFILLED') {
+                statusStyle = 'bg-secondary';
+                status = 'Partially Fulfilled';
               }
 
               const { customer, products, supplier } = order;
