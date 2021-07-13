@@ -280,22 +280,22 @@ const AddLocation = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
                       <label className="required-field col-sm-6" htmlFor="addressTitle">Title</label>
-                      <input
-                        type="text"
-                        className="form-control"
+                      <TextField style={{width:"300px"}}
+                        id="standard-basic"
+                        label="Enter Title" 
+                        className="form-control2"
                         name="addressTitle"
-                        placeholder="Enter Title"
                         value={values.addressTitle}
                         onBlur={handleBlur}
                         onChange={(e) => {
                           setAddressTitle(e.target.value);
                         }}
                       />
-                      {errors.addressTitle && touched.addressTitle && (
+                    { /*  {errors.addressTitle && touched.addressTitle && (
                         <span className="error-msg text-danger-ANL">
                           {errors.addressTitle}
                         </span>
-                      )}
+                     )} */}
                       </div>
                     </div>
                   </div>
@@ -303,22 +303,22 @@ const AddLocation = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
                         <label className="required-field col-sm-6" htmlFor="addressLine">Address Line</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="addressLine"
-                          placeholder="Enter Address Line"
-                          value={values.addressLine}
-                          onBlur={handleBlur}
-                          onChange={(e) => {
-                            setAddressLine(e.target.value);
-                          }}
-                        />
-                        {errors.addressLine && touched.addressLine && (
+                        <TextField style={{width:"300px"}}
+                        type="text"
+                        id="standard-basic"
+                        label="Enter Address Line" 
+                        className="form-control2"
+                        value={values.addressLine}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          setAddressLine(e.target.value);
+                        }}
+                      />
+                      {/*{errors.addressLine && touched.addressLine && (
                           <span className="error-msg text-danger-ANL">
                             {errors.addressLine}
                           </span>
-                        )}
+                  )} */}
                       </div>
                     </div>
                   </div>
@@ -326,22 +326,26 @@ const AddLocation = (props) => {
                     <div className="col-md-6 com-sm-16">
                       <div className="form-group">
                         <label className="required-field col-sm-6" htmlFor="Select Location">Pincode</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          name="pincode"
-                          placeholder="Select Pincode"
-                          value={values.pincode}
-                          onBlur={handleBlur}
-                          onChange={(e) => {
-                            setPincode(e.target.value);
-                          }}
-                        />
-                        {errors.pincode && touched.pincode && (
+                        <TextField style={{width:"300px"}}
+                            id="standard-basic"
+                            label="Pin Code" 
+                            type="number"
+                            className="form-control2"
+                            name="pincode"
+                            value={values.pincode}
+                            onBlur={handleBlur}
+                           /*  handleChange={handleChange}
+                            handleBlur={handleBlur}
+                            error={errors.pincode}
+                            touched={touched.pincode} */
+                            onChange={(e) => {setPincode(e.target.value)
+                            }}
+                          />
+                        {/* {errors.pincode && touched.pincode && (
                           <span className="error-msg text-danger-ANL">
                             {errors.pincode}
                           </span>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </div>
