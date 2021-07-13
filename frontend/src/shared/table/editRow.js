@@ -107,11 +107,14 @@ const EditRow = (props) => {
                 }}
                 groups={category}
               /> */}
+              {
+              console.log(categories)
+              }
               <Select
                   className="no-border"
-                  placeholder={categories}
-                  value={{value: categories, label: categories}}
-                  // defaultInputValue={inventories.type}
+                  placeholder={<div className="select-placeholder-text">Select Product Category</div>} 
+                  value={categories=="Select Category"?null:{value: categories, label: categories}}
+                   defaultInputValue={inventories.type}
                   onChange={(item) => handleCategoryChange(idx, item.value)}
                   options={category}
                   />
@@ -122,8 +125,8 @@ const EditRow = (props) => {
                 <div className="title col-8 recived-text">
                   <Select
                     className="no-border"
-                    placeholder={productName}
-                    value={{value: productName, label: productName}}
+                    placeholder= {<div className= "select-placeholder-text" > Product Name </div>}
+                    value={(productName=="Select Product" || productName=="")?null:{value: productName, label: productName}}
                     // defaultInputValue={inventories.type}
                     onChange={(item) =>
                       handleInventoryChange(idx, 'productName', item.name)

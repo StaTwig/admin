@@ -137,10 +137,13 @@ const handleChange = (value) =>
                   onSelect={item => { handleCategoryChange(index, item) }}
                   groups={category}
                 /> */}
+                {
+                  console.log(prod.id,prod.type)
+                }
                 <Select
                   className="no-border"
                   placeholder={<div className="select-placeholder-text">Select Product Category</div>} 
-                  value={{value: prod.id, label: prod.type}}
+                  value={(prod.type==undefined || prod.id==undefined)?null:{value: prod.id, label: prod.type}}
                   defaultInputValue={prod.type}
                   onChange={(v) => handleCategoryChange(index, v.value)}
                   options={category}
@@ -167,7 +170,7 @@ const handleChange = (value) =>
                 <Select
                 className="no-border"
                 placeholder= {<div className= "select-placeholder-text" > Product Name </div>} 
-                value={{value: prod.id, label: prod.name}}
+                value={(prod.id==undefined || prod.name==undefined || prod.name==="")?null:{value: prod.id, label: prod.name}}
                 placeholder="Product Name"
                    defaultInputValue={prod.name}
                   onChange={(v) => {
