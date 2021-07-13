@@ -14,7 +14,7 @@ import logo from '../../assets/brands/VACCINELEDGER.png';
 //import bellIcon from '../../assets/icons/bellwhite.png';
 //import dropdownIcon from '../../assets/icons/drop-down.png';
 import user from '../../assets/icons/user.svg';
-import { getNotifications, deleteNotification } from '../../actions/notificationActions';
+import { getNotifications, deleteNotification, getImage } from '../../actions/notificationActions';
 import { turnOff, turnOn } from "../../actions/spinnerActions";
 import useOnclickOutside from 'react-cool-onclickoutside';
 import { config } from "../../config";
@@ -41,6 +41,7 @@ const Header = props => {
   const [invalidSearch, setInvalidSearch] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [image, setImage] = useState('');
   // const [orderIds, setOrderIds] = useState([]);
   // const [airWayBillNo,setairWayBillNo] = useState([]);
   // const [airWayBillNowithshipmentID,setairWayBillNowithshipmentID] = useState([]);
@@ -154,6 +155,12 @@ const ref = useOnclickOutside(() => {
     async function fetchApi() {
       const response = await getNotifications();
       setNotifications(response.data);
+      const r = await getImage(profile.photoId);
+      const reader = new window.FileReader();
+      reader.readAsDataURL(r.data); 
+      reader.onload = function () {
+        setImage(reader.result);
+      }
       
       const warehouses = await getActiveWareHouses();
       setActiveWarehouses(warehouses.map(item=>{
@@ -279,7 +286,7 @@ const imgs = config().fetchProfileImage;
 
           <div className="userPic">
             <img
-              src={`${imgs}${profile.photoId}` ? `${imgs}${profile.photoId}` : user }
+              src={`${imgs}${profile.photoId}` ? `${image}` : user }
               alt="profile"
               className={`rounded rounded-circle ${`${imgs}${profile.photoId}` ? `` :`img-thumbnail bg-transparent border-0`}` }
               onClick={() => setMenu(!menu) }

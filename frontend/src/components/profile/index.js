@@ -12,6 +12,7 @@ import { config } from "../../config";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { Alert, AlertTitle } from '@material-ui/lab';
+import { getImage } from '../../actions/notificationActions';
 
 
 const axios = require("axios");
@@ -57,6 +58,7 @@ class Profile extends React.Component {
       warehouseAddress_state: "",
       title: "",
       warehouseLocByOrg: [],
+      image: ''
     };
     this.onChange = this.onChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
@@ -136,6 +138,14 @@ class Profile extends React.Component {
         this.state.warehouseLocations= this.state.warehouseLocations.filter((data)=>response.data.data.warehouseId.includes(data.id));
       })
       
+    }
+
+    const that = this;
+    const r = await getImage(this.props.user.photoId);
+    const reader = new window.FileReader();
+    reader.readAsDataURL(r.data); 
+    reader.onload = function () {
+      that.setState({ image: reader.result });
     }
   }
 
@@ -295,8 +305,10 @@ class Profile extends React.Component {
       warehouseAddress_secondline,
       warehouseAddress_state,
       title,
+      image
     } = this.state;
     const imgs = config().fetchProfileImage;
+    
     return (
       <div className="profile">
         <h1 className="breadcrumb">Profile</h1>
@@ -313,7 +325,7 @@ class Profile extends React.Component {
                   />:
                   <img
                     name="photo"
-                    src={`${imgs}${this.props.user.photoId}`}
+                    src={`${image}`}
                     className="rounded rounded-circle"
                   />}
                 </div>
