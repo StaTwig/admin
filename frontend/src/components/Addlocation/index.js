@@ -60,7 +60,6 @@ const AddLocation = (props) => {
   };
   async function fetchAllCity1(id){
     let res = await fetchCitiesByState(id);
-    console.log(res,"All City");
     setallCity(res.data);
   };
   const updateStatus = async (values) => {
@@ -106,6 +105,13 @@ const AddLocation = (props) => {
   const requestadminforapproval = () => {
     //  props.history.push('/profile');
   };
+  function search(name, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].name === name) {
+            return myArray[i].id;
+        }
+    }
+}
   return (
     <div>
       <div className="addproduct">
@@ -178,12 +184,11 @@ const AddLocation = (props) => {
                           onChange={(event, newValue) => {
                             fetchAllCountries1(newValue);
                             setregion(newValue);
+                            setcountry("");
+                            setState("");
+                            setCity("");
                           }}
-                          id="controllable-states-demo"
-                          inputValue={inputValue1}
-                          onInputChange={(event, newInputValue) => {
-                            setInputValue1(newInputValue);
-                          }}                 
+                          id="controllable-states-demo"               
                           options={allregions}
                           style={{ width: 300 }}
                           renderInput={(params) => <TextField {...params} label="Select Region"  />}
@@ -203,20 +208,14 @@ const AddLocation = (props) => {
                         <Autocomplete
                           value={country}
                           onChange={(event, newValue) => {
-                            fetchAllState1(newValue.id);
-                            setcountry(newValue.name);
+                            let v = search(newValue,allCountries);
+                            fetchAllState1(v);
+                            setcountry(newValue);
+                            setState("");
+                            setCity("");
                           }}
                           id="controllable-states-demo"
-                          options={allCountries}
-                          getOptionLabel = {
-                            (option) => option.name
-                          }
-                          inputValue={country}
-                          // onInputChange={(event, newInputValue) => {
-                          //   console.log(event,"event");
-                          //   console.log(newInputValue,'New input value');
-                          //   setInputValue2(newInputValue.name);
-                          // }} 
+                          options={allCountries.map((option)=>option.name)}
                           style={{ width: 300 }}
                           renderInput={(params) => <TextField {...params} label="Select Country"  />}
                         />
@@ -235,21 +234,19 @@ const AddLocation = (props) => {
                         <Autocomplete
                           value={state}
                           onChange={(event, newValue) => {
-                            fetchAllCity1(newValue.id);
-                            setState(newValue.name);
+                            let v = search(newValue,allState);
+                            fetchAllCity1(v);
+                            setState(newValue);
+                            setCity("");
                           }}
                           id="controllable-states-demo"
-                          options={allState}
-                          getOptionLabel = {
-                            (option) => option.name
-                          }
-                          inputValue={state}
+                          options={allState.map((option)=>option.name)}
                           style={{ width: 300 }}
                           renderInput={(params) => <TextField {...params} label="Select State"  />}
                         />
-                        {errors.addressTitle && touched.addressTitle && (
+                        {errors.state && touched.state && (
                           <span className="error-msg text-danger-ANL">
-                            {errors.addressTitle}
+                            {errors.state}
                           </span>
                         )}
                       </div>
@@ -263,14 +260,10 @@ const AddLocation = (props) => {
                         <Autocomplete
                           value={city}
                           onChange={(event, newValue) => {
-                            setCity(newValue.name);
+                            setCity(newValue);
                           }}
                           id="controllable-states-demo"
-                          options={allCity}
-                          getOptionLabel = {
-                            (option) => option.name
-                          }
-                          inputValue={city}
+                          options={allCity.map((Option)=>Option.name)}
                           style={{ width: 300 }}
                           renderInput={(params) => <TextField {...params} label="Select City"  />}
                         />
