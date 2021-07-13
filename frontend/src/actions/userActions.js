@@ -112,6 +112,15 @@ export const getUserInfo = () => {
   }
 };
 
+export const getActiveWareHouses = async() =>{
+  try{
+    const result= await axios.get(config().userInfoUrl);
+    return result.data.data.warehouses;
+  }catch(e){
+    return e.response;
+  }
+}
+
 export const getUserInfoUpdated = async () => {
   try {    
       const result = await axios.get(config().userInfoUrl );

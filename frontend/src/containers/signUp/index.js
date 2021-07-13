@@ -41,7 +41,8 @@ const SignupContainer = (props) => {
         city:  values.city,
         state: values.state,
         pincode: values.pincode,
-        country: values.country
+        country: values.country,
+        region:values.region
       }
       // data.type = 'CUSTOMER_SUPPLIER';
       data.type = orgType;

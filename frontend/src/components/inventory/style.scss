@@ -66,9 +66,10 @@
 
     .overflow {
       .col-sm-6 {
-        margin-top: 12px;
-        padding-bottom: 8px;
-      }
+        margin-top: 1px;
+        padding-bottom: 10px;
+        padding-left: 30px;
+     }
     }
 
     .product{
@@ -76,17 +77,23 @@
     }
     .round-sign {
       border-radius: 100%;
-      font: Bold 13px Roboto;
+      font: Bold 11px "Source Sans Pro";
       letter-spacing: 0px;
-      color: #707070;
-      padding: 5px;
-      width: 40px;
+      color: #006d6d;
+      padding: 30px;
+      width: 140%;
       height: 40px;
       display: flex;
       justify-content: center;
       text-align: center;
       align-items: center;
-      margin-top: 10px;
+      margin-top: 1px;
+    }
+    .qty{
+      font: Bold 12px "Source Sans Pro"; 
+      color: #014721;
+      text-align: center;
+      align-items: center;
     }
 
     p {

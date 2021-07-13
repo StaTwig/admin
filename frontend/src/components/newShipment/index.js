@@ -26,6 +26,7 @@ import {getOrganizationsTypewithauth} from '../../actions/userActions';
 import { getProducts, getProductsByCategory } from "../../actions/poActions";
 import {getProductList} from '../../actions/productActions';
 import { Alert, AlertTitle } from '@material-ui/lab';
+import { TextField } from "@material-ui/core";
 
 
 
@@ -104,20 +105,13 @@ const NewShipment = (props) => {
     async function fetchData() {
 
       const result111 = await getProductList();
-      //console.log(result111);
+     
       setProductsList(result111.message);
 
       const { search } = props.location;
       // const result = await getShippingOrderIds();
       const result = await getOpenOrderIds();
-      // console.log('IDS');
-      // console.log(orderIds);
-      // const data1 = await dispatch(getOrder('po-1jpv1enwklta6bf8'));
-      // console.log('Data');
-      // console.log(data1);
-      // const data2 = await getShippingOrderById('so-1jpv1jsjkluz8yvs');
-      // console.log('New Data');
-      // console.log(data2);
+      
       const ids = result.map(item => {
                                       return {
                                         value: item.id,
@@ -129,9 +123,9 @@ const NewShipment = (props) => {
       const orgs = await getAllOrganisations();
       
       const orgSplit = user.organisation?.split("/");
-      // console.log(orgSplit,"sender");
+     
       setSenderOrganisation([orgSplit[0]]);
-      // const organisations = orgs.data.filter((org) => org.id != orgSplit[1]);
+     
       const organisations = orgs.data;
       setAllOrganisations(organisations.map(item => {
                                       return {
@@ -270,9 +264,7 @@ const NewShipment = (props) => {
     products.forEach((p) => {
       if (p.productQuantity < 1) error = true;
     });
-    console.log(products);  
-    console.log("error is there");
-    if (!error) {
+if (!error) {
       const data = {
         airWayBillNo,
         poId: OrderId ? OrderId : null,
@@ -314,7 +306,7 @@ const NewShipment = (props) => {
 
     
       var check = 0; 
-      console.log(data.products);
+    
       for(var i=0;i<data.products.length;i++)
       {
         if(typeof data.products[i].productQuantity==='undefined')
@@ -450,7 +442,7 @@ const NewShipment = (props) => {
       setErrorMessage(err);
     }
   };
-  // console.log(values.toOrgLoc,"To org");
+  
 
   const onProductChange = (index, item, setFieldValue) => {
     addProducts.splice(index, 1);
@@ -473,18 +465,22 @@ const NewShipment = (props) => {
     newArray[prodIndex] = { ...newArray[prodIndex], isSelected: true };
     setProducts((prod) => [...newArray]);
   };
-
-
 // //console.log(allOrganisations,"All org");
 // async function fetchShipmentDetails(id){
 //   const result = await dispatch(getViewShipment(id));
 //   return result;
-// }
-   
+// }   
 // console.log(products,"1");
 // console.log(addProducts,"2");
 // console.log(category,"3");
-  
+  const onRemoveRow = (index) => {
+  const inventoryStateClone = JSON.parse (JSON.stringify(OrderDetails ?.products));
+  inventoryStateClone.splice(index, 1);
+  const cloneOrder = OrderDetails;
+  cloneOrder.products = inventoryStateClone; 
+  setOrderDetails(cloneOrder); 
+  setOrderProduct(inventoryStateClone);
+  };
   return (
     <div className="NewShipment">
       <h1 className="breadcrumb">CREATE SHIPMENT</h1>
@@ -642,7 +638,7 @@ const NewShipment = (props) => {
                           setOrderId(v.value);
                           dispatch(turnOn());
                           const result = await dispatch(getOrder(v.value));
-                          // console.log(result);
+                          
                           setReceiverOrgLoc(
                              result.poDetails[0].customer.warehouse.title + '/' + result.poDetails[0].customer.warehouse.postalAddress
                           );
@@ -742,21 +738,14 @@ const NewShipment = (props) => {
                       const result = await dispatch(getViewShipment(values.shipmentID));
                       dispatch(turnOff());
                       
-                      // setReceiverOrgLoc(result.receiver.warehouse.title);
-                      //   setReceiverOrgId(result.receiver.org.name);
-                      //   console.log(senderOrganisation[0]);
-                      //   setFieldValue("fromOrg", senderOrganisation[0]);
-                      //   setFieldValue("fromOrgLoc", result.receiver.org.id);     
-                      //   setFieldValue("rtype",result.receiver.org.type);
-                      //   setFieldValue("toOrg",result.receiver.org.id);
-                      // setFieldValue('rtypeName',"Deepak"); 
+                    
                         setReceiverOrgLoc();
                         setReceiverOrgId();
                         setFieldValue("fromOrg","");
                         setFieldValue("fromOrgLoc","" );     
                         setFieldValue("rtype",);
                         setFieldValue("toOrg","");
-                        console.log(result);
+                       
                         if(result.status==500)
                         {
                           setShipmentError('Check Shipment Reference ID');
@@ -773,7 +762,7 @@ const NewShipment = (props) => {
                         // settoOrgLocLabel(wa?.warehouseAddress ? wa?.title + '/' + wa?.warehouseAddress?.firstLine + ", " + wa?.warehouseAddress?.city : wa?.title + '/' + wa.postalAddress)
 
                         let products_temp = result.products;
-                        console.log(products_temp);
+                        
                         for (let i = 0; i < products_temp.length; i++) {
                           products_temp[i].manufacturer =
                             result.products[i].manufacturer;
@@ -783,15 +772,15 @@ const NewShipment = (props) => {
                             result.products[i].productQuantity;
                           products_temp[i].type =
                             result.products[i].productCategory;
-                          
+                          delete products_temp[i].productQuantityDelivered;
                         }
-                        //console.log(products_temp);
+                        console.log(products_temp);
                        if (result.products.length > 0) {
                          setProducts(p => []);
                          setAddProducts(p => []);
                           setFieldValue("products",products_temp);
                         } else setFieldValue("products", []);
-                        console.log(values.products);
+                       
                       }
                     }
                   }
@@ -1032,7 +1021,7 @@ const NewShipment = (props) => {
                           onChange={(v) => {
                             setFieldValue("toOrgLoc", v.value);
                             settoOrgLocLabel(v.label)
-                            // console.log(v.label);
+                           
                           }}
                           defaultInputValue={values.toOrgLoc}
                           options={receiverWarehouses.filter( (ele, ind) => ind === receiverWarehouses.findIndex( elem => elem.label===ele.label))}
@@ -1058,23 +1047,25 @@ const NewShipment = (props) => {
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label className="required-field" htmlFor="organizationName">Transit Number</label>
+                      <div  className="form-control">
                       <input
                         type="text"
-                        className="form-control"
                         name="airWayBillNo"
                         onBlur={handleBlur}
                         placeholder="Enter Transit Number"
                         onChange={handleChange}
                         value={values.airWayBillNo}
                       />
-
+                      
                       {errors.airWayBillNo && touched.airWayBillNo && (
                         <span className="error-msg text-danger-AB">
                           {errors.airWayBillNo}
                         </span>
                       )}
+                      </div>
                     </div>
                   </div>
+                  
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
@@ -1116,9 +1107,9 @@ const NewShipment = (props) => {
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label className="required-field" htmlFor="Label code">Label Code</label>
+                     <div className="form-control">
                       <input
                         type="text"
-                        className="form-control"
                         name="labelCode"
                         placeholder="Enter Label Code"
                         onBlur={handleBlur}
@@ -1131,6 +1122,7 @@ const NewShipment = (props) => {
                         </span>
                       )}
                     </div>
+                  </div>
                   </div>
 
                   <div className="col-md-6 com-sm-12">
