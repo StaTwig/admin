@@ -60,15 +60,15 @@ const Table = props => {
                 status = 'Partially Fulfilled';
               }
 
-              const { customer, products, supplier } = order;
+              const { customer, products, supplier, creatorOrganisation } = order;
               return (
               <div className="rTableRow pt-2 pb-2 shadow-none" key={index}>
                     <div className="rTableCell">
                       <div className="userPic text-right rounded d-flex flex-row">
                         <img src={user} width="30" height="20" alt="User" className="rounded mr-1 align-self-center" />
                         <div className="flex-column d-flex">
-                          <span className="text-primary bold">{visible == 'two' ? supplier.organisation.name : customer.organisation.name}</span>
-                          <p className="address mb-0 text-primary">{visible == 'two' ? supplier.organisation.id : customer.organisation.id}</p>
+                          <span className="text-primary bold">{visible == 'two' ? creatorOrganisation.name : supplier.organisation.name}</span>
+                          <p className="address mb-0 text-primary">{visible == 'two' ?creatorOrganisation.id :supplier.organisation.id }</p>
                       </div>
                       </div>
                     </div>
@@ -79,8 +79,8 @@ const Table = props => {
                   <div className="rTableCell text-center"><p className="mb-0 bold mb-0 address text-muted">{products[0]?.name+(products.length > 1 ? ' + '+(products.length-1)+' more' : '')}</p></div> 
                 
                 <div className="rTableCell  d-flex flex-column" style={{position:'relative',left:"45px"}}> 
-                  <span>{customer.warehouse?.warehouseAddress?.city}</span> 
-                  <span className="text-muted ">{customer.warehouse && customer.warehouse.warehouseAddress ? customer.warehouse.title+ " / "+ customer.warehouse.warehouseAddress.firstLine + " "+customer.warehouse.warehouseAddress.city: null}</span>
+                  <span>{customer.organisation.name}</span> 
+                  <span className="text-muted ">{customer.warehouse && customer.warehouse.warehouseAddress ?  customer.warehouse.warehouseAddress.firstLine + " "+customer.warehouse.warehouseAddress.city: null}</span>
                 </div> 
 
                 <div className="rTableCell " style={{position:'relative',left:"110px"}}> 
