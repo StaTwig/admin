@@ -190,6 +190,30 @@ const OrganisationPopUp = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
+                  <TextField 
+                    style={{
+                        width:"425px"
+                    }}
+                  id="standard-basic"
+                  label="Organisation Name" 
+                  className="form-control2"
+                  name="name"
+                  value={values.name}
+                  handleChange={handleChange}
+                  handleBlur={handleBlur}
+                  error={errors.name}
+                  touched={touched.name}
+                  onChange={(e) => {setname(e.target.value)}}
+                  />
+                  {errors.name && touched.name && (
+                  <span className="error-msg text-dangerS">{errors.name}</span>
+                  )}
+                  </div>
+                  </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
                        {/* <label className="required-field col-sm-6" htmlFor="region">Region</label> */}
                         <Autocomplete
                           value={region}
@@ -309,30 +333,6 @@ const OrganisationPopUp = (props) => {
                         )}
                       </div>
                     </div>
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6 com-sm-12">
-                      <div className="form-group">
-                  <TextField 
-                    style={{
-                        width:"425px"
-                    }}
-                  id="standard-basic"
-                  label="Organisation Name" 
-                  className="form-control2"
-                  name="name"
-                  value={values.name}
-                  handleChange={handleChange}
-                  handleBlur={handleBlur}
-                  error={errors.name}
-                  touched={touched.name}
-                  onChange={(e) => {setname(e.target.value)}}
-                  />
-                  {errors.name && touched.name && (
-                  <span className="error-msg text-dangerS">{errors.name}</span>
-                  )}
-                  </div>
-                  </div>
                   </div>
                   {/* <AddressField
                       error={errors.name}
