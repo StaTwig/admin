@@ -175,6 +175,29 @@ const AddLocation = (props) => {
                 dirty,
               }) => (
                 <form onSubmit={handleSubmit} className="mb-3">
+                <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                      <label className="required-field col-sm-6" htmlFor="addressTitle">Address Title</label>
+                      <TextField style={{width:"300px"}}
+                        id="standard-basic"
+                        label="Enter Title" 
+                        className="form-control2"
+                        name="addressTitle"
+                        value={values.addressTitle}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          setAddressTitle(e.target.value);
+                        }}
+                      />
+                    { /*  {errors.addressTitle && touched.addressTitle && (
+                        <span className="error-msg text-danger-ANL">
+                          {errors.addressTitle}
+                        </span>
+                     )} */}
+                      </div>
+                    </div>
+                  </div>
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
@@ -276,29 +299,7 @@ const AddLocation = (props) => {
                     </div>
                   </div>
 
-                  <div className="row">
-                    <div className="col-md-6 com-sm-12">
-                      <div className="form-group">
-                      <label className="required-field col-sm-6" htmlFor="addressTitle">Title</label>
-                      <TextField style={{width:"300px"}}
-                        id="standard-basic"
-                        label="Enter Title" 
-                        className="form-control2"
-                        name="addressTitle"
-                        value={values.addressTitle}
-                        onBlur={handleBlur}
-                        onChange={(e) => {
-                          setAddressTitle(e.target.value);
-                        }}
-                      />
-                    { /*  {errors.addressTitle && touched.addressTitle && (
-                        <span className="error-msg text-danger-ANL">
-                          {errors.addressTitle}
-                        </span>
-                     )} */}
-                      </div>
-                    </div>
-                  </div>
+                  
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
