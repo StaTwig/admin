@@ -217,7 +217,7 @@ const Analytics = (props) => {
   };
 
   return (
-    <div className="container-fluid">
+    <div className="container-fluid" style={{ paddingRight: '0px' }}>
       <div className="row">
         <div className="col-md-2 d-none d-md-block padding0 greyBG">
           <SideBar {...props} />

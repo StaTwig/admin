@@ -19,7 +19,9 @@ import { spinnerReducer } from './spinnerReducer';
 import { poReducer } from './poReducer';
 import { lastMileReducer } from './lastMileReducer';
 import { lastMileCountReducer } from './lastMileCountReducer';
+import { userLocationReducer } from './userLocationReducer';
 const rootReducer = (history) => combineReducers({
+  userLocation: userLocationReducer,
   shipments: shipmentReducer,
   shipmentsCount : shipmentCountReducer,
   inventories: inventoryReducer,

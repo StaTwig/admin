@@ -194,6 +194,37 @@
         @media screen and (max-width: 768px){
           display: none;
         }
+
+        .custom-dropdown {
+          flex-basis: 100%;
+          display: flex;
+          outline: none;
+          position: relative;
+          small {
+            color: $a8Grey;
+          }
+          
+          .btn-custom-dropdown1 {
+            border: none;
+            display: flex;
+            justify-content: space-between;
+            color:#0B65C1;
+            flex-basis: 100%;
+            outline: none;
+            align-items: center;
+            font-size: 14px;
+            background: transparent;
+            text-align: left;
+            font-weight: 700;
+            &.active {
+              color: $primaryBlue;
+            }
+            .textNeg{
+              margin-top: -1.15rem;
+            }
+          }
+        }
+        
       }
       .cname1 {
         font-size: 14px;
@@ -292,7 +323,7 @@
   top: 5.6rem;
   right: 15rem !important;
   //left: unset;
-  width: 10rem;
+  width: 18rem;
   text-align: center;
   position: absolute;
   //z-index: 1000;
@@ -311,7 +342,7 @@
   
   .slider-item1 {
     overflow: hidden;
-    border-top: 1px solid #d6d6d6;
+    border-bottom: 1px solid #d6d6d6;
     width: 100%;
     padding: 10px 0;
     font-weight: 400;
@@ -341,3 +372,5 @@
       margin-bottom: 3px;
     }
   }}
+
+  

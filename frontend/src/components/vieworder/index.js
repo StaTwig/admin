@@ -39,6 +39,15 @@ else if (order.poStatus === 'ACCEPTED') {
     statusStyle = 'bg-warning';
     status = 'FullyFilled';
   }
+  else if (order.poStatus === 'TRANSIT&PARTIALLYFULFILLED') {
+    statusStyle = 'bg-info';
+    status = 'Transit and Partially Fulfilled';
+  }
+  else if (order.poStatus === 'PARTIALLYFULFILLED') {
+    statusStyle = 'bg-secondary';
+    status = 'Partially Fulfilled';
+  }
+
 
 
 const onPOStatusChange = async status => {

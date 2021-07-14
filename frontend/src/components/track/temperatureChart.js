@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { LineChart } from 'react-chartkick';
 import 'chart.js';
-//import './style.scss'
 
 const Chart = (props) => {
   return (
-    <div>
+    <div className="col-12">
       <LineChart
         colors={["#FA7923", "#666"]}
-        id="users-chart" height="220px"
-        data={props.lastTenIotShipmentData}
+        id="users-chart" height={props.height || '450px'}
+        data={props.allIotShipmentData}
       />
     </div>
   );
+
 };
 export default Chart;

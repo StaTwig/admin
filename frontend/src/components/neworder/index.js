@@ -578,11 +578,11 @@ const NewOrder = (props) => {
             <div className="d-flex pt-4 justify-content-between mb-1">
               <div className="value">{quantity}</div>
               <div className="d-flex">
-                <button type="button" className="btn btn-white shadow-radius font-bold mr-2"onClick={() => {dispatch(resetReviewPos({})); props.history.push('/orders')}}>
+                <button type="button" className="btn btn-white shadow-radius font-bold mr-2 mt-3" onClick={() => {dispatch(resetReviewPos({})); props.history.push('/orders')}}>
                   Cancel
                 </button>
 
-                <button className="btn btn-orange fontSize20 font-bold mb-2">
+                <button className="btn btn-orange fontSize20 font-bold mt-3">
                   <img src={OrderIcon} width="20" height="17" className="mr-2 mb-1" />
                   <span>Review Order</span>
                 </button>

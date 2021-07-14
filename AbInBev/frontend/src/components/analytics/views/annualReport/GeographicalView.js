@@ -84,6 +84,7 @@ const GeographicalView = (props) => {
   }, [sku, viewName, props]);
 
   const showDetailedGeoView = (param) => {
+    console.log("params", param)
     props.onViewChange('DETAILED_GEO_VIEW', param);
   };
   return (
@@ -106,7 +107,7 @@ const GeographicalView = (props) => {
           <tbody>
             {analytics.length == 0 ? (
               <tr>
-                <td colSpan="5">No Data found</td>
+                <td colspan="5">No Data found</td>
               </tr>
             ) : (
               analytics?.map((analytic, index) => (

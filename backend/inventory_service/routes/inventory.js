@@ -54,6 +54,7 @@ router.get("/getRegions", InventoryController.getRegions);
 router.get("/getCountryDetailsByRegion", InventoryController.getCountryDetailsByRegion);
 router.get("/trackProduct", InventoryController.trackProduct);
 router.post("/addProductsToInventory", InventoryController.addProductsToInventory);
+router.post("/deleteProductsFromInventory", InventoryController.deleteProductsFromInventory);
 router.post("/updateInventories", InventoryController.updateInventories);
 router.post("/insertInventories", InventoryController.insertInventories);
 

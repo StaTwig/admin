@@ -10,14 +10,17 @@ import {
   Cell,
   ResponsiveContainer,
   Tooltip,
+  RadialBarChart,
+  RadialBar,
+  Legend
 } from 'recharts';
 const DetailedSupplierView = (props) => {
   const { prop, brandsIconArr, brandsArr, brands } = props;
 
   const [SupplierChartData, setSupplierChartData] = useState([
-    { name: 'S1', value: 0 },
-    { name: 'S2', value: 0 },
-    { name: 'S3', value: 0 },
+    { name: 'S1', value: 0, fill: '#A344B7' },
+    { name: 'S2', value: 0, fill: '#F45733' },
+    { name: 'S3', value: 0, fill: '#FFC700' },
   ]);
   const [name, setName] = useState(prop.name);
   const [shortName, setShortname] = useState(prop.shortName);
@@ -63,26 +66,26 @@ const DetailedSupplierView = (props) => {
       }
       let cond = '';
       if (props.params) {
-        if(props.params.state)
-          cond = '&state='+props.params.state;
+        if (props.params.state)
+          cond = '&state=' + props.params.state;
         if (props.params.district)
-          cond+= '&district=' + props.params.district;
+          cond += '&district=' + props.params.district;
       }
-      
+
 
       let result = await dispatch(
         getAllOrganisationStats(
           '?orgType=' +
-            (props?.Otype ? props.Otype : 'ALL_VENDORS') +
-            '&sku=' +
-            (props.sku ? props.sku : prop.externalId) +
-            '&pid=' +
-            prop.id +
-            '&brand=' +
-            prop.manufacturer + cond,
+          (props?.Otype ? props.Otype : 'ALL_VENDORS') +
+          '&sku=' +
+          (props.sku ? props.sku : prop.externalId) +
+          '&pid=' +
+          prop.id +
+          '&brand=' +
+          prop.manufacturer + cond,
         ),
       );
-
+      console.log("result inside the useEffect", result);
       let n = result.data.filter(
         (a) => a.type == 'S1' || a.type == 'S2' || a.type == 'S3',
       );
@@ -122,12 +125,29 @@ const DetailedSupplierView = (props) => {
       let s3Data = s3ActualTotal / s3Length;
 
       setSupplierChartData([
-        { name: 'S1', value: s1Data },
-        { name: 'S2', value: s2Data },
-        { name: 'S3', value: s3Data },
+        { name: 'S1', value: s1Data, fill: '#A344B7' },
+        { name: 'S2', value: s2Data, fill: '#F45733' },
+        { name: 'S3', value: s3Data, fill: '#FFC700' },
       ]);
     })();
   }, []);
+
+  const renderLegend = (props) => {
+    const { payload } = props;
+    return (<div style={{ display: 'grid', gap: '2em' }}>
+      {
+        payload.map((entry, index) => (
+          <div className="renderLegend">
+            <div className="renderLegendCircle" style={{ backgroundColor: `${entry.color}` }} />
+            <div style={{ color: `${entry.color}` }}>{entry.payload.name}</div>
+            <div style={{ color: `${entry.color}` }}>{(entry.payload.value).toFixed(2)}%</div>
+          </div>
+        ))
+      }
+    </div>)
+  }
+
+
   return (
     <div>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
@@ -143,7 +163,7 @@ const DetailedSupplierView = (props) => {
                   className="productImage"
                   src={
                     brandsIconArr[
-                      brands.indexOf(prop.manufacturer.split(' ').join(''))
+                    brands.indexOf(prop.manufacturer.split(' ').join(''))
                     ]
                   }
                 />
@@ -156,9 +176,9 @@ const DetailedSupplierView = (props) => {
                         <img
                           src={
                             brandsArr[
-                              brands.indexOf(
-                                prop.manufacturer.split(' ').join(''),
-                              )
+                            brands.indexOf(
+                              prop.manufacturer.split(' ').join(''),
+                            )
                             ]
                           }
                           alt=""
@@ -213,29 +233,36 @@ const DetailedSupplierView = (props) => {
         </div>
 
         <div className="row">
-          <div className="col-lg-4 col-md-4 col-sm-12">
+          <div className="col-lg-4 col-md-4 col-sm-12 radialBarChartContainer">
             <div id="chart"></div>
             <ResponsiveContainer width="100%" height={350}>
-              <PieChart width={300} height={300}>
-                <Pie
-                  data={SupplierChartData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  label={renderCustomizedLabel}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                >
-                  {SupplierChartData.map((entry, index) => (
-                    <Cell
-                      key={`cell-${index}`}
-                      fill={COLORS[index % COLORS.length]}
-                    />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
+              <RadialBarChart
+                width={500}
+                height={300}
+                cx={150}
+                cy={150}
+                innerRadius={20}
+                outerRadius={140}
+                barSize={10}
+                data={
+                  SupplierChartData
+                }
+              >
+                <RadialBar
+                  tminAngle={15}
+                  background
+                  cornerRadius="5"
+                  background={() => SupplierChartData.map(item => item.fill)}
+                  clockWise dataKey="value"
+                />
+                <Legend
+                  iconSize={10}
+                  verticalAlign="bottom"
+                  iconType={'circle'}
+                  height={36}
+                  content={renderLegend}
+                />
+              </RadialBarChart>
             </ResponsiveContainer>
           </div>
           <div className="col-lg-8 col-md-8 col-sm-12">
@@ -254,32 +281,32 @@ const DetailedSupplierView = (props) => {
                       <td colspan="3">No Data found</td>
                     </tr>
                   ) : (
-                    analytics.map((analytic, index) => (
-                      <tr key={index}>
-                        <td scope="row">
-                          <div className="supplierImage justify-content-start">
-                            <img src={profile} className="displayImage" />
-                            <div className="supplierNames justify-content-start">
-                              <span>{analytic.name}</span>
-                              <br />
-                              <span
-                                className={`group ${analytic?.type?.toLowerCase()}group`}
-                              >
-                                {analytic.type} Vendor
+                      analytics.map((analytic, index) => (
+                        <tr key={index}>
+                          <td scope="row">
+                            <div className="supplierImage justify-content-start">
+                              <img src={profile} className="displayImage" />
+                              <div className="supplierNames justify-content-start">
+                                <span>{analytic.name}</span>
+                                <br />
+                                <span
+                                  className={`group ${analytic?.type?.toLowerCase()}group`}
+                                >
+                                  {analytic.type} Vendor
                               </span>
+                              </div>
                             </div>
-                          </div>
-                        </td>
-                        <td>Karnataka</td>
-                        <td>
-                          {!isNaN(analytic.analytics.actualReturns)
-                            ? analytic.analytics.actualReturns
-                            : 0}
+                          </td>
+                          <td>Karnataka</td>
+                          <td>
+                            {!isNaN(analytic.analytics.actualReturns)
+                              ? analytic.analytics.actualReturns
+                              : 0}
                           %
                         </td>
-                      </tr>
-                    ))
-                  )}
+                        </tr>
+                      ))
+                    )}
                 </tbody>
               </table>
             </div>
