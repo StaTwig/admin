@@ -156,6 +156,7 @@ const Inventory = (props) => {
     props.applyFilters(_filters);
     _getDistrictsByState(selectedState);
     _getOrganizationsByType(_filters);
+    setIsDetailedView(false);
 
     const _filterVisibility = { ...filterVisibility };
     _filterVisibility.district = true;
@@ -184,6 +185,7 @@ const Inventory = (props) => {
     }
     setFilters(_filters);
     setSelectedVendor(null);
+    setIsDetailedView(false);
     props.applyFilters(_filters);
   };
 
@@ -287,7 +289,7 @@ const Inventory = (props) => {
                               : ''}
                           </span>
                         </div>
-                        <div className="pad-tb-10">
+                        {/* <div className="pad-tb-10">
                           <span className="labelHead">Mobile No:</span>
                           <span>
                             {selectedVendor.organisation &&
@@ -295,7 +297,7 @@ const Inventory = (props) => {
                               ? selectedVendor.organisation.id
                               : ''}
                           </span>
-                        </div>
+                        </div> */}
                         <div className="pad-tb-10">
                           <span className="labelHead">Total Stock:</span>
                           <span>{totalStock}</span>
@@ -444,7 +446,7 @@ const Inventory = (props) => {
                               </span>}
                           </td>
                           <td>{isDetailedView ? inventory.org.district : inventory.org.shortName}</td>
-                          <td>{inventory.quantity}</td>
+                          <td>{inventory.quantity.toLocaleString('en-IN')}</td>
                         </tr>
                       ))
                     )}

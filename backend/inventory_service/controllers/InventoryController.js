@@ -2701,10 +2701,14 @@ exports.getInventoryProductsByPlatform = [
       if (filters.invDetails && filters.invDetails.length) {
         skuFilter["productDetails.id"] = filters.invDetails;
       }
+      if (filters.sku && filters.sku.length) {
+        skuFilter["productDetails.externalId"] = filters.sku;
+      }
+      const fl = await getFilterConditions(filters);
       
       const platformInventory = await OrganisationModel.aggregate([
               {
-                $match: getFilterConditions(filters),
+                $match: fl,
               },
 							{
 								$unwind: "$warehouses"
