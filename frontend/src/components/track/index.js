@@ -10,7 +10,7 @@ import searchingIcon from '../../assets/icons/searching@2x.png';
 import { useDispatch } from "react-redux";
 import './style.scss';
 import { formatTimeAMPM } from '../../utils/dateHelper';
-import zoomOutIcon from '../../assets/icons/smallscreen.png';
+import zoomOutIcon from '../../assets/icons/smallScreen.png';
 import zoomInIcon from "../../assets/icons/fullScreen.png"
 
 const Track = (props) => {
