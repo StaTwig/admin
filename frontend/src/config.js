@@ -1,4 +1,5 @@
 export const TEST_SERVER_URL = 'https://test.vaccineledger.com';
+export const TEST_SERVER_URL_FOR_ROAMBEE = "http://integrations.vaccineledger.com:8080";
 export const PROD_SERVER_URL = 'http://api.vaccineledger.com:9001';
 export const ABINBEVPROD_SERVER_URL = 'https://abinbev.statledger.io';
 export const ABINBEVTEST_SERVER_URL = 'https://test.abinbev.statledger.io';
@@ -440,6 +441,10 @@ export function config() {
       poDetailsByShipmentId:`${TEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchPOdetailsByShipmentID?shipmentId=`,
       productDetailsByShipmentId:`${TEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchProductdetailsByShipmentID?shipmentId=`,
       trackTemperature: `${TEST_SERVER_URL}/tracktracemanagement/api/track/fetchTemp`,
+      getIotEnabledStatus:`${TEST_SERVER_URL}/productmanagement/api/products/getIotEnabledStatus`,
+      trackLastTenIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/lastteniotsamplesforshipmentid/:shipmentId`,
+      trackLatestShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/latestiotdataforshipmentid/:shipmentId`,
+      trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
       trackProduct: `${TEST_SERVER_URL}/tracktracemanagement/api/track/track?trackingNumber=`,
       getOrganisations:`${TEST_SERVER_URL}/productmanagement/api/organisation/getOrganisations`,
       getOrganizationsByType:`${TEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsByType?id=`,

@@ -158,8 +158,8 @@
   }
   
   .arrow{
-    width: 25px;
-    height: 25px;
+    width: 56px;
+    height: 58px;
     box-shadow: 0px 3px 6px #00000029;
     border-radius: 50%;
     justify-content: center;
@@ -167,9 +167,14 @@
     display: flex;
     background:white;
     cursor: pointer;
-    position: absolute;
-    bottom: -8px;
-    right: 30px;
+    margin-right: 10px;
+    // bottom: -8px;
+    // right: 30px;
+  }
+
+  .arrow-image {
+    width: 15px;
+    height: 31px;
   }
 
   .btn{
@@ -251,3 +256,45 @@
       
   }
   
+  .temperature-graph-container {
+    height: 695px;
+
+    .graph-information-container {
+      padding: 30px 0px 60px 0px;
+    }
+  }
+
+  .temperature-graph-panel-information {
+    padding: 15px 0px 20px 0px;
+  }
+
+  .zoom-out-icon {
+    width: 47px;
+    height: 57px;
+    border-radius: 10px;
+    border: 0px solid;
+    padding: 5px;
+    background-color: #C2E6FA;
+    cursor: pointer;
+  }
+
+  .current-info-container {    
+    display: flex;
+  }
+  
+  .current-info {
+    align-content: center;
+    justify-content: flex-start;
+    flex-direction: column;
+    margin-right: 10px;
+  }
+
+  .zoom-in-icon {
+    width: 47px;
+    height: 57px;
+    border-radius: 10px;
+    border: 0px solid;
+    padding: 5px;
+    background-color: #c2e6fa;
+    cursor: pointer;
+  }

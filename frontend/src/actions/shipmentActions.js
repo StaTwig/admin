@@ -22,13 +22,13 @@ export const getShipments = (skip = 0, limit = 5) => {
         `${config().shipmentsUrl}?skip=${skip}&limit=${limit}`,
       );
       dispatch(setShipments(result.data));
-     // dispatch(setShipmentsCount(result.data));
+      // dispatch(setShipmentsCount(result.data));
       dispatch(turnOff());
       return result.data;
     } catch (e) {
       dispatch(turnOff());
       dispatch(resetShipments(e.response));
-     // dispatch(resetShipmentsCount(e.response));
+      // dispatch(resetShipmentsCount(e.response));
     }
   };
 };
@@ -90,7 +90,7 @@ export const fetchairwayBillNumber = async () => {
 export const getJourneyTrack = async (id) => {
   try {
     const result = await axios.get(
-      `${config().trackJourney+id}`,
+      `${config().trackJourney + id}`,
     );
     return result;
   } catch (e) {
@@ -164,6 +164,27 @@ export const getTemperature = async () => {
   }
 };
 
+export const getIotShipmentData = async (url) => {
+  try {
+    return await fetch(url).then(data => data.json()).then(data => data);
+  } catch (e) {
+    return e.response;
+  }
+}
+
+export const fetchIotEnabledApiResponse = async (id) => {
+  try {
+    const result = await axios.get(config().getIotEnabledStatus);
+    return result.data;
+    // return await fetch(config().getIotEnabledStatus)
+    //   .then(data => data.json()).then(data => data);
+  } catch (e) {
+    return e.response;
+  }
+}
+
+
+
 export const getShipmentsById = query => {
   try {
     return async dispatch => {
@@ -189,14 +210,14 @@ export const createShipment = async data => {
   }
 };
 
-  export const getViewShipment = (id) => {
-    return async dispatch => {
-      try {
-        const result = await axios.get(config().viewShipmentUrl + id);
-        return result.data.data;
-      } catch (e) {
-        return e.response;
-      }
+export const getViewShipment = (id) => {
+  return async dispatch => {
+    try {
+      const result = await axios.get(config().viewShipmentUrl + id);
+      return result.data.data;
+    } catch (e) {
+      return e.response;
+    }
   };
 };
 
@@ -222,7 +243,7 @@ export const setReviewShipments = data => {
 };
 
 export const updateTrackingStatus = async data => {
-try {
+  try {
     const result = await axios.post(config().updateTrackingStatusUrl, data);
     return result;
   } catch (e) {
@@ -282,57 +303,57 @@ const resetShipmentsCount = data => {
 
 
 
-export const uploadImage = async (id, formData) =>{
-  try{
+export const uploadImage = async (id, formData) => {
+  try {
     const configObject = config();
     const url = configObject.uploadImage + id;
     const result = await axios.post(url, formData);
     return result;
 
-  //   const requestOptions = {
-  //     method: 'POST',
-  //     headers: new Headers({
-  //       'Authorization': 'bearer '+ localStorage.theLedgerToken , 
-  //       'Content-Type': 'application/x-www-form-urlencoded'
-  //     }),
-  //     body: formData,
-  // };
-  // const result = await fetch(url, requestOptions);
+    //   const requestOptions = {
+    //     method: 'POST',
+    //     headers: new Headers({
+    //       'Authorization': 'bearer '+ localStorage.theLedgerToken , 
+    //       'Content-Type': 'application/x-www-form-urlencoded'
+    //     }),
+    //     body: formData,
+    // };
+    // const result = await fetch(url, requestOptions);
   }
-  catch (e){
+  catch (e) {
     return e.reponse;
   }
 };
 
 export const fetchImage = async (id) => {
-  try{
+  try {
     const configObject = config();
     const url = configObject.fetchImage + id;
     const result = await axios.get(url);
     return result;
   }
-  catch(e){
+  catch (e) {
     return e.response;
   }
 };
 
 export const receiveApi = async (formData) => {
-  try{
+  try {
     const configObject = config();
     const url = configObject.receiveApi;
-    const result = await axios.post(url,formData);
+    const result = await axios.post(url, formData);
     return result;
   }
-  catch(e){
+  catch (e) {
     return e.response;
   }
-}; 
+};
 
 
 export const chainOfCustodyTrack = async id => {
   try {
     const configObject = config();
-    const url = 'http://54.164.66.73:3002/shipmentmanagement/api/shipment/chainOfCustody?shipmentId='+id;
+    const url = 'http://54.164.66.73:3002/shipmentmanagement/api/shipment/chainOfCustody?shipmentId=' + id;
     const result = await axios.get(url);
     return result;
   } catch (e) {
