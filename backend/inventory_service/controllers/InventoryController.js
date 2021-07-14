@@ -2618,6 +2618,9 @@ exports.getInventoryProductsByOrganisation = [
 
 async function getFilterConditions(filters) {
   let matchCondition = {};
+  if (filters.invDetails && filters.invDetails.length)
+    matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }];
+  
   if (filters.orgType && filters.orgType !== "") {
     if (
       filters.orgType === "BREWERY" ||

@@ -194,6 +194,37 @@
         @media screen and (max-width: 768px){
           display: none;
         }
+
+        .custom-dropdown {
+          flex-basis: 100%;
+          display: flex;
+          outline: none;
+          position: relative;
+          small {
+            color: $a8Grey;
+          }
+          
+          .btn-custom-dropdown1 {
+            border: none;
+            display: flex;
+            justify-content: space-between;
+            color:#0B65C1;
+            flex-basis: 100%;
+            outline: none;
+            align-items: center;
+            font-size: 14px;
+            background: transparent;
+            text-align: left;
+            font-weight: 700;
+            &.active {
+              color: $primaryBlue;
+            }
+            .textNeg{
+              margin-top: -1.15rem;
+            }
+          }
+        }
+        
       }
       .cname1 {
         font-size: 14px;
@@ -341,3 +372,5 @@
       margin-bottom: 3px;
     }
   }}
+
+  

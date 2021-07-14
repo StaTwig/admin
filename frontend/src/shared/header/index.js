@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import './style.scss';
 import searchingIcon from '../../assets/icons/search.png';   //'../../assets/icons/search_head.svg'
@@ -8,7 +8,7 @@ import dropdownIcon from '../../assets/icons/dropdown_selected.png';
 import Location from '../../assets/icons/location_blue.png';
 import { Redirect } from 'react-router-dom';
 import DrawerMenu from './drawerMenu';
-import { getActiveWareHouses, getUserInfo, logoutUser, registerUser } from '../../actions/userActions';
+import { getActiveWareHouses, getUserInfo, logoutUser, registerUser, setUserLocation } from '../../actions/userActions';
 import logo from '../../assets/brands/VACCINELEDGER.png';
 //import searchingIcon from '../../assets/icons/searching@2x.png';
 //import bellIcon from '../../assets/icons/bellwhite.png';
@@ -31,11 +31,12 @@ import { getOrderIds} from "../../actions/poActions";
 import Select from '@material-ui/core/Select';
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import { resetShipments } from '../../actions/shipmentActions';
+import { userLocationReducer } from '../../reducers/userLocationReducer';
 
 const Header = props => {
   const dispatch = useDispatch();
   const [menu, setMenu] = useState(false);
-  const [location, setLocation] = useState(false);
+  const [location, setLocation] = useState({});
   const [sidebar, openSidebar] = useState(false);
   const [search, setSearch] = useState('');
   const [invalidSearch, setInvalidSearch] = useState(false);
@@ -51,7 +52,6 @@ const Header = props => {
   
 const ref = useOnclickOutside(() => {
     setMenu(false);
-    setLocation(false);
   });
   function onSearchChange(e) {
     setSearch(e.target.value);
@@ -60,6 +60,10 @@ const ref = useOnclickOutside(() => {
   const closeModalFail = () => {
     setInvalidSearch(false);
   };
+
+  const usersLocation=useSelector((state)=>{
+    return state.userLocation;
+  });
   // useEffect(() => {
 
     // async function getIds(){
@@ -165,16 +169,44 @@ const ref = useOnclickOutside(() => {
       const warehouses = await getActiveWareHouses();
       setActiveWarehouses(warehouses.map(item=>{
         return{
-          value: item.name,
-          label: item.name,
+          title: item.name,
+          organisationId: item.name,
           ...item
         };
       }));
-      console.log("activeWarehouses",activeWarehouses);
-      console.log("warehouses",warehouses);
+      // console.log("usersLocation",usersLocation);
+      setLocation(prod => warehouses[0]);
+      if (warehouses.length > 0)
+        if(warehouses[0].id)
+          localStorage.setItem('location', warehouses[0].id);
+    
+      if (Object.keys(usersLocation).length === 0) {
+        if (warehouses.length > 0)
+          if (warehouses[0].id) {
+            setLocation(warehouses[0]);
+            localStorage.setItem('location', warehouses[0].id);
+          }
+      }
+      else {
+        if (usersLocation.id) {
+          localStorage.setItem('location', usersLocation.id);
+          setLocation(usersLocation);
+        }
+      }
     }
     fetchApi();
+    
   }, []);
+  
+  useEffect(() => {
+    if(location?.id)
+    localStorage.setItem('location', location?.id);
+  },[location]);
+
+  const handleLocation=(item)=>{
+    setLocation(item);
+    dispatch(setUserLocation(item));
+  }
 
   const clearNotification = async notification => {
     const response = await deleteNotification(notification._id);
@@ -252,31 +284,20 @@ const imgs = config().fetchProfileImage;
            <div className="location">
               <img src={Location} width="20" height="26" /> 
            </div>  
-          <div className="userName" style={{fontSize: "13px", marginBottom:"0px"}}
-          onClick={() => setLocation(!location)}> 
+          {/* <div className="userName" style={{fontSize: "13px", marginBottom:"0px"}}> 
           <p className="cname1"><b>{activeWarehouses[0]?.title}</b></p>
           <p className="uname"> {activeWarehouses[0]?.warehouseAddress.firstLine}</p>
-          </div>
-                           
-           <div className="userActions mr-3"> 
-              <img src={dropdownIcon} 
-              alt="actions"
-              onClick={() => setLocation(!location)}
-                />
+          </div> */}
+
+            <div className="userName" style={{fontSize: "4px", marginBottom:"0px"}}>               
+           <DropdownButton
+            // name={location?.title+"\n Address-"+location?.warehouseAddress?.firstLine}
+            name={location?.title}
+
+            onSelect={item=>{handleLocation(item)}}
+            groups={activeWarehouses}
+           />
            </div>
-           {location && (
-            <div className="slider-menu1">
-              {activeWarehouses.map(item=>{
-                  return(
-                    <React.Fragment>
-                      <div className="slider-item1">
-                        {item.title}
-                      </div>
-                    </React.Fragment>
-                  )
-              })}
-            </div>
-          )}
            
           <div className="userName">
             <p className="cname">{profile?.organisation?.split('/')[0]}</p>
