@@ -9,4 +9,12 @@
     color:rgb(212, 2, 2);
     font-size:12px;
 }
+.form-control2{
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    
+}
 
