@@ -2086,8 +2086,8 @@ exports.getStatsBySKU = [
 					let to = moment().endOf('month');
 					if ((analytic._id.toString()).includes('GMT')) {
 						enableSort = true;
-						from = moment(analytic._id).startOf('month');
-						to = moment(analytic._id).endOf('month');
+						from = moment(analytic._id).tz("Etc/GMT").startOf('month');
+						to = moment(analytic._id).tz("Etc/GMT").endOf('month');
 					}
 					let temp = await getReturns(analytic.data, from, to, wIds, filters);
 					temp['groupedBy'] = (analytic._id.toString()).includes('GMT') ? monthNames[moment(analytic._id).tz("Etc/GMT").month()]+' - '+moment(analytic._id).tz("Etc/GMT").year() : analytic._id;
