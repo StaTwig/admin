@@ -145,7 +145,11 @@ const handleChange = (value) =>
                   placeholder={<div className="select-placeholder-text">Select Product Category</div>} 
                   value={{value: prod.id, label: prod.type}}
                   defaultInputValue={prod.type}
-                  onChange={(v) => handleCategoryChange(index, v.value)}
+                  onChange={(v) => {
+                    handleCategoryChange(index, v.value,prod.batchNumber);
+                    handleBatchChange(prod.batchNumber, index);
+                  }
+                }
                   options={category}
                 />:
                 prod.type
@@ -178,6 +182,7 @@ const handleChange = (value) =>
                    defaultInputValue={prod.name}
                   onChange={(v) => {
                     handleProductChange(index, v);
+                    handleBatchChange(prod.batchNumber, index);
                     setQuantityChecker(1);
                   }
                 }

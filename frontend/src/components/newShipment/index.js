@@ -423,12 +423,12 @@ if (!error) {
     soDetailsClone.products[i]["labelId"] = value;
     setOrderDetails(soDetailsClone);
   };
-  const onCategoryChange = async (index, value, setFieldValue) => {
+  const onCategoryChange = async (index, value,batchNo,setFieldValue) => {
     try {
       const warehouse = await getProductsByCategory(value);
       let newArr = [...addProducts];
       newArr[index]["type"] = value;
-      newArr[index] = {"productId": "", "id": "", "productQuantity": "", "name": "", "type": value, "manufacturer": "","unitofMeasure":""};
+      newArr[index] = {"productId": "","batchNumber":batchNo,"id": "", "productQuantity": "", "name": "", "type": value, "manufacturer": "","unitofMeasure":""};
       newArr[index]['quantity'] = '';
       setAddProducts((prod) => [...newArr]);
       setProducts(warehouse.data.map(item => {
@@ -456,6 +456,7 @@ if (!error) {
         name: row.name,
         productCategory: row.type,
         manufacturer: row.manufacturer,
+
       }))
     );
     setAddProducts((prod) => [...newArr]);
@@ -1290,7 +1291,8 @@ if (!error) {
                     handleProductChange={(index, item) => {
                       addProducts.splice(index, 1,item);
                       let newArr = [...addProducts];
-                      setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": '',"quantity": '',"name": row.name,"type": row.type,"manufacturer": row.manufacturer,"unitofMeasure":row.unitofMeasure})));
+                      console.log(newArr);
+                      setFieldValue('products', newArr.map(row => ({"productId": row.id,"batchNumber":row.batchNumber,"id": row.id,"productQuantity": '',"quantity": '',"name": row.name,"type": row.type,"manufacturer": row.manufacturer,"unitofMeasure":row.unitofMeasure})));
                       setAddProducts(prod => [...newArr]);
 
                       const prodIndex = products.findIndex(p => p.id === item.id);
