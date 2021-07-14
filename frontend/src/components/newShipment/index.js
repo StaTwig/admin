@@ -264,9 +264,7 @@ const NewShipment = (props) => {
     products.forEach((p) => {
       if (p.productQuantity < 1) error = true;
     });
-    
-
-    if (!error) {
+if (!error) {
       const data = {
         airWayBillNo,
         poId: OrderId ? OrderId : null,
@@ -325,6 +323,7 @@ const NewShipment = (props) => {
       }
       if(check===1)
       {
+        console.log("product quantity is undefined ");
         setShipmentError("Check product quantity");
         setOpenShipmentFail(true);
       }
@@ -466,21 +465,22 @@ const NewShipment = (props) => {
     newArray[prodIndex] = { ...newArray[prodIndex], isSelected: true };
     setProducts((prod) => [...newArray]);
   };
-
+// //console.log(allOrganisations,"All org");
+// async function fetchShipmentDetails(id){
+//   const result = await dispatch(getViewShipment(id));
+//   return result;
+// }   
+// console.log(products,"1");
+// console.log(addProducts,"2");
+// console.log(category,"3");
   const onRemoveRow = (index) => {
-
-   
-    const inventoryStateClone = JSON.parse(JSON.stringify(OrderDetails?.products));
-    inventoryStateClone.splice(index, 1);
-   
-    const cloneOrder = OrderDetails;
-    cloneOrder.products = inventoryStateClone; 
-    setOrderDetails(cloneOrder); 
-    setOrderProduct(inventoryStateClone);
-   
-    
+  const inventoryStateClone = JSON.parse (JSON.stringify(OrderDetails ?.products));
+  inventoryStateClone.splice(index, 1);
+  const cloneOrder = OrderDetails;
+  cloneOrder.products = inventoryStateClone; 
+  setOrderDetails(cloneOrder); 
+  setOrderProduct(inventoryStateClone);
   };
-
   return (
     <div className="NewShipment">
       <h1 className="breadcrumb">CREATE SHIPMENT</h1>
@@ -1184,7 +1184,35 @@ const NewShipment = (props) => {
                     handleBatchChange(v, i);
                   }}
                   enableDelete={false}
-                  onRemoveRow={onRemoveRow}
+                  onRemoveRow={(index) => {
+                    const prodIndex = products.findIndex(
+                      (p) => p.id === OrderDetails?.products[index].id
+                    );
+                    let newArray = [...products];
+                    newArray[prodIndex] = {
+                      ...newArray[prodIndex],
+                      isSelected: false,
+                    };
+                    setProducts((prod) => [...newArray]);
+
+                    OrderDetails?.products.splice(index, 1);
+                    let newArr = [...OrderDetails?.products];
+                    if (newArr.length > 0)
+                      setFieldValue(
+                        "products",
+                        newArr.map((row) => ({
+                          productCategory: row.type,
+                          productID: row.id,
+                          productQuantity: row.productQuantity,
+                          batchNumber: row.batchNumber,
+                          productName: row.name,
+                          manufacturer: row.manufacturer,
+                          quantity: row.quantity,
+                        }))
+                      );
+                    else setFieldValue("products", []);
+                    setAddProducts((prod) => [...newArr]);
+                  }}
                   handleLabelIdChange={handleLabelIdChange}
                 />
               )}
