@@ -158,7 +158,7 @@ const NewOrder = (props) => {
     try {
       const warehouse = await getProductsByCategory(value);
       let newArr = [...addProducts];
-      newArr[index] = {"productId": "", "id": "", "productQuantity": "", "name": "null", "type": value, "manufacturer": "","unitofMeasure":""};
+      newArr[index] = {"productId": "", "id": "", "productQuantity": "", "name": "", "type": value, "manufacturer": "","unitofMeasure":""};
       newArr[index]['quantity'] = '';
       setAddProducts(prod => [...newArr]);
       setFieldValue('products', newArr.map(row => ({ "productId": row.id, "id": row.id, "productQuantity": row?.productQuantity ? row?.productQuantity : 0, "name": row.name, "type": row.type, "manufacturer": row.manufacturer,"unitofMeasure":row.unitofMeasure })));
