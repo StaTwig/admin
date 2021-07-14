@@ -51,6 +51,7 @@
     "mdbreact": "^4.25.2",
     "node-sass": "^4.13.1",
     "prop-types": "^15.6.2",
+    "query-string": "^7.0.1",
     "react": "^16.6.0",
     "react-chartjs-2": "^2.11.1",
     "react-chartkick": "^0.4.0",

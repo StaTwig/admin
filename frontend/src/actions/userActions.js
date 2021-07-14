@@ -1,4 +1,4 @@
-import { AUTH_SUCCESS, AUTH_ERROR, PROFILE_SUCCESS, GET_ALL_USERS_SUCCESS } from '../constants/userConstants';
+import { AUTH_SUCCESS, AUTH_ERROR, PROFILE_SUCCESS, GET_ALL_USERS_SUCCESS, SET_USER_LOCATION } from '../constants/userConstants';
 import { config } from '../config';
 import axios from 'axios';
 
@@ -112,6 +112,15 @@ export const getUserInfo = () => {
   }
 };
 
+export const getActiveWareHouses = async() =>{
+  try{
+    const result= await axios.get(config().userInfoUrl);
+    return result.data.data.warehouses;
+  }catch(e){
+    return e.response;
+  }
+}
+
 export const getUserInfoUpdated = async () => {
   try {    
       const result = await axios.get(config().userInfoUrl );
@@ -160,6 +169,14 @@ export const setProfile = (data) => {
 export const setAllUsers = (data) => {
   return {
     type: GET_ALL_USERS_SUCCESS,
+    payload: data,
+  };
+};
+
+//set location from top panel dropdown
+export const setUserLocation = (data)=>{
+  return{
+    type: SET_USER_LOCATION,
     payload: data,
   };
 };

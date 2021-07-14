@@ -492,9 +492,9 @@ const changeFn = (value_new,e) => {
                     <span className="error-msg text-dangerON">{errors.org}</span>
                   )}
                   </div>
-                  {
-                  props.errorMessage && <div className="mt-3 mr-4"> <Alert variant="filled" severity="error"><AlertTitle>Error</AlertTitle>{props.errorMessage}</Alert></div>
-                  }
+                   {
+                      props.errorMessage && <div className="mt-3 mr-4"> <Alert variant="filled" severity="error"><AlertTitle>Error</AlertTitle>{props.errorMessage}</Alert></div>
+                   }
                   
                   
                   <div className="text-center" >

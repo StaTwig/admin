@@ -169,6 +169,24 @@ background-color: $white;
           }
         }
       }
+      .form-control2 {
+            //border: none;
+            border-bottom: 1px solid #757575;
+            border-radius: 0;
+            width: 150px;
+            font-size: 16px;
+                      
+            // padding-left: 3rem;
+            outline: none;
+      
+            
+        .custom-dropdown .btn-custom-dropdown {
+          font-size: 19px;
+          @media (max-width: 1250px) {
+            font-size: 19px;
+          }
+        }
+      }
 
       .form-control-login {
         width: 100%;

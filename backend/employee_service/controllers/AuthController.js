@@ -102,7 +102,7 @@ exports.checkEmail = [
         );
         return apiResponse.ErrorResponse(
           res,
-          'Name should only consists of letters',
+          'Name should be specified',
         );
       }
       const errors = validationResult(req);
@@ -247,7 +247,7 @@ exports.checkEmail = [
         );
         return apiResponse.ErrorResponse(
           res,
-          'Name should only consists of letters',
+          'Name should be specified',
         );
       }
       /*EmployeeModel.collection.dropIndexes(function(){
