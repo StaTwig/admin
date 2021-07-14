@@ -7,13 +7,15 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
+  Label
 } from 'recharts';
 import '../../style.scss';
 import { getAnalyticsAllStats } from '../../../../actions/analyticsAction';
 import { useDispatch } from 'react-redux';
+import abbreviate from "number-abbreviate"; 
 
 const DetailedGeographicalView = (props) => {
-  const { states, prop, sku, SKUStats, params, brandsArr, brands } = props;
+  const { states, prop, sku, SKUStats, params, brandsArr, brands, geoAnalyticsCardYAxisLabel } = props;
 
   const [analytics, setAnalytics] = useState([]);
   const [name, setName] = useState(prop.name);
@@ -47,13 +49,13 @@ const DetailedGeographicalView = (props) => {
       const result = await dispatch(
         getAnalyticsAllStats(
           '?sku=' +
-            (props.sku ? props.sku : prop.externalId) +
-            '&pid=' +
-            prop.id +
-            '&brand=' +
-            prop.manufacturer +
-            '&group_by=date' +
-            qp,
+          (props.sku ? props.sku : prop.externalId) +
+          '&pid=' +
+          prop.id +
+          '&brand=' +
+          prop.manufacturer +
+          '&group_by=date' +
+          qp,
         ),
       );
       setAnalytics(result.data);
@@ -87,21 +89,27 @@ const DetailedGeographicalView = (props) => {
         <div className="col-md-12 col-sm-12">
           <div className="geoAnalyticsCard">
             <div className="geoanalyticsTitle"></div>
-            <div className="geosubTitle mb-4">Return Rate</div>
             <ResponsiveContainer width="100%" height={380}>
               <LineChart
                 width={500}
-                height={300}
+                height={400}
                 data={analytics}
                 margin={{
-                  top: 5,
-                  right: 30,
-                  left: 20,
-                  bottom: 5,
+                  top: 15,
+                  right: 35,
+                  left: 25,
+                  bottom: 15,
                 }}
               >
-                <XAxis dataKey="groupedBy" />
-                <YAxis />
+                <Legend verticalAlign="top" height={36}/>
+                <XAxis dataKey="groupedBy" offset={0}>
+                  <Label value="Time Frame" dy={20} position="insideBottom" />
+                </XAxis>
+                <YAxis 
+                  dy={-5} 
+                  label={{ value: 'Volume', angle: -90, position: 'insideLeft' }} 
+                  tickFormatter={abbreviate} 
+                />
                 <Tooltip />
                 <Legend />
                 <Line
@@ -128,14 +136,6 @@ const DetailedGeographicalView = (props) => {
                   strokeWidth={3}
                   dot={false}
                 />
-                <Line
-                  type="monotone"
-                  dataKey="actualReturns"
-                  name="Actual Returns"
-                  stroke="#E36141"
-                  strokeWidth={3}
-                  dot={false}
-                />
               </LineChart>
             </ResponsiveContainer>
             <div className="tableDetals">
@@ -155,20 +155,20 @@ const DetailedGeographicalView = (props) => {
                       <td colspan="5">No Data found</td>
                     </tr>
                   ) : (
-                    analytics.map((analytic, index) => (
-                      <tr key={index}>
-                        <td scope="row">
-                          <span className="stateLink">
-                            {analytic.groupedBy}
-                          </span>
-                        </td>
-                        <td>{analytic.sales}</td>
-                        <td>{analytic.returns}</td>
-                        <td>{analytic.targetSales}</td>
-                        <td>{analytic.actualReturns}%</td>
-                      </tr>
-                    ))
-                  )}
+                      analytics.map((analytic, index) => (
+                        <tr key={index}>
+                          <td scope="row">
+                            <span className="stateLink">
+                              {analytic.groupedBy}
+                            </span>
+                          </td>
+                          <td>{analytic.sales}</td>
+                          <td>{analytic.returns}</td>
+                          <td>{analytic.targetSales}</td>
+                          <td>{analytic.actualReturns}%</td>
+                        </tr>
+                      ))
+                    )}
                 </tbody>
               </table>
             </div>
