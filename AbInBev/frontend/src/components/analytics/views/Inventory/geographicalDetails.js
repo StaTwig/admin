@@ -3,19 +3,21 @@ import becks from '../../../../assets/images/becks.png';
 import bottlesIcon from '../../../../assets/becks_330ml.png';
 import {
   BarChart,
-  AreaChart,
-  Area,
   Bar,
-  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer,
+  RadialBarChart,
+  RadialBar,
+  PolarAngleAxis,
+  Label
 } from 'recharts';
 import { getAnalyticsAllStats } from '../../../../actions/analyticsAction';
 import { useDispatch } from 'react-redux';
+import abbreviate from "number-abbreviate";
 
 const iGraphicalDetailedView = (props) => {
   const [analytics, setAnalytics] = useState([]);
@@ -41,14 +43,14 @@ const iGraphicalDetailedView = (props) => {
     (async () => {
       let cond = '';
       if (props.params) {
-        if(props.params.state)
+        if (props.params.state)
           cond = '&state=' + props.params.state;
         if (props.params.district) {
           setIsActive(true);
           cond += '&district=' + props.params.district;
         }
       }
-      
+
       if (props.sku) {
         let n = props.SKUStats.filter((a) => a.externalId == props.sku);
         setName(n[0].name);
@@ -58,14 +60,14 @@ const iGraphicalDetailedView = (props) => {
       const result = await dispatch(
         getAnalyticsAllStats(
           '?sku=' +
-            (props.sku ? props.sku : prop.externalId) +
-            '&pid=' +
-            prop.id +
-            '&orgType=' +
-            props.Otype +
-            '&brand=' +
-            prop.manufacturer +
-            '&group_by=state&inventory=true'+cond,
+          (props.sku ? props.sku : prop.externalId) +
+          '&pid=' +
+          prop.id +
+          '&orgType=' +
+          props.Otype +
+          '&brand=' +
+          prop.manufacturer +
+          '&group_by=state&inventory=true' + cond,
         ),
       );
       setAnalytics(result.data);
@@ -87,7 +89,7 @@ const iGraphicalDetailedView = (props) => {
     if (!active) {
       let cond = '';
       if (props.params) {
-        if(props.params.state)
+        if (props.params.state)
           cond = '&state=' + props.params.state;
         if (props.params.district) {
           setIsActive(true);
@@ -97,13 +99,13 @@ const iGraphicalDetailedView = (props) => {
       const result = await dispatch(
         getAnalyticsAllStats(
           '?sku=' +
-            (props.sku ? props.sku : prop.externalId) + cond +
-            '&pid=' +
-            prop.id +
-            '&brand=' +
-            prop.manufacturer +
-            '&group_by=district&inventory=true&state=' +
-            sku,
+          (props.sku ? props.sku : prop.externalId) + cond +
+          '&pid=' +
+          prop.id +
+          '&brand=' +
+          prop.manufacturer +
+          '&group_by=district&inventory=true&state=' +
+          sku,
         ),
       );
       setIsActive(true);
@@ -136,6 +138,25 @@ const iGraphicalDetailedView = (props) => {
     setActive(!active);
   };
 
+  const renderLegend = (props) => {
+    const { payload } = props;
+    return (<div style={{ display: 'grid' }}>
+      {
+        payload.map((entry, index) => (
+          <div className="renderLegendLabel">
+            <div
+              className="renderLegendCircle"
+              style={{ backgroundColor: `${entry.color}` }} />
+            <div className="renderLabelFont" style={{ color: `${entry.color}` }}>
+              {entry.payload.name === 'Total Sales' ? 'Sales' : 'Total Bottle Pool'}</div>
+            <div className="renderLabelFont" style={{ color: `${entry.color}` }}>
+              {(entry.payload.value)}</div>
+          </div>
+        ))
+      }
+    </div>)
+  }
+  console.log("states: ", analytics)
   return (
     <div className="productDetailedView">
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
@@ -149,7 +170,7 @@ const iGraphicalDetailedView = (props) => {
                 className="productImage"
                 src={
                   props.brandsIconArr[
-                    props.brands.indexOf(prop.manufacturer.split(' ').join(''))
+                  props.brands.indexOf(prop.manufacturer.split(' ').join(''))
                   ]
                 }
               />
@@ -162,9 +183,9 @@ const iGraphicalDetailedView = (props) => {
                       <img
                         src={
                           props.brandsArr[
-                            props.brands.indexOf(
-                              prop.manufacturer.split(' ').join(''),
-                            )
+                          props.brands.indexOf(
+                            prop.manufacturer.split(' ').join(''),
+                          )
                           ]
                         }
                         alt=""
@@ -227,18 +248,39 @@ const iGraphicalDetailedView = (props) => {
                 <BarChart
                   width={500}
                   height={300}
+                  layout="vertical"
                   data={analytics}
                   margin={{
-                    top: 5,
+                    top: 15,
                     right: 30,
-                    left: 20,
-                    bottom: 5,
+                    left: 70,
+                    bottom: 15,
                   }}
                   barSize={10}
                 >
+                  <Legend verticalAlign="top" height={36} />
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" />
-                  <YAxis />
+                  <XAxis type='number' tickFormatter={abbreviate}/>
+                  <YAxis
+                    dataKey="groupedBy"
+                    type="category"
+                    scale="band"
+                    offset={0}
+                    tickLine={false}
+                    dx={-8}
+                    style={{ fontSize: '12px', fontWeight: '600'}}
+                  >
+                    {/* <Label 
+                      value={'District'} 
+                      dx={-15} 
+                      dy={-20} 
+                      offset={10} 
+                      position="top"
+                      style={{
+                        fontSize: '16px',
+                        fontWeight: '600'
+                      }} /> */}
+                  </YAxis>
                   <Tooltip />
                   <Legend />
                   <Bar name="Sales" dataKey="sales" fill="#A344B7" />
@@ -250,38 +292,49 @@ const iGraphicalDetailedView = (props) => {
                 </BarChart>
               </ResponsiveContainer>
             </div>
-          ) : (
-            <div className="stateandDistrictCard mb-4">
-              <h2>{analytics.length ? analytics[0].groupedBy : isActive ? 'District' : 'State'}</h2>
-              <ResponsiveContainer width="100%" height={200}>
-                <BarChart
-                  width={200}
-                  height={150}
-                  barCategoryGap={1}
-                  data={data}
-                  margin={{
-                    top: 20,
-                    right: 30,
-                    left: 20,
-                    bottom: 5,
-                  }}
-                  barSize={50}
-                  barGap={1}
-                >
-                  <XAxis dataKey="name" scale="band" />
-                  <YAxis type="number" />
-                  <Tooltip />
-                  <Legend />
-                  <Bar
-                    dataKey="count"
-                    barCategoryGap={80}
-                    radius={[5, 5, 0, 0]}
-                    fill="#54265E"
-                  />
-                </BarChart>
-              </ResponsiveContainer>
+          ) :
+            <div style={{ display: 'flex' }}>
+              {
+                data && data.map(item => (
+                  <div className="stateandDistrictCard mb-4">
+                    <h2>{analytics.length ? (item.name === 'Total Sales' ? `${analytics[0].groupedBy} Sales` : `${analytics[0].groupedBy} Total Bottle Pool`) : isActive ? 'District' : 'State'}</h2>
+                    <ResponsiveContainer
+                      width="100%"
+                      height={280}
+                    >
+                      <RadialBarChart
+                        width={'100%'}
+                        height={400}
+                        cx={220}
+                        cy={130}
+                        innerRadius={120}
+                        barSize={20}
+                        data={item.name === 'Total Sales' ?
+                          [{ ...item, fill: '#F8AB11' }] :
+                          [{ ...item, fill: '#A344B7' }]}
+                      >
+                        <PolarAngleAxis
+                          type="number"
+                          domain={[0, data.reduce((n, { count }) => n + count, 0)]}
+                          angleAxisId={0}
+                          tick={false} />
+                        <RadialBar
+                          background
+                          dataKey="count" angleAxisId={0}
+                          data={item.name === 'Total Sales' ?
+                            [{ ...item, fill: '#F8AB11' }] : [{ ...item, fill: '#A344B7' }]} />
+                        <Legend
+                          iconSize={10}
+                          verticalAlign="bottom"
+                          align={'middle'}
+                          content={renderLegend} />
+                      </RadialBarChart>
+                    </ResponsiveContainer>
+                  </div>
+                ))
+              }
             </div>
-          )}
+          }
           <div className="tableDetals">
             <table className="table">
               <thead>
@@ -297,22 +350,22 @@ const iGraphicalDetailedView = (props) => {
                     <td colspan="3">No Data found</td>
                   </tr>
                 ) : (
-                  analytics.map((analytic, index) => (
-                    <tr
-                      key={index}
-                      onClick={() => {
-                        setIsActive((i) => !i);
-                        openDetailView(analytic.groupedBy);
-                      }}
-                    >
-                      <td scope="row">
-                        <span className="stateLink">{analytic.groupedBy}</span>
-                      </td>
-                      <td>{analytic.sales.toLocaleString('en-IN')}</td>
-                      <td>{analytic.inventory.toLocaleString('en-IN')}</td>
-                    </tr>
-                  ))
-                )}
+                    analytics.map((analytic, index) => (
+                      <tr
+                        key={index}
+                        onClick={() => {
+                          setIsActive((i) => !i);
+                          openDetailView(analytic.groupedBy);
+                        }}
+                      >
+                        <td scope="row">
+                          <span className="stateLink">{analytic.groupedBy}</span>
+                        </td>
+                        <td>{analytic.sales.toLocaleString('en-IN')}</td>
+                        <td>{analytic.inventory.toLocaleString('en-IN')}</td>
+                      </tr>
+                    ))
+                  )}
               </tbody>
             </table>
           </div>
