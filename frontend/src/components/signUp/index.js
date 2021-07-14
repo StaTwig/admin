@@ -32,7 +32,6 @@ const [orgType, setorgType] = useState('');
 const [selectedType,setselectedType] = useState();
 const [emailError,setemailerror] = useState(false);
 const [phoneError,setphoneerror] = useState(false);
-//const [signupDisable,setsignupDisable]=useState(false);
 const [signupDisable,setsignupDisable]=useState(true);
 const [lastNameError,setLastNameError] = useState(false);
 const [firstNameError,setFirstNameError] = useState(false);
@@ -339,6 +338,7 @@ const changeFn = (value_new,e) => {
                       }}
                       value={props.phone}
                       onChange={(e)=>{
+                        setChecker(true);
                         if(e.length > 0)
                         {
                           setPhoneNumberError(false);
@@ -492,9 +492,9 @@ const changeFn = (value_new,e) => {
                     <span className="error-msg text-dangerON">{errors.org}</span>
                   )}
                   </div>
-                   {
-                      props.errorMessage && <div className="mt-3 mr-4"> <Alert variant="filled" severity="error"><AlertTitle>Error</AlertTitle>{props.errorMessage}</Alert></div>
-                   }
+                  {
+                  props.errorMessage && <div className="mt-3 mr-4"> <Alert variant="filled" severity="error"><AlertTitle>Error</AlertTitle>{props.errorMessage}</Alert></div>
+                  }
                   
                   
                   <div className="text-center" >
