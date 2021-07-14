@@ -105,8 +105,9 @@ const changeFn = (value_new,e) => {
   // console.log(email);
   // console.log(value);
   // console.log(mobileNumber);
-  if(checker && firstName.length > 0 && lastName.length > 0 && orgType.length > 0 && email.length > 0 && value.length > 0 && mobileNumber.length >0)
+  if(checker && firstName.length > 0 && lastName.length > 0 && orgType.length > 0 && value.length > 0 && (email.length > 0  || mobileNumber.length >0))
   {
+    console.log("Entered");
      console.log(firstName);
      console.log(lastName);
      console.log(orgType);
@@ -125,6 +126,7 @@ const changeFn = (value_new,e) => {
             <img src={logo} alt="vaccineledger" />
           </div>
         </div> */}
+      
   
   <div className="row">
           <div className="col-m-6 col-lg-6">
@@ -154,18 +156,19 @@ const changeFn = (value_new,e) => {
                 }}
                 validate={(values) => {
                   const errors = {};
+                  console.log(values);
                   if (!values.firstName) {
                     errors.firstName = "Required";
                   }
                   if (!values.lastName) {
                     errors.lastName = "Required";
                   }
-                  if (!values.email) {
-                    errors.email = "Required";
-                  }
-                  if (!values.phone) {
-                     errors.phone = "Required";
-                   }
+                  //if (!values.email) {
+                   // errors.email = "Required";
+                  //}
+                  // if (!values.phone) {
+                  //    errors.phone = "Required";
+                  //  }
                   if (!values.org) {
                     errors.org = "Required";
                   }
@@ -203,11 +206,16 @@ const changeFn = (value_new,e) => {
                   name="firstName"
                   value={props.firstName}
                   onChange={(e) => {
+
+                    setChecker(true);
                     console.log(e.target.value.length);
                     if(e.target.value.length > 0)
                     {
                       setFirstNameError(false);
 
+                    }else
+                    {
+                      setsignupDisable(true);
                     } 
                      setFirstName(e.target.value);  
                      props.onfirstNameChange(e); handleChange(e);
@@ -237,11 +245,15 @@ const changeFn = (value_new,e) => {
                   name="lastName"
                   value={props.lastName}
                   onChange={(e) => {
+                    setChecker(true);
                     console.log(e.target.value.length);
                     if(e.target.value.length > 0)
                     {
                       setLastNameError(false);
 
+                    }else
+                    {
+                      setsignupDisable(true);
                     } 
                      setLastName(e.target.value);
                      props.onlastNameChange(e);
@@ -269,23 +281,30 @@ const changeFn = (value_new,e) => {
                   name="email"
                   autoCapitalize = 'none'
                   value={(props.email).toLowerCase()}
+                  
                   onChange={(e) => {
-
+                     setChecker(true);
                     console.log(e.target.value);
                      if(e.target.value.length > 0)
                      {
+                      setPhoneNumberError(false);
                       setMailError(false);
                       console.log(mailError);
+                     }else
+                     {
+                      setsignupDisable(true);
                      }
                      setEmail(e.target.value);
                      props.onEmailChange(e); 
                      handleChange(e);}}
                   handleBlur={props.email?verifyEmailAndPhoneNo(`emailId=${props.email}`).then((v)=>{
                     if(v.data.length){
+                      setemailerror(true);
                       //setemailerror(true);
                       setsignupDisable(true);
                     }else{
                       setemailerror(false);
+                      //setsignupDisable(false);
                       //setsignupDisable(false);
                     }
                 }):null}
@@ -296,8 +315,8 @@ const changeFn = (value_new,e) => {
                   {emailError && (
                     <span className="error-msg text-dangerS">Email ID Already registered</span>
                   )}
-                  {mailError && (
-                    <span className="error-msg text-dangerS">Email ID is required</span>
+                  {phoneNumberError && (
+                    <span className="error-msg text-dangerS">Phone Number or Email ID is required</span>
                   )}
                   
                   </div>
@@ -306,7 +325,8 @@ const changeFn = (value_new,e) => {
                   <div style={{position:"absolute", left:"4px", top:"10px"}}>
                         <img alt="Phone icon" src={Phone} height="20px" width="19px" />
                   </div>
-                 
+                  
+                  
                   <PhoneInput
                       country={'in'}
                       placeholder='Enter Phone number'
@@ -318,9 +338,14 @@ const changeFn = (value_new,e) => {
                       }}
                       value={props.phone}
                       onChange={(e)=>{
+                        setChecker(true);
                         if(e.length > 0)
                         {
                           setPhoneNumberError(false);
+                        }
+                        else
+                        {
+                          setsignupDisable(true);
                         }
                         setMobileNumber(e);
                         props.onphoneChange(e)}}
@@ -344,9 +369,10 @@ const changeFn = (value_new,e) => {
                   {phoneError && (
                     <span className="error-msg text-dangerS">Mobile No. Already registered</span>
                   )}
-                  {phoneNumberError&& (
-                    <span className="error-msg text-dangerS">Phone Number is required</span>
+                  {phoneNumberError && (
+                    <span className="error-msg text-dangerS">Phone Number or Email ID is required</span>
                   )}
+                
                   <div className="pb-3"></div>
                  
                             
@@ -361,6 +387,7 @@ const changeFn = (value_new,e) => {
                       value={orgType}
                       placeholder='Organisation Type'
                       onChange={item =>{
+                        setChecker(true);
                         setFieldValue('type', item);
                         props.onOrgTypeChange(item);
                         setselectedType(item);
@@ -374,6 +401,7 @@ const changeFn = (value_new,e) => {
                       value={orgType}
                       placeholder='Organisation Type'
                       onSelect={item => {
+                        setChecker(true);
                         console.log('Hi');
                         if(firstName.length<=0)
                         {
@@ -384,14 +412,7 @@ const changeFn = (value_new,e) => {
                         {
                           setLastNameError(true);
                         }
-                        if(email.length <=0)
-                        {
-                          setMailError(true);
-                        }
-                        if(mobileNumber.length <=0)
-                        {
-                          setPhoneNumberError(true);
-                        }
+                       
                         setFieldValue('type', item);
                         props.onOrgTypeChange(item);
                         setselectedType(item);
@@ -434,14 +455,7 @@ const changeFn = (value_new,e) => {
                       {
                         setLastNameError(true);
                       }
-                      if(email.length <=0)
-                      {
-                        setMailError(true);
-                      }
-                      if(mobileNumber.length <=0)
-                      {
-                        setPhoneNumberError(true);
-                      }
+                     
                       setFieldValue('org', item);
                       props.onOrganisationChange(item);
                         if(item.name!='Other'){
@@ -449,12 +463,14 @@ const changeFn = (value_new,e) => {
                           props.onOrgChange(false);
                         }
                         if(item.name =='Other'){
+                          props.onOrgChange(true);
 
-                          if(firstName.length > 0 && lastName.length > 0 && orgType.length > 0 && email.length > 0  && mobileNumber.length >0)
+                          if(firstName.length > 0 && lastName.length > 0 && orgType.length > 0 && (email.length > 0  || mobileNumber.length >0))
                           {
                             props.onOrgChange(true);
                           }
                           else{
+                            setPhoneNumberError(true);
                              props.onOrgChange(false);
                           }
                         }
@@ -476,9 +492,10 @@ const changeFn = (value_new,e) => {
                     <span className="error-msg text-dangerON">{errors.org}</span>
                   )}
                   </div>
-                   {
-                      props.errorMessage && <div className="mt-3 mr-4"> <Alert variant="filled" severity="error"><AlertTitle>Error</AlertTitle>{props.errorMessage}</Alert></div>
-                   }
+                  {
+                  props.errorMessage && <div className="mt-3 mr-4"> <Alert variant="filled" severity="error"><AlertTitle>Error</AlertTitle>{props.errorMessage}</Alert></div>
+                  }
+                  
                   
                   <div className="text-center" >
                     <br></br>
@@ -506,6 +523,3 @@ const changeFn = (value_new,e) => {
 };
 
 export default FormPage;
-
-
-
