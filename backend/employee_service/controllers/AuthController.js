@@ -311,7 +311,7 @@ exports.checkEmail = [
             //   }
             // }
             const country = req.body?.address?.country ? req.body.address?.country : 'India';
-            const address = req.body?.address ? req.body.address : {};
+            const address = req.body?.address ? req.body.address :  {};
             addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
             const incrementCounterOrg = await CounterModel.update({
               'counters.name': "orgId"
@@ -337,7 +337,7 @@ exports.checkEmail = [
               primaryContactId: employeeId,
               name: organisationName,
               id: organisationId,
-              type: req.body?.type ? req.body.type : 'CUSTOMER_SUPPLIER',
+              type:  req.body?.type ? req.body.type :  'CUSTOMER_SUPPLIER',
               status: 'NOTVERIFIED',
               postalAddress: addr,
               warehouses: [warehouseId],
@@ -347,7 +347,7 @@ exports.checkEmail = [
                 countryName: country
               },
               configuration_id: 'CONF000',
-              authority: req.body?.authority
+              authority: req.body.authority
             });
             await org.save();
             const incrementCounterInv = await CounterModel.update({
@@ -389,12 +389,12 @@ exports.checkEmail = [
           }
         }
         let emailId = null
-        if(req.body?.emailId)
+        if(req.body.emailId)
           emailId=req.body.emailId.toLowerCase().replace(' ', '');
         
        let phoneNumber = null
-        if(req.body?.phoneNumber)
-           phoneNumber='+'+req.body?.phoneNumber;
+        if(req.body.phoneNumber)
+           phoneNumber='+'+req.body.phoneNumber;
         
         // if (emailId.indexOf('@') === -1)
         //   phoneNumber = '+' + emailId;
@@ -1860,3 +1860,47 @@ exports.Image=[
 	FileStream.pipe(res)
   }
 ]
+
+exports.switchLocation = [
+  auth,
+  async (req, res) => {
+    try {
+      const employee = await EmployeeModel.findOne({
+        emailId: req.user.emailId,
+      });
+      const {
+        warehouseId,
+      } = req.body;
+
+      const returnData = { isRefresh: false };
+      if (warehouseId !== req.user.warehouseId) {
+        let userData = {
+          id: employee.id,
+          firstName: employee.firstName,
+          emailId: employee.emailId,
+          role: employee.role,
+          warehouseId: warehouseId,
+          phoneNumber: employee.phoneNumber
+        };
+        //Prepare JWT token for authentication
+        const jwtPayload = userData;
+        const jwtData = {
+          expiresIn: process.env.JWT_TIMEOUT_DURATION,
+        };
+        const secret = process.env.JWT_SECRET;
+        //Generated JWT token with Payload and secret.
+        returnData.isRefresh = true;
+        returnData.token = jwt.sign(jwtPayload, secret, jwtData);
+      }
+      return apiResponse.successResponseWithData(res, 'Switch Location Success', returnData);
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< UserService < AuthController < updateProfile : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
+
