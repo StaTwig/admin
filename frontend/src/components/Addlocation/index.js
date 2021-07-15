@@ -40,7 +40,7 @@ const AddLocation = (props) => {
 
   const closeModalAddedLocation = ()=>{
     setAddedLocationModal(false);
-    props.history.push('/profile');
+    props.history.push({pathname:'/profile',state:{editMode:true}});
   };
   useEffect(()=>{
     async function fetchAllRegions1(){
