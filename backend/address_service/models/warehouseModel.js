@@ -17,8 +17,8 @@ var WarehouseSchema = new mongoose.Schema(
       type: Object,
       required: true,
       default: {
-        regionId: "reg123",
-        regionName: "Earth Prime",
+        regionId: null,
+        regionName: null,
       },
     },
     warehouseAddress: {
