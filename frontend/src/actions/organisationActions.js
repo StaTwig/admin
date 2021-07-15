@@ -467,3 +467,37 @@ export const modifyLocation = async (data) => {
     return e.response;
   }
 };
+
+export const fetchAllRegions = async () => {
+  try {
+    const result = await axios.get(config().fetchAllRegions);
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
+export const fetchCountriesByRegion = async (id) => {
+  try {
+    const result = await axios.get(config().fetchCountriesByRegion+id);
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+export const fetchStateByCountry = async (id) => {
+  try {
+    const result = await axios.get(config().fetchStateByCountry+id);
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+export const fetchCitiesByState = async (id) => {
+  try {
+    const result = await axios.get(config().fetchCitiesByState+id);
+    return result.data;
+  } catch (e) {
+    return [];
+  }
+};
