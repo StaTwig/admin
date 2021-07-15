@@ -204,7 +204,7 @@ const OrganisationPopUp = (props) => {
                   value={values.name}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
-                  error={errors.name}
+                  //error={errors.name}
                   touched={touched.name}
                   onChange={(e) => {setname(e.target.value)}}
                   />
@@ -360,7 +360,7 @@ const OrganisationPopUp = (props) => {
                   value={values.line1}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
-                  error={errors.line1}
+                  //error={errors.line1}
                   touched={touched.line1}
                   onChange={(e) => {setline1(e.target.value); }}
                   />
@@ -396,7 +396,7 @@ const OrganisationPopUp = (props) => {
                   value={values.pincode}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
-                  error={errors.pincode}
+                  //error={errors.pincode}
                   touched={touched.pincode}
                   onChange={(e) => {setPincode(e.target.value)}}
                   />
