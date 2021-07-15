@@ -153,6 +153,9 @@ const OrganisationPopUp = (props) => {
                   if (!values.pincode) {
                     errors.pincode = "Required";
                   }
+                  if (!values.pincode) {
+                    errors.region = "Required";
+                  }
                   if (!values.line1) {
                     errors.line1 = "Required";
                   }
@@ -201,12 +204,12 @@ const OrganisationPopUp = (props) => {
                   value={values.name}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
-                  error={errors.name}
+                  //error={errors.name}
                   touched={touched.name}
                   onChange={(e) => {setname(e.target.value)}}
                   />
                   {errors.name && touched.name && (
-                  <span className="error-msg text-dangerS">{errors.name}</span>
+                  <span className="error-msg text-danger-ANL">{errors.name}</span>
                   )}
                   </div>
                   </div>
@@ -303,9 +306,9 @@ const OrganisationPopUp = (props) => {
                           style={{ width: 425 }}
                           renderInput={(params) => <TextField {...params} label="Select State"  />}
                         />
-                        {errors.addressTitle && touched.addressTitle && (
+                        {errors.state && touched.state && (
                           <span className="error-msg text-danger-ANL">
-                            {errors.addressTitle}
+                            {errors.state}
                           </span>
                         )}
                       </div>
@@ -357,12 +360,12 @@ const OrganisationPopUp = (props) => {
                   value={values.line1}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
-                  error={errors.line1}
+                  //error={errors.line1}
                   touched={touched.line1}
                   onChange={(e) => {setline1(e.target.value); }}
                   />
                   {errors.line1 && touched.line1 && (
-                  <span className="error-msg text-dangerS">{errors.line1}</span>
+                  <span className="error-msg text-danger-ANL">{errors.line1}</span>
                   )}
                   </div>
                   </div>
@@ -393,12 +396,12 @@ const OrganisationPopUp = (props) => {
                   value={values.pincode}
                   handleChange={handleChange}
                   handleBlur={handleBlur}
-                  error={errors.pincode}
+                  //error={errors.pincode}
                   touched={touched.pincode}
                   onChange={(e) => {setPincode(e.target.value)}}
                   />
                   {errors.pincode && touched.pincode && (
-                  <span className="error-msg text-dangerS">{errors.pincode}</span>
+                  <span className="error-msg text-danger-ANL">{errors.pincode}</span>
                   )}
                   </div>
                   </div>
