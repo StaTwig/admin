@@ -103,7 +103,8 @@ const Tracing = (props) => {
         </div>
         <div className="col-sm-7">
           <div className="row mb-4 mt-4">
-            <div className="panel col mr-2 geo commonpanle">
+            <div className="panel col mr-2 geo commonpanle" 
+              style={{ height: '315px' }}>
               <p className="heading">Geographical Tracking</p> <Map data={shippmentChainOfCustodyData} />{" "}
             </div>
             <div className="panel commonpanle col">
@@ -129,7 +130,7 @@ const Tracing = (props) => {
                     <div className="current-info">
                       <div className="info">Last Upadated on</div>
                       <div className="info">{Object.keys(props.latestIotShipmentData).length > 0
-                        ? formatTimeAMPM(/**props.latestIotShipmentData.temp['UnixTimeStamp']*/ new Date().toString().split(' ')[4]) : ''} </div>
+                        ? formatTimeAMPM(new Date().toString().split(' ')[4]) : ''} </div>
                     </div>
                     <img 
                       className="zoom-in-icon" 
