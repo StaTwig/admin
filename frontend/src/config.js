@@ -9,6 +9,7 @@ export const LOCAL_SERVER_URL_AFFILIATION = "//localhost:3002";
 export const LOCAL_SERVER_URL_EMPLOYEE = "//localhost:3003";
 export const LOCAL_SERVER_URL_RBAC = "//localhost:3004";
 export const LOCAL_SERVER_URL_CONFIG = "//localhost:3005";
+export const TEST_SERVER_URL_VL = 'https://test.vaccineledger.com';
 
 export function config() {
   const confs = {
@@ -48,6 +49,11 @@ export function config() {
       updateOrgTypesUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/configuration_service/updateOrganizationsByType`,
       addNewOrgTypesUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/configuration_service/addNewOrgType`,
       imgDomainUrl: `${TEST_SERVER_URL}`,
+      //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
+      fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
+      fetchCountriesByRegion:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
+      fetchStateByCountry:`${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
+      fetchCitiesByState:`${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
     },
     test: {
       sendOtpUrl: `${TEST_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -84,6 +90,11 @@ export function config() {
       getLocationApprovalUrl: `${TEST_SERVER_URL}/api/address_service/getLocationApprovals`,
       modifyLocationUrl: `${TEST_SERVER_URL}/api/address_service/modifyLocation`,
       imgDomainUrl: `${TEST_SERVER_URL}`,
+            //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
+      fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
+      fetchCountriesByRegion:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
+      fetchStateByCountry:`${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
+      fetchCitiesByState:`${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
     },
     prod: {
       sendOtpUrl: `${PROD_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -120,6 +131,11 @@ export function config() {
       getLocationApprovalUrl: `${PROD_SERVER_URL}/api/address_service/getLocationApprovals`,
       modifyLocationUrl: `${PROD_SERVER_URL}/api/address_service/modifyLocation`,
       imgDomainUrl: `${PROD_SERVER_URL}`,
+      //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
+      fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
+      fetchCountriesByRegion:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
+      fetchStateByCountry:`${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
+      fetchCitiesByState:`${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
     },
     abinbevtest: {
       sendOtpUrl: `${ABINBEV_TEST_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -156,6 +172,11 @@ export function config() {
       getLocationApprovalUrl: `${ABINBEV_TEST_SERVER_URL}/api/address_service/getLocationApprovals`,
       modifyLocationUrl: `${ABINBEV_TEST_SERVER_URL}/api/address_service/modifyLocation`,
       imgDomainUrl: `${ABINBEV_TEST_SERVER_URL}`,
+      //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
+      fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
+      fetchCountriesByRegion:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
+      fetchStateByCountry:`${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
+      fetchCitiesByState:`${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
     },
     abinbevprod: {
       sendOtpUrl: `${ABINBEV_PROD_SERVER_URL}/api/employee_service/auth/sendOtp`,
@@ -192,6 +213,11 @@ export function config() {
       getLocationApprovalUrl: `${ABINBEV_PROD_SERVER_URL}/api/address_service/getLocationApprovals`,
       modifyLocationUrl: `${ABINBEV_PROD_SERVER_URL}/api/address_service/modifyLocation`,
       imgDomainUrl: `${ABINBEV_PROD_SERVER_URL}`,
+      //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
+      fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
+      fetchCountriesByRegion:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
+      fetchStateByCountry:`${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
+      fetchCitiesByState:`${TEST_SERVER_URL_VL}/productmanagement/api/location?state_id=`,
     },
   };
 
