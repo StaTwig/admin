@@ -311,7 +311,7 @@ exports.checkEmail = [
             //   }
             // }
             const country = req.body?.address?.country ? req.body.address?.country : 'India';
-            const address = req.body?.address ? req.body.address :  {};
+            const address = req.body?.address ? req.body.address : {};
             addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
             const incrementCounterOrg = await CounterModel.update({
               'counters.name': "orgId"
@@ -337,7 +337,7 @@ exports.checkEmail = [
               primaryContactId: employeeId,
               name: organisationName,
               id: organisationId,
-              type:  req.body?.type ? req.body.type :  'CUSTOMER_SUPPLIER',
+              type: req.body?.type ? req.body.type : 'CUSTOMER_SUPPLIER',
               status: 'NOTVERIFIED',
               postalAddress: addr,
               warehouses: [warehouseId],
@@ -347,7 +347,7 @@ exports.checkEmail = [
                 countryName: country
               },
               configuration_id: 'CONF000',
-              authority: req.body.authority
+              authority: req.body?.authority
             });
             await org.save();
             const incrementCounterInv = await CounterModel.update({
@@ -389,12 +389,12 @@ exports.checkEmail = [
           }
         }
         let emailId = null
-        if(req.body.emailId)
+        if(req.body?.emailId)
           emailId=req.body.emailId.toLowerCase().replace(' ', '');
         
        let phoneNumber = null
-        if(req.body.phoneNumber)
-           phoneNumber='+'+req.body.phoneNumber;
+        if(req.body?.phoneNumber)
+           phoneNumber='+'+req.body?.phoneNumber;
         
         // if (emailId.indexOf('@') === -1)
         //   phoneNumber = '+' + emailId;
