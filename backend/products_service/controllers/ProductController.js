@@ -561,3 +561,47 @@ exports.getIotEnabledStatus =[
 
   }
 ]
+
+exports.getproductcategory = [
+  auth,
+  async (req,res)=>{
+    try{
+    //const externalId= req.query.id;
+    const product= await ProductModel.find({},'id type externalId');
+
+    return apiResponse.successResponseWithData(
+      res,
+      'Product Details',
+      product,
+    );
+  } catch (err) {
+    logger.log(
+      'error',
+      '<<<<< ProductService < ProductController < getproductcategory : error (catch block)',
+    );
+    return apiResponse.ErrorResponse(res, err.message);
+  }
+},
+]
+
+exports.getproductname = [
+  auth,
+  async (req,res)=>{
+    try{
+    //const externalId= req.query.id;
+    const product= await ProductModel.find({},'id externalId name shortName');
+
+    return apiResponse.successResponseWithData(
+      res,
+      'Product Details',
+      product,
+    );
+  } catch (err) {
+    logger.log(
+      'error',
+      '<<<<< ProductService < ProductController < getproductname : error (catch block)',
+    );
+    return apiResponse.ErrorResponse(res, err.message);
+  }
+},
+]
