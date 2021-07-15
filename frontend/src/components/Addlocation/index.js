@@ -67,7 +67,7 @@ const AddLocation = (props) => {
       title: values.addressTitle,
       organisationId: props.user.organisationId,
       postalAddress: props.user.postalAddress,
-      region: "",
+      region: values.region,
       country: props.user.warehouseAddress_country,
       location: {
         longitude: '0',
@@ -75,6 +75,7 @@ const AddLocation = (props) => {
         geohash: '1231nejf923453',
       },
       warehouseAddress: {
+        region: values.region,
         firstLine: values.addressLine,
         secondLine: null,
         city: values.city,
