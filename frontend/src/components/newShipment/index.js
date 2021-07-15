@@ -1056,6 +1056,7 @@ if (!error) {
                         placeholder="Enter Transit Number"
                         onChange={handleChange}
                         value={values.airWayBillNo}
+                        style={{border:"none",outline:"none"}}
                       />
                       
                       {errors.airWayBillNo && touched.airWayBillNo && (
@@ -1116,6 +1117,7 @@ if (!error) {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         value={values.labelCode}
+                        style={{border:"none",outline:"none"}}
                       />
                       {errors.labelCode && touched.labelCode && (
                         <span className="error-msg text-danger-AB">
