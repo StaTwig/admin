@@ -560,20 +560,28 @@ const TransactionHistory = (props) => {
                         {selectedIndex === index ? (
                           <>
                             <div className="productDetail">
-                              <div className="row supplierOrgName">
-                                {selectedTransaction.supplier &&
-                                selectedTransaction.supplier.org
-                                  ? selectedTransaction.supplier.org.name
-                                  : ''}
+                              <div className="row">
+                                <div
+                                  className="col-md-6"
+                                  style={{ 'margin-bottom': '5px' }}
+                                >
+                                  <span className="productHeader">
+                                    Vendor:&nbsp;
+                                  </span>
+                                  <span>
+                                    {selectedTransaction.supplier &&
+                                    selectedTransaction.supplier.org
+                                      ? selectedTransaction.supplier.org.name
+                                      : ''}
+                                  </span>
+                                </div>
                               </div>
                               <div className="row">
                                 <div className="col-md-3">
                                   <span className="productHeader">
                                     Transaction ID:&nbsp;
                                   </span>
-                                  <span>
-                                    {selectedTransaction.externalShipmentId}
-                                  </span>
+                                  <span>{transaction.id}</span>
                                 </div>
                                 <div className="col-md-3">
                                   <span className="productHeader">
@@ -662,6 +670,9 @@ const TransactionHistory = (props) => {
                                           <th className="productHeader">
                                             Quantity Received
                                           </th>
+                                          <th className="productHeader">
+                                            Comments
+                                          </th>
                                         </tr>
                                       </thead>
                                       <tbody>
@@ -681,6 +692,15 @@ const TransactionHistory = (props) => {
                                                     {
                                                       product.productQuantityDelivered
                                                     }
+                                                  </td>
+                                                  <td>
+                                                    {selectedTransaction
+                                                      .shipmentUpdates[1]
+                                                      .updateComment != ''
+                                                      ? selectedTransaction
+                                                          .shipmentUpdates[1]
+                                                          .updateComment
+                                                      : '-'}
                                                   </td>
                                                 </tr>
                                               </>
