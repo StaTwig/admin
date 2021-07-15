@@ -75,7 +75,7 @@ const Track = (props) => {
                   <Map data={shippmentChainOfCustodyData} />
                 </div>
               </div>
-              <div 
+              {/* <div 
                 className="panel commonpanle row shadow bg-white mb-4" 
                 style={{ minHeight: '400px' }}>
                 <div className="col">
@@ -96,7 +96,7 @@ const Track = (props) => {
                       <div className="current-info">
                         <div className="info">Last Upadated on</div>
                         <div className="info">{Object.keys(props.latestIotShipmentData).length > 0
-                          ? formatTimeAMPM(/**props.latestIotShipmentData.temp['UnixTimeStamp']*/ new Date().toString().split(' ')[4]) : ''} </div>
+                          ? formatTimeAMPM(new Date().toString().split(' ')[4]) : ''} </div>
                       </div>
                       <img
                         src={zoomInIcon}
@@ -109,7 +109,7 @@ const Track = (props) => {
                     allIotShipmentData={props.lastTenIotShipmentData} 
                     height={'220px'} />{" "}
                 </div>
-              </div>
+              </div> */}
             </div>}
           <div className="col-6 ml-3">
             {shippmentChainOfCustodyData.length == 0 ? (
@@ -207,11 +207,12 @@ const Track = (props) => {
               )}
           </div>
         </div>
-        : <div className="row mb-4 mt-4">
+        : 
+        <div className="row mb-4 mt-4" style={{ width: '100%' }}>
           <div className="temperature-graph-container panel commonpanle col">
             <div className="graph-information-container d-flex justify-content-between">
               <div className="row ml-4 mb-2">
-                <div className="arrow mr-2">
+                <div className="arrow-temp mr-2">
                   <img className="arrow-image" src={CurrentTemperature} width="20" height="20" />
                 </div>
 

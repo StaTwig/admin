@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Map, InfoWindow, Marker, GoogleApiWrapper, Polygon} from 'google-maps-react';
 
 const style = {
-    width: '90%',
+    width: '94%',
     height: '80%'
   }
 
