@@ -79,7 +79,7 @@ const ProductInventory = props => {
       </div>
       {enable && 
     <div class="main">
-      <div className="row ml-0"> 
+      <div className="row ml-0 flex-nowrap"> 
         {categoryArray.map(cat => 
           <div className={`panel m-2 ${category == cat && `active`}`} onClick={() => changeType(cat)}>
             <div className="flex flex-column">
