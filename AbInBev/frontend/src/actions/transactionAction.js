@@ -6,7 +6,11 @@ import setAuthToken from '../utils/setAuthToken';
 function getQueryString(filters) {
   let queryStr = '';
   if (filters.organizationType && filters.organizationType.length) {
-    if (filters.organizationType === 'VENDOR' && filters.vendorType && filters.vendorType.length) {
+    if (
+      filters.organizationType === 'VENDOR' &&
+      filters.vendorType &&
+      filters.vendorType.length
+    ) {
       queryStr = '&orgType=' + filters.vendorType;
     } else {
       queryStr = '&orgType=' + filters.organizationType;
@@ -47,14 +51,15 @@ function getQueryString(filters) {
 }
 
 export const getTransactions = (filters) => {
-  let skip = 0, limit = 100;
+  let skip = 0,
+    limit = 100;
 
   let queryString = getQueryString(filters);
 
   let params = filters;
-  return async dispatch => {
+  return async (dispatch) => {
     try {
-      setAuthToken(localStorage.getItem("theAbInBevToken"))
+      setAuthToken(localStorage.getItem('theAbInBevToken'));
       dispatch(turnOn());
       const result = await axios.get(
         `${config().shipmentsUrl}?skip=${skip}&limit=${limit}` + queryString,
@@ -67,11 +72,10 @@ export const getTransactions = (filters) => {
   };
 };
 
-
 export const fetchShipment = (shipmentId) => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
-      setAuthToken(localStorage.getItem("theAbInBevToken"))
+      setAuthToken(localStorage.getItem('theAbInBevToken'));
       dispatch(turnOn());
       const result = await axios.get(
         `${config().viewShipmentUrl}` + shipmentId,
@@ -85,9 +89,9 @@ export const fetchShipment = (shipmentId) => {
 };
 
 export const fetchChallanImage = (imageId) => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
-      setAuthToken(localStorage.getItem("theAbInBevToken"))
+      setAuthToken(localStorage.getItem('theAbInBevToken'));
       dispatch(turnOn());
       const result = await axios.get(
         `${config().fetchChallanImageUrl}/` + imageId,

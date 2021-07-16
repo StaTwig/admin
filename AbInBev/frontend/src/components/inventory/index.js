@@ -84,7 +84,7 @@ const Inventory = (props) => {
     sku: '',
     inventoryType: 'BREWERY',
     organizationType: 'BREWERY',
-    invDetails: ''
+    invDetails: '',
   });
 
   const defaultFilters = {
@@ -95,19 +95,30 @@ const Inventory = (props) => {
     sku: '',
     inventoryType: 'BREWERY',
     organizationType: 'BREWERY',
-    invDetails: ''
+    invDetails: '',
   };
 
   const onInventoryTypeChange = (inventoryType) => {
     setIsDetailedView(false);
     setSelectedVendor(null);
     setSelectedInventoryType(inventoryType);
+
     const _filters = { ...filters };
     _filters.inventoryType = inventoryType;
     _filters.organizationType = inventoryType;
     _filters.vendorType = 'ALL_VENDORS';
     _filters.invDetails = '';
+    _filters.district = '';
+    _filters.state = '';
+    _filters.brewery = '';
+    _filters.sku = '';
+    _filters.organization = '';
     setFilters(_filters);
+    const _filterVisibility = { ...filterVisibility };
+    _filterVisibility.district = false;
+    _filterVisibility.organization = false;
+    _filterVisibility.state = true;
+    setFilterVisibility(_filterVisibility);
     props.applyFilters(_filters);
   };
 
@@ -183,6 +194,11 @@ const Inventory = (props) => {
       _filters.organization = '';
       setSelectedVendorType('ALL_VENDORS');
     }
+    const _filterVisibility = { ...filterVisibility };
+    _filterVisibility.district = false;
+    _filterVisibility.organization = false;
+    _filterVisibility.state = true;
+    setFilterVisibility(_filterVisibility);
     setFilters(_filters);
     setSelectedVendor(null);
     setIsDetailedView(false);
@@ -231,17 +247,17 @@ const Inventory = (props) => {
   }, []);
 
   const onDetails = (inv) => {
-    if (selectedInventoryType !== 'BREWERY') {
+    if (selectedInventoryType !== 'BREWERY' && !isDetailedView) {
       setIsDetailedView(true);
       setInventory(inv);
       console.log(inv);
-      
+
       const _filters = { ...filters };
       _filters.invDetails = inv._id;
       setFilters(_filters);
       props.applyFilters(_filters);
     }
-  }
+  };
 
   return (
     <div className="container-fluid">
@@ -338,8 +354,8 @@ const Inventory = (props) => {
                     Vendor
                   </a>
                 </div>
-                )}
-              {isDetailedView &&
+              )}
+              {isDetailedView && (
                 <div className="vCard">
                   <div className="row">
                     <div className="col-lg-10 col-md-10 col-sm-12">
@@ -349,7 +365,11 @@ const Inventory = (props) => {
                             className="productImage"
                             src={
                               brandsIconArr[
-                              brands.indexOf(inventory.org.manufacturer.split(' ').join(''))
+                                brands.indexOf(
+                                  inventory.org.manufacturer
+                                    .split(' ')
+                                    .join(''),
+                                )
                               ]
                             }
                           />
@@ -362,9 +382,11 @@ const Inventory = (props) => {
                                   <img
                                     src={
                                       brandsArr[
-                                      brands.indexOf(
-                                        inventory.org.manufacturer.split(' ').join(''),
-                                      )
+                                        brands.indexOf(
+                                          inventory.org.manufacturer
+                                            .split(' ')
+                                            .join(''),
+                                        )
                                       ]
                                     }
                                     alt=""
@@ -372,8 +394,12 @@ const Inventory = (props) => {
                                   />
                                 </div>
                                 <div className="info">
-                                  <div className="name">{inventory.org.product_name}</div>
-                                  <div className="caption">{inventory.org.shortName}</div>
+                                  <div className="name">
+                                    {inventory.org.product_name}
+                                  </div>
+                                  <div className="caption">
+                                    {inventory.org.shortName}
+                                  </div>
                                   <div className="caption">
                                     {inventory.org.externalId}
                                   </div>
@@ -384,7 +410,9 @@ const Inventory = (props) => {
                               <span className="productText">
                                 Inventory{' '}
                                 <span className="breweryPropertyValue">
-                                  {!isNaN(inventory.quantity) ? inventory.quantity.toLocaleString('en-IN') : 0}
+                                  {!isNaN(inventory.quantity)
+                                    ? inventory.quantity.toLocaleString('en-IN')
+                                    : 0}
                                 </span>
                               </span>
                             </div>
@@ -394,7 +422,7 @@ const Inventory = (props) => {
                     </div>
                   </div>
                 </div>
-              }
+              )}
               <div className="inventoryDetails">
                 <table className="inventorytable">
                   <thead>
@@ -406,10 +434,12 @@ const Inventory = (props) => {
                       <th className="inventoryHeader">
                         {isDetailedView ? 'State' : 'SKU'}
                         <br />
-                        <span className="tableHeadersubtitle">{isDetailedView ? '' : 'Stock Code'}</span>
+                        <span className="tableHeadersubtitle">
+                          {isDetailedView ? '' : 'Stock Code'}
+                        </span>
                       </th>
                       <th className="inventoryHeader">
-                        {isDetailedView ? 'City' : 'Stock Long Description'}
+                        {isDetailedView ? 'District' : 'Stock Long Description'}
                       </th>
                       <th className="inventoryHeader">Quantity</th>
                     </tr>
@@ -426,26 +456,41 @@ const Inventory = (props) => {
                       </tr>
                     ) : (
                       inventories.map((inventory, index) => (
-                        <tr key={index} className="cursorP" onClick={() => onDetails(inventory)}>
+                        <tr
+                          key={index}
+                          className="cursorP"
+                          onClick={() => onDetails(inventory)}
+                        >
                           <td className="inventorydesc">
-                            {isDetailedView ? inventory.org.name : inventory.org.manufacturer} <br />
+                            {isDetailedView
+                              ? inventory.org.name
+                              : inventory.org.manufacturer}{' '}
                             <br />
-                            {isDetailedView &&
+                            <br />
+                            {isDetailedView && (
                               <span
                                 className={`group ${inventory.org.type?.toLowerCase()}group`}
                               >
                                 {inventory.org.type} Vendor
-                              </span>}
+                              </span>
+                            )}
                           </td>
                           <td className="inventorydesc">
-                            {isDetailedView ? inventory.org.state : inventory.org.product_name}
+                            {isDetailedView
+                              ? inventory.org.state
+                              : inventory.org.product_name}
                             <br />
-                            {!isDetailedView &&
+                            {!isDetailedView && (
                               <span className="inventorydescsubtitle">
                                 {inventory.org.externalId}
-                              </span>}
+                              </span>
+                            )}
                           </td>
-                          <td>{isDetailedView ? inventory.org.district : inventory.org.shortName}</td>
+                          <td>
+                            {isDetailedView
+                              ? inventory.org.district
+                              : inventory.org.shortName}
+                          </td>
                           <td>{inventory.quantity.toLocaleString('en-IN')}</td>
                         </tr>
                       ))
