@@ -1860,3 +1860,47 @@ exports.Image=[
 	FileStream.pipe(res)
   }
 ]
+
+exports.switchLocation = [
+  auth,
+  async (req, res) => {
+    try {
+      const employee = await EmployeeModel.findOne({
+        emailId: req.user.emailId,
+      });
+      const {
+        warehouseId,
+      } = req.body;
+
+      const returnData = { isRefresh: false };
+      if (warehouseId !== req.user.warehouseId) {
+        let userData = {
+          id: employee.id,
+          firstName: employee.firstName,
+          emailId: employee.emailId,
+          role: employee.role,
+          warehouseId: warehouseId,
+          phoneNumber: employee.phoneNumber
+        };
+        //Prepare JWT token for authentication
+        const jwtPayload = userData;
+        const jwtData = {
+          expiresIn: process.env.JWT_TIMEOUT_DURATION,
+        };
+        const secret = process.env.JWT_SECRET;
+        //Generated JWT token with Payload and secret.
+        returnData.isRefresh = true;
+        returnData.token = jwt.sign(jwtPayload, secret, jwtData);
+      }
+      return apiResponse.successResponseWithData(res, 'Switch Location Success', returnData);
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< UserService < AuthController < updateProfile : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
+
