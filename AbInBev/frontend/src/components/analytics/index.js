@@ -110,9 +110,8 @@ const Analytics = (props) => {
     const selectedMonth = event.target.value;
     setMonth(selectedMonth);
     const filter = { ...params };
-    if (!filter.year)
-      filter.year = year;
-    
+    if (!filter.year) filter.year = year;
+
     filter.month = selectedMonth;
     filter.quarter = undefined;
     setParams(filter);
@@ -213,7 +212,7 @@ const Analytics = (props) => {
     setMonth('');
     setQtr('');
     setOtype('ALL_VENDORS');
-    setParams({year: new Date().getFullYear()});
+    setParams({ year: new Date().getFullYear() });
   };
 
   return (
@@ -329,36 +328,43 @@ const Analytics = (props) => {
                       />{' '}
                       Brewery View
                     </label>
-                    <label className="filterSubHeading mt-3">
-                      Select State
-                    </label>
-                    <select
-                      className="filterSelect mt-2"
-                      value={state}
-                      onChange={onStateChange}
-                    >
-                      <option value="">Select State</option>
-                      {props.states?.map((state, index) => (
-                        <option key={index} value={state}>
-                          {state}
-                        </option>
-                      ))}
-                    </select>
-                    <label className="filterSubHeading mt-3">
-                      Select District
-                    </label>
-                    <select
-                      value={district}
-                      className="filterSelect mt-2"
-                      onChange={onDistrictChange}
-                    >
-                      <option value="">Select District</option>
-                      {districts?.map((district, index) => (
-                        <option key={index} value={district}>
-                          {district}
-                        </option>
-                      ))}
-                    </select>
+                    {(selectedViewCode == 'DETAILED_GEO_VIEW' ||
+                      selectedViewCode == 'SKU_DETAIL_VIEW' ||
+                      selectedViewCode == 'BREWERY_DETAIL_VIEW' ||
+                      selectedViewCode == 'SUPPLIER_DETAIL_VIEW') && (
+                      <>
+                        <label className="filterSubHeading mt-3">
+                          Select State
+                        </label>
+                        <select
+                          className="filterSelect mt-2"
+                          value={state}
+                          onChange={onStateChange}
+                        >
+                          <option value="">Select State</option>
+                          {props.states?.map((state, index) => (
+                            <option key={index} value={state}>
+                              {state}
+                            </option>
+                          ))}
+                        </select>
+                        <label className="filterSubHeading mt-3">
+                          Select District
+                        </label>
+                        <select
+                          value={district}
+                          className="filterSelect mt-2"
+                          onChange={onDistrictChange}
+                        >
+                          <option value="">Select District</option>
+                          {districts?.map((district, index) => (
+                            <option key={index} value={district}>
+                              {district}
+                            </option>
+                          ))}
+                        </select>
+                      </>
+                    )}
                     {selectedViewCode == 'SKU_VIEW' && (
                       <>
                         <label className="filterSubHeading mt-3">
@@ -548,44 +554,49 @@ const Analytics = (props) => {
                       />{' '}
                       SKU View
                     </label>
+                    {(selectedViewCode == 'INVENTORY_SKU_DETAILS' ||
+                      selectedViewCode == 'INVENTORY_GRAPHICAL') && (
+                      <>
+                        <label className="filterSubHeading mt-3">
+                          Select State
+                        </label>
+                        <select
+                          className="filterSelect mt-2"
+                          value={state}
+                          onChange={onStateChange}
+                        >
+                          <option value="">Select State</option>
+                          {props.states?.map((state, index) => (
+                            <option key={index} value={state}>
+                              {state}
+                            </option>
+                          ))}
+                        </select>
+                        <label className="filterSubHeading mt-3">
+                          Select District
+                        </label>
 
-                    <label className="filterSubHeading mt-3">
-                      Select State
-                    </label>
-                    <select
-                      className="filterSelect mt-2"
-                      value={state}
-                      onChange={onStateChange}
-                    >
-                      <option value="">Select State</option>
-                      {props.states?.map((state, index) => (
-                        <option key={index} value={state}>
-                          {state}
-                        </option>
-                      ))}
-                    </select>
-                    <label className="filterSubHeading mt-3">
-                      Select District
-                    </label>
-
-                    <select
-                      value={district}
-                      className="filterSelect mt-2"
-                      onChange={onDistrictChange}
-                    >
-                      {state == '' && <option value="">Select District</option>}
-                      {(selectedViewCode == 'INVENTORY_GRAPHICAL' ||
-                        (selectedViewCode == 'INVENTORY_SKU_DETAILS' &&
-                          state != '')) && (
-                        <option value="">All District</option>
-                      )}
-                      {districts?.map((district, index) => (
-                        <option key={index} value={district}>
-                          {district}
-                        </option>
-                      ))}
-                    </select>
-
+                        <select
+                          value={district}
+                          className="filterSelect mt-2"
+                          onChange={onDistrictChange}
+                        >
+                          {state == '' && (
+                            <option value="">Select District</option>
+                          )}
+                          {(selectedViewCode == 'INVENTORY_GRAPHICAL' ||
+                            (selectedViewCode == 'INVENTORY_SKU_DETAILS' &&
+                              state != '')) && (
+                            <option value="">All District</option>
+                          )}
+                          {districts?.map((district, index) => (
+                            <option key={index} value={district}>
+                              {district}
+                            </option>
+                          ))}
+                        </select>
+                      </>
+                    )}
                     <label className="filterSubHeading mt-3">Select SKU</label>
                     <select
                       className="filterSelect mt-2"

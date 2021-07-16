@@ -264,9 +264,7 @@ const NewShipment = (props) => {
     products.forEach((p) => {
       if (p.productQuantity < 1) error = true;
     });
-    
-
-    if (!error) {
+if (!error) {
       const data = {
         airWayBillNo,
         poId: OrderId ? OrderId : null,
@@ -325,14 +323,15 @@ const NewShipment = (props) => {
       }
       if(check===1)
       {
+        console.log("product quantity is undefined ");
         setShipmentError("Check product quantity");
         setOpenShipmentFail(true);
       }
-      else if(check===2)
+      /* else if(check===2)
       {
         setShipmentError("Check Batch Number");
         setOpenShipmentFail(true);
-      }
+      } */
       else{
         let i,j;
         let check = true;
@@ -424,12 +423,12 @@ const NewShipment = (props) => {
     soDetailsClone.products[i]["labelId"] = value;
     setOrderDetails(soDetailsClone);
   };
-  const onCategoryChange = async (index, value, setFieldValue) => {
+  const onCategoryChange = async (index, value,batchNo,setFieldValue) => {
     try {
       const warehouse = await getProductsByCategory(value);
       let newArr = [...addProducts];
       newArr[index]["type"] = value;
-      newArr[index] = {"productId": "", "id": "", "productQuantity": "", "name": "", "type": value, "manufacturer": "","unitofMeasure":""};
+      newArr[index] = {"productId": "","batchNumber":batchNo,"id": "", "productQuantity": "", "name": "", "type": value, "manufacturer": "","unitofMeasure":""};
       newArr[index]['quantity'] = '';
       setAddProducts((prod) => [...newArr]);
       setProducts(warehouse.data.map(item => {
@@ -457,6 +456,7 @@ const NewShipment = (props) => {
         name: row.name,
         productCategory: row.type,
         manufacturer: row.manufacturer,
+
       }))
     );
     setAddProducts((prod) => [...newArr]);
@@ -466,21 +466,22 @@ const NewShipment = (props) => {
     newArray[prodIndex] = { ...newArray[prodIndex], isSelected: true };
     setProducts((prod) => [...newArray]);
   };
-
+// //console.log(allOrganisations,"All org");
+// async function fetchShipmentDetails(id){
+//   const result = await dispatch(getViewShipment(id));
+//   return result;
+// }   
+// console.log(products,"1");
+// console.log(addProducts,"2");
+// console.log(category,"3");
   const onRemoveRow = (index) => {
-
-   
-    const inventoryStateClone = JSON.parse(JSON.stringify(OrderDetails?.products));
-    inventoryStateClone.splice(index, 1);
-   
-    const cloneOrder = OrderDetails;
-    cloneOrder.products = inventoryStateClone; 
-    setOrderDetails(cloneOrder); 
-    setOrderProduct(inventoryStateClone);
-   
-    
+  const inventoryStateClone = JSON.parse (JSON.stringify(OrderDetails ?.products));
+  inventoryStateClone.splice(index, 1);
+  const cloneOrder = OrderDetails;
+  cloneOrder.products = inventoryStateClone; 
+  setOrderDetails(cloneOrder); 
+  setOrderProduct(inventoryStateClone);
   };
-
   return (
     <div className="NewShipment">
       <h1 className="breadcrumb">CREATE SHIPMENT</h1>
@@ -1055,6 +1056,7 @@ const NewShipment = (props) => {
                         placeholder="Enter Transit Number"
                         onChange={handleChange}
                         value={values.airWayBillNo}
+                        style={{border:"none",outline:"none"}}
                       />
                       
                       {errors.airWayBillNo && touched.airWayBillNo && (
@@ -1115,6 +1117,7 @@ const NewShipment = (props) => {
                         onBlur={handleBlur}
                         onChange={handleChange}
                         value={values.labelCode}
+                        style={{border:"none",outline:"none"}}
                       />
                       {errors.labelCode && touched.labelCode && (
                         <span className="error-msg text-danger-AB">
@@ -1184,7 +1187,35 @@ const NewShipment = (props) => {
                     handleBatchChange(v, i);
                   }}
                   enableDelete={false}
-                  onRemoveRow={onRemoveRow}
+                  onRemoveRow={(index) => {
+                    const prodIndex = products.findIndex(
+                      (p) => p.id === OrderDetails?.products[index].id
+                    );
+                    let newArray = [...products];
+                    newArray[prodIndex] = {
+                      ...newArray[prodIndex],
+                      isSelected: false,
+                    };
+                    setProducts((prod) => [...newArray]);
+
+                    OrderDetails?.products.splice(index, 1);
+                    let newArr = [...OrderDetails?.products];
+                    if (newArr.length > 0)
+                      setFieldValue(
+                        "products",
+                        newArr.map((row) => ({
+                          productCategory: row.type,
+                          productID: row.id,
+                          productQuantity: row.productQuantity,
+                          batchNumber: row.batchNumber,
+                          productName: row.name,
+                          manufacturer: row.manufacturer,
+                          quantity: row.quantity,
+                        }))
+                      );
+                    else setFieldValue("products", []);
+                    setAddProducts((prod) => [...newArr]);
+                  }}
                   handleLabelIdChange={handleLabelIdChange}
                 />
               )}
@@ -1262,7 +1293,8 @@ const NewShipment = (props) => {
                     handleProductChange={(index, item) => {
                       addProducts.splice(index, 1,item);
                       let newArr = [...addProducts];
-                      setFieldValue('products', newArr.map(row => ({"productId": row.id,"id": row.id,"productQuantity": '',"quantity": '',"name": row.name,"type": row.type,"manufacturer": row.manufacturer,"unitofMeasure":row.unitofMeasure})));
+                      console.log(newArr);
+                      setFieldValue('products', newArr.map(row => ({"productId": row.id,"batchNumber":row.batchNumber,"id": row.id,"productQuantity": '',"quantity": '',"name": row.name,"type": row.type,"manufacturer": row.manufacturer,"unitofMeasure":row.unitofMeasure})));
                       setAddProducts(prod => [...newArr]);
 
                       const prodIndex = products.findIndex(p => p.id === item.id);

@@ -59,24 +59,22 @@ const EditRow = props => {
                   onSelect={item => { handleCategoryChange(index, item) }}
                   groups={category}
                 /> */}
-                {
-                  prod.type.length > 0 ?
-                  <Select 
-                  className="no-border"
-                  placeholder={<div className="select-placeholder-text">Select Product Category</div>} 
-                  value={{value: prod.type, label: prod.type}}                  onChange={(v) => handleCategoryChange(index, v.value)}
-                  options={category}
-                />
-                :
-                <Select 
+                
+                  {
+                    console.log(prod.type)
+                  }
+                <Select
                 className="no-border"
                 placeholder={<div className="select-placeholder-text">Select Product Category</div>} 
+                value={(prod.type==undefined || prod.id==undefined || prod.type=="")?null:{value: prod.id, label: prod.type}}
+                defaultInputValue={prod.type}
                 onChange={(v) => handleCategoryChange(index, v.value)}
                 options={category}
               />
+             
 
 
-                }
+                
              
               </div>
             </div>
@@ -91,32 +89,23 @@ const EditRow = props => {
                   onSelect={item => { handleProductChange(index, item) }}
                   groups={products}
                 /> */}
-                {
-                  console.log(prod.name)
-                }
-                     {
-                       
-                       (prod.name.length ===0 && prod.name!="null") ?
-                       <Select
-                  className="no-border"
-                  placeholder= {<div className= "select-placeholder-text" > Product Name </div>} 
-                  placeholder="Product Name"
-                  // defaultInputValue={prod.name?prod.name:"Product Name"}
-                  onChange={(v) => handleProductChange(index, v)}
-                  options={products.filter(p=>p.type==prod.type)}
-                />
-                :
+               
+                     
+              
                 <Select
-                  className="no-border"
-                  placeholder= {<div className= "select-placeholder-text" > Product Name </div>} 
-                  value={{value: prod.id, label: prod.name=="null" ? "":prod.name}}
-                  placeholder="Product Name"
-                  // defaultInputValue={prod.name?prod.name:"Product Name"}
-                  onChange={(v) => handleProductChange(index, v)}
+                className="no-border"
+                placeholder= {<div className= "select-placeholder-text" > Product Name </div>} 
+                value={(prod.id==undefined || prod.name==undefined || prod.name==="")?null:{value: prod.id, label: prod.name}}
+                placeholder="Product Name"
+                   defaultInputValue={prod.name}
+                  onChange={(v) => {
+                    handleProductChange(index, v);
+                   
+                  }
+                }
                   options={products.filter(p=>p.type==prod.type)}
-                />
-
-                     }        
+                /> 
+                        
                
               </div>
               <div className="title recived-text align-self-center">{prod.id ? prod.id : <div className="placeholder_id">Product ID</div>}</div>

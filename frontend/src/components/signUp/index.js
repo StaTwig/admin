@@ -32,7 +32,16 @@ const [orgType, setorgType] = useState('');
 const [selectedType,setselectedType] = useState();
 const [emailError,setemailerror] = useState(false);
 const [phoneError,setphoneerror] = useState(false);
-const [signupDisable,setsignupDisable]=useState(false);
+const [signupDisable,setsignupDisable]=useState(true);
+const [lastNameError,setLastNameError] = useState(false);
+const [firstNameError,setFirstNameError] = useState(false);
+const [mailError,setMailError] = useState(false);
+const [phoneNumberError,setPhoneNumberError] = useState(false);
+const [firstName,setFirstName] = useState("");
+const [lastName,setLastName] = useState("");
+const [email,setEmail] = useState("");
+const [mobileNumber,setMobileNumber] = useState("");
+const [checker,setChecker] = useState(true);
   useEffect(() => {
     async function fetchData() {
       const orgs = await getOrganisations();
@@ -89,6 +98,25 @@ const changeFn = (value_new,e) => {
 
   props.onOrganisationChange({id: 0, name: value_new});
   }
+
+  // console.log(firstName);
+  // console.log(lastName);
+  // console.log(orgType);
+  // console.log(email);
+  // console.log(value);
+  // console.log(mobileNumber);
+  if(checker && firstName.length > 0 && lastName.length > 0 && orgType.length > 0 && value.length > 0 && (email.length > 0  || mobileNumber.length >0))
+  {
+    console.log("Entered");
+     console.log(firstName);
+     console.log(lastName);
+     console.log(orgType);
+     console.log(email);
+     console.log(value);
+     console.log(mobileNumber);
+    setsignupDisable(false);
+    setChecker(false);
+  }
   
   return (
     <div className="login-wrapper">
@@ -99,6 +127,7 @@ const changeFn = (value_new,e) => {
           </div>
         </div> */}
       
+  
   <div className="row">
           <div className="col-m-6 col-lg-6">
             <div className="form-content">
@@ -127,6 +156,7 @@ const changeFn = (value_new,e) => {
                 }}
                 validate={(values) => {
                   const errors = {};
+                  console.log(values);
                   if (!values.firstName) {
                     errors.firstName = "Required";
                   }
@@ -137,8 +167,8 @@ const changeFn = (value_new,e) => {
                    // errors.email = "Required";
                   //}
                   // if (!values.phone) {
-                  //   errors.phone = "Required";
-                  // }
+                  //    errors.phone = "Required";
+                  //  }
                   if (!values.org) {
                     errors.org = "Required";
                   }
@@ -175,12 +205,35 @@ const changeFn = (value_new,e) => {
                   className="form-controll ml-4"
                   name="firstName"
                   value={props.firstName}
-                  onChange={(e) => { props.onfirstNameChange(e); handleChange(e);}}
+                  onChange={(e) => {
+
+                    setChecker(true);
+                    console.log(e.target.value.length);
+                    if(e.target.value.length > 0)
+                    {
+                      setFirstNameError(false);
+
+                    }else
+                    {
+                      setsignupDisable(true);
+                    } 
+                     setFirstName(e.target.value);  
+                     props.onfirstNameChange(e); handleChange(e);
+                    }
+                  }
                   />
                   {errors.firstName && touched.firstName && (
                   <span className="error-msg text-dangerS">{errors.firstName}</span>
                   )}
+
+                  {firstNameError && (
+                    <span className="error-msg text-dangerS">First Name is required</span>
+                  )}
+
+
                   </div>
+
+
                   <div className="form-group flex-column" style={{position:"relative", top:"-10px"}}>
                   <div style={{position:"absolute", left:"-10px", top:"20px"}}>
                         <img alt="" src={User} height="20px" width="18px"/>
@@ -191,10 +244,28 @@ const changeFn = (value_new,e) => {
                   className=" form-controll ml-4"
                   name="lastName"
                   value={props.lastName}
-                  onChange={(e) => { props.onlastNameChange(e); handleChange(e);}}
+                  onChange={(e) => {
+                    setChecker(true);
+                    console.log(e.target.value.length);
+                    if(e.target.value.length > 0)
+                    {
+                      setLastNameError(false);
+
+                    }else
+                    {
+                      setsignupDisable(true);
+                    } 
+                     setLastName(e.target.value);
+                     props.onlastNameChange(e);
+                     handleChange(e);
+                  }}
                   />
                   {errors.lastName && touched.lastName && (
                     <span className="error-msg text-dangerS">{errors.lastName}</span>
+                  )}
+
+                  {lastNameError && (
+                    <span className="error-msg text-dangerS">Last Name is required</span>
                   )}
                   </div>
 
@@ -210,14 +281,31 @@ const changeFn = (value_new,e) => {
                   name="email"
                   autoCapitalize = 'none'
                   value={(props.email).toLowerCase()}
-                  onChange={(e) => { props.onEmailChange(e); handleChange(e);}}
+                  
+                  onChange={(e) => {
+                     setChecker(true);
+                    console.log(e.target.value);
+                     if(e.target.value.length > 0)
+                     {
+                      setPhoneNumberError(false);
+                      setMailError(false);
+                      console.log(mailError);
+                     }else
+                     {
+                      setsignupDisable(true);
+                     }
+                     setEmail(e.target.value);
+                     props.onEmailChange(e); 
+                     handleChange(e);}}
                   handleBlur={props.email?verifyEmailAndPhoneNo(`emailId=${props.email}`).then((v)=>{
                     if(v.data.length){
                       setemailerror(true);
+                      //setemailerror(true);
                       setsignupDisable(true);
                     }else{
                       setemailerror(false);
-                      setsignupDisable(false);
+                      //setsignupDisable(false);
+                      //setsignupDisable(false);
                     }
                 }):null}
                   />
@@ -227,12 +315,18 @@ const changeFn = (value_new,e) => {
                   {emailError && (
                     <span className="error-msg text-dangerS">Email ID Already registered</span>
                   )}
+                  {phoneNumberError && (
+                    <span className="error-msg text-dangerS">Phone Number or Email ID is required</span>
+                  )}
+                  
                   </div>
 
                   <div className="form-group" style={{position:"relative", left:"-15px", bottom:"20px"}}>
                   <div style={{position:"absolute", left:"4px", top:"10px"}}>
                         <img alt="Phone icon" src={Phone} height="20px" width="19px" />
                   </div>
+                  
+                  
                   <PhoneInput
                       country={'in'}
                       placeholder='Enter Phone number'
@@ -243,19 +337,31 @@ const changeFn = (value_new,e) => {
                         enableSearch: true,
                       }}
                       value={props.phone}
-                      onChange={(e)=>{props.onphoneChange(e)}}
+                      onChange={(e)=>{
+                        setChecker(true);
+                        if(e.length > 0)
+                        {
+                          setPhoneNumberError(false);
+                        }
+                        else
+                        {
+                          setsignupDisable(true);
+                        }
+                        setMobileNumber(e);
+                        props.onphoneChange(e)}}
                       handleBlur={props.phone?verifyEmailAndPhoneNo(`phoneNumber=${props.phone}`).then((v)=>{
+                        console.log('Hi');
                         console.log(v.data,"Data");
                         if(v.data[0].phoneNumber){
                           setphoneerror(true);
-                          setsignupDisable(true);
+                         // setsignupDisable(true);
                         }
                         else{
                           setphoneerror(false);
-                          setsignupDisable(false);
+                          //setsignupDisable(false);
                         }}
                         ):null}
-                      onChange = {props.onphoneChange}
+                      
                     /></div>
                    {errors.phone && touched.phone && (
                     <span className="error-msg text-dangerS">{errors.phone}</span>
@@ -263,6 +369,10 @@ const changeFn = (value_new,e) => {
                   {phoneError && (
                     <span className="error-msg text-dangerS">Mobile No. Already registered</span>
                   )}
+                  {phoneNumberError && (
+                    <span className="error-msg text-dangerS">Phone Number or Email ID is required</span>
+                  )}
+                
                   <div className="pb-3"></div>
                  
                             
@@ -277,6 +387,7 @@ const changeFn = (value_new,e) => {
                       value={orgType}
                       placeholder='Organisation Type'
                       onChange={item =>{
+                        setChecker(true);
                         setFieldValue('type', item);
                         props.onOrgTypeChange(item);
                         setselectedType(item);
@@ -290,6 +401,18 @@ const changeFn = (value_new,e) => {
                       value={orgType}
                       placeholder='Organisation Type'
                       onSelect={item => {
+                        setChecker(true);
+                        console.log('Hi');
+                        if(firstName.length<=0)
+                        {
+                          console.log("Hi1");
+                          setFirstNameError(true);
+                        }
+                        if(lastName.length <=0)
+                        {
+                          setLastNameError(true);
+                        }
+                       
                         setFieldValue('type', item);
                         props.onOrgTypeChange(item);
                         setselectedType(item);
@@ -322,6 +445,17 @@ const changeFn = (value_new,e) => {
                     isText={true}
                     placeholder='Organisation Name'
                     onSelect={item => {
+                      console.log("lastName Length " + lastName.length);
+                      if(firstName.length<=0)
+                      {
+                        console.log("Hi1");
+                        setFirstNameError(true);
+                      }
+                      if(lastName.length <=0)
+                      {
+                        setLastNameError(true);
+                      }
+                     
                       setFieldValue('org', item);
                       props.onOrganisationChange(item);
                         if(item.name!='Other'){
@@ -330,6 +464,15 @@ const changeFn = (value_new,e) => {
                         }
                         if(item.name =='Other'){
                           props.onOrgChange(true);
+
+                          if(firstName.length > 0 && lastName.length > 0 && orgType.length > 0 && (email.length > 0  || mobileNumber.length >0))
+                          {
+                            props.onOrgChange(true);
+                          }
+                          else{
+                            setPhoneNumberError(true);
+                             props.onOrgChange(false);
+                          }
                         }
                     }}
                     groups={showOrgByType(selectedType)}
@@ -353,8 +496,12 @@ const changeFn = (value_new,e) => {
                   props.errorMessage && <div className="mt-3 mr-4"> <Alert variant="filled" severity="error"><AlertTitle>Error</AlertTitle>{props.errorMessage}</Alert></div>
                   }
                   
+                  
                   <div className="text-center" >
                     <br></br>
+                    {
+                      console.log(signupDisable)
+                    }
                   <button type="submit" className="btn btn-primary mr-5" disabled={signupDisable}>
                   SIGNUP
                   </button>
@@ -376,6 +523,3 @@ const changeFn = (value_new,e) => {
 };
 
 export default FormPage;
-
-
-

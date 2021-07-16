@@ -40,7 +40,7 @@ const AddLocation = (props) => {
 
   const closeModalAddedLocation = ()=>{
     setAddedLocationModal(false);
-    props.history.push('/profile');
+    props.history.push({pathname:'/profile',state:{editMode:true}});
   };
   useEffect(()=>{
     async function fetchAllRegions1(){
@@ -67,7 +67,7 @@ const AddLocation = (props) => {
       title: values.addressTitle,
       organisationId: props.user.organisationId,
       postalAddress: props.user.postalAddress,
-      region: "",
+      region: values.region,
       country: props.user.warehouseAddress_country,
       location: {
         longitude: '0',
@@ -75,6 +75,7 @@ const AddLocation = (props) => {
         geohash: '1231nejf923453',
       },
       warehouseAddress: {
+        region: values.region,
         firstLine: values.addressLine,
         secondLine: null,
         city: values.city,
@@ -175,6 +176,29 @@ const AddLocation = (props) => {
                 dirty,
               }) => (
                 <form onSubmit={handleSubmit} className="mb-3">
+                <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                      <label className="required-field col-sm-6" htmlFor="addressTitle">Address Title</label>
+                      <TextField style={{width:"300px"}}
+                        id="standard-basic"
+                        label="Enter Title" 
+                        className="form-control2"
+                        name="addressTitle"
+                        value={values.addressTitle}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          setAddressTitle(e.target.value);
+                        }}
+                      />
+                    { /*  {errors.addressTitle && touched.addressTitle && (
+                        <span className="error-msg text-danger-ANL">
+                          {errors.addressTitle}
+                        </span>
+                     )} */}
+                      </div>
+                    </div>
+                  </div>
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
@@ -276,29 +300,7 @@ const AddLocation = (props) => {
                     </div>
                   </div>
 
-                  <div className="row">
-                    <div className="col-md-6 com-sm-12">
-                      <div className="form-group">
-                      <label className="required-field col-sm-6" htmlFor="addressTitle">Title</label>
-                      <TextField style={{width:"300px"}}
-                        id="standard-basic"
-                        label="Enter Title" 
-                        className="form-control2"
-                        name="addressTitle"
-                        value={values.addressTitle}
-                        onBlur={handleBlur}
-                        onChange={(e) => {
-                          setAddressTitle(e.target.value);
-                        }}
-                      />
-                    { /*  {errors.addressTitle && touched.addressTitle && (
-                        <span className="error-msg text-danger-ANL">
-                          {errors.addressTitle}
-                        </span>
-                     )} */}
-                      </div>
-                    </div>
-                  </div>
+                  
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">

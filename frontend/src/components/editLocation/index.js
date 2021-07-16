@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import Location from "../../assets/icons/CurrentLocation1.png";
 import {updateWarehouse} from "../../actions/userActions";
@@ -7,6 +9,8 @@ import FailPopup from "../../shared/PopUp/failedPopUp";
 import Modal from "../../shared/modal";
 // import React, { useState,useRef } from 'react';
 import {getWarehouseById} from "../../actions/userActions";
+import {fetchAllRegions,fetchCountriesByRegion,fetchStateByCountry,fetchCitiesByState,} from "../../actions/productActions";
+
 
 import "./style.scss";
 import { Formik } from "formik";
@@ -22,7 +26,14 @@ const editLocation = (props) => {
   const [state, setState] = useState("");
   const [country, setCountry] = useState("");
   const [pincode, setPincode] = useState("");
+  const [region, setregion] = useState("");
   const [addedLocationModal, setAddedLocationModal] = useState(false);
+
+  const [allregions,setallregions] = useState([]);
+  const [allCountries,setallCountries] = useState([]);
+  const [allState,setallState] = useState([]);
+  const [allCity,setallCity] = useState([]);
+
   const closeModalAddedLocation = ()=>{
     setAddedLocationModal(false);
     props.history.push({
@@ -42,10 +53,17 @@ const editLocation = (props) => {
 
   useEffect(() => {
     async function fetchData() {
+      async function fetchAllRegions1(){
+        let arr = await fetchAllRegions();
+        setallregions(arr.data);
+      }
+      fetchAllRegions1();
+
       const result = await getWarehouseById(id);  
       console.log('results');
-      console.log(result.data.data);   
+      console.log(result.data);   
       const warehouseInfo = result.data.data[0];
+      setregion(warehouseInfo.warehouseAddress.region)
       setAddressTitle(warehouseInfo.title);
       setAddressLine(warehouseInfo.warehouseAddress.firstLine);
       setCity(warehouseInfo.warehouseAddress.city);
@@ -57,12 +75,25 @@ const editLocation = (props) => {
     fetchData();
   }, []);
 
+  async function fetchAllCountries1(id){
+    let res = await fetchCountriesByRegion(id);
+    setallCountries(res.data);
+  };
+  async function fetchAllState1(id){
+    let res = await fetchStateByCountry(id);
+    setallState(res.data);
+  };
+  async function fetchAllCity1(id){
+    let res = await fetchCitiesByState(id);
+    setallCity(res.data);
+  };
+
   const updateStatus = async (values, id) => {
     const data =  {
       title: values.addressTitle,
       organisationId: props.user.organisationId,
       postalAddress: props.user.postalAddress,
-      region: "",
+      region: values.region,
       country: props.user.warehouseAddress_country,
       location: {
         longitude: '0',
@@ -71,6 +102,7 @@ const editLocation = (props) => {
       },
       warehouseAddress: {
         firstLine: values.addressLine,
+        region: values.region,
         secondLine: null,
         city: values.city,
         state: values.state,
@@ -95,6 +127,13 @@ const editLocation = (props) => {
     }
   };
 
+  function search(name, myArray){
+    for (var i=0; i < myArray.length; i++) {
+        if (myArray[i].name === name) {
+            return myArray[i].id;
+        }
+    }
+}
   const requestadminforapproval = () => {
     //  props.history.push('/profile');
   };
@@ -108,6 +147,7 @@ const editLocation = (props) => {
             <Formik
               enableReinitialize={true}
               initialValues={{
+                region,
                 addressTitle,
                 addressLine,
                 city,
@@ -118,6 +158,9 @@ const editLocation = (props) => {
               validate={(values) => {
                 const errors = {};
 
+                if (!values.region) {
+                  errors.region = "Required";
+                }
                 if (!values.addressTitle) {
                   errors.addressTitle = "Required";
                 }
@@ -162,8 +205,18 @@ const editLocation = (props) => {
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label className="required-field col-sm-6" htmlFor="addressTitle">Address Title</label>
-
-                      <input
+                      <TextField style={{width:"800px"}}
+                        id="standard-basic"
+                        label="Enter Title" 
+                        className="form-control2"
+                        name="addressTitle"
+                        value={values.addressTitle}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          setAddressTitle(e.target.value);
+                        }}
+                      />
+                      {/* <input
                         type="text"
                         className="form-control"
                         name="addressTitle"
@@ -173,7 +226,7 @@ const editLocation = (props) => {
                         onChange={(e) => {
                           setAddressTitle(e.target.value);
                         }}
-                      />
+                      /> */}
                       {errors.addressTitle && touched.addressTitle && (
                         <span className="error-msg text-danger-EL">
                           {errors.addressTitle}
@@ -183,6 +236,160 @@ const editLocation = (props) => {
                   </div>
                 </div>
                 <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                        <label className="required-field col-sm-6" htmlFor="region">Region</label>
+                        <Autocomplete
+                          value={values.region}
+                          onChange={(event, newValue) => {
+                            setFieldValue("region",newValue);
+                            fetchAllCountries1(newValue);
+                            setregion(newValue);
+                            setcountry("");
+                            setState("");
+                            setCity("");
+                          }}
+                          id="controllable-states-demo"               
+                          options={allregions}
+                          style={{ width: 300 }}
+                          renderInput={(params) => <TextField {...params} label="Select Region"  />}
+                        />
+                        {errors.region && touched.region && (
+                          <span className="error-msg text-danger-ANL">
+                            {errors.region}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                      <label className="required-field col-sm-6" htmlFor="country">Country</label>
+                        <Autocomplete
+                          value={values.country}
+                          onChange={(event, newValue) => {
+                            // handleChange(event);
+                            setFieldValue("country",newValue);
+                            let v = search(newValue,allCountries);
+                            fetchAllState1(v);
+                            setCountry(newValue);
+                            setState("");
+                            setCity("");
+                          }}
+                          id="controllable-states-demo"
+                          options={allCountries.map((option)=>option.name)}
+                          style={{ width: 300 }}
+                          renderInput={(params) => <TextField {...params} label="Select Country"  />}
+                        />
+                        {errors.country && touched.country && (
+                          <span className="error-msg text-danger-ANL">
+                            {errors.country}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                      <label className="required-field col-sm-6" htmlFor="state">State</label>
+                        <Autocomplete
+                          value={values.state}
+                          onChange={(event, newValue) => {
+                            let v = search(newValue,allState);
+                            fetchAllCity1(v);
+                            setState(newValue);
+                            setCity("");
+                          }}
+                          id="controllable-states-demo"
+                          options={allState.map((option)=>option.name)}
+                          style={{ width: 300 }}
+                          renderInput={(params) => <TextField {...params} label="Select State"  />}
+                        />
+                        {errors.state && touched.state && (
+                          <span className="error-msg text-danger-ANL">
+                            {errors.state}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                      <label className="required-field col-sm-6" htmlFor="city">City</label>
+                        <Autocomplete
+                          value={values.city}
+                          onChange={(event, newValue) => {
+                            setCity(newValue);
+                          }}
+                          id="controllable-states-demo"
+                          options={allCity.map((Option)=>Option.name)}
+                          style={{ width: 300 }}
+                          renderInput={(params) => <TextField {...params} label="Select City"  />}
+                        />
+                        {errors.city && touched.city && (
+                          <span className="error-msg text-danger-ANL">
+                            {errors.city}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-md-6 com-sm-12">
+                      <div className="form-group">
+                        <label className="required-field col-sm-6" htmlFor="addressLine">Address Line</label>
+                        <TextField style={{width:"300px"}}
+                        type="text"
+                        id="standard-basic"
+                        label="Enter Address Line" 
+                        className="form-control2"
+                        value={values.addressLine}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          setAddressLine(e.target.value);
+                        }}
+                      />
+                      {/*{errors.addressLine && touched.addressLine && (
+                          <span className="error-msg text-danger-ANL">
+                            {errors.addressLine}
+                          </span>
+                  )} */}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="col-md-6 com-sm-16">
+                      <div className="form-group">
+                        <label className="required-field col-sm-6" htmlFor="Select Location">Pincode</label>
+                        <TextField style={{width:"300px"}}
+                            id="standard-basic"
+                            label="Pin Code" 
+                            type="number"
+                            className="form-control2"
+                            name="pincode"
+                            value={values.pincode}
+                            onBlur={handleBlur}
+                           /*  handleChange={handleChange}
+                            handleBlur={handleBlur}
+                            error={errors.pincode}
+                            touched={touched.pincode} */
+                            onChange={(e) => {setPincode(e.target.value)
+                            }}
+                          />
+                        {/* {errors.pincode && touched.pincode && (
+                          <span className="error-msg text-danger-ANL">
+                            {errors.pincode}
+                          </span>
+                        )} */}
+                      </div>
+                    </div>
+                  </div>
+                {/* <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label className="required-field col-sm-6" htmlFor="addressLine">Address Line</label>
@@ -204,8 +411,8 @@ const editLocation = (props) => {
                       )}
                     </div>
                   </div>
-                </div>
-                <div className="row">
+                </div> */}
+                {/* <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label className="required-field col-sm-6" htmlFor="city">City/Town</label>
@@ -227,9 +434,9 @@ const editLocation = (props) => {
                       )}
                     </div>
                   </div>
-                </div>
+                </div> */}
 
-                <div className="row">
+                {/* <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label className="required-field col-sm-6" htmlFor="state">State</label>
@@ -275,8 +482,8 @@ const editLocation = (props) => {
                       )}
                     </div>
                   </div>
-                </div>
-                <div className="row">
+                </div> */}
+                {/* <div className="row">
                   <div className="col-md-6 com-sm-16">
                     <div className="form-group">
                       <label className="required-field col-sm-6" htmlFor="Select Location">Pincode</label>
@@ -298,7 +505,7 @@ const editLocation = (props) => {
                       )}
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className="d-flex flex-row-reverse">
                   <button
                     class="close"

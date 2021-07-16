@@ -2619,6 +2619,9 @@ exports.getInventoryProductsByOrganisation = [
 
 async function getFilterConditions(filters) {
   let matchCondition = {};
+  if (filters.invDetails && filters.invDetails.length)
+    matchCondition.$or = [{ type: "S1" }, { type: "S2" }, { type: "S3" }];
+  
   if (filters.orgType && filters.orgType !== "") {
     if (
       filters.orgType === "BREWERY" ||
@@ -2699,10 +2702,14 @@ exports.getInventoryProductsByPlatform = [
       if (filters.invDetails && filters.invDetails.length) {
         skuFilter["productDetails.id"] = filters.invDetails;
       }
+      if (filters.sku && filters.sku.length) {
+        skuFilter["productDetails.externalId"] = filters.sku;
+      }
+      const fl = await getFilterConditions(filters);
       
       const platformInventory = await OrganisationModel.aggregate([
               {
-                $match: getFilterConditions(filters),
+                $match: fl,
               },
 							{
 								$unwind: "$warehouses"

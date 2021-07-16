@@ -32,7 +32,6 @@
     border-radius: 10px;
     padding: 17px 10px 10px 10px;
     background: #ffffff 0% 0% no-repeat padding-box;
-    height: 310px;
   }
 
   .enlargeTemperature {
@@ -198,15 +197,24 @@
 }
 
 .zoom-in-icon {
-  width: 47px;
-  height: 57px;
+  width: 32px !important;
+  height: 32px !important;
   border-radius: 10px;
   border: 0px solid;
   padding: 5px;
   background-color: #c2e6fa;
   cursor: pointer;
 }
-
+.zoom-out-icon {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 10px;
+  border: 0px solid;
+  padding: 5px;
+  background-color: #c2e6fa;
+  cursor: pointer;
+  margin-right: 15px;
+}
 .temperature-icon-container {
   width: 56px;
   height: 58px;

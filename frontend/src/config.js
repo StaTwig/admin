@@ -144,7 +144,11 @@ export function config() {
       fetchAllRegions:`${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/location?region=all`,
       fetchCountriesByRegion:`${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/location?region=`,
       fetchStateByCountry:`${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/location?country_id=`,
-      fetchCitiesByState:`${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/location?state_id=`
+      fetchCitiesByState:`${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/location?state_id=`,
+      getIotEnabledStatus:`${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/getIotEnabledStatus`,
+      trackLastTenIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/lastteniotsamplesforshipmentid/:shipmentId`,
+      trackLatestShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/latestiotdataforshipmentid/:shipmentId`,
+      trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`
 },
     dev: {
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
@@ -255,7 +259,11 @@ export function config() {
       fetchAllRegions:`${DEV_SERVER_URL}/productmanagement/api/location?region=all`,
       fetchCountriesByRegion:`${DEV_SERVER_URL}/productmanagement/api/location?region=`,
       fetchStateByCountry:`${DEV_SERVER_URL}/productmanagement/api/location?country_id=`,
-      fetchCitiesByState:`${DEV_SERVER_URL}/productmanagement/api/location?state_id=`
+      fetchCitiesByState:`${DEV_SERVER_URL}/productmanagement/api/location?state_id=`,
+      getIotEnabledStatus:`${DEV_SERVER_URL}/productmanagement/api/products/getIotEnabledStatus`,
+      trackLastTenIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/lastteniotsamplesforshipmentid/:shipmentId`,
+      trackLatestShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/latestiotdataforshipmentid/:shipmentId`,
+      trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
       },
     stable: {
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
@@ -604,7 +612,11 @@ export function config() {
       fetchAllRegions:`${DEMO_SERVER_URL}/productmanagement/api/location?region=all`,
       fetchCountriesByRegion:`${DEMO_SERVER_URL}/productmanagement/api/location?region=`,
       fetchStateByCountry:`${DEMO_SERVER_URL}/productmanagement/api/location?country_id=`,
-      fetchCitiesByState:`${DEMO_SERVER_URL}/productmanagement/api/location?state_id=`
+      fetchCitiesByState:`${DEMO_SERVER_URL}/productmanagement/api/location?state_id=`,
+      getIotEnabledStatus:`${DEMO_SERVER_URL}/productmanagement/api/products/getIotEnabledStatus`,
+      trackLastTenIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/lastteniotsamplesforshipmentid/:shipmentId`,
+      trackLatestShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/latestiotdataforshipmentid/:shipmentId`,
+      trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
     },
     prod: {
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
@@ -712,7 +724,11 @@ export function config() {
       fetchAllRegions:`${PROD_SERVER_URL}/productmanagement/api/location?region=all`,
       fetchCountriesByRegion:`${PROD_SERVER_URL}/productmanagement/api/location?region=`,
       fetchStateByCountry:`${PROD_SERVER_URL}/productmanagement/api/location?country_id=`,
-      fetchCitiesByState:`${PROD_SERVER_URL}/productmanagement/api/location?state_id=`
+      fetchCitiesByState:`${PROD_SERVER_URL}/productmanagement/api/location?state_id=`,
+      getIotEnabledStatus:`${PROD_SERVER_URL}/productmanagement/api/products/getIotEnabledStatus`,
+      trackLastTenIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/lastteniotsamplesforshipmentid/:shipmentId`,
+      trackLatestShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/latestiotdataforshipmentid/:shipmentId`,
+      trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
     },
     
     uniceftest: {
@@ -828,7 +844,11 @@ export function config() {
       fetchAllRegions:`${UNICEFTEST_SERVER_URL}/productmanagement/api/location?region=all`,
       fetchCountriesByRegion:`${UNICEFTEST_SERVER_URL}/productmanagement/api/location?region=`,
       fetchStateByCountry:`${UNICEFTEST_SERVER_URL}/productmanagement/api/location?country_id=`,
-      fetchCitiesByState:`${UNICEFTEST_SERVER_URL}/productmanagement/api/location?state_id=`
+      fetchCitiesByState:`${UNICEFTEST_SERVER_URL}/productmanagement/api/location?state_id=`,
+      getIotEnabledStatus:`${UNICEFTEST_SERVER_URL}/productmanagement/api/products/getIotEnabledStatus`,
+      trackLastTenIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/lastteniotsamplesforshipmentid/:shipmentId`,
+      trackLatestShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/latestiotdataforshipmentid/:shipmentId`,
+      trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
     },
   };
 
