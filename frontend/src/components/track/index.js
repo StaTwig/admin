@@ -40,20 +40,19 @@ const Track = (props) => {
     setValue(e.target.value);
     setIsSubmitted(false);
     setOp(1);
-    if (
-      e.target.value.substring(0, 2) == 'SH' ||
-      e.target.value.substring(0, 2) == 'sh'
-    ) {
-      setSearchType('SH');
-      setOp(1);
-    } else {
-      setSearchType('PO');
-      setOp(-1);
-    }
+    // if (
+    //   e.target.value.substring(0, 2) == 'SH' ||
+    //   e.target.value.substring(0, 2) == 'sh'
+    // ) {
+    //   setSearchType('SH');
+    //   setOp(1);
+    // } else {
+    //   setSearchType('PO');
+    //   setOp(-1);
+    // }
   };
 
   const onSeach = async (v = value) => {
-    console.log(v);
     await searchData(v);
     setIsSubmitted(true);
   };
