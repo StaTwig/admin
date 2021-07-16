@@ -146,7 +146,7 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 				elementMatchQuery[`productDetails.manufacturer`] = productManufacturer;
 			}
 			if(req.user.warehouseId){
-				elementMatchQuery[`employeeDetails.warehouseId`] = req.user.warehouseId;
+				elementMatchQuery[`actorWarehouseId`] = req.user.warehouseId;
 			}
 			if(category){
 				elementMatchQuery[`productDetails.type`] = category
