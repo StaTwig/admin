@@ -21,6 +21,8 @@ router.get("/generateCodes", ProductController.generateCodes);
 router.get("/productInfo", ProductController.getProductInfo);
 router.get("/getManufacturer", ProductController.getManufacturer);
 router.get("/getIotEnabledStatus", ProductController.getIotEnabledStatus);
+router.get("/getproductcategory", ProductController.getproductcategory);
+router.get("/getproductname", ProductController.getproductname);
 
 //router.post("/addProduct", ProductController.addProduct);
 router.post(
