@@ -176,8 +176,6 @@ export const fetchIotEnabledApiResponse = async (id) => {
   try {
     const result = await axios.get(config().getIotEnabledStatus);
     return result.data;
-    // return await fetch(config().getIotEnabledStatus)
-    //   .then(data => data.json()).then(data => data);
   } catch (e) {
     return e.response;
   }
