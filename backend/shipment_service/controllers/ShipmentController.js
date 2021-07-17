@@ -520,6 +520,7 @@ exports.createShipment = [
               event_data.eventType.description = "SHIPMENT";
               event_data.actor.actorid = user_id || "null";
               event_data.actor.actoruserid = email || "null";
+              event_data.actorWarehouseId = req.user.warehouseId || "null";
               event_data.stackholders.actororg.id = orgId || "null";
               event_data.stackholders.actororg.name = orgName || "null";
               event_data.stackholders.actororg.address = address || "null";
