@@ -19,6 +19,7 @@ const Sidebar = (props) => {
   const { history } = props;
   history.location.pathname;
   const dispatch = useDispatch();
+  const type = localStorage.getItem('type');
 
   const user = useSelector((state) => {
     return state.user;
@@ -101,6 +102,7 @@ const Sidebar = (props) => {
         <span className="whiteC"></span>
         <span className="grid jis">
           <span>{user?.firstName}</span>
+          <span className="orgType">{type}</span>
         </span>
       </button>
 
