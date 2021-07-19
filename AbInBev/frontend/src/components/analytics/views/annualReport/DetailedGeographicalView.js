@@ -32,8 +32,10 @@ const DetailedGeographicalView = (props) => {
       }
 
       let qp = '';
-
-      if (props.params) {
+      
+      if (Object.keys(props.params).length === 0){
+        qp = '&year='+(new Date().getFullYear())+'&date_filter_type=by_yearly';
+      } else {
         const p = props.params;
         if (p.year) qp = '&year=' + p.year;
         if (p.month) qp += '&month=' + p.month;

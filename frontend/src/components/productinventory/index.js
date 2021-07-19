@@ -60,6 +60,9 @@ const ProductInventory = props => {
       });
       setData(prodArray);
     }
+    function scrollWin() {
+      window.scrollBy(100, 0);
+    }
     // setData(inventories.filter(r => r.payloadData.data.products[0].type == cat));
   return (
     <div className="productinventory">
@@ -75,11 +78,10 @@ const ProductInventory = props => {
         </div>
       </div>
       {enable && 
-        <div class="wrapper mb-5">
-    <div class="longcontent">
-      <div className="row ml-0"> 
+    <div class="main">
+      <div className="row ml-0 flex-nowrap"> 
         {categoryArray.map(cat => 
-          <div className={`panel m-2 ${category == cat && `active`}`}style={{width:"10%"}} onClick={() => changeType(cat)}>
+          <div className={`panel m-2 ${category == cat && `active`}`} onClick={() => changeType(cat)}>
             <div className="flex flex-column">
               <div className=" picture truck-bg">
                 <img src={TotalInventoryAdded} alt="truck" />
@@ -90,8 +92,7 @@ const ProductInventory = props => {
         )}
       </div>
       </div>
-</div>
-      }
+        }
       <div className="row">
         <div className=" p-2 rounded full-width-ribbon">
           <div className=" row filter">

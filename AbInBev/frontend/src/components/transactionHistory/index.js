@@ -8,6 +8,7 @@ import {
   getTransactions,
   fetchShipment,
   fetchChallanImage,
+  getImage
 } from '../../actions/transactionAction';
 import Moment from 'react-moment';
 import setAuthToken from '../../utils/setAuthToken';
@@ -45,6 +46,7 @@ const TransactionHistory = (props) => {
   const [inTransit, setinTransit] = useState([]);
   const [sent, setSent] = useState([]);
   const [Added, setAdded] = useState([]);
+  const [image, setImage] = useState('');
 
   const [dateClassName, setdateClassName] = useState('transactionListDate');
 
@@ -218,6 +220,7 @@ const TransactionHistory = (props) => {
       _filters.month = new Date().getMonth() + 1;
       _filters.quarter = 1;
       _filters.startDate = new Date();
+      _filters.date_filter_type = 'by_yearly';
       _filters.endDate = new Date();
       _filters.organizationType = 'BREWERY';
       setSelectedOrganizationType('BREWERY');
@@ -230,12 +233,15 @@ const TransactionHistory = (props) => {
       _filters.year = new Date().getFullYear();
       _filters.month = new Date().getMonth() + 1;
       _filters.quarter = 1;
+      _filters.date_filter_type = 'by_yearly';
       _filters.startDate = new Date();
       _filters.endDate = new Date();
       setSelectedVendorType('ALL_VENDORS');
       setSelectedOrganizationType('VENDOR');
     }
     setFilters(_filters);
+    setSelectedIndex(null);
+      setSelectedTransaction(null);
     setSelectedTransactionType('ALL');
 
     setSelectedDateType('by_yearly');
@@ -281,7 +287,7 @@ const TransactionHistory = (props) => {
   const onQuarterChange = (event) => {
     const selectedQuarter = event.target.value;
     const _filters = { ...filters };
-    _filters.month = selectedQuarter;
+    _filters.quarter = selectedQuarter;
     setFilters(_filters);
     applyFilters(_filters);
   };
@@ -296,12 +302,21 @@ const TransactionHistory = (props) => {
     } else {
       const result = await dispatch(fetchShipment(transaction.id));
       setSelectedTransaction(result.data);
+      if (result.data.imageDetails.length)
+        getImageURL(result.data.imageDetails[0]);
+      else
+        setImage('');
       setSelectedIndex(index);
     }
   };
 
-  const getImageURL = (imageId) => {
-    return `${config().fetchChallanImageUrl}${imageId}`;
+  const getImageURL = async(imageId) => {
+    const r = await getImage(imageId);
+    const reader = new window.FileReader();
+    reader.readAsDataURL(r.data); 
+    reader.onload = function () {
+      setImage(reader.result);
+    }
   };
 
   const getSumByProperty = (inputArr, key) => {
@@ -407,6 +422,31 @@ const TransactionHistory = (props) => {
     })();
   }, []);
 
+  const displayComment = (comment) => {
+    let rtn = comment;
+    switch (comment) {
+      case 'Receive_comment_1':
+        rtn = 'Damaged in transit';
+        break;
+      case 'Receive_comment_2':
+        rtn = 'Chipping';
+        break;
+      case 'Receive_comment_3':
+        rtn = 'Dirty Bottles';
+        break;
+      case 'Receive_comment_4':
+        rtn = 'Wrong count';
+        break;
+      case 'Receive_comment_5':
+        rtn = 'Wrong count';
+        break;
+    
+      default:
+        break;
+    }
+    return rtn;
+  }
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -453,17 +493,14 @@ const TransactionHistory = (props) => {
               </div>
 
               <div className="productList">
-                {displayTransactions.length ? (
-                  <>
-                    <div className="productListHeader col-md-12">
-                      <div className="col-md-6">Particulars</div>
-                      <div className="col-md-3">Status</div>
-                      <div className=" col-md-3">Quantity</div>
-                    </div>
-                  </>
-                ) : (
-                  ''
-                )}
+              <div className="productListHeader col-md-12">
+                <div className="col-md-6">Particulars</div>
+                <div className="col-md-3">Status</div>
+                <div className=" col-md-3">Quantity</div>
+              </div>
+                {displayTransactions.length == 0 &&
+                  <div className="text-center"> No data found</div>
+                }
 
                 {displayTransactions.map((transaction, index) => (
                   <div key={index}>
@@ -636,21 +673,16 @@ const TransactionHistory = (props) => {
                                 </div> */}
                               </div>
                               <div className="row">
-                                {selectedTransaction.imageDetails &&
-                                  selectedTransaction.imageDetails.map(
-                                    (image) => (
-                                      <>
-                                        <ModalImage
-                                          small={getImageURL(image)}
-                                          className="challanImage"
-                                          large={getImageURL(image)}
-                                          showRotate={true}
-                                          hideZoom={false}
-                                          alt="Challan Image"
-                                        />
-                                      </>
-                                    ),
-                                  )}
+                                {selectedTransaction.imageDetails.length > 0 &&
+                                  <ModalImage
+                                    small={image}
+                                    className="challanImage"
+                                    large={image}
+                                    showRotate={true}
+                                    hideZoom={false}
+                                    alt="Challan Image"
+                                  />
+                                }
                               </div>
                               <div className=" transactionProducts row">
                                 {selectedTransaction.products.length ? (
@@ -697,9 +729,9 @@ const TransactionHistory = (props) => {
                                                     {selectedTransaction
                                                       .shipmentUpdates[1]
                                                       .updateComment != ''
-                                                      ? selectedTransaction
+                                                      ? displayComment(selectedTransaction
                                                           .shipmentUpdates[1]
-                                                          .updateComment
+                                                          .updateComment)
                                                       : '-'}
                                                   </td>
                                                 </tr>
@@ -922,10 +954,22 @@ const TransactionHistory = (props) => {
                           onChange={onQuarterChange}
                         >
                           <option>Select Quarter</option>
-                          {['1', '2', '3', '4'].map((quarter, index) => {
+                          {/* {['1', '2', '3', '4'].map((quarter, index) => {
                             return (
                               <option key={index} value={quarter}>
                                 {quarter}
+                              </option>
+                            );
+                          })} */}
+                          {[
+                            'Jan - Mar',
+                            'Apr - Jun',
+                            'Jul - Sep',
+                            'Oct - Dec',
+                          ].map((qtr, index) => {
+                            return (
+                              <option key={index} value={index + 1}>
+                                {qtr}
                               </option>
                             );
                           })}

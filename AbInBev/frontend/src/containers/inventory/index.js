@@ -7,9 +7,10 @@ const InventoryContainer = (props) => {
   const [inventories, setInventories] = useState([]);
   const [totalStock, setTotalStock] = useState(0);
   const dispatch = useDispatch();
+  const type = localStorage.getItem('type');
 
   const [filters, setFilters] = useState({
-    inventoryType: 'BREWERY',
+    inventoryType: (type == 'BREWERY' || type == 'CENTRAL_AUTHORITY') ? 'BREWERY' : 'VENDOR',
     vendorType: 'ALL_VENDORS',
     state: '',
     district: '',

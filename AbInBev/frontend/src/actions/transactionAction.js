@@ -103,3 +103,14 @@ export const fetchChallanImage = (imageId) => {
     }
   };
 };
+
+export const getImage = async (imageId) => {
+  try {
+    const result = await axios.get(config().fetchChallanImageUrl + imageId, {
+      responseType: 'blob'
+    });
+    return result;
+  } catch (e) {
+    return { data: [] };
+  }
+};

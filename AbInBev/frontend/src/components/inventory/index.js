@@ -30,10 +30,12 @@ import {
 
 const Inventory = (props) => {
   const { totalStock, inventories } = props;
-  const [selectedInventoryType, setSelectedInventoryType] = useState('BREWERY');
+  const type = localStorage.getItem('type');
+  const [selectedInventoryType, setSelectedInventoryType] = useState((type == 'BREWERY' || type == 'CENTRAL_AUTHORITY') ? 'BREWERY' : 'VENDOR');
   const [selectedVendorType, setSelectedVendorType] = useState('ALL_VENDORS');
   const [selectedVendor, setSelectedVendor] = useState(null);
   const [isDetailedView, setIsDetailedView] = useState(false);
+
 
   const dispatch = useDispatch();
   const [states, setStates] = useState([]);
@@ -82,8 +84,8 @@ const Inventory = (props) => {
     brewery: '',
     organization: '',
     sku: '',
-    inventoryType: 'BREWERY',
-    organizationType: 'BREWERY',
+    inventoryType: (type == 'BREWERY' || type == 'CENTRAL_AUTHORITY') ? 'BREWERY' : 'ALL_VENDORS',
+    organizationType: (type == 'BREWERY' || type == 'CENTRAL_AUTHORITY') ? 'BREWERY' : 'VENDOR',
     invDetails: '',
   });
 
@@ -93,8 +95,8 @@ const Inventory = (props) => {
     brewery: '',
     organization: '',
     sku: '',
-    inventoryType: 'BREWERY',
-    organizationType: 'BREWERY',
+    inventoryType: (type == 'BREWERY' || type == 'CENTRAL_AUTHORITY') ? 'BREWERY' : 'ALL_VENDORS',
+    organizationType: (type == 'BREWERY' || type == 'CENTRAL_AUTHORITY') ? 'BREWERY' : 'VENDOR',
     invDetails: '',
   };
 
@@ -333,26 +335,30 @@ const Inventory = (props) => {
                 </>
               ) : (
                 <div className="btn-group mainSortingButton">
-                  <a
-                    className={`btn ${
-                      selectedInventoryType === 'BREWERY' ? 'active' : ''
-                    }`}
-                    onClick={() => {
-                      onInventoryTypeChange('BREWERY');
-                    }}
-                  >
-                    Brewery
-                  </a>
-                  <a
-                    className={`btn ${
-                      selectedInventoryType === 'VENDOR' ? 'active' : ''
-                    }`}
-                    onClick={() => {
-                      onInventoryTypeChange('VENDOR');
-                    }}
-                  >
-                    Vendor
-                  </a>
+                  {(type == 'BREWERY' || type == 'CENTRAL_AUTHORITY') &&
+                    <>
+                      <a
+                        className={`btn ${
+                          selectedInventoryType === 'BREWERY' ? 'active' : ''
+                        }`}
+                        onClick={() => {
+                          onInventoryTypeChange('BREWERY');
+                        }}
+                      >
+                        Brewery
+                      </a>
+                      <a
+                        className={`btn ${
+                          selectedInventoryType === 'VENDOR' ? 'active' : ''
+                        }`}
+                        onClick={() => {
+                          onInventoryTypeChange('VENDOR');
+                        }}
+                      >
+                        Vendor
+                      </a>
+                    </>
+                  }
                 </div>
               )}
               {isDetailedView && (
@@ -504,7 +510,7 @@ const Inventory = (props) => {
                 <div className="filterHeader">
                   <img src={filterIcon} className="filterIcon" /> FILTERS
                 </div>
-                {filters.inventoryType === 'VENDOR' ? (
+                {(filters.inventoryType === 'VENDOR' || filters.inventoryType === 'ALL_VENDORS') ? (
                   <>
                     <label className="filterSubHeading mt-3">
                       Vendor Type{' '}

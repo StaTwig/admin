@@ -65,10 +65,10 @@
     justify-content: center;
     align-items: flex-start;
     // -ms-flex: 0 0 18%;
-    // flex: 0 0 18%;
+    flex: 0 0 12%;
     // max-width: 18%;
     // height: 35vh;
-    overflow: hidden;
+    //overflow: hidden;
 
     text-align: center;
     text-align: -webkit-center;
@@ -210,16 +210,20 @@
       color: $deepBlue;
     }
   }
-  .wrapper {
-    position: relative;
-    width: 1500px;
-    height: 200px;
-    //outline: 1px solid rgb(0, 0, 0);
-    overflow: auto;
-}
-.longcontent {
+  .longcontent {
     position: absolute;
     width: 2000px;
     height: 100px;
+}
+.main{
+  margin-right: 2rem;
+  height:160px;
+  width:100%;
+  white-space:nowrap !important;
+  display:inline-block !important;
+  overflow: auto;
+  //overflow: visible;
+  //table-layout:fixed;
+
 }
 }
