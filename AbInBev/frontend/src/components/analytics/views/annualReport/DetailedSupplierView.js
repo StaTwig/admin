@@ -12,11 +12,11 @@ import {
   Tooltip,
   RadialBarChart,
   RadialBar,
-  Legend
+  Legend,
+  PolarAngleAxis,
 } from 'recharts';
 const DetailedSupplierView = (props) => {
   const { prop, brandsIconArr, brandsArr, brands } = props;
-
   const [SupplierChartData, setSupplierChartData] = useState([
     { name: 'S1', value: 0, fill: '#A344B7' },
     { name: 'S2', value: 0, fill: '#F45733' },
@@ -51,7 +51,7 @@ const DetailedSupplierView = (props) => {
         textAnchor={x > cx ? 'start' : 'end'}
         dominantBaseline="central"
       >
-        {`${(percent * 100).toFixed(0)}%`}
+        {`${Number(percent * 100).toFixed(0)}%`}
       </text>
     );
   };
@@ -66,26 +66,23 @@ const DetailedSupplierView = (props) => {
       }
       let cond = '';
       if (props.params) {
-        if (props.params.state)
-          cond = '&state=' + props.params.state;
-        if (props.params.district)
-          cond += '&district=' + props.params.district;
+        if (props.params.state) cond = '&state=' + props.params.state;
+        if (props.params.district) cond += '&district=' + props.params.district;
       }
-
 
       let result = await dispatch(
         getAllOrganisationStats(
           '?orgType=' +
-          (props?.Otype ? props.Otype : 'ALL_VENDORS') +
-          '&sku=' +
-          (props.sku ? props.sku : prop.externalId) +
-          '&pid=' +
-          prop.id +
-          '&brand=' +
-          prop.manufacturer + cond,
+            (props?.Otype ? props.Otype : 'ALL_VENDORS') +
+            '&sku=' +
+            (props.sku ? props.sku : prop.externalId) +
+            '&pid=' +
+            prop.id +
+            '&brand=' +
+            prop.manufacturer +
+            cond,
         ),
       );
-      console.log("result inside the useEffect", result);
       let n = result.data.filter(
         (a) => a.type == 'S1' || a.type == 'S2' || a.type == 'S3',
       );
@@ -107,17 +104,20 @@ const DetailedSupplierView = (props) => {
 
       s1 = result.data.filter((a) => a?.type == 'S1');
       let s1ActualTotal = s1.reduce(function (prev, cur) {
-        return prev + cur.analytics.actualReturns;
+        return prev + Number(cur.analytics.actualReturns);
       }, 0);
 
       s2 = result.data.filter((a) => a?.type == 'S2');
       let s2ActualTotal = s2.reduce(function (prev, cur) {
-        return prev + cur.analytics.actualReturns;
+        console.log(
+          's2ActualTotal== ' + prev + '' + cur.analytics.actualReturns,
+        );
+        return prev + Number(cur.analytics.actualReturns);
       }, 0);
 
       s3 = result.data.filter((a) => a?.type == 'S3');
       let s3ActualTotal = s3.reduce(function (prev, cur) {
-        return prev + cur.analytics.actualReturns;
+        return prev + Number(cur.analytics.actualReturns);
       }, 0);
 
       let s1Data = s1ActualTotal / s1Length;
@@ -125,28 +125,32 @@ const DetailedSupplierView = (props) => {
       let s3Data = s3ActualTotal / s3Length;
 
       setSupplierChartData([
-        { name: 'S1', value: s1Data, fill: '#A344B7' },
-        { name: 'S2', value: s2Data, fill: '#F45733' },
-        { name: 'S3', value: s3Data, fill: '#FFC700' },
+        { name: 'S1', value: Number(s1Data).toFixed(2), fill: '#A344B7' },
+        { name: 'S2', value: Number(s2Data).toFixed(2), fill: '#F45733' },
+        { name: 'S3', value: Number(s3Data).toFixed(2), fill: '#FFC700' },
       ]);
     })();
   }, []);
 
   const renderLegend = (props) => {
     const { payload } = props;
-    return (<div style={{ display: 'grid', gap: '2em' }}>
-      {
-        payload.map((entry, index) => (
+    return (
+      <div style={{ display: 'grid', gap: '2em' }}>
+        {payload.map((entry, index) => (
           <div className="renderLegend">
-            <div className="renderLegendCircle" style={{ backgroundColor: `${entry.color}` }} />
+            <div
+              className="renderLegendCircle"
+              style={{ backgroundColor: `${entry.color}` }}
+            />
             <div style={{ color: `${entry.color}` }}>{entry.payload.name}</div>
-            <div style={{ color: `${entry.color}` }}>{(entry.payload.value).toFixed(2)}%</div>
+            <div style={{ color: `${entry.color}` }}>
+              {Number(entry.payload.value).toFixed(2)}%
+            </div>
           </div>
-        ))
-      }
-    </div>)
-  }
-
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div>
@@ -163,7 +167,7 @@ const DetailedSupplierView = (props) => {
                   className="productImage"
                   src={
                     brandsIconArr[
-                    brands.indexOf(prop.manufacturer.split(' ').join(''))
+                      brands.indexOf(prop.manufacturer.split(' ').join(''))
                     ]
                   }
                 />
@@ -176,9 +180,9 @@ const DetailedSupplierView = (props) => {
                         <img
                           src={
                             brandsArr[
-                            brands.indexOf(
-                              prop.manufacturer.split(' ').join(''),
-                            )
+                              brands.indexOf(
+                                prop.manufacturer.split(' ').join(''),
+                              )
                             ]
                           }
                           alt=""
@@ -234,7 +238,6 @@ const DetailedSupplierView = (props) => {
 
         <div className="row">
           <div className="col-lg-4 col-md-4 col-sm-12 radialBarChartContainer">
-            <div id="chart"></div>
             <ResponsiveContainer width="100%" height={350}>
               <RadialBarChart
                 width={500}
@@ -243,17 +246,23 @@ const DetailedSupplierView = (props) => {
                 cy={150}
                 innerRadius={20}
                 outerRadius={140}
-                barSize={10}
-                data={
-                  SupplierChartData
-                }
+                barSize={15}
+                data={SupplierChartData}
               >
+                <PolarAngleAxis
+                  type="number"
+                  domain={[0, 100]}
+                  angleAxisId={0}
+                  tick={false}
+                />
                 <RadialBar
+                  label={{ position: 'insideStart', fill: '#fff' }}
                   tminAngle={15}
                   background
                   cornerRadius="5"
-                  background={() => SupplierChartData.map(item => item.fill)}
-                  clockWise dataKey="value"
+                  background={() => SupplierChartData.map((item) => item.fill)}
+                  clockWise
+                  dataKey="value"
                 />
                 <Legend
                   iconSize={10}
@@ -278,35 +287,35 @@ const DetailedSupplierView = (props) => {
                 <tbody>
                   {analytics.length == 0 ? (
                     <tr>
-                      <td colspan="3">No Data found</td>
+                      <td colSpan="3">No Data found</td>
                     </tr>
                   ) : (
-                      analytics.map((analytic, index) => (
-                        <tr key={index}>
-                          <td scope="row">
-                            <div className="supplierImage justify-content-start">
-                              <img src={profile} className="displayImage" />
-                              <div className="supplierNames justify-content-start">
-                                <span>{analytic.name}</span>
-                                <br />
-                                <span
-                                  className={`group ${analytic?.type?.toLowerCase()}group`}
-                                >
-                                  {analytic.type} Vendor
+                    analytics.map((analytic, index) => (
+                      <tr key={index}>
+                        <td scope="row">
+                          <div className="supplierImage justify-content-start">
+                            <img src={profile} className="displayImage" />
+                            <div className="supplierNames justify-content-start">
+                              <span>{analytic.name}</span>
+                              <br />
+                              <span
+                                className={`group ${analytic?.type?.toLowerCase()}group`}
+                              >
+                                {analytic.type} Vendor
                               </span>
-                              </div>
                             </div>
-                          </td>
-                          <td>Karnataka</td>
-                          <td>
-                            {!isNaN(analytic.analytics.actualReturns)
-                              ? analytic.analytics.actualReturns
-                              : 0}
+                          </div>
+                        </td>
+                        <td>Karnataka</td>
+                        <td>
+                          {!isNaN(analytic.analytics.actualReturns)
+                            ? analytic.analytics.actualReturns
+                            : 0}
                           %
                         </td>
-                        </tr>
-                      ))
-                    )}
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

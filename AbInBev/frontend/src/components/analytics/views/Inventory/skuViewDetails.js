@@ -32,8 +32,7 @@ const iSKUViewDetails = (props) => {
     (async () => {
       let cond = '';
       if (props.params) {
-        if(props.params.state)
-          cond = '&state=' + props.params.state;
+        if (props.params.state) cond = '&state=' + props.params.state;
         if (props.params.district) {
           setIsActive(true);
           cond += '&district=' + props.params.district;
@@ -52,7 +51,8 @@ const iSKUViewDetails = (props) => {
             '&brand=' +
             prop.manufacturer +
             '&pid=' +
-            prop.id+cond,
+            prop.id +
+            cond,
         ),
       );
       setAnalytics(result.data);
@@ -64,13 +64,11 @@ const iSKUViewDetails = (props) => {
   };
 
   const changeSku = async (event) => {
-      let cond = '';
-      if (props.params) {
-        if(props.params.state)
-          cond = '&state=' + props.params.state;
-        if (props.params.district) 
-          cond += '&district=' + props.params.district;
-      }
+    let cond = '';
+    if (props.params) {
+      if (props.params.state) cond = '&state=' + props.params.state;
+      if (props.params.district) cond += '&district=' + props.params.district;
+    }
     let sku = event.target.value;
     const result = await dispatch(
       getAnalyticsAllStats(
@@ -79,7 +77,8 @@ const iSKUViewDetails = (props) => {
           prop.manufacturer +
           (sku ? '&sku=' + sku : '') +
           '&pid=' +
-          prop.id+cond,
+          prop.id +
+          cond,
       ),
     );
     setAnalytics(result.data);
@@ -163,7 +162,7 @@ const iSKUViewDetails = (props) => {
               <tbody>
                 {analytics.length == 0 ? (
                   <tr>
-                    <td colspan="3">No Data found</td>
+                    <td colSpan="3">No Data found</td>
                   </tr>
                 ) : (
                   analytics.map((analytic, index) => (

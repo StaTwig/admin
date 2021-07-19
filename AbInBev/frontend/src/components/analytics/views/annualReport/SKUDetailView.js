@@ -225,18 +225,19 @@ const SKUDetailView = (props) => {
                     dataKey="sales"
                     stackId="a"
                     fill="#FDAB0F"
+                    radius={[0, 5, 5, 0]}
                   />
                   <Bar
                     name="Returns"
                     dataKey="returns"
                     fill="#A20134"
-                    stackId="a"
+                    stackId="b"
                   />
                   <Bar
                     name="Target Sales"
                     dataKey="targetSales"
                     fill="#A344B7"
-                    stackId="a"
+                    stackId="b"
                     radius={[0, 5, 5, 0]}
                   />
                 </BarChart>
@@ -256,7 +257,7 @@ const SKUDetailView = (props) => {
                   <tbody>
                     {analytics.length == 0 ? (
                       <tr>
-                        <td colspan="5">No Data found</td>
+                        <td colSpan="5">No Data found</td>
                       </tr>
                     ) : (
                       analytics.map((analytic, index) => (
