@@ -104,8 +104,8 @@ const ref = useOnclickOutside(() => {
       getAllShipmentIDs().then((result)=>{
         let shippingIds = result.map((so)=>so.id);
         if(shippingIds.indexOf(search)!=-1){
-          // props.history.push(`/viewshipment/${search}`);
-          window.location.href=`/viewshipment/${search}`;
+          props.history.push('/overview');
+          props.history.replace(`/viewshipment/${search}`);
         }
         else
           setInvalidSearch(true);
@@ -115,8 +115,8 @@ const ref = useOnclickOutside(() => {
       getAllOrderIDs().then((result)=>{
         let orderIds = result.map((so)=>so.id);
         if(orderIds.indexOf(search)!=-1){
-          // props.history.push(`/vieworder/${search}`);
-          window.location.href=`/vieworder/${search}`;
+          props.history.push(`/overview`);
+          props.history.replace(`/vieworder/${search}`);
         }        
         else
           setInvalidSearch(true);
