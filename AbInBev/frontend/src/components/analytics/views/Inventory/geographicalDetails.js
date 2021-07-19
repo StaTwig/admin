@@ -255,7 +255,10 @@ const iGraphicalDetailedView = (props) => {
               <label className="productsChartTitle">
                 {isActive ? 'Districts' : 'State'}
               </label>
-              <ResponsiveContainer width="100%" height={500}>
+              <ResponsiveContainer
+                width="100%"
+                height={analytics.length <= 1 ? 300 : 1500}
+              >
                 <BarChart
                   width={500}
                   height={300}
