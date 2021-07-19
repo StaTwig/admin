@@ -43,7 +43,8 @@ const ShipmentDetails = (props) => {
             <li  className="mb-1">{props.shipments.airWayBillNo}</li>
             <li  className="mb-1">{props.shipments.label.labelId}</li>
             <li  className="mb-1">{props.shipments.shippingDate.length == 10 ? props.shipments.shippingDate : formatDate(props.shipments.shippingDate)} </li>
-            <li  className="mb-1">{props.shipments.expectedDeliveryDate.length == 10 ? props.shipments.expectedDeliveryDate : formatDate(props.shipments.expectedDeliveryDate)}</li>
+            
+            <li  className="mb-1">{props.shipments.expectedDeliveryDate.length == 0 ? "-":(props.shipments.expectedDeliveryDate.length == 10 ? props.shipments.expectedDeliveryDate : formatDate(props.shipments.expectedDeliveryDate))}</li>
 
            </ul>
            <div>

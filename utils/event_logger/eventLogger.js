@@ -53,6 +53,7 @@ async function logEvent(data) {
                     actorOrgId: data.stackholders.actororg.id,
                     actorOrgName: data.stackholders.actororg.name,
                     actorOrgAddress: data.stackholders.actororg.address,
+                    actorWarehouseId: data.actorWarehouseId,
                     secondaryOrgId: data.stackholders.secondorg.id,
                     secondaryOrgName: data.stackholders.secondorg.name,
                     secondaryOrgAddress: data.stackholders.secondorg.address,
