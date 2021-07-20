@@ -108,12 +108,12 @@ inventoryDetails.sort(function(a,b){
                                       <TableRow>
                                            <TableCell>Mfg Date</TableCell>
                                               <div className="ml-5">
-                                              <TableCell align="left">{formatDate(inventory.payloadData.data.products.mfgDate)}</TableCell></div>
+                                              <TableCell align="left">{formatDate(inventory.payloadData.data.products.mfgDate, "mmyyyy")}</TableCell></div>
                                       </TableRow>
                                       <TableRow>
                                               <TableCell align="left">Exp Date</TableCell>
                                               <div className="ml-5">
-                                              <TableCell align="left">{formatDate(inventory.payloadData.data.products.expDate)}</TableCell></div>
+                                              <TableCell align="left">{formatDate(inventory.payloadData.data.products.expDate, "mmyyyy")}</TableCell></div>
                                       </TableRow>
                                       <TableRow>
                                               <TableCell align="left">Batch</TableCell>
