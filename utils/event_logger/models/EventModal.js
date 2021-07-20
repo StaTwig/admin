@@ -13,6 +13,7 @@ var EventSchema = new mongoose.Schema({
 	actorOrgId: { type: String, required: true },
 	actorOrgName: { type: String, required: true },
 	actorOrgAddress: { type: String, required: true },
+	actorWarehouseId: { type: String, required: true },
 	secondaryOrgId: { type: String, required: true },
 	secondaryOrgName: { type: String, required: true },
 	secondaryOrgAddress: { type: String, required: true },

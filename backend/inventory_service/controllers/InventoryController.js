@@ -1272,6 +1272,7 @@ exports.addProductsToInventory = [
           event_data.stackholders.actororg.id = orgId || "null";
           event_data.stackholders.actororg.name = orgName || "null";
           event_data.stackholders.actororg.address = address || "null";
+          event_data.actorWarehouseId = req.user.warehouseId || "null";
           event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
           event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
           event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";

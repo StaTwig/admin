@@ -13,6 +13,7 @@ import {
   verifyOtp,
   setCurrentUser,
   registerUser,
+  getUserInfoUpdated
 } from '../../actions/userActions';
 import { turnOff, turnOn } from '../../actions/spinnerActions';
 import setAuthToken from '../../utils/setAuthToken';
@@ -66,6 +67,11 @@ const Home = (props) => {
       const decoded = jwt_decode(token);
       localStorage.setItem('theAbInBevToken', token);
       dispatch(setCurrentUser(decoded));
+      dispatch(turnOn());
+      const r = await getUserInfoUpdated();
+      dispatch(turnOff());
+      
+      localStorage.setItem('type', r.data.data.type);
       props.history.push('/analytics');
     } else {
       const err = result.data.message;

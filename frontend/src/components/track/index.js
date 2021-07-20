@@ -35,6 +35,8 @@ const Track = (props) => {
   }, [props, shippmentChainOfCustodyData])
 
   const onSearchChange = (e) => {
+
+    console.log(e.target.value);
     setValue(e.target.value);
     setIsSubmitted(false);
     setOp(1);
@@ -125,7 +127,7 @@ const Track = (props) => {
                     />
                     <img
                       src={searchingIcon}
-                      onClick={onSeach}
+                      onClick={()=> onSeach(value)}
                       className="searchIcon cursorP"
                       alt="searching"
                     />

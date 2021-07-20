@@ -754,7 +754,7 @@ exports.userInfo = [
             photoId,
             postalAddress
           } = user;
-          const org = await OrganisationModel.findOne({ id: organisationId }, 'name configuration_id');
+          const org = await OrganisationModel.findOne({ id: organisationId }, 'name configuration_id type');
           const warehouse = await EmployeeModel.findOne({ id }, { _id: 0, warehouseId: 1 });
           const warehouseArray = await WarehouseModel.find({ id: { "$in": warehouse.warehouseId },$or:[{status: 'ACTIVE'}, {status: {$exists: false}}] })
           let user_data = {
@@ -770,6 +770,7 @@ exports.userInfo = [
             role,
             photoId,
             configuration_id: org.configuration_id,
+            type: org.type,
             location: postalAddress,
             warehouses: warehouseArray
           };

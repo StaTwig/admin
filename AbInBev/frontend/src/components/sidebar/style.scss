@@ -10,3 +10,9 @@
     padding: 10px;
     color: #036600;
   }
+  .orgType{
+    text-transform: lowercase;
+    &:first-letter{
+      text-transform: uppercase;
+    }
+  }

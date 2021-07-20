@@ -14,7 +14,6 @@ import traceDrop from "../../assets/icons/traceDrop.png";
 import Serial from "./serial";
 import back from '../../assets/icons/back.png';
 import UpdateStatus from '../../assets/icons/Update_Status.png';
-
 import "./style.scss";
 import ChainOfCustody from "./chainofcustody";
 import Modal from "../../shared/modal";
