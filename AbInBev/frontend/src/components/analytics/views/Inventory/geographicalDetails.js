@@ -13,11 +13,11 @@ import {
   RadialBarChart,
   RadialBar,
   PolarAngleAxis,
-  Label
+  Label,
 } from 'recharts';
 import { getAnalyticsAllStats } from '../../../../actions/analyticsAction';
 import { useDispatch } from 'react-redux';
-import abbreviate from "number-abbreviate";
+import abbreviate from 'number-abbreviate';
 
 const iGraphicalDetailedView = (props) => {
   const [analytics, setAnalytics] = useState([]);
@@ -43,8 +43,7 @@ const iGraphicalDetailedView = (props) => {
     (async () => {
       let cond = '';
       if (props.params) {
-        if (props.params.state)
-          cond = '&state=' + props.params.state;
+        if (props.params.state) cond = '&state=' + props.params.state;
         if (props.params.district) {
           setIsActive(true);
           cond += '&district=' + props.params.district;
@@ -60,14 +59,15 @@ const iGraphicalDetailedView = (props) => {
       const result = await dispatch(
         getAnalyticsAllStats(
           '?sku=' +
-          (props.sku ? props.sku : prop.externalId) +
-          '&pid=' +
-          prop.id +
-          '&orgType=' +
-          props.Otype +
-          '&brand=' +
-          prop.manufacturer +
-          '&group_by=state&inventory=true' + cond,
+            (props.sku ? props.sku : prop.externalId) +
+            '&pid=' +
+            prop.id +
+            '&orgType=' +
+            props.Otype +
+            '&brand=' +
+            prop.manufacturer +
+            '&group_by=state&inventory=true' +
+            cond,
         ),
       );
       setAnalytics(result.data);
@@ -89,8 +89,7 @@ const iGraphicalDetailedView = (props) => {
     if (!active) {
       let cond = '';
       if (props.params) {
-        if (props.params.state)
-          cond = '&state=' + props.params.state;
+        if (props.params.state) cond = '&state=' + props.params.state;
         if (props.params.district) {
           setIsActive(true);
           cond += '&district=' + props.params.district;
@@ -99,13 +98,14 @@ const iGraphicalDetailedView = (props) => {
       const result = await dispatch(
         getAnalyticsAllStats(
           '?sku=' +
-          (props.sku ? props.sku : prop.externalId) + cond +
-          '&pid=' +
-          prop.id +
-          '&brand=' +
-          prop.manufacturer +
-          '&group_by=district&inventory=true&state=' +
-          sku,
+            (props.sku ? props.sku : prop.externalId) +
+            cond +
+            '&pid=' +
+            prop.id +
+            '&brand=' +
+            prop.manufacturer +
+            '&group_by=district&inventory=true&state=' +
+            sku,
         ),
       );
       setIsActive(true);
@@ -140,23 +140,34 @@ const iGraphicalDetailedView = (props) => {
 
   const renderLegend = (props) => {
     const { payload } = props;
-    return (<div style={{ display: 'grid' }}>
-      {
-        payload.map((entry, index) => (
+    return (
+      <div style={{ display: 'grid' }}>
+        {payload.map((entry, index) => (
           <div className="renderLegendLabel">
             <div
               className="renderLegendCircle"
-              style={{ backgroundColor: `${entry.color}` }} />
-            <div className="renderLabelFont" style={{ color: `${entry.color}` }}>
-              {entry.payload.name === 'Total Sales' ? 'Sales' : 'Total Bottle Pool'}</div>
-            <div className="renderLabelFont" style={{ color: `${entry.color}` }}>
-              {(entry.payload.value)}</div>
+              style={{ backgroundColor: `${entry.color}` }}
+            />
+            <div
+              className="renderLabelFont"
+              style={{ color: `${entry.color}` }}
+            >
+              {entry.payload.name === 'Total Sales'
+                ? 'Sales'
+                : 'Total Bottle Pool'}
+            </div>
+            <div
+              className="renderLabelFont"
+              style={{ color: `${entry.color}` }}
+            >
+              {entry.payload.value}
+            </div>
           </div>
-        ))
-      }
-    </div>)
-  }
-  console.log("states: ", analytics)
+        ))}
+      </div>
+    );
+  };
+  console.log('states: ', analytics);
   return (
     <div className="productDetailedView">
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
@@ -170,7 +181,7 @@ const iGraphicalDetailedView = (props) => {
                 className="productImage"
                 src={
                   props.brandsIconArr[
-                  props.brands.indexOf(prop.manufacturer.split(' ').join(''))
+                    props.brands.indexOf(prop.manufacturer.split(' ').join(''))
                   ]
                 }
               />
@@ -183,9 +194,9 @@ const iGraphicalDetailedView = (props) => {
                       <img
                         src={
                           props.brandsArr[
-                          props.brands.indexOf(
-                            prop.manufacturer.split(' ').join(''),
-                          )
+                            props.brands.indexOf(
+                              prop.manufacturer.split(' ').join(''),
+                            )
                           ]
                         }
                         alt=""
@@ -244,7 +255,10 @@ const iGraphicalDetailedView = (props) => {
               <label className="productsChartTitle">
                 {isActive ? 'Districts' : 'State'}
               </label>
-              <ResponsiveContainer width="100%" height={500}>
+              <ResponsiveContainer
+                width="100%"
+                height={analytics.length <= 1 ? 300 : 1500}
+              >
                 <BarChart
                   width={500}
                   height={300}
@@ -260,7 +274,7 @@ const iGraphicalDetailedView = (props) => {
                 >
                   <Legend verticalAlign="top" height={36} />
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis type='number' tickFormatter={abbreviate}/>
+                  <XAxis type="number" tickFormatter={abbreviate} />
                   <YAxis
                     dataKey="groupedBy"
                     type="category"
@@ -268,7 +282,7 @@ const iGraphicalDetailedView = (props) => {
                     offset={0}
                     tickLine={false}
                     dx={-8}
-                    style={{ fontSize: '12px', fontWeight: '600'}}
+                    style={{ fontSize: '12px', fontWeight: '600' }}
                   >
                     {/* <Label 
                       value={'District'} 
@@ -292,16 +306,21 @@ const iGraphicalDetailedView = (props) => {
                 </BarChart>
               </ResponsiveContainer>
             </div>
-          ) :
+          ) : (
             <div style={{ display: 'flex' }}>
-              {
-                data && data.map(item => (
+              {data &&
+                data.map((item) => (
                   <div className="stateandDistrictCard mb-4">
-                    <h2>{analytics.length ? (item.name === 'Total Sales' ? `${analytics[0].groupedBy} Sales` : `${analytics[0].groupedBy} Total Bottle Pool`) : isActive ? 'District' : 'State'}</h2>
-                    <ResponsiveContainer
-                      width="100%"
-                      height={280}
-                    >
+                    <h2>
+                      {analytics.length
+                        ? item.name === 'Total Sales'
+                          ? `${analytics[0].groupedBy} Sales`
+                          : `${analytics[0].groupedBy} Total Bottle Pool`
+                        : isActive
+                        ? 'District'
+                        : 'State'}
+                    </h2>
+                    <ResponsiveContainer width="100%" height={280}>
                       <RadialBarChart
                         width={'100%'}
                         height={400}
@@ -309,32 +328,43 @@ const iGraphicalDetailedView = (props) => {
                         cy={130}
                         innerRadius={120}
                         barSize={20}
-                        data={item.name === 'Total Sales' ?
-                          [{ ...item, fill: '#F8AB11' }] :
-                          [{ ...item, fill: '#A344B7' }]}
+                        data={
+                          item.name === 'Total Sales'
+                            ? [{ ...item, fill: '#F8AB11' }]
+                            : [{ ...item, fill: '#A344B7' }]
+                        }
                       >
                         <PolarAngleAxis
                           type="number"
-                          domain={[0, data.reduce((n, { count }) => n + count, 0)]}
+                          domain={[
+                            0,
+                            data.reduce((n, { count }) => n + count, 0),
+                          ]}
                           angleAxisId={0}
-                          tick={false} />
+                          tick={false}
+                        />
                         <RadialBar
                           background
-                          dataKey="count" angleAxisId={0}
-                          data={item.name === 'Total Sales' ?
-                            [{ ...item, fill: '#F8AB11' }] : [{ ...item, fill: '#A344B7' }]} />
+                          dataKey="count"
+                          angleAxisId={0}
+                          data={
+                            item.name === 'Total Sales'
+                              ? [{ ...item, fill: '#F8AB11' }]
+                              : [{ ...item, fill: '#A344B7' }]
+                          }
+                        />
                         <Legend
                           iconSize={10}
                           verticalAlign="bottom"
                           align={'middle'}
-                          content={renderLegend} />
+                          content={renderLegend}
+                        />
                       </RadialBarChart>
                     </ResponsiveContainer>
                   </div>
-                ))
-              }
+                ))}
             </div>
-          }
+          )}
           <div className="tableDetals">
             <table className="table">
               <thead>
@@ -347,25 +377,25 @@ const iGraphicalDetailedView = (props) => {
               <tbody>
                 {analytics.length == 0 ? (
                   <tr>
-                    <td colspan="3">No Data found</td>
+                    <td colSpan="3">No Data found</td>
                   </tr>
                 ) : (
-                    analytics.map((analytic, index) => (
-                      <tr
-                        key={index}
-                        onClick={() => {
-                          setIsActive((i) => !i);
-                          openDetailView(analytic.groupedBy);
-                        }}
-                      >
-                        <td scope="row">
-                          <span className="stateLink">{analytic.groupedBy}</span>
-                        </td>
-                        <td>{analytic.sales.toLocaleString('en-IN')}</td>
-                        <td>{analytic.inventory.toLocaleString('en-IN')}</td>
-                      </tr>
-                    ))
-                  )}
+                  analytics.map((analytic, index) => (
+                    <tr
+                      key={index}
+                      onClick={() => {
+                        setIsActive((i) => !i);
+                        openDetailView(analytic.groupedBy);
+                      }}
+                    >
+                      <td scope="row">
+                        <span className="stateLink">{analytic.groupedBy}</span>
+                      </td>
+                      <td>{analytic.sales.toLocaleString('en-IN')}</td>
+                      <td>{analytic.inventory.toLocaleString('en-IN')}</td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

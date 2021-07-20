@@ -44,7 +44,9 @@ const GeographicalView = (props) => {
           else cond += '?';
           cond +=
             'date_filter_type=' +
-            (props.params?.date_filter_type ? props.params?.date_filter_type : 'by_yearly') +
+            (props.params?.date_filter_type
+              ? props.params?.date_filter_type
+              : 'by_yearly') +
             '&year=' +
             props.params?.year +
             '&month=' +
@@ -84,7 +86,7 @@ const GeographicalView = (props) => {
   }, [sku, viewName, props]);
 
   const showDetailedGeoView = (param) => {
-    console.log("params", param)
+    console.log('params', param);
     props.onViewChange('DETAILED_GEO_VIEW', param);
   };
   return (
@@ -107,7 +109,7 @@ const GeographicalView = (props) => {
           <tbody>
             {analytics.length == 0 ? (
               <tr>
-                <td colspan="5">No Data found</td>
+                <td colSpan="5">No Data found</td>
               </tr>
             ) : (
               analytics?.map((analytic, index) => (

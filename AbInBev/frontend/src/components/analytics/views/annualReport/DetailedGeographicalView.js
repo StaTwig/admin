@@ -7,15 +7,24 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-  Label
+  Label,
 } from 'recharts';
 import '../../style.scss';
 import { getAnalyticsAllStats } from '../../../../actions/analyticsAction';
 import { useDispatch } from 'react-redux';
-import abbreviate from "number-abbreviate"; 
+import abbreviate from 'number-abbreviate';
 
 const DetailedGeographicalView = (props) => {
-  const { states, prop, sku, SKUStats, params, brandsArr, brands, geoAnalyticsCardYAxisLabel } = props;
+  const {
+    states,
+    prop,
+    sku,
+    SKUStats,
+    params,
+    brandsArr,
+    brands,
+    geoAnalyticsCardYAxisLabel,
+  } = props;
 
   const [analytics, setAnalytics] = useState([]);
   const [name, setName] = useState(prop.name);
@@ -51,13 +60,13 @@ const DetailedGeographicalView = (props) => {
       const result = await dispatch(
         getAnalyticsAllStats(
           '?sku=' +
-          (props.sku ? props.sku : prop.externalId) +
-          '&pid=' +
-          prop.id +
-          '&brand=' +
-          prop.manufacturer +
-          '&group_by=date' +
-          qp,
+            (props.sku ? props.sku : prop.externalId) +
+            '&pid=' +
+            prop.id +
+            '&brand=' +
+            prop.manufacturer +
+            '&group_by=date' +
+            qp,
         ),
       );
       setAnalytics(result.data);
@@ -103,14 +112,18 @@ const DetailedGeographicalView = (props) => {
                   bottom: 15,
                 }}
               >
-                <Legend verticalAlign="top" height={36}/>
+                <Legend verticalAlign="top" height={36} />
                 <XAxis dataKey="groupedBy" offset={0}>
                   <Label value="Time Frame" dy={20} position="insideBottom" />
                 </XAxis>
-                <YAxis 
-                  dy={-5} 
-                  label={{ value: 'Volume', angle: -90, position: 'insideLeft' }} 
-                  tickFormatter={abbreviate} 
+                <YAxis
+                  dy={-5}
+                  label={{
+                    value: 'Volume',
+                    angle: -90,
+                    position: 'insideLeft',
+                  }}
+                  tickFormatter={abbreviate}
                 />
                 <Tooltip />
                 <Legend />
@@ -154,23 +167,23 @@ const DetailedGeographicalView = (props) => {
                 <tbody>
                   {analytics.length == 0 ? (
                     <tr>
-                      <td colspan="5">No Data found</td>
+                      <td colSpan="5">No Data found</td>
                     </tr>
                   ) : (
-                      analytics.map((analytic, index) => (
-                        <tr key={index}>
-                          <td scope="row">
-                            <span className="stateLink">
-                              {analytic.groupedBy}
-                            </span>
-                          </td>
-                          <td>{analytic.sales}</td>
-                          <td>{analytic.returns}</td>
-                          <td>{analytic.targetSales}</td>
-                          <td>{analytic.actualReturns}%</td>
-                        </tr>
-                      ))
-                    )}
+                    analytics.map((analytic, index) => (
+                      <tr key={index}>
+                        <td scope="row">
+                          <span className="stateLink">
+                            {analytic.groupedBy}
+                          </span>
+                        </td>
+                        <td>{analytic.sales}</td>
+                        <td>{analytic.returns}</td>
+                        <td>{analytic.targetSales}</td>
+                        <td>{analytic.actualReturns}%</td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

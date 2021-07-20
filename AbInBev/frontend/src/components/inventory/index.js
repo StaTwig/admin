@@ -454,7 +454,7 @@ const Inventory = (props) => {
                     {inventories.length == 0 ? (
                       <tr>
                         <td
-                          colspan="4"
+                          colSpan="4"
                           style={{ textAlign: 'center', padding: '20px' }}
                         >
                           No Data found
