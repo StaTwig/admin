@@ -3,6 +3,7 @@ import Delete from '../../../assets/icons/Delete.png';
 import DropdownButton from '../../../shared/dropdownButtonGroup';
 import Select from 'react-select';
 import './style.scss';
+import Divider from '@material-ui/core/Divider';
 
 const EditRow = props => {
   const {
@@ -40,18 +41,13 @@ const EditRow = props => {
         e.returnValue = false;
         if (e.preventDefault) e.preventDefault();
       }
-    }
-    
-    
+    }  
   }
-
-
-
   return (
-    <div className="row ml-3">
+    <div className="row ml-3" >
       <div className="trow row text-dark col">
         <div className="col pl-4 tcell p-2">
-          <div className=" p-0">
+          <div className="">
             <div className="d-flex flex-column">
               <div className="title recived-text">
                 {/* <DropdownButton
@@ -71,15 +67,11 @@ const EditRow = props => {
                 onChange={(v) => handleCategoryChange(index, v.value)}
                 options={category}
               />
-             
-
-
-                
-             
               </div>
             </div>
           </div>
-        </div>
+        </div> 
+        <div className="divider1"></div>
         <div className="col tcell text-center justify-content-center">
           <div className="">
             <div className="d-flex flex-row justify-content-between">
@@ -89,18 +81,13 @@ const EditRow = props => {
                   onSelect={item => { handleProductChange(index, item) }}
                   groups={products}
                 /> */}
-               
-                     
-              
                 <Select
                 className="no-border"
                 placeholder= {<div className= "select-placeholder-text" > Product Name </div>} 
                 value={(prod.id==undefined || prod.name==undefined || prod.name==="")?null:{value: prod.id, label: prod.name}}
-                placeholder="Product Name"
-                   defaultInputValue={prod.name}
+                  defaultInputValue={prod.name}
                   onChange={(v) => {
                     handleProductChange(index, v);
-                   
                   }
                 }
                   options={products.filter(p=>p.type==prod.type)}
@@ -108,11 +95,12 @@ const EditRow = props => {
                         
                
               </div>
-              <div className="title recived-text align-self-center">{prod.id ? prod.id : <div className="placeholder_id">Product ID</div>}</div>
+              <div className="title recived-text align-self-center">{prod.id ? prod.id : <div className="select-placeholder-text">Product ID</div>}</div>
             </div>
           </div>
         </div>
-        <div className="col text-center justify-content-center ">&nbsp;&nbsp;{prod.manufacturer ? prod.manufacturer : <div className="placeholder_manufacture">Manufacturer</div>}</div>
+        <div className="col text-center justify-content-center ">{prod.manufacturer ? prod.manufacturer : <div className="select-placeholder-text">Manufacturer</div>}</div>
+        <div className="divider1"></div>
         <div className="col tcell text-center justify-content-center p-2">
           <div className="">
             <input
@@ -127,7 +115,7 @@ const EditRow = props => {
         <div className="title recived-text align-self-center" style={{position:"absolute",right:"20px"}}>
         {/* prod.unitofMeasure? prod.unitofMeasure.name:null */}
           { prod.unitofMeasure ?<div>{ prod.unitofMeasure ==undefined ? null: prod.unitofMeasure.name}</div>:
-          <div className="placeholder_id">Unit</div>}
+          <div className="select-placeholder-text">Unit</div>}
         </div>
       </div>
       {props.product.length > 0 &&
