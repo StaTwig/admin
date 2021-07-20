@@ -1272,6 +1272,7 @@ exports.addProductsToInventory = [
           event_data.stackholders.actororg.id = orgId || "null";
           event_data.stackholders.actororg.name = orgName || "null";
           event_data.stackholders.actororg.address = address || "null";
+	  event_data.actorWarehouseId = req.user.warehouseId || "null";
           event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
           event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
           event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
@@ -1474,6 +1475,7 @@ exports.addInventoriesFromExcel = [
               event_data.stackholders.actororg.id = orgId || req.user.organisationId || "null";
               event_data.stackholders.actororg.name = orgName || "null";
               event_data.stackholders.actororg.address = address || "null";
+	      event_data.actorWarehouseId = req.user.warehouseId || "null";
               event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
               event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
               event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
@@ -3325,14 +3327,11 @@ exports.deleteProductsFromInventory = [
             event_data.stackholders.secondorg.address = receiverAddress || "null";
 
             event_data.payload.data = payload;
-		console.log("event adta",event_data)
             async function compute(event_data) {
                 result = await logEvent(event_data);
-		    console.log("result",result)
                 return result;
             }
             compute(event_data).then((response) => {
-		    console.log("res1",response)
             });
 
             return apiResponse.successResponse(
