@@ -8,7 +8,7 @@ import dropdownIcon from '../../assets/icons/dropdown_selected.png';
 import Location from '../../assets/icons/location_blue.png';
 import { Redirect } from 'react-router-dom';
 import DrawerMenu from './drawerMenu';
-import { getActiveWareHouses, getUserInfo, logoutUser, registerUser, setUserLocation } from '../../actions/userActions';
+import { getActiveWareHouses, getUserInfo, logoutUser, registerUser, setUserLocation, postUserLocation } from '../../actions/userActions';
 import logo from '../../assets/brands/VACCINELEDGER.png';
 //import searchingIcon from '../../assets/icons/searching@2x.png';
 //import bellIcon from '../../assets/icons/bellwhite.png';
@@ -22,6 +22,7 @@ import Modal from "../modal/index";
 import FailedPopUp from "../PopUp/failedPopUp";
 import {getShippingOrderIds,fetchAllairwayBillNumber} from "../../actions/shippingOrderAction";
 import { getOrderIds} from "../../actions/poActions";
+import axios from 'axios';
 //import Badge from '@material-ui/core/Badge';
 //import MailIcon from '@material-ui/icons/Mail';
 //import Divider from '@material-ui/core/Divider';
@@ -32,6 +33,7 @@ import Select from '@material-ui/core/Select';
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import { resetShipments } from '../../actions/shipmentActions';
 import { userLocationReducer } from '../../reducers/userLocationReducer';
+import setAuthToken from '../../utils/setAuthToken';
 
 const Header = props => {
   const dispatch = useDispatch();
@@ -176,39 +178,38 @@ const ref = useOnclickOutside(() => {
           ...item
         };
       }));
-      // console.log("usersLocation",usersLocation);
-      setLocation(prod => warehouses[0]);
-      if (warehouses.length > 0)
-        if(warehouses[0].id)
-          localStorage.setItem('location', warehouses[0].id);
-    
-      if (Object.keys(usersLocation).length === 0) {
-        if (warehouses.length > 0)
-          if (warehouses[0].id) {
-            setLocation(warehouses[0]);
-            localStorage.setItem('location', warehouses[0].id);
-          }
+      if(localStorage.getItem("location")!=null){
+        setLocation(prod=>JSON.parse(localStorage.getItem("location")));
       }
-      else {
-        if (usersLocation.id) {
-          localStorage.setItem('location', usersLocation.id);
-          setLocation(usersLocation);
-        }
+      else{
+        setLocation(prod=>warehouses[0]);
+        localStorage.setItem('location', JSON.stringify(warehouses[0]));
       }
+
     }
     fetchApi();
     
   }, []);
-  
-  useEffect(() => {
-    if(location?.id)
-    localStorage.setItem('location', location?.id);
-  },[location]);
 
-  const handleLocation=(item)=>{
-    setLocation(item);
+  const handleLocation=async (item)=>{
+    localStorage.setItem("location",JSON.stringify(item));
+    setLocation(prod=>item);
+    const body={warehouseId:item.id};
+
     dispatch(setUserLocation(item));
+
+    dispatch(turnOn());
+    const result=await postUserLocation(body);
+    dispatch(turnOff());
+    if(result.status === 200){
+      const token=result.data.data.token;
+      setAuthToken(token);
+      localStorage.setItem('theLedgerToken', token);
+      props.history.push("/overview");
+      props.history.replace(`${props.location.pathname}`);
+    }
   }
+
 
   const clearNotification = async notification => {
     const response = await deleteNotification(notification._id);
@@ -293,9 +294,9 @@ const imgs = config().fetchProfileImage;
 
             <div className="userName" style={{fontSize: "4px", marginBottom:"0px"}}>               
            <DropdownButton
-            // name={location?.title+"\n Address-"+location?.warehouseAddress?.firstLine}
-            name={location?.title}
-
+            name={location?.title+'\n'+location?.warehouseAddress?.city+','+location?.warehouseAddress?.country}
+            // name={location?.title}
+            arrowImg={dropdownIcon}
             onSelect={item=>{handleLocation(item)}}
             groups={activeWarehouses}
            />
