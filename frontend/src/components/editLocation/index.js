@@ -251,7 +251,7 @@ const editLocation = (props) => {
                           }}
                           id="controllable-states-demo"               
                           options={allregions}
-                          style={{ width: 300 }}
+                          style={{ width: 800 }}
                           renderInput={(params) => <TextField {...params} label="Select Region"  />}
                         />
                         {errors.region && touched.region && (
@@ -279,7 +279,7 @@ const editLocation = (props) => {
                           }}
                           id="controllable-states-demo"
                           options={allCountries.map((option)=>option.name)}
-                          style={{ width: 300 }}
+                          style={{ width: 800 }}
                           renderInput={(params) => <TextField {...params} label="Select Country"  />}
                         />
                         {errors.country && touched.country && (
@@ -304,7 +304,7 @@ const editLocation = (props) => {
                           }}
                           id="controllable-states-demo"
                           options={allState.map((option)=>option.name)}
-                          style={{ width: 300 }}
+                          style={{ width: 800 }}
                           renderInput={(params) => <TextField {...params} label="Select State"  />}
                         />
                         {errors.state && touched.state && (
@@ -327,7 +327,7 @@ const editLocation = (props) => {
                           }}
                           id="controllable-states-demo"
                           options={allCity.map((Option)=>Option.name)}
-                          style={{ width: 300 }}
+                          style={{ width: 800 }}
                           renderInput={(params) => <TextField {...params} label="Select City"  />}
                         />
                         {errors.city && touched.city && (
@@ -343,7 +343,7 @@ const editLocation = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
                         <label className="required-field col-sm-6" htmlFor="addressLine">Address Line</label>
-                        <TextField style={{width:"300px"}}
+                        <TextField style={{width:"800px"}}
                         type="text"
                         id="standard-basic"
                         label="Enter Address Line" 
@@ -366,7 +366,7 @@ const editLocation = (props) => {
                     <div className="col-md-6 com-sm-16">
                       <div className="form-group">
                         <label className="required-field col-sm-6" htmlFor="Select Location">Pincode</label>
-                        <TextField style={{width:"300px"}}
+                        <TextField style={{width:"800px"}}
                             id="standard-basic"
                             label="Pin Code" 
                             type="number"
