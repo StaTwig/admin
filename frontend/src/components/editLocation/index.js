@@ -63,7 +63,7 @@ const editLocation = (props) => {
       console.log('results');
       console.log(result.data);   
       const warehouseInfo = result.data.data[0];
-      setregion(warehouseInfo.warehouseAddress.region)
+      setregion(warehouseInfo.region.regionName);
       setAddressTitle(warehouseInfo.title);
       setAddressLine(warehouseInfo.warehouseAddress.firstLine);
       setCity(warehouseInfo.warehouseAddress.city);
@@ -205,6 +205,7 @@ const editLocation = (props) => {
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label className="required-field col-sm-6" htmlFor="addressTitle">Address Title</label>
+                      <div style={{width:50}}></div>
                       <TextField style={{width:"800px"}}
                         id="standard-basic"
                         label="Enter Title" 
@@ -235,6 +236,9 @@ const editLocation = (props) => {
                     </div>
                   </div>
                 </div>
+                {
+                  console.log(values)
+                }
                 <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
@@ -245,7 +249,7 @@ const editLocation = (props) => {
                             setFieldValue("region",newValue);
                             fetchAllCountries1(newValue);
                             setregion(newValue);
-                            setcountry("");
+                            setCountry("");
                             setState("");
                             setCity("");
                           }}
