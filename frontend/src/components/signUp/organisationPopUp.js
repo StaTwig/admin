@@ -153,7 +153,7 @@ const OrganisationPopUp = (props) => {
                   if (!values.pincode) {
                     errors.pincode = "Required";
                   }
-                  if (!values.pincode) {
+                  if (!values.region) {
                     errors.region = "Required";
                   }
                   if (!values.line1) {
