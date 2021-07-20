@@ -284,6 +284,7 @@ exports.createShipment = [
                 },
               }
             );
+
             //  let event_data = {}
             const shipmentCounter = await CounterModel.findOne({
               "counters.name": "shipmentId",
@@ -321,16 +322,17 @@ exports.createShipment = [
             });
             if(supplierOrgData==null)
             {
+              console.log("Supplier not defined");
               return apiResponse.ErrorResponse(res,"Supplier  not defined");
             }
-            
+                        
             const receiverOrgData = await OrganisationModel.findOne({
               id: req.body.receiver.id,
             });
             if(receiverOrgData==null)
             {
               return apiResponse.ErrorResponse(res,"Receiver not defined");
-            }
+            }      
 
             const supplierName = supplierOrgData.name;
             const supplierAddress = supplierOrgData.postalAddress;
