@@ -1,24 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { AreaChart, Area, Tooltip } from "recharts";
-import { useDispatch } from "react-redux";
-import "./style.scss";
-import Moment from "react-moment";
+import React, { useEffect, useState } from 'react';
+import { AreaChart, Area, Tooltip } from 'recharts';
+import { useDispatch } from 'react-redux';
+import './style.scss';
+import Moment from 'react-moment';
 
-import bottlesIcon from "../../assets/becks_330ml.png";
-import brewIcon from "../../assets/in brewery.png";
-import s2VenorsIcon from "../../assets/s2 venors.png";
-import s1VenorsIcon from "../../assets/s1vendors.png";
-import SideBar from "../../components/sidebar";
-import { getOverviewAnalytics } from "../../actions/overviewAction";
+import bottlesIcon from '../../assets/becks_330ml.png';
+import brewIcon from '../../assets/in brewery.png';
+import s2VenorsIcon from '../../assets/s2 venors.png';
+import s1VenorsIcon from '../../assets/s1vendors.png';
+import SideBar from '../../components/sidebar';
+import { getOverviewAnalytics } from '../../actions/overviewAction';
 
 const Overview = (props) => {
   const dispatch = useDispatch();
   const [Transactions, setTransactions] = useState([]);
-  const [overviewStats, setOverviewStats] = useState({ breweryObj: {}, s1Obj: {}, s2Obj: {} });
+  const [overviewStats, setOverviewStats] = useState({
+    breweryObj: {},
+    s1Obj: {},
+    s2Obj: {},
+  });
 
   const [selectedFilter, setSelectedFilter] = useState('BREWERY');
 
-  const today = new Date().toDateString()
+  const today = new Date().toDateString();
 
   const applyFilter = (_filter) => {
     setSelectedFilter(_filter);
@@ -32,7 +36,7 @@ const Overview = (props) => {
       }
       setTransactions(results.data.data);
     })();
-  }
+  };
 
   useEffect(() => {
     (async () => {
@@ -52,7 +56,10 @@ const Overview = (props) => {
         <div className="col-md-2 d-none d-md-block padding0 greyBG">
           <SideBar {...props} />
         </div>
-        <main role="main" className="col-md-9 mainContainer ml-sm-auto col-lg-10">
+        <main
+          role="main"
+          className="col-md-9 mainContainer ml-sm-auto col-lg-10"
+        >
           <div className="row">
             <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center p-2">
               <h1 className="h2">Overview</h1>
@@ -60,7 +67,12 @@ const Overview = (props) => {
 
             <div className="col-md-9  pt-3 px-4">
               <div className="grid gafc gap3">
-                <section className={(selectedFilter === 'BREWERY') ? 'selectedBox' : 'box'} onClick={() => applyFilter('BREWERY')}>
+                <section
+                  className={
+                    selectedFilter === 'BREWERY' ? 'selectedBox' : 'box'
+                  }
+                  onClick={() => applyFilter('BREWERY')}
+                >
                   <div className="grid gafc aic gapc3">
                     <div
                       className="whiteC"
@@ -77,7 +89,9 @@ const Overview = (props) => {
                         width="12px"
                         height="12px"
                         viewBox="0 0 21.166 21.166"
-                        fill={(selectedFilter === 'BREWERY') ? '#ffffff' : '#333751'}
+                        fill={
+                          selectedFilter === 'BREWERY' ? '#ffffff' : '#333751'
+                        }
                       >
                         <path
                           className="a"
@@ -96,13 +110,20 @@ const Overview = (props) => {
                         />
                       </svg>
                     </span>
-                    <span>{(overviewStats['breweryObj'] && overviewStats['breweryObj']['n_warehouses']) ? overviewStats['breweryObj']['n_warehouses'] : 0}</span>
+                    <span>
+                      {overviewStats['breweryObj'] &&
+                      overviewStats['breweryObj']['n_warehouses']
+                        ? overviewStats['breweryObj']['n_warehouses']
+                        : 0}
+                    </span>
                     <span className="bi2-icons">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="12px"
                         height="12px"
-                        fill={(selectedFilter === 'BREWERY') ? '#ffffff' : '#333751'}
+                        fill={
+                          selectedFilter === 'BREWERY' ? '#ffffff' : '#333751'
+                        }
                         className="bi bi-clock"
                         viewBox="0 0 16 16"
                       >
@@ -111,17 +132,26 @@ const Overview = (props) => {
                       </svg>
                     </span>
                     <span>
-                      <Moment format="MMM Do, YYYY">
-                        {today}
-                      </Moment>
+                      <Moment format="MMM Do, YYYY">{today}</Moment>
                     </span>
                   </div>
-                  <div className="card-footer bg-transparent" style={{ border: 0 }}>
+                  <div
+                    className="card-footer bg-transparent"
+                    style={{ border: 0 }}
+                  >
                     Stock: &nbsp;
-                    <span className="stoct-count font-HelveticaNeue">{(overviewStats['breweryObj'] && overviewStats['breweryObj']['stock']) ? overviewStats['breweryObj']['stock'] : 0}</span>
+                    <span className="stoct-count font-HelveticaNeue">
+                      {overviewStats['breweryObj'] &&
+                      overviewStats['breweryObj']['stock']
+                        ? overviewStats['breweryObj']['stock']
+                        : 0}
+                    </span>
                   </div>
                 </section>
-                <section className={(selectedFilter === 'S1') ? 'selectedBox' : 'box'} onClick={() => applyFilter('S1')}>
+                <section
+                  className={selectedFilter === 'S1' ? 'selectedBox' : 'box'}
+                  onClick={() => applyFilter('S1')}
+                >
                   <div className="grid gafc aic gapc3">
                     <div
                       className="blueC"
@@ -136,7 +166,7 @@ const Overview = (props) => {
                         width="12px"
                         height="12px"
                         viewBox="0 0 21.166 21.166"
-                        fill={(selectedFilter === 'S1') ? '#ffffff' : '#333751'}
+                        fill={selectedFilter === 'S1' ? '#ffffff' : '#333751'}
                       >
                         <path
                           className="a"
@@ -155,13 +185,18 @@ const Overview = (props) => {
                         />
                       </svg>
                     </span>
-                    <span>{(overviewStats['s1Obj'] && overviewStats['s1Obj']['n_warehouses']) ? overviewStats['s1Obj']['n_warehouses'] : 0}</span>
+                    <span>
+                      {overviewStats['s1Obj'] &&
+                      overviewStats['s1Obj']['n_warehouses']
+                        ? overviewStats['s1Obj']['n_warehouses']
+                        : 0}
+                    </span>
                     <span className="bi2-icons">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="12px"
                         height="12px"
-                        fill={(selectedFilter === 'S1') ? '#ffffff' : '#333751'}
+                        fill={selectedFilter === 'S1' ? '#ffffff' : '#333751'}
                         className="bi bi-clock"
                         viewBox="0 0 16 16"
                       >
@@ -169,16 +204,24 @@ const Overview = (props) => {
                         <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
                       </svg>
                     </span>
-                    <Moment format="MMM Do, YYYY">
-                      {today}
-                    </Moment>
+                    <Moment format="MMM Do, YYYY">{today}</Moment>
                   </div>
-                  <div className="card-footer bg-transparent" style={{ border: 0 }}>
+                  <div
+                    className="card-footer bg-transparent"
+                    style={{ border: 0 }}
+                  >
                     Stock: &nbsp;
-                    <span className="stoct-count">{(overviewStats['s1Obj'] && overviewStats['s1Obj']['stock']) ? overviewStats['s1Obj']['stock'] : 0}</span>
+                    <span className="stoct-count">
+                      {overviewStats['s1Obj'] && overviewStats['s1Obj']['stock']
+                        ? overviewStats['s1Obj']['stock']
+                        : 0}
+                    </span>
                   </div>
                 </section>
-                <section className={(selectedFilter === 'S2') ? 'selectedBox' : 'box'} onClick={() => applyFilter('S2')}>
+                <section
+                  className={selectedFilter === 'S2' ? 'selectedBox' : 'box'}
+                  onClick={() => applyFilter('S2')}
+                >
                   <div className="grid gafc aic gapc3">
                     <div
                       className="blueC"
@@ -193,7 +236,7 @@ const Overview = (props) => {
                         width="12px"
                         height="12px"
                         viewBox="0 0 21.166 21.166"
-                        fill={(selectedFilter === 'S2') ? '#ffffff' : '#333751'}
+                        fill={selectedFilter === 'S2' ? '#ffffff' : '#333751'}
                       >
                         <path
                           className="a"
@@ -212,13 +255,18 @@ const Overview = (props) => {
                         />
                       </svg>
                     </span>
-                    <span>{(overviewStats['s2Obj'] && overviewStats['s2Obj']['n_warehouses']) ? overviewStats['s2Obj']['n_warehouses'] : 0}</span>
+                    <span>
+                      {overviewStats['s2Obj'] &&
+                      overviewStats['s2Obj']['n_warehouses']
+                        ? overviewStats['s2Obj']['n_warehouses']
+                        : 0}
+                    </span>
                     <span className="bi2-icons">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="12px"
                         height="12px"
-                        fill={(selectedFilter === 'S2') ? '#ffffff' : '#333751'}
+                        fill={selectedFilter === 'S2' ? '#ffffff' : '#333751'}
                         className="bi bi-clock"
                         viewBox="0 0 16 16"
                       >
@@ -226,13 +274,18 @@ const Overview = (props) => {
                         <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm7-8A7 7 0 1 1 1 8a7 7 0 0 1 14 0z" />
                       </svg>
                     </span>
-                    <Moment format="MMM Do, YYYY">
-                      {today}
-                    </Moment>
+                    <Moment format="MMM Do, YYYY">{today}</Moment>
                   </div>
-                  <div className="card-footer bg-transparent" style={{ border: 0 }}>
+                  <div
+                    className="card-footer bg-transparent"
+                    style={{ border: 0 }}
+                  >
                     Stock: &nbsp;
-                    <span className="stoct-count">{(overviewStats['s2Obj'] && overviewStats['s2Obj']['stock']) ? overviewStats['s2Obj']['stock'] : 0}</span>
+                    <span className="stoct-count">
+                      {overviewStats['s2Obj'] && overviewStats['s2Obj']['stock']
+                        ? overviewStats['s2Obj']['stock']
+                        : 0}
+                    </span>
                   </div>
                 </section>
               </div>
@@ -244,11 +297,13 @@ const Overview = (props) => {
                 <thead>
                   <tr>
                     <th scope="col"></th>
-                    <th scope="col" className="skuColumnHead">SKU</th>
+                    <th scope="col" className="skuColumnHead">
+                      SKU
+                    </th>
                     <th scope="col">Sales</th>
                     <th scope="col">Return Bottles</th>
-                    <th scope="col">Target</th>
-                    <th scope="col">Actual Return</th>
+                    <th scope="col">Return Target</th>
+                    <th scope="col">Return Rate Percentage</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -256,19 +311,32 @@ const Overview = (props) => {
                     <tr key={index}>
                       <td>
                         <div className="profileIcon">
-                          <img src={bottlesIcon} alt="" width="60" height="60" />
+                          <img
+                            src={bottlesIcon}
+                            alt=""
+                            width="60"
+                            height="60"
+                          />
                         </div>
                       </td>
                       <td scope="row">
                         <div className="profileName">
-                          <span className="profileTitle">{transaction.productName}</span>
+                          <span className="profileTitle">
+                            {transaction.productName}
+                          </span>
                           <span>{transaction.productId}</span>
                         </div>
                       </td>
                       <td>{transaction.sales}</td>
                       <td>{transaction.returns}</td>
                       <td>{transaction.targetSales}</td>
-                      <td>{(transaction.returns / transaction.sales * 100).toFixed(2)}%</td>
+                      <td>
+                        {(
+                          (transaction.returns / transaction.sales) *
+                          100
+                        ).toFixed(2)}
+                        %
+                      </td>
                     </tr>
                   ))}
                 </tbody>
