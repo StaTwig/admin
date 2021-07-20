@@ -8,7 +8,7 @@ import './style.scss';
 
 const dropdownButtonGroup = props => {
   const [menu, setMenu] = useState(false);
-  const {groups, name, name2, onSelect, isText, value, changeFn, placeholder, dClass, disabled } = props;
+  const {groups, name, name2, onSelect, isText, value, changeFn, placeholder, dClass, disabled, arrowImg } = props;
 
   const ref = useOnclickOutside(() => {
     setMenu(false);
@@ -36,7 +36,7 @@ const dropdownButtonGroup = props => {
           onClick={() => setMenu(!menu)}
         >
           <span className={`${name?.length > 30 && 'textNeg'}`}>{useParse ? parse(name) : name}</span>
-          <img src={upDownArrow} alt="downarrow" width="9" height="9" />
+          <img src={arrowImg?arrowImg:upDownArrow} alt="downarrow" className={arrowImg?"dropdownImg":style="height:9;width:9;"}/>
         </button>
       }
       {menu && !disabled && (

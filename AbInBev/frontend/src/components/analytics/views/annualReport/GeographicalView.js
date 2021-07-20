@@ -175,7 +175,7 @@ const GeographicalView = (props) => {
           <tbody>
             {items.length == 0 ? (
               <tr>
-                <td colspan="5">No Data found</td>
+                <td colSpan="5">No Data found</td>
               </tr>
             ) : (
               items?.map((analytic, index) => (

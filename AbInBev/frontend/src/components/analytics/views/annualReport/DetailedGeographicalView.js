@@ -168,7 +168,7 @@ const DetailedGeographicalView = (props) => {
                 <tbody>
                   {analytics.length == 0 ? (
                     <tr>
-                      <td colspan="5">No Data found</td>
+                      <td colSpan="5">No Data found</td>
                     </tr>
                   ) : (
                     analytics.map((analytic, index) => (

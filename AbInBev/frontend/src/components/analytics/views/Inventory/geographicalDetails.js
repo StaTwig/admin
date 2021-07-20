@@ -259,7 +259,10 @@ const iGraphicalDetailedView = (props) => {
               <label className="productsChartTitle">
                 {isActive ? 'Districts' : 'State'}
               </label>
-              <ResponsiveContainer width="100%" height={500}>
+              <ResponsiveContainer
+                width="100%"
+                height={analytics.length <= 1 ? 300 : 1500}
+              >
                 <BarChart
                   width={500}
                   height={300}
@@ -378,7 +381,7 @@ const iGraphicalDetailedView = (props) => {
               <tbody>
                 {analytics.length == 0 ? (
                   <tr>
-                    <td colspan="3">No Data found</td>
+                    <td colSpan="3">No Data found</td>
                   </tr>
                 ) : (
                   analytics.map((analytic, index) => (

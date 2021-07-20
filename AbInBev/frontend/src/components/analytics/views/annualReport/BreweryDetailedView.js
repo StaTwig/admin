@@ -137,7 +137,7 @@ const BreweryDetailedView = (props) => {
                 <tbody>
                   {analytics.length == 0 ? (
                     <tr>
-                      <td colspan="4">No Data found</td>
+                      <td colSpan="4">No Data found</td>
                     </tr>
                   ) : (
                     analytics.map((analytic, index) => (
