@@ -412,6 +412,10 @@ const changeFn = (value_new,e) => {
                         {
                           setLastNameError(true);
                         }
+                        if(mobileNumber.length <=0 && email.length <=0)
+                        {
+                            setPhoneNumberError(true);
+                        }
                        
                         setFieldValue('type', item);
                         props.onOrgTypeChange(item);
@@ -455,6 +459,10 @@ const changeFn = (value_new,e) => {
                       {
                         setLastNameError(true);
                       }
+                      if(mobileNumber.length <=0 && email.length <=0)
+                        {
+                            setPhoneNumberError(true);
+                        }
                      
                       setFieldValue('org', item);
                       props.onOrganisationChange(item);
