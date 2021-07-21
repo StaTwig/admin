@@ -13,7 +13,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { getImage } from '../../actions/notificationActions';
-
+import Input from '@material-ui/core/Input';
 
 const axios = require("axios");
 import {
@@ -359,8 +359,9 @@ class Profile extends React.Component {
                   <div className="col">
                     <div className="form-group">
                       <label htmlFor="shipmentId"> First Name</label>
-                      <input
-                        className="form-control"
+                      <Input
+                        placeholder="Enter First Name"
+                        style={{flexBasis:"34%"}}
                         value={firstName}
                         onChange={(e) =>
                           this.setState({ firstName: e.target.value })
@@ -369,10 +370,10 @@ class Profile extends React.Component {
                     </div>
                     <div className="form-group">
                       <label htmlFor="shipmentId">Last Name</label>
-                      <input
-                        className="form-control"
+                      <Input
+                        style={{flexBasis:"34%"}}
                         value={lastName}
-                        placeholder="Enter last Name"
+                        placeholder="Enter Last Name"
                         onChange={(e) =>
                           this.setState({
                             lastName: e.target.value,
@@ -384,18 +385,19 @@ class Profile extends React.Component {
                       <label htmlFor="shipmentId">Organisation</label>
                       <input
                         className="form-control wallet"
-                        disabled
+                        //disabled
+                        style={{flexBasis:"35%"}}
                         value={this.state.organisation}
-                        style={{ textAlign: "left" }}
+                        
                       />
                     </div>
                     <div className="form-group">
                       <label htmlFor="shipmentId">Email</label>
                       <input
                         className="form-control wallet"
-                        disabled
+                        //disabled
+                        style={{flexBasis:"35%"}}
                         value={this.props.user.emailId}
-                        style={{ textAlign: "left" }}
                         onChange={(e) =>
                           this.setState({ email: e.target.value })
                         }
@@ -407,7 +409,7 @@ class Profile extends React.Component {
                         className="form-group"
                         country={"in"}
                         placeholder="Enter Phone number"
-                        style={{ position: "absolute", marginLeft: "64%" }}
+                        style={{ position: "absolute", marginLeft: "64%"}}
                         value={this.state.phoneNumber}
                         onChange={(phone) =>
                             this.setState({phoneNumber:phone})  
