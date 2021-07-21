@@ -76,15 +76,14 @@
       flex-grow: inherit;
       font-size: 15px;
     }
-    .form-control0 {
-      border: none;
-      background: transparent;
+    .line {
       border-bottom: 2px solid #d6d6d6;
-      border-radius: 0;
+      padding: 0;
       color: $black;
-      flex-basis: 55%;
-      flex-grow: inherit;
+      flex-basis: 65%;
+      
       font-size: 14px;
+      width:400px;
       
     }
     .name{
@@ -93,7 +92,6 @@
       font-size: 14px;
       padding: 0;
     }
-
     @media (min-width: $xl) {
       label {
         font-size: 15px;
