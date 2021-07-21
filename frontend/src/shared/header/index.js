@@ -206,7 +206,7 @@ const ref = useOnclickOutside(() => {
     localStorage.setItem('location', location?.id);
   },[location]);
 
-  const handleLocation=(item)=>{
+  const handleLocation=async(item)=>{
     setLocation(item);
     dispatch(setUserLocation(item));
 
