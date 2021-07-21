@@ -163,12 +163,6 @@ const ref = useOnclickOutside(() => {
     async function fetchApi() {
       const response = await getNotifications();
       setNotifications(response.data);
-      const r = await getImage(profile.photoId);
-      const reader = new window.FileReader();
-      reader.readAsDataURL(r.data); 
-      reader.onload = function () {
-        setImage(reader.result);
-      }
       
       const warehouses = await getActiveWareHouses();
       setActiveWarehouses(warehouses.map(item=>{
@@ -184,6 +178,12 @@ const ref = useOnclickOutside(() => {
       else{
         setLocation(prod=>warehouses[0]);
         localStorage.setItem('location', JSON.stringify(warehouses[0]));
+      }
+      const r = await getImage(profile.photoId);
+      const reader = new window.FileReader();
+      reader.readAsDataURL(r.data); 
+      reader.onload = function () {
+        setImage(reader.result);
       }
 
     }
@@ -203,8 +203,10 @@ const ref = useOnclickOutside(() => {
     dispatch(turnOff());
     if(result.status === 200){
       const token=result.data.data.token;
-      setAuthToken(token);
-      localStorage.setItem('theLedgerToken', token);
+      if(token){
+        setAuthToken(token);
+        localStorage.setItem('theLedgerToken', token);
+      }
       props.history.push("/overview");
       props.history.replace(`${props.location.pathname}`);
     }
