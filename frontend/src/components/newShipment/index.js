@@ -1348,7 +1348,7 @@ if (!error) {
               <div className="d-flex">
                 <button
                   type="button"
-                  className="btn btn-white shadow-radius font-bold mr-2"
+                  className="btn btn-outline-primary font-bold mr-2"
                   onClick={() => props.history.push("/shipments")}
                 >
                   Cancel
