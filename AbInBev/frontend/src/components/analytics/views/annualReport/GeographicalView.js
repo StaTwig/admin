@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { AreaChart, Area, ResponsiveContainer, Tooltip } from 'recharts';
 
 import '../../style.scss';
@@ -89,6 +89,48 @@ const GeographicalView = (props) => {
     console.log('params', param);
     props.onViewChange('DETAILED_GEO_VIEW', param);
   };
+
+  const useSortableData = (items, config = null) => {
+    const [sortConfig, setSortConfig] = useState(config);
+
+    const sortedItems = useMemo(() => {
+      let sortableItems = [...items];
+      if (sortConfig !== null) {
+        sortableItems.sort((a, b) => {
+          if (a[sortConfig.key] < b[sortConfig.key]) {
+            return sortConfig.direction === 'ascending' ? -1 : 1;
+          }
+          if (a[sortConfig.key] > b[sortConfig.key]) {
+            return sortConfig.direction === 'ascending' ? 1 : -1;
+          }
+          return 0;
+        });
+      }
+      return sortableItems;
+    }, [items, sortConfig]);
+
+    const requestSort = (key) => {
+      let direction = 'ascending';
+      if (
+        sortConfig &&
+        sortConfig.key === key &&
+        sortConfig.direction === 'ascending'
+      ) {
+        direction = 'descending';
+      }
+      setSortConfig({ key, direction });
+    };
+
+    return { items: sortedItems, requestSort, sortConfig };
+  };
+
+  const { items, requestSort, sortConfig } = useSortableData(analytics);
+  const getClassNamesFor = (name) => {
+    if (!sortConfig) {
+      return;
+    }
+    return sortConfig.key === name ? sortConfig.direction : undefined;
+  };
   return (
     <>
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
@@ -100,19 +142,43 @@ const GeographicalView = (props) => {
           <thead>
             <tr>
               <th scope="col">SKU</th>
-              <th scope="col">Sales</th>
-              <th scope="col">Return Bottles</th>
-              <th scope="col">Target</th>
-              <th scope="col">Actual Return</th>
+              <th
+                scope="col"
+                onClick={() => requestSort('sales')}
+                className={getClassNamesFor('sales')}
+              >
+                Sales
+              </th>
+              <th
+                scope="col"
+                onClick={() => requestSort('returns')}
+                className={getClassNamesFor('returns')}
+              >
+                Return Bottles
+              </th>
+              <th
+                scope="col"
+                onClick={() => requestSort('targetSales')}
+                className={getClassNamesFor('targetSales')}
+              >
+                Return Target
+              </th>
+              <th
+                scope="col"
+                onClick={() => requestSort('returnRate')}
+                className={getClassNamesFor('returnRate')}
+              >
+                Return Rate Percentage
+              </th>
             </tr>
           </thead>
           <tbody>
-            {analytics.length == 0 ? (
+            {items.length == 0 ? (
               <tr>
                 <td colSpan="5">No Data found</td>
               </tr>
             ) : (
-              analytics?.map((analytic, index) => (
+              items?.map((analytic, index) => (
                 <tr key={index}>
                   <td scope="row">
                     <div className="tableProfileIconCard justify-content-start">

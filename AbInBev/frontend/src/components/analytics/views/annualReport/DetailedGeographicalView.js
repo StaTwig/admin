@@ -41,9 +41,10 @@ const DetailedGeographicalView = (props) => {
       }
 
       let qp = '';
-      
-      if (Object.keys(props.params).length === 0){
-        qp = '&year='+(new Date().getFullYear())+'&date_filter_type=by_yearly';
+
+      if (Object.keys(props.params).length === 0) {
+        qp =
+          '&year=' + new Date().getFullYear() + '&date_filter_type=by_yearly';
       } else {
         const p = props.params;
         if (p.year) qp = '&year=' + p.year;
@@ -138,7 +139,7 @@ const DetailedGeographicalView = (props) => {
                 <Line
                   type="monotone"
                   dataKey="returns"
-                  name="Returns"
+                  name="Return Rate Percentage"
                   stroke="#A344B7"
                   strokeWidth={3}
                   dot={false}
@@ -146,7 +147,7 @@ const DetailedGeographicalView = (props) => {
                 <Line
                   type="monotone"
                   dataKey="targetSales"
-                  name="Target Sales"
+                  name="Return Target"
                   stroke="#A21233"
                   strokeWidth={3}
                   dot={false}
@@ -160,8 +161,8 @@ const DetailedGeographicalView = (props) => {
                     <th scope="col">Month</th>
                     <th scope="col">Sales</th>
                     <th scope="col">Returns</th>
-                    <th scope="col">Target Sales</th>
-                    <th scope="col">Actual Returns</th>
+                    <th scope="col">Return Target</th>
+                    <th scope="col">Return Rate Percentage</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -177,9 +178,9 @@ const DetailedGeographicalView = (props) => {
                             {analytic.groupedBy}
                           </span>
                         </td>
-                        <td>{analytic.sales}</td>
-                        <td>{analytic.returns}</td>
-                        <td>{analytic.targetSales}</td>
+                        <td>{analytic.sales.toLocaleString('en-IN')}</td>
+                        <td>{analytic.returns.toLocaleString('en-IN')}</td>
+                        <td>{analytic.targetSales.toLocaleString('en-IN')}</td>
                         <td>{analytic.actualReturns}%</td>
                       </tr>
                     ))

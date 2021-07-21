@@ -357,8 +357,9 @@ const NewOrder = (props) => {
                         setAddAnotherProductFailed(true);
                       }
                     }}
-                  >
+                  > <div style={{fontSize:"14px"}}>
                     +<span> Add Another Product</span>
+                    </div>
                   </button>
                 </div>
             </div>
@@ -367,14 +368,14 @@ const NewOrder = (props) => {
             )}
 
             <div className="row mb-3">
-              <div className="col bg-white shadow formContainer low p-3">
+              <div className="col bg-white shadow formContainer low">
                 <label htmlFor="client" className="headsup">
                   Order From
                 </label>
                 <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                        <label className="required-field" htmlFor="organizationName" style={{fontSize:"16px"}}>Organisation Type</label>
+                        <label className="required-field" htmlFor="organizationName" style={{fontSize:"14px"}}>Organisation Type</label>
                         <div className="form-control">
                           <Select
                             styles={customStyles}
@@ -399,7 +400,7 @@ const NewOrder = (props) => {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="required-field" htmlFor="organizationName" style={{fontSize:"16px"}}>Organisation Name</label>
+                      <label className="required-field" htmlFor="organizationName" style={{fontSize:"14px"}}>Organisation Name</label>
                       <div className="form-control">
                         {/* <DropdownButton
                           isText={true}
@@ -434,7 +435,7 @@ const NewOrder = (props) => {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="required-field" htmlFor="orgLocation" style={{fontSize:"16px"}}>Organisation ID</label>
+                      <label className="required-field" htmlFor="orgLocation" style={{fontSize:"14px",position:"relative",top:"10px"}}>Organisation ID</label>
                       <div className="form-control border-0">
                         {values.fromOrg}
                       </div>
@@ -445,7 +446,7 @@ const NewOrder = (props) => {
             </div>
 
             <div className="row mb-3">
-              <div className="col bg-white formContainer shadow low p-3">
+              <div className="col bg-white formContainer shadow low">
                 <label htmlFor="client" className="headsup">
                 Deliver To
                 </label>
@@ -453,7 +454,7 @@ const NewOrder = (props) => {
                  <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                        <label className="required-field" htmlFor="organizationName" style={{fontSize:"16px"}}>Organisation Type</label>
+                        <label className="required-field" htmlFor="organizationName" style={{fontSize:"14px"}}>Organisation Type</label>
                         <div className="form-control">
                           <Select
                             styles={customStyles}
@@ -480,7 +481,7 @@ const NewOrder = (props) => {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="required-field" htmlFor="organizationName" style={{fontSize:"16px"}}>Organisation Name</label>
+                      <label className="required-field" htmlFor="organizationName" style={{fontSize:"14px"}}>Organisation Name</label>
                       <div className="form-control">
                         {/* <DropdownButton
                           isText={true}
@@ -519,7 +520,7 @@ const NewOrder = (props) => {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="required-field" htmlFor="delLocation" style={{fontSize:"16px"}}>Organisation ID</label>
+                      <label className="required-field" htmlFor="delLocation" style={{fontSize:"14px",position:"relative",top:"60px"}}>Organisation ID</label>
                       <div className="form-control border-0">
                         {values.toOrg}
                       </div>
@@ -529,7 +530,7 @@ const NewOrder = (props) => {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="required-field" htmlFor="delLocation" style={{fontSize:"16px"}}>Delivery Location</label>
+                      <label className="required-field" htmlFor="delLocation" style={{fontSize:"14px"}}>Delivery Location</label>
                       <div className="form-control">
                         {/* <DropdownButton
                           isText={true}

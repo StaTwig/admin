@@ -32,6 +32,7 @@ const SKUDetailView = (props) => {
   const [name, setName] = useState(prop.name);
   const [arrIndex, setArrIndex] = useState(-1);
   const [dText, setDText] = useState('State');
+  const [stateLabel, setStateLabel] = useState('');
   const [shortName, setShortname] = useState(prop.shortName);
   const [image, setImage] = useState(prop.image);
   const dispatch = useDispatch();
@@ -174,6 +175,10 @@ const SKUDetailView = (props) => {
         <div className="row">
           <div className="col-md-12 col-sm-12">
             <div className="productsChart">
+              {isActive && (
+                <h2 className="stateTitle">{stateLabel} SKU Details</h2>
+              )}
+
               <ResponsiveContainer
                 width="100%"
                 height={analytics.length <= 1 ? 300 : 1500}
@@ -250,8 +255,8 @@ const SKUDetailView = (props) => {
                       <th scope="col">{dText}</th>
                       <th scope="col">Sales</th>
                       <th scope="col">Returned</th>
-                      <th scope="col">Target</th>
-                      <th scope="col">Actual Returns</th>
+                      <th scope="col">Return Target</th>
+                      <th scope="col">Return Rate Percentage</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -274,6 +279,7 @@ const SKUDetailView = (props) => {
                                     );
                                   else {
                                     setIsActive(!isActive);
+                                    setStateLabel(analytic.groupedBy);
                                     setDText('District');
                                   }
                                 }}
