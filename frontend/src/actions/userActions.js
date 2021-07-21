@@ -151,7 +151,8 @@ export const setCurrentUser = decoded => {
 
 // Set logged in user
 export const logoutUser = () => {
-  localStorage.removeItem('theLedgerToken')
+  localStorage.removeItem('theLedgerToken');
+  localStorage.removeItem('location');
   return {
     type: AUTH_ERROR,
   };

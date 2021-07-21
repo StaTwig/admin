@@ -161,12 +161,6 @@ const ref = useOnclickOutside(() => {
     async function fetchApi() {
       const response = await getNotifications();
       setNotifications(response.data);
-      const r = await getImage(profile.photoId);
-      const reader = new window.FileReader();
-      reader.readAsDataURL(r.data); 
-      reader.onload = function () {
-        setImage(reader.result);
-      }
       
       const warehouses = await getActiveWareHouses();
       setActiveWarehouses(warehouses.map(item=>{
@@ -195,6 +189,13 @@ const ref = useOnclickOutside(() => {
           setLocation(usersLocation);
         }
       }
+      const r = await getImage(profile.photoId);
+      const reader = new window.FileReader();
+      reader.readAsDataURL(r.data); 
+      reader.onload = function () {
+        setImage(reader.result);
+      }
+
     }
     fetchApi();
     
@@ -208,6 +209,19 @@ const ref = useOnclickOutside(() => {
   const handleLocation=(item)=>{
     setLocation(item);
     dispatch(setUserLocation(item));
+
+    dispatch(turnOn());
+    const result=await postUserLocation(body);
+    dispatch(turnOff());
+    if(result.status === 200){
+      const token=result.data.data.token;
+      if(token){
+        setAuthToken(token);
+        localStorage.setItem('theLedgerToken', token);
+      }
+      props.history.push("/overview");
+      props.history.replace(`${props.location.pathname}`);
+    }
   }
 
   const clearNotification = async notification => {
