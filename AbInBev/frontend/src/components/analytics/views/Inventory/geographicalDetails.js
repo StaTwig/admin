@@ -36,6 +36,7 @@ const iGraphicalDetailedView = (props) => {
   const [active, setActive] = useState(false);
   const [isActive, setIsActive] = useState(false);
   const [name, setName] = useState(prop.name);
+  const [stateLabel, setStateLabel] = useState('');
   const [shortName, setShortname] = useState(prop.shortName);
   const [image, setImage] = useState(prop.image);
   const dispatch = useDispatch();
@@ -160,7 +161,7 @@ const iGraphicalDetailedView = (props) => {
               className="renderLabelFont"
               style={{ color: `${entry.color}` }}
             >
-              {entry.payload.value}
+              {entry.payload.value.toLocaleString('en-IN')}
             </div>
           </div>
         ))}
@@ -252,6 +253,9 @@ const iGraphicalDetailedView = (props) => {
         <div className="col-md-12 col-sm-12">
           {active ? (
             <div className="productsChart">
+              {isActive && (
+                <h2 className="stateTitle">{stateLabel} Inventory Details</h2>
+              )}
               <label className="productsChartTitle">
                 {isActive ? 'Districts' : 'State'}
               </label>
@@ -386,6 +390,9 @@ const iGraphicalDetailedView = (props) => {
                       onClick={() => {
                         setIsActive((i) => !i);
                         openDetailView(analytic.groupedBy);
+                        if (!isActive) {
+                          setStateLabel(analytic.groupedBy);
+                        }
                       }}
                     >
                       <td scope="row">

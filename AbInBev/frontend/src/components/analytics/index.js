@@ -52,7 +52,10 @@ const Analytics = (props) => {
   const [districts, setDistricts] = useState([]);
   const [prop, setProp] = useState({});
   let skuArr = [];
-  const [params, setParams] = useState({year: new Date().getFullYear(), date_filter_type: 'by_yearly'});
+  const [params, setParams] = useState({
+    year: new Date().getFullYear(),
+    date_filter_type: 'by_yearly',
+  });
   const [SKU, setSKU] = useState('');
   const [state, setState] = useState('');
   const [district, setDistrict] = useState('');

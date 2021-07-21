@@ -281,7 +281,7 @@ const DetailedSupplierView = (props) => {
                   <tr>
                     <th scope="col">Vendor</th>
                     <th scope="col">State</th>
-                    <th scope="col">Actual Returns</th>
+                    <th scope="col">Return Rate Percentage</th>
                   </tr>
                 </thead>
                 <tbody>

@@ -142,7 +142,7 @@ const GeographicalView = (props) => {
         </div>
         <div className="col-md-3">
           <div className="analyticsCard">
-            <span className="analyticsTitle">Actual Returns</span>
+            <span className="analyticsTitle">Return Rate Percentage</span>
             <span className="analyticsPercentage blue">82%</span>
             <div className="chartAnalytics">
               <ResponsiveContainer width="100%" height={100}>
@@ -176,8 +176,8 @@ const GeographicalView = (props) => {
               <th scope="col">SKU</th>
               <th scope="col">Sales</th>
               <th scope="col">Return Bottles</th>
-              <th scope="col">Traget</th>
-              <th scope="col">Actual Return</th>
+              <th scope="col">Return Target</th>
+              <th scope="col">Return Rate Percentage</th>
             </tr>
           </thead>
           <tbody>
