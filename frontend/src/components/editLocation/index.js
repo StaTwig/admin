@@ -10,7 +10,8 @@ import Modal from "../../shared/modal";
 // import React, { useState,useRef } from 'react';
 import {getWarehouseById} from "../../actions/userActions";
 import {fetchAllRegions,fetchCountriesByRegion,fetchStateByCountry,fetchCitiesByState,} from "../../actions/productActions";
-
+import Input from '@material-ui/core/Input';
+import Select from 'react-select';
 
 import "./style.scss";
 import { Formik } from "formik";
@@ -206,7 +207,7 @@ const editLocation = (props) => {
                     <div className="form-group">
                       <label className="required-field col-sm-6" htmlFor="addressTitle">Address Title</label>
                       <div style={{width:50}}></div>
-                      <TextField style={{width:"800px"}}
+                      {/* <TextField style={{width:"800px"}}
                         id="standard-basic"
                         label="Enter Title" 
                         className="form-control2"
@@ -216,10 +217,12 @@ const editLocation = (props) => {
                         onChange={(e) => {
                           setAddressTitle(e.target.value);
                         }}
-                      />
-                      {/* <input
+                      /> */}
+                      <Input
+                      style={{width:"800px",fontSize:"12px"}}
+                        id="standard-basic"
                         type="text"
-                        className="form-control"
+                        className="form-control2"
                         name="addressTitle"
                         placeholder="Enter Address Title"
                         value={values.addressTitle}
@@ -227,7 +230,7 @@ const editLocation = (props) => {
                         onChange={(e) => {
                           setAddressTitle(e.target.value);
                         }}
-                      /> */}
+                      />
                       {errors.addressTitle && touched.addressTitle && (
                         <span className="error-msg text-danger-EL">
                           {errors.addressTitle}
@@ -243,8 +246,12 @@ const editLocation = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
                         <label className="required-field col-sm-6" htmlFor="region">Region</label>
-                        <Autocomplete
+                        <div className="line1">
+                          <Select
                           value={values.region}
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          placeholder={<div className="select-placeholder-text">Select Region</div>}
                           onChange={(event, newValue) => {
                             setFieldValue("region",newValue);
                             fetchAllCountries1(newValue);
@@ -255,14 +262,14 @@ const editLocation = (props) => {
                           }}
                           id="controllable-states-demo"               
                           options={allregions}
-                          style={{ width: 800 }}
-                          renderInput={(params) => <TextField {...params} label="Select Region"  />}
-                        />
-                        {errors.region && touched.region && (
+                          renderInput={(params) => <TextField {...params} />}
+                          />
+                         {errors.region && touched.region && (
                           <span className="error-msg text-danger-ANL">
                             {errors.region}
                           </span>
                         )}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -270,7 +277,26 @@ const editLocation = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
                       <label className="required-field col-sm-6" htmlFor="country">Country</label>
-                        <Autocomplete
+                      <div className="line1">
+                          <Select
+                          value={values.country}
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          placeholder={<div className="select-placeholder-text">Select Country</div>}
+                          onChange={(event, newValue) => {
+                            // handleChange(event);
+                            setFieldValue("country",newValue);
+                            let v = search(newValue,allCountries);
+                            fetchAllState1(v);
+                            setCountry(newValue);
+                            setState("");
+                            setCity("");
+                          }}
+                          id="controllable-states-demo"
+                          options={allCountries.map((option)=>option.name)}
+                          renderInput={(params) => <TextField {...params} label="Select Country"  />}
+                          />  
+                      {/* <Autocomplete
                           value={values.country}
                           onChange={(event, newValue) => {
                             // handleChange(event);
@@ -285,12 +311,13 @@ const editLocation = (props) => {
                           options={allCountries.map((option)=>option.name)}
                           style={{ width: 800 }}
                           renderInput={(params) => <TextField {...params} label="Select Country"  />}
-                        />
+                        /> */}
                         {errors.country && touched.country && (
                           <span className="error-msg text-danger-ANL">
                             {errors.country}
                           </span>
                         )}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -298,7 +325,23 @@ const editLocation = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
                       <label className="required-field col-sm-6" htmlFor="state">State</label>
-                        <Autocomplete
+                      <div className="line1">
+                          <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          placeholder={<div className="select-placeholder-text">Select State</div>}
+                          value={values.state}
+                          onChange={(event, newValue) => {
+                            let v = search(newValue,allState);
+                            fetchAllCity1(v);
+                            setState(newValue);
+                            setCity("");
+                          }}
+                          id="controllable-states-demo"
+                          options={allState.map((option)=>option.name)}
+                          renderInput={(params) => <TextField {...params} label="Select State"  />}
+                          />    
+                      {/* <Autocomplete
                           value={values.state}
                           onChange={(event, newValue) => {
                             let v = search(newValue,allState);
@@ -310,12 +353,13 @@ const editLocation = (props) => {
                           options={allState.map((option)=>option.name)}
                           style={{ width: 800 }}
                           renderInput={(params) => <TextField {...params} label="Select State"  />}
-                        />
+                        /> */}
                         {errors.state && touched.state && (
                           <span className="error-msg text-danger-ANL">
                             {errors.state}
                           </span>
                         )}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -324,7 +368,20 @@ const editLocation = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
                       <label className="required-field col-sm-6" htmlFor="city">City</label>
-                        <Autocomplete
+                      <div className="line1">
+                          <Select
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          placeholder={<div className="select-placeholder-text">Select City</div>}
+                          value={values.city}
+                          onChange={(event, newValue) => {
+                            setCity(newValue);
+                          }}
+                          id="controllable-states-demo"
+                          options={allCity.map((Option)=>Option.name)}
+                          renderInput={(params) => <TextField {...params} label="Select City"  />}
+                          />     
+                      {/* <Autocomplete
                           value={values.city}
                           onChange={(event, newValue) => {
                             setCity(newValue);
@@ -333,12 +390,13 @@ const editLocation = (props) => {
                           options={allCity.map((Option)=>Option.name)}
                           style={{ width: 800 }}
                           renderInput={(params) => <TextField {...params} label="Select City"  />}
-                        />
+                        /> */}
                         {errors.city && touched.city && (
                           <span className="error-msg text-danger-ANL">
                             {errors.city}
                           </span>
                         )}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -347,7 +405,21 @@ const editLocation = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
                         <label className="required-field col-sm-6" htmlFor="addressLine">Address Line</label>
-                        <TextField style={{width:"800px"}}
+                        <div style={{width:50}}></div>
+                        <Input
+                        style={{width:"800px",fontSize:"12px"}}
+                        id="standard-basic"
+                        type="text"
+                        className="form-control2"
+                        name="addressTitle"
+                        placeholder="Enter Address Line"
+                        value={values.addressLine}
+                        onBlur={handleBlur}
+                        onChange={(e) => {
+                          setAddressLine(e.target.value);
+                        }}
+                      />
+                        {/* <TextField style={{width:"800px"}}
                         type="text"
                         id="standard-basic"
                         label="Enter Address Line" 
@@ -357,7 +429,7 @@ const editLocation = (props) => {
                         onChange={(e) => {
                           setAddressLine(e.target.value);
                         }}
-                      />
+                      /> */}
                       {/*{errors.addressLine && touched.addressLine && (
                           <span className="error-msg text-danger-ANL">
                             {errors.addressLine}
@@ -370,7 +442,20 @@ const editLocation = (props) => {
                     <div className="col-md-6 com-sm-16">
                       <div className="form-group">
                         <label className="required-field col-sm-6" htmlFor="Select Location">Pincode</label>
-                        <TextField style={{width:"800px"}}
+                        <div style={{width:50}}></div>
+                        <Input
+                          style={{width:"800px",fontSize:"12px"}}
+                          id="standard-basic"
+                          type="number"
+                          className="form-control2"
+                          name="pincode"
+                          placeholder="Enter Pincode"
+                          value={values.pincode}
+                          onBlur={handleBlur}
+                          onChange={(e) => {setPincode(e.target.value)
+                          }}
+                      />
+                        {/* <TextField style={{width:"800px"}}
                             id="standard-basic"
                             label="Pin Code" 
                             type="number"
@@ -378,13 +463,13 @@ const editLocation = (props) => {
                             name="pincode"
                             value={values.pincode}
                             onBlur={handleBlur}
-                           /*  handleChange={handleChange}
+                            handleChange={handleChange}
                             handleBlur={handleBlur}
                             error={errors.pincode}
-                            touched={touched.pincode} */
+                            touched={touched.pincode}
                             onChange={(e) => {setPincode(e.target.value)
                             }}
-                          />
+                          /> */}
                         {/* {errors.pincode && touched.pincode && (
                           <span className="error-msg text-danger-ANL">
                             {errors.pincode}
