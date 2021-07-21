@@ -344,6 +344,13 @@ exports.addAddressesFromExcel = [
         )
           .then((res) => res.json())
           .then(async (res) => {
+          const user = await EmployeeModel.findOne({
+            $or: [
+              { emailId: address.user },
+              { phoneNumber: address.user },
+            ]
+          })
+          console.log("USERS IS ",user);
             const reqData = {
               id: warehouseId,
               warehouseInventory: inventoryResult.id,
@@ -372,10 +379,11 @@ exports.addAddressesFromExcel = [
                 geohash: "1231nejf923453",
               },
               supervisors: [],
-              employeess: [],
+              employees: [user.id],
             };
             let warehouse = new Warehouse(reqData);
-            await warehouse.save();
+            const warehouseRes = await warehouse.save();
+            console.log(warehouseRes);
             if (address?.user) {
               await EmployeeModel.updateOne(
                 {
