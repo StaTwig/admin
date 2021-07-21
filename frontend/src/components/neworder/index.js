@@ -374,14 +374,14 @@ const NewOrder = (props) => {
                 </label>
                 <div className="row">
                     <div className="col-md-6 com-sm-12">
-                      <div className="form-group">
-                        <label className="required-field" htmlFor="organizationName" style={{fontSize:"14px"}}>Organisation Type</label>
-                        <div className="form-control">
+                      <div className="name form-group">
+                        <label className="required-field" htmlFor="organizationName">Organisation Type</label>
+                        <div className="line">
                           <Select
-                            styles={customStyles}
-                            placeholder={<div className="select-placeholder-text">Select Organisation Type</div>}
-                          
-                            onChange={(v) => {
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          placeholder={<div className="select-placeholder-text">Select Organisation Type</div>}
+                          onChange={(v) => {
                               setFieldValue('type', v?.value);
                               setFieldValue('typeName', v?.label);
                               setFieldValue('fromOrgId',"");
@@ -399,9 +399,9 @@ const NewOrder = (props) => {
                 </div>
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
-                    <div className="form-group">
-                      <label className="required-field" htmlFor="organizationName" style={{fontSize:"14px"}}>Organisation Name</label>
-                      <div className="form-control">
+                    <div className="name form-group">
+                      <label className="required-field" htmlFor="organizationName">Organisation Name</label>
+                      <div className="line">
                         {/* <DropdownButton
                           isText={true}
                           name={senderOrgId}
@@ -415,7 +415,8 @@ const NewOrder = (props) => {
                         /> */}
                         
                           <Select
-                            styles={customStyles}
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
                             placeholder={<div className="select-placeholder-text">Select Organisation Name</div>}
                             value={values.fromOrg==""?"Select Organisation Name":{value: values.fromOrg, label: values.fromOrgId}}
                             defaultInputValue={values.fromOrgId}
@@ -434,9 +435,9 @@ const NewOrder = (props) => {
                   </div>
 
                   <div className="col-md-6 com-sm-12">
-                    <div className="form-group">
-                      <label className="required-field" htmlFor="orgLocation" style={{fontSize:"14px",position:"relative",top:"10px"}}>Organisation ID</label>
-                      <div className="form-control border-0">
+                    <div className="name form-group">
+                      <label className="org required-field" htmlFor="orgLocation">Organisation ID</label>
+                      <div className="orgV border-0">
                         {values.fromOrg}
                       </div>
                     </div>
@@ -453,12 +454,12 @@ const NewOrder = (props) => {
                   
                  <div className="row">
                     <div className="col-md-6 com-sm-12">
-                      <div className="form-group">
-                        <label className="required-field" htmlFor="organizationName" style={{fontSize:"14px"}}>Organisation Type</label>
-                        <div className="form-control">
+                      <div className="name form-group">
+                        <label className="required-field" htmlFor="organizationName">Organisation Type</label>
+                        <div className="line">
                           <Select
-                            styles={customStyles}
-                           
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
                             placeholder={<div className="select-placeholder-text">Select Organisation Type</div>}
                             defaultInputValue={values.rtypeName}
                             onChange={(v) => {
@@ -480,9 +481,9 @@ const NewOrder = (props) => {
                 </div>
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
-                    <div className="form-group">
-                      <label className="required-field" htmlFor="organizationName" style={{fontSize:"14px"}}>Organisation Name</label>
-                      <div className="form-control">
+                    <div className="name form-group">
+                      <label className="required-field" htmlFor="organizationName">Organisation Name</label>
+                      <div className="line">
                         {/* <DropdownButton
                           isText={true}
                           name={receiverOrgId}
@@ -498,7 +499,8 @@ const NewOrder = (props) => {
                           groups={allOrganisations.filter((org) => org.id != values.fromOrg)}
                         /> */}
                           <Select
-                            styles={customStyles}
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
                             placeholder={<div className="select-placeholder-text">Select Organisation Name</div>}
                             value={values.toOrg==""?"Select Organisation Name":{value: values.toOrg, label: values.toOrgName}}
                             defaultInputValue={values.toOrgName}
@@ -519,9 +521,9 @@ const NewOrder = (props) => {
                   </div>
 
                   <div className="col-md-6 com-sm-12">
-                    <div className="form-group">
-                      <label className="required-field" htmlFor="delLocation" style={{fontSize:"14px",position:"relative",top:"60px"}}>Organisation ID</label>
-                      <div className="form-control border-0">
+                    <div className="name form-group">
+                      <label className="org required-field" htmlFor="delLocation">Organisation ID</label>
+                      <div className="orgV border-0">
                         {values.toOrg}
                       </div>
                     </div>
@@ -529,9 +531,9 @@ const NewOrder = (props) => {
                 </div>
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
-                    <div className="form-group">
-                      <label className="required-field" htmlFor="delLocation" style={{fontSize:"14px"}}>Delivery Location</label>
-                      <div className="form-control">
+                    <div className="name form-group">
+                      <label className="required-field" htmlFor="delLocation">Delivery Location</label>
+                      <div className="line">
                         {/* <DropdownButton
                           isText={true}
                           name={receiverOrgLoc}
@@ -556,7 +558,8 @@ const NewOrder = (props) => {
                         /> */}
 
                           <Select
-                            styles={customStyles}
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
                             placeholder={<div className="select-placeholder-text">Select Delivery Location</div>}
                             value={values.toOrgLoc==""?"Select Delivery Location":{value: values.toOrgLoc, label: values.toOrgLocName}}
                             defaultInputValue={values.toOrgLocName}
@@ -579,7 +582,7 @@ const NewOrder = (props) => {
             <div className="d-flex pt-4 justify-content-between mb-1">
               <div className="value">{quantity}</div>
               <div className="d-flex">
-                <button type="button" className="btn btn-white shadow-radius font-bold mr-2 mt-3" onClick={() => {dispatch(resetReviewPos({})); props.history.push('/orders')}}>
+                <button type="button" className="btn btn-outline-primary font-bold mr-2 mt-3" onClick={() => {dispatch(resetReviewPos({})); props.history.push('/orders')}}>
                   Cancel
                 </button>
 

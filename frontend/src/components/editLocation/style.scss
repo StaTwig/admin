@@ -9,3 +9,25 @@
     color:rgb(212, 2, 2);
     font-size:12px;
 }
+.form-control2{
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+      color:#707070;
+    }
+}
+.line1 {
+    border-bottom: 2px solid #d6d6d6;
+    padding: 0;
+    color: $black;
+    flex-basis: 47%;
+    font-size: 14px;  
+  }
+  .name{
+    color: #707070;
+    font-weight: 400;
+    font-size: 14px;
+    padding: 0;
+  }
+

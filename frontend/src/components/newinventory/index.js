@@ -253,10 +253,10 @@ const NewInventory = (props) => {
 
   return (
     <div className="Newinventory">
-      <div className="d-flex justify-content-between mb-3">
+      <div className="d-flex justify-content-between mb-0">
         <h1 className="breadcrumb">ADD INVENTORY</h1>
         <div className="d-flex flex-column align-items-center">
-          <button className="btn-primary btn mt-1" onClick={() => setMenu(!menu)}>
+          <button className="btn-primary btn mt-0" onClick={() => setMenu(!menu)}>
             <div className="d-flex  align-items-center">
               <img src={ExportIcon} width="16" height="16" className="mr-3" />
               <span>Import</span>
@@ -302,10 +302,11 @@ const NewInventory = (props) => {
 
       <div className="d-flex justify-content-between">
         <button
-          className="btn btn-white bg-white shadow-radius mt-3 font-bold"
+          className="btn btn-white bg-white shadow-radius mt-0 font-bold ml-3"
           onClick={onAddAnotherProduct}
-        >
+        ><div style={{fontSize:"14px"}}>
           +<span> Add Another Product</span>
+          </div>
         </button>
       </div>
       <hr />
@@ -319,7 +320,7 @@ const NewInventory = (props) => {
       </button>
       <button 
       type="button"
-      className="btn btn-white shadow-radius font-bold mr-3" 
+      className="btn btn-outline-primary font-bold mr-3" 
       onClick={() => {dispatch(resetReviewInventories([]));props.history.push("/inventory")}}
       >Cancel
       </button>
