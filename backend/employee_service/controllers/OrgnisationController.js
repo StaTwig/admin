@@ -1,5 +1,6 @@
 const OrganisationModel = require("../models/OrganisationModel");
 const EmployeeModel = require("../models/EmployeeModel");
+const WarehouseModel = require("../models/WarehouseModel")
 const auth = require("../middlewares/jwt");
 const apiResponse = require("../helpers/apiResponse");
 
@@ -64,6 +65,23 @@ exports.updateOrg = [
             }
           )
             .then(async (org) => {
+              if(req.body.status === "REJECTED"){
+                try{
+                  await OrganisationModel.findOneAndDelete({id: id})
+                  await EmployeeModel.findOneAndDelete(
+                    { id: org.primaryContactId },
+                  );
+                  await WarehouseModel.findOneAndDelete({id: org.warehouses[0]})
+                  return apiResponse.successResponseWithData(
+                    res,
+                    "Organisation updated ",
+                    org
+                  );
+                }catch(err){
+                  console.log(err);
+                  return apiResponse.ErrorResponse(res, err);
+                }
+              }
               await EmployeeModel.findOneAndUpdate(
                 { id: org.primaryContactId },
                 {
