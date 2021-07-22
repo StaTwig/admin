@@ -78,21 +78,21 @@ const EditRow = (props) => {
       <div className="d-flex flex-column ml-5 itable">
         <div className="row mb-3">
           <div className={`row ${!addMore ? `col-10` : `col-12`}`}>
-            <div className="col theader text-center pro">
+            <div className="col-3 theader text-center pro">
               <img src={Package} width="16" height="16" />
-              <span className="pl-3 text-muted required-field">Product Category</span>
+              <span className="pl-1 text-muted required-field">Product Category</span>
             </div>
-            <div className="col-4 theader text-center pro">
+            <div className="col-5 theader text-center pro">
               <img src={Package} width="16" height="16" />
-              <span className="pl-3 text-muted required-field">Product</span>
+              <span className="pl-1 text-muted required-field">Product</span>
             </div>
-            <div className="col theader text-center pro">
+            <div className="col theader ">
               <img src={mon} width="16" height="16" />
-              <span className="pl-3 text-muted">Manufacturer</span>
+              <span className="pl-1 text-muted">Manufacturer</span>
             </div>
             <div className="col theader text-center pro">
               <img src={qty} width="25" height="16" />
-              <span className="pl-3 text-muted required-field">Quantity</span>
+              <span className="pl-1 text-muted required-field">Quantity</span>
             </div>
           </div>
         </div>
@@ -178,6 +178,7 @@ const EditRow = (props) => {
           {!addMore && (
             <div className="ml-2 mt-1 pl-3 mb-1 ">
               <button
+                style={{width:"200px",height:"53px"}}
                 type="button"
                 onClick={() => {
                   setAddMore(true);
@@ -198,19 +199,19 @@ const EditRow = (props) => {
             <div className="row col-12 mb-2">
               <div className="col theader text-center pro">
                 <img src={sdate} width="16" height="16" />
-                <span className="pl-3 text-muted">Mfg Date</span>
+                <span className="pl-1 text-muted">Mfg Date</span>
               </div>
               <div className="col theader text-center pro">
                 <img src={sdate} width="16" height="16" />
-                <span className="pl-3 text-muted">Exp Date</span>
+                <span className="pl-1 text-muted">Exp Date</span>
               </div>
               <div className="col theader text-center pro">
                 <img src={Batch} width="16" height="16" />
-                <span className="pl-3 text-muted">Batch Number</span>
+                <span className="pl-1 text-muted">Batch Number</span>
               </div>
               <div className="col theader text-center pro">
                 <img src={Serial} width="16" height="16" />
-                <span className="pl-3 text-muted">Serial Numbers</span>
+                <span className="pl-1 text-muted">Serial Numbers</span>
               </div>
             </div>
             <div className="rTableRow inp-grp mb-3 row bg-white col-12">

@@ -46,7 +46,7 @@ const EditRow = props => {
   return (
     <div className="row ml-3" >
       <div className="trow row text-dark col">
-        <div className="col pl-4 tcell p-2">
+        <div className="col-3 pl-4 tcell p-2">
           <div className="">
             <div className="d-flex flex-column">
               <div className="title recived-text">
@@ -72,7 +72,7 @@ const EditRow = props => {
           </div>
         </div> 
         <div className="divider1"></div>
-        <div className="col tcell text-center justify-content-center">
+        <div className="col-4 tcell text-center justify-content-center">
           <div className="">
             <div className="d-flex flex-row justify-content-between">
               <div className="title recived-text w-50">
@@ -83,7 +83,7 @@ const EditRow = props => {
                 /> */}
                 <Select
                 className="no-border"
-                placeholder= {<div className= "select-placeholder-text" > Product Name </div>} 
+                placeholder= {<div className= "select-placeholder-text"> Product Name </div>} 
                 value={(prod.id==undefined || prod.name==undefined || prod.name==="")?null:{value: prod.id, label: prod.name}}
                   defaultInputValue={prod.name}
                   onChange={(v) => {
@@ -95,7 +95,7 @@ const EditRow = props => {
                         
                
               </div>
-              <div className="title recived-text align-self-center">{prod.id ? prod.id : <div className="select-placeholder-text">Product ID</div>}</div>
+              <div className="col-2 title recived-text align-self-center">{prod.id ? prod.id : <div className="select-placeholder-text">Product ID</div>}</div>
             </div>
           </div>
         </div>

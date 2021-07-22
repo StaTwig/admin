@@ -27,6 +27,7 @@ import { getProducts, getProductsByCategory } from "../../actions/poActions";
 import {getProductList} from '../../actions/productActions';
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { TextField } from "@material-ui/core";
+import Input from '@material-ui/core/Input';
 
 
 
@@ -557,8 +558,8 @@ if (!error) {
                 <div className="row mt-3">
                 <div className="col-md-6 col-sm-12 ">
                   <div className="form-group">
-                    <label htmlFor="orderID">Order ID</label>
-                    <div className="form-control">
+                    <label className="name" htmlFor="orderID">Order ID</label>
+                    <div className="line">
                       {/* <DropdownButton
                         name={OrderId}
                         name2="Select Order ID"
@@ -627,7 +628,8 @@ if (!error) {
                         groups={OrderIds}
                       /> */}
                       <Select
-                        styles={customStyles}
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
                         placeholder="Select Order ID"
                 
                         onChange={async(v) => {    
@@ -714,12 +716,12 @@ if (!error) {
                   </div>
                 </div>
                <div className="col-md-6 com-sm-12">
-                  <div className="form-group mr-3">
-                    <label htmlFor="shipmentID">Reference Shipment ID</label>
-                    <input
+                  <div className="form-group ">
+                    <label className="name" htmlFor="shipmentID">Reference Shipment ID</label>
+                    <Input
                       type="text"
-                      style={{position:"relative", left:"70px" }}
-                      className="form-control"
+                      style={{fontSize:"14px",width:"450px",position:"relative", left:"70px" }}
+                      
                       name="shipmentID"
                       onBlur={handleBlur}
                       placeholder="Enter Reference Shipment ID"
@@ -826,10 +828,10 @@ if (!error) {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="required-field" htmlFor="organizationName">
+                      <label className="name required-field" htmlFor="organizationName">
                         Organisation Name
                       </label>
-                      <div className="form-control">
+                      <div className="line">
                         {/* <DropdownButton
                           name={senderOrganisation[0]}
                           disabled={true}
@@ -855,10 +857,10 @@ if (!error) {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="required-field" htmlFor="orgLocation">
+                      <label className="name required-field" htmlFor="orgLocation">
                         Organisation Location
                       </label>
-                      <div className="form-control">
+                      <div className="line">
                         {/* <DropdownButton
                           name={senderOrgLoc}
                           name2="Select Organisation Location"
@@ -886,7 +888,8 @@ if (!error) {
                           groups={senderWarehouses}
                         /> */}
                         <Select
-                          styles={customStyles}
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
                           isDisabled={false}
                           placeholder="Select Organisation Location"
                           onChange={(v) => {
@@ -924,10 +927,11 @@ if (!error) {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="required-field" htmlFor="organizationType">Organisation Type</label>
-                      <div className="form-control">
+                      <label className="name required-field" htmlFor="organizationType">Organisation Type</label>
+                      <div className="line">
                         <Select
-                          styles={customStyles}
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
                           isDisabled={disabled}
 
                           placeholder={disabled ? values.rtype: "Select Organisation Type"}
@@ -951,10 +955,10 @@ if (!error) {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="required-field" htmlFor="organizationName">
+                      <label className="name required-field" htmlFor="organizationName">
                         Organisation Name
                       </label>
-                      <div className="form-control">
+                      <div className="line">
                         {/* <DropdownButton
                           name={receiverOrgId}
                           name2="Select Organisation Name"
@@ -969,7 +973,8 @@ if (!error) {
                           groups={allOrganisations}
                         /> */}
                         <Select
-                          styles={customStyles}
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
                           isDisabled={disabled}
                           // placeholder={disabled ? (values.toOrg).split("/")[1] : "Select Organisation Name"}
                           placeholder={"Select Organisation Name"}
@@ -995,8 +1000,8 @@ if (!error) {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="required-field" htmlFor="delLocation">Delivery Location</label>
-                      <div className="form-control">
+                      <label className="name required-field" htmlFor="delLocation">Delivery Location</label>
+                      <div className="line">
                         {/* <DropdownButton
                           name={receiverOrgLoc}
                           name2="Select Delivery Location"
@@ -1014,7 +1019,8 @@ if (!error) {
                           groups={receiverWarehouses}
                         /> */}
                         <Select
-                          styles={customStyles}
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
                           isDisabled={disabled}
                           // placeholder={disabled ? values.toOrgLoc.split("/")[1] : "Select Delivery Location"}
                           placeholder={"Select Delivery Location"}
@@ -1047,8 +1053,8 @@ if (!error) {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="required-field" htmlFor="organizationName">Transit Number</label>
-                      <div  className="form-control">
+                      <label className="name required-field" htmlFor="organizationName">Transit Number</label>
+                      <div  className="line">
                       <input
                         type="text"
                         name="airWayBillNo"
@@ -1071,8 +1077,8 @@ if (!error) {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="required-field" htmlFor="delLocation">Shipment Date</label>
-                      <div className="form-control">
+                      <label className="name required-field" htmlFor="delLocation">Shipment Date</label>
+                      <div className="line">
                         <DatePicker
                           className="date"
                           selected={
@@ -1108,8 +1114,8 @@ if (!error) {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="required-field" htmlFor="Label code">Label Code</label>
-                     <div className="form-control">
+                      <label className="name required-field" htmlFor="Label code">Label Code</label>
+                     <div className="line">
                       <input
                         type="text"
                         name="labelCode"
@@ -1130,11 +1136,8 @@ if (!error) {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label htmlFor="shipmentId ">
-                        {" "}
-                        Estimate Delivery Date
-                      </label>
-                      <div className="form-control">
+                      <label className="name" htmlFor="shipmentId ">Estimate Delivery Date</label>
+                      <div className="line">
                         <DatePicker
                           className="date"
                           placeholderText="Enter Delivery Date"
@@ -1345,7 +1348,7 @@ if (!error) {
               <div className="d-flex">
                 <button
                   type="button"
-                  className="btn btn-white shadow-radius font-bold mr-2"
+                  className="btn btn-outline-primary font-bold mr-2"
                   onClick={() => props.history.push("/shipments")}
                 >
                   Cancel
