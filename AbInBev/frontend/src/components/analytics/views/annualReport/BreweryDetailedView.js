@@ -130,14 +130,14 @@ const BreweryDetailedView = (props) => {
                   <tr>
                     <th scope="col">Vendor</th>
                     <th scope="col">State</th>
-                    <th scope="col">Sales</th>
-                    <th scope="col">Return</th>
+                    <th scope="col">Return Target</th>
+                    <th scope="col">Return Rate Percentage</th>
                   </tr>
                 </thead>
                 <tbody>
                   {analytics.length == 0 ? (
                     <tr>
-                      <td colspan="4">No Data found</td>
+                      <td colSpan="4">No Data found</td>
                     </tr>
                   ) : (
                     analytics.map((analytic, index) => (

@@ -1109,13 +1109,13 @@ body {
     color: #ffffff;
   }
   .s1group {
-    background-color: orange;
+    background-color: #A344B7;
   }
   .s2group {
-    background-color: blueviolet;
+    background-color: #F45733;
   }
   .s3group {
-    background-color: darkcyan;
+    background-color: #FFC700;
   }
 }
 .round {
@@ -1251,4 +1251,13 @@ body {
     font-size: 15px;
     font-weight: 600;
   }
+}
+
+.stateTitle{
+  text-align: left;
+  font-weight: bolder;
+  font-size: 17px;
+  padding: 10px 10px;
+  border-bottom: 1px solid #CCC;
+  margin-bottom: 10px;
 }

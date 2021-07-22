@@ -8,7 +8,7 @@ import dropdownIcon from '../../assets/icons/dropdown_selected.png';
 import Location from '../../assets/icons/location_blue.png';
 import { Redirect } from 'react-router-dom';
 import DrawerMenu from './drawerMenu';
-import { getActiveWareHouses, getUserInfo, logoutUser, registerUser, setUserLocation } from '../../actions/userActions';
+import { getActiveWareHouses, getUserInfo, logoutUser, registerUser, setUserLocation, postUserLocation } from '../../actions/userActions';
 import logo from '../../assets/brands/VACCINELEDGER.png';
 //import searchingIcon from '../../assets/icons/searching@2x.png';
 //import bellIcon from '../../assets/icons/bellwhite.png';
@@ -32,6 +32,7 @@ import Select from '@material-ui/core/Select';
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import { resetShipments } from '../../actions/shipmentActions';
 import { userLocationReducer } from '../../reducers/userLocationReducer';
+import setAuthToken from '../../utils/setAuthToken';
 
 const Header = props => {
   const dispatch = useDispatch();
@@ -104,8 +105,8 @@ const ref = useOnclickOutside(() => {
       getAllShipmentIDs().then((result)=>{
         let shippingIds = result.map((so)=>so.id);
         if(shippingIds.indexOf(search)!=-1){
-          // props.history.push(`/viewshipment/${search}`);
-          window.location.href=`/viewshipment/${search}`;
+          props.history.push('/overview');
+          props.history.replace(`/viewshipment/${search}`);
         }
         else
           setInvalidSearch(true);
@@ -115,8 +116,8 @@ const ref = useOnclickOutside(() => {
       getAllOrderIDs().then((result)=>{
         let orderIds = result.map((so)=>so.id);
         if(orderIds.indexOf(search)!=-1){
-          // props.history.push(`/vieworder/${search}`);
-          window.location.href=`/vieworder/${search}`;
+          props.history.push(`/overview`);
+          props.history.replace(`/vieworder/${search}`);
         }        
         else
           setInvalidSearch(true);
@@ -161,12 +162,6 @@ const ref = useOnclickOutside(() => {
     async function fetchApi() {
       const response = await getNotifications();
       setNotifications(response.data);
-      const r = await getImage(profile.photoId);
-      const reader = new window.FileReader();
-      reader.readAsDataURL(r.data); 
-      reader.onload = function () {
-        setImage(reader.result);
-      }
       
       const warehouses = await getActiveWareHouses();
       setActiveWarehouses(warehouses.map(item=>{
@@ -177,37 +172,45 @@ const ref = useOnclickOutside(() => {
         };
       }));
       // console.log("usersLocation",usersLocation);
-      setLocation(prod => warehouses[0]);
-      if (warehouses.length > 0)
-        if(warehouses[0].id)
-          localStorage.setItem('location', warehouses[0].id);
     
-      if (Object.keys(usersLocation).length === 0) {
-        if (warehouses.length > 0)
-          if (warehouses[0].id) {
-            setLocation(warehouses[0]);
-            localStorage.setItem('location', warehouses[0].id);
-          }
+      if(localStorage.getItem("location")!=null){
+        setLocation(prod=>JSON.parse(localStorage.getItem("location")));
       }
       else {
-        if (usersLocation.id) {
-          localStorage.setItem('location', usersLocation.id);
-          setLocation(usersLocation);
-        }
+       setLocation(prod=>warehouses[0]);
+        localStorage.setItem('location', JSON.stringify(warehouses[0]));
       }
+      const r = await getImage(profile.photoId);
+      const reader = new window.FileReader();
+      reader.readAsDataURL(r.data); 
+      reader.onload = function () {
+        setImage(reader.result);
+      }
+
     }
     fetchApi();
     
   }, []);
-  
-  useEffect(() => {
-    if(location?.id)
-    localStorage.setItem('location', location?.id);
-  },[location]);
 
-  const handleLocation=(item)=>{
+  const handleLocation=async(item)=>{
     setLocation(item);
     dispatch(setUserLocation(item));
+    localStorage.setItem("location",JSON.stringify(item));
+    setLocation(prod=>item);
+    const body={warehouseId:item.id};
+
+    dispatch(turnOn());
+    const result=await postUserLocation(body);
+    dispatch(turnOff());
+    if(result.status === 200){
+      const token=result.data.data.token;
+      if(token){
+        setAuthToken(token);
+        localStorage.setItem('theLedgerToken', token);
+        props.history.push("/overview");
+        props.history.replace(`${props.location.pathname}`);
+      }
+    }
   }
 
   const clearNotification = async notification => {

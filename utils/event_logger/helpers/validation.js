@@ -30,8 +30,8 @@ const eventSchema = Joi.object().keys({
   }),
   payload: Joi.object().keys({
     data: Joi.any().optional()
-  })
-
+  }),
+  actorWarehouseId: Joi.string().min(1).max(50).required(),
 });
 
 

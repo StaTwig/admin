@@ -151,7 +151,8 @@ export const setCurrentUser = decoded => {
 
 // Set logged in user
 export const logoutUser = () => {
-  localStorage.removeItem('theLedgerToken')
+  localStorage.removeItem('theLedgerToken');
+  localStorage.removeItem('location');
   return {
     type: AUTH_ERROR,
   };
@@ -189,6 +190,15 @@ export const getAllUsers = () => {
       return result;
     }
   } catch (e) {
+    return e.response;
+  }
+}
+
+export const postUserLocation = async (data)=>{
+  try{
+    const result=await axios.post(config().locationUrl,data);
+    return result;
+  }catch(e){
     return e.response;
   }
 }
