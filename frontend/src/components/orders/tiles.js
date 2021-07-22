@@ -21,7 +21,7 @@ const Tiles = props => {
     <div className="row mb-4">
       <div className="col">
         <div onClick={() => props.setData('one')} className="panel cursorP">
-          <div className="picture recived-bg">
+          <div className="picture recived-bg ml-1">
             <img src={Received} alt="truck"/>
           </div>
           <div className="d-flex flex-column">
@@ -32,7 +32,7 @@ const Tiles = props => {
       </div>
       <div className="col">
         <div onClick={() => props.setData('two')} className="panel cursorP">
-          <div className="picture sent-bg">
+          <div className="picture sent-bg ml-1">
             <img src={Sent} alt="truck" />
           </div>
           <div className="d-flex flex-column">
@@ -43,7 +43,7 @@ const Tiles = props => {
       </div>
       <div className="col">
         <div onClick={() => props.setData('two', true)} className="panel cursorP">
-          <div className="picture inbound-alert-bg">
+          <div className="picture inbound-alert-bg ml-1">
             <img src={Current} alt="truck" />
           </div>
           <div className="d-flex flex-column">
@@ -54,7 +54,7 @@ const Tiles = props => {
       </div>
       <div className="col">
         <div onClick={() => props.setData('one', true)} className="panel cursorP">
-          <div className="picture outbound-alert-bg">
+          <div className="picture outbound-alert-bg ml-1">
             <img src={Rejected} alt="truck" />
           </div>
           <div className="d-flex flex-column">

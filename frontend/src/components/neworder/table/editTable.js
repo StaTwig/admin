@@ -9,11 +9,11 @@ const EditTable = props => {
  return (
     <div className="table productTable mb-0 mt-1">
      <div className="d-flex flex-column">
-       <div className="row  mb-2" style={{position:"relative", left:"60px"}}>
-         <div className="col-4 theader"><img src={Package} width="16" height="16" /><span className="ml-2 text-muted required-field">Product Category</span></div>
-         <div className="col theader"><img src={Package} width="16" height="16" /><span className="ml-2 text-muted required-field">Product</span></div>
-         <div className="col theader"><img src={mon} width="16" height="16" /><span className="ml-2 text-muted">Manufacturer</span></div>
-         <div className="col theader"><img src={quantity} width="25" height="16" /><span className="ml-2 text-muted required-field">Quantity</span></div>
+       <div className="row  mb-2" style={{position:"relative", left:"0px"}}>
+         <div className="col-4 theader text-center"><img src={Package} width="16" height="16" /><span className="ml-2 text-muted required-field">Product Category</span></div>
+         <div className="col-3 theader text-center"><img src={Package} width="16" height="16" /><span className="ml-2 text-muted required-field">Product</span></div>
+         <div className="col theader text-center ml-2"><img src={mon} width="16" height="16" /><span className="ml-2 text-muted">Manufacturer</span></div>
+         <div className="col theader text-center mr-5"><img src={quantity} width="25" height="16" /><span className="ml-2 text-muted required-field">Quantity</span></div>
         
         </div>
         <div className="">
