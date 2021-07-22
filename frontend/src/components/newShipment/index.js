@@ -853,7 +853,7 @@ if (!error) {
                       <label className="name required-field" htmlFor="orgLocation">
                         Organisation Location
                       </label>
-                      <div className="line">
+                      <div className={`line ${errors.fromOrgLoc ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           name={senderOrgLoc}
                           name2="Select Organisation Location"
@@ -881,8 +881,6 @@ if (!error) {
                           groups={senderWarehouses}
                         /> */}
                         <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
                           isDisabled={false}
                           placeholder="Select Organisation Location"
                           onChange={(v) => {
@@ -900,11 +898,11 @@ if (!error) {
                           defaultInputValue={values.fromOrgLoc}
                           options={senderWarehouses.filter( (ele, ind) => ind === senderWarehouses.findIndex( elem => elem.label===ele.label))}
                         />
-                        {errors.fromOrgLoc && touched.fromOrgLoc && (
+                        {/* {errors.fromOrgLoc && touched.fromOrgLoc && (
                           <span className="error-msg text-danger">
                             {errors.fromOrgLoc}
                           </span>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </div>
@@ -921,12 +919,11 @@ if (!error) {
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label className="name required-field" htmlFor="organizationType">Organisation Type</label>
-                      <div className="line">
+                      <div className={`line ${errors.rtype ? "border-danger" : "" }`}>
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
                           isDisabled={disabled}
-
                           placeholder={disabled ? values.rtype: "Select Organisation Type"}
                           onChange={(v) => {
                             setFieldValue('rtype', v?.value);
@@ -938,9 +935,9 @@ if (!error) {
                           defaultInputValue={values.rtype}
                           options={orgTypes}
                         />
-                        {errors.rtype && touched.rtype && (
+                        {/* {errors.rtype && touched.rtype && (
                           <span className="error-msg text-danger">{errors.rtype}</span>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </div>
@@ -951,7 +948,7 @@ if (!error) {
                       <label className="name required-field" htmlFor="organizationName">
                         Organisation Name
                       </label>
-                      <div className="line">
+                      <div className={`line ${errors.toOrg ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           name={receiverOrgId}
                           name2="Select Organisation Name"
@@ -966,8 +963,6 @@ if (!error) {
                           groups={allOrganisations}
                         /> */}
                         <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
                           isDisabled={disabled}
                           // placeholder={disabled ? (values.toOrg).split("/")[1] : "Select Organisation Name"}
                           placeholder={"Select Organisation Name"}
@@ -982,11 +977,11 @@ if (!error) {
                           defaultInputValue={values.toOrg}
                           options={allOrganisations.filter(a => a.type == values.rtypeName)}
                         />
-                        {errors.toOrg && touched.toOrg && (
+                        {/* {errors.toOrg && touched.toOrg && (
                           <span className="error-msg text-danger">
                             {errors.toOrg}
                           </span>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </div>
@@ -994,7 +989,7 @@ if (!error) {
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label className="name required-field" htmlFor="delLocation">Delivery Location</label>
-                      <div className="line">
+                      <div className={`line ${errors.toOrgLoc ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           name={receiverOrgLoc}
                           name2="Select Delivery Location"
@@ -1012,8 +1007,6 @@ if (!error) {
                           groups={receiverWarehouses}
                         /> */}
                         <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
                           isDisabled={disabled}
                           // placeholder={disabled ? values.toOrgLoc.split("/")[1] : "Select Delivery Location"}
                           placeholder={"Select Delivery Location"}
@@ -1021,16 +1014,15 @@ if (!error) {
                           onChange={(v) => {
                             setFieldValue("toOrgLoc", v.value);
                             settoOrgLocLabel(v.label)
-                           
                           }}
                           defaultInputValue={values.toOrgLoc}
                           options={receiverWarehouses.filter( (ele, ind) => ind === receiverWarehouses.findIndex( elem => elem.label===ele.label))}
                         />
-                        {errors.toOrgLoc && touched.toOrgLoc && (
+                        {/* {errors.toOrgLoc && touched.toOrgLoc && (
                           <span className="error-msg text-danger">
                             {errors.toOrgLoc}
                           </span>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </div>
@@ -1047,7 +1039,7 @@ if (!error) {
                   <div className="col-md-6 com-sm-12 mt-2">
                       <label className="name required-field" htmlFor="organizationName">Transit Number</label>
                       <input
-                        className="input refship "
+                        className={`input refship ${errors.airWayBillNo ? "border-danger" : "" }`}
                         type="text"
                         id="referenceShipmentId"
                         name="airWayBillNo"
@@ -1056,18 +1048,18 @@ if (!error) {
                         placeholder="Enter Transit Number"
                         onChange={handleChange}
                       />
-                      {errors.airWayBillNo && touched.airWayBillNo && (
+                      {/* {errors.airWayBillNo && touched.airWayBillNo && (
                         <span className="error-msg text-danger-AB">
                           {errors.airWayBillNo}
                         </span>
-                      )}
+                      )} */}
                   </div>
                   
 
                   <div className="col-md-6 com-sm-12 mt-3">
                     <div className="form-group">
                       <label className="name required-field" htmlFor="delLocation">Shipment Date</label>
-                      <div className="refship">
+                      <div className={`input refship ${errors.shipmentDate ? "border-danger" : "" }`}>
                         <DatePicker
                           className="date"
                           selected={
@@ -1090,11 +1082,11 @@ if (!error) {
                           yearDropdownItemNumber={15}
                           scrollableYearDropdown
                         />
-                        {errors.shipmentDate && touched.shipmentDate && (
+                        {/* {errors.shipmentDate && touched.shipmentDate && (
                           <span className="error-msg text-danger-SD">
                             {errors.shipmentDate}
                           </span>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </div>
@@ -1104,7 +1096,7 @@ if (!error) {
                     <label className="name required-field" htmlFor="organizationName">Label Code</label>
                     <input
                     style={{position:"relative",top:"-7px"}}
-                      className="input refship "
+                      className={`input refship ${errors.labelCode ? "border-danger" : "" }`}
                       type="text"
                       id="referenceShipmentId"
                       name="labelCode"
@@ -1113,11 +1105,11 @@ if (!error) {
                       placeholder="Enter Label Code"
                       onChange={handleChange}
                     />
-                    {errors.labelCode && touched.labelCode && (
+                    {/* {errors.labelCode && touched.labelCode && (
                       <span className="error-msg text-danger-LC">
                         {errors.labelCode}
                       </span>
-                    )}
+                    )} */}
                 </div>
                 
                 <div className="col-md-6 com-sm-12">
