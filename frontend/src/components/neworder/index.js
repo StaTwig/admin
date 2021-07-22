@@ -368,7 +368,7 @@ const NewOrder = (props) => {
             )}
 
             <div className="row mb-3">
-              <div className="col bg-white shadow formContainer low">
+              <div className="col bg-white formContainer low">
                 <label htmlFor="client" className="headsup">
                   Order From
                 </label>
@@ -447,7 +447,7 @@ const NewOrder = (props) => {
             </div>
 
             <div className="row mb-3">
-              <div className="col bg-white formContainer shadow low">
+              <div className="col bg-white formContainer low">
                 <label htmlFor="client" className="headsup">
                 Deliver To
                 </label>
@@ -583,12 +583,12 @@ const NewOrder = (props) => {
               <div className="value">{quantity}</div>
               <div className="d-flex">
                 <button type="button" className="btn btn-outline-primary font-bold mr-2 mt-3" onClick={() => {dispatch(resetReviewPos({})); props.history.push('/orders')}}>
-                  Cancel
+                  <b>Cancel</b>
                 </button>
 
                 <button className="btn btn-orange fontSize20 font-bold mt-3">
                   <img src={OrderIcon} width="20" height="17" className="mr-2 mb-1" />
-                  <span>Review Order</span>
+                  <span><b>Review Order</b></span>
                 </button>
               </div>
             </div>

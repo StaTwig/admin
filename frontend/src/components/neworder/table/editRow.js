@@ -104,6 +104,7 @@ const EditRow = props => {
         <div className="col-2 tcell text-center justify-content-center p-2">
           <div className="">
             <input
+            style={{position:"relative",left:"-20px"}}
               className="form-control text-center"
               placeholder="Enter Quantity"
               onKeyPress={numbersOnly}

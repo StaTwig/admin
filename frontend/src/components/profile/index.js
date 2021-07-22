@@ -568,7 +568,7 @@ class Profile extends React.Component {
                           <span>N/A</span>
                         )}
                       </div>
-                      <div className="row name">
+                      <div className="row mb-3" style={{fontSize:"35px", fontWeight:"600"}}>
                         {this.state.firstName ? (
                           <span>{this.state.firstName}</span>
                         ) : (
@@ -621,7 +621,7 @@ class Profile extends React.Component {
                         )}
                       </div>
                     </div>
-                    <div className="col">
+                    <div className="col mt-5">
                       <div className="row location">MY LOCATIONS</div>
                     </div>
                     <div
