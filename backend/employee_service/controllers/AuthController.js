@@ -310,8 +310,8 @@ exports.checkEmail = [
             //   if (centralOrg.configuration_id) {
             //   }
             // }
-            const country = req.body?.address?.country ? req.body.address?.country : 'India';
-            const address = req.body?.address ? req.body.address : {};
+            const country = /*req.body?.address?.country ? req.body.address?.country : */'India';
+            const address = /*req.body?.address ? req.body.address : */ {};
             addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
             const incrementCounterOrg = await CounterModel.update({
               'counters.name': "orgId"
@@ -337,7 +337,7 @@ exports.checkEmail = [
               primaryContactId: employeeId,
               name: organisationName,
               id: organisationId,
-              type: req.body?.type ? req.body.type : 'CUSTOMER_SUPPLIER',
+              type: /*req.body?.type ? req.body.type :*/ 'CUSTOMER_SUPPLIER',
               status: 'NOTVERIFIED',
               postalAddress: addr,
               warehouses: [warehouseId],
@@ -347,7 +347,7 @@ exports.checkEmail = [
                 countryName: country
               },
               configuration_id: 'CONF000',
-              authority: req.body?.authority
+              authority: req.body.authority
             });
             await org.save();
             const incrementCounterInv = await CounterModel.update({
@@ -389,12 +389,12 @@ exports.checkEmail = [
           }
         }
         let emailId = null
-        if(req.body?.emailId)
+        if(req.body.emailId)
           emailId=req.body.emailId.toLowerCase().replace(' ', '');
         
        let phoneNumber = null
-        if(req.body?.phoneNumber)
-           phoneNumber='+'+req.body?.phoneNumber;
+        if(req.body.phoneNumber)
+           phoneNumber='+'+req.body.phoneNumber;
         
         // if (emailId.indexOf('@') === -1)
         //   phoneNumber = '+' + emailId;
@@ -690,12 +690,14 @@ exports.verifyOtp = [
             address = user.walletAddress
           }
 
+	  const activeWarehouse = await WarehouseModel.findOne( {$and: [ {"id": {$in: user.warehouseId }},{"status": "ACTIVE" }]})
+
           let userData = {
             id: user.id,
             firstName: user.firstName,
             emailId: user.emailId,
             role: user.role,
-            warehouseId: user.warehouseId[0],
+            warehouseId: activeWarehouse.id,
             organisationId: user.organisationId,
             walletAddress: address,
 	    phoneNumber: user.phoneNumber
@@ -837,6 +839,7 @@ exports.updateProfile = [
           firstName: firstName,
           emailId: employee.emailId,
           role: employee.role,
+	  organisationId: user.organisationId,
           warehouseId: warehouseId,
           phoneNumber: employee.phoneNumber
         };
@@ -1869,10 +1872,11 @@ exports.switchLocation = [
       const employee = await EmployeeModel.findOne({
         emailId: req.user.emailId,
       });
+	    console.log("emp",employee)
       const {
         warehouseId,
       } = req.body;
-
+console.log("wid",warehouseId)
       const returnData = { isRefresh: false };
       if (warehouseId !== req.user.warehouseId) {
         let userData = {
@@ -1880,9 +1884,11 @@ exports.switchLocation = [
           firstName: employee.firstName,
           emailId: employee.emailId,
           role: employee.role,
+	  organisationId: employee.organisationId,
           warehouseId: warehouseId,
           phoneNumber: employee.phoneNumber
         };
+	      console.log("ed",userData)
         //Prepare JWT token for authentication
         const jwtPayload = userData;
         const jwtData = {
