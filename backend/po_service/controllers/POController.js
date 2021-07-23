@@ -1000,7 +1000,7 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
               let productName = req.query.productName ? req.query.productName : undefined;
               let deliveryLocation = req.query.deliveryLocation ? req.query.deliveryLocation : undefined;
               let orderId = req.query.orderId ? req.query.orderId : undefined;
-              let postatus=req.query.poStatus ? req.query.poStatus:undefined;
+              let poStatus=req.query.poStatus ? req.query.poStatus:undefined;
               switch (req.query.dateFilter) {
                 case "today":
                   fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
@@ -1045,8 +1045,8 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
                   whereQuery["customer.customerOrganisation"] = fromCustomer
               }
 
-              if(postatus){
-                whereQuery["poStatus"]=postatus
+              if(poStatus){
+                whereQuery["poStatus"]=poStatus
               }
 
               if (productName) {
@@ -1168,7 +1168,7 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
               let productName = req.query.productName ? req.query.productName : undefined;
               let deliveryLocation = req.query.deliveryLocation ? req.query.deliveryLocation : undefined;
               let orderId = req.query.orderId ? req.query.orderId : undefined;
-              let postatus=req.query.poStatus ? req.query.poStatus:undefined;
+              let poStatus=req.query.poStatus ? req.query.poStatus:undefined;
               switch (req.query.dateFilter) {
                 case "today":
                   fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
@@ -1214,8 +1214,8 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
                   whereQuery["supplier.supplierOrganisation"] = toSupplier;
               }
 
-              if(postatus){
-                whereQuery["poStatus"]=postatus
+              if(poStatus){
+                whereQuery["poStatus"]=poStatus
               }
 	      
               if (productName) {
