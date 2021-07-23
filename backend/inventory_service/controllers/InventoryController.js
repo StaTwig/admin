@@ -1033,7 +1033,7 @@ exports.addProductsToInventory = [
           const employee = await EmployeeModel.findOne({ id });
           //var warehouseId = req.user.warehouseId;
            if (!req.query.warehouseId)
-             warehouseId = employee.warehouseId[0];
+             warehouseId = req.user.warehouseId;
            else
              warehouseId = req.query.warehouseId;
           console.log(warehouseId)
