@@ -45,6 +45,7 @@ import BatchExpiry from '../containers/batchexpiry';
 import ViewInventory from '../containers/viewInventory';
 import AddNewCategory from '../containers/addNewCategory';
 import NoMatch from '../components/NoMatch';
+import ViewProduct from '../containers/viewProduct'
 
 import './style.scss';
 
@@ -95,6 +96,8 @@ const routes = (
       <Route path="/batchexpired" component={requireAuth(BatchExpiry)} />
       <Route path="/viewinventory/:warehouseId" component={requireAuth(ViewInventory)} />
       <Route path="/addNewCategory" component={requireAuth(AddNewCategory)} />
+      <Route path="/viewproduct" component={requireAuth(ViewProduct)} />
+      
       <Route component={NoMatch} />
     </Switch>
 );
