@@ -74,6 +74,7 @@ router.get("/getOrgTypes", InventoryController.getOrgTypes);
 router.get("/getOrganizations", InventoryController.getOrganizations);
 router.get("/getAddresses", InventoryController.getAddresses);
 router.get("/getOrganizationWarehouses", InventoryController.getOrganizationWarehouses);
+router.get("/searchProduct", InventoryController.searchProduct);
 
 router.post(
   '/addInventoriesFromExcel',
