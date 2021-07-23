@@ -296,9 +296,9 @@ const imgs = config().fetchProfileImage;
 
             <div className="userName" style={{fontSize: "4px", marginBottom:"0px"}}>               
            <DropdownButton
-            // name={location?.title+"\n Address-"+location?.warehouseAddress?.firstLine}
-            name={location?.title}
-
+            name={location?.title+"\n"+location?.warehouseAddress?.city+","+location?.warehouseAddress?.country}
+            // name={location?.title}
+            arrowImg={dropdownIcon}
             onSelect={item=>{handleLocation(item)}}
             groups={activeWarehouses}
            />
