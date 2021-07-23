@@ -136,3 +136,4 @@ sketch
 pre-deploy*.sh
 **/package-lock.json
 **/yarn.lock
+/env
