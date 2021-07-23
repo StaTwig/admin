@@ -1782,9 +1782,7 @@ exports.getwarehouseByType = [
   async (req, res) => {
     try {
       const organisationId = req.query.id;
-      console.log(organisationId);
       const organisations = await ConfigurationModel.find({ id: organisationId }, 'warehouseTypes.id warehouseTypes.name')
-      console.log(organisations)
       return apiResponse.successResponseWithData(
         res,
         "Operation success",
