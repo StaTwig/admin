@@ -17,8 +17,7 @@ const ProductModel = require("../models/ProductModel");
 const NotificationModel = require("../models/NotificationModel");
 const logEvent = require("../../../utils/event_logger");
 const checkToken = require("../middlewares/middleware").checkToken;
-const checkPermissions =
-  require("../middlewares/rbac_middleware").checkPermissions;
+const checkPermissions = require("../middlewares/rbac_middleware").checkPermissions;
 const axios = require("axios");
 
 const fs = require("fs");
@@ -76,7 +75,7 @@ exports.getTotalCount = [
         "error",
         "<<<<< InventoryService < InventoryController < getTotalCount : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -117,7 +116,7 @@ exports.getTotalCountOnHold = [
         "error",
         "<<<<< InventoryService < InventoryController < getTotalCountOnHold : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -158,7 +157,7 @@ exports.getExpiringInventory = [
         "error",
         "<<<<< InventoryService < InventoryController < getExpiringInventory : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -200,7 +199,7 @@ exports.getInventoryforProduct = [
         "error",
         "<<<<< InventoryService < InventoryController < getInventoryforProduct : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -251,7 +250,7 @@ exports.getInventoryDetailsForProduct = [
         "error",
         "<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -517,7 +516,7 @@ exports.getAllInventoryDetails = [
         "error",
         "<<<<< InventoryService < InventoryController < getAllInventoryDetails : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -604,7 +603,7 @@ exports.updateInventories = [
       // compute(event_data).then((response) => console.log(response))
       apiResponse.successResponseWithData(res, "Updated Success");
     } catch (e) {
-      apiResponse.ErrorResponse(res, e);
+      apiResponse.ErrorResponse(res, e.message);
     }
   },
 ];
@@ -739,7 +738,7 @@ exports.insertInventories = [
       // compute(event_data).then((response) => console.log(response))
       apiResponse.successResponseWithData(res, "Inserted Success");
     } catch (e) {
-      apiResponse.ErrorResponse(res, e);
+      apiResponse.ErrorResponse(res, e.message);
     }
   },
 ];
@@ -757,7 +756,7 @@ exports.getAllStates = [
         allStates
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -779,7 +778,7 @@ exports.getCountries = [
         countries
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -801,7 +800,7 @@ exports.getStatesByCountry = [
         allStates
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -823,7 +822,7 @@ exports.getCitiesByState = [
         allCities
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -845,7 +844,7 @@ exports.getWarehousesByCity = [
         allWarehouses
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -864,7 +863,7 @@ exports.getDistrictsByState = [
         allStates
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -885,7 +884,7 @@ exports.getVendorsByDistrict = [
         allVendors
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -921,7 +920,7 @@ exports.getAllSKUs = [
         allSKUs
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -953,7 +952,7 @@ exports.getOrganizationsByType = [
         organisations
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -983,7 +982,7 @@ exports.getOrganizationInfoByID = [
         responseObj
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1215,7 +1214,7 @@ exports.addProductsToInventory = [
               if (atomsArray.length > 0) await AtomModel.insertMany(atomsArray);
               await inventory.save();
             } catch (err) {
-              console.log("err", err);
+              console.log("err", err.message);
             }
             /*AtomModel.insertMany(atoms).then(async (res, err) =>  {
              if(err) {
@@ -1298,7 +1297,7 @@ exports.addProductsToInventory = [
         "error",
         "<<<<< InventoryService < InventoryController < addMultipleInventories : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1501,7 +1500,7 @@ exports.addInventoriesFromExcel = [
         }
       });
     } catch (e) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1538,7 +1537,7 @@ exports.trackProduct = [
         "error",
         "<<<<< ShipmentService < ShipmentController < trackProduct : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1573,7 +1572,7 @@ exports.getInventoryDetails = [
         );
       }
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1830,7 +1829,7 @@ exports.getGroupedInventoryDetails = [
         "error",
         "<<<<< InventoryService < InventoryController < getGroupedInventoryDetails : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1883,7 +1882,7 @@ exports.getInventoryDetailsByBatchNumber = [
         "error",
         "<<<<< InventoryService < InventoryController < getInventoryDetailsByBatchNumber : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1948,7 +1947,7 @@ exports.getBatchDetailsByBatchNumber = [
         "error",
         "<<<<< InventoryService < InventoryController < getBatchDetailsByBatchNumber : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2053,7 +2052,7 @@ exports.getProductDetailsByWarehouseId = [
         "error",
         "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2075,7 +2074,7 @@ exports.getEmployeeDetailsByWarehouseId = [
         "error",
         "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2084,25 +2083,55 @@ exports.getCountryDetailsByRegion = [
   auth,
   async (req, res) => {
     try {
-      const { region } = req.query;
-      const regionDetails = await RegionModel.find({ name: region });
-      console.log(regionDetails[0].country);
-      // var countryArray = [];
-      /*for (j=0;j<regionDetails.length;j++)
-                   {
-                        var countryName = countryDetails[j].country;
-                        countryArray.push(countryName)
-                   } */
+      const { region , orgType } = req.query;
+      var common = [];
+      var countries = [];
+      if(region && orgType) {
+        const regionDetails = await RegionModel.find({ name: region });
+        if(regionDetails.length > 0)
+        {
+          countries = regionDetails[0].country;
+          countries.sort();
+        }
+        const orgs = await OrganisationModel.find({type:orgType}).select('country');
+        const orgSet = new Set()
+        for (let org of orgs) {
+          orgSet.add(org.country.countryName);
+        }
+        const orgArray = [...orgSet];
+        orgArray.sort();
 
-      return apiResponse.successResponseWithData(res, "Fetch success", {
-        countries: regionDetails[0].country,
-      });
+        // Get common countries
+        var i = 0, j = 0;
+        while(i<countries.length && j<orgArray.length) {
+          if(countries[i] == orgArray[j]) {
+            common.push(countries[i]);
+            i++;
+            j++;
+          }
+          else if(countries[i] < orgArray[j]) {
+            i++;                        
+          }                              
+          else {
+            j++;
+          }
+        }
+      }
+      else
+      {
+        if(region){
+        const regionDetails = await RegionModel.find({ name: region });
+        if(regionDetails.length > 0){
+          common = regionDetails[0].country;
+        }
+      }
+      else{
+        return apiResponse.ErrorResponse(res, "Please provide region and orgType");
+      }
+    }
+      return apiResponse.successResponseWithData(res, `Countries in Region ${region} & OrgType ${orgType}`,common);
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2111,16 +2140,28 @@ exports.getRegions = [
   auth,
   async (req, res) => {
     try {
-      const regions = await RegionModel.find({});
-      return apiResponse.successResponseWithData(res, "Regions", regions);
+      const {orgType} = req.query;
+      var orgs;
+      if(!orgType)
+      {
+        orgs = await OrganisationModel.find({}).select('region.name');
+      }
+      else{
+        orgs = await OrganisationModel.find({type:orgType}).select('region.name');
+      }
+      const orgSet = new Set()
+      for (let org of orgs) {
+        orgSet.add(org.region.name);
+      }
+      return apiResponse.successResponseWithData(res, `Regions of Organisations of type ${orgType}`,[...orgSet]);
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
 
 exports.getWarehouseDetailsByRegion = [
-  auth,
+  // auth,
   async (req, res) => {
     try {
       const { region } = req.query;
@@ -2128,6 +2169,7 @@ exports.getWarehouseDetailsByRegion = [
         "region.regionName": region,
       });
 
+      console.log(warehouseDetails);
       var warehouseArray = [];
       for (j = 0; j < warehouseDetails.length; j++) {
         var warehouseId = warehouseDetails[j];
@@ -2144,7 +2186,7 @@ exports.getWarehouseDetailsByRegion = [
         "error",
         "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2174,7 +2216,7 @@ exports.getWarehouseDetailsByCountry = [
         "error",
         "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2223,7 +2265,7 @@ exports.getInventory = [
     } catch (err) {
       console.log(err);
 
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2250,7 +2292,7 @@ exports.getInventoryCountsOfThePlatform = [
         "error",
         "<<<<< InventoryService < InventoryController < getInventoryCountsOfThePlatform : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2329,7 +2371,7 @@ exports.getInventoryCountsByOrganisation = [
         "error",
         "<<<<< InventoryService < InventoryController < getInventoryCountsByOrganisation : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2488,7 +2530,7 @@ exports.getInventoryCountsByWarehouse = [
         "error",
         "<<<<< InventoryService < InventoryController < getInventoryCountsByWarehouse : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2580,7 +2622,7 @@ exports.getInventoryProductsByWarehouse = [
         "error",
         "<<<<< InventoryService < InventoryController < getInventoryProductsByWarehouse : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2613,7 +2655,7 @@ exports.getInventoryProductsByOrganisation = [
         "error",
         "<<<<< InventoryService < InventoryController < getInventoryProductsByWarehouse : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2881,7 +2923,7 @@ exports.getInventoryProductsByPlatform = [
         "error",
         "<<<<< InventoryService < InventoryController < getInventoryProductsByWarehouse : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2987,7 +3029,7 @@ exports.uploadSalesData = [
       );
 
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -3048,7 +3090,7 @@ exports.getBatchNearExpiration = [
         );
       }
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -3105,7 +3147,7 @@ exports.getBatchExpired = [
         );
       }
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -3143,7 +3185,7 @@ exports.getBatchWarehouse = [
         result
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -3343,3 +3385,95 @@ exports.deleteProductsFromInventory = [
         }
     },
 ];
+
+exports.getOrgTypes = [
+    async (req, res)=>{
+        try {
+            const orgTypes = await OrganisationModel.find({},{ '_id': 0}).select('type');
+            const orgSet = new Set()
+            for (let org of orgTypes) {
+              if (org.type == null) {
+                continue;
+              }
+              orgSet.add(org.type);
+            }
+            return apiResponse.successResponseWithData(res,"All Organisation Types", [...orgSet]);
+        } catch (err) {
+            return apiResponse.ErrorResponse(res, err.message);
+        }
+    }
+]
+
+exports.getOrganizations = [
+  auth,
+    async (req, res)=>{
+        try {
+            var orgs = [];
+            const {orgType, country} = req.query;
+            if(orgType && country){
+              orgs = await OrganisationModel.find({$and: [{type: orgType}, {"country.countryName": country}]});
+            }else if(country){
+              orgs = await OrganisationModel.find({"country.countryName": country});
+            }else{
+              return apiResponse.ErrorResponse(res, "Provide OrgType and Country");
+            }
+            return apiResponse.successResponseWithData(res,"All Organizations", orgs);
+        } catch (err) {
+            return apiResponse.ErrorResponse(res, err.message);
+        }
+    }
+]
+
+exports.getAddresses = [
+  auth,
+  async (req, res)=>{
+      try {
+          var warehouseIds = [];
+          var warehouseData = [];
+          const {orgType, country} = req.query;
+          if(orgType && country){
+            const orgs = await OrganisationModel.find({type: orgType}).select("warehouses");
+            for(let org of orgs){
+              for(let warehouse of org.warehouses){
+                warehouseIds.push(warehouse);
+              }
+            }
+            warehouseData = await WarehouseModel.find({$and: [{id: {$in: warehouseIds}},{"country.countryName": country}]});
+          }else if(country){
+            warehouseData = await WarehouseModel.find({"country.countryName": country});
+          }else{
+            return apiResponse.ErrorResponse(res, "Provide OrgType and Country");
+          }
+          return apiResponse.successResponseWithData(res,`Organizations Warehouse Address of type ${orgType} & country ${country}`, warehouseData);
+      } catch (err) {
+          return apiResponse.ErrorResponse(res, err.message);
+      }
+  }
+]
+
+exports.getOrganizationWarehouses = [
+  auth,
+  async (req, res)=>{
+      try {
+          var warehouseIds = [];
+          var warehouseData = [];
+          const {orgId , country} = req.query;
+          if(orgId && country){
+            const orgs = await OrganisationModel.find({id: orgId}).select("warehouses");
+            for(let org of orgs){
+              for(let warehouse of org.warehouses){
+                warehouseIds.push(warehouse);
+              }
+            }
+            warehouseData = await WarehouseModel.find({$and: [{id: {$in: warehouseIds}},{"country.countryName": country}]});
+          }else if(orgId){
+            warehouseData = await WarehouseModel.find({"organisationId": orgId});
+          }else{
+            return apiResponse.ErrorResponse(res, "Provide OrgId and Country");
+          }
+          return apiResponse.successResponseWithData(res,`Organizations Warehouse Address of ${orgId} & country ${country}`, warehouseData);
+      } catch (err) {
+          return apiResponse.ErrorResponse(res, err.message);
+      }
+  }
+]
