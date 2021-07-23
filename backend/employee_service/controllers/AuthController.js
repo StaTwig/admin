@@ -311,7 +311,7 @@ exports.checkEmail = [
             //   }
             // }
             const country = req.body?.address?.country ? req.body.address?.country : 'India';
-            const address = req.body?.address ? req.body.address : {};
+            const address = req.body?.address ? req.body.address :  {};
             addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
             const incrementCounterOrg = await CounterModel.update({
               'counters.name': "orgId"
@@ -690,12 +690,14 @@ exports.verifyOtp = [
             address = user.walletAddress
           }
 
+	  const activeWarehouse = await WarehouseModel.findOne( {$and: [ {"id": {$in: user.warehouseId }},{"status": "ACTIVE" }]})
+
           let userData = {
             id: user.id,
             firstName: user.firstName,
             emailId: user.emailId,
             role: user.role,
-            warehouseId: user.warehouseId[0],
+            warehouseId: activeWarehouse.id,
             organisationId: user.organisationId,
             walletAddress: address,
 	    phoneNumber: user.phoneNumber
@@ -837,6 +839,7 @@ exports.updateProfile = [
           firstName: firstName,
           emailId: employee.emailId,
           role: employee.role,
+	  organisationId: user.organisationId,
           warehouseId: warehouseId,
           phoneNumber: employee.phoneNumber
         };
@@ -1870,7 +1873,6 @@ exports.switchLocation = [
       const {
         warehouseId,
       } = req.body;
-
       const returnData = { isRefresh: false };
       if (warehouseId !== req.user.warehouseId) {
         let userData = {
@@ -1878,6 +1880,7 @@ exports.switchLocation = [
           firstName: employee.firstName,
           emailId: employee.emailId,
           role: employee.role,
+	  organisationId: employee.organisationId,
           warehouseId: warehouseId,
           phoneNumber: employee.phoneNumber
         };
