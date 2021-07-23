@@ -112,7 +112,7 @@ const Overview = props => {
               <div className="d-flex align-items-center justify-content-between">
                 <h5 className="card-title font-weight-bold mt-2">Inventory Summary</h5>
                 <Link to="/newinventory">
-                  <button className="btn-primary btn-sm btn mt-3"> Add Inventory</button>
+                  <button className="btn-primary btn-sm btn mt-3"> <b>Add Inventory</b></button>
                 </Link>
               </div>
             </div>
@@ -124,7 +124,7 @@ const Overview = props => {
             <div className="card-footer mb-2">
               <div className="d-flex align-items-center justify-content-center">
                 <Link to="/inventory">
-                <button className=" card-link btn btn-outline-primary"> View More</button>
+                <button className=" card-link btn btn-outline-primary">View More</button>
               </Link>
               </div>
             </div>
@@ -136,7 +136,7 @@ const Overview = props => {
               <div className="d-flex align-items-center justify-content-between">
                 <h5 className="card-title font-weight-bold mt-2">Shipment Summary</h5>
                 <Link to="/newshipment">
-                  <button className="btn-primary btn-sm btn mt-3"> Create Shipment</button>
+                  <button className="btn-primary btn-sm btn mt-3"><b> Create Shipment </b></button>
                 </Link>
               </div>
             </div>
@@ -146,7 +146,7 @@ const Overview = props => {
             <div className="card-footer mb-2">
               <div className="d-flex align-items-center justify-content-center">
                 <Link to="/shipments">
-                <button className=" card-link btn btn-outline-primary"> View More</button>
+                <button className=" card-link btn btn-outline-primary">View More</button>
                   </Link>
               </div>
             </div>

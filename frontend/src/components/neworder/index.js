@@ -368,7 +368,7 @@ const NewOrder = (props) => {
             )}
 
             <div className="row mb-3">
-              <div className="col bg-white shadow formContainer low">
+              <div className="col bg-white formContainer low">
                 <label htmlFor="client" className="headsup">
                   Order From
                 </label>
@@ -376,7 +376,7 @@ const NewOrder = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="name form-group">
                         <label className="required-field" htmlFor="organizationName">Organisation Type</label>
-                        <div className="line">
+                        <div className={`line ${errors.type ? "border-danger" : "" }`}>
                           <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
@@ -390,9 +390,9 @@ const NewOrder = (props) => {
                             defaultInputValue={values.typeName}
                             options={orgTypes}
                           />
-                          {errors.type && touched.type && (
+                         {/* {errors.type && touched.type && (
                             <span className="error-msg text-danger">{errors.type}</span>
-                          )}
+                         )} */}
                         </div>
                       </div>
                     </div>
@@ -401,7 +401,7 @@ const NewOrder = (props) => {
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
                       <label className="required-field" htmlFor="organizationName">Organisation Name</label>
-                      <div className="line">
+                      <div className={`line ${errors.fromOrg ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           isText={true}
                           name={senderOrgId}
@@ -427,9 +427,9 @@ const NewOrder = (props) => {
                             isDisabled={values.typeName == ''}
                             options={allOrganisations.filter(a => a.type == values.typeName)}
                           />
-                        {errors.fromOrg && touched.fromOrg && (
+                        {/* {errors.fromOrg && touched.fromOrg && (
                           <span className="error-msg text-danger">{errors.fromOrg}</span>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </div>
@@ -447,7 +447,7 @@ const NewOrder = (props) => {
             </div>
 
             <div className="row mb-3">
-              <div className="col bg-white formContainer shadow low">
+              <div className="col bg-white formContainer low">
                 <label htmlFor="client" className="headsup">
                 Deliver To
                 </label>
@@ -456,7 +456,7 @@ const NewOrder = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="name form-group">
                         <label className="required-field" htmlFor="organizationName">Organisation Type</label>
-                        <div className="line">
+                        <div className={`line ${errors.rtype ? "border-danger" : "" }`}>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
@@ -472,9 +472,9 @@ const NewOrder = (props) => {
                             }}
                             options={orgTypes}
                           />
-                          {errors.rtype && touched.rtype && (
+                          {/* {errors.rtype && touched.rtype && (
                             <span className="error-msg text-danger">{errors.rtype}</span>
-                          )}
+                          )} */}
                         </div>
                       </div>
                     </div>
@@ -483,7 +483,7 @@ const NewOrder = (props) => {
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
                       <label className="required-field" htmlFor="organizationName">Organisation Name</label>
-                      <div className="line">
+                      <div className={`line ${errors.toOrg ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           isText={true}
                           name={receiverOrgId}
@@ -513,9 +513,9 @@ const NewOrder = (props) => {
                             isDisabled={values.rtypeName == ''}
                             options={allOrganisations.filter(a => a.type == values.rtypeName)}
                           />
-                        {errors.toOrg && touched.toOrg && (
+                        {/* {errors.toOrg && touched.toOrg && (
                           <span className="error-msg text-danger">{errors.toOrg}</span>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </div>
@@ -533,7 +533,7 @@ const NewOrder = (props) => {
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
                       <label className="required-field" htmlFor="delLocation">Delivery Location</label>
-                      <div className="line">
+                      <div className={`line ${errors.toOrgLoc ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           isText={true}
                           name={receiverOrgLoc}
@@ -570,9 +570,9 @@ const NewOrder = (props) => {
                             isDisabled={values.rtypeName == ''}
                             options={receiverWarehouses}
                           />
-                        {errors.toOrgLoc && touched.toOrgLoc && (
+                        {/* {errors.toOrgLoc && touched.toOrgLoc && (
                           <span className="error-msg text-danger">{errors.toOrgLoc}</span>
-                        )}
+                        )} */}
                       </div>
                     </div>
                   </div>
@@ -583,12 +583,12 @@ const NewOrder = (props) => {
               <div className="value">{quantity}</div>
               <div className="d-flex">
                 <button type="button" className="btn btn-outline-primary font-bold mr-2 mt-3" onClick={() => {dispatch(resetReviewPos({})); props.history.push('/orders')}}>
-                  Cancel
+                  <b>Cancel</b>
                 </button>
 
                 <button className="btn btn-orange fontSize20 font-bold mt-3">
                   <img src={OrderIcon} width="20" height="17" className="mr-2 mb-1" />
-                  <span>Review Order</span>
+                  <span><b>Review Order</b></span>
                 </button>
               </div>
             </div>

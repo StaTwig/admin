@@ -192,16 +192,16 @@ const Orders = props => {
           <Link to="/neworder">
             <button className="btn btn-orange fontSize20 font-bold mt-1">
               <img src={OrderIcon} width="20" height="17" className="mr-2 mb-1" />
-              <span style={{ color: 'white' }}>Create New Order</span>
+              <span style={{ color: 'white' }}><b>Create New Order</b></span>
             </button>
           </Link>
           
           {/* <div className="d-flex flex-column align-items-center"> */}
             <button className="btn-primary btn fontSize20 font-bold mt-1 ml-2" onClick={() => setMenu(!menu)}>
               <div className="d-flex align-items-center">
-                <img src={ExportIcon} width="16" height="16" className="mr-3" />
-                <span>Import</span>
-                <img src={dropdownIcon} width="16" height="16" className="ml-3" />
+                <img src={ExportIcon} width="16" height="16" className="mr-2" />
+                <span><b>Import</b></span>
+                <img src={dropdownIcon} width="14" height="14" className="ml-2" />
             </div>
             </button>
             {menu ? (
@@ -236,7 +236,7 @@ const Orders = props => {
         </div>
       </div>
       <Tiles {...props} setData={setData} />
-      <div className="mt-4 ">
+      <div className="mt-4">
         <Tabs {...props} setvisible={setvisible} visible={visible} />
       </div>
       <div className="full-width-ribben mt-4">

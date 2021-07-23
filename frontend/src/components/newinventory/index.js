@@ -259,7 +259,7 @@ const NewInventory = (props) => {
           <button className="btn-primary btn mt-0" onClick={() => setMenu(!menu)}>
             <div className="d-flex  align-items-center">
               <img src={ExportIcon} width="16" height="16" className="mr-3" />
-              <span>Import</span>
+              <span><b>Import</b></span>
               <img src={dropdownIcon} width="16" height="16" className="ml-3" />
             </div>
           </button>
@@ -305,7 +305,7 @@ const NewInventory = (props) => {
           className="btn btn-white bg-white shadow-radius mt-0 font-bold ml-3"
           onClick={onAddAnotherProduct}
         ><div style={{fontSize:"14px"}}>
-          +<span> Add Another Product</span>
+          +<span><b>Add Another Product</b></span>
           </div>
         </button>
       </div>
@@ -316,13 +316,13 @@ const NewInventory = (props) => {
       <span className="value">{grandTotal}</span> */}
       <button className="btn-orange btn" onClick={onProceedToReview}>
         <img src={review} width="20" className="" />
-        <span className="ml-1">Review Product</span>
+        <span className="ml-1"><b>Review Product</b></span>
       </button>
       <button 
       type="button"
       className="btn btn-outline-primary font-bold mr-3" 
       onClick={() => {dispatch(resetReviewInventories([]));props.history.push("/inventory")}}
-      >Cancel
+      ><b>Cancel</b>
       </button>
       </div>
       {openCreatedInventory && (
