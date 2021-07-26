@@ -137,10 +137,14 @@ const ReviewOrder = props => {
                   <span className="col" style={{color: "black",fontSize:"14px"}} >{order.rtypeName}/{order.toOrg}</span>
                 </div>
                 <div className="w-100"></div>
-                <div className="col row col-6 mt-5">
-                  <span className="col-4">Delivery Location:</span>
-                  <span className="col ml-2 " style={{color: "black",fontSize:"14px"}} >{order.toOrgLocName}</span>
+                <div className="col row  mt-5">
+                  <span className="col-4">Region:</span>
+                  <span className="col ml-2 " style={{color: "black",fontSize:"14px"}} >{order.toOrgRegion}</span>
                 </div>
+                <div className="col row  mt-5">
+                <span className="col-4">Country: </span>
+                <span className="col" style={{color: "black",fontSize:"14px"}} >{order.toOrgCountry}</span>
+              </div>
               </div>
             </div>
           </div>

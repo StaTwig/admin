@@ -32,6 +32,7 @@ export const DEV_SERVER_URL = 'http://127.0.0.1:9001';
 export function config() {
   const confs = {
     local: {
+      getOrganizationsUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
       loginUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/login`,
       sendOtpUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/register`,
@@ -40,6 +41,7 @@ export function config() {
       userInfoUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/updateProfile`,
+      locationUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/switchLocation`,
       upload: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/uploadImage?`,
       fetchProfileImage:`${LOCAL_SERVER_URL_USER}`,
       uploadProfileImage:`${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/uploadImage?action=PROFILE`,
@@ -151,6 +153,7 @@ export function config() {
       trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`
 },
     dev: {
+      getOrganizationsUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/register`,
@@ -159,6 +162,7 @@ export function config() {
       userInfoUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/updateProfile`,
+      locationUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/switchLocation`,
       upload: `${DEV_SERVER_URL}/usermanagement/api/auth/uploadImage?`,
       fetchProfileImage:`${DEV_SERVER_URL}`,
       getAnalyticsUrl:`${DEV_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
@@ -266,6 +270,7 @@ export function config() {
       trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
       },
     stable: {
+      getOrganizationsUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
       sendOtpUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/register`,
@@ -273,6 +278,7 @@ export function config() {
       verifyOtpUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/getAllUsers`,
+      locationUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/switchLocation`,
       updateProfileUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/updateProfile`,
       upload: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/uploadImage?`,
       fetchProfileImage:`${STABLE_SERVER_URL_USER}`,
@@ -387,6 +393,8 @@ export function config() {
       fetchCitiesByState:`${STABLE_SERVER_URL_PRODUCTS}/productmanagement/api/location?state_id=`
     },
     test: {
+      getOrganizationsUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
+      getOrganizationsByTypeUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsByType?id=`,
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/register`,
@@ -394,8 +402,10 @@ export function config() {
       verifyOtpUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
+      locationUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/switchLocation`,
       updateProfileUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${TEST_SERVER_URL}/usermanagement/api/auth/uploadImage?`,
+      getOrganizationsByType:`${TEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsByType?id=`,
       fetchProfileImage:`${TEST_SERVER_URL}`,
       uploadProfileImage:`${TEST_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
       getAnalyticsUrl:`${TEST_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
@@ -506,6 +516,7 @@ export function config() {
       fetchCitiesByState:`${TEST_SERVER_URL}/productmanagement/api/location?state_id=`
 },
     demo: {
+      getOrganizationsUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/register`,
@@ -513,6 +524,7 @@ export function config() {
       verifyOtpUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
+      locationUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/switchLocation`,
       updateProfileUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${DEMO_SERVER_URL}/usermanagement/api/auth/uploadImage?`,
       fetchProfileImage:`${DEMO_SERVER_URL}`,
@@ -619,6 +631,7 @@ export function config() {
       trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
     },
     prod: {
+      getOrganizationsUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/register`,
@@ -626,6 +639,7 @@ export function config() {
       verifyOtpUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/userInfo`,
       getAllUsersUrl: `${PROD_SERVER_URL}/api/auth/getAllUsers`,
+      locationUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/switchLocation`,
       updateProfileUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${PROD_SERVER_URL}/usermanagement/api/auth/uploadImage?`,
       fetchProfileImage:`${PROD_SERVER_URL}`,
@@ -732,12 +746,14 @@ export function config() {
     },
     
     uniceftest: {
+      getOrganizationsUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
       loginUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/register`,
       checkUserUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/check`,
       verifyOtpUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/verifyOtp`,
       userInfoUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/userInfo`,
+      locationUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/switchLocation`,
       getAllUsersUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/getAllUsers`,
       updateProfileUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/uploadImage?`,

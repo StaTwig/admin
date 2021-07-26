@@ -1,5 +1,4 @@
 const Joi = require('joi');
-
 const eventSchema = Joi.object().keys({
   eventID: Joi.string().min(1).max(50).required(),
   eventTime: Joi.string().required(),
@@ -40,12 +39,12 @@ function validate(data) {
   const { value, error } = result;
   const valid = error == null;
   if (!valid) {
-    //console.log(error)
+    console.log(error)
     return false;
   }
   else {
+    console.log('success')
     return true;
   }
 }
-
 module.exports = validate;
