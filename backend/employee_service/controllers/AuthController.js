@@ -1237,9 +1237,12 @@ exports.updateWarehouseAddress = [
   auth,
   async (req, res) => {
     try {
+       const loc = await getLatLongByCity( req.body.warehouseAddress.city+','+ req.body.warehouseAddress.country);
+      const data = req.body;
+      data.location = loc;
       await WarehouseModel.findOneAndUpdate(
         { id: req.query.warehouseId },
-        req.body,
+        data,
         { new: true }
       )
         .then((warehouse) => {
