@@ -86,7 +86,7 @@ const AdvanceTableFilter = (props) => {
               <Button variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("ACCEPTED")}>Accepted</Button>
             </StyledMenuItem>
             <StyledMenuItem>
-              <Button variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("CREATED")}>Sent</Button>
+              <Button variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("CREATED")}>{props.visible=="one"?"Sent":"Received"}</Button>
             </StyledMenuItem>
 
             <StyledMenuItem>
