@@ -376,7 +376,7 @@ const NewOrder = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="name form-group">
                         <label className="required-field" htmlFor="organizationName">Organisation Type</label>
-                        <div className={`line ${errors.type ? "border-danger" : "" }`}>
+                        <div className={`line ${errors.type && touched.type ? "border-danger" : "" }`}>
                           <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
@@ -401,7 +401,7 @@ const NewOrder = (props) => {
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
                       <label className="required-field" htmlFor="organizationName">Organisation Name</label>
-                      <div className={`line ${errors.fromOrg ? "border-danger" : "" }`}>
+                      <div className={`line ${errors.fromOrg && touched.fromOrg ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           isText={true}
                           name={senderOrgId}
@@ -456,7 +456,7 @@ const NewOrder = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="name form-group">
                         <label className="required-field" htmlFor="organizationName">Organisation Type</label>
-                        <div className={`line ${errors.rtype ? "border-danger" : "" }`}>
+                        <div className={`line ${errors.rtype && touched.rtype ? "border-danger" : "" }`}>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
@@ -483,7 +483,7 @@ const NewOrder = (props) => {
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
                       <label className="required-field" htmlFor="organizationName">Organisation Name</label>
-                      <div className={`line ${errors.toOrg ? "border-danger" : "" }`}>
+                      <div className={`line ${errors.toOrg && touched.toOrg ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           isText={true}
                           name={receiverOrgId}
@@ -533,7 +533,7 @@ const NewOrder = (props) => {
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
                       <label className="required-field" htmlFor="delLocation">Delivery Location</label>
-                      <div className={`line ${errors.toOrgLoc ? "border-danger" : "" }`}>
+                      <div className={`line ${errors.toOrgLoc && touched.toOrgLoc ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           isText={true}
                           name={receiverOrgLoc}
