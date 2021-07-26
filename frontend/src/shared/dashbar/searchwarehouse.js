@@ -1,6 +1,7 @@
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import React,{useEffect, useState} from 'react';
 import { useDispatch } from 'react-redux'
-
+import { fetchAllRegions,fetchCountriesByRegion } from '../../actions/productActions';
 import {
     getRegions,
     getCountryByRegion,
@@ -11,6 +12,7 @@ import {
 import CloseIcon from '../../assets/icons/cross.svg';
 import DropdownButton from '../dropdownButtonGroup';
 import './style.scss'
+import { TextField } from '@material-ui/core';
    const SearchWareHouse = props => {
        const dispatch = useDispatch();
     const [region,setRegion]= useState('Select Region')
@@ -23,31 +25,37 @@ import './style.scss'
     const [ products, setProducts ] = useState([]);
     const [ warehouse, setWarehouse ] = useState({});
     useEffect(() => {
-        async function fetchData() {
-          const result = await getRegions();
-          setRegions(result.data.map(reg => reg.name));
-       }
-        fetchData();
+    async function fetchAllRegions1(){
+        let arr = await fetchAllRegions();
+        console.log(arr);
+        setRegions(arr.data);
+      }
+      fetchAllRegions1();
       }, []);
 
-        const onCountries = async (item) => {
-           const countryResult = await getCountryByRegion(item);
-        if (countryResult.status === 1) {
-            setCountries(countryResult.data.countries)
-        }
-    }
+    //     const onCountries = async (item) => {
+    //        const countryResult = await getCountryByRegion(item);
+    //     if (countryResult.status === 1) {
+    //         setCountries(countryResult.data.countries)
+    //     }
+    // }
+    async function fetchAllCountries1(id){
+        let res = await fetchCountriesByRegion(id);
+        console.log("res",res);
+        setCountries(x=>res.data);
+        console.log("countries",countries);
+      };
 
-    const onRegionChange = async item => {
-        setRegion(item)
-        onCountries(item);
-        const regionResult = await getWareHousesByRegion(item);
-        if (regionResult.status === 1) {
-            setWareHouses(regionResult.data);
-            props.setWarehouseArr(regionResult.data);
-            const warehouseList = regionResult.data.map(w => w.id);
-            setWareHouseIds(warehouseList);
-        }
-    }
+    const onRegionChange = async (item) => {
+        const warehousesResult = await getWareHousesByRegion(item);
+     if (warehousesResult.status === 1) {
+         setWareHouses(warehousesResult.data);
+         props.setWarehouseArr(warehousesResult.data);
+         const warehouseList = warehousesResult.data.map(w => w.id);
+         setWareHouseIds(warehouseList);
+     }
+ }
+
 
     const onCountryChange = async item => {
         setRegion(item)
@@ -88,38 +96,47 @@ import './style.scss'
                 <div className="form-group row mr-1">
                   <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">Region</label>
                     <div className="form-control col">
-                        <DropdownButton
-                            name={region}
-                            onSelect={onRegionChange}
-                            groups={regions}
+                        <Autocomplete
+                        value={region}
+                        onChange={(event,newValue)=>{
+                            fetchAllCountries1(newValue);
+                            setRegion(newValue);
+                            onRegionChange(newValue);
+                            setCountry('');
+                            setWareHouseId('');
+
+                        }}
+                        options={regions}
+                        renderInput={(params)=><TextField {...params}/>}
                         />
                     </div>
                 </div>
                 <div className="form-group row mr-1">
                     <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">Country</label>
                     <div className="form-control col">
-                        <DropdownButton
-                            name={country}
-                            onSelect={item =>
-                                {
-                                setCountry(item)
-                                onWarehouses(item)
-                                }
-                            }
-                            groups={countries}
+                        <Autocomplete
+                        value={country}
+                        onChange={(event,newValue)=>{
+                            setCountry(newValue)
+                            onWarehouses(newValue)
+                            setWareHouseId('')
+                        }}
+                        options={countries.map((option)=>option.name)}
+                        renderInput={(params)=><TextField {...params}/>}
                         />
                     </div>
                 </div>
                 <div className="form-group mb-4 row mr-1">
                     <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">Location</label>
                     <div className="form-control col">
-                        <DropdownButton
-                            name={warehouseId}
-                            onSelect={item => {
-                                setWareHouseId(item)
-                                onSearchWareHouse(item)
-                            }}
-                            groups={warehouseIds}
+                        <Autocomplete
+                        value={warehouseId}
+                        onChange={(event,newValue)=>{
+                            setWareHouseId(newValue);
+                            onSearchWareHouse(newValue);
+                        }}
+                        options={warehouseIds}
+                        renderInput={(params)=><TextField {...params}/>}
                         />
                     </div>
                 </div>
