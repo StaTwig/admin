@@ -403,6 +403,10 @@ const NewOrder = (props) => {
           if (!values.toOrgLoc) {
             errors.toOrgLoc = "Required";
           }
+          if (!values.toOrgLocCountry) {
+            errors.toOrgLocCountry = "Required";
+          }
+          
           if (values.products.length == 0) {
             errors.products = "Required";
           }
@@ -515,6 +519,7 @@ const NewOrder = (props) => {
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
+                            
                             placeholder={<div className="select-placeholder-text">Select Organisation Name</div>}
                             value={values.fromOrg==""?"Select Organisation Name":{value: values.fromOrg, label: values.fromOrgId}}
                             defaultInputValue={values.fromOrgId}
@@ -559,6 +564,7 @@ const NewOrder = (props) => {
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
+                            styles={customStyles}
                             placeholder={<div className="select-placeholder-text">Select Organisation Type</div>}
                             defaultInputValue={values.rtypeName}
                             onChange={(v) => {
@@ -570,6 +576,7 @@ const NewOrder = (props) => {
                               setFieldValue('toOrgCountry',"");
                               setFieldValue('toOrgRegion',"");
                               setFieldValue('toOrgLoc',"");
+                              setFieldValue('toOrgLocCountry',"");
                               setOrgType(v.label);
                               onOrgTypeChange(v.label);
                             }}
@@ -589,13 +596,13 @@ const NewOrder = (props) => {
                 <div className="row">
                 <div className="col-md-6 com-sm-12">
                   <div className="name form-group">
-                    <label className="required-field" htmlFor="delLocation" style={{fontSize:"16px"}}>Region</label>
-                    <div className="form-control">
+                    <label className="required-field" htmlFor="delLocation">Region</label>
+                    <div className={`line ${errors.toOrgLoc ? "border-danger" : "" }`}>
     
                         <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
-                        styles={customStyles}
+                        
                           placeholder={<div className="select-placeholder-text">Select Delivery Location</div>}
                           value={values.toOrgLoc==""?"Select Delivery Location":{value: values.toOrgLoc, label: values.toOrgRegion}}
                           defaultInputValue={values.toOrgRegion}
@@ -608,9 +615,9 @@ const NewOrder = (props) => {
                           isDisabled={values.rtypeName == ''}
                           options={receiverWarehousesRegion}
                         />
-                      {errors.toOrgLoc && touched.toOrgLoc && (
+                      {/*errors.toOrgLoc && touched.toOrgLoc && (
                         <span className="error-msg text-danger">{errors.toOrgLoc}</span>
-                      )}
+                      )*/}
                     </div>
                   </div>
                 </div>
@@ -619,26 +626,27 @@ const NewOrder = (props) => {
                 <div className="row">
                 <div className="col-md-6 com-sm-12">
                   <div className="name form-group">
-                    <label className="required-field" htmlFor="delLocation" style={{fontSize:"16px"}}>Country</label>
-                    <div className="form-control">
+                    <label className="required-field" htmlFor="delLocation" >Country</label>
+                    <div className={`line ${errors.toOrgLocCountry ? "border-danger" : "" }`}>
 
                         <Select
-                          styles={customStyles}
+                          
                           placeholder={<div className="select-placeholder-text">Select Delivery Location</div>}
-                          value={values.toOrgLoc==""?"Select Delivery Location":{value: values.toOrgLoc, label: values.toOrgCountry}}
+                          value={values.toOrgLoc==""?"Select Delivery Location":{value: values.toOrgLocCountry, label: values.toOrgCountry}}
                           defaultInputValue={values.toOrgCountry}
                           onChange={(v) => {
                             setFieldValue('toOrgCountry', v.label);
-                            setFieldValue('toOrgLoc', v.value);
+                            setFieldValue('toOrgLocCountry', v.value);
                             setCountry(v.label);
                             onCountryChange(v.label);
+
                           }}
                           isDisabled={values.rtypeName == ''}
                           options={receiverWarehousesCountry}
                         />
-                      {errors.toOrgLoc && touched.toOrgLoc && (
+                      {/*errors.toOrgLoc && touched.toOrgLoc && (
                         <span className="error-msg text-danger">{errors.toOrgLoc}</span>
-                      )}
+                      )*/}
                     </div>
                   </div>
                 </div>
@@ -676,7 +684,7 @@ const NewOrder = (props) => {
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
-                            styles={customStyles}
+                           
                             placeholder={<div className="select-placeholder-text">Select Organisation Name</div>}
                             value={values.toOrg==""?"Select Organisation Name":{value: values.toOrg, label: values.toOrgName}}
                             defaultInputValue={values.toOrgName}
