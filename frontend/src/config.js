@@ -32,6 +32,7 @@ export const DEV_SERVER_URL = 'http://127.0.0.1:9001';
 export function config() {
   const confs = {
     local: {
+      getOrganizationsUrl: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
       loginUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/login`,
       sendOtpUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${LOCAL_SERVER_URL_USER}/usermanagement/api/auth/register`,
@@ -152,6 +153,7 @@ export function config() {
       trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`
 },
     dev: {
+      getOrganizationsUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
       loginUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${DEV_SERVER_URL}/usermanagement/api/auth/register`,
@@ -268,6 +270,7 @@ export function config() {
       trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
       },
     stable: {
+      getOrganizationsUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
       sendOtpUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/register`,
@@ -390,6 +393,8 @@ export function config() {
       fetchCitiesByState:`${STABLE_SERVER_URL_PRODUCTS}/productmanagement/api/location?state_id=`
     },
     test: {
+      getOrganizationsUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
+      getOrganizationsByTypeUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsByType?id=`,
       loginUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/register`,
@@ -400,6 +405,7 @@ export function config() {
       locationUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/switchLocation`,
       updateProfileUrl: `${TEST_SERVER_URL}/usermanagement/api/auth/updateProfile`,
       upload: `${TEST_SERVER_URL}/usermanagement/api/auth/uploadImage?`,
+      getOrganizationsByType:`${TEST_SERVER_URL}/usermanagement/api/auth/getOrganizationsByType?id=`,
       fetchProfileImage:`${TEST_SERVER_URL}`,
       uploadProfileImage:`${TEST_SERVER_URL}/usermanagement/api/auth/uploadImage?action=PROFILE`,
       getAnalyticsUrl:`${TEST_SERVER_URL}/analyticsmanagement/api/analytics/getAnalytics`,
@@ -510,6 +516,7 @@ export function config() {
       fetchCitiesByState:`${TEST_SERVER_URL}/productmanagement/api/location?state_id=`
 },
     demo: {
+      getOrganizationsUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
       loginUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${DEMO_SERVER_URL}/usermanagement/api/auth/register`,
@@ -624,6 +631,7 @@ export function config() {
       trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
     },
     prod: {
+      getOrganizationsUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
       loginUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${PROD_SERVER_URL}/usermanagement/api/auth/register`,
@@ -738,6 +746,7 @@ export function config() {
     },
     
     uniceftest: {
+      getOrganizationsUrl: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
       loginUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/login`,
       sendOtpUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/sendOtp`,
       registerUrl: `${UNICEFTEST_SERVER_URL}/usermanagement/api/auth/register`,
