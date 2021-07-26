@@ -297,6 +297,12 @@ const NewOrder = (props) => {
         }}
         validate={(values) => {
           const errors = {};
+          if (!values.type) {
+            errors.type = "Required";
+          }
+          if (!values.rtype) {
+            errors.rtype = "Required";
+          }
           if (!values.fromOrg) {
             errors.fromOrg = "Required";
           }
@@ -420,6 +426,7 @@ const NewOrder = (props) => {
                             placeholder={<div className="select-placeholder-text">Select Organisation Name</div>}
                             value={values.fromOrg==""?"Select Organisation Name":{value: values.fromOrg, label: values.fromOrgId}}
                             defaultInputValue={values.fromOrgId}
+                            onBlur={handleBlur}
                             onChange={(v) => {
                               setFieldValue('fromOrg', v.value);
                               setFieldValue('fromOrgId', v.label);
@@ -462,6 +469,7 @@ const NewOrder = (props) => {
                             id="demo-simple-select"
                             placeholder={<div className="select-placeholder-text">Select Organisation Type</div>}
                             defaultInputValue={values.rtypeName}
+                            onBlur={handleBlur}
                             onChange={(v) => {
                               setFieldValue('rtype', v.value);
                               setFieldValue('rtypeName', v.label);
@@ -504,6 +512,7 @@ const NewOrder = (props) => {
                             placeholder={<div className="select-placeholder-text">Select Organisation Name</div>}
                             value={values.toOrg==""?"Select Organisation Name":{value: values.toOrg, label: values.toOrgName}}
                             defaultInputValue={values.toOrgName}
+                            onBlur={handleBlur}
                             onChange={(v) => {
                               setFieldValue('toOrgLoc', '');
                               setFieldValue('toOrg', v.value);
@@ -563,6 +572,7 @@ const NewOrder = (props) => {
                             placeholder={<div className="select-placeholder-text">Select Delivery Location</div>}
                             value={values.toOrgLoc==""?"Select Delivery Location":{value: values.toOrgLoc, label: values.toOrgLocName}}
                             defaultInputValue={values.toOrgLocName}
+                            onBlur={handleBlur}
                             onChange={(v) => {
                               setFieldValue('toOrgLocName', v.label);
                               setFieldValue('toOrgLoc', v.value);
