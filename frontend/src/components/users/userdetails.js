@@ -6,24 +6,24 @@ import Popover from "react-popover";
 const UserDetails = (props) => {
   const [visible, setVisible] = useState(false);
   const [display, setDisplay] = useState(false);
-  const [statusStyle,setStatusStyle]=useState("");
+  const [statusStyle, setStatusStyle] = useState("");
   const { user, activateUser, deactivateUser, unaffiliate, permission } = props;
- // console.log("user",user);
+  // console.log("user",user);
 
   const [status, setStatus] = useState("");
 
   useEffect(() => {
     setVisible(false);
     let statusStyle = 'bg-primary';
-    if(user?.accountStatus == "ACTIVE"){
+    if (user?.accountStatus == "ACTIVE") {
       setStatusStyle('bg-primary');
       setStatus(user?.accountStatus);
     }
-    else if(user?.accountStatus == "REJECTED"){
+    else if (user?.accountStatus == "REJECTED") {
       setStatusStyle('bg-warning');
       setStatus(user?.accountStatus);
     }
-    
+
   }, [setStatus, setVisible, user]);
 
   const changeStatus = (status) => {
@@ -83,7 +83,7 @@ const UserDetails = (props) => {
   return (
     <div className="card rounded bg-white border border-white mt-1 ml-1 p-1 mb-3">
       <div className="card-body d-flex flex-row justify-content-between">
-        <div className="userPic w-15 text-center rounded d-flex flex-row">
+        <div className="userPic w-10 text-center rounded d-flex flex-row">
           <img src={user?.photoId} alt="User" className="rounded mr-1" />
           <h6 className="text-primary pt-1 txtWrapu">
             {user?.firstName + " " + user?.lastName}
@@ -94,7 +94,11 @@ const UserDetails = (props) => {
             display ? `text-left` : ` align-self-center txtWrapu text-center`
           } `}
         >
-          <span className="">{user?.role}</span>
+          <span className={
+            `w-10 ${display ? `text-left` : ` align-self-center txtWrapu text-center`
+            } `
+          }>{user?.role}</span>
+
           {display && (
             <div className="pt-3">
               {permission?.map((per) => (
@@ -104,43 +108,36 @@ const UserDetails = (props) => {
           )}
         </span>
         <span
-          className={`txtWrapu text-center w-15 ${
-            display ? ` ` : ` align-self-center`
-          } `}
+          className={`txtWrapu text-center w-20 ${display ? ` ` : ` align-self-center`
+            } `}
         >
-          {user?.orgs?.length
-            ? user.orgs.map((row, index) => (index > 0 ? " | " : "") + row.name)
-            : "-"}
+          location
         </span>
         <span
-          className={`txtWrapu w-15 text-center text-decoration-underline ${
-            display ? ` ` : ` align-self-center`
-          } `}
+          className={`txtWrapu w-20 text-center text-decoration-underline ${display ? ` ` : ` align-self-center`
+            } `}
         >
           <a href="#" className="text-decoration-underline">
             {user?.walletAddress}
           </a>
         </span>
         <span
-          className={`txtWrapu text-center w-15 ${
-            display ? ` ` : ` align-self-center`
-          } `}
+          className={`txtWrapu text-center w-15 ${display ? ` ` : ` align-self-center`
+            } `}
         >
           {user?.emailId}
         </span>
         <button
-          className={`status secondary-bg w-10  ${statusStyle} ${
-            display ? `align-self-start` : `align-self-center`
-          } ` } style={{position:"relative",marginLeft:"50px",borderRadius:"8px", width:"95px",color:"white",border:"none"}}>
-        
+          className={`status secondary-bg w-10  ${statusStyle} ${display ? `align-self-start` : `align-self-center`
+            } `} style={{ position: "relative", marginLeft: "50px", borderRadius: "8px", width: "95px", color: "white", border: "none" }}>
+
           {status}
-          </button>
-        
-      
+        </button>
+
+
         <div
-          className={`w-10  ${
-            display ? `align-self-start` : ` align-self-center`
-          } `}
+          className={`w-10  ${display ? `align-self-start` : ` align-self-center`
+            } `}
         >
           {/* <button
             type="button"

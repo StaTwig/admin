@@ -58,19 +58,6 @@ const DrawerMenu = ({ match, location, close }) => {
             <span className="pt-2">Manage Users</span>
           </Link>
         </li>
-        <li className={url === "/affiliate" ? "active" : ""}>
-          <Link to="/affiliate">
-            <img
-              src={
-                url === "/affiliate"
-                  ? AffiliatedOrganisationSelectedIcon
-                  : AffiliatedOrganisationIcon
-              }
-              alt="Affiliate Organisation"
-            />
-            <span className="pt-2">Affiliate Organisation</span>
-          </Link>
-        </li>
       </ul>
       <Footer />
     </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "leaflet/dist/leaflet.css";
-// import "./style.scss";
+import "./style.scss";
 import { formatDate } from "../../utils/dateHelper";
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import { map } from "leaflet";
@@ -10,6 +10,8 @@ const Details = (props) => {
   const [status, setStatus] = useState("");
   const [typeId, setTypeId] = useState("");
   const [type, setType] = useState(org?.type);
+
+  
   useEffect(() => {
     setStatus(org?.status);
     // console.log(types)
@@ -61,6 +63,9 @@ const Details = (props) => {
         </span>
         <span className="txtWrapu text-center w-10 align-self-center">
           {org?.country?.countryName}
+        </span>
+        <span className="txtWrapu text-center w-10 align-self-center">
+          {'region'}
         </span>
         <span className="txtWrapu text-center w-10 align-self-center font-weight-bold text-secondory">
             {(status) ? (status === 'ACTIVE' ? <div className="status text-success"> ACTIVE </div> :  <div className="status text-danger">REJECTED</div>) :  <div className="status text-warning">DEACTIVATED</div>} 

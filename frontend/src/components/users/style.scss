@@ -52,3 +52,60 @@
   border-radius: 10px;
   opacity: 1;
 }
+
+.table-header {
+  background-color: #eaeaea;
+  height: 72px;
+  text-align: center;
+
+  .w-10 {
+    width: 220px;
+  }
+
+  .headerText {
+    color: #000000;
+    font-size: 20px;
+  }
+
+  .vl {
+    border-left: 1px solid #d6d6d6;
+    height: 38px;
+    margin-top: 15px;
+  }
+
+  .showDropDownFilter {
+    display: none;
+  }
+
+  .roleDiv:hover .showDropDownFilter {
+    display: block;
+  }
+
+  .adjustFilterBtn {
+    width: 150px;
+    height: 60px;
+    background: #36c2cf 0% 0% no-repeat padding-box;
+    border-radius: 10px;
+    text-align: center;
+    font: 20px;
+    font-weight: bold;
+    letter-spacing: 0px;
+    color: #ffffff;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-left: 25px;
+  }
+
+  .accountStatusImage {
+    width: 10px;
+    height: 15px;
+    margin-top: -7px;
+    margin-left: 50px;
+    margin-right: -25px;
+  }
+
+  .full-width {
+    width: 100%;
+  }
+}
