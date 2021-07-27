@@ -2166,7 +2166,7 @@ exports.getWarehouseDetailsByRegion = [
     try {
       const { region } = req.query;
       const warehouseDetails = await WarehouseModel.find({
-        "region.regionName": region,
+       "warehouseAddress.region": region,
       });
 
       console.log(warehouseDetails);
