@@ -691,17 +691,31 @@ exports.verifyOtp = [
           }
 
 	  const activeWarehouse = await WarehouseModel.findOne( {$and: [ {"id": {$in: user.warehouseId }},{"status": "ACTIVE" }]})
-
-          let userData = {
-            id: user.id,
-            firstName: user.firstName,
-            emailId: user.emailId,
-            role: user.role,
-            warehouseId: activeWarehouse.id,
-            organisationId: user.organisationId,
-            walletAddress: address,
-	    phoneNumber: user.phoneNumber
-          };
+    var userData ;
+    if(activeWarehouse) {
+      userData = {
+        id: user.id,
+        firstName: user.firstName,
+        emailId: user.emailId,
+        role: user.role,
+        warehouseId: activeWarehouse.id,
+        organisationId: user.organisationId,
+        walletAddress: address,
+        phoneNumber: user.phoneNumber
+      };
+    }
+    else{
+      userData = {
+        id: user.id,
+        firstName: user.firstName,
+        emailId: user.emailId,
+        role: user.role,
+        warehouseId: [],
+        organisationId: user.organisationId,
+        walletAddress: address,
+        phoneNumber: user.phoneNumber
+      };
+    }
           //Prepare JWT token for authentication
           const jwtPayload = userData;
           const jwtData = {
@@ -759,23 +773,45 @@ exports.userInfo = [
           const org = await OrganisationModel.findOne({ id: organisationId }, 'name configuration_id type');
           const warehouse = await EmployeeModel.findOne({ id }, { _id: 0, warehouseId: 1 });
           const warehouseArray = await WarehouseModel.find({ id: { "$in": warehouse.warehouseId },$or:[{status: 'ACTIVE'}, {status: {$exists: false}}] })
-          let user_data = {
-            firstName,
-            lastName,
-            emailId,
-            phoneNumber,
-            walletAddress,
-            affiliatedOrganisations,
-            organisation: `${org.name}/${organisationId}`,
-            warehouseId,
-            accountStatus,
-            role,
-            photoId,
-            configuration_id: org.configuration_id,
-            type: org.type,
-            location: postalAddress,
-            warehouses: warehouseArray
-          };
+          var user_data;
+          if(org){
+            user_data = {
+              firstName,
+              lastName,
+              emailId,
+              phoneNumber,
+              walletAddress,
+              affiliatedOrganisations,
+              organisation: `${org.name}/${organisationId}`,
+              warehouseId,
+              accountStatus,
+              role,
+              photoId,
+              configuration_id: org.configuration_id,
+              type: org.type,
+              location: postalAddress,
+              warehouses: warehouseArray
+            };
+          }
+          else{
+            user_data = {
+              firstName,
+              lastName,
+              emailId,
+              phoneNumber,
+              walletAddress,
+              affiliatedOrganisations,
+              organisation: `NOT_ASSIGNED`,
+              warehouseId,
+              accountStatus,
+              role,
+              photoId,
+              configuration_id: null,
+              type: null,
+              location: postalAddress,
+              warehouses: warehouseArray
+            };
+          }
           logger.log(
             'info',
             '<<<<< UserService < AuthController < userInfo : sending profile',
