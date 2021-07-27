@@ -311,6 +311,7 @@ exports.checkEmail = [
             //   }
             // }
             const country = req.body?.address?.country ? req.body.address?.country : 'India';
+            const region = req.body?.address?.region ? req.body.address?.region : 'Asia';
             const address = req.body?.address ? req.body.address :  {};
             addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
             const incrementCounterOrg = await CounterModel.update({
@@ -342,6 +343,9 @@ exports.checkEmail = [
               postalAddress: addr,
               warehouses: [warehouseId],
               warehouseEmployees: [employeeId],
+              region: {
+                regionName: region
+              },
               country: {
                 countryId: '001',
                 countryName: country
@@ -373,12 +377,16 @@ exports.checkEmail = [
               warehouseAddress: {
                 firstLine: address.line1,
                 secondLine: "",
+                region: address.region,
                 city: address.city,
                 state: address.state,
                 country: address.country,
                 landmark: "",
                 zipCode: address.pincode
               },
+              region: {
+                            regionName: region
+                    },
               country: {
                 countryId: '001',
                 countryName: country
