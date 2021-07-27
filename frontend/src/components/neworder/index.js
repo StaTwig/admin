@@ -750,7 +750,7 @@ const NewOrder = (props) => {
                           }}
                           defaultInputValue={values.toOrgLoc}
                           options={receiverWarehouses}
-                        /> */}
+                        />
 
                           <Select
                             labelId="demo-simple-select-label"
