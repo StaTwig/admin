@@ -394,6 +394,12 @@ const NewOrder = (props) => {
         }}
         validate={(values) => {
           const errors = {};
+          if (!values.type) {
+            errors.type = "Required";
+          }
+          if (!values.rtype) {
+            errors.rtype = "Required";
+          }
           if (!values.fromOrg) {
             errors.fromOrg = "Required";
           }
@@ -478,7 +484,7 @@ const NewOrder = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="name form-group">
                         <label className="required-field" htmlFor="organizationName">Organisation Type</label>
-                        <div className={`line ${errors.type ? "border-danger" : "" }`}>
+                        <div className={`line ${errors.type && touched.type ? "border-danger" : "" }`}>
                           <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
@@ -503,7 +509,7 @@ const NewOrder = (props) => {
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
                       <label className="required-field" htmlFor="organizationName">Organisation Name</label>
-                      <div className={`line ${errors.fromOrg ? "border-danger" : "" }`}>
+                      <div className={`line ${errors.fromOrg && touched.fromOrg ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           isText={true}
                           name={senderOrgId}
@@ -523,6 +529,7 @@ const NewOrder = (props) => {
                             placeholder={<div className="select-placeholder-text">Select Organisation Name</div>}
                             value={values.fromOrg==""?"Select Organisation Name":{value: values.fromOrg, label: values.fromOrgId}}
                             defaultInputValue={values.fromOrgId}
+                            onBlur={handleBlur}
                             onChange={(v) => {
                               setFieldValue('fromOrg', v.value);
                               setFieldValue('fromOrgId', v.label);
@@ -560,13 +567,14 @@ const NewOrder = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="name form-group">
                         <label className="required-field" htmlFor="organizationName">Organisation Type</label>
-                        <div className={`line ${errors.rtype ? "border-danger" : "" }`}>
+                        <div className={`line ${errors.rtype && touched.rtype ? "border-danger" : "" }`}>
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             styles={customStyles}
                             placeholder={<div className="select-placeholder-text">Select Organisation Type</div>}
                             defaultInputValue={values.rtypeName}
+                            onBlur={handleBlur}
                             onChange={(v) => {
                               console.log(v);
                               setFieldValue('rtype', v.value);
@@ -666,7 +674,7 @@ const NewOrder = (props) => {
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
                       <label className="required-field" htmlFor="organizationName">Organisation Name</label>
-                      <div className={`line ${errors.toOrg ? "border-danger" : "" }`}>
+                      <div className={`line ${errors.toOrg && touched.toOrg ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           isText={true}
                           name={receiverOrgId}
@@ -688,6 +696,7 @@ const NewOrder = (props) => {
                             placeholder={<div className="select-placeholder-text">Select Organisation Name</div>}
                             value={values.toOrg==""?"Select Organisation Name":{value: values.toOrg, label: values.toOrgName}}
                             defaultInputValue={values.toOrgName}
+                            onBlur={handleBlur}
                             onChange={(v) => {
                               //setFieldValue('toOrgLoc', '');
                               setFieldValue('toOrg', v.value);
@@ -719,15 +728,37 @@ const NewOrder = (props) => {
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
                       <label className="required-field" htmlFor="delLocation">Delivery Location</label>
-                      <div className={`line ${errors.toOrgLoc ? "border-danger" : "" }`}>
-                    
-               
+                      <div className={`line ${errors.toOrgLoc && touched.toOrgLoc ? "border-danger" : "" }`}>
+                        {/* <DropdownButton
+                          isText={true}
+                          name={receiverOrgLoc}
+                          name2="Select Delivery Location"
+                          onSelect={(v) => {
+                            let name =v?.warehouseAddress ? (v?.title +'/' + v?.warehouseAddress?.firstLine + ', ' + v?.warehouseAddress?.city) : (v?.title  +'/' + v?.postalAddress)  ;
+                            setReceiverOrgLoc(name);
+                            setFieldValue('toOrgLocName', name);
+                           setFieldValue('toOrgLoc', v.id);
+                          }}
+                          groups={receiverWarehouses}
+                        /> */}
+ {/* <Select
+                          styles={customStyles}
+                          isDisabled={disabled}
+                          placeholder={disabled ? values.toOrgLoc : "Select Delivery Location"}
+                          onChange={(v) => {
+                            setFieldValue("toOrgLoc", v.value);
+                          }}
+                          defaultInputValue={values.toOrgLoc}
+                          options={receiverWarehouses}
+                        />
+
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
                             placeholder={<div className="select-placeholder-text">Select Delivery Location</div>}
                             value={values.toOrgLoc==""?"Select Delivery Location":{value: values.toOrgLoc, label: values.toOrgLocName}}
                             defaultInputValue={values.toOrgLocName}
+                            onBlur={handleBlur}
                             onChange={(v) => {
                               setFieldValue('toOrgLocName', v.label);
                               setFieldValue('toOrgLoc', v.value);

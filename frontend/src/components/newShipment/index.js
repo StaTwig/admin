@@ -853,7 +853,7 @@ if (!error) {
                       <label className="name required-field" htmlFor="orgLocation">
                         Organisation Location
                       </label>
-                      <div className={`line ${errors.fromOrgLoc ? "border-danger" : "" }`}>
+                      <div className={`line ${errors.fromOrgLoc && touched.fromOrgLoc ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           name={senderOrgLoc}
                           name2="Select Organisation Location"
@@ -919,7 +919,7 @@ if (!error) {
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label className="name required-field" htmlFor="organizationType">Organisation Type</label>
-                      <div className={`line ${errors.rtype ? "border-danger" : "" }`}>
+                      <div className={`line ${errors.rtype && touched.rtype ? "border-danger" : "" }`}>
                         <Select
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
@@ -935,7 +935,7 @@ if (!error) {
                           defaultInputValue={values.rtype}
                           options={orgTypes}
                         />
-                        {/* {errors.rtype && touched.rtype && (
+                         {/* {errors.rtype && touched.rtype && (
                           <span className="error-msg text-danger">{errors.rtype}</span>
                         )} */}
                       </div>
@@ -948,7 +948,7 @@ if (!error) {
                       <label className="name required-field" htmlFor="organizationName">
                         Organisation Name
                       </label>
-                      <div className={`line ${errors.toOrg ? "border-danger" : "" }`}>
+                      <div className={`line ${errors.toOrg && touched.toOrg ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           name={receiverOrgId}
                           name2="Select Organisation Name"
@@ -989,7 +989,7 @@ if (!error) {
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label className="name required-field" htmlFor="delLocation">Delivery Location</label>
-                      <div className={`line ${errors.toOrgLoc ? "border-danger" : "" }`}>
+                      <div className={`line ${errors.toOrgLoc && touched.toOrgLoc ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           name={receiverOrgLoc}
                           name2="Select Delivery Location"
@@ -1039,7 +1039,7 @@ if (!error) {
                   <div className="col-md-6 com-sm-12 mt-2">
                       <label className="name required-field" htmlFor="organizationName">Transit Number</label>
                       <input
-                        className={`input refship ${errors.airWayBillNo ? "border-danger" : "" }`}
+                        className={`input refship ${errors.airWayBillNo && touched.airWayBillNo ? "border-danger" : "" }`}
                         type="text"
                         id="referenceShipmentId"
                         name="airWayBillNo"
@@ -1059,7 +1059,7 @@ if (!error) {
                   <div className="col-md-6 com-sm-12 mt-3">
                     <div className="form-group">
                       <label className="name required-field" htmlFor="delLocation">Shipment Date</label>
-                      <div className={`input refship ${errors.shipmentDate ? "border-danger" : "" }`}>
+                      <div className={`input refship ${errors.shipmentDate && touched.shipmentDate ? "border-danger" : "" }`}>
                         <DatePicker
                           className="date"
                           selected={
@@ -1095,8 +1095,7 @@ if (!error) {
                 <div className="col-md-6 com-sm-12">
                     <label className="name required-field" htmlFor="organizationName">Label Code</label>
                     <input
-                    style={{position:"relative",top:"-7px"}}
-                      className={`input refship ${errors.labelCode ? "border-danger" : "" }`}
+                      className={`input refship ${errors.labelCode && touched.labelCode ? "border-danger" : "" }`}
                       type="text"
                       id="referenceShipmentId"
                       name="labelCode"
@@ -1115,7 +1114,7 @@ if (!error) {
                 <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label className="name" htmlFor="shipmentId ">Estimate Delivery Date</label>
-                      <div className="refship">
+                      <div className={`input refship ${errors.estimateDeliveryDate && touched.estimateDeliveryDate ? "border-danger" : "" }`}>
                         <DatePicker
                           className="date"
                           placeholderText="Enter Delivery Date"
