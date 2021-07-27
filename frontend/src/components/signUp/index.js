@@ -14,7 +14,7 @@ import Mail from "../../assets/icons/mail.png";
 import Phone from "../../assets/icons/phone.png";
 import hide from "../../assets/icons/hide.png";
 import eye from "../../assets/icons/eye.png";
-import org from "../../assets/icons/organization.png";
+import org from "../../assets/icons/org.png";
 import Waiting from "../../assets/icons/waiting.png";
 import organisationType from "../../assets/icons/organisationType.png";
 import logo from "../../assets/brands/VaccineLedgerlogo.svg";
@@ -73,7 +73,6 @@ organisationsType.map((data)=>{
 const showOrgByType = (value) =>{
   let arr = organisations.filter(data => data.type == value);
   arr.push({name:'Other'});
-  console.log(arr,"array==========")
   return arr;
 }
 
@@ -196,8 +195,8 @@ const changeFn = (value_new,e) => {
                  <div className="card-title p-0">Signup</div>
                   <div className="form-group flex-column ">
                    
-                  <div style={{position:"absolute", left:"-10px", top:"20px"}}>
-                       <img alt="" src={User} height="20px" width="18px"/>
+                  <div style={{position:"absolute", left:"-9px", top:"20px"}}>
+                       <img alt="" src={User} height="19px" width="17px"/>
                   </div>
                   
                   <TextField 
@@ -236,8 +235,8 @@ const changeFn = (value_new,e) => {
 
 
                   <div className="form-group flex-column" style={{position:"relative", top:"-10px"}}>
-                  <div style={{position:"absolute", left:"-10px", top:"20px"}}>
-                        <img alt="" src={User} height="20px" width="18px"/>
+                  <div style={{position:"absolute", left:"-9px", top:"20px"}}>
+                        <img alt="" src={User} height="19px" width="17px"/>
                   </div>
                   <TextField 
                   id="standard-basic" 
@@ -273,7 +272,7 @@ const changeFn = (value_new,e) => {
 
                   <div className="form-group flex-column" style={{position:"relative", top:"-20px"}}>
                   <div style={{position:"absolute", left:"-10px", top:"20px"}}>
-                        <img alt="Mail Icon" src={Mail} height="15px" width="18px" />
+                        <img alt="Mail Icon" src={Mail} height="14px" width="19px" />
                   </div>
                   <TextField 
                   id="standard-basic" 
@@ -324,7 +323,7 @@ const changeFn = (value_new,e) => {
 
                   <div className="form-group" style={{position:"relative", left:"-15px", bottom:"20px"}}>
                   <div style={{position:"absolute", left:"4px", top:"10px"}}>
-                        <img alt="Phone icon" src={Phone} height="20px" width="19px" />
+                        <img alt="Phone icon" src={Phone} height="20px" width="20px" />
                   </div>
                   
                   
@@ -376,10 +375,10 @@ const changeFn = (value_new,e) => {
                 
                   <div className="pb-3"></div>
                   <div className="form-group" style={{position:"relative", left:"30px", bottom:"0px"}}>
-                  <div style={{position:"absolute", left:"-40px", top:"10px", color:"black"}}>
-                        <img alt="Phone icon" src={organisationType} height="30px" width="25px" />
+                  <div style={{position:"absolute", left:"-40px", top:"14px", color:"black"}}>
+                        <img alt="Phone icon" src={organisationType} height="28px" width="24px" />
                   </div>  
-                  <div className="form-controll" style={{position:"relative",bottom:"5px"}}>
+                  <div className="form-controll" style={{position:"relative",bottom:"5px",width:"345px"}}>
                     <Autocomplete
                         value={orgType}
                         onChange={(event, item) => {
@@ -468,13 +467,13 @@ const changeFn = (value_new,e) => {
                     
 
                     <div className="form-group" style={{position:"relative", left:"30px", bottom:"-12px"}}>
-                    <div style={{position:"absolute ", left:"-38px", top:"-6px", color:"black"}}>
-                       <img alt="Phone icon" src={org} height="20px" width="23px" />
+                    <div style={{position:"absolute ", left:"-38px", top:"-1px", color:"black"}}>
+                       <img alt="Phone icon" src={org} height="19px" width="22px" />
                     </div>
-                    <div className="form-controll" style={{position:"relative",bottom:"25px"}} >
+                    <div className="form-controll" style={{position:"relative",bottom:"25px",width:"345px"}} >
                     <Autocomplete
                       onChange={(event, item) => {
-                      console.log(item,"event-------------")
+                      console.log(item,"item-------------")
                       console.log("lastName Length " + lastName.length);
                       if(firstName.length<=0)
                       {

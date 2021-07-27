@@ -25,6 +25,17 @@ const ChartsPage = (props) => {
             {
               data: quantity,
               backgroundColor: [
+                "#D8E5FB",
+                "#FFEF83",
+                "#DFF1F2",
+                "#EBDDED",
+                "#EBDDED",
+                "#D9E5EF",
+                "#FFC18C",
+                "#F1DDC6",
+                "#BCFFF2",
+                "#FFD0CA",
+                
                 "#63B7AF",
                 "#FFCB91",
                 "#FFEFA1",
