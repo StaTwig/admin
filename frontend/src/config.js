@@ -150,7 +150,8 @@ export function config() {
       getIotEnabledStatus:`${LOCAL_SERVER_URL_PRODUCTS}/productmanagement/api/products/getIotEnabledStatus`,
       trackLastTenIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/lastteniotsamplesforshipmentid/:shipmentId`,
       trackLatestShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/latestiotdataforshipmentid/:shipmentId`,
-      trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`
+      trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
+      searchProduct:`${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10&warehouseId=0&productName=&producttype=`
 },
     dev: {
       getOrganizationsUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -268,6 +269,7 @@ export function config() {
       trackLastTenIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/lastteniotsamplesforshipmentid/:shipmentId`,
       trackLatestShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/latestiotdataforshipmentid/:shipmentId`,
       trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
+      searchProduct:`${DEV_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10&warehouseId=0&productName=&producttype=`
       },
     stable: {
       getOrganizationsUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -390,7 +392,8 @@ export function config() {
       fetchAllRegions:`${STABLE_SERVER_URL_PRODUCTS}/productmanagement/api/location?region=all`,
       fetchCountriesByRegion:`${STABLE_SERVER_URL_PRODUCTS}/productmanagement/api/location?region=`,
       fetchStateByCountry:`${STABLE_SERVER_URL_PRODUCTS}/productmanagement/api/location?country_id=`,
-      fetchCitiesByState:`${STABLE_SERVER_URL_PRODUCTS}/productmanagement/api/location?state_id=`
+      fetchCitiesByState:`${STABLE_SERVER_URL_PRODUCTS}/productmanagement/api/location?state_id=`,
+      searchProduct:`${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10&warehouseId=0&productName=&producttype=`
     },
     test: {
       getOrganizationsUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -513,7 +516,8 @@ export function config() {
       fetchAllRegions:`${TEST_SERVER_URL}/productmanagement/api/location?region=all`,
       fetchCountriesByRegion:`${TEST_SERVER_URL}/productmanagement/api/location?region=`,
       fetchStateByCountry:`${TEST_SERVER_URL}/productmanagement/api/location?country_id=`,
-      fetchCitiesByState:`${TEST_SERVER_URL}/productmanagement/api/location?state_id=`
+      fetchCitiesByState:`${TEST_SERVER_URL}/productmanagement/api/location?state_id=`,
+      searchProduct:`${TEST_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10&warehouseId=0&productName=&producttype=`
 },
     demo: {
       getOrganizationsUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -743,6 +747,7 @@ export function config() {
       trackLastTenIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/lastteniotsamplesforshipmentid/:shipmentId`,
       trackLatestShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/latestiotdataforshipmentid/:shipmentId`,
       trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
+      searchProduct:`${PROD_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10&warehouseId=0&productName=&producttype=`
     },
     
     uniceftest: {
@@ -865,6 +870,7 @@ export function config() {
       trackLastTenIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/lastteniotsamplesforshipmentid/:shipmentId`,
       trackLatestShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/latestiotdataforshipmentid/:shipmentId`,
       trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
+      searchProduct:`${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10&warehouseId=0&productName=&producttype=`
     },
   };
 
