@@ -3,7 +3,7 @@ import {Map, InfoWindow, Marker, GoogleApiWrapper, Polygon} from 'google-maps-re
 
 const style = {
     width: '94%',
-    height: '80%'
+    height: '85%'
   }
 
   /*var points = [

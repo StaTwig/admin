@@ -1276,6 +1276,7 @@ exports.updateWarehouseAddress = [
        const loc = await getLatLongByCity( req.body.warehouseAddress.city+','+ req.body.warehouseAddress.country);
       const data = req.body;
       data.location = loc;
+      data.status = "NOTVERIFIED";
       await WarehouseModel.findOneAndUpdate(
         { id: req.query.warehouseId },
         data,
