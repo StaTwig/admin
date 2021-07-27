@@ -69,6 +69,17 @@ const ChartsPage = (props) => {
                 "#455A64",
               ],
               hoverBackgroundColor: [
+                "#D8E5FB",
+                "#FFEF83",
+                "#DFF1F2",
+                "#EBDDED",
+                "#EBDDED",
+                "#D9E5EF",
+                "#FFC18C",
+                "#F1DDC6",
+                "#BCFFF2",
+                "#FFD0CA",
+                
                 "#63B7AF",
                 "#F7A440",
                 "#FFCB91",
