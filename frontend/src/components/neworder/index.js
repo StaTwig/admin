@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch, batch } from "react-redux";
+import { useSelector, useDispatch, batch, createDispatchHook } from "react-redux";
 import OrderIcon from '../../assets/icons/order.svg';
 import EditTable from "./table/editTable";
 import "./style.scss";
 import {
   getWarehouseByOrgId,
   getAllOrganisations,
+  getRegions,
+  getCountryDetailsByRegion,
+  getOrgTypes,
+  getOrganizations,
+  getOrganizationWarehouses,
+  getAddresses   
+
 } from "../../actions/shippingOrderAction";
 // import {
 //   getShippingOrderIds,
@@ -52,6 +59,9 @@ const NewOrder = (props) => {
   }
   const [allOrganisations, setAllOrganisations] = useState([]);
   const [receiverWarehouses, setReceiverWarehouses] = useState([]);
+  const [receiverWarehousesCountry,setReceiverWarehousesCountry] = useState([]);
+  const [receiverWarehousesRegion,setReceiverWarehousesRegion] = useState([]);
+  const [orgNames,setOrgNames] = useState([]);
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState([]);
   const [addProducts, setAddProducts] = useState(editPo !== null ? editPo.products : [{"productId": "", "id": "", "productQuantity": "", "name": "","manufacturer": " ", "type": ""}]);
@@ -76,6 +86,9 @@ const NewOrder = (props) => {
   const [shipmentError, setOrderError] = useState("");
   const [addAnotherProductFailed, setAddAnotherProductFailed] = useState(false);
   const [orgTypes, setOrgTypes] = useState([]);
+  const [region, setRegion] = useState("");
+  const [country, setCountry] = useState("");
+  const [orgType,setOrgType] = useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -152,6 +165,88 @@ const NewOrder = (props) => {
     catch (err) {
       setErrorMessage(err);
     }
+  }
+
+  const onOrgTypeChange = async(value) =>
+  {
+    try{
+        console.log("new order label is :- onOrgTypeChange" ,value);
+        const region = await getRegions(value);
+        //const check = await getOrganizations("VENDOR","India");
+      console.log("region is => " , region);
+        const rr = region.data.map(v =>{
+                  console.log(v);
+                  return{
+                    value:v,
+                    label:v
+                  }
+
+        }
+        );
+       // console.log("regions are :- ",rr);
+         setReceiverWarehousesRegion(rr);
+       console.log("new order label is :- onOrgTypeChange Check" ,region);
+
+    }
+    catch(err)
+    {
+      setErrorMessage(err);
+    }
+
+  }
+
+  const onRegionChange = async (id) => {
+    try{
+
+      console.log("Region is " + id);
+      console.log("OrgType is " + orgType);
+      const countries = await getCountryDetailsByRegion(id,orgType);
+      console.log(countries);
+
+      const cc = countries.data.map(v =>{
+
+          return {
+            value:v,
+            label:v
+          }
+      });
+
+      setReceiverWarehousesCountry(cc);
+
+    }
+    catch (err)
+    {
+      setErrorMessage(err);
+    }
+
+  }
+
+  const onCountryChange= async(idd) =>{
+
+    try{
+
+      console.log("country is " + idd);
+      console.log("org type is " + orgType);
+
+      const org = await getOrganizations(orgType,idd);
+      console.log(org);
+
+      const oo = org.data.map(v =>{
+
+        return{
+          value:v.id,
+          label:v.name
+        }
+      });
+      console.log(oo);
+      setOrgNames(oo);
+
+    }
+    catch(err)
+    {
+      setErrorMessage(err);
+    }
+
   }
 
   const onCategoryChange = async (index, value, setFieldValue) => {
@@ -289,10 +384,12 @@ const NewOrder = (props) => {
           rtype: editPo !== null ? editPo.rtype : '',
           rtypeName: editPo !== null ? editPo.rtypeName : '',
           fromOrgId: editPo !== null ? editPo.fromOrgId : '',
+          toOrgCountry: editPo !== null ? editPo.toOrgCountry : '',
+          toOrgRegion: editPo !== null ? editPo.toOrgRegion : '',
           toOrg:  editPo !== null ? editPo.toOrg : '',
           toOrgName:  editPo !== null ? editPo.toOrgName : '',
           toOrgLoc: editPo !== null ? editPo.toOrgLoc : '',
-          toOrgLocName: editPo !== null ? editPo.toOrgLocName : '',
+          //toOrgLocName: editPo !== null ? editPo.toOrgLocName : '',
           products: editPo !== null ? editPo.products : []
         }}
         validate={(values) => {
@@ -312,6 +409,10 @@ const NewOrder = (props) => {
           if (!values.toOrgLoc) {
             errors.toOrgLoc = "Required";
           }
+          if (!values.toOrgLocCountry) {
+            errors.toOrgLocCountry = "Required";
+          }
+          
           if (values.products.length == 0) {
             errors.products = "Required";
           }
@@ -373,6 +474,7 @@ const NewOrder = (props) => {
               <span className="error-msg text-danger1">{errors.products}</span>
             )}
 
+           
             <div className="row mb-3">
               <div className="col bg-white formContainer low">
                 <label htmlFor="client" className="headsup">
@@ -423,6 +525,7 @@ const NewOrder = (props) => {
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
+                            
                             placeholder={<div className="select-placeholder-text">Select Organisation Name</div>}
                             value={values.fromOrg==""?"Select Organisation Name":{value: values.fromOrg, label: values.fromOrgId}}
                             defaultInputValue={values.fromOrgId}
@@ -453,6 +556,7 @@ const NewOrder = (props) => {
               </div>
             </div>
 
+                       
             <div className="row mb-3">
               <div className="col bg-white formContainer low">
                 <label htmlFor="client" className="headsup">
@@ -467,16 +571,22 @@ const NewOrder = (props) => {
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
+                            styles={customStyles}
                             placeholder={<div className="select-placeholder-text">Select Organisation Type</div>}
                             defaultInputValue={values.rtypeName}
                             onBlur={handleBlur}
                             onChange={(v) => {
+                              console.log(v);
                               setFieldValue('rtype', v.value);
                               setFieldValue('rtypeName', v.label);
                               setFieldValue('toOrg',"");
                               setFieldValue('toOrgName',"");
-                              setFieldValue('toOrgLocName',"");
+                              setFieldValue('toOrgCountry',"");
+                              setFieldValue('toOrgRegion',"");
                               setFieldValue('toOrgLoc',"");
+                              setFieldValue('toOrgLocCountry',"");
+                              setOrgType(v.label);
+                              onOrgTypeChange(v.label);
                             }}
                             options={orgTypes}
                           />
@@ -487,6 +597,79 @@ const NewOrder = (props) => {
                       </div>
                     </div>
                 </div>
+
+
+
+                          
+                <div className="row">
+                <div className="col-md-6 com-sm-12">
+                  <div className="name form-group">
+                    <label className="required-field" htmlFor="delLocation">Region</label>
+                    <div className={`line ${errors.toOrgLoc ? "border-danger" : "" }`}>
+    
+                        <Select
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        
+                          placeholder={<div className="select-placeholder-text">Select Delivery Location</div>}
+                          value={values.toOrgLoc==""?"Select Delivery Location":{value: values.toOrgLoc, label: values.toOrgRegion}}
+                          defaultInputValue={values.toOrgRegion}
+                          onChange={(v) => {
+                            setFieldValue('toOrgRegion', v.label);
+                            setFieldValue('toOrgLoc', v.value);
+                            setRegion(v.label);
+                            onRegionChange(v.label);
+                          }}
+                          isDisabled={values.rtypeName == ''}
+                          options={receiverWarehousesRegion}
+                        />
+                      {/*errors.toOrgLoc && touched.toOrgLoc && (
+                        <span className="error-msg text-danger">{errors.toOrgLoc}</span>
+                      )*/}
+                    </div>
+                  </div>
+                </div>
+              </div>
+    
+                <div className="row">
+                <div className="col-md-6 com-sm-12">
+                  <div className="name form-group">
+                    <label className="required-field" htmlFor="delLocation" >Country</label>
+                    <div className={`line ${errors.toOrgLocCountry ? "border-danger" : "" }`}>
+
+                        <Select
+                          
+                          placeholder={<div className="select-placeholder-text">Select Delivery Location</div>}
+                          value={values.toOrgLoc==""?"Select Delivery Location":{value: values.toOrgLocCountry, label: values.toOrgCountry}}
+                          defaultInputValue={values.toOrgCountry}
+                          onChange={(v) => {
+                            setFieldValue('toOrgCountry', v.label);
+                            setFieldValue('toOrgLocCountry', v.value);
+                            setCountry(v.label);
+                            onCountryChange(v.label);
+
+                          }}
+                          isDisabled={values.rtypeName == ''}
+                          options={receiverWarehousesCountry}
+                        />
+                      {/*errors.toOrgLoc && touched.toOrgLoc && (
+                        <span className="error-msg text-danger">{errors.toOrgLoc}</span>
+                      )*/}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+          
+
+
+
+
+
+
+
+
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
@@ -509,18 +692,19 @@ const NewOrder = (props) => {
                           <Select
                             labelId="demo-simple-select-label"
                             id="demo-simple-select"
+                           
                             placeholder={<div className="select-placeholder-text">Select Organisation Name</div>}
                             value={values.toOrg==""?"Select Organisation Name":{value: values.toOrg, label: values.toOrgName}}
                             defaultInputValue={values.toOrgName}
                             onBlur={handleBlur}
                             onChange={(v) => {
-                              setFieldValue('toOrgLoc', '');
+                              //setFieldValue('toOrgLoc', '');
                               setFieldValue('toOrg', v.value);
                               setFieldValue('toOrgName', v.label);
                               onOrgChange(v.value);
                             }}
                             isDisabled={values.rtypeName == ''}
-                            options={allOrganisations.filter(a => a.type == values.rtypeName)}
+                            options={orgNames}
                           />
                         {/* {errors.toOrg && touched.toOrg && (
                           <span className="error-msg text-danger">{errors.toOrg}</span>
@@ -538,6 +722,8 @@ const NewOrder = (props) => {
                     </div>
                   </div>
                 </div>
+                
+                {/*
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
@@ -580,13 +766,12 @@ const NewOrder = (props) => {
                             isDisabled={values.rtypeName == ''}
                             options={receiverWarehouses}
                           />
-                        {/* {errors.toOrgLoc && touched.toOrgLoc && (
-                          <span className="error-msg text-danger">{errors.toOrgLoc}</span>
-                        )} */}
+                        
                       </div>
                     </div>
                   </div>
                 </div>
+                          */}
               </div>
             </div>
             <div className="d-flex pt-4 justify-content-between mb-1">

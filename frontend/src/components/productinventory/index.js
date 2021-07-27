@@ -11,6 +11,8 @@ const ProductInventory = props => {
   const [category, setCategory] = useState(props.match.params?.category);
   const [data, setData] = useState([]);
   const [enable, setEnable] = useState(true);
+  const [more, setMore] = useState([]);
+
   const { products, inventories } = props;
   // console.log(products,"products");
   // console.log(inventories,"inventories");
@@ -96,7 +98,7 @@ const ProductInventory = props => {
       <div className="row">
         <div className=" p-2 rounded full-width-ribbon">
           <div className=" row filter">
-            <div className="col-3">
+            <div className="col-2">
               <img src={Product} width="24" height="24" alt="Product Name" />
               <span className="ml-2 font-small">Product Name</span>
             </div>
@@ -104,11 +106,11 @@ const ProductInventory = props => {
               <img src={Quantity} width="35" height="24" alt="Product Category" />
               <span className="ml-2 font-small">Product Category</span>
             </div>
-            <div className="col-3">
+            <div className="col-2">
               <img src={user} width="16" height="24" alt="Manufacturer" />
               <span className="ml-2 font-small">Manufacturer</span>
             </div>
-            <div className="col-3">
+            <div className="col-2">
               <img src={Quantity} width="35" height="24" alt="Quantity" />
               <span className="ml-2 font-small">Quantity</span>
             </div>
@@ -120,11 +122,13 @@ const ProductInventory = props => {
         <div className="ribbon-space col-12">
           {data.map((inv, i) => 
             <div key={i} className="col-12 p-3 mb-3 rounded row bg-white shadow">
-              <div className="col-3 txt txtBlue">{inv.products.name?inv.products.name:"N/A"}</div>
+              <div className="col-2 txt txtBlue">{inv.products.name?inv.products.name:"N/A"}</div>
               <div className="col-3 txt ">{inv.products.type ? inv.products.type:"N/A"}</div>
-              <div className="col-3 txt ">{inv.products.manufacturer?inv.products.manufacturer:"N/A"}</div>
-              <div className="col-3 txt ">{inv.inventoryDetails.quantity?inv.inventoryDetails.quantity:"N/A"}{"  ("}{inv.products.unitofMeasure?inv.products.unitofMeasure.name:"N/A"}{")"}</div>
-            </div>
+              <div className="col-2 txt ">{inv.products.manufacturer?inv.products.manufacturer:"N/A"}</div>
+              <div className="col-2 txt ">{inv.inventoryDetails.quantity?inv.inventoryDetails.quantity:"N/A"}{"  ("}{inv.products.unitofMeasure?inv.products.unitofMeasure.name:"N/A"}{")"}</div>
+              <div className="col-2 txt "><button type="button" onClick={() => props.history.push(`/viewproduct`, {data: inv})} className="btn btn-outline-primary">Show {more[i] ? `less` :`more`}</button></div>
+              </div>
+            // </div>
           )}
           {data?.length === 0 && 
             <div className="col-12 p-3 mb-3 rounded row bg-white shadow">

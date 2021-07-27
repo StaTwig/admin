@@ -18,6 +18,8 @@ services:
     image: 'advanced_analytics_service1.0'
     container_name: 'advanced_analytics_service1.0'
     restart: always
+    env_file:
+      - ./env/ledger.env     
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -30,7 +32,8 @@ services:
     build: './backend/alert_service'
     image: 'alert_service1.0'
     container_name: 'alert_service1.0'
-    restart: always
+    env_file:
+      - ./env/ledger.env     
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -44,6 +47,8 @@ services:
     image: 'analytics_service1.0'
     container_name: 'analytics_service1.0'
     restart: always
+    env_file:
+      - ./env/ledger.env     
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -57,6 +62,8 @@ services:
     image: 'blockchain_service1.0'
     container_name: 'blockchain_service1.0'
     restart: always
+    env_file:
+      - ./env/ledger.env     
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -70,6 +77,8 @@ services:
     image: 'event_service1.0'
     container_name: 'event_service1.0'
     restart: always
+    env_file:
+      - ./env/ledger.env     
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -85,6 +94,8 @@ services:
     image: 'inventory_service1.0'
     container_name: 'inventory_service1.0'
     restart: always
+    env_file:
+      - ./env/ledger.env     
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -98,6 +109,8 @@ services:
     image: 'last_mile_service1.0'
     container_name: 'last_mile_service1.0'
     restart: always
+    env_file:
+      - ./env/ledger.env     
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -111,6 +124,8 @@ services:
     image: 'notification_service1.0'
     container_name: 'notification_service1.0'
     restart: always
+    env_file:
+      - ./env/ledger.env     
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -124,6 +139,8 @@ services:
     image: 'po_service1.0'
     container_name: 'po_service1.0'
     restart: always
+    env_file:
+      - ./env/ledger.env     
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -137,6 +154,8 @@ services:
     image: 'products_service1.0'
     container_name: 'products_service1.0'
     restart: always
+    env_file:
+      - ./env/ledger.env     
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -152,6 +171,8 @@ services:
     image: 'shipmentmanagement1.0'
     container_name: 'shipment_service1.0'
     restart: always
+    env_file:
+      - ./env/ledger.env     
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -165,6 +186,8 @@ services:
     image: 'rbac_service1.0'
     container_name: 'rbac_service1.0'
     restart: always
+    env_file:
+      - ./env/ledger.env     
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -178,6 +201,8 @@ services:
     image: 'employee_service1.0'
     container_name: 'employee_service1.0'
     restart: always
+    env_file:
+      - ./env/ledger.env     
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -191,6 +216,8 @@ services:
     image: 'shippingorder_service1.0'
     container_name: 'shippingOrder_service1.0'
     restart: always
+    env_file:
+      - ./env/ledger.env     
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -204,6 +231,8 @@ services:
     image: 'track_trace1.0'
     container_name: 'track_trace1.0'
     restart: always
+    env_file:
+      - ./env/ledger.env     
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -216,7 +245,7 @@ services:
     build: './frontend'
     image: 'frontend1.0'
     container_name: 'frontend'
-    restart: always
+    restart: always    
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"

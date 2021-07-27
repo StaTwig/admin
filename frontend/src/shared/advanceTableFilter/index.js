@@ -79,15 +79,30 @@ const AdvanceTableFilter = (props) => {
           onClose={handleInventoryStatusClose}
         >
           <div className="d-flex flex-column align-items-center">
-            <StyledMenuItem>
-              <Button variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("")}>Clear</Button>
+              <StyledMenuItem>
+              <Button variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("")}>Clear</Button>
+            </StyledMenuItem>
+          <StyledMenuItem>
+              <Button variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("ACCEPTED")}>Accepted</Button>
             </StyledMenuItem>
             <StyledMenuItem>
-              <Button variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("ADD")}>Add</Button>
+              <Button variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("CREATED")}>{props.visible=="one"?"Sent":"Received"}</Button>
             </StyledMenuItem>
+
             <StyledMenuItem>
-              <Button variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("CREATE")}>Create</Button>
-            </StyledMenuItem>
+            <Button variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("TRANSIT%26PARTIALLYFULFILLED")}>Transit&Par..</Button>
+          </StyledMenuItem>
+
+          <StyledMenuItem>
+          <Button variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("TRANSIT%26FULLYFULFILLED")}>Transit&Ful..</Button>
+        </StyledMenuItem>
+
+          <StyledMenuItem>
+          <Button variant="outlined" color="primary" onClick={() =>  setStatusFilterOnSelect("FULLYFULFILLED")}>FullyFilled</Button>
+          </StyledMenuItem>
+          <StyledMenuItem>
+          <Button variant="outlined" color="primary" onClick={() =>  setStatusFilterOnSelect("REJECTED")}>Rejected</Button>
+          </StyledMenuItem>
           </div>
         </StyledMenu>
 

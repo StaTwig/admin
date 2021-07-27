@@ -3,7 +3,6 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
-const fs = require('fs');
 const mongoose = require("mongoose");
 const swaggerUi = require('swagger-ui-express');
 const openApiDocumentation = require('./openApiDocumentation');
@@ -12,11 +11,6 @@ require("dotenv").config();
 const indexRouter = require("./routes/index");
 const apiRouter = require("./routes/api");
 const apiResponse = require("./helpers/apiResponse");
-
-const dir = `images`;
-if (!fs.existsSync(dir)) {
-  fs.mkdirSync(dir);
-}
 
 const app = express();
 
@@ -42,7 +36,6 @@ if(process.env.NODE_ENV !== "test") {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocumentation));
 
 //To allow cross-origin requests
@@ -54,7 +47,7 @@ app.use("/inventorymanagement/api/", apiRouter);
 
 // throw 404 if URL not found
 app.all("*", function(req, res) {
-	return apiResponse.notFoundResponse(res, "Page not found");
+	return apiResponse.notFoundResponse(res, "API Endpoint not found");
 });
 
 app.use((err, req, res) => {
