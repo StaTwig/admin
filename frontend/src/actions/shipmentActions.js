@@ -18,6 +18,7 @@ export const getShipments = (skip = 0, limit = 5) => {
   return async dispatch => {
     try {
       dispatch(turnOn());
+      dispatch(resetShipments([]));
       const result = await axios.get(
         `${config().shipmentsUrl}?skip=${skip}&limit=${limit}`,
       );
