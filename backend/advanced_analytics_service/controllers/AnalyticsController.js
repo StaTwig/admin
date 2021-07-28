@@ -604,9 +604,9 @@ function getSKUAnalyticsFilterConditions(filters) {
 		} else if (filters.date_filter_type === 'by_monthly') {
 
 			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
-			let startDateOfTheMonth = moment(startDateOfTheYear).add(filters.month - 1, 'months').format(DATE_FORMAT);
-			let endDateOfTheMonth = moment(startDateOfTheMonth).tz("Etc/GMT").add(1, 'months').endOf('month');
-
+			let startDateOfTheMonth = moment(startDateOfTheYear).tz("Etc/IST").add(filters.month - 1, 'months').format(DATE_FORMAT);
+			let endDateOfTheMonth = moment(startDateOfTheMonth).tz("Etc/IST").endOf('month').format(DATE_FORMAT);
+			//console.log("START",startDateOfTheMonth,"END",endDateOfTheMonth)
 			matchCondition.uploadDate = {
 				$gte: new Date(startDateOfTheMonth),
 				$lte: new Date(endDateOfTheMonth)
@@ -615,10 +615,10 @@ function getSKUAnalyticsFilterConditions(filters) {
 		} else if (filters.date_filter_type === 'by_quarterly') {
 
 			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
-			let startDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).startOf('quarter').format(DATE_FORMAT);
+			let startDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).tz("Etc/IST").startOf('quarter').format(DATE_FORMAT);
 			// let endDateOfTheQuarter = moment(startDateOfTheYear).tz("Etc/GMT").quarter(filters.quarter).add(1, 'years').endOf('quarter');
-			let endDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).tz("Etc/GMT").add(3, 'months').endOf('quarter');
-
+			let endDateOfTheQuarter = moment(startDateOfTheYear).quarter(filters.quarter).tz("Etc/IST").endOf('quarter').format(DATE_FORMAT);
+			//console.log("start",startDateOfTheQuarter,"END",endDateOfTheQuarter)
 			matchCondition.uploadDate = {
 				$gte: new Date(startDateOfTheQuarter),
 				$lte: new Date(endDateOfTheQuarter)
@@ -629,9 +629,9 @@ function getSKUAnalyticsFilterConditions(filters) {
 			const currentDate = moment().format(DATE_FORMAT);
 			const currentYear = moment().year();
 
-			let startDateOfTheYear = moment([filters.year]).format(DATE_FORMAT);
-			let endDateOfTheYear = moment([filters.year]).tz("Etc/GMT").add(1, 'years').endOf('year');
-
+			let startDateOfTheYear = moment([filters.year]).tz("Etc/IST").startOf('year').format(DATE_FORMAT);
+			let endDateOfTheYear = moment([filters.year]).tz("Etc/IST").endOf('year').format(DATE_FORMAT);
+			//console.log("START",startDateOfTheYear,"END",endDateOfTheYear)
 			if (filters.year === currentYear) {
 				endDateOfTheYear = currentDate;
 			}
