@@ -89,6 +89,7 @@ const NewOrder = (props) => {
   const [region, setRegion] = useState("");
   const [country, setCountry] = useState("");
   const [orgType,setOrgType] = useState("");
+  const [orgDetails,setOrgDetails] = useState([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -150,7 +151,24 @@ const NewOrder = (props) => {
   };
 
   
-
+  const onOrggChange = async(v,setFieldValue) =>
+  {
+    console.log("Hi");
+    try{
+      const selOrg = orgDetails.filter((value) => {
+        return value.name==v.label;
+    });
+     
+      setFieldValue('toOrgLocName',selOrg[0].postalAddress);
+      setFieldValue('toOrgLoc',selOrg[0].warehouses[0]);
+      //console.log(values.toOrgLocName);
+      //console.log(values.toOrgLoc);
+    }
+    catch(err)
+    {
+      console.log(err);
+    }
+  }
   const onOrgChange = async (value) => {
     try {
       const warehouse = await getWarehouseByOrgId(value);
@@ -201,7 +219,7 @@ const NewOrder = (props) => {
       console.log("Region is " + id);
       console.log("OrgType is " + orgType);
       const countries = await getCountryDetailsByRegion(id,orgType);
-      console.log(countries);
+      console.log("countries are :- ", countries);
 
       const cc = countries.data.map(v =>{
 
@@ -229,8 +247,8 @@ const NewOrder = (props) => {
       console.log("org type is " + orgType);
 
       const org = await getOrganizations(orgType,idd);
-      console.log(org);
-
+      console.log("Organizations names are :- " ,org);
+      setOrgDetails(org.data);
       const oo = org.data.map(v =>{
 
         return{
@@ -389,7 +407,9 @@ const NewOrder = (props) => {
           toOrg:  editPo !== null ? editPo.toOrg : '',
           toOrgName:  editPo !== null ? editPo.toOrgName : '',
           toOrgLoc: editPo !== null ? editPo.toOrgLoc : '',
-          //toOrgLocName: editPo !== null ? editPo.toOrgLocName : '',
+          toOrgLocRegion:editPo !== null ? editPo.toOrgLocRegion : '',
+          toOrgLocName: editPo !== null ? editPo.toOrgLocName : '',
+          toOrgLocCountry:editPo !== null ? editPo.toOrgLocCountry : '',
           products: editPo !== null ? editPo.products : []
         }}
         validate={(values) => {
@@ -406,8 +426,8 @@ const NewOrder = (props) => {
           if (!values.toOrg) {
             errors.toOrg = "Required";
           }
-          if (!values.toOrgLoc) {
-            errors.toOrgLoc = "Required";
+          if (!values.toOrgLocRegion) {
+            errors.toOrgLocRegion = "Required";
           }
           if (!values.toOrgLocCountry) {
             errors.toOrgLocCountry = "Required";
@@ -584,6 +604,7 @@ const NewOrder = (props) => {
                               setFieldValue('toOrgCountry',"");
                               setFieldValue('toOrgRegion',"");
                               setFieldValue('toOrgLoc',"");
+                              setFieldValue('toOrgLocRegion',"");
                               setFieldValue('toOrgLocCountry',"");
                               setOrgType(v.label);
                               onOrgTypeChange(v.label);
@@ -605,18 +626,18 @@ const NewOrder = (props) => {
                 <div className="col-md-6 com-sm-12">
                   <div className="name form-group">
                     <label className="required-field" htmlFor="delLocation">Region</label>
-                    <div className={`line ${errors.toOrgLoc ? "border-danger" : "" }`}>
+                    <div className={`line ${errors.toOrgLocRegion ? "border-danger" : "" }`}>
     
                         <Select
                         labelId="demo-simple-select-label"
                         id="demo-simple-select"
                         
                           placeholder={<div className="select-placeholder-text">Select Delivery Location</div>}
-                          value={values.toOrgLoc==""?"Select Delivery Location":{value: values.toOrgLoc, label: values.toOrgRegion}}
+                          value={values.toOrgLocRegion==""?"Select Delivery Location":{value: values.toOrgLocRegion, label: values.toOrgRegion}}
                           defaultInputValue={values.toOrgRegion}
                           onChange={(v) => {
                             setFieldValue('toOrgRegion', v.label);
-                            setFieldValue('toOrgLoc', v.value);
+                            setFieldValue('toOrgLocRegion', v.value);
                             setRegion(v.label);
                             onRegionChange(v.label);
                           }}
@@ -640,7 +661,7 @@ const NewOrder = (props) => {
                         <Select
                           
                           placeholder={<div className="select-placeholder-text">Select Delivery Location</div>}
-                          value={values.toOrgLoc==""?"Select Delivery Location":{value: values.toOrgLocCountry, label: values.toOrgCountry}}
+                          value={values.toOrgLocCountry==""?"Select Delivery Location":{value: values.toOrgLocCountry, label: values.toOrgCountry}}
                           defaultInputValue={values.toOrgCountry}
                           onChange={(v) => {
                             setFieldValue('toOrgCountry', v.label);
@@ -699,9 +720,14 @@ const NewOrder = (props) => {
                             onBlur={handleBlur}
                             onChange={(v) => {
                               //setFieldValue('toOrgLoc', '');
+
+                            //   const selOrg = orgDetails.filter((value) => {
+                            //     return value.name==v.label;
+                            // });
                               setFieldValue('toOrg', v.value);
-                              setFieldValue('toOrgName', v.label);
-                              onOrgChange(v.value);
+                              setFieldValue('toOrgName', v.label); 
+                              onOrggChange(v,setFieldValue);
+                              
                             }}
                             isDisabled={values.rtypeName == ''}
                             options={orgNames}
