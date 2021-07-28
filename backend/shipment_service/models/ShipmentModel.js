@@ -41,6 +41,7 @@ ShipmentSchema = new mongoose.Schema(
         manufacturer: String,
         batchNumber: String,
         productQuantity: Number,
+	productQuantityTaggedSent : Number,
         productQuantityDelivered: Number,
         rejectionRate:{type:Number, default:0.00},
         labelId: String,
