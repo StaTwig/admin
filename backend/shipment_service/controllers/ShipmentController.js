@@ -256,6 +256,19 @@ const userShipments = async (mode, warehouseId, skip, limit, callback) => {
   callback(undefined, shipments)
 }
 
+const taggedShipmentUpdate = async (id, quantity, shipmentId , next) => {
+    const shipmentUpdate = await ShipmentModel.update(
+      {
+        id: shipmentId,
+        "products.productID": id,
+      },
+      {
+        $inc: {
+          "products.$.productQuantityTaggedSent": quantity,
+        },
+      }
+    );
+};
 
 exports.createShipment = [
   auth,
@@ -580,7 +593,15 @@ exports.createShipment = [
                   $push: {
                     taggedShipments: prevTaggedShipments.taggedShipments
                   }
-                });   
+                });
+
+  		for (count = 0; count < products.length; count++) {
+              	  taggedShipmentUpdate(
+                    products[count].productId,
+                    products[count].productQuantity,
+                    data.taggedShipments
+                  );
+                }
               }
               async function compute(event_data) {
                 resultt = await logEvent(event_data);
