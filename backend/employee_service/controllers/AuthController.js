@@ -883,7 +883,7 @@ exports.updateProfile = [
           firstName: firstName,
           emailId: employee.emailId,
           role: employee.role,
-	  organisationId: user.organisationId,
+	  organisationId: employee.organisationId,
           warehouseId: warehouseId,
           phoneNumber: employee.phoneNumber
         };
