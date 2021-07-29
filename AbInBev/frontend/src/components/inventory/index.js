@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
 import { AreaChart, Area, ResponsiveContainer, Tooltip } from 'recharts';
 import './style.scss';
@@ -31,11 +31,12 @@ import {
 const Inventory = (props) => {
   const { totalStock, inventories } = props;
   const type = localStorage.getItem('type');
-  const [selectedInventoryType, setSelectedInventoryType] = useState((type == 'BREWERY' || type == 'CENTRAL_AUTHORITY') ? 'BREWERY' : 'VENDOR');
+  const [selectedInventoryType, setSelectedInventoryType] = useState(
+    type == 'BREWERY' || type == 'CENTRAL_AUTHORITY' ? 'BREWERY' : 'VENDOR',
+  );
   const [selectedVendorType, setSelectedVendorType] = useState('ALL_VENDORS');
   const [selectedVendor, setSelectedVendor] = useState(null);
   const [isDetailedView, setIsDetailedView] = useState(false);
-
 
   const dispatch = useDispatch();
   const [states, setStates] = useState([]);
@@ -84,8 +85,12 @@ const Inventory = (props) => {
     brewery: '',
     organization: '',
     sku: '',
-    inventoryType: (type == 'BREWERY' || type == 'CENTRAL_AUTHORITY') ? 'BREWERY' : 'ALL_VENDORS',
-    organizationType: (type == 'BREWERY' || type == 'CENTRAL_AUTHORITY') ? 'BREWERY' : 'VENDOR',
+    inventoryType:
+      type == 'BREWERY' || type == 'CENTRAL_AUTHORITY'
+        ? 'BREWERY'
+        : 'ALL_VENDORS',
+    organizationType:
+      type == 'BREWERY' || type == 'CENTRAL_AUTHORITY' ? 'BREWERY' : 'VENDOR',
     invDetails: '',
   });
 
@@ -95,8 +100,12 @@ const Inventory = (props) => {
     brewery: '',
     organization: '',
     sku: '',
-    inventoryType: (type == 'BREWERY' || type == 'CENTRAL_AUTHORITY') ? 'BREWERY' : 'ALL_VENDORS',
-    organizationType: (type == 'BREWERY' || type == 'CENTRAL_AUTHORITY') ? 'BREWERY' : 'VENDOR',
+    inventoryType:
+      type == 'BREWERY' || type == 'CENTRAL_AUTHORITY'
+        ? 'BREWERY'
+        : 'ALL_VENDORS',
+    organizationType:
+      type == 'BREWERY' || type == 'CENTRAL_AUTHORITY' ? 'BREWERY' : 'VENDOR',
     invDetails: '',
   };
 
@@ -261,6 +270,48 @@ const Inventory = (props) => {
     }
   };
 
+  const useSortableData = (items, config = null) => {
+    const [sortConfig, setSortConfig] = useState(config);
+
+    const sortedItems = useMemo(() => {
+      let sortableItems = [...items];
+      if (sortConfig !== null) {
+        sortableItems.sort((a, b) => {
+          if (a[sortConfig.key] < b[sortConfig.key]) {
+            return sortConfig.direction === 'ascending' ? -1 : 1;
+          }
+          if (a[sortConfig.key] > b[sortConfig.key]) {
+            return sortConfig.direction === 'ascending' ? 1 : -1;
+          }
+          return 0;
+        });
+      }
+      return sortableItems;
+    }, [items, sortConfig]);
+
+    const requestSort = (key) => {
+      let direction = 'ascending';
+      if (
+        sortConfig &&
+        sortConfig.key === key &&
+        sortConfig.direction === 'ascending'
+      ) {
+        direction = 'descending';
+      }
+      setSortConfig({ key, direction });
+    };
+
+    return { items: sortedItems, requestSort, sortConfig };
+  };
+
+  const { items, requestSort, sortConfig } = useSortableData(inventories);
+  const getClassNamesFor = (name) => {
+    if (!sortConfig) {
+      return;
+    }
+    return sortConfig.key === name ? sortConfig.direction : undefined;
+  };
+
   return (
     <div className="container-fluid">
       <div className="row">
@@ -335,7 +386,7 @@ const Inventory = (props) => {
                 </>
               ) : (
                 <div className="btn-group mainSortingButton">
-                  {(type == 'BREWERY' || type == 'CENTRAL_AUTHORITY') &&
+                  {(type == 'BREWERY' || type == 'CENTRAL_AUTHORITY') && (
                     <>
                       <a
                         className={`btn ${
@@ -358,7 +409,7 @@ const Inventory = (props) => {
                         Vendor
                       </a>
                     </>
-                  }
+                  )}
                 </div>
               )}
               {isDetailedView && (
@@ -447,11 +498,16 @@ const Inventory = (props) => {
                       <th className="inventoryHeader">
                         {isDetailedView ? 'District' : 'Stock Long Description'}
                       </th>
-                      <th className="inventoryHeader">Quantity</th>
+                      <th
+                        className="inventoryHeader"
+                        onClick={() => requestSort('quantity')}
+                      >
+                        Quantity
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
-                    {inventories.length == 0 ? (
+                    {items.length == 0 ? (
                       <tr>
                         <td
                           colSpan="4"
@@ -461,7 +517,7 @@ const Inventory = (props) => {
                         </td>
                       </tr>
                     ) : (
-                      inventories.map((inventory, index) => (
+                      items.map((inventory, index) => (
                         <tr
                           key={index}
                           className="cursorP"
@@ -510,7 +566,8 @@ const Inventory = (props) => {
                 <div className="filterHeader">
                   <img src={filterIcon} className="filterIcon" /> FILTERS
                 </div>
-                {(filters.inventoryType === 'VENDOR' || filters.inventoryType === 'ALL_VENDORS') ? (
+                {filters.inventoryType === 'VENDOR' ||
+                filters.inventoryType === 'ALL_VENDORS' ? (
                   <>
                     <label className="filterSubHeading mt-3">
                       Vendor Type{' '}
