@@ -64,7 +64,8 @@ const editLocation = (props) => {
       console.log('results');
       console.log(result.data);   
       const warehouseInfo = result.data.data[0];
-      setregion(warehouseInfo.region.regionName);
+      const region = warehouseInfo.warehouseAddress.region ? warehouseInfo.warehouseAddress.region : warehouseInfo.region.regionName;
+      setregion(region);
       setAddressTitle(warehouseInfo.title);
       setAddressLine(warehouseInfo.warehouseAddress.firstLine);
       setCity(warehouseInfo.warehouseAddress.city);
