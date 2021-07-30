@@ -291,7 +291,7 @@ exports.checkEmail = [
             "counters.$.value": 1
           }
         })
-        const empCounter = await CounterModel.findOne({ 'counters.name': "employeeId" }, { "counters.name.$": 1 })
+        const empCounter = await CounterModel.findOne({ 'counters.name': "employeeId" }, { "counters.$": 1 })
         var employeeId = empCounter.counters[0].format + empCounter.counters[0].value;
         //var employeeId = uniqid('emp-');
         var employeeStatus = 'NOTAPPROVED';
@@ -321,7 +321,7 @@ exports.checkEmail = [
                 "counters.$.value": 1
               }
             })
-            const orgCounter = await CounterModel.findOne({ 'counters.name': "orgId" }, { "counters.name.$": 1 })
+            const orgCounter = await CounterModel.findOne({ 'counters.name': "orgId" }, { "counters.$": 1 })
             organisationId = orgCounter.counters[0].format + orgCounter.counters[0].value;
             //organisationId = uniqid('org-');
             const incrementCounterWarehouse = await CounterModel.update({
@@ -331,7 +331,7 @@ exports.checkEmail = [
                 "counters.$.value": 1
               }
             })
-            const warehouseCounter = await CounterModel.findOne({ 'counters.name': "warehouseId" }, { "counters.name.$": 1 })
+            const warehouseCounter = await CounterModel.findOne({ 'counters.name': "warehouseId" }, { "counters.$": 1 })
             warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
             //warehouseId = uniqid('war-');
             const org = new OrganisationModel({
@@ -361,7 +361,7 @@ exports.checkEmail = [
                 "counters.$.value": 1
               }
             })
-            const invCounter = await CounterModel.findOne({ 'counters.name': "inventoryId" }, { "counters.name.$": 1 })
+            const invCounter = await CounterModel.findOne({ 'counters.name': "inventoryId" }, { "counters.$": 1 })
             const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
             //const inventoryId = uniqid('inv-');
             const inventoryResult = new InventoryModel({ id: inventoryId });
@@ -1192,7 +1192,7 @@ exports.addWarehouse = [
         }
       })
 
-      const invCounter = await CounterModel.findOne({ 'counters.name': "inventoryId" }, { "counters.name.$": 1 })
+      const invCounter = await CounterModel.findOne({ 'counters.name': "inventoryId" }, { "counters.$": 1 })
       const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
       const inventoryResult = new InventoryModel({ id: inventoryId });
       await inventoryResult.save();
@@ -1217,7 +1217,7 @@ exports.addWarehouse = [
         }
       })
 
-      const warehouseCounter = await CounterModel.findOne({ 'counters.name': "warehouseId" }, { "counters.name.$": 1 })
+      const warehouseCounter = await CounterModel.findOne({ 'counters.name': "warehouseId" }, { "counters.$": 1 })
       const warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
 
       const loc = await getLatLongByCity(warehouseAddress.city+','+warehouseAddress.country);
