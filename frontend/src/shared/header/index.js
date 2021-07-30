@@ -207,7 +207,7 @@ const ref = useOnclickOutside(() => {
       if(token){
         setAuthToken(token);
         localStorage.setItem('theLedgerToken', token);
-        props.history.push("/profile");
+        props.history.push("/neworder");
         props.history.replace(`${props.location.pathname}`);
       }
     }
