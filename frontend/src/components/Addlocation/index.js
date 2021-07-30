@@ -92,7 +92,7 @@ const AddLocation = (props) => {
     const result = await addWarehouse(data);
     console.log("Result");
     console.log(result);
-    if(result.status = 200){
+    if(result.data.status != 0){
       console.log('Added Location');
       console.log(result);
       setAddedLocationModal(true);
