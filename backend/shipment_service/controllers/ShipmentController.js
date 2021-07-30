@@ -300,8 +300,8 @@ exports.createShipment = [
 
             //  let event_data = {}
             const shipmentCounter = await CounterModel.findOne({
-              "counters.name": "shipmentId",
-            });
+              "counters.name": "shipmentId"}, { "counters.$": 1 }
+            );
             const shipmentId =
               shipmentCounter.counters[0].format + shipmentCounter.counters[0].value;
             data.id = shipmentId;
