@@ -2776,7 +2776,7 @@ exports.fetchairwayBillNumber = [
                 },
               ],
             },
-            'airWayBillNo id'
+            'airWayBillNo id status'
           )
             .then((shipments) => {
               return apiResponse.successResponseWithData(
