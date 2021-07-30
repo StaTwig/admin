@@ -14,6 +14,7 @@ const OrganisationModel = require("../models/OrganisationModel");
 const CounterModel = require("../models/CounterModel");
 const ProductModel = require("../models/ProductModel");
 const logEvent = require("../../../utils/event_logger");
+const Event = require("./models/EventModal");
 const init = require("../logging/init");
 const moment = require('moment');
 const logger = init.getLog();
@@ -172,6 +173,69 @@ const shipmentUpdate = async (
       },
     }
   );
+  let event = Event.findOne({'payloadData.data.id': shipmentId})
+  var evid = Math.random().toString(36).slice(2);
+  let event_data = {
+    eventID: null,
+    eventTime: null,
+    eventType: {
+      primary: "CREATE",
+      description: "SHIPMENT_CREATION",
+    },
+    actor: {
+      actorid: null,
+      actoruserid: null,
+    },
+    stackholders: {
+      ca: {
+        id: null,
+        name: null,
+        address: null,
+      },
+      actororg: {
+        id: null,
+        name: null,
+        address: null,
+      },
+      secondorg: {
+        id: null,
+        name: null,
+        address: null,
+      },
+    },
+    payload: {
+      data: {
+        abc: 123,
+      },
+    },
+  };
+  event_data.eventID = "ev0000" + evid;
+  event_data.eventTime = datee;
+  event_data.eventType.primary = "UPDATE";
+  event_data.eventType.description = "SHIPMENT";
+  event_data.actor.actorid = event.actorId || "null";
+  event_data.actor.actoruserid = actorUserId || "null";
+  event_data.actorWarehouseId = event.warehouseId || "null";
+  event_data.stackholders.actororg.id = event.actorOrgId || "null";
+  event_data.stackholders.actororg.name = event.actorOrgName || "null";
+  event_data.stackholders.actororg.address = event.actorOrgAddress || "null";
+  event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+  event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+  event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
+  event_data.stackholders.secondorg.id = event.secondaryOrgId || "null";
+  event_data.stackholders.secondorg.name = event.secondaryOrgName || "null";
+  event_data.stackholders.secondorg.address = event.secondaryOrgAddress || "null";
+  event_data.payload.data = event.payloaData;
+
+  async function compute(event_data) {
+    resultt = await logEvent(event_data);
+    return resultt;     
+  }
+  console.log(result);
+  compute(event_data).then((response) => {
+    console.log(response);
+  });
+
   //next("Success")
 };
 
