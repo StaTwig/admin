@@ -128,6 +128,15 @@ const onPOStatusChange = async status => {
                   <span className= " col text-dark ">{order.customer?.organisation?.id}</span>
                 </div>
                 <div class="w-100"></div>
+                <div className="col row mt-3">      
+                  <span className="col-4">Region:</span>
+                  <span className= " col  text-dark ">{order.customer?.region }</span>
+                </div>
+                <div className="col row mt-3">      
+                  <span className="col-4">Country:</span>
+                  <span className= " col text-dark ">{order.customer?.country }</span>
+                </div>
+                <div class="w-100"></div>
                 <div className="col row col-6 mt-3">      
                   <span className="col-4">Delivery Location:</span>
                   <span className= " col ml-2 text-dark ">{order && order.customer&& order.customer.warehouse && order.customer.warehouse.warehouseAddress ? order.customer.warehouse.title+ " / "+ order.customer.warehouse.warehouseAddress.firstLine + " "+order.customer.warehouse.warehouseAddress.city: null}</span>
