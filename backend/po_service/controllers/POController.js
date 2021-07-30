@@ -546,7 +546,7 @@ exports.addPOsFromExcel = [
                 "counters.$.value": 1
               }
             });
-            let poCounter = await CounterModel.findOne({'counters.name':"poId"},{"counters.name.$":1})
+            let poCounter = await CounterModel.findOne({'counters.name':"poId"},{"counters.$":1})
             let dataRows =0;
             for(let i in poDataArray){
               if(poDataArray[i].externalId!=null){
@@ -598,7 +598,7 @@ exports.addPOsFromExcel = [
                         "counters.$.value": 1
                       }
                     })
-                    const orgCounter = await CounterModel.findOne({ 'counters.name': "orgId" }, { "counters.name.$": 1 })
+                    const orgCounter = await CounterModel.findOne({ 'counters.name': "orgId" }, { "counters.$": 1 })
                     organisationId = orgCounter.counters[0].format + orgCounter.counters[0].value;
                     const incrementCounterWarehouse = await CounterModel.update({
                       'counters.name': "warehouseId"
@@ -613,9 +613,9 @@ exports.addPOsFromExcel = [
                         "counters.$.value": 1
                       }
                     })
-                    const warehouseCounter = await CounterModel.findOne({ 'counters.name': "warehouseId" }, { "counters.name.$": 1 })
+                    const warehouseCounter = await CounterModel.findOne({ 'counters.name': "warehouseId" }, { "counters.$": 1 })
                     warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
-                    const empCounter = await CounterModel.findOne({ 'counters.name': "employeeId" }, { "counters.name.$": 1 })
+                    const empCounter = await CounterModel.findOne({ 'counters.name': "employeeId" }, { "counters.$": 1 })
                     var employeeId = empCounter.counters[0].format + empCounter.counters[0].value;
                     var employeeStatus = 'NOTAPPROVED';
                     let addr = '';
@@ -661,7 +661,7 @@ exports.addPOsFromExcel = [
                         "counters.$.value": 1
                       }
                     })
-                    const invCounter = await CounterModel.findOne({ 'counters.name': "inventoryId" }, { "counters.name.$": 1 })
+                    const invCounter = await CounterModel.findOne({ 'counters.name': "inventoryId" }, { "counters.$": 1 })
                     const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
                     const inventoryResult = new InventoryModel({ id: inventoryId });                    
                     console.log(inventoryResult)
@@ -721,7 +721,7 @@ exports.addPOsFromExcel = [
                         "counters.$.value": 1
                       }
                     })
-                    const orgCounter = await CounterModel.findOne({ 'counters.name': "orgId" }, { "counters.name.$": 1 })
+                    const orgCounter = await CounterModel.findOne({ 'counters.name': "orgId" }, { "counters.$": 1 })
                     organisationId = orgCounter.counters[0].format + orgCounter.counters[0].value;
                     const incrementCounterWarehouse = await CounterModel.update({
                       'counters.name': "warehouseId"
@@ -736,9 +736,9 @@ exports.addPOsFromExcel = [
                         "counters.$.value": 1
                       }
                     })
-                    const warehouseCounter = await CounterModel.findOne({ 'counters.name': "warehouseId" }, { "counters.name.$": 1 })
+                    const warehouseCounter = await CounterModel.findOne({ 'counters.name': "warehouseId" }, { "counters.$": 1 })
                     warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
-                    const empCounter = await CounterModel.findOne({ 'counters.name': "employeeId" }, { "counters.name.$": 1 })
+                    const empCounter = await CounterModel.findOne({ 'counters.name': "employeeId" }, { "counters.$": 1 })
                     var employeeId = empCounter.counters[0].format + empCounter.counters[0].value;
                     var employeeStatus = 'NOTAPPROVED';
                     let addr = '';
@@ -784,7 +784,7 @@ exports.addPOsFromExcel = [
                         "counters.$.value": 1
                       }
                     })
-                    const invCounter = await CounterModel.findOne({ 'counters.name': "inventoryId" }, { "counters.name.$": 1 })
+                    const invCounter = await CounterModel.findOne({ 'counters.name': "inventoryId" }, { "counters.$": 1 })
                     const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
                     const inventoryResult = new InventoryModel({ id: inventoryId });
                     console.log(inventoryResult)
@@ -879,7 +879,7 @@ exports.createOrder = [
         }
       });
 
-      const poCounter = await CounterModel.findOne({'counters.name':"poId"},{"counters.name.$":1})
+      const poCounter = await CounterModel.findOne({'counters.name':"poId"},{"counters.$":1})
       const poId = poCounter.counters[0].format + poCounter.counters[0].value;
 
       let { externalId, supplier, customer, products, creationDate, lastUpdatedOn } = req.body;
