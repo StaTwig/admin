@@ -360,7 +360,7 @@ exports.getRegions = [
               var orgs = [];
               const {orgType, country} = req.query;
               if(orgType && country){
-                orgs = await OrganisationModel.find({$and: [{type: orgType}, {"country.countryName": country}]});
+                orgs = await OrganisationModel.find({$and: [{type: orgType}, {"country.countryName": country},{status: "ACTIVE"}]});
               }else if(country){
                 orgs = await OrganisationModel.find({"country.countryName": country});
               }else{
