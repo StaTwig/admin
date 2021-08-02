@@ -151,18 +151,17 @@ const NewOrder = (props) => {
   };
 
   
-  const onOrggChange = async(v,setFieldValue) =>
+  const onOrggChange = async(v) =>
   {
     console.log("Hi");
     try{
       const selOrg = orgDetails.filter((value) => {
         return value.name==v.label;
     });
-     
+     console.log("SelOrg is :- ", selOrg);
       setFieldValue('toOrgLocName',selOrg[0].postalAddress);
       setFieldValue('toOrgLoc',selOrg[0].warehouses[0]);
-      //console.log(values.toOrgLocName);
-      //console.log(values.toOrgLoc);
+      
     }
     catch(err)
     {
@@ -726,7 +725,7 @@ const NewOrder = (props) => {
                             // });
                               setFieldValue('toOrg', v.value);
                               setFieldValue('toOrgName', v.label); 
-                              onOrggChange(v,setFieldValue);
+                              onOrgChange(v.value);
                               
                             }}
                             isDisabled={values.rtypeName == ''}
@@ -749,12 +748,12 @@ const NewOrder = (props) => {
                   </div>
                 </div>
                 
-                {/*
+                
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
                       <label className="required-field" htmlFor="delLocation">Delivery Location</label>
-                      <div className={`line ${errors.toOrgLoc && touched.toOrgLoc ? "border-danger" : "" }`}>
+                      <div className={`line ${errors.toOrgLoc ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           isText={true}
                           name={receiverOrgLoc}
@@ -767,7 +766,7 @@ const NewOrder = (props) => {
                           }}
                           groups={receiverWarehouses}
                         /> */}
- {/* <Select
+                       {/*<Select
                           styles={customStyles}
                           isDisabled={disabled}
                           placeholder={disabled ? values.toOrgLoc : "Select Delivery Location"}
@@ -776,7 +775,7 @@ const NewOrder = (props) => {
                           }}
                           defaultInputValue={values.toOrgLoc}
                           options={receiverWarehouses}
-                        />
+                        /> */}
 
                           <Select
                             labelId="demo-simple-select-label"
@@ -797,7 +796,7 @@ const NewOrder = (props) => {
                     </div>
                   </div>
                 </div>
-                          */}
+                          
               </div>
             </div>
             <div className="d-flex pt-4 justify-content-between mb-1">
