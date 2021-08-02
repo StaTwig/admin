@@ -45,6 +45,8 @@ const ReviewOrder = props => {
           customerIncharge: null,
           customerOrganisation: toOrg,
           customerType: rtypeName,
+          region: toOrgRegion,
+          country: toOrgCountry,
           shippingAddress: {
             shippingAddressId:toOrgLoc,
             shipmentReceiverId: null
