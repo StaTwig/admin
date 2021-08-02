@@ -19,6 +19,9 @@ const BREWERY_ORG = 'BREWERY';
 const S1_ORG = 'S1';
 const S2_ORG = 'S2';
 
+const redis = require("redis");
+const client = redis.createClient();
+
 const DATE_FORMAT = 'YYYY-MM-DD';
 var today = new Date()
 var lastWeek = new Date()
@@ -926,13 +929,25 @@ exports.getAllBrands = [
  * @returns {Object}
  */
 exports.getStatsByBrand = [
-	auth,
+	// auth,
 	async function (req, res) {
 		try {
 			const filters = req.query;
+			const r = JSON.stringify(filters);
+			client.get(r,(err, data) => {
+				console.log(data);
+				if(!err && data != null) {
+					return apiResponse.successResponseWithData(res,"HIT Cache",JSON.parse(data))
+				}
+			})
+			const date = new Date();
+			console.log(date);
 			let warehouseIds = await _getWarehouseIds(filters);
 			today = new Date()
+			console.log('warehouseIds ==>',today-date);
 			let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
+			const date1 = new Date();
+			console.log('Filter ==>',date1-today);
 			const Products = await AnalyticsModel.aggregate([
 				{
 					$match: analyticsFilter
@@ -951,8 +966,11 @@ exports.getStatsByBrand = [
 				},
 				{ $sort: { "_id.manufacturer": 1 } }
 			]);
+			const date2 = new Date();
+			console.log('Products ==>',date2-date1);
 			const MasterProducts = await ProductModel.find({});
-
+			const date3 = new Date();
+			console.log('MasterProds ==>',date3-date2);
 			let Analytics = [];
 			let arr = {};
 			let prevBrand = '';
@@ -963,8 +981,11 @@ exports.getStatsByBrand = [
 				lastMonthStart = moment(analyticsFilter.uploadDate['$gte']).tz("Etc/GMT").subtract(1, 'months').startOf('month');
 			if (analyticsFilter?.uploadDate)
 				lastMonthEnd = moment(analyticsFilter.uploadDate['$lte']).tz("Etc/GMT").subtract(1, 'months').endOf('month');
-			
+				const date4 = new Date();
+				console.log('Moment Time ==>',date4-date3);
 			warehouseIds = await _getWarehouseIdByOrgType(filters);
+			const date5 = new Date();
+			console.log('warehouses ==>',date5-date4);
 			for (const [index, product] of Products.entries()) {
 				if (prevBrand != product._id.manufacturer) {
 					if (!!Object.keys(arr).length) {
@@ -995,6 +1016,8 @@ exports.getStatsByBrand = [
 						p['returns'] = await getOnlyReturns(prod.id, from, to, warehouseIds);
 						p['returnRate'] = parseFloat(((parseInt(p['returns']) / parseInt(product.sales)) * 100)).toFixed(2);
 						// p['returnRatePrev'] = await calculatePrevReturnRatesNew(filters, product);
+						const date6 = new Date();
+						console.log('loop Cummulative ==>',date6-date5);
 						let prevAnalytic = await AnalyticsModel.aggregate([
 							{
 								$match: {
@@ -1030,6 +1053,16 @@ exports.getStatsByBrand = [
 				if (index == Products.length - 1)
 					Analytics.push(arr);
 			}
+			const date7 = new Date();
+			console.log('endTotal',date7-date);
+			client.set(r, JSON.stringify(Analytics), function (err, value) {
+				if (err) {
+					console.log(err);
+				} else {
+					console.log('set', value);
+				}
+			}
+			);
 			return apiResponse.successResponseWithData(
 				res,
 				"Operation success",
