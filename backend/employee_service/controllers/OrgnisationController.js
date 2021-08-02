@@ -14,13 +14,13 @@ function getOrgCondition(query){
     matchCondition.type = query.orgType;
   }
   if(query.country && query.country!=''){
-    matchCondition.country.countryName = query.country;
+    matchCondition['country.countryName'] = query.country ;
   }
   if(query.status && query.status!=''){
     matchCondition.status = query.status;
   }
   if(query.region && query.region!=''){
-    matchCondition.region.name = query.region;
+    matchCondition['region.name'] = query.region;
   }
   if(query.creationFilter && query.creationFilter=='true'){
     matchCondition.createdAt = {
@@ -36,11 +36,11 @@ exports.getOrgs = [
   auth,
   async (req, res) => {
     try {
-      const users = await OrganisationModel.find({
+      console.log(getOrgCondition(req.query))
+      const users = await OrganisationModel.aggregate([{
         $match: getOrgCondition(req.query)
-      }).select(
-        "name postalAddress country primaryContactId createdAt type status logoId id"
-      );
+      }])
+      console.log(users)
       for (var c = 0; c < users.length; c++) {
         if (EmployeeIdMap.has(users[c].primaryContactId)) {
           users[c].primaryContactId = EmployeeIdMap.get(
@@ -62,6 +62,7 @@ exports.getOrgs = [
         users
       );
     } catch (err) {
+      console.log(err)
       return apiResponse.ErrorResponse(res, err);
     }
   },

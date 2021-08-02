@@ -22,8 +22,8 @@ const phoneRgex = /^\d{10}$/;
 
 function getUserCondition(query,orgId){
   let matchCondition = {};
-  matchcondition.organisationId = orgId
-  matchcondition.accountStatus = { $ne: "NOTAPPROVED" }
+  matchCondition.organisationId = orgId
+  matchCondition.accountStatus = { $ne: "NOTAPPROVED" }
   if(query.role && query.role!=''){
     matchCondition.role = query.role;
   }
@@ -371,6 +371,7 @@ exports.getOrgUsers = [
   auth,
   async (req, res) => {
     try {
+      console.log(getUserCondition(req.query,req.user.organisationId))
       const users = await EmployeeModel.aggregate([
         {
           $match: getUserCondition(req.query,req.user.organisationId),
@@ -408,6 +409,7 @@ exports.getOrgUsers = [
         users
       );
     } catch (err) {
+      console.log(err)
       return apiResponse.ErrorResponse(res, err);
     }
   },
