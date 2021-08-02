@@ -7,12 +7,38 @@ const apiResponse = require("../helpers/apiResponse");
 const checkToken = require("../middlewares/middleware").checkToken;
 let EmployeeIdMap = new Map();
 
+
+
+function getOrgCondition(query){
+  let matchCondition = {};
+  if(query.orgType && query.orgType!=''){
+    matchCondition.type = query.orgType;
+  }
+  if(query.country && query.country!=''){
+    matchCondition.country.countryName = query.country;
+  }
+  if(query.status && query.status!=''){
+    matchCondition.status = query.status;
+  }
+  if(query.region && query.region!=''){
+    matchCondition.region.name = query.region;
+  }
+  if(query.creationFilter && query.creationFilter=='true'){
+    matchCondition.createdAt = {
+      $gte: new Date(query.startDate),
+      $lte: new Date(query.endDate)
+    };
+  }
+  return matchCondition;
+}
+
+
 exports.getOrgs = [
   auth,
   async (req, res) => {
     try {
       const users = await OrganisationModel.find({
-        // status: "NOTVERIFIED",
+        $match: getOrgCondition(req.query)
       }).select(
         "name postalAddress country primaryContactId createdAt type status logoId id"
       );

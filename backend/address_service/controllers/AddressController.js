@@ -4,6 +4,7 @@ const Warehouse = require("../models/warehouseModel");
 const Inventory = require("../models/inventoryModel");
 const CounterModel = require("../models/CounterModel");
 const EmployeeModel = require("../models/EmployeeModel");
+const WarehouseModel = require("../models/warehouseModel");
 const ConfigurationModel = require("../models/ConfigurationModel");
 const auth = require("../middlewares/jwt");
 const { customAlphabet } = require("nanoid");
@@ -344,6 +345,13 @@ exports.addAddressesFromExcel = [
         )
           .then((res) => res.json())
           .then(async (res) => {
+          const user = await EmployeeModel.findOne({
+            $or: [
+              { emailId: address.user },
+              { phoneNumber: address.user },
+            ]
+          })
+          console.log("USERS IS ",user);
             const reqData = {
               id: warehouseId,
               warehouseInventory: inventoryResult.id,
@@ -372,10 +380,11 @@ exports.addAddressesFromExcel = [
                 geohash: "1231nejf923453",
               },
               supervisors: [],
-              employeess: [],
+              employees: [user.id],
             };
             let warehouse = new Warehouse(reqData);
-            await warehouse.save();
+            const warehouseRes = await warehouse.save();
+            console.log(warehouseRes);
             if (address?.user) {
               await EmployeeModel.updateOne(
                 {
@@ -478,6 +487,73 @@ exports.modifyLocation = [
         });
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.getCountries = [
+  auth,
+  async (req, res) => {
+    try {
+      const countries = await WarehouseModel.aggregate([{ $match :{'warehouseAddress.region' : req.query.region}},
+      {
+         $group:
+           {
+             _id: "$warehouseAddress.country",
+           }
+       }
+  ]);
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        countries
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+exports.getStatesByCountry = [
+  auth,
+  async (req, res) => {
+    try {
+      const allStates = await WarehouseModel.aggregate([{ $match :{'warehouseAddress.country': req.query.country}},
+      {
+         $group:
+           {
+             _id: "$warehouseAddress.state",
+           }
+       }
+  ]);
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allStates
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+exports.getCitiesByState = [
+  auth,
+  async (req, res) => {
+    try {
+      const allCities = await WarehouseModel.aggregate([{ $match :{'warehouseAddress.state': req.query.state}},
+      {
+         $group:
+           {
+             _id: "$warehouseAddress.city",
+           }
+       }
+  ]);
+      return apiResponse.successResponseWithData(
+        res,
+        "Operation success",
+        allCities
+      );
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
