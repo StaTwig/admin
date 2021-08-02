@@ -12,6 +12,7 @@ const CounterModel = require('../models/CounterModel')
 const OrganisationModel = require('../models/OrganisationModel')
 const ProductModel = require('../models/ProductModel')
 const EmployeeModel = require('../models/EmployeeModel')
+const logEvent = require("../../../utils/event_logger");
 const WarehouseModel = require('../models/WarehouseModel')
 const InventoryModel = require('../models/InventoryModel')
 //this helper file to prepare responses.
@@ -881,6 +882,8 @@ exports.createOrder = [
 
       const poCounter = await CounterModel.findOne({'counters.name':"poId"},{"counters.$":1})
       const poId = poCounter.counters[0].format + poCounter.counters[0].value;
+      const email = req.user.emailId;
+      const user_id = req.user.id;      
 
       let { externalId, supplier, customer, products, creationDate, lastUpdatedOn } = req.body;
       products.forEach(async element => {
@@ -901,7 +904,29 @@ exports.createOrder = [
         createdBy,
         lastUpdatedBy
       });
+      const supplierID = req.body.supplier.id;
+      const supplierOrgData = await OrganisationModel.findOne({
+        id: req.body.supplier.id,
+      });
+      if(supplierOrgData==null)
+      {
+        console.log("Supplier not defined");
+        return apiResponse.ErrorResponse(res,"Supplier  not defined");
+      }
+                  
+      const receiverOrgData = await OrganisationModel.findOne({
+        id: req.body.receiver.id,
+      });
+      if(receiverOrgData==null)
+      {
+        return apiResponse.ErrorResponse(res,"Receiver not defined");
+      }      
 
+      const supplierName = supplierOrgData.name;
+      const supplierAddress = supplierOrgData.postalAddress;
+      const receiverId = req.body.receiver.id;
+      const receiverName = receiverOrgData.name;
+      const receiverAddress = receiverOrgData.postalAddress;
       const currDateTime = date.format( new Date(), 'DD/MM/YYYY HH:mm');
       const updates = {
              "updatedOn": currDateTime,
@@ -910,6 +935,72 @@ exports.createOrder = [
       purchaseOrder.poUpdates = updates;
 
       const result = await purchaseOrder.save();
+
+      try{
+        var evid = Math.random().toString(36).slice(2);
+        let event_data = {
+          eventID: null,
+          eventTime: null,
+          eventType: {
+            primary: "CREATE",
+            description: "ORDER",
+          },
+          actor: {
+            actorid: null,
+            actoruserid: null,
+          },
+          stackholders: {
+            ca: {
+              id: null,
+              name: null,
+              address: null,
+            },
+            actororg: {
+              id: null,
+              name: null,
+              address: null,
+            },
+            secondorg: {
+              id: null,
+              name: null,
+              address: null,
+            },
+          },
+          payload: {
+            data: {
+              abc: 123,
+            },
+          },
+        };
+        event_data.eventID = "ev0000" + evid;
+        event_data.eventTime = datee;
+        event_data.eventType.primary = "CREATE";
+        event_data.eventType.description = "ORDER";
+        event_data.actor.actorid = user_id || "null";
+        event_data.actor.actoruserid = email || "null";
+        event_data.actorWarehouseId = req.user.warehouseId || "null";
+        event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
+        event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
+        event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
+        event_data.stackholders.secondorg.id = receiverId || "null";
+        event_data.stackholders.secondorg.name = receiverName || "null";
+        event_data.stackholders.secondorg.address = receiverAddress || "null";
+        event_data.stackholders.actororg.id = supplierID || "null";
+        event_data.stackholders.actororg.name = supplierName || "null";
+        event_data.stackholders.actororg.address = supplierAddress || "null";
+        event_data.payload.data = req.body;
+      
+        async function compute(event_data) {
+          resultt = await logEvent(event_data);
+          return resultt;     
+        }
+        console.log(result);
+        compute(event_data).then((response) => {
+          console.log(response);
+        });
+      }catch(error){
+        console.log(error);
+      }
       return apiResponse.successResponseWithData(res, 'Created order',{"poId":poId});
     } catch (err) {
       logger.log(

@@ -432,7 +432,7 @@ export function config() {
       createShipmentUrl: `${TEST_SERVER_URL}/shipmentmanagement/api/shipment/createShipment`,
       shipmentsSearch: `${TEST_SERVER_URL}/shipmentmanagement/api/shipping/fetchShipments?key=`,
       createPurchaseOrderUrl: `${TEST_SERVER_URL}/pomanagement/api/po/createPurchaseOrder`,
-      createOrderUrl: `${TEST_SERVER_URL}/pomanagement/api/po/createOrder`,
+      createOrderUrl: `${LOCAL_SERVER_URL_PO}/pomanagement/api/po/createOrder`,
       fetchPurchaseOrderUrl: `${TEST_SERVER_URL}/pomanagement/api/po/fetchPurchaseOrders`,
       fetchPurchaseOrderById: `${TEST_SERVER_URL}/pomanagement/api/po/fetchPurchaseOrders?skip=0&limit=5&poId=`,
       changePOStatus: `${TEST_SERVER_URL}/pomanagement/api/po/changePOStatus`,
