@@ -236,7 +236,7 @@ class Profile extends React.Component {
 
   async onSubmit() {
     this.onChange();
-    const {
+    let {
       firstName,
       lastName,
       organisation,
@@ -252,6 +252,7 @@ class Profile extends React.Component {
       title,
       editMode
     } = this.state;
+    phoneNumber  = phoneNumber ? phoneNumber.replaceAll('+', '') : '';
     const data = {
       firstName,
       lastName,

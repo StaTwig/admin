@@ -42,7 +42,7 @@ const SummaryTable = (props) => {
             </div>
             {shipments.map((shipment, index) =>
               index < 5 ? (
-                <div className="combine-data" key={index}>
+                <div className="row combine-data" key={index}>
                   <div>{shipment.id}</div>
                   {shipment?.shipmentAlerts?.length > 0 && (
                     <span
@@ -65,7 +65,7 @@ const SummaryTable = (props) => {
             </div>
             {shipments.map((shipment, index) =>
               index < 5 ? (
-                <div className="pl-5" key={index}>
+                <div className="row combine-data" key={index}>
                   <div>
                     {profile.warehouseId == shipment.supplier.locationId
                       ? "Outbound"
@@ -85,7 +85,7 @@ const SummaryTable = (props) => {
              
             {shipments.map((shipment, index) =>
               index < 5 ? (
-                <div className="pl-5" key={index}>
+                <div className="row combine-data" key={index}>
                   <div className="text-left">
                     {shipment.shippingDate.length == 10 ? shipment.shippingDate : formatDate(shipment.shippingDate)}
                   </div>
@@ -102,7 +102,7 @@ const SummaryTable = (props) => {
             </div>
             {shipments.map((shipment, index) =>
               index < 5 ? (
-                <div className="pl-5" key={index}>
+                <div className="row combine-data" key={index}>
                   <div className="rTableCell text-left">
                     <p className="mb-0">{shipment.supplier.org.name}</p>
                   </div>
@@ -120,7 +120,7 @@ const SummaryTable = (props) => {
             </div>
             {shipments.map((shipment, index) =>
               index < 5 ? (
-                <div className="pl-5" key={index}>
+                <div className="row combine-data pl-3" key={index}>
                   <div className="rTableCell text-left">
                     <p className="mb-0 bold">{shipment.receiver.org.name}</p>
                   </div>
@@ -137,7 +137,7 @@ const SummaryTable = (props) => {
             </div>
             {shipments.map((shipment, index) =>
               index < 5 ? (
-                <div className="combine-data" key={index}>
+                <div className="row combine-data" key={index}>
                    <div className="status " target={shipment.status}>
 
                    {shipment.status=="CREATED"?"Shipped":"Delivered"}

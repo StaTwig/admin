@@ -30,10 +30,11 @@
 
     .combine-data {
       position: relative;
-      left: 30%;
+      left: 40%;
       display: flex;
       text-align: center;
-      word-break:break-word;
+      font-size: 12px;
+      //word-break:break-word;
       a {
         color: #0093e9;
         font-size: 9px;

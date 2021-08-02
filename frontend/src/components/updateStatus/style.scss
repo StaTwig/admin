@@ -4,14 +4,17 @@
   position:relative;
   top:-22px;
   padding-right:1rem;
-    padding-left: 2rem;
-    overflow:hidden;
+    padding-left: 4.5rem;
+    //overflow:hidden;
     @media (max-width: $md) {
       padding-right: 10px;
       padding-left: 10px;
     }
-
-
+    
+    .breadcrumb{
+      position: relative;
+      left:-25px;
+    }
     .browse{
       display: flex;
       align-items: center;

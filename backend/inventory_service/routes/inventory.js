@@ -2,6 +2,8 @@ var express = require("express");
 const multer = require('multer');
 
 const InventoryController = require("../controllers/InventoryController");
+const WarehouseController = require("../controllers/WarehouseController");
+const RegionController = require("../controllers/RegionCountryController");
 
 const Storage = multer.diskStorage({
   destination(req, file, callback) {
@@ -32,11 +34,9 @@ router.get("/getInventory", InventoryController.getInventory);
 router.get("/getBatchNearExpiration", InventoryController.getBatchNearExpiration);
 router.get("/getBatchExpired", InventoryController.getBatchExpired);
 router.get("/getBatchWarehouse", InventoryController.getBatchWarehouse);
-
 router.get("/getInventoryCountsPlatform", InventoryController.getInventoryCountsOfThePlatform);
 router.get("/getInventoryCountsByOrganisation", InventoryController.getInventoryCountsByOrganisation);
 router.get("/getInventoryCountsByWarehouse", InventoryController.getInventoryCountsByWarehouse);
-
 router.get("/getInventoryProductsByWarehouse", InventoryController.getInventoryProductsByWarehouse);
 router.get("/getInventoryProductsByOrganisation", InventoryController.getInventoryProductsByOrganisation);
 router.get("/getInventoryProductsByPlatform", InventoryController.getInventoryProductsByPlatform);
@@ -46,34 +46,31 @@ router.post(
   InventoryController.uploadSalesData,
 );
 
-router.get("/getWarehouseDetailsByRegion", InventoryController.getWarehouseDetailsByRegion);
-router.get("/getWarehouseDetailsByCountry", InventoryController.getWarehouseDetailsByCountry);
-router.get("/getProductDetailsByWarehouseId", InventoryController.getProductDetailsByWarehouseId);
+router.get("/getWarehouseDetailsByRegion", WarehouseController.getWarehouseDetailsByRegion);
+router.get("/getWarehouseDetailsByCountry", WarehouseController.getWarehouseDetailsByCountry);
+router.get("/getProductDetailsByWarehouseId", WarehouseController.getProductDetailsByWarehouseId);
+router.get("/getOrganizationWarehouses", WarehouseController.getOrganizationWarehouses);
+router.get("/getWarehousesByCity", WarehouseController.getWarehousesByCity);
 
-router.get("/getRegions", InventoryController.getRegions);
-router.get("/getCountryDetailsByRegion", InventoryController.getCountryDetailsByRegion);
-router.get("/trackProduct", InventoryController.trackProduct);
+router.get("/getRegions", RegionController.getRegions);
+router.get("/getAddresses", RegionController.getAddresses);
+router.get("/getCountries", RegionController.getCountries);
+router.get("/getOrganizations", RegionController.getOrganizations);
+router.get("/getCountryDetailsByRegion", RegionController.getCountryDetailsByRegion);
+router.get("/getAllStates", RegionController.getAllStates);
+router.get("/getStatesByCountry", RegionController.getStatesByCountry);
+router.get("/getCitiesByState", RegionController.getCitiesByState);
+router.get("/getDistrictsByState", RegionController.getDistrictsByState);
+router.get("/getVendorsByDistrict", RegionController.getVendorsByDistrict);
+router.get("/getAllSKUs", RegionController.getAllSKUs);
+router.get("/getOrganizationsByType", RegionController.getOrganizationsByType);
+router.get("/getOrganizationInfoByID", RegionController.getOrganizationInfoByID);
+
 router.post("/addProductsToInventory", InventoryController.addProductsToInventory);
 router.post("/deleteProductsFromInventory", InventoryController.deleteProductsFromInventory);
 router.post("/updateInventories", InventoryController.updateInventories);
 router.post("/insertInventories", InventoryController.insertInventories);
-
-router.get("/getAllStates", InventoryController.getAllStates);
-router.get("/getDistrictsByState", InventoryController.getDistrictsByState);
-router.get("/getVendorsByDistrict", InventoryController.getVendorsByDistrict);
-router.get("/getAllSKUs", InventoryController.getAllSKUs);
-router.get("/getOrganizationsByType", InventoryController.getOrganizationsByType);
-router.get("/getOrganizationInfoByID", InventoryController.getOrganizationInfoByID);
-
-router.get("/getStatesByCountry", InventoryController.getStatesByCountry);
-router.get("/getCitiesByState", InventoryController.getCitiesByState);
-router.get("/getWarehousesByCity", InventoryController.getWarehousesByCity);
-router.get("/getCountries", InventoryController.getCountries);
-
-router.get("/getOrgTypes", InventoryController.getOrgTypes);
-router.get("/getOrganizations", InventoryController.getOrganizations);
-router.get("/getAddresses", InventoryController.getAddresses);
-router.get("/getOrganizationWarehouses", InventoryController.getOrganizationWarehouses);
+router.get("/trackProduct", InventoryController.trackProduct);
 router.get("/searchProduct", InventoryController.searchProduct);
 
 router.post(

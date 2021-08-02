@@ -6,7 +6,7 @@ import {getOrganizationsByType} from '../../actions/userActions';
 import { Formik } from "formik";
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
-
+import Autocomplete from '@material-ui/lab/Autocomplete';
 import './style.scss';
 import Key from "../../assets/icons/key.png";
 import User from "../../assets/icons/user.png";
@@ -14,7 +14,7 @@ import Mail from "../../assets/icons/mail.png";
 import Phone from "../../assets/icons/phone.png";
 import hide from "../../assets/icons/hide.png";
 import eye from "../../assets/icons/eye.png";
-import org from "../../assets/icons/organization.png";
+import org from "../../assets/icons/org.png";
 import Waiting from "../../assets/icons/waiting.png";
 import organisationType from "../../assets/icons/organisationType.png";
 import logo from "../../assets/brands/VaccineLedgerlogo.svg";
@@ -195,8 +195,8 @@ const changeFn = (value_new,e) => {
                  <div className="card-title p-0">Signup</div>
                   <div className="form-group flex-column ">
                    
-                  <div style={{position:"absolute", left:"-10px", top:"20px"}}>
-                       <img alt="" src={User} height="20px" width="18px"/>
+                  <div style={{position:"absolute", left:"-9px", top:"20px"}}>
+                       <img alt="" src={User} height="19px" width="17px"/>
                   </div>
                   
                   <TextField 
@@ -235,8 +235,8 @@ const changeFn = (value_new,e) => {
 
 
                   <div className="form-group flex-column" style={{position:"relative", top:"-10px"}}>
-                  <div style={{position:"absolute", left:"-10px", top:"20px"}}>
-                        <img alt="" src={User} height="20px" width="18px"/>
+                  <div style={{position:"absolute", left:"-9px", top:"20px"}}>
+                        <img alt="" src={User} height="19px" width="17px"/>
                   </div>
                   <TextField 
                   id="standard-basic" 
@@ -272,7 +272,7 @@ const changeFn = (value_new,e) => {
 
                   <div className="form-group flex-column" style={{position:"relative", top:"-20px"}}>
                   <div style={{position:"absolute", left:"-10px", top:"20px"}}>
-                        <img alt="Mail Icon" src={Mail} height="15px" width="18px" />
+                        <img alt="Mail Icon" src={Mail} height="14px" width="19px" />
                   </div>
                   <TextField 
                   id="standard-basic" 
@@ -323,7 +323,7 @@ const changeFn = (value_new,e) => {
 
                   <div className="form-group" style={{position:"relative", left:"-15px", bottom:"20px"}}>
                   <div style={{position:"absolute", left:"4px", top:"10px"}}>
-                        <img alt="Phone icon" src={Phone} height="20px" width="19px" />
+                        <img alt="Phone icon" src={Phone} height="20px" width="20px" />
                   </div>
                   
                   
@@ -374,29 +374,57 @@ const changeFn = (value_new,e) => {
                   )}
                 
                   <div className="pb-3"></div>
-                 
-                            
-                   
                   <div className="form-group" style={{position:"relative", left:"30px", bottom:"0px"}}>
-                  <div style={{position:"absolute", left:"-40px", top:"10px", color:"black"}}>
-                        <img alt="Phone icon" src={organisationType} height="30px" width="25px" />
+                  <div style={{position:"absolute", left:"-40px", top:"14px", color:"black"}}>
+                        <img alt="Phone icon" src={organisationType} height="28px" width="24px" />
                   </div>  
-                  <div className="form-controll">
-                  {/* <Select
-                      isText={true}
-                      value={orgType}
-                      placeholder='Organisation Type'
-                      onChange={item =>{
+                  <div className="form-controll" style={{position:"relative",bottom:"5px",width:"345px"}}>
+                    <Autocomplete
+                        value={orgType}
+                        onChange={(event, item) => {
                         setChecker(true);
+                        console.log('Hi');
+                        if(firstName.length<=0)
+                        {
+                          console.log("Hi1");
+                          setFirstNameError(true);
+                        }
+                        if(lastName.length <=0)
+                        {
+                          setLastNameError(true);
+                        }
+                        if(mobileNumber.length <=0 && email.length <=0)
+                        {
+                            setPhoneNumberError(true);
+                        }
+                       
                         setFieldValue('type', item);
                         props.onOrgTypeChange(item);
                         setselectedType(item);
                         setorgType(item);
                         setValue('');
-                      }}
-                      options={orgTypeArray}
-                        /> */}
-                   <DropdownButton
+                       }}
+                        id="debug"
+                        options={orgTypeArray}
+                        debug
+                        renderInput={(params) => <TextField {...params} label="Organisation Type" />}
+                      />
+                                           
+                      {/* <Select
+                        isText={true}
+                        value={orgType}
+                        placeholder='Organisation Type'
+                        onChange={item =>{
+                          setChecker(true);
+                          setFieldValue('type', item);
+                          props.onOrgTypeChange(item);
+                          setselectedType(item);
+                          setorgType(item);
+                          setValue('');
+                        }}
+                        options={orgTypeArray}
+                          /> */}
+                       {/* <DropdownButton
                       isText={true}
                       value={orgType}
                       placeholder='Organisation Type'
@@ -426,11 +454,11 @@ const changeFn = (value_new,e) => {
                       groups={orgTypeArray}
                       dClass="ml-1"
                       className="text"
-                    /> 
+                    />  */}
                     </div>
-                    <div style={{position:"relative", left:"-35px", top:"10px",cursor:"pointer"}}>
+                    {/* <div style={{position:"relative", left:"-35px", top:"10px",cursor:"pointer"}}>
                         <img src={dropdownIcon} width="15" height="10" />
-                    </div>
+                  </div> */}
                     { errors.org && touched.org &&  (
                       <span  className="error-msg text-dangerO "> {errors.org} </span>
                     )}
@@ -439,11 +467,54 @@ const changeFn = (value_new,e) => {
                     
 
                     <div className="form-group" style={{position:"relative", left:"30px", bottom:"-12px"}}>
-                    <div style={{position:"absolute ", left:"-38px", top:"10px", color:"black"}}>
-                       <img alt="Phone icon" src={org} height="20px" width="23px" />
+                    <div style={{position:"absolute ", left:"-38px", top:"-1px", color:"black"}}>
+                       <img alt="Phone icon" src={org} height="19px" width="22px" />
                     </div>
-                    <div className="form-controll ">
-                    <DropdownButton
+                    <div className="form-controll" style={{position:"relative",bottom:"25px",width:"345px"}} >
+                    <Autocomplete
+                      onChange={(event, item) => {
+                      console.log(item,"item-------------")
+                      console.log("lastName Length " + lastName.length);
+                      if(firstName.length<=0)
+                      {
+                        console.log("Hi1");
+                        setFirstNameError(true);
+                      }
+                      if(lastName.length <=0)
+                      {
+                        setLastNameError(true);
+                      }
+                      if(mobileNumber.length <=0 && email.length <=0)
+                        {
+                          setPhoneNumberError(true);
+                        }                     
+                        setFieldValue('org', item);
+                      props.onOrganisationChange(item);
+                        if(item.name!='Other'){
+                          setValue(item.name);
+                          props.onOrgChange(false);
+                        }
+                        if(item.name =='Other'){
+                          props.onOrgChange(true);
+
+                        if(firstName.length > 0 && lastName.length > 0 && orgType.length > 0 && (email.length > 0  || mobileNumber.length >0))
+                          {
+                            props.onOrgChange(true);
+                          }
+                          else{
+                            setPhoneNumberError(true);
+                             props.onOrgChange(false);
+                          }
+                        }
+                    }}
+                    id="debug"
+                    debug
+                    getOptionLabel={(option) => option.name}
+                    options={showOrgByType(selectedType)}
+                    renderInput={(params) => <TextField {...params} label="Organisation Name"  />}
+                  />
+
+                  {/* <DropdownButton
                     name={props.organisation.organisationId}
                     value={value}
                     isText={true}
@@ -491,11 +562,11 @@ const changeFn = (value_new,e) => {
                         //  }}
                     dClass="ml-1"
                     className="text"
-                  /> 
+                  />  */}
                   </div>
-                  <div style={{position:"relative", left:"-50px", top:"10px",cursor:"pointer"}}>
+                  {/* <div style={{position:"relative", left:"-50px", top:"10px",cursor:"pointer"}}>
                   <img src={dropdownIcon} width="15" height="10" className="ml-3" />
-                  </div>
+                  </div> */}
                   {errors.org && touched.org && (
                     <span className="error-msg text-dangerON">{errors.org}</span>
                   )}

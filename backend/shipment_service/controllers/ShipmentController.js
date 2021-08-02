@@ -320,6 +320,19 @@ const userShipments = async (mode, warehouseId, skip, limit, callback) => {
   callback(undefined, shipments)
 }
 
+const taggedShipmentUpdate = async (id, quantity, shipmentId , next) => {
+    const shipmentUpdate = await ShipmentModel.update(
+      {
+        id: shipmentId,
+        "products.productID": id,
+      },
+      {
+        $inc: {
+          "products.$.productQuantityTaggedSent": quantity,
+        },
+      }
+    );
+};
 
 exports.createShipment = [
   auth,
@@ -351,8 +364,8 @@ exports.createShipment = [
 
             //  let event_data = {}
             const shipmentCounter = await CounterModel.findOne({
-              "counters.name": "shipmentId",
-            });
+              "counters.name": "shipmentId"}, { "counters.$": 1 }
+            );
             const shipmentId =
               shipmentCounter.counters[0].format + shipmentCounter.counters[0].value;
             data.id = shipmentId;
@@ -534,7 +547,42 @@ exports.createShipment = [
                     products[count].productQuantity,
                     data.poId,
                     "CREATED"
-                  );          
+                  );         
+		if (products[count].batchNumber != null) {
+		    const update = await AtomModel.updateMany({
+		        batchNumbers: products[count].batchNumber,
+		        "inventoryIds": suppInventoryId
+		    }, {
+		        $set: {
+		            "inventoryIds.$": recvInventoryId
+		        }
+		    })
+		
+		} else if (products[count].serialNumber != null) {
+		    const serialNumbers = product.serialNumbersRange.split("-");
+		    let atomsArray = [];
+		    if (serialNumbers.length > 1) {
+		        const serialNumbersFrom = parseInt(
+		            serialNumbers[0].split(/(\d+)/)[1]
+		        );
+		        const serialNumbersTo = parseInt(
+		            serialNumbers[1].split(/(\d+)/)[1]
+			        );
+		
+		        const serialNumberText = serialNumbers[1].split(/(\d+)/)[0];
+		        for (let i = serialNumbersFrom; i <= serialNumbersTo; i++) {
+		            const updateAtoms = await AtomModel.updateMany({
+		                id:  `${serialNumberText}${i}` ,
+		                "inventoryIds": suppInventoryId
+		            }, {
+		                $set: {
+		                    "inventoryIds.$": recvInventoryId
+		                }
+		            })
+		            atomsArray.push(atom);
+		        }
+		    }
+		}
               }
               const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
               const updates = {
@@ -644,7 +692,15 @@ exports.createShipment = [
                   $push: {
                     taggedShipments: prevTaggedShipments.taggedShipments
                   }
-                });   
+                });
+
+  		for (count = 0; count < products.length; count++) {
+              	  taggedShipmentUpdate(
+                    products[count].productId,
+                    products[count].productQuantity,
+                    data.taggedShipments
+                  );
+                }
               }
               async function compute(event_data) {
                 resultt = await logEvent(event_data);
@@ -2678,7 +2734,9 @@ exports.trackJourney = [
 
 			if( poDetails == null)
                         throw new Error("Order ID does not exists..Please try searching with existing IDs");
-
+			
+			if ( poDetails.shipments.length > 0)
+                        {
                         outwardShipmentsArray = await ShipmentModel.aggregate([{
                                 $match:
 
@@ -2744,6 +2802,7 @@ exports.trackJourney = [
                                 },
                             },
                         ])
+		      }
                     }
                     return apiResponse.successResponseWithData(
                         res,
@@ -2819,7 +2878,7 @@ exports.fetchairwayBillNumber = [
                 },
               ],
             },
-            'airWayBillNo id'
+            'airWayBillNo id status'
           )
             .then((shipments) => {
               return apiResponse.successResponseWithData(

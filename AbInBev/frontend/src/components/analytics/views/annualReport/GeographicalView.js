@@ -86,7 +86,6 @@ const GeographicalView = (props) => {
   }, [sku, viewName, props]);
 
   const showDetailedGeoView = (param) => {
-    console.log('params', param);
     props.onViewChange('DETAILED_GEO_VIEW', param);
   };
 

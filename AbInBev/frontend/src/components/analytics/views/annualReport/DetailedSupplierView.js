@@ -132,10 +132,37 @@ const DetailedSupplierView = (props) => {
     })();
   }, []);
 
+  const getIntroOfPage = (label) => {
+    if (label == 0) {
+      return 'S1';
+    }
+    if (label == 1) {
+      return 'S2';
+    }
+    if (label == 2) {
+      return 'S3';
+    }
+    return '';
+  };
+
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip">
+          <p className="label">{`${getIntroOfPage(label)} : ${
+            payload[0].value
+          }`}</p>
+        </div>
+      );
+    }
+
+    return null;
+  };
+
   const renderLegend = (props) => {
     const { payload } = props;
     return (
-      <div style={{ display: 'grid', gap: '2em' }}>
+      <div style={{ display: 'grid', gap: '1em' }}>
         {payload.map((entry, index) => (
           <div className="renderLegend">
             <div
@@ -150,6 +177,49 @@ const DetailedSupplierView = (props) => {
         ))}
       </div>
     );
+  };
+
+  const useSortableData = (items, config = null) => {
+    const [sortConfig, setSortConfig] = useState(config);
+
+    const sortedItems = useMemo(() => {
+      let sortableItems = [...items];
+      if (sortConfig !== null) {
+        sortableItems.sort((a, b) => {
+          if (a[sortConfig.key] < b[sortConfig.key]) {
+            return sortConfig.direction === 'ascending' ? -1 : 1;
+          }
+          if (a[sortConfig.key] > b[sortConfig.key]) {
+            return sortConfig.direction === 'ascending' ? 1 : -1;
+          }
+          return 0;
+        });
+      }
+      return sortableItems;
+    }, [items, sortConfig]);
+
+    const requestSort = (key) => {
+      setArrIndex(-1);
+      let direction = 'ascending';
+      if (
+        sortConfig &&
+        sortConfig.key === key &&
+        sortConfig.direction === 'ascending'
+      ) {
+        direction = 'descending';
+      }
+      setSortConfig({ key, direction });
+    };
+
+    return { items: sortedItems, requestSort, sortConfig };
+  };
+
+  const { items, requestSort, sortConfig } = useSortableData(analytics);
+  const getClassNamesFor = (name) => {
+    if (!sortConfig) {
+      return;
+    }
+    return sortConfig.key === name ? sortConfig.direction : undefined;
   };
 
   return (
@@ -271,6 +341,7 @@ const DetailedSupplierView = (props) => {
                   height={36}
                   content={renderLegend}
                 />
+                <Tooltip content={<CustomTooltip />} />
               </RadialBarChart>
             </ResponsiveContainer>
           </div>
