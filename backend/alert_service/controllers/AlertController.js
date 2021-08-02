@@ -77,7 +77,7 @@ exports.createNewAlert = [
               actorOrgId: req.body.actorOrgId,
               createdBy: req.user.id,
             }
-            if (req.body.alertType == 'SHIPMENT') alertData.transactionId = req.body.transactionId;
+            if (req.body.alertType == 'SHIPMENT' || req.body.alertType == 'ORDER') alertData.transactionId = req.body.transactionId;            
             console.log(alertData)
             const alert = new Alerts({
               id: utility.randomNumber(10),
