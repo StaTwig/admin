@@ -768,7 +768,7 @@ if (!error) {
                           products_temp[i].name =
                             result.products[i].productName;
                           products_temp[i].productQuantity =
-                            result.products[i].productQuantity;
+                            ( (result.products[i].productQuantity) - (result.products[i].productQuantityTaggedSent));
                           products_temp[i].type =
                             result.products[i].productCategory;
                           delete products_temp[i].productQuantityDelivered;
