@@ -766,7 +766,7 @@ exports.getOverviewStats = [
 				finalData
 			);
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ];
@@ -804,7 +804,7 @@ exports.getAllBrands = [
 				allBrands
 			);
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ];
@@ -926,7 +926,7 @@ exports.getAllBrands = [
 // 				Analytics
 // 			);
 // 		} catch (err) {
-// 			return apiResponse.ErrorResponse(res, err);
+// 			return apiResponse.ErrorResponse(res, err.message);
 // 		}
 // 	}
 // ];
@@ -1070,7 +1070,7 @@ exports.getStatsByBrand = [
 		// }	
 		} 
 		catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ];
@@ -1163,7 +1163,7 @@ exports.getSalesStatsByBrand = [
 				Analytics
 			);
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ];
@@ -1270,7 +1270,7 @@ exports.getStatsByOrg = [
 				);
 			}
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ];
@@ -1379,7 +1379,7 @@ exports.getStatsByOrgType = [
 				organizations
 			);
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ];
@@ -1517,7 +1517,7 @@ exports.getLeadTimes = [
 				shipmentLeadTimes
 			);
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ];
@@ -2011,7 +2011,7 @@ exports.getAllStats = [
 				finalData
 			);
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ];
@@ -2232,7 +2232,7 @@ exports.getStatsBySKU = [
 			}
 
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ];
@@ -2295,7 +2295,7 @@ exports.getSalesTotalOfAllBrands = [
 			);
 
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ]
@@ -2375,7 +2375,7 @@ exports.getMonthlySalesOfSkuByBrand = [
 				Analytics
 			);
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ]
