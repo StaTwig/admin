@@ -20,7 +20,13 @@ const S1_ORG = 'S1';
 const S2_ORG = 'S2';
 
 const redis = require("redis");
+const { promisifyAll } = require('bluebird');
+promisifyAll(redis);
 const client = redis.createClient();
+
+client.on('error', err => {
+    console.log('Error ' + err);
+});
 
 const DATE_FORMAT = 'YYYY-MM-DD';
 var today = new Date()
@@ -933,21 +939,19 @@ exports.getStatsByBrand = [
 	async function (req, res) {
 		try {
 			const filters = req.query;
-			const r = JSON.stringify(filters);
-			client.get(r,(err, data) => {
-				console.log(data);
-				if(!err && data != null) {
-					return apiResponse.successResponseWithData(res,"HIT Cache",JSON.parse(data))
-				}
-			})
-			const date = new Date();
-			console.log(date);
-			let warehouseIds = await _getWarehouseIds(filters);
+			const filterString = "GSB" + JSON.stringify(filters);
+			const data = await client.getAsync(filterString);
+			if(data && data!= null) {
+				return apiResponse.successResponseWithData(
+					res,
+					"Cache Hit",
+					JSON.parse(data)
+				);
+			}
+			else {
+				let warehouseIds = await _getWarehouseIds(filters);
 			today = new Date()
-			console.log('warehouseIds ==>',today-date);
 			let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
-			const date1 = new Date();
-			console.log('Filter ==>',date1-today);
 			const Products = await AnalyticsModel.aggregate([
 				{
 					$match: analyticsFilter
@@ -966,26 +970,17 @@ exports.getStatsByBrand = [
 				},
 				{ $sort: { "_id.manufacturer": 1 } }
 			]);
-			const date2 = new Date();
-			console.log('Products ==>',date2-date1);
 			const MasterProducts = await ProductModel.find({});
-			const date3 = new Date();
-			console.log('MasterProds ==>',date3-date2);
 			let Analytics = [];
 			let arr = {};
 			let prevBrand = '';
-			
 			let lastMonthStart = moment().subtract(1, 'months').tz("Etc/GMT").startOf('month');
 			let lastMonthEnd = moment().subtract(1, 'months').tz("Etc/GMT").endOf('month');
 			if (analyticsFilter?.uploadDate)
 				lastMonthStart = moment(analyticsFilter.uploadDate['$gte']).tz("Etc/GMT").subtract(1, 'months').startOf('month');
 			if (analyticsFilter?.uploadDate)
 				lastMonthEnd = moment(analyticsFilter.uploadDate['$lte']).tz("Etc/GMT").subtract(1, 'months').endOf('month');
-				const date4 = new Date();
-				console.log('Moment Time ==>',date4-date3);
 			warehouseIds = await _getWarehouseIdByOrgType(filters);
-			const date5 = new Date();
-			console.log('warehouses ==>',date5-date4);
 			for (const [index, product] of Products.entries()) {
 				if (prevBrand != product._id.manufacturer) {
 					if (!!Object.keys(arr).length) {
@@ -1016,8 +1011,6 @@ exports.getStatsByBrand = [
 						p['returns'] = await getOnlyReturns(prod.id, from, to, warehouseIds);
 						p['returnRate'] = parseFloat(((parseInt(p['returns']) / parseInt(product.sales)) * 100)).toFixed(2);
 						// p['returnRatePrev'] = await calculatePrevReturnRatesNew(filters, product);
-						const date6 = new Date();
-						console.log('loop Cummulative ==>',date6-date5);
 						let prevAnalytic = await AnalyticsModel.aggregate([
 							{
 								$match: {
@@ -1053,21 +1046,13 @@ exports.getStatsByBrand = [
 				if (index == Products.length - 1)
 					Analytics.push(arr);
 			}
-			const date7 = new Date();
-			console.log('endTotal',date7-date);
-			client.set(r, JSON.stringify(Analytics), function (err, value) {
-				if (err) {
-					console.log(err);
-				} else {
-					console.log('set', value);
-				}
-			}
-			);
+			await client.setAsync(filterString, JSON.stringify(Analytics));
 			return apiResponse.successResponseWithData(
 				res,
 				"Operation success",
 				Analytics
 			);
+		}	
 		} catch (err) {
 			return apiResponse.ErrorResponse(res, err);
 		}
@@ -1189,6 +1174,13 @@ exports.getStatsByOrg = [
 	async function (req, res) {
 		try {
 			const filters = req.query;
+			const filterString = "GSO" + JSON.stringify(filters);
+			client.get(filterString,(err, data) => {
+				if(!err && data != null) {
+					return apiResponse.successResponseWithData(res,"HIT Cache",JSON.parse(data))
+				}
+			})
+
 			let organizations = await OrganisationModel.aggregate([
 				{
 					$match: getFilterConditions(filters)
@@ -1242,6 +1234,15 @@ exports.getStatsByOrg = [
 					}]);
 				organization.analyticsPrevMonth = aggregateSalesStats(prevMonthAnalytics);
 			}
+
+			client.set(filterString, JSON.stringify(organizations), function (err, value) {
+				if (err) {
+					console.log(err);
+				} else {
+					console.log('set', value);
+				}
+			}
+			);
 
 			return apiResponse.successResponseWithData(
 				res,
@@ -1862,6 +1863,13 @@ exports.getSupplierPerformance = [
 	async function (req, res) {
 		try {
 			const orgType = req.query.supplierType;
+			const filterString = "GSP"+JSON.stringify(filters);
+			client.get(filterString,(err, data) => {
+				if(!err && data != null) {
+					return apiResponse.successResponseWithData(res,"HIT Cache",JSON.parse(data))
+				}
+			})
+
 			let matchCondition = {}
 			if (!orgType || orgType === 'ALL') {
 				matchCondition = { $or: [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }] };
@@ -1920,6 +1928,15 @@ exports.getSupplierPerformance = [
 				supplier.dirtyBottles = dirtyBreakage.dirtyBottles;
 				supplier.breakage = dirtyBreakage.breakage;
 			}
+
+			client.set(filterString, JSON.stringify(supplierOrgs), function (err, value) {
+				if (err) {
+					console.log(err);
+				} else {
+					console.log('set', value);
+				}
+			}
+			);
 
 			return apiResponse.successResponseWithData(
 				res,
@@ -2067,6 +2084,13 @@ exports.getStatsBySKU = [
 	async function (req, res) {
 		try {
 			const filters = req.query;
+			const filterString = "GSS" + JSON.stringify(filters);
+			client.get(filterString,(err, data) => {
+				if(!err && data != null) {
+					return apiResponse.successResponseWithData(res,"HIT Cache",JSON.parse(data))
+				}
+			})
+
 			const monthNames = ["January", "February", "March", "April", "May", "June",
 				"July", "August", "September", "October", "November", "December"
 			];
@@ -2167,6 +2191,15 @@ exports.getStatsBySKU = [
 					return a.sortBy - b.sortBy;
 				});
 			}
+
+			client.set(filterString, JSON.stringify(response), function (err, value) {
+				if (err) {
+					console.log(err);
+				} else {
+					console.log('set', value);
+				}
+			}
+			);
 
 			return apiResponse.successResponseWithData(res, "Operation Success", response);
 
