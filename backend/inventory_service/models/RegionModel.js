@@ -1,9 +1,31 @@
-var mongoose = require('mongoose');
-var RegionSchema = new mongoose.Schema(
-  {
-    name: { type: String, required: true, unique: true },
-    country: { type: Array, required: true },
-  },
-  { timestamps: true },
-);
-module.exports = mongoose.model('Region', RegionSchema);
+const mongoose = require("mongoose");
+const RegionSchema = new mongoose.Schema({
+    "lng": { type: String },
+    "geonameId": { type: Number },
+    "name": { type: String },
+    "fclName": {
+        type: String
+    },
+    "toponymName": {
+        type: String
+    },
+    "fcodeName": {
+        type: String
+    },
+    "adminName1": {
+        type: String
+    },
+    "lat": {
+        type: String
+    },
+    "fcl": {
+        type: String
+    },
+    "fcode": {
+        type: String
+    },
+    "population": {
+        type: Number
+    }
+});
+module.exports = mongoose.model("regions", RegionSchema);
