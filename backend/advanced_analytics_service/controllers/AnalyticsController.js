@@ -937,7 +937,7 @@ exports.getAllBrands = [
  * @returns {Object}
  */
 exports.getStatsByBrand = [
-	// auth,
+	auth,
 	async function (req, res) {
 		try {
 			const filters = req.query;
@@ -1186,7 +1186,7 @@ function getConditionsOrgWarehouse(filters) {
  * @returns {Object}
  */
 exports.getStatsByOrg = [
-	// auth,
+	auth,
 	async function (req, res) {
 		try {
 			const filters = req.query;
@@ -1883,9 +1883,10 @@ exports.getSupplierPerformance = [
 	async function (req, res) {
 		try {
 			const orgType = req.query.supplierType;
-			const filterString = "GSP"+JSON.stringify(filters);
+			const keyString = "GSP"+orgType;
+			console.log(keyString);
 			var bool =false;
-			client.get(filterString,(err, data) => {
+			client.get(keyString,(err, data) => {
 				if(!err && data != null) {
 					bool = true;
 					return apiResponse.successResponseWithData(res,"HIT Cache",JSON.parse(data))
@@ -1951,7 +1952,7 @@ exports.getSupplierPerformance = [
 				supplier.breakage = dirtyBreakage.breakage;
 			}
 
-			client.set(filterString, JSON.stringify(supplierOrgs), function (err, value) {
+			client.set(keyString, JSON.stringify(supplierOrgs), function (err, value) {
 				if (err) {
 					console.log(err);
 				} else {
@@ -1967,7 +1968,7 @@ exports.getSupplierPerformance = [
 				);
 			}
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ];
