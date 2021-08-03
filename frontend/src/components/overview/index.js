@@ -34,7 +34,10 @@ const Overview = props => {
     let rtnArr = v == 'two' ? props.shipments.filter(row => props.user.warehouseId == row.supplier.locationId) : props.shipments.filter(row => props.user.warehouseId != row.supplier.locationId);
     if (a != '')
       rtnArr = rtnArr.filter(row => row?.shipmentAlerts?.length > 0);
-    setShpmnts(rtnArr);
+      // console.log(rtnArr)
+      // console.log(props.shipments)
+    setShpmnts(rtnArr);  
+
   }
 
 

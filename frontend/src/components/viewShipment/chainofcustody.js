@@ -70,7 +70,7 @@ const ChainOfCustody = (props) => {
                         {getAddress(shipmentData.supplier.warehouse.warehouseAddress)}
                       </span>
                     </div>
-                    <h6 className="poheads potext mt-3 mb-3">To</h6>
+                    {/* <h6 className="poheads potext mt-3 mb-3">To</h6>
 
                     <div className=" d-flex flex-row p-1">
                       <span class="w-100 text-secondary">
@@ -87,7 +87,7 @@ const ChainOfCustody = (props) => {
                       <span class="w-100 pl-2">
                         {getAddress(shipmentData.receiver.warehouse.warehouseAddress)}
                       </span>
-                    </div>
+                    </div> */}
                   </div>
                   <div className="col">
                     <div className="emp"></div>
@@ -97,7 +97,7 @@ const ChainOfCustody = (props) => {
                   </div>
                   <div className="d-flex flex-column mr-5">
                     <div className="emp"></div>
-                    <div>{custody.updatedOn?.split(" ")[0]}</div>
+                    <div>{custody.updatedOn}</div>
                     <div></div>
                   </div>
                 </div>
@@ -194,7 +194,7 @@ const ChainOfCustody = (props) => {
                       </div>
                       <div className="d-flex flex-column mr-5">
                         <div className="emp"></div>
-                        <div>{custody.updatedOn?.split(" ")[0]}</div>
+                        <div>{custody.updatedOn}</div>
                         <div></div>
                       </div>
                     </div>
@@ -284,7 +284,7 @@ const ChainOfCustody = (props) => {
                       </div>
                       <div className="d-flex flex-column mr-5">
                         <div className="emp"></div>
-                        <div>{custody.updatedOn?.split(" ")[0]}</div>
+                        <div>{custody.updatedOn}</div>
                         <div></div>
                       </div>
                     </div>

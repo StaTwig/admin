@@ -46,10 +46,24 @@ const Orders = props => {
   useEffect(() => {
     async function fetchData() {
       if (visible == 'one') {
+        setDateFilter("");
+        setProductNameFilter("");
+        setToFilter("");
+        setFromFilter("");
+        setOrderIdFilter("");
+        setStatusFilter("");
+        setLocationFilter("");
         const outboundRes = await getSentPOs("", "", "", "", "","", 0, limit); //to, orderId, productName, deliveryLocation, date, statusFilter,skip, limit
         setOutboundRecords(outboundRes.data.outboundPOs);
         setCount(outboundRes.data.count)
       } else {
+        setDateFilter("");
+        setProductNameFilter("");
+        setToFilter("");
+        setFromFilter("");
+        setOrderIdFilter("");
+        setStatusFilter("");
+        setLocationFilter("");
         const inboundRes = await getReceivedPOs("", "", "", "", "", "",0, limit); //from, orderId, productName, deliveryLocation, date,status, skip, limit
         console.log(inboundRes.data.inboundPOs);
         setInboundRecords(inboundRes.data.inboundPOs);

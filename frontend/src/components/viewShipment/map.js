@@ -3,7 +3,7 @@ import {Map, InfoWindow, Marker, GoogleApiWrapper, Polygon} from 'google-maps-re
 
 const style = {
     width: '94%',
-    height: '80%'
+    height: '85%'
   }
 
   /*var points = [
@@ -54,7 +54,7 @@ export class MapContainer extends Component {
             return (
               row?.receiver?.warehouse?.location?.latitude && row?.receiver?.warehouse?.location?.longitude &&
                   <Marker
-                    title={row.receiver.warehouse.title}
+                    title={row.receiver.warehouse.title +","+row.receiver.warehouse.warehouseAddress.firstLine+","+row.receiver.warehouse.warehouseAddress.secondLine +","+row.receiver.warehouse.warehouseAddress.city}
                     name={row.receiver.warehouse.warehouseAddress.city}
                   position={{ lat: row.receiver.warehouse.location.latitude, lng: row.receiver.warehouse.location.longitude }} />
             )
@@ -65,7 +65,7 @@ export class MapContainer extends Component {
             return (
                 row?.supplier?.warehouse?.location?.latitude && row?.supplier?.warehouse?.location?.longitude &&
                   <Marker
-                    title={row.supplier.warehouse.title}
+                     title={row.supplier.warehouse.title +","+row.supplier.warehouse.warehouseAddress.firstLine +","+row.supplier.warehouse.warehouseAddress.secondLine +","+row.supplier.warehouse.warehouseAddress.city}
                     name={row.supplier.warehouse.warehouseAddress.city}
                   position={{ lat: row.supplier.warehouse.location.latitude, lng: row.supplier.warehouse.location.longitude }} />
             )

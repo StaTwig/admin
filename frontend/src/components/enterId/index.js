@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import {getShipmentIds,getViewShipment,fetchairwayBillNumber} from '../../actions/shipmentActions';
 import { useDispatch, useSelector } from 'react-redux';
-import { func } from "prop-types";
+import { element, func } from "prop-types";
 
 const EnterId = (props) => {
   const { id } = props.match.params;
@@ -14,6 +14,7 @@ const EnterId = (props) => {
   const [shipmentArray,setShipmentArray] = useState([]);
   const [transitNumberArray,settransitNumberArray] = useState([]);
   const [shipdisabled, setshipdisabled] = useState(true);
+  const [shipdisabled1, setshipdisabled1] = useState(true);
   useEffect(()=>{
     async function getShipmentArray(){
       let arr = await getShipmentIds();
@@ -48,6 +49,7 @@ const EnterId = (props) => {
   const [shipmentId, setShipmentId] = useState(null);
   const [enableSearch,setenableSearch] = useState(false);
   const [errorShipment,seterrorShipment] = useState(false);
+  const [errorShipment1,seterrorShipment1] = useState(false);
   const [value, setValue] = React.useState();
   const [value1, setValue1] = React.useState();
   const [inputValue, setInputValue] = React.useState('');
@@ -71,6 +73,23 @@ const EnterId = (props) => {
       }
     })
     console.log(val);
+    console.log("shipmentid",shipmentId);
+  }
+  const billNoCheck=(bno)=>{
+    console.log("transitnoarray",transitNumberArray);
+    let val=transitNumberArray.filter(e=>e.airWayBillNo==bno);
+    console.log("val",val);
+    console.log("val status",val[0]?.status);
+    if(val[0]?.status=="RECEIVED"){
+      setshipdisabled(true);
+      seterrorShipment1(true);
+      console.log("Shipment is already delivered");
+    }
+    else{
+      setshipdisabled(false);
+      seterrorShipment1(false);
+      console.log("You can update the shipment");
+    }
   }
   return (
     <div className="updateStatus">
@@ -148,7 +167,7 @@ const EnterId = (props) => {
                           }}
                           id="controllable-states-demo"
                           autoComplete
-                          renderInput={(params) => <TextField {...params}  name="shipmentId" label="Enter Shipment ID" margin="normal" variant="outlined" />}
+                          renderInput={(params) => <TextField {...params}  name="shipmentId" margin="normal" variant="outlined" />}
                         />
                             {errorShipment && (
                             <span className="error-msg text-danger mt-3 " style={{top:"-10px",left:"0px"}} >
@@ -200,11 +219,18 @@ const EnterId = (props) => {
                           onInputChange={(event, newInputValue) => {
                             setbillno(newInputValue);
                             setInputValue1(newInputValue);
-                           newInputValue?setshipdisabled(false):setshipdisabled(true);
+                            console.log("ip",newInputValue);
+                            billNoCheck(newInputValue);
+                            //newInputValue?setshipdisabled(false):(setshipdisabled(true),seterrorShipment(false));
                           }}
                           debug
-                          renderInput={(params) => <TextField {...params} name="billNo" label="Transit No." margin="normal" variant="outlined" />}
+                          renderInput={(params) => <TextField {...params} name="billNo" margin="normal" variant="outlined" />}
                         />
+                        {errorShipment1 && (
+                            <span className="error-msg text-danger mt-3 " style={{top:"-10px",left:"0px"}} >
+                              This shipment has been already delivered. 
+                            </span>
+                          )}
                         </div>
             {/* <label className="mb-1 text-secondary pt-2">Bill No:</label>
               <input
