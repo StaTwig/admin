@@ -22,8 +22,10 @@ const S2_ORG = 'S2';
 const redis = require("redis");
 const { promisifyAll } = require('bluebird');
 promisifyAll(redis);
-const client = redis.createClient();
-
+const client = redis.createClient(process.env.REDIS_URL);
+client.on('connect', () => {
+	console.log("Connected to Redis");
+});
 client.on('error', err => {
     console.log('Error ' + err);
 });
