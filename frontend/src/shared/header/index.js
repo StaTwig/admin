@@ -33,6 +33,8 @@ import DropdownButton from "../../shared/dropdownButtonGroup";
 import { resetShipments } from '../../actions/shipmentActions';
 import { userLocationReducer } from '../../reducers/userLocationReducer';
 import setAuthToken from '../../utils/setAuthToken';
+import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 const Header = props => {
   const dispatch = useDispatch();
@@ -40,6 +42,7 @@ const Header = props => {
   const [location, setLocation] = useState({});
   const [sidebar, openSidebar] = useState(false);
   const [search, setSearch] = useState('');
+  const [searchtemp, setsearchtemp] = useState('');
   const [invalidSearch, setInvalidSearch] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -50,6 +53,8 @@ const Header = props => {
   // const [shippingIds, setShippingIds] = useState([]);
   const [activeWarehouses, setActiveWarehouses]= useState([]);
   const [selectLocation, setSelectLocation] = useState("");
+  const options = [];
+
   
 const ref = useOnclickOutside(() => {
     setMenu(false);
@@ -241,7 +246,29 @@ const imgs = config().fetchProfileImage;
       
       <div className="actions">
         <div className="search-form" tabIndex="-1" onKeyDown={onkeydown}>
-          <input
+        <Autocomplete
+        style={{width:"130%"}}
+        id="free-solo-demo"
+        freeSolo
+        //value={search}
+        options={options}
+        placeholder="Search PO ID/ Shipment ID/ Transit Number"
+            onFocus={(e) => e.target.placeholder = ''}
+            onBlur={(e) => e.target.placeholder = 'Search PO ID/ Shipment ID/ Transit Number'}
+            inputValue={search}
+            onInputChange={(event, newInputValue) => {
+              setSearch(newInputValue);
+              console.log(newInputValue,"new------")
+            }}
+            onChange={(event, newValue) => {
+              onSearchChange(newValue);
+              console.log(newValue,"---------")
+            }}
+          renderInput={(params) => (
+          <TextField {...params} label="Search PO ID/ Shipment ID/ Transit Number" margin="normal" variant="outlined" />
+        )}
+      />
+        {/* <input
             type="text"
             // value={search}
             placeholder="Search PO ID/ Shipment ID/ Transit Number"
@@ -249,7 +276,8 @@ const imgs = config().fetchProfileImage;
             onBlur={(e) => e.target.placeholder = 'Search PO ID/ Shipment ID/ Transit Number'}
             onChange={onSearchChange}
             className= "form-control search-field"
-          />
+        /> */}
+
           <img src={searchingIcon} onClick={onSeach} alt="searching" />
         </div>
         <div>
