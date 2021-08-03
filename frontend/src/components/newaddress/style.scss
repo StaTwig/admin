@@ -1,0 +1,12 @@
+@import "../../assets/styles/global.scss";
+
+.txt {
+  color: #ffffff;
+}
+.font-13 {
+  width: 60%;
+  font-size: 13px;
+}
+.form-control:focus {
+  box-shadow: none;
+}

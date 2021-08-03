@@ -1,0 +1,30 @@
+@import '../../assets/styles/global.scss';
+
+.spacingbutton
+{
+    padding-right:0px;
+    padding-left:90px;
+}
+
+.workflow
+{
+    top: 358px;
+left: 290px;
+width: 198px;
+height: 900px;
+}
+.borderless tr td {
+    border: none !important;
+
+}
+td {
+    text-align: center;  
+  }
+ 
+
+  th {
+    border: none !important;
+  }
+  p{
+      font-size: medium;
+  }

@@ -1,0 +1,58 @@
+@import "../../assets/styles/global.scss";
+
+.dashboard {
+  padding-right: 1rem;
+  padding-left: 2rem;
+
+  @media (max-width: $md) {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+}
+
+.userPic {
+  margin-right: 0.5rem;
+  img {
+    width: 30px;
+    height: 30px;
+  }
+}
+.r-10 {
+  right: 10px;
+}
+.sub-header {
+  margin-left: 1em;
+  color: blue;
+}
+.dropdownLabel {
+  font-size: larger;
+}
+.d-grid {
+  display: grid;
+  justify-items: flex-end;
+}
+.txtColor {
+  color: $lightGrey;
+}
+.orangeBtn {
+  background-color: #ff8c00;
+  color: #ffffff;
+}
+.txtWrapR {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 75%;
+}
+.text-decoration-underline {
+  text-decoration: underline;
+}
+.leaflet-container {
+  border-top: 3px solid #d6d6d6;
+  bottom: 0;
+  top: 198px;
+  position: fixed;
+  left: 95px;
+  z-index: 9;
+  width: 100%;
+}
