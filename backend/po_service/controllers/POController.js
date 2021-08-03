@@ -30,7 +30,9 @@ const po_stream_name = process.env.PO_STREAM;
 
 const products = require('../data/products');
 const manufacturers = require('../data/manufacturers');
-
+const CENTRAL_AUTHORITY_ID = null
+const CENTRAL_AUTHORITY_NAME = null
+const CENTRAL_AUTHORITY_ADDRESS = null
 const init = require('../logging/init');
 const logger = init.getLog();
 
@@ -888,8 +890,8 @@ exports.createOrder = [
       let { externalId, supplier, customer, products, creationDate, lastUpdatedOn } = req.body;
       products.forEach(async element => {
         var product = await ProductModel.findOne({ id: element.productId });
-        element.type = product.type
-        element.unitofMeasure= product.unitofMeasure.name
+        element.type = product?.type
+        element.unitofMeasure= product?.unitofMeasure.name
         console.log(product)
       });
 	    const createdBy =  lastUpdatedBy = req.user.id;
@@ -904,9 +906,9 @@ exports.createOrder = [
         createdBy,
         lastUpdatedBy
       });
-      const supplierID = req.body.supplier.id;
+      const supplierID = req.body.supplier.supplierOrganisation;
       const supplierOrgData = await OrganisationModel.findOne({
-        id: req.body.supplier.id,
+        id: req.body.supplier.supplierOrganisation,
       });
       if(supplierOrgData==null)
       {
@@ -915,16 +917,18 @@ exports.createOrder = [
       }
                   
       const receiverOrgData = await OrganisationModel.findOne({
-        id: req.body.receiver.id,
+        id: req.body.customer.customerOrganisation,
       });
       if(receiverOrgData==null)
       {
+        console.log("customer not defined");
         return apiResponse.ErrorResponse(res,"Receiver not defined");
       }      
-
+      var datee = new Date();
+      datee = datee.toISOString();
       const supplierName = supplierOrgData.name;
       const supplierAddress = supplierOrgData.postalAddress;
-      const receiverId = req.body.receiver.id;
+      const receiverId = receiverOrgData.id;
       const receiverName = receiverOrgData.name;
       const receiverAddress = receiverOrgData.postalAddress;
       const currDateTime = date.format( new Date(), 'DD/MM/YYYY HH:mm');
@@ -989,6 +993,7 @@ exports.createOrder = [
         event_data.stackholders.actororg.name = supplierName || "null";
         event_data.stackholders.actororg.address = supplierAddress || "null";
         event_data.payload.data = req.body;
+        event_data.payload.data.order_id = poId;
       
         async function compute(event_data) {
           resultt = await logEvent(event_data);
@@ -997,12 +1002,14 @@ exports.createOrder = [
         console.log(result);
         compute(event_data).then((response) => {
           console.log(response);
+          return apiResponse.successResponseWithData(res, 'Created order',{"poId":poId});
+
         });
       }catch(error){
         console.log(error);
       }
-      return apiResponse.successResponseWithData(res, 'Created order',{"poId":poId});
     } catch (err) {
+      console.log(err)
       logger.log(
           'error',
           '<<<<< POService < POController < createOrder : error (catch block)',
