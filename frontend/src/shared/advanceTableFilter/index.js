@@ -62,9 +62,9 @@ const AdvanceTableFilter = (props) => {
 
   const renderColumn6 = (columnData) => {
     if (columnData === "Status") {
-      return (<div className="box col">
+      return (<div className="box col-1">
       <span className="divider" />
-        <a className="filter-item" onClick={handleInventoryStatusClick}>
+        <a className="filter-item ml-4" onClick={handleInventoryStatusClick}>
           <div className="icon mr-2">
             {props.data.img5}
           </div>
@@ -177,9 +177,9 @@ const AdvanceTableFilter = (props) => {
   }
   const renderColumn5 = (columnData) => {
     if (columnData == "Status") {
-      return (<div className="box col">
+      return (<div className="box col-2">
       {/* <span className="divider" /> */}
-        <a className="filter-item" onClick={handleInventoryStatusClick}>
+        <a className="filter-item mr-5" onClick={handleInventoryStatusClick}>
           <div className="icon mr-2">
             {props.data.img5}
           </div>
@@ -259,7 +259,7 @@ const AdvanceTableFilter = (props) => {
     
     else if (columnData == "Delivery Location") {
       return (<div className="box col">
-        <a className="filter-item" onClick={handlePoDeliveryLocationClick}>
+        <a className="filter-item ml-5" onClick={handlePoDeliveryLocationClick}>
           <div className="icon mr-2">
             {props.data.img5}
           </div>
@@ -363,7 +363,7 @@ const AdvanceTableFilter = (props) => {
 
   const renderColumn4 = (columnData) => {
     if (columnData == "To") {
-      return (<div className="box col">
+      return (<div className="box col-3">
         <a className="filter-item" onClick={handleToShipmentClick}>
           <div className="icon mr-2">
             {props.data.img4}
@@ -412,7 +412,7 @@ const AdvanceTableFilter = (props) => {
         </StyledMenu>
       </div>);
     } else if (columnData == "Product") {
-      return (<div className="box col">
+      return (<div className="box col-3">
         <a className="filter-item" onClick={handlePoProductNameClick}>
           <div className="icon mr-2">
             {props.data.img4}
@@ -546,7 +546,7 @@ const AdvanceTableFilter = (props) => {
 
   const renderColumn3 = (columnData) => {
     if (columnData == "From") {
-      return (<div className="box col">
+      return (<div className="box col-4">
         <a className="filter-item" onClick={handleFromShipmentClick}>
           <div className="icon mr-2">
             {props.data.img3}
@@ -596,7 +596,7 @@ const AdvanceTableFilter = (props) => {
 
       </div>);
     } else if (columnData == "Order ID") {
-      return (<div className="box col">
+      return (<div className="box col-2">
         <a className="filter-item" onClick={handlePoOrderIdClick}>
           <div className="icon mr-2">
             {props.data.img3}
@@ -714,7 +714,7 @@ const AdvanceTableFilter = (props) => {
   };
   const renderColumn2 = (columnData) => {
     if (columnData == "Product Category") {
-      return (<div className="box col">
+      return (<div className="box col-4">
         <a className="filter-item" onClick={handleInventoryProductCategoryClick}>
           <div className="icon mr-2">
             {props.data.img2}
@@ -745,7 +745,7 @@ const AdvanceTableFilter = (props) => {
       </div>);
     }
      else {
-      return (<div className="box col">
+      return (<div className="box col-2">
       <div className="filter-item">
         <div className="icon mr-2">
           {props.data.img2}
@@ -812,8 +812,8 @@ const AdvanceTableFilter = (props) => {
   }
   const renderColumn1 = (columnData) => {
     if (columnData == "Shipment ID") {
-      return (<div className="box col">
-        <a className="filter-item" onClick={handleShipmentIdClick}>
+      return (<div className="box col-2">
+        <a className="filter-item ml-4" onClick={handleShipmentIdClick}>
           <div className="icon mr-2">
             {props.data.img1}
           </div>
@@ -860,8 +860,8 @@ const AdvanceTableFilter = (props) => {
         </StyledMenu>
       </div>);
     } else if (columnData == "To") {
-      return (<div className="box col">
-        <a className="filter-item" onClick={handlePoToClick}>
+      return (<div className="box col-2">
+        <a className="filter-item ml-4" onClick={handlePoToClick}>
           <div className="icon mr-2">
             {props.data.img1}
           </div>
@@ -909,8 +909,8 @@ const AdvanceTableFilter = (props) => {
         </StyledMenu>
       </div>);
     } else if (columnData == "From") {
-      return (<div className="box col">
-        <a className="filter-item" onClick={handlePoFromClick}>
+      return (<div className="box col-2">
+        <a className="filter-item ml-4" onClick={handlePoFromClick}>
           <div className="icon mr-2">
             {props.data.img1}
           </div>
@@ -958,8 +958,8 @@ const AdvanceTableFilter = (props) => {
         </StyledMenu>
       </div>);
     }  else if (columnData == "Product Name") {
-      return (<div className="box col">
-        <a className="filter-item" onClick={handleInventoryProductNameClick}>
+      return (<div className="box col-3">
+        <a className="filter-item ml-4" onClick={handleInventoryProductNameClick}>
           <div className="icon mr-2">
             {props.data.img1}
           </div>
@@ -1117,7 +1117,7 @@ const AdvanceTableFilter = (props) => {
           </button> */}
             <button
               
-              className="btn btn-md btn-blue mr-2"
+              className="btn btn-md btn-blue"
               onClick={handleClick}>
               <div className="d-flex align-items-center">
                 <img src={FilterIcon} width="16" height="16" className="mr-3" />
