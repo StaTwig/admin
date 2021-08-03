@@ -138,7 +138,7 @@ services:
       REGISTRY_URL: "http://registry:8081"
       KEYCLOAK_URL: "http://keycloak:8080/auth"
       CLICK_HOUSE_URL: tcp://clickhouse-server:9000?debug=true
-      ADMIN_API_CLIENT_SECRET: 1d9a5c6c-0c23-47e2-850c-3d04b0b56d87
+      ADMIN_API_CLIENT_SECRET: d5d889ce-27b5-43e8-95bd-503444b27fe3
       DB_HOST: db
       KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     depends_on:
@@ -172,7 +172,7 @@ services:
   nginx:
     image: dockerhub/nginx:1.23.3-generic
     ports:
-      - "81:80"
+      - "80:80"
     depends_on:
       - vaccination_api
       - portal_api
