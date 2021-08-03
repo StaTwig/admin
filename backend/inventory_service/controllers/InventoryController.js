@@ -2952,7 +2952,7 @@ exports.searchProduct = [
   auth,
   async (req, res) => {
     try {
-      const { skip, limit,productName,producttype  } = req.query;
+      const {productName, producttype  } = req.query;
       var warehouseId = "";
       if (!req.query.warehouseId)
         warehouseId = req.user.warehouseId;
@@ -2961,7 +2961,7 @@ exports.searchProduct = [
       const warehouse = await WarehouseModel.findOne({ id: warehouseId })
       if (warehouse) {
         let elementMatchQuery={}
-        elementMatchQuery['id']=warehouse.warehouseInventory
+        elementMatchQuery[`id`]=warehouse.warehouseInventory
         if (productName) {
           elementMatchQuery[`products.name`] = productName;
         }
@@ -2986,8 +2986,6 @@ exports.searchProduct = [
         // }
         ])
           .sort({ createdAt: -1 })
-          .skip(parseInt(skip))
-          .limit(parseInt(limit));
         return apiResponse.successResponseWithData(
           res,
           "Inventory Details",
