@@ -940,16 +940,22 @@ exports.getStatsByBrand = [
 		try {
 			const filters = req.query;
 			const filterString = "GSB" + JSON.stringify(filters);
-			const data = await client.getAsync(filterString);
-			if(data && data!= null) {
-				return apiResponse.successResponseWithData(
-					res,
-					"Cache Hit",
-					JSON.parse(data)
-				);
-			}
-			else {
-				let warehouseIds = await _getWarehouseIds(filters);
+			client.get(filterString,(err, data) => {
+				if(!err && data != null) {
+					return apiResponse.successResponseWithData(res,"HIT Cache",JSON.parse(data))
+				}
+				console.log("TEST1");
+			})
+			// const data = await client.getAsync(filterString);
+			// if(data && data!= null) {
+			// 	return apiResponse.successResponseWithData(
+			// 		res,
+			// 		"Cache Hit",
+			// 		JSON.parse(data)
+			// 	);
+			// }
+			// else {
+			let warehouseIds = await _getWarehouseIds(filters);
 			today = new Date()
 			let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
 			const Products = await AnalyticsModel.aggregate([
@@ -1046,14 +1052,16 @@ exports.getStatsByBrand = [
 				if (index == Products.length - 1)
 					Analytics.push(arr);
 			}
-			await client.setAsync(filterString, JSON.stringify(Analytics));
+			const result = await client.setAsync(filterString, JSON.stringify(Analytics));
+			console.log("REDIS" , result);
 			return apiResponse.successResponseWithData(
 				res,
 				"Operation success",
 				Analytics
 			);
-		}	
-		} catch (err) {
+		// }	
+		} 
+		catch (err) {
 			return apiResponse.ErrorResponse(res, err);
 		}
 	}
