@@ -2,6 +2,7 @@ var mongoose = require("mongoose");
 
 var EventSchema = new mongoose.Schema({
 	eventID: { type: String, required: true },
+	transactionId: { type: String, required: false},
 	eventTime: { type: String, required: true },
 	eventTypePrimary: { type: String, required: true },
 	eventTypeDesc: { type: String, required: true },
