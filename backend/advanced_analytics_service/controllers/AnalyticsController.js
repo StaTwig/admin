@@ -942,11 +942,12 @@ exports.getStatsByBrand = [
 		try {
 			const filters = req.query;
 			const filterString = "GSB" + JSON.stringify(filters);
+			var bool = false;
 			client.get(filterString,(err, data) => {
 				if(!err && data != null) {
+					bool = true;
 					return apiResponse.successResponseWithData(res,"HIT Cache",JSON.parse(data))
 				}
-				console.log("TEST1");
 			})
 			// const data = await client.getAsync(filterString);
 			// if(data && data!= null) {
@@ -1055,12 +1056,17 @@ exports.getStatsByBrand = [
 					Analytics.push(arr);
 			}
 			const result = await client.setAsync(filterString, JSON.stringify(Analytics));
-			console.log("REDIS" , result);
-			return apiResponse.successResponseWithData(
-				res,
-				"Operation success",
-				Analytics
-			);
+			console.log("REDIS set for GSB" , result);
+
+			if(!bool)
+			{
+				return apiResponse.successResponseWithData(
+					res,
+					"Operation success",
+					Analytics
+				);
+			}
+
 		// }	
 		} 
 		catch (err) {
@@ -1185,8 +1191,10 @@ exports.getStatsByOrg = [
 		try {
 			const filters = req.query;
 			const filterString = "GSO" + JSON.stringify(filters);
+			var bool = false;
 			client.get(filterString,(err, data) => {
 				if(!err && data != null) {
+					bool = true;
 					return apiResponse.successResponseWithData(res,"HIT Cache",JSON.parse(data))
 				}
 			})
@@ -1249,16 +1257,18 @@ exports.getStatsByOrg = [
 				if (err) {
 					console.log(err);
 				} else {
-					console.log('set', value);
+					console.log('set Cache for GSO', value);
 				}
 			}
 			);
 
-			return apiResponse.successResponseWithData(
-				res,
-				"Operation success",
-				organizations
-			);
+			if(!bool){
+				return apiResponse.successResponseWithData(
+					res,
+					"Operation success",
+					organizations
+				);
+			}
 		} catch (err) {
 			return apiResponse.ErrorResponse(res, err);
 		}
@@ -1874,8 +1884,10 @@ exports.getSupplierPerformance = [
 		try {
 			const orgType = req.query.supplierType;
 			const filterString = "GSP"+JSON.stringify(filters);
+			var bool =false;
 			client.get(filterString,(err, data) => {
 				if(!err && data != null) {
+					bool = true;
 					return apiResponse.successResponseWithData(res,"HIT Cache",JSON.parse(data))
 				}
 			})
@@ -1943,17 +1955,17 @@ exports.getSupplierPerformance = [
 				if (err) {
 					console.log(err);
 				} else {
-					console.log('set', value);
+					console.log('Cached GSP', value);
 				}
 			}
 			);
-
-			return apiResponse.successResponseWithData(
-				res,
-				"Operation success",
-				supplierOrgs
-			);
-
+			if(!bool) {
+				return apiResponse.successResponseWithData(
+					res,
+					"Operation success",
+					supplierOrgs
+				);
+			}
 		} catch (err) {
 			return apiResponse.ErrorResponse(res, err);
 		}
@@ -2090,13 +2102,15 @@ function getSKUGroupByFilters(filters) {
  * @returns {Object}
  */
 exports.getStatsBySKU = [
-	// auth,
+	auth,
 	async function (req, res) {
 		try {
 			const filters = req.query;
 			const filterString = "GSS" + JSON.stringify(filters);
+			var bool = false;
 			client.get(filterString,(err, data) => {
 				if(!err && data != null) {
+					bool = true;
 					return apiResponse.successResponseWithData(res,"HIT Cache",JSON.parse(data))
 				}
 			})
@@ -2206,12 +2220,15 @@ exports.getStatsBySKU = [
 				if (err) {
 					console.log(err);
 				} else {
-					console.log('set', value);
+					console.log('Cache Updated for GSS', value);
 				}
 			}
 			);
 
-			return apiResponse.successResponseWithData(res, "Operation Success", response);
+			if(!bool)
+			{
+				return apiResponse.successResponseWithData(res, "Operation Success", response);
+			}
 
 		} catch (err) {
 			return apiResponse.ErrorResponse(res, err);
