@@ -45,14 +45,14 @@ inventoryDetails.sort(function(a,b){
                   //className="rTableRow"
                   >
                                    
-                  <div className="rTableCell" style={{position:"relative",left:'0%', fontWeight:" 600 "}}>
+                  <div className="rTableCell" style={{position:"relative",left:'0%', fontWeight:"600"}}>
                     <div className="d-flex flex-column txtBlue">
                       <div> 
                           {inventory.productDetails.name}
                       </div>
                     </div>
                   </div>
-                  <div className="rTableCell text-center" style={{position:"relative",left:'16%'}}>{inventory.productDetails.type}</div>
+                  <div className="rTableCell text-center" style={{position:"relative",left:'18%'}}>{inventory.productDetails.type}</div>
                   {/* <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.manufacturer}</div> */}
                   <div className="rTableCell " style={{position:"relative",left:'27%'}}> {formatDate(inventory.createdAt)}</div>
                   <div className="rTableCell"  style={{position:"relative",left:'26%'}}>{inventory.inventoryQuantity}{inventory.productDetails.unitofMeasure ? inventory.productDetails.unitofMeasure.name ? <span>{" ("}{inventory.productDetails.unitofMeasure.name}{")"}</span>: null:null}</div>                                 
