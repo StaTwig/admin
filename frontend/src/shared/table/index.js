@@ -54,8 +54,8 @@ inventoryDetails.sort(function(a,b){
                   </div>
                   <div className="rTableCell text-center" style={{position:"relative",left:'18%'}}>{inventory.productDetails.type}</div>
                   {/* <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.manufacturer}</div> */}
-                  <div className="rTableCell " style={{position:"relative",left:'27%'}}> {formatDate(inventory.createdAt)}</div>
-                  <div className="rTableCell"  style={{position:"relative",left:'26%'}}>{inventory.inventoryQuantity}{inventory.productDetails.unitofMeasure ? inventory.productDetails.unitofMeasure.name ? <span>{" ("}{inventory.productDetails.unitofMeasure.name}{")"}</span>: null:null}</div>                                 
+                  <div className="rTableCell " style={{position:"relative",left:'12%'}}> {formatDate(inventory.createdAt)}</div>
+                  <div className="rTableCell text-right"  style={{position:"relative",left:'22%'}}>{inventory.inventoryQuantity}{inventory.productDetails.unitofMeasure ? inventory.productDetails.unitofMeasure.name ? <span>{" ("}{inventory.productDetails.unitofMeasure.name}{")"}</span>: null:null}</div>                                 
                   <div className="rTableCell" style={{position:"relative", left:"19%", fontWeight:" 600 "}}>
                          {(inventory.eventTypePrimary !== 'ADD') ? (inventory.eventTypePrimary === 'RECEIVE' ? <div className="status secondary-bg bg-success"> Received</div> :  <div className="status secondary-bg bg-warning">Sent</div>) :  <div className="status secondary-bg bg-primary">Added</div>} 
                   </div>
@@ -153,8 +153,8 @@ inventoryDetails.sort(function(a,b){
      
      {inventoryCount > 0 && (
             <div className="d-flex flex-row-reverse">
-              <Pagination showFirstButton showLastButton color="primary" count={Math.ceil(inventoryCount/10)} onChange={handlePageChange} />
-              <span className="mx-5 my-1 rounded text-primary">Total Records {inventoryCount} </span>
+              <Pagination showFirstButton showLastButton color="primary"  count={Math.ceil(inventoryCount/10)} onChange={handlePageChange} />
+              <span className="mx-5 my-1 rounded text-dark" style={{fontWeight:"400"}}>Total Records {inventoryCount} </span>
             </div>            
           )}
       </div>
