@@ -52,8 +52,7 @@ exports.createNewAlert = [
           actorOrgId: req.body.actorOrgId,
           createdBy: req.body.createdBy
         }
-        if (req.body.alertType == 'SHIPMENT' || req.body.alertType == 'ORDER') {
-         console.log(req.body.transactionId)
+        if (req.body.eventSecondary== 'SHIPMENT' || req.body.eventSecondary == 'ORDER') {
           newAlert['transactionId'] = req.body.transactionId;
         }
         console.log(newAlert)
@@ -81,8 +80,7 @@ exports.createNewAlert = [
               actorOrgId: req.body.actorOrgId,
               createdBy: req.user.id,
             }
-            if (req.body.alertType == 'SHIPMENT' || req.body.alertType == 'ORDER') {
-              console.log(req.body.transactionId)
+            if (req.body.eventSecondary == 'SHIPMENT' || req.body.eventSecondary == 'ORDER') {
               alertData['transactionId'] = req.body.transactionId;
              }        
             console.log(alertData)
