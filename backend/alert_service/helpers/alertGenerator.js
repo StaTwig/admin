@@ -4,35 +4,84 @@ const User = require('../models/UserModel')
 const { alertMobile, alertEmail, alertPushNotification, pushNotification } = require('./alertSender')
 
 
+async function processShipmentEvents(event){
+    try{
+        const shipmentId = event?.payloadData?.data?.id;
+        let params = { 
+            "alerts.event_type_primary": event.eventTypePrimary,
+            "alerts.event_type_secondary": event.eventTypeDesc,
+            "alerts.transactionId" : shipmentId      
+        }
+        for await(const row of Alert.find({
+            ...params
+        })){
+            pushNotification(event,row.user.user_id)
+            if(row.alertMode.mobile){
+                alertMobile(event,row.user.mobile_number);
+            }
+            if(row.alertMode.email){
+            alertEmail(event,row.user.emailId)
+            }
+            if(row.alertMode.web_push){
+                alertPushNotification(event,row.user.user_id)
+            }        
+        }
+    }
+    catch(err){
+        console.log(err)
+    }
+}
+
+async function processOrderEvents(event){
+    try{
+        const orderId = event?.payloadData?.data?.order_id;
+        let params = { 
+            "alerts.event_type_primary": event.eventTypePrimary,
+            "alerts.event_type_secondary": event.eventTypeDesc,
+            "alerts.transactionId" : orderId    
+        }
+        for await(const row of Alert.find({
+            ...params
+        })){
+            pushNotification(event,row.user.user_id)
+            if(row.alertMode.mobile){
+                alertMobile(event,row.user.mobile_number);
+            }
+            if(row.alertMode.email){
+            alertEmail(event,row.user.emailId)
+            }
+            if(row.alertMode.web_push){
+                alertPushNotification(event,row.user.user_id)
+            }        
+        }
+    }
+    catch(err){
+        console.log(err)
+    }
+}
 
 async function generateAlert(event) {
     try{
-        //console.log("*****************EVENT*************",event)
+    if(event.eventTypeDesc=='SHIPMENT') await processShipmentEvents(event);
+    else if(event.eventTypeDesc=='ORDER') await processOrderEvents(event);
     let params = { 
         "alerts.event_type_primary": event.eventTypePrimary,
         "alerts.event_type_secondary": event.eventTypeDesc,
         "alerts.actorOrgId": event.actorOrgId
     }
-    console.log("*************PARAMS FOR QUERY*************",params)
 	for await(const row of Alert.find({
         ...params
     })){
         pushNotification(event,row.user.user_id)
-        console.log("*****************ROW STARTS HERE**********************",row)
-        console.log("**************** ALERTS MODE *****************", row.alertMode)
         if(row.alertMode.mobile){
-            console.log("********************MOBILE NUMBER*********************",row.user.mobile_number)
             alertMobile(event,row.user.mobile_number);
         }
         if(row.alertMode.email){
-            console.log("********************EMAIL ID****************",row.user.emailId)
            alertEmail(event,row.user.emailId)
         }
         if(row.alertMode.web_push){
-            console.log("****************WEB PUSH ID****************",row.user.user_id)
             alertPushNotification(event,row.user.user_id)
         }        
-        console.log("****************ROW ENDS HERE *****************************")
     }
 }
 catch(err){
