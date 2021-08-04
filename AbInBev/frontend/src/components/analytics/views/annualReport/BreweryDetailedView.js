@@ -135,8 +135,8 @@ const BreweryDetailedView = (props) => {
                   <tr>
                     <th scope="col">Vendor</th>
                     <th scope="col">State</th>
-                    <th scope="col">Return Target</th>
-                    <th scope="col">Return Rate Percentage</th>
+                    <th scope="col">Sales</th>
+                    <th scope="col">Returns</th>
                   </tr>
                 </thead>
                 <tbody>
