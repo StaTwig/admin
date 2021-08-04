@@ -19,7 +19,9 @@ services:
     container_name: 'advanced_analytics_service1.0'
     restart: always
     env_file:
-      - ./env/ledger.env    
+      - ./env/ledger.env
+    environment:
+      - REDIS_URL=redis://cache      
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -27,11 +29,23 @@ services:
       - "traefik.http.routers.advancedanalytics.rule=Host(`test.abinbev.statledger.io`) && PathPrefix(`/advancedanalytics/`)"
       - "traefik.http.routers.advancedanalytics.tls=true"
       - "traefik.http.routers.advancedanalytics.tls.certresolver=lets-encrypt"
+  
+  cache:
+    image: "redis"
+    container_name: "cache"
+    restart: always
+    ports:
+      - "6379:6379"
+    labels:
+      - traefik.enable=false    
 
   alert:
     build: './backend/alert_service'
     image: 'alert_service1.0'
     container_name: 'alert_service1.0'
+    restart: always
+    env_file:
+      - ./env/ledger.env
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"

@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "6bde6a2a-49a8-4767-8ad6-2e993dfc1295",
+		"_postman_id": "b31e241d-83c7-47c8-9c6f-b5637a0bce1b",
 		"name": "advanced_analytics",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -36,6 +36,100 @@
 			"response": []
 		},
 		{
+			"name": "getAllStatsBYBrand",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://test.abinbev.statledger.io/advancedanalytics/api/analytics/getStatsByBrand?date_filter_type=by_yearly&year=2021&month=undefined&quarter=undefined&&orgType=ALL_VENDORS",
+					"protocol": "https",
+					"host": [
+						"test",
+						"abinbev",
+						"statledger",
+						"io"
+					],
+					"path": [
+						"advancedanalytics",
+						"api",
+						"analytics",
+						"getStatsByBrand"
+					],
+					"query": [
+						{
+							"key": "date_filter_type",
+							"value": "by_yearly"
+						},
+						{
+							"key": "year",
+							"value": "2021"
+						},
+						{
+							"key": "month",
+							"value": "undefined"
+						},
+						{
+							"key": "quarter",
+							"value": "undefined"
+						},
+						{
+							"key": null,
+							"value": null
+						},
+						{
+							"key": "orgType",
+							"value": "ALL_VENDORS"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getStatsByOrg",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDYyMTgwNywiZXhwIjoxNjIwNjY1MDA3fQ.FcPBYP3kQA13InoC5G2OkzJ1ICW7vpB7D0QOyrLQHBU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://test.abinbev.statledger.io/advancedanalytics/api/analytics/getStatsByOrg",
+					"protocol": "https",
+					"host": [
+						"test",
+						"abinbev",
+						"statledger",
+						"io"
+					],
+					"path": [
+						"advancedanalytics",
+						"api",
+						"analytics",
+						"getStatsByOrg"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "getStatsBySKU",
 			"request": {
 				"auth": {
@@ -51,22 +145,20 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{url}}/advancedanalytics/api/analytics/getStatsBySKU/:productId",
+					"raw": "https://test.abinbev.statledger.io/advancedanalytics/api/analytics/getStatsBySKU/",
+					"protocol": "https",
 					"host": [
-						"{{url}}"
+						"test",
+						"abinbev",
+						"statledger",
+						"io"
 					],
 					"path": [
 						"advancedanalytics",
 						"api",
 						"analytics",
 						"getStatsBySKU",
-						":productId"
-					],
-					"variable": [
-						{
-							"key": "productId",
-							"value": "prod-9bhkk6yiutx"
-						}
+						""
 					]
 				}
 			},
@@ -314,6 +406,34 @@
 						{
 							"key": "state",
 							"value": "Telangana"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getSupplierPerfomance",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3016/advancedanalytics/api/analytics/getSupplierPerfomance?supplierType=ALL",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3016",
+					"path": [
+						"advancedanalytics",
+						"api",
+						"analytics",
+						"getSupplierPerfomance"
+					],
+					"query": [
+						{
+							"key": "supplierType",
+							"value": "ALL"
 						}
 					]
 				}
