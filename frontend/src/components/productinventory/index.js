@@ -119,11 +119,11 @@ const ProductInventory = props => {
         <div className="ribbon-space col p-3">
           {data.map((inv, i) => 
             <div key={i} className="col p-2 mb-3 rounded row bg-white shadow">
-              <div className="col-3 mt-3 mb-3 txt txtBlue">{inv.products.name?inv.products.name:"N/A"}</div>
-              <div className="col-3 mt-3 mb-3 txt1">{inv.products.type ? inv.products.type:"N/A"}</div>
-              <div className="col-3 mt-3 mb-3 txt1">{inv.products.manufacturer?inv.products.manufacturer:"N/A"}</div>
-              <div className="col-2 mt-3 mb-3 txt1">{inv.inventoryDetails.quantity?inv.inventoryDetails.quantity:"N/A"}{"  ("}{inv.products.unitofMeasure?inv.products.unitofMeasure.name:"N/A"}{")"}</div>
-              <div className="col-1 ">
+              <div className="col-3 txt txtBlue">{inv.products.name?inv.products.name:"N/A"}</div>
+              <div className="col-3 txt1">{inv.products.type ? inv.products.type:"N/A"}</div>
+              <div className="col-3 txt1">{inv.products.manufacturer?inv.products.manufacturer:"N/A"}</div>
+              <div className="col-2 txt1">{inv.inventoryDetails.quantity?inv.inventoryDetails.quantity:"N/A"}{"  ("}{inv.products.unitofMeasure?inv.products.unitofMeasure.name:"N/A"}{")"}</div>
+              <div className="col-1 txt1 mb-3">
               <button type="button" onClick={() => props.history.push(`/viewproduct`, {data: inv})} className="btn btn-outline-primary" style={{position:"relative",left:"-50px",top:"7px",width:"125px",height:"35px"}}>Show {more[i] ? `less` :`more`}</button></div>
               </div>
             // </div>
