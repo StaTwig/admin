@@ -13,45 +13,23 @@ const DropDownFilter = (props) => {
     } else {
         cardFormat = 'role-card-container';
     }
-    const getMaxWidthAndLeftStyleValues = (type) => {
-        if (type == 'role') {
-            return {
-                left: '18.5rem',
-                maxWidth: '171px'
-            }
-        } else if (type == 'region') {
-            return {
-                left: '50.8rem',
-                maxWidth: '171px'
-            }
-        } else if (type == 'country') {
-            return {
-                left: '40rem',
-                maxWidth: '171px'
-            }
-        } else if (type == 'status') {
-            return {
-                left: '61.7rem',
-                maxWidth: '170px'
-            }
-        } else if (type == 'createdOn') {
-            return {
-                left: '72.5rem',
-                maxWidth: '171px'
-            }
-        } 
-    }
-    console.log(props)
+    
     return (
-        <div className={`card rounded bg-white border-white ${cardFormat}`} style={getMaxWidthAndLeftStyleValues(props.type)}>
+        <div className={`card rounded bg-white border-white ${cardFormat}`} style={{ left: '0rem' }}>
             <SearchBar
                 onChangeOfSearchInput={props.onChangeOfSearchInput}
                 type={props.type}
             />
             <ul>
-                {props?.data?.map(item => {
+                {props?.data?.map((item, index) => {
                     return (
-                        <li key={item.key}>{item.value}</li>
+                        <li 
+                            className={item.checked ? "selected" : 'nonSelected'}
+                            key={item.key} 
+                            onClick={() => props.onClickOfDropDownItem(index, props.type, item.value)}
+                        >
+                            {item.value}
+                        </li>
                     )
                 })}
             </ul>

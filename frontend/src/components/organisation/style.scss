@@ -75,7 +75,7 @@
 .full-width {
   position: absolute;
   left: -95px;
-  right: -30px;
+  right: 0px;
   background-color: #eaeaea;
   margin-left: 118px;
 }
@@ -101,4 +101,21 @@
 .headerText {
   color: #000000;
   font-size: 20px;
+}
+
+
+.details-card {
+  margin-top: 100px;
+}
+
+.details-body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+}
+
+.row-details {
+  margin-left: 1rem;
+  margin-right: 1rem;
 }

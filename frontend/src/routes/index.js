@@ -30,7 +30,6 @@ const routes = (
     <Route path="/editaddress/:address" component={requireAuth(NewAddress)} />
     <Route path="/users" component={requireAuth(Users)} />
     <Route path="/organisation" component={requireAuth(Organisations)} />
-    {/* <Route path="/affiliate" component={requireAuth(Affiliate)} /> */}
     <Route path="/login" component={Login} />
     <Route path="/verify" component={Verify} />
     <Route path="/signup" component={Signup} />

@@ -11,6 +11,8 @@ import {
   SET_AFFILATED_ORGS,
   SET_ORGANISATIONS,
   SET_ORGANISATION_TYPES,
+  SET_COUNTRY_TYPES,
+  SET_REGION_TYPES,
 } from "../constants/organisationConstants";
 import { turnOn, turnOff } from "./spinnerActions";
 
@@ -261,11 +263,12 @@ export const getOrgUsers = () => {
   }
 };
 
-export const getOrgs = () => {
+export const getOrgs = (params) => {
   try {
     return async (dispatch) => {
       dispatch(turnOn());
-      const result = await axios.get(config().getOrgUrl);
+      const url = params ? `${config().getOrgUrl}?${params}` : config().getOrgUrl;
+      const result = await axios.get(url);
       dispatch({
         type: SET_ORGANISATIONS,
         payload: result.data,
@@ -289,6 +292,67 @@ export const getTypes = () => {
       });
       dispatch(turnOff());
       return result.data.data[0].organisationTypes;
+    };
+  } catch (e) {
+    throw Error(e.message);
+  }
+};
+
+export const getCountryData = () => {
+  try {
+    return async (dispatch) => {
+      dispatch(turnOn());
+      const result = await axios.get(config().getCountryDataUrl);
+      dispatch({
+        type: SET_COUNTRY_TYPES,
+        payload: result.data.data[0],
+      });
+      dispatch(turnOff());
+      return result.data.data[0];
+    };
+  } catch (e) {
+    throw Error(e.message);
+  }
+};
+
+export const getRegionData = () => {
+  try {
+    return async (dispatch) => {
+      dispatch(turnOn());
+      /**this should be replaced with a actual request */
+      // const result = await axios.get(config().getRegionDataUrl);
+      const result = [
+        {
+          key: 0,
+          value: 'Antarctica'
+        },
+        {
+          key: 1,
+          value: 'Americas'
+        },
+        {
+          key: 2,
+          value: 'Oceania'
+        },
+        {
+          key: 3,
+          value: 'Europe'
+        },
+        {
+          key: 4,
+          value: 'Asia'
+        },
+        {
+          key: 5,
+          value: 'Africa'
+        },
+      ]
+      dispatch({
+        type: SET_REGION_TYPES,
+        payload: result,
+      });
+      dispatch(turnOff());
+      return result;
     };
   } catch (e) {
     throw Error(e.message);

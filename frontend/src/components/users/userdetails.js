@@ -82,14 +82,17 @@ const UserDetails = (props) => {
 
   return (
     <div className="card rounded bg-white border border-white mt-1 ml-1 p-1 mb-3">
-      <div className="card-body d-flex flex-row justify-content-between">
-        <div className="userPic w-10 text-center rounded d-flex flex-row">
+      <div className="card-body d-flex">
+        <div className="userPic w-23 text-center rounded d-flex flex-row">
           <img src={user?.photoId} alt="User" className="rounded mr-1" />
           <h6 className="text-primary pt-1 txtWrapu">
             {user?.firstName + " " + user?.lastName}
           </h6>
+          <div className="blockquote-footer mt-2 ml-4 txtWrapu">
+              {user?.emailId}
+          </div>
         </div>
-        <span
+         <span
           className={`w-20 ${
             display ? `text-left` : ` align-self-center txtWrapu text-center`
           } `}
@@ -98,7 +101,6 @@ const UserDetails = (props) => {
             `w-10 ${display ? `text-left` : ` align-self-center txtWrapu text-center`
             } `
           }>{user?.role}</span>
-
           {display && (
             <div className="pt-3">
               {permission?.map((per) => (
@@ -107,32 +109,28 @@ const UserDetails = (props) => {
             </div>
           )}
         </span>
-        <span
-          className={`txtWrapu text-center w-20 ${display ? ` ` : ` align-self-center`
-            } `}
-        >
-          location
+        <span className=" w-25 text-center align-self-center locationText">
+          {
+            'location'
+          }
         </span>
-        <span
-          className={`txtWrapu w-20 text-center text-decoration-underline ${display ? ` ` : ` align-self-center`
-            } `}
-        >
+        <span className=" w-25 text-center align-self-center walletText">
           <a href="#" className="text-decoration-underline">
             {user?.walletAddress}
           </a>
         </span>
-        <span
-          className={`txtWrapu text-center w-15 ${display ? ` ` : ` align-self-center`
-            } `}
-        >
+        <span className=" w-25 text-center align-self-center emailText">
           {user?.emailId}
         </span>
-        <button
-          className={`status secondary-bg w-10  ${statusStyle} ${display ? `align-self-start` : `align-self-center`
-            } `} style={{ position: "relative", marginLeft: "50px", borderRadius: "8px", width: "95px", color: "white", border: "none" }}>
+        <span className=" w-25 text-center align-self-center accountText">
+          <button
+            className={`status secondary-bg w-10  ${statusStyle} ${display ? `align-self-start` : `align-self-center`
+              } `} style={{ position: "relative", marginLeft: "50px", borderRadius: "8px", width: "95px", color: "white", border: "none" }}>
 
-          {status}
-        </button>
+            {status}
+          </button>
+        </span>
+       
 
 
         <div

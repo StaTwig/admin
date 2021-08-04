@@ -3,6 +3,8 @@
 .users {
   padding-left: 2rem;
   padding-right: 1rem;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 .w-15 {
   width: 15%;
@@ -81,22 +83,6 @@
     display: block;
   }
 
-  .adjustFilterBtn {
-    width: 150px;
-    height: 60px;
-    background: #36c2cf 0% 0% no-repeat padding-box;
-    border-radius: 10px;
-    text-align: center;
-    font: 20px;
-    font-weight: bold;
-    letter-spacing: 0px;
-    color: #ffffff;
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
-    margin-left: 25px;
-  }
-
   .accountStatusImage {
     width: 10px;
     height: 15px;
@@ -106,6 +92,73 @@
   }
 
   .full-width {
-    width: 100%;
+    position: absolute;
+    left: -95px;
+    right: 0px;
+    background-color: #eaeaea;
+    margin-left: 118px;
   }
+
+  .filter {
+    margin-left: 9rem;
+    margin-right: 3rem;
+  }
+
+  .box {
+    background: #eaeaea;
+    padding: 5px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 78px;
+  }
+}
+
+.userList-container {
+  margin-top: 100px;
+}
+
+.adjustFilterBtn {
+  width: 150px;
+  height: 60px;
+  background: #36c2cf 0% 0% no-repeat padding-box;
+  border-radius: 10px;
+  text-align: center;
+  font: 20px;
+  font-weight: bold;
+  letter-spacing: 0px;
+  color: #ffffff;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-left: 25px;
+}
+
+.roleText {
+  width: 24%!important;
+  position: relative;
+  left: -7px;
+}
+
+.locationText {
+  width: 24%!important;
+  position: relative;
+  left: -8px;
+}
+
+.walletText {
+  width: 24%!important;
+  position: relative;
+  left: -9px;
+}
+
+.emailText {
+  width: 24%!important;
+  position: relative;
+  left: -9px;
+}
+
+.accountText {
+  position: relative;
+  left: -10px;
 }
