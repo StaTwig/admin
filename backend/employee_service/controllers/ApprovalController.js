@@ -184,6 +184,12 @@ exports.rejectApproval = [
                     } catch (err) {
                       console.log(err);
                     }
+                    try{
+                      EmployeeModel.findOneAndDelete({id}).then(()=>console.log("deleted"))
+                    }catch(err){
+                      console.log(err)
+                      return apiResponse.ErrorResponse(res, err);
+                    }
                     return apiResponse.successResponseWithData(
                       res,
                       "User Rejected",

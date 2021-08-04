@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "dev": "node server.js",
-    "build": "webpack --env.ENVIRONMENT=$ENVIRONMENT --mode production"
+    "build": "webpack --env production --mode=production"
   },
   "author": "Mahesh",
   "license": "MIT",

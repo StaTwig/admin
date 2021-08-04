@@ -5,6 +5,18 @@ import { formatDate } from "../../utils/dateHelper";
 import DropdownButton from "../../shared/dropdownButtonGroup";
 import { map } from "leaflet";
 
+export function getColor(status) {
+  if (status === 'ACTIVE') {
+    return "status text-success";
+  } else if (status === "REJECTED") {
+    return 'status text-danger';
+  } else if (status === "NOTVERIFIED") {
+    return "status text-secondary";
+  } else {
+    return "status text-warning";
+  }
+}
+
 const Details = (props) => {
   const { org, modifyOrg, types } = props;
   const [status, setStatus] = useState("");
@@ -68,7 +80,7 @@ const Details = (props) => {
           {'region'}
         </span>
         <span className="txtWrapu text-center w-10 align-self-center font-weight-bold text-secondory">
-            {(status) ? (status === 'ACTIVE' ? <div className="status text-success"> ACTIVE </div> :  <div className="status text-danger">REJECTED</div>) :  <div className="status text-warning">DEACTIVATED</div>} 
+        {(status) ?<div className={getColor(status)}>{status}</div> : <div className={getColor("DEACTIVATED")}>DEACTIVATED</div>}
         </span>
         <span className="txtWrapu text-center w-15 align-self-center">
           {org?.createdAt ? formatDate(org?.createdAt) : ""}

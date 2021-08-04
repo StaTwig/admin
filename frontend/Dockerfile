@@ -1,4 +1,4 @@
-FROM node:14.16.1 as react_build 
+FROM node:lts as react_build 
 
 WORKDIR /app
 

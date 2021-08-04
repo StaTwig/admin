@@ -20,6 +20,25 @@ const EmailContent = require("../components/EmailContent");
 const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 const phoneRgex = /^\d{10}$/;
 
+function getUserCondition(query,orgId){
+  let matchCondition = {};
+  matchCondition.organisationId = orgId
+  matchCondition.accountStatus = { $ne: "NOTAPPROVED" }
+  if(query.role && query.role!=''){
+    matchCondition.role = query.role;
+  }
+  if(query.status && query.status!=''){
+    matchCondition.accountStatus = query.status;
+  }
+  if(query.creationFilter && query.creationFilter=='true'){
+    matchCondition.createdAt = {
+      $gte: new Date(query.startDate),
+      $lte: new Date(query.endDate)
+    };
+  }
+  return matchCondition;
+}
+
 exports.sendOtp = [
   check("emailId")
     .isLength({ min: 7 })
@@ -352,12 +371,10 @@ exports.getOrgUsers = [
   auth,
   async (req, res) => {
     try {
+      console.log(getUserCondition(req.query,req.user.organisationId))
       const users = await EmployeeModel.aggregate([
         {
-          $match: {
-            organisationId: req.user.organisationId,
-            accountStatus: { $ne: "NOTAPPROVED" },
-          },
+          $match: getUserCondition(req.query,req.user.organisationId),
         },
         {
           $lookup: {
@@ -392,6 +409,7 @@ exports.getOrgUsers = [
         users
       );
     } catch (err) {
+      console.log(err)
       return apiResponse.ErrorResponse(res, err);
     }
   },

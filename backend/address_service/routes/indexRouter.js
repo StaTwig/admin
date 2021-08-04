@@ -10,6 +10,9 @@ const {
   addAddressesFromExcel,
   getLocationApprovals,
   modifyLocation,
+  getCountries,
+  getStatesByCountry,
+  getCitiesByState
 } = require("../controllers/AddressController");
 const Storage = multer.diskStorage({
   destination(req, file, callback) {
@@ -30,7 +33,9 @@ router.post("/addWarehouse", AddWarehouse); // --> /addWarehouse
 router.post("/addOffice", AddOffice); // --> /addOffice
 router.get("/getLocationApprovals", getLocationApprovals);
 router.post("/modifyLocation", modifyLocation);
-
+router.get("/getCountries", getCountries);
+router.get("/getStatesByCountry", getStatesByCountry);
+router.get("/getCitiesByState", getCitiesByState);
 router.get("/", function (req, res) {
   res.json({ status: "OK" });
 });
