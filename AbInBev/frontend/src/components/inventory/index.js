@@ -255,6 +255,7 @@ const Inventory = (props) => {
   useEffect(() => {
     _getAllStates();
     _getAllSKUs();
+    requestSort('quantity');
   }, []);
 
   const onDetails = (inv) => {
@@ -501,6 +502,9 @@ const Inventory = (props) => {
                       <th
                         className="inventoryHeader"
                         onClick={() => requestSort('quantity')}
+                        className={
+                          'inventoryHeader ' + getClassNamesFor('quantity')
+                        }
                       >
                         Quantity
                       </th>

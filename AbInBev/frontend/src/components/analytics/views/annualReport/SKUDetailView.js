@@ -73,6 +73,7 @@ const SKUDetailView = (props) => {
       );
       setAnalytics(result.data);
     })();
+    requestSort('sales');
   }, [isActive, prop, props]);
 
   const getAnalyticsByType = async (district, i) => {
