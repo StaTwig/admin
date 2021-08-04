@@ -153,8 +153,8 @@ inventoryDetails.sort(function(a,b){
      
      {inventoryCount > 0 && (
             <div className="d-flex flex-row-reverse">
-              <Pagination showFirstButton showLastButton color="primary" count={Math.ceil(inventoryCount/10)} onChange={handlePageChange} />
-              <span className="mx-5 my-1 rounded text-primary">Total Records {inventoryCount} </span>
+              <Pagination showFirstButton showLastButton color="primary"  count={Math.ceil(inventoryCount/10)} onChange={handlePageChange} />
+              <span className="mx-5 my-1 rounded text-dark" style={{fontWeight:"400"}}>Total Records {inventoryCount} </span>
             </div>            
           )}
       </div>

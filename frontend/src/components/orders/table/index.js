@@ -103,7 +103,7 @@ const Table = props => {
           {orders?.length > 0 && (
             <div className="d-flex flex-row-reverse">
             <Pagination showFirstButton showLastButton color="primary" count={Math.ceil(props.count/10)} onChange={handlePageChange} />
-            <span className="mx-5 my-1 rounded text-primary">Total Records {props.count} </span>
+            <span className="mx-5 my-1 rounded text-dark">Total Records {props.count} </span>
           </div> 
           )}
           </div>
