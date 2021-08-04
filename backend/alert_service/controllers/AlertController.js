@@ -42,7 +42,7 @@ exports.createNewAlert = [
       Alert = await Alerts.findOne({ username: req.user.id })
       console.log(Alert)
       if (Alert) {
-        const newAlert = {
+        let newAlert = {
           id: utility.randomNumber(10),
           productId: req.body.productId,
           productName: req.body.productName,
@@ -51,6 +51,10 @@ exports.createNewAlert = [
           event_type_secondary: req.body.eventSecondary,          
           actorOrgId: req.body.actorOrgId,
           createdBy: req.body.createdBy
+        }
+        if (req.body.alertType == 'SHIPMENT' || req.body.alertType == 'ORDER') {
+         console.log(req.body.transactionId)
+          newAlert['transactionId'] = req.body.transactionId;
         }
         console.log(newAlert)
         Alert.alerts.push(newAlert)
@@ -77,7 +81,10 @@ exports.createNewAlert = [
               actorOrgId: req.body.actorOrgId,
               createdBy: req.user.id,
             }
-            if (req.body.alertType == 'SHIPMENT' || req.body.alertType == 'ORDER') alertData.transactionId = req.body.transactionId;            
+            if (req.body.alertType == 'SHIPMENT' || req.body.alertType == 'ORDER') {
+              console.log(req.body.transactionId)
+              alertData['transactionId'] = req.body.transactionId;
+             }        
             console.log(alertData)
             const alert = new Alerts({
               id: utility.randomNumber(10),
