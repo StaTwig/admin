@@ -14,20 +14,6 @@ const Users = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [data, setData] = useState([]);
   const closeModal = () => setShowModal(false);
-  const [searchText, setSearchText] = useState('');
-  const [roleOriginalData, setRoleOriginalData] = useState();
-  const [accountStatusOriginalData, setAccountStatusOriginalData] = useState();
-
-  const [roleData, setRoleData] = useState([]);
-
-  const [accountStatusData, setAccountStatusData] = useState([]);
-  const [openDropDownFilterForRole, setOpenDropDownFilterForRole] = useState(false);
-  const [calenderFilterJsonData, setCalenderFilterJsonData] = useState([]);
-  const [openFilterDropDown, setOpenFilterDropDown] = useState(false);
-  const [openAccountStatusDropDown, setOpenAccountStatusDropDown] = useState(false);
-  const [filterDropDownValue, setFilterDropDownValue] = useState('');
-
-  const [userList, setUsersList] = useState([]);
 
   const {
     usersList,
@@ -37,98 +23,20 @@ const Users = (props) => {
     permissions,
     addUser,
     unaffiliate,
+    roleData,
+    accountStatusData,
+    setShowDropDownForAccountStatus,
+    setShowDropDownForRole,
+    showDropDownForAccountStatus,
+    showDropDownForRole,
+    filterOrganisationListBasedOnTopPanelSearchInput,
+    onChangeOfSearchForFilterInput,
+    onSelectionOfDropdownValue,
+    showFilterDropDown,
+    setShowFilterDropDown,
+    calenderFilterJsonData
   } = props;
 
-  const prepareDropdownData = (data) => {
-    let finalDropDownData = [];
-    data?.forEach(item => {
-      let obj = {};
-      obj['key'] = item.id ? item['id'] : item.toLowerCase();
-      obj['value'] = item.name ? item['name'] : item;
-      obj['checked'] = false;
-      finalDropDownData.push(obj);
-    });
-    return finalDropDownData;
-  }
-
-  const prepareData = (data, type) => {
-    const availableList = data?.map(item => item[type]).filter(item => item);
-    return [...new Set(availableList)];
-  };
-
-  useEffect(() => {
-    setUsersList(usersList);
-    console.log('userlist: ', prepareData(usersList, 'role'));
-
-    setRoleData(oldTypes => [...oldTypes, ...prepareDropdownData(prepareData(usersList, 'role'))]);
-    setRoleOriginalData(roleData);
-   
-    setAccountStatusOriginalData([{ key: 1, value: 'Manufacturer' }, { key: 2, value: 'randome' }, { key: 3, value: 'doctor' }, { key: 4, value: 'syndrome' }]);
-    setCalenderFilterJsonData([{ key: 'today', value: 'Today', checked: false }, 
-    { key: 'this_week', value: 'This week', checked: false  },
-    { key: 'this_month', value: 'This Month', checked: false  },
-    { key: 'last_3_onths', value: 'Last 3 Months', checked: false  },
-    { key: 'Last 6 Months', value: 'Last 6 Months', checked: false  }, 
-    { key: 'This Year', value: 'This Year', checked: false }])
-  }, []);
-
-  const onChangeOfSearchInput = (event, type) => {
-    
-  };
-
-  const filterListForDropDown = (data, value) => {
-    return data?.filter(item => {
-      if (item.value.toLowerCase().includes(value)) {
-        return item;
-      }
-    })
-  };
-
-  const onChangeOfFilterDropDown = (value) => {
-    setFilterDropDownValue(value);
-    setOpenFilterDropDown(false);
-  }
-
-  const onChangeOfSearchForOriginalListInput = (inputValue, type) => {
-    if (type === 'searchBarTopPanel' && inputValue) {
-      const filteredList = usersList.filter(item => {
-        return `${item.firstName}${item.lastName}`.toLowerCase().includes(inputValue.toLowerCase());
-      });
-      setUsersList(filteredList);
-    } else {
-      setUsersList(usersList);
-    }
-  };
-
-  const filterListForSearchInput = (data, searchInput) => data.filter(item => {
-    return item.value.toLowerCase().includes(searchInput.toLowerCase());
-  });
-
-  const onChangeOfSearchForFilterInput = (searchInput, type) => {
-    if (type === 'role' && searchInput) {
-      setRoleOriginalData(filterListForSearchInput(roleData, searchInput));
-    } else if (type === 'status') {
-      setStatusOriginalData(filterListForSearchInput(statusData, searchInput))
-    } else {
-      console.log('roledata', role);
-      if (type === 'role') {
-        setRoleOriginalData(roleData);
-      } else if (type === 'status') {
-        setTypeOriginalData(statusData);
-      }
-    }
-  }
-
-  const setCheckedAndUnCheckedOfProvidedList = (typeOriginalData, index) => {
-    return typeOriginalData.filter((item, i) => i === index ? item.checked = true : item.checked = false);
-  }
-
-  const onClickOfDropDownItem = (index, type) => {
-    if (type === 'role') {
-      setRoleOriginalData([...setCheckedAndUnCheckedOfProvidedList(roleData, index)]);
-      setOpenDropDownFilterForRole(!openDropDownFilterForRole);
-    } 
-  };
 
   return (
     <div className="users">
@@ -155,7 +63,8 @@ const Users = (props) => {
       <div className="d-flex pl-2 justify-content-between">
         <h1 className="breadcrumb dash">MANAGE USERS</h1>
         <div className='d-flex'>
-          <SearchBar onChangeOfSearchInput={onChangeOfSearchForOriginalListInput} type={'searchBarTopPanel'} />
+          <SearchBar onChangeOfSearchInput={filterOrganisationListBasedOnTopPanelSearchInput}
+            type={'searchBarTopPanel'} />
           <div className="pr-4">
             <button
               type="button"
@@ -186,14 +95,15 @@ const Users = (props) => {
                 src={sortIcon}
                 alt='roleSortIcon'
                 onClick={() => {
-                  setOpenDropDownFilterForRole(!openDropDownFilterForRole);  }}
+                  setShowDropDownForRole(!showDropDownForRole);
+                }}
               />
-              {openDropDownFilterForRole &&
-                <DropDownFilter
+              {showDropDownForRole && roleData &&
+                <DropDownFiter
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
-                  data={roleOriginalData}
+                  data={roleData}
                   type={'role'}
-                  onClickOfDropDownItem={onClickOfDropDownItem}
+                  onClickOfDropDownItem={onSelectionOfDropdownValue}
                 />
               }
             </div>
@@ -208,13 +118,7 @@ const Users = (props) => {
             <span className="headerText col box headerText">Email/Mobile</span>
 
             <div class="vl text-center"></div>
-            <div className='col box headerText'
-              onClick={() => {
-                setOpenAccountStatusDropDown(!openAccountStatusDropDown);
-                if (!openAccountStatusDropDown) {
-                  setSearchText('');
-                }
-              }}>
+            <div className='col box headerText'>
               <span className="headerText" style={{ 'marginRight': '40px' }}>{'Account Status'}</span>
               <img
                 class='headerText'
@@ -225,37 +129,41 @@ const Users = (props) => {
                 }}
                 src={sortIcon}
                 alt='roleSortIcon'
+                onClick={() => {
+                  setShowDropDownForAccountStatus(!showDropDownForAccountStatus);
+                }}
               />
-              {openAccountStatusDropDown &&
+              {showDropDownForAccountStatus &&
                 <DropDownFilter
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
-                  data={accountStatusOriginalData}
+                  data={accountStatusData}
                   type={'accountStatus'}
-                  onClickOfDropDownItem={onClickOfDropDownItem}
+                  onClickOfDropDownItem={onSelectionOfDropdownValue}
                 />
               }
             </div>
             <div className="col box">
               <button className='text-center adjustFilterBtn'
-                onClick={() => setOpenFilterDropDown(!openFilterDropDown)}
+                onClick={() => setShowFilterDropDown(!showFilterDropDown)}
               >
                 <img src={FilterIcon} alt={'filter-icon'} />
                 <span>{'Filter'}</span>
                 <img src={DownArrowIcon} alt={'drp-arrow'} />
+                {
+                  showFilterDropDown && calenderFilterJsonData &&
+                  <FilterDropDown
+                    data={calenderFilterJsonData}
+                    onChangeOfFilterDropDown={onSelectionOfDropdownValue}
+                    type={'dateRange'}
+                  />
+                }
               </button>
-              {
-                openFilterDropDown &&
-                <FilterDropDown
-                  data={calenderFilterJsonData}
-                  onChangeOfFilterDropDown={onChangeOfFilterDropDown}
-                />
-              }
             </div>
           </div>
         </div>
       </div>
       <div className='userList-container'>
-        {userList?.map((row, index) => (
+        {usersList?.map((row, index) => (
           <UserDetails
             key={index}
             user={row}

@@ -7,7 +7,7 @@ const FilterDropDown = (props) => {
             <ul className='ul-element'>
                 {props.data.map(item => {
                     return (
-                        <li className='li-element' key={item.key} onClick={() => { props.onChangeOfFilterDropDown(item.key) }}>{item.value}</li>
+                        <li className='li-element' key={item.key} onClick={() => { props.onChangeOfFilterDropDown(item.key, props.type, item.value) }}>{item.value}</li>
                     )
                 })}
             </ul>

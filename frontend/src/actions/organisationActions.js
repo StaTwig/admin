@@ -246,11 +246,12 @@ export const getRecentReqSent = () => {
   }
 };
 
-export const getOrgUsers = () => {
+export const getOrgUsers = (params) => {
   try {
     return async (dispatch) => {
       dispatch(turnOn());
-      const result = await axios.get(config().getOrgUsersUrl);
+      const url = params ? `${config().getOrgUsersUrl}?${params}` : config().getOrgUsersUrl;
+      const result = await axios.get(url);
       dispatch({
         type: SET_ORGANISATION_USERS,
         payload: result.data,

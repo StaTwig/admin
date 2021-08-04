@@ -3,19 +3,8 @@ import SearchBar from '../searchBar';
 import "./style.scss";
 
 const DropDownFilter = (props) => {
-    let cardFormat = null;
-    if (props.type === 'accountStatus') {
-        cardFormat = 'account-status-card-container';
-    } else if (props.type === 'role') {
-        cardFormat = 'role-card-container';
-    } else if (props.type === 'type') {
-        cardFormat = 'role-card-container';
-    } else {
-        cardFormat = 'role-card-container';
-    }
-    
-    return (
-        <div className={`card rounded bg-white border-white ${cardFormat}`} style={{ left: '0rem' }}>
+     return (
+        <div className={`card rounded bg-white border-white role-card-container`} style={{ left: '0rem' }}>
             <SearchBar
                 onChangeOfSearchInput={props.onChangeOfSearchInput}
                 type={props.type}

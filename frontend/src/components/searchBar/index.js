@@ -32,7 +32,7 @@ const SearchBar = (props) => {
                     id="header-search"
                     placeholder="Search"
                     value={query}
-                    onChange={(event) => handleOnChange(event)}
+                    onChange={handleOnChange}
                 />
                 <img src={SearchIcon} alt='searchIcon' id={props.type === 'searchBarTopPanel' 
                     ? 'input_img' : 'input_img_for_drp'} />
