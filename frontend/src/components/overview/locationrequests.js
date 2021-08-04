@@ -55,7 +55,7 @@ const LocationRequests = (props) => {
       </div>
       <div className="pl-1">
         <div className="d-grid txtColor">
-          <span>Date: {formatDate(row?.createdAt)}</span>
+          <span>Date: {formatDate(row?.updatedAt)}</span>
         </div>
         <div className="d-flex flex-row mt-5 pt-5">
           <button
