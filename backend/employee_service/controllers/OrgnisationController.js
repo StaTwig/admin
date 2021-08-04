@@ -3,6 +3,7 @@ const EmployeeModel = require("../models/EmployeeModel");
 const auth = require("../middlewares/jwt");
 const apiResponse = require("../helpers/apiResponse");
 
+const moment = require('moment');
 const checkToken = require("../middlewares/middleware").checkToken;
 let EmployeeIdMap = new Map();
 
@@ -23,10 +24,35 @@ function getOrgCondition(query){
     matchCondition['region.name'] = query.region;
   }
   if(query.creationFilter && query.creationFilter=='true'){
-    matchCondition.createdAt = {
-      $gte: new Date(query.startDate),
-      $lte: new Date(query.endDate)
-    };
+    let now = moment();
+    let oneDayAgo = moment().subtract(1, 'day')
+    let oneMonthAgo = moment().subtract(1, 'months')
+    let threeMonthsAgo = moment().subtract(3, 'months')
+    let oneYearAgo = moment().subtract(1, 'years')
+    if(query.dateRange=='today'){
+      matchCondition.createdAt = {
+        $gte: new Date(oneDayAgo),
+        $lte: new Date(now)
+      };
+    }
+    else if(query.dateRange=='lastMonth'){
+      matchCondition.createdAt = {
+        $gte: new Date(oneMonthAgo),
+        $lte: new Date(now)
+      };
+    }
+    else if(query.dateRange=='threeMonths'){
+      matchCondition.createdAt = {
+        $gte: new Date(threeMonthsAgo),
+        $lte: new Date(now)
+      };
+    }
+    else if(query.dateRange=='year'){
+      matchCondition.createdAt = {
+        $gte: new Date(oneYearAgo),
+        $lte: new Date(now)
+      };
+    }
   }
   return matchCondition;
 }
