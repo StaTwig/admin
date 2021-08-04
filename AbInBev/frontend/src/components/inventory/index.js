@@ -501,6 +501,9 @@ const Inventory = (props) => {
                       <th
                         className="inventoryHeader"
                         onClick={() => requestSort('quantity')}
+                        className={
+                          'inventoryHeader ' + getClassNamesFor('quantity')
+                        }
                       >
                         Quantity
                       </th>

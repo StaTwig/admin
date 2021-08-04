@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import profile from '../../../../assets/user.png';
 import Chart from 'react-apexcharts';
 import { getAllOrganisationStats } from '../../../../actions/analyticsAction';
