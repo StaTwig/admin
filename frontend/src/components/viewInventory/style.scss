@@ -51,6 +51,15 @@
     align-self: center;
     overflow: hidden;
   }
+  .txt2{
+    font-weight: 400;
+    font-size: small;
+    align-self: center;
+    overflow: hidden;
+    text-align: right;
+    position:relative;
+    left:-130px; 
+  }
 
   .txtBlue{
     color: #0093e9;
