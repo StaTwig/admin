@@ -29,13 +29,15 @@ function getOrgCondition(query){
     let oneMonthAgo = moment().subtract(1, 'months')
     let threeMonthsAgo = moment().subtract(3, 'months')
     let oneYearAgo = moment().subtract(1, 'years')
+    let oneWeek = moment().subtract(1, 'weeks')
+    let sixMonths = moment().subtract(6, 'months')
     if(query.dateRange=='today'){
       matchCondition.createdAt = {
         $gte: new Date(oneDayAgo),
         $lte: new Date(now)
       };
     }
-    else if(query.dateRange=='lastMonth'){
+    else if(query.dateRange=='month'){
       matchCondition.createdAt = {
         $gte: new Date(oneMonthAgo),
         $lte: new Date(now)
@@ -50,6 +52,18 @@ function getOrgCondition(query){
     else if(query.dateRange=='year'){
       matchCondition.createdAt = {
         $gte: new Date(oneYearAgo),
+        $lte: new Date(now)
+      };
+    }
+    else if(query.dateRange=='week'){
+      matchCondition.createdAt = {
+        $gte: new Date(oneWeek),
+        $lte: new Date(now)
+      };
+    }
+    else if(query.dateRange=='sixMonths'){
+      matchCondition.createdAt = {
+        $gte: new Date(sixMonths),
         $lte: new Date(now)
       };
     }
