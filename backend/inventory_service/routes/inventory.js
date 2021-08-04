@@ -7,7 +7,7 @@ const RegionController = require("../controllers/RegionCountryController");
 
 const Storage = multer.diskStorage({
   destination(req, file, callback) {
-    callback(null, './images');
+    callback(null, 'uploads/');
   },
   filename(req, file, callback) {
     callback(null, `${Date.now()}`);
