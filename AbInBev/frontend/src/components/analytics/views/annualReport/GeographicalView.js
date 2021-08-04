@@ -83,6 +83,7 @@ const GeographicalView = (props) => {
         else setAnalytics(n);
       }
     } else setAnalytics(SKUStats);
+    requestSort('sales');
   }, [sku, viewName, props]);
 
   const showDetailedGeoView = (param) => {

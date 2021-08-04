@@ -72,6 +72,7 @@ const DetailedGeographicalView = (props) => {
       );
       setAnalytics(result.data);
     })();
+    requestSort('sales');
   }, [props]);
 
   const useSortableData = (items, config = null) => {

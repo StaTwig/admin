@@ -286,6 +286,21 @@ flex-shrink: 0;
         thead{
             border-bottom: 2px solid #54265E ;
         }
+        .descending {
+            box-shadow: none !important;
+            &:before {
+              content: "▼";
+              float: right;
+            }
+          }
+        
+          .ascending {
+            box-shadow: none !important;
+            &:before {
+              content: "▲";
+              float: right;
+            }
+          }
         .inventoryHeader{
             padding:10px;
             font-size:16px;

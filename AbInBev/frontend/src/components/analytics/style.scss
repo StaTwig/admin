@@ -634,6 +634,21 @@ body {
       color: #54265e;
       font-weight: bolder;
     }
+    .descending {
+      box-shadow: none !important;
+      &:before {
+        content: "▼";
+        float: right;
+      }
+    }
+  
+    .ascending {
+      box-shadow: none !important;
+      &:before {
+        content: "▲";
+        float: right;
+      }
+    }
     tr {
       border-bottom: 1px solid #e5e0e9;
     }
