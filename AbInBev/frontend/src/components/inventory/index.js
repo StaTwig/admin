@@ -255,6 +255,7 @@ const Inventory = (props) => {
   useEffect(() => {
     _getAllStates();
     _getAllSKUs();
+    requestSort('quantity');
   }, []);
 
   const onDetails = (inv) => {
