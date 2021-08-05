@@ -14,7 +14,7 @@ const { uploadFile } = require("../helpers/s3");
 const fs = require("fs");
 const util = require("util");
 const unlinkFile = util.promisify(fs.unlink);
-
+const moment = require('moment');
 const EmailContent = require("../components/EmailContent");
 
 const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -31,10 +31,49 @@ function getUserCondition(query,orgId){
     matchCondition.accountStatus = query.status;
   }
   if(query.creationFilter && query.creationFilter=='true'){
-    matchCondition.createdAt = {
-      $gte: new Date(query.startDate),
-      $lte: new Date(query.endDate)
-    };
+    let now = moment();
+    let oneDayAgo = moment().subtract(1, 'day')
+    let oneMonthAgo = moment().subtract(1, 'months')
+    let threeMonthsAgo = moment().subtract(3, 'months')
+    let oneYearAgo = moment().subtract(1, 'years')
+    let oneWeek = moment().subtract(1, 'weeks')
+    let sixMonths = moment().subtract(6, 'months')
+    if(query.dateRange=='today'){
+      matchCondition.createdAt = {
+        $gte: new Date(oneDayAgo),
+        $lte: new Date(now)
+      };
+    }
+    else if(query.dateRange=='month'){
+      matchCondition.createdAt = {
+        $gte: new Date(oneMonthAgo),
+        $lte: new Date(now)
+      };
+    }
+    else if(query.dateRange=='threeMonths'){
+      matchCondition.createdAt = {
+        $gte: new Date(threeMonthsAgo),
+        $lte: new Date(now)
+      };
+    }
+    else if(query.dateRange=='year'){
+      matchCondition.createdAt = {
+        $gte: new Date(oneYearAgo),
+        $lte: new Date(now)
+      };
+    }
+    else if(query.dateRange=='week'){
+      matchCondition.createdAt = {
+        $gte: new Date(oneWeek),
+        $lte: new Date(now)
+      };
+    }
+    else if(query.dateRange=='sixMonths'){
+      matchCondition.createdAt = {
+        $gte: new Date(sixMonths),
+        $lte: new Date(now)
+      };
+    }
   }
   return matchCondition;
 }
