@@ -19,7 +19,9 @@ services:
     container_name: 'advanced_analytics_service1.0'
     restart: always
     env_file:
-      - ./env/ledger.env    
+      - ./env/ledger.env
+    environment:
+      - REDIS_URL=redis://cache          
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
