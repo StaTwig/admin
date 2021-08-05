@@ -24,8 +24,8 @@ const UserContainer = (props) => {
   const [error, setError] = useState("");
   const dispatch = useDispatch();
 
-  const [params, setParams] = useState("");
-  const [paramType, setParamType] = useState("");
+  const [queryKey, setQueryKey] = useState("");
+  const [queryValue, setQueryValue] = useState("");
 
   const [roleData, setRoleData] = useState([]);
   const [roleReplicaData, setRoleReplicaData] = useState([]);
@@ -48,13 +48,13 @@ const UserContainer = (props) => {
   }
 
   useEffect(() => {
-    if (params && paramType) {
-      if (paramType === 'role') {
-        requestWithParams(params, dispatch, 'role');
-      } else if (paramType === 'accountStatus') {
-        requestWithParams(params, dispatch, 'status');
-      } else if (paramType === 'dateRange') {
-        requestWithParams(params, dispatch, 'creationFilter=true&dateRange');
+    if (queryKey && queryValue) {
+      if (queryValue === 'role') {
+        requestWithParams(queryKey, dispatch, 'role');
+      } else if (queryValue === 'accountStatus') {
+        requestWithParams(queryKey, dispatch, 'status');
+      } else if (queryValue === 'dateRange') {
+        requestWithParams(queryKey, dispatch, 'creationFilter=true&dateRange');
       }
     } else {
       async function fetchData() {
@@ -63,7 +63,7 @@ const UserContainer = (props) => {
       }
       fetchData();
     }
-  }, [params]);
+  }, [queryKey]);
 
   const usersList = useSelector((state) => {
     return state.organisation.users;
@@ -92,6 +92,7 @@ const UserContainer = (props) => {
 
   useEffect(() => {
     const originalList = userStateList.length > 0 ? userStateList : usersList;
+    console.log(userStateList, usersList);
     if(originalList.length > 0) {
       setRoleData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(originalList, 'role'))]);
       setRoleReplicaData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(originalList, 'role'))]);
@@ -101,16 +102,16 @@ const UserContainer = (props) => {
   
       setCalenderFilterJsonData([
       { key: 'today', value: 'Today', checked: false },
-      { key: 'week', value: 'This week', checked: false },
-      { key: 'month', value: 'This Month', checked: false },
-      { key: 'lastThreeMonths', value: 'Last 3 Months', checked: false },
-      { key: 'lastSixMonths', value: 'Last 6 Months', checked: false },
-      { key: 'year', value: 'This Year', checked: false }]);
+      { key: 'thisWeek', value: 'This week', checked: false },
+      { key: 'thisMonth', value: 'This Month', checked: false },
+      { key: 'threeMonths', value: 'Last 3 Months', checked: false },
+      { key: 'sixMonths', value: 'Last 6 Months', checked: false },
+      { key: 'thisYear', value: 'This Year', checked: false }]);
     };
 
   }, [userStateList]);
 
-
+  console.log(roleData);
   const activateUser = async (data) => {
     dispatch(turnOn());
     const result = await activateOrgUser(data);
@@ -180,7 +181,7 @@ const UserContainer = (props) => {
   const setCheckedAndUnCheckedOfProvidedList = (typeOriginalData, index) => {
     return typeOriginalData.map((item, i) => {
       if (i === index) {
-        item.checked = true;
+        item.checked = !item.checked;
       } else {
         item.checked = false
       }
@@ -191,18 +192,15 @@ const UserContainer = (props) => {
   const onSelectionOfDropdownValue = (index, type, value) => {
     if (type === 'role') {
       setRoleData([...setCheckedAndUnCheckedOfProvidedList(roleData, index)]);
-      setParams(value);
-      setParamType(type);
+      setQueryKeyAndQueryValue(setQueryKey, value, setQueryValue, type, roleData, index);
       markOpenedDrownsToFalse(setShowDropDownForAccountStatus, setShowFilterDropDown, setShowDropDownForRole);
     } else if (type === 'accountStatus') {
       setAccountStatusData([...setCheckedAndUnCheckedOfProvidedList(accountStatusData, index)]);
-      setParams(value);
-      setParamType(type);
+      setQueryKeyAndQueryValue(setQueryKey, value, setQueryValue, type, accountStatusData, index);
       markOpenedDrownsToFalse(setShowDropDownForAccountStatus, setShowFilterDropDown, setShowDropDownForRole);
     } else if (type === 'dateRange') {
       setCalenderFilterJsonData([...setCheckedAndUnCheckedOfProvidedList(calenderFilterJsonData, index)]);
-      setParams(value);
-      setParamType(type);
+      setQueryKeyAndQueryValue(setQueryKey, value, setQueryValue, type, calenderFilterJsonData, index);
       markOpenedDrownsToFalse(setShowDropDownForAccountStatus, setShowFilterDropDown, setShowDropDownForRole);
     }
   };
@@ -274,3 +272,13 @@ const UserContainer = (props) => {
 };
 
 export default UserContainer;
+
+function setQueryKeyAndQueryValue(setQueryValue, value, setQueryType, type, data, index) {
+  if(data[index].checked) {
+    setQueryValue(value);
+    setQueryType(type);
+  } else {
+    setQueryValue();
+    setQueryType();
+  }
+}

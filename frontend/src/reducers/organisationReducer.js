@@ -12,6 +12,7 @@ import {
   SET_COUNTRY_TYPES,
   SET_REGION_TYPES,
   SET_ALL_ORGANISATIONS,
+  SET_ALL_ORGANISATION_ACTIVE_USERS,
 } from "../constants/organisationConstants";
 
 export const initialState = {
@@ -25,7 +26,8 @@ export const initialState = {
   list: [],
   countries: [],
   regions: [],
-  allList: []
+  allList: [],
+  activeUsers: []
 };
 
 export const organisationReducer = (state = initialState, action) => {
@@ -40,6 +42,8 @@ export const organisationReducer = (state = initialState, action) => {
       return { ...state, types: action.payload };
     case SET_ORGANISATION_USERS:
       return { ...state, users: action.payload.data };
+    case SET_ALL_ORGANISATION_ACTIVE_USERS:
+        return { ...state, activeUsers: action.payload.data };
     case SET_ORGANISATION_REQ_SENT:
       return {
         ...state,

@@ -48,7 +48,7 @@ const DashBoardContainer = (props) => {
   });
 
   const usersList = useSelector((state) => {
-    return state.organisation.users;
+    return state.organisation.activeUsers;
   });
 
   useEffect(() => {

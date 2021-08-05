@@ -46,7 +46,7 @@ const AffiliateContainer = (props) => {
   });
 
   const usersList = useSelector((state) => {
-    return state.organisation.users;
+    return state.organisation.activeUsers;
   });
 
   const unaffiliatedOrgs = async (data) => {
