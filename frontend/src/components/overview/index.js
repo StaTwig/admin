@@ -30,7 +30,9 @@ const DashBoard = (props) => {
   requestsPending.sort(function (a, b) {
     return new Date(b.createdAt) - new Date(a.createdAt);
   });
-
+locationApprovals.sort(function (a, b) {
+    return new Date(b.updatedAt) - new Date(a.updatedAt);
+  });
   return (
     <div className="dashboard">
       {showModal && (
