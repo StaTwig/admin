@@ -47,14 +47,15 @@ const Organisations = (props) => {
       <div className="flex-row justify-content-between pl-2 pr-1">
         <div className="panel mr-3 mt-3">
           <div className="mt-4">
-            <div className="ml-4 txtColor d-flex flex-row justify-content-between">
-              <span className="text-center w-20">Name</span>
-              <span className="text-center w-15">Type</span>
-              <span className="text-center w-20">Postal address</span>
-              <span className="text-center w-10">Country</span>
-              <span className="text-center w-10">Status</span>
-              <span className="text-center w-15">Created on</span>
-              <span className="text-center w-20">&nbsp;</span>
+            <div className="ml-4 txtColor row justify-content-between">
+              <span className="text-center col-2">Name</span>
+              <span className="text-center col-2">Type</span>
+              <span className="text-center col-2">Approval authority</span>
+              <span className="text-center col-2">Postal address</span>
+              <span className="col">Country</span>
+              <span className="col">Status</span>
+              <span className="col">Created on</span>
+              <span className="col">&nbsp;</span>
             </div>
             {orgList.map((row, index) => (
               <Details
@@ -64,6 +65,7 @@ const Organisations = (props) => {
                 setShowModals={setShowModals}
                 modifyOrg={modifyOrg}
                 types={orgTypes}
+                orgList={orgList}
               />
             ))}
           </div>

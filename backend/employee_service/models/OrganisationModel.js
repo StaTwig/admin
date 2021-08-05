@@ -33,7 +33,7 @@ var OrganisationSchema = new mongoose.Schema(
     primaryContactId: String,
     logoId: String,
     type: String,
-    typeId:String,
+    typeId: String,
     status: String,
     warehouses: {
       type: Array,
@@ -47,6 +47,7 @@ var OrganisationSchema = new mongoose.Schema(
       type: String,
       default: ["em12345", "em12346", "em12347"],
     },
+    authority: String,
   },
   { timestamps: true }
 );

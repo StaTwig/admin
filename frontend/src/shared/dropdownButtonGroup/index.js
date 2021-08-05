@@ -44,7 +44,6 @@ const dropdownButtonGroup = (props) => {
                       setMenu(false);
                       onSelect(item);
                     }}
-                    {...console.log(item)}
                   >
                     {namer == "employee"
                       ? item.firstName +

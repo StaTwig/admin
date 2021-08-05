@@ -13,7 +13,7 @@ exports.getOrgs = [
       const users = await OrganisationModel.find({
         // status: "NOTVERIFIED",
       }).select(
-        "name postalAddress country primaryContactId createdAt type status logoId id"
+        "name postalAddress country primaryContactId createdAt type status logoId id authority"
       );
       return apiResponse.successResponseWithData(
         res,
@@ -32,7 +32,7 @@ exports.updateOrg = [
     try {
       checkToken(req, res, async (result) => {
         if (result.success) {
-          const { id, status, type, typeId } = req.body;
+          const { id, status, type, typeId, orgId } = req.body;
           await OrganisationModel.findOneAndUpdate(
             {
               id: id,
@@ -40,8 +40,9 @@ exports.updateOrg = [
             {
               $set: {
                 status: status,
-                type : type || "S2",
+                type: type || "S2",
                 typeId: typeId || "4",
+                authority: orgId,
               },
             }
           )
