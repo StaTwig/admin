@@ -151,13 +151,17 @@ const Analytics = (props) => {
     const filter = { ...params };
     if (value == 'by_monthly') {
       setMonth(new Date().getMonth() + 1);
-      filter.month = month;
+      filter.month = new Date().getMonth() + 1;
       filter.quarter = undefined;
     }
     if (value == 'by_quarterly') {
       setQtr(1);
       filter.month = undefined;
       filter.quarter = qtr;
+    }
+    if (value == 'by_yearly') {
+      filter.month = undefined;
+      filter.quarter = undefined;
     }
     filter.date_filter_type = value;
     setIsActive(value);
@@ -183,7 +187,7 @@ const Analytics = (props) => {
       setSpmButton('btn active');
     }
     setSelectedModule(module);
-    setParams({});
+    // setParams({});
   }
   const changeView = (event) => {
     setSKU('');
