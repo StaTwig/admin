@@ -1,2 +1,3 @@
 .prettierrc
 **.DS_Store
+env
