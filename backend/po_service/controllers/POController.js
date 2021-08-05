@@ -393,7 +393,27 @@ exports.changePOStatus = [
                       $push: { poUpdates: updates },
                       $set: {poStatus :status }
                 })
+                try{
+                  let event = Event.findOne({'payloadData.data.order_id': orderID})
+                  
+                  if (status === "ACCEPTED")
+                    event.eventType.primary = "RECEIVE";
+                  else event.eventType.primary = "UPDATE";
 
+                  event.eventType.description = "ORDER";
+                
+                  async function compute(event) {
+                    resultt = await logEvent(event);
+                    return resultt;     
+                  }
+                  console.log(result);
+                  compute(event).then((response) => {
+                    console.log(response);
+          
+                  });
+                }catch(error){
+                  console.log(error);
+                }
                 return apiResponse.successResponseWithData(
                       res,
                       'PO Status',
