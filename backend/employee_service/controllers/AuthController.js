@@ -435,6 +435,7 @@ exports.getOrgUsers = [
             phoneNumber: 1,
             role: 1,
             emailId: 1,
+            postalAddress: 1,
             orgs: {
               name: 1,
             },
