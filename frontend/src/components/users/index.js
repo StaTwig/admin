@@ -84,14 +84,9 @@ const Users = (props) => {
 
             <div class="vl text-center"></div>
             <div className='col box headerText'>
-              <span className="headerText" style={{ marginRight: '72px' }}>{'Role'}</span>
+              <span className="headerText">{'Role'}</span>
               <img
-                class='headerText'
-                style={{
-                  width: '10px',
-                  height: '15px',
-                  marginTop: '0px'
-                }}
+                class='headerText imageFilterIcon'
                 src={sortIcon}
                 alt='roleSortIcon'
                 onClick={() => {
@@ -99,7 +94,7 @@ const Users = (props) => {
                 }}
               />
               {showDropDownForRole && roleData &&
-                <DropDownFiter
+                <DropDownFilter
                   onChangeOfSearchInput={onChangeOfSearchForFilterInput}
                   data={roleData}
                   type={'role'}
@@ -119,14 +114,10 @@ const Users = (props) => {
 
             <div class="vl text-center"></div>
             <div className='col box headerText'>
-              <span className="headerText" style={{ 'marginRight': '40px' }}>{'Account Status'}</span>
+              <span className="headerText">{'Account Status'}</span>
               <img
-                class='headerText'
-                style={{
-                  width: '10px',
-                  height: '15px',
-                  marginTop: '0px',
-                }}
+                class='headerText imageFilterIcon'
+                style={{ marginLeft: '20px' }}
                 src={sortIcon}
                 alt='roleSortIcon'
                 onClick={() => {

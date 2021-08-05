@@ -69,13 +69,14 @@ const Organisations = (props) => {
             <div class="vl text-center"></div>
 
             <div className='box col headerText'>
-              <span className="headerText" style={{ marginRight: '72px' }}>{'Type'}</span>
+              <span className="headerText">{'Type'}</span>
               <img
                 class='headerText'
                 style={{
                   width: '10px',
                   height: '15px',
-                  marginTop: '0px'
+                  marginTop: '0px',
+                  marginLeft: '38px'
                 }}
                 src={sortIcon}
                 alt='roleSortIcon'
@@ -99,13 +100,14 @@ const Organisations = (props) => {
 
 
             <div className='box col headerText'>
-              <span className="headerText" style={{ marginRight: '72px' }}>{'Country'}</span>
+              <span className="headerText">{'Country'}</span>
               <img
                 class='headerText'
                 style={{
                   width: '10px',
                   height: '15px',
-                  marginTop: '0px'
+                  marginTop: '0px',
+                  marginLeft: '38px'
                 }}
                 src={sortIcon}
                 alt='roleSortIcon'
@@ -148,13 +150,14 @@ const Organisations = (props) => {
             <div class="vl text-center"></div>
 
             <div className='box col headerText'>
-              <span className="headerText" style={{ marginRight: '72px' }}>{'Status'}</span>
+              <span className="headerText">{'Status'}</span>
               <img
                 class='headerText'
                 style={{
                   width: '10px',
                   height: '15px',
-                  marginTop: '0px'
+                  marginTop: '0px',
+                  marginLeft: '38px'
                 }}
                 src={sortIcon}
                 alt='roleSortIcon'
@@ -174,13 +177,14 @@ const Organisations = (props) => {
             <div class="vl text-center"></div>
 
             <div className='box col headerText'>
-              <span className="headerText" style={{ marginRight: '40px' }}>{'Created on'}</span>
+              <span className="headerText">{'Created on'}</span>
               <img
                 class='headerText'
                 style={{
                   width: '10px',
                   height: '15px',
-                  marginTop: '0px'
+                  marginTop: '0px',
+                  marginLeft: '38px'
                 }}
                 src={sortIcon}
                 alt='roleSortIcon'

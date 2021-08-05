@@ -44,10 +44,10 @@ const Details = (props) => {
   }
   
   return (
-    <div className="card rounded bg-white border border-white mt-1 ml-1 p-1 mb-3">
-      <div className="row row-details">
-        <div className="card-body details-body" style={{ display: 'flex' }}>
-          <div className="userPic w-25 text-center rounded">
+    <div className="card rounded bg-white border border-white mt-1 ml-1 p-1 mb-3" style={{ width: 'min-content' }}>
+        <div className="card-body details-body">
+          <div className="userPic text-center rounded" 
+            style={{ width: '190px' }}>
             {org?.logoId && (
               <img
                 src={org?.logoId}
@@ -55,12 +55,25 @@ const Details = (props) => {
                 className="rounded mr-1"
               />
             )}
-            <h6 className="text-primary pt-1 txtWrapu">{org?.name}</h6>
-            <div className="blockquote-footer mt-2 ml-4 txtWrapu">
+            <h6 className="text-primary pt-1" style={{
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  maxWidth: '75%'
+            }}>{org?.name}</h6>
+            <div className="blockquote-footer" style={{
+                  whiteSpace: 'nowrap',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  position: 'relative',
+                  left: '23px',
+                  maxWidth: '75%'
+            }}>
               {org?.primaryContactId}
             </div>
           </div>
-          <span className=" text-center w-25 align-self-center">
+          
+          <span className="text-center align-self-center" style={{ maxWidth: '170px' }}>
             {org?.type}
             <DropdownButton
               groups={types}
@@ -72,22 +85,31 @@ const Details = (props) => {
             />
           </span>
 
-          <span className=" w-25 text-center align-self-center">
+          <span className="text-center align-self-center" 
+          style={{     
+            maxWidth: '169px',
+            wordWrap: 'break-word'
+          }}>
             {org?.postalAddress}
           </span>
-          <span className="txtWrapu text-center w-25 align-self-center">
+          
+          <span className="txtWrapu text-center align-self-center" style={{ width: '203px' }}>
             {org?.country?.countryName}
           </span>
-          <span className="txtWrapu text-center w-25 align-self-center">
+          
+          <span className="txtWrapu text-center align-self-center" style={{ width: '200px' }}>
             {org?.region?.regionName}
           </span>
-          <span className="txtWrapu text-center w-25 align-self-center font-weight-bold text-secondory">
+          
+          <span className="txtWrapu text-center align-self-center font-weight-bold text-secondory" style={{ width: '203px' }}>
             {(status) ? (status === 'ACTIVE' ? <div className="status text-success"> ACTIVE </div> : <div className="status text-danger">REJECTED</div>) : <div className="status text-warning">DEACTIVATED</div>}
           </span>
-          <span className="txtWrapu text-center w-25 align-self-center">
+          
+          <span className="txtWrapu text-center align-self-center" style={{ width: '182px' }}>
             {org?.createdAt ? formatDate(org?.createdAt) : ""}
           </span>
-          <div className="w-25">
+         
+          <div>
             <button
               type="button"
               onClick={() => {
@@ -133,7 +155,6 @@ const Details = (props) => {
             )}
           </div>
         </div>
-      </div>
     </div>
   );
 };

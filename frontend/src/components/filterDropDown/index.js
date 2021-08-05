@@ -5,9 +5,16 @@ const FilterDropDown = (props) => {
     return (
         <div className='card rounded bg-white border-white filter-card-container'>
             <ul className='ul-element'>
-                {props.data.map(item => {
+                {props.data.map((item, index) => {
                     return (
-                        <li className='li-element' key={item.key} onClick={() => { props.onChangeOfFilterDropDown(item.key, props.type, item.value) }}>{item.value}</li>
+                        <li 
+                            className={item.checked ? "li-element-selected" : 'li-element'}
+                            key={item.key} 
+                            onClick={() => 
+                                { props.onChangeOfFilterDropDown(index, props.type, item.value) }}
+                        >
+                            {item.value}
+                        </li>
                     )
                 })}
             </ul>

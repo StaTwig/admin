@@ -32,10 +32,10 @@ const UserContainer = (props) => {
 
   const [accountStatusData, setAccountStatusData] = useState([]);
   const [accountStatusReplicaData, setAccountStatusReplicaData] = useState([]);
-  
+
   const [showDropDownForRole, setShowDropDownForRole] = useState(false);
   const [calenderFilterJsonData, setCalenderFilterJsonData] = useState([]);
-  
+
   const [showFilterDropDown, setShowFilterDropDown] = useState(false);
   const [showDropDownForAccountStatus, setShowDropDownForAccountStatus] = useState(false);
   const [filterDropDownValue, setFilterDropDownValue] = useState('');
@@ -48,16 +48,20 @@ const UserContainer = (props) => {
   }
 
   useEffect(() => {
-     if (params && paramType) {
+    if (params && paramType) {
       if (paramType === 'role') {
         requestWithParams(params, dispatch, 'role');
       } else if (paramType === 'accountStatus') {
         requestWithParams(params, dispatch, 'status');
-      } else if(paramType === 'dateRange') {
-        requestWithParams(params, dispatch, 'accountStatus');
+      } else if (paramType === 'dateRange') {
+        requestWithParams(params, dispatch, 'creationFilter=true&dateRange');
       }
     } else {
-      dispatch(getOrgUsers());
+      async function fetchData() {
+        const originalList = await dispatch(getOrgUsers());
+        localStorage.setItem('userData', JSON.stringify(originalList));
+      }
+      fetchData();
       dispatch(getPermissions());
     }
   }, [params]);
@@ -88,23 +92,23 @@ const UserContainer = (props) => {
   };
 
   useEffect(() => {
-    if(usersList) {
-      setUsersStateList([...usersList]);
-      
-      setRoleData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(usersList, 'role'))]);
-      setRoleReplicaData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(usersList, 'role'))]);
-     
-      setAccountStatusData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(usersList, 'accountStatus'))]);
-      setAccountStatusReplicaData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(usersList, 'accountStatus'))]);
+    const originalList = JSON.parse(localStorage.getItem('userData'));
 
-      setCalenderFilterJsonData([{ key: 'today', value: 'Today', checked: false }, 
-      { key: 'this_week', value: 'This week', checked: false  },
-      { key: 'this_month', value: 'This Month', checked: false  },
-      { key: 'last_3_onths', value: 'Last 3 Months', checked: false  },
-      { key: 'Last 6 Months', value: 'Last 6 Months', checked: false  }, 
-      { key: 'This Year', value: 'This Year', checked: false }])
-    }
-  }, [usersList]);
+    setRoleData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(originalList, 'role'))]);
+    setRoleReplicaData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(originalList, 'role'))]);
+
+    setAccountStatusData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(originalList, 'accountStatus'))]);
+    setAccountStatusReplicaData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(originalList, 'accountStatus'))]);
+
+    setCalenderFilterJsonData([
+    { key: 'today', value: 'Today', checked: false },
+    { key: 'week', value: 'This week', checked: false },
+    { key: 'month', value: 'This Month', checked: false },
+    { key: 'lastThreeMonths', value: 'Last 3 Months', checked: false },
+    { key: 'lastSixMonths', value: 'Last 6 Months', checked: false },
+    { key: 'year', value: 'This Year', checked: false }]);
+  }, []);
+
 
   const activateUser = async (data) => {
     dispatch(turnOn());
@@ -168,7 +172,7 @@ const UserContainer = (props) => {
         setRoleData([...roleReplicaData]);
       } else if (type === 'accountStatus') {
         setAccountStatusData([...accountStatusReplicaData]);
-      } 
+      }
     }
   }
 
@@ -199,10 +203,10 @@ const UserContainer = (props) => {
       setParams(value);
       setParamType(type);
       markOpenedDrownsToFalse(setShowDropDownForAccountStatus, setShowFilterDropDown, setShowDropDownForRole);
-    } 
+    }
   };
 
-  const markOpenedDrownsToFalse = (setShowDropDownForAccountStatus, setShowFilterDropDown, setShowDropDownForRole)  => {
+  const markOpenedDrownsToFalse = (setShowDropDownForAccountStatus, setShowFilterDropDown, setShowDropDownForRole) => {
     setShowDropDownForAccountStatus(false);
     setShowFilterDropDown(false);
     setShowDropDownForRole(false);
@@ -218,6 +222,8 @@ const UserContainer = (props) => {
       setUsersStateList([...usersList]);
     }
   };
+
+  console.log('setCalenderFilterJsonData:', calenderFilterJsonData);
 
   return (
     <div className="container-fluid p-0">
@@ -240,7 +246,7 @@ const UserContainer = (props) => {
           )}
           <Users
             {...props}
-            usersList={userStateList}
+            usersList={usersList}
             activateUser={activateUser}
             deactivateUser={deactivateUser}
             showModals={showModals}

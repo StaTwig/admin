@@ -78,6 +78,7 @@
   right: 0px;
   background-color: #eaeaea;
   margin-left: 118px;
+  width: 108%;
 }
 
 .filter {
@@ -110,7 +111,6 @@
 
 .details-body {
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: row;
 }
@@ -119,3 +119,11 @@
   margin-left: 1rem;
   margin-right: 1rem;
 }
+
+.img-align {
+  width: '10px';
+  height: '15px';
+  margin-top: '0px';
+  margin-left: '38px'
+}
+

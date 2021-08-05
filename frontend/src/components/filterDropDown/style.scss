@@ -25,14 +25,19 @@
     border-radius: 12px;
     height: 40px;
     width: 119px;
-    line-height: 35px;
+    line-height: 38px;
     margin-bottom: 15px;
     color: #0093E9;
 }
 
 .li-element:hover {
-    background-color: aqua;
+    background-color: #F6F6F6;
     cursor: pointer;
+}
+
+.li-element-selected {
+    @extend .li-element;
+    background-color: #F6F6F6;
 }
 
 .filter-card-container ul {

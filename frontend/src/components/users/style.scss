@@ -101,7 +101,7 @@
 
   .filter {
     margin-left: 9rem;
-    margin-right: 3rem;
+    margin-right: 2rem;
   }
 
   .box {
@@ -135,25 +135,25 @@
 }
 
 .roleText {
-  width: 24%!important;
+  width: 24% !important;
   position: relative;
   left: -7px;
 }
 
 .locationText {
-  width: 24%!important;
+  width: 24% !important;
   position: relative;
   left: -8px;
 }
 
 .walletText {
-  width: 24%!important;
+  width: 24% !important;
   position: relative;
   left: -9px;
 }
 
 .emailText {
-  width: 24%!important;
+  width: 24% !important;
   position: relative;
   left: -9px;
 }
@@ -161,4 +161,11 @@
 .accountText {
   position: relative;
   left: -10px;
+}
+
+.imageFilterIcon {
+  width: 10px;
+  height: 15px;
+  margin-top: 0px;
+  margin-left: 60px;
 }
