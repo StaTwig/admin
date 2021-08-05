@@ -72,6 +72,7 @@ router.post("/updateInventories", InventoryController.updateInventories);
 router.post("/insertInventories", InventoryController.insertInventories);
 router.get("/trackProduct", InventoryController.trackProduct);
 router.get("/searchProduct", InventoryController.searchProduct);
+router.get("/getsearchsuggestions", InventoryController.autoCompleteSuggestions);
 
 router.post(
   '/addInventoriesFromExcel',

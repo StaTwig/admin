@@ -8,6 +8,7 @@ const utility = require("../helpers/utility");
 const { warehouseDistrictMapping } = require("../helpers/constants");
 const auth = require("../middlewares/jwt");
 const InventoryModel = require("../models/InventoryModel");
+const RecordModel = require('../models/RecordModel');
 const WarehouseModel = require("../models/WarehouseModel");
 const ShipmentModel = require("../models/ShipmentModel");
 const EmployeeModel = require("../models/EmployeeModel");
@@ -2952,7 +2953,7 @@ exports.searchProduct = [
   auth,
   async (req, res) => {
     try {
-      const {productName, producttype  } = req.query;
+      const { skip, limit,productName,producttype  } = req.query;
       var warehouseId = "";
       if (!req.query.warehouseId)
         warehouseId = req.user.warehouseId;
@@ -2961,7 +2962,7 @@ exports.searchProduct = [
       const warehouse = await WarehouseModel.findOne({ id: warehouseId })
       if (warehouse) {
         let elementMatchQuery={}
-        elementMatchQuery[`id`]=warehouse.warehouseInventory
+        elementMatchQuery['id']=warehouse.warehouseInventory
         if (productName) {
           elementMatchQuery[`products.name`] = productName;
         }
@@ -2986,6 +2987,8 @@ exports.searchProduct = [
         // }
         ])
           .sort({ createdAt: -1 })
+          .skip(parseInt(skip))
+          .limit(parseInt(limit));
         return apiResponse.successResponseWithData(
           res,
           "Inventory Details",
@@ -3005,6 +3008,33 @@ exports.searchProduct = [
 ];
 
 
+exports.autoCompleteSuggestions = [
+  auth,
+  async (req, res) => {
+    try {
+      const { searchString  } = req.query;
+       
+        const suggestions = await RecordModel.aggregate([
+          {$project: { _id: 0, value: "$id", record_type: "order"}},
+          {$unionWith: {coll: "products", pipeline: [ { $project: { _id: 0, value: "$name", record_type: "productName" } } ]}}, 
+          {$unionWith: {coll: "shipments", pipeline: [ { $project: { _id: 0, value: "$id", record_type: "shipment" } } ]}}, 
+          {$unionWith: {coll: "products", pipeline: [ { $project: { _id: 0, value: "$type", record_type: "productType" } } ]}}, 
+    {$match: {"value": {$regex: searchString ? searchString: ""} }},
+    {$limit: 10},
+    { $group: { _id: '$value', type: { "$first": "$record_type"}}},
+  ])
+          .sort({ createdAt: -1 })
+        return apiResponse.successResponseWithData(
+          res,
+          "Autocorrect Suggestions",
+          suggestions
+        );
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
 
 
 
