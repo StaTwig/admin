@@ -183,7 +183,7 @@ const DetailedGeographicalView = (props) => {
                 <Line
                   type="monotone"
                   dataKey="returns"
-                  name="Return Rate Percentage"
+                  name="Returns"
                   stroke="#A344B7"
                   strokeWidth={3}
                   dot={false}
