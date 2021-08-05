@@ -1001,14 +1001,9 @@ function getShipmentFilterCondition(filters, warehouseIds) {
         },
       ];
     } else if (filters.txn_type === 'SENT') {
-      matchCondition.supplier = {
-        id: filters.organization,
-      };
-
+      matchCondition["supplier.id"] = filters.organization;
     } else if (filters.txn_type === 'RECEIVED') {
-      matchCondition.receiver = {
-        id: filters.organization
-      };
+      matchCondition["receiver.id"] = filters.organization;
     }
   }
 
