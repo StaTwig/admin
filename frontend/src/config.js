@@ -49,6 +49,8 @@ export function config() {
       updateOrgTypesUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/configuration_service/updateOrganizationsByType`,
       addNewOrgTypesUrl: `${LOCAL_SERVER_URL_ADDRESS}/api/configuration_service/addNewOrgType`,
       imgDomainUrl: `${TEST_SERVER_URL}`,
+      getCountryDataUrl: `${TEST_SERVER_URL}/api/address_service/getCountries`,
+      getRegionDataUrl: `${TEST_SERVER_URL}/api/address_service/getRegions`,
       //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
       fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
       fetchCountriesByRegion:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
@@ -90,7 +92,9 @@ export function config() {
       getLocationApprovalUrl: `${TEST_SERVER_URL}/api/address_service/getLocationApprovals`,
       modifyLocationUrl: `${TEST_SERVER_URL}/api/address_service/modifyLocation`,
       imgDomainUrl: `${TEST_SERVER_URL}`,
-            //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
+      getCountryDataUrl: `${TEST_SERVER_URL}/api/address_service/getCountries`,
+      getRegionDataUrl: `${TEST_SERVER_URL}/api/address_service/getRegions`,
+           //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
       fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
       fetchCountriesByRegion:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
       fetchStateByCountry:`${TEST_SERVER_URL_VL}/productmanagement/api/location?country_id=`,
@@ -131,6 +135,8 @@ export function config() {
       getLocationApprovalUrl: `${PROD_SERVER_URL}/api/address_service/getLocationApprovals`,
       modifyLocationUrl: `${PROD_SERVER_URL}/api/address_service/modifyLocation`,
       imgDomainUrl: `${PROD_SERVER_URL}`,
+      getCountryDataUrl: `${TEST_SERVER_URL}/api/address_service/getCountries`,
+      getRegionDataUrl: `${TEST_SERVER_URL}/api/address_service/getRegions`,
       //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
       fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
       fetchCountriesByRegion:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
@@ -172,6 +178,8 @@ export function config() {
       getLocationApprovalUrl: `${ABINBEV_TEST_SERVER_URL}/api/address_service/getLocationApprovals`,
       modifyLocationUrl: `${ABINBEV_TEST_SERVER_URL}/api/address_service/modifyLocation`,
       imgDomainUrl: `${ABINBEV_TEST_SERVER_URL}`,
+      getCountryDataUrl: `${TEST_SERVER_URL}/api/address_service/getCountries`,
+      getRegionDataUrl: `${TEST_SERVER_URL}/api/address_service/getRegions`,
       //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
       fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
       fetchCountriesByRegion:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,
@@ -213,6 +221,9 @@ export function config() {
       getLocationApprovalUrl: `${ABINBEV_PROD_SERVER_URL}/api/address_service/getLocationApprovals`,
       modifyLocationUrl: `${ABINBEV_PROD_SERVER_URL}/api/address_service/modifyLocation`,
       imgDomainUrl: `${ABINBEV_PROD_SERVER_URL}`,
+      getCountryDataUrl: `${TEST_SERVER_URL}/api/address_service/getCountries`,
+      getRegionDataUrl: `${TEST_SERVER_URL}/api/address_service/getRegions`,
+     
       //The 4 endpoints below are written in theledger repo, Modify the server address after merging the VLadmin portal to test.vl.com
       fetchAllRegions:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=all`,
       fetchCountriesByRegion:`${TEST_SERVER_URL_VL}/productmanagement/api/location?region=`,

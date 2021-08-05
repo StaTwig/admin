@@ -9,6 +9,8 @@ import {
   SET_AFFILATED_ORGS,
   SET_ORGANISATIONS,
   SET_ORGANISATION_TYPES,
+  SET_COUNTRY_TYPES,
+  SET_REGION_TYPES,
 } from "../constants/organisationConstants";
 
 export const initialState = {
@@ -20,6 +22,8 @@ export const initialState = {
   affilatedPendingReq: [],
   affiliatedOrgs: [],
   list: [],
+  countries: [],
+  regions: []
 };
 
 export const organisationReducer = (state = initialState, action) => {
@@ -48,6 +52,10 @@ export const organisationReducer = (state = initialState, action) => {
       return { ...state, affiliatedOrgs: action.payload.data };
     case SET_ORGANISATIONS:
       return { ...state, list: action.payload.data };
+    case SET_COUNTRY_TYPES:
+      return { ...state, countries: action.payload };
+    case SET_REGION_TYPES:
+        return { ...state, regions: action.payload };
     case GET_FAILURE:
       return initialState;
     default:

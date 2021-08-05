@@ -15,6 +15,13 @@ const AddressDetails = (props) => {
             {address.region.regionName + ", " + address.country.countryName}
             <span className="row justify-content-md-center">&nbsp;</span>
           </p>
+          {address.employees && address.employees.length > 0 ?
+            address.employees.map(data => {
+              return <p className='txtColor'>
+                {data?.name}
+              </p>
+            }) : ''
+          }
           <p className="txtColor pt-0">
             {address?.warehouseAddress?.firstLine +
               ", " +

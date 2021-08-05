@@ -85,23 +85,6 @@ const SideBar = ({ match, location, user }) => {
             </span>
           </Link>
         </li>
-        <li className={url === "/affiliate" ? "active" : ""}>
-          <Link to="/affiliate">
-            <img
-              src={
-                url === "/affiliate"
-                  ? AffiliatedOrganisationSelectedIcon
-                  : AffiliatedOrganisationIcon
-              }
-              alt="Affiliate Organisation"
-            />
-            <span className="pt-2 text-center">
-              Affiliate
-              <br />
-              Organisation
-            </span>
-          </Link>
-        </li>
         <li className={url === "/configuration" ? "active" : ""}>
           <Link to="/configuration">
             <img
