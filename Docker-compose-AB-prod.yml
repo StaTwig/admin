@@ -27,6 +27,15 @@ services:
       - "traefik.http.routers.advancedanalytics.rule=Host(`abinbev.statledger.io`) && PathPrefix(`/advancedanalytics/`)"
       - "traefik.http.routers.advancedanalytics.tls=true"
       - "traefik.http.routers.advancedanalytics.tls.certresolver=lets-encrypt"
+      
+  cache:
+    image: "redis"
+    container_name: "cache"
+    restart: always
+    ports:
+      - "6379:6379"
+    labels:
+      - traefik.enable=false
 
   alert:
     build: './backend/alert_service'
