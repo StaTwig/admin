@@ -44,7 +44,7 @@ const DashBoardContainer = (props) => {
   });
 
   const organisationsList = useSelector((state) => {
-    return state.organisation.list;
+    return state.organisation.allList;
   });
 
   const usersList = useSelector((state) => {

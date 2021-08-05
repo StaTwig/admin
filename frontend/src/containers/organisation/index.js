@@ -34,7 +34,7 @@ const OrganisationContainer = (props) => {
   const [replicaOrgTypeData, setReplicaOrgTypeData] = useState([]);
 
   const [organisationList, setOrganisationList] = useState([]);
- 
+
   const [showDropDownForType, setShowDropDownForType] = useState(false);
   const [showDropDownForCreatedOn, setShowDropDownForCreatedOn] = useState(false);
   const [showDropDownForStatus, setShowDropDownForStatus] = useState(false);
@@ -61,8 +61,7 @@ const OrganisationContainer = (props) => {
       }
     } else {
       async function fetchData() {
-        const originalOrganisationData = await dispatch(getOrgs());
-        localStorage.setItem("organisationData", JSON.stringify(originalOrganisationData));
+        setOrganisationList(await dispatch(getOrgs()));
       }
       fetchData();
     }
@@ -90,20 +89,22 @@ const OrganisationContainer = (props) => {
   };
 
   useEffect(() => {
-      const organisationData = JSON.parse(localStorage.getItem('organisationData'));
-      
-      setCountryData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationData, 'country', 'countryName'))]);
-      setReplicaCountryData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationData, 'country', 'countryName'))]);
+    if (organisationList.length > 0) {
+      setCountryData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationList, 'country', 'countryName'))]);
+      setReplicaCountryData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationList, 'country', 'countryName'))]);
 
-      setRegionData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationData, 'region', 'regionName'))]);
-      setReplicaRegionData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationData, 'region', 'regionName'))]);
+      setRegionData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationList, 'region', 'regionName'))]);
+      setReplicaRegionData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationList, 'region', 'regionName'))]);
 
-      setStatusData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationData, 'status'))]);
-      setReplicaStatusData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationData, 'status'))]);
+      setStatusData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationList, 'status'))]);
+      setReplicaStatusData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationList, 'status'))]);
 
-      setOrgTypeData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationData, 'type'))]);
-      setReplicaOrgTypeData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationData, 'type'))]);
-  },[]);
+      setOrgTypeData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationList, 'type'))]);
+      setReplicaOrgTypeData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationList, 'type'))]);
+    }
+  }, [organisationList]);
+
+  console.log('country data: ', countryData);
 
   const updateOrgs = async (data) => {
     dispatch(turnOn());

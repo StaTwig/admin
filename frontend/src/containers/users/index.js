@@ -58,11 +58,10 @@ const UserContainer = (props) => {
       }
     } else {
       async function fetchData() {
-        const originalList = await dispatch(getOrgUsers());
-        localStorage.setItem('userData', JSON.stringify(originalList));
+        dispatch(getPermissions());
+        setUsersStateList([...await dispatch(getOrgUsers())]);
       }
       fetchData();
-      dispatch(getPermissions());
     }
   }, [params]);
 
@@ -92,22 +91,24 @@ const UserContainer = (props) => {
   };
 
   useEffect(() => {
-    const originalList = JSON.parse(localStorage.getItem('userData'));
+    const originalList = userStateList.length > 0 ? userStateList : usersList;
+    if(originalList.length > 0) {
+      setRoleData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(originalList, 'role'))]);
+      setRoleReplicaData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(originalList, 'role'))]);
+  
+      setAccountStatusData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(originalList, 'accountStatus'))]);
+      setAccountStatusReplicaData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(originalList, 'accountStatus'))]);
+  
+      setCalenderFilterJsonData([
+      { key: 'today', value: 'Today', checked: false },
+      { key: 'week', value: 'This week', checked: false },
+      { key: 'month', value: 'This Month', checked: false },
+      { key: 'lastThreeMonths', value: 'Last 3 Months', checked: false },
+      { key: 'lastSixMonths', value: 'Last 6 Months', checked: false },
+      { key: 'year', value: 'This Year', checked: false }]);
+    };
 
-    setRoleData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(originalList, 'role'))]);
-    setRoleReplicaData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(originalList, 'role'))]);
-
-    setAccountStatusData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(originalList, 'accountStatus'))]);
-    setAccountStatusReplicaData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(originalList, 'accountStatus'))]);
-
-    setCalenderFilterJsonData([
-    { key: 'today', value: 'Today', checked: false },
-    { key: 'week', value: 'This week', checked: false },
-    { key: 'month', value: 'This Month', checked: false },
-    { key: 'lastThreeMonths', value: 'Last 3 Months', checked: false },
-    { key: 'lastSixMonths', value: 'Last 6 Months', checked: false },
-    { key: 'year', value: 'This Year', checked: false }]);
-  }, []);
+  }, [userStateList]);
 
 
   const activateUser = async (data) => {
@@ -222,8 +223,6 @@ const UserContainer = (props) => {
       setUsersStateList([...usersList]);
     }
   };
-
-  console.log('setCalenderFilterJsonData:', calenderFilterJsonData);
 
   return (
     <div className="container-fluid p-0">

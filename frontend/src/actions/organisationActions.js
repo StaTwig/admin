@@ -13,6 +13,7 @@ import {
   SET_ORGANISATION_TYPES,
   SET_COUNTRY_TYPES,
   SET_REGION_TYPES,
+  SET_ALL_ORGANISATIONS,
 } from "../constants/organisationConstants";
 import { turnOn, turnOff } from "./spinnerActions";
 
@@ -112,7 +113,7 @@ export const getAllOrganisations = () => {
       dispatch(turnOn());
       const result = await axios.get(config().getAllOrgUrl);
       dispatch({
-        type: SET_ORGANISATIONS,
+        type: SET_ALL_ORGANISATIONS,
         payload: result.data,
       });
       dispatch(turnOff());
