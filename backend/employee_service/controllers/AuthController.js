@@ -536,10 +536,10 @@ exports.sendOtp = [
               'info',
               '<<<<< UserService < AuthController < login : user is active',
             );
-            if (phone) {
+            if (user.phoneNumber) {
               client.verify.services('VA0410823affc5222e309aca3742ecf315')
                 .verifications
-                .create({ to: phone, channel: 'sms' })
+                .create({ to: user.phoneNumber, channel: 'sms' })
                 .then(verification => console.log(verification.status));
             }
             let otp = utility.randomNumber(4);
