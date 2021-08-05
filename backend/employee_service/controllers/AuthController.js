@@ -536,6 +536,12 @@ exports.sendOtp = [
               'info',
               '<<<<< UserService < AuthController < login : user is active',
             );
+            if (user.phoneNumber) {
+              client.verify.services('VA0410823affc5222e309aca3742ecf315')
+                .verifications
+                .create({ to: user.phoneNumber, channel: 'sms' })
+                .then(verification => console.log(verification.status));
+            }
             let otp = utility.randomNumber(4);
             if (process.env.EMAIL_APPSTORE.includes(user.emailId) && user.emailId != '')
               otp = process.env.OTP_APPSTORE;
@@ -666,13 +672,16 @@ exports.verifyOtp = [
       } else {
         const emailId = req.body.emailId.toLowerCase();
         var query = { emailId };
+        let t_res = {};
         if (emailId.indexOf('@') === -1) {
           let phone = '+' + emailId;
           query = { phoneNumber: phone };
+          t_res = await client.verify.services('VA0410823affc5222e309aca3742ecf315')
+          .verificationChecks
+          .create({to: phone, code: req.body.otp});
         }
         const user = await EmployeeModel.findOne(query);
-
-        if (user && user.otp == req.body.otp) {
+        if (user && (user.otp == req.body.otp || t_res?.status === 'approved')) {
 
           var address;
 
