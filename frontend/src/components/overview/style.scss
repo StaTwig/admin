@@ -13,9 +13,9 @@
 
   .full-width-ribben {
     position: absolute;
-    left: -105px;
-    right: -80px;
-    margin-top: 1px;
+    left: -95px;
+    right: -30px;
+    margin-top: 0px;
          
     background-color: $eeGrey;
     @media screen and (max-width: 768px) {
@@ -32,7 +32,7 @@
   }
 
   .ribben-space {
-    margin-top: 7.5rem;
+    margin-top: 7rem;
 
     @media screen and (max-width: 768px) {
       margin-top: 2rem;
@@ -50,13 +50,13 @@
   .custom-card {
     margin-right: 0px;
     margin-top: -12px;
-    height: 101% !important;
+    height: 100% !important;
     padding: 0;
     display: flex;
     flex-direction: column;
       .card-title {
       margin-bottom: 0.75rem;
-      font-size: 17px;
+      font-size: 20px;
       font-weight: 500;
       color:#4D4F5C;
     }
@@ -108,7 +108,7 @@
   .panel {
     background: $eeGrey;
     padding: 1rem;
-    height: 85px;
+    height: 80px;
     display: flex;
     justify-content: left;
     align-items: center;
@@ -192,35 +192,45 @@
     }
 
     .count1{
-      font-size: 26px;
+      font-size: 30px;
       color: #0B65C1;
       font-weight: bold;
       //margin-top: 6px;
+      position: relative;
+      top: 8px;
     }
 
     .count2 {
-      font-size: 26px;
+      font-size: 30px;
       color:#2A9FAA;
       font-weight: bold;
+      position: relative;
+      top:8px;
     }
 
     .count3 {
-      font-size: 26px;
+      font-size: 30px;
       color: #0093E9;
       font-weight: bold;
+      position: relative;
+      top:8px;
     }
 
     .count4 {
-      font-size: 26px;
+      font-size: 30px;
       color: #FA7923;
       font-weight: bold;
+      position: relative;
+      top:8px;
     }
 
     
     .count5 {
-      font-size: 26px;
+      font-size: 30px;
       color: #FFAB1D;
       font-weight: bold;
+      position: relative;
+      top:8px;
     }
 
     .dayStatus {

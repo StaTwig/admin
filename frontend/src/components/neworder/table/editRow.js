@@ -46,9 +46,9 @@ const EditRow = props => {
   return (
     <div className="row ml-3" >
       <div className="trow row text-dark col">
-        <div className="col-3 pl-4 tcell p-2">
+        <div className="col-3 ml-3 tcell">
           <div className="">
-            <div className="d-flex flex-column">
+            <div className="col-13 d-flex flex-column">
               <div className="title recived-text">
                 {/* <DropdownButton
                   name={prod.type ? prod.type : "Select Product Category"}
@@ -75,7 +75,7 @@ const EditRow = props => {
         <div className="col-4 tcell text-center justify-content-center">
           <div className="">
             <div className="d-flex flex-row justify-content-between">
-              <div className="title recived-text w-50">
+              <div className="col-10 title recived-text w-50">
                 {/* <DropdownButton
                   name={prod.name ? prod.name : "Product Name"}
                   onSelect={item => { handleProductChange(index, item) }}
@@ -95,15 +95,16 @@ const EditRow = props => {
                         
                
               </div>
-              <div className="col-2 title recived-text align-self-center">{prod.id ? prod.id : <div className="select-placeholder-text">Product ID</div>}</div>
+              <div className="col-3 title recived-text align-self-center" style={{position:"relative",right:"20px"}}>{prod.id ? prod.id : <div className="" style={{fontSize:"14px",lineHeight:"21px",color:"#a8a8a8"}}>Product ID</div>}</div>
             </div>
           </div>
         </div>
-        <div className="col text-center justify-content-center ">{prod.manufacturer ? prod.manufacturer : <div className="select-placeholder-text">Manufacturer</div>}</div>
+        <div className="col-2 text-center justify-content-center ">{prod.manufacturer ? prod.manufacturer : <div className="select-placeholder-text">Manufacturer</div>}</div>
         <div className="divider1"></div>
-        <div className="col tcell text-center justify-content-center p-2">
+        <div className="col-2 tcell text-center justify-content-center p-2">
           <div className="">
             <input
+            style={{position:"relative",left:"-20px"}}
               className="form-control text-center"
               placeholder="Enter Quantity"
               onKeyPress={numbersOnly}

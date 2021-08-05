@@ -64,7 +64,8 @@ const editLocation = (props) => {
       console.log('results');
       console.log(result.data);   
       const warehouseInfo = result.data.data[0];
-      setregion(warehouseInfo.region.regionName);
+      const region = warehouseInfo.warehouseAddress.region ? warehouseInfo.warehouseAddress.region : warehouseInfo.region.regionName;
+      setregion(region);
       setAddressTitle(warehouseInfo.title);
       setAddressLine(warehouseInfo.warehouseAddress.firstLine);
       setCity(warehouseInfo.warehouseAddress.city);
@@ -206,7 +207,7 @@ const editLocation = (props) => {
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
                       <label className="required-field col-sm-6" htmlFor="addressTitle">Address Title</label>
-                      <div style={{width:50}}></div>
+                      
                       {/* <TextField style={{width:"800px"}}
                         id="standard-basic"
                         label="Enter Title" 
@@ -218,11 +219,11 @@ const editLocation = (props) => {
                           setAddressTitle(e.target.value);
                         }}
                       /> */}
-                      <Input
-                      style={{width:"800px",fontSize:"12px"}}
+                      <input
+                        style={{flexBasis:"47%"}}
+                        className="editlocP"
                         id="standard-basic"
                         type="text"
-                        className="form-control2"
                         name="addressTitle"
                         placeholder="Enter Address Title"
                         value={values.addressTitle}
@@ -246,8 +247,8 @@ const editLocation = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
                         <label className="required-field col-sm-6" htmlFor="region">Region</label>
-                        <div className="line1">
-                          <Select
+                        <div className="" style={{flexBasis:"47%"}}>
+                          <Autocomplete
                           value={values.region}
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
@@ -277,8 +278,8 @@ const editLocation = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
                       <label className="required-field col-sm-6" htmlFor="country">Country</label>
-                      <div className="line1">
-                          <Select
+                      <div className="" style={{flexBasis:"47%"}}>
+                          <Autocomplete
                           value={values.country}
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
@@ -325,8 +326,8 @@ const editLocation = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
                       <label className="required-field col-sm-6" htmlFor="state">State</label>
-                      <div className="line1">
-                          <Select
+                      <div className="" style={{flexBasis:"47%"}}>
+                          <Autocomplete
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
                           placeholder={<div className="select-placeholder-text">Select State</div>}
@@ -368,8 +369,8 @@ const editLocation = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
                       <label className="required-field col-sm-6" htmlFor="city">City</label>
-                      <div className="line1">
-                          <Select
+                      <div className="" style={{flexBasis:"47%"}}>
+                          <Autocomplete
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
                           placeholder={<div className="select-placeholder-text">Select City</div>}
@@ -405,12 +406,10 @@ const editLocation = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
                         <label className="required-field col-sm-6" htmlFor="addressLine">Address Line</label>
-                        <div style={{width:50}}></div>
-                        <Input
-                        style={{width:"800px",fontSize:"12px"}}
+                        <input
+                        style={{flexBasis:"47%"}}
                         id="standard-basic"
-                        type="text"
-                        className="form-control2"
+                        className="editlocP mt-2"
                         name="addressTitle"
                         placeholder="Enter Address Line"
                         value={values.addressLine}
@@ -442,12 +441,11 @@ const editLocation = (props) => {
                     <div className="col-md-6 com-sm-16">
                       <div className="form-group">
                         <label className="required-field col-sm-6" htmlFor="Select Location">Pincode</label>
-                        <div style={{width:50}}></div>
-                        <Input
-                          style={{width:"800px",fontSize:"12px"}}
+                        <input
+                          style={{flexBasis:"47%"}}
                           id="standard-basic"
                           type="number"
-                          className="form-control2"
+                          className="editlocP mt-2"
                           name="pincode"
                           placeholder="Enter Pincode"
                           value={values.pincode}

@@ -6,7 +6,7 @@ Vaccine Ledger
 
 [Roadmap](https://trello.com/b/DCItcgrQ/statwig-product-roadmap)
 
-[SlackChannel](https://join.slack.com/t/statwig-group/shared_invite/zt-flzyf6ci-giVkco5NmdvZjVuO85~dlw)
+[SlackChannel](https://join.slack.com/t/statwig/shared_invite/zt-tau73hhe-o~~ill48n~5EfUs7r8OkRA)
 
 [Wiki](https://gitlab.com/statwig-public/theledger/-/wikis/home)
 
@@ -41,7 +41,7 @@ Branch out from ```development``` , Merge requests shall be to development, no d
 
 # Flow 
 
-Browser / Client  ---> traefik ---> Services
+**Browser** / **Client**  ---> **traefik** ---> **Services**
 
 Frontends also is a service , a docker container of nginx serving the files
 
@@ -56,7 +56,7 @@ Dependencies can be installed by running ```dependencyinstaller.sh```
 
 
 ## Deployment Strategy:
-Docker with Docker Compose
+**Docker with Docker Compose**
 
 - [x] Every Service has a Dockerfile in its root folder, which reflects in building that Docker Image.
 
@@ -92,19 +92,28 @@ Docker with Docker Compose
 
 3) Run Dependency installer script to download Docker Engine , Docker Compose and create Docker Network named : Proxy
 
-4) Build the images
+4) Create a folder `env`
+
+```
+mkdir env
+```
+Add a file `ledger.env` with the environment varibles
+
+5) Build the images
 ```
 docker-compose -f Docker-compose.yml build
 ```
 Builds all the docker containers as images and docker can caches the old ones
 
-5) 
+All new built images are tagged with `latest` tag
+
+6) 
 ```
 docker-compse -f Docker-compose.yml up -d
 ```
 Running all services in as a daemon process
 
-6) If wanted to see the logs(console) 
+6) If wanted to see the logs(console) / Run process in Foreground  
 ```
 docker-compse -f Docker-compose.yml up 
 ```
@@ -118,6 +127,18 @@ docker-compse -f Docker-compose.yml down
 7) To properlly stop all services 
 ```
 docker-compse -f Docker-compose.yml down
+```
+
+**Note:**
+
+1) To remove Previous Build images
+```
+docker image prune -a
+```
+
+2) To clear build cache
+```
+docker builder prune -a
 ```
 
 ##  Run Docker commands without sudo
@@ -139,6 +160,8 @@ $ sudo service docker restart
 
 ## Notice :
 - Don't store any data that needs to be persistent in the services, as docker containers are volatile and data can be lost , for every docker image restart / New start 
+
+- We are not binding an Volume to docker containers
 
 
 ## References

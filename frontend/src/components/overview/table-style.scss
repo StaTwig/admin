@@ -8,10 +8,10 @@
     justify-content: space-between;
     flex: 1;
     & > div {
-      margin-bottom: 15px;
+      margin-bottom: 20px;
       text-align: left;
       margin-right: 0px;
-      font-size: 10px;
+      font-size: 12px;
       color: #000000;
       @media (min-width: $xl) {
         font-size: 10px;
@@ -25,14 +25,16 @@
       background-color: #f5f1f1;
       // margin: 0;  
       margin-right: 0;
+      font-size: 12px;
     }
 
     .combine-data {
       position: relative;
-      left: 30%;
+      left: 40%;
       display: flex;
       text-align: center;
-      word-break:break-word;
+      font-size: 12px;
+      //word-break:break-word;
       a {
         color: #0093e9;
         font-size: 9px;

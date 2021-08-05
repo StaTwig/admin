@@ -16,6 +16,10 @@ const BreweryDetailedView = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {
     (async () => {
+      let qp = '';
+      const p = props.params;
+      if (p.state) qp += '&state=' + p.state;
+      if (p.district) qp += '&district=' + p.district;
       let cond =
         '?orgType=' +
         (props?.Otype ? props.Otype : 'ALL_VENDORS') +
@@ -24,7 +28,8 @@ const BreweryDetailedView = (props) => {
         '&pid=' +
         prop.id +
         '&brand=' +
-        prop.manufacturer;
+        prop.manufacturer +
+        qp;
       const result = await dispatch(getAllOrganisationStats(cond));
       let n = result.data.filter((a) => a.type == 'S1');
       for (let org of n) {
@@ -130,8 +135,8 @@ const BreweryDetailedView = (props) => {
                   <tr>
                     <th scope="col">Vendor</th>
                     <th scope="col">State</th>
-                    <th scope="col">Return Target</th>
-                    <th scope="col">Return Rate Percentage</th>
+                    <th scope="col">Sales</th>
+                    <th scope="col">Returns</th>
                   </tr>
                 </thead>
                 <tbody>

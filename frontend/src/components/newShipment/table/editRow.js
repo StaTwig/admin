@@ -127,7 +127,7 @@ const handleChange = (value) =>
   return (
     <div className="row ml-3 mr-1">
       <div className="trow row mr-1 col">
-        <div className="col pl-4 tcell p-2">
+        <div className="col pl-4 tcell">
           <div className=" p-0">
             {/* <div className="profileIconRound recived-bg">OPV</div> */}
 
@@ -156,8 +156,8 @@ const handleChange = (value) =>
             </div>
 </div>
 </div>
-
-<div className="col pl-4 tcell p-2">
+<div className="Divider1"></div>
+<div className="col tcell">
           <div className=" p-0">
             <div className="col tcell text-center justify-content-center pl-0">
               <div className="title recived-text">
@@ -191,7 +191,7 @@ const handleChange = (value) =>
             </div>
           </div>
         </div>
-        <div className="col tcell text-center justify-content-center p-2">{prod.manufacturer ? prod.manufacturer : "Manufacturer"}</div>
+        <div className="col tcell text-center justify-content-center p-2">{prod.manufacturer ? prod.manufacturer : <div className="select-placeholder-text">Manufacturer</div>}</div>
         <div className="col tcell text-center justify-content-center p-2">
           <div className="">
             <input

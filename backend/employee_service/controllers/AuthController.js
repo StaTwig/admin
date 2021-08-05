@@ -291,7 +291,7 @@ exports.checkEmail = [
             "counters.$.value": 1
           }
         })
-        const empCounter = await CounterModel.findOne({ 'counters.name': "employeeId" }, { "counters.name.$": 1 })
+        const empCounter = await CounterModel.findOne({ 'counters.name': "employeeId" }, { "counters.$": 1 })
         var employeeId = empCounter.counters[0].format + empCounter.counters[0].value;
         //var employeeId = uniqid('emp-');
         var employeeStatus = 'NOTAPPROVED';
@@ -311,7 +311,8 @@ exports.checkEmail = [
             //   }
             // }
             const country = req.body?.address?.country ? req.body.address?.country : 'India';
-            const address = req.body?.address ? req.body.address : {};
+            const region = req.body?.address?.region ? req.body.address?.region : 'Asia';
+            const address = req.body?.address ? req.body.address :  {};
             addr = address.line1 + ', ' + address.city + ', ' + address.state + ', ' + address.pincode;
             const incrementCounterOrg = await CounterModel.update({
               'counters.name': "orgId"
@@ -320,7 +321,7 @@ exports.checkEmail = [
                 "counters.$.value": 1
               }
             })
-            const orgCounter = await CounterModel.findOne({ 'counters.name': "orgId" }, { "counters.name.$": 1 })
+            const orgCounter = await CounterModel.findOne({ 'counters.name': "orgId" }, { "counters.$": 1 })
             organisationId = orgCounter.counters[0].format + orgCounter.counters[0].value;
             //organisationId = uniqid('org-');
             const incrementCounterWarehouse = await CounterModel.update({
@@ -330,7 +331,7 @@ exports.checkEmail = [
                 "counters.$.value": 1
               }
             })
-            const warehouseCounter = await CounterModel.findOne({ 'counters.name': "warehouseId" }, { "counters.name.$": 1 })
+            const warehouseCounter = await CounterModel.findOne({ 'counters.name': "warehouseId" }, { "counters.$": 1 })
             warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
             //warehouseId = uniqid('war-');
             const org = new OrganisationModel({
@@ -342,6 +343,9 @@ exports.checkEmail = [
               postalAddress: addr,
               warehouses: [warehouseId],
               warehouseEmployees: [employeeId],
+              region: {
+                regionName: region
+              },
               country: {
                 countryId: '001',
                 countryName: country
@@ -357,7 +361,7 @@ exports.checkEmail = [
                 "counters.$.value": 1
               }
             })
-            const invCounter = await CounterModel.findOne({ 'counters.name': "inventoryId" }, { "counters.name.$": 1 })
+            const invCounter = await CounterModel.findOne({ 'counters.name': "inventoryId" }, { "counters.$": 1 })
             const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
             //const inventoryId = uniqid('inv-');
             const inventoryResult = new InventoryModel({ id: inventoryId });
@@ -373,12 +377,16 @@ exports.checkEmail = [
               warehouseAddress: {
                 firstLine: address.line1,
                 secondLine: "",
+                region: address.region,
                 city: address.city,
                 state: address.state,
                 country: address.country,
                 landmark: "",
                 zipCode: address.pincode
               },
+              region: {
+                            regionName: region
+                    },
               country: {
                 countryId: '001',
                 countryName: country
@@ -690,16 +698,32 @@ exports.verifyOtp = [
             address = user.walletAddress
           }
 
-          let userData = {
-            id: user.id,
-            firstName: user.firstName,
-            emailId: user.emailId,
-            role: user.role,
-            warehouseId: user.warehouseId[0],
-            organisationId: user.organisationId,
-            walletAddress: address,
-	    phoneNumber: user.phoneNumber
-          };
+	  const activeWarehouse = await WarehouseModel.findOne( {$and: [ {"id": {$in: user.warehouseId }},{"status": "ACTIVE" }]})
+    var userData ;
+    if(activeWarehouse) {
+      userData = {
+        id: user.id,
+        firstName: user.firstName,
+        emailId: user.emailId,
+        role: user.role,
+        warehouseId: activeWarehouse.id,
+        organisationId: user.organisationId,
+        walletAddress: address,
+        phoneNumber: user.phoneNumber
+      };
+    }
+    else{
+      userData = {
+        id: user.id,
+        firstName: user.firstName,
+        emailId: user.emailId,
+        role: user.role,
+        warehouseId: [],
+        organisationId: user.organisationId,
+        walletAddress: address,
+        phoneNumber: user.phoneNumber
+      };
+    }
           //Prepare JWT token for authentication
           const jwtPayload = userData;
           const jwtData = {
@@ -757,23 +781,45 @@ exports.userInfo = [
           const org = await OrganisationModel.findOne({ id: organisationId }, 'name configuration_id type');
           const warehouse = await EmployeeModel.findOne({ id }, { _id: 0, warehouseId: 1 });
           const warehouseArray = await WarehouseModel.find({ id: { "$in": warehouse.warehouseId },$or:[{status: 'ACTIVE'}, {status: {$exists: false}}] })
-          let user_data = {
-            firstName,
-            lastName,
-            emailId,
-            phoneNumber,
-            walletAddress,
-            affiliatedOrganisations,
-            organisation: `${org.name}/${organisationId}`,
-            warehouseId,
-            accountStatus,
-            role,
-            photoId,
-            configuration_id: org.configuration_id,
-            type: org.type,
-            location: postalAddress,
-            warehouses: warehouseArray
-          };
+          var user_data;
+          if(org){
+            user_data = {
+              firstName,
+              lastName,
+              emailId,
+              phoneNumber,
+              walletAddress,
+              affiliatedOrganisations,
+              organisation: `${org.name}/${organisationId}`,
+              warehouseId,
+              accountStatus,
+              role,
+              photoId,
+              configuration_id: org.configuration_id,
+              type: org.type,
+              location: postalAddress,
+              warehouses: warehouseArray
+            };
+          }
+          else{
+            user_data = {
+              firstName,
+              lastName,
+              emailId,
+              phoneNumber,
+              walletAddress,
+              affiliatedOrganisations,
+              organisation: `NOT_ASSIGNED`,
+              warehouseId,
+              accountStatus,
+              role,
+              photoId,
+              configuration_id: null,
+              type: null,
+              location: postalAddress,
+              warehouses: warehouseArray
+            };
+          }
           logger.log(
             'info',
             '<<<<< UserService < AuthController < userInfo : sending profile',
@@ -837,6 +883,7 @@ exports.updateProfile = [
           firstName: firstName,
           emailId: employee.emailId,
           role: employee.role,
+	  organisationId: employee.organisationId,
           warehouseId: warehouseId,
           phoneNumber: employee.phoneNumber
         };
@@ -1145,7 +1192,7 @@ exports.addWarehouse = [
         }
       })
 
-      const invCounter = await CounterModel.findOne({ 'counters.name': "inventoryId" }, { "counters.name.$": 1 })
+      const invCounter = await CounterModel.findOne({ 'counters.name': "inventoryId" }, { "counters.$": 1 })
       const inventoryId = invCounter.counters[0].format + invCounter.counters[0].value;
       const inventoryResult = new InventoryModel({ id: inventoryId });
       await inventoryResult.save();
@@ -1170,7 +1217,7 @@ exports.addWarehouse = [
         }
       })
 
-      const warehouseCounter = await CounterModel.findOne({ 'counters.name': "warehouseId" }, { "counters.name.$": 1 })
+      const warehouseCounter = await CounterModel.findOne({ 'counters.name': "warehouseId" }, { "counters.$": 1 })
       const warehouseId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
 
       const loc = await getLatLongByCity(warehouseAddress.city+','+warehouseAddress.country);
@@ -1234,9 +1281,13 @@ exports.updateWarehouseAddress = [
   auth,
   async (req, res) => {
     try {
+       const loc = await getLatLongByCity( req.body.warehouseAddress.city+','+ req.body.warehouseAddress.country);
+      const data = req.body;
+      data.location = loc;
+      data.status = "NOTVERIFIED";
       await WarehouseModel.findOneAndUpdate(
         { id: req.query.warehouseId },
-        req.body,
+        data,
         { new: true }
       )
         .then((warehouse) => {
@@ -1782,9 +1833,7 @@ exports.getwarehouseByType = [
   async (req, res) => {
     try {
       const organisationId = req.query.id;
-      console.log(organisationId);
       const organisations = await ConfigurationModel.find({ id: organisationId }, 'warehouseTypes.id warehouseTypes.name')
-      console.log(organisations)
       return apiResponse.successResponseWithData(
         res,
         "Operation success",
@@ -1872,7 +1921,6 @@ exports.switchLocation = [
       const {
         warehouseId,
       } = req.body;
-
       const returnData = { isRefresh: false };
       if (warehouseId !== req.user.warehouseId) {
         let userData = {
@@ -1880,6 +1928,7 @@ exports.switchLocation = [
           firstName: employee.firstName,
           emailId: employee.emailId,
           role: employee.role,
+	  organisationId: employee.organisationId,
           warehouseId: warehouseId,
           phoneNumber: employee.phoneNumber
         };

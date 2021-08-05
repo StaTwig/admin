@@ -70,11 +70,11 @@ const AddLocation = (props) => {
       postalAddress: props.user.postalAddress,
       region: values.region,
       country: props.user.warehouseAddress_country,
-      location: {
-        longitude: '0',
-        latitude: '0',
-        geohash: '1231nejf923453',
-      },
+      // location: {
+      //   longitude: '0',
+      //   latitude: '0',
+      //   geohash: '1231nejf923453',
+      // },
       warehouseAddress: {
         region: values.region,
         firstLine: values.addressLine,
@@ -92,7 +92,7 @@ const AddLocation = (props) => {
     const result = await addWarehouse(data);
     console.log("Result");
     console.log(result);
-    if(result.status = 200){
+    if(result.data.status != 0){
       console.log('Added Location');
       console.log(result);
       setAddedLocationModal(true);
@@ -181,21 +181,19 @@ const AddLocation = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
                       <label className="required-field col-sm-6" htmlFor="addressTitle">Address Title</label>
-                      
-                      <Input
-                      style={{width:"800px",fontSize:"12px"}}
-                        id="standard-basic"
-                        placeholder="Enter Title" 
-                        className="form-control2"
-                        name="addressTitle"
-                        value={values.addressTitle}
-                        onBlur={handleBlur}
-                        onChange={(e) => {
+                      <input
+                      style={{flexBasis:"47%"}}
+                      className="addlocP"
+                      type="text"
+                      id="referenceShipmentId"
+                      name="addressTitle"
+                      placeholder="Enter Title" 
+                      value={values.addressTitle}
+                      onBlur={handleBlur}
+                      onChange={(e) => {
                           setAddressTitle(e.target.value);
                         }}
-                      
-                      />
-                      
+                    />
                     { /*  {errors.addressTitle && touched.addressTitle && (
                         <span className="error-msg text-danger-ANL">
                           {errors.addressTitle}
@@ -208,8 +206,8 @@ const AddLocation = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
                         <label className="required-field col-sm-6" htmlFor="region">Region</label>
-                        <div className="line1">
-                          <Select
+                        <div className="" style={{flexBasis:"47%"}}>
+                        <Autocomplete
                           value={region}
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
@@ -238,8 +236,8 @@ const AddLocation = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
                       <label className="required-field col-sm-6" htmlFor="country">Country</label>
-                      <div className="line1">
-                          <Select
+                      <div className="" style={{flexBasis:"47%"}}>
+                          <Autocomplete
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
                           placeholder={<div className="select-placeholder-text">Select Country</div>}
@@ -269,8 +267,8 @@ const AddLocation = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
                       <label className="required-field col-sm-6" htmlFor="state">State</label>
-                      <div className="line1">
-                          <Select
+                      <div className="" style={{flexBasis:"47%"}}>
+                          <Autocomplete
                           labelId="demo-simple-select-label"
                           id="demo-simple-select"
                           placeholder={<div className="select-placeholder-text">Select State</div>}
@@ -299,12 +297,12 @@ const AddLocation = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
                       <label className="required-field col-sm-6" htmlFor="city">City</label>
-                      <div className="line1">
-                      <Select
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      placeholder={<div className="select-placeholder-text">Select State</div>}
-                      value={city}
+                      <div className="" style={{flexBasis:"47%"}}>
+                      <Autocomplete
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
+                          placeholder={<div className="select-placeholder-text">Select State</div>}
+                          value={city}
                           onChange={(event, newValue) => {
                             setCity(newValue);
                           }}
@@ -337,11 +335,11 @@ const AddLocation = (props) => {
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
                         <label className="required-field col-sm-6" htmlFor="addressLine">Address Line</label>
-                        <Input
-                        style={{width:"800px",fontSize:"12px"}}
+                        <input
+                        style={{flexBasis:"47%"}}
                         id="standard-basic"
                         placeholder="Enter Address Line" 
-                        className="form-control2"
+                        className="addlocP mt-2"
                         name="addressTitle"
                         value={values.addressLine}
                         onBlur={handleBlur}
@@ -372,11 +370,12 @@ const AddLocation = (props) => {
                     <div className="col-md-6 com-sm-16">
                       <div className="form-group">
                         <label className="required-field col-sm-6" htmlFor="Select Location">Pincode</label>
-                        <Input
-                        style={{width:"800px",fontSize:"12px"}}
+                        <input
+                        type="number"
+                        style={{flexBasis:"47%"}}
                         id="standard-basic"
                         placeholder="Pincode" 
-                        className="form-control2"
+                        className="addlocP mt-2"
                         name="pincode"
                             value={values.pincode}
                             onBlur={handleBlur}

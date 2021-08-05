@@ -8,17 +8,16 @@ const utility = require("../helpers/utility");
 const { warehouseDistrictMapping } = require("../helpers/constants");
 const auth = require("../middlewares/jwt");
 const InventoryModel = require("../models/InventoryModel");
+const RecordModel = require('../models/RecordModel');
 const WarehouseModel = require("../models/WarehouseModel");
 const ShipmentModel = require("../models/ShipmentModel");
-const RegionModel = require("../models/RegionModel");
 const EmployeeModel = require("../models/EmployeeModel");
 const AtomModel = require("../models/AtomModel");
 const ProductModel = require("../models/ProductModel");
 const NotificationModel = require("../models/NotificationModel");
 const logEvent = require("../../../utils/event_logger");
 const checkToken = require("../middlewares/middleware").checkToken;
-const checkPermissions =
-  require("../middlewares/rbac_middleware").checkPermissions;
+const checkPermissions = require("../middlewares/rbac_middleware").checkPermissions;
 const axios = require("axios");
 
 const fs = require("fs");
@@ -32,9 +31,6 @@ const stream_name = process.env.STREAM;
 const init = require('../logging/init');
 const OrganisationModel = require('../models/OrganisationModel');
 const AnalyticsModel = require('../models/AnalyticsModel');
-const StateDistrictStaticDataModel = require("../models/StateDistrictStaticDataModel");
-const { request } = require("http");
-const { match } = require("assert");
 const logger = init.getLog();
 const CENTRAL_AUTHORITY_ID = null;
 const CENTRAL_AUTHORITY_NAME = null;
@@ -76,7 +72,7 @@ exports.getTotalCount = [
         "error",
         "<<<<< InventoryService < InventoryController < getTotalCount : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -117,7 +113,7 @@ exports.getTotalCountOnHold = [
         "error",
         "<<<<< InventoryService < InventoryController < getTotalCountOnHold : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -158,7 +154,7 @@ exports.getExpiringInventory = [
         "error",
         "<<<<< InventoryService < InventoryController < getExpiringInventory : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -200,7 +196,7 @@ exports.getInventoryforProduct = [
         "error",
         "<<<<< InventoryService < InventoryController < getInventoryforProduct : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -251,7 +247,7 @@ exports.getInventoryDetailsForProduct = [
         "error",
         "<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -517,7 +513,7 @@ exports.getAllInventoryDetails = [
         "error",
         "<<<<< InventoryService < InventoryController < getAllInventoryDetails : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -604,7 +600,7 @@ exports.updateInventories = [
       // compute(event_data).then((response) => console.log(response))
       apiResponse.successResponseWithData(res, "Updated Success");
     } catch (e) {
-      apiResponse.ErrorResponse(res, e);
+      apiResponse.ErrorResponse(res, e.message);
     }
   },
 ];
@@ -739,251 +735,7 @@ exports.insertInventories = [
       // compute(event_data).then((response) => console.log(response))
       apiResponse.successResponseWithData(res, "Inserted Success");
     } catch (e) {
-      apiResponse.ErrorResponse(res, e);
-    }
-  },
-];
-
-exports.getAllStates = [
-  auth,
-  async (req, res) => {
-    try {
-      const allStates = await StateDistrictStaticDataModel.find().distinct(
-        "state"
-      );
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        allStates
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-exports.getCountries = [
-  auth,
-  async (req, res) => {
-    try {
-      const countries = await WarehouseModel.aggregate([{ $match :{'warehouseAddress.region' : req.query.region}},
-      {
-         $group:
-           {
-             _id: "$warehouseAddress.country",
-           }
-       }
-  ]);
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        countries
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-exports.getStatesByCountry = [
-  auth,
-  async (req, res) => {
-    try {
-      const allStates = await WarehouseModel.aggregate([{ $match :{'warehouseAddress.country': req.query.country}},
-      {
-         $group:
-           {
-             _id: "$warehouseAddress.state",
-           }
-       }
-  ]);
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        allStates
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-exports.getCitiesByState = [
-  auth,
-  async (req, res) => {
-    try {
-      const allCities = await WarehouseModel.aggregate([{ $match :{'warehouseAddress.state': req.query.state}},
-      {
-         $group:
-           {
-             _id: "$warehouseAddress.city",
-           }
-       }
-  ]);
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        allCities
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-exports.getWarehousesByCity = [
-  auth,
-  async (req, res) => {
-    try {
-      var allWarehouses = await WarehouseModel.aggregate([{ $match :{'warehouseAddress.city': req.query.city}},
-      {
-         $group:
-           {
-             _id: "$id",
-           }
-       }
-  ]);
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        allWarehouses
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-
-exports.getDistrictsByState = [
-  auth,
-  async (req, res) => {
-    try {
-      const _selectedState = req.query.state;
-      const allStates = await StateDistrictStaticDataModel.find({
-        state: _selectedState,
-      }).distinct("district");
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        allStates
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-
-exports.getVendorsByDistrict = [
-  auth,
-  async (req, res) => {
-    try {
-      const _selectedDistrict = req.query.district;
-      const _vendorType = req.query.vendorType;
-      const allVendors = await OrganisationModel.find({
-        district: _selectedDistrict,
-        type: _vendorType,
-      });
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        allVendors
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-
-exports.getAllSKUs = [
-  auth,
-  async (req, res) => {
-    try {
-      const allSKUs = await ProductModel.aggregate([
-        {
-          $group: {
-            _id: { externalId: "$externalId", name: "$name" }
-          }
-        },
-        {
-          $replaceRoot: {
-            newRoot: {
-              $mergeObjects: ["$_id", "$$ROOT"]
-            }
-          }
-        },
-        {
-          $project: {
-            _id: 0,
-            id: "$externalId",
-            name: 1
-          }
-        }
-      ]).sort({ name: 1 });
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        allSKUs
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-
-exports.getOrganizationsByType = [
-  auth,
-  async (req, res) => {
-    try {
-      const filters = req.query;
-      let matchCondition = {};
-      if (
-        filters.orgType === "BREWERY" ||
-        filters.orgType === "S1" ||
-        filters.orgType === "S2"
-      ) {
-        matchCondition.type = filters.orgType;
-      } else if (filters.orgType === "ALL_VENDORS") {
-        matchCondition.$or = [{ type: "S1" }, { type: "S2" }];
-      }
-
-      const organisations = await OrganisationModel.aggregate([
-        {
-          $match: matchCondition,
-        },
-      ]);
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        organisations
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-
-exports.getOrganizationInfoByID = [
-  auth,
-  async (req, res) => {
-    try {
-      const orgId = req.query.orgId;
-      const organisation = await OrganisationModel.findOne({ id: orgId });
-      const warehouseIds = organisation.warehouses;
-      const stats = await AnalyticsModel.find({
-        warehouseId: { $in: warehouseIds },
-      });
-      let totalStock = 0;
-      stats.forEach((stat) => {
-        totalStock = totalStock + parseInt(stat.returns);
-      });
-
-      let responseObj = {
-        organisation,
-        totalStock,
-      };
-      return apiResponse.successResponseWithData(
-        res,
-        "Operation success",
-        responseObj
-      );
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      apiResponse.ErrorResponse(res, e.message);
     }
   },
 ];
@@ -1034,7 +786,7 @@ exports.addProductsToInventory = [
           const employee = await EmployeeModel.findOne({ id });
           //var warehouseId = req.user.warehouseId;
            if (!req.query.warehouseId)
-             warehouseId = employee.warehouseId[0];
+             warehouseId = req.user.warehouseId;
            else
              warehouseId = req.query.warehouseId;
           console.log(warehouseId)
@@ -1215,7 +967,7 @@ exports.addProductsToInventory = [
               if (atomsArray.length > 0) await AtomModel.insertMany(atomsArray);
               await inventory.save();
             } catch (err) {
-              console.log("err", err);
+              console.log("err", err.message);
             }
             /*AtomModel.insertMany(atoms).then(async (res, err) =>  {
              if(err) {
@@ -1298,7 +1050,7 @@ exports.addProductsToInventory = [
         "error",
         "<<<<< InventoryService < InventoryController < addMultipleInventories : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1501,7 +1253,7 @@ exports.addInventoriesFromExcel = [
         }
       });
     } catch (e) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1538,7 +1290,7 @@ exports.trackProduct = [
         "error",
         "<<<<< ShipmentService < ShipmentController < trackProduct : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1573,7 +1325,7 @@ exports.getInventoryDetails = [
         );
       }
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1830,7 +1582,7 @@ exports.getGroupedInventoryDetails = [
         "error",
         "<<<<< InventoryService < InventoryController < getGroupedInventoryDetails : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1883,7 +1635,7 @@ exports.getInventoryDetailsByBatchNumber = [
         "error",
         "<<<<< InventoryService < InventoryController < getInventoryDetailsByBatchNumber : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1948,7 +1700,7 @@ exports.getBatchDetailsByBatchNumber = [
         "error",
         "<<<<< InventoryService < InventoryController < getBatchDetailsByBatchNumber : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2007,56 +1759,7 @@ exports.getProductListCounts = [
   },
 ];
 
-exports.getProductDetailsByWarehouseId = [
-  auth,
-  async (req, res) => {
-    try {
-      const { warehouseId } = req.query;
-      const warehouseDetails = await WarehouseModel.findOne({
-        id: warehouseId,
-      });
-      const val = warehouseDetails.warehouseInventory;
-      const productList = await InventoryModel.find({ id: val });
-      console.log(warehouseDetails);
-      
-      const list = JSON.parse(JSON.stringify(productList[0].inventoryDetails));
-      var productArray = [];
-      for (j = 0; j < list.length; j++) {
-        var productId = list[j].productId;
-        const product = await ProductModel.find({ id: productId });
-        var product1 = {
-          productName: product[0].name,
-          productId: product[0].id,
-          manufacturer: product[0].manufacturer,
-          quantity: list[j].quantity ? list[j].quantity : 0,
-          unitofMeasure:product[0].unitofMeasure
-        };
-        productArray.push(product1);
-      }
-      let { firstLine, secondLine, city, state, country, zipCode } = warehouseDetails.warehouseAddress;
-      let address = firstLine +" "+(secondLine ? secondLine + ' ' : '') + city +' '+ state+' '+zipCode+' '+country;
-      var warehouse = {
-        warehouseCountryId: warehouseDetails.country.countryId,
-        warehouseCountryName: warehouseDetails.country.countryName,
-        warehouseId: warehouseDetails.id,
-        warehouseName: warehouseDetails.title,
-        warehouseAddress: address,
-        warehouseLocation: warehouseDetails.location,
-      };
 
-      return apiResponse.successResponseWithData(res, "Fetch success", {
-        warehouse,
-        productArray,
-      });
-    } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
-      );
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
 
 exports.getEmployeeDetailsByWarehouseId = [
   auth,
@@ -2075,109 +1778,11 @@ exports.getEmployeeDetailsByWarehouseId = [
         "error",
         "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
 
-exports.getCountryDetailsByRegion = [
-  auth,
-  async (req, res) => {
-    try {
-      const { region } = req.query;
-      const regionDetails = await RegionModel.find({ name: region });
-      console.log(regionDetails[0].country);
-      // var countryArray = [];
-      /*for (j=0;j<regionDetails.length;j++)
-                   {
-                        var countryName = countryDetails[j].country;
-                        countryArray.push(countryName)
-                   } */
-
-      return apiResponse.successResponseWithData(res, "Fetch success", {
-        countries: regionDetails[0].country,
-      });
-    } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
-      );
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-
-exports.getRegions = [
-  auth,
-  async (req, res) => {
-    try {
-      const regions = await RegionModel.find({});
-      return apiResponse.successResponseWithData(res, "Regions", regions);
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-
-exports.getWarehouseDetailsByRegion = [
-  auth,
-  async (req, res) => {
-    try {
-      const { region } = req.query;
-      const warehouseDetails = await WarehouseModel.find({
-        "region.regionName": region,
-      });
-
-      var warehouseArray = [];
-      for (j = 0; j < warehouseDetails.length; j++) {
-        var warehouseId = warehouseDetails[j];
-        warehouseArray.push(warehouseId);
-      }
-
-      return apiResponse.successResponseWithData(
-        res,
-        "Fetch success",
-        warehouseArray
-      );
-    } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
-      );
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-
-exports.getWarehouseDetailsByCountry = [
-  auth,
-  async (req, res) => {
-    try {
-      const { country } = req.query;
-      const warehouseDetails = await WarehouseModel.find({
-        "country.countryName": country,
-      });
-
-      var warehouseArray = [];
-      for (j = 0; j < warehouseDetails.length; j++) {
-        var warehouseId = warehouseDetails[j];
-        warehouseArray.push(warehouseId);
-      }
-
-      return apiResponse.successResponseWithData(
-        res,
-        "Fetch success",
-        warehouseArray
-      );
-    } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
-      );
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
 
 exports.getInventory = [
   auth,
@@ -2223,7 +1828,7 @@ exports.getInventory = [
     } catch (err) {
       console.log(err);
 
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2250,7 +1855,7 @@ exports.getInventoryCountsOfThePlatform = [
         "error",
         "<<<<< InventoryService < InventoryController < getInventoryCountsOfThePlatform : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2329,7 +1934,7 @@ exports.getInventoryCountsByOrganisation = [
         "error",
         "<<<<< InventoryService < InventoryController < getInventoryCountsByOrganisation : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2488,7 +2093,7 @@ exports.getInventoryCountsByWarehouse = [
         "error",
         "<<<<< InventoryService < InventoryController < getInventoryCountsByWarehouse : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2580,7 +2185,7 @@ exports.getInventoryProductsByWarehouse = [
         "error",
         "<<<<< InventoryService < InventoryController < getInventoryProductsByWarehouse : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2613,7 +2218,7 @@ exports.getInventoryProductsByOrganisation = [
         "error",
         "<<<<< InventoryService < InventoryController < getInventoryProductsByWarehouse : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2695,7 +2300,7 @@ async function getFilterConditions(filters) {
 
 // total quantity as per the products for the ecosystem
 exports.getInventoryProductsByPlatform = [
-  // auth,
+  auth,
   async (req, res) => {
     try {
       const filters = req.query;
@@ -2881,7 +2486,7 @@ exports.getInventoryProductsByPlatform = [
         "error",
         "<<<<< InventoryService < InventoryController < getInventoryProductsByWarehouse : error (catch block)"
       );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -2987,7 +2592,7 @@ exports.uploadSalesData = [
       );
 
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -3048,7 +2653,7 @@ exports.getBatchNearExpiration = [
         );
       }
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -3105,7 +2710,7 @@ exports.getBatchExpired = [
         );
       }
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -3143,7 +2748,7 @@ exports.getBatchWarehouse = [
         result
       );
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -3343,3 +2948,93 @@ exports.deleteProductsFromInventory = [
         }
     },
 ];
+
+exports.searchProduct = [
+  auth,
+  async (req, res) => {
+    try {
+      const { skip, limit,productName,producttype  } = req.query;
+      var warehouseId = "";
+      if (!req.query.warehouseId)
+        warehouseId = req.user.warehouseId;
+      else
+        warehouseId = req.query.warehouseId;
+      const warehouse = await WarehouseModel.findOne({ id: warehouseId })
+      if (warehouse) {
+        let elementMatchQuery={}
+        elementMatchQuery['id']=warehouse.warehouseInventory
+        if (productName) {
+          elementMatchQuery[`products.name`] = productName;
+        }
+        if (producttype) {
+          elementMatchQuery[`products.type`] = producttype;
+        }
+        const inventory = await InventoryModel.aggregate([
+          { $unwind: "$inventoryDetails" },
+          {
+            $lookup: {
+              from: "products",
+              localField: "inventoryDetails.productId",
+              foreignField: "id",
+              as: "products",
+            },
+          },
+          { $unwind: "$products" },
+          { $match: elementMatchQuery },
+        //   { $project:{
+        //     products:"",
+        //   }
+        // }
+        ])
+          .sort({ createdAt: -1 })
+          .skip(parseInt(skip))
+          .limit(parseInt(limit));
+        return apiResponse.successResponseWithData(
+          res,
+          "Inventory Details",
+          inventory
+        );
+      } else {
+        return apiResponse.ErrorResponse(
+          res,
+          "Cannot find warehouse for this employee"
+        );
+      }
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
+
+exports.autoCompleteSuggestions = [
+  auth,
+  async (req, res) => {
+    try {
+      const { searchString  } = req.query;
+       
+        const suggestions = await RecordModel.aggregate([
+          {$project: { _id: 0, value: "$id", record_type: "order"}},
+          {$unionWith: {coll: "products", pipeline: [ { $project: { _id: 0, value: "$name", record_type: "productName" } } ]}}, 
+          {$unionWith: {coll: "shipments", pipeline: [ { $project: { _id: 0, value: "$id", record_type: "shipment" } } ]}}, 
+          {$unionWith: {coll: "products", pipeline: [ { $project: { _id: 0, value: "$type", record_type: "productType" } } ]}}, 
+    {$match: {"value": {$regex: searchString ? searchString: ""} }},
+    {$limit: 10},
+    { $group: { _id: '$value', type: { "$first": "$record_type"}}},
+  ])
+          .sort({ createdAt: -1 })
+        return apiResponse.successResponseWithData(
+          res,
+          "Autocorrect Suggestions",
+          suggestions
+        );
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
+
+

@@ -236,7 +236,7 @@ class Profile extends React.Component {
 
   async onSubmit() {
     this.onChange();
-    const {
+    let {
       firstName,
       lastName,
       organisation,
@@ -252,6 +252,7 @@ class Profile extends React.Component {
       title,
       editMode
     } = this.state;
+    phoneNumber  = phoneNumber ? phoneNumber.replaceAll('+', '') : '';
     const data = {
       firstName,
       lastName,
@@ -358,20 +359,28 @@ class Profile extends React.Component {
                 {editMode ? (
                   <div className="col">
                     <div className="form-group">
-                      <label htmlFor="shipmentId"> First Name</label>
-                      <Input
-                        placeholder="Enter First Name"
-                        style={{flexBasis:"34%"}}
-                        value={firstName}
-                        onChange={(e) =>
+                    <label htmlFor="shipmentId"> First Name</label>
+                    <input
+                      style={{flexBasis:"34%"}}
+                      className="input refship "
+                      type="text"
+                      id="referenceShipmentId"
+                      name="firstname"
+                      placeholder="Enter First Name"
+                      value={firstName}
+                      onChange={(e) =>
                           this.setState({ firstName: e.target.value })
                         }
-                      />
+                    />  
                     </div>
                     <div className="form-group">
                       <label htmlFor="shipmentId">Last Name</label>
-                      <Input
+                      <input
                         style={{flexBasis:"34%"}}
+                        className="input refship "
+                        type="text"
+                        id="referenceShipmentId"
+                        name="lastname"
                         value={lastName}
                         placeholder="Enter Last Name"
                         onChange={(e) =>
@@ -386,7 +395,7 @@ class Profile extends React.Component {
                       <input
                         className="form-control wallet"
                         //disabled
-                        style={{flexBasis:"35%"}}
+                        style={{flexBasis:"34.5%", fontSize:"14px"}}
                         value={this.state.organisation}
                         
                       />
@@ -396,7 +405,7 @@ class Profile extends React.Component {
                       <input
                         className="form-control wallet"
                         //disabled
-                        style={{flexBasis:"35%"}}
+                        style={{flexBasis:"34.5%",fontSize:"14px"}}
                         value={this.props.user.emailId}
                         onChange={(e) =>
                           this.setState({ email: e.target.value })
@@ -568,7 +577,7 @@ class Profile extends React.Component {
                           <span>N/A</span>
                         )}
                       </div>
-                      <div className="row name">
+                      <div className="row mb-3" style={{fontSize:"35px", fontWeight:"600"}}>
                         {this.state.firstName ? (
                           <span>{this.state.firstName}</span>
                         ) : (
@@ -621,7 +630,7 @@ class Profile extends React.Component {
                         )}
                       </div>
                     </div>
-                    <div className="col">
+                    <div className="col mt-5">
                       <div className="row location">MY LOCATIONS</div>
                     </div>
                     <div

@@ -15,6 +15,7 @@ import zoomInIcon from "../../assets/icons/fullScreen.png"
 
 const Track = (props) => {
   const [value, setValue] = useState('');
+  const [msg, setMsg] = useState('No data found');
   const [searchType, setSearchType] = useState('PO');
   const [visible, setVisible] = useState(false);
   const [op, setOp] = useState(props.match.params.id ? 1 : -1);
@@ -53,7 +54,12 @@ const Track = (props) => {
   };
 
   const onSeach = async (v = value) => {
-    await searchData(v);
+    if (v) {
+      await searchData(v);
+      setMsg('No data found');
+    }
+    else
+      setMsg('Required');
     setIsSubmitted(true);
   };
 
@@ -133,7 +139,7 @@ const Track = (props) => {
                     />
                   </div>
                   {isSubmitted && (
-                    <span className="redTxt">No data found</span>
+                    <span className="redTxt">{msg}</span>
                   )}
                 </div>
               </>
@@ -142,7 +148,8 @@ const Track = (props) => {
                   <div className="d-flex flex-row-reverse mb-2">
                     {!props.match.params.id &&
                       <button
-                        onClick={() => {
+                      onClick={() => {
+                          setValue('');
                           resetData();
                           setIsSubmitted(false);
                         }}

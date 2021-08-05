@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "77efa149-081e-41ed-8f2d-ef922af7b9df",
+		"_postman_id": "94b09dad-78a0-4ff3-b887-f2f73fde4e2e",
 		"name": "inventory_service",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -769,36 +769,6 @@
 			"response": []
 		},
 		{
-			"name": "getRegions",
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2YWtyOGtuNzYydTBuIiwiZmlyc3ROYW1lIjoiU291cmF2IiwiZW1haWxJZCI6InNvdXJhdi5sa29AZ21haWwuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoiQVAwMDIiLCJvcmdhbmlzYXRpb25JZCI6IkFQMTAwMSIsImlhdCI6MTYyMDA1MDkzMywiZXhwIjoxNjIwMDU4MTMzfQ.pYifVujfNcbUZfRY-TtKTlOfKCZBRWJpY4xsLiCdLO4",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{url}}/inventorymanagement/api/inventory/getRegions",
-					"host": [
-						"{{url}}"
-					],
-					"path": [
-						"inventorymanagement",
-						"api",
-						"inventory",
-						"getRegions"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "getCountryDetailsByRegion",
 			"request": {
 				"auth": {
@@ -1078,11 +1048,180 @@
 			"response": []
 		},
 		{
-			"name": "New Request",
+			"name": "Get Regions",
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": null
+				"url": {
+					"raw": "http://localhost:3007/inventorymanagement/api/inventory/getRegions?orgType=CENTRAL_AUTHORITY",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3007",
+					"path": [
+						"inventorymanagement",
+						"api",
+						"inventory",
+						"getRegions"
+					],
+					"query": [
+						{
+							"key": "orgType",
+							"value": "CENTRAL_AUTHORITY"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Countries",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3007/inventorymanagement/api/inventory/getCountryDetailsByRegion?orgType=CENTRAL_AUTHORITY&region=Asia",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3007",
+					"path": [
+						"inventorymanagement",
+						"api",
+						"inventory",
+						"getCountryDetailsByRegion"
+					],
+					"query": [
+						{
+							"key": "orgType",
+							"value": "CENTRAL_AUTHORITY"
+						},
+						{
+							"key": "region",
+							"value": "Asia"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Org Types",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3007/inventorymanagement/api/inventory/getOrgTypes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3007",
+					"path": [
+						"inventorymanagement",
+						"api",
+						"inventory",
+						"getOrgTypes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Organizations - List of Orgs of type and in country",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3007/inventorymanagement/api/inventory/getOrganizations?country=India&orgType=CENTRAL_AUTHORITY",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3007",
+					"path": [
+						"inventorymanagement",
+						"api",
+						"inventory",
+						"getOrganizations"
+					],
+					"query": [
+						{
+							"key": "country",
+							"value": "India"
+						},
+						{
+							"key": "orgType",
+							"value": "CENTRAL_AUTHORITY"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Organization Warehouses - List of warehouses of Org with orgId and in Country",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3007/inventorymanagement/api/inventory/getOrganizationWarehouses?country=Australia&orgId=ORG100001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3007",
+					"path": [
+						"inventorymanagement",
+						"api",
+						"inventory",
+						"getOrganizationWarehouses"
+					],
+					"query": [
+						{
+							"key": "country",
+							"value": "Australia"
+						},
+						{
+							"key": "orgId",
+							"value": "ORG100001"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Addresses - List of Addresses of OrgType and Country",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3007/inventorymanagement/api/inventory/getAddresses?country=Australia&orgType=CENTRAL_AUTHORITY",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3007",
+					"path": [
+						"inventorymanagement",
+						"api",
+						"inventory",
+						"getAddresses"
+					],
+					"query": [
+						{
+							"key": "country",
+							"value": "Australia"
+						},
+						{
+							"key": "orgType",
+							"value": "CENTRAL_AUTHORITY"
+						}
+					]
+				}
 			},
 			"response": []
 		}

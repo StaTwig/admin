@@ -6,7 +6,7 @@ import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import {getShipmentIds,getViewShipment,fetchairwayBillNumber} from '../../actions/shipmentActions';
 import { useDispatch, useSelector } from 'react-redux';
-import { func } from "prop-types";
+import { element, func } from "prop-types";
 
 const EnterId = (props) => {
   const { id } = props.match.params;
@@ -14,6 +14,7 @@ const EnterId = (props) => {
   const [shipmentArray,setShipmentArray] = useState([]);
   const [transitNumberArray,settransitNumberArray] = useState([]);
   const [shipdisabled, setshipdisabled] = useState(true);
+  const [shipdisabled1, setshipdisabled1] = useState(true);
   useEffect(()=>{
     async function getShipmentArray(){
       let arr = await getShipmentIds();
@@ -48,6 +49,7 @@ const EnterId = (props) => {
   const [shipmentId, setShipmentId] = useState(null);
   const [enableSearch,setenableSearch] = useState(false);
   const [errorShipment,seterrorShipment] = useState(false);
+  const [errorShipment1,seterrorShipment1] = useState(false);
   const [value, setValue] = React.useState();
   const [value1, setValue1] = React.useState();
   const [inputValue, setInputValue] = React.useState('');
@@ -71,6 +73,23 @@ const EnterId = (props) => {
       }
     })
     console.log(val);
+    console.log("shipmentid",shipmentId);
+  }
+  const billNoCheck=(bno)=>{
+    console.log("transitnoarray",transitNumberArray);
+    let val=transitNumberArray.filter(e=>e.airWayBillNo==bno);
+    console.log("val",val);
+    console.log("val status",val[0]?.status);
+    if(val[0]?.status=="RECEIVED"){
+      setshipdisabled(true);
+      seterrorShipment1(true);
+      console.log("Shipment is already delivered");
+    }
+    else{
+      setshipdisabled(false);
+      seterrorShipment1(false);
+      console.log("You can update the shipment");
+    }
   }
   return (
     <div className="updateStatus">
@@ -123,13 +142,13 @@ const EnterId = (props) => {
               <div className="">
                 <div className="row" >
                   <div className="" >
-                    <div className="panel commonpanle ml-4" style={{height:"60%",width:"114%" }}>
+                    <div className="panel commonpanle" style={{height:"60%",width:"114%" }}>
                       <div
                         className={`form-group ${
                           errors.shipmentId && touched.shipmentId && ``
                         }`}
                       >
-                        <label className="mt-1 text-secondary">
+                        <label className="text-secondary">
                           Shipment ID
                         </label>
                         <div className="mb-2" style={{width: 300 }}>
@@ -147,17 +166,14 @@ const EnterId = (props) => {
                             newInputValue?setshipdisabled(false):(setshipdisabled(true),seterrorShipment(false));
                           }}
                           id="controllable-states-demo"
-                  
-                         
                           autoComplete
-                          renderInput={(params) => <TextField {...params}  name="shipmentId" label="Enter Shipment ID" margin="normal"                     
-                          />}
+                          renderInput={(params) => <TextField {...params}  name="shipmentId" margin="normal" variant="outlined" />}
                         />
-                                              {errorShipment && (
-                    <span className="error-msg text-danger mt-3 " style={{top:"0px",left:"0px"}} >
-                      This shipment has been already delivered. 
-                    </span>
-                  )}
+                            {errorShipment && (
+                            <span className="error-msg text-danger mt-3 " style={{top:"-10px",left:"0px"}} >
+                              This shipment has been already delivered. 
+                            </span>
+                          )}
                         </div>
 
                         {/* <input
@@ -184,18 +200,17 @@ const EnterId = (props) => {
                     </div>
                   </div>
                   <div className="col-1 ml-3 mr-4" >
-                    <h6 className="or" style={{position:"absolute", left:"4px",top:"20px"}}><b>OR</b></h6>
+                    <h6 className="or" style={{position:"absolute", left:"4px",top:"25px"}}><b>OR</b></h6>
                   </div>
 
                   <div className="" >
-                    <div className="panel commonpanle ml-5" style={{height:"60%", width:"115%" }}>
-                    <div className="form-group mt-3">
-            <label className="text-secondary mb-3">Transit No.</label>
-                        <div className="mb-0" style={{width: 300 }}>
+                    <div className="panel commonpanle ml-5" style={{height:"60%", width:"110%" }}>
+                    <div className="form-group">
+                      <label className="text-secondary">Transit No.</label>
+                        <div className="" style={{width: 300 }}>
                         <Autocomplete 
                           {...defaultProps1}
                           id="billNo"
-                          style={{position:"relative",top:"-20px"}}
                           value1={value1}
                           onChange={(event, newValue) => {
                             setValue1(newValue);
@@ -204,11 +219,18 @@ const EnterId = (props) => {
                           onInputChange={(event, newInputValue) => {
                             setbillno(newInputValue);
                             setInputValue1(newInputValue);
-                           newInputValue?setshipdisabled(false):setshipdisabled(true);
+                            console.log("ip",newInputValue);
+                            billNoCheck(newInputValue);
+                            //newInputValue?setshipdisabled(false):(setshipdisabled(true),seterrorShipment(false));
                           }}
                           debug
-                          renderInput={(params) => <TextField {...params} name="billNo" label="Transit No." margin="normal" />}
+                          renderInput={(params) => <TextField {...params} name="billNo" margin="normal" variant="outlined" />}
                         />
+                        {errorShipment1 && (
+                            <span className="error-msg text-danger mt-3 " style={{top:"-10px",left:"0px"}} >
+                              This shipment has been already delivered. 
+                            </span>
+                          )}
                         </div>
             {/* <label className="mb-1 text-secondary pt-2">Bill No:</label>
               <input
@@ -221,7 +243,7 @@ const EnterId = (props) => {
               /> */}
             </div>
                     </div>
-                    <div className="row" style={{position:"relative",left:"20rem",top:"340px"}}>
+                    <div className="col" style={{position:"relative",left:"16.5rem",top:"300px"}}>
                       <button
                         type="button"
                         className="btn btn-outline-primary mr-4 "

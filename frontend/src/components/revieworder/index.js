@@ -18,6 +18,7 @@ const ReviewOrder = props => {
   const order = useSelector(state => {
     return state?.reviewPo;
   });
+  console.log("order is ", order);
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [openOrder, setOpenOrder] = useState(false);
@@ -27,7 +28,7 @@ const ReviewOrder = props => {
 
   const onAssign = async () => {
     let error = false;  
-    const { fromOrg, fromOrgId, toOrg, toOrgLoc, products, typeName, rtypeName } = order;
+    const { fromOrg, fromOrgId, toOrg, toOrgLoc, products, typeName, rtypeName,toOrgCountry,toOrgRegion,toOrgLocName } = order;
     products.forEach((p) => {
       if (p.productQuantity < 1)
         error = true;
@@ -44,8 +45,10 @@ const ReviewOrder = props => {
           customerIncharge: null,
           customerOrganisation: toOrg,
           customerType: rtypeName,
+          region: toOrgRegion,
+          country: toOrgCountry,
           shippingAddress: {
-            shippingAddressId: toOrgLoc,
+            shippingAddressId:toOrgLoc,
             shipmentReceiverId: null
           }
         },
@@ -137,10 +140,15 @@ const ReviewOrder = props => {
                   <span className="col" style={{color: "black",fontSize:"14px"}} >{order.rtypeName}/{order.toOrg}</span>
                 </div>
                 <div className="w-100"></div>
-                <div className="col row col-6 mt-5">
-                  <span className="col-4">Delivery Location:</span>
+                <div className="col row  mt-5">
+                  <span className="col-4">Organisation Location:</span>
                   <span className="col ml-2 " style={{color: "black",fontSize:"14px"}} >{order.toOrgLocName}</span>
                 </div>
+                <div className="col row  mt-5">
+                <span className="col-4"></span>
+                <span className="col ml-2 " style={{color: "black",fontSize:"14px"}} ></span>
+              </div>
+              
               </div>
             </div>
           </div>
