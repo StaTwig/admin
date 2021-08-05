@@ -8,7 +8,7 @@ import {
   getTransactions,
   fetchShipment,
   fetchChallanImage,
-  getImage
+  getImage,
 } from '../../actions/transactionAction';
 import Moment from 'react-moment';
 import setAuthToken from '../../utils/setAuthToken';
@@ -124,7 +124,9 @@ const TransactionHistory = (props) => {
     _filters.state = '';
     _filters.district = '';
     _filters.organization = '';
+    _filters.vendorType = 'ALL_VENDORS';
     setFilters(_filters);
+    setSelectedVendorType('ALL_VENDORS');
     applyFilters(_filters);
   };
   const onDateTypeChange = (dateType) => {
@@ -241,7 +243,7 @@ const TransactionHistory = (props) => {
     }
     setFilters(_filters);
     setSelectedIndex(null);
-      setSelectedTransaction(null);
+    setSelectedTransaction(null);
     setSelectedTransactionType('ALL');
 
     setSelectedDateType('by_yearly');
@@ -304,19 +306,18 @@ const TransactionHistory = (props) => {
       setSelectedTransaction(result.data);
       if (result.data.imageDetails.length)
         getImageURL(result.data.imageDetails[0]);
-      else
-        setImage('');
+      else setImage('');
       setSelectedIndex(index);
     }
   };
 
-  const getImageURL = async(imageId) => {
+  const getImageURL = async (imageId) => {
     const r = await getImage(imageId);
     const reader = new window.FileReader();
-    reader.readAsDataURL(r.data); 
+    reader.readAsDataURL(r.data);
     reader.onload = function () {
       setImage(reader.result);
-    }
+    };
   };
 
   const getSumByProperty = (inputArr, key) => {
@@ -440,12 +441,12 @@ const TransactionHistory = (props) => {
       case 'Receive_comment_5':
         rtn = 'Wrong count';
         break;
-    
+
       default:
         break;
     }
     return rtn;
-  }
+  };
 
   return (
     <div className="container-fluid">
@@ -493,14 +494,14 @@ const TransactionHistory = (props) => {
               </div>
 
               <div className="productList">
-              <div className="productListHeader col-md-12">
-                <div className="col-md-6">Particulars</div>
-                <div className="col-md-3">Status</div>
-                <div className=" col-md-3">Quantity</div>
-              </div>
-                {displayTransactions.length == 0 &&
+                <div className="productListHeader col-md-12">
+                  <div className="col-md-6">Particulars</div>
+                  <div className="col-md-3">Status</div>
+                  <div className=" col-md-3">Quantity</div>
+                </div>
+                {displayTransactions.length == 0 && (
                   <div className="text-center"> No data found</div>
-                }
+                )}
 
                 {displayTransactions.map((transaction, index) => (
                   <div key={index}>
@@ -673,7 +674,8 @@ const TransactionHistory = (props) => {
                                 </div> */}
                               </div>
                               <div className="row">
-                                {selectedTransaction.imageDetails.length > 0 &&
+                                {selectedTransaction.imageDetails.length >
+                                  0 && (
                                   <ModalImage
                                     small={image}
                                     className="challanImage"
@@ -682,7 +684,7 @@ const TransactionHistory = (props) => {
                                     hideZoom={false}
                                     alt="Challan Image"
                                   />
-                                }
+                                )}
                               </div>
                               <div className=" transactionProducts row">
                                 {selectedTransaction.products.length ? (
@@ -729,9 +731,11 @@ const TransactionHistory = (props) => {
                                                     {selectedTransaction
                                                       .shipmentUpdates[1]
                                                       .updateComment != ''
-                                                      ? displayComment(selectedTransaction
-                                                          .shipmentUpdates[1]
-                                                          .updateComment)
+                                                      ? displayComment(
+                                                          selectedTransaction
+                                                            .shipmentUpdates[1]
+                                                            .updateComment,
+                                                        )
                                                       : '-'}
                                                   </td>
                                                 </tr>

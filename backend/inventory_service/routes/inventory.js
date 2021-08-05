@@ -7,7 +7,7 @@ const RegionController = require("../controllers/RegionCountryController");
 
 const Storage = multer.diskStorage({
   destination(req, file, callback) {
-    callback(null, './images');
+    callback(null, 'uploads/');
   },
   filename(req, file, callback) {
     callback(null, `${Date.now()}`);
@@ -72,6 +72,7 @@ router.post("/updateInventories", InventoryController.updateInventories);
 router.post("/insertInventories", InventoryController.insertInventories);
 router.get("/trackProduct", InventoryController.trackProduct);
 router.get("/searchProduct", InventoryController.searchProduct);
+router.get("/getsearchsuggestions", InventoryController.autoCompleteSuggestions);
 
 router.post(
   '/addInventoriesFromExcel',

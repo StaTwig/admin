@@ -1,7 +1,7 @@
 @import "../../assets/styles/global.scss";
 
 .productinventory {
-  padding-right: 1rem;
+  padding-right: 6rem;
   padding-left: 4rem;
   //overflow: hidden;
   @media (max-width: $md) {
@@ -16,16 +16,17 @@
   .full-width-ribbon{
     position: absolute;
     left: 0;
-    right: 0;
+    right: -5px;
     background-color: #eaeaea;
     .filter{
-      margin-left: 9rem;
-      margin-right: 3rem;
+      margin-left: 8rem;
+      margin-right: 0rem;
     }
   }
 
   .rounded{
     border-radius: 15px !important;
+    box-shadow: 0px 3px 10px #e4e4e4!important;
   }
 
   .ribbon-space {
@@ -34,7 +35,22 @@
 
   .txt{
     font-weight: 600;
-    font-size: small;
+    font-size: 14px;
+    align-self: center;
+  }
+  .txt1{
+    font-weight: 400;
+    font-size: 14px;
+    align-self: center;
+    //text-align: right;
+  }
+  .txt2{
+    font-weight: 400;
+    font-size: 14px;
+    align-self: center;
+    text-align: right;
+    position:relative;
+    left:-130px;    
   }
 
   .txtBlue{

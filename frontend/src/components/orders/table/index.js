@@ -63,7 +63,7 @@ const Table = props => {
               const { customer, products, supplier, creatorOrganisation } = order;
               return (
               <div className="rTableRow pt-2 pb-2 shadow-none" key={index}>
-                    <div className="rTableCell">
+                    <div className="rTableCell" style={{position:'relative',left:"-20px", width:"200px"}}>
                       <div className="userPic text-right rounded d-flex flex-row">
                         <img src={user} width="30" height="20" alt="User" className="rounded mr-1 align-self-center" />
                         <div className="flex-column d-flex">
@@ -72,14 +72,14 @@ const Table = props => {
                       </div>
                       </div>
                     </div>
-                <div className="rTableCell" style={{position:'relative',left:"35px"}}>
+                <div className="rTableCell" style={{position:'relative',left:"30px"}}>
                   {formatDate(order.creationDate)}
                 </div>
-                  <div className="rTableCell text-center"><p className="mb-0 bold address mb-0 text-muted">{order.id}</p></div>
-                  <div className="rTableCell text-center"><p className="mb-0 bold mb-0 address text-muted">{products[0]?.name+(products.length > 1 ? ' + '+(products.length-1)+' more' : '')}</p></div> 
+                  <div className="rTableCell" style={{position:'relative',left:"0px"}}><p className="mb-0 bold address mb-0 text-muted">{order.id}</p></div>
+                  <div className="rTableCell" style={{position:'relative',left:"-20px", width:"250px"}}><p className="mb-0 bold mb-0 address text-muted">{products[0]?.name+(products.length > 1 ? ' + '+(products.length-1)+' more' : '')}</p></div> 
                 
-                <div className="rTableCell  d-flex flex-column" style={{position:'relative',left:"45px"}}> 
-                  <span>{customer?.organisation?.name}</span> 
+                <div className="rTableCell  d-flex flex-column" style={{position:"relative", left:"50px", width:"320px"}}> 
+                  <span>{customer.organisation.name}</span> 
                   <span className="text-muted ">{customer.warehouse && customer.warehouse.warehouseAddress ?  customer.warehouse.warehouseAddress.firstLine + " "+customer.warehouse.warehouseAddress.city: null}</span>
                 </div> 
 
@@ -103,7 +103,7 @@ const Table = props => {
           {orders?.length > 0 && (
             <div className="d-flex flex-row-reverse">
             <Pagination showFirstButton showLastButton color="primary" count={Math.ceil(props.count/10)} onChange={handlePageChange} />
-            <span className="mx-5 my-1 rounded text-primary">Total Records {props.count} </span>
+            <span className="mx-5 my-1 rounded text-dark">Total Records {props.count} </span>
           </div> 
           )}
           </div>

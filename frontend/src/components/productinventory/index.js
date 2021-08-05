@@ -62,9 +62,6 @@ const ProductInventory = props => {
       });
       setData(prodArray);
     }
-    function scrollWin() {
-      window.scrollBy(100, 0);
-    }
     // setData(inventories.filter(r => r.payloadData.data.products[0].type == cat));
   return (
     <div className="productinventory">
@@ -72,7 +69,7 @@ const ProductInventory = props => {
         <h1 className="breadcrumb">{enable ? 'PRODUCT CATEGORY' : 'PRODUCTS OUT OF STOCK'}</h1>
         <div className="d-flex">
         <Link to="/addNewCategory">
-            <button className="btn btn-yellow mr-4" style={{position:"relative", top:"-15px"}}>
+            <button className="btn btn-yellow mr-3" style={{position:"relative", top:"-15px"}}>
               <img src={Add} width="13" height="13" className="mr-2 mb-1" />
               <span>Add New Category</span>
             </button>
@@ -96,9 +93,9 @@ const ProductInventory = props => {
       </div>
         }
       <div className="row">
-        <div className=" p-2 rounded full-width-ribbon">
-          <div className=" row filter">
-            <div className="col-2">
+        <div className="p-3 rounded full-width-ribbon">
+          <div className="row filter">
+            <div className="col-3">
               <img src={Product} width="24" height="24" alt="Product Name" />
               <span className="ml-2 font-small">Product Name</span>
             </div>
@@ -106,7 +103,7 @@ const ProductInventory = props => {
               <img src={Quantity} width="35" height="24" alt="Product Category" />
               <span className="ml-2 font-small">Product Category</span>
             </div>
-            <div className="col-2">
+            <div className="col-3">
               <img src={user} width="16" height="24" alt="Manufacturer" />
               <span className="ml-2 font-small">Manufacturer</span>
             </div>
@@ -119,14 +116,15 @@ const ProductInventory = props => {
         {
           console.log(data)
         }
-        <div className="ribbon-space col-12">
+        <div className="ribbon-space col p-3">
           {data.map((inv, i) => 
-            <div key={i} className="col-12 p-3 mb-3 rounded row bg-white shadow">
-              <div className="col-2 txt txtBlue">{inv.products.name?inv.products.name:"N/A"}</div>
-              <div className="col-3 txt ">{inv.products.type ? inv.products.type:"N/A"}</div>
-              <div className="col-2 txt ">{inv.products.manufacturer?inv.products.manufacturer:"N/A"}</div>
-              <div className="col-2 txt ">{inv.inventoryDetails.quantity?inv.inventoryDetails.quantity:"N/A"}{"  ("}{inv.products.unitofMeasure?inv.products.unitofMeasure.name:"N/A"}{")"}</div>
-              <div className="col-2 txt "><button type="button" onClick={() => props.history.push(`/viewproduct`, {data: inv})} className="btn btn-outline-primary">Show {more[i] ? `less` :`more`}</button></div>
+            <div key={i} className="col p-2 mb-3 rounded row bg-white shadow">
+              <div className="col-3 txt txtBlue">{inv.products.name?inv.products.name:"N/A"}</div>
+              <div className="col-3 txt1">{inv.products.type ? inv.products.type:"N/A"}</div>
+              <div className="col-3 txt1">{inv.products.manufacturer?inv.products.manufacturer:"N/A"}</div>
+              <div className="col-2 txt2">{inv.inventoryDetails.quantity?inv.inventoryDetails.quantity:"N/A"}{"  ("}{inv.products.unitofMeasure?inv.products.unitofMeasure.name:"N/A"}{")"}</div>
+              <div className="col-1 txt1 mb-3">
+              <button type="button" onClick={() => props.history.push(`/viewproduct`, {data: inv})} className="btn btn-outline-primary" style={{position:"relative",left:"-50px",top:"7px",width:"125px",height:"35px"}}>Show {more[i] ? `less` :`more`}</button></div>
               </div>
             // </div>
           )}

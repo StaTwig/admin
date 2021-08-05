@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import profile from '../../../../assets/user.png';
 import Chart from 'react-apexcharts';
 import { getAllOrganisationStats } from '../../../../actions/analyticsAction';
@@ -130,6 +130,7 @@ const DetailedSupplierView = (props) => {
         { name: 'S3', value: Number(s3Data).toFixed(2), fill: '#FFC700' },
       ]);
     })();
+    requestSort('sales');
   }, []);
 
   const getIntroOfPage = (label) => {
@@ -199,7 +200,6 @@ const DetailedSupplierView = (props) => {
     }, [items, sortConfig]);
 
     const requestSort = (key) => {
-      setArrIndex(-1);
       let direction = 'ascending';
       if (
         sortConfig &&

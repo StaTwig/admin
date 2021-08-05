@@ -84,6 +84,7 @@ const iGraphicalDetailedView = (props) => {
         },
       ]);
     })();
+    requestSort('sales');
   }, []);
 
   const openDetailView = async (sku) => {
