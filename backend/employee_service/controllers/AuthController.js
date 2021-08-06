@@ -1,5 +1,6 @@
 const EmployeeModel = require('../models/EmployeeModel');
 const WarehouseModel = require('../models/WarehouseModel');
+const logEvent = require("../../../utils/event_logger");
 const ConsumerModel = require('../models/ConsumerModel');
 const InventoryModel = require('../models/InventoryModel');
 const OrganisationModel = require('../models/OrganisationModel');
