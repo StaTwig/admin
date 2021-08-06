@@ -414,6 +414,62 @@ exports.changePOStatus = [
                 }catch(error){
                   console.log(error);
                 }
+                try{
+                  let event = Event.findOne({'payloadData.data.order_id': orderID})
+                  var evid = Math.random().toString(36).slice(2);
+                  var datee = new Date();
+                  datee = datee.toISOString();
+                  let event_data = {
+                    eventID: null,
+                    eventTime: null,
+                    eventType: {
+                      primary: "UPDATE",
+                      description: "ORDER",
+                    },
+                    actor: {
+                      actorid: "null",
+                      actoruserid: "null",
+                    },
+                    stackholders: {
+                      ca: {
+                        id: "null",
+                        name: "null",
+                        address: "null",
+                      },
+                      actororg: {
+                        id: "null",
+                        name: "null",
+                        address: "null",
+                      },
+                      secondorg: {
+                        id: "null",
+                        name: "null",
+                        address: "null",
+                      },
+                    },
+                    payload: {
+                      data: {
+                        data: null,
+                      },
+                    },
+                  };
+                  event_data.eventID = "ev0000" + evid;
+                  event_data.eventTime = datee;
+                  event_data.eventType.primary = "UPDATE";
+                  event_data.eventType.description = "ORDER";
+                  event_data.payloaData = event.payloaData;
+                
+                  async function compute(event_data) {
+                    resultt = await logEvent(event_data);
+                    return resultt;     
+                  }
+                  console.log(result);
+                  compute(event_data).then((response) => {
+                    console.log(response);
+                  });
+                }catch(error){
+                  console.log(error);
+                }
                 return apiResponse.successResponseWithData(
                       res,
                       'PO Status',
