@@ -1,6 +1,7 @@
 const Joi = require('joi');
 const eventSchema = Joi.object().keys({
   eventID: Joi.string().min(1).max(50).required(),
+  transactionId: Joi.string().min(1).max(50),
   eventTime: Joi.string().required(),
   eventType: Joi.object().keys({
     primary: Joi.string().min(3).max(50).required(),
