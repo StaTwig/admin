@@ -11,7 +11,7 @@ export const LOCAL_SERVER_URL_PO = 'http://localhost:3012';
 export const LOCAL_SERVER_URL_TRACKANDTRACE = 'http://localhost:3005';
 export const LOCAL_SERVER_URL_NOTIFICATION = 'http://localhost:3006';
 export const LOCAL_SERVER_URL_ANALYTICS = 'http://localhost:3015';
-export const LOCAL_SERVER_URL_AANALYTICS = 'http://localhost:3069';
+export const LOCAL_SERVER_URL_AANALYTICS = 'http://localhost:3016';
 export const LOCAL_SERVER_URL_PRODUCTS = 'http://localhost:3010';
 export const STABLE_SERVER_URL_USER = 'http://54.164.66.73:3001';
 export const STABLE_SERVER_URL_SHIPMENT = 'http://54.164.66.73:3002';
@@ -104,6 +104,7 @@ export function config() {
       getOrganisationTypeStatsurl: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getStatsByOrgType`,
       getOverviewStats: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getOverviewStats`,
       getSupplierPerfomance: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getSupplierPerfomance`,
+      getStatsBySKUOrgTypeUrl: `${ABINBEVPROD_SERVER_URL}/advancedanalytics/api/analytics/getStatsBySKUOrgType`,
     },
     ainbevtest: {
       loginUrl: `${ABINBEVTEST_SERVER_URL}/usermanagement/api/auth/login`,
@@ -182,6 +183,7 @@ export function config() {
       getOrganisationTypeStatsurl: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getStatsByOrgType`,
       getOverviewStats: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getOverviewStats`,
       getSupplierPerfomance: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getSupplierPerfomance`,
+      getStatsBySKUOrgTypeUrl: `${ABINBEVTEST_SERVER_URL}/advancedanalytics/api/analytics/getStatsBySKUOrgType`,
     },
   };
 

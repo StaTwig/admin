@@ -41,4 +41,5 @@ router.post("/createNewAlert", AlertController.createNewAlert)
 * @returns {Error}  default - Unexpected error 
 */
 router.delete("/deleteAlert/:alertId", AlertController.deleteAlert);
+router.get("/getNotifications",AlertController.getNotifications)
 module.exports = router;

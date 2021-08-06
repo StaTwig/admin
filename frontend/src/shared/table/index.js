@@ -44,23 +44,23 @@ inventoryDetails.sort(function(a,b){
                   id="panel1a-header"
                   //className="rTableRow"
                   >
-                                   
-                  <div className="rTableCell" style={{position:"relative",left:'0%', fontWeight:"600"}}>
+                  {/*<div className="rTableCell" style={{position:"relative",left:'0%', fontWeight:"600"}}>*/}            
+                  <div className="col-4 txt1 text-left" style={{position:"relative",left:'-1%', fontWeight:"600"}}>
                     <div className="d-flex flex-column txtBlue">
                       <div> 
                           {inventory.productDetails.name}
                       </div>
                     </div>
                   </div>
-                  <div className="rTableCell text-center" style={{position:"relative",left:'18%'}}>{inventory.productDetails.type}</div>
+                  <div className="col-2 txt1 text-left" style={{position:"relative",left:'3%'}}>{inventory.productDetails.type}</div>
                   {/* <div className="rTableCell" style={{position:"relative",left:'0%'}}>{inventory.ProductList[0].productDetails.manufacturer}</div> */}
-                  <div className="rTableCell " style={{position:"relative",left:'27%'}}> {formatDate(inventory.createdAt)}</div>
-                  <div className="rTableCell text-right"  style={{position:"relative",left:'19%'}}>{inventory.inventoryQuantity}{inventory.productDetails.unitofMeasure ? inventory.productDetails.unitofMeasure.name ? <span>{" ("}{inventory.productDetails.unitofMeasure.name}{")"}</span>: null:null}</div>                                 
-                  <div className="rTableCell" style={{position:"relative", left:"19%", fontWeight:" 600 "}}>
+                  <div className="col txt1" style={{position:"relative",left:'11%'}}> {formatDate(inventory.createdAt)}</div>
+                  <div className="col txt1 text-right"  style={{position:"relative",left:'14%'}}>{inventory.inventoryQuantity}{inventory.productDetails.unitofMeasure ? inventory.productDetails.unitofMeasure.name ? <span>{" ("}{inventory.productDetails.unitofMeasure.name}{")"}</span>: null:null}</div>                                 
+                  <div className="rTableCell" style={{position:"relative", left:"14%", fontWeight:" 600 "}}>
                          {(inventory.eventTypePrimary !== 'ADD') ? (inventory.eventTypePrimary === 'RECEIVE' ? <div className="status secondary-bg bg-success"> Received</div> :  <div className="status secondary-bg bg-warning">Sent</div>) :  <div className="status secondary-bg bg-primary">Added</div>} 
                   </div>
                     <div className=" rTableCell m-2" 
-                         style={{position:"relative",left:'12%'}}>
+                         style={{position:"relative",left:'8.5%'}}>
                          <span className="drop-pad shadow rounded-circle ">
                          <img src={dropdownIcon} height="12" width="18" /> </span>
                   </div>                  
