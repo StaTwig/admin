@@ -3019,9 +3019,11 @@ exports.autoCompleteSuggestions = [
           {$unionWith: {coll: "products", pipeline: [ { $project: { _id: 0, value: "$name", record_type: "productName" } } ]}}, 
           {$unionWith: {coll: "shipments", pipeline: [ { $project: { _id: 0, value: "$id", record_type: "shipment" } } ]}}, 
           {$unionWith: {coll: "products", pipeline: [ { $project: { _id: 0, value: "$type", record_type: "productType" } } ]}}, 
-    {$match: {"value": {$regex: searchString ? searchString: ""} }},
-    {$limit: 10},
-    { $group: { _id: '$value', type: { "$first": "$record_type"}}},
+          {$unionWith: {coll: "shipments", pipeline: [ { $project: { _id: 0, value: "$airWayBillNo", airWayBillNo: "$airWayBillNo", record_type: "transitNumber" } } ]}}, 
+
+          {$match: {"value": {$regex: searchString ? searchString: ""} }},
+          {$limit: 10},
+          { $group: { _id: '$value', type: { "$first": "$record_type"}, airWayBillNo: {"$first": "$airWayBillNo"}}},
   ])
           .sort({ createdAt: -1 })
         return apiResponse.successResponseWithData(
