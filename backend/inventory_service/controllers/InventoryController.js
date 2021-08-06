@@ -3023,7 +3023,7 @@ exports.autoCompleteSuggestions = [
 
           {$match: {"value": {$regex: searchString ? searchString: ""} }},
           {$limit: 10},
-          { $group: { _id: '$value', type: { "$first": "$record_type"}, airwayBillNo: {"$first": "$airWayBillNo"}}},
+          { $group: { _id: '$value', type: { "$first": "$record_type"}, airWayBillNo: {"$first": "$airWayBillNo"}}},
   ])
           .sort({ createdAt: -1 })
         return apiResponse.successResponseWithData(
