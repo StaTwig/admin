@@ -308,7 +308,7 @@ exports.addAddressesFromExcel = [
 
       const invCounter = await CounterModel.findOne(
         { "counters.name": "inventoryId" },
-        { "counters.name.$": 1 }
+        { "counters.$": 1 }
       );
 
       const incrementCounterWarehouse = await CounterModel.update(
@@ -324,7 +324,7 @@ exports.addAddressesFromExcel = [
 
       const warehouseCounter = await CounterModel.findOne(
         { "counters.name": "warehouseId" },
-        { "counters.name.$": 1 }
+        { "counters.$": 1 }
       );
 
       for (const [index, address] of data.entries()) {
