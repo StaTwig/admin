@@ -235,7 +235,7 @@ exports.addUser = [
                   }
              })
 
-          const employeeCounter = await CounterModel.findOne({'counters.name':"employeeId"},{"counters.name.$":1})
+          const employeeCounter = await CounterModel.findOne({'counters.name':"employeeId"},{"counters.$":1})
           var employeeId = employeeCounter.counters[0].format + employeeCounter.counters[0].value;
           
           const user = new EmployeeModel({
