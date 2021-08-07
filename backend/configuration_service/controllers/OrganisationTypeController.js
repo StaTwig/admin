@@ -18,7 +18,7 @@ const CounterModel = require('../models/CounterModel');
             }
        })
 
-      const orgCounter = await CounterModel.findOne({'counters.name':"orgId"},{"counters.name.$":1})
+      const orgCounter = await CounterModel.findOne({'counters.name':"orgId"},{"counters.$":1})
       organisatId = orgCounter.counters[0].format + orgCounter.counters[0].value;
       const incrementCounterWarehouse = await CounterModel.update({
             'counters.name': "warehouseId"
