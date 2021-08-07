@@ -28,7 +28,7 @@ const CounterModel = require('../models/CounterModel');
             }
        })
 
-      const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.name.$":1})
+      const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.$":1})
       configid = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
               const u_id = configid;
               const Org_id = organisatId;
@@ -65,7 +65,7 @@ const CounterModel = require('../models/CounterModel');
             }
        })
 
-      const orgCounter = await CounterModel.findOne({'counters.name':"orgId"},{"counters.name.$":1})
+      const orgCounter = await CounterModel.findOne({'counters.name':"orgId"},{"counters.$":1})
       organisatId = orgCounter.counters[0].format + orgCounter.counters[0].value;
 
 
@@ -235,7 +235,7 @@ exports.getOrganizationsByType = [
             }
        })
 
-      const orgCounter = await CounterModel.findOne({'counters.name':"orgId"},{"counters.name.$":1})
+      const orgCounter = await CounterModel.findOne({'counters.name':"orgId"},{"counters.$":1})
       configid = orgCounter.counters[0].format + orgCounter.counters[0].value;
 
       //organisationId = uniqid('org-');
@@ -247,7 +247,7 @@ exports.getOrganizationsByType = [
             }
        })
 
-      const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.name.$":1})
+      const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.$":1})
       organisatId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
 
               const u_id = configid;
@@ -285,7 +285,7 @@ exports.getOrganizationsByType = [
             }
        })
 
-      const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.name.$":1})
+      const warehouseCounter = await CounterModel.findOne({'counters.name':"warehouseId"},{"counters.$":1})
       organisatId = warehouseCounter.counters[0].format + warehouseCounter.counters[0].value;
 
           const Org_id = organisatId;
