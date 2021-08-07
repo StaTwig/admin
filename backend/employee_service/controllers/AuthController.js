@@ -1,5 +1,6 @@
 const EmployeeModel = require('../models/EmployeeModel');
 const WarehouseModel = require('../models/WarehouseModel');
+const logEvent = require("../../../utils/event_logger");
 const ConsumerModel = require('../models/ConsumerModel');
 const InventoryModel = require('../models/InventoryModel');
 const OrganisationModel = require('../models/OrganisationModel');
@@ -421,6 +422,63 @@ exports.checkEmail = [
           warehouseId: warehouseId == 'NA' ? [] : [warehouseId]
         });
         await user.save()
+
+        try{
+          var evid = Math.random().toString(36).slice(2);
+          var datee = new Date();
+          datee = datee.toISOString();
+          let event_data = {
+            eventID: null,
+            eventTime: null,
+            eventType: {
+              primary: "CREATE",
+              description: "USER",
+            },
+            actor: {
+              actorid: "null",
+              actoruserid: "null",
+            },
+            stackholders: {
+              ca: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+              actororg: {
+                id: req.body.organisationId ? req.body.organisationId : "null",
+                name: "null",
+                address: "null",
+              },
+              secondorg: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+            },
+            payload: {
+              data: {
+                data: null,
+              },
+            },
+          };
+          event_data.eventID = "ev0000" + evid;
+          event_data.eventTime = datee;
+          event_data.eventType.primary = "CREATE";
+          event_data.eventType.description = "USER";
+          event_data.payloaData = req.body;
+        
+          async function compute(event_data) {
+            resultt = await logEvent(event_data);
+            return resultt;     
+          }
+          console.log(result);
+          compute(event_data).then((response) => {
+            console.log(response);
+          });
+        }catch(error){
+          console.log(error);
+        }
+
         return apiResponse.successResponse(res, 'User registered Success');
         // Html email body
         /* let html = EmailContent({
@@ -536,6 +594,12 @@ exports.sendOtp = [
               'info',
               '<<<<< UserService < AuthController < login : user is active',
             );
+            if (user.phoneNumber) {
+              client.verify.services('VA0410823affc5222e309aca3742ecf315')
+                .verifications
+                .create({ to: user.phoneNumber, channel: 'sms' })
+                .then(verification => console.log(verification.status));
+            }
             let otp = utility.randomNumber(4);
             if (process.env.EMAIL_APPSTORE.includes(user.emailId) && user.emailId != '')
               otp = process.env.OTP_APPSTORE;
@@ -666,13 +730,16 @@ exports.verifyOtp = [
       } else {
         const emailId = req.body.emailId.toLowerCase();
         var query = { emailId };
+        let t_res = {};
         if (emailId.indexOf('@') === -1) {
           let phone = '+' + emailId;
           query = { phoneNumber: phone };
+          t_res = await client.verify.services('VA0410823affc5222e309aca3742ecf315')
+          .verificationChecks
+          .create({to: phone, code: req.body.otp});
         }
         const user = await EmployeeModel.findOne(query);
-
-        if (user && user.otp == req.body.otp) {
+        if (user && (user.otp == req.body.otp || t_res?.status === 'approved')) {
 
           var address;
 
@@ -1253,6 +1320,61 @@ exports.addWarehouse = [
         }
       });
 
+      try{
+        var evid = Math.random().toString(36).slice(2);
+        var datee = new Date();
+        datee = datee.toISOString();
+        let event_data = {
+          eventID: null,
+          eventTime: null,
+          eventType: {
+            primary: "ADD",
+            description: "WAREHOUSE",
+          },
+          actor: {
+            actorid: req.user.id ? req.user.id :"null",
+            actoruserid: req.user.emailId ? req.user.emailId : "null",
+          },
+          stackholders: {
+            ca: {
+              id: "null",
+              name: "null",
+              address: "null",
+            },
+            actororg: {
+              id: organisationId ? organisationId : "null",
+              name: "null",
+              address: postalAddress ? postalAddress : "null",
+            },
+            secondorg: {
+              id: "null",
+              name: "null",
+              address: "null",
+            },
+          },
+          payload: {
+            data: {
+              data: null,
+            },
+          },
+        };
+        event_data.eventID = "ev0000" + evid;
+        event_data.eventTime = datee;
+        event_data.eventType.primary = "ADD";
+        event_data.eventType.description = "WAREHOUSE";
+        event_data.payloaData = req.body;
+      
+        async function compute(event_data) {
+          resultt = await logEvent(event_data);
+          return resultt;     
+        }
+        console.log(result);
+        compute(event_data).then((response) => {
+          console.log(response);
+        });
+      }catch(error){
+        console.log(error);
+      }
       return apiResponse.successResponseWithData(
         res,
         'Warehouse added success',

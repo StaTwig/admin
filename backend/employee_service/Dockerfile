@@ -1,8 +1,14 @@
-FROM node:14.16.1
+FROM node:lts
 
-WORKDIR /src
+WORKDIR /src/utils/event_logger
 
-COPY . /src
+COPY /utils/event_logger .
+
+RUN yarn install
+
+WORKDIR /src/backend/service
+
+COPY /backend/employee_service/ .
 
 RUN yarn install
 

@@ -363,8 +363,13 @@ function getFilterConditionsSkuOrgType(filters) {
 			matchCondition.type = filters.orgType;
 		} else if (filters.orgType === 'ALL_VENDORS') {
 			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }, { type: 'BREWERY' }];
+		} else if (filters.orgType === 'NOTBREWERY') {
+			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }];
 		}
+
 	}
+	console.log(matchCondition);
+	
 	return matchCondition;
 }
 
@@ -472,8 +477,11 @@ function getDistrictConditionsWarehouse(filters) {
 
 
 const _getWarehouseIdsByDistrict = async (filters) => {
-	if(filters.orgType && filters.orgType !== '' && filters.orgType !== 'ALL_VENDORS')
-		filters.warehouseIds = await _getWarehousesByOrgType(filters)
+	if (filters.orgType && filters.orgType !== '' && filters.orgType !== 'ALL_VENDORS')
+		filters.warehouseIds = await _getWarehousesByOrgType(filters);
+	if (filters.inventory)
+		filters.warehouseIds = await _getWarehousesByOrgType({ ...filters, ...{ orgType: 'NOTBREWERY' } });
+	
 	const warehouses = await WarehouseModel.aggregate([
 		{
 			$match: getDistrictConditionsWarehouse(filters)
@@ -1378,6 +1386,88 @@ exports.getStatsByOrgType = [
 				"Operation success",
 				organizations
 			);
+		} catch (err) {
+			return apiResponse.ErrorResponse(res, err.message);
+		}
+	}
+];
+
+/**
+ * getStatsBySKUOrgType.
+ *
+ * @returns {Object}
+ */
+exports.getStatsBySKUOrgType = [
+	auth,
+	async function (req, res) {
+		try {
+			const filters = req.query;
+			const organizations = await OrganisationModel.aggregate([
+				{
+					$match: { $or: [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }] }
+				},
+				{
+					$lookup: {
+						from: 'warehouses',
+						localField: 'id',
+						foreignField: 'organisationId',
+						as: 'warehouseDetails'
+					}
+				},
+				{
+					$match: { "warehouseDetails.warehouseAddress.city": filters.district }
+				},
+				{
+					$group: {
+						_id: "$type",
+						orgIds: {
+							$addToSet: "$id"
+						}
+					}
+				}
+			]);
+			
+			let response = [];
+			for (const organization of organizations) {
+				let temp = {type: organization._id};
+				let inventory = await WarehouseModel.aggregate([
+					{
+						$match: {organisationId: {$in: organization.orgIds}}
+					},
+					{
+						$lookup: {
+							from: 'inventories',
+							localField: 'warehouseInventory',
+							foreignField: 'id',
+							as: 'inventories'
+						}
+					},
+					{
+						$unwind: "$inventories"
+					},
+					{
+						$unwind: "$inventories.inventoryDetails"
+					},
+					{
+						$match: {
+							'inventories.inventoryDetails.productId': filters.pid
+						}
+					},
+					{
+						$group: {
+							_id: '$inventories.inventoryDetails.productId',
+							quantity: { $sum: "$inventories.inventoryDetails.quantity" },
+						}
+					}
+				]);
+				
+				temp['inventory'] = inventory.length ? inventory[0].quantity : 0;
+				response.push(temp);
+			}
+
+				console.log(response);
+			return apiResponse.successResponseWithData(res, "Operation Success", response);
+
 		} catch (err) {
 			return apiResponse.ErrorResponse(res, err.message);
 		}

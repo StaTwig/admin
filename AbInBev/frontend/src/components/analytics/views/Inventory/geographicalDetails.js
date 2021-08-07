@@ -15,7 +15,7 @@ import {
   PolarAngleAxis,
   Label,
 } from 'recharts';
-import { getAnalyticsAllStats } from '../../../../actions/analyticsAction';
+import { getAnalyticsAllStats, getAllOrganisationTypeStats } from '../../../../actions/analyticsAction';
 import { useDispatch } from 'react-redux';
 import abbreviate from 'number-abbreviate';
 
@@ -39,10 +39,15 @@ const iGraphicalDetailedView = (props) => {
   const [stateLabel, setStateLabel] = useState('');
   const [shortName, setShortname] = useState(prop.shortName);
   const [image, setImage] = useState(prop.image);
+  const [arrIndex, setArrIndex] = useState(-1);
+  const [subAnalytics, setSubAnalytics] = useState([]);
   const dispatch = useDispatch();
   useEffect(() => {
     (async () => {
       let cond = '';
+      let gb = 'state';
+      console.log(props.params);
+      
       if (props.params) {
         if (props.params.state) cond = '&state=' + props.params.state;
         if (props.params.district) {
@@ -67,7 +72,7 @@ const iGraphicalDetailedView = (props) => {
             props.Otype +
             '&brand=' +
             prop.manufacturer +
-            '&group_by=state&inventory=true' +
+            '&group_by='+gb+'&inventory=true' +
             cond,
         ),
       );
@@ -211,6 +216,22 @@ const iGraphicalDetailedView = (props) => {
     }
     return sortConfig.key === name ? sortConfig.direction : undefined;
   };
+
+
+    const getAnalyticsByType = async (district, i) => {
+      setArrIndex(i);
+      const result = await dispatch(
+        getAllOrganisationTypeStats(
+            '?sku=' +
+              (props.sku ? props.sku : prop.externalId) +
+              '&pid=' +
+              prop.id +
+              '&district=' + district,
+          ),
+      );
+      setSubAnalytics(result.data);
+    };
+  
   return (
     <div className="productDetailedView">
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
@@ -438,14 +459,18 @@ const iGraphicalDetailedView = (props) => {
                     <td colSpan="3">No Data found</td>
                   </tr>
                 ) : (
-                  items.map((analytic, index) => (
+                    items.map((analytic, index) => (
+                    <>
                     <tr
                       key={index}
                       onClick={() => {
-                        setIsActive((i) => !i);
+                        // setIsActive((i) => !i);
                         openDetailView(analytic.groupedBy);
                         if (!isActive) {
                           setStateLabel(analytic.groupedBy);
+                        }
+                        else {
+                          getAnalyticsByType(analytic.groupedBy,analytic.groupedBy);
                         }
                       }}
                     >
@@ -455,6 +480,17 @@ const iGraphicalDetailedView = (props) => {
                       <td>{analytic.sales.toLocaleString('en-IN')}</td>
                       <td>{analytic.inventory.toLocaleString('en-IN')}</td>
                     </tr>
+                    {arrIndex === analytic.groupedBy &&
+                            subAnalytics?.map((sub, i) => (
+                              <tr key={i}>
+                                <td scope="row"><span className="stateLink">{sub.type}</span></td>
+                                <td scope="row">&nbsp;</td>
+                                <td scope="row">
+                                  {sub.inventory.toLocaleString('en-IN')}
+                                </td>
+                              </tr>
+                            ))}
+                </>
                   ))
                 )}
               </tbody>

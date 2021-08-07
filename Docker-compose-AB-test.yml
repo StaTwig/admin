@@ -147,7 +147,9 @@ services:
       - "traefik.http.routers.notification.tls.certresolver=lets-encrypt"
 
   po:
-    build: './backend/po_service'
+    build: 
+      context: .
+      dockerfile: backend/po_service/Dockerfile
     image: 'po_service1.0'
     container_name: 'po_service1.0'
     restart: always
@@ -209,7 +211,9 @@ services:
       - "traefik.http.routers.rbac.tls.certresolver=lets-encrypt"
 
   employee:
-    build: './backend/employee_service'
+    build: 
+      context: .
+      dockerfile: backend/employee_service/Dockerfile
     image: 'employee_service1.0'
     container_name: 'employee_service1.0'
     restart: always

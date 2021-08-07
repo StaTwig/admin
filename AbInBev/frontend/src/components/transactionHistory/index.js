@@ -729,6 +729,7 @@ const TransactionHistory = (props) => {
                                                   </td>
                                                   <td>
                                                     {selectedTransaction
+                                                      .shipmentUpdates.length > 1 ? selectedTransaction
                                                       .shipmentUpdates[1]
                                                       .updateComment != ''
                                                       ? displayComment(
@@ -736,7 +737,7 @@ const TransactionHistory = (props) => {
                                                             .shipmentUpdates[1]
                                                             .updateComment,
                                                         )
-                                                      : '-'}
+                                                      : '-' : '-'}
                                                   </td>
                                                 </tr>
                                               </>
