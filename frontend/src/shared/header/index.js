@@ -35,6 +35,8 @@ import { userLocationReducer } from '../../reducers/userLocationReducer';
 import setAuthToken from '../../utils/setAuthToken';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import axios from 'axios';
 
 const Header = props => {
   const dispatch = useDispatch();
@@ -42,6 +44,10 @@ const Header = props => {
   const [location, setLocation] = useState({});
   const [sidebar, openSidebar] = useState(false);
   const [search, setSearch] = useState('');
+  const [searchString, setSearchString] = useState('');
+
+  const [searchType, setSearchType] = useState('');
+
   const [searchtemp, setsearchtemp] = useState('');
   const [invalidSearch, setInvalidSearch] = useState(false);
   const [notifications, setNotifications] = useState([]);
@@ -53,14 +59,23 @@ const Header = props => {
   // const [shippingIds, setShippingIds] = useState([]);
   const [activeWarehouses, setActiveWarehouses]= useState([]);
   const [selectLocation, setSelectLocation] = useState("");
-  const options = [];
+  const [options, setOptions] = useState([{_id: "hello"},{_id: "hi"}]);
 
+  const filterOptions = createFilterOptions({
+    matchFrom: 'start',
+    stringify: option => option._id,
+  });
+  
   
 const ref = useOnclickOutside(() => {
     setMenu(false);
   });
   function onSearchChange(e) {
-    setSearch(e.target.value);
+    // console.log(e)
+    setSearchString(e._id)
+    setSearchType(e.type)
+    axios.get(`${config().getSuggestions}?searchString=${e}`)
+    .then((resp)=>setOptions([...resp.data.data]))
   }
 
   const closeModalFail = () => {
@@ -128,7 +143,7 @@ const ref = useOnclickOutside(() => {
           setInvalidSearch(true);
       })
     }
-    else{
+    else if(searchType === "transitNumber"){
         getAllAirwayBillNo().then((result)=>{
           dispatch(turnOn());
           let airWayBillNowithshipmentID = result.data;
@@ -145,6 +160,27 @@ const ref = useOnclickOutside(() => {
             setInvalidSearch(true); 
 
         });
+    }
+    else if (searchType === "productName"){
+      axios.get(`${config().searchProduct}&productName=${searchString}`)
+      .then((resp)=>{
+        if(resp.data.data.length>0)
+        props.history.push(`/viewproduct`, {data: resp.data.data[0]})
+        else
+        alert(`The product "${searchString}" is not found in the inventory`)
+      })
+      .catch((err)=> alert(err.response.data.message))
+    }
+    else if (searchType === "productType"){
+      axios.get(`${config().searchProduct}&productType=${searchString}`)
+      .then((resp)=>{
+        // console.log(resp.data)
+        if(resp.data.data.length>0)
+        props.history.push(`/productinventory/${searchString}`)
+        else
+        alert(`Theere are no products belonging to type: "${searchString}" in your inventory`)
+      })
+      .catch((err)=> alert(err.response.data.message))
     }
     // if(orderIds.indexOf(search)!=-1)
     // props.history.push(`/vieworder/${search}`);
@@ -252,21 +288,25 @@ const imgs = config().fetchProfileImage;
         freeSolo
         //value={search}
         options={options}
+        getOptionLabel={(option) => option._id}
+        filterOptions={filterOptions}
         placeholder="Search PO ID/ Shipment ID/ Transit Number"
             onFocus={(e) => e.target.placeholder = ''}
             onBlur={(e) => e.target.placeholder = 'Search PO ID/ Shipment ID/ Transit Number'}
             inputValue={search}
             onInputChange={(event, newInputValue) => {
               setSearch(newInputValue);
-              console.log(newInputValue,"new------")
+              // console.log(newInputValue,"new------")
+              onSearchChange(newInputValue)
             }}
             onChange={(event, newValue) => {
-              onSearchChange(newValue);
-              console.log(newValue,"---------")
+              onSearchChange(newValue)
+              // console.log("---------")
             }}
           renderInput={(params) => (
           <TextField {...params} label="Search PO ID/ Shipment ID/ Transit Number" margin="normal" variant="outlined" />
-        )}
+        )
+}
       />
         {/* <input
             type="text"
