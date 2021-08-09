@@ -142,7 +142,7 @@ const ReviewOrder = props => {
                 <div className="w-100"></div>
                 <div className="col row  mt-5">
                   <span className="col-4">Organisation Location:</span>
-                  <span className="col ml-2 " style={{color: "black",fontSize:"14px"}} >{order.toOrgLocName}</span>
+                  <span className="col" style={{color: "black",fontSize:"14px"}} >{order.toOrgLocName}, {order.toOrgCountry}, {order.toOrgRegion}</span>
                 </div>
                 <div className="col row  mt-5">
                 <span className="col-4"></span>

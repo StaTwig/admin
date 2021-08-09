@@ -82,7 +82,7 @@ const EditRow = props => {
                   groups={products}
                 /> */}
                 <Select
-                className="no-border"
+                className="no-border mr-3"
                 placeholder= {<div className= "select-placeholder-text"> Product Name </div>} 
                 value={(prod.id==undefined || prod.name==undefined || prod.name==="")?null:{value: prod.id, label: prod.name}}
                   defaultInputValue={prod.name}
@@ -95,7 +95,7 @@ const EditRow = props => {
                         
                
               </div>
-              <div className="col-3 title recived-text align-self-center" style={{position:"relative",right:"20px"}}>{prod.id ? prod.id : <div className="" style={{fontSize:"14px",lineHeight:"21px",color:"#a8a8a8"}}>Product ID</div>}</div>
+              <div className="col-3 title recived-text align-self-center" style={{position:"relative",right:"30px"}}>{prod.id ? prod.id : <div className="" style={{fontSize:"14px",lineHeight:"21px",color:"#a8a8a8"}}>Product ID</div>}</div>
             </div>
           </div>
         </div>

@@ -1,5 +1,6 @@
 import React, { useState} from 'react';
 import Pagination from '@material-ui/lab/Pagination';
+import user from '../../../assets/icons/user.svg';
 import './style.scss'
 const Table = props => {
   const [ batch, setBatch] = useState('');
@@ -15,11 +16,12 @@ var orgTypeArray = [...props.lastMile]
            {orgTypeArray.map((lastmile,index) => ( 
             <div key={index} onClick={()=>props.cardFill(lastmile)}>
               <div className="rTableRow pt-3 pb-3">
-              <div className="rTableCell" >{lastmile.eol_info.first_name +" "+  lastmile.eol_info.last_name}</div>
-              <div className="rTableCell ml-2" >{lastmile.eol_info.idProof.idNo}</div>
-              <div className="rTableCell ml-2">{lastmile.eol_info.contact_number}</div>
-              <div className="rTableCell ml-2">{lastmile.productAdministeredInfo[0].productName}</div>
-              <div className="rTableCell ">{lastmile.productAdministeredInfo[0].administeredData.split('T').join(" ").substring(0, 23)}</div> 
+              <img src={user} width="27" height="18" alt="User" className="ml-4" />
+              <div className="rTableCell">{lastmile.eol_info.first_name +" "+  lastmile.eol_info.last_name}</div>
+              <div className="rTableCell ml-3" >{lastmile.eol_info.idProof.idNo}</div>
+              <div className="rTableCell ml-5">{lastmile.eol_info.contact_number}</div>
+              <div className="rTableCell ml-5">{lastmile.productAdministeredInfo[0].productName}</div>
+              <div className="rTableCell">{lastmile.productAdministeredInfo[0].administeredData.split('T').join(" ").substring(0, 19)}</div> 
               </div>
            
             </div>
@@ -29,7 +31,7 @@ var orgTypeArray = [...props.lastMile]
           {orgTypeArray?.length > 0 && (
             <div className="d-flex flex-row-reverse">
             <Pagination showFirstButton showLastButton color="primary" count={Math.ceil(props.count/10)} onChange={handlePageChange} />
-            <span className="mx-5 my-1 rounded text-primary">Total Records {props.count} </span>
+            <span className="mx-5 my-1 rounded text-dark">Total Records {props.count} </span>
           </div> 
           )}
         

@@ -53,8 +53,8 @@ const lastMile=(props)=>{
         coloumn4: 'Product',
         coloumn5: 'Date & Time',
     
-        img1: <img src={patient} width="18" height="20" className="pb-1"/>,
-        img2: <img src={idprrof} width="23" height="20" className="pb-1"/>,
+        img1: <img src={patient} width="15" height="20" className="pb-1"/>,
+        img2: <img src={idprrof} width="20" height="20" className="pb-1"/>,
         img3: <img src={mobile} width="16" height="25" className="pb-1"/>,
         img4: <img src={Product} width="20" height="22" className="pb-1"/>,
         img5: <img src={Date_time} width="19" height="22" className="pb-1"/>,
@@ -185,7 +185,7 @@ return (
 <div>
 <div className="lastmile" style={{position:"relative",left:"-22px",top:"-20px"}}>
     <h1 className="breadcrumb">LAST MILE</h1>
-    {/* <button className="btn btn-md btn-main-blue float-center ml-5"> 
+    {/* <button className="btn btn-main-blue float-center ml-5" style={{position:"absolute", left:"690px"}}> 
               <img src={ExportIcon} width="16" height="16" className="mr-3" />
               <span>Export</span>
               <img src={dropdownIcon} width="12" height="12" className="ml-3" />
@@ -238,7 +238,7 @@ return (
                     <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">State</label>
                     <div className="form-control col">
                         <DropdownButton
-                             name={state===''?'Select state':state}
+                             name={state===''?'Select State':state}
                              groups={states}
                              onSelect={item => {
                                 setstate(item)
@@ -251,7 +251,7 @@ return (
                     <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">City</label>
                     <div className="form-control col">
                         <DropdownButton
-                             name={district===''?'Select district':district}
+                             name={district===''?'Select District':district}
                              groups={cities}
                              onSelect={item => {
                                 setdistrict(item)
@@ -264,7 +264,7 @@ return (
                     <label htmlFor="shipmentId" className="mt-2 mr-3 col-4">Location</label>
                     <div className="form-control col">
                         <DropdownButton
-                             name={location===''?'Select location': location}
+                             name={location===''?'Select Location': location}
                              groups={locations}
                              onSelect={item => {
                                 setlocation(item)
@@ -302,15 +302,15 @@ return (
                 <div className="d-flex text-white mt-2 flex-row " >
                     <ul className="mr-3 text-light">
                         {/* <li className="mb-1">Country ID</li> */}
-                        <li className="mb-1">Country</li>
-                        <li className="mb-1">Location</li>
-                        <li className="mb-1">Location Name</li>
+                        <li className="mb-3">Country</li>
+                        <li className="mb-3">Location</li>
+                        <li className="mb-3">Location Name</li>
                     </ul>
                     <ul class="text-light">
                         {/* <li className="mb-1">{countryId}</li> */}
-                        <li className="mb-1">{locationCountry}</li>
-                        <li className="mb-1">{locationState}</li>
-                        <li className="mb-1">{locationName}</li>
+                        <li className="mb-3">{locationCountry}</li>
+                        <li className="mb-3">{locationState}</li>
+                        <li className="mb-3">{locationName}</li>
                     </ul>
                 </div>
                 </div>
