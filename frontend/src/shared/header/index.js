@@ -59,7 +59,7 @@ const Header = props => {
   // const [shippingIds, setShippingIds] = useState([]);
   const [activeWarehouses, setActiveWarehouses]= useState([]);
   const [selectLocation, setSelectLocation] = useState("");
-  const [options, setOptions] = useState([{_id: "hello"},{_id: "hi"}]);
+  const [options, setOptions] = useState([]);
 
   const filterOptions = createFilterOptions({
     matchFrom: 'start',
