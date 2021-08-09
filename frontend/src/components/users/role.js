@@ -27,7 +27,7 @@ const Role = (props) => {
       >
         <div className="form-check width30">
           <input
-            className="form-check-input"
+            className="radio1 form-check-input"
             type="radio"
             name={name}
             id={`${name}${i}`}
