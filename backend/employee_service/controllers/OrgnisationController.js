@@ -38,7 +38,7 @@ function getOrgCondition(query){
         $lte: new Date(now)
       };
     }
-    else if(query.dateRange=='month'){
+    else if(query.dateRange=='thisMonth'){
       matchCondition.createdAt = {
         $gte: new Date(oneMonthAgo),
         $lte: new Date(now)
@@ -50,13 +50,13 @@ function getOrgCondition(query){
         $lte: new Date(now)
       };
     }
-    else if(query.dateRange=='year'){
+    else if(query.dateRange=='thisYear'){
       matchCondition.createdAt = {
         $gte: new Date(oneYearAgo),
         $lte: new Date(now)
       };
     }
-    else if(query.dateRange=='week'){
+    else if(query.dateRange=='thisWeek'){
       matchCondition.createdAt = {
         $gte: new Date(oneWeek),
         $lte: new Date(now)
