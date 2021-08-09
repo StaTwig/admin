@@ -13,6 +13,8 @@ import {
   SET_ORGANISATION_TYPES,
   SET_COUNTRY_TYPES,
   SET_REGION_TYPES,
+  SET_ALL_ORGANISATIONS,
+  SET_ALL_ORGANISATION_ACTIVE_USERS,
 } from "../constants/organisationConstants";
 import { turnOn, turnOff } from "./spinnerActions";
 
@@ -112,7 +114,7 @@ export const getAllOrganisations = () => {
       dispatch(turnOn());
       const result = await axios.get(config().getAllOrgUrl);
       dispatch({
-        type: SET_ORGANISATIONS,
+        type: SET_ALL_ORGANISATIONS,
         payload: result.data,
       });
       dispatch(turnOff());
@@ -366,7 +368,7 @@ export const getOrgActiveUsers = () => {
       dispatch(turnOn());
       const result = await axios.get(config().getOrgActiveUsers);
       dispatch({
-        type: SET_ORGANISATION_USERS,
+        type: SET_ALL_ORGANISATION_ACTIVE_USERS,
         payload: result.data,
       });
       dispatch(turnOff());

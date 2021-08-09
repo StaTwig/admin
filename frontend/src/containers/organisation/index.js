@@ -17,8 +17,8 @@ const OrganisationContainer = (props) => {
   const closeModals = () => setShowModals(false);
   const [message, setMessage] = useState("");
   const [successmessage, setSuccessMessage] = useState("");
-  const [params, setParams] = useState("");
-  const [paramType, setParamType] = useState("");
+  const [queryKey, setQueryKey] = useState("");
+  const [queryValue, setQueryValue] = useState("");
   const [error, setError] = useState("");
 
   const [countryData, setCountryData] = useState([]);
@@ -34,7 +34,7 @@ const OrganisationContainer = (props) => {
   const [replicaOrgTypeData, setReplicaOrgTypeData] = useState([]);
 
   const [organisationList, setOrganisationList] = useState([]);
- 
+
   const [showDropDownForType, setShowDropDownForType] = useState(false);
   const [showDropDownForCreatedOn, setShowDropDownForCreatedOn] = useState(false);
   const [showDropDownForStatus, setShowDropDownForStatus] = useState(false);
@@ -49,24 +49,23 @@ const OrganisationContainer = (props) => {
   }
 
   useEffect(() => {
-    if (params && paramType) {
-      if (paramType === 'orgType') {
-        requestWithParams(params, dispatch, 'orgType');
-      } else if (paramType === 'country') {
-        requestWithParams(params, dispatch, 'country');
-      } else if (paramType === 'region') {
-        requestWithParams(params, dispatch, 'region');
-      } else if (paramType === 'status') {
-        requestWithParams(params, dispatch, 'status');
+    if (queryKey && queryValue) {
+      if (queryValue === 'orgType') {
+        requestWithParams(queryKey, dispatch, 'orgType');
+      } else if (queryValue === 'country') {
+        requestWithParams(queryKey, dispatch, 'country');
+      } else if (queryValue === 'region') {
+        requestWithParams(queryKey, dispatch, 'region');
+      } else if (queryValue === 'status') {
+        requestWithParams(queryKey, dispatch, 'status');
       }
     } else {
       async function fetchData() {
-        const originalOrganisationData = await dispatch(getOrgs());
-        localStorage.setItem("organisationData", JSON.stringify(originalOrganisationData));
+        setOrganisationList(await dispatch(getOrgs()));
       }
       fetchData();
     }
-  }, [params]);
+  }, [queryKey]);
 
   const orgList = useSelector((state) => {
     return state.organisation.list;
@@ -90,20 +89,20 @@ const OrganisationContainer = (props) => {
   };
 
   useEffect(() => {
-      const organisationData = JSON.parse(localStorage.getItem('organisationData'));
-      
-      setCountryData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationData, 'country', 'countryName'))]);
-      setReplicaCountryData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationData, 'country', 'countryName'))]);
+    if (organisationList.length > 0) {
+      setCountryData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationList, 'country', 'countryName'))]);
+      setReplicaCountryData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationList, 'country', 'countryName'))]);
 
-      setRegionData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationData, 'region', 'regionName'))]);
-      setReplicaRegionData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationData, 'region', 'regionName'))]);
+      setRegionData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationList, 'region', 'regionName'))]);
+      setReplicaRegionData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationList, 'region', 'regionName'))]);
 
-      setStatusData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationData, 'status'))]);
-      setReplicaStatusData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationData, 'status'))]);
+      setStatusData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationList, 'status'))]);
+      setReplicaStatusData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationList, 'status'))]);
 
-      setOrgTypeData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationData, 'type'))]);
-      setReplicaOrgTypeData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationData, 'type'))]);
-  },[]);
+      setOrgTypeData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationList, 'type'))]);
+      setReplicaOrgTypeData([...prepareDropdownData(getUniqueStringFromOrgListForGivenType(organisationList, 'type'))]);
+    }
+  }, [organisationList]);
 
   const updateOrgs = async (data) => {
     dispatch(turnOn());
@@ -170,9 +169,9 @@ const OrganisationContainer = (props) => {
   const setCheckedAndUnCheckedOfProvidedList = (typeOriginalData, index) => {
     return typeOriginalData.map((item, i) => {
       if (i === index) {
-        item.checked = true;
+        item.checked = !item.checked;
       } else {
-        item.checked = false
+        item.checked = false;
       }
       return item;
     });
@@ -181,29 +180,26 @@ const OrganisationContainer = (props) => {
   const onSelectionOfDropdownValue = (index, type, value) => {
     if (type === 'orgType') {
       setOrgTypeData([...setCheckedAndUnCheckedOfProvidedList(orgTypeData, index)]);
-      setParams(value);
-      setParamType(type);
+      setQueryKeyAndQueryValue(setQueryKey, value, setQueryValue, type, orgTypeData, index);
       markOpenedDrownsToFalse(setShowDropDownForRegion, setShowDropDownForCreatedOn, setShowDropDownForStatus, setShowDropDownForType, setShowDropDownForCountry);
     } else if (type === 'country') {
       setCountryData([...setCheckedAndUnCheckedOfProvidedList(countryData, index)]);
-      setParams(value);
-      setParamType(type);
+      setQueryKeyAndQueryValue(setQueryKey, value, setQueryValue, type, countryData, index);
       markOpenedDrownsToFalse(setShowDropDownForRegion, setShowDropDownForCreatedOn, setShowDropDownForStatus, setShowDropDownForType, setShowDropDownForCountry);
     } else if (type === 'region') {
       setRegionData([...setCheckedAndUnCheckedOfProvidedList(regionData, index)]);
-      setParams(value);
-      setParamType(type);
+      setQueryKeyAndQueryValue(setQueryKey, value, setQueryValue, type, regionData, index);
       markOpenedDrownsToFalse(setShowDropDownForRegion, setShowDropDownForCreatedOn, setShowDropDownForStatus, setShowDropDownForType, setShowDropDownForCountry);
     } else if (type === 'status') {
       setStatusData([...setCheckedAndUnCheckedOfProvidedList(statusData, index)]);
-      setParams(value);
-      setParamType(type);
+      setQueryKeyAndQueryValue(setQueryKey, value, setQueryValue, type, statusData, index);
       markOpenedDrownsToFalse(setShowDropDownForRegion, setShowDropDownForCreatedOn, setShowDropDownForStatus, setShowDropDownForType, setShowDropDownForCountry);
     } else if (type === 'createdOn') {
       // setStatusData([...setCheckedAndUnCheckedOfProvidedList(statusData, index)]);
       setShowDropDownForCreatedOn(!showDropDownForCreatedOn);
       markOpenedDrownsToFalse(setShowDropDownForRegion, setShowDropDownForCreatedOn, setShowDropDownForStatus, setShowDropDownForType, setShowDropDownForCountry);
     } else {
+      setOrgTypeData([...setCheckedAndUnCheckedOfProvidedList(orgTypeData)]);
     }
   };
 
@@ -258,6 +254,16 @@ const OrganisationContainer = (props) => {
 };
 
 export default OrganisationContainer;
+
+function setQueryKeyAndQueryValue(setQueryValue, value, setQueryType, type, data, index) {
+  if(data[index].checked) {
+    setQueryValue(value);
+    setQueryType(type);
+  } else {
+    setQueryValue();
+    setQueryType();
+  }
+}
 
 function markOpenedDrownsToFalse(setShowDropDownForRegion, setShowDropDownForCreatedOn, setShowDropDownForStatus, setShowDropDownForType, setShowDropDownForCountry) {
   setShowDropDownForRegion(false);

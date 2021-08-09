@@ -16,9 +16,9 @@ const AddressDetails = (props) => {
             <span className="row justify-content-md-center">&nbsp;</span>
           </p>
           {address.employees && address.employees.length > 0 ?
-            address.employees.map(data => {
+            address.employees.map(employee => {
               return <p className='txtColor'>
-                {data?.name}
+                {employee}
               </p>
             }) : ''
           }
