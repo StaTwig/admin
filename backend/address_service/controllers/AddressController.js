@@ -39,7 +39,7 @@ exports.addressesOfOrgWarehouses = [
   auth,
   async (req, res) => {
     try {
-      await Warehouse.find({ organisationId: req.user.organisationId })
+      await Warehouse.find({$and: [{organisationId: req.user.organisationId},{status:"ACTIVE"}]})
         .then((warehouses) => {
           return apiResponse.successResponseWithData(
             res,
