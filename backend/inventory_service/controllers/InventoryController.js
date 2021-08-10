@@ -2952,7 +2952,7 @@ exports.searchProduct = [
   auth,
   async (req, res) => {
     try {
-      const {productName, producttype  } = req.query;
+      const {productName, productType  } = req.query;
       var warehouseId = "";
       if (!req.query.warehouseId)
         warehouseId = req.user.warehouseId;
@@ -2965,8 +2965,8 @@ exports.searchProduct = [
         if (productName) {
           elementMatchQuery[`products.name`] = productName;
         }
-        if (producttype) {
-          elementMatchQuery[`products.type`] = producttype;
+        if (productType) {
+          elementMatchQuery[`products.type`] = productType;
         }
         const inventory = await InventoryModel.aggregate([
           { $unwind: "$inventoryDetails" },
