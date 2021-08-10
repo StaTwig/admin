@@ -80,7 +80,7 @@ const Table = props => {
                   <div className="col-2 txt1" style={{position:'relative',left:"8.5%"}}><p className="mb-0 bold mb-0 address text-muted">{products[0]?.name+(products.length > 1 ? ' + '+(products.length-1)+' more' : '')}</p></div> 
                 
                 <div className="col-2 txt1 ml-5 d-flex flex-column" style={{position:"relative", left:"7%"}}> 
-                  <span>{customer.organisation.name}</span> 
+                  <span>{customer.warehouse.title}</span> 
                   <span className="text-muted ">{customer.warehouse && customer.warehouse.warehouseAddress ?  customer.warehouse.warehouseAddress.firstLine + " "+customer.warehouse.warehouseAddress.city: null}</span>
                 </div> 
 
