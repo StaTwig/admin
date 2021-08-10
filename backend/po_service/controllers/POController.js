@@ -592,6 +592,7 @@ exports.addPOsFromExcel = [
                   "customerOrganisation": po['IP Code'],
                   "name" : po['IP Name'],
                   "country" : po['Country Name'],
+				  "region"   : po['Region Name'],
                   "address" : 'NA',
                   // "customerIncharge": po['Customer Incharge'],
                   "shippingAddress": {
@@ -669,6 +670,7 @@ exports.addPOsFromExcel = [
                   }
                   else {
                     const country = poDataArray[i].customer?.country ? poDataArray[i].customer?.country : 'India';
+					const region = poDataArray[i].customer?.region ? poDataArray[i].customer?.region : 'Asia';
                     const address = poDataArray[i].customer?.address ? poDataArray[i].customer?.address : '';
                     const incrementCounterOrg = await CounterModel.update({
                       'counters.name': "orgId"
@@ -727,6 +729,11 @@ exports.addPOsFromExcel = [
                         countryId: '001',
                         countryName: country
                       },
+					  region:{
+					  id:'reg123',
+					  regionName: region,
+					  name: region
+					  },
                       configuration_id: 'CONF000',
                       authority: req.body?.authority,
                       externalId : poDataArray[i].customer.customerOrganisation
@@ -754,6 +761,7 @@ exports.addPOsFromExcel = [
                       warehouseAddress: {
                         firstLine: address,
                         secondLine: "",
+						region: region,
                         city: address,
                         state: address,
                         country: country,
@@ -792,6 +800,7 @@ exports.addPOsFromExcel = [
                 }
                   else {
                     const country = poDataArray[i].supplier?.country ? poDataArray[i].supplier?.country : 'India';
+                    const region = poDataArray[i].supplier?.region ? poDataArray[i].supplier?.region : 'Asia';
                     const address = poDataArray[i].supplier?.address ? poDataArray[i].supplier?.address : 'Address NA';
                     const incrementCounterOrg = await CounterModel.update({
                       'counters.name': "orgId"
@@ -850,6 +859,11 @@ exports.addPOsFromExcel = [
                         countryId: '001',
                         countryName: country
                       },
+					  region:{
+					  id:'reg123',
+					  regionName: region,
+					  name: region
+					  },
                       configuration_id: 'CONF000',
                       authority: req.body?.authority,
                       externalId : poDataArray[i].supplier.supplierOrganisation,
@@ -879,6 +893,7 @@ exports.addPOsFromExcel = [
                         secondLine: "",
                         city: address,
                         state: address,
+						region: region,
                         country: country,
                         landmark: "",
                       },
@@ -928,6 +943,8 @@ exports.addPOsFromExcel = [
     }
   },
 ];
+
+
 
 
 exports.success = [
