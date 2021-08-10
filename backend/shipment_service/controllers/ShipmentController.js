@@ -123,7 +123,7 @@ const poUpdate = async (id, quantity, poId, shipmentStatus, next) => {
       },
       {
         $inc: {
-          "products.$.productQuantityShipped": quantity,
+          "products.$.productQuantityShipped": parseInt(quantity),
         },
       }
     );
@@ -196,13 +196,12 @@ const poUpdate = async (id, quantity, poId, shipmentStatus, next) => {
     event_data.eventTime = datee;
     event_data.eventType.primary = "UPDATE";
     event_data.eventType.description = "ORDER";
-    event_data.payloaData = event.payloaData;
+    event_data.payloadData = event.payloadData;
   
     async function compute(event_data) {
       resultt = await logEvent(event_data);
       return resultt;     
     }
-    console.log(result);
     compute(event_data).then((response) => {
       console.log(response);
     });
@@ -283,7 +282,7 @@ const shipmentUpdate = async (
   event_data.stackholders.secondorg.id = event.secondaryOrgId || "null";
   event_data.stackholders.secondorg.name = event.secondaryOrgName || "null";
   event_data.stackholders.secondorg.address = event.secondaryOrgAddress || "null";
-  event_data.payload.data = event.payloaData;
+  event_data.payload.data = event.payloadData;
 
   async function compute(event_data) {
     resultt = await logEvent(event_data);
@@ -1672,46 +1671,7 @@ exports.updateStatus = [
             }
           )
             .then((result) => {
-              //   event_data = {
-              //     "eventID": "ev0000"+  Math.random().toString(36).slice(2),
-              //     "eventTime": new Date().toISOString(),
-              //     "eventType": {
-              //         "primary": "CREATE",
-              //         "description": "SHIPMENT ALERTS"
-              //     },
-              //     "actor": {
-              //         "actorid": "userid1",
-              //         "actoruserid": "ashwini@statwig.com"
-              //     },
-              //     "stackholders": {
-              //         "ca": {
-              //             "id": "org001",
-              //             "name": "Statwig Pvt. Ltd.",
-              //             "address": "ca_address_object"
-              //         },
-              //         "actororg": {
-              //             "id": "org002",
-              //             "name": "Appollo Hospitals Jublihills",
-              //             "address": "actororg_address_object"
-              //         },
-              //         "secondorg": {
-              //             "id": "org003",
-              //             "name": "Med Plus Gachibowli",
-              //             "address": "secondorg_address_object"
-              //         }
-              //     },
-              //     "payload": {
-              //         "data": {
-              //             "abc": 123
-              //         }
-              //     }
-              // }
-              // async function compute(event_data) {
-              //     result = await logEvent(event_data)
-              //     return result
-              // }
-
-              // compute(event_data).then((response) => console.log(response))
+            
               return apiResponse.successResponseWithData(
                 res,
                 "Status Updated",
