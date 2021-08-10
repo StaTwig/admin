@@ -241,6 +241,24 @@ const NewAddress = (props) => {
                   dirty,
                 }) => (
                   <form onSubmit={handleSubmit} className="mb-3" enableReinitialize>
+                  <TextField 
+                          style={{
+                              width:"425px"
+                          }}
+                          id="standard-basic"
+                          label="Address Title" 
+                          className="form-control2 mb-3"
+                          name="title"
+                          value={values.title}
+                          // handleChange={handleChange}
+                          onBlur={handleBlur}
+                          error={errors.title && touched.title}
+                          onChange={(e) => {handleChange(e);setAddressTitle(e.target.value)}}
+                        />
+                        {/* {errors.title && touched.title && (
+                        <span className="error-msg text-dangerS">{errors.title}</span>
+                        )}  */} 
+
                         <Autocomplete
                           value={values.region}
                           onBlur={handleBlur}
@@ -257,13 +275,13 @@ const NewAddress = (props) => {
                           style={{ width: 300 }}
                           renderInput={(params) => <TextField style={{
                             width:"425px"
-                        }}{...params} label="Select Region"  />}
+                        }}{...params} className="mb-3" /*error={errors.region}  touched={touched.region} */ label="Select Region"  />}
                         />
-                        {errors.region && touched.region && (
+                        {/* {errors.region && touched.region && (
                           <span className="error-msg text-danger-ANL">
                             {errors.region}
                           </span>
-                        )}
+                        )} */}
                         <Autocomplete
                           value={values.country}
                           onChange={(event, newValue) => {
@@ -279,13 +297,13 @@ const NewAddress = (props) => {
                           style={{ width: 300 }}
                           renderInput={(params) => <TextField style={{
                             width:"425px"
-                        }} {...params} label="Select Country"  />}
+                        }} {...params} className="mb-3"  label="Select Country"  />}
                         />
-                        {errors.country && touched.country && (
+                        {/* {errors.country && touched.country && (
                           <span className="error-msg text-danger-ANL">
                             {errors.country}
                           </span>
-                        )}
+                        )} */}
                         <Autocomplete
                           onBlur={handleBlur}
                           value={values.state}
@@ -301,15 +319,16 @@ const NewAddress = (props) => {
                           style={{ width: 300 }}
                           renderInput={(params) => < TextField style={{
                             width:"425px"
-                        }}{...params} label="Select State"  />}
+                        }}{...params} className="mb-3"  label="Select State"  />}
                         />
-                        {errors.state && touched.state && (
+                        {/* {errors.state && touched.state && (
                           <span className="error-msg text-danger-ANL">
                             {errors.state}
                           </span>
-                        )}
+                        )} */}
                         <Autocomplete
                           value={values.town}
+                          onBlur={handleBlur}
                           onChange={(event, newValue) => {
                             setFieldValue("town",newValue);
                             setCity(newValue);
@@ -319,50 +338,32 @@ const NewAddress = (props) => {
                           style={{ width: 300 }}
                           renderInput={(params) => <TextField style={{
                             width:"425px"
-                        }} {...params} label="Select City"  />}
+                        }} {...params} className="mb-3" label="Select City"  />}
                         />
-                        {errors.town && touched.town && (
+                        {/* {errors.town && touched.town && (
                           <span className="error-msg text-danger-ANL">
                             {errors.town}
                           </span>
-                        )}
-                        <TextField 
-                          style={{
-                              width:"425px"
-                          }}
-                          id="standard-basic"
-                          label="Title" 
-                          className="form-control2"
-                          name="title"
-                          value={values.title}
-                          // handleChange={handleChange}
-                          onBlur={handleBlur}
-                          error={errors.title}
-                          // touched={touched.title}
-                          onChange={(e) => {handleChange(e);setAddressTitle(e.target.value)}}
-                        />
-                        {errors.title && touched.title && (
-                        <span className="error-msg text-dangerS">{errors.title}</span>
-                        )}  
-                  <TextField 
+                        )} */}
+                   <TextField 
                     style={{
                         width:"425px"
                     }}
                     id="standard-basic"
                     label="Address Line" 
-                    className="form-control2"
+                    className="form-control2 mb-3"
                     name="area"
                     value={values.area}
                     // handleChange={handleChange}
                     onBlur={handleBlur}
-                    error={errors.area}
-                    // touched={touched.area}
+                    error={errors.area && touched.area}
+                    //touched={touched.area}
                     onChange={(e) => {handleChange(e);setAddressLine(e.target.value)}}
                     />
-                    {errors.area && touched.area && (
+                    {/* {errors.area && touched.area && (
                     <span className="error-msg text-dangerS">{errors.area}</span>
-                  )}  
-
+                    )}  */} 
+                    <br/>
                 <TextField 
                   style={{
                       width:"425px"
@@ -370,18 +371,18 @@ const NewAddress = (props) => {
                   id="standard-basic"
                   label="Pin Code" 
                   type="number"
-                  className="form-control2"
+                  className="form-control2 mb-3"
                   name="pincode"
                   value={values.pincode}
-                  handleChange={handleChange}
-                  handleBlur={handleBlur}
-                  error={errors.pincode}
-                  touched={touched.pincode}
+                  //handleChange={handleChange}
+                  onBlur={handleBlur}
+                  error={errors.pincode && touched.pincode}
+                  //touched={touched.pincode}
                   onChange={(e) => {handleChange(e); setPincode(e.target.value)}}
                   />
-                  {errors.pincode && touched.pincode && (
+                  {/* {errors.pincode && touched.pincode && (
                   <span className="error-msg text-dangerS">{errors.pincode}</span>
-                  )}
+                  )} */}
                     {/* <AddressField
                       error={errors.title}
                       touched={touched.title}
@@ -453,15 +454,16 @@ const NewAddress = (props) => {
                       handleChange={handleChange}
                       handleBlur={handleBlur}
                       value={values.pincode}
-                    /> */}
-                    <div className="pt-5">
-                      <button type="submit" className="btn btn-warning ">
-                        <i
-                          className="fa fa-plus txt pr-2"
-                          aria-hidden="true"
-                        ></i>
-                        <span className="txt">Add New Address</span>
-                      </button>
+                    /> */}<br/>
+                    <div className="w-50 d-flex flex-row-reverse" style={{float:"right", position:"relative", left:"330px"}}>
+                    <button type="submit" 
+                    className="btn btn-warning">
+                      <i
+                        className="fa fa-plus txt pr-2"
+                        aria-hidden="true"
+                      ></i>
+                      <span className="txt">Add New Address</span>
+                    </button>
                     </div>
                   </form>
                 )}
@@ -479,8 +481,7 @@ const NewAddress = (props) => {
               </div>
               <div className="pl-1 w-75 pt-1">
                 <p className="txtColor font-13">
-                  This will auto populate/ auto fill every information that is
-                  shown mandatory
+                  This will auto populate/ auto fill every information that is shown mandatory
                 </p>
               </div>
             </div>
