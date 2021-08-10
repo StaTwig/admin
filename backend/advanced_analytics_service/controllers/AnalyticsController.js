@@ -19,6 +19,17 @@ const BREWERY_ORG = 'BREWERY';
 const S1_ORG = 'S1';
 const S2_ORG = 'S2';
 
+const redis = require("redis");
+const { promisifyAll } = require('bluebird');
+promisifyAll(redis);
+const client = redis.createClient(process.env.REDIS_URL);
+client.on('connect', () => {
+	console.log("Connected to Redis");
+});
+client.on('error', err => {
+    console.log('Error ' + err);
+});
+
 const DATE_FORMAT = 'YYYY-MM-DD';
 var today = new Date()
 var lastWeek = new Date()
@@ -352,8 +363,13 @@ function getFilterConditionsSkuOrgType(filters) {
 			matchCondition.type = filters.orgType;
 		} else if (filters.orgType === 'ALL_VENDORS') {
 			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }, { type: 'BREWERY' }];
+		} else if (filters.orgType === 'NOTBREWERY') {
+			matchCondition.$or = [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }];
 		}
+
 	}
+	console.log(matchCondition);
+	
 	return matchCondition;
 }
 
@@ -461,8 +477,11 @@ function getDistrictConditionsWarehouse(filters) {
 
 
 const _getWarehouseIdsByDistrict = async (filters) => {
-	if(filters.orgType && filters.orgType !== '' && filters.orgType !== 'ALL_VENDORS')
-		filters.warehouseIds = await _getWarehousesByOrgType(filters)
+	if (filters.orgType && filters.orgType !== '' && filters.orgType !== 'ALL_VENDORS')
+		filters.warehouseIds = await _getWarehousesByOrgType(filters);
+	if (filters.inventory)
+		filters.warehouseIds = await _getWarehousesByOrgType({ ...filters, ...{ orgType: 'NOTBREWERY' } });
+	
 	const warehouses = await WarehouseModel.aggregate([
 		{
 			$match: getDistrictConditionsWarehouse(filters)
@@ -755,7 +774,7 @@ exports.getOverviewStats = [
 				finalData
 			);
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ];
@@ -793,7 +812,7 @@ exports.getAllBrands = [
 				allBrands
 			);
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ];
@@ -915,7 +934,7 @@ exports.getAllBrands = [
 // 				Analytics
 // 			);
 // 		} catch (err) {
-// 			return apiResponse.ErrorResponse(res, err);
+// 			return apiResponse.ErrorResponse(res, err.message);
 // 		}
 // 	}
 // ];
@@ -930,6 +949,23 @@ exports.getStatsByBrand = [
 	async function (req, res) {
 		try {
 			const filters = req.query;
+			const filterString = "GSB" + JSON.stringify(filters);
+			var bool = false;
+			client.get(filterString,(err, data) => {
+				if(!err && data != null) {
+					bool = true;
+					return apiResponse.successResponseWithData(res,"HIT Cache",JSON.parse(data))
+				}
+			})
+			// const data = await client.getAsync(filterString);
+			// if(data && data!= null) {
+			// 	return apiResponse.successResponseWithData(
+			// 		res,
+			// 		"Cache Hit",
+			// 		JSON.parse(data)
+			// 	);
+			// }
+			// else {
 			let warehouseIds = await _getWarehouseIds(filters);
 			today = new Date()
 			let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
@@ -952,18 +988,15 @@ exports.getStatsByBrand = [
 				{ $sort: { "_id.manufacturer": 1 } }
 			]);
 			const MasterProducts = await ProductModel.find({});
-
 			let Analytics = [];
 			let arr = {};
 			let prevBrand = '';
-			
 			let lastMonthStart = moment().subtract(1, 'months').tz("Etc/GMT").startOf('month');
 			let lastMonthEnd = moment().subtract(1, 'months').tz("Etc/GMT").endOf('month');
 			if (analyticsFilter?.uploadDate)
 				lastMonthStart = moment(analyticsFilter.uploadDate['$gte']).tz("Etc/GMT").subtract(1, 'months').startOf('month');
 			if (analyticsFilter?.uploadDate)
 				lastMonthEnd = moment(analyticsFilter.uploadDate['$lte']).tz("Etc/GMT").subtract(1, 'months').endOf('month');
-			
 			warehouseIds = await _getWarehouseIdByOrgType(filters);
 			for (const [index, product] of Products.entries()) {
 				if (prevBrand != product._id.manufacturer) {
@@ -1030,13 +1063,22 @@ exports.getStatsByBrand = [
 				if (index == Products.length - 1)
 					Analytics.push(arr);
 			}
-			return apiResponse.successResponseWithData(
-				res,
-				"Operation success",
-				Analytics
-			);
-		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			const result = await client.setAsync(filterString, JSON.stringify(Analytics));
+			console.log("REDIS set for GSB" , result);
+
+			if(!bool)
+			{
+				return apiResponse.successResponseWithData(
+					res,
+					"Operation success",
+					Analytics
+				);
+			}
+
+		// }	
+		} 
+		catch (err) {
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ];
@@ -1129,7 +1171,7 @@ exports.getSalesStatsByBrand = [
 				Analytics
 			);
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ];
@@ -1152,10 +1194,19 @@ function getConditionsOrgWarehouse(filters) {
  * @returns {Object}
  */
 exports.getStatsByOrg = [
-	// auth,
+	auth,
 	async function (req, res) {
 		try {
 			const filters = req.query;
+			const filterString = "GSO" + JSON.stringify(filters);
+			var bool = false;
+			client.get(filterString,(err, data) => {
+				if(!err && data != null) {
+					bool = true;
+					return apiResponse.successResponseWithData(res,"HIT Cache",JSON.parse(data))
+				}
+			})
+
 			let organizations = await OrganisationModel.aggregate([
 				{
 					$match: getFilterConditions(filters)
@@ -1210,13 +1261,24 @@ exports.getStatsByOrg = [
 				organization.analyticsPrevMonth = aggregateSalesStats(prevMonthAnalytics);
 			}
 
-			return apiResponse.successResponseWithData(
-				res,
-				"Operation success",
-				organizations
+			client.set(filterString, JSON.stringify(organizations), function (err, value) {
+				if (err) {
+					console.log(err);
+				} else {
+					console.log('set Cache for GSO', value);
+				}
+			}
 			);
+
+			if(!bool){
+				return apiResponse.successResponseWithData(
+					res,
+					"Operation success",
+					organizations
+				);
+			}
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ];
@@ -1325,7 +1387,89 @@ exports.getStatsByOrgType = [
 				organizations
 			);
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
+		}
+	}
+];
+
+/**
+ * getStatsBySKUOrgType.
+ *
+ * @returns {Object}
+ */
+exports.getStatsBySKUOrgType = [
+	auth,
+	async function (req, res) {
+		try {
+			const filters = req.query;
+			const organizations = await OrganisationModel.aggregate([
+				{
+					$match: { $or: [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }] }
+				},
+				{
+					$lookup: {
+						from: 'warehouses',
+						localField: 'id',
+						foreignField: 'organisationId',
+						as: 'warehouseDetails'
+					}
+				},
+				{
+					$match: { "warehouseDetails.warehouseAddress.city": filters.district }
+				},
+				{
+					$group: {
+						_id: "$type",
+						orgIds: {
+							$addToSet: "$id"
+						}
+					}
+				}
+			]);
+			
+			let response = [];
+			for (const organization of organizations) {
+				let temp = {type: organization._id};
+				let inventory = await WarehouseModel.aggregate([
+					{
+						$match: {organisationId: {$in: organization.orgIds}}
+					},
+					{
+						$lookup: {
+							from: 'inventories',
+							localField: 'warehouseInventory',
+							foreignField: 'id',
+							as: 'inventories'
+						}
+					},
+					{
+						$unwind: "$inventories"
+					},
+					{
+						$unwind: "$inventories.inventoryDetails"
+					},
+					{
+						$match: {
+							'inventories.inventoryDetails.productId': filters.pid
+						}
+					},
+					{
+						$group: {
+							_id: '$inventories.inventoryDetails.productId',
+							quantity: { $sum: "$inventories.inventoryDetails.quantity" },
+						}
+					}
+				]);
+				
+				temp['inventory'] = inventory.length ? inventory[0].quantity : 0;
+				response.push(temp);
+			}
+
+				console.log(response);
+			return apiResponse.successResponseWithData(res, "Operation Success", response);
+
+		} catch (err) {
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ];
@@ -1463,7 +1607,7 @@ exports.getLeadTimes = [
 				shipmentLeadTimes
 			);
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ];
@@ -1829,6 +1973,16 @@ exports.getSupplierPerformance = [
 	async function (req, res) {
 		try {
 			const orgType = req.query.supplierType;
+			const keyString = "GSP"+orgType;
+			console.log(keyString);
+			var bool =false;
+			client.get(keyString,(err, data) => {
+				if(!err && data != null) {
+					bool = true;
+					return apiResponse.successResponseWithData(res,"HIT Cache",JSON.parse(data))
+				}
+			})
+
 			let matchCondition = {}
 			if (!orgType || orgType === 'ALL') {
 				matchCondition = { $or: [{ type: 'S1' }, { type: 'S2' }, { type: 'S3' }] };
@@ -1888,14 +2042,23 @@ exports.getSupplierPerformance = [
 				supplier.breakage = dirtyBreakage.breakage;
 			}
 
-			return apiResponse.successResponseWithData(
-				res,
-				"Operation success",
-				supplierOrgs
+			client.set(keyString, JSON.stringify(supplierOrgs), function (err, value) {
+				if (err) {
+					console.log(err);
+				} else {
+					console.log('Cached GSP', value);
+				}
+			}
 			);
-
+			if(!bool) {
+				return apiResponse.successResponseWithData(
+					res,
+					"Operation success",
+					supplierOrgs
+				);
+			}
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ];
@@ -1938,7 +2101,7 @@ exports.getAllStats = [
 				finalData
 			);
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ];
@@ -2030,10 +2193,19 @@ function getSKUGroupByFilters(filters) {
  * @returns {Object}
  */
 exports.getStatsBySKU = [
-	// auth,
+	auth,
 	async function (req, res) {
 		try {
 			const filters = req.query;
+			const filterString = "GSS" + JSON.stringify(filters);
+			var bool = false;
+			client.get(filterString,(err, data) => {
+				if(!err && data != null) {
+					bool = true;
+					return apiResponse.successResponseWithData(res,"HIT Cache",JSON.parse(data))
+				}
+			})
+
 			const monthNames = ["January", "February", "March", "April", "May", "June",
 				"July", "August", "September", "October", "November", "December"
 			];
@@ -2135,10 +2307,22 @@ exports.getStatsBySKU = [
 				});
 			}
 
-			return apiResponse.successResponseWithData(res, "Operation Success", response);
+			client.set(filterString, JSON.stringify(response), function (err, value) {
+				if (err) {
+					console.log(err);
+				} else {
+					console.log('Cache Updated for GSS', value);
+				}
+			}
+			);
+
+			if(!bool)
+			{
+				return apiResponse.successResponseWithData(res, "Operation Success", response);
+			}
 
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ];
@@ -2201,7 +2385,7 @@ exports.getSalesTotalOfAllBrands = [
 			);
 
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ]
@@ -2281,7 +2465,7 @@ exports.getMonthlySalesOfSkuByBrand = [
 				Analytics
 			);
 		} catch (err) {
-			return apiResponse.ErrorResponse(res, err);
+			return apiResponse.ErrorResponse(res, err.message);
 		}
 	}
 ]

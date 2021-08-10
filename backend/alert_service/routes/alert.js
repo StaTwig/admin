@@ -21,8 +21,9 @@ router.get("/getAllAlerts/:username", AlertController.getAllAlerts);
 *"productId":"prood001",
 *"productName":"COVAXINE",
 *"manufacturer":"BHARATBIOTECH",
-*"eventPrimary" : "CREATE",
-*"eventSecondary" : "ORGANIZATION",
+*"eventPrimary" : "UPDATE",
+*"eventSecondary" : "SHIPMENT",
+*"transactionId" : "SH100163",
 *"actorOrgId" : "org002",
 *"alertMobile" : true,
 *"alertEmail" : true,
@@ -40,4 +41,5 @@ router.post("/createNewAlert", AlertController.createNewAlert)
 * @returns {Error}  default - Unexpected error 
 */
 router.delete("/deleteAlert/:alertId", AlertController.deleteAlert);
+router.get("/getNotifications",AlertController.getNotifications)
 module.exports = router;

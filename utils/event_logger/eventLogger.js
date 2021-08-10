@@ -43,6 +43,7 @@ async function logEvent(data) {
                 var event = new Event({
                     eventID: data.eventID,
                     eventTime: data.eventTime,
+                    transactionId: data.transactionId ? data.transactionId : null,
                     eventTypePrimary: data.eventType.primary,
                     eventTypeDesc: data.eventType.description,
                     actorId: data.actor.actorid,

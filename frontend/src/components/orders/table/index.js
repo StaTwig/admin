@@ -62,35 +62,36 @@ const Table = props => {
 
               const { customer, products, supplier, creatorOrganisation } = order;
               return (
-              <div className="rTableRow pt-2 pb-2 shadow-none" key={index}>
-                    <div className="rTableCell">
-                      <div className="userPic text-right rounded d-flex flex-row">
-                        <img src={user} width="30" height="20" alt="User" className="rounded mr-1 align-self-center" />
-                        <div className="flex-column d-flex">
+                /* <div className="rTableRow pt-2 pb-2 shadow-none" key={index}> */
+              <div className="col-12 p-3 mb-3 ml-1 rounded1 row bg-white shadow" key={index}>
+                    <div className="col-2 txt1 txtBlue" style={{position:'relative',left:"-1.5%"}}> {/*rTableCell */}
+                      <div className="userPic text-right d-flex flex-row">
+                        <img src={user} width="27" height="18" alt="User" className="align-self-center" />
+                        <div className="flex-column d-flex text-left">
                           <span className="text-primary bold">{visible == 'two' ? creatorOrganisation.name : supplier.organisation.name}</span>
                           <p className="address mb-0 text-primary">{visible == 'two' ?creatorOrganisation.id :supplier.organisation.id }</p>
                       </div>
                       </div>
                     </div>
-                <div className="rTableCell" style={{position:'relative',left:"35px"}}>
+                <div className="col-1 txt1" style={{position:'relative',left:"-1%"}}>
                   {formatDate(order.creationDate)}
                 </div>
-                  <div className="rTableCell text-center"><p className="mb-0 bold address mb-0 text-muted">{order.id}</p></div>
-                  <div className="rTableCell text-center"><p className="mb-0 bold mb-0 address text-muted">{products[0]?.name+(products.length > 1 ? ' + '+(products.length-1)+' more' : '')}</p></div> 
+                  <div className="col-1 txt1" style={{position:'relative',left:"4%"}}><p className="mb-0 bold address mb-0 text-muted">{order.id}</p></div>
+                  <div className="col-2 txt1" style={{position:'relative',left:"8.5%"}}><p className="mb-0 bold mb-0 address text-muted">{products[0]?.name+(products.length > 1 ? ' + '+(products.length-1)+' more' : '')}</p></div> 
                 
-                <div className="rTableCell  d-flex flex-column" style={{position:'relative',left:"45px"}}> 
-                  <span>{customer?.organisation?.name}</span> 
+                <div className="col-2 txt1 ml-5 d-flex flex-column" style={{position:"relative", left:"7%"}}> 
+                  <span>{customer.organisation.name}</span> 
                   <span className="text-muted ">{customer.warehouse && customer.warehouse.warehouseAddress ?  customer.warehouse.warehouseAddress.firstLine + " "+customer.warehouse.warehouseAddress.city: null}</span>
                 </div> 
 
-                <div className="rTableCell " style={{position:'relative',left:"110px"}}> 
+                <div className="rTableCell " style={{position:'relative',left:"10%"}}> 
                 
                 <div className={`status secondary-bg ${statusStyle}`}>
                   {status} 
                 </div>
                 </div>
                 
-                <div className="rTableCell" style={{position:'relative',left:"85px"}} >
+                <div className="rTableCell" style={{position:'relative',left:"7%"}} >
                   <Link to={`/vieworder/${order.id}`}
                     className="button">
                     View
@@ -103,7 +104,7 @@ const Table = props => {
           {orders?.length > 0 && (
             <div className="d-flex flex-row-reverse">
             <Pagination showFirstButton showLastButton color="primary" count={Math.ceil(props.count/10)} onChange={handlePageChange} />
-            <span className="mx-5 my-1 rounded text-primary">Total Records {props.count} </span>
+            <span className="mx-5 my-1 rounded text-dark">Total Records {props.count} </span>
           </div> 
           )}
           </div>

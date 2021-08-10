@@ -21,6 +21,7 @@ AlertSchema = new mongoose.Schema(
         event_type_primary: String,
         event_type_secondary: String, 
         createdBy: String,    
+        transactionId: String,
       },
     ],
     alertMode: {

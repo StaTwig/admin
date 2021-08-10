@@ -73,6 +73,7 @@ const SKUDetailView = (props) => {
       );
       setAnalytics(result.data);
     })();
+    requestSort('sales');
   }, [isActive, prop, props]);
 
   const getAnalyticsByType = async (district, i) => {
@@ -282,7 +283,7 @@ const SKUDetailView = (props) => {
                     stackId="b"
                   />
                   <Bar
-                    name="Target Sales"
+                    name="Target Returns"
                     dataKey="targetSales"
                     fill="#A344B7"
                     stackId="b"

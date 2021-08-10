@@ -41,12 +41,14 @@ const DetailedGeographicalView = (props) => {
       }
 
       let qp = '';
+console.log(props.params);
 
       if (Object.keys(props.params).length === 0) {
         qp =
           '&year=' + new Date().getFullYear() + '&date_filter_type=by_yearly';
       } else {
         const p = props.params;
+        
         if (p.year) qp = '&year=' + p.year;
         if (p.month) qp += '&month=' + p.month;
         if (p.quarter) qp += '&quarter=' + p.quarter;
@@ -72,6 +74,7 @@ const DetailedGeographicalView = (props) => {
       );
       setAnalytics(result.data);
     })();
+    requestSort('sales');
   }, [props]);
 
   const useSortableData = (items, config = null) => {
@@ -182,7 +185,7 @@ const DetailedGeographicalView = (props) => {
                 <Line
                   type="monotone"
                   dataKey="returns"
-                  name="Return Rate Percentage"
+                  name="Returns"
                   stroke="#A344B7"
                   strokeWidth={3}
                   dot={false}
