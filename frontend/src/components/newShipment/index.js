@@ -81,13 +81,18 @@ const NewShipment = (props) => {
   });
   
   const customStyles = {
+    placeholder:(provided, state)=>({
+      color: state.isDisabled ? 'black' : 'grey',
+    }),
     option: (provided, state) => ({
       ...provided,
       borderBottom: '1px solid #d6d6d6',
       // padding: 20,
     }),
     control: () => ({
-      display: 'flex'
+      display: 'flex',
+      //border: '2px solid #2196f3',
+      //borderRadius: '6px',
     }),
     indicatorSeparator: () => ({
       display: 'none'
@@ -631,10 +636,8 @@ if (!error) {
                         groups={OrderIds}
                       /> */}
                       <Select
-                        labelId="demo-simple-select-label"
-                        id="demo-simple-select"
+                        styles={customStyles}
                         placeholder="Select Order ID"
-                
                         onChange={async(v) => {    
                           setfetchdisabled(true);
                           setProducts(p => []);
@@ -721,7 +724,7 @@ if (!error) {
                <div className="col-md-6 com-sm-12">
                  <label className="name" htmlFor="shipmentID">Reference Shipment ID</label>
                   <input
-                      className="input refship "
+                      className="refship" //input
                       type="text"
                       id="referenceShipmentId"
                       name="shipmentID"
@@ -881,6 +884,7 @@ if (!error) {
                           groups={senderWarehouses}
                         /> */}
                         <Select
+                          styles={customStyles}
                           isDisabled={false}
                           placeholder="Select Organisation Location"
                           onChange={(v) => {
@@ -921,8 +925,7 @@ if (!error) {
                       <label className="name required-field" htmlFor="organizationType">Organisation Type</label>
                       <div className={`line ${errors.rtype && touched.rtype ? "border-danger" : "" }`}>
                         <Select
-                          labelId="demo-simple-select-label"
-                          id="demo-simple-select"
+                          styles={customStyles}
                           isDisabled={disabled}
                           placeholder={disabled ? values.rtype: "Select Organisation Type"}
                           onChange={(v) => {
@@ -963,9 +966,10 @@ if (!error) {
                           groups={allOrganisations}
                         /> */}
                         <Select
-                          isDisabled={disabled}
-                          // placeholder={disabled ? (values.toOrg).split("/")[1] : "Select Organisation Name"}
-                          placeholder={"Select Organisation Name"}
+                          styles={customStyles}
+                          //isDisabled={disabled}
+                          placeholder={disabled ? (values.toOrg).split("/")[1] : "Select Organisation Name"}
+                          //placeholder={"Select Organisation Name"}
                           value={values.toOrg==""?"Select Organisation Name":{value: values.toOrg, label: receiverOrgId}}
                           onChange={(v) => {
                             setFieldValue("toOrgLoc", "");
@@ -1007,9 +1011,10 @@ if (!error) {
                           groups={receiverWarehouses}
                         /> */}
                         <Select
-                          isDisabled={disabled}
-                          // placeholder={disabled ? values.toOrgLoc.split("/")[1] : "Select Delivery Location"}
-                          placeholder={"Select Delivery Location"}
+                          styles={customStyles}
+                          //isDisabled={disabled}
+                          placeholder={disabled ? values.toOrgLoc.split("/")[1] : "Select Delivery Location"}
+                          //placeholder={"Select Delivery Location"}
                           value={values.toOrgLoc==""?"Select Delivery Loction":{value: values.toOrgLoc, label:toOrgLocLabel}}
                           onChange={(v) => {
                             setFieldValue("toOrgLoc", v.value);
