@@ -13,6 +13,7 @@ const ConfigurationModel = require("../models/ConfigurationModel");
 const OrganisationModel = require("../models/OrganisationModel");
 const CounterModel = require("../models/CounterModel");
 const ProductModel = require("../models/ProductModel");
+const AtomModel = require("../models/AtomModel");
 const logEvent = require("../../../utils/event_logger");
 const Event = require("../models/EventModal");
 const init = require("../logging/init");
