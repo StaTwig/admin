@@ -137,6 +137,7 @@ exports.getAllEventsWithFilter = [ //inventory with filter(skip, limit, dateFilt
 			}
 
 			let elementMatchQuery = {};
+			elementMatchQuery[`$or`] = [{eventTypeDesc: "SHIPMENT"}, {eventTypeDesc: "INVENTORY"}]
 			console.log(fromDateFilter)
 			if (productName) {
 				elementMatchQuery[`productDetails.id`] = productName;
