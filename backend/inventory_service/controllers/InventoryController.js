@@ -2953,11 +2953,7 @@ exports.searchProduct = [
   auth,
   async (req, res) => {
     try {
-<<<<<<< HEAD
       const {productName, productType  } = req.query;
-=======
-      const { skip, limit,productName,producttype  } = req.query;
->>>>>>> 3d4d64b57bf1335335fa4d28df60e8a8aa8a4529
       var warehouseId = "";
       if (!req.query.warehouseId)
         warehouseId = req.user.warehouseId;
@@ -2991,8 +2987,6 @@ exports.searchProduct = [
         // }
         ])
           .sort({ createdAt: -1 })
-          .skip(parseInt(skip))
-          .limit(parseInt(limit));
         return apiResponse.successResponseWithData(
           res,
           "Inventory Details",
