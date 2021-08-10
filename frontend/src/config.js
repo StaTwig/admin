@@ -151,7 +151,8 @@ export function config() {
       trackLastTenIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/lastteniotsamplesforshipmentid/:shipmentId`,
       trackLatestShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/latestiotdataforshipmentid/:shipmentId`,
       trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
-      searchProduct:`${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10&warehouseId=0&productName=&producttype=`
+      searchProduct:`${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10`,
+      getSuggestions:`${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getsearchsuggestions`
 },
     dev: {
       getOrganizationsUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -269,8 +270,9 @@ export function config() {
       trackLastTenIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/lastteniotsamplesforshipmentid/:shipmentId`,
       trackLatestShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/latestiotdataforshipmentid/:shipmentId`,
       trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
-      searchProduct:`${DEV_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10&warehouseId=0&productName=&producttype=`
-      },
+      searchProduct:`${DEV_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10`,
+      getSuggestions:`${DEV_SERVER_URL}/inventorymanagement/api/inventory/getsearchsuggestions`
+    },
     stable: {
       getOrganizationsUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
       loginUrl: `${STABLE_SERVER_URL_USER}/usermanagement/api/auth/login`,
@@ -393,7 +395,8 @@ export function config() {
       fetchCountriesByRegion:`${STABLE_SERVER_URL_PRODUCTS}/productmanagement/api/location?region=`,
       fetchStateByCountry:`${STABLE_SERVER_URL_PRODUCTS}/productmanagement/api/location?country_id=`,
       fetchCitiesByState:`${STABLE_SERVER_URL_PRODUCTS}/productmanagement/api/location?state_id=`,
-      searchProduct:`${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10&warehouseId=0&productName=&producttype=`
+      searchProduct:`${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10`,
+      getSuggestions:`${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getsearchsuggestions`
     },
     test: {
       getOrganizationsUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -517,7 +520,8 @@ export function config() {
       fetchCountriesByRegion:`${TEST_SERVER_URL}/productmanagement/api/location?region=`,
       fetchStateByCountry:`${TEST_SERVER_URL}/productmanagement/api/location?country_id=`,
       fetchCitiesByState:`${TEST_SERVER_URL}/productmanagement/api/location?state_id=`,
-      searchProduct:`${TEST_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10&warehouseId=0&productName=&producttype=`
+      searchProduct:`${TEST_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10`,
+      getSuggestions:`${TEST_SERVER_URL}/inventorymanagement/api/inventory/getsearchsuggestions`
 },
     demo: {
       getOrganizationsUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -633,6 +637,8 @@ export function config() {
       trackLastTenIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/lastteniotsamplesforshipmentid/:shipmentId`,
       trackLatestShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/latestiotdataforshipmentid/:shipmentId`,
       trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
+      getSuggestions:`${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getsearchsuggestions`
+
     },
     prod: {
       getOrganizationsUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -747,7 +753,9 @@ export function config() {
       trackLastTenIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/lastteniotsamplesforshipmentid/:shipmentId`,
       trackLatestShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/latestiotdataforshipmentid/:shipmentId`,
       trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
-      searchProduct:`${PROD_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10&warehouseId=0&productName=&producttype=`
+      searchProduct:`${PROD_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10`,
+      getSuggestions:`${PROD_SERVER_URL}/inventorymanagement/api/inventory/getsearchsuggestions`
+
     },
     
     uniceftest: {
@@ -870,7 +878,8 @@ export function config() {
       trackLastTenIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/lastteniotsamplesforshipmentid/:shipmentId`,
       trackLatestShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/latestiotdataforshipmentid/:shipmentId`,
       trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
-      searchProduct:`${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10&warehouseId=0&productName=&producttype=`
+      searchProduct:`${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10`,
+      getSuggestions:`${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getsearchsuggestions`
     },
   };
 
