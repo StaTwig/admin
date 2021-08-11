@@ -1,6 +1,5 @@
 const RbacModel = require('../models/RbacModel');
 const { body, validationResult } = require('express-validator');
-const checkToken = require('../middlewares/middleware').checkToken;
 const auth = require('../middlewares/jwt');
 
 const apiResponse = require('../helpers/apiResponse');

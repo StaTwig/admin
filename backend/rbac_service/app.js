@@ -34,7 +34,6 @@ if(process.env.NODE_ENV !== "test") {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
 
 //To allow cross-origin requests
 app.use(cors());
