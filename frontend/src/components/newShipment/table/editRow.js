@@ -321,7 +321,7 @@ const handleChange = (value) =>
                 <div className="rTableRow pt-3 pb-3">
                 <input className="txt1" type="checkbox" id="" name="fetchBillNo" style={{position:"relative",left:'2%'}}></input>
                 <img src={user} width="27" height="18" alt="User" className="txt1" style={{position:"relative",left:'4%'}}/>
-                <div className="col txt" style={{position:"relative",left:'4%'}}>OPV jjsdjbsd sdg jhdv</div>
+                <div className="col txt" style={{position:"relative",left:'4%'}}>OPV</div>
                 <div className="col txt1" style={{position:"relative",left:'8%'}} >Bharat Biotech</div>
                 <div className="col txt1" style={{position:"relative",left:'8%'}} >BIOE13BCG1</div>
                 <div className="col txt1" style={{position:"relative",left:'9%'}}>11/08/2021</div>
