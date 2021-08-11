@@ -47,6 +47,11 @@ const EditRow = props => {
     img6: <img src={Quantity} width="20" height="15"/>,
   };
   console.log(prod,"Edit rowt",index);
+  const [editButtonStatus, setEditButtonStatus] = useState(false);
+  const [changeValue, setValue] = useState("");
+  const [changebtn, setbtn] = useState(false);
+  const [addnew, setAddnew] = useState(!props.category);
+  const [disabled, setDisabled] = useState(true);
   const [productsList,setProductsList] = useState([]);
   const [quantityChecker,setQuantityChecker] = useState(1);
   const [showModal, setShowModal] = useState(false);
@@ -59,6 +64,29 @@ const EditRow = props => {
     setOpen(false);
   };
 
+  const onEditClick = (e) => {
+    setDisabled(!disabled);
+    setEditButtonStatus(true);
+    //setDisabled(!disabled);
+    //setEditButtonStatus(false);
+  };
+
+  const onSaveClick = (e) => {
+    const data = {
+      id: prod.id,
+      name: changeValue,
+    };
+    updateOrgTypesUrl(data);
+    setbtn(true);
+    setDisabled(!disabled);
+    setEditButtonStatus(false);
+  };
+
+  const handleBatchQuantityChange = (e) => {
+    setValue(e);
+  };
+
+  
   useEffect(() => {
 
     async function fetchData() {
@@ -292,15 +320,67 @@ const handleChange = (value) =>
                <div>
                 <div className="rTableRow pt-3 pb-3">
                 <input className="col txt1" type="checkbox" id="" name="fetchBillNo" style={{position:"relative",left:'2%'}}></input>
-                <img src={user} width="27" height="18" alt="User"/>
+                <img src={user} width="27" height="18" alt="User" className="txt1"/>
                 <div className="col txt">OPV</div>
                 <div className="col txt1" style={{position:"relative",left:'0%'}} >Bharat Biotech</div>
                 <div className="col txt1" style={{position:"relative",left:'0%'}} >BIOE13BCG1</div>
                 <div className="col txt1" style={{position:"relative",left:'2%'}}>11/08/2021</div>
                 <div className="col txt1" style={{position:"relative",left:'2%'}}>11/08/2021</div> 
-                <div className="col txt1" style={{position:"relative",left:'1%'}}>500 EA</div> 
-                </div>
-             
+                <div className="col txt1" style={{position:"relative",left:'1%'}}>
+                <div className="txt1">
+                <input
+                  className="form-control text-center no-border"
+                  id="checker"
+                  placeholder="Quantity"
+                  onKeyPress={numbersOnly}
+                  value={prod.productQuantity}
+                  disabled={disabled}
+                  onChange={(e) => handleBatchQuantityChange(e.target.value, index)}
+                />
+              </div>
+            </div>
+    
+            <div className="txt1 pr-2">
+              <div>
+                {editButtonStatus ? (
+                  <div>
+                    {addnew ? (
+                      <button
+                        type="submit"
+                        className="btn-sm btn-orange d-width"
+                        onClick={onSaveClick}
+                      >
+                        <i className="fa fa-pencil text-center"></i>
+                        <span className="ml-2">{changebtn ? "Saved" : "Save"}</span>
+                      </button>
+                    ) : (
+                      <button
+                        className="btn-sm btn-orange d-width"
+                        onClick={onEditClick}
+                      >
+                        <i className="fa fa-pencil text-center"></i>
+                        {/* <span className="ml-1"></span> */}
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <button
+                    className="btn-sm btn-orange d-width"
+                    onClick={onEditClick}
+                  >
+                    <i className="fa fa-pencil text-center"></i>
+                    {/* <span className="ml-1"></span> */}
+                  </button>
+                )}
+              </div>
+                 </div> 
+                {/* <div className="pr-3">
+                      <button className="bg-white btn-outline-primary d-width">
+                        <i className="fa fa-pencil"></i>
+                        <span className="ml-1"></span>
+                      </button>
+                </div> */}
+              </div>
               </div>
           </div>
         </div>
