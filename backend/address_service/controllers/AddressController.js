@@ -228,6 +228,7 @@ exports.AddWarehouse = [
         warehouseAddress,
         status: "ACTIVE",
         warehouseInventory: inventoryResult.id,
+        employees: req.body.employees || [req.user.id]
       });
       await warehouse.save();
       return apiResponse.successResponseWithData(
@@ -236,6 +237,7 @@ exports.AddWarehouse = [
         warehouse
       );
     } catch (err) {
+      console.log(err)
       return apiResponse.ErrorResponse(res, err);
     }
   },
