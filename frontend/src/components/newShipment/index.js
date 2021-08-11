@@ -1369,16 +1369,17 @@ if (!error) {
           />
         </Modal>
       )}
-
-      {message && (
-        <div className="d-flex justify-content-center mt-3"> <Alert severity="success"><AlertTitle>Success</AlertTitle>{message}</Alert></div>
-      )}
-
-      {errorMessage && (
-        <div className="d-flex justify-content-center mt-3"> <Alert severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
-      )}
     </div>
   );
 };
 
 export default NewShipment;
+
+
+/* {message && (
+  <div className="d-flex justify-content-center mt-3"> <Alert severity="success"><AlertTitle>Success</AlertTitle>{message}</Alert></div>
+)} 
+
+{errorMessage && (
+  <div className="d-flex justify-content-center mt-3"> <Alert severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
+)} */
