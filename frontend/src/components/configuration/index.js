@@ -6,17 +6,31 @@ import Add from "../../assets/icons/add.svg";
 import EditTable from "./table/editTable";
 import EditTable1 from "./table1/editTable";
 import { useSelector, useDispatch } from "react-redux";
+import { DEFAULT_USER_ROLES } from '../../constants/userRoles';
+import { DEFAULT_FEATURE_PANEL_VALUES } from '../../constants/featureConstants';
+import { OVERVIEW_CONSTANTS } from '../../constants/overviewContants';
+
 //import EditTable from "./table/editTable";
 import { Formik } from "formik";
 
 import { getOrgTypeiIdsUrl } from "../../actions/organisationActions";
 import { updateOrgTypesUrl } from "../../actions/organisationActions";
 import { addNewOrgTypesUrl } from "../../actions/organisationActions";
+import UserRoles from "../userRoles/userRoles";
 
 const Configurationpart = (props) => {
-  const [tabIndex, setTabIndex] = useState(1);
+  const [tabIndex, setTabIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const closeModal = () => setShowModal(false);
+
+  const [defaultRoles, setDefaultRoles] = useState([]);
+  const [showAddNewInputSection, setShowAddNewInputSection] = useState(false);
+  const [featurePanelValues, setFeaturePanelValues] = useState([]);
+  const [showFunctionalitiesAndPermission, setShowFunctionalitiesAndPermission] = useState(false);
+  const [functionalitiesPermissionPanelData, setFunctionalitiesPermissionPanelData] = useState([]);
+  const [defaultOverviewPanelValues, setDefaultOverviewPanelValues] = useState([]);
+
+  const [selectedLevel, setSelectedLevel] = useState('');
 
   const [addOrganisation, setAddOrganisation] = useState([]);
   const [blankInventory, setBlankInventory] = useState({
@@ -51,13 +65,19 @@ const Configurationpart = (props) => {
     fetchOrganisationType();
   }, []);
 
+  useEffect(() => {
+    setDefaultRoles([...DEFAULT_USER_ROLES, { key: 'add_new_role', value: 'Add new role' }]);
+    setFeaturePanelValues([...DEFAULT_FEATURE_PANEL_VALUES]);
+    setDefaultOverviewPanelValues([...OVERVIEW_CONSTANTS]);
+  }, []);
+
   var orgTypeArray = [];
   organisationsArr.map((data) => {
     for (var i = 0; i < data.length; i++) {
       orgTypeArray.push(data[i].name);
     }
   });
-  
+
   const onQuantityChange = (v, i, setFieldValue) => {
     let newArr = [...addProducts];
     newArr[i].quantity = v;
@@ -72,6 +92,41 @@ const Configurationpart = (props) => {
     setInventoryState([...addOrganisation, blankInventory]);
   };
 
+  const onSelectOfRole = (event) => {
+    const value = event?.target?.value;
+    if (value === 'add_new_role') {
+      setShowAddNewInputSection(current => current = true);
+      setSelectedLevel(value);
+    } else {
+      setShowAddNewInputSection(current => current = false);
+      setSelectedLevel(value);
+    }
+  };
+
+  //should get the functionality of adding this role to the list only if only of the role is selected.
+  const onChangeOfAddNewInput = (event) => {
+    const { value } = event?.target;
+    console.log('value: ', value);
+  }
+
+  const setOveriewPanelForSelectedLevel = (selectedLevel) => {
+      if(selectedLevel === 'add_new_role') {
+        setFunctionalitiesPermissionPanelData([...defaultOverviewPanelValues])
+      }
+  };
+
+  const handleOnClickOfAFeature = (seletedFeature) => {
+    console.log('selectedFeature', seletedFeature, selectedLevel)
+    if(seletedFeature === 'overview' && selectedLevel) {
+      setShowFunctionalitiesAndPermission(current => current = true);
+      setOveriewPanelForSelectedLevel(selectedLevel);
+    }
+  }
+
+  console.log(functionalitiesPermissionPanelData);
+  console.log('showFunctionalitiesAndPermission', showFunctionalitiesAndPermission)
+
+
   return (
     <div>
       <div className="addproduct">
@@ -79,7 +134,19 @@ const Configurationpart = (props) => {
         <div>
           <Tabs {...props} tabIndex={tabIndex} setTabIndex={setTabIndex} />
         </div>
-
+        {
+          tabIndex == 0 &&
+          (<UserRoles
+            defaultRoles={defaultRoles}
+            showAddNewInputSection={showAddNewInputSection}
+            onSelectOfRole={onSelectOfRole}
+            onChangeOfAddNewInput={onChangeOfAddNewInput}
+            featurePanelValues={featurePanelValues}
+            showFunctionalitiesAndPermission={showFunctionalitiesAndPermission}
+            handleOnClickOfAFeature={handleOnClickOfAFeature}
+            functionalitiesPermissionPanelData={functionalitiesPermissionPanelData}
+          />)
+        }
         {tabIndex == 6 && (
           <div className="row">
             <div className="col-2">
@@ -156,43 +223,43 @@ const Configurationpart = (props) => {
                 </div>
               </div>
             ) : (
-              <div className="col">
-                <div className="row">
-                  <p className="mb-4">
-                    <b>Warehouse Type</b>
-                  </p>
-
-                  <div style={{ position: "relative", left: "70%" }}>
-                    <button
-                      className="btn btn-yellow ml-5"
-                      onClick={() => {
-                        let newArr = { name: "" };
-                        setAddProducts1((prod) => [...prod, newArr]);
-                        setShowLeft(!showleft);
-                        // console.log(showleft,"------------------");
-                      }}
-                    >
-                      <img src={Add} width="13" height="13" className="mr-2" />
-                      <span>Add New Type</span>
-                    </button>
-                  </div>
-                </div>
                 <div className="col">
                   <div className="row">
-                    <div className="col-6">
-                      <EditTable1
-                        product={addProducts1}
-                        products={products}
-                        // category={category}
-                        handleQuantityChange={(v, i) =>
-                          onQuantityChange(v, i, setFieldValue)
-                        }
-                      />
+                    <p className="mb-4">
+                      <b>Warehouse Type</b>
+                    </p>
+
+                    <div style={{ position: "relative", left: "70%" }}>
+                      <button
+                        className="btn btn-yellow ml-5"
+                        onClick={() => {
+                          let newArr = { name: "" };
+                          setAddProducts1((prod) => [...prod, newArr]);
+                          setShowLeft(!showleft);
+                          // console.log(showleft,"------------------");
+                        }}
+                      >
+                        <img src={Add} width="13" height="13" className="mr-2" />
+                        <span>Add New Type</span>
+                      </button>
+                    </div>
+                  </div>
+                  <div className="col">
+                    <div className="row">
+                      <div className="col-6">
+                        <EditTable1
+                          product={addProducts1}
+                          products={products}
+                          // category={category}
+                          handleQuantityChange={(v, i) =>
+                            onQuantityChange(v, i, setFieldValue)
+                          }
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
           </div>
         )}
 
