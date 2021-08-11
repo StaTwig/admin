@@ -319,17 +319,17 @@ const handleChange = (value) =>
             <div>
                <div>
                 <div className="rTableRow pt-3 pb-3">
-                <input className="col txt1" type="checkbox" id="" name="fetchBillNo" style={{position:"relative",left:'2%'}}></input>
-                <img src={user} width="27" height="18" alt="User" className="txt1"/>
-                <div className="col txt">OPV</div>
-                <div className="col txt1" style={{position:"relative",left:'0%'}} >Bharat Biotech</div>
-                <div className="col txt1" style={{position:"relative",left:'0%'}} >BIOE13BCG1</div>
-                <div className="col txt1" style={{position:"relative",left:'2%'}}>11/08/2021</div>
-                <div className="col txt1" style={{position:"relative",left:'2%'}}>11/08/2021</div> 
-                <div className="col txt1" style={{position:"relative",left:'1%'}}>
+                <input className="txt1" type="checkbox" id="" name="fetchBillNo" style={{position:"relative",left:'2%'}}></input>
+                <img src={user} width="27" height="18" alt="User" className="txt1" style={{position:"relative",left:'4%'}}/>
+                <div className="col txt" style={{position:"relative",left:'4%'}}>OPV jjsdjbsd sdg jhdv</div>
+                <div className="col txt1" style={{position:"relative",left:'8%'}} >Bharat Biotech</div>
+                <div className="col txt1" style={{position:"relative",left:'8%'}} >BIOE13BCG1</div>
+                <div className="col txt1" style={{position:"relative",left:'9%'}}>11/08/2021</div>
+                <div className="col txt1" style={{position:"relative",left:'8%'}}>11/08/2021</div> 
+                <div className="col txt1" style={{position:"relative",left:'0%'}}>
                 <div className="txt1">
                 <input
-                  className="form-control text-center no-border"
+                  className="form-control"
                   id="checker"
                   placeholder="Quantity"
                   onKeyPress={numbersOnly}
@@ -337,10 +337,13 @@ const handleChange = (value) =>
                   disabled={disabled}
                   onChange={(e) => handleBatchQuantityChange(e.target.value, index)}
                 />
-              </div>
+               </div>
             </div>
-    
-            <div className="txt1 pr-2">
+            <div className="txt1 title recived-text align-self-center mr-2">
+            {prod.unitofMeasure.name}
+             </div>
+            
+            <div className="txt1 pr-3">
               <div>
                 {editButtonStatus ? (
                   <div>
