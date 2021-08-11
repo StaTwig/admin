@@ -1,6 +1,7 @@
 const RbacModel = require('../models/RbacModel');
 const { body, validationResult } = require('express-validator');
 const auth = require('../middlewares/jwt');
+const {RbacCache} = require('../helpers/rbacCache');
 
 const apiResponse = require('../helpers/apiResponse');
 
@@ -53,7 +54,6 @@ exports.addPermissions = [
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        // Display sanitized values/errors messages.
         return apiResponse.validationErrorWithData(
           res,
           'Validation Error.',
@@ -71,7 +71,8 @@ exports.addPermissions = [
             });
             await rbac.save();  
           }
-          apiResponse.successResponse(res, 'Success');
+          RbacCache();
+          return apiResponse.successResponse(res, 'Success');
     } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
