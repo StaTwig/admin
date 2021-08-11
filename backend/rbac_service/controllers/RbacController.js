@@ -1,20 +1,42 @@
 const RbacModel = require('../models/RbacModel');
 const { body, validationResult } = require('express-validator');
-const checkToken = require('../middlewares/middleware').checkToken;
 const auth = require('../middlewares/jwt');
 const apiResponse = require('../helpers/apiResponse');
 
 exports.getPermissions = [
+  auth,
   async (req, res) => {
     try {
-          const permissions = await RbacModel.find({});
-          res.json({ data: permissions });
-        } 
-    catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+          const { role } = req.query;
+          let permissions;
+          if(role){
+          permissions = await RbacModel.find({role});
+          }
+          else{
+          permissions = await RbacModel.find({});
+          }
+          return apiResponse.successResponseWithData(res, "All Permissions", permissions);
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
+
+exports.getRoles = [
+  auth,
+  async (req, res) => {
+    try {
+          var roles =[];
+          const results = await RbacModel.find({}, { _id: 0, role: 1 });
+          results.map(r => {
+              roles.push(r.role);
+            })
+          return apiResponse.successResponseWithData(res, "All Roles", roles);
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  }
+]
 
 exports.addPermissions = [
   auth,
@@ -29,18 +51,17 @@ exports.addPermissions = [
     try {
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
+        // Display sanitized values/errors messages.
         return apiResponse.validationErrorWithData(
           res,
           'Validation Error.',
           errors.array(),
         );
       }
-      checkToken(req, res, async result => {
-        if (result.success) {
-          const { role, permissions } = req.body;
-          const rbac_object = await RbacModel.findOne({ role });
+        const { role, permissions } = req.body;
+        const rbac_object = await RbacModel.findOne({ role });
           if(rbac_object){
-            await RbacModel.update({role}, {permissions});
+            await RbacModel.updateOne({role}, {permissions});
           } else{
             const rbac = new RbacModel({
               role,
@@ -48,13 +69,9 @@ exports.addPermissions = [
             });
             await rbac.save();  
           }
-          apiResponse.successResponseWithData(res, 'Success');
-        } else {
-          return apiResponse.ErrorResponse(res, 'User not authenticated');
-        }
-      });
+          apiResponse.successResponse(res, 'Success');
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
