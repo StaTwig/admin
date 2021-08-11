@@ -1,5 +1,5 @@
 const express = require("express");
-const RbacRouter = require("./rbacTesting")
+const RbacRouter = require("./rbac")
 const app = express();
 
 app.use("/rbac", RbacRouter);

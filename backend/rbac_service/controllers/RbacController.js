@@ -1,6 +1,5 @@
 const RbacModel = require('../models/RbacModel');
 const { body, validationResult } = require('express-validator');
-//helper file to prepare responses.
 const checkToken = require('../middlewares/middleware').checkToken;
 const auth = require('../middlewares/jwt');
 
@@ -10,14 +9,8 @@ exports.getPermissions = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
-        if (result.success) {
           const permissions = await RbacModel.find({});
-          res.json({ data: permissions });
-        } else {
-          res.status(403).json(result);
-        }
-      });
+          return apiResponse.successResponseWithData(res, "All Permissions", permissions);
     } catch (err) {
       return apiResponse.ErrorResponse(res, err);
     }
@@ -44,12 +37,10 @@ exports.addPermissions = [
           errors.array(),
         );
       }
-      checkToken(req, res, async result => {
-        if (result.success) {
-          const { role, permissions } = req.body;
-          const rbac_object = await RbacModel.findOne({ role });
+        const { role, permissions } = req.body;
+        const rbac_object = await RbacModel.findOne({ role });
           if(rbac_object){
-            await RbacModel.update({role}, {permissions});
+            await RbacModel.updateOne({role}, {permissions});
           } else{
             const rbac = new RbacModel({
               role,
@@ -57,13 +48,9 @@ exports.addPermissions = [
             });
             await rbac.save();  
           }
-          apiResponse.successResponseWithData(res, 'Success');
-        } else {
-          return apiResponse.ErrorResponse(res, 'User not authenticated');
-        }
-      });
+          apiResponse.successResponse(res, 'Success');
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
