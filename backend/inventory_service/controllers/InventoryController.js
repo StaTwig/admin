@@ -40,38 +40,19 @@ exports.getTotalCount = [
   auth,
   async (req, res) => {
     try {
-      const { authorization } = req.headers;
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< InventoryService < InventoryController < getTotalCount : token verifed successfully"
-          );
-
-          permission_request = {
-            emailId: result,
-            permissionRequired: "viewInventory",
-          };
-          checkPermissions(permission_request, (permissionResult) => {
-            if (permissionResult.success) {
-              res.json("Total inventory count");
-            } else {
-              res.json("Sorry! User does not have enough Permissions");
-            }
-          });
+      const {role} = req.user;
+      permission_request = {
+        role: role,
+        permissionRequired: "viewInventory",
+      };
+      checkPermissions(permission_request, (permissionResult) => {
+        if (permissionResult.success) {
+          return apiResponse.successResponse(res,"Total inventory count");
         } else {
-          logger.log(
-            "warn",
-            "<<<<< InventoryService < InventoryController < getTotalCount : refuted token"
-          );
-          res.status(403).json(result);
+          return apiResponse.forbiddenResponse(res,"User does not authorized to view this resource.");
         }
       });
-    } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< InventoryService < InventoryController < getTotalCount : error (catch block)"
-      );
+      }catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
   },

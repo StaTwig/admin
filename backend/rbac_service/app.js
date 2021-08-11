@@ -7,6 +7,9 @@ var indexRouter = require("./routes/index");
 var apiRouter = require("./routes/api");
 var apiResponse = require("./helpers/apiResponse");
 var cors = require("cors");
+const redis = require("redis");
+const client = redis.createClient(process.env.REDIS_URL);
+const RbacModel = require('./models/RbacModel');
 
 // DB connection
 var MONGODB_URL = process.env.MONGODB_URL;
@@ -24,6 +27,33 @@ mongoose.connect(MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true 
     process.exit(1);
   });
 var db = mongoose.connection;
+
+client.on('connect', () => {
+	console.log("Connected to Redis");
+});
+client.on('error', err => {
+    console.log('Error ' + err);
+});
+
+RbacModel.find({}).then(permissions => {
+  if(permissions.length > 0) {
+    permissions.forEach(role => {
+      client.sadd(role.role, role.permissions , (err,data) => {
+    if(err) {
+      console.log(err);
+    }
+    console.log(role)
+    console.log(data);
+  })  
+});
+  }
+  else{
+    console.log("No permissions found");
+  }
+}).catch(err => {
+  console.log(err);
+}
+)
 
 var app = express();
 
