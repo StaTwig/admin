@@ -4,6 +4,16 @@ import DropdownButton from '../../../shared/dropdownButtonGroup';
 import Select from 'react-select';
 import {getProductList} from '../../../actions/productActions';
 import './style.scss';
+import Modal from "../../../shared/modal";
+import CloseIcon from "../../../assets/icons/cross.svg";
+import TotalInventoryAdded from '../../../assets/icons/TotalInventoryAddedcopy.svg';
+import Add from '../../../assets/icons/add.svg';
+import user from '../../../assets/icons/brand.svg';
+import Quantity from '../../../assets/icons/Quantity.png';
+import Product from '../../../assets/icons/Producttype.png';
+import date from '../../../assets/icons/ShippingDate.svg';
+import Batch from '../../../assets/icons/Batch.png';
+import TableFilter from './tablefilter.js';
 
 const EditRow = props => {
   const {
@@ -21,9 +31,34 @@ const EditRow = props => {
     check
   } = props;
   
+  const headers = {
+    coloumn1: 'Product Name',
+    coloumn2: 'Manufacturer',
+    coloumn3: 'Batch Number',
+    coloumn4: 'Mfg Date',
+    coloumn5: 'Exp Date',
+    coloumn6: 'Quantity',
+
+    img1: <img src={Product} width="15" height="15"/>,
+    img2: <img src={user} width="15" height="15"/>,
+    img3: <img src={Batch} width="15" height="15"/>,
+    img4: <img src={date} width="15" height="15"/>,
+    img5: <img src={date} width="15" height="15"/>,
+    img6: <img src={Quantity} width="20" height="15"/>,
+  };
   console.log(prod,"Edit rowt",index);
   const [productsList,setProductsList] = useState([]);
   const [quantityChecker,setQuantityChecker] = useState(1);
+  const [showModal, setShowModal] = useState(false);
+  const closeModal = () => setShowModal(false);
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   useEffect(() => {
 
     async function fetchData() {
@@ -192,20 +227,7 @@ const handleChange = (value) =>
           </div>
         </div>
         <div className="col tcell text-center justify-content-center p-2">{prod.manufacturer ? prod.manufacturer : <div className="select-placeholder-text">Manufacturer</div>}</div>
-        <div className="col tcell text-center justify-content-center p-2">
-          <div className="">
-            <input
-              className="form-control text-center"
-              id="checker"
-              placeholder="Batch number"
-              value={prod.batchNumber}
-              onChange={(e) => {
-                handleBatchChange(e.target.value, index);
-                setQuantityChecker(1);
-              }}
-            />
-          </div>
-        </div>
+        
         <div className="col tcell text-center justify-content-center p-2">
           <div className="">
             <input
@@ -227,11 +249,79 @@ const handleChange = (value) =>
             />
           </div>
         </div>
-        <div className="title recived-text align-self-center" style={{position:"absolute",right:"20px"}}>
+        <div className="title recived-text align-self-center" style={{position:"relative",right:"40px"}}>
           {prod.unitofMeasure && prod.unitofMeasure.name  ? <div>{prod.unitofMeasure.name}</div>:
           <div className="placeholder_id">Unit</div>}
         </div>
-      </div>
+
+        <div className="col tcell text-center justify-content-center p-2">
+          <div className="">
+            <input
+              className="form-control text-center"
+              id="checker"
+              placeholder="Batch number"
+              value={prod.batchNumber}
+              onChange={(e) => {
+                handleBatchChange(e.target.value, index);
+                setQuantityChecker(1);
+              }}
+            />
+          </div>
+        </div>
+        <div className="d-flex">
+            <button type="button" class="btn btn-outline-primary mr-2 ml-2"
+                style={{height:"30px",width:"60px"}}
+                onClick={() => setShowModal(true)}>
+                <div style={{position:"relative",fontSize:"12px",left:"-6px"}}>Fetch</div>
+            </button>
+            <div className="">
+            {showModal && (
+              <div>
+              <Modal
+                close={closeModal}
+                title="FETCH SERIAL NUMBERS"
+                size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
+              >
+              <div className="col tab" style={{width:"100%"}}>
+              <div className="mb-2">
+                  <TableFilter data={headers} fb="120%"/>
+                </div>
+              </div>
+              <div className="rTable pt-3">
+            <div>
+               <div>
+                <div className="rTableRow pt-3 pb-3">
+                <input className="col txt1" type="checkbox" id="" name="fetchBillNo" style={{position:"relative",left:'2%'}}></input>
+                <img src={user} width="27" height="18" alt="User"/>
+                <div className="col txt">OPV</div>
+                <div className="col txt1" style={{position:"relative",left:'0%'}} >Bharat Biotech</div>
+                <div className="col txt1" style={{position:"relative",left:'0%'}} >BIOE13BCG1</div>
+                <div className="col txt1" style={{position:"relative",left:'2%'}}>11/08/2021</div>
+                <div className="col txt1" style={{position:"relative",left:'2%'}}>11/08/2021</div> 
+                <div className="col txt1" style={{position:"relative",left:'1%'}}>500 EA</div> 
+                </div>
+             
+              </div>
+          </div>
+        </div>
+              <div className="d-flex flex-row-reverse p-3">
+                <button type="submit" className="ml-3 btn btn-orange">
+                 Next
+                </button>
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className="btn btn-outline-dark"
+                >
+                  CANCEL
+                </button>
+              </div>
+              </Modal>
+              </div>
+            )}
+            </div> 
+      </div>    
+    </div>
       {
         // enableDelete && props.product.length > 1 &&
        //   <div className="m-3 bg-light">

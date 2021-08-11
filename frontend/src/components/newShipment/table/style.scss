@@ -115,10 +115,9 @@
 .del-pad{
   padding: 0.7rem 0.4rem;
 }
-
-
-
-
+.cursorP{
+  float: right;
+}
 
 .editTable {
 
@@ -194,6 +193,17 @@
       }
     }
   }
-
-
+}
+.txt{
+  font-weight: 600;
+  color: #0093E9;
+  font-size: small;
+  align-self: center;
+  overflow: hidden;
+}
+.txt1{
+  font-weight: 400;
+  font-size: small;
+  align-self: center;
+  overflow: hidden;
 }
