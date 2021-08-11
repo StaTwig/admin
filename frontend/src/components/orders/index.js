@@ -65,7 +65,6 @@ const Orders = props => {
         setStatusFilter("");
         setLocationFilter("");
         const inboundRes = await getReceivedPOs("", "", "", "", "", "",0, limit); //from, orderId, productName, deliveryLocation, date,status, skip, limit
-        console.log(inboundRes.data.inboundPOs);
         setInboundRecords(inboundRes.data.inboundPOs);
         setCount(inboundRes.data.count)
       }
@@ -73,6 +72,7 @@ const Orders = props => {
       setPoOrderIdList(orderIdListRes);
 
       const productsLocationsOrganisationsRes = await getProductIdDeliveryLocationsOrganisations();
+      // console.log('products location', productsLocationsOrganisationsRes);
       setPoDeliveryLocationsList(productsLocationsOrganisationsRes.deliveryLocations);
       setPoProductsList(productsLocationsOrganisationsRes.productIds);
       setPoOrganisationsList(productsLocationsOrganisationsRes.organisations);
@@ -99,7 +99,7 @@ const Orders = props => {
   };
 
   const headers = {
-    coloumn1: visible == 'one' ? 'To' : 'From',
+    coloumn1: visible == 'one' ? 'Order Sent To' : 'Order CreatedBy',
     coloumn2: 'Order Date',
     coloumn3: 'Order ID',
     coloumn4: 'Product',
