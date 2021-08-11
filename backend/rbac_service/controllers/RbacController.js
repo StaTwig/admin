@@ -8,13 +8,37 @@ exports.getPermissions = [
   auth,
   async (req, res) => {
     try {
-          const permissions = await RbacModel.find({});
-          return apiResponse.successResponseWithData(res, "All Permissions", permissions);
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
+      const { role } = req.query;
+      if(role){
+      const permissions = await RbacModel.find({role});
+      return apiResponse.successResponseWithData(res, `Permissions of ${role}`, permissions);
+      }
+      else{
+      const permissions = await RbacModel.find({});
+      return apiResponse.successResponseWithData(res, "All Permissions", permissions);
+      }
+} catch (err) {
+  return apiResponse.ErrorResponse(res, err.message);
+}
+},
 ];
+
+exports.getRoles = [
+auth,
+async (req, res) => {
+try {
+      var roles =[];
+      const results = await RbacModel.find({}, { _id: 0, role: 1 });
+      results.map(r => {
+          roles.push(r.role);
+        })
+      return apiResponse.successResponseWithData(res, "All Roles", roles);
+} catch (err) {
+  console.log(err)
+  return apiResponse.ErrorResponse(res, err.message);
+}
+}
+]
 
 exports.addPermissions = [
   auth,
