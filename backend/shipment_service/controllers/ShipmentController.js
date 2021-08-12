@@ -944,12 +944,12 @@ exports.receiveShipment = [
             data.poId,
             "RECEIVED"
           );
-          /*shipmentUpdate(
+          shipmentUpdate(
             products[count].productID,
             products[count].productQuantity,
             data.id,
             "RECEIVED"
-          );*/
+          );
           if (flag == "Y")
             poUpdate(
               products[count].productId,
@@ -959,35 +959,28 @@ exports.receiveShipment = [
             );
 
 
-
-
-		console.log("here")
-
                if (products[count].batchNumber != null) {
-console.log("batch num exist")
-                const find = await AtomModel.find({"$and":[{inventoryIds:recvInventoryId},{batchNumbers: products[count].batchNumber}]})
-                console.log("find",find.length)
+                const checkBatch = await AtomModel.find({"$and":[{inventoryIds:recvInventoryId},{batchNumbers: products[count].batchNumber}]})
 
-                if (find.length > 0)
-                {       console.log("find not null")
-
-                    const update = await AtomModel.update({
+               if (checkBatch.length > 0)
+               	 {
+                        const update = await AtomModel.update({
                         batchNumbers: products[count].batchNumber,
                         "inventoryIds": recvInventoryId
                     },
-                                        {
-                                                $inc: {
-                                                        "quantity": parseInt(products[count].productQuantity),
-                                                },
+                    {
+                              $inc: {
+                                    "quantity": parseInt(products[count].productQuantity),
+			      },
                     })
-                                }
-              else {
-                      console.log("find null")
-              const atom = new AtomModel({
+                }
+              else 
+		{
+              	const atom = new AtomModel({
                 id: uniqid('batch-'),
                 label: {
-                          labelId: "QR_2D",
-                          labelType: "3232",
+                     labelId: "QR_2D",
+                     labelType: "3232",
                 },
                 quantity: products[count].productQuantity,
                 productId: products[count].productID,
@@ -1004,18 +997,15 @@ console.log("batch num exist")
                   expDate: products[count].batchNumber.expDate,
                 },
                 eolInfo: {
- eolId: "IDN29402-23423-23423",
+		  eolId: "IDN29402-23423-23423",
                   eolDate: "2021-03-31T18:30:00.000Z",
                   eolBy: req.user.id,
-eolUserInfo: "",
+		  eolUserInfo: "",
                 },
               });
-console.log("atom",atom)
               await atom.save();
 	      }
-        }
-
-
+           }
         }
 
         const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
@@ -2626,7 +2616,7 @@ exports.trackJourney = [
                     var outwardShipmentsArray = [];
                     var poDetails, trackedShipment;
                     const trackingId = req.query.trackingId;
-		    var outwardShipmentsArray1 = "";
+		    var poShipmentsArray = "";
 		    try
 		    {
                     if (!trackingId.includes("PO")) {
@@ -2924,7 +2914,7 @@ exports.trackJourney = [
                         ])
 
 
-			 outwardShipmentsArray1 = await ShipmentModel.aggregate([{
+			 poShipmentsArray = await ShipmentModel.aggregate([{
                                 $match:
                                 {
                                         id: { "$in": poDetails.shipments }
@@ -2993,7 +2983,7 @@ exports.trackJourney = [
                             "inwardShipmentsArray": inwardShipmentsArray,
                             "trackedShipment": trackedShipment,
                             "outwardShipmentsArray": outwardShipmentsArray,
-			    "outwardShipmentsArrayNew": outwardShipmentsArray1
+			    "poShipmentsArray": poShipmentsArray
                         }
                     );
 	   	 } catch (err) {
