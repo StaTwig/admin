@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const RbacSchema = new mongoose.Schema({
 	permissions: {type: Array, required: true},
-	role:{type: String, required: true},
+	role:{type: String, required: true , unique: true},
 	overview: {
 		overview: {type: Boolean, default: false},
 	},
