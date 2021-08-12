@@ -339,27 +339,29 @@ const editQuantity = (value, index) => {
                 size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
               >
               <div className="col tab" style={{width:"100%"}}>
-              <div className="mb-2">
+              <div className="">
                   <TableFilter data={headers} fb="120%"/>
                 </div>
               </div>
               
               {batches.length === 0 ? <div className="rTableRow pt-3 pb-3 justify-content-center text-muted shadow-none">No records found</div> : batches.map((product, index) => (
-              <div className="rTable pt-3">
+              <div className="rTable pt-1">
             <div>
                <div>
-                <div className="rTableRow pt-3 pb-3"> 
-                        <input className="col txt1" type="checkbox" id={index} style={{position:"relative",left:'2%'}} onChange={(e) => handleChange({quant: product.quantity, bnp: product.batchNumbers[0]})}></input>
-                        <img src={user} width="27" height="18" alt="User" className="txt1"/>
-                        <div className="col txt">{ModelProd?.name}</div>
-                        <div className="col txt1" style={{position:"relative",left:'0%'}} >{ModelProd?.manufacturer}</div>
-                        <div className="col txt1" style={{position:"relative",left:'0%'}} >{product.batchNumbers[0]}</div>
-                        <div className="col txt1" style={{position:"relative",left:'2%'}}>{formatDate(product.attributeSet.mfgDate)}</div>
-                        <div className="col txt1" style={{position:"relative",left:'2%'}}>{formatDate(product.attributeSet.expDate)}</div> 
-                        <div className="col txt1" style={{position:"relative",left:'1%'}}>
+                <div className="rTableRow mb-1"> 
+                        <input className="txt1" type="checkbox" id={index} style={{position:"relative",left:'2%'}} 
+                               onChange={(e) => handleChange({quant: product.quantity, bnp: product.batchNumbers[0]})}>
+                        </input>
+                        {/* <img src={user} width="27" height="18" alt="User" className="txt1"/> */}
+                        <div className="col txt" style={{position:"relative",left:'6%'}}>{ModelProd?.name}</div>
+                        <div className="col txt1" style={{position:"relative",left:'11%'}} >{ModelProd?.manufacturer}</div>
+                        <div className="col txt1" style={{position:"relative",left:'12%'}} >{product.batchNumbers[0]}</div>
+                        <div className="col txt1" style={{position:"relative",left:'11%'}}>{formatDate(product.attributeSet.mfgDate)}</div>
+                        <div className="col txt1" style={{position:"relative",left:'11%'}}>{formatDate(product.attributeSet.expDate)}</div> 
+                        <div className="col txt1" style={{position:"relative",left:'4%'}}>
                         <div className="txt1">
                         <input
-                          className="form-control text-center no-border"
+                          className="form-control input1"
                           id="checker"
                           placeholder="Quantity"
                           onKeyPress={numbersOnly}
@@ -373,7 +375,7 @@ const editQuantity = (value, index) => {
             {prod.unitofMeasure.name}
              </div>
             
-            <div className="txt1 pr-3">
+            <div className="txt1 mr-3">
               <div>
                 {editButtonStatus ? (
                   <div>
@@ -384,7 +386,7 @@ const editQuantity = (value, index) => {
                         onClick={onSaveClick}
                       >
                         <i className="fa fa-pencil text-center"></i>
-                        <span className="ml-2">{changebtn ? "Saved" : "Save"}</span>
+                        <span className="">{changebtn ? "" : "" }</span>
                       </button>
                     ) : (
                       <button
