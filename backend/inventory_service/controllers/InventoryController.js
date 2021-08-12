@@ -3037,4 +3037,26 @@ exports.autoCompleteSuggestions = [
 ];
 
 
+exports.fetchBatchesOfInventory = [
+  auth,
+  async (req, res) => {
+    try {
+      const { productId } = req.query;
+       var warehouseId = req.user.warehouseId;
+       let warehouse = await WarehouseModel.findOne({id: warehouseId}) 
+       let inventoryId = warehouse.warehouseInventory
+        const batches = await AtomModel.find({productId: productId,"batchNumbers": {$nin: ["", "null", null]}, inventoryIds: inventoryId})
+          .sort({ createdAt: -1 })
+        return apiResponse.successResponseWithData(
+          res,
+          "Batches of product",
+          batches
+        );
+    } catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
 

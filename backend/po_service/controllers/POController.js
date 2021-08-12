@@ -1500,7 +1500,7 @@ exports.fetchProductIdsCustomerLocationsOrganisations = [
     try {
       let responseData = {};
       ProductModel.find({},'id name').then (function (productIds){
-        WarehouseModel.find({},'id title').then (function (locations){
+        WarehouseModel.find({},'warehouseAddress.city warehouseAddress.country id title').then (function (locations){
           OrganisationModel.find({'status':'ACTIVE'},'id name').then (function (organisation){
             responseData[`organisations`] = organisation;
             responseData[`deliveryLocations`] = locations;

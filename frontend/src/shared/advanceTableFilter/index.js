@@ -290,7 +290,7 @@ const AdvanceTableFilter = (props) => {
               <Autocomplete
               id="toShipment"
               options={props.poDeliveryLocationsList}
-              getOptionLabel={(options) => options.title ? options.title + " ("+ options.id +" )" : " ("+ options.id +" )"}
+              getOptionLabel={(options) => options.title ? options.title + " ("+ options.warehouseAddress.city +" ,"+ options.warehouseAddress.country +")" : " ("+ options.id +" )"}
               onChange={(event, newValue) => {
                 setPoDeliveryLocationFilterOnSelect(newValue.id)
               }}
