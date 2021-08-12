@@ -50,7 +50,7 @@ const BatchExpiry = props => {
               <img src={user} width="16" height="24" alt="Manufacturer" />
               <span className="ml-2 font-small">Manufacturer</span>
             </div>
-            <div className="col-1 p-0">
+            <div className="col-2 p-0">
               <img src={Quantity} width="35" height="24" alt="Quantity" />
               <span className="ml-2 font-small">Quantity</span>
             </div>
@@ -58,7 +58,7 @@ const BatchExpiry = props => {
               <img src={Quantity} width="35" height="24" alt="Batch Number" />
               <span className="ml-2 font-small">Batch Number</span>
             </div>
-            <div className="col-2 pl-0">
+            <div className="col-1 pl-0">
               <img src={calender} width="35" height="24" alt="Mfg Date" />
               <span className="ml-1 font-small">Mfg Date</span>
             </div>
@@ -72,12 +72,12 @@ const BatchExpiry = props => {
           {data.map((exp, i) => 
             <div key={i} className="col-12 p-3 mb-3 rounded row bg-white shadow">
               <div className="col-2 txt txtBlue">{exp.products.name}</div>
-              <div className="col-2 txt ">{exp.products.type}</div>
-              <div className="col-2 txt ">{exp.products.manufacturer}</div>
-              <div className="col-1 txt ">{exp?.quantity ? exp.quantity : 0}{" ("}{exp.products.unitofMeasure? exp.products.unitofMeasure.name:"N/A"}{")"}</div>
-              <div className="col-2 txt ">{exp.batchNumbers[0]}</div>
-              <div className="col-2 txt ">{exp.attributeSet.mfgDate ? formatDate(exp.attributeSet.mfgDate) : ''}</div>
-              <div className="col-1 txt ">{exp.attributeSet.expDate ? formatDate(exp.attributeSet.expDate) : ''}</div>
+              <div className="col-2 txt1 ">{exp.products.type}</div>
+              <div className="col-2 txt1 ">{exp.products.manufacturer}</div>
+              <div className="col-2 txt1 ">{exp?.quantity ? exp.quantity : 0}{" ("}{exp.products.unitofMeasure? exp.products.unitofMeasure.name:"N/A"}{")"}</div>
+              <div className="col-2 txt1 ">{exp.batchNumbers[0]}</div>
+              <div className="col-1 txt1 ">{exp.attributeSet.mfgDate ? formatDate(exp.attributeSet.mfgDate) : ''}</div>
+              <div className="col-1 txt1 ">{exp.attributeSet.expDate ? formatDate(exp.attributeSet.expDate) : ''}</div>
             </div>
           )}
         </div>
