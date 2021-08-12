@@ -317,10 +317,10 @@ return (
                 <div class="panel address searchpanel mb-2 mt-3 ml-1 mr-1">
                     <div className="row">
                         <img src={pingrey} height="20" width="15"></img>
-                        <div className="ml-2">Address</div>
+                        <div className="ml-2" style={{fontSize:"13px"}}>Address</div>
 
                         </div>
-                        <div>{Address}</div>
+                        <div className="ml-2">{Address}</div>
                     </div>
                 </div>
                 </div>
