@@ -338,26 +338,26 @@ const editQuantity = (value, index) => {
                 title="FETCH SERIAL NUMBERS"
                 size="modal-xl" //for other size's use `modal-lg, modal-md, modal-sm`
               >
-              <div className="col tab" style={{width:"100%"}}>
+              
               <div className="">
-                  <TableFilter data={headers} fb="120%"/>
+                  <TableFilter data={headers} fb="140%"/>
                 </div>
-              </div>
+              
               
               {batches.length === 0 ? <div className="rTableRow pt-3 pb-3 justify-content-center text-muted shadow-none">No records found</div> : batches.map((product, index) => (
               <div className="rTable pt-1">
             <div>
                <div>
                 <div className="rTableRow mb-1"> 
-                        <input className="txt1" type="checkbox" id={index} style={{position:"relative",left:'2%'}} 
+                        <input className="txt1 ml-3" type="checkbox" id={index} 
                                onChange={(e) => handleChange({quant: product.quantity, bnp: product.batchNumbers[0]})}>
                         </input>
                         {/* <img src={user} width="27" height="18" alt="User" className="txt1"/> */}
-                        <div className="col txt" style={{position:"relative",left:'6%'}}>{ModelProd?.name}</div>
-                        <div className="col txt1" style={{position:"relative",left:'11%'}} >{ModelProd?.manufacturer}</div>
-                        <div className="col txt1" style={{position:"relative",left:'12%'}} >{product.batchNumbers[0]}</div>
-                        <div className="col txt1" style={{position:"relative",left:'11%'}}>{formatDate(product.attributeSet.mfgDate)}</div>
-                        <div className="col txt1" style={{position:"relative",left:'11%'}}>{formatDate(product.attributeSet.expDate)}</div> 
+                        <div className="col txt" style={{position:"relative",left:'0%'}}>{ModelProd?.name}</div>
+                        <div className="col txt1" style={{position:"relative",left:'6%'}} >{ModelProd?.manufacturer}</div>
+                        <div className="col txt1" style={{position:"relative",left:'8%'}} >{product.batchNumbers[0]}</div>
+                        <div className="col txt1" style={{position:"relative",left:'8%'}}>{formatDate(product.attributeSet.mfgDate)}</div>
+                        <div className="col txt1" style={{position:"relative",left:'8%'}}>{formatDate(product.attributeSet.expDate)}</div> 
                         <div className="col txt1" style={{position:"relative",left:'4%'}}>
                         <div className="txt1">
                         <input
