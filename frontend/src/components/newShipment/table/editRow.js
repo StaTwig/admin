@@ -349,7 +349,7 @@ const editQuantity = (value, index) => {
             <div>
                <div>
                 <div className="rTableRow mb-1"> 
-                        <input className="txt1 ml-3" type="checkbox" id={index} 
+                        <input className="txt2 ml-3" type="checkbox" id={index} 
                                onChange={(e) => handleChange({quant: product.quantity, bnp: product.batchNumbers[0]})}>
                         </input>
                         {/* <img src={user} width="27" height="18" alt="User" className="txt1"/> */}
@@ -382,7 +382,7 @@ const editQuantity = (value, index) => {
                     {addnew ? (
                       <button
                         type="submit"
-                        className="btn-sm btn-orange d-width"
+                        className="btn-sm btn-yellow d-width"
                         onClick={onSaveClick}
                       >
                         <i className="fa fa-pencil text-center"></i>
@@ -390,7 +390,7 @@ const editQuantity = (value, index) => {
                       </button>
                     ) : (
                       <button
-                        className="btn-sm btn-orange d-width"
+                        className="btn-sm btn-yellow d-width"
                         onClick={onEditClick}
                       >
                         <i className="fa fa-pencil text-center"></i>
@@ -400,7 +400,7 @@ const editQuantity = (value, index) => {
                   </div>
                 ) : (
                   <button
-                    className="btn-sm btn-orange d-width"
+                    className="btn-sm btn-yellow d-width"
                     onClick={onEditClick}
                   >
                     <i className="fa fa-pencil text-center"></i>
