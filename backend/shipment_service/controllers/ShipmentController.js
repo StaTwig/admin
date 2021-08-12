@@ -30,6 +30,7 @@ const axios = require("axios");
 const { uploadFile , getFileStream} = require("../helpers/s3");
 const fs = require('fs');
 const util = require('util');
+const uniqid = require("uniqid");
 const unlinkFile = util.promisify(fs.unlink);
 
 const inventoryUpdate = async (
@@ -610,16 +611,17 @@ exports.createShipment = [
                     data.poId,
                     "CREATED"
                   );         
+		//Case - create shipment with Batch Number
 		if (products[count].batchNumber != null) {
-		    const update = await AtomModel.updateMany({
-		        batchNumbers: products[count].batchNumber,
-		        "inventoryIds": suppInventoryId
-		    }, {
-		        $set: {
-		            "inventoryIds.$": recvInventoryId
-		        }
-		    })
-		
+		const update = await AtomModel.updateOne({
+                        batchNumbers: products[count].batchNumber,
+                        "inventoryIds": suppInventoryId
+                    }, 
+			{
+			$inc: {
+			"quantity": -parseInt(products[count].productQuantity),
+		},	
+                    })	
 		} else if (products[count].serialNumber != null) {
 		    const serialNumbers = product.serialNumbersRange.split("-");
 		    let atomsArray = [];
@@ -942,12 +944,12 @@ exports.receiveShipment = [
             data.poId,
             "RECEIVED"
           );
-          shipmentUpdate(
+          /*shipmentUpdate(
             products[count].productID,
             products[count].productQuantity,
             data.id,
             "RECEIVED"
-          );
+          );*/
           if (flag == "Y")
             poUpdate(
               products[count].productId,
@@ -955,6 +957,65 @@ exports.receiveShipment = [
               data.poId,
               "RECEIVED"
             );
+
+
+
+
+		console.log("here")
+
+               if (products[count].batchNumber != null) {
+console.log("batch num exist")
+                const find = await AtomModel.find({"$and":[{inventoryIds:recvInventoryId},{batchNumbers: products[count].batchNumber}]})
+                console.log("find",find.length)
+
+                if (find.length > 0)
+                {       console.log("find not null")
+
+                    const update = await AtomModel.update({
+                        batchNumbers: products[count].batchNumber,
+                        "inventoryIds": recvInventoryId
+                    },
+                                        {
+                                                $inc: {
+                                                        "quantity": parseInt(products[count].productQuantity),
+                                                },
+                    })
+                                }
+              else {
+                      console.log("find null")
+              const atom = new AtomModel({
+                id: uniqid('batch-'),
+                label: {
+                          labelId: "QR_2D",
+                          labelType: "3232",
+                },
+                quantity: products[count].productQuantity,
+                productId: products[count].productID,
+                inventoryIds: recvInventoryId,
+                lastInventoryId: "",
+                lastShipmentId: "",
+                poIds: [],
+                shipmentIds: [],
+                txIds: [],
+                batchNumbers: products[count].batchNumber,
+                atomStatus: "Healthy",
+                attributeSet: {
+                  mfgDate: products[count].mfgDate,
+                  expDate: products[count].batchNumber.expDate,
+                },
+                eolInfo: {
+ eolId: "IDN29402-23423-23423",
+                  eolDate: "2021-03-31T18:30:00.000Z",
+                  eolBy: req.user.id,
+eolUserInfo: "",
+                },
+              });
+console.log("atom",atom)
+              await atom.save();
+	      }
+        }
+
+
         }
 
         const currDateTime = date.format(new Date(), "DD/MM/YYYY HH:mm");
@@ -979,6 +1040,7 @@ exports.receiveShipment = [
         //}, {
         //  status: "RECEIVED"
         //}, );
+
 
         var datee = new Date();
         datee = datee.toISOString();
@@ -2564,6 +2626,7 @@ exports.trackJourney = [
                     var outwardShipmentsArray = [];
                     var poDetails, trackedShipment;
                     const trackingId = req.query.trackingId;
+		    var outwardShipmentsArray1 = "";
 		    try
 		    {
                     if (!trackingId.includes("PO")) {
@@ -2799,9 +2862,9 @@ exports.trackJourney = [
 
                                 {
                                     "$or": [{
-                                        id: poDetails.shipments.toString()
+                                        id: { "$in": poDetails.shipments }
                                     }, {
-                                        taggedShipments: poDetails.shipments.toString()
+                                        taggedShipments: { "$in": poDetails.shipments }
                                     }]
 
                                 }
@@ -2859,6 +2922,68 @@ exports.trackJourney = [
                                 },
                             },
                         ])
+
+
+			 outwardShipmentsArray1 = await ShipmentModel.aggregate([{
+                                $match:
+                                {
+                                        id: { "$in": poDetails.shipments }
+                                }
+                            },
+                            {
+                                $lookup: {
+                                    from: "warehouses",
+                                    localField: "supplier.locationId",
+                                    foreignField: "id",
+                                    as: "supplier.warehouse",
+                                },
+                            },
+                            {
+                                $unwind: {
+                                    path: "$supplier.warehouse",
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: "organisations",
+                                    localField: "supplier.warehouse.organisationId",
+                                    foreignField: "id",
+                                    as: "supplier.org",
+                                },
+                            },
+                            {
+                                $unwind: {
+                                    path: "$supplier.org",
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: "warehouses",
+                                    localField: "receiver.locationId",
+                                    foreignField: "id",
+                                    as: "receiver.warehouse",
+                                },
+                            },
+                            {
+                                $unwind: {
+                                    path: "$receiver.warehouse",
+                                },
+                            },
+                            {
+                                $lookup: {
+                                    from: "organisations",
+                                    localField: "receiver.warehouse.organisationId",
+                                    foreignField: "id",
+                                    as: "receiver.org",
+                                },
+                            },
+                            {
+                                $unwind: {
+                                    path: "$receiver.org",
+                                },
+                            },
+                        ])
+
 		      }
                     }
                     return apiResponse.successResponseWithData(
@@ -2867,7 +2992,8 @@ exports.trackJourney = [
                             "poDetails": poDetails,
                             "inwardShipmentsArray": inwardShipmentsArray,
                             "trackedShipment": trackedShipment,
-                            "outwardShipmentsArray": outwardShipmentsArray
+                            "outwardShipmentsArray": outwardShipmentsArray,
+			    "outwardShipmentsArrayNew": outwardShipmentsArray1
                         }
                     );
 	   	 } catch (err) {
