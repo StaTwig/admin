@@ -33,7 +33,7 @@ const Tiles = props => {
   return (
     <div className="row mb-4">
       <div className="col">
-        <div onClick={() => props.setData('one')} className="panel cursorP" style={{height:'11.7vh'}}>
+        <div onClick={() => props.setData('one')} className="panel cursorP">
           <div className="picture recived-bg">
             <img src={Received} alt="truck" />
           </div>
@@ -44,7 +44,7 @@ const Tiles = props => {
         </div>
       </div>
       <div className="col">
-        <div onClick={() => props.setData('two')} className="panel cursorP" style={{height:'11.7vh'}}>
+        <div onClick={() => props.setData('two')} className="panel cursorP">
           <div className="picture sent-bg">
             <img src={Sent} alt="truck" />
           </div>
@@ -55,7 +55,7 @@ const Tiles = props => {
         </div>
       </div>
       <div className="col">
-        <div onClick={() => props.setData('one', true)} className="panel cursorP" style={{height:'11.7vh'}}>
+        <div onClick={() => props.setData('one', true)} className="panel cursorP">
           <div className="picture inbound-alert-bg">
              <img src={InboundAlert} alt="truck" />
           </div>
@@ -67,7 +67,7 @@ const Tiles = props => {
         </div>
       </div>
       <div className="col">
-        <div onClick={() => props.setData('two', true)} className="panel cursorP" style={{height:'11.7vh'}}>
+        <div onClick={() => props.setData('two', true)} className="panel cursorP">
           <div className="picture outbound-alert-bg">
             <img src={OutboundAlert} alt="truck" />
           </div>
