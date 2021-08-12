@@ -4,6 +4,7 @@ const serviceId = process.env.TWILIO_SERVICE_ID;
 const axios = require('axios');
 const client = require('twilio')(accountSid, authToken);
 const Notification = require('../models/NotificationsModel')
+var uuid = require('uuid');
 
 function eventToData(event,type){
     switch(type){
@@ -27,7 +28,7 @@ function eventToHtml(event){
 function pushNotification(event,userId){
     try{
         const content = eventToData(event,"mobile")
-        var notification = new Notification({ title: "VaccineLedger alert", message: content, user: userId});
+        var notification = new Notification({ id: uuid.v4() ,title: "VaccineLedger alert", message: content, user: userId});
         console.log(notification);
         notification.save(function(err, doc) {
             if (err) return console.error(err);
@@ -63,6 +64,7 @@ function alertMobile(event,mobile){
 function alertEmail(event,email){
     try{
     const content = eventToData(event,"email")
+    console.log("Mailed succesfully to",email)
     axios.post(process.env.MESSAGING_SERVICE_URL, {
         "subject": `New Alert`,
         "email" : email,
