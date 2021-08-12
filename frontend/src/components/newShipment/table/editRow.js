@@ -14,6 +14,9 @@ import Product from '../../../assets/icons/Producttype.png';
 import date from '../../../assets/icons/ShippingDate.svg';
 import Batch from '../../../assets/icons/Batch.png';
 import TableFilter from './tablefilter.js';
+import axios from 'axios';
+import { config } from '../../../config';
+import { formatDate } from '../../../utils/dateHelper';
 
 const EditRow = props => {
   const {
@@ -55,6 +58,10 @@ const EditRow = props => {
   const [productsList,setProductsList] = useState([]);
   const [quantityChecker,setQuantityChecker] = useState(1);
   const [showModal, setShowModal] = useState(false);
+  const [ModelProd, setModelProduct] = useState({});
+  const [batches, setBatches] = useState([]);
+  const [selectedBatch, setSelectedBatch] = useState({});
+  const [selectedIndex, setSelectedIndex] = useState();
   const closeModal = () => setShowModal(false);
   const handleOpen = () => {
     setOpen(true);
@@ -72,11 +79,6 @@ const EditRow = props => {
   };
 
   const onSaveClick = (e) => {
-    const data = {
-      id: prod.id,
-      name: changeValue,
-    };
-    updateOrgTypesUrl(data);
     setbtn(true);
     setDisabled(!disabled);
     setEditButtonStatus(false);
@@ -150,8 +152,20 @@ if(check==="0" && quantityChecker===1 && typeof(prod)!="undefined" && typeof(pro
                     }
   }
 
-
-
+  async function changeBatch(batch, index){
+    console.log(selectedBatch.quant, selectedBatch.bnp, index);
+    handleBatchChange(batch.bnp, index);
+    handleQuantityChange(batch.quant, index);
+    // closeModal()
+  }
+  async function fetchBatches(prod, index){
+    setSelectedIndex(index);
+    console.log("index, ", selectedIndex )
+    setModelProduct(prod);
+    let res = await axios.get(`${config().fetchBatchesOfInventory}?productId=${prod.id}`)
+    console.log(res.data);
+    setBatches(res.data.data)
+  }
   const numbersOnly = (e) => {
     // Handle paste
     if (e.type === 'paste') {
@@ -170,6 +184,20 @@ if(check==="0" && quantityChecker===1 && typeof(prod)!="undefined" && typeof(pro
 const handleChange = (value) =>
 {
     console.log(value);
+    setSelectedBatch(value);
+}
+const setQuantity = (value) => {
+  let buffer = selectedBatch;
+  buffer.quant = value;
+  setSelectedBatch(buffer);
+  console.log(selectedBatch)
+}
+const editQuantity = (value, index) => {
+  let buffer = [...batches];
+  buffer[index].quantity = value;
+  setBatches(buffer);
+  setQuantity(value);
+  
 }
 //console.log("yyyy",prod);
 // console.log(products);
@@ -299,7 +327,7 @@ const handleChange = (value) =>
         <div className="d-flex">
             <button type="button" class="btn btn-outline-primary mr-2 ml-2"
                 style={{height:"30px",width:"60px"}}
-                onClick={() => setShowModal(true)}>
+                onClick={() => {setShowModal(true); fetchBatches(prod, index)}}>
                 <div style={{position:"relative",fontSize:"12px",left:"-6px"}}>Fetch</div>
             </button>
             <div className="">
@@ -315,29 +343,31 @@ const handleChange = (value) =>
                   <TableFilter data={headers} fb="120%"/>
                 </div>
               </div>
+              
+              {batches.length === 0 ? <div className="rTableRow pt-3 pb-3 justify-content-center text-muted shadow-none">No records found</div> : batches.map((product, index) => (
               <div className="rTable pt-3">
             <div>
                <div>
-                <div className="rTableRow pt-3 pb-3">
-                <input className="txt1" type="checkbox" id="" name="fetchBillNo" style={{position:"relative",left:'2%'}}></input>
-                <img src={user} width="27" height="18" alt="User" className="txt1" style={{position:"relative",left:'4%'}}/>
-                <div className="col txt" style={{position:"relative",left:'4%'}}>OPV</div>
-                <div className="col txt1" style={{position:"relative",left:'8%'}} >Bharat Biotech</div>
-                <div className="col txt1" style={{position:"relative",left:'8%'}} >BIOE13BCG1</div>
-                <div className="col txt1" style={{position:"relative",left:'9%'}}>11/08/2021</div>
-                <div className="col txt1" style={{position:"relative",left:'8%'}}>11/08/2021</div> 
-                <div className="col txt1" style={{position:"relative",left:'0%'}}>
-                <div className="txt1">
-                <input
-                  className="form-control"
-                  id="checker"
-                  placeholder="Quantity"
-                  onKeyPress={numbersOnly}
-                  value={prod.productQuantity}
-                  disabled={disabled}
-                  onChange={(e) => handleBatchQuantityChange(e.target.value, index)}
-                />
-               </div>
+                <div className="rTableRow pt-3 pb-3"> 
+                        <input className="col txt1" type="checkbox" id={index} style={{position:"relative",left:'2%'}} onChange={(e) => handleChange({quant: product.quantity, bnp: product.batchNumbers[0]})}></input>
+                        <img src={user} width="27" height="18" alt="User" className="txt1"/>
+                        <div className="col txt">{ModelProd?.name}</div>
+                        <div className="col txt1" style={{position:"relative",left:'0%'}} >{ModelProd?.manufacturer}</div>
+                        <div className="col txt1" style={{position:"relative",left:'0%'}} >{product.batchNumbers[0]}</div>
+                        <div className="col txt1" style={{position:"relative",left:'2%'}}>{formatDate(product.attributeSet.mfgDate)}</div>
+                        <div className="col txt1" style={{position:"relative",left:'2%'}}>{formatDate(product.attributeSet.expDate)}</div> 
+                        <div className="col txt1" style={{position:"relative",left:'1%'}}>
+                        <div className="txt1">
+                        <input
+                          className="form-control text-center no-border"
+                          id="checker"
+                          placeholder="Quantity"
+                          onKeyPress={numbersOnly}
+                          value={product.quantity}
+                          disabled={disabled}
+                          onChange={(e) => editQuantity(e.target.value, index)}
+                        />
+              </div>
             </div>
             <div className="txt1 title recived-text align-self-center mr-2">
             {prod.unitofMeasure.name}
@@ -384,11 +414,17 @@ const handleChange = (value) =>
                       </button>
                 </div> */}
               </div>
-              </div>
-          </div>
-        </div>
+                </div>
+               </div>
+             </div>
+          
+          ))}
+          
+          
+          
+          
               <div className="d-flex flex-row-reverse p-3">
-                <button type="submit" className="ml-3 btn btn-orange">
+                <button type="button" className="ml-3 btn btn-orange" onClick={() => {changeBatch(selectedBatch, selectedIndex); closeModal()}}>
                  Next
                 </button>
                 <button
