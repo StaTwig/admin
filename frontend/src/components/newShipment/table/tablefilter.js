@@ -5,7 +5,7 @@ import './style.scss'
 
 const tablefilter = (props) => {
   return (
-    <div className="filter col-12 p-2">
+    <div className="filter col-12 p-0 mb-3">
       <div className="d-flex justify-content-between">
         <div className="row" style={{ flexBasis: props.fb }}>
         <div className="box col-3">
