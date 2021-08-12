@@ -361,7 +361,7 @@ const editQuantity = (value, index) => {
                         <div className="col txt1" style={{position:"relative",left:'4%'}}>
                         <div className="txt1">
                         <input
-                          className="form-control input1"
+                          className="form-control text-center input1"
                           id="checker"
                           placeholder="Quantity"
                           onKeyPress={numbersOnly}
