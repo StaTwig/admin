@@ -9,7 +9,8 @@ const eventSchema = Joi.object().keys({
   }),
   actor: Joi.object().keys({
     actorid: Joi.string().min(1).max(50).required(),
-    actoruserid: Joi.string().email({ tlds: { allow: false } }),
+    actoruserid: Joi.string().min(1).max(50).required(),
+    // actoruserid: Joi.string().email({ tlds: { allow: false } }),
   }),
   stackholders: Joi.object().keys({
     ca: Joi.object().keys({
@@ -31,7 +32,7 @@ const eventSchema = Joi.object().keys({
   payload: Joi.object().keys({
     data: Joi.any().optional()
   }),
-  actorWarehouseId: Joi.string().min(1).max(50).required(),
+  actorWarehouseId: Joi.string().min(1).max(50),
 });
 
 

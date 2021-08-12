@@ -368,8 +368,11 @@ const editQuantity = (value, index) => {
                         />
               </div>
             </div>
-    
-            <div className="txt1 pr-2">
+            <div className="txt1 title recived-text align-self-center mr-2">
+            {prod.unitofMeasure.name}
+             </div>
+            
+            <div className="txt1 pr-3">
               <div>
                 {editButtonStatus ? (
                   <div>
