@@ -16,6 +16,7 @@ import Batch from '../../../assets/icons/Batch.png';
 import TableFilter from './tablefilter.js';
 import axios from 'axios';
 import { config } from '../../../config';
+import { formatDate } from '../../../utils/dateHelper';
 
 const EditRow = props => {
   const {
@@ -353,8 +354,8 @@ const editQuantity = (value, index) => {
                         <div className="col txt">{ModelProd?.name}</div>
                         <div className="col txt1" style={{position:"relative",left:'0%'}} >{ModelProd?.manufacturer}</div>
                         <div className="col txt1" style={{position:"relative",left:'0%'}} >{product.batchNumbers[0]}</div>
-                        <div className="col txt1" style={{position:"relative",left:'2%'}}>{product.attributeSet.mfgDate}</div>
-                        <div className="col txt1" style={{position:"relative",left:'2%'}}>{product.attributeSet.expDate}</div> 
+                        <div className="col txt1" style={{position:"relative",left:'2%'}}>{formatDate(product.attributeSet.mfgDate)}</div>
+                        <div className="col txt1" style={{position:"relative",left:'2%'}}>{formatDate(product.attributeSet.expDate)}</div> 
                         <div className="col txt1" style={{position:"relative",left:'1%'}}>
                         <div className="txt1">
                         <input
