@@ -819,7 +819,139 @@
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "getPermissions",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3004/api/rbac_service/getPermissions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3004",
+							"path": [
+								"api",
+								"rbac_service",
+								"getPermissions"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "powerUser",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "14671"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"394f-vs+IRs+98CteTwKV425Lfc3KksQ\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 12 Aug 2021 11:44:48 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": 1,\n    \"message\": \"All Permissions\",\n    \"data\": [\n        {\n            \"overview\": {\n                \"overview\": false\n            },\n            \"search\": {\n                \"searchByOrderId\": false,\n                \"searchByShipmentId\": false,\n                \"searchByProductCategory\": false,\n                \"searchByTransitNo\": false,\n                \"searchByProductName\": false,\n                \"searchByProductId\": false\n            },\n            \"inventory\": {\n                \"viewInventory\": false,\n                \"addInventory\": false,\n                \"importInventory\": false,\n                \"inventoryAnalytics\": false,\n                \"viewProductList\": false,\n                \"viewProductInfo\": false,\n                \"addNewProduct\": false,\n                \"inventoryFilters\": false,\n                \"inventoryExportReport\": false\n            },\n            \"shipment\": {\n                \"createShipment\": false,\n                \"shipmentAnalytics\": false,\n                \"updateShipment\": false,\n                \"receiveShipment\": false,\n                \"receiveShipmentScan\": false,\n                \"inboundShipments\": false,\n                \"outboundShipments\": false,\n                \"viewShipment\": false,\n                \"shipmentFilters\": false,\n                \"shipmentExportReport\": false\n            },\n            \"order\": {\n                \"createOrder\": false,\n                \"importOrder\": false,\n                \"orderAnalytics\": false,\n                \"receiveOrder\": false,\n                \"acceptRejectOrder\": false,\n                \"viewInboundOrders\": false,\n                \"viewOutboundOrders\": false,\n                \"orderFilters\": false,\n                \"orderExportReport\": false,\n                \"viewPO\": false\n            },\n            \"network\": {\n                \"network\": false\n            },\n            \"track\": {\n                \"trackAndTrace\": false\n            },\n            \"admin\": {\n                \"getUserRequest\": false,\n                \"acceptUser\": false,\n                \"addUser\": false,\n                \"removeUser\": false,\n                \"deactivateUser\": false,\n                \"addRole\": false,\n                \"deleteRole\": false,\n                \"affliateUser\": false,\n                \"unaffliateUser\": false,\n                \"viewAffliation\": false,\n                \"acceptAffiliation\": false,\n                \"removeAffiliation\": false\n            },\n            \"permissions\": [\n                \"viewInventoryAtDifferentWarehouses\",\n                \"viewShipment\",\n                \"addInventory\",\n                \"viewInventory\",\n                \"viewProductList\",\n                \"addNewProduct\",\n                \"createPO\",\n                \"receivePO\",\n                \"viewPO\",\n                \"createShipmentOrder\",\n                \"viewShipment\",\n                \"receiveShipmentOrder\",\n                \"scanShipment\",\n                \"sendShipment\",\n                \"trackAndTrace\",\n                \"addUsers\",\n                \"removeUsers\",\n                \"deactivateUsers\",\n                \"affiliateUser\",\n                \"unAffiliateUser\",\n                \"addRole\",\n                \"deleteRole\",\n                \"viewRequestForAffiliation\",\n                \"acceptOrRejectRequestForAffiliation\",\n                \"removeAffiliationToOrganisation\",\n                \"manageAddresses\",\n                \"changePOStatus\",\n                \"fetchPurchaseOrders\",\n                \"addProduct\",\n                \"fetchAllPurchaseOrdersBC\",\n                \"fetchPublisherPurchaseOrders\",\n                \"fetchPurchaseOrderBC\",\n                \"createPurchaseOrder\",\n                \"addPOsFromExcel\",\n                \"search\"\n            ],\n            \"_id\": \"5f4bf27f0cc6fb17fec1851d\",\n            \"role\": \"powerUser\",\n            \"createdAt\": \"2020-08-30T18:39:59.390Z\",\n            \"updatedAt\": \"2020-08-30T18:53:37.872Z\",\n            \"__v\": 0\n        },\n        {\n            \"overview\": {\n                \"overview\": false\n            },\n            \"search\": {\n                \"searchByOrderId\": false,\n                \"searchByShipmentId\": false,\n                \"searchByProductCategory\": false,\n                \"searchByTransitNo\": false,\n                \"searchByProductName\": false,\n                \"searchByProductId\": false\n            },\n            \"inventory\": {\n                \"viewInventory\": false,\n                \"addInventory\": false,\n                \"importInventory\": false,\n                \"inventoryAnalytics\": false,\n                \"viewProductList\": false,\n                \"viewProductInfo\": false,\n                \"addNewProduct\": false,\n                \"inventoryFilters\": false,\n                \"inventoryExportReport\": false\n            },\n            \"shipment\": {\n                \"createShipment\": false,\n                \"shipmentAnalytics\": false,\n                \"updateShipment\": false,\n                \"receiveShipment\": false,\n                \"receiveShipmentScan\": false,\n                \"inboundShipments\": false,\n                \"outboundShipments\": false,\n                \"viewShipment\": false,\n                \"shipmentFilters\": false,\n                \"shipmentExportReport\": false\n            },\n            \"order\": {\n                \"createOrder\": false,\n                \"importOrder\": false,\n                \"orderAnalytics\": false,\n                \"receiveOrder\": false,\n                \"acceptRejectOrder\": false,\n                \"viewInboundOrders\": false,\n                \"viewOutboundOrders\": false,\n                \"orderFilters\": false,\n                \"orderExportReport\": false,\n                \"viewPO\": false\n            },\n            \"network\": {\n                \"network\": false\n            },\n            \"track\": {\n                \"trackAndTrace\": false\n            },\n            \"admin\": {\n                \"getUserRequest\": false,\n                \"acceptUser\": false,\n                \"addUser\": false,\n                \"removeUser\": false,\n                \"deactivateUser\": false,\n                \"addRole\": false,\n                \"deleteRole\": false,\n                \"affliateUser\": false,\n                \"unaffliateUser\": false,\n                \"viewAffliation\": false,\n                \"acceptAffiliation\": false,\n                \"removeAffiliation\": false\n            },\n            \"permissions\": [\n                \"addUsers\",\n                \"removeUsers\",\n                \"deactivateUsers\",\n                \"affiliateUser\",\n                \"unAffiliateUser\",\n                \"addRole\",\n                \"deleteRole\",\n                \"manageAddresses\"\n            ],\n            \"_id\": \"5f4bf5e50cc6fb17fec1851e\",\n            \"role\": \"admin\",\n            \"createdAt\": \"2020-08-30T18:54:29.887Z\",\n            \"updatedAt\": \"2020-08-30T18:54:29.887Z\",\n            \"__v\": 0\n        },\n        {\n            \"overview\": {\n                \"overview\": false\n            },\n            \"search\": {\n                \"searchByOrderId\": false,\n                \"searchByShipmentId\": false,\n                \"searchByProductCategory\": false,\n                \"searchByTransitNo\": false,\n                \"searchByProductName\": false,\n                \"searchByProductId\": false\n            },\n            \"inventory\": {\n                \"viewInventory\": false,\n                \"addInventory\": false,\n                \"importInventory\": false,\n                \"inventoryAnalytics\": false,\n                \"viewProductList\": false,\n                \"viewProductInfo\": false,\n                \"addNewProduct\": false,\n                \"inventoryFilters\": false,\n                \"inventoryExportReport\": false\n            },\n            \"shipment\": {\n                \"createShipment\": false,\n                \"shipmentAnalytics\": false,\n                \"updateShipment\": false,\n                \"receiveShipment\": false,\n                \"receiveShipmentScan\": false,\n                \"inboundShipments\": false,\n                \"outboundShipments\": false,\n                \"viewShipment\": false,\n                \"shipmentFilters\": false,\n                \"shipmentExportReport\": false\n            },\n            \"order\": {\n                \"createOrder\": false,\n                \"importOrder\": false,\n                \"orderAnalytics\": false,\n                \"receiveOrder\": false,\n                \"acceptRejectOrder\": false,\n                \"viewInboundOrders\": false,\n                \"viewOutboundOrders\": false,\n                \"orderFilters\": false,\n                \"orderExportReport\": false,\n                \"viewPO\": false\n            },\n            \"network\": {\n                \"network\": false\n            },\n            \"track\": {\n                \"trackAndTrace\": false\n            },\n            \"admin\": {\n                \"getUserRequest\": false,\n                \"acceptUser\": false,\n                \"addUser\": false,\n                \"removeUser\": false,\n                \"deactivateUser\": false,\n                \"addRole\": false,\n                \"deleteRole\": false,\n                \"affliateUser\": false,\n                \"unaffliateUser\": false,\n                \"viewAffliation\": false,\n                \"acceptAffiliation\": false,\n                \"removeAffiliation\": false\n            },\n            \"permissions\": [\n                \"viewShipment\",\n                \"viewRequestForAffiliation\",\n                \"acceptOrRejectRequestForAffiliation\",\n                \"removeAffiliationToOrganisation\"\n            ],\n            \"_id\": \"5f4bf6090cc6fb17fec1851f\",\n            \"role\": \"affiliatee\",\n            \"createdAt\": \"2020-08-30T18:55:05.828Z\",\n            \"updatedAt\": \"2020-08-30T18:55:05.828Z\",\n            \"__v\": 0\n        },\n        {\n            \"overview\": {\n                \"overview\": false\n            },\n            \"search\": {\n                \"searchByOrderId\": false,\n                \"searchByShipmentId\": false,\n                \"searchByProductCategory\": false,\n                \"searchByTransitNo\": false,\n                \"searchByProductName\": false,\n                \"searchByProductId\": false\n            },\n            \"inventory\": {\n                \"viewInventory\": false,\n                \"addInventory\": false,\n                \"importInventory\": false,\n                \"inventoryAnalytics\": false,\n                \"viewProductList\": false,\n                \"viewProductInfo\": false,\n                \"addNewProduct\": false,\n                \"inventoryFilters\": false,\n                \"inventoryExportReport\": false\n            },\n            \"shipment\": {\n                \"createShipment\": false,\n                \"shipmentAnalytics\": false,\n                \"updateShipment\": false,\n                \"receiveShipment\": false,\n                \"receiveShipmentScan\": false,\n                \"inboundShipments\": false,\n                \"outboundShipments\": false,\n                \"viewShipment\": false,\n                \"shipmentFilters\": false,\n                \"shipmentExportReport\": false\n            },\n            \"order\": {\n                \"createOrder\": false,\n                \"importOrder\": false,\n                \"orderAnalytics\": false,\n                \"receiveOrder\": false,\n                \"acceptRejectOrder\": false,\n                \"viewInboundOrders\": false,\n                \"viewOutboundOrders\": false,\n                \"orderFilters\": false,\n                \"orderExportReport\": false,\n                \"viewPO\": false\n            },\n            \"network\": {\n                \"network\": false\n            },\n            \"track\": {\n                \"trackAndTrace\": false\n            },\n            \"admin\": {\n                \"getUserRequest\": false,\n                \"acceptUser\": false,\n                \"addUser\": false,\n                \"removeUser\": false,\n                \"deactivateUser\": false,\n                \"addRole\": false,\n                \"deleteRole\": false,\n                \"affliateUser\": false,\n                \"unaffliateUser\": false,\n                \"viewAffliation\": false,\n                \"acceptAffiliation\": false,\n                \"removeAffiliation\": false\n            },\n            \"permissions\": [\n                \"viewInventory\",\n                \"viewProductList\",\n                \"addNewProduct\",\n                \"createPO\",\n                \"receivePO\",\n                \"viewPO\",\n                \"createShipmentOrder\",\n                \"viewShipment\",\n                \"trackAndTrace\",\n                \"manageAddresses\"\n            ],\n            \"_id\": \"5f4bf62f0cc6fb17fec18520\",\n            \"role\": \"salesEmployeeSenior\",\n            \"createdAt\": \"2020-08-30T18:55:43.103Z\",\n            \"updatedAt\": \"2020-08-30T18:55:43.103Z\",\n            \"__v\": 0\n        },\n        {\n            \"overview\": {\n                \"overview\": false\n            },\n            \"search\": {\n                \"searchByOrderId\": false,\n                \"searchByShipmentId\": false,\n                \"searchByProductCategory\": false,\n                \"searchByTransitNo\": false,\n                \"searchByProductName\": false,\n                \"searchByProductId\": false\n            },\n            \"inventory\": {\n                \"viewInventory\": false,\n                \"addInventory\": false,\n                \"importInventory\": false,\n                \"inventoryAnalytics\": false,\n                \"viewProductList\": false,\n                \"viewProductInfo\": false,\n                \"addNewProduct\": false,\n                \"inventoryFilters\": false,\n                \"inventoryExportReport\": false\n            },\n            \"shipment\": {\n                \"createShipment\": false,\n                \"shipmentAnalytics\": false,\n                \"updateShipment\": false,\n                \"receiveShipment\": false,\n                \"receiveShipmentScan\": false,\n                \"inboundShipments\": false,\n                \"outboundShipments\": false,\n                \"viewShipment\": false,\n                \"shipmentFilters\": false,\n                \"shipmentExportReport\": false\n            },\n            \"order\": {\n                \"createOrder\": false,\n                \"importOrder\": false,\n                \"orderAnalytics\": false,\n                \"receiveOrder\": false,\n                \"acceptRejectOrder\": false,\n                \"viewInboundOrders\": false,\n                \"viewOutboundOrders\": false,\n                \"orderFilters\": false,\n                \"orderExportReport\": false,\n                \"viewPO\": false\n            },\n            \"network\": {\n                \"network\": false\n            },\n            \"track\": {\n                \"trackAndTrace\": false\n            },\n            \"admin\": {\n                \"getUserRequest\": false,\n                \"acceptUser\": false,\n                \"addUser\": false,\n                \"removeUser\": false,\n                \"deactivateUser\": false,\n                \"addRole\": false,\n                \"deleteRole\": false,\n                \"affliateUser\": false,\n                \"unaffliateUser\": false,\n                \"viewAffliation\": false,\n                \"acceptAffiliation\": false,\n                \"removeAffiliation\": false\n            },\n            \"permissions\": [\n                \"viewInventory\",\n                \"viewProductList\",\n                \"addNewProduct\",\n                \"createPO\",\n                \"receivePO\",\n                \"viewPO\",\n                \"createShipmentOrder\",\n                \"viewShipment\",\n                \"trackAndTrace\"\n            ],\n            \"_id\": \"5f4bf6490cc6fb17fec18521\",\n            \"role\": \"salesEmployeeJunior\",\n            \"createdAt\": \"2020-08-30T18:56:09.569Z\",\n            \"updatedAt\": \"2020-08-30T18:56:09.569Z\",\n            \"__v\": 0\n        },\n        {\n            \"overview\": {\n                \"overview\": false\n            },\n            \"search\": {\n                \"searchByOrderId\": false,\n                \"searchByShipmentId\": false,\n                \"searchByProductCategory\": false,\n                \"searchByTransitNo\": false,\n                \"searchByProductName\": false,\n                \"searchByProductId\": false\n            },\n            \"inventory\": {\n                \"viewInventory\": false,\n                \"addInventory\": false,\n                \"importInventory\": false,\n                \"inventoryAnalytics\": false,\n                \"viewProductList\": false,\n                \"viewProductInfo\": false,\n                \"addNewProduct\": false,\n                \"inventoryFilters\": false,\n                \"inventoryExportReport\": false\n            },\n            \"shipment\": {\n                \"createShipment\": false,\n                \"shipmentAnalytics\": false,\n                \"updateShipment\": false,\n                \"receiveShipment\": false,\n                \"receiveShipmentScan\": false,\n                \"inboundShipments\": false,\n                \"outboundShipments\": false,\n                \"viewShipment\": false,\n                \"shipmentFilters\": false,\n                \"shipmentExportReport\": false\n            },\n            \"order\": {\n                \"createOrder\": false,\n                \"importOrder\": false,\n                \"orderAnalytics\": false,\n                \"receiveOrder\": false,\n                \"acceptRejectOrder\": false,\n                \"viewInboundOrders\": false,\n                \"viewOutboundOrders\": false,\n                \"orderFilters\": false,\n                \"orderExportReport\": false,\n                \"viewPO\": false\n            },\n            \"network\": {\n                \"network\": false\n            },\n            \"track\": {\n                \"trackAndTrace\": false\n            },\n            \"admin\": {\n                \"getUserRequest\": false,\n                \"acceptUser\": false,\n                \"addUser\": false,\n                \"removeUser\": false,\n                \"deactivateUser\": false,\n                \"addRole\": false,\n                \"deleteRole\": false,\n                \"affliateUser\": false,\n                \"unaffliateUser\": false,\n                \"viewAffliation\": false,\n                \"acceptAffiliation\": false,\n                \"removeAffiliation\": false\n            },\n            \"permissions\": [\n                \"addInventory\",\n                \"viewInventory\",\n                \"receiveShipment\",\n                \"viewShipment\",\n                \"receiveShipmentOrder\",\n                \"scanShipment\",\n                \"sendShipment\",\n                \"manageAddresses\"\n            ],\n            \"_id\": \"5f4bf6820cc6fb17fec18522\",\n            \"role\": \"warehouseEmployeeSenior\",\n            \"createdAt\": \"2020-08-30T18:57:06.447Z\",\n            \"updatedAt\": \"2020-08-30T18:57:06.447Z\",\n            \"__v\": 0\n        },\n        {\n            \"overview\": {\n                \"overview\": true\n            },\n            \"search\": {\n                \"searchByOrderId\": false,\n                \"searchByShipmentId\": false,\n                \"searchByProductCategory\": false,\n                \"searchByTransitNo\": false,\n                \"searchByProductName\": false,\n                \"searchByProductId\": false\n            },\n            \"inventory\": {\n                \"viewInventory\": false,\n                \"addInventory\": false,\n                \"importInventory\": false,\n                \"inventoryAnalytics\": false,\n                \"viewProductList\": false,\n                \"viewProductInfo\": false,\n                \"addNewProduct\": false,\n                \"inventoryFilters\": false,\n                \"inventoryExportReport\": false\n            },\n            \"shipment\": {\n                \"createShipment\": false,\n                \"shipmentAnalytics\": false,\n                \"updateShipment\": false,\n                \"receiveShipment\": false,\n                \"receiveShipmentScan\": false,\n                \"inboundShipments\": false,\n                \"outboundShipments\": false,\n                \"viewShipment\": false,\n                \"shipmentFilters\": false,\n                \"shipmentExportReport\": false\n            },\n            \"order\": {\n                \"createOrder\": false,\n                \"importOrder\": false,\n                \"orderAnalytics\": false,\n                \"receiveOrder\": false,\n                \"acceptRejectOrder\": false,\n                \"viewInboundOrders\": false,\n                \"viewOutboundOrders\": false,\n                \"orderFilters\": false,\n                \"orderExportReport\": false,\n                \"viewPO\": false\n            },\n            \"network\": {\n                \"network\": false\n            },\n            \"track\": {\n                \"trackAndTrace\": false\n            },\n            \"admin\": {\n                \"getUserRequest\": false,\n                \"acceptUser\": false,\n                \"addUser\": false,\n                \"removeUser\": false,\n                \"deactivateUser\": false,\n                \"addRole\": false,\n                \"deleteRole\": false,\n                \"affliateUser\": false,\n                \"unaffliateUser\": false,\n                \"viewAffliation\": false,\n                \"acceptAffiliation\": false,\n                \"removeAffiliation\": false\n            },\n            \"permissions\": [],\n            \"_id\": \"5f4bf69f0cc6fb17fec18523\",\n            \"role\": \"warehouseEmployeeJunior\",\n            \"createdAt\": \"2020-08-30T18:57:35.230Z\",\n            \"updatedAt\": \"2021-08-12T06:00:03.428Z\",\n            \"__v\": 0\n        },\n        {\n            \"overview\": {\n                \"overview\": false\n            },\n            \"search\": {\n                \"searchByOrderId\": false,\n                \"searchByShipmentId\": false,\n                \"searchByProductCategory\": false,\n                \"searchByTransitNo\": false,\n                \"searchByProductName\": false,\n                \"searchByProductId\": false\n            },\n            \"inventory\": {\n                \"viewInventory\": false,\n                \"addInventory\": false,\n                \"importInventory\": false,\n                \"inventoryAnalytics\": false,\n                \"viewProductList\": false,\n                \"viewProductInfo\": false,\n                \"addNewProduct\": false,\n                \"inventoryFilters\": false,\n                \"inventoryExportReport\": false\n            },\n            \"shipment\": {\n                \"createShipment\": false,\n                \"shipmentAnalytics\": false,\n                \"updateShipment\": false,\n                \"receiveShipment\": false,\n                \"receiveShipmentScan\": false,\n                \"inboundShipments\": false,\n                \"outboundShipments\": false,\n                \"viewShipment\": false,\n                \"shipmentFilters\": false,\n                \"shipmentExportReport\": false\n            },\n            \"order\": {\n                \"createOrder\": false,\n                \"importOrder\": false,\n                \"orderAnalytics\": false,\n                \"receiveOrder\": false,\n                \"acceptRejectOrder\": false,\n                \"viewInboundOrders\": false,\n                \"viewOutboundOrders\": false,\n                \"orderFilters\": false,\n                \"orderExportReport\": false,\n                \"viewPO\": false\n            },\n            \"network\": {\n                \"network\": false\n            },\n            \"track\": {\n                \"trackAndTrace\": false\n            },\n            \"admin\": {\n                \"getUserRequest\": false,\n                \"acceptUser\": false,\n                \"addUser\": false,\n                \"removeUser\": false,\n                \"deactivateUser\": false,\n                \"addRole\": false,\n                \"deleteRole\": false,\n                \"affliateUser\": false,\n                \"unaffliateUser\": false,\n                \"viewAffliation\": false,\n                \"acceptAffiliation\": false,\n                \"removeAffiliation\": false\n            },\n            \"permissions\": [\n                \"addInventory\",\n                \"viewInventory\",\n                \"viewProductList\",\n                \"addNewProduct\",\n                \"viewInventoryAtDifferentWarehouses\",\n                \"createPO\",\n                \"receivePO\",\n                \"viewPO\",\n                \"createShipmentOrder\",\n                \"receiveShipment\",\n                \"viewShipment\",\n                \"receiveShipmentOrder\",\n                \"scanShipment\",\n                \"sendShipment\",\n                \"trackAndTrace\",\n                \"addUsers\",\n                \"removeUsers\",\n                \"deactivateUsers\",\n                \"affiliateUser\",\n                \"unAffiliateUser\",\n                \"addRole\",\n                \"deleteRole\",\n                \"viewRequestForAffiliation\",\n                \"acceptOrRejectRequestForAffiliation\",\n                \"removeAffiliationToOrganisation\",\n                \"manageAddresses\"\n            ],\n            \"_id\": \"5f4bf8af0cc6fb17fec18524\",\n            \"role\": \"ERP Specialist\",\n            \"createdAt\": \"2020-08-30T19:06:23.610Z\",\n            \"updatedAt\": \"2020-08-30T19:06:23.610Z\",\n            \"__v\": 0\n        },\n        {\n            \"overview\": {\n                \"overview\": false\n            },\n            \"search\": {\n                \"searchByOrderId\": false,\n                \"searchByShipmentId\": false,\n                \"searchByProductCategory\": false,\n                \"searchByTransitNo\": false,\n                \"searchByProductName\": false,\n                \"searchByProductId\": false\n            },\n            \"inventory\": {\n                \"viewInventory\": false,\n                \"addInventory\": false,\n                \"importInventory\": false,\n                \"inventoryAnalytics\": false,\n                \"viewProductList\": false,\n                \"viewProductInfo\": false,\n                \"addNewProduct\": false,\n                \"inventoryFilters\": false,\n                \"inventoryExportReport\": false\n            },\n            \"shipment\": {\n                \"createShipment\": true,\n                \"shipmentAnalytics\": false,\n                \"updateShipment\": true,\n                \"receiveShipment\": false,\n                \"receiveShipmentScan\": false,\n                \"inboundShipments\": false,\n                \"outboundShipments\": false,\n                \"viewShipment\": false,\n                \"shipmentFilters\": false,\n                \"shipmentExportReport\": false\n            },\n            \"order\": {\n                \"createOrder\": false,\n                \"importOrder\": false,\n                \"orderAnalytics\": false,\n                \"receiveOrder\": false,\n                \"acceptRejectOrder\": false,\n                \"viewInboundOrders\": false,\n                \"viewOutboundOrders\": false,\n                \"orderFilters\": false,\n                \"orderExportReport\": false,\n                \"viewPO\": false\n            },\n            \"network\": {\n                \"network\": false\n            },\n            \"track\": {\n                \"trackAndTrace\": false\n            },\n            \"admin\": {\n                \"getUserRequest\": false,\n                \"acceptUser\": false,\n                \"addUser\": false,\n                \"removeUser\": false,\n                \"deactivateUser\": false,\n                \"addRole\": false,\n                \"deleteRole\": false,\n                \"affliateUser\": false,\n                \"unaffliateUser\": false,\n                \"viewAffliation\": false,\n                \"acceptAffiliation\": false,\n                \"removeAffiliation\": false\n            },\n            \"permissions\": [\n                \"overview1\",\n                \"createShipment\",\n                \"updateShipment\"\n            ],\n            \"_id\": \"6114d93526999d691f476beb\",\n            \"role\": \"warehouseEmployeeJunior1\",\n            \"createdAt\": \"2021-08-12T08:17:57.551Z\",\n            \"updatedAt\": \"2021-08-12T08:22:29.038Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+				},
+				{
+					"name": "getPermissions",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3004/api/rbac_service/getPermissions?role=powerUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3004",
+							"path": [
+								"api",
+								"rbac_service",
+								"getPermissions"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "powerUser"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "2127"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"84f-Dcn49lO0ZselB0XOvKdkw0hUZ3I\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 12 Aug 2021 11:45:25 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": 1,\n    \"message\": \"Permissions of powerUser\",\n    \"data\": [\n        {\n            \"overview\": {\n                \"overview\": false\n            },\n            \"search\": {\n                \"searchByOrderId\": false,\n                \"searchByShipmentId\": false,\n                \"searchByProductCategory\": false,\n                \"searchByTransitNo\": false,\n                \"searchByProductName\": false,\n                \"searchByProductId\": false\n            },\n            \"inventory\": {\n                \"viewInventory\": false,\n                \"addInventory\": false,\n                \"importInventory\": false,\n                \"inventoryAnalytics\": false,\n                \"viewProductList\": false,\n                \"viewProductInfo\": false,\n                \"addNewProduct\": false,\n                \"inventoryFilters\": false,\n                \"inventoryExportReport\": false\n            },\n            \"shipment\": {\n                \"createShipment\": false,\n                \"shipmentAnalytics\": false,\n                \"updateShipment\": false,\n                \"receiveShipment\": false,\n                \"receiveShipmentScan\": false,\n                \"inboundShipments\": false,\n                \"outboundShipments\": false,\n                \"viewShipment\": false,\n                \"shipmentFilters\": false,\n                \"shipmentExportReport\": false\n            },\n            \"order\": {\n                \"createOrder\": false,\n                \"importOrder\": false,\n                \"orderAnalytics\": false,\n                \"receiveOrder\": false,\n                \"acceptRejectOrder\": false,\n                \"viewInboundOrders\": false,\n                \"viewOutboundOrders\": false,\n                \"orderFilters\": false,\n                \"orderExportReport\": false,\n                \"viewPO\": false\n            },\n            \"network\": {\n                \"network\": false\n            },\n            \"track\": {\n                \"trackAndTrace\": false\n            },\n            \"admin\": {\n                \"getUserRequest\": false,\n                \"acceptUser\": false,\n                \"addUser\": false,\n                \"removeUser\": false,\n                \"deactivateUser\": false,\n                \"addRole\": false,\n                \"deleteRole\": false,\n                \"affliateUser\": false,\n                \"unaffliateUser\": false,\n                \"viewAffliation\": false,\n                \"acceptAffiliation\": false,\n                \"removeAffiliation\": false\n            },\n            \"permissions\": [\n                \"viewInventoryAtDifferentWarehouses\",\n                \"viewShipment\",\n                \"addInventory\",\n                \"viewInventory\",\n                \"viewProductList\",\n                \"addNewProduct\",\n                \"createPO\",\n                \"receivePO\",\n                \"viewPO\",\n                \"createShipmentOrder\",\n                \"viewShipment\",\n                \"receiveShipmentOrder\",\n                \"scanShipment\",\n                \"sendShipment\",\n                \"trackAndTrace\",\n                \"addUsers\",\n                \"removeUsers\",\n                \"deactivateUsers\",\n                \"affiliateUser\",\n                \"unAffiliateUser\",\n                \"addRole\",\n                \"deleteRole\",\n                \"viewRequestForAffiliation\",\n                \"acceptOrRejectRequestForAffiliation\",\n                \"removeAffiliationToOrganisation\",\n                \"manageAddresses\",\n                \"changePOStatus\",\n                \"fetchPurchaseOrders\",\n                \"addProduct\",\n                \"fetchAllPurchaseOrdersBC\",\n                \"fetchPublisherPurchaseOrders\",\n                \"fetchPurchaseOrderBC\",\n                \"createPurchaseOrder\",\n                \"addPOsFromExcel\",\n                \"search\"\n            ],\n            \"_id\": \"5f4bf27f0cc6fb17fec1851d\",\n            \"role\": \"powerUser\",\n            \"createdAt\": \"2020-08-30T18:39:59.390Z\",\n            \"updatedAt\": \"2020-08-30T18:53:37.872Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+				}
+			]
 		},
 		{
 			"name": "getRoles",
@@ -840,7 +972,67 @@
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "getRoles",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3004/api/rbac_service/getRoles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3004",
+							"path": [
+								"api",
+								"rbac_service",
+								"getRoles"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "216"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"d8-43SCWzujcnKcgR/STFd6EgPrLCk\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 12 Aug 2021 11:45:37 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": 1,\n    \"message\": \"All Roles\",\n    \"data\": [\n        \"powerUser\",\n        \"admin\",\n        \"affiliatee\",\n        \"salesEmployeeSenior\",\n        \"salesEmployeeJunior\",\n        \"warehouseEmployeeSenior\",\n        \"warehouseEmployeeJunior\",\n        \"ERP Specialist\",\n        \"warehouseEmployeeJunior1\"\n    ]\n}"
+				}
+			]
 		},
 		{
 			"name": "add role RBAC",
@@ -872,6 +1064,103 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "updatePermission",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"permissions\":{\"overview\":{\"overview1\" : true},\"shipment\":{\"createShipment\": true, \"updateShipment\":true}},\n    \"role\":\"warehouseEmployeeJunior1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3004/api/rbac_service/updatePermissions",
+					"host": [
+						"localhost"
+					],
+					"port": "3004",
+					"path": [
+						"api",
+						"rbac_service",
+						"updatePermissions"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "updatePermission",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"permissions\":{\"overview\":{\"overview1\" : true},\"shipment\":{\"createShipment\": true, \"updateShipment\":true}},\n    \"role\":\"warehouseEmployeeJunior1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3004/api/rbac_service/updatePermissions",
+							"host": [
+								"localhost"
+							],
+							"port": "3004",
+							"path": [
+								"api",
+								"rbac_service",
+								"updatePermissions"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1187"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"4a3-vVOnD6qLJfORXennqFhFhnmISSo\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 12 Aug 2021 08:22:29 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": 1,\n    \"message\": \"Success\",\n    \"data\": {\n        \"overview\": {\n            \"overview\": false\n        },\n        \"search\": {\n            \"searchByOrderId\": false,\n            \"searchByShipmentId\": false,\n            \"searchByProductCategory\": false,\n            \"searchByTransitNo\": false,\n            \"searchByProductName\": false,\n            \"searchByProductId\": false\n        },\n        \"inventory\": {\n            \"addInventory\": false,\n            \"importInventory\": false,\n            \"inventoryAnalytics\": false,\n            \"viewProductList\": false,\n            \"addNewProduct\": false,\n            \"inventoryFilters\": false,\n            \"inventoryExportReport\": false\n        },\n        \"shipment\": {\n            \"createShipment\": true,\n            \"shipmentAnalytics\": false,\n            \"updateShipment\": true,\n            \"receiveShipment\": false,\n            \"receiveShipmentScan\": false,\n            \"inboundShipments\": false,\n            \"outboundShipments\": false,\n            \"viewShipment\": false,\n            \"shipmentFilters\": false,\n            \"shipmentExportReport\": false\n        },\n        \"order\": {\n            \"createOrder\": false,\n            \"importOrder\": false,\n            \"orderAnalytics\": false,\n            \"receiveOrder\": false,\n            \"acceptRejectOrder\": false,\n            \"viewInboundOrders\": false,\n            \"viewOutboundOrders\": false,\n            \"orderFilters\": false,\n            \"orderExportReport\": false\n        },\n        \"network\": {\n            \"network\": false\n        },\n        \"track\": {\n            \"trackAndTrace\": false\n        },\n        \"permissions\": [\n            \"overview1\",\n            \"createShipment\",\n            \"updateShipment\"\n        ],\n        \"_id\": \"6114d93526999d691f476beb\",\n        \"role\": \"warehouseEmployeeJunior1\",\n        \"createdAt\": \"2021-08-12T08:17:57.551Z\",\n        \"updatedAt\": \"2021-08-12T08:22:29.038Z\",\n        \"__v\": 0\n    }\n}"
+				}
+			]
 		},
 		{
 			"name": "fetchPendingRequests",

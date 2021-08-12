@@ -15,10 +15,12 @@ const RbacSchema = new mongoose.Schema({
 		searchByProductId: {type: Boolean, default: false},
 	},
 	inventory: {
+		viewInventory: {type: Boolean, default: false},
 		addInventory: {type: Boolean, default: false},
 		importInventory: {type: Boolean, default: false},
 		inventoryAnalytics: {type: Boolean, default: false},
 		viewProductList: {type: Boolean, default: false},
+		viewProductInfo: {type: Boolean, default: false},
 		addNewProduct: {type: Boolean, default: false},
 		inventoryFilters: {type: Boolean, default: false},
 		inventoryExportReport: {type: Boolean, default: false}
@@ -45,13 +47,28 @@ const RbacSchema = new mongoose.Schema({
 		viewOutboundOrders: {type: Boolean, default: false},
 		orderFilters: {type: Boolean, default: false},
 		orderExportReport: {type: Boolean, default: false},
+		viewPO: {type: Boolean, default: false},
 	},
 	network: {
 		network: {type: Boolean, default: false},
 	},
 	track: {
 		trackAndTrace: {type: Boolean, default: false},
-	}
+	},
+	admin:{
+		getUserRequest: {type: Boolean, default: false},
+		acceptUser: {type: Boolean, default: false},
+		addUser: {type: Boolean, default: false},
+		removeUser: {type: Boolean, default: false},
+		deactivateUser: {type: Boolean, default: false},
+		addRole: {type: Boolean, default: false},
+		deleteRole: {type: Boolean, default: false},
+		affliateUser: {type: Boolean, default: false},
+		unaffliateUser: {type: Boolean, default: false},
+		viewAffliation: {type: Boolean, default: false},
+		acceptAffiliation: {type: Boolean, default: false},
+		removeAffiliation: {type: Boolean, default: false},
+	}	
 }, {timestamps: true});
 
 module.exports = mongoose.model("permissions", RbacSchema);
