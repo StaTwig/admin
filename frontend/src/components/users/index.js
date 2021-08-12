@@ -34,7 +34,8 @@ const Users = (props) => {
     onSelectionOfDropdownValue,
     showFilterDropDown,
     setShowFilterDropDown,
-    calenderFilterJsonData
+    calenderFilterJsonData,
+    addresses
   } = props;
 
 
@@ -50,6 +51,7 @@ const Users = (props) => {
           <NUModal
             data={data}
             permissions={permissions}
+            addresses={addresses}
             onSuccess={() => {
               addUser(data);
               closeModal();

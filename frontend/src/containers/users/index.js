@@ -11,6 +11,7 @@ import {
   activateOrgUser,
   deactivateOrgUser,
   unaffiliateUser,
+  getWareHouses,
 } from "../../actions/organisationActions";
 import { turnOn, turnOff } from "../../actions/spinnerActions";
 import Modal from "../../shared/modal";
@@ -59,6 +60,7 @@ const UserContainer = (props) => {
     } else {
       async function fetchData() {
         dispatch(getPermissions());
+        dispatch(getWareHouses());
         setUsersStateList([...await dispatch(getOrgUsers())]);
       }
       fetchData();
@@ -72,7 +74,10 @@ const UserContainer = (props) => {
   const permissions = useSelector((state) => {
     return state.organisation.permissions;
   });
-
+const addresses = useSelector((state) => {
+    return state.organisation.addresses;
+  });
+  
   const prepareDropdownData = (data) => {
     let finalDropDownData = [];
     data?.forEach(item => {
@@ -249,6 +254,7 @@ const UserContainer = (props) => {
             showModals={showModals}
             setShowModals={setShowModals}
             permissions={permissions}
+            addresses={addresses}
             addUser={addUser}
             unaffiliate={unaffiliate}
             roleData={roleData}
