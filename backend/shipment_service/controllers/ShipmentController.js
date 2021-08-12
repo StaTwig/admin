@@ -115,7 +115,69 @@ const inventoryUpdate = async (
   // next("Success")
 };
 
-const poUpdate = async (id, quantity, poId, shipmentStatus, next) => {
+const poUpdate = async (id, quantity, poId, shipmentStatus, actor, next) => {
+  try{
+    let event = await Event.findOne({'payloadData.data.order_id': poId})
+    console.log("event is", event)
+
+    var evid = Math.random().toString(36).slice(2);
+    var datee = new Date();
+    datee = datee.toISOString();
+    let event_data = {
+      eventID: null,
+      eventTime: null,
+      actorWarehouseId: actor.warehouseId,
+      eventType: {
+        primary: "UPDATE",
+        description: "ORDER",
+      },
+      actor: {
+        actorid: actor.id,
+        actoruserid: actor.emailId,
+      },
+      stackholders: {
+        ca: {
+          id: "null",
+          name: "null",
+          address: "null",
+        },
+        actororg: {
+          id: actor.organisationId,
+          name: "null",
+          address: "null",
+        },
+        secondorg: {
+          id: "null",
+          name: "null",
+          address: "null",
+        },
+      },
+      payload: {
+        data: {
+          data: null,
+        },
+      },
+    };
+    event_data.eventID = "ev0000" + evid;
+    event_data.eventTime = datee;
+    event_data.eventType.primary = "UPDATE";
+    event_data.transactionId = poId;
+    event_data.eventType.description = "ORDER";
+    if(event)
+    event_data.payload.data = event.payloadData;
+
+  
+    async function compute(event_data) {
+      resultt = await logEvent(event_data);
+      return resultt;     
+    }
+    let response = await compute(event_data)
+    console.log("response is", response);
+    return response;
+  }catch(error){ 
+    console.log(error);
+    return apiResponse.ErrorResponse(res, err.message);
+  }
   if (shipmentStatus == "CREATED") {
     const poUpdateShipped = await RecordModel.update(
       {
@@ -124,7 +186,7 @@ const poUpdate = async (id, quantity, poId, shipmentStatus, next) => {
       },
       {
         $inc: {
-          "products.$.productQuantityShipped": quantity,
+          "products.$.productQuantityShipped": parseInt(quantity),
         },
       }
     );
@@ -153,63 +215,7 @@ const poUpdate = async (id, quantity, poId, shipmentStatus, next) => {
       }
     );
   }
-  //next("Success")
-  try{
-    let event = Event.findOne({'payloadData.data.order_id': poId})
-    var evid = Math.random().toString(36).slice(2);
-    var datee = new Date();
-    datee = datee.toISOString();
-    let event_data = {
-      eventID: null,
-      eventTime: null,
-      eventType: {
-        primary: "UPDATE",
-        description: "ORDER",
-      },
-      actor: {
-        actorid: "null",
-        actoruserid: "null",
-      },
-      stackholders: {
-        ca: {
-          id: "null",
-          name: "null",
-          address: "null",
-        },
-        actororg: {
-          id: "null",
-          name: "null",
-          address: "null",
-        },
-        secondorg: {
-          id: "null",
-          name: "null",
-          address: "null",
-        },
-      },
-      payload: {
-        data: {
-          data: null,
-        },
-      },
-    };
-    event_data.eventID = "ev0000" + evid;
-    event_data.eventTime = datee;
-    event_data.eventType.primary = "UPDATE";
-    event_data.eventType.description = "ORDER";
-    event_data.payloaData = event.payloaData;
-  
-    async function compute(event_data) {
-      resultt = await logEvent(event_data);
-      return resultt;     
-    }
-    console.log(result);
-    compute(event_data).then((response) => {
-      console.log(response);
-    });
-  }catch(error){
-    console.log(error);
-  }
+
 };
 
 const shipmentUpdate = async (
@@ -230,73 +236,7 @@ const shipmentUpdate = async (
       },
     }
   );
-  try{
-  let event = Event.findOne({'payloadData.data.id': shipmentId})
-  var evid = Math.random().toString(36).slice(2);
-  let event_data = {
-    eventID: null,
-    eventTime: null,
-    transactionId: shipmentId,
-    eventType: {
-      primary: "CREATE",
-      description: "SHIPMENT_CREATION",
-    },
-    actor: {
-      actorid: null,
-      actoruserid: null,
-    },
-    stackholders: {
-      ca: {
-        id: null,
-        name: null,
-        address: null,
-      },
-      actororg: {
-        id: null,
-        name: null,
-        address: null,
-      },
-      secondorg: {
-        id: null,
-        name: null,
-        address: null,
-      },
-    },
-    payload: {
-      data: {
-        abc: 123,
-      },
-    },
-  };
-  event_data.eventID = "ev0000" + evid;
-  event_data.eventTime = datee;
-  event_data.eventType.primary = "UPDATE";
-  event_data.eventType.description = "SHIPMENT";
-  event_data.actor.actorid = event.actorId || "null";
-  event_data.actor.actoruserid = actorUserId || "null";
-  event_data.actorWarehouseId = event.warehouseId || "null";
-  event_data.stackholders.actororg.id = event.actorOrgId || "null";
-  event_data.stackholders.actororg.name = event.actorOrgName || "null";
-  event_data.stackholders.actororg.address = event.actorOrgAddress || "null";
-  event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
-  event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
-  event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
-  event_data.stackholders.secondorg.id = event.secondaryOrgId || "null";
-  event_data.stackholders.secondorg.name = event.secondaryOrgName || "null";
-  event_data.stackholders.secondorg.address = event.secondaryOrgAddress || "null";
-  event_data.payload.data = event.payloaData;
 
-  async function compute(event_data) {
-    resultt = await logEvent(event_data);
-    return resultt;     
-  }
-  console.log(result);
-  compute(event_data).then((response) => {
-    console.log(response);
-  });
-}catch(err){
-  console.log(err)
-}
 
   //next("Success")
 };
@@ -604,11 +544,12 @@ exports.createShipment = [
                   "CREATED"
                 );
                 if (flag == "Y")
-                  poUpdate(
+                  await poUpdate(
                     products[count].productId,
                     products[count].productQuantity,
                     data.poId,
-                    "CREATED"
+                    "CREATED",
+                    req.user
                   );         
 		if (products[count].batchNumber != null) {
 		    const update = await AtomModel.updateMany({
@@ -694,6 +635,7 @@ exports.createShipment = [
               event_data.eventTime = datee;
               event_data.eventType.primary = "CREATE";
               event_data.eventType.description = "SHIPMENT";
+              event_data.transactionId = data.id;
               event_data.actor.actorid = user_id || "null";
               event_data.actor.actoruserid = email || "null";
               event_data.actorWarehouseId = req.user.warehouseId || "null";
@@ -728,15 +670,15 @@ exports.createShipment = [
     address: req.user.walletAddress,
     data: data,
   };
-  const response =  await axios.post(
-    `${blockchain_service_url}/publish`,
-    userData,
-  );
+  // const response =  await axios.post(
+  //   `${blockchain_service_url}/publish`,
+  //   userData,
+  // );
   await ShipmentModel.findOneAndUpdate({
     id: shipmentId
   }, {
     $push: {
-      transactionIds: response.data.transactionId
+      transactionIds: "response.data.transactionId"
     }
   });         
 
@@ -949,11 +891,12 @@ exports.receiveShipment = [
             "RECEIVED"
           );
           if (flag == "Y")
-            poUpdate(
+            await poUpdate(
               products[count].productId,
               products[count].productQuantity,
               data.poId,
-              "RECEIVED"
+              "RECEIVED",
+              req.user
             );
         }
 
@@ -1030,6 +973,8 @@ exports.receiveShipment = [
         event_data.stackholders.ca.id = CENTRAL_AUTHORITY_ID || "null";
         event_data.stackholders.ca.name = CENTRAL_AUTHORITY_NAME || "null";
         event_data.stackholders.ca.address = CENTRAL_AUTHORITY_ADDRESS || "null";
+        event_data.transactionId = data.id;
+
         if (orgId === supplierID) {
           event_data.stackholders.secondorg.id = receiverId || "null";
           event_data.stackholders.secondorg.name = receiverName || "null";
@@ -1673,46 +1618,7 @@ exports.updateStatus = [
             }
           )
             .then((result) => {
-              //   event_data = {
-              //     "eventID": "ev0000"+  Math.random().toString(36).slice(2),
-              //     "eventTime": new Date().toISOString(),
-              //     "eventType": {
-              //         "primary": "CREATE",
-              //         "description": "SHIPMENT ALERTS"
-              //     },
-              //     "actor": {
-              //         "actorid": "userid1",
-              //         "actoruserid": "ashwini@statwig.com"
-              //     },
-              //     "stackholders": {
-              //         "ca": {
-              //             "id": "org001",
-              //             "name": "Statwig Pvt. Ltd.",
-              //             "address": "ca_address_object"
-              //         },
-              //         "actororg": {
-              //             "id": "org002",
-              //             "name": "Appollo Hospitals Jublihills",
-              //             "address": "actororg_address_object"
-              //         },
-              //         "secondorg": {
-              //             "id": "org003",
-              //             "name": "Med Plus Gachibowli",
-              //             "address": "secondorg_address_object"
-              //         }
-              //     },
-              //     "payload": {
-              //         "data": {
-              //             "abc": 123
-              //         }
-              //     }
-              // }
-              // async function compute(event_data) {
-              //     result = await logEvent(event_data)
-              //     return result
-              // }
-
-              // compute(event_data).then((response) => console.log(response))
+            
               return apiResponse.successResponseWithData(
                 res,
                 "Status Updated",
@@ -1848,7 +1754,56 @@ exports.updateTrackingStatus = [
             { id: req.body.id },
             { $push: { shipmentUpdates: data.shipmentUpdates } }
           );
+       try {
+          var datee = new Date();
+          datee = datee.toISOString();
+          var evid = Math.random().toString(36).slice(2);
+          let event_data = {
+            eventID: "ev0000" + evid,
+            eventTime: datee,
+            actorWarehouseId: req.user.warehouseId,
+            eventType: {
+              primary: "UPDATE",
+              description: "SHIPMENT_TRACKING",
+            },
+            actor: {
+              actorid: req.user.id || "null",
+              actoruserid: req.user.emailId || "null",
+            },
+            stackholders: {
+              ca: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+              actororg: {
+                id: req.user.organisationId,
+                name: "null",
+                address: "null",
+              },
+              secondorg: {
+                id: "null",
+                name: "null",
+                address: "null",
+              },
+            },
+            payload: {
+              data: req.body
+            },
+          };
 
+          console.log(event_data);
+          async function compute(event_data) {
+            resultt = await logEvent(event_data);
+            return resultt;
+          }
+          compute(event_data).then((response) => {
+            console.log(response);
+          });
+        }catch(err){
+          console.log(err)
+        }
+          console.log(req.user)
           return apiResponse.successResponse(res, "Status Updated");
         } else {
           logger.log(
