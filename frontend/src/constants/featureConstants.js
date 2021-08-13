@@ -9,7 +9,7 @@ export const DEFAULT_FEATURE_PANEL_VALUES = [
         value: 'Inventory', key: 'inventory'
     },
     {
-        value: 'Orders', key: 'orders'
+        value: 'Order', key: 'order'
     },
     {
         value: 'Shipment', key: 'shipment'
@@ -18,6 +18,6 @@ export const DEFAULT_FEATURE_PANEL_VALUES = [
         value: 'Network', key: 'network'
     },
     {
-        value: 'Track & Trace', key: 'trackandtrace'
+        value: 'Track & Trace', key: 'track'
     }
 ];

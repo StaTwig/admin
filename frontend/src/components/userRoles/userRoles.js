@@ -6,8 +6,8 @@ import Arrow from "../../assets/icons/arrow.png";
 
 const UserRoles = ({ defaultRoles, showAddNewInputSection,
     onSelectOfRole, onChangeOfAddNewInput, featurePanelValues,
-    showFunctionalitiesAndPermission, handleOnClickOfAFeature,
-    functionalitiesPermissionPanelData }) => {
+    handleOnClickOfAFeature,
+    functionalitiesPermissionPanelData, handleOnPermissionsChecked, onSaveOfUpdatePermission }) => {
     return (
         <div className="user-role-container">
             <div className="user-role-header">
@@ -31,7 +31,7 @@ const UserRoles = ({ defaultRoles, showAddNewInputSection,
                     }
                 </div>
                 <div className={'btn-section'}>
-                    <button className="save-button">{'SAVE'}</button>
+                    <button className="save-button" onClick={() => onSaveOfUpdatePermission()}>{'SAVE'}</button>
                     <button className="add-user-btn">
                         <i className="fa fa-plus txt pr-2" aria-hidden="true"></i>
                         <span className="txt">{'Add New User Role'}</span>
@@ -66,13 +66,24 @@ const UserRoles = ({ defaultRoles, showAddNewInputSection,
                         <span className="functionality-permission-text">{'Functionality'}</span>
                         <span className="functionality-permission-text">{'Permission'}</span>
                     </div>
-                    {showFunctionalitiesAndPermission &&
-                        functionalitiesPermissionPanelData.length > 0 ?
+                    {functionalitiesPermissionPanelData.length > 0 ?
                         functionalitiesPermissionPanelData.map(item => {
-                            return (<div className="selection-panel">
-                                <span>{item.value}</span>
-                                <input type="checkbox" value={item.hasPermission} onClick={() => { '' }} />
-                            </div>)
+                            return (<div style={{ display: 'flex' }}>
+                                <div className="selection-panel">
+                                    <span>{item.value}</span>
+                                </div>
+                                <div className="selection-panel">
+                                    <input
+                                        type="checkbox"
+                                        style={{
+                                            position: 'absolute',
+                                            right: '250px'
+                                        }}
+                                        checked={item.hasPermission}
+                                        onClick={() => handleOnPermissionsChecked({ ...item, hasPermission: !item.hasPermission })} />
+                                </div>
+                            </div>
+                            )
                         }) : ''
                     }
                 </div>

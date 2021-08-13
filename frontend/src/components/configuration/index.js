@@ -8,12 +8,12 @@ import EditTable1 from "./table1/editTable";
 import { useSelector, useDispatch } from "react-redux";
 import { DEFAULT_USER_ROLES } from '../../constants/userRoles';
 import { DEFAULT_FEATURE_PANEL_VALUES } from '../../constants/featureConstants';
-import { OVERVIEW_CONSTANTS } from '../../constants/overviewContants';
+import { INVENTORY_CONSTANTS, NETWORK_CONSTANTS, ORDERS_CONSTANTS, OVERVIEW_CONSTANTS, SEARCH_CONSTANTS, SHIPMENT_CONSTANTS, TRACK_AND_TRACE_CONSTANTS } from '../../constants/functionalitiesAndPermissionContants';
 
 //import EditTable from "./table/editTable";
 import { Formik } from "formik";
 
-import { getOrgTypeiIdsUrl } from "../../actions/organisationActions";
+import { getAllRoles, getOrgTypeiIdsUrl, getPermissionByRole, getPermissions, updatePermissionsByRole } from "../../actions/organisationActions";
 import { updateOrgTypesUrl } from "../../actions/organisationActions";
 import { addNewOrgTypesUrl } from "../../actions/organisationActions";
 import UserRoles from "../userRoles/userRoles";
@@ -29,6 +29,9 @@ const Configurationpart = (props) => {
   const [showFunctionalitiesAndPermission, setShowFunctionalitiesAndPermission] = useState(false);
   const [functionalitiesPermissionPanelData, setFunctionalitiesPermissionPanelData] = useState([]);
   const [defaultOverviewPanelValues, setDefaultOverviewPanelValues] = useState([]);
+  const [permissionByRoleData, setPermissionByRoleData] = useState([]);
+  const [selectedFeature, setSelectedFeature] = useState('');
+  const [updatePermissions, setUpdatePermissions] = useState({});
 
   const [selectedLevel, setSelectedLevel] = useState('');
 
@@ -65,11 +68,57 @@ const Configurationpart = (props) => {
     fetchOrganisationType();
   }, []);
 
+  const prepareDefaultRoleData = (data) => {
+    return data.map(item => {
+      let obj = {};
+      obj['key'] = item;
+      obj['value'] = item;
+      return obj;
+    })
+  }
+
+  const mapPermissionToFunctionalitiesAndPermissionByFeaturePanel = (permissionsByRoleList, selectedFeature, selectedFeatureConstants) => {
+    const permission = permissionsByRoleList.length > 0 ? permissionsByRoleList[0][selectedFeature] : [];
+    console.log('permission', permission);
+    const constants = selectedFeatureConstants.map(item => {
+      if (Object.keys(permission).map(key => key = item.key)) {
+        return {
+          ...item,
+          hasPermission: permission[item.key] ? permission[item.key] : false
+        }
+      }
+    });
+    setFunctionalitiesPermissionPanelData([...constants]);
+  };
+
   useEffect(() => {
-    setDefaultRoles([...DEFAULT_USER_ROLES, { key: 'add_new_role', value: 'Add new role' }]);
+    //getRoles
+    async function getRoles() {
+      const roles = await getAllRoles();
+      setDefaultRoles([...prepareDefaultRoleData(roles), { key: 'add_new_role', value: 'Add new role' }]);
+      setSelectedLevel(roles[0]);
+    }
+    getRoles();
+
     setFeaturePanelValues([...DEFAULT_FEATURE_PANEL_VALUES]);
-    setDefaultOverviewPanelValues([...OVERVIEW_CONSTANTS]);
   }, []);
+
+  useEffect(() => {
+    //getPermissions for the first role
+    if (selectedLevel !== 'add_new_role') {
+      async function getPermissions() {
+        const permissions = await getPermissionByRole(selectedLevel);
+        setPermissionByRoleData([...permissions]);
+        setSelectedFeature('overview');
+        mapPermissionToFunctionalitiesAndPermissionByFeaturePanel(permissions, 'overview', OVERVIEW_CONSTANTS);
+      }
+
+      getPermissions();
+    } else {
+      setSelectedFeature('overview');
+      mapPermissionToFunctionalitiesAndPermissionByFeaturePanel([], 'overview', OVERVIEW_CONSTANTS);
+    }
+  }, [selectedLevel]);
 
   var orgTypeArray = [];
   organisationsArr.map((data) => {
@@ -106,26 +155,82 @@ const Configurationpart = (props) => {
   //should get the functionality of adding this role to the list only if only of the role is selected.
   const onChangeOfAddNewInput = (event) => {
     const { value } = event?.target;
-    console.log('value: ', value);
+    setShowAddNewInputSection(current => current = true);
+    setSelectedLevel(value);
   }
 
-  const setOveriewPanelForSelectedLevel = (selectedLevel) => {
-      if(selectedLevel === 'add_new_role') {
-        setFunctionalitiesPermissionPanelData([...defaultOverviewPanelValues])
+  const handleOnClickOfAFeature = (selectedFeature) => {
+    const CONSTANTS_DATA = extractConstantsBySelectedFeature(selectedFeature);
+    setSelectedFeature(selectedFeature);
+    mapPermissionToFunctionalitiesAndPermissionByFeaturePanel(permissionByRoleData, selectedFeature, CONSTANTS_DATA);
+  }
+
+  const setPermissionOnCheckOfAnItem = (selectedFeatureConstants, permission) => {
+    const updatedPermissionData = selectedFeatureConstants.map(item => {
+      if (permission.key === item.key) {
+        return {
+          ...item,
+          hasPermission: permission.hasPermission
+        }
       }
+      return item;
+    });
+    setFunctionalitiesPermissionPanelData([...updatedPermissionData]);
+    prepareDataToUpdatePermission(updatedPermissionData, selectedFeature, selectedLevel);
+  }
+
+  const prepareKeyValueByPermissionData = (data) => {
+    let obj = {};
+    data.forEach(item => {
+      obj = {
+        ...obj,
+        [item.key]: item.hasPermission
+      }
+    });
+    return obj;
   };
 
-  const handleOnClickOfAFeature = (seletedFeature) => {
-    console.log('selectedFeature', seletedFeature, selectedLevel)
-    if(seletedFeature === 'overview' && selectedLevel) {
-      setShowFunctionalitiesAndPermission(current => current = true);
-      setOveriewPanelForSelectedLevel(selectedLevel);
+  const prepareDataToUpdatePermission = (permissionData, selectedFeature, selectedLevel) => {
+    const permissionsObj = prepareKeyValueByPermissionData(permissionData);
+    let selectedPermissionObj = {
+      permissions: {
+        [selectedFeature]: {
+          ...permissionsObj
+        }
+      },
+      role: selectedLevel
     }
+    setUpdatePermissions(selectedPermissionObj);
+  };
+
+  const handleOnPermissionsChecked = (item) => {
+    setPermissionOnCheckOfAnItem(functionalitiesPermissionPanelData, item);
   }
 
-  console.log(functionalitiesPermissionPanelData);
-  console.log('showFunctionalitiesAndPermission', showFunctionalitiesAndPermission)
+  //TODO: CHECKS THE VALUES of add new roles...
+  const checkIfAllThePermissionsAreMarked = (obj) => {
+    Object.keys(obj['permissions']).map(key => {
+      if(obj['permissions'][key]) {
+        console.log(obj.permissions[key])
+      }
+    })
+  }
 
+  const onSaveOfUpdatePermission = async () => {
+    if (updatePermissions && Object.keys(updatePermissions).length > 0) {
+      console.log(showAddNewInputSection)
+      if (!showAddNewInputSection) {
+        const permissions = await updatePermissionsByRole(updatePermissions);
+        setPermissionByRoleData([permissions]);
+        setSelectedFeature('overview');
+        mapPermissionToFunctionalitiesAndPermissionByFeaturePanel([permissions], 'overview', OVERVIEW_CONSTANTS);
+      } else {
+        checkIfAllThePermissionsAreMarked(updatePermissions);
+        // const permissions = await updatePermissionsByRole(updatePermissions);
+        // console.log(permissions);
+      }
+    }
+  }
 
   return (
     <div>
@@ -142,9 +247,10 @@ const Configurationpart = (props) => {
             onSelectOfRole={onSelectOfRole}
             onChangeOfAddNewInput={onChangeOfAddNewInput}
             featurePanelValues={featurePanelValues}
-            showFunctionalitiesAndPermission={showFunctionalitiesAndPermission}
             handleOnClickOfAFeature={handleOnClickOfAFeature}
             functionalitiesPermissionPanelData={functionalitiesPermissionPanelData}
+            handleOnPermissionsChecked={handleOnPermissionsChecked}
+            onSaveOfUpdatePermission={onSaveOfUpdatePermission}
           />)
         }
         {tabIndex == 6 && (
@@ -548,3 +654,23 @@ const Configurationpart = (props) => {
 };
 
 export default Configurationpart;
+function extractConstantsBySelectedFeature(selectedFeature) {
+  let CONSTANTS_DATA = [];
+  if (selectedFeature === 'overview') {
+    CONSTANTS_DATA = [...OVERVIEW_CONSTANTS];
+  } else if (selectedFeature === 'search') {
+    CONSTANTS_DATA = [...SEARCH_CONSTANTS];
+  } else if (selectedFeature === 'inventory') {
+    CONSTANTS_DATA = [...INVENTORY_CONSTANTS];
+  } else if (selectedFeature === 'order') {
+    CONSTANTS_DATA = [...ORDERS_CONSTANTS];
+  } else if (selectedFeature === 'shipment') {
+    CONSTANTS_DATA = [...SHIPMENT_CONSTANTS];
+  } else if (selectedFeature === 'network') {
+    CONSTANTS_DATA = [...NETWORK_CONSTANTS];
+  } else if (selectedFeature === 'track') {
+    CONSTANTS_DATA = [...TRACK_AND_TRACE_CONSTANTS];
+  }
+  return CONSTANTS_DATA;
+}
+
