@@ -16,7 +16,6 @@ const AtomModel = require("../models/AtomModel");
 const ProductModel = require("../models/ProductModel");
 const NotificationModel = require("../models/NotificationModel");
 const logEvent = require("../../../utils/event_logger");
-const checkToken = require("../middlewares/middleware").checkToken;
 const checkPermissions = require("../middlewares/rbac_middleware").checkPermissions;
 const axios = require("axios");
 
@@ -62,38 +61,19 @@ exports.getTotalCountOnHold = [
   auth,
   async (req, res) => {
     try {
-      const { authorization } = req.headers;
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< InventoryService < InventoryController < getTotalCountOnHold : token verified successfully"
-          );
-
-          permission_request = {
-            result: result,
+      const {role} = req.user;
+      permission_request = {
+            result: role,
             permissionRequired: "viewInventory",
           };
           checkPermissions(permission_request, (permissionResult) => {
             if (permissionResult.success) {
-              res.json("Total inventory count on Hold");
+              return apiResponse.successResponse(res,"Total inventory count on Hold");
             } else {
-              res.json("Sorry! User does not have enough Permissions");
+              return apiResponse.forbiddenResponse(res,"User does not authorized to view this resource.");
             }
           });
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< InventoryService < InventoryController < getTotalCountOnHold : refuted token"
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< InventoryService < InventoryController < getTotalCountOnHold : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -103,38 +83,19 @@ exports.getExpiringInventory = [
   auth,
   async (req, res) => {
     try {
-      const { authorization } = req.headers;
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< InventoryService < InventoryController < getExpiringInventory : token verified successfully"
-          );
-
+      const {role} = req.user;
           permission_request = {
-            result: result,
+            role: role,
             permissionRequired: "viewInventory",
           };
           checkPermissions(permission_request, (permissionResult) => {
             if (permissionResult.success) {
-              res.json("Total inventory count expiring");
+              return apiResponse.successResponse(res,"Total inventory count expiring");
             } else {
-              res.json("Sorry! User does not have enough Permissions");
+              return apiResponse.forbiddenResponse(res,"User does not authorized to view this resource.");
             }
           });
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< InventoryService < InventoryController < getExpiringInventory : refuted token"
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< InventoryService < InventoryController < getExpiringInventory : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -144,39 +105,19 @@ exports.getInventoryforProduct = [
   auth,
   async (req, res) => {
     try {
-      const { authorization } = req.headers;
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< InventoryService < InventoryController < getInventoryforProduct : token verified successfullly"
-          );
-
+      const {role} = req.user;
           permission_request = {
-            result: result,
+            role: role,
             permissionRequired: "viewInventory",
           };
           checkPermissions(permission_request, (permissionResult) => {
             if (permissionResult.success) {
-              const { product_id } = result.data.key;
-              res.json("Inventory details for product");
+              return apiResponse.successResponse(res,"Inventory details for product");
             } else {
-              res.json("Sorry! User does not have enough Permissions");
+              return apiResponse.forbiddenResponse(res,"User does not authorized to view this resource.");
             }
           });
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< InventoryService < InventoryController < getInventoryforProduct : refuted token"
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< InventoryService < InventoryController < getInventoryforProduct : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -186,48 +127,24 @@ exports.getInventoryDetailsForProduct = [
   auth,
   (req, res) => {
     try {
-      const { authorization } = req.headers;
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : token verified successfullly, querying data by key"
-          );
-
+      const {role} = req.user;
+      const { key } = req.query;
           permission_request = {
-            result: result,
+            role: role,
             permissionRequired: "viewInventory",
           };
           checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
-              const { key } = req.query;
               const response = await axios.get(
                 `${blockchain_service_url}/queryDataByKey?stream=${stream_name}&key=${key}`
               );
               const items = response.data.items;
-              logger.log("items", items);
-              logger.log(
-                "info",
-                "<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : queried data by key"
-              );
-              res.json({ data: items });
+              return apiResponse.successResponseWithData(res,"getInventoryDetailsForProduct", items);
             } else {
-              res.json("Sorry! User does not have enough Permissions");
+              return apiResponse.forbiddenResponse(res,"User does not authorized to view this resource.");
             }
-          });
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : refuted token"
-          );
-          res.status(403).json(result);
-        }
-      });
-    } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< InventoryService < InventoryController < getInventoryDetailsForProduct : error (catch block)"
-      );
+            })
+      }catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -237,22 +154,15 @@ exports.getAllInventoryDetails = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< InventoryService < InventoryController < getAllInventoryDetails : token verified successfullly, querying data by publisher"
-          );
-
+      const {role} = req.user;
+      const { address } = req.user;
+      const { skip, limit } = req.query;
           permission_request = {
-            result: result,
+            role: role,
             permissionRequired: "viewInventory",
           };
           checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
-              const { address } = req.user;
-              const { skip, limit } = req.query;
-
               /* InventoryModel.collection.dropIndexes(function(){
                 InventoryModel.collection.reIndex(function(finished){
                   console.log("finished re indexing")
@@ -290,10 +200,6 @@ exports.getAllInventoryDetails = [
                 (product) => product.productName
               );
 
-              logger.log(
-                "info",
-                "<<<<< InventoryService < InventoryController < getAllInventoryDetails : queried and pushed data"
-              );
               const nextYear = new Date(
                 new Date().setFullYear(new Date().getFullYear() + 1)
               );
@@ -478,22 +384,10 @@ exports.getAllInventoryDetails = [
                 },
               });
             } else {
-              res.json("Sorry! User does not have enough Permissions");
+              return apiResponse.forbiddenResponse(res, 'User Does not have enough permissions')
             }
           });
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< InventoryService < InventoryController < getAllInventoryDetails : refuted token"
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< InventoryService < InventoryController < getAllInventoryDetails : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -1040,10 +934,9 @@ exports.addInventoriesFromExcel = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async (result) => {
-        if (result.success) {
+      const {role} = req.user;
           permission_request = {
-            role: req.user.role,
+            role: role,
             permissionRequired: "addInventory",
           };
           const email = req.user.emailId;
@@ -1229,11 +1122,7 @@ exports.addInventoriesFromExcel = [
               );
             }
           });
-        } else {
-          return apiResponse.ErrorResponse(res, "User not authenticated");
-        }
-      });
-    } catch (e) {
+    } catch (err) {
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -1314,22 +1203,14 @@ exports.getGroupedInventoryDetails = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< InventoryService < InventoryController < getGroupedInventoryDetails : token verified successfullly, querying data by publisher"
-          );
-
+      const {role, address} = req.user;
+      const { skip, limit } = req.query;
           permission_request = {
-            result: result,
+            role: role,
             permissionRequired: "viewInventory",
           };
           checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
-              const { address } = req.user;
-              const { skip, limit } = req.query;
-
               const inventoryResult = await InventoryModel.aggregate([
                 { $match: { owner: address } },
                 {
@@ -1363,10 +1244,6 @@ exports.getGroupedInventoryDetails = [
                 (product) => product.productName
               );
 
-              logger.log(
-                "info",
-                "<<<<< InventoryService < InventoryController < getAllInventoryDetails : queried and pushed data"
-              );
               const nextYear = new Date(
                 new Date().setFullYear(new Date().getFullYear() + 1)
               );
@@ -1544,25 +1421,13 @@ exports.getGroupedInventoryDetails = [
                 },
               });
             } else {
-              apiResponse.ErrorResponse(
+              return apiResponse.forbiddenResponse(
                 res,
                 `Sorry! User doens't have permissions`
               );
             }
           });
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< InventoryService < InventoryController < getGroupedInventoryDetails : refused token"
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< InventoryService < InventoryController < getGroupedInventoryDetails : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -1572,50 +1437,27 @@ exports.getInventoryDetailsByBatchNumber = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< InventoryService < InventoryController < getInventoryDetailsByBatchNumber : token verified successfullly, querying data by publisher"
-          );
-
+      const {role, address} = req.user;
+      const { batchNumber, skip, limit } = req.query;
           permission_request = {
-            result: result,
+            role: role,
             permissionRequired: "viewInventory",
           };
           checkPermissions(permission_request, async (permissionResult) => {
-            if (permissionResult.success) {
-              const { address } = req.user;
-              const { batchNumber, skip, limit } = req.query;
-
-              const inventoryResult = await InventoryModel.find({
+            if (permissionResult.success) {  
+            const inventoryResult = await InventoryModel.find({
                 owner: address,
                 batchNumber: batchNumber,
               })
                 .sort({ createdAt: -1 })
                 .skip(parseInt(skip))
                 .limit(parseInt(limit));
-
-              res.json({
-                data: inventoryResult,
-              });
+              return apiResponse.successResponseWithData(res, inventoryResult);
             } else {
-              res.json("Sorry! User does not have enough Permissions");
+              return apiResponse.forbiddenResponse(res, permissionResult.message);
             }
           });
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< InventoryService < InventoryController < getInventoryDetailsByBatchNumber : refuted token"
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< InventoryService < InventoryController < getInventoryDetailsByBatchNumber : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -1625,22 +1467,14 @@ exports.getBatchDetailsByBatchNumber = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async (result) => {
-        if (result.success) {
-          logger.log(
-            "info",
-            "<<<<< InventoryService < InventoryController < getBatchDetailsByBatchNumber : token verified successfullly, querying data by publisher"
-          );
-
+      const {role, address} = req.user;
+      const { skip, limit, batchNumber } = req.query;
           permission_request = {
-            role: req.user.role,
+            role: role,
             permissionRequired: "viewInventory",
           };
           checkPermissions(permission_request, async (permissionResult) => {
             if (permissionResult.success) {
-              const { address } = req.user;
-              const { skip, limit, batchNumber } = req.query;
-
               const inventoryResult = await InventoryModel.aggregate([
                 { $match: { owner: address, batchNumber: batchNumber } },
                 {
@@ -1660,27 +1494,12 @@ exports.getBatchDetailsByBatchNumber = [
                 .sort({ createdAt: -1 })
                 .skip(parseInt(skip))
                 .limit(parseInt(limit));
-
-              res.json({
-                data: inventoryResult,
-              });
+              return apiResponse.successResponseWithData(res, inventoryResult);
             } else {
-              res.json("Sorry! User does not have enough Permissions");
+              return apiResponse.forbiddenResponse(res,"Sorry! User does not have enough Permissions");
             }
           });
-        } else {
-          logger.log(
-            "warn",
-            "<<<<< InventoryService < InventoryController < getBatchDetailsByBatchNumber : refused token"
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< InventoryService < InventoryController < getBatchDetailsByBatchNumber : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -1731,16 +1550,10 @@ exports.getProductListCounts = [
      
       return apiResponse.successResponseWithData(res, productArray);
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
-
-
 
 exports.getEmployeeDetailsByWarehouseId = [
   auth,
