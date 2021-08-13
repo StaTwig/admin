@@ -174,48 +174,54 @@ const poUpdate = async (id, quantity, poId, shipmentStatus, actor, next) => {
     }
     let response = await compute(event_data)
     console.log("response is", response);
+
+
+    if (shipmentStatus == "CREATED") {
+      const poUpdateShipped = await RecordModel.update(
+        {
+          id: poId,
+          "products.productId": id,
+        },
+        {
+          $inc: {
+            "products.$.productQuantityShipped": parseInt(quantity),
+          },
+        }
+      );
+    }
+    if (shipmentStatus == "RECEIVED") {
+      const poUpdate = await RecordModel.update(
+        {
+          id: poId,
+          "products.productId": id,
+        },
+        {
+          $inc: {
+            "products.$.productQuantityShipped": -quantity,
+          },
+        }
+      );
+      const poUpdateRecvDelivered = await RecordModel.update(
+        {
+          id: poId,
+          "products.productId": id,
+        },
+        {
+          $inc: {
+            "products.$.productQuantityDelivered": quantity,
+          },
+        }
+      );
+    }
+
+
+
     return response;
   }catch(error){ 
     console.log(error);
     return apiResponse.ErrorResponse(res, err.message);
   }
-  if (shipmentStatus == "CREATED") {
-    const poUpdateShipped = await RecordModel.update(
-      {
-        id: poId,
-        "products.productId": id,
-      },
-      {
-        $inc: {
-          "products.$.productQuantityShipped": parseInt(quantity),
-        },
-      }
-    );
-  }
-  if (shipmentStatus == "RECEIVED") {
-    const poUpdate = await RecordModel.update(
-      {
-        id: poId,
-        "products.productId": id,
-      },
-      {
-        $inc: {
-          "products.$.productQuantityShipped": -quantity,
-        },
-      }
-    );
-    const poUpdateRecvDelivered = await RecordModel.update(
-      {
-        id: poId,
-        "products.productId": id,
-      },
-      {
-        $inc: {
-          "products.$.productQuantityDelivered": quantity,
-        },
-      }
-    );
-  }
+
 
 };
 
