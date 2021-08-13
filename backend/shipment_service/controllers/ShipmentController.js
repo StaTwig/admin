@@ -672,15 +672,15 @@ exports.createShipment = [
     address: req.user.walletAddress,
     data: data,
   };
-  // const response =  await axios.post(
-  //   `${blockchain_service_url}/publish`,
-  //   userData,
-  // );
+  const response =  await axios.post(
+    `${blockchain_service_url}/publish`,
+    userData,
+  );
   await ShipmentModel.findOneAndUpdate({
     id: shipmentId
   }, {
     $push: {
-      transactionIds: "response.data.transactionId"
+      transactionIds: response.data.transactionId
     }
   });         
 
