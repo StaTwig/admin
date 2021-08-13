@@ -67,8 +67,8 @@ const UserRoles = ({ defaultRoles, showAddNewInputSection,
                         <span className="functionality-permission-text">{'Permission'}</span>
                     </div>
                     {functionalitiesPermissionPanelData.length > 0 ?
-                        functionalitiesPermissionPanelData.map(item => {
-                            return (<div style={{ display: 'flex' }}>
+                        functionalitiesPermissionPanelData.map((item, index) => {
+                            return (<div key={index} className="permission-selection-panal">
                                 <div className="selection-panel">
                                     <span>{item.value}</span>
                                 </div>
@@ -76,11 +76,10 @@ const UserRoles = ({ defaultRoles, showAddNewInputSection,
                                     <input
                                         type="checkbox"
                                         style={{
-                                            position: 'absolute',
-                                            right: '250px'
+                                            marginRight: '50px'
                                         }}
                                         checked={item.hasPermission}
-                                        onClick={() => handleOnPermissionsChecked({ ...item, hasPermission: !item.hasPermission })} />
+                                        onChange={() => handleOnPermissionsChecked({ ...item, hasPermission: !item.hasPermission })} />
                                 </div>
                             </div>
                             )

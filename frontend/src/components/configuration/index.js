@@ -77,14 +77,23 @@ const Configurationpart = (props) => {
     })
   }
 
+  const getPermissionsValueByUpdatePermissionOrByOriginalPermissionList = (originalPermissionState, updatedPermissionObject, currentPermisionObj, selectedFeature) => {
+    if((updatedPermissionObject && Object.keys(updatedPermissionObject).length > 0))
+      {
+        if(Object.keys(updatedPermissionObject).includes(selectedFeature)) {
+          return updatedPermissionObject[selectedFeature][currentPermisionObj.key];
+        }
+    }
+    return originalPermissionState;
+  }
+
   const mapPermissionToFunctionalitiesAndPermissionByFeaturePanel = (permissionsByRoleList, selectedFeature, selectedFeatureConstants) => {
-    const permission = permissionsByRoleList.length > 0 ? permissionsByRoleList[0][selectedFeature] : [];
-    console.log('permission', permission);
+    const permission = permissionsByRoleList.length > 0 ? permissionsByRoleList[0][selectedFeature] : {};
     const constants = selectedFeatureConstants.map(item => {
-      if (Object.keys(permission).map(key => key = item.key)) {
+      if (Object.keys(permission).map(key => key === item.key)) {
         return {
           ...item,
-          hasPermission: permission[item.key] ? permission[item.key] : false
+          hasPermission: getPermissionsValueByUpdatePermissionOrByOriginalPermissionList(permission[item.key], updatePermissions.permissions, item, selectedFeature)
         }
       }
     });
@@ -99,25 +108,17 @@ const Configurationpart = (props) => {
       setSelectedLevel(roles[0]);
     }
     getRoles();
-
     setFeaturePanelValues([...DEFAULT_FEATURE_PANEL_VALUES]);
   }, []);
 
   useEffect(() => {
-    //getPermissions for the first role
-    if (selectedLevel !== 'add_new_role') {
-      async function getPermissions() {
-        const permissions = await getPermissionByRole(selectedLevel);
-        setPermissionByRoleData([...permissions]);
-        setSelectedFeature('overview');
-        mapPermissionToFunctionalitiesAndPermissionByFeaturePanel(permissions, 'overview', OVERVIEW_CONSTANTS);
-      }
-
-      getPermissions();
-    } else {
+    async function getPermissions() {
+      const permissions = await getPermissionByRole(selectedLevel);
+      setPermissionByRoleData([...permissions]);
       setSelectedFeature('overview');
-      mapPermissionToFunctionalitiesAndPermissionByFeaturePanel([], 'overview', OVERVIEW_CONSTANTS);
+      mapPermissionToFunctionalitiesAndPermissionByFeaturePanel(permissions, 'overview', OVERVIEW_CONSTANTS);
     }
+    getPermissions();
   }, [selectedLevel]);
 
   var orgTypeArray = [];
@@ -155,8 +156,9 @@ const Configurationpart = (props) => {
   //should get the functionality of adding this role to the list only if only of the role is selected.
   const onChangeOfAddNewInput = (event) => {
     const { value } = event?.target;
-    setShowAddNewInputSection(current => current = true);
-    setSelectedLevel(value);
+    console.log('onchange of add new inputs: ', value);
+    // setShowAddNewInputSection(current => current = true);
+    // setSelectedLevel(value);
   }
 
   const handleOnClickOfAFeature = (selectedFeature) => {
@@ -172,8 +174,10 @@ const Configurationpart = (props) => {
           ...item,
           hasPermission: permission.hasPermission
         }
+      } 
+      return {
+        ...item
       }
-      return item;
     });
     setFunctionalitiesPermissionPanelData([...updatedPermissionData]);
     prepareDataToUpdatePermission(updatedPermissionData, selectedFeature, selectedLevel);
@@ -194,6 +198,7 @@ const Configurationpart = (props) => {
     const permissionsObj = prepareKeyValueByPermissionData(permissionData);
     let selectedPermissionObj = {
       permissions: {
+        ...updatePermissions.permissions,
         [selectedFeature]: {
           ...permissionsObj
         }
@@ -218,8 +223,8 @@ const Configurationpart = (props) => {
 
   const onSaveOfUpdatePermission = async () => {
     if (updatePermissions && Object.keys(updatePermissions).length > 0) {
-      console.log(showAddNewInputSection)
       if (!showAddNewInputSection) {
+        console.log('update: permissions', updatePermissions);
         const permissions = await updatePermissionsByRole(updatePermissions);
         setPermissionByRoleData([permissions]);
         setSelectedFeature('overview');
