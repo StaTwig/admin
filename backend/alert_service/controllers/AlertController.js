@@ -20,11 +20,23 @@ exports.getAllAlerts = [
   },
 ]
 
-exports.getNotifications = [
+exports.getAlertNotifications = [
   auth,
   async function (req, res) {
     try {
-      let notifications = await Notification.find({ user : req.user.id})
+      let notifications = await Notification.find({ user : req.user.id, type : 'ALERT'})
+      return apiResponse.successResponseWithData(res, 'Notifications fetched successfully', notifications)
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err)
+    }
+  }
+]
+
+exports.getTransactionNotifications = [
+  auth,
+  async function (req, res) {
+    try {
+      let notifications = await Notification.find({ user : req.user.id, type : "TRANSACTION"})
       return apiResponse.successResponseWithData(res, 'Notifications fetched successfully', notifications)
     } catch (err) {
       return apiResponse.ErrorResponse(res, err)
