@@ -418,8 +418,8 @@ exports.getOrgUsers = [
         {
           $lookup: {
             from: "organisations",
-            localField: "id",
-            foreignField: "affiliations.employee_id",
+            localField: "organisationId",
+            foreignField: "id",
             as: "orgs",
           },
         },
@@ -436,9 +436,7 @@ exports.getOrgUsers = [
             role: 1,
             emailId: 1,
             postalAddress: 1,
-            orgs: {
-              name: 1,
-            },
+            location: "$orgs.postalAddress",
           },
         },
       ]);

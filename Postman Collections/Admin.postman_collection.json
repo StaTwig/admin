@@ -159,7 +159,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0NzY3NDA0LCJleHAiOjE2MTQ3NzQ2MDR9.khVOBVZJMxvoOG4JvBBbdBCvH9N25mc73jYlYk94ZiM",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkVNUDEwMDAwNyIsImZpcnN0TmFtZSI6IkJQIiwiZW1haWxJZCI6ImJwcGFud2FyLmNoQGdtYWlsLmNvbSIsInJvbGUiOiJwb3dlclVzZXIiLCJ3YXJlaG91c2VJZCI6Ik5BIiwib3JnYW5pc2F0aW9uSWQiOiJPUkcxMDAxNCIsIm9yZ2FuaXNhdGlvbk5hbWUiOiJVTklDRUYgQ09QRU5IQUdFTiIsImlhdCI6MTYyMjg5MjgxMCwiZXhwIjoxNjIyOTAwMDEwfQ.iPycdHiDQgE4NKOA4CgYCRnfhyUfIZiUyIBk3Nf5k_4",
 							"type": "string"
 						}
 					]
@@ -167,13 +167,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://admin.vaccineledger.com/api/employee_service/getApprovals",
+					"raw": "http://localhost:3003/api/employee_service/getApprovals",
 					"protocol": "http",
 					"host": [
-						"admin",
-						"vaccineledger",
-						"com"
+						"localhost"
 					],
+					"port": "3003",
 					"path": [
 						"api",
 						"employee_service",
@@ -191,7 +190,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJOQSIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb24iOnsiX2lkIjoiNjAxODMzMjYyMzI5OTg3NGY0YWM3NTM1IiwibmFtZSI6IkJoYXJhdCJ9LCJpYXQiOjE2MTQxODk2MDIsImV4cCI6MTYxNDE5NjgwMn0.BPToTa_74KDMEhPn6ofn3t5Va_Uq_Yqy05zCWXIgIKc",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkVNUDEwMDAwNyIsImZpcnN0TmFtZSI6IkJQIiwiZW1haWxJZCI6ImJwcGFud2FyLmNoQGdtYWlsLmNvbSIsInJvbGUiOiJwb3dlclVzZXIiLCJ3YXJlaG91c2VJZCI6Ik5BIiwib3JnYW5pc2F0aW9uSWQiOiJPUkcxMDAxNCIsIm9yZ2FuaXNhdGlvbk5hbWUiOiJVTklDRUYgQ09QRU5IQUdFTiIsImlhdCI6MTYyMjg5MjgxMCwiZXhwIjoxNjIyOTAwMDEwfQ.iPycdHiDQgE4NKOA4CgYCRnfhyUfIZiUyIBk3Nf5k_4",
 							"type": "string"
 						}
 					]
@@ -199,26 +198,29 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://admin.vaccineledger.com/api/employee_service/accpetApproval?id=emp-18gpp8rrkljqnvbd&role=powerUser",
+					"raw": "http://localhost:3003/api/employee_service/acceptApproval?id=EMP100048&role=powerUser&warehouseId=WAR10025",
 					"protocol": "http",
 					"host": [
-						"admin",
-						"vaccineledger",
-						"com"
+						"localhost"
 					],
+					"port": "3003",
 					"path": [
 						"api",
 						"employee_service",
-						"accpetApproval"
+						"acceptApproval"
 					],
 					"query": [
 						{
 							"key": "id",
-							"value": "emp-18gpp8rrkljqnvbd"
+							"value": "EMP100048"
 						},
 						{
 							"key": "role",
 							"value": "powerUser"
+						},
+						{
+							"key": "warehouseId",
+							"value": "WAR10025"
 						}
 					]
 				}
@@ -269,7 +271,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"emailId\":\"ravilochan2000@gmail.com\"\n}",
+					"raw": "{\n    \"emailId\":\"vinod.kumarreddy2021@gmail.com\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -300,7 +302,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"emailId\":\"thrinethra@statwig.com\",\n    \"otp\":\"1234\"\n}",
+					"raw": "{\n    \"emailId\":\"vinod.kumarreddy2021@gmail.com\",\n    \"otp\": \"2427\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -308,16 +310,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://admin.vaccineledger.com/api/employee_service/auth/verifyOtp",
+					"raw": "http://localhost:3001/usermanagement/api/auth/verifyOtp",
 					"protocol": "http",
 					"host": [
-						"admin",
-						"vaccineledger",
-						"com"
+						"localhost"
 					],
+					"port": "3001",
 					"path": [
+						"usermanagement",
 						"api",
-						"employee_service",
 						"auth",
 						"verifyOtp"
 					]
@@ -364,6 +365,49 @@
 						"employee_service",
 						"auth",
 						"getOrgUsers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get Orgs",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkVNUDEwMDAwNyIsImZpcnN0TmFtZSI6IkJQIiwiZW1haWxJZCI6ImJwcGFud2FyLmNoQGdtYWlsLmNvbSIsInJvbGUiOiJwb3dlclVzZXIiLCJ3YXJlaG91c2VJZCI6Ik5BIiwib3JnYW5pc2F0aW9uSWQiOiJPUkcxMDAxNCIsIm9yZ2FuaXNhdGlvbk5hbWUiOiJVTklDRUYgQ09QRU5IQUdFTiIsImlhdCI6MTYyMjg5MjgxMCwiZXhwIjoxNjIyOTAwMDEwfQ.iPycdHiDQgE4NKOA4CgYCRnfhyUfIZiUyIBk3Nf5k_4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3003/api/employee_service/getOrgs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"api",
+						"employee_service",
+						"getOrgs"
 					]
 				}
 			},
@@ -471,7 +515,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0Nzc3NTQ0LCJleHAiOjE2MTQ3ODQ3NDR9.xgjlo-eGWOVPd3A1UUPF4MR24e1SZRgOs5EspClNF-8",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xOGdwcDhycmtsanFudmJkIiwiZmlyc3ROYW1lIjoiaGFyc2hhIiwiZW1haWxJZCI6ImhhcnNoYV9kQHN0YXR3aWcuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoid2FyLTdkMTM3OGE0MWUiLCJvcmdhbmlzYXRpb25JZCI6Im9yZy0xIiwid2FsbGV0QWRkcmVzcyI6IjFVQTYzY3V5d3I2NDd1OU01Z05wOTNVbzdNRmgyYUM0RVFiWUs1IiwiaWF0IjoxNjIyNDA4MTc5LCJleHAiOjE2MjI0MTUzNzl9.QqslRyTmZYt5RLWX4hIE1KKPIylcoxCMiH3cW1up3HY",
 							"type": "string"
 						}
 					]
@@ -480,7 +524,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"firstName\":\"test emp 2\",\n    \"lastName\":\"test\",\n    \"organisation\":\"orgID/Name\",\n    \"emailId\":\"test2@gmail.com\"\n\n}",
+					"raw": "{\n    \"firstName\":\"Harsha\",\n    \"lastName\":\"D\",\n    \"organisation\":\"StaTwig Pvt. Ltd./org-1\",\n    \"emailId\":\"harsha_d@statwig.com\",\n    \"phoneNumber\":\"\"\n\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -488,15 +532,15 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:3003/api/employee_service/auth/updateProfile",
+					"raw": "http://localhost:3001/usermanagement/api/auth/updateProfile",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "3003",
+					"port": "3001",
 					"path": [
+						"usermanagement",
 						"api",
-						"employee_service",
 						"auth",
 						"updateProfile"
 					]
@@ -512,7 +556,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0Nzc3NTQ0LCJleHAiOjE2MTQ3ODQ3NDR9.xgjlo-eGWOVPd3A1UUPF4MR24e1SZRgOs5EspClNF-8",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2MmJ6MWttMG5pc3B0IiwiZmlyc3ROYW1lIjoiVFNUIiwiZW1haWxJZCI6InNkZnNkQHMuY28iLCJyb2xlIjoiYWRtaW4iLCJ3YXJlaG91c2VJZCI6Ik5BIiwib3JnYW5pc2F0aW9uSWQiOiJvcmctMTIzNDUiLCJvcmdhbmlzYXRpb25OYW1lIjoiU3RhVHdpZyBQdnQuIEx0ZC4iLCJpYXQiOjE2MjI2Mjg3NTAsImV4cCI6MTYyMjYzNTk1MH0.UXQeWHfOQMpREqd91qG4c5lLk5hTd5txAg4LDb4QL8o",
 							"type": "string"
 						}
 					]
@@ -520,13 +564,14 @@
 				"method": "POST",
 				"header": [],
 				"body": {
-					"mode": "raw",
-					"raw": "{\n    \"file\":\"\"\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "profile",
+							"type": "file",
+							"src": "/Users/ravilochan/Downloads/company.jpeg"
 						}
-					}
+					]
 				},
 				"url": {
 					"raw": "http://localhost:3003/api/employee_service/auth/upload",
@@ -540,6 +585,144 @@
 						"employee_service",
 						"auth",
 						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload Image User managment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkVNUDEwMDAwNSIsImZpcnN0TmFtZSI6IlZpbm9kIEt1bWFyIiwiZW1haWxJZCI6InZpbm9kLmt1bWFycmVkZHkyMDIxQGdtYWlsLmNvbSIsInJvbGUiOiJwb3dlclVzZXIiLCJ3YXJlaG91c2VJZCI6WyJXQVIxMDAxMCJdLCJvcmdhbmlzYXRpb25JZCI6Ik9SRzEwMDAzIiwib3JnYW5pc2F0aW9uTmFtZSI6IlZpbm9kIG9yZyBQcnYuIEx0ZCIsIm9yZ2FuaXNhdGlvblR5cGUiOiJTVVBQTElFUiIsImlhdCI6MTYyNTA0NjQzNCwiZXhwIjoxNjI1MDUzNjM0fQ.VNs6TrgVrDvdf3xGP2LBJCYKUAhSnoPM9n6_w9SNv-Q",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "photo",
+							"type": "file",
+							"src": "/Users/ravilochan/Downloads/sample.webp"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3001/usermanagement/api/auth/uploadImage?action=PROFILE",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"usermanagement",
+						"api",
+						"auth",
+						"uploadImage"
+					],
+					"query": [
+						{
+							"key": "action",
+							"value": "PROFILE"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload Image User managment Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xOGdwcDhycmtsanFudmJkIiwiZmlyc3ROYW1lIjoiaGFyc2hhIiwiZW1haWxJZCI6ImhhcnNoYV9kQHN0YXR3aWcuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoid2FyLTdkMTM3OGE0MWUiLCJvcmdhbmlzYXRpb25JZCI6Im9yZy0xIiwid2FsbGV0QWRkcmVzcyI6IjFVQTYzY3V5d3I2NDd1OU01Z05wOTNVbzdNRmgyYUM0RVFiWUs1IiwiaWF0IjoxNjIyNDA4MTc5LCJleHAiOjE2MjI0MTUzNzl9.QqslRyTmZYt5RLWX4hIE1KKPIylcoxCMiH3cW1up3HY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "photo",
+							"type": "file",
+							"src": "/Users/ravilochan/Downloads/image.jpeg"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3001/usermanagement/api/auth/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"usermanagement",
+						"api",
+						"auth",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "upload Image Shipment",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xOGdwcDhycmtsanFudmJkIiwiZmlyc3ROYW1lIjoiaGFyc2hhIiwiZW1haWxJZCI6ImhhcnNoYV9kQHN0YXR3aWcuY29tIiwicm9sZSI6InBvd2VyVXNlciIsIndhcmVob3VzZUlkIjoid2FyLTdkMTM3OGE0MWUiLCJvcmdhbmlzYXRpb25JZCI6Im9yZy0xIiwid2FsbGV0QWRkcmVzcyI6IjFVQTYzY3V5d3I2NDd1OU01Z05wOTNVbzdNRmgyYUM0RVFiWUs1IiwiaWF0IjoxNjIyNDA4MTc5LCJleHAiOjE2MjI0MTUzNzl9.QqslRyTmZYt5RLWX4hIE1KKPIylcoxCMiH3cW1up3HY",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "photo",
+							"type": "file",
+							"src": "/Users/ravilochan/Downloads/user.webp"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3002/shipmentmanagement/api/shipment/uploadImage?id=SH100429",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"shipmentmanagement",
+						"api",
+						"shipment",
+						"uploadImage"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "SH100429"
+						}
 					]
 				}
 			},
@@ -617,21 +800,239 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://admin.vaccineledger.com/api/rbac_service/getPermissions",
+					"raw": "http://localhost:3004/api/rbac_service/getPermissions?role=powerUser",
 					"protocol": "http",
 					"host": [
-						"admin",
-						"vaccineledger",
-						"com"
+						"localhost"
 					],
+					"port": "3004",
 					"path": [
 						"api",
 						"rbac_service",
 						"getPermissions"
+					],
+					"query": [
+						{
+							"key": "role",
+							"value": "powerUser"
+						}
 					]
 				}
 			},
-			"response": []
+			"response": [
+				{
+					"name": "getPermissions",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3004/api/rbac_service/getPermissions",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3004",
+							"path": [
+								"api",
+								"rbac_service",
+								"getPermissions"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "powerUser",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "14671"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"394f-vs+IRs+98CteTwKV425Lfc3KksQ\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 12 Aug 2021 11:44:48 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": 1,\n    \"message\": \"All Permissions\",\n    \"data\": [\n        {\n            \"overview\": {\n                \"overview\": false\n            },\n            \"search\": {\n                \"searchByOrderId\": false,\n                \"searchByShipmentId\": false,\n                \"searchByProductCategory\": false,\n                \"searchByTransitNo\": false,\n                \"searchByProductName\": false,\n                \"searchByProductId\": false\n            },\n            \"inventory\": {\n                \"viewInventory\": false,\n                \"addInventory\": false,\n                \"importInventory\": false,\n                \"inventoryAnalytics\": false,\n                \"viewProductList\": false,\n                \"viewProductInfo\": false,\n                \"addNewProduct\": false,\n                \"inventoryFilters\": false,\n                \"inventoryExportReport\": false\n            },\n            \"shipment\": {\n                \"createShipment\": false,\n                \"shipmentAnalytics\": false,\n                \"updateShipment\": false,\n                \"receiveShipment\": false,\n                \"receiveShipmentScan\": false,\n                \"inboundShipments\": false,\n                \"outboundShipments\": false,\n                \"viewShipment\": false,\n                \"shipmentFilters\": false,\n                \"shipmentExportReport\": false\n            },\n            \"order\": {\n                \"createOrder\": false,\n                \"importOrder\": false,\n                \"orderAnalytics\": false,\n                \"receiveOrder\": false,\n                \"acceptRejectOrder\": false,\n                \"viewInboundOrders\": false,\n                \"viewOutboundOrders\": false,\n                \"orderFilters\": false,\n                \"orderExportReport\": false,\n                \"viewPO\": false\n            },\n            \"network\": {\n                \"network\": false\n            },\n            \"track\": {\n                \"trackAndTrace\": false\n            },\n            \"admin\": {\n                \"getUserRequest\": false,\n                \"acceptUser\": false,\n                \"addUser\": false,\n                \"removeUser\": false,\n                \"deactivateUser\": false,\n                \"addRole\": false,\n                \"deleteRole\": false,\n                \"affliateUser\": false,\n                \"unaffliateUser\": false,\n                \"viewAffliation\": false,\n                \"acceptAffiliation\": false,\n                \"removeAffiliation\": false\n            },\n            \"permissions\": [\n                \"viewInventoryAtDifferentWarehouses\",\n                \"viewShipment\",\n                \"addInventory\",\n                \"viewInventory\",\n                \"viewProductList\",\n                \"addNewProduct\",\n                \"createPO\",\n                \"receivePO\",\n                \"viewPO\",\n                \"createShipmentOrder\",\n                \"viewShipment\",\n                \"receiveShipmentOrder\",\n                \"scanShipment\",\n                \"sendShipment\",\n                \"trackAndTrace\",\n                \"addUsers\",\n                \"removeUsers\",\n                \"deactivateUsers\",\n                \"affiliateUser\",\n                \"unAffiliateUser\",\n                \"addRole\",\n                \"deleteRole\",\n                \"viewRequestForAffiliation\",\n                \"acceptOrRejectRequestForAffiliation\",\n                \"removeAffiliationToOrganisation\",\n                \"manageAddresses\",\n                \"changePOStatus\",\n                \"fetchPurchaseOrders\",\n                \"addProduct\",\n                \"fetchAllPurchaseOrdersBC\",\n                \"fetchPublisherPurchaseOrders\",\n                \"fetchPurchaseOrderBC\",\n                \"createPurchaseOrder\",\n                \"addPOsFromExcel\",\n                \"search\"\n            ],\n            \"_id\": \"5f4bf27f0cc6fb17fec1851d\",\n            \"role\": \"powerUser\",\n            \"createdAt\": \"2020-08-30T18:39:59.390Z\",\n            \"updatedAt\": \"2020-08-30T18:53:37.872Z\",\n            \"__v\": 0\n        },\n        {\n            \"overview\": {\n                \"overview\": false\n            },\n            \"search\": {\n                \"searchByOrderId\": false,\n                \"searchByShipmentId\": false,\n                \"searchByProductCategory\": false,\n                \"searchByTransitNo\": false,\n                \"searchByProductName\": false,\n                \"searchByProductId\": false\n            },\n            \"inventory\": {\n                \"viewInventory\": false,\n                \"addInventory\": false,\n                \"importInventory\": false,\n                \"inventoryAnalytics\": false,\n                \"viewProductList\": false,\n                \"viewProductInfo\": false,\n                \"addNewProduct\": false,\n                \"inventoryFilters\": false,\n                \"inventoryExportReport\": false\n            },\n            \"shipment\": {\n                \"createShipment\": false,\n                \"shipmentAnalytics\": false,\n                \"updateShipment\": false,\n                \"receiveShipment\": false,\n                \"receiveShipmentScan\": false,\n                \"inboundShipments\": false,\n                \"outboundShipments\": false,\n                \"viewShipment\": false,\n                \"shipmentFilters\": false,\n                \"shipmentExportReport\": false\n            },\n            \"order\": {\n                \"createOrder\": false,\n                \"importOrder\": false,\n                \"orderAnalytics\": false,\n                \"receiveOrder\": false,\n                \"acceptRejectOrder\": false,\n                \"viewInboundOrders\": false,\n                \"viewOutboundOrders\": false,\n                \"orderFilters\": false,\n                \"orderExportReport\": false,\n                \"viewPO\": false\n            },\n            \"network\": {\n                \"network\": false\n            },\n            \"track\": {\n                \"trackAndTrace\": false\n            },\n            \"admin\": {\n                \"getUserRequest\": false,\n                \"acceptUser\": false,\n                \"addUser\": false,\n                \"removeUser\": false,\n                \"deactivateUser\": false,\n                \"addRole\": false,\n                \"deleteRole\": false,\n                \"affliateUser\": false,\n                \"unaffliateUser\": false,\n                \"viewAffliation\": false,\n                \"acceptAffiliation\": false,\n                \"removeAffiliation\": false\n            },\n            \"permissions\": [\n                \"addUsers\",\n                \"removeUsers\",\n                \"deactivateUsers\",\n                \"affiliateUser\",\n                \"unAffiliateUser\",\n                \"addRole\",\n                \"deleteRole\",\n                \"manageAddresses\"\n            ],\n            \"_id\": \"5f4bf5e50cc6fb17fec1851e\",\n            \"role\": \"admin\",\n            \"createdAt\": \"2020-08-30T18:54:29.887Z\",\n            \"updatedAt\": \"2020-08-30T18:54:29.887Z\",\n            \"__v\": 0\n        },\n        {\n            \"overview\": {\n                \"overview\": false\n            },\n            \"search\": {\n                \"searchByOrderId\": false,\n                \"searchByShipmentId\": false,\n                \"searchByProductCategory\": false,\n                \"searchByTransitNo\": false,\n                \"searchByProductName\": false,\n                \"searchByProductId\": false\n            },\n            \"inventory\": {\n                \"viewInventory\": false,\n                \"addInventory\": false,\n                \"importInventory\": false,\n                \"inventoryAnalytics\": false,\n                \"viewProductList\": false,\n                \"viewProductInfo\": false,\n                \"addNewProduct\": false,\n                \"inventoryFilters\": false,\n                \"inventoryExportReport\": false\n            },\n            \"shipment\": {\n                \"createShipment\": false,\n                \"shipmentAnalytics\": false,\n                \"updateShipment\": false,\n                \"receiveShipment\": false,\n                \"receiveShipmentScan\": false,\n                \"inboundShipments\": false,\n                \"outboundShipments\": false,\n                \"viewShipment\": false,\n                \"shipmentFilters\": false,\n                \"shipmentExportReport\": false\n            },\n            \"order\": {\n                \"createOrder\": false,\n                \"importOrder\": false,\n                \"orderAnalytics\": false,\n                \"receiveOrder\": false,\n                \"acceptRejectOrder\": false,\n                \"viewInboundOrders\": false,\n                \"viewOutboundOrders\": false,\n                \"orderFilters\": false,\n                \"orderExportReport\": false,\n                \"viewPO\": false\n            },\n            \"network\": {\n                \"network\": false\n            },\n            \"track\": {\n                \"trackAndTrace\": false\n            },\n            \"admin\": {\n                \"getUserRequest\": false,\n                \"acceptUser\": false,\n                \"addUser\": false,\n                \"removeUser\": false,\n                \"deactivateUser\": false,\n                \"addRole\": false,\n                \"deleteRole\": false,\n                \"affliateUser\": false,\n                \"unaffliateUser\": false,\n                \"viewAffliation\": false,\n                \"acceptAffiliation\": false,\n                \"removeAffiliation\": false\n            },\n            \"permissions\": [\n                \"viewShipment\",\n                \"viewRequestForAffiliation\",\n                \"acceptOrRejectRequestForAffiliation\",\n                \"removeAffiliationToOrganisation\"\n            ],\n            \"_id\": \"5f4bf6090cc6fb17fec1851f\",\n            \"role\": \"affiliatee\",\n            \"createdAt\": \"2020-08-30T18:55:05.828Z\",\n            \"updatedAt\": \"2020-08-30T18:55:05.828Z\",\n            \"__v\": 0\n        },\n        {\n            \"overview\": {\n                \"overview\": false\n            },\n            \"search\": {\n                \"searchByOrderId\": false,\n                \"searchByShipmentId\": false,\n                \"searchByProductCategory\": false,\n                \"searchByTransitNo\": false,\n                \"searchByProductName\": false,\n                \"searchByProductId\": false\n            },\n            \"inventory\": {\n                \"viewInventory\": false,\n                \"addInventory\": false,\n                \"importInventory\": false,\n                \"inventoryAnalytics\": false,\n                \"viewProductList\": false,\n                \"viewProductInfo\": false,\n                \"addNewProduct\": false,\n                \"inventoryFilters\": false,\n                \"inventoryExportReport\": false\n            },\n            \"shipment\": {\n                \"createShipment\": false,\n                \"shipmentAnalytics\": false,\n                \"updateShipment\": false,\n                \"receiveShipment\": false,\n                \"receiveShipmentScan\": false,\n                \"inboundShipments\": false,\n                \"outboundShipments\": false,\n                \"viewShipment\": false,\n                \"shipmentFilters\": false,\n                \"shipmentExportReport\": false\n            },\n            \"order\": {\n                \"createOrder\": false,\n                \"importOrder\": false,\n                \"orderAnalytics\": false,\n                \"receiveOrder\": false,\n                \"acceptRejectOrder\": false,\n                \"viewInboundOrders\": false,\n                \"viewOutboundOrders\": false,\n                \"orderFilters\": false,\n                \"orderExportReport\": false,\n                \"viewPO\": false\n            },\n            \"network\": {\n                \"network\": false\n            },\n            \"track\": {\n                \"trackAndTrace\": false\n            },\n            \"admin\": {\n                \"getUserRequest\": false,\n                \"acceptUser\": false,\n                \"addUser\": false,\n                \"removeUser\": false,\n                \"deactivateUser\": false,\n                \"addRole\": false,\n                \"deleteRole\": false,\n                \"affliateUser\": false,\n                \"unaffliateUser\": false,\n                \"viewAffliation\": false,\n                \"acceptAffiliation\": false,\n                \"removeAffiliation\": false\n            },\n            \"permissions\": [\n                \"viewInventory\",\n                \"viewProductList\",\n                \"addNewProduct\",\n                \"createPO\",\n                \"receivePO\",\n                \"viewPO\",\n                \"createShipmentOrder\",\n                \"viewShipment\",\n                \"trackAndTrace\",\n                \"manageAddresses\"\n            ],\n            \"_id\": \"5f4bf62f0cc6fb17fec18520\",\n            \"role\": \"salesEmployeeSenior\",\n            \"createdAt\": \"2020-08-30T18:55:43.103Z\",\n            \"updatedAt\": \"2020-08-30T18:55:43.103Z\",\n            \"__v\": 0\n        },\n        {\n            \"overview\": {\n                \"overview\": false\n            },\n            \"search\": {\n                \"searchByOrderId\": false,\n                \"searchByShipmentId\": false,\n                \"searchByProductCategory\": false,\n                \"searchByTransitNo\": false,\n                \"searchByProductName\": false,\n                \"searchByProductId\": false\n            },\n            \"inventory\": {\n                \"viewInventory\": false,\n                \"addInventory\": false,\n                \"importInventory\": false,\n                \"inventoryAnalytics\": false,\n                \"viewProductList\": false,\n                \"viewProductInfo\": false,\n                \"addNewProduct\": false,\n                \"inventoryFilters\": false,\n                \"inventoryExportReport\": false\n            },\n            \"shipment\": {\n                \"createShipment\": false,\n                \"shipmentAnalytics\": false,\n                \"updateShipment\": false,\n                \"receiveShipment\": false,\n                \"receiveShipmentScan\": false,\n                \"inboundShipments\": false,\n                \"outboundShipments\": false,\n                \"viewShipment\": false,\n                \"shipmentFilters\": false,\n                \"shipmentExportReport\": false\n            },\n            \"order\": {\n                \"createOrder\": false,\n                \"importOrder\": false,\n                \"orderAnalytics\": false,\n                \"receiveOrder\": false,\n                \"acceptRejectOrder\": false,\n                \"viewInboundOrders\": false,\n                \"viewOutboundOrders\": false,\n                \"orderFilters\": false,\n                \"orderExportReport\": false,\n                \"viewPO\": false\n            },\n            \"network\": {\n                \"network\": false\n            },\n            \"track\": {\n                \"trackAndTrace\": false\n            },\n            \"admin\": {\n                \"getUserRequest\": false,\n                \"acceptUser\": false,\n                \"addUser\": false,\n                \"removeUser\": false,\n                \"deactivateUser\": false,\n                \"addRole\": false,\n                \"deleteRole\": false,\n                \"affliateUser\": false,\n                \"unaffliateUser\": false,\n                \"viewAffliation\": false,\n                \"acceptAffiliation\": false,\n                \"removeAffiliation\": false\n            },\n            \"permissions\": [\n                \"viewInventory\",\n                \"viewProductList\",\n                \"addNewProduct\",\n                \"createPO\",\n                \"receivePO\",\n                \"viewPO\",\n                \"createShipmentOrder\",\n                \"viewShipment\",\n                \"trackAndTrace\"\n            ],\n            \"_id\": \"5f4bf6490cc6fb17fec18521\",\n            \"role\": \"salesEmployeeJunior\",\n            \"createdAt\": \"2020-08-30T18:56:09.569Z\",\n            \"updatedAt\": \"2020-08-30T18:56:09.569Z\",\n            \"__v\": 0\n        },\n        {\n            \"overview\": {\n                \"overview\": false\n            },\n            \"search\": {\n                \"searchByOrderId\": false,\n                \"searchByShipmentId\": false,\n                \"searchByProductCategory\": false,\n                \"searchByTransitNo\": false,\n                \"searchByProductName\": false,\n                \"searchByProductId\": false\n            },\n            \"inventory\": {\n                \"viewInventory\": false,\n                \"addInventory\": false,\n                \"importInventory\": false,\n                \"inventoryAnalytics\": false,\n                \"viewProductList\": false,\n                \"viewProductInfo\": false,\n                \"addNewProduct\": false,\n                \"inventoryFilters\": false,\n                \"inventoryExportReport\": false\n            },\n            \"shipment\": {\n                \"createShipment\": false,\n                \"shipmentAnalytics\": false,\n                \"updateShipment\": false,\n                \"receiveShipment\": false,\n                \"receiveShipmentScan\": false,\n                \"inboundShipments\": false,\n                \"outboundShipments\": false,\n                \"viewShipment\": false,\n                \"shipmentFilters\": false,\n                \"shipmentExportReport\": false\n            },\n            \"order\": {\n                \"createOrder\": false,\n                \"importOrder\": false,\n                \"orderAnalytics\": false,\n                \"receiveOrder\": false,\n                \"acceptRejectOrder\": false,\n                \"viewInboundOrders\": false,\n                \"viewOutboundOrders\": false,\n                \"orderFilters\": false,\n                \"orderExportReport\": false,\n                \"viewPO\": false\n            },\n            \"network\": {\n                \"network\": false\n            },\n            \"track\": {\n                \"trackAndTrace\": false\n            },\n            \"admin\": {\n                \"getUserRequest\": false,\n                \"acceptUser\": false,\n                \"addUser\": false,\n                \"removeUser\": false,\n                \"deactivateUser\": false,\n                \"addRole\": false,\n                \"deleteRole\": false,\n                \"affliateUser\": false,\n                \"unaffliateUser\": false,\n                \"viewAffliation\": false,\n                \"acceptAffiliation\": false,\n                \"removeAffiliation\": false\n            },\n            \"permissions\": [\n                \"addInventory\",\n                \"viewInventory\",\n                \"receiveShipment\",\n                \"viewShipment\",\n                \"receiveShipmentOrder\",\n                \"scanShipment\",\n                \"sendShipment\",\n                \"manageAddresses\"\n            ],\n            \"_id\": \"5f4bf6820cc6fb17fec18522\",\n            \"role\": \"warehouseEmployeeSenior\",\n            \"createdAt\": \"2020-08-30T18:57:06.447Z\",\n            \"updatedAt\": \"2020-08-30T18:57:06.447Z\",\n            \"__v\": 0\n        },\n        {\n            \"overview\": {\n                \"overview\": true\n            },\n            \"search\": {\n                \"searchByOrderId\": false,\n                \"searchByShipmentId\": false,\n                \"searchByProductCategory\": false,\n                \"searchByTransitNo\": false,\n                \"searchByProductName\": false,\n                \"searchByProductId\": false\n            },\n            \"inventory\": {\n                \"viewInventory\": false,\n                \"addInventory\": false,\n                \"importInventory\": false,\n                \"inventoryAnalytics\": false,\n                \"viewProductList\": false,\n                \"viewProductInfo\": false,\n                \"addNewProduct\": false,\n                \"inventoryFilters\": false,\n                \"inventoryExportReport\": false\n            },\n            \"shipment\": {\n                \"createShipment\": false,\n                \"shipmentAnalytics\": false,\n                \"updateShipment\": false,\n                \"receiveShipment\": false,\n                \"receiveShipmentScan\": false,\n                \"inboundShipments\": false,\n                \"outboundShipments\": false,\n                \"viewShipment\": false,\n                \"shipmentFilters\": false,\n                \"shipmentExportReport\": false\n            },\n            \"order\": {\n                \"createOrder\": false,\n                \"importOrder\": false,\n                \"orderAnalytics\": false,\n                \"receiveOrder\": false,\n                \"acceptRejectOrder\": false,\n                \"viewInboundOrders\": false,\n                \"viewOutboundOrders\": false,\n                \"orderFilters\": false,\n                \"orderExportReport\": false,\n                \"viewPO\": false\n            },\n            \"network\": {\n                \"network\": false\n            },\n            \"track\": {\n                \"trackAndTrace\": false\n            },\n            \"admin\": {\n                \"getUserRequest\": false,\n                \"acceptUser\": false,\n                \"addUser\": false,\n                \"removeUser\": false,\n                \"deactivateUser\": false,\n                \"addRole\": false,\n                \"deleteRole\": false,\n                \"affliateUser\": false,\n                \"unaffliateUser\": false,\n                \"viewAffliation\": false,\n                \"acceptAffiliation\": false,\n                \"removeAffiliation\": false\n            },\n            \"permissions\": [],\n            \"_id\": \"5f4bf69f0cc6fb17fec18523\",\n            \"role\": \"warehouseEmployeeJunior\",\n            \"createdAt\": \"2020-08-30T18:57:35.230Z\",\n            \"updatedAt\": \"2021-08-12T06:00:03.428Z\",\n            \"__v\": 0\n        },\n        {\n            \"overview\": {\n                \"overview\": false\n            },\n            \"search\": {\n                \"searchByOrderId\": false,\n                \"searchByShipmentId\": false,\n                \"searchByProductCategory\": false,\n                \"searchByTransitNo\": false,\n                \"searchByProductName\": false,\n                \"searchByProductId\": false\n            },\n            \"inventory\": {\n                \"viewInventory\": false,\n                \"addInventory\": false,\n                \"importInventory\": false,\n                \"inventoryAnalytics\": false,\n                \"viewProductList\": false,\n                \"viewProductInfo\": false,\n                \"addNewProduct\": false,\n                \"inventoryFilters\": false,\n                \"inventoryExportReport\": false\n            },\n            \"shipment\": {\n                \"createShipment\": false,\n                \"shipmentAnalytics\": false,\n                \"updateShipment\": false,\n                \"receiveShipment\": false,\n                \"receiveShipmentScan\": false,\n                \"inboundShipments\": false,\n                \"outboundShipments\": false,\n                \"viewShipment\": false,\n                \"shipmentFilters\": false,\n                \"shipmentExportReport\": false\n            },\n            \"order\": {\n                \"createOrder\": false,\n                \"importOrder\": false,\n                \"orderAnalytics\": false,\n                \"receiveOrder\": false,\n                \"acceptRejectOrder\": false,\n                \"viewInboundOrders\": false,\n                \"viewOutboundOrders\": false,\n                \"orderFilters\": false,\n                \"orderExportReport\": false,\n                \"viewPO\": false\n            },\n            \"network\": {\n                \"network\": false\n            },\n            \"track\": {\n                \"trackAndTrace\": false\n            },\n            \"admin\": {\n                \"getUserRequest\": false,\n                \"acceptUser\": false,\n                \"addUser\": false,\n                \"removeUser\": false,\n                \"deactivateUser\": false,\n                \"addRole\": false,\n                \"deleteRole\": false,\n                \"affliateUser\": false,\n                \"unaffliateUser\": false,\n                \"viewAffliation\": false,\n                \"acceptAffiliation\": false,\n                \"removeAffiliation\": false\n            },\n            \"permissions\": [\n                \"addInventory\",\n                \"viewInventory\",\n                \"viewProductList\",\n                \"addNewProduct\",\n                \"viewInventoryAtDifferentWarehouses\",\n                \"createPO\",\n                \"receivePO\",\n                \"viewPO\",\n                \"createShipmentOrder\",\n                \"receiveShipment\",\n                \"viewShipment\",\n                \"receiveShipmentOrder\",\n                \"scanShipment\",\n                \"sendShipment\",\n                \"trackAndTrace\",\n                \"addUsers\",\n                \"removeUsers\",\n                \"deactivateUsers\",\n                \"affiliateUser\",\n                \"unAffiliateUser\",\n                \"addRole\",\n                \"deleteRole\",\n                \"viewRequestForAffiliation\",\n                \"acceptOrRejectRequestForAffiliation\",\n                \"removeAffiliationToOrganisation\",\n                \"manageAddresses\"\n            ],\n            \"_id\": \"5f4bf8af0cc6fb17fec18524\",\n            \"role\": \"ERP Specialist\",\n            \"createdAt\": \"2020-08-30T19:06:23.610Z\",\n            \"updatedAt\": \"2020-08-30T19:06:23.610Z\",\n            \"__v\": 0\n        },\n        {\n            \"overview\": {\n                \"overview\": false\n            },\n            \"search\": {\n                \"searchByOrderId\": false,\n                \"searchByShipmentId\": false,\n                \"searchByProductCategory\": false,\n                \"searchByTransitNo\": false,\n                \"searchByProductName\": false,\n                \"searchByProductId\": false\n            },\n            \"inventory\": {\n                \"viewInventory\": false,\n                \"addInventory\": false,\n                \"importInventory\": false,\n                \"inventoryAnalytics\": false,\n                \"viewProductList\": false,\n                \"viewProductInfo\": false,\n                \"addNewProduct\": false,\n                \"inventoryFilters\": false,\n                \"inventoryExportReport\": false\n            },\n            \"shipment\": {\n                \"createShipment\": true,\n                \"shipmentAnalytics\": false,\n                \"updateShipment\": true,\n                \"receiveShipment\": false,\n                \"receiveShipmentScan\": false,\n                \"inboundShipments\": false,\n                \"outboundShipments\": false,\n                \"viewShipment\": false,\n                \"shipmentFilters\": false,\n                \"shipmentExportReport\": false\n            },\n            \"order\": {\n                \"createOrder\": false,\n                \"importOrder\": false,\n                \"orderAnalytics\": false,\n                \"receiveOrder\": false,\n                \"acceptRejectOrder\": false,\n                \"viewInboundOrders\": false,\n                \"viewOutboundOrders\": false,\n                \"orderFilters\": false,\n                \"orderExportReport\": false,\n                \"viewPO\": false\n            },\n            \"network\": {\n                \"network\": false\n            },\n            \"track\": {\n                \"trackAndTrace\": false\n            },\n            \"admin\": {\n                \"getUserRequest\": false,\n                \"acceptUser\": false,\n                \"addUser\": false,\n                \"removeUser\": false,\n                \"deactivateUser\": false,\n                \"addRole\": false,\n                \"deleteRole\": false,\n                \"affliateUser\": false,\n                \"unaffliateUser\": false,\n                \"viewAffliation\": false,\n                \"acceptAffiliation\": false,\n                \"removeAffiliation\": false\n            },\n            \"permissions\": [\n                \"overview1\",\n                \"createShipment\",\n                \"updateShipment\"\n            ],\n            \"_id\": \"6114d93526999d691f476beb\",\n            \"role\": \"warehouseEmployeeJunior1\",\n            \"createdAt\": \"2021-08-12T08:17:57.551Z\",\n            \"updatedAt\": \"2021-08-12T08:22:29.038Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+				},
+				{
+					"name": "getPermissions",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3004/api/rbac_service/getPermissions?role=powerUser",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3004",
+							"path": [
+								"api",
+								"rbac_service",
+								"getPermissions"
+							],
+							"query": [
+								{
+									"key": "role",
+									"value": "powerUser"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "2127"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"84f-Dcn49lO0ZselB0XOvKdkw0hUZ3I\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 12 Aug 2021 11:45:25 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": 1,\n    \"message\": \"Permissions of powerUser\",\n    \"data\": [\n        {\n            \"overview\": {\n                \"overview\": false\n            },\n            \"search\": {\n                \"searchByOrderId\": false,\n                \"searchByShipmentId\": false,\n                \"searchByProductCategory\": false,\n                \"searchByTransitNo\": false,\n                \"searchByProductName\": false,\n                \"searchByProductId\": false\n            },\n            \"inventory\": {\n                \"viewInventory\": false,\n                \"addInventory\": false,\n                \"importInventory\": false,\n                \"inventoryAnalytics\": false,\n                \"viewProductList\": false,\n                \"viewProductInfo\": false,\n                \"addNewProduct\": false,\n                \"inventoryFilters\": false,\n                \"inventoryExportReport\": false\n            },\n            \"shipment\": {\n                \"createShipment\": false,\n                \"shipmentAnalytics\": false,\n                \"updateShipment\": false,\n                \"receiveShipment\": false,\n                \"receiveShipmentScan\": false,\n                \"inboundShipments\": false,\n                \"outboundShipments\": false,\n                \"viewShipment\": false,\n                \"shipmentFilters\": false,\n                \"shipmentExportReport\": false\n            },\n            \"order\": {\n                \"createOrder\": false,\n                \"importOrder\": false,\n                \"orderAnalytics\": false,\n                \"receiveOrder\": false,\n                \"acceptRejectOrder\": false,\n                \"viewInboundOrders\": false,\n                \"viewOutboundOrders\": false,\n                \"orderFilters\": false,\n                \"orderExportReport\": false,\n                \"viewPO\": false\n            },\n            \"network\": {\n                \"network\": false\n            },\n            \"track\": {\n                \"trackAndTrace\": false\n            },\n            \"admin\": {\n                \"getUserRequest\": false,\n                \"acceptUser\": false,\n                \"addUser\": false,\n                \"removeUser\": false,\n                \"deactivateUser\": false,\n                \"addRole\": false,\n                \"deleteRole\": false,\n                \"affliateUser\": false,\n                \"unaffliateUser\": false,\n                \"viewAffliation\": false,\n                \"acceptAffiliation\": false,\n                \"removeAffiliation\": false\n            },\n            \"permissions\": [\n                \"viewInventoryAtDifferentWarehouses\",\n                \"viewShipment\",\n                \"addInventory\",\n                \"viewInventory\",\n                \"viewProductList\",\n                \"addNewProduct\",\n                \"createPO\",\n                \"receivePO\",\n                \"viewPO\",\n                \"createShipmentOrder\",\n                \"viewShipment\",\n                \"receiveShipmentOrder\",\n                \"scanShipment\",\n                \"sendShipment\",\n                \"trackAndTrace\",\n                \"addUsers\",\n                \"removeUsers\",\n                \"deactivateUsers\",\n                \"affiliateUser\",\n                \"unAffiliateUser\",\n                \"addRole\",\n                \"deleteRole\",\n                \"viewRequestForAffiliation\",\n                \"acceptOrRejectRequestForAffiliation\",\n                \"removeAffiliationToOrganisation\",\n                \"manageAddresses\",\n                \"changePOStatus\",\n                \"fetchPurchaseOrders\",\n                \"addProduct\",\n                \"fetchAllPurchaseOrdersBC\",\n                \"fetchPublisherPurchaseOrders\",\n                \"fetchPurchaseOrderBC\",\n                \"createPurchaseOrder\",\n                \"addPOsFromExcel\",\n                \"search\"\n            ],\n            \"_id\": \"5f4bf27f0cc6fb17fec1851d\",\n            \"role\": \"powerUser\",\n            \"createdAt\": \"2020-08-30T18:39:59.390Z\",\n            \"updatedAt\": \"2020-08-30T18:53:37.872Z\",\n            \"__v\": 0\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "getRoles",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3004/api/rbac_service/getRoles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3004",
+					"path": [
+						"api",
+						"rbac_service",
+						"getRoles"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "getRoles",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3004/api/rbac_service/getRoles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3004",
+							"path": [
+								"api",
+								"rbac_service",
+								"getRoles"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "216"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"d8-43SCWzujcnKcgR/STFd6EgPrLCk\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 12 Aug 2021 11:45:37 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": 1,\n    \"message\": \"All Roles\",\n    \"data\": [\n        \"powerUser\",\n        \"admin\",\n        \"affiliatee\",\n        \"salesEmployeeSenior\",\n        \"salesEmployeeJunior\",\n        \"warehouseEmployeeSenior\",\n        \"warehouseEmployeeJunior\",\n        \"ERP Specialist\",\n        \"warehouseEmployeeJunior1\"\n    ]\n}"
+				}
+			]
 		},
 		{
 			"name": "add role RBAC",
@@ -663,6 +1064,103 @@
 				}
 			},
 			"response": []
+		},
+		{
+			"name": "updatePermission",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"permissions\":{\"overview\":{\"overview1\" : true},\"shipment\":{\"createShipment\": true, \"updateShipment\":true}},\n    \"role\":\"warehouseEmployeeJunior1\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3004/api/rbac_service/updatePermissions",
+					"host": [
+						"localhost"
+					],
+					"port": "3004",
+					"path": [
+						"api",
+						"rbac_service",
+						"updatePermissions"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "updatePermission",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"permissions\":{\"overview\":{\"overview1\" : true},\"shipment\":{\"createShipment\": true, \"updateShipment\":true}},\n    \"role\":\"warehouseEmployeeJunior1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3004/api/rbac_service/updatePermissions",
+							"host": [
+								"localhost"
+							],
+							"port": "3004",
+							"path": [
+								"api",
+								"rbac_service",
+								"updatePermissions"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1187"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"4a3-vVOnD6qLJfORXennqFhFhnmISSo\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 12 Aug 2021 08:22:29 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": 1,\n    \"message\": \"Success\",\n    \"data\": {\n        \"overview\": {\n            \"overview\": false\n        },\n        \"search\": {\n            \"searchByOrderId\": false,\n            \"searchByShipmentId\": false,\n            \"searchByProductCategory\": false,\n            \"searchByTransitNo\": false,\n            \"searchByProductName\": false,\n            \"searchByProductId\": false\n        },\n        \"inventory\": {\n            \"addInventory\": false,\n            \"importInventory\": false,\n            \"inventoryAnalytics\": false,\n            \"viewProductList\": false,\n            \"addNewProduct\": false,\n            \"inventoryFilters\": false,\n            \"inventoryExportReport\": false\n        },\n        \"shipment\": {\n            \"createShipment\": true,\n            \"shipmentAnalytics\": false,\n            \"updateShipment\": true,\n            \"receiveShipment\": false,\n            \"receiveShipmentScan\": false,\n            \"inboundShipments\": false,\n            \"outboundShipments\": false,\n            \"viewShipment\": false,\n            \"shipmentFilters\": false,\n            \"shipmentExportReport\": false\n        },\n        \"order\": {\n            \"createOrder\": false,\n            \"importOrder\": false,\n            \"orderAnalytics\": false,\n            \"receiveOrder\": false,\n            \"acceptRejectOrder\": false,\n            \"viewInboundOrders\": false,\n            \"viewOutboundOrders\": false,\n            \"orderFilters\": false,\n            \"orderExportReport\": false\n        },\n        \"network\": {\n            \"network\": false\n        },\n        \"track\": {\n            \"trackAndTrace\": false\n        },\n        \"permissions\": [\n            \"overview1\",\n            \"createShipment\",\n            \"updateShipment\"\n        ],\n        \"_id\": \"6114d93526999d691f476beb\",\n        \"role\": \"warehouseEmployeeJunior1\",\n        \"createdAt\": \"2021-08-12T08:17:57.551Z\",\n        \"updatedAt\": \"2021-08-12T08:22:29.038Z\",\n        \"__v\": 0\n    }\n}"
+				}
+			]
 		},
 		{
 			"name": "fetchPendingRequests",
@@ -863,7 +1361,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb24iOnsiX2lkIjoiNjAxODMzMjYyMzI5OTg3NGY0YWM3NTM1IiwibmFtZSI6IkJoYXJhdCJ9LCJpYXQiOjE2MTQ1NzUwMzIsImV4cCI6MTYxNDU4MjIzMn0.YFeg3EnX7BYe7r9TGMaUZAcR3TeGnz4KdGNM7kbRrxg",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJ0ZXN0IGVtcCAyIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJOQSIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0ODQ4MDAzLCJleHAiOjE2MTQ4NTUyMDN9.vcqnljuXL5fMwSllPsac9sJU0U_uXNV54pJ8YVOsS8U",
 							"type": "string"
 						}
 					]
@@ -871,13 +1369,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://admin.vaccineledger.com/api/affliation_service/unAffiliate?orgId=org-1234",
+					"raw": "http://localhost:3002/api/affliation_service/unAffiliate?id=emp-eewk2iklkjoesi",
 					"protocol": "http",
 					"host": [
-						"admin",
-						"vaccineledger",
-						"com"
+						"localhost"
 					],
+					"port": "3002",
 					"path": [
 						"api",
 						"affliation_service",
@@ -885,8 +1382,45 @@
 					],
 					"query": [
 						{
+							"key": "id",
+							"value": "emp-eewk2iklkjoesi"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Unaffliate Org",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJ0ZXN0IGVtcCAyIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJOQSIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0ODQ4MDAzLCJleHAiOjE2MTQ4NTUyMDN9.vcqnljuXL5fMwSllPsac9sJU0U_uXNV54pJ8YVOsS8U",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3002/api/affliation_service/unAffiliateOrg?orgId=org-1test",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3002",
+					"path": [
+						"api",
+						"affliation_service",
+						"unAffiliateOrg"
+					],
+					"query": [
+						{
 							"key": "orgId",
-							"value": "org-1234"
+							"value": "org-1test"
 						}
 					]
 				}
@@ -1030,7 +1564,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb24iOnsiX2lkIjoiNjAxODMzMjYyMzI5OTg3NGY0YWM3NTM1IiwibmFtZSI6IkJoYXJhdCJ9LCJpYXQiOjE2MTQ1NTYyMTksImV4cCI6MTYxNDU2MzQxOX0.xFmeL_N1skaIKvZWwFfFxbF1V7pb110f4ye-SZH4eqU",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJ0ZXN0IGVtcCAyIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJOQSIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0NzgzNTI0LCJleHAiOjE2MTQ3OTA3MjR9.d6LnyJLaIOPVP5Xs3P5bi7WbO13euoQIOTQk8LMvUco",
 							"type": "string"
 						}
 					]
@@ -1039,7 +1573,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n  \"firstName\": \"Warehouse\",\n  \"lastName\": \"organization_id\",\n  \"emailId\": \"J@gmail.com\",\n}",
+					"raw": "{\n  \"emailId\": \"ravilochan2000@gmail.com\",\n  \"role\":\"powerUser\"\n\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -1071,7 +1605,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJUSFJJTkVUSFJBIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJ3YXItYmgtMiIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0NzY3NDA0LCJleHAiOjE2MTQ3NzQ2MDR9.khVOBVZJMxvoOG4JvBBbdBCvH9N25mc73jYlYk94ZiM",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xZjh1a2tlNHVoaHkiLCJmaXJzdE5hbWUiOiJ0ZXN0IGVtcCAyIiwiZW1haWxJZCI6InRocmluZXRocmFAc3RhdHdpZy5jb20iLCJyb2xlIjoicG93ZXJVc2VyIiwid2FyZWhvdXNlSWQiOiJOQSIsIm9yZ2FuaXNhdGlvbklkIjoib3JnLTEiLCJvcmdhbmlzYXRpb25OYW1lIjoiQmhhcmF0IiwiaWF0IjoxNjE0NzgzNTI0LCJleHAiOjE2MTQ3OTA3MjR9.d6LnyJLaIOPVP5Xs3P5bi7WbO13euoQIOTQk8LMvUco",
 							"type": "string"
 						}
 					]
@@ -1079,13 +1613,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://admin.vaccineledger.com/api/employee_service/activateUser?id=emp-1234&role=powerUser",
+					"raw": "http://localhost:3003/api/employee_service/activateUser?id=emp-eewk2iklkjoesi&role=powerUser",
 					"protocol": "http",
 					"host": [
-						"admin",
-						"vaccineledger",
-						"com"
+						"localhost"
 					],
+					"port": "3003",
 					"path": [
 						"api",
 						"employee_service",
@@ -1094,7 +1627,7 @@
 					"query": [
 						{
 							"key": "id",
-							"value": "emp-1234"
+							"value": "emp-eewk2iklkjoesi"
 						},
 						{
 							"key": "role",
@@ -1142,6 +1675,202 @@
 							"value": "",
 							"disabled": true
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin.abinbev.statledger.io/api/employee_service/auth/sendOtp",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"emailId\":\"+917901051813\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "admin.abinbev.statledger.io/api/employee_service/auth/sendOtp",
+					"host": [
+						"admin",
+						"abinbev",
+						"statledger",
+						"io"
+					],
+					"path": [
+						"api",
+						"employee_service",
+						"auth",
+						"sendOtp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateOrg",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkVNUDEwMDAwNyIsImZpcnN0TmFtZSI6IkJQIiwiZW1haWxJZCI6ImJwcGFud2FyLmNoQGdtYWlsLmNvbSIsInJvbGUiOiJwb3dlclVzZXIiLCJ3YXJlaG91c2VJZCI6Ik5BIiwib3JnYW5pc2F0aW9uSWQiOiJPUkcxMDAxNCIsIm9yZ2FuaXNhdGlvbk5hbWUiOiJVTklDRUYgQ09QRU5IQUdFTiIsImlhdCI6MTYyMjg5MjgxMCwiZXhwIjoxNjIyOTAwMDEwfQ.iPycdHiDQgE4NKOA4CgYCRnfhyUfIZiUyIBk3Nf5k_4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"ORG10023\",\n    \"status\": \"ACTIVE\",\n    \"type\":\"Vendor\",\n    \"typeId\":\"3\"\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://admin.unicef.vaccineledger.com/api/employee_service/updateOrg",
+					"protocol": "http",
+					"host": [
+						"admin",
+						"unicef",
+						"vaccineledger",
+						"com"
+					],
+					"path": [
+						"api",
+						"employee_service",
+						"updateOrg"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getOrgTypes",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2MmJ6MWttMG5pc3B0IiwiZmlyc3ROYW1lIjoiY3NkZnNkIiwiZW1haWxJZCI6InNkZnNkQHMuY28iLCJyb2xlIjoiYWRtaW4iLCJ3YXJlaG91c2VJZCI6Indhci0xMjM0Iiwib3JnYW5pc2F0aW9uSWQiOiJvcmctMTIzNDUiLCJvcmdhbmlzYXRpb25OYW1lIjoiU3RhVHdpZyBQdnQuIEx0ZC4iLCJpYXQiOjE2MjE3MDE1MzcsImV4cCI6MTYyMTcwODczN30.rYYJ6AOcRTrRCuYYZ3Nk42uqJ6E2Z-eH0SOXWQhqMh0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3005/api/configuration_service/getOrgTypes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"configuration_service",
+						"getOrgTypes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getOrgTypes by ConfId",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2MmJ6MWttMG5pc3B0IiwiZmlyc3ROYW1lIjoiY3NkZnNkIiwiZW1haWxJZCI6InNkZnNkQHMuY28iLCJyb2xlIjoiYWRtaW4iLCJ3YXJlaG91c2VJZCI6Indhci0xMjM0Iiwib3JnYW5pc2F0aW9uSWQiOiJvcmctMTIzNDUiLCJvcmdhbmlzYXRpb25OYW1lIjoiU3RhVHdpZyBQdnQuIEx0ZC4iLCJpYXQiOjE2MjE3MTA3MzIsImV4cCI6MTYyMTcxNzkzMn0.cwEF5MP1ZGbDrR1SfUm6C8FPL3A4gTv-f_HX7vvH-Uw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3005/api/configuration_service/getOrganizationsByType?id=CONF001",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"configuration_service",
+						"getOrganizationsByType"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "CONF001"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getWarehouseTypes",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImVtcC0xanB2MmJ6MWttMG5pc3B0IiwiZmlyc3ROYW1lIjoiY3NkZnNkIiwiZW1haWxJZCI6InNkZnNkQHMuY28iLCJyb2xlIjoiYWRtaW4iLCJ3YXJlaG91c2VJZCI6Indhci0xMjM0Iiwib3JnYW5pc2F0aW9uSWQiOiJvcmctMTIzNDUiLCJvcmdhbmlzYXRpb25OYW1lIjoiU3RhVHdpZyBQdnQuIEx0ZC4iLCJpYXQiOjE2MjE3MDE1MzcsImV4cCI6MTYyMTcwODczN30.rYYJ6AOcRTrRCuYYZ3Nk42uqJ6E2Z-eH0SOXWQhqMh0",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3005/api/configuration_service/getWarehouseTypes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3005",
+					"path": [
+						"api",
+						"configuration_service",
+						"getWarehouseTypes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Images",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3001/usermanagement/api/auth/images/ckqjapoez00004t6z5fd6b5im1625046474203.jpg",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3001",
+					"path": [
+						"usermanagement",
+						"api",
+						"auth",
+						"images",
+						"ckqjapoez00004t6z5fd6b5im1625046474203.jpg"
 					]
 				}
 			},

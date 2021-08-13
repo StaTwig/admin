@@ -1,20 +1,42 @@
 const RbacModel = require('../models/RbacModel');
 const { body, validationResult } = require('express-validator');
-const checkToken = require('../middlewares/middleware').checkToken;
 const auth = require('../middlewares/jwt');
 const apiResponse = require('../helpers/apiResponse');
 
 exports.getPermissions = [
+  auth,
   async (req, res) => {
     try {
+          const { role } = req.query;
+          if(role){
+          const permissions = await RbacModel.find({role});
+          return apiResponse.successResponseWithData(res, `Permissions of ${role}`, permissions);
+          }
+          else{
           const permissions = await RbacModel.find({});
-          res.json({ data: permissions });
-        } 
-    catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+          return apiResponse.successResponseWithData(res, "All Permissions", permissions);
+          }     
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
+
+exports.getRoles = [
+  auth,
+  async (req, res) => {
+    try {
+          var roles =[];
+          const results = await RbacModel.find({}, { _id: 0, role: 1 });
+          results.map(element => {
+              roles.push(element.role);
+            })
+          return apiResponse.successResponseWithData(res, "All Roles", roles);
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err);
+    }
+  }
+]
 
 exports.addPermissions = [
   auth,
@@ -35,12 +57,10 @@ exports.addPermissions = [
           errors.array(),
         );
       }
-      checkToken(req, res, async result => {
-        if (result.success) {
-          const { role, permissions } = req.body;
-          const rbac_object = await RbacModel.findOne({ role });
+        const { role, permissions } = req.body;
+        const rbac_object = await RbacModel.findOne({ role });
           if(rbac_object){
-            await RbacModel.update({role}, {permissions});
+            await RbacModel.updateOne({role}, {permissions});
           } else{
             const rbac = new RbacModel({
               role,
@@ -48,13 +68,55 @@ exports.addPermissions = [
             });
             await rbac.save();  
           }
-          apiResponse.successResponseWithData(res, 'Success');
-        } else {
-          return apiResponse.ErrorResponse(res, 'User not authenticated');
-        }
-      });
+          apiResponse.successResponse(res, 'Success');
     } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
+
+exports.updatePermissions = [
+  auth,
+  body('permissions')
+    .isLength({ min: 1 })
+    .withMessage('At least one permission must be specified.'),
+  body('role')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Role must be specified.'),
+  async (req, res) => {
+    try{
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return apiResponse.validationErrorWithData(
+          res,
+          'Validation Error.',
+          errors.array(),
+        );
+      }
+      const { role, permissions } = req.body;
+      var permsArray = [];
+      for(var i in permissions){
+        for (const [key, value] of Object.entries(permissions[i])) {
+          if(value == true){
+            permsArray.push(key);
+          }
+        } 
+    }
+      let rbac_object = await RbacModel.findOneAndUpdate({ role },{$set: permissions , "permissions": permsArray}, {new: true});
+      if(!rbac_object){
+      const rbac = new RbacModel({
+        role,
+        permissions : permsArray,
+      });
+      await rbac.save();
+      rbac_object = await RbacModel.findOneAndUpdate({ role },{$set: permissions}, {new: true});
+    }
+    return apiResponse.successResponseWithData(res, 'Success', rbac_object);
+  }
+    catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  }
+]
