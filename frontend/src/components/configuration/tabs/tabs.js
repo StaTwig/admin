@@ -7,6 +7,14 @@ const Tabs = (props) => {
     <div className="tabs">
       <ul className="nav nav-pills mb-2 ml-3">
         <li
+          className={tabIndex == 0 ? "nav-item-active " : "nav-item"}
+          onClick={() => setTabIndex(0)}
+        >
+          <a className={tabIndex == 0 ? "nav-link text-secondary" : "nav-link"}>
+            {'User Role'}
+          </a>
+        </li>
+        <li
           className={tabIndex == 1 ? "nav-item-active " : "nav-item"}
           onClick={() => setTabIndex(1)}
         >
@@ -50,7 +58,7 @@ const Tabs = (props) => {
           className={tabIndex == 6 ? "nav-item-active" : "nav-item"}
           onClick={() => setTabIndex(6)}
         >
-          <a className={tabIndex == 6? "nav-link text-secondary " : "nav-link "}>
+          <a className={tabIndex == 6 ? "nav-link text-secondary " : "nav-link "}>
             Type
           </a>
         </li>

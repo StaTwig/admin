@@ -159,8 +159,7 @@ export const deactivateOrgUser = async (data) => {
 export const verifyOrgUser = async (data) => {
   try {
     const result = await axios.get(
-      `${config().verifyOrgUserUrl}?id=${data.id}&role=${
-        data.role
+      `${config().verifyOrgUserUrl}?id=${data.id}&role=${data.role
       }&warehouseId=${data.warehouse}`
     );
     return result;
@@ -546,7 +545,7 @@ export const fetchAllRegions = async () => {
 
 export const fetchCountriesByRegion = async (id) => {
   try {
-    const result = await axios.get(config().fetchCountriesByRegion+id);
+    const result = await axios.get(config().fetchCountriesByRegion + id);
     return result.data;
   } catch (e) {
     return [];
@@ -554,7 +553,7 @@ export const fetchCountriesByRegion = async (id) => {
 };
 export const fetchStateByCountry = async (id) => {
   try {
-    const result = await axios.get(config().fetchStateByCountry+id);
+    const result = await axios.get(config().fetchStateByCountry + id);
     return result.data;
   } catch (e) {
     return [];
@@ -562,8 +561,39 @@ export const fetchStateByCountry = async (id) => {
 };
 export const fetchCitiesByState = async (id) => {
   try {
-    const result = await axios.get(config().fetchCitiesByState+id);
+    const result = await axios.get(config().fetchCitiesByState + id);
     return result.data;
+  } catch (e) {
+    return [];
+  }
+};
+
+export const getAllRoles = async () => {
+  try {
+    const result = await axios.get(config().fetchAllRoles);
+    return result.data.data;
+  } catch (error) {
+    return [];
+  }
+};
+
+export const getPermissionByRole = async (role) => {
+  try {
+    const result = await axios.get(`${config().fetchPermissionsByRole}?role=${role}`);
+    return result.data.data;
+  } catch (error) {
+    return [];
+  }
+};
+
+export const updatePermissionsByRole = async (data) => {
+  try {
+    console.log('url:', config().updatePermissions);
+    const result = await axios.post(
+      `${config().updatePermissions}`,
+      data
+    );
+    return result.data.data;
   } catch (e) {
     return [];
   }

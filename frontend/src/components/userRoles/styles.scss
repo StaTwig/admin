@@ -1,0 +1,139 @@
+.user-role-container {
+  .user-role-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+
+    .input-section {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: nowrap;
+      align-items: center;
+      column-gap: 20px;
+
+      .role-section {
+        display: flex;
+        flex-direction: column;
+        row-gap: 10px;
+      }
+
+      .add-new-section-input {
+        width: 265px;
+        height: 40px;
+        border-radius: 8px;
+      }
+
+      .text {
+        text-align: left;
+        font: normal normal medium 20px/24px Roboto;
+        color: #707070;
+      }
+    }
+
+    .btn-section {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      column-gap: 10px;
+
+      .save-button {
+        width: 120px;
+        height: 45px;
+
+        background: #0093e9 0% 0% no-repeat padding-box;
+        border-radius: 10px;
+        opacity: 1;
+
+        text-align: center;
+        font: normal normal bold 20px/13px Roboto;
+        color: #ffffff;
+      }
+
+      .add-user-btn {
+        width: 235px;
+        height: 45px;
+
+        background: #fa7923 0% 0% no-repeat padding-box;
+        border-radius: 10px;
+
+        text-align: center;
+        font: normal normal bold 20px/13px Roboto;
+        color: #ffffff;
+      }
+    }
+  }
+
+  .user-role-content {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 45px;
+
+    margin-top: 25px;
+
+    .card-container {
+      width: 198px;
+      height: 450px;
+
+      background: #ffffff 0% 0% no-repeat padding-box;
+      box-shadow: 0px 3px 6px #0000003f;
+      border-radius: 15px;
+    }
+
+    .feature-panel {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .list-group-item {
+      border: none;
+    }
+
+    .list-group-item:hover {
+      color: #0b65c1;
+    }
+
+    .feature-functionality-permissions-headers {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      column-gap: 260px;
+      margin: 10px;
+    }
+
+    .functionality-permission-text {
+      text-align: left;
+      font-size: 20px;
+      line-height: 26px;
+      letter-spacing: 0px;
+      color: #0b65c1;
+    }
+
+    .selection-panel {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      column-gap: 330px;
+      padding: 5px;
+      margin-left: 18px;
+
+      span {
+        color: #000000;
+        font-size: 18px;
+        line-height: 21px;
+      }
+
+     input {
+        width: 17px;
+        height: 20px;
+        border: 3px solid #B7B2B2;
+        border-radius: 4px;
+        opacity: 1;
+      }
+    }
+  }
+}
