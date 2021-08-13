@@ -18,7 +18,12 @@ mongoose.connect(MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true 
     console.log("Connected to %s", MONGODB_URL);
     console.log("RBAC Service is running ... \n");
   }
-  RbacCache();
+  try{
+    RbacCache();
+  }
+  catch(err){
+    console.log(err);
+  }
 })
   .catch(err => {
     console.error("App starting error:", err.message);

@@ -13,11 +13,14 @@ exports.RbacCache = function(){
 RbacModel.find({}).then(permissions => {
     if(permissions.length > 0) {
       permissions.forEach(role => {
+        client.del(role.role, (err, res) => { if(err) console.log(err);
+        console.log("DELETE",res, role.role);
+       })
         client.sadd(role.role, role.permissions , (err,data) => {
       if(err) {
         console.log(err);
       }
-      console.log("Cache " + data + " --- " + role.role + "\n");
+      console.log("Cache Loaded" + data + " --- " + role.role + "\n");
     })  
   });
     }
