@@ -2,7 +2,6 @@ const RbacModel = require('../models/RbacModel');
 const { body, validationResult } = require('express-validator');
 const auth = require('../middlewares/jwt');
 const {RbacCache} = require('../helpers/rbacCache');
-
 const apiResponse = require('../helpers/apiResponse');
 
 exports.getPermissions = [
@@ -78,3 +77,49 @@ exports.addPermissions = [
     }
   },
 ];
+
+exports.updatePermissions = [
+  auth,
+  body('permissions')
+    .isLength({ min: 1 })
+    .withMessage('At least one permission must be specified.'),
+  body('role')
+    .isLength({ min: 1 })
+    .trim()
+    .withMessage('Role must be specified.'),
+  async (req, res) => {
+    try{
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return apiResponse.validationErrorWithData(
+          res,
+          'Validation Error.',
+          errors.array(),
+        );
+      }
+      const { role, permissions } = req.body;
+      var permsArray = [];
+      for(var i in permissions){
+        for (const [key, value] of Object.entries(permissions[i])) {
+          if(value == true){
+            permsArray.push(key);
+          }
+        } 
+    }
+      let rbac_object = await RbacModel.findOneAndUpdate({ role },{$set: permissions , "permissions": permsArray}, {new: true});
+      if(!rbac_object){
+      const rbac = new RbacModel({
+        role,
+        permissions : permsArray,
+      });
+      await rbac.save();
+      rbac_object = await RbacModel.findOneAndUpdate({ role },{$set: permissions}, {new: true});
+    }
+    return apiResponse.successResponseWithData(res, 'Success', rbac_object);
+  }
+    catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  }
+]
