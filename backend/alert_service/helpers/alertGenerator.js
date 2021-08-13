@@ -16,7 +16,7 @@ async function processShipmentEvents(event){
             ...params
         })){
             if(event.eventTypeDesc=='SHIPMENT') pushNotification(event,row.user.user_id,'TRANSACTION') 
-            else pushNotification(event,row.user.user_id,'ALERT')
+            else pushNotification(event,row.user.user_id,'ALERT',shipmentId)
             if(row.alertMode.mobile){
                 alertMobile(event,row.user.mobile_number);
             }
@@ -45,7 +45,7 @@ async function processOrderEvents(event){
         for await(const row of Alert.find({
             ...params
         })){
-            pushNotification(event,row.user.user_id,'TRANSACTION')
+            pushNotification(event,row.user.user_id,'TRANSACTION',orderId )
             if(row.alertMode.mobile){
                 alertMobile(event,row.user.mobile_number);
             }

@@ -11,6 +11,9 @@ NotificationSchema = new mongoose.Schema(
     user: {
       type: String,
     },
+    type: { type: String},
+    eventType: { type: String },
+    transactionId: { type: String}
   },
   { timestamps: true },
 )
