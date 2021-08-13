@@ -984,7 +984,7 @@ exports.createOrder = [
       products.forEach(async element => {
         var product = await ProductModel.findOne({ id: element.productId });
         element.type = product?.type
-        element.unitofMeasure= product?.unitofMeasure.name
+        element.unitofMeasure= product?.unitofMeasure
         console.log(product)
       });
 	    const createdBy =  lastUpdatedBy = req.user.id;

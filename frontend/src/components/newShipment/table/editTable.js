@@ -11,8 +11,8 @@ const EditTable = props => {
        <div className="col theader text-center pro required-field">Product Category</div>
          <div className="col theader text-center pro required-field">Product Name</div>
          <div className="col theader text-center pro">Manufacturer</div>
-         <div className="col theader text-center pro">Batch Number</div>
-         <div className="col theader text-center pro required-field">Quantity</div>
+         <div className="col theader text-center pro required-field mr-5">Quantity</div>
+         <div className="col theader text-center pro mr-5" style={{position:'relative',left:"-60px"}}>Batch Number</div>
          {props.enableDelete &&
            <div className=" ml-2 bg-light align-self-center ">&nbsp;</div>
          }

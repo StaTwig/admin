@@ -124,7 +124,7 @@ const ProductInventory = props => {
               <div className="col-3 txt1">{inv.products.manufacturer?inv.products.manufacturer:"N/A"}</div>
               <div className="col-2 txt2">{inv.inventoryDetails.quantity?inv.inventoryDetails.quantity:"N/A"}{"  ("}{inv.products.unitofMeasure?inv.products.unitofMeasure.name:"N/A"}{")"}</div>
               <div className="col-1 txt1 mb-3">
-              <button type="button" onClick={() => props.history.push(`/viewproduct`, {data: inv})} className="btn btn-outline-primary" style={{position:"relative",left:"-50px",top:"7px",width:"125px",height:"35px"}}>Show {more[i] ? `less` :`more`}</button></div>
+              <button type="button" onClick={() => props.history.push(`/viewproduct`, {data: inv})} className="btn-sm btn-outline-primary mt-3 bg-white">Show {more[i] ? `less` :`more`}</button></div>
               </div>
             // </div>
           )}

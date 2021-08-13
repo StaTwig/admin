@@ -117,9 +117,6 @@
 }
 
 
-
-
-
 .editTable {
 
 
@@ -194,6 +191,27 @@
       }
     }
   }
-
-
+}
+.txt{
+  font-weight: 600;
+  color: #0093E9;
+  font-size: small;
+  align-self: center;
+  cursor: auto;
+}
+.txt1{
+  font-weight: 400;
+  font-size: small;
+  align-self: center;
+  cursor: auto;
+}
+.txt2{
+  align-self: center;
+  cursor: pointer;
+}
+.input1{
+  width:50%;  
+}
+.filter-item{
+  margin-left: -70px;
 }
