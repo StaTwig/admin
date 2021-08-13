@@ -25,11 +25,13 @@ function eventToHtml(event){
     return `<html><p>New alert from ${event.actorOrgId}, Event "${event.eventTypePrimary}" applied on ${event.eventTypeDesc}</p></html>`
 }
 
-function pushNotification(event,userId){
+function pushNotification(event,userId,type){
     try{
         const content = eventToData(event,"mobile")
         var notification = new Notification({ id: uuid.v4() ,title: "VaccineLedger alert", message: content, user: userId});
         console.log(notification);
+        if(type == 'ALERT') notification.type = 'ALERT';
+        else notification.type = 'TRANSACTION'
         notification.save(function(err, doc) {
             if (err) return console.error(err);
             console.log("Document inserted succussfully!",doc);
@@ -63,7 +65,7 @@ function alertMobile(event,mobile){
 
 function alertEmail(event,email){
     try{
-    const content = eventToData(event,"email")
+    const content = eventToData(event,"mobile")
     console.log("Mailed succesfully to",email)
     axios.post(process.env.MESSAGING_SERVICE_URL, {
         "subject": `New Alert`,

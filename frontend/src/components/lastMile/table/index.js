@@ -18,7 +18,7 @@ var orgTypeArray = [...props.lastMile]
               <div className="rTableRow pt-3 pb-3">
               <img src={user} width="27" height="18" alt="User" className="ml-4" />
               <div className="rTableCell">{lastmile.eol_info.first_name +" "+  lastmile.eol_info.last_name}</div>
-              <div className="rTableCell ml-3" >{lastmile.eol_info.idProof.idNo}</div>
+              <div className="rTableCell ml-5" >{lastmile.eol_info.idProof.idNo}</div>
               <div className="rTableCell ml-5">{lastmile.eol_info.contact_number}</div>
               <div className="rTableCell ml-5">{lastmile.productAdministeredInfo[0].productName}</div>
               <div className="rTableCell">{lastmile.productAdministeredInfo[0].administeredData.split('T').join(" ").substring(0, 19)}</div> 

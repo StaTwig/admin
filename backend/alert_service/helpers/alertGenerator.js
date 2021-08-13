@@ -10,16 +10,18 @@ async function processShipmentEvents(event){
         let params = { 
             "alerts.event_type_primary": event.eventTypePrimary,
             "alerts.event_type_secondary": event.eventTypeDesc,
-            "alerts.transactionId" : shipmentId      
+            "alerts.transactionId" : shipmentId   
         }
         for await(const row of Alert.find({
             ...params
         })){
-            pushNotification(event,row.user.user_id)
+            if(event.eventTypeDesc=='SHIPMENT') pushNotification(event,row.user.user_id,'TRANSACTION') 
+            else pushNotification(event,row.user.user_id,'ALERT')
             if(row.alertMode.mobile){
                 alertMobile(event,row.user.mobile_number);
             }
             if(row.alertMode.email){
+                console.log(row.user.emailId)
             alertEmail(event,row.user.emailId)
             }
             if(row.alertMode.web_push){
@@ -43,7 +45,7 @@ async function processOrderEvents(event){
         for await(const row of Alert.find({
             ...params
         })){
-            pushNotification(event,row.user.user_id)
+            pushNotification(event,row.user.user_id,'TRANSACTION')
             if(row.alertMode.mobile){
                 alertMobile(event,row.user.mobile_number);
             }
@@ -64,6 +66,7 @@ async function generateAlert(event) {
     try{
     if(event.eventTypeDesc=='SHIPMENT') await processShipmentEvents(event);
     else if(event.eventTypeDesc=='ORDER') await processOrderEvents(event);
+    else if(event.eventTypeDesc=='SHIPMENT_TRACKING') await processShipmentEvents(event);
     let params = { 
         "alerts.event_type_primary": event.eventTypePrimary,
         "alerts.event_type_secondary": event.eventTypeDesc,
@@ -72,7 +75,7 @@ async function generateAlert(event) {
 	for await(const row of Alert.find({
         ...params
     })){
-        pushNotification(event,row.user.user_id)
+        pushNotification(event,row.user.user_id,'TRANSACTION')
         if(row.alertMode.mobile){
             alertMobile(event,row.user.mobile_number);
         }

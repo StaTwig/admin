@@ -156,10 +156,7 @@ const UpdateStatus = (props) => {
                   <div className="col ">
                     <div className="panel commonpanle">
                       <div
-                        className={`form-group ${
-                          errors.shipmentId && touched.shipmentId && `mb-0`
-                        }`}
-                      >
+                        className="form-group">
                         <label className="mt-3 text-secondary">
                           Shipment ID
                         </label>
@@ -171,11 +168,11 @@ const UpdateStatus = (props) => {
                           value={values.shipmentId}
                         />
                       </div>
-                      {errors.shipmentId && touched.shipmentId && (
+                      {/* {errors.shipmentId && touched.shipmentId && (
                         <span className="error-msg text-danger row justify-content-end col-8">
                           {errors.shipmentId}
                         </span>
-                      )}
+                      )} */}
                     </div>
                     <h6 className="poheads potext m-4">
                       Account Holder Details
@@ -183,7 +180,7 @@ const UpdateStatus = (props) => {
                     <div className="panel commonpanle">
                       <div className="form-group">
                         <label className="mb-1 text-secondary">
-                          User Name*
+                          User Name
                         </label>
                         <input
                           type="text"
@@ -196,7 +193,7 @@ const UpdateStatus = (props) => {
                       </div>
                       <div className="form-group">
                         <label className="mb-1 text-secondary">
-                          Organisation Name*
+                          Organisation Name
                         </label>
                         <input
                           type="text"
@@ -224,7 +221,7 @@ const UpdateStatus = (props) => {
                       </div> */}
                       <div className="form-group mb-0">
                         <label className="mb-1 text-secondary">
-                          Update Status Location*
+                          Update Status Location
                         </label>
                         <input
                           type="text"
@@ -235,12 +232,12 @@ const UpdateStatus = (props) => {
                           value={values.updateStatusLocation}
                         />
                       </div>
-                      {errors.updateStatusLocation &&
+                      {/* {errors.updateStatusLocation &&
                         touched.updateStatusLocation && (
                           <span className="error-msg text-danger-US row justify-content-end col-8">
                             {errors.updateStatusLocation}
                           </span>
-                        )}
+                        )} */}
                     </div>
 
                     <h6 className="poheads potext m-4">Comment</h6>
@@ -433,13 +430,13 @@ const UpdateStatus = (props) => {
           />
         </Modal>
       )}
-      {message && (
+      {/* {message && (
         <div className="d-flex justify-content-center mt-3"> <Alert severity="success"><AlertTitle>Success</AlertTitle>{message}</Alert></div>
       )}
 
       {errorMessage && (
         <div className="d-flex justify-content-center mt-3"> <Alert severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
-      )}
+      )} */}
     </div>
   );
 };
