@@ -86,11 +86,11 @@ const Details = (props) => {
             />
           </span>
 
-          <span className="col-2 ml-4 txt1">
+          <span className="col-2 ml-5 txt1">
             {org?.postalAddress}
           </span>
           
-          <span className="col txt1 text-center" style={{position:"relative", left:"-20px"}}>
+          <span className="col txt1 text-center" style={{position:"relative", left:"0px"}}>
             {org?.country?.countryName}
           </span>
           
@@ -98,15 +98,15 @@ const Details = (props) => {
             {org?.region?.regionName}
           </span>
           
-          <span className="col txt1 font-weight-bold text-secondory text-center" style={{position:"relative", left:"40px"}} >
+          <span className="col txt1 font-weight-bold text-secondory text-center" style={{position:"relative", left:"0px"}} >
             {(status) ? (status === 'ACTIVE' ? <div className="status text-success"> ACTIVE </div> : <div className="status text-danger">REJECTED</div>) : <div className="status text-warning">DEACTIVATED</div>}
           </span>
           
-          <span className="col txt1 text-center"  style={{position:"relative", left:"50px"}}>
+          <span className="col txt1 text-center"  style={{position:"relative", left:"10px"}}>
             {org?.createdAt ? formatDate(org?.createdAt) : ""}
           </span>
          
-          <div className="col txt1" style={{position:"relative", left:"30px"}}>
+          <div className="col txt1" style={{position:"relative", left:"10px"}}>
             <button
               type="button"
               onClick={() => {
@@ -145,7 +145,7 @@ const Details = (props) => {
                   });
                   changeStatus("REJECTED");
                 }}
-                className="btn ml-2 bg-secondary btn-view w-auto"
+                className="btn bg-secondary btn-view w-auto"
               >
                 Reject
               </button>

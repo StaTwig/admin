@@ -1,6 +1,6 @@
 import React from "react";
 
-import statwigLogo from "../../assets/brands/Statwig-Logo.png";
+import statwigLogo from "../../assets/brands/StatwigLogo B&W.png";
 import "./style.scss";
 
 const Footer = () => {
@@ -9,7 +9,7 @@ const Footer = () => {
       <p>Version 1.2</p>
       <p>Made with care</p>
       <div className="footer-branding">
-        <img src={statwigLogo} alt="statwig logo" height="10px" width="80px" />
+        <img src={statwigLogo} alt="statwig logo" width="80px" />
       </div>
     </footer>
   );

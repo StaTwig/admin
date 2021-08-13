@@ -65,7 +65,7 @@ const Organisations = (props) => {
       <div className='full-width'>
         <div className='filter'>
           <div className='row'>
-            <div className='box col-1 mr-5 headerText'>Name</div>
+            <div className='box col-1 ml-5 mr-5 headerText'>Name</div>
             <div class="vl text-center"></div>
 
             <div className='box col-2 headerText'>
@@ -106,7 +106,7 @@ const Organisations = (props) => {
             <div class="vl text-center"></div>
 
 
-            <div className='box col ml-4 mr-4 headerText'>
+            <div className='box col-1 ml-2 mr-2 headerText'>
               <span className="headerText"  
                   onClick={() => {
                     setShowDropDownForCountry(!showDropDownForCountry);
@@ -138,7 +138,7 @@ const Organisations = (props) => {
               }
             </div>
             <div class="vl text-center"></div>
-            <div className='box col headerText ml-4 mr-4'>
+            <div className='box col-1 headerText ml-2 mr-2'>
               <span className="headerText" 
                     onClick={() => { setShowDropDownForRegion(!showDropDownForRegion); }}
                     style={{cursor:"pointer"}}>{'Region'}
@@ -167,7 +167,7 @@ const Organisations = (props) => {
             </div>
             <div class="vl text-center"></div>
 
-            <div className='box col ml-4 mr-4 headerText'>
+            <div className='box col ml-2 mr-2 headerText'>
               <span className="headerText" 
                   onClick={() => {
                     setShowDropDownForStatus(!showDropDownForStatus);
@@ -200,7 +200,7 @@ const Organisations = (props) => {
             </div>
             <div class="vl text-center"></div>
 
-            <div className='box col ml-4  headerText'>
+            <div className='box col ml-2  headerText'>
               <span className="headerText" 
                 onClick={() => {
                   setShowDropDownForCreatedOn(!showDropDownForCreatedOn);
