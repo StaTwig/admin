@@ -161,6 +161,10 @@ const DashBoardContainer = (props) => {
       }, 3000);
     }
   };
+  
+  const redirectToConfigurationPage = () => {
+    props.history.push(`/configuration`);
+  };
 
   return (
     <div className="container-fluid p-0">
@@ -183,6 +187,7 @@ const DashBoardContainer = (props) => {
             addresses={addresses}
             locationApprovals={locationApprovals}
             modifyLocations={modifyLocations}
+            redirectToConfigurationPage={redirectToConfigurationPage}
           />
         </div>
       </div>

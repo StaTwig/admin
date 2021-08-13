@@ -13,7 +13,7 @@ import { INVENTORY_CONSTANTS, NETWORK_CONSTANTS, ORDERS_CONSTANTS, OVERVIEW_CONS
 //import EditTable from "./table/editTable";
 import { Formik } from "formik";
 
-import { getAllRoles, getOrgTypeiIdsUrl, getPermissionByRole, getPermissions, updatePermissionsByRole } from "../../actions/organisationActions";
+import { getAllRoles, getOrgTypeiIdsUrl, getPermissionByRole, getPermissions, getWareHouses, updatePermissionsByRole } from "../../actions/organisationActions";
 import { updateOrgTypesUrl } from "../../actions/organisationActions";
 import { addNewOrgTypesUrl } from "../../actions/organisationActions";
 import UserRoles from "../userRoles/userRoles";
@@ -59,6 +59,11 @@ const Configurationpart = (props) => {
   const dispatch = useDispatch();
 
   const [organisationsArr, setOrganisationsArr] = useState([]);
+
+  useEffect(() => {
+    dispatch(getPermissions());
+    dispatch(getWareHouses());
+  }, []);
 
   useEffect(() => {
     async function fetchOrganisationType() {
@@ -236,6 +241,32 @@ const Configurationpart = (props) => {
     }
   }
 
+  const permissions = useSelector((state) => {
+    return state.organisation.permissions;
+  });
+
+  const addresses = useSelector((state) => {
+    return state.organisation.addresses;
+  });
+
+  const acceptApproval = async (data) => {
+    let result;
+    if (data?.emailId) result = await addOrgUser(data);
+    else result = await verifyOrgUser(data);
+    if (result.status == 200) {
+      if (data.rindex) reqPending.splice(data.rindex, 1);
+      setMessage(result.data.message);
+      setTimeout(() => {
+        setMessage("");
+      }, 3000);
+    } else {
+      setError(result.data.message);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
+    }
+  };
+
   return (
     <div>
       <div className="addproduct">
@@ -257,6 +288,10 @@ const Configurationpart = (props) => {
             onSaveOfUpdatePermission={onSaveOfUpdatePermission}
             errorForRoleNotFound={errorForRoleNotFound}
             isLoading={isLoading}
+            permissions={permissions}
+            addresses={addresses}
+            acceptApproval={acceptApproval}
+            selectedFeature={selectedFeature}
           />)
         }
         {tabIndex == 6 && (

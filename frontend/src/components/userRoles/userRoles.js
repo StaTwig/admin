@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import CustomDropdown from "../customDropdown";
 import "./styles.scss";
 
 import Arrow from "../../assets/icons/arrow.png";
 import Spinner from "../spinner";
+import Modal from "../../shared/modal";
+import NUModal from "../users/NUModal";
 
 const UserRoles = ({
   defaultRoles,
@@ -16,11 +18,43 @@ const UserRoles = ({
   handleOnPermissionsChecked,
   onSaveOfUpdatePermission,
   isLoading,
+  permissions,
+  acceptApproval,
+  addresses,
+  selectedFeature
 }) => {
+  
+  const [data, setData] = useState([]);
+  const [title, setTitle] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const closeModal = () => setShowModal(false);
+  const [btnTxt, setBtnTxt] = useState("");
+
   return isLoading ? (
     <Spinner />
   ) : (
     <div className="user-role-container">
+      {showModal && (
+        <Modal
+          close={closeModal}
+          title={title}
+          size="modal-lg" //for other size's use `modal-lg, modal-md, modal-sm`
+          buttonclassName="btn-orange"
+        >
+          <NUModal
+            data={data}
+            permissions={permissions}
+            addresses={addresses}
+            onSuccess={() => {
+              acceptApproval(data);
+              closeModal();
+            }}
+            onHide={closeModal}
+            buttonText={btnTxt}
+            setData={setData}
+          />
+        </Modal>
+      )}
       <div className="user-role-header">
         <div className="input-section">
           <div className="role-section">
@@ -49,7 +83,15 @@ const UserRoles = ({
           >
             {"SAVE"}
           </button>
-          <button className="add-user-btn">
+          <button
+            className="add-user-btn"
+            onClick={() => {
+              setTitle("ADD NEW USER");
+              setBtnTxt("ADD USER");
+              setData([]);
+              setShowModal(true);
+            }}
+          >
             <i className="fa fa-plus txt pr-2" aria-hidden="true"></i>
             <span className="txt">{"Add New User Role"}</span>
           </button>
@@ -62,7 +104,7 @@ const UserRoles = ({
               return (
                 <a
                   key={index}
-                  className="list-group-item list-group-item-action feature-panel"
+                  className={`list-group-item list-group-item-action feature-panel ${item.key === selectedFeature ? 'selectedFeature' : ''}`}
                   onClick={() => handleOnClickOfAFeature(item.key)}
                 >
                   {item.value}

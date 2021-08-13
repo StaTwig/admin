@@ -169,6 +169,30 @@
   margin-top: 0px;
   margin-left: 60px;
 }
-.radio1{
+.radio1 {
   margin-left: -142px;
+}
+
+.txt-btn {
+  text-align: center;
+  letter-spacing: 0px;
+  color: #fa7923;
+  opacity: 1;
+  font-size: 20px;
+}
+
+.plus-icon {
+  color: #fa7923;
+  width: 20px;
+  height: 20px;
+}
+
+.redirect-button {
+  width: 252px;
+  height: 54px;
+  border: 2px solid #fa7923;
+  border-radius: 10px;
+  background-color: #ffffff;
+  outline: none;
+  cursor: pointer;
 }
