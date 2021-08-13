@@ -64,19 +64,26 @@ const Organisations = (props) => {
       </div>
       <div className='full-width'>
         <div className='filter'>
-          <div className='row' style={{ flexBasis: '95%' }}>
-            <div className='box col headerText'>Name</div>
+          <div className='row'>
+            <div className='box col-1 mr-5 headerText'>Name</div>
             <div class="vl text-center"></div>
 
-            <div className='box col headerText'>
-              <span className="headerText">{'Type'}</span>
+            <div className='box col-2 headerText'>
+              <span className="headerText" 
+                  onClick={() => {
+                    setShowDropDownForType(!showDropDownForType);
+                  }}
+                  
+                 style={{cursor:"pointer"}}>{'Type'}
+              </span>
               <img
                 class='headerText'
                 style={{
-                  width: '10px',
-                  height: '15px',
+                  width: '7px',
+                  height: '10px',
                   marginTop: '0px',
-                  marginLeft: '38px'
+                  marginLeft: '68px',
+                  cursor:"pointer"
                 }}
                 src={sortIcon}
                 alt='roleSortIcon'
@@ -95,19 +102,25 @@ const Organisations = (props) => {
             </div>
             <div class="vl text-center"></div>
 
-            <div className='box col headerText'>Postal address</div>
+            <div className='box col-2 headerText'>Postal address</div>
             <div class="vl text-center"></div>
 
 
-            <div className='box col headerText'>
-              <span className="headerText">{'Country'}</span>
+            <div className='box col ml-4 mr-4 headerText'>
+              <span className="headerText"  
+                  onClick={() => {
+                    setShowDropDownForCountry(!showDropDownForCountry);
+                  }}
+                  style={{cursor:"pointer"}}>{'Country'}
+                </span>
               <img
                 class='headerText'
                 style={{
-                  width: '10px',
-                  height: '15px',
+                  width: '7px',
+                  height: '10px',
                   marginTop: '0px',
-                  marginLeft: '38px'
+                  marginLeft: '68px',
+                  cursor:"pointer"
                 }}
                 src={sortIcon}
                 alt='roleSortIcon'
@@ -125,14 +138,19 @@ const Organisations = (props) => {
               }
             </div>
             <div class="vl text-center"></div>
-            <div className='box col headerText'>
-              <span className="headerText" style={{ marginRight: '72px' }}>{'Region'}</span>
+            <div className='box col headerText ml-4 mr-4'>
+              <span className="headerText" 
+                    onClick={() => { setShowDropDownForRegion(!showDropDownForRegion); }}
+                    style={{cursor:"pointer"}}>{'Region'}
+              </span>
               <img
                 class='headerText'
                 style={{
-                  width: '10px',
-                  height: '15px',
-                  marginTop: '0px'
+                  width: '7px',
+                  height: '10px',
+                  marginTop: '0px',
+                  marginLeft: '68px',
+                  cursor:"pointer"
                 }}
                 src={sortIcon}
                 alt='roleSortIcon'
@@ -149,15 +167,21 @@ const Organisations = (props) => {
             </div>
             <div class="vl text-center"></div>
 
-            <div className='box col headerText'>
-              <span className="headerText">{'Status'}</span>
+            <div className='box col ml-4 mr-4 headerText'>
+              <span className="headerText" 
+                  onClick={() => {
+                    setShowDropDownForStatus(!showDropDownForStatus);
+                  }}
+                  style={{cursor:"pointer"}}>{'Status'}
+              </span>
               <img
                 class='headerText'
                 style={{
-                  width: '10px',
-                  height: '15px',
+                  width: '7px',
+                  height: '10px',
                   marginTop: '0px',
-                  marginLeft: '38px'
+                  marginLeft: '68px',
+                  cursor:"pointer"
                 }}
                 src={sortIcon}
                 alt='roleSortIcon'
@@ -176,15 +200,21 @@ const Organisations = (props) => {
             </div>
             <div class="vl text-center"></div>
 
-            <div className='box col headerText'>
-              <span className="headerText">{'Created on'}</span>
+            <div className='box col ml-4  headerText'>
+              <span className="headerText" 
+                onClick={() => {
+                  setShowDropDownForCreatedOn(!showDropDownForCreatedOn);
+                }}
+                style={{cursor:"pointer"}}>{'Created on'}
+              </span>
               <img
                 class='headerText'
                 style={{
-                  width: '10px',
-                  height: '15px',
+                  width: '7px',
+                  height: '10px',
                   marginTop: '0px',
-                  marginLeft: '38px'
+                  marginLeft: '38px',
+                  cursor:"pointer"
                 }}
                 src={sortIcon}
                 alt='roleSortIcon'

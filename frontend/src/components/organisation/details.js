@@ -44,10 +44,10 @@ const Details = (props) => {
   }
   
   return (
-    <div className="card rounded bg-white border border-white mt-1 ml-1 p-1 mb-3" style={{ width: 'min-content' }}>
+    <div className="col-12 p-0 mb-3 ml-1 rounded row bg-white shadow">
         <div className="card-body details-body">
           <div className="userPic text-center rounded" 
-            style={{ width: '190px' }}>
+            style={{ width: '160px' }}>
             {org?.logoId && (
               <img
                 src={org?.logoId}
@@ -55,25 +55,26 @@ const Details = (props) => {
                 className="rounded mr-1"
               />
             )}
-            <h6 className="text-primary pt-1" style={{
+            <h6 className=" txt text-primary text-left" style={{
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
-                  maxWidth: '75%'
+                  
+                  //maxWidth: '65%'
             }}>{org?.name}</h6>
             <div className="blockquote-footer" style={{
                   whiteSpace: 'nowrap',
                   overflow: 'hidden',
                   textOverflow: 'ellipsis',
                   position: 'relative',
-                  left: '23px',
+                  left: '0px',
                   maxWidth: '75%'
             }}>
               {org?.primaryContactId}
             </div>
           </div>
           
-          <span className="text-center align-self-center" style={{ maxWidth: '170px' }}>
+          <span className="col text-center align-self-center">
             {org?.type}
             <DropdownButton
               groups={types}
@@ -85,31 +86,27 @@ const Details = (props) => {
             />
           </span>
 
-          <span className="text-center align-self-center" 
-          style={{     
-            maxWidth: '169px',
-            wordWrap: 'break-word'
-          }}>
+          <span className="col-2 ml-4 txt1">
             {org?.postalAddress}
           </span>
           
-          <span className="txtWrapu text-center align-self-center" style={{ width: '203px' }}>
+          <span className="col txt1 text-center" style={{position:"relative", left:"-20px"}}>
             {org?.country?.countryName}
           </span>
           
-          <span className="txtWrapu text-center align-self-center" style={{ width: '200px' }}>
+          <span className="col txt1 text-center">
             {org?.region?.regionName}
           </span>
           
-          <span className="txtWrapu text-center align-self-center font-weight-bold text-secondory" style={{ width: '203px' }}>
+          <span className="col txt1 font-weight-bold text-secondory text-center" style={{position:"relative", left:"40px"}} >
             {(status) ? (status === 'ACTIVE' ? <div className="status text-success"> ACTIVE </div> : <div className="status text-danger">REJECTED</div>) : <div className="status text-warning">DEACTIVATED</div>}
           </span>
           
-          <span className="txtWrapu text-center align-self-center" style={{ width: '182px' }}>
+          <span className="col txt1 text-center"  style={{position:"relative", left:"50px"}}>
             {org?.createdAt ? formatDate(org?.createdAt) : ""}
           </span>
          
-          <div>
+          <div className="col txt1" style={{position:"relative", left:"30px"}}>
             <button
               type="button"
               onClick={() => {
