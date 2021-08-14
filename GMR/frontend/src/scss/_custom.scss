@@ -1,0 +1,42 @@
+// Here you can add other styles
+.sidebar{
+    background:#003978;
+}
+.sidebar-nav .nav-link.active,
+.sidebar-nav .nav-link.active .nav-icon{
+    color:#FFA83B; 
+}
+.avatarTableDisplaywithName{
+    display: flex;
+    align-items: center;
+    .title{
+        margin-left:10px;
+    }
+}
+
+.groupByTable{
+    background: #f3f3f3;
+    color:#000000;
+    font-weight: 500;
+}
+
+.float{
+	position: absolute;
+    width: 45px;
+    height: 45px;
+    right: 7px;
+    background-color: #003978;
+    color: #FFF;
+    border-radius: 50px;
+    text-align: center;
+    box-shadow: 2px 2px 3px #999;
+    top: 111;
+    z-index: 1001;
+    &:hover{
+        color:#FFF;
+    }
+}
+
+.my-float{
+	margin-top:15px;
+}
