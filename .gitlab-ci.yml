@@ -7,15 +7,15 @@ cache:
 before_script:
    #generate ssh key
      - mkdir -p ~/.ssh
-     - echo -e "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+     - echo -e "$ID_RSA" > ~/.ssh/id_rsa
      - chmod 600 ~/.ssh/id_rsa
      - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
      - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )'
      - npm install
   
 stages:
-     - build
-     - test
+     #- build
+     #- test
      - deploy
 
 install_dependencies:
@@ -33,7 +33,7 @@ install_dependencies:
 
 deployToAWS:
   only:
-    - master
+    - cicd_test
   stage: deploy
   script:
     - bash deploy/deploy.sh
