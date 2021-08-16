@@ -99,7 +99,7 @@ const Details = (props) => {
           </span>
           
           <span className="col txt1 font-weight-bold text-secondory text-center" style={{position:"relative", left:"0px"}} >
-            {(status) ? (status === 'ACTIVE' ? <div className="status text-success"> ACTIVE </div> : <div className="status text-danger">REJECTED</div>) : <div className="status text-warning">DEACTIVATED</div>}
+          {(status) ? (<div className={getColor(status)}>{status}</div>) :  <div className="status text-warning">DEACTIVATED</div>}
           </span>
           
           <span className="col txt1 text-center"  style={{position:"relative", left:"10px"}}>
