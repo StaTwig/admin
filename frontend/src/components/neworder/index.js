@@ -429,9 +429,11 @@ const NewOrder = (props) => {
             errors.toOrgLocRegion = "Required";
           }
           if (!values.toOrgLocCountry) {
-            errors.toOrgLocCountry = "Required";
+            errors.toOrgLocCountry = "Required"; 
           }
-          
+          if (!values.toOrgLoc) {
+            errors.toOrgLoc = "Required";
+          }          
           if (values.products.length == 0) {
             errors.products = "Required";
           }
@@ -625,7 +627,7 @@ const NewOrder = (props) => {
                 <div className="col-md-6 com-sm-12">
                   <div className="name form-group">
                     <label className="required-field" htmlFor="delLocation">Region</label>
-                    <div className={`line ${errors.toOrgLocRegion ? "border-danger" : "" }`}>
+                    <div className={`line ${errors.toOrgLocRegion && touched.toOrgLocRegion ? "border-danger" : "" }`}>
     
                         <Select
                         labelId="demo-simple-select-label"
@@ -655,10 +657,9 @@ const NewOrder = (props) => {
                 <div className="col-md-6 com-sm-12">
                   <div className="name form-group">
                     <label className="required-field" htmlFor="delLocation" >Country</label>
-                    <div className={`line ${errors.toOrgLocCountry ? "border-danger" : "" }`}>
+                    <div className={`line ${errors.toOrgLocCountry && touched.toOrgLocCountry ? "border-danger" : "" }`}>
 
-                        <Select
-                          
+                        <Select                          
                           placeholder={<div className="select-placeholder-text">Select Delivery Location</div>}
                           value={values.toOrgLocCountry==""?"Select Delivery Location":{value: values.toOrgLocCountry, label: values.toOrgCountry}}
                           defaultInputValue={values.toOrgCountry}
@@ -679,18 +680,7 @@ const NewOrder = (props) => {
                   </div>
                 </div>
               </div>
-
-
-          
-
-
-
-
-
-
-
-
-                <div className="row">
+              <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
                       <label className="required-field" htmlFor="organizationName">Organisation Name</label>
@@ -753,7 +743,7 @@ const NewOrder = (props) => {
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
                       <label className="required-field" htmlFor="delLocation">Delivery Location</label>
-                      <div className={`line ${errors.toOrgLoc ? "border-danger" : "" }`}>
+                      <div className={`line ${errors.toOrgLoc && touched.toOrgLoc ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           isText={true}
                           name={receiverOrgLoc}
