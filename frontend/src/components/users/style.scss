@@ -137,30 +137,36 @@
 .roleText {
   width: 24% !important;
   position: relative;
-  left: -7px;
+  left: -60px;
+  font-weight: 400;
+  font-size: small;
+  align-self: center;
 }
 
 .locationText {
-  width: 24% !important;
+  width: 20% !important;
   position: relative;
-  left: -8px;
+  left: -45px;
+  font-weight: 400;
+  font-size: small;
+  align-self: center;
 }
 
 .walletText {
-  width: 24% !important;
+  width: 18% !important;
   position: relative;
-  left: -9px;
+  left: -20px;
 }
 
 .emailText {
   width: 24% !important;
   position: relative;
-  left: -9px;
+  left: -5px;
 }
 
 .accountText {
   position: relative;
-  left: -10px;
+  left: -60px;
 }
 
 .imageFilterIcon {
@@ -171,4 +177,16 @@
 }
 .radio1{
   margin-left: -142px;
+}
+.txt{
+  font-weight: 600;
+  font-size: small;
+  align-self: center;
+  overflow: hidden;
+}
+.txt1{
+  font-weight: 400;
+  font-size: small;
+  align-self: center;
+  overflow: hidden;
 }

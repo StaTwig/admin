@@ -52,7 +52,7 @@ const Header = (props) => {
         <div className="search-form d-none">
           <input
             type="text"
-            // value={search}
+            //value={search}
             placeholder="Search"
             onChange={onSearchChange}
             className="form-control search-field"
@@ -128,7 +128,7 @@ const Header = (props) => {
             {
               <React.Fragment>
                 <div className="slider-item-text">
-                  <p>{profile?.firstName + " " + profile?.lastName}</p>
+                  <p >{profile?.firstName + " " + profile?.lastName}</p>
                   <p>{profile?.organisation?.split("/")[0]}</p>
                 </div>
                 {/* <Link className="slider-item border-top-0" to="/profile">

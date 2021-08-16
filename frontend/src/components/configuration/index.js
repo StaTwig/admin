@@ -234,7 +234,7 @@ const Configurationpart = (props) => {
 
   return (
     <div>
-      <div className="addproduct">
+      <div className="spacingbutton">
         <h1 className="breadcrumb">CONFIGURATION</h1>
         <div>
           <Tabs {...props} tabIndex={tabIndex} setTabIndex={setTabIndex} />

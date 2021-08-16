@@ -13,7 +13,7 @@
 
   .logo {
     cursor: pointer;
-    height: 40px;
+    height: 45px;
   }
 
   .branding {
@@ -68,9 +68,8 @@
     justify-content: space-between;
     align-items: center;
     position: relative;
-    background: transparent
-      linear-gradient(246deg, $primaryBlue 0%, $skyBlue 100%) 0% 0% no-repeat
-      padding-box;
+    //background: #0B65C1;
+    background: transparent linear-gradient(20deg, #013f7c 0%, #0B65C1 50%) 0% 0% no-repeat padding-box;
     border-radius: 0px 0px 0px 100px;
     flex: 1;
     height: 80px;
