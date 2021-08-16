@@ -4,7 +4,6 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 require("dotenv").config();
 var indexRouter = require("./routes/index");
-var apiRouter = require("./routes/api");
 var apiResponse = require("./helpers/apiResponse");
 const {RbacCache}= require("./helpers/rbacCache");
 var cors = require("cors");
@@ -45,8 +44,7 @@ app.use(cookieParser());
 app.use(cors());
 
 //Route Prefixes
-app.use("/", indexRouter);
-app.use("/rbacmanagement/api/", apiRouter);
+app.use("/rbacmanagement/api/", indexRouter);
 
 // app.get("/", (req, res) => {
 // 	return res.json("test")

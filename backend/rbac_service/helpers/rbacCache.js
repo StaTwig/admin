@@ -16,12 +16,14 @@ RbacModel.find({}).then(permissions => {
         client.del(role.role, (err, res) => { if(err) console.log(err);
         console.log("DELETE",res, role.role);
        })
+       if(role.permissions.length > 0){
         client.sadd(role.role, role.permissions , (err,data) => {
-      if(err) {
-        console.log(err);
-      }
-      console.log("Cache Loaded" + data + " --- " + role.role + "\n");
-    })  
+          if(err) {
+            console.log(err);
+          }
+          console.log("Cache Loaded " + data + " --- " + role.role + "\n");
+        }) 
+       } 
   });
     }
     else{
