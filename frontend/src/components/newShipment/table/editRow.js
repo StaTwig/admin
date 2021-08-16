@@ -356,8 +356,8 @@ const editQuantity = (value, index) => {
                         <div className="col txt" style={{position:"relative",left:'0%'}}>{ModelProd?.name}</div>
                         <div className="col txt1" style={{position:"relative",left:'6%'}} >{ModelProd?.manufacturer}</div>
                         <div className="col txt1" style={{position:"relative",left:'8%'}} >{product.batchNumbers[0]}</div>
-                        <div className="col txt1" style={{position:"relative",left:'8%'}}>{formatDate(product.attributeSet.mfgDate)}</div>
-                        <div className="col txt1" style={{position:"relative",left:'8%'}}>{formatDate(product.attributeSet.expDate)}</div> 
+                        <div className="col txt1" style={{position:"relative",left:'8%'}}>{(product.attributeSet.mfgDate.length > 0) ?  formatDate(product.attributeSet.mfgDate): "-"}</div>
+                        <div className="col txt1" style={{position:"relative",left:'8%'}}>{(product.attributeSet.expDate.length > 0) ? formatDate(product.attributeSet.expDate) : "-"}</div> 
                         <div className="col txt1" style={{position:"relative",left:'4%'}}>
                         <div className="txt1">
                         <input
