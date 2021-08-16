@@ -32,6 +32,8 @@
       }
     }
 
+    
+
     .btn-section {
       display: flex;
       flex-direction: row;
@@ -93,7 +95,7 @@
       border: none;
     }
 
-    .list-group-item:hover {
+    .selectedFeature {
       color: #0b65c1;
     }
 
@@ -114,10 +116,6 @@
     }
 
     .selection-panel {
-      display: flex;
-      align-items: center;
-      flex-wrap: wrap;
-      column-gap: 330px;
       padding: 5px;
       margin-left: 18px;
 
@@ -134,6 +132,13 @@
         border-radius: 4px;
         opacity: 1;
       }
+    }
+
+    .permission-selection-panal {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
     }
   }
 }

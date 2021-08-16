@@ -6,7 +6,7 @@ import DropdownButton from "../../shared/dropdownButtonGroup";
 const NUModal = (props) => {
   const [selectedValue, setSelectedValue] = useState(-1);
   const [wh, setWH] = useState("Select a Location");
-  const { permissions, onHide, onSuccess, data, setData, addresses } = props;
+  const { permissions, onHide, onSuccess, data, setData, addresses, redirectToConfigurationPage } = props;
   const setRole = (role) => {
     setSelectedValue(role);
     setData({ ...data, ...{ role: role } });
@@ -68,8 +68,10 @@ const NUModal = (props) => {
               Enter the email address of the users you'd like to add or invite
               and choose the role they should have.
             </p>
-            <div className="pl-4 pr-4 pt-3 d-flex pb-4 shadow">
-              <div className="input-group">
+            <div className="pl-4 pr-4 pt-3 d-flex pb-4 shadow" 
+              style={{ justifyContent: 'space-between'}}>
+              <div className="input-group" 
+                style={{ width: '65%', alignItems: 'center' }}>
                 <input
                   type="text"
                   name="email"
@@ -87,6 +89,13 @@ const NUModal = (props) => {
                   value={values.email}
                 />
               </div>
+              <button 
+                // disabled={errors}
+                className="redirect-button" 
+                onClick={() => redirectToConfigurationPage()}>
+                <i className="plus-icon fa fa-plus pr-2" aria-hidden="true"></i>
+                <span className="txt-btn">{"Add New User Role"}</span>
+              </button>
             </div>
             <div className="p-1">
               {permissions.map((permission, index) => (

@@ -26,6 +26,7 @@ const DashBoard = (props) => {
     modifyLocations,
     addresses,
     locationApprovals,
+    redirectToConfigurationPage
   } = props;
   requestsPending.sort(function (a, b) {
     return new Date(b.createdAt) - new Date(a.createdAt);
@@ -53,6 +54,7 @@ locationApprovals.sort(function (a, b) {
             onHide={closeModal}
             buttonText={btnTxt}
             setData={setData}
+            redirectToConfigurationPage={redirectToConfigurationPage}
           />
         </Modal>
       )}
