@@ -2,6 +2,9 @@ const RbacModel = require('../models/RbacModel');
 const { body, validationResult } = require('express-validator');
 const auth = require('../middlewares/jwt');
 const apiResponse = require('../helpers/apiResponse');
+const { default: axios } = require('axios');
+const dotenv = require('dotenv').config();
+
 
 exports.getPermissions = [
   auth,
@@ -38,48 +41,11 @@ exports.getRoles = [
   }
 ]
 
-exports.addPermissions = [
-  auth,
-  body('permissions')
-    .isLength({ min: 1 })
-    .withMessage('At least one permission must be specified.'),
-  body('role')
-    .isLength({ min: 1 })
-    .trim()
-    .withMessage('Role must be specified.'),
-  async (req, res) => {
-    try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return apiResponse.validationErrorWithData(
-          res,
-          'Validation Error.',
-          errors.array(),
-        );
-      }
-        const { role, permissions } = req.body;
-        const rbac_object = await RbacModel.findOne({ role });
-          if(rbac_object){
-            await RbacModel.updateOne({role}, {permissions});
-          } else{
-            const rbac = new RbacModel({
-              role,
-              permissions
-            });
-            await rbac.save();  
-          }
-          apiResponse.successResponse(res, 'Success');
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err.message);
-    }
-  },
-];
-
 exports.updatePermissions = [
-  auth,
+  // auth,
   body('permissions')
     .isLength({ min: 1 })
-    .withMessage('At least one permission must be specified.'),
+    .withMessage('Permission Structure must be specified.'),
   body('role')
     .isLength({ min: 1 })
     .trim()
@@ -114,6 +80,11 @@ exports.updatePermissions = [
       });
       await rbac.save();
       rbac_object = await RbacModel.findOneAndUpdate({ role },{$set: permissions}, {new: true});
+    }
+    console.log(rbac_object);
+    const result = await axios.get(process.env.LEDGER + '/rbacmanagement/api/rbacCache');
+    if(result.data == undefined){
+      return apiResponse.errorResponse(res, result.data);
     }
     return apiResponse.successResponseWithData(res, 'Success', rbac_object);
   }
