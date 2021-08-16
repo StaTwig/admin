@@ -101,6 +101,9 @@ exports.updatePermissions = [
           if(value == true){
             permsArray.push(key);
           }
+          if(value == false){
+            permsArray = permsArray.filter(elem => elem !== key);
+          }
         } 
     }
       let rbac_object = await RbacModel.findOneAndUpdate({ role },{$set: permissions , "permissions": permsArray}, {new: true});

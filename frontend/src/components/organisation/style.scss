@@ -1,7 +1,7 @@
 @import "../../assets/styles/global.scss";
 
 .users {
-  padding-left: 2rem;
+  padding-left: 6rem;
   padding-right: 1rem;
   overflow-x: hidden;
   overflow-y: hidden;
@@ -67,9 +67,9 @@
 }
 
 .vl {
-  border-left: 1px solid #d6d6d6;
+  border-left: 1.5px solid #d6d6d6;
   height: 38px;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .full-width {
@@ -78,7 +78,7 @@
   right: 0px;
   background-color: #eaeaea;
   margin-left: 118px;
-  width: 108%;
+  width: 100%;
 }
 
 .filter {
@@ -92,7 +92,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 78px;
+  height: 58px;
 }
 
 .table-full-width {
@@ -101,18 +101,19 @@
 
 .headerText {
   color: #000000;
-  font-size: 20px;
+  font-size: 14px;
 }
 
 
 .details-card {
-  margin-top: 100px;
+  margin-top: 90px;
 }
 
 .details-body {
   display: flex;
   align-items: center;
   flex-direction: row;
+  width: 100%;
 }
 
 .row-details {
@@ -126,4 +127,18 @@
   margin-top: '0px';
   margin-left: '38px'
 }
-
+.ribbon-space {
+  margin-top: 4rem;
+}
+.txt{
+  font-weight: 600;
+  font-size: small;
+  align-self: center;
+  overflow: hidden;
+}
+.txt1{
+  font-weight: 400;
+  font-size: small;
+  align-self: center;
+  overflow: hidden;
+}

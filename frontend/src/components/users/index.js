@@ -86,9 +86,21 @@ const Users = (props) => {
 
             <div class="vl text-center"></div>
             <div className='col box headerText'>
-              <span className="headerText">{'Role'}</span>
+              <span className="headerText" 
+                  onClick={() => {
+                    setShowDropDownForRole(!showDropDownForRole);
+                  }}
+                  style={{cursor:"pointer"}}>{'Role'}
+              </span>
               <img
-                class='headerText imageFilterIcon'
+              class='headerText'
+              style={{
+                width: '7px',
+                height: '10px',
+                marginTop: '0px',
+                marginLeft: '68px',
+                cursor:"pointer"
+              }}
                 src={sortIcon}
                 alt='roleSortIcon'
                 onClick={() => {
@@ -116,10 +128,18 @@ const Users = (props) => {
 
             <div class="vl text-center"></div>
             <div className='col box headerText'>
-              <span className="headerText">{'Account Status'}</span>
+              <span className="headerText" onClick={() => {
+                setShowDropDownForAccountStatus(!showDropDownForAccountStatus);
+              }} style={{cursor:"pointer"}}>{'Account Status'}</span>
               <img
-                class='headerText imageFilterIcon'
-                style={{ marginLeft: '20px' }}
+              class='headerText'
+              style={{
+                width: '7px',
+                height: '10px',
+                marginTop: '0px',
+                marginLeft: '68px',
+                cursor:"pointer"
+              }}
                 src={sortIcon}
                 alt='roleSortIcon'
                 onClick={() => {
@@ -136,12 +156,12 @@ const Users = (props) => {
               }
             </div>
             <div className="col box">
-              <button className='text-center adjustFilterBtn'
+              <button className='btn btn-primary'
                 onClick={() => setShowFilterDropDown(!showFilterDropDown)}
               >
-                <img src={FilterIcon} alt={'filter-icon'} />
+                <img className="mr-3" src={FilterIcon} alt={'filter-icon'} />
                 <span>{'Filter'}</span>
-                <img src={DownArrowIcon} alt={'drp-arrow'} />
+                <img className="ml-3" src={DownArrowIcon} alt={'drp-arrow'} />
                 {
                   showFilterDropDown && calenderFilterJsonData &&
                   <FilterDropDown

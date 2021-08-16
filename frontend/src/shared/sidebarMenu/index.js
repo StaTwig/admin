@@ -9,9 +9,9 @@ import UserSelectedIcon from "../../assets/aicons/ManageUsers-selected.png";
 import AddressIcon from "../../assets/aicons/ManageAddress.png";
 import AddressSelectedIcon from "../../assets/aicons/ManageAddress-selected.png";
 import AffiliatedOrganisationIcon from "../../assets/aicons/AffiliatedOrganisation.png";
-
-import Configration from "../../assets/aicons/configration.png";
 import AffiliatedOrganisationSelectedIcon from "../../assets/aicons/AffiliatedOrganisation-selected.png";
+import Configration from "../../assets/aicons/configration.png";
+
 import "./style.scss";
 
 const SideBar = ({ match, location, user }) => {
@@ -20,29 +20,27 @@ const SideBar = ({ match, location, user }) => {
     <div className="sidebar">
       <ul>
         <li className={url === "/overview" ? "active" : ""}>
-          <Link to="/overview">
+          <Link to="/overview" className="d-inline-block">
             <img
-              src={url === "/overview" ? HomeSelectedIcon : HomeIcon}
+              src={url === "/overview" ? HomeSelectedIcon : HomeSelectedIcon}
               alt="Overview"
             />
-            <span className="pt-2 text-center">Overview</span>
+            <span className="ml-2">Overview</span>
           </Link>
         </li>
         {user.type == "CENTRAL_AUTHORITY" && (
           <li className={url === "/organisation" ? "active" : ""}>
-            <Link to="/organisation">
+            <Link to="/organisation" className="d-inline-block">
               <img
                 src={
                   url === "/organisation"
                     ? AffiliatedOrganisationSelectedIcon
-                    : AffiliatedOrganisationIcon
+                    : AffiliatedOrganisationSelectedIcon
                 }
                 alt="Organisation"
               />
-              <span className="pt-2 text-center">
-                Manage
-                <br />
-                Organisation
+              <span className="ml-2">
+                Manage Organisation
               </span>
             </Link>
           </li>
@@ -52,46 +50,47 @@ const SideBar = ({ match, location, user }) => {
             url === "/address" || url === "/newaddress" ? "active" : ""
           }
         >
-          <Link to="/address">
+          <Link to="/address" className="d-inline-block">
             <img
               src={
                 url === "/address" || url === "/newaddress"
                   ? AddressSelectedIcon
-                  : AddressIcon
+                  : AddressSelectedIcon
               }
               alt="Manage address"
             />
-            <span className="pt-2 text-center">
-              Manage
-              <br />
-              address
+            <span className="ml-2">
+              Manage Address
             </span>
           </Link>
         </li>
         <li className={url === "/users" || url === "/addusers" ? "active" : ""}>
-          <Link to="/users">
+          <Link to="/users" className="d-inline-block">
             <img
               src={
                 url === "/users" || url === "/addusers"
                   ? UserSelectedIcon
-                  : UserIcon
+                  : UserSelectedIcon
               }
               alt="Manage users"
             />
-            <span className="pt-2 text-center">
-              Manage
-              <br />
-              Users
+            <span className="ml-2">
+              Manage Users
             </span>
           </Link>
         </li>
         <li className={url === "/configuration" ? "active" : ""}>
-          <Link to="/configuration">
+          <Link to="/configuration" className="d-inline-block">
             <img
-              src={url === "/Configration" ? Configration : Configration}
+              src={url === "/Configration" 
+                  ? Configration 
+                  : Configration
+                }
               alt="configuration"
             />
-            <span className="pt-2 text-center">configuration</span>
+            <span className="ml-2">
+            Configuration
+            </span>
           </Link>
         </li>
       </ul>

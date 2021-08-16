@@ -112,7 +112,7 @@ const UserDetails = (props) => {
               } `}
           >
             <span className={
-              `w-10 ${display ? `text-left` : ` align-self-center txtWrapu text-center`
+              `w-10 ${display ? `text-left` : ` roleText align-self-center txtWrapu text-center`
               } `
             }>{user?.role}</span>
             {display && (
@@ -123,7 +123,7 @@ const UserDetails = (props) => {
               </div>
             )}
           </span>
-          <span className=" w-25 text-center align-self-center locationText">
+          <span className="text-left align-self-center locationText">
             { user?.location }
           </span>
           <span className=" w-25 text-center align-self-center walletText txtWrapu">
@@ -134,8 +134,9 @@ const UserDetails = (props) => {
           <span className=" w-25 text-center align-self-center emailText">
             {user?.emailId}
           </span>
-          <span className=" w-25 text-center align-self-center accountText">
-            {status}
+          <span className=" w-25 text-center align-self-center accountText font-weight-bold">
+           {(status) ? (status === 'ACTIVE' ? <div className="status text-success"> ACTIVE </div> : <div className="status text-danger">REJECTED</div>) : <div className="status text-warning">DEACTIVATED</div>}
+          
           </span>
           <div
             className={`w-15  ${display ? `align-self-start` : ` align-self-center`
