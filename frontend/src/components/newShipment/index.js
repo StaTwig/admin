@@ -414,8 +414,12 @@ if (!error) {
   const handleQuantityChange = (value, i) => {
     
     const soDetailsClone = { ...OrderDetails };
-    soDetailsClone.products[i].productQuantity = value;
-    setOrderDetails(soDetailsClone);
+    if(value > soDetailsClone.products[i].productQuantity){
+      setOrderDetails(soDetailsClone);
+    }else{
+      soDetailsClone.products[i].productQuantity = value;
+      setOrderDetails(soDetailsClone);    
+    }
   };
  
   const handleBatchChange = (value, i) => {
