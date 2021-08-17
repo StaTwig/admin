@@ -149,357 +149,357 @@ const Reports = () => {
           </CRow>
           <div className="table-container" role="table" aria-label="Destinations">
             <div className="flex-table header tableHeader mb-0 pb-0" role="rowgroup">
-              <div className="flex-row first" role="columnheader">
+              <div className="flex-rowReport first" role="columnheader">
                 Agent Name
               </div>
-              <div className="flex-row" role="columnheader">
+              <div className="flex-rowReport" role="columnheader">
                 AWB
               </div>
-              <div className="flex-row" role="columnheader">
+              <div className="flex-rowReport" role="columnheader">
                 SB
               </div>
-              <div className="flex-row" role="columnheader">
+              <div className="flex-rowReport" role="columnheader">
                 VCT
               </div>
-              <div className="flex-row" role="columnheader">
+              <div className="flex-rowReport" role="columnheader">
                 Airline
               </div>
-              <div className="flex-row" role="columnheader">
+              <div className="flex-rowReport" role="columnheader">
                 E-Red/Gen
               </div>
             </div>
             {/* Group data Begins */}
             <div className="flex-table groupbyDate mb-0 pb-0" role="rowgroup">
-              <div className="flex-row textLeft" role="cell">
+              <div className="flex-rowReport textLeft" role="cell">
                 July 1, 2019
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowReport first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowReport first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
 
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowReport first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowReport first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowReport first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowReport first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowReport first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 Gen
               </div>
             </div>
             {/* Group data */}
             <div className="flex-table groupbyDate mb-0 pb-0" role="rowgroup">
-              <div className="flex-row textLeft" role="cell">
+              <div className="flex-rowReport textLeft" role="cell">
                 July 2, 2019
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowReport first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowReport first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowReport first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowReport first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowReport first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowReport first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowReport first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowReport" role="cell">
                 Gen
               </div>
             </div>

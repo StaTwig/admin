@@ -1,5 +1,6 @@
 import React from 'react'
 import './style.scss'
+import logo from '../../../assets/icons/GMRLogo.png'
 
 const Login = (props) => {
   const { onSendOtp } = props
@@ -34,6 +35,9 @@ const Login = (props) => {
           >
             Login
           </button>
+          <div className="col text-center footer-logo">
+            <img src={logo} width={150} />
+          </div>
         </div>
       </div>
     </div>

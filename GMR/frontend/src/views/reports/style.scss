@@ -48,7 +48,7 @@ div {
     border-top: none;
     border-left: none;
   }
-  &:first-of-type .flex-row {
+  &:first-of-type .flex-rowReport {
     color: grey;
   }
 }
@@ -65,7 +65,7 @@ div {
     font-weight: 900;
 }
 
-.flex-row {
+.flex-rowReport {
   width: calc(100% / 6);
   text-align: center;
   padding: 0.5em 0.5em;
@@ -85,7 +85,7 @@ div {
   flex-flow: column wrap;
   width: 75%;
   padding: 0;
-  .flex-row {
+  .flex-rowReport {
     display: flex;
     flex-flow: row wrap;
     width: 100%;
@@ -109,7 +109,7 @@ div {
 }
 
 @media all and (max-width: 767px) {
-  .flex-row {
+  .flex-rowReport {
     width: calc(100% / 3); //1px = border right
     
    &.first {
@@ -125,21 +125,21 @@ div {
 @media all and (max-width: 430px) {
   
   .flex-table {
-    .flex-row {
+    .flex-rowReport {
       border-bottom: 0;
     }
-    .flex-row:last-of-type {
+    .flex-rowReport:last-of-type {
     //   border-bottom: solid 1px $table-border;
     }
   }
   
   .header {
-    .flex-row {
+    .flex-rowReport {
     //   border-bottom: solid 1px;
     }
   }
   
-  .flex-row {
+  .flex-rowReport {
     width: 100%; //1px = border right
     
    &.first {
@@ -150,7 +150,7 @@ div {
 
   .column {
     width: 100%;
-    .flex-row {
+    .flex-rowReport {
     //   border-bottom: solid 1px $table-border;
     }
   }

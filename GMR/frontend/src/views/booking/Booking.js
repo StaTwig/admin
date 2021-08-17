@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
-import './style.scss'
 import { CAvatar, CCard, CCardBody, CCol, CDropdown, CDropdownToggle, CRow } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFilter } from '@fortawesome/free-solid-svg-icons'
 import { Drawer } from 'antd'
-
+import './style.scss'
 const Booking = () => {
   const [visible, setVisible] = useState(false)
 
@@ -154,401 +153,401 @@ const Booking = () => {
           </CRow>
           <div className="table-container" role="table" aria-label="Destinations">
             <div className="flex-table header tableHeader mb-0 pb-0" role="rowgroup">
-              <div className="flex-row first" role="columnheader">
+              <div className="flex-rowBooking first" role="columnheader">
                 Agent Name
               </div>
-              <div className="flex-row" role="columnheader">
+              <div className="flex-rowBooking" role="columnheader">
                 Created By
               </div>
-              <div className="flex-row" role="columnheader">
+              <div className="flex-rowBooking" role="columnheader">
                 AWB
               </div>
-              <div className="flex-row" role="columnheader">
+              <div className="flex-rowBooking" role="columnheader">
                 SB
               </div>
-              <div className="flex-row" role="columnheader">
+              <div className="flex-rowBooking" role="columnheader">
                 VCT
               </div>
-              <div className="flex-row" role="columnheader">
+              <div className="flex-rowBooking" role="columnheader">
                 Airline
               </div>
-              <div className="flex-row" role="columnheader">
+              <div className="flex-rowBooking" role="columnheader">
                 E-Red/Gen
               </div>
             </div>
             {/* Group data Begins */}
             <div className="flex-table groupbyDate mb-0 pb-0" role="rowgroup">
-              <div className="flex-row textLeft" role="cell">
+              <div className="flex-rowBooking textLeft" role="cell">
                 July 1, 2019
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowBooking first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 <div>Yiorgos Avraamu</div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowBooking first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 <div>Yiorgos Avraamu</div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowBooking first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 <div>Yiorgos Avraamu</div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowBooking first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 <div>Yiorgos Avraamu</div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowBooking first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 <div>Yiorgos Avraamu</div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowBooking first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 <div>Yiorgos Avraamu</div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowBooking first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 <div>Yiorgos Avraamu</div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 Gen
               </div>
             </div>
             {/* Group data */}
             <div className="flex-table groupbyDate mb-0 pb-0" role="rowgroup">
-              <div className="flex-row textLeft" role="cell">
+              <div className="flex-rowBooking textLeft" role="cell">
                 July 2, 2019
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowBooking first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 <div>Yiorgos Avraamu</div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowBooking first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 <div>Yiorgos Avraamu</div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowBooking first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 <div>Yiorgos Avraamu</div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowBooking first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 <div>Yiorgos Avraamu</div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowBooking first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 <div>Yiorgos Avraamu</div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowBooking first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 <div>Yiorgos Avraamu</div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 Gen
               </div>
             </div>
             <div className="flex-table" role="rowgroup">
-              <div className="flex-row first" role="cell">
+              <div className="flex-rowBooking first" role="cell">
                 <div className="avatarTableDisplaywithName">
                   <CAvatar size="md" src="/avatars/profile.png" status="success" />
                   <div className="title">User Name</div>
                 </div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 <div>Yiorgos Avraamu</div>
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 123456
               </div>
-              <div className="flex-row" role="cell">
+              <div className="flex-rowBooking" role="cell">
                 Gen
               </div>
             </div>
