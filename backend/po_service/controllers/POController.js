@@ -269,7 +269,7 @@ exports.changePOStatus = [
       const { address , role } = req.user;
           const permission_request = {
             role: role,
-            permissionRequired: 'receivePO',
+            permissionRequired: 'changePOStatus',
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
@@ -1047,7 +1047,7 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
       const { skip, limit } = req.query;
           const permission_request = {
             role: role,
-            permissionRequired: 'viewPO',
+            permissionRequired: 'viewInboundOrders',
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
@@ -1191,7 +1191,7 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
       const { skip, limit } = req.query;
           const permission_request = {
             role: role,
-            permissionRequired: 'viewPO',
+            permissionRequired: 'viewOutboundOrders',
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {

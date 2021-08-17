@@ -1582,6 +1582,7 @@ exports.getInventory = [
   auth,
   async (req, res) => {
     try {
+
       const { skip, limit } = req.query;
       var warehouseId = "";
 
@@ -2747,6 +2748,13 @@ exports.searchProduct = [
   auth,
   async (req, res) => {
     try {
+      const {role} = req.user;
+      permission_request = {
+        role: role,
+        permissionRequired: "searchByProductName",
+      };
+      checkPermissions(permission_request, async (permissionResult) => {
+        if (permissionResult.success) {
       const {productName, productType  } = req.query;
       var warehouseId = "";
       if (!req.query.warehouseId)
@@ -2792,7 +2800,12 @@ exports.searchProduct = [
           "Cannot find warehouse for this employee"
         );
       }
-    } catch (err) {
+    }
+    else{
+      return apiResponse.forbiddenResponse(res, "Access denied");
+     }
+    })}
+        catch (err) {
       console.log(err);
       return apiResponse.ErrorResponse(res, err.message);
     }
