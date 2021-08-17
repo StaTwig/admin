@@ -150,7 +150,7 @@ const FormVerifyPage = (props) => {
                           Didn't receive the OTP?
                         </div>
                         <div
-                          className="text-center mb-5 text-primary resend"
+                          className="text-center mt-2 mb-5 text-primary resend"
                           style={{cursor: "pointer"}}
                           onClick={onResendOtp}
                         >
@@ -160,9 +160,9 @@ const FormVerifyPage = (props) => {
                         {errorMessage && (
                           <div> <Alert severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
                         )}
-                        <div className="text-center mt-3 mb-3">
-                          <button type="submit" className="btn btn-primary">
-                            LOGIN
+                        <div className="text-center mt-3 mb-3 ml-1">
+                          <button type="submit" className=" buttonS btn btn-primary">
+                            VERIFY
                           </button>
                         </div>
                       </form>
