@@ -1,230 +1,559 @@
-import React from 'react'
-import {
-  CAvatar,
-  CCard,
-  CCardBody,
-  CCol,
-  CDropdown,
-  CDropdownItem,
-  CDropdownMenu,
-  CDropdownToggle,
-  CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
-} from '@coreui/react'
+import React, { useState } from 'react'
+import './style.scss'
+import { CAvatar, CCard, CCardBody, CCol, CDropdown, CDropdownToggle, CRow } from '@coreui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFilter } from '@fortawesome/free-solid-svg-icons'
+import { Drawer } from 'antd'
 
 const Booking = () => {
+  const [visible, setVisible] = useState(false)
+
+  const showDrawer = () => {
+    setVisible(true)
+  }
+
+  const onClose = () => {
+    setVisible(false)
+  }
   return (
     <>
-      <a className="float">
+      <a onClick={showDrawer} className="floatFilter">
         <FontAwesomeIcon icon={faFilter} className="nav-icon my-float" />
       </a>
+
+      {/* Filter Section Start */}
+      <Drawer
+        title="Basic Drawer"
+        className="filterdrawer"
+        placement="right"
+        closable={false}
+        onClose={onClose}
+        visible={visible}
+      >
+        <div className="filterSection">
+          <div className="filterHeader mb-2">
+            <FontAwesomeIcon icon={faFilter} /> FILTERS
+          </div>
+          <div className="btn-group filterButton ">
+            <a className="btn active">GMR</a>
+            <a className="btn">Agent</a>
+          </div>
+
+          <label className="filterSubHeading mt-2 mb-2">Time Period</label>
+          <label className="radioButton" htmlFor="daily">
+            <input
+              className="radioInput"
+              type="radio"
+              name="view"
+              id="daily"
+              value="daily"
+              defaultChecked="daily"
+            />
+            Daily
+          </label>
+          <label className="radioButton" htmlFor="WeeklyReport">
+            <input
+              className="radioInput"
+              type="radio"
+              name="view"
+              id="WeeklyReport"
+              value="WeeklyReport"
+            />
+            Weekly Report
+          </label>
+          <label className="radioButton" htmlFor="FortnightReport">
+            <input
+              className="radioInput"
+              type="radio"
+              name="view"
+              id="FortnightReport"
+              value="FortnightReport"
+            />
+            Fortnight Report
+          </label>
+          <label className="radioButton" htmlFor="MonthlyReport">
+            <input
+              className="radioInput"
+              type="radio"
+              name="view"
+              id="MonthlyReport"
+              value="MonthlyReport"
+            />
+            Monthly Report
+          </label>
+
+          <label className="radioButton" htmlFor="QuarterlyReport">
+            <input
+              className="radioInput"
+              type="radio"
+              name="view"
+              id="QuarterlyReport"
+              value="QuarterlyReport"
+            />
+            Quarterly Report
+          </label>
+          <label className="radioButton" htmlFor="YearlyReport">
+            <input
+              className="radioInput"
+              type="radio"
+              name="view"
+              id="YearlyReport"
+              value="YearlyReport"
+            />
+            Yearly Report
+          </label>
+          <label className="radioButton" htmlFor="AllReports">
+            <input
+              className="radioInput"
+              type="radio"
+              name="view"
+              id="AllReports"
+              value="AllReports"
+            />
+            All Reports
+          </label>
+
+          <div className="btn-group filterButton mt-2 mb-2">
+            <a className="btn active">All</a>
+            <a className="btn">E-Rec</a>
+            <a className="btn">Gen VCT</a>
+          </div>
+
+          <label className="filterSubHeading mt-2 mb-2">Agent</label>
+          <select className="filterSelect mt-2">
+            <option value="">Select Agent</option>
+            <option key="1" value="agent1">
+              Agent 1
+            </option>
+            <option key="2" value="agent2">
+              Agent 2
+            </option>
+          </select>
+          <label className="filterSubHeading mt-2 mb-2">Airline</label>
+          <select className="filterSelect mt-2">
+            <option value="">Select Airline</option>
+            <option key="1" value="Airline1">
+              Airline 1
+            </option>
+            <option key="2" value="Airline2">
+              Airline 2
+            </option>
+          </select>
+          <button className="btn SearchButton mt-4">Search</button>
+        </div>
+      </Drawer>
+      {/* Filter Section Ends */}
       <CCard className="mb-4">
         <CCardBody className="mb-1">
           <CRow>
-            <CCol sm="10">
-              <h4 id="traffic" className="card-title mb-0">
-                Booking
-              </h4>
-            </CCol>
-
-            <CCol sm="2">
-              <CDropdown>
-                <CDropdownToggle color="primary">Export</CDropdownToggle>
-                <CDropdownMenu>
-                  <CDropdownItem href="#">Option</CDropdownItem>
-                </CDropdownMenu>
+            <CCol sm="12">
+              <CDropdown className="exportButton">
+                <CDropdownToggle>Export</CDropdownToggle>
               </CDropdown>
             </CCol>
           </CRow>
+          <div className="table-container" role="table" aria-label="Destinations">
+            <div className="flex-table header tableHeader mb-0 pb-0" role="rowgroup">
+              <div className="flex-row first" role="columnheader">
+                Agent Name
+              </div>
+              <div className="flex-row" role="columnheader">
+                Created By
+              </div>
+              <div className="flex-row" role="columnheader">
+                AWB
+              </div>
+              <div className="flex-row" role="columnheader">
+                SB
+              </div>
+              <div className="flex-row" role="columnheader">
+                VCT
+              </div>
+              <div className="flex-row" role="columnheader">
+                Airline
+              </div>
+              <div className="flex-row" role="columnheader">
+                E-Red/Gen
+              </div>
+            </div>
+            {/* Group data Begins */}
+            <div className="flex-table groupbyDate mb-0 pb-0" role="rowgroup">
+              <div className="flex-row textLeft" role="cell">
+                July 1, 2019
+              </div>
+            </div>
+            <div className="flex-table" role="rowgroup">
+              <div className="flex-row first" role="cell">
+                <div className="avatarTableDisplaywithName">
+                  <CAvatar size="md" src="/avatars/profile.png" status="success" />
+                  <div className="title">User Name</div>
+                </div>
+              </div>
+              <div className="flex-row" role="cell">
+                <div>Yiorgos Avraamu</div>
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                Gen
+              </div>
+            </div>
+            <div className="flex-table" role="rowgroup">
+              <div className="flex-row first" role="cell">
+                <div className="avatarTableDisplaywithName">
+                  <CAvatar size="md" src="/avatars/profile.png" status="success" />
+                  <div className="title">User Name</div>
+                </div>
+              </div>
+              <div className="flex-row" role="cell">
+                <div>Yiorgos Avraamu</div>
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                Gen
+              </div>
+            </div>
+            <div className="flex-table" role="rowgroup">
+              <div className="flex-row first" role="cell">
+                <div className="avatarTableDisplaywithName">
+                  <CAvatar size="md" src="/avatars/profile.png" status="success" />
+                  <div className="title">User Name</div>
+                </div>
+              </div>
+              <div className="flex-row" role="cell">
+                <div>Yiorgos Avraamu</div>
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                Gen
+              </div>
+            </div>
+            <div className="flex-table" role="rowgroup">
+              <div className="flex-row first" role="cell">
+                <div className="avatarTableDisplaywithName">
+                  <CAvatar size="md" src="/avatars/profile.png" status="success" />
+                  <div className="title">User Name</div>
+                </div>
+              </div>
+              <div className="flex-row" role="cell">
+                <div>Yiorgos Avraamu</div>
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                Gen
+              </div>
+            </div>
+            <div className="flex-table" role="rowgroup">
+              <div className="flex-row first" role="cell">
+                <div className="avatarTableDisplaywithName">
+                  <CAvatar size="md" src="/avatars/profile.png" status="success" />
+                  <div className="title">User Name</div>
+                </div>
+              </div>
+              <div className="flex-row" role="cell">
+                <div>Yiorgos Avraamu</div>
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                Gen
+              </div>
+            </div>
+            <div className="flex-table" role="rowgroup">
+              <div className="flex-row first" role="cell">
+                <div className="avatarTableDisplaywithName">
+                  <CAvatar size="md" src="/avatars/profile.png" status="success" />
+                  <div className="title">User Name</div>
+                </div>
+              </div>
+              <div className="flex-row" role="cell">
+                <div>Yiorgos Avraamu</div>
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                Gen
+              </div>
+            </div>
+            <div className="flex-table" role="rowgroup">
+              <div className="flex-row first" role="cell">
+                <div className="avatarTableDisplaywithName">
+                  <CAvatar size="md" src="/avatars/profile.png" status="success" />
+                  <div className="title">User Name</div>
+                </div>
+              </div>
+              <div className="flex-row" role="cell">
+                <div>Yiorgos Avraamu</div>
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                Gen
+              </div>
+            </div>
+            {/* Group data */}
+            <div className="flex-table groupbyDate mb-0 pb-0" role="rowgroup">
+              <div className="flex-row textLeft" role="cell">
+                July 2, 2019
+              </div>
+            </div>
+            <div className="flex-table" role="rowgroup">
+              <div className="flex-row first" role="cell">
+                <div className="avatarTableDisplaywithName">
+                  <CAvatar size="md" src="/avatars/profile.png" status="success" />
+                  <div className="title">User Name</div>
+                </div>
+              </div>
+              <div className="flex-row" role="cell">
+                <div>Yiorgos Avraamu</div>
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                Gen
+              </div>
+            </div>
+            <div className="flex-table" role="rowgroup">
+              <div className="flex-row first" role="cell">
+                <div className="avatarTableDisplaywithName">
+                  <CAvatar size="md" src="/avatars/profile.png" status="success" />
+                  <div className="title">User Name</div>
+                </div>
+              </div>
+              <div className="flex-row" role="cell">
+                <div>Yiorgos Avraamu</div>
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                Gen
+              </div>
+            </div>
+            <div className="flex-table" role="rowgroup">
+              <div className="flex-row first" role="cell">
+                <div className="avatarTableDisplaywithName">
+                  <CAvatar size="md" src="/avatars/profile.png" status="success" />
+                  <div className="title">User Name</div>
+                </div>
+              </div>
+              <div className="flex-row" role="cell">
+                <div>Yiorgos Avraamu</div>
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                Gen
+              </div>
+            </div>
+            <div className="flex-table" role="rowgroup">
+              <div className="flex-row first" role="cell">
+                <div className="avatarTableDisplaywithName">
+                  <CAvatar size="md" src="/avatars/profile.png" status="success" />
+                  <div className="title">User Name</div>
+                </div>
+              </div>
+              <div className="flex-row" role="cell">
+                <div>Yiorgos Avraamu</div>
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                Gen
+              </div>
+            </div>
+            <div className="flex-table" role="rowgroup">
+              <div className="flex-row first" role="cell">
+                <div className="avatarTableDisplaywithName">
+                  <CAvatar size="md" src="/avatars/profile.png" status="success" />
+                  <div className="title">User Name</div>
+                </div>
+              </div>
+              <div className="flex-row" role="cell">
+                <div>Yiorgos Avraamu</div>
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                Gen
+              </div>
+            </div>
+            <div className="flex-table" role="rowgroup">
+              <div className="flex-row first" role="cell">
+                <div className="avatarTableDisplaywithName">
+                  <CAvatar size="md" src="/avatars/profile.png" status="success" />
+                  <div className="title">User Name</div>
+                </div>
+              </div>
+              <div className="flex-row" role="cell">
+                <div>Yiorgos Avraamu</div>
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                Gen
+              </div>
+            </div>
+            <div className="flex-table" role="rowgroup">
+              <div className="flex-row first" role="cell">
+                <div className="avatarTableDisplaywithName">
+                  <CAvatar size="md" src="/avatars/profile.png" status="success" />
+                  <div className="title">User Name</div>
+                </div>
+              </div>
+              <div className="flex-row" role="cell">
+                <div>Yiorgos Avraamu</div>
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                123456
+              </div>
+              <div className="flex-row" role="cell">
+                Gen
+              </div>
+            </div>
+          </div>
         </CCardBody>
-        <CTable hover responsive align="middle" className="mb-0">
-          <CTableHead color="light">
-            <CTableRow>
-              <CTableHeaderCell className="text-center">Agent Name</CTableHeaderCell>
-              <CTableHeaderCell>Created By</CTableHeaderCell>
-              <CTableHeaderCell className="text-center">AWB</CTableHeaderCell>
-              <CTableHeaderCell>SB</CTableHeaderCell>
-              <CTableHeaderCell className="text-center">VCT</CTableHeaderCell>
-              <CTableHeaderCell>Airline</CTableHeaderCell>
-              <CTableHeaderCell>E-Red/Gen</CTableHeaderCell>
-            </CTableRow>
-          </CTableHead>
-          <CTableBody>
-            <CTableRow className="groupByTable">
-              <CTableDataCell colSpan="7" className="text-left ">
-                <small className="text-medium-emphasis">Aug 01, 2021</small>
-              </CTableDataCell>
-            </CTableRow>
-            <CTableRow>
-              <CTableDataCell className="text-center">
-                <div className="avatarTableDisplaywithName">
-                  <CAvatar size="md" src="/avatars/profile.png" status="success" />
-                  <div className="title">User Name</div>
-                </div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div>Yiorgos Avraamu</div>
-              </CTableDataCell>
-              <CTableDataCell className="text-center">
-                <div>123456</div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div className="clearfix">123456</div>
-              </CTableDataCell>
-              <CTableDataCell className="text-center">
-                <div>123456789</div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div>EY</div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div>Gen VCT</div>
-              </CTableDataCell>
-            </CTableRow>
-            <CTableRow>
-              <CTableDataCell className="text-center">
-                <div className="avatarTableDisplaywithName">
-                  <CAvatar size="md" src="/avatars/profile.png" status="success" />
-                  <div className="title">User Name</div>
-                </div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div>Yiorgos Avraamu</div>
-              </CTableDataCell>
-              <CTableDataCell className="text-center">
-                <div>123456</div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div className="clearfix">123456</div>
-              </CTableDataCell>
-              <CTableDataCell className="text-center">
-                <div>123456789</div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div>EY</div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div>Gen VCT</div>
-              </CTableDataCell>
-            </CTableRow>
-            <CTableRow>
-              <CTableDataCell className="text-center">
-                <div className="avatarTableDisplaywithName">
-                  <CAvatar size="md" src="/avatars/profile.png" status="success" />
-                  <div className="title">User Name</div>
-                </div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div>Yiorgos Avraamu</div>
-              </CTableDataCell>
-              <CTableDataCell className="text-center">
-                <div>123456</div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div className="clearfix">123456</div>
-              </CTableDataCell>
-              <CTableDataCell className="text-center">
-                <div>123456789</div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div>EY</div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div>Gen VCT</div>
-              </CTableDataCell>
-            </CTableRow>
-            <CTableRow className="groupByTable">
-              <CTableDataCell colSpan="7" className="text-left">
-                <small className="text-medium-emphasis">Aug 02, 2021</small>
-              </CTableDataCell>
-            </CTableRow>
-            <CTableRow>
-              <CTableDataCell className="text-center">
-                <div className="avatarTableDisplaywithName">
-                  <CAvatar size="md" src="/avatars/profile.png" status="success" />
-                  <div className="title">User Name</div>
-                </div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div>Yiorgos Avraamu</div>
-              </CTableDataCell>
-              <CTableDataCell className="text-center">
-                <div>123456</div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div className="clearfix">123456</div>
-              </CTableDataCell>
-              <CTableDataCell className="text-center">
-                <div>123456789</div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div>EY</div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div>Gen VCT</div>
-              </CTableDataCell>
-            </CTableRow>
-            <CTableRow>
-              <CTableDataCell className="text-center">
-                <div className="avatarTableDisplaywithName">
-                  <CAvatar size="md" src="/avatars/profile.png" status="success" />
-                  <div className="title">User Name</div>
-                </div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div>Yiorgos Avraamu</div>
-              </CTableDataCell>
-              <CTableDataCell className="text-center">
-                <div>123456</div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div className="clearfix">123456</div>
-              </CTableDataCell>
-              <CTableDataCell className="text-center">
-                <div>123456789</div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div>EY</div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div>Gen VCT</div>
-              </CTableDataCell>
-            </CTableRow>
-            <CTableRow>
-              <CTableDataCell className="text-center">
-                <div className="avatarTableDisplaywithName">
-                  <CAvatar size="md" src="/avatars/profile.png" status="success" />
-                  <div className="title">User Name</div>
-                </div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div>Yiorgos Avraamu</div>
-              </CTableDataCell>
-              <CTableDataCell className="text-center">
-                <div>123456</div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div className="clearfix">123456</div>
-              </CTableDataCell>
-              <CTableDataCell className="text-center">
-                <div>123456789</div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div>EY</div>
-              </CTableDataCell>
-              <CTableDataCell>
-                <div>Gen VCT</div>
-              </CTableDataCell>
-            </CTableRow>
-          </CTableBody>
-        </CTable>
       </CCard>
     </>
   )

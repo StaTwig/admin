@@ -124,7 +124,7 @@ const Dashboard = () => {
                   dayRender={(info) => {
                     const isToday = moment().isSame(info.date, 'day')
                     if (isToday && info.view.type !== 'resourceTimelineDay') {
-                      info.el.style.backgroundColor = '#E6F7FF'
+                      info.el.style.backgroundColor = '#EBEDEF'
                     }
                   }}
                 />

@@ -11,7 +11,7 @@ import {
 
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
-import logo from '../assets/icons/logo.png'
+import logo from '../assets/icons/GMRLogo.png'
 import narrowLogo from '../assets/icons/gmr_logo.png'
 
 // sidebar nav config
@@ -33,7 +33,7 @@ const AppSidebar = () => {
         dispatch({ type: 'set', sidebarShow: false })
       }}
     >
-      <CSidebarBrand className="d-none d-md-flex" to="/">
+      <CSidebarBrand className="d-none d-md-flex mb-5" to="/">
         <img alt="gmr logo" height={35} src={logo} className="sidebar-brand-full"></img>
         <img
           alt="gmr logo narrow"

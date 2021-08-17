@@ -6,7 +6,6 @@ const Reports = React.lazy(() => import('./views/reports/Reports'))
 const Track = React.lazy(() => import('./views/trackandtrace/Track'))
 
 const routes = [
-  { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   { path: '/booking', name: 'VCT Booking', component: Booking },
   { path: '/reports', name: 'VCT Reports', component: Reports },
