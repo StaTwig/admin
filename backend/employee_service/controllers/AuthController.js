@@ -741,9 +741,7 @@ exports.verifyOtp = [
         }
         const user = await EmployeeModel.findOne(query);
         if (user && (user.otp == req.body.otp || t_res?.status === 'approved')) {
-
           var address;
-
           if (user.walletAddress == null || user.walletAddress == "wallet12345address") {
             const response = await axios.get(
               `${blockchain_service_url}/createUserAddress`,
@@ -760,7 +758,7 @@ exports.verifyOtp = [
               `${blockchain_service_url}/grantPermission`,
               userData,
             );
-            await EmployeeModel.update(query, { otp: null, walletAddress: address });
+            await EmployeeModel.updateOne(query, { otp: null, walletAddress: address });
           }
           else {
             address = user.walletAddress
@@ -800,7 +798,8 @@ exports.verifyOtp = [
           };
           const secret = process.env.JWT_SECRET;
           //Generated JWT token with Payload and secret.
-          usrData.permissions = await RbacModel.findone({role});
+          const {role} = user;
+          userData.permissions = await RbacModel.findOne({role});
           userData.token = jwt.sign(jwtPayload, secret, jwtData);
           logger.log(
             'info',

@@ -1,5 +1,5 @@
+
 const mongoose = require("mongoose");
-​
 const RbacSchema = new mongoose.Schema({
 	permissions: {type: Array, required: true},
 	role:{type: String, required: true , unique: true},
@@ -68,7 +68,6 @@ const RbacSchema = new mongoose.Schema({
 		viewAffliation: {type: Boolean, default: false},
 		acceptAffiliation: {type: Boolean, default: false},
 		removeAffiliation: {type: Boolean, default: false},
-	}
+	}	
 }, {timestamps: true});
-​
 module.exports = mongoose.model("permissions", RbacSchema);
