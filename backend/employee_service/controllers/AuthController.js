@@ -587,12 +587,12 @@ exports.sendOtp = [
               'info',
               '<<<<< UserService < AuthController < login : user is active',
             );
-            if (user.phoneNumber) {
-              client.verify.services('VA0410823affc5222e309aca3742ecf315')
-                .verifications
-                .create({ to: user.phoneNumber, channel: 'sms' })
-                .then(verification => console.log(verification.status));
-            }
+            // if (user.phoneNumber) {
+            //   client.verify.services('VA0410823affc5222e309aca3742ecf315')
+            //     .verifications
+            //     .create({ to: user.phoneNumber, channel: 'sms' })
+            //     .then(verification => console.log(verification.status));
+            // }
             let otp = utility.randomNumber(4);
             if (process.env.EMAIL_APPSTORE.includes(user.emailId) && user.emailId != '')
               otp = process.env.OTP_APPSTORE;
@@ -727,12 +727,14 @@ exports.verifyOtp = [
         if (emailId.indexOf('@') === -1) {
           let phone = '+' + emailId;
           query = { phoneNumber: phone };
-          t_res = await client.verify.services('VA0410823affc5222e309aca3742ecf315')
-          .verificationChecks
-          .create({to: phone, code: req.body.otp});
+          // t_res = await client.verify.services('VA0410823affc5222e309aca3742ecf315')
+          // .verificationChecks
+          // .create({to: phone, code: req.body.otp});
         }
         const user = await EmployeeModel.findOne(query);
-        if (user && (user.otp == req.body.otp || t_res?.status === 'approved')) {
+        // if (user && (user.otp == req.body.otp || t_res?.status === 'approved')) {
+        if (user && user.otp == req.body.otp) {
+
           var address;
           if (user.walletAddress == null || user.walletAddress == "wallet12345address") {
             const response = await axios.get(
@@ -756,7 +758,7 @@ exports.verifyOtp = [
             address = user.walletAddress
           }
 
-	  const activeWarehouse = await WarehouseModel.findOne( {$and: [ {"id": {$in: user.warehouseId }},{"status": "ACTIVE" }]})
+          const activeWarehouse = await WarehouseModel.findOne({ $and: [{ "id": { $in: user.warehouseId } }, {$or: [{ status: 'ACTIVE' },{ status: 'PENDING' }, { status: { $exists: false } }]} ]})
     var userData ;
     if(activeWarehouse) {
       userData = {
@@ -840,7 +842,8 @@ exports.userInfo = [
           } = user;
           const org = await OrganisationModel.findOne({ id: organisationId }, 'name configuration_id type');
           const warehouse = await EmployeeModel.findOne({ id }, { _id: 0, warehouseId: 1 });
-          const warehouseArray = await WarehouseModel.find({ id: { "$in": warehouse.warehouseId },$or:[{status: 'ACTIVE'}, {status: {$exists: false}}] })
+          // const warehouseArray = await WarehouseModel.find({ id: { "$in": warehouse.warehouseId },$or:[{status: 'ACTIVE'},{status: 'PENDING'}, {status: {$exists: false}}] })
+          const warehouseArray = await WarehouseModel.find({ id: { "$in": warehouse.warehouseId } })
           var user_data;
           if(org){
             user_data = {
@@ -1297,7 +1300,7 @@ exports.updateWarehouseAddress = [
        const loc = await getLatLongByCity( req.body.warehouseAddress.city+','+ req.body.warehouseAddress.country);
       const data = req.body;
       data.location = loc;
-      data.status = "NOTVERIFIED";
+      data.status = "PENDING";
       await WarehouseModel.findOneAndUpdate(
         { id: req.query.warehouseId },
         data,
