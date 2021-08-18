@@ -412,14 +412,10 @@ if (!error) {
   };
  
   const handleQuantityChange = (value, i) => {
-    
     const soDetailsClone = { ...OrderDetails };
-    if(value > soDetailsClone.products[i].productQuantity){
-      setOrderDetails(soDetailsClone);
-    }else{
       soDetailsClone.products[i].productQuantity = value;
       setOrderDetails(soDetailsClone);    
-    }
+    
   };
  
   const handleBatchChange = (value, i) => {
@@ -660,7 +656,6 @@ if (!error) {
                             // result.poDetails[0].customer.organisation.id
                           );
                           setOrderDetails(result.poDetails[0]);
-
                           dispatch(turnOff());
                           setDisabled(true);
                           let warehouse = senderWarehouses.filter((w) => {
@@ -713,6 +708,7 @@ if (!error) {
                             result.poDetails[0].products[i].productQuantityShipped;
                           }
                           console.log(products_temp);
+                          
                          if (result.poDetails[0].products.length > 0) {
                            setProducts(p => []);
                            setAddProducts(p => []);

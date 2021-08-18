@@ -2853,7 +2853,7 @@ exports.fetchBatchesOfInventory = [
        let warehouse = await WarehouseModel.findOne({id: warehouseId}) 
        let inventoryId = warehouse.warehouseInventory
         const batches = await AtomModel.find({productId: productId,"batchNumbers": {$nin: ["", "null", null]}, inventoryIds: inventoryId})
-          .sort({ createdAt: -1 })
+          .sort({"attributeSet.expDate": 1})
         return apiResponse.successResponseWithData(
           res,
           "Batches of product",
