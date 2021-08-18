@@ -1,7 +1,7 @@
 @import "../../assets/styles/global.scss";
 
 .header {
-  height: 75px;
+  height: 85px;
   background-color: $white;
   display: flex;
   justify-content: space-between;
@@ -77,10 +77,10 @@
    
 
     .search-form {
-      width: 350px;
+      width: 470px;
       position: relative;
       top: 45px;
-      right: 32.5rem;
+      right: 33rem;
       //left: unset;
       display: block;
       
@@ -91,8 +91,8 @@
       }
       img {
         position: relative;
-        right: -26.5rem;
-        bottom: 47px;
+        right: -26.2rem;
+        bottom: 49px;
         width: 20px;
         opacity: 2;
       }
@@ -114,11 +114,11 @@
     }
 
     .user-info {
+      position: absolute;
       display: flex;
       align-items: center;
       flex: 1;
       justify-content: flex-end;
-      padding-right: 30px;
       color: #0B65C1;
       img {
         max-width: 100%;
@@ -127,14 +127,16 @@
         position: relative;
         right: 2.5rem;
         top: -3rem;
+        cursor: pointer;
         .bellicon-wrap {
           position: relative;
           cursor: pointer;
           .badge {
             position: absolute;
-            top: -10px;
+            top: -33px;
             left: 10px;
             border-radius: 100%;
+            color: #0B65C1;
           }
         }
         .slider-menu {
@@ -173,7 +175,7 @@
       .divider {
         // margin-right: 1rem;
         position:relative;
-        left: -2.5rem;
+        left: -2.4rem;
         bottom:45px;
         // border: 1px solid #fff;
         border: .1px solid #D9D9D9;
@@ -186,24 +188,22 @@
       .location{
         position: relative;
         right:1rem;
-        bottom:3rem;
+        bottom:3.2rem;
       }
       .userName {
-        max-width: 10vw;
+        max-width: 12vw;
         margin-right: 1rem;
         position: relative;
-        bottom:2.5rem;
+        bottom:3rem;
 
-        
         .uname {
-          font-size: 10px;
+          font-size: 12px;
           text-align: right;
           margin: 1px;
-          
         }
 
         .cname {
-          font-size: 14px;
+          font-size: 16px;
           text-align: right;
           font-weight: 700;
           margin: 0;
@@ -229,10 +229,10 @@
             flex-basis: 100%;
             outline: none;
             align-items: center;
-            font-size: 14px;
+            font-size: 16px;
             background: transparent;
             text-align: left;
-            font-weight: 700;
+            font-weight: 600;
             &.active {
               color: $primaryBlue;
             }
@@ -243,21 +243,26 @@
           .dropdownImg{
             margin-left: auto;
             width:13px;
+            height: 8px;
             margin-right: auto;
+            bottom: 3rem;
           }
           .dropdown-menu {
+            top:1.7rem;
+            margin-left: -50px;
             height: max-content;
-            width: max-content;
+            width: 460px;
             overflow: auto;
             box-shadow: 0px 3px 10px $grey;
             border-radius: 8px;
             border: none;
-            padding: 0.5rem;
+            padding: 0.6rem;
             .dropdown-item {
               padding: 0;
               clear: both;
-              font-size: 14px;
+              font-size: 16px;
               cursor: pointer;
+              color: #707070;
             }
             hr {
               border-width: 0.5px;
@@ -283,7 +288,8 @@
       .userPic {
         position: relative;
         margin-right: 0.5rem;
-        bottom:2.5rem;
+        bottom:3rem;
+        
         img {
           width: 40px;
           height:40px;
@@ -293,7 +299,7 @@
       .userActions {
         img {
           position: relative;
-          bottom:2.5rem;
+          bottom:3rem;
           width: 13px;
           cursor: pointer;
         }
@@ -309,7 +315,7 @@
 .slider-menu {
   //display: flex;
   //flex-direction: column;
-  top: 5.6rem;
+  top: 5.9rem;
   right: 1rem !important;
   //left: unset;
   max-width: 10rem;
@@ -323,9 +329,9 @@
   transform: translate3d(0px, 38px, 0px);
   will-change: transform;
   box-shadow: 0px 3px 10px $grey;
-  border-radius:  15px;
+  border-radius:  8px;
   padding: 1rem;
-
+  
   @media screen and (max-width: 768px) {
     right: 0 !important;
   }
@@ -347,7 +353,7 @@
     @media (min-width: $xl) {
       margin: 0.5rem 0;
       padding: 0.25rem 1.5rem;
-      font-size: 18px;
+      font-size: 16px;
     }
   }
 

@@ -283,7 +283,7 @@ const imgs = config().fetchProfileImage;
       <div className="actions">
         <div className="search-form" tabIndex="-1" onKeyDown={onkeydown}>
         <Autocomplete
-        style={{width:"130%"}}
+        
         id="free-solo-demo"
         freeSolo
         //value={search}
@@ -324,7 +324,7 @@ const imgs = config().fetchProfileImage;
         
        <div className="user-info ">
        <div className="notifications">
-                <img src={bellIcon} onClick={showNotifications} alt="notification" /><bellIcon />
+                <img src={bellIcon} onClick={() => setShowNotifications(!showNotifications)} alt="notification" /><bellIcon />
                   
                     <div className="bellicon-wrap" onClick={() => setShowNotifications(!showNotifications)}>
             
@@ -366,14 +366,14 @@ const imgs = config().fetchProfileImage;
           <p className="uname"> {activeWarehouses[0]?.warehouseAddress.firstLine}</p>
           </div> */}
 
-            <div className="userName" style={{fontSize: "4px", marginBottom:"0px"}}>               
+            <div className="userName">               
            <DropdownButton
             name={location?.title+"\n"+location?.warehouseAddress?.city+","+location?.warehouseAddress?.country}
             // name={location?.title}
             arrowImg={dropdownIcon}
             onSelect={item=>{handleLocation(item)}}
             groups={activeWarehouses}
-           />
+          />
            </div>
            
           <div className="userName">
