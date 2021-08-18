@@ -18,6 +18,7 @@
     "mongoose": "^5.12.11",
     "morgan": "~1.10.0",
     "nodemailer": "^6.6.1",
+    "redis": "^3.1.2",
     "swagger-ui-express": "^4.1.6",
     "winston": "^3.3.3",
     "winston-logzio": "^5.1.2"

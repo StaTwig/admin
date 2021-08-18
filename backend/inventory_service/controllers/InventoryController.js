@@ -63,7 +63,7 @@ exports.getTotalCountOnHold = [
     try {
       const {role} = req.user;
       permission_request = {
-            result: role,
+            role: role,
             permissionRequired: "viewInventory",
           };
           checkPermissions(permission_request, (permissionResult) => {

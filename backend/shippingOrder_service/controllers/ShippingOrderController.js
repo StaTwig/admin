@@ -147,8 +147,9 @@ exports.assignShippingOrder = [
   auth,
   async (req, res) => {
     try {
+      const { role } = req.user;
           const permission_request = {
-            result: result,
+            role: role,
             permissionRequired: 'receiveSO',
           };
           checkPermissions(permission_request, async permissionResult => {
@@ -195,8 +196,9 @@ exports.updateShippingOrder = [
   auth,
   async (req, res) => {
     try {
+      const {role} = req.user;
           const permission_request = {
-            result: result,
+            role: role,
             permissionRequired: 'receiveSO',
           };
           checkPermissions(permission_request, async permissionResult => {
@@ -260,16 +262,15 @@ exports.changeSOStatus = [
   auth,
   async (req, res) => {
     try {
+      const { address,role } = req.user;
           const permission_request = {
-            result: result,
+            role: role,
             permissionRequired: 'receiveSO',
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
               try {
-                const { address } = req.user;
                 const { orderID, status, poId } = req.body;
-
                 const POFound = await RecordModel.findOne({ id: poId });
                 if (!POFound) {
                   return apiResponse.ErrorResponse(res, 'PO Not found');
