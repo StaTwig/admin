@@ -9,7 +9,7 @@ const tablefilter = (props) => {
       <div className="d-flex justify-content-between">
         <div className="row" style={{ flexBasis: props.fb }}>
         <div className="box col-3">
-          <div className="filter-item">
+          <div className="filter-item mr-5 pr-5">
               <div className="icon mr-2">
               {props.data.img1}
               </div>
@@ -21,7 +21,7 @@ const tablefilter = (props) => {
         </div>
         <span className="" />
         <div className="box col">
-          <div className="filter-item">
+          <div className="filter-item mr-3 pr-3">
               <div className="icon mr-2">
               {props.data.img2}
               </div>
@@ -46,7 +46,7 @@ const tablefilter = (props) => {
         {props.data.img4? <span className="" />: null}
         {props.data.img4? 
         <div className="box col">
-          <div className="filter-item">
+          <div className="filter-item mr-3 pr-3">
               <div className="icon mr-2">
                 {props.data.img4}
               </div>
@@ -59,7 +59,7 @@ const tablefilter = (props) => {
         {props.data.img5? <span className="" /> : null}
         {props.data.img5? 
           <div className="box col">
-            <div className="filter-item">
+            <div className="filter-item mr-3 pr-3">
                 <div className="icon mr-2">
                   {props.data.img5}
                 </div>
@@ -73,7 +73,7 @@ const tablefilter = (props) => {
         {props.data.img6? <span className="" /> : null}
         {props.data.img6? 
           <div className="box col">
-            <div className="filter-item">
+            <div className="filter-item mr-5 pr-5">
                 <div className="icon mr-2">
                   {props.data.img6}
                 </div>

@@ -80,6 +80,11 @@ const BatchExpiry = props => {
               <div className="col-1 txt1 ">{exp.attributeSet.expDate ? formatDate(exp.attributeSet.expDate) : ''}</div>
             </div>
           )}
+          {data?.length === 0 && 
+            <div className="col-12 p-3 mb-3 rounded row bg-white shadow">
+              <div className="col-12 txt text-center txtBlue">No records found</div>
+            </div>
+          }
         </div>
       </div>
     </div>

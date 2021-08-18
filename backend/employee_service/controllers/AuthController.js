@@ -1,3 +1,4 @@
+const dotenv = require('dotenv').config();
 const EmployeeModel = require('../models/EmployeeModel');
 const WarehouseModel = require('../models/WarehouseModel');
 const logEvent = require("../../../utils/event_logger");
@@ -6,26 +7,22 @@ const InventoryModel = require('../models/InventoryModel');
 const OrganisationModel = require('../models/OrganisationModel');
 const ConfigurationModel = require('../models/ConfigurationModel');
 const CounterModel = require('../models/CounterModel');
+const RbacModel = require('../models/RbacModel')
 const { body, validationResult} = require('express-validator');
 const { sanitizeBody } = require('express-validator');
 //helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
 const utility = require('../helpers/utility');
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mailer = require('../helpers/mailer');
-const { constants } = require('../helpers/constants');
-var base64Img = require('base64-img');
 const auth = require('../middlewares/jwt');
 const axios = require('axios');
-const dotenv = require('dotenv').config();
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilio_service_id = process.env.TWILIO_SERVICE_ID;
 const client = require('twilio')(accountSid, authToken, {
   lazyLoading: true
 });
-const moveFile = require("move-file");
 const blockchain_service_url = process.env.URL;
 const stream_name = process.env.INV_STREAM;
 const checkToken = require('../middlewares/middleware').checkToken;
@@ -297,7 +294,7 @@ exports.checkEmail = [
         //var employeeId = uniqid('emp-');
         var employeeStatus = 'NOTAPPROVED';
         let addr = '';
-        //create organisation if doesn't exists 
+        //create organisation if doesn't exists
         if (req.body.organisationName) {
           const organisationName = req.body.organisationName;
           const organisation = await OrganisationModel.findOne({ name: new RegExp('^'+organisationName+'$', "i") });
@@ -400,11 +397,11 @@ exports.checkEmail = [
         let emailId = null
         if(req.body?.emailId)
           emailId=req.body.emailId.toLowerCase().replace(' ', '');
-        
+
        let phoneNumber = null
         if(req.body?.phoneNumber)
            phoneNumber='+'+req.body?.phoneNumber;
-        
+
         // if (emailId.indexOf('@') === -1)
         //   phoneNumber = '+' + emailId;
         // if(phoneNumber.indexOf('+')===-1)
@@ -466,10 +463,10 @@ exports.checkEmail = [
           event_data.eventType.primary = "CREATE";
           event_data.eventType.description = "USER";
           event_data.payloaData = req.body;
-        
+
           async function compute(event_data) {
             resultt = await logEvent(event_data);
-            return resultt;     
+            return resultt;
           }
           console.log(result);
           compute(event_data).then((response) => {
@@ -554,11 +551,7 @@ exports.sendOtp = [
   body('emailId')
     .isLength({ min: 10 })
     .trim()
-    .withMessage('Email/Mobile must be specified.')
-  //   .isEmail()
-  // .withMessage('Email must be a valid email address.')
-  ,
-  sanitizeBody('emailId').escape(),
+    .withMessage('Email/Mobile must be specified.'),
   async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -594,12 +587,12 @@ exports.sendOtp = [
               'info',
               '<<<<< UserService < AuthController < login : user is active',
             );
-            if (user.phoneNumber) {
-              client.verify.services('VA0410823affc5222e309aca3742ecf315')
-                .verifications
-                .create({ to: user.phoneNumber, channel: 'sms' })
-                .then(verification => console.log(verification.status));
-            }
+            // if (user.phoneNumber) {
+            //   client.verify.services('VA0410823affc5222e309aca3742ecf315')
+            //     .verifications
+            //     .create({ to: user.phoneNumber, channel: 'sms' })
+            //     .then(verification => console.log(verification.status));
+            // }
             let otp = utility.randomNumber(4);
             if (process.env.EMAIL_APPSTORE.includes(user.emailId) && user.emailId != '')
               otp = process.env.OTP_APPSTORE;
@@ -734,15 +727,15 @@ exports.verifyOtp = [
         if (emailId.indexOf('@') === -1) {
           let phone = '+' + emailId;
           query = { phoneNumber: phone };
-          t_res = await client.verify.services('VA0410823affc5222e309aca3742ecf315')
-          .verificationChecks
-          .create({to: phone, code: req.body.otp});
+          // t_res = await client.verify.services('VA0410823affc5222e309aca3742ecf315')
+          // .verificationChecks
+          // .create({to: phone, code: req.body.otp});
         }
         const user = await EmployeeModel.findOne(query);
-        if (user && (user.otp == req.body.otp || t_res?.status === 'approved')) {
+        // if (user && (user.otp == req.body.otp || t_res?.status === 'approved')) {
+        if (user && user.otp == req.body.otp) {
 
           var address;
-
           if (user.walletAddress == null || user.walletAddress == "wallet12345address") {
             const response = await axios.get(
               `${blockchain_service_url}/createUserAddress`,
@@ -759,13 +752,13 @@ exports.verifyOtp = [
               `${blockchain_service_url}/grantPermission`,
               userData,
             );
-            await EmployeeModel.update(query, { otp: null, walletAddress: address });
+            await EmployeeModel.updateOne(query, { otp: null, walletAddress: address });
           }
           else {
             address = user.walletAddress
           }
 
-	  const activeWarehouse = await WarehouseModel.findOne( {$and: [ {"id": {$in: user.warehouseId }},{"status": "ACTIVE" }]})
+          const activeWarehouse = await WarehouseModel.findOne({ $and: [{ "id": { $in: user.warehouseId } }, {$or: [{ status: 'ACTIVE' },{ status: 'PENDING' }, { status: { $exists: false } }]} ]})
     var userData ;
     if(activeWarehouse) {
       userData = {
@@ -799,6 +792,8 @@ exports.verifyOtp = [
           };
           const secret = process.env.JWT_SECRET;
           //Generated JWT token with Payload and secret.
+          const {role} = user;
+          userData.permissions = await RbacModel.findOne({role});
           userData.token = jwt.sign(jwtPayload, secret, jwtData);
           logger.log(
             'info',
@@ -847,7 +842,8 @@ exports.userInfo = [
           } = user;
           const org = await OrganisationModel.findOne({ id: organisationId }, 'name configuration_id type');
           const warehouse = await EmployeeModel.findOne({ id }, { _id: 0, warehouseId: 1 });
-          const warehouseArray = await WarehouseModel.find({ id: { "$in": warehouse.warehouseId },$or:[{status: 'ACTIVE'}, {status: {$exists: false}}] })
+          // const warehouseArray = await WarehouseModel.find({ id: { "$in": warehouse.warehouseId },$or:[{status: 'ACTIVE'},{status: 'PENDING'}, {status: {$exists: false}}] })
+          const warehouseArray = await WarehouseModel.find({ id: { "$in": warehouse.warehouseId } })
           var user_data;
           if(org){
             user_data = {
@@ -974,108 +970,6 @@ exports.updateProfile = [
     }
   },
 ];
-
-exports.updatePassword = [
-  auth,
-  (req, res) => {
-    try {
-      EmployeeModel.findOne({ email: req.user.email }).then(user => {
-        if (user) {
-          logger.log(
-            'info',
-            '<<<<< UserService < AuthController < updatePassword : user exist',
-          );
-          bcrypt.hash(req.body.password, 10, function (err, hash) {
-            var passwordNew = hash;
-            if (req.body.password) {
-              logger.log(
-                'info',
-                '<<<<< UserService < AuthController < updatePassword : new password is not null',
-              );
-              if (req.body.password.length > 2) {
-                logger.log(
-                  'info',
-                  '<<<<< UserService < AuthController < updatePassword : new password has length grater than 2',
-                );
-                user.password = passwordNew;
-              }
-            }
-            user.save(function (err) {
-              if (err) {
-                logger.log(
-                  'error',
-                  '<<<<< UserService < AuthController < updatePassword : error while updating user password',
-                );
-                return apiResponse.ErrorResponse(res, err);
-              } else {
-                logger.log(
-                  'info',
-                  '<<<<< UserService < AuthController < updatePassword : updating password successfully',
-                );
-                return apiResponse.successResponse(
-                  res,
-                  user.firstName + ' password Updated',
-                );
-              }
-            });
-          });
-        }
-      });
-    } catch (err) {
-      logger.log(
-        'info',
-        '<<<<< UserService < AuthController < updatePassword : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-
-/*exports.uploadImage = [
-  auth,
-  (req, res) => {
-    try {
-      EmployeeModel.findOne({ emailId: req.user.emailId }).then(user => {
-        if (user) {
-          logger.log(
-            'info',
-            '<<<<< UserService < AuthController < uploadImage : user exist',
-          );
-          base64Img.base64('uploads/' + req.file.filename, function (err, data) {
-            var base64ImgData = data;
-            user.profile_picture = data;
-            user.image_location = req.file.filename;
-            // Save user.
-            user.save(function (err) {
-              if (err) {
-                logger.log(
-                  'error',
-                  '<<<<< UserService < AuthController < uploadImage : error while uploading image',
-                );
-                return apiResponse.ErrorResponse(res, err);
-              }
-              logger.log(
-                'info',
-                '<<<<< UserService < AuthController < uploadImage : uploading user image successfully',
-              );
-              return apiResponse.successResponseWithData(
-                res,
-                'Updated',
-                base64ImgData,
-              );
-            });
-          });
-        }
-      });
-    } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< UserService < AuthController < uploadImage : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];*/
 
 exports.createUserAddress = [
   async (req, res) => {
@@ -1363,10 +1257,10 @@ exports.addWarehouse = [
         event_data.eventType.primary = "ADD";
         event_data.eventType.description = "WAREHOUSE";
         event_data.payloaData = req.body;
-      
+
         async function compute(event_data) {
           resultt = await logEvent(event_data);
-          return resultt;     
+          return resultt;
         }
         console.log(result);
         compute(event_data).then((response) => {
@@ -1406,7 +1300,7 @@ exports.updateWarehouseAddress = [
        const loc = await getLatLongByCity( req.body.warehouseAddress.city+','+ req.body.warehouseAddress.country);
       const data = req.body;
       data.location = loc;
-      data.status = "NOTVERIFIED";
+      data.status = "PENDING";
       await WarehouseModel.findOneAndUpdate(
         { id: req.query.warehouseId },
         data,
@@ -1569,7 +1463,7 @@ exports.getAllRegisteredUsers = [
   async (req, res) => {
     try {
       const resPerPage = 10; // results per page
-      const page = req.query.page || 1; // Page 
+      const page = req.query.page || 1; // Page
       const totalRecords = await EmployeeModel.count({})
       const users = await EmployeeModel.find({}).skip((resPerPage * page) - resPerPage)
         .limit(resPerPage);;
@@ -1664,7 +1558,7 @@ exports.getAllUsersByWarehouse = [
   async (req, res) => {
     try {
       const resPerPage = 10; // results per page
-      const page = req.query.page || 1; // Page 
+      const page = req.query.page || 1; // Page
       const totalRecords = await EmployeeModel.count({ warehouseId: req.params.warehouseId })
       const users = await EmployeeModel.find({ warehouseId: req.params.warehouseId }).skip((resPerPage * page) - resPerPage)
         .limit(resPerPage);;
@@ -1760,7 +1654,7 @@ exports.getAllUsersByOrganisation = [
   async (req, res) => {
     try {
       const resPerPage = 10; // results per page
-      const page = req.query.page || 1; // Page 
+      const page = req.query.page || 1; // Page
       const totalRecords = await EmployeeModel.count({ organisationId: req.params.organisationId })
       const users = await EmployeeModel.find({ organisationId: req.params.organisationId }).skip((resPerPage * page) - resPerPage)
         .limit(resPerPage);;
@@ -1865,7 +1759,7 @@ exports.createTwilioBinding = [
                       address: req.body.token_id
                       })
                       .then(binding => console.log(binding));
-      return apiResponse.successResponse(res,"Succesfully Registered") 
+      return apiResponse.successResponse(res,"Succesfully Registered")
     } catch (err) {
       console.log(err)
       return apiResponse.ErrorResponse(res, err);
@@ -1874,7 +1768,7 @@ exports.createTwilioBinding = [
 ];
 
 exports.getOrganizationsByType = [
-//without auth for new user register 
+//without auth for new user register
   async (req, res) => {
     try {
       const organisationId = req.query.id;
@@ -1986,7 +1880,7 @@ exports.getwarehouseinfo = [
 ];
 
 exports.getOrganizationsTypewithauth = [
-   auth, 
+   auth,
   async (req, res) => {
     try {
       const organisationId = req.query.id;
@@ -2007,9 +1901,9 @@ exports.emailverify=[
   async (req,res)=>{
     try{
       const emailId= req.query.emailId;
-      const phoneNumber=req.query.phoneNumber;   
+      const phoneNumber=req.query.phoneNumber;
       const email= await EmployeeModel.find({$or:[{"phoneNumber":"+"+phoneNumber},{"emailId":emailId}]},'emailId phoneNumber')
-      
+
       return apiResponse.successResponseWithData(
         res,
         "Operation success",
@@ -2074,5 +1968,3 @@ exports.switchLocation = [
     }
   },
 ];
-
-

@@ -21,7 +21,7 @@ const app = express();
 
 // DB connection
 const MONGODB_URL = process.env.MONGODB_URL;
-mongoose.connect(MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true}).then(() => {
+mongoose.connect(MONGODB_URL, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true}).then(() => {
   //don't show the log when it is test
   if(process.env.NODE_ENV !== "test") {
     console.log("Connected to %s", MONGODB_URL);

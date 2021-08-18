@@ -1,30 +1,46 @@
 const RbacModel = require('../models/RbacModel');
 const { body, validationResult } = require('express-validator');
-//helper file to prepare responses.
-const checkToken = require('../middlewares/middleware').checkToken;
 const auth = require('../middlewares/jwt');
-
+const {RbacCache} = require('../helpers/rbacCache');
 const apiResponse = require('../helpers/apiResponse');
 
 exports.getPermissions = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
-        if (result.success) {
-          const permissions = await RbacModel.find({});
-          res.json({ data: permissions });
-        } else {
-          res.status(403).json(result);
-        }
-      });
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
+      const { role } = req.query;
+      if(role){
+      const permissions = await RbacModel.find({role});
+      return apiResponse.successResponseWithData(res, `Permissions of ${role}`, permissions);
+      }
+      else{
+      const permissions = await RbacModel.find({});
+      return apiResponse.successResponseWithData(res, "All Permissions Available", permissions);
+      }
+} catch (err) {
+  return apiResponse.ErrorResponse(res, err.message);
+}
+},
 ];
 
-exports.addPermissions = [
+exports.getRoles = [
+auth,
+async (req, res) => {
+try {
+      var roles =[];
+      const results = await RbacModel.find({}, { _id: 0, role: 1 });
+      results.map(r => {
+          roles.push(r.role);
+        })
+      return apiResponse.successResponseWithData(res, "All Roles", roles);
+} catch (err) {
+  console.log(err)
+  return apiResponse.ErrorResponse(res, err.message);
+}
+}
+]
+
+exports.updatePermissions = [
   auth,
   body('permissions')
     .isLength({ min: 1 })
@@ -34,36 +50,53 @@ exports.addPermissions = [
     .trim()
     .withMessage('Role must be specified.'),
   async (req, res) => {
-    try {
+    try{
       const errors = validationResult(req);
       if (!errors.isEmpty()) {
-        // Display sanitized values/errors messages.
         return apiResponse.validationErrorWithData(
           res,
           'Validation Error.',
           errors.array(),
         );
       }
-      checkToken(req, res, async result => {
-        if (result.success) {
-          const { role, permissions } = req.body;
-          const rbac_object = await RbacModel.findOne({ role });
-          if(rbac_object){
-            await RbacModel.update({role}, {permissions});
-          } else{
-            const rbac = new RbacModel({
-              role,
-              permissions
-            });
-            await rbac.save();  
+      const { role, permissions } = req.body;
+      var permsArray = [];
+      for(var i in permissions){
+        for (const [key, value] of Object.entries(permissions[i])) {
+          if(value == true){
+            permsArray.push(key);
           }
-          apiResponse.successResponseWithData(res, 'Success');
-        } else {
-          return apiResponse.ErrorResponse(res, 'User not authenticated');
-        }
-      });
-    } catch (err) {
-      return apiResponse.ErrorResponse(res, err);
+          if(value == false){
+            permsArray = permsArray.filter(elem => elem !== key);
+          }
+        } 
     }
-  },
-];
+      let rbac_object = await RbacModel.findOneAndUpdate({ role },{$set: permissions , "permissions": permsArray}, {new: true});
+      if(!rbac_object){
+      const rbac = new RbacModel({
+        role,
+        permissions : permsArray,
+      });
+      await rbac.save();
+      rbac_object = await RbacModel.findOneAndUpdate({ role },{$set: permissions}, {new: true});
+    }
+    RbacCache();
+    return apiResponse.successResponseWithData(res, 'Success', rbac_object);
+  }
+    catch (err) {
+      console.log(err);
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  }
+]
+
+exports.rbacCache = [
+  async (req, res) => {
+    try {
+      RbacCache();
+      return apiResponse.successResponse(res, 'Success Cache Updated');
+    } catch (err) {
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  }
+]

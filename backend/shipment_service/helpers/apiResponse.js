@@ -26,7 +26,6 @@ exports.successResponseWithMultipleData = function (res, msg, data, dataIn, data
   return res.status(200).json(resData);
 };
 
-
 exports.ErrorResponse = function (res, msg) {
   var data = {
     status: 0,
@@ -59,3 +58,11 @@ exports.unauthorizedResponse = function (res, msg) {
   };
   return res.status(401).json(data);
 };
+
+exports.forbiddenResponse = function (res, msg) {
+	var data = {
+		status: 0,
+		message: msg,
+	};
+	return res.status(403).json(data);
+}
