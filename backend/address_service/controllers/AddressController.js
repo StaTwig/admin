@@ -57,7 +57,10 @@ exports.addressesOfOrgWarehouses = [
 ];
 
 function getConditionForLocationApprovals(type, id) {
-  let matchConditions = { status: "NOTVERIFIED" };
+  // let matchConditions = { status: "NOTVERIFIED" };
+  let matchConditions = {
+    $or: [{ status: "NOTVERIFIED" }, { status: "PENDING" }],
+  };
   if (type != "CENTRAL_AUTHORITY") matchConditions.organisationId = id;
   return matchConditions;
 }
