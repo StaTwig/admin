@@ -130,13 +130,13 @@ class Profile extends React.Component {
       // console.log(wareHouseAddresses,"All warehouses");
       this.setState({
         wareIds: wareHouseIdResult,
-        warehouseLocations: wareHouseAddresses,
+        warehouseLocations: response.data.data.warehouses,
         warehouseLocByOrg:wareHouseAddresses
       });
 
-     this.state.warehouseLocations.map((id)=>{
-        this.state.warehouseLocations= this.state.warehouseLocations.filter((data)=>response.data.data.warehouseId.includes(data.id));
-      })
+    //  this.state.warehouseLocations.map((id)=>{
+    //     this.state.warehouseLocations= this.state.warehouseLocations.filter((data)=>response.data.data.warehouseId.includes(data.id));
+    //   })
       
     }
 
@@ -500,7 +500,7 @@ class Profile extends React.Component {
                               </button> */}
                               </div>
                               {this.state.warehouseLocations[id]['status'] != 'ACTIVE' &&
-                                <span className="font-weight-bold text-danger">
+                                <span className="font-weight-bold text-red">
                                   Approval Pending
                                 </span>
                               }
@@ -656,7 +656,7 @@ class Profile extends React.Component {
                                     </h3>
                                   </div>
                                   {this.state.warehouseLocations[id]['status'] != 'ACTIVE' &&
-                                    <span className="font-weight-bold text-danger">
+                                    <span className="font-weight-bold text-red">
                                       Approval Pending
                                     </span>
                                   }
