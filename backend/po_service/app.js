@@ -18,7 +18,7 @@ const app = express();
 
 // DB connection
 const MONGODB_URL = process.env.MONGODB_URL;
-mongoose.connect(MONGODB_URL, { useNewUrlParser: true, autoIndex: true }).then(() => {
+mongoose.connect(MONGODB_URL, { useNewUrlParser: true, autoIndex: true , useUnifiedTopology: true, useCreateIndex: true}).then(() => {
   //don't show the log when it is test
   if(process.env.NODE_ENV !== "test") {
     console.log("Connected to %s", MONGODB_URL);
@@ -49,7 +49,7 @@ app.use("/pomanagement/api/", apiRouter);
 
 // throw 404 if URL not found
 app.all("*", function(req, res) {
-	return apiResponse.notFoundResponse(res, "Page not found");
+	return apiResponse.notFoundResponse(res, "API not found");
 });
 
 app.use((err, req, res) => {

@@ -59,3 +59,11 @@ exports.unauthorizedResponse = function (res, msg) {
   };
   return res.status(401).json(data);
 };
+
+exports.forbiddenResponse = function (res, msg) {
+	var data = {
+		status: 0,
+		message: msg,
+	};
+	return res.status(403).json(data);
+}

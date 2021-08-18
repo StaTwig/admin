@@ -1,4 +1,3 @@
-const { body, validationResult } = require('express-validator');
 const fs = require('fs');
 const moveFile = require('move-file');
 const XLSX = require('xlsx');
@@ -18,7 +17,6 @@ const InventoryModel = require('../models/InventoryModel')
 //this helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
 const auth = require('../middlewares/jwt');
-const checkToken = require('../middlewares/middleware').checkToken;
 const checkPermissions = require('../middlewares/rbac_middleware')
     .checkPermissions;
 const dotenv = require('dotenv').config();
@@ -115,24 +113,15 @@ exports.fetchPurchaseOrders = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-              'info',
-              '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : token verified successfully, querying data by publisher',
-          );
-          const permission_request = {
-            //role: req.user.role,
-            result: result,
+      const { organisationId, role, id } = req.user;
+      const { skip, limit, poId } = req.query;
+      const permission_request = {
+            role: role,
             permissionRequired: 'viewPO',
           };
-          checkPermissions(permission_request, async permissionResult => {
+      checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
-
-              const { organisationId, role, id } = req.user;
-              const { skip, limit, poId } = req.query;
               var inboundPOs, outboundPOs, poDetails;
-
                     try {
                     if ( poId != null)
                     {
@@ -171,29 +160,12 @@ exports.fetchPurchaseOrders = [
                   console.log(err)
                     return apiResponse.ErrorResponse(res, err);
                 }
-
-              logger.log(
-                  'info',
-                  '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : queried data by publisher',
-              );
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              return apiResponse.forbiddenResponse(res,"User doesn't have enough permission to view Resource");
             }
           });
-        } else {
-          logger.log(
-              'warn',
-              '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : refuted token',
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-          'error',
-          '<<<<< ShipmentService < ShipmentController < purchaseOrderStatistics : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -203,15 +175,9 @@ exports.fetchAllPurchaseOrdersBC = [
   auth,
   async (req, res) => {
     try {
-      const { authorization } = req.headers;
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-              'info',
-              '<<<<< ShipmentService < ShipmentController < fetchAllPurchaseOrders : token verified successfully, querying all stream keys',
-          );
+      const {role} = req.user;
           const permission_request = {
-            result: result,
+            role: role,
             permissionRequired: 'receivePO',
           };
           checkPermissions(permission_request, async permissionResult => {
@@ -220,29 +186,13 @@ exports.fetchAllPurchaseOrdersBC = [
                   `${blockchain_service_url}/queryAllStreamKeys?stream=${po_stream_name}`,
               );
               const items = response.data.items;
-              logger.log(
-                  'info',
-                  '<<<<< ShipmentService < ShipmentController < fetchAllPurchaseOrders : queried all stream keys',
-              );
-              res.json({ data: items });
+             return apiResponse.successResponseWithData(res, 'fetchAllPurchaseOrdersBC', items);
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              return apiResponse.forbiddenResponse(res, 'User does not have enough Permissions');
             }
           });
-        } else {
-          logger.log(
-              'warn',
-              '<<<<< ShipmentService < ShipmentController < fetchAllPurchaseOrders : refuted token',
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-          'error',
-          '<<<<< ShipmentService < ShipmentController < fetchAllPurchaseOrders : error(catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -251,31 +201,19 @@ exports.fetchPublisherPurchaseOrders = [
   auth,
   async (req, res) => {
     try {
-      const { authorization } = req.headers;
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-              'info',
-              '<<<<< ShipmentService < ShipmentController < fetchPublisherPurchaseOrders : token verified successfully, querying all publisher keys',
-          );
+      const { address, role } = req.user;
           const permission_request = {
-            result: result,
+            role: role,
             permissionRequired: 'viewPO',
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
-              const { address } = req.user;
               /*const acceptedPOs = await POModel.find({
                 receiver: address,
                 status: 'Accepted',
               });*/
 
               const acceptedPOs = await wrapper.findRecordsAndSort(POModel,{receiver: address,status: 'Accepted'});
-
-              logger.log(
-                  'info',
-                  '<<<<< ShipmentService < ShipmentController < fetchPublisherPurchaseOrders : queried all publisher keys',
-              );
               const poIds = acceptedPOs.map(po => po.orderID);
               apiResponse.successResponseWithData(
                   res,
@@ -283,23 +221,12 @@ exports.fetchPublisherPurchaseOrders = [
                   poIds,
               );
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              return apiResponse.forbiddenResponse(res, 'User does not have enough Permissions');
             }
-          });
-        } else {
-          logger.log(
-              'warn',
-              '<<<<< ShipmentService < ShipmentController < fetchPublisherPurchaseOrders : refuted token',
+            }
           );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-          'error',
-          '<<<<< ShipmentService < ShipmentController < fetchPublisherPurchaseOrders : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -308,52 +235,29 @@ exports.fetchPurchaseOrderBC = [
   auth,
   async (req, res) => {
     try {
-      const { authorization } = req.headers;
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-              'info',
-              '<<<<< ShipmentService < ShipmentController < fetchPurchaseOrder : token verified successfully, querying data by key',
-          );
-
+      const { role } = req.user;
+      const { key } = req.query;
           const permission_request = {
-            result: result,
+            role: role,
             permissionRequired: 'viewPO',
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
-              const { key } = req.query;
               const response = await axios.get(
                   `${blockchain_service_url}/queryDataByKey?stream=${po_stream_name}&key=${key}`,
               );
               const items = response.data.items;
-              logger.log(
-                  'info',
-                  '<<<<< ShipmentService < ShipmentController < fetchPurchaseOrder : queried data by key',
-              );
               return apiResponse.successResponseWithData(
                   res,
                   'Purchase Order Info',
                   items,
               );
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              return apiResponse.forbiddenResponse(res, 'User does not have enough Permissions');
             }
           });
-        } else {
-          logger.log(
-              'warn',
-              '<<<<< ShipmentService < ShipmentController < fetchPurchaseOrder : refuted token',
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-          'error',
-          '<<<<< ShipmentService < ShipmentController < fetchPurchaseOrder : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -362,21 +266,15 @@ exports.changePOStatus = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-              'info',
-              '<<<<< POStatus < ShipmentController < changePOStatus : token verified successfully',
-          );
-
+      const { address , role } = req.user;
           const permission_request = {
-            result: result,
-            permissionRequired: 'receivePO',
+            role: role,
+            permissionRequired: 'changePOStatus',
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
               try {
-                const { address } = req.user;
+
                 const { orderID, status } = req.body;
                 const po = await RecordModel.findOne({ id : orderID });
                 if (po && po.customer.customer_incharge === address) {
@@ -481,32 +379,15 @@ exports.changePOStatus = [
                       'You are not authorised to change the status',
                   );
                 }
-
-                logger.log(
-                    'info',
-                    '<<<<< POStatus < ShipmentController < changePOStatus : Changed Successfully',
-                );
               } catch (e) {
-                return apiResponse.ErrorResponse(res, 'Error from Blockchain');
+                return apiResponse.ErrorResponse(res, e.message);
               }
               } else {
-               res.json('Sorry! User does not have enough Permissions');
+               return apiResponse.forbiddenResponse(res, 'User does not have enough Permissions');
             }
           });
-        } else {
-          logger.log(
-              'warn',
-              '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : refuted token',
-          );
-          return apiResponse.ErrorResponse(res, result);
-        }
-      });
     } catch (err) {
-      logger.log(
-          'error',
-          '<<<<< ShipmentService < ShipmentController < createPurchaseOrder : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -761,7 +642,7 @@ exports.addPOsFromExcel = [
                       warehouseAddress: {
                         firstLine: address,
                         secondLine: "",
-						region: region,
+						            region: region,
                         city: address,
                         state: address,
                         country: country,
@@ -893,7 +774,7 @@ exports.addPOsFromExcel = [
                         secondLine: "",
                         city: address,
                         state: address,
-						region: region,
+						            region: region,
                         country: country,
                         landmark: "",
                       },
@@ -939,7 +820,7 @@ exports.addPOsFromExcel = [
     //  });
     } catch (err) {
       console.log(err)
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1116,7 +997,6 @@ exports.getOrderIds = [
   auth,
   async (req, res) => {
     try {
-     
       const {organisationId } = req.user;
       const orderID = await RecordModel.find({$or:[{"supplier.supplierOrganisation":organisationId},{"customer.customerOrganisation":organisationId},{"createdBy":req.user.id}]},'id');
     
@@ -1126,10 +1006,6 @@ exports.getOrderIds = [
         orderID,
       );
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
-      );
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -1158,10 +1034,6 @@ exports.getOpenOrderIds = [
         orderID,
       );
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
-      );
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -1171,20 +1043,14 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-            'info',
-            '<<<<< POService < POController < fetchInboundPurchaseOrders : token verified successfully',
-          );
+      const { organisationId, role } = req.user;
+      const { skip, limit } = req.query;
           const permission_request = {
-            result: result,
-            permissionRequired: 'viewPO',
+            role: role,
+            permissionRequired: 'viewInboundOrders',
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
-              const { organisationId, role } = req.user;
-              const { skip, limit } = req.query;
               let currentDate = new Date();
               let fromDateFilter = 0;
               let fromCustomer = req.query.from ? req.query.from : undefined;
@@ -1248,8 +1114,6 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
                 }
               }
 
-          
-
               console.log("whereQuery ======>", whereQuery);
               try {
                 let inboundPOsCount = await RecordModel.count(whereQuery);
@@ -1309,27 +1173,11 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
               } catch (err) {
                 return apiResponse.ErrorResponse(res, err);
               }
-              logger.log(
-                'info',
-                '<<<<< POService < POController < fetchInboundPurchaseOrders',
-              );
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              return apiResponse.forbiddenResponse(res, "User doesn't have enough Permissions");
             }
           });
-        } else {
-          logger.log(
-            'warn',
-            '<<<<< POService < POController < fetchInboundPurchaseOrders  : refuted token',
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< POService < POController < fetchInboundPurchaseOrders : error (catch block)',
-      );
       return apiResponse.ErrorResponse(res, err);
     }
   },
@@ -1339,20 +1187,14 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-            'info',
-            '<<<<< POService < POController < fetchOutboundPurchaseOrders : token verified successfully',
-          );
+      const { organisationId, role, id } = req.user;
+      const { skip, limit } = req.query;
           const permission_request = {
-            result: result,
-            permissionRequired: 'viewPO',
+            role: role,
+            permissionRequired: 'viewOutboundOrders',
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
-              const { organisationId, role, id } = req.user;
-              const { skip, limit } = req.query;
               let currentDate = new Date();
               let fromDateFilter = 0;
               let toSupplier = req.query.to ? req.query.to : undefined;
@@ -1466,33 +1308,15 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
               } catch (err) {
                 return apiResponse.ErrorResponse(res, err);
               }
-              logger.log(
-                'info',
-                '<<<<< POService < POController < fetchOutboundPurchaseOrders',
-              );
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              return apiResponse.forbiddenResponse(res, "User doesn't have enough Permissions");
             }
           });
-        } else {
-          logger.log(
-            'warn',
-            '<<<<< POService < POController < fetchOutboundPurchaseOrders  : refuted token',
-          );
-          res.status(403).json(result);
-        }
-      });
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< POService < POController < fetchOutboundPurchaseOrders : error (catch block)',
-      );
       return apiResponse.ErrorResponse(res, err);
     }
   },
 ];
-
-
 
 exports.fetchProductIdsCustomerLocationsOrganisations = [
   auth,
@@ -1514,10 +1338,6 @@ exports.fetchProductIdsCustomerLocationsOrganisations = [
         });
       });
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< POService < POController < fetchProductIdsCustomerLocations : error (catch block)',
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },

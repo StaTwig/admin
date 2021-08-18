@@ -10,8 +10,6 @@ const RecordModel = require('../models/RecordModel');
 const AtomModel = require('../models/AtomModel');
 const OrganisationModel = require('../models/OrganisationModel');
 const ProductModel = require('../models/ProductModel');
-
-const checkToken = require('../middlewares/middleware').checkToken;
 const checkPermissions = require('../middlewares/rbac_middleware').checkPermissions;
 const axios = require('axios');
 
@@ -338,15 +336,6 @@ exports.fetchDataByQRCode = [
     auth,
     async (req, res) => {
         try {
-            const {
-                authorization
-            } = req.headers;
-            checkToken(req, res, async (result) => {
-                if (result.success) {
-                    const {
-                        QRcode
-                    } = req.query;
-
                     const shipmentCheck = await ShipmentModel.findOne({
                         "label.labelId": QRcode
                     })
@@ -465,20 +454,8 @@ exports.fetchDataByQRCode = [
                             });
 
                     }
-                } else {
-                    logger.log(
-                        "warn",
-                        "<<<<< ShipmentService < ShipmentController < modifyShipment : refuted token"
-                    );
-                    res.status(403).json("Auth failed");
-                }
-            });
         } catch (err) {
-            logger.log(
-                "error",
-                "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
-            );
-            return apiResponse.ErrorResponse(res, err);
+            return apiResponse.ErrorResponse(res, err.message);
         }
     },
 ];

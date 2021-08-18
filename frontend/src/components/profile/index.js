@@ -499,7 +499,7 @@ class Profile extends React.Component {
                                 <span>EDIT</span>
                               </button> */}
                               </div>
-                              {this.state.warehouseLocations[id]['status'] == 'PENDING' &&
+                              {this.state.warehouseLocations[id]['status'] != 'ACTIVE' &&
                                 <span className="font-weight-bold text-danger">
                                   Approval Pending
                                 </span>
@@ -655,7 +655,7 @@ class Profile extends React.Component {
                                     {this.state.warehouseLocations[id]['title']}-{this.state.warehouseLocations[id]['id']}
                                     </h3>
                                   </div>
-                                  {this.state.warehouseLocations[id]['status'] == 'PENDING' &&
+                                  {this.state.warehouseLocations[id]['status'] != 'ACTIVE' &&
                                     <span className="font-weight-bold text-danger">
                                       Approval Pending
                                     </span>

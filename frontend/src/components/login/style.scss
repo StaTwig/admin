@@ -193,6 +193,9 @@ background-color: $white;
       }
 
       .form-controlll {
+        ::after{
+          border-bottom: 2px solid #0093E9;
+        }
         width: 74%;
         border: none;
         //border-bottom: 1px solid #D6D6D6;
@@ -208,6 +211,9 @@ background-color: $white;
           }
         }
       }
+    }
+    .MuiFormLabel-root.Mui-focused{
+      color:#0093E9;
     }
 
     .forgot-link {
@@ -232,6 +238,9 @@ background-color: $white;
       
     }
     .form-controll {
+      ::after{
+        border-bottom: 2px solid #0093E9;
+      }
       //border: none;
       //border-bottom: 1px solid #757575;
       //border-radius: 0;
@@ -272,5 +281,9 @@ background-color: $white;
 .or{
   font-weight: 500;
 }
-
+.buttonS{
+  width:150px;
+  font-weight: 600;
+  font-size: 14px;
+}
 

@@ -124,8 +124,9 @@
         max-width: 100%;
       }
       .notifications {
-        position: absolute;
-        right: 31rem;
+        position: relative;
+        right: 2.5rem;
+        top: -3rem;
         .bellicon-wrap {
           position: relative;
           cursor: pointer;
@@ -138,11 +139,23 @@
         }
         .slider-menu {
           top: .9rem;
-          right: 0rem !important;
+          right: -4rem !important;
+          overflow: scroll;
+          min-width: 350px;
+          min-height: 300px;
+          font-size: 10px;
+          
+          .section {
+            display: flex;
+            flex-direction: row;
+            left: 50%;
+            
+          }
 
           .slider-item {
             white-space: pre-wrap;
-            min-width: 200px;
+            min-width: 300px;
+            font-size: 10px;
             &:first-child {
               border-top: none;
             }

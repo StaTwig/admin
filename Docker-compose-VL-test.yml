@@ -20,6 +20,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env     
+    depends_on: 
+      - cache
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -43,6 +45,8 @@ services:
     container_name: 'alert_service1.0'
     env_file:
       - ./env/ledger.env     
+    depends_on: 
+      - cache
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -58,6 +62,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env     
+    depends_on: 
+      - cache
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -73,6 +79,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env     
+    depends_on: 
+      - cache
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -88,6 +96,9 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env     
+    depends_on: 
+      - traefik
+      - cache
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -105,6 +116,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env     
+    depends_on: 
+      - cache
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -120,6 +133,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env     
+    depends_on: 
+      - cache
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -135,6 +150,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env     
+    depends_on: 
+      - cache
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -152,6 +169,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env     
+    depends_on: 
+      - cache
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -167,6 +186,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env     
+    depends_on: 
+      - cache
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -184,6 +205,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env     
+    depends_on: 
+      - cache
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -199,6 +222,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env     
+    depends_on: 
+      - cache
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -216,6 +241,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env     
+    depends_on: 
+      - cache
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -231,6 +258,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env     
+    depends_on: 
+      - cache
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
@@ -246,6 +275,8 @@ services:
     restart: always
     env_file:
       - ./env/ledger.env     
+    depends_on: 
+      - cache
     labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
