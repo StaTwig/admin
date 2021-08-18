@@ -118,13 +118,13 @@ const ProductInventory = props => {
         }
         <div className="ribbon-space col p-3">
           {data.map((inv, i) => 
-            <div key={i} className="col p-2 mb-3 rounded row bg-white shadow">
+            <div key={i} className="col mb-3 rounded row bg-white shadow">
               <div className="col-3 txt txtBlue">{inv.products.name?inv.products.name:"N/A"}</div>
               <div className="col-3 txt1">{inv.products.type ? inv.products.type:"N/A"}</div>
-              <div className="col-3 txt1">{inv.products.manufacturer?inv.products.manufacturer:"N/A"}</div>
-              <div className="col-2 txt2">{inv.inventoryDetails.quantity?inv.inventoryDetails.quantity:"N/A"}{"  ("}{inv.products.unitofMeasure?inv.products.unitofMeasure.name:"N/A"}{")"}</div>
-              <div className="col-1 txt1 mb-3">
-              <button type="button" onClick={() => props.history.push(`/viewproduct`, {data: inv})} className="btn-sm btn-outline-primary mt-3 bg-white">Show {more[i] ? `less` :`more`}</button></div>
+              <div className="col-2 txt1">{inv.products.manufacturer?inv.products.manufacturer:"N/A"}</div>
+              <div className="col-2 txt1 text-right">{inv.inventoryDetails.quantity?inv.inventoryDetails.quantity:"N/A"}{"  ("}{inv.products.unitofMeasure?inv.products.unitofMeasure.name:"N/A"}{")"}</div>
+              <div className="col-2 mb-3">
+              <button type="button" onClick={() => props.history.push(`/viewproduct`, {data: inv})} className="btn btn-outline-primary mt-3 ml-5">Show {more[i] ? `less` :`more`}</button></div>
               </div>
             // </div>
           )}
