@@ -1,9 +1,13 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const RbacController = require("../controllers/RbacController");
+const router = express.Router();
 
-/* GET home page. */
 router.get("/", function(req, res) {
-res.render("index", { title: "Express" });
+    res.status(200).json({status:"OK",message: "RBAC Service"});
 });
+router.get("/getPermissions", RbacController.getPermissions);
+router.get("/getRoles", RbacController.getRoles);
+router.get("/rbacCache", RbacController.rbacCache);
+router.post("/updatePermissions", RbacController.updatePermissions);
 
 module.exports = router;

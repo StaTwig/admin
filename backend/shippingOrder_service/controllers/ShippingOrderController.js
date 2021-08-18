@@ -6,14 +6,10 @@ const WarehouseModel = require('../models/WarehouseModel');
 const apiResponse = require('../helpers/apiResponse');
 
 const auth = require('../middlewares/jwt');
-const checkToken = require('../middlewares/middleware').checkToken;
 const checkPermissions = require('../middlewares/rbac_middleware')
   .checkPermissions;
 const wrapper = require('../models/DBWrapper');
 const uniqid = require('uniqid');
-
-const init = require('../logging/init');
-const logger = init.getLog();
 
 exports.createShippingOrder = [
   auth,
@@ -27,16 +23,8 @@ exports.createShippingOrder = [
       } = req.body;
       const { id: soCreatedBy, id: soUpdatedBy } = req.user;
       const id = uniqid('so-');
-
       const POFound = await RecordModel.findOne({ id: soPurchaseOrderId });
-
-      console.log('POFound', POFound);
-
       if (!POFound) {
-        logger.log(
-          'info',
-          '<<<<< ShippingOrderService < ShippingController < createShippingOrder : PO not found in collection',
-        );
         return apiResponse.ErrorResponse(res, 'PO Not found');
       } else {
         await RecordModel.findOneAndUpdate(
@@ -60,11 +48,7 @@ exports.createShippingOrder = [
         );
       }
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< ShippingOrderService < ShippingController < createShippingOrder : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -83,11 +67,7 @@ exports.getShippingOrders = [
         shippingOrders,
       );
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -107,11 +87,7 @@ exports.getShippingOrderIds = [
         shippingOrderIds,
       );
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< ShippingOrderService < ShippingController < fetchAllShippingOrders : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -162,11 +138,7 @@ exports.viewShippingOrder = [
         data,
       );
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< ShippingOrderService < ShippingController < viewShippingOrder : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -175,15 +147,9 @@ exports.assignShippingOrder = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-            'info',
-            '<<<<< ShippingService < Controller < assignShippingOrder : token verified successfully',
-          );
-
+      const { role } = req.user;
           const permission_request = {
-            result: result,
+            role: role,
             permissionRequired: 'receiveSO',
           };
           checkPermissions(permission_request, async permissionResult => {
@@ -191,13 +157,6 @@ exports.assignShippingOrder = [
               try {
                 const { address } = req.user;
                 const { orderID, assignedTo, poId } = req.body;
-                const POFound = await RecordModel.findOne({ id: poId });
-                if (!POFound) {
-                  logger.log(
-                    'info',
-                    '<<<<< ShippingService < Controller < createSO : PO not found in collection',
-                  );
-                } else {
                   const so = await RecordModel.findOne({
                     shippingOrders: { orderId: orderID },
                   });
@@ -220,33 +179,15 @@ exports.assignShippingOrder = [
                       'You are not authorised to assign Shipping Order',
                     );
                   }
-                }
-
-                logger.log(
-                  'info',
-                  '<<<<< ShippingService < Controller < assignShippingOrder : Changed Successfully',
-                );
               } catch (e) {
-                return apiResponse.ErrorResponse(res, 'Error from Blockchain');
+                return apiResponse.ErrorResponse(res, e.message);
               }
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              return apiResponse.forbiddenResponse(res, 'User doesnot have enough permissions'); 
             }
           });
-        } else {
-          logger.log(
-            'warn',
-            '<<<<< ShippingService < Controller < assignShippingOrder : refuted token',
-          );
-          return apiResponse.ErrorResponse(res, result);
-        }
-      });
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< ShippingService < Controller < assignShippingOrder  : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -255,15 +196,9 @@ exports.updateShippingOrder = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-            'info',
-            '<<<<< ShippingService < Controller < updateShippingOrder : token verified successfully',
-          );
-
+      const {role} = req.user;
           const permission_request = {
-            result: result,
+            role: role,
             permissionRequired: 'receiveSO',
           };
           checkPermissions(permission_request, async permissionResult => {
@@ -282,10 +217,7 @@ exports.updateShippingOrder = [
 
                 const POFound = await RecordModel.findOne({ id: poId });
                 if (!POFound) {
-                  logger.log(
-                    'info',
-                    '<<<<< ShippingService < Controller < createSO : PO not found in collection',
-                  );
+                  return apiResponse.ErrorResponse(res, 'PO Not found');
                 } else {
                   const so = await RecordModel.findOne({
                     shippingOrders: { orderId: orderID },
@@ -307,38 +239,21 @@ exports.updateShippingOrder = [
                       'Success',
                     );
                   } else {
-                    return apiResponse.ErrorResponse(
+                    return apiResponse.forbiddenResponse(
                       res,
                       'You are not authorised to update Shipping Order',
                     );
                   }
                 }
-
-                logger.log(
-                  'info',
-                  '<<<<< ShippingService < Controller < updateShippingOrder : Changed Successfully',
-                );
               } catch (e) {
-                return apiResponse.ErrorResponse(res, 'Error from Blockchain');
+                return apiResponse.ErrorResponse(res, e.message);
               }
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              return apiResponse.forbiddenResponse(res,'Sorry! User does not have enough Permissions');
             }
           });
-        } else {
-          logger.log(
-            'warn',
-            '<<<<< ShippingService < Controller < updateShippingOrder : refuted token',
-          );
-          return apiResponse.ErrorResponse(res, result);
-        }
-      });
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< ShippingService < Controller < updateShippingOrder  : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -347,29 +262,18 @@ exports.changeSOStatus = [
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-            'info',
-            '<<<<< ShippingService < Controller < changeSOStatus : token verified successfully',
-          );
-
+      const { address,role } = req.user;
           const permission_request = {
-            result: result,
+            role: role,
             permissionRequired: 'receiveSO',
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
               try {
-                const { address } = req.user;
                 const { orderID, status, poId } = req.body;
-
                 const POFound = await RecordModel.findOne({ id: poId });
                 if (!POFound) {
-                  logger.log(
-                    'info',
-                    '<<<<< ShippingService < Controller < createSO : PO not found in collection',
-                  );
+                  return apiResponse.ErrorResponse(res, 'PO Not found');
                 } else {
                   const so = await RecordModel.findOne({
                     shippingOrders: { orderId: orderID },
@@ -394,32 +298,15 @@ exports.changeSOStatus = [
                     );
                   }
                 }
-
-                logger.log(
-                  'info',
-                  '<<<<< ShippingService < Controller < changeSOStatus : Changed Successfully',
-                );
               } catch (e) {
-                return apiResponse.ErrorResponse(res, 'Error from Blockchain');
+                return apiResponse.ErrorResponse(res, e.message);
               }
             } else {
-              res.json('Sorry! User does not have enough Permissions');
+              return apiResponse.forbiddenResponse(res, 'Sorry! User does not have enough Permissions');
             }
           });
-        } else {
-          logger.log(
-            'warn',
-            '<<<<< ShippingService < Controller < changeSOStatus : refuted token',
-          );
-          return apiResponse.ErrorResponse(res, result);
-        }
-      });
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< ShippingService < Controller < changeSOStatus  : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];

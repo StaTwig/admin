@@ -1,3 +1,4 @@
+const dotenv = require('dotenv').config();
 const EmployeeModel = require('../models/EmployeeModel');
 const WarehouseModel = require('../models/WarehouseModel');
 const logEvent = require("../../../utils/event_logger");
@@ -11,21 +12,16 @@ const { sanitizeBody } = require('express-validator');
 //helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
 const utility = require('../helpers/utility');
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mailer = require('../helpers/mailer');
-const { constants } = require('../helpers/constants');
-var base64Img = require('base64-img');
 const auth = require('../middlewares/jwt');
 const axios = require('axios');
-const dotenv = require('dotenv').config();
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const twilio_service_id = process.env.TWILIO_SERVICE_ID;
 const client = require('twilio')(accountSid, authToken, {
   lazyLoading: true
 });
-const moveFile = require("move-file");
 const blockchain_service_url = process.env.URL;
 const stream_name = process.env.INV_STREAM;
 const checkToken = require('../middlewares/middleware').checkToken;
@@ -554,11 +550,7 @@ exports.sendOtp = [
   body('emailId')
     .isLength({ min: 10 })
     .trim()
-    .withMessage('Email/Mobile must be specified.')
-  //   .isEmail()
-  // .withMessage('Email must be a valid email address.')
-  ,
-  sanitizeBody('emailId').escape(),
+    .withMessage('Email/Mobile must be specified.'),
   async (req, res) => {
     try {
       const errors = validationResult(req);
@@ -974,108 +966,6 @@ exports.updateProfile = [
     }
   },
 ];
-
-exports.updatePassword = [
-  auth,
-  (req, res) => {
-    try {
-      EmployeeModel.findOne({ email: req.user.email }).then(user => {
-        if (user) {
-          logger.log(
-            'info',
-            '<<<<< UserService < AuthController < updatePassword : user exist',
-          );
-          bcrypt.hash(req.body.password, 10, function (err, hash) {
-            var passwordNew = hash;
-            if (req.body.password) {
-              logger.log(
-                'info',
-                '<<<<< UserService < AuthController < updatePassword : new password is not null',
-              );
-              if (req.body.password.length > 2) {
-                logger.log(
-                  'info',
-                  '<<<<< UserService < AuthController < updatePassword : new password has length grater than 2',
-                );
-                user.password = passwordNew;
-              }
-            }
-            user.save(function (err) {
-              if (err) {
-                logger.log(
-                  'error',
-                  '<<<<< UserService < AuthController < updatePassword : error while updating user password',
-                );
-                return apiResponse.ErrorResponse(res, err);
-              } else {
-                logger.log(
-                  'info',
-                  '<<<<< UserService < AuthController < updatePassword : updating password successfully',
-                );
-                return apiResponse.successResponse(
-                  res,
-                  user.firstName + ' password Updated',
-                );
-              }
-            });
-          });
-        }
-      });
-    } catch (err) {
-      logger.log(
-        'info',
-        '<<<<< UserService < AuthController < updatePassword : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];
-
-/*exports.uploadImage = [
-  auth,
-  (req, res) => {
-    try {
-      EmployeeModel.findOne({ emailId: req.user.emailId }).then(user => {
-        if (user) {
-          logger.log(
-            'info',
-            '<<<<< UserService < AuthController < uploadImage : user exist',
-          );
-          base64Img.base64('uploads/' + req.file.filename, function (err, data) {
-            var base64ImgData = data;
-            user.profile_picture = data;
-            user.image_location = req.file.filename;
-            // Save user.
-            user.save(function (err) {
-              if (err) {
-                logger.log(
-                  'error',
-                  '<<<<< UserService < AuthController < uploadImage : error while uploading image',
-                );
-                return apiResponse.ErrorResponse(res, err);
-              }
-              logger.log(
-                'info',
-                '<<<<< UserService < AuthController < uploadImage : uploading user image successfully',
-              );
-              return apiResponse.successResponseWithData(
-                res,
-                'Updated',
-                base64ImgData,
-              );
-            });
-          });
-        }
-      });
-    } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< UserService < AuthController < uploadImage : error (catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
-    }
-  },
-];*/
 
 exports.createUserAddress = [
   async (req, res) => {

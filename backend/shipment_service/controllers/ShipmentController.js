@@ -23,7 +23,8 @@ const imageUrl = process.env.IMAGE_URL;
 const CENTRAL_AUTHORITY_ID = null
 const CENTRAL_AUTHORITY_NAME = null
 const CENTRAL_AUTHORITY_ADDRESS = null
-
+const checkPermissions = require('../middlewares/rbac_middleware')
+    .checkPermissions;
 const blockchain_service_url = process.env.URL;
 const shipment_stream = process.env.SHIP_STREAM;
 const axios = require("axios");
@@ -755,6 +756,13 @@ exports.receiveShipment = [
   auth,
   async (req, res) => {
     try {
+      const {role} = req.user;
+      const permission_request = {
+        role: role,
+        permissionRequired: 'receiveShipment',
+      };
+  checkPermissions(permission_request, async permissionResult => {
+        if (permissionResult.success) {      
       const data = req.body;
       const shipmentID = data.id;
       const shipmentInfo = await ShipmentModel.find({ id: shipmentID });
@@ -1064,7 +1072,12 @@ exports.receiveShipment = [
           "Cannot receive  a Shipment without SO and PO"
         );
       }
-    } catch (err) {
+    }
+    else{
+      return apiResponse.forbiddenResponse(res, "Access denied");
+  }
+})}
+     catch (err) {
       logger.log(
         "error",
         "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
@@ -1482,9 +1495,13 @@ exports.viewShipment = [
   auth,
   async (req, res) => {
     try {
-      const { authorization } = req.headers;
-      checkToken(req, res, async (result) => {
-        if (result.success) {
+      const { role } = req.user;
+      const permission_request = {
+        role: role,
+        permissionRequired: 'viewShipment',
+      };
+    checkPermissions(permission_request, async permissionResult => {
+        if (permissionResult.success) {
           await ShipmentModel.aggregate([
             {
               $match:{
@@ -1568,18 +1585,10 @@ exports.viewShipment = [
               return apiResponse.ErrorResponse(res, err.message);
             });
         } else {
-          logger.log(
-            "warn",
-            "<<<<< ShipmentService < ShipmentController < modifyShipment : refuted token"
-          );
-          res.status(403).json("Auth failed");
+          return apiResponse.forbiddenResponse(res, 'User does not have enough Permissions');
         }
       });
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -1886,10 +1895,12 @@ exports.chainOfCustody = [
     auth,
     async (req, res) => {
         try {
-            const {
-                authorization
-            } = req.headers;
-            checkToken(req, res, async (result) => {
+          const { role } = req.user;
+          const permission_request = {
+            role: role,
+            permissionRequired: 'viewShipment',
+          };
+        checkPermissions(permission_request, async permissionResult => {
                 if (result.success) {
                     var chainOfCustody = [];
                     var poDetails = "";
@@ -2097,18 +2108,10 @@ exports.chainOfCustody = [
                     }
 
                 } else {
-                    logger.log(
-                        "warn",
-                        "<<<<< ShipmentService < ShipmentController < modifyShipment : refuted token"
-                    );
-                    res.status(403).json("Auth failed");
+                  return apiResponse.forbiddenResponse(res, 'Access denied');
                 }
             });
         } catch (err) {
-            logger.log(
-                "error",
-                "<<<<< ShipmentService < ShipmentController < modifyShipment : error (catch block)"
-            );
             return apiResponse.ErrorResponse(res, err.message);
         }
     },
