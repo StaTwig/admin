@@ -192,7 +192,7 @@ const changeFn = (value_new,e) => {
                 }) => (
                   <form onSubmit={handleSubmit} className="mb-5">
                   <div className="login-form mt-1 pl-5 pr-5 ml-5">
-                 <div className="card-title p-0">Signup</div>
+                 <div className="card-title mr-5">Signup</div>
                   <div className="form-group flex-column ">
                    
                   <div style={{position:"absolute", left:"-9px", top:"20px"}}>
@@ -581,12 +581,12 @@ const changeFn = (value_new,e) => {
                     {
                       console.log(signupDisable)
                     }
-                  <button type="submit" className="btn btn-primary mr-5" disabled={signupDisable}>
+                  <button type="submit" className="buttonS btn btn-primary mr-5" disabled={signupDisable}>
                   SIGNUP
                   </button>
                     </div>
                         <div className="signup-link text-center mt-3 mb-4 mr-5">
-                  Already have an Account? <Link to="/login">Login</Link>
+                  Already have an Account? <Link to="/login"><b>Login</b></Link>
                   </div>
                   </div></form>
                 )}
