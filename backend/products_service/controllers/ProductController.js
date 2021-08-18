@@ -8,7 +8,7 @@ const moveFile = require("move-file");
 const fs = require("fs");
 const QRCode = require("qrcode");
 const uniqid = require("uniqid");
-const symbology = require("symbology");
+// const symbology = require("symbology");
 const array = require("lodash/array");
 
 // Define font files
@@ -350,20 +350,21 @@ exports.generateCodes = async function (req, res) {
 
         qrCodes.push(qrCode);
       }
-    } else if (type === "barcode") {
-      for (let i = 0; i < limit; i++) {
-        const uniqueId = uniqid();
-        const data = await symbology.createStream(
-          {
-            symbology: symbology.Barcode.CODE128,
-            backgroundColor: "ffffff",
-            foregroundColor: "000000",
-          },
-          uniqueId
-        );
-        qrCodes.push(data.data);
-      }
     }
+    // else if (type === "barcode") {
+    //   for (let i = 0; i < limit; i++) {
+    //     const uniqueId = uniqid();
+    //     const data = await symbology.createStream(
+    //       {
+    //         symbology: symbology.Barcode.CODE128,
+    //         backgroundColor: "ffffff",
+    //         foregroundColor: "000000",
+    //       },
+    //       uniqueId
+    //     );
+    //     qrCodes.push(data.data);
+    //   }
+    // }
     const qrCodesImages = qrCodes.map((qrCode) => {
       return { image: qrCode, width: 150 };
     });
