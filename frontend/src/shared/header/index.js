@@ -215,7 +215,7 @@ const ref = useOnclickOutside(() => {
       // console.log("usersLocation",usersLocation);
     
       if(localStorage.getItem("location")!=null){
-        setLocation(prod=>JSON.parse(localStorage.getItem("location")));
+        //setLocation(prod=>JSON.parse(localStorage.getItem("location")));
       }
       else {
        setLocation(prod=>warehouses[0]);
@@ -324,15 +324,19 @@ const imgs = config().fetchProfileImage;
         
        <div className="user-info ">
        <div className="notifications">
-                {/*   <Badge badgeContent={1} color="primary"> </Badge> {/*<img src={bellIcon} alt="notification" /><MailIcon />*/}
+                <img src={bellIcon} onClick={showNotifications} alt="notification" /><bellIcon />
                   
-                    {  /* <div className="bellicon-wrap" onClick={() => setShowNotifications(!showNotifications)}>
+                    <div className="bellicon-wrap" onClick={() => setShowNotifications(!showNotifications)}>
             
               {notifications.length > 0 && <span className="badge badge-light">{notifications.length }</span> }
             </div>
             {showNotifications && notifications.length > 0 && (
               <div className="slider-menu">
                 <React.Fragment>
+                  <div className="section">
+                    <button style={{backgroundColor: "#0B65C1", color: "white"}} onClick={() => setNotifications(/*criteria for alert */)}>Alerts</button>
+                    <button style={{backgroundColor: "#0B65C1", color: "white"}} onClick={() => setNotifications(/*criteria for transaction */)}>Transactions</button>
+                  </div>
                   {notifications.map(notification =>  <div className="slider-item">
                     <div className="row justify-content-between align-items-center" onClick={() => clearNotification(notification)}>
                       <div className="col-sm-10">
@@ -351,7 +355,7 @@ const imgs = config().fetchProfileImage;
                   </div>)}
                 </React.Fragment>
               </div>
-            )}*/}
+            )}
             </div>  
             <div className="divider" />
            <div className="location">
