@@ -413,6 +413,12 @@ if (!error) {
  
   const handleQuantityChange = (value, i) => {
     const soDetailsClone = { ...OrderDetails };
+    if(parseInt(value) > parseInt(soDetailsClone.products[i].orderedQuantity)){
+      soDetailsClone.products[i].productQuantity = soDetailsClone.products[i].orderedQuantity;
+      setOrderDetails(soDetailsClone); 
+      alert("Quantity cannot be more than ordered quantity")
+      return
+    }
       soDetailsClone.products[i].productQuantity = value;
       setOrderDetails(soDetailsClone);    
     
@@ -646,8 +652,11 @@ if (!error) {
                           setFieldValue("OrderId", v.value);
                           setOrderId(v.value);
                           dispatch(turnOn());
-                          const result = await dispatch(getOrder(v.value));
-                          
+                          let result = await dispatch(getOrder(v.value));
+                          for (let i = 0; i < result.poDetails[0].products.length; i++) {
+                            result.poDetails[0].products[i].orderedQuantity =
+                            result.poDetails[0].products[i].productQuantity;
+                          }
                           setReceiverOrgLoc(
                              result.poDetails[0].customer.warehouse.title + '/' + result.poDetails[0].customer.warehouse.postalAddress
                           );
@@ -742,7 +751,10 @@ if (!error) {
                         setOrderIdSelected(true);
                         dispatch(turnOn());
                         setDisabled(false);
-                        const result = await dispatch(getViewShipment(values.shipmentID));
+                        let result = await dispatch(getViewShipment(values.shipmentID));
+                        for (let i = 0; i < result.products.length; i++) {
+                          result.products[i].orderedQuantity = result.products[i].productQuantity;
+                        }
                         dispatch(turnOff());
                         setReceiverOrgLoc();
                         setReceiverOrgId();
