@@ -130,13 +130,13 @@ class Profile extends React.Component {
       // console.log(wareHouseAddresses,"All warehouses");
       this.setState({
         wareIds: wareHouseIdResult,
-        warehouseLocations: wareHouseAddresses,
+        warehouseLocations: response.data.data.warehouses,
         warehouseLocByOrg:wareHouseAddresses
       });
 
-     this.state.warehouseLocations.map((id)=>{
-        this.state.warehouseLocations= this.state.warehouseLocations.filter((data)=>response.data.data.warehouseId.includes(data.id));
-      })
+    //  this.state.warehouseLocations.map((id)=>{
+    //     this.state.warehouseLocations= this.state.warehouseLocations.filter((data)=>response.data.data.warehouseId.includes(data.id));
+    //   })
       
     }
 
@@ -471,25 +471,27 @@ class Profile extends React.Component {
                                 <h3 className="card-title font-weight-bold">
                                   {this.state.warehouseLocations[id]['title']}-{this.state.warehouseLocations[id]['id']}
                                 </h3>
-                                <Link
-                                  to={{
-                                    pathname: `/editLocation/${this.state.warehouseLocations[id]['id']}`,
-                                    state: {editMode:this.state.editMode},
-                                  }}
-                                >
-                                  <button
-                                    className="btn btn-info fontSize20 font-bold pl-2 pr-10"
-                                    style={{ height: "35px", width: "100px" }}
+                                {this.state.warehouseLocations[id]['status'] == 'ACTIVE' &&
+                                  <Link
+                                    to={{
+                                      pathname: `/editLocation/${this.state.warehouseLocations[id]['id']}`,
+                                      state: { editMode: this.state.editMode },
+                                    }}
                                   >
-                                    <img
-                                      src={Pen}
-                                      width="15"
-                                      height="15"
-                                      className="mr-2"
-                                    />
-                                    <span>EDIT</span>
-                                  </button>
-                                </Link>
+                                    <button
+                                      className="btn btn-blue fontSize20 font-bold pl-2 pr-10"
+                                      style={{ height: "35px", width: "100px" }}
+                                    >
+                                      <img
+                                        src={Pen}
+                                        width="15"
+                                        height="15"
+                                        className="mr-2"
+                                      />
+                                      <span>Edit</span>
+                                    </button>
+                                  </Link>
+                                }
                                 {/* <button
                                 className="btn-primary btn edit-button"
                               >
@@ -497,6 +499,11 @@ class Profile extends React.Component {
                                 <span>EDIT</span>
                               </button> */}
                               </div>
+                              {this.state.warehouseLocations[id]['status'] != 'ACTIVE' &&
+                                <span className="font-weight-bold text-red">
+                                  Approval Pending
+                                </span>
+                              }
                             </div>
                             <div className="card-body">
                               <input
@@ -648,6 +655,11 @@ class Profile extends React.Component {
                                     {this.state.warehouseLocations[id]['title']}-{this.state.warehouseLocations[id]['id']}
                                     </h3>
                                   </div>
+                                  {this.state.warehouseLocations[id]['status'] != 'ACTIVE' &&
+                                    <span className="font-weight-bold text-red">
+                                      Approval Pending
+                                    </span>
+                                  }
                                 </div>
                                 <div className="card-body">
                                   <div className="total">

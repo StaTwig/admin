@@ -205,7 +205,7 @@ const ref = useOnclickOutside(() => {
       setNotifications(response.data);
       
       const warehouses = await getActiveWareHouses();
-      setActiveWarehouses(warehouses.map(item=>{
+      setActiveWarehouses(warehouses.filter(i => i.status == 'ACTIVE' || i.status == 'PENDING').map(item=>{
         return{
           title: item.name,
           organisationId: item.name,
