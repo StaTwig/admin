@@ -66,7 +66,7 @@ const AdvanceTableFilter = (props) => {
       <span className="divider" />
         <a className="filter-item ml-4" onClick={handleInventoryStatusClick}>
           <div className="icon mr-2">
-            {props.data.img5}
+            {props.data.img6}
           </div>
           <div className="filterTitle">{props.data.coloumn6}</div>
           <img src={updownarrow} width="10" height="10" className="ml-3" />

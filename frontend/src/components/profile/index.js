@@ -313,7 +313,7 @@ class Profile extends React.Component {
     return (
       <div className="profile">
         <h1 className="breadcrumb">Profile</h1>
-        <div className="card">
+        <div className="card" style={{border:"none"}}>
           <div className="card-body">
             <div className="d-flex flex-row justify-content-between">
               <div className="col-2">
