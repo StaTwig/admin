@@ -402,20 +402,29 @@ const imgs = config().fetchProfileImage;
           <div className="slider-menu" ref={ref}>
             {
               <React.Fragment>
-                <div className="slider-item-text">
+                <div className="slider-item-text p-2">
                   <p>{profile.name}</p>
                   <p>{profile?.organisation?.split('/')[0]}</p>
                 </div>
-                <Link className="slider-item border-top-0" to="/profile">
-                  My Profile
-                </Link>
+                <div 
+                    className="slider-item border-top-0 p-0"
+                    onClick={() => props.history.push('/profile')}
+                >
+                    My Profile
+                </div>
+                <div 
+                    className="slider-item p-0"
+                    onClick={() => props.history.push('/alerts')}
+                >
+                    Settings
+                </div>
                <div
-                  className="slider-item"
+                  className="slider-item p-0"
                   onClick={() => dispatch(logoutUser())}
                 >
                   Logout
                 </div>
-              </React.Fragment>
+             </React.Fragment>
             }
           </div>
         )}
