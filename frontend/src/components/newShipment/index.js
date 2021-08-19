@@ -413,6 +413,7 @@ if (!error) {
  
   const handleQuantityChange = (value, i) => {
     const soDetailsClone = { ...OrderDetails };
+    console.log(soDetailsClone.products[i])
     if(parseInt(value) > parseInt(soDetailsClone.products[i].orderedQuantity)){
       soDetailsClone.products[i].productQuantity = soDetailsClone.products[i].orderedQuantity;
       setOrderDetails(soDetailsClone); 
@@ -654,6 +655,9 @@ if (!error) {
                           dispatch(turnOn());
                           let result = await dispatch(getOrder(v.value));
                           for (let i = 0; i < result.poDetails[0].products.length; i++) {
+                            if(result.poDetails[0].products[i].productQuantityShipped){
+                              result.poDetails[0].products[i].productQuantity = parseInt(result.poDetails[0].products[i].productQuantity) - parseInt(result.poDetails[0].products[i].productQuantityShipped);
+                            }
                             result.poDetails[0].products[i].orderedQuantity =
                             result.poDetails[0].products[i].productQuantity;
                           }
@@ -753,6 +757,9 @@ if (!error) {
                         setDisabled(false);
                         let result = await dispatch(getViewShipment(values.shipmentID));
                         for (let i = 0; i < result.products.length; i++) {
+                          if(result.products[i].productQuantityShipped){
+                            result.products[i].productQuantity = parseInt(result.products[i].productQuantity) - parseInt(result.products[i].productQuantityShipped);
+                          }
                           result.products[i].orderedQuantity = result.products[i].productQuantity;
                         }
                         dispatch(turnOff());
