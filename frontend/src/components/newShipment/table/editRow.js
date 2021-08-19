@@ -31,7 +31,8 @@ const EditRow = props => {
     handleProductChange,
     handleBatchChange,
     products,
-    check
+    check,
+    warehouseID
   } = props;
   
   const headers = {
@@ -160,11 +161,12 @@ if(check==="0" && quantityChecker===1 && typeof(prod)!="undefined" && typeof(pro
     // closeModal()
   }
   async function fetchBatches(prod, index){
+    // console.log(warehouseID)
     setSelectedIndex(index);
-    console.log("index, ", selectedIndex )
+    // console.log("index, ", selectedIndex )
     setModelProduct(prod);
-    let res = await axios.get(`${config().fetchBatchesOfInventory}?productId=${prod.id}`)
-    console.log(res.data);
+    let res = await axios.get(`${config().fetchBatchesOfInventory}?productId=${prod.id}&wareId=${warehouseID}`)
+    // console.log(res.data);
     setBatches(res.data.data)
   }
   const numbersOnly = (e) => {
@@ -184,7 +186,6 @@ if(check==="0" && quantityChecker===1 && typeof(prod)!="undefined" && typeof(pro
   }
 const handleChange = (value) =>
 {
-
     console.log(value);
     setSelectedBatch(value);
 }

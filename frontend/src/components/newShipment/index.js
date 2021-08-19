@@ -48,7 +48,7 @@ const NewShipment = (props) => {
   const dispatch = useDispatch();
   const [category, setCategory] = useState([]);
   const [OrderId, setOrderId] = useState("Select Order ID");
-  const [senderOrgId, setSenderOrgId] = useState("Select Organisation Name");
+  const [senderOrgId, setSenderOrgId] = useState("null");
   const [orderIdSelected, setOrderIdSelected] = useState(false);
   const [senderOrgLoc, setSenderOrgLoc] = useState(
     "Select Organisation Location"
@@ -413,7 +413,6 @@ if (!error) {
  
   const handleQuantityChange = (value, i) => {
     const soDetailsClone = { ...OrderDetails };
-    console.log(soDetailsClone.products[i])
     if(parseInt(value) > parseInt(soDetailsClone.products[i].orderedQuantity)){
       soDetailsClone.products[i].productQuantity = soDetailsClone.products[i].orderedQuantity;
       setOrderDetails(soDetailsClone); 
@@ -910,6 +909,8 @@ if (!error) {
                             onWarehouseChange(v.warehouseInventory);
                             setFieldValue("fromOrg", senderOrganisation[0]);
                             setFieldValue("fromOrgLoc", v.value);
+                            // console.log(v.value)
+                            setSenderOrgId(v.value);
                             setAddProducts((prod) => []);
                             let newArr = {
                               productName: "",
@@ -1183,6 +1184,7 @@ if (!error) {
               {OrderDetails?.products?.length > 0 && (
                 <EditTable
                 check="1"
+                warehouseID={senderOrgId}
                   product={OrderDetails?.products}
                   handleQuantityChange={(v, i) => {
                     handleQuantityChange(v, i);
