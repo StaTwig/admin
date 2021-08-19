@@ -49,7 +49,7 @@ const EditRow = props => {
     img5: <img src={date} width="15" height="15"/>,
     img6: <img src={Quantity} width="20" height="15"/>,
   };
-  console.log(prod,"Edit rowt",index);
+  // console.log(prod,"Edit rowt",index);
   const [editButtonStatus, setEditButtonStatus] = useState(false);
   const [changeValue, setValue] = useState("");
   const [changebtn, setbtn] = useState(false);
@@ -130,7 +130,7 @@ const updateQuantity = () =>
 {
   setQuantityChecker(0);
 }
-console.log("product Quantity is "+ prod.productQuantity);
+// console.log("product Quantity is "+ prod.productQuantity);
 if(check==="0" && quantityChecker===1 && typeof(prod)!="undefined" && typeof(prod.name!="undefined") && typeof(productsList)!="undefined")
   {
                      let qty;
@@ -294,13 +294,7 @@ const editQuantity = (value, index) => {
               value={prod.productQuantity}
               
               onChange={(e) => {
-              
                 handleQuantityChange(e.target.value, index);
-                 console.log(e.target.value);
-                  if(e.target.value==="0")
-                  {
-                    prod.productQuantity = "";
-                  }
                 }}
             />
           </div>
@@ -356,8 +350,8 @@ const editQuantity = (value, index) => {
                         <div className="col txt" style={{position:"relative",left:'0%'}}>{ModelProd?.name}</div>
                         <div className="col txt1" style={{position:"relative",left:'6%'}} >{ModelProd?.manufacturer}</div>
                         <div className="col txt1" style={{position:"relative",left:'8%'}} >{product.batchNumbers[0]}</div>
-                        <div className="col txt1" style={{position:"relative",left:'8%'}}>{formatDate(product.attributeSet.mfgDate)}</div>
-                        <div className="col txt1" style={{position:"relative",left:'8%'}}>{formatDate(product.attributeSet.expDate)}</div> 
+                        <div className="col txt1" style={{position:"relative",left:'8%'}}>{(product.attributeSet.mfgDate.length > 0) ?  formatDate(product.attributeSet.mfgDate, "mmyyyy"): "-"}</div>
+                        <div className="col txt1" style={{position:"relative",left:'8%'}}>{(product.attributeSet.expDate.length > 0) ? formatDate(product.attributeSet.expDate, "mmyyyy") : "-"}</div> 
                         <div className="col txt1" style={{position:"relative",left:'4%'}}>
                         <div className="txt1">
                         <input

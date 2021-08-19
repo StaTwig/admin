@@ -23,7 +23,6 @@ router.post("/verifyOtp", AuthController.verifyOtp);
 router.get("/userInfo", AuthController.userInfo);
 router.get("/getAllUsers", AuthController.getAllUsers);
 router.post("/updateProfile", AuthController.updateProfile);
-router.post("/updatePassword", AuthController.updatePassword);
 router.post("/upload", upload.single("profile"), AuthController.uploadImage);
 router.get("/createAddress", AuthController.createUserAddress);
 router.post("/assignProductConsumer", AuthController.assignProductConsumer);
