@@ -695,6 +695,7 @@ exports.addProductsToInventory = [
           //      `Product doesn't conatin valid serial numbers range`,
           //    );
           //  }
+          
           const inventory = await InventoryModel.findOne({
             id: warehouse.warehouseInventory,
           });
@@ -859,9 +860,10 @@ exports.addProductsToInventory = [
           let event_data = {
             eventID: null,
             eventTime: null,
+            transactionId: warehouse.warehouseInventory,
             eventType: {
-              primary: "CREATE",
-              description: "SHIPMENT_CREATION",
+              primary: "ADD",
+              description: "INVENTORY",
             },
             actor: {
               actorid: null,

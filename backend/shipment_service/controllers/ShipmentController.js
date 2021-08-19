@@ -1830,6 +1830,7 @@ exports.updateTrackingStatus = [
             eventID: "ev0000" + evid,
             eventTime: datee,
             actorWarehouseId: req.user.warehouseId,
+            transactionId: req.body.id,
             eventType: {
               primary: "UPDATE",
               description: "SHIPMENT_TRACKING",

@@ -320,6 +320,7 @@ exports.changePOStatus = [
                   let event_data = {
                     eventID: null,
                     eventTime: null,
+                    transactionId: orderID,
                     eventType: {
                       primary: "UPDATE",
                       description: "ORDER",
@@ -968,7 +969,7 @@ exports.createOrder = [
         event_data.stackholders.actororg.address = supplierAddress || "null";
         event_data.payload.data = req.body;
         event_data.payload.data.order_id = poId;
-      
+        event_data.transactionId = poId;
         async function compute(event_data) {
           resultt = await logEvent(event_data);
           return resultt;     
