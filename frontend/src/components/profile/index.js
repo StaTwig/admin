@@ -498,12 +498,13 @@ class Profile extends React.Component {
                                 <img src={Pen} width="15" height="15" className="mr-2" />
                                 <span>EDIT</span>
                               </button> */}
-                              </div>
                               {this.state.warehouseLocations[id]['status'] != 'ACTIVE' &&
-                                <span className="font-weight-bold text-red">
+                                <span className="font-weight-bold badge badge-danger">
                                   Approval Pending
                                 </span>
                               }
+                              </div>
+                              
                             </div>
                             <div className="card-body">
                               <input
@@ -656,7 +657,7 @@ class Profile extends React.Component {
                                     </h3>
                                   </div>
                                   {this.state.warehouseLocations[id]['status'] != 'ACTIVE' &&
-                                    <span className="font-weight-bold text-red">
+                                    <span className="font-weight-bold badge badge-danger">
                                       Approval Pending
                                     </span>
                                   }
