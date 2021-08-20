@@ -425,8 +425,9 @@ exports.checkEmail = [
           var datee = new Date();
           datee = datee.toISOString();
           let event_data = {
-            eventID: null,
-            eventTime: null,
+            eventID: evid,
+            eventTime: datee,
+            actorWarehouseId: "null",
             eventType: {
               primary: "CREATE",
               description: "USER",
@@ -462,13 +463,12 @@ exports.checkEmail = [
           event_data.eventTime = datee;
           event_data.eventType.primary = "CREATE";
           event_data.eventType.description = "USER";
-          event_data.payloaData = req.body;
-
+          event_data.payload.data = req.body;
+        
           async function compute(event_data) {
             resultt = await logEvent(event_data);
             return resultt;
           }
-          console.log(result);
           compute(event_data).then((response) => {
             console.log(response);
           });
@@ -1221,6 +1221,7 @@ exports.addWarehouse = [
         let event_data = {
           eventID: null,
           eventTime: null,
+          actorWarehouseId: "null",
           eventType: {
             primary: "ADD",
             description: "WAREHOUSE",
@@ -1254,15 +1255,14 @@ exports.addWarehouse = [
         };
         event_data.eventID = "ev0000" + evid;
         event_data.eventTime = datee;
-        event_data.eventType.primary = "ADD";
+        event_data.eventType.primary = "CREATE";
         event_data.eventType.description = "WAREHOUSE";
-        event_data.payloaData = req.body;
-
+        event_data.payload.data = req.body;
+      
         async function compute(event_data) {
           resultt = await logEvent(event_data);
           return resultt;
         }
-        console.log(result);
         compute(event_data).then((response) => {
           console.log(response);
         });
