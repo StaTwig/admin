@@ -3,7 +3,6 @@ import EditRow from './editRow';
 import './style.scss';
 
 const EditTable = props => {
-  // console.log(props.product,"Table");
  return (
     <div className="table productTable mt-2">
      <div className="d-flex flex-column">

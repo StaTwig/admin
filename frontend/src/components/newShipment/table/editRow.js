@@ -31,7 +31,8 @@ const EditRow = props => {
     handleProductChange,
     handleBatchChange,
     products,
-    check
+    check,
+    warehouseID
   } = props;
   
   const headers = {
@@ -62,6 +63,7 @@ const EditRow = props => {
   const [batches, setBatches] = useState([]);
   const [selectedBatch, setSelectedBatch] = useState({});
   const [selectedIndex, setSelectedIndex] = useState();
+  const [BatchSelected, setBatchSelected] = useState(false);
   const closeModal = () => setShowModal(false);
   const handleOpen = () => {
     setOpen(true);
@@ -159,11 +161,12 @@ if(check==="0" && quantityChecker===1 && typeof(prod)!="undefined" && typeof(pro
     // closeModal()
   }
   async function fetchBatches(prod, index){
+    // console.log(warehouseID)
     setSelectedIndex(index);
-    console.log("index, ", selectedIndex )
+    // console.log("index, ", selectedIndex )
     setModelProduct(prod);
-    let res = await axios.get(`${config().fetchBatchesOfInventory}?productId=${prod.id}`)
-    console.log(res.data);
+    let res = await axios.get(`${config().fetchBatchesOfInventory}?productId=${prod.id}&wareId=${warehouseID}`)
+    // console.log(res.data);
     setBatches(res.data.data)
   }
   const numbersOnly = (e) => {
@@ -344,7 +347,7 @@ const editQuantity = (value, index) => {
                <div>
                 <div className="rTableRow mb-1"> 
                         <input className="txt2 ml-3" type="checkbox" id={index} 
-                               onChange={(e) => handleChange({quant: product.quantity, bnp: product.batchNumbers[0]})}>
+                               onChange={(e) => {handleChange({quant: product.quantity, bnp: product.batchNumbers[0]}); setBatchSelected(!BatchSelected);}}>
                         </input>
                         {/* <img src={user} width="27" height="18" alt="User" className="txt1"/> */}
                         <div className="col txt" style={{position:"relative",left:'0%'}}>{ModelProd?.name}</div>
@@ -395,6 +398,7 @@ const editQuantity = (value, index) => {
                 ) : (
                   <button
                     className="btn-sm btn-yellow d-width"
+                    disabled={!BatchSelected}
                     onClick={onEditClick}
                   >
                     <i className="fa fa-pencil text-center"></i>
@@ -425,7 +429,7 @@ const editQuantity = (value, index) => {
                 </button>
                 <button
                   type="button"
-                  onClick={closeModal}
+                  onClick={() => {closeModal(); setBatchSelected(false); setDisabled(true)}}
                   className="btn btn-outline-dark"
                 >
                   CANCEL

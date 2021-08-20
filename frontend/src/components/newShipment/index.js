@@ -48,7 +48,7 @@ const NewShipment = (props) => {
   const dispatch = useDispatch();
   const [category, setCategory] = useState([]);
   const [OrderId, setOrderId] = useState("Select Order ID");
-  const [senderOrgId, setSenderOrgId] = useState("Select Organisation Name");
+  const [senderOrgId, setSenderOrgId] = useState("null");
   const [orderIdSelected, setOrderIdSelected] = useState(false);
   const [senderOrgLoc, setSenderOrgLoc] = useState(
     "Select Organisation Location"
@@ -413,6 +413,12 @@ if (!error) {
  
   const handleQuantityChange = (value, i) => {
     const soDetailsClone = { ...OrderDetails };
+    if(parseInt(value) > parseInt(soDetailsClone.products[i].orderedQuantity)){
+      soDetailsClone.products[i].productQuantity = soDetailsClone.products[i].orderedQuantity;
+      setOrderDetails(soDetailsClone); 
+      alert("Quantity cannot be more than ordered quantity")
+      return
+    }
       soDetailsClone.products[i].productQuantity = value;
       setOrderDetails(soDetailsClone);    
     
@@ -646,8 +652,14 @@ if (!error) {
                           setFieldValue("OrderId", v.value);
                           setOrderId(v.value);
                           dispatch(turnOn());
-                          const result = await dispatch(getOrder(v.value));
-                          
+                          let result = await dispatch(getOrder(v.value));
+                          for (let i = 0; i < result.poDetails[0].products.length; i++) {
+                            if(result.poDetails[0].products[i].productQuantityShipped){
+                              result.poDetails[0].products[i].productQuantity = parseInt(result.poDetails[0].products[i].productQuantity) - parseInt(result.poDetails[0].products[i].productQuantityShipped);
+                            }
+                            result.poDetails[0].products[i].orderedQuantity =
+                            result.poDetails[0].products[i].productQuantity;
+                          }
                           setReceiverOrgLoc(
                              result.poDetails[0].customer.warehouse.title + '/' + result.poDetails[0].customer.warehouse.postalAddress
                           );
@@ -742,7 +754,13 @@ if (!error) {
                         setOrderIdSelected(true);
                         dispatch(turnOn());
                         setDisabled(false);
-                        const result = await dispatch(getViewShipment(values.shipmentID));
+                        let result = await dispatch(getViewShipment(values.shipmentID));
+                        for (let i = 0; i < result.products.length; i++) {
+                          if(result.products[i].productQuantityShipped){
+                            result.products[i].productQuantity = parseInt(result.products[i].productQuantity) - parseInt(result.products[i].productQuantityShipped);
+                          }
+                          result.products[i].orderedQuantity = result.products[i].productQuantity;
+                        }
                         dispatch(turnOff());
                         setReceiverOrgLoc();
                         setReceiverOrgId();
@@ -891,6 +909,8 @@ if (!error) {
                             onWarehouseChange(v.warehouseInventory);
                             setFieldValue("fromOrg", senderOrganisation[0]);
                             setFieldValue("fromOrgLoc", v.value);
+                            // console.log(v.value)
+                            setSenderOrgId(v.value);
                             setAddProducts((prod) => []);
                             let newArr = {
                               productName: "",
@@ -1164,6 +1184,7 @@ if (!error) {
               {OrderDetails?.products?.length > 0 && (
                 <EditTable
                 check="1"
+                warehouseID={senderOrgId}
                   product={OrderDetails?.products}
                   handleQuantityChange={(v, i) => {
                     handleQuantityChange(v, i);
