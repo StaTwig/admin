@@ -29,7 +29,7 @@ const { uploadFile , getFileStream} = require("../helpers/s3");
 const fs = require('fs');
 const util = require('util');
 const unlinkFile = util.promisify(fs.unlink);
-
+const excel = require('node-excel-export');
 const inventoryUpdate = async (
   id,
   quantity,
@@ -2813,3 +2813,334 @@ exports.Image=[
     FileStream.pipe(res);
   }
 ]
+
+
+exports.exportInboundShipments = [//inbound shipments with filter(shipmentId, from, to, status, date)
+  auth,
+  async (req, res) => {
+    try {
+      const { skip, limit } = req.query;
+      checkToken(req, res, async (result) => {
+        if (result.success) {
+          const { warehouseId } = req.user;
+          let currentDate = new Date();
+          let fromDateFilter = 0;
+          let status = req.query.status ? req.query.status : undefined;
+          let fromSupplier = req.query.from ? req.query.from : undefined;
+          let toReceiver = req.query.to ? req.query.to : undefined;
+          let shipmentId = req.query.shipmentId ? req.query.shipmentId : undefined;
+          switch (req.query.dateFilter) {
+            case "today":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+              break;
+            case "week":
+              fromDateFilter = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay())).toUTCString();
+              break;
+            case "month":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
+              break;
+            case "threeMonth":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, currentDate.getDate());
+              break;
+            case "sixMonth":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 6, currentDate.getDate());
+              break;
+            case "year":
+              fromDateFilter = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate());
+              break;
+            default:
+              fromDateFilter = 0;
+          }
+
+          let whereQuery = {};
+
+          if (shipmentId) {
+            whereQuery['id'] = shipmentId
+          }
+
+          if (status) {
+            if (status == "RECEIVED") {
+              whereQuery['status'] = status
+            } else {
+              whereQuery['status'] = { $ne: "RECEIVED" }
+            }
+          }
+
+          if (fromDateFilter) {
+            whereQuery['createdAt'] = { $gte: fromDateFilter }
+          }
+
+          if (warehouseId) {
+            whereQuery["receiver.locationId"] = warehouseId
+          }
+
+          if (fromSupplier) {
+            whereQuery["supplier.id"] = fromSupplier;
+          }
+
+          if (toReceiver) {
+            whereQuery["receiver.id"] = toReceiver
+          }
+          console.log("In bound whereQuery ======>", whereQuery);
+          try {
+            let inboundShipmentsCount = await ShipmentModel.count(whereQuery);
+            ShipmentModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((inboundShipmentsList) => {
+              let inboundShipmentsRes = [];
+              let findInboundShipmentData = inboundShipmentsList.map(async (inboundShipment) => {
+                let inboundShipmentData = JSON.parse(JSON.stringify(inboundShipment))
+                let supplierOrganisation = await OrganisationModel.findOne(
+                  {
+                    id: inboundShipmentData.supplier.id
+                  });
+                let supplierWarehouse = await WarehouseModel.findOne(
+                  {
+                    id: inboundShipmentData.supplier.locationId
+                  });
+                let receiverOrganisation = await OrganisationModel.findOne(
+                  {
+                    id: inboundShipmentData.receiver.id
+                  });
+                let receiverWarehouse = await WarehouseModel.findOne(
+                  {
+                    id: inboundShipmentData.receiver.locationId
+                  });
+                inboundShipmentData.supplier[`org`] = supplierOrganisation;
+                inboundShipmentData.supplier[`warehouse`] = supplierWarehouse;
+                inboundShipmentData.receiver[`org`] = receiverOrganisation;
+                inboundShipmentData.receiver[`warehouse`] = receiverWarehouse;
+                inboundShipmentsRes.push(inboundShipmentData);
+              });
+
+              Promise.all(findInboundShipmentData).then(function (results) {
+                res = buildExcelReport(req,res,inboundShipmentsRes)
+                return apiResponse.successResponseWithData(
+                  res,
+                  "Inbound Shipment Records",
+                );
+              });
+            });
+          } catch (err) {
+            return apiResponse.ErrorResponse(res, err.message);
+          }
+        } else {
+          logger.log(
+            "warn",
+            "<<<<< ShipmentService < ShipmentController < fetchInboundShipments : refuted token"
+          );
+          res.status(403).json("Auth failed");
+        }
+      });
+    } catch (err) {
+      logger.log(
+        "error",
+        "<<<<< ShipmentService < ShipmentController < fetchInboundShipments : error (catch block)"
+      );
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
+function buildExcelReport(req,res,dataForExcel){
+  const styles = {
+    headerDark: {
+      fill: {
+        fgColor: {
+          rgb: 'FF000000'
+        }
+      },
+      font: {
+        color: {
+          rgb: 'FFFFFFFF'
+        },
+        sz: 14,
+        bold: true,
+        underline: true
+      }
+    },
+    cellPink: {
+      fill: {
+        fgColor: {
+          rgb: 'FFFFCCFF'
+        }
+      }
+    },
+    cellGreen: {
+      fill: {
+        fgColor: {
+          rgb: 'FF00FF00'
+        }
+      }
+    }
+  };
+   
+  //Array of objects representing heading rows (very top)
+  const heading = [
+    [{value: 'a1', style: styles.headerDark}, {value: 'b1', style: styles.headerDark}, 
+    ,{value: 'c1', style: styles.headerDark},{value: 'd1', style: styles.headerDark},
+    {value: 'e1', style: styles.headerDark},{value: 'f1', style: styles.headerDark},
+    {value: 'g1', style: styles.headerDark},{value: 'h1', style: styles.headerDark},
+    {value: 'i1', style: styles.headerDark},{value: 'j1', style: styles.headerDark},
+    {value: 'k1', style: styles.headerDark},{value: 'l1', style: styles.headerDark},
+    {value: 'm1', style: styles.headerDark},{value: 'n1', style: styles.headerDark},
+    {value: 'o1', style: styles.headerDark},{value: 'p1', style: styles.headerDark},
+    {value: 'q1', style: styles.headerDark},{value: 'r1', style: styles.headerDark},
+    {value: 's1', style: styles.headerDark}],
+    ['a2', 'b2', 'c2','d2','e2','f2','g2','h2','i2','j2','k2','l2','m2','n2','o2','p2','q2','r2','s2'] // <-- It can be only values
+  ];
+   
+  //Here you specify the export structure
+  const specification = {
+    id: { // <- the key should match the actual data key
+      displayName: 'Shipment ID', // <- Here you specify the column header
+      headerStyle: styles.headerDark, // <- Header style
+      cellStyle: styles.cellPink,
+      width: 120 // <- width in pixels
+    },
+    poId: {
+      displayName: 'Reference Order ID',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink,
+      width: '10' // <- width in chars (when the number is passed as string)
+    },
+    note: {
+      displayName: 'Product Category',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, // <- Cell style
+      width: 220 // <- width in pixels
+    },
+    note: {
+      displayName: 'Product Name',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, // <- Cell style
+      width: 220 // <- width in pixels
+    },
+    note: {
+      displayName: 'Product ID',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, // <- Cell style
+      width: 220 // <- width in pixels
+    },
+    note: {
+      displayName: 'Quantity',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, // <- Cell style
+      width: 220 // <- width in pixels
+    },
+    note: {
+      displayName: 'Batch Number',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, // <- Cell style
+      width: 220 // <- width in pixels
+    },
+    note: {
+      displayName: 'Expiry Date',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, // <- Cell style
+      width: 220 // <- width in pixels
+    },
+    note: {
+      displayName: 'Manufacturer',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, // <- Cell style
+      width: 220 // <- width in pixels
+    },
+    supplier: {
+      displayName: 'From Organization Name',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, // <- Cell style
+      width: 220 // <- width in pixels
+    },
+    supplier: {
+      displayName: 'From Organization ID',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, // <- Cell style
+      width: 220 // <- width in pixels
+    },
+    reciever: {
+      displayName: 'From Organization Location Details',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, // <- Cell style
+      width: 220 // <- width in pixels
+    },
+    reciever: {
+      displayName: 'Delivery Organization Name',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, // <- Cell style
+      width: 220 // <- width in pixels
+    },
+    reciever: {
+      displayName: 'Delivery Organization ID',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, // <- Cell style
+      width: 220 // <- width in pixels
+    },
+    reciever: {
+      displayName: 'Delivery Organization Location Details',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, // <- Cell style
+      width: 220 // <- width in pixels
+    },
+    airWayBillNo: {
+      displayName: 'Transit Number',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, // <- Cell style
+      width: 220 // <- width in pixels
+    },
+    label: {
+      displayName: 'Label Code',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, // <- Cell style
+      width: 220 // <- width in pixels
+    },
+    shippingDate: {
+      displayName: 'Shipment Date',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, // <- Cell style
+      width: 220 // <- width in pixels
+    },
+    expectedDeliveryDate: {
+      displayName: 'Shipment Estimate Date',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, // <- Cell style
+      width: 220 // <- width in pixels
+    }
+  }
+   
+  // The data set should have the following shape (Array of Objects)
+  // The order of the keys is irrelevant, it is also irrelevant if the
+  // dataset contains more fields as the report is build based on the
+  // specification provided above. But you should have all the fields
+  // that are listed in the report specification
+  const dataset = [
+    {customer_name: 'IBM', status_id: 1, note: 'some note', misc: 'not shown'},
+    {customer_name: 'HP', status_id: 0, note: 'some note'},
+    {customer_name: 'MS', status_id: 0, note: 'some note', misc: 'not shown'}
+  ]
+   
+  // Define an array of merges. 1-1 = A:1
+  // The merges are independent of the data.
+  // A merge will overwrite all data _not_ in the top-left cell.
+  const merges = [
+    { start: { row: 1, column: 1 }, end: { row: 1, column: 10 } },
+    { start: { row: 2, column: 1 }, end: { row: 2, column: 5 } },
+    { start: { row: 2, column: 6 }, end: { row: 2, column: 10 } }
+  ]
+   
+  // Create the excel report.
+  // This function will return Buffer
+  const report = excel.buildExport(
+    [ // <- Notice that this is an array. Pass multiple sheets to create multi sheet report
+      {
+        name: 'Report Shipment', // <- Specify sheet name (optional)
+        heading: heading, // <- Raw heading array (optional)
+        merges: merges, // <- Merge cell ranges
+        specification: specification, // <- Report specification
+        data: dataForExcel // <-- Report data
+      }
+    ]
+  );
+   
+  // You can then return this straight
+  res.attachment('report.xlsx'); // This is sails.js specific (in general you need to set headers)
+  return res.send(report);
+}

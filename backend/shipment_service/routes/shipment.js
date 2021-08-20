@@ -41,4 +41,5 @@ router.get("/fetchOutboundShipments", ShipmentController.fetchOutboundShipments)
 router.get("/fetchSupplierAndReceiverList", ShipmentController.fetchSupplierAndReceiverList);
 router.get("/fetchairwayBillNumber", ShipmentController.fetchairwayBillNumber);
 router.get("/images/:key", ShipmentController.Image);
+router.get("/exportInboundShipments", ShipmentController.exportInboundShipments);
 module.exports = router;
