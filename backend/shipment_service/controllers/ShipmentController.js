@@ -3138,7 +3138,8 @@ function buildExcelReport(req,res,dataForExcel){
     cellPink: {
       fill: {
         fgColor: {
-          rgb: 'FFFFCCFF'
+           //rgb: 'FFFFCCFF'
+           rgb: 'FF00FF00'
         }
       }
     },
@@ -3162,7 +3163,7 @@ function buildExcelReport(req,res,dataForExcel){
     {value: 'o1', style: styles.headerDark},{value: 'p1', style: styles.headerDark},
     {value: 'q1', style: styles.headerDark},{value: 'r1', style: styles.headerDark},
     {value: 's1', style: styles.headerDark}],
-    ['a2', 'b2', 'c2','d2','e2','f2','g2','h2','i2','j2','k2','l2','m2','n2','o2','p2','q2','r2','s2'] // <-- It can be only values
+    //['a2', 'b2', 'c2','d2','e2','f2','g2','h2','i2','j2','k2','l2','m2','n2','o2','p2','q2','r2','s2'] // <-- It can be only values
   ];
    
   const specification = {
@@ -3282,24 +3283,13 @@ function buildExcelReport(req,res,dataForExcel){
     }
   }
    
-  const dataset = [
-    {customer_name: 'IBM', status_id: 1, note: 'some note', misc: 'not shown'},
-    {customer_name: 'HP', status_id: 0, note: 'some note'},
-    {customer_name: 'MS', status_id: 0, note: 'some note', misc: 'not shown'}
-  ]
-   
-  const merges = [
-    { start: { row: 1, column: 1 }, end: { row: 1, column: 10 } },
-    { start: { row: 2, column: 1 }, end: { row: 2, column: 5 } },
-    { start: { row: 2, column: 6 }, end: { row: 2, column: 10 } }
-  ]
    
   const report = excel.buildExport(
     [ 
       {
         name: 'Report Shipment', 
-        heading: heading, 
-        merges: merges, 
+       // heading: heading, 
+       // merges: merges, 
         specification: specification, 
         data: dataForExcel 
       }
