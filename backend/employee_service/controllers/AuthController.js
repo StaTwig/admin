@@ -1118,24 +1118,20 @@ exports.getUserWarehouses = [
   auth,
   async (req, res) => {
     try {
+      if(!req.user.organisationId){
+        return apiResponse.ErrorResponse(res, 'User Organisation ID not found');
+      }
+      const orgId = req.user.organisationId;
       const users = await WarehouseModel.find({
-        organisationId: req.user.organisationId
+        organisationId: orgId,
       });
-      logger.log(
-        'info',
-        '<<<<< UserService < AuthController < getAllUsers : retrieved users successfully',
-      );
       return apiResponse.successResponseWithData(
         res,
         "User warehouses",
         users,
       );
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< UserService < AuthController < getAllUsers : error(catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
