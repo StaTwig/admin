@@ -1,34 +1,14 @@
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
 const auth = require("../middlewares/jwt");
-
-const InventoryModel = require('../models/InventoryModel');
 const ShipmentModel = require('../models/ShipmentModel');
 const ShippingOrderModel = require('../models/ShippingOrderModel')
-const POModel = require('../models/POModel');
 const RecordModel = require('../models/RecordModel');
 const AtomModel = require('../models/AtomModel');
 const OrganisationModel = require('../models/OrganisationModel');
 const ProductModel = require('../models/ProductModel');
-const checkPermissions = require('../middlewares/rbac_middleware').checkPermissions;
-const axios = require('axios');
-
-const fs = require('fs');
-const stream_name = process.env.SHIP_STREAM;
-const po_stream_name = process.env.PO_STREAM;
-const blockchain_service_url = process.env.URL;
-
 const init = require('../logging/init');
 const logger = init.getLog();
-
-
-const UserModel = require('../models/UserModel');
-const utility = require('../helpers/utility');
-const jwt = require('jsonwebtoken');
-const {
-    constants
-} = require('../helpers/constants');
-
 
 exports.fetchGoodsByID = [
     (req, res) => {
