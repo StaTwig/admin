@@ -2910,9 +2910,37 @@ exports.exportInboundShipments = [//inbound shipments with filter(shipmentId, fr
                 inboundShipmentData.receiver[`warehouse`] = receiverWarehouse;
                 inboundShipmentsRes.push(inboundShipmentData);
               });
+              
 
               Promise.all(findInboundShipmentData).then(function (results) {
-                res = buildExcelReport(req,res,inboundShipmentsRes)
+                let data = []
+                let rowData;
+               for(row of inboundShipmentsRes){
+                  for(product of row.products){
+                     rowData ={
+                       id: row.id,
+                       poId : row.poId,
+                       productCategory: product.productCategory,
+                       productName: product.productName,
+                       productID: product.productID,
+                       productQuantity: product.productQuantity,
+                       batchNumber: product.batchNumber,
+                       manufacturer: product.manufacturer,
+                      supplierOrgName: row?.supplier?.org?.name,
+                      supplierOrgId: row?.supplier?.org?.id,
+                      supplierOrgLocation: row?.supplier?.locationId,
+                      recieverOrgName: row?.receiver?.org?.name,
+                      recieverOrgId: row?.receiver?.org?.id,
+                      recieverOrgLocation: row?.receiver?.locationId,
+                      airWayBillNo: row.airWayBillNo,
+                      label: row?.label?.labelId,
+                      shippingDate: row.shippingDate,
+                      expectedDeliveryDate: row.expectedDeliveryDate || "unknown"
+                     }
+                     data.push(rowData)
+                  }
+                }
+                res = buildExcelReport(req,res,data)
                 return apiResponse.successResponseWithData(
                   res,
                   "Inbound Shipment Records",
@@ -2939,6 +2967,156 @@ exports.exportInboundShipments = [//inbound shipments with filter(shipmentId, fr
     }
   },
 ];
+
+exports.exportOutboundShipments = [ //outbound shipments with filter(shipmentId, from, to, status, date)
+  auth,
+  async (req, res) => {
+    try {
+      const { skip, limit } = req.query;
+      checkToken(req, res, async (result) => {
+        if (result.success) {
+          const { warehouseId } = req.user;
+          let currentDate = new Date();
+          let fromDateFilter = 0;
+          let status = req.query.status ? req.query.status : undefined;
+          let fromSupplier = req.query.from ? req.query.from : undefined;
+          let toReceiver = req.query.to ? req.query.to : undefined;
+          let shipmentId = req.query.shipmentId ? req.query.shipmentId : undefined;
+          switch (req.query.dateFilter) {
+            case "today":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+              break;
+            case "week":
+              fromDateFilter = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay())).toUTCString();
+              break;
+            case "month":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
+              break;
+            case "threeMonth":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, currentDate.getDate());
+              break;
+            case "sixMonth":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 6, currentDate.getDate());
+              break;
+            case "year":
+              fromDateFilter = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate());
+              break;
+            default:
+              fromDateFilter = 0;
+          }
+
+          let whereQuery = {};
+
+          if (shipmentId) {
+            whereQuery['id'] = shipmentId
+          }
+
+          if (status) {
+            whereQuery['status'] = status
+          }
+
+          if (fromDateFilter) {
+            whereQuery['createdAt'] = { $gte: fromDateFilter }
+          }
+
+          if (warehouseId) {
+            whereQuery["supplier.locationId"] = warehouseId
+          }
+
+          if (fromSupplier) {
+            whereQuery["supplier.id"] = fromSupplier;
+          }
+
+          if (toReceiver) {
+            whereQuery["receiver.id"] = toReceiver
+          }
+
+          console.log("Out bound whereQuery ======>", whereQuery);
+          try {
+            let outboundShipmentsCount = await ShipmentModel.count(whereQuery);
+            ShipmentModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((outboundShipmentsList) => {
+              let outboundShipmentsRes = [];
+              let findOutboundShipmentData = outboundShipmentsList.map(async (outboundShipment) => {
+                let outboundShipmentData = JSON.parse(JSON.stringify(outboundShipment))
+                let supplierOrganisation = await OrganisationModel.findOne(
+                  {
+                    id: outboundShipmentData.supplier.id
+                  });
+                let supplierWarehouse = await WarehouseModel.findOne(
+                  {
+                    id: outboundShipmentData.supplier.locationId
+                  });
+                let receiverOrganisation = await OrganisationModel.findOne(
+                  {
+                    id: outboundShipmentData.receiver.id
+                  });
+                let receiverWarehouse = await WarehouseModel.findOne(
+                  {
+                    id: outboundShipmentData.receiver.locationId
+                  });
+                outboundShipmentData.supplier[`org`] = supplierOrganisation;
+                outboundShipmentData.supplier[`warehouse`] = supplierWarehouse;
+                outboundShipmentData.receiver[`org`] = receiverOrganisation;
+                outboundShipmentData.receiver[`warehouse`] = receiverWarehouse;
+                outboundShipmentsRes.push(outboundShipmentData);
+              });
+
+              Promise.all(findOutboundShipmentData).then(function (results) {
+                let data = []
+                let rowData;
+               for(row of outboundShipmentsRes){
+                  for(product of row.products){
+                     rowData ={
+                       id: row.id,
+                       poId : row.poId,
+                       productCategory: product.productCategory,
+                       productName: product.productName,
+                       productID: product.productID,
+                       productQuantity: product.productQuantity,
+                       batchNumber: product.batchNumber,
+                       manufacturer: product.manufacturer,
+                      supplierOrgName: row?.supplier?.org?.name,
+                      supplierOrgId: row?.supplier?.org?.id,
+                      supplierOrgLocation: row?.supplier?.locationId,
+                      recieverOrgName: row?.receiver?.org?.name,
+                      recieverOrgId: row?.receiver?.org?.id,
+                      recieverOrgLocation: row?.receiver?.locationId,
+                      airWayBillNo: row.airWayBillNo,
+                      label: row?.label?.labelId,
+                      shippingDate: row.shippingDate,
+                      expectedDeliveryDate: row.expectedDeliveryDate || "unknown"
+                     }
+                     data.push(rowData)
+                  }
+                }
+                res = buildExcelReport(req,res,data)
+                return apiResponse.successResponseWithMultipleData(
+                  res,
+                  "Outbound Shipment Records"
+                  );
+              });
+            });
+          } catch (err) {
+            return apiResponse.ErrorResponse(res, err.message);
+          }
+        } else {
+          logger.log(
+            "warn",
+            "<<<<< ShipmentService < ShipmentController < fetchOutboundShipments : refuted token"
+          );
+          res.status(403).json("Auth failed");
+        }
+      });
+    } catch (err) {
+      logger.log(
+        "error",
+        "<<<<< ShipmentService < ShipmentController < fetchOutboundShipments : error (catch block)"
+      );
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
 
 function buildExcelReport(req,res,dataForExcel){
   const styles = {
@@ -2973,7 +3151,6 @@ function buildExcelReport(req,res,dataForExcel){
     }
   };
    
-  //Array of objects representing heading rows (very top)
   const heading = [
     [{value: 'a1', style: styles.headerDark}, {value: 'b1', style: styles.headerDark}, 
     ,{value: 'c1', style: styles.headerDark},{value: 'd1', style: styles.headerDark},
@@ -2988,159 +3165,147 @@ function buildExcelReport(req,res,dataForExcel){
     ['a2', 'b2', 'c2','d2','e2','f2','g2','h2','i2','j2','k2','l2','m2','n2','o2','p2','q2','r2','s2'] // <-- It can be only values
   ];
    
-  //Here you specify the export structure
   const specification = {
-    id: { // <- the key should match the actual data key
-      displayName: 'Shipment ID', // <- Here you specify the column header
-      headerStyle: styles.headerDark, // <- Header style
+    id: { 
+      displayName: 'Shipment ID', 
+      headerStyle: styles.headerDark, 
       cellStyle: styles.cellPink,
-      width: 120 // <- width in pixels
+      width: 120 
     },
     poId: {
       displayName: 'Reference Order ID',
       headerStyle: styles.headerDark,
       cellStyle: styles.cellPink,
-      width: '10' // <- width in chars (when the number is passed as string)
+      width: '10' 
     },
-    note: {
+    productCategory: {
       displayName: 'Product Category',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, // <- Cell style
-      width: 220 // <- width in pixels
+      cellStyle: styles.cellPink, 
+      width: 220 
     },
-    note: {
+    productName: {
       displayName: 'Product Name',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, // <- Cell style
-      width: 220 // <- width in pixels
+      cellStyle: styles.cellPink, 
+      width: 220 
     },
-    note: {
+    productID: {
       displayName: 'Product ID',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, // <- Cell style
-      width: 220 // <- width in pixels
+      cellStyle: styles.cellPink, 
+      width: 220 
     },
-    note: {
+    productQuantity: {
       displayName: 'Quantity',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, // <- Cell style
-      width: 220 // <- width in pixels
+      cellStyle: styles.cellPink, 
+      width: 220 
     },
-    note: {
+    batchNumber: {
       displayName: 'Batch Number',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, // <- Cell style
-      width: 220 // <- width in pixels
+      cellStyle: styles.cellPink, 
+      width: 220 
     },
     note: {
       displayName: 'Expiry Date',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, // <- Cell style
-      width: 220 // <- width in pixels
+      cellStyle: styles.cellPink, 
+      width: 220 
     },
-    note: {
+    manufacturer: {
       displayName: 'Manufacturer',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, // <- Cell style
-      width: 220 // <- width in pixels
+      cellStyle: styles.cellPink, 
+      width: 220 
     },
-    supplier: {
+    supplierOrgName: {
       displayName: 'From Organization Name',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, // <- Cell style
-      width: 220 // <- width in pixels
+      cellStyle: styles.cellPink, 
+      width: 220 
     },
-    supplier: {
+    supplierOrgId: {
       displayName: 'From Organization ID',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, // <- Cell style
-      width: 220 // <- width in pixels
+      cellStyle: styles.cellPink, 
+      width: 220 
     },
-    reciever: {
+    supplierOrgLocation: {
       displayName: 'From Organization Location Details',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, // <- Cell style
-      width: 220 // <- width in pixels
+      cellStyle: styles.cellPink, 
+      width: 220 
     },
-    reciever: {
+    recieverOrgName: {
       displayName: 'Delivery Organization Name',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, // <- Cell style
-      width: 220 // <- width in pixels
+      cellStyle: styles.cellPink, 
+      width: 220 
     },
-    reciever: {
+    recieverOrgId: {
       displayName: 'Delivery Organization ID',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, // <- Cell style
-      width: 220 // <- width in pixels
+      cellStyle: styles.cellPink, 
+      width: 220 
     },
-    reciever: {
+    recieverOrgLocation: {
       displayName: 'Delivery Organization Location Details',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, // <- Cell style
-      width: 220 // <- width in pixels
+      cellStyle: styles.cellPink, 
+      width: 220 
     },
     airWayBillNo: {
       displayName: 'Transit Number',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, // <- Cell style
-      width: 220 // <- width in pixels
+      cellStyle: styles.cellPink, 
+      width: 220 
     },
     label: {
       displayName: 'Label Code',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, // <- Cell style
-      width: 220 // <- width in pixels
+      cellStyle: styles.cellPink, 
+      width: 220 
     },
     shippingDate: {
       displayName: 'Shipment Date',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, // <- Cell style
-      width: 220 // <- width in pixels
+      cellStyle: styles.cellPink, 
+      width: 220 
     },
     expectedDeliveryDate: {
       displayName: 'Shipment Estimate Date',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, // <- Cell style
-      width: 220 // <- width in pixels
+      cellStyle: styles.cellPink, 
+      width: 220 
     }
   }
    
-  // The data set should have the following shape (Array of Objects)
-  // The order of the keys is irrelevant, it is also irrelevant if the
-  // dataset contains more fields as the report is build based on the
-  // specification provided above. But you should have all the fields
-  // that are listed in the report specification
   const dataset = [
     {customer_name: 'IBM', status_id: 1, note: 'some note', misc: 'not shown'},
     {customer_name: 'HP', status_id: 0, note: 'some note'},
     {customer_name: 'MS', status_id: 0, note: 'some note', misc: 'not shown'}
   ]
    
-  // Define an array of merges. 1-1 = A:1
-  // The merges are independent of the data.
-  // A merge will overwrite all data _not_ in the top-left cell.
   const merges = [
     { start: { row: 1, column: 1 }, end: { row: 1, column: 10 } },
     { start: { row: 2, column: 1 }, end: { row: 2, column: 5 } },
     { start: { row: 2, column: 6 }, end: { row: 2, column: 10 } }
   ]
    
-  // Create the excel report.
-  // This function will return Buffer
   const report = excel.buildExport(
-    [ // <- Notice that this is an array. Pass multiple sheets to create multi sheet report
+    [ 
       {
-        name: 'Report Shipment', // <- Specify sheet name (optional)
-        heading: heading, // <- Raw heading array (optional)
-        merges: merges, // <- Merge cell ranges
-        specification: specification, // <- Report specification
-        data: dataForExcel // <-- Report data
+        name: 'Report Shipment', 
+        heading: heading, 
+        merges: merges, 
+        specification: specification, 
+        data: dataForExcel 
       }
     ]
   );
    
-  // You can then return this straight
-  res.attachment('report.xlsx'); // This is sails.js specific (in general you need to set headers)
+  res.attachment('report.xlsx'); 
   return res.send(report);
 }
