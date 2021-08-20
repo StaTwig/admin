@@ -79,18 +79,18 @@ const PopUpLocation = (props) => {
       
       <div className="line">
       <center>
-      <h6> ━━━━━━━ &nbsp;&nbsp;&nbsp; Or &nbsp;&nbsp;&nbsp;    ━━━━━━━ </h6>
+      <h6> ━━━━━━━━━━ &nbsp;&nbsp;&nbsp; Or &nbsp;&nbsp;&nbsp;  ━━━━━━━━━━ </h6>
       </center>
       </div>
       <br></br>
       <div className="ml-5">
       <div className="col-md-12">
           <div className="form-group">
-            <img src={Location} height="35" width="20" className="pt-2"></img>
-            <label htmlFor="Select Location" className="pt-3">
+            <img src={Location} className="addLocModalImg pt-2"></img>
+            <label htmlFor="Select Location" className="addLocModal pt-3">
               <b>Select Location</b>
             </label>
-            <div className="form-controll">
+            <div className={`form-controlAddLoc mr-5 ${alertFlag  ? "border-danger" : "" }`}>
               <DropdownButton
                 name={selectLocation}
                 // name2="Select Location"
@@ -112,7 +112,7 @@ const PopUpLocation = (props) => {
 
 
       <div class="wrapper1">
-        <button className="btn btn-primary mt-5" onClick={()=>{updateStatus(wareHouse);}}>
+        <button className="buttonS btn btn-primary mt-3" onClick={()=>{updateStatus(wareHouse);}}>
           <span>Continue</span>
         </button>
       </div>
@@ -136,11 +136,11 @@ const PopUpLocation = (props) => {
             />
           </Modal>
         )}   */}
-        {alertFlag && 
+        {/* {alertFlag && 
         <Alert variant="filled" severity="error">
           <AlertTitle>Error</AlertTitle>
           Please select Location
-        </Alert>}
+        </Alert>} */}
     </div>
   );
 };

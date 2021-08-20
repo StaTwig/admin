@@ -178,7 +178,7 @@ const Inventory = props => {
                 <img src={TotalInventoryAdded} alt="truck"/>
               </div>
               <div className="d-flex flex-column">
-                <div className="title truck-text">Total Product Category</div>
+                <div className="title truck-text font-weight-bold">Total Product Category</div>
                 
                 <div className="count truck-text">{inventoriesCount} {inventoryAnalytics?.totalProductCategory}</div>
               </div>
@@ -192,7 +192,7 @@ const Inventory = props => {
               <img src={currentinventory} alt="truck" />
             </div>
             <div className="d-flex flex-column">
-              <div className="title sent-text">Product Out Of Stock</div>
+              <div className="title sent-text font-weight-bold">Product Out Of Stock</div>
               <div className="sent-text count">{currentInventoriesCount}{inventoryAnalytics?.stockOut}</div>
               </div>
             </div>
@@ -206,7 +206,7 @@ const Inventory = props => {
               <img src={Expiration} alt="truck" />
             </div>
             <div className="d-flex flex-column">
-              <div className="title recived-text">Batch near Expiration</div>
+              <div className="title recived-text font-weight-bold">Batch near Expiration</div>
               {/* <div className="tab-container">
                 <div
                   className="tab-item active"
@@ -279,7 +279,7 @@ const Inventory = props => {
               <img src={TotalVaccineExpired} alt="truck" />
             </div>
             <div className="d-flex flex-column">
-              <div className="title transit-text">Batch Expired</div>
+              <div className="title transit-text font-weight-bold">Batch Expired</div>
               {/* <div className="tab-container">
                 <div
                   className="tab-item active"

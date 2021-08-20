@@ -313,7 +313,7 @@ class Profile extends React.Component {
     return (
       <div className="profile">
         <h1 className="breadcrumb">Profile</h1>
-        <div className="card">
+        <div className="card" style={{border:"none"}}>
           <div className="card-body">
             <div className="d-flex flex-row justify-content-between">
               <div className="col-2">
@@ -436,12 +436,12 @@ class Profile extends React.Component {
                         <div class="addloc1">
                           {editMode && (
                             <button
-                              className="btn btn-orange fontSize20 font-bold pl-10 pr-10"
+                              className="buttonA btn btn-orange fontSize20 font-bold pl-10 pr-10"
                               onClick={() => {
                                 this.setState({ openModal: true });
                               }}
                             >
-                              <span>+ Add </span>
+                              <span>+ ADD </span>
                             </button>
                           )}
                           <div className="inventorypopup">
@@ -498,12 +498,13 @@ class Profile extends React.Component {
                                 <img src={Pen} width="15" height="15" className="mr-2" />
                                 <span>EDIT</span>
                               </button> */}
-                              </div>
                               {this.state.warehouseLocations[id]['status'] != 'ACTIVE' &&
-                                <span className="font-weight-bold text-red">
+                                <span className="font-weight-bold badge badge-danger">
                                   Approval Pending
                                 </span>
                               }
+                              </div>
+                              
                             </div>
                             <div className="card-body">
                               <input
@@ -651,12 +652,12 @@ class Profile extends React.Component {
                               <div className="custom-card p-3">
                                 <div className="card-header">
                                   <div className="d-flex align-items-center justify-content-between">
-                                    <h3 className="card-title font-weight-bold">
+                                    <h3 className="card-title font-weight-bold" style={{fontSize:"18px"}}>
                                     {this.state.warehouseLocations[id]['title']}-{this.state.warehouseLocations[id]['id']}
                                     </h3>
                                   </div>
                                   {this.state.warehouseLocations[id]['status'] != 'ACTIVE' &&
-                                    <span className="font-weight-bold text-red">
+                                    <span className="font-weight-bold badge badge-danger">
                                       Approval Pending
                                     </span>
                                   }
@@ -723,27 +724,27 @@ class Profile extends React.Component {
               {!editMode ? (
                 // <div>
                 <button
-                  className="btn-primary btn"
+                  className="buttonS btn-primary btn"
                   onClick={() => {
                     this.setState({ editMode: true });
                     this.onOrganisation();
                   }}
                 >
                   <img src={Pen} width="15" height="15" className="mr-2 mb-1" />
-                  <span>Edit</span>
+                  <span>EDIT</span>
                 </button>
               ) : (
                 // </div>
-                <div className="d-flex flex-row justify-content-between">
+                <div className="d-flex flex-row justify-content-between" style={{position:"relative",left: -100 }}>
                   <button
-                    className="btn btn-outline-info mr-2"
+                    className="buttonS btn btn-outline-primary mr-2"
                     onClick={this.onCancel}
                   >
-                    <span>Cancel</span>
+                    <span>CANCEL</span>
                   </button>
-                  <button className="btn-primary btn" onClick={this.onSubmit}>
+                  <button className="buttonS btn-orange btn" onClick={this.onSubmit}>
                   {/* <button className="btn-primary btn" onClick={this.onSubmit(),()=>{this.onChange()}}> */}
-                    <span>Save</span>
+                    <span>SAVE</span>
                   </button>
                 </div>
               )}

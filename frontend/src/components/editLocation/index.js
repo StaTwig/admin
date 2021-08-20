@@ -596,7 +596,7 @@ const editLocation = (props) => {
                 <div className="d-flex flex-row-reverse">
                   <button
                     class="close"
-                    className="btn btn-yellow btn-lg float-right"
+                    className="btn btn-yellow float-right font-weight-bold"
                     disabled={!((values.country)&&(values.addressLine)&&(values.addressTitle)&&(values.city)&&(values.state)&&(values.pincode))}
                     type="submit"
                   >
@@ -604,7 +604,7 @@ const editLocation = (props) => {
                   </button>
                   <button 
                     type="button"
-                    className="btn btn-white shadow-radius font-bold mr-3" 
+                    className="btn btn-white shadow-radius font-bold mr-3 font-weight-bold" 
 
                     onClick={() => {
                       props.history.push({
