@@ -1,8 +1,6 @@
-const { body, validationResult, sanitizeBody } = require("express-validator");
 const apiResponse = require("../helpers/apiResponse");
 require("dotenv").config();
 const auth = require("../middlewares/jwt");
-const checkToken = require("../middlewares/middleware").checkToken;
 const LastMileModel = require("../models/LastMileModel");
 const WarehoseModel = require("../models/WarehouseModel");
 const init = require("../logging/init");
