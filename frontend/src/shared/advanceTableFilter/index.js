@@ -72,6 +72,8 @@ const AdvanceTableFilter = (props) => {
           <img src={updownarrow} width="10" height="10" className="ml-3" />
         </a>
         <StyledMenu
+          className="ml-5 mt-3"
+          style={{width: "140rem"}}
           id="customized-menu"
           anchorEl={inventoryStatusAnchorEl}
           keepMounted
@@ -81,28 +83,28 @@ const AdvanceTableFilter = (props) => {
         >
           <div className="d-flex flex-column align-items-center">
               <StyledMenuItem>
-              <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-outline-primary btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("")}>Clear</Button>
+              <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-outline-primary btn-sm font-weight-bold" color="primary" onClick={() => setStatusFilterOnSelect("")}>Clear</Button>
             </StyledMenuItem>
           <StyledMenuItem>
-              <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-outline-primary btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("ACCEPTED")}>Accepted</Button>
+              <Button style={{padding:"10px" ,height: "40px" , width:"180px"}} class="btn btn-outline-success btn-sm font-weight-bold" color="primary" onClick={() => setStatusFilterOnSelect("ACCEPTED")}>Accepted</Button>
             </StyledMenuItem>
             <StyledMenuItem>
-              <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-outline-primary btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("CREATED")}>{props.visible== "one" ? "Sent" : "Received"}</Button>
+              <Button style={{padding:"10px" ,height: "40px" , width:"180px"}} class="btn btn-outline-primary btn-sm font-weight-bold"  color="primary" onClick={() => setStatusFilterOnSelect("CREATED")}>{props.visible== "one" ? "Sent" : "Received"}</Button>
             </StyledMenuItem>
 
             <StyledMenuItem>
-            <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-outline-primary btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("TRANSIT%26PARTIALLYFULFILLED")}>Transit & Par..</Button>
+            <Button style={{padding:"10px" ,height: "40px" , width:"180px"}} class="btn btn-outline-warning btn-sm font-weight-bold" color="primary" onClick={() => setStatusFilterOnSelect("TRANSIT%26PARTIALLYFULFILLED")}>Transit & Partially Fulfilled</Button>
           </StyledMenuItem>
 
           <StyledMenuItem>
-          <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-outline-primary btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setStatusFilterOnSelect("TRANSIT%26FULLYFULFILLED")}>Transit & Ful..</Button>
+          <Button style={{padding:"10px" ,height: "40px" , width:"180px"}} class="btn btn-outline-info btn-sm font-weight-bold" color="primary" onClick={() => setStatusFilterOnSelect("TRANSIT%26FULLYFULFILLED")}>Transit & Fullyfilled</Button>
         </StyledMenuItem>
 
           <StyledMenuItem>
-          <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-outline-primary btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() =>  setStatusFilterOnSelect("FULLYFULFILLED")}>FullyFilled</Button>
+          <Button style={{padding:"10px" ,height: "40px" , width:"180px"}} class="btn btn-outline-info btn-sm font-weight-bold" color="primary" onClick={() =>  setStatusFilterOnSelect("FULLYFULFILLED")}>Fullyfilled</Button>
           </StyledMenuItem>
           <StyledMenuItem>
-          <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-outline-primary btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() =>  setStatusFilterOnSelect("REJECTED")}>Rejected</Button>
+          <Button style={{padding:"10px" ,height: "40px" , width:"180px"}} class="btn btn-outline-secondary btn-sm font-weight-bold" color="primary" onClick={() =>  setStatusFilterOnSelect("REJECTED")}>Rejected</Button>
           </StyledMenuItem>
           </div>
         </StyledMenu>
@@ -195,16 +197,16 @@ const AdvanceTableFilter = (props) => {
         >
           <div className="d-flex flex-column align-items-center">
             <StyledMenuItem>
-              <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-outline-primary btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("")}>Clear</Button>
+              <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-outline-danger btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("")}>Clear</Button>
             </StyledMenuItem>
             <StyledMenuItem>
               <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-outline-primary btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("ADD")}>Added</Button>
             </StyledMenuItem>
             <StyledMenuItem>
-              <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-outline-primary btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("CREATE")}>Sent</Button>
+              <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-outline-warning btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("CREATE")}>Sent</Button>
             </StyledMenuItem>
             <StyledMenuItem>
-              <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-outline-primary btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("RECEIVE")}>Received</Button>
+              <Button style={{padding:"10px" ,height: "40px" , width:"130px"}} class="btn btn-outline-success btn-sm font-weight-bold" variant="outlined" color="primary" onClick={() => setInventoryStatusFilterOnSelect("RECEIVE")}>Received</Button>
             </StyledMenuItem>
           </div>
         </StyledMenu>
@@ -234,6 +236,7 @@ const AdvanceTableFilter = (props) => {
           <img src={updownarrow} width="10" height="10" className="ml-3" />
         </a>
         <StyledMenu
+          className="filter-dropdown"
           id="customized-menu"
           anchorEl={inventoryStatusAnchorEl}
           keepMounted
@@ -268,6 +271,7 @@ const AdvanceTableFilter = (props) => {
         </a>
         <StyledMenu
           id="customized-menu"
+          className="filter-dropdown"
           anchorEl={poDeliveryLocationAnchorEl}
           keepMounted
           open={Boolean(poDeliveryLocationAnchorEl)}
@@ -421,6 +425,7 @@ const AdvanceTableFilter = (props) => {
           <img src={updownarrow} width="10" height="10" className="ml-3" style={{position:"relative", left:"100px"}}/>
         </a>
         <StyledMenu
+          className="filter-dropdown"
           id="customized-menu"
           anchorEl={poProductNameAnchorEl}
           keepMounted

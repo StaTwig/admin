@@ -28,23 +28,23 @@ else if (order.poStatus === 'ACCEPTED') {
     statusStyle = 'bg-success';
     status = 'Accepted';
   }else if (order.poStatus === 'REJECTED') {
-    statusStyle = 'bg-danger';
+    statusStyle = 'bg-secondary';
     status = 'Rejected';
   }
   else if (order.poStatus === 'TRANSIT&FULLYFULFILLED') {
     statusStyle = 'bg-info';
-    status = 'Transit and FullyFilled';
+    status = 'Transit & Fullyfilled';
   }
   else if (order.poStatus === 'FULLYFULFILLED') {
-    statusStyle = 'bg-warning';
-    status = 'FullyFilled';
+    statusStyle = 'bg-info';
+    status = 'Fullyfilled';
   }
   else if (order.poStatus === 'TRANSIT&PARTIALLYFULFILLED') {
-    statusStyle = 'bg-info';
-    status = 'Transit and Partially Fulfilled';
+    statusStyle = 'bg-warning';
+    status = 'Transit & Partially Fulfilled';
   }
   else if (order.poStatus === 'PARTIALLYFULFILLED') {
-    statusStyle = 'bg-secondary';
+    statusStyle = 'bg-warning';
     status = 'Partially Fulfilled';
   }
 
