@@ -1902,7 +1902,7 @@ exports.chainOfCustody = [
             permissionRequired: 'viewShipment',
           };
         checkPermissions(permission_request, async permissionResult => {
-                if (result.success) {
+                if (permissionResult.success) {
                     var chainOfCustody = [];
                     var poDetails = "";
                     const id = req.query.shipmentId;
