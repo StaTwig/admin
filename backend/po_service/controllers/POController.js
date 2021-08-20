@@ -269,7 +269,7 @@ exports.changePOStatus = [
       const { address , role } = req.user;
           const permission_request = {
             role: role,
-            permissionRequired: 'changePOStatus',
+            permissionRequired: 'viewPO',
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
