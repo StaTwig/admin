@@ -3152,20 +3152,6 @@ function buildExcelReport(req,res,dataForExcel){
     }
   };
    
-  const heading = [
-    [{value: 'a1', style: styles.headerDark}, {value: 'b1', style: styles.headerDark}, 
-    ,{value: 'c1', style: styles.headerDark},{value: 'd1', style: styles.headerDark},
-    {value: 'e1', style: styles.headerDark},{value: 'f1', style: styles.headerDark},
-    {value: 'g1', style: styles.headerDark},{value: 'h1', style: styles.headerDark},
-    {value: 'i1', style: styles.headerDark},{value: 'j1', style: styles.headerDark},
-    {value: 'k1', style: styles.headerDark},{value: 'l1', style: styles.headerDark},
-    {value: 'm1', style: styles.headerDark},{value: 'n1', style: styles.headerDark},
-    {value: 'o1', style: styles.headerDark},{value: 'p1', style: styles.headerDark},
-    {value: 'q1', style: styles.headerDark},{value: 'r1', style: styles.headerDark},
-    {value: 's1', style: styles.headerDark}],
-    //['a2', 'b2', 'c2','d2','e2','f2','g2','h2','i2','j2','k2','l2','m2','n2','o2','p2','q2','r2','s2'] // <-- It can be only values
-  ];
-   
   const specification = {
     id: { 
       displayName: 'Shipment ID', 
@@ -3288,8 +3274,6 @@ function buildExcelReport(req,res,dataForExcel){
     [ 
       {
         name: 'Report Shipment', 
-       // heading: heading, 
-       // merges: merges, 
         specification: specification, 
         data: dataForExcel 
       }
