@@ -40,23 +40,23 @@ const Table = props => {
                 statusStyle = 'bg-success';
                 status = 'Accepted';
               }else if (order.poStatus === 'REJECTED') {
-                statusStyle = 'bg-danger';
+                statusStyle = 'bg-secondary';
                 status = 'Rejected';
               }
               else if (order.poStatus === 'TRANSIT&FULLYFULFILLED') {
                 statusStyle = 'bg-info';
-                status = 'Transit and FullyFilled';
+                status = 'Transit & Fullyfilled';
               }
               else if (order.poStatus === 'FULLYFULFILLED') {
-                statusStyle = 'bg-warning';
-                status = 'FullyFilled';
+                statusStyle = 'bg-info';
+                status = 'Fullyfilled';
               }
               else if (order.poStatus === 'TRANSIT&PARTIALLYFULFILLED') {
-                statusStyle = 'bg-info';
-                status = 'Transit and Partially Fulfilled';
+                statusStyle = 'bg-warning';
+                status = 'Transit & Partially Fulfilled';
               }
               else if (order.poStatus === 'PARTIALLYFULFILLED') {
-                statusStyle = 'bg-secondary';
+                statusStyle = 'bg-warning';
                 status = 'Partially Fulfilled';
               }
 
@@ -84,9 +84,9 @@ const Table = props => {
                   <span className="text-muted ">{customer.warehouse && customer.warehouse.warehouseAddress ?  customer.warehouse.warehouseAddress.firstLine + " "+customer.warehouse.warehouseAddress.city: null}</span>
                 </div> 
 
-                <div className="rTableCell " style={{position:'relative',left:"10%"}}> 
+                <div className="rTableCell " style={{position:'relative',left:"9%"}}> 
                 
-                <div className={`status secondary-bg ${statusStyle}`}>
+                <div className={`status secondary-bg ${statusStyle}`} style={{width: "122px"}}>
                   {status} 
                 </div>
                 </div>

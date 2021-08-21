@@ -842,8 +842,8 @@ if (!error) {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="name required-field" htmlFor="organizationName">
-                        Organisation Name
+                      <label className="name" htmlFor="organizationName">
+                        Organisation Name*
                       </label>
                       <div className="line">
                         {/* <DropdownButton
@@ -871,8 +871,8 @@ if (!error) {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="name required-field" htmlFor="orgLocation">
-                        Organisation Location
+                      <label className="name" htmlFor="orgLocation">
+                        Organisation Location*
                       </label>
                       <div className={`line ${errors.fromOrgLoc && touched.fromOrgLoc ? "border-danger" : "" }`}>
                         {/* <DropdownButton
@@ -942,7 +942,7 @@ if (!error) {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="name required-field" htmlFor="organizationType">Organisation Type</label>
+                      <label className="name" htmlFor="organizationType">Organisation Type*</label>
                       <div className={`line ${errors.rtype && touched.rtype ? "border-danger" : "" }`}>
                         <Select
                           styles={customStyles}
@@ -968,8 +968,8 @@ if (!error) {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="name required-field" htmlFor="organizationName">
-                        Organisation Name
+                      <label className="name" htmlFor="organizationName">
+                        Organisation Name*
                       </label>
                       <div className={`line ${errors.toOrg && touched.toOrg ? "border-danger" : "" }`}>
                         {/* <DropdownButton
@@ -1012,7 +1012,7 @@ if (!error) {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="name required-field" htmlFor="delLocation">Delivery Location</label>
+                      <label className="name" htmlFor="delLocation">Delivery Location*</label>
                       <div className={`line ${errors.toOrgLoc && touched.toOrgLoc ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           name={receiverOrgLoc}
@@ -1062,7 +1062,7 @@ if (!error) {
                 </label>
                 <div className="row">
                   <div className="col-md-6 com-sm-12 mt-2">
-                      <label className="name required-field" htmlFor="organizationName">Transit Number</label>
+                      <label className="name" htmlFor="organizationName">Transit Number*</label>
                       <input
                         className={`input refship ${errors.airWayBillNo && touched.airWayBillNo ? "border-danger" : "" }`}
                         type="text"
@@ -1083,7 +1083,7 @@ if (!error) {
 
                   <div className="col-md-6 com-sm-12 mt-3">
                     <div className="form-group">
-                      <label className="name required-field" htmlFor="delLocation">Shipment Date</label>
+                      <label className="name" htmlFor="delLocation">Shipment Date*</label>
                       <div className={`input refship ${errors.shipmentDate && touched.shipmentDate ? "border-danger" : "" }`}>
                         <DatePicker
                           className="date"
@@ -1118,7 +1118,7 @@ if (!error) {
                 </div>
                 <div className="row">
                 <div className="col-md-6 com-sm-12">
-                    <label className="name required-field" htmlFor="organizationName">Label Code</label>
+                    <label className="name" htmlFor="organizationName">Label Code*</label>
                     <input
                       className={`input refship ${errors.labelCode && touched.labelCode ? "border-danger" : "" }`}
                       type="text"
