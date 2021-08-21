@@ -33,7 +33,7 @@ const fs = require('fs');
 const util = require('util');
 const uniqid = require("uniqid");
 const unlinkFile = util.promisify(fs.unlink);
-
+const excel = require('node-excel-export');
 const inventoryUpdate = async (
   id,
   quantity,
@@ -3054,3 +3054,473 @@ exports.Image=[
     FileStream.pipe(res);
   }
 ]
+
+
+exports.exportInboundShipments = [//inbound shipments with filter(shipmentId, from, to, status, date)
+  auth,
+  async (req, res) => {
+    try {
+      const { skip, limit } = req.query;
+      checkToken(req, res, async (result) => {
+        if (result.success) {
+          const { warehouseId } = req.user;
+          let currentDate = new Date();
+          let fromDateFilter = 0;
+          let status = req.query.status ? req.query.status : undefined;
+          let fromSupplier = req.query.from ? req.query.from : undefined;
+          let toReceiver = req.query.to ? req.query.to : undefined;
+          let shipmentId = req.query.shipmentId ? req.query.shipmentId : undefined;
+          switch (req.query.dateFilter) {
+            case "today":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+              break;
+            case "week":
+              fromDateFilter = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay())).toUTCString();
+              break;
+            case "month":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
+              break;
+            case "threeMonth":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, currentDate.getDate());
+              break;
+            case "sixMonth":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 6, currentDate.getDate());
+              break;
+            case "year":
+              fromDateFilter = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate());
+              break;
+            default:
+              fromDateFilter = 0;
+          }
+
+          let whereQuery = {};
+
+          if (shipmentId) {
+            whereQuery['id'] = shipmentId
+          }
+
+          if (status) {
+            if (status == "RECEIVED") {
+              whereQuery['status'] = status
+            } else {
+              whereQuery['status'] = { $ne: "RECEIVED" }
+            }
+          }
+
+          if (fromDateFilter) {
+            whereQuery['createdAt'] = { $gte: fromDateFilter }
+          }
+
+          if (warehouseId) {
+            whereQuery["receiver.locationId"] = warehouseId
+          }
+
+          if (fromSupplier) {
+            whereQuery["supplier.id"] = fromSupplier;
+          }
+
+          if (toReceiver) {
+            whereQuery["receiver.id"] = toReceiver
+          }
+          console.log("In bound whereQuery ======>", whereQuery);
+          try {
+            let inboundShipmentsCount = await ShipmentModel.count(whereQuery);
+            ShipmentModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((inboundShipmentsList) => {
+              let inboundShipmentsRes = [];
+              let findInboundShipmentData = inboundShipmentsList.map(async (inboundShipment) => {
+                let inboundShipmentData = JSON.parse(JSON.stringify(inboundShipment))
+                let supplierOrganisation = await OrganisationModel.findOne(
+                  {
+                    id: inboundShipmentData.supplier.id
+                  });
+                let supplierWarehouse = await WarehouseModel.findOne(
+                  {
+                    id: inboundShipmentData.supplier.locationId
+                  });
+                let receiverOrganisation = await OrganisationModel.findOne(
+                  {
+                    id: inboundShipmentData.receiver.id
+                  });
+                let receiverWarehouse = await WarehouseModel.findOne(
+                  {
+                    id: inboundShipmentData.receiver.locationId
+                  });
+                inboundShipmentData.supplier[`org`] = supplierOrganisation;
+                inboundShipmentData.supplier[`warehouse`] = supplierWarehouse;
+                inboundShipmentData.receiver[`org`] = receiverOrganisation;
+                inboundShipmentData.receiver[`warehouse`] = receiverWarehouse;
+                inboundShipmentsRes.push(inboundShipmentData);
+              });
+              
+
+              Promise.all(findInboundShipmentData).then(function (results) {
+                let data = []
+                let rowData;
+               for(row of inboundShipmentsRes){
+                  for(product of row.products){
+                     rowData ={
+                       id: row.id,
+                       poId : row.poId,
+                       productCategory: product.productCategory,
+                       productName: product.productName,
+                       productID: product.productID,
+                       productQuantity: product.productQuantity,
+                       batchNumber: product.batchNumber,
+                       manufacturer: product.manufacturer,
+                      supplierOrgName: row?.supplier?.org?.name,
+                      supplierOrgId: row?.supplier?.org?.id,
+                      supplierOrgLocation: row?.supplier?.locationId,
+                      recieverOrgName: row?.receiver?.org?.name,
+                      recieverOrgId: row?.receiver?.org?.id,
+                      recieverOrgLocation: row?.receiver?.locationId,
+                      airWayBillNo: row.airWayBillNo,
+                      label: row?.label?.labelId,
+                      shippingDate: row.shippingDate,
+                      expectedDeliveryDate: row.expectedDeliveryDate || "unknown"
+                     }
+                     data.push(rowData)
+                  }
+                }
+                res = buildExcelReport(req,res,data)
+                return apiResponse.successResponseWithData(
+                  res,
+                  "Inbound Shipment Records",
+                );
+              });
+            });
+          } catch (err) {
+            return apiResponse.ErrorResponse(res, err.message);
+          }
+        } else {
+          logger.log(
+            "warn",
+            "<<<<< ShipmentService < ShipmentController < fetchInboundShipments : refuted token"
+          );
+          res.status(403).json("Auth failed");
+        }
+      });
+    } catch (err) {
+      logger.log(
+        "error",
+        "<<<<< ShipmentService < ShipmentController < fetchInboundShipments : error (catch block)"
+      );
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
+exports.exportOutboundShipments = [ //outbound shipments with filter(shipmentId, from, to, status, date)
+  auth,
+  async (req, res) => {
+    try {
+      const { skip, limit } = req.query;
+      checkToken(req, res, async (result) => {
+        if (result.success) {
+          const { warehouseId } = req.user;
+          let currentDate = new Date();
+          let fromDateFilter = 0;
+          let status = req.query.status ? req.query.status : undefined;
+          let fromSupplier = req.query.from ? req.query.from : undefined;
+          let toReceiver = req.query.to ? req.query.to : undefined;
+          let shipmentId = req.query.shipmentId ? req.query.shipmentId : undefined;
+          switch (req.query.dateFilter) {
+            case "today":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+              break;
+            case "week":
+              fromDateFilter = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay())).toUTCString();
+              break;
+            case "month":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
+              break;
+            case "threeMonth":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, currentDate.getDate());
+              break;
+            case "sixMonth":
+              fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 6, currentDate.getDate());
+              break;
+            case "year":
+              fromDateFilter = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate());
+              break;
+            default:
+              fromDateFilter = 0;
+          }
+
+          let whereQuery = {};
+
+          if (shipmentId) {
+            whereQuery['id'] = shipmentId
+          }
+
+          if (status) {
+            whereQuery['status'] = status
+          }
+
+          if (fromDateFilter) {
+            whereQuery['createdAt'] = { $gte: fromDateFilter }
+          }
+
+          if (warehouseId) {
+            whereQuery["supplier.locationId"] = warehouseId
+          }
+
+          if (fromSupplier) {
+            whereQuery["supplier.id"] = fromSupplier;
+          }
+
+          if (toReceiver) {
+            whereQuery["receiver.id"] = toReceiver
+          }
+
+          console.log("Out bound whereQuery ======>", whereQuery);
+          try {
+            let outboundShipmentsCount = await ShipmentModel.count(whereQuery);
+            ShipmentModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((outboundShipmentsList) => {
+              let outboundShipmentsRes = [];
+              let findOutboundShipmentData = outboundShipmentsList.map(async (outboundShipment) => {
+                let outboundShipmentData = JSON.parse(JSON.stringify(outboundShipment))
+                let supplierOrganisation = await OrganisationModel.findOne(
+                  {
+                    id: outboundShipmentData.supplier.id
+                  });
+                let supplierWarehouse = await WarehouseModel.findOne(
+                  {
+                    id: outboundShipmentData.supplier.locationId
+                  });
+                let receiverOrganisation = await OrganisationModel.findOne(
+                  {
+                    id: outboundShipmentData.receiver.id
+                  });
+                let receiverWarehouse = await WarehouseModel.findOne(
+                  {
+                    id: outboundShipmentData.receiver.locationId
+                  });
+                outboundShipmentData.supplier[`org`] = supplierOrganisation;
+                outboundShipmentData.supplier[`warehouse`] = supplierWarehouse;
+                outboundShipmentData.receiver[`org`] = receiverOrganisation;
+                outboundShipmentData.receiver[`warehouse`] = receiverWarehouse;
+                outboundShipmentsRes.push(outboundShipmentData);
+              });
+
+              Promise.all(findOutboundShipmentData).then(function (results) {
+                let data = []
+                let rowData;
+               for(row of outboundShipmentsRes){
+                  for(product of row.products){
+                     rowData ={
+                       id: row.id,
+                       poId : row.poId,
+                       productCategory: product.productCategory,
+                       productName: product.productName,
+                       productID: product.productID,
+                       productQuantity: product.productQuantity,
+                       batchNumber: product.batchNumber,
+                       manufacturer: product.manufacturer,
+                      supplierOrgName: row?.supplier?.org?.name,
+                      supplierOrgId: row?.supplier?.org?.id,
+                      supplierOrgLocation: row?.supplier?.locationId,
+                      recieverOrgName: row?.receiver?.org?.name,
+                      recieverOrgId: row?.receiver?.org?.id,
+                      recieverOrgLocation: row?.receiver?.locationId,
+                      airWayBillNo: row.airWayBillNo,
+                      label: row?.label?.labelId,
+                      shippingDate: row.shippingDate,
+                      expectedDeliveryDate: row.expectedDeliveryDate || "unknown"
+                     }
+                     data.push(rowData)
+                  }
+                }
+                res = buildExcelReport(req,res,data)
+                return apiResponse.successResponseWithMultipleData(
+                  res,
+                  "Outbound Shipment Records"
+                  );
+              });
+            });
+          } catch (err) {
+            return apiResponse.ErrorResponse(res, err.message);
+          }
+        } else {
+          logger.log(
+            "warn",
+            "<<<<< ShipmentService < ShipmentController < fetchOutboundShipments : refuted token"
+          );
+          res.status(403).json("Auth failed");
+        }
+      });
+    } catch (err) {
+      logger.log(
+        "error",
+        "<<<<< ShipmentService < ShipmentController < fetchOutboundShipments : error (catch block)"
+      );
+      return apiResponse.ErrorResponse(res, err.message);
+    }
+  },
+];
+
+
+function buildExcelReport(req,res,dataForExcel){
+  const styles = {
+    headerDark: {
+      fill: {
+        fgColor: {
+          rgb: 'FF000000'
+        }
+      },
+      font: {
+        color: {
+          rgb: 'FFFFFFFF'
+        },
+        sz: 14,
+        bold: true,
+        underline: true
+      }
+    },
+    cellPink: {
+      fill: {
+        fgColor: {
+           //rgb: 'FFFFCCFF'
+           rgb: 'FF00FF00'
+        }
+      }
+    },
+    cellGreen: {
+      fill: {
+        fgColor: {
+          rgb: 'FF00FF00'
+        }
+      }
+    }
+  };
+   
+  const specification = {
+    id: { 
+      displayName: 'Shipment ID', 
+      headerStyle: styles.headerDark, 
+      cellStyle: styles.cellPink,
+      width: 120 
+    },
+    poId: {
+      displayName: 'Reference Order ID',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink,
+      width: '10' 
+    },
+    productCategory: {
+      displayName: 'Product Category',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, 
+      width: 220 
+    },
+    productName: {
+      displayName: 'Product Name',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, 
+      width: 220 
+    },
+    productID: {
+      displayName: 'Product ID',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, 
+      width: 220 
+    },
+    productQuantity: {
+      displayName: 'Quantity',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, 
+      width: 220 
+    },
+    batchNumber: {
+      displayName: 'Batch Number',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, 
+      width: 220 
+    },
+    note: {
+      displayName: 'Expiry Date',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, 
+      width: 220 
+    },
+    manufacturer: {
+      displayName: 'Manufacturer',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, 
+      width: 220 
+    },
+    supplierOrgName: {
+      displayName: 'From Organization Name',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, 
+      width: 220 
+    },
+    supplierOrgId: {
+      displayName: 'From Organization ID',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, 
+      width: 220 
+    },
+    supplierOrgLocation: {
+      displayName: 'From Organization Location Details',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, 
+      width: 220 
+    },
+    recieverOrgName: {
+      displayName: 'Delivery Organization Name',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, 
+      width: 220 
+    },
+    recieverOrgId: {
+      displayName: 'Delivery Organization ID',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, 
+      width: 220 
+    },
+    recieverOrgLocation: {
+      displayName: 'Delivery Organization Location Details',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, 
+      width: 220 
+    },
+    airWayBillNo: {
+      displayName: 'Transit Number',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, 
+      width: 220 
+    },
+    label: {
+      displayName: 'Label Code',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, 
+      width: 220 
+    },
+    shippingDate: {
+      displayName: 'Shipment Date',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, 
+      width: 220 
+    },
+    expectedDeliveryDate: {
+      displayName: 'Shipment Estimate Date',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellPink, 
+      width: 220 
+    }
+  }
+   
+   
+  const report = excel.buildExport(
+    [ 
+      {
+        name: 'Report Shipment', 
+        specification: specification, 
+        data: dataForExcel 
+      }
+    ]
+  );
+   
+  res.attachment('report.xlsx'); 
+  return res.send(report);
+}
