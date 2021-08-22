@@ -13,7 +13,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { getImage } from '../../actions/notificationActions';
-import Input from '@material-ui/core/Input';
+import SuccessPopUp from "./successPopup";
 
 const axios = require("axios");
 import {
@@ -436,7 +436,7 @@ class Profile extends React.Component {
                         <div class="addloc1">
                           {editMode && (
                             <button
-                              className="buttonA btn btn-orange fontSize20 font-bold pl-10 pr-10"
+                              className="buttonA btn btn-orange font-bold mt-1"
                               onClick={() => {
                                 this.setState({ openModal: true });
                               }}
@@ -468,8 +468,9 @@ class Profile extends React.Component {
                           <div className="custom-card p-3">
                             <div className="card-header">
                               <div className="d-flex align-items-center justify-content-between">
-                                <h3 className="card-title font-weight-bold">
-                                  {this.state.warehouseLocations[id]['title']}-{this.state.warehouseLocations[id]['id']}
+                                <h3 className="card-title font-weight-bold" style={{fontSize:"18px"}}>
+                                  {this.state.warehouseLocations[id]['title']}
+                                  <div style={{fontSize:"15px", fontWeight:"400"}}>{this.state.warehouseLocations[id]['id']}</div>
                                 </h3>
                                 {this.state.warehouseLocations[id]['status'] == 'ACTIVE' &&
                                   <Link
@@ -648,19 +649,21 @@ class Profile extends React.Component {
                       {Object.keys(this.state.warehouseLocations).map((id) => {
                         return (
                           <div className="col">
-                            <div className="location-cards">
+                            <div className="location-cards mt-1">
                               <div className="custom-card p-3">
                                 <div className="card-header">
                                   <div className="d-flex align-items-center justify-content-between">
                                     <h3 className="card-title font-weight-bold" style={{fontSize:"18px"}}>
-                                    {this.state.warehouseLocations[id]['title']}-{this.state.warehouseLocations[id]['id']}
+                                    {this.state.warehouseLocations[id]['title']}
+                                    <div style={{fontSize:"15px", fontWeight:"400"}}>{this.state.warehouseLocations[id]['id']}
+                                    {this.state.warehouseLocations[id]['status'] != 'ACTIVE' &&
+                                    <div className="font-weight-bold badge badge-danger ml-3">
+                                      Approval Pending
+                                    </div>
+                                  }
+                                    </div>
                                     </h3>
                                   </div>
-                                  {this.state.warehouseLocations[id]['status'] != 'ACTIVE' &&
-                                    <span className="font-weight-bold badge badge-danger">
-                                      Approval Pending
-                                    </span>
-                                  }
                                 </div>
                                 <div className="card-body">
                                   <div className="total">
@@ -748,11 +751,23 @@ class Profile extends React.Component {
                   </button>
                 </div>
               )}
+              <div className="">
+                            {this.state.message && (
+                              <Modal
+                                close={() => this.closeModal()}
+                                size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+                              >
+                                <SuccessPopUp
+                                     onHide={this.closeModal}
+                                />
+                              </Modal>
+                            )}
+                          </div>
             </div>
           </div>
         </div>
-        {message && <div> <Alert severity="success"><AlertTitle>Success</AlertTitle>{message}</Alert></div>
-    }
+        {/* {message && <div> <SuccessPopUp severity="success">{message}</SuccessPopUp></div>
+    } */}
       </div>
     );
   }

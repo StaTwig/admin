@@ -504,7 +504,7 @@ const NewOrder = (props) => {
                 <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="name form-group">
-                        <label className="required-field" htmlFor="organizationName">Organisation Type</label>
+                        <label className="" htmlFor="organizationName">Organisation Type*</label>
                         <div className={`line ${errors.type && touched.type ? "border-danger" : "" }`}>
                           <Select
                           labelId="demo-simple-select-label"
@@ -529,7 +529,7 @@ const NewOrder = (props) => {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
-                      <label className="required-field" htmlFor="organizationName">Organisation Name</label>
+                      <label className="" htmlFor="organizationName">Organisation Name*</label>
                       <div className={`line ${errors.fromOrg && touched.fromOrg ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           isText={true}
@@ -567,7 +567,7 @@ const NewOrder = (props) => {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
-                      <label className="org required-field" htmlFor="orgLocation">Organisation ID</label>
+                      <label className="org" htmlFor="orgLocation">Organisation ID*</label>
                       <div className="orgV border-0">
                         {values.fromOrg}
                       </div>
@@ -587,7 +587,7 @@ const NewOrder = (props) => {
                  <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="name form-group">
-                        <label className="required-field" htmlFor="organizationName">Organisation Type</label>
+                        <label className="" htmlFor="organizationName">Organisation Type*</label>
                         <div className={`line ${errors.rtype && touched.rtype ? "border-danger" : "" }`}>
                           <Select
                             labelId="demo-simple-select-label"
@@ -626,7 +626,7 @@ const NewOrder = (props) => {
                 <div className="row">
                 <div className="col-md-6 com-sm-12">
                   <div className="name form-group">
-                    <label className="required-field" htmlFor="delLocation">Region</label>
+                    <label className="" htmlFor="delLocation">Region*</label>
                     <div className={`line ${errors.toOrgLocRegion && touched.toOrgLocRegion ? "border-danger" : "" }`}>
     
                         <Select
@@ -656,7 +656,7 @@ const NewOrder = (props) => {
                 <div className="row">
                 <div className="col-md-6 com-sm-12">
                   <div className="name form-group">
-                    <label className="required-field" htmlFor="delLocation" >Country</label>
+                    <label className="" htmlFor="delLocation" >Country*</label>
                     <div className={`line ${errors.toOrgLocCountry && touched.toOrgLocCountry ? "border-danger" : "" }`}>
 
                         <Select                          
@@ -683,7 +683,7 @@ const NewOrder = (props) => {
               <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
-                      <label className="required-field" htmlFor="organizationName">Organisation Name</label>
+                      <label className="" htmlFor="organizationName">Organisation Name*</label>
                       <div className={`line ${errors.toOrg && touched.toOrg ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           isText={true}
@@ -730,7 +730,7 @@ const NewOrder = (props) => {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
-                      <label className="org required-field" htmlFor="delLocation">Organisation ID</label>
+                      <label className="org" htmlFor="delLocation">Organisation ID*</label>
                       <div className="orgV border-0">
                         {values.toOrg}
                       </div>
@@ -742,7 +742,7 @@ const NewOrder = (props) => {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
-                      <label className="required-field" htmlFor="delLocation">Delivery Location</label>
+                      <label className="" htmlFor="delLocation">Delivery Location*</label>
                       <div className={`line ${errors.toOrgLoc && touched.toOrgLoc ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           isText={true}

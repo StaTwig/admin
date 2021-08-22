@@ -10,10 +10,10 @@ const ViewTable = props => {
     <div className="table productTable mb-0  mt-2">
      <div className="d-flex flex-column">
        <div className="row ml-3 mb-3">
-         <div className="col theader ml-4"><img src={Package} width="16" height="16" /><span className="pl-2 text-muted required-field">Product Category</span></div>
-         <div className="col theader ml-4"><img src={Package} width="16" height="16" /><span className="pl-2 text-muted required-field">Product</span></div>
-         <div className="col theader ml-4"><img src={mon} width="16" height="16" /><span className="pl-2 text-muted">Manufacturer</span></div>
-         <div className="col theader ml-4"><img src={quantity} width="24" height="16" /><span className="pl-2 text-muted required-field">Quantity</span></div>
+         <div className="col theader ml-4"><img src={Package} width="14" height="14" /><span className="pl-2 text-muted">Product Category*</span></div>
+         <div className="col theader ml-4"><img src={Package} width="14" height="14" /><span className="pl-2 text-muted ">Product*</span></div>
+         <div className="col theader ml-4"><img src={mon} width="14" height="16" /><span className="pl-2 text-muted">Manufacturer</span></div>
+         <div className="col theader ml-4"><img src={quantity} width="22" height="14" /><span className="pl-2 text-muted ">Quantity*</span></div>
         </div>
         <div className="">
           {props.product.map((product, index) => (

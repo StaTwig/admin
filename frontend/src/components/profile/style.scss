@@ -210,22 +210,22 @@ padding-left:100px;
     display: flex;
     flex-direction: column;
     padding-top: 0% !important;
-    margin-top:20px;
-    
+    margin-top:5px;
+    height: max-content;    
     
     .total {
-        font-size: 16px;
+        font-size: 15px;
         font-weight: bold;
         padding-bottom: 2vh;        
     }
     .total-input {
-      font-size: 13px;
+      font-size: 15px;
       font-weight: bold;
       border: 0vh;           
   }    
     .full-address {
         width: 45vh;
-        font-size: 14px;
+        font-size: 13px;
         color: #707070;
         padding-bottom: 2vh;
     }  
@@ -276,7 +276,7 @@ padding-left:100px;
 
 .location{
   color: #707070;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   padding-top: 3vh;
   padding-bottom: 2vh;
@@ -292,6 +292,9 @@ padding-left:100px;
   color:#707070;
 }
 .form-controlAddLoc {
+  ::after{
+    border-radius: 0;
+  }
   border: none;
   background: transparent;
   border-bottom: 2px solid #d6d6d6;
@@ -314,8 +317,7 @@ padding-left:100px;
   width: 16px;
 }
 .buttonA{
-  width:150px;
-  height: 100px;
+  width:120px;
   font-weight: 600;
   font-size: 16px;
   letter-spacing: 2px;
