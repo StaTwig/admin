@@ -24,7 +24,8 @@ exports.getAlertNotifications = [
   auth,
   async function (req, res) {
     try {
-      let notifications = await Notification.find({ user : req.user.id, type : 'ALERT'})
+      // let notifications = await Notification.find({ user : req.user.id, type : 'ALERT'})
+      let notifications = await Notification.find({ user : req.user.id, type : req.query.type})
       return apiResponse.successResponseWithData(res, 'Notifications fetched successfully', notifications)
     } catch (err) {
       return apiResponse.ErrorResponse(res, err)
