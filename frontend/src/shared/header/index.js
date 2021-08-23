@@ -47,7 +47,7 @@ const Header = props => {
   const [searchString, setSearchString] = useState('');
 
   const [searchType, setSearchType] = useState('');
-
+  const [alertType, setAlertType] = useState('ALERT');
   const [searchtemp, setsearchtemp] = useState('');
   const [invalidSearch, setInvalidSearch] = useState(false);
   const [notifications, setNotifications] = useState([]);
@@ -197,12 +197,19 @@ const ref = useOnclickOutside(() => {
   const profile = useSelector(state => {
     return state.user;
   });
+  async function changeNotifications (value){
+    const response = await axios.get(`${config().getAlerts}${value}`);
+    console.log(response.data.data)
+    setNotifications(response.data.data);
+  }
   // const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUserInfo());
     async function fetchApi() {
-      const response = await getNotifications();
-      setNotifications(response.data);
+      // const response = await getNotifications();
+      const response = await axios.get(`${config().getAlerts}${alertType}`);
+      console.log(response.data.data)
+      setNotifications(response.data.data);
       
       const warehouses = await getActiveWareHouses();
       setActiveWarehouses(warehouses.filter(i => i.status == 'ACTIVE' || i.status == 'PENDING').map(item=>{
@@ -337,9 +344,8 @@ const imgs = config().fetchProfileImage;
                     <text style={{color: "white", fontSize: "20px", fontWeight: "bold", padding: "30px"}}>User Notifications</text> 
                     <text style={{backgroundColor: "#fa7a23", padding: "5px", color: "white", textAlign: 'right', borderRadius: "6px"}}>{notifications.length} new</text> 
                   <div className="section">
-                    <button style={{backgroundColor: "transparent", color: "white", borderColor: "transparent"}} /*onClick={() => setNotifications(criteria for alert)}*/>Alerts</button>
-                    <button style={{backgroundColor: "transparent", color: "white", borderColor: "transparent"}} /*onClick={() => setNotifications(criteria for transaction )}*/>Transactions</button>
-                  </div>
+                    <button style={{backgroundColor: "#0B65C1", color: "white"}} onClick={() => {setAlertType('ALERT'); changeNotifications('ALERT')}}>Alerts</button>
+                    <button style={{backgroundColor: "#0B65C1", color: "white"}} onClick={() => {setAlertType('TRANSACTION'); changeNotifications('TRANSACTION')}}>Transactions</button>
                   </div>
                   {notifications.map(notification =>  <div className="slider-item">
                     <div className="row justify-content-between align-items-center" onClick={() => clearNotification(notification)}>
