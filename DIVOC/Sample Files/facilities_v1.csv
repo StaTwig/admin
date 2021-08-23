@@ -1,0 +1,6 @@
+serialNum,facilityCode,facilityName,contact,email,operatingHourStart,operatingHourEnd,category,type,status,addressLine1,addressLine2,district,state,pincode,geoLocationLat,geoLocationLon,websiteURL,adminName,adminMobile
+11,DEL11,Delhi Hospital 11,4444444440,mysuru1@mailinator.com,9,18,GOVT,Fixed location,Active,No 23,OMR,Delhi,Delhi,110011,28,77,www.awesome.com  ,Sagar6,3333333331
+12,DEL12,Delhi Hospital 12,4444444441,mysuru2@mailinator.com,9,18,GOVT,Fixed location,Active,No 23,OMR,Delhi,Delhi,110011,28,77,www.awesome.com  ,Sagar7,3333333332
+13,DEL13,Delhi Hospital 13,4444444442,mysuru1@mailinator.com,9,18,GOVT,Fixed location,Active,No 23,OMR,Delhi,Delhi,110011,28,77,www.awesome.com  ,Sagar8,3333333333
+14,DEL14,Delhi Hospital 14,4444444443,mysuru2@mailinator.com,9,18,GOVT,Fixed location,Active,No 23,OMR,Delhi,Delhi,110011,28,77,www.awesome.com  ,Sagar9,3333333334
+15,DEL15,Delhi Hospital 15,4444444444,mysuru1@mailinator.com,9,18,GOVT,Fixed location,Active,No 23,OMR,Delhi,Delhi,110011,28,77,www.awesome.com  ,Sagar10,3333333335
