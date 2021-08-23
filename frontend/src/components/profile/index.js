@@ -152,7 +152,7 @@ class Profile extends React.Component {
 
   closeModal() {
     console.log("Closed Model called");
-    this.setState({ openModal: false });
+    this.setState({ openModal: false, message: "" });
     // props.history.push("/Addlocation");
   }
   onCancel() {
@@ -655,15 +655,14 @@ class Profile extends React.Component {
                                   <div className="d-flex align-items-center justify-content-between">
                                     <h3 className="card-title font-weight-bold" style={{fontSize:"18px"}}>
                                     {this.state.warehouseLocations[id]['title']}
-                                    <div style={{fontSize:"15px", fontWeight:"400"}}>{this.state.warehouseLocations[id]['id']}
+                                    <div style={{fontSize:"15px", fontWeight:"400"}}>{this.state.warehouseLocations[id]['id']}</div>
+                                    </h3>
                                     {this.state.warehouseLocations[id]['status'] != 'ACTIVE' &&
                                     <div className="font-weight-bold badge badge-danger ml-3">
                                       Approval Pending
                                     </div>
                                   }
-                                    </div>
-                                    </h3>
-                                  </div>
+                                 </div>
                                 </div>
                                 <div className="card-body">
                                   <div className="total">
