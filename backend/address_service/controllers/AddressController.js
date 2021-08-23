@@ -217,7 +217,7 @@ exports.AddWarehouse = [
         warehouseCounter.counters[0].format +
         warehouseCounter.counters[0].value;
     let employee = [];
-    if(employees.length > 0) {
+    if(employees != undefined && employees.length > 0){
       employee = employees
     }
     else{
@@ -250,7 +250,7 @@ exports.AddWarehouse = [
       await warehouse.save();
       return apiResponse.successResponseWithData(
         res,
-        "Warehouse added success",
+        "Warehouse Added Successfully",
         warehouse
       );
     } catch (err) {
