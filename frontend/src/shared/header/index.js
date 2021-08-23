@@ -331,7 +331,7 @@ const imgs = config().fetchProfileImage;
         
        <div className="user-info ">
        <div className="notifications">
-                <img src={bellIcon} onClick={() => setShowNotifications(!showNotifications)} alt="notification" /><bellIcon />
+                <img src={bellIcon} onClick={showNotifications} alt="notification" /><bellIcon />
                   
                     <div className="bellicon-wrap" onClick={() => setShowNotifications(!showNotifications)}>
             
@@ -340,6 +340,9 @@ const imgs = config().fetchProfileImage;
             {showNotifications && notifications.length > 0 && (
               <div className="slider-menu">
                 <React.Fragment>
+                  <div className="nheader" style={{backgroundImage: "linear-gradient(to right, #0092e8, #0a6bc6)"}}>
+                    <text style={{color: "white", fontSize: "20px", fontWeight: "bold", padding: "30px"}}>User Notifications</text> 
+                    <text style={{backgroundColor: "#fa7a23", padding: "5px", color: "white", textAlign: 'right', borderRadius: "6px"}}>{notifications.length} new</text> 
                   <div className="section">
                     <button style={{backgroundColor: "#0B65C1", color: "white"}} onClick={() => {setAlertType('ALERT'); changeNotifications('ALERT')}}>Alerts</button>
                     <button style={{backgroundColor: "#0B65C1", color: "white"}} onClick={() => {setAlertType('TRANSACTION'); changeNotifications('TRANSACTION')}}>Transactions</button>
@@ -364,10 +367,6 @@ const imgs = config().fetchProfileImage;
               </div>
             )}
             </div>  
-            <div className="divider" />
-           <div className="location">
-              <img src={Location} width="20" height="26" /> 
-           </div>  
           {/* <div className="userName" style={{fontSize: "13px", marginBottom:"0px"}}> 
           <p className="cname1"><b>{activeWarehouses[0]?.title}</b></p>
           <p className="uname"> {activeWarehouses[0]?.warehouseAddress.firstLine}</p>
