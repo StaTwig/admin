@@ -185,7 +185,6 @@ exports.AddWarehouse = [
       );
       const inventoryId =
         invCounter.counters[0].format + invCounter.counters[0].value;
-      //const inventoryId = "inv-" + nanoid();
       const inventoryResult = new Inventory({ id: inventoryId });
       await inventoryResult.save();
       const {
@@ -217,16 +216,22 @@ exports.AddWarehouse = [
       const warehouseId =
         warehouseCounter.counters[0].format +
         warehouseCounter.counters[0].value;
-      //const warehouseId = "war-" + nanoid();
-      const employee = req.body.employees || req.user.id;
-   const employeewarehouse = await EmployeeModel.findOneAndUpdate({
-     id: employee,
+    let employee = [];
+    if(employees.length > 0) {
+      employee = employees
+    }
+    else{
+      employee.push(req.user.id);
+    }
+    employee.forEach(async(emp) => {
+    const employeewarehouse = await EmployeeModel.findOneAndUpdate({
+     id: emp,
    },{
      $push: {warehouseId: warehouseId}
    },{
      new: true
    });
-   console.log(employeewarehouse);
+  });
       const warehouse = new Warehouse({
         id: warehouseId,
         title,
