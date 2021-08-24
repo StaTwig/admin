@@ -218,6 +218,22 @@ exports.AddWarehouse = [
         warehouseCounter.counters[0].format +
         warehouseCounter.counters[0].value;
       //const warehouseId = "war-" + nanoid();
+      let employee = [];
+    if(employees != undefined && employees.length > 0){
+      employee = employees
+    }
+    else{
+      employee.push(req.user.id);
+    }
+    employee.forEach(async(emp) => {
+    const employeewarehouse = await EmployeeModel.findOneAndUpdate({
+     id: emp,
+   },{
+     $push: {warehouseId: warehouseId}
+   },{
+     new: true
+   });
+  });
       const warehouse = new Warehouse({
         id: warehouseId,
         title,
