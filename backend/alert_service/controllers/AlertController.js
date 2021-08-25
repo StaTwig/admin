@@ -9,7 +9,7 @@ const Notification = require('../models/NotificationsModel')
 const EmployeeModel = require('../models/EmployeeModel')
 
 exports.getAllAlerts = [
-  //auth,
+  auth,
   async function (req, res) {
     try {
       let alerts = await Alerts.find({ username: req.user.id })
