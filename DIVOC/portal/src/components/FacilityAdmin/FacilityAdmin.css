@@ -2,9 +2,13 @@
     border-radius: 6px;
     border: none;
     color: #FFFFFF;
-    background: #88C6A9;
+    background: #FFAB1D;
     text-align: center;
     padding-top: 10px;
+    height: fit-content;
+    justify-content: center;
+    margin-top: 0.5%;
+    margin-right: 0.5%;
 }
 
 .btn-template h6 {

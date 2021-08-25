@@ -2,7 +2,7 @@ import React from "react";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import {makeStyles, withStyles} from '@material-ui/core/styles';
-
+import './TabPanel.module.css'
 
 export const StyledTabs = withStyles({
     indicator: {
@@ -35,10 +35,14 @@ export const StyledTab = withStyles((theme) => ({
 export const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
-        paddingLeft: theme.spacing(1),
-        paddingRight: theme.spacing(1),
+        paddingLeft: theme.spacing(4),
+        paddingRight: theme.spacing(4),
         paddingTop: theme.spacing(3),
+        
     },
+    abc: {
+        background: '#0B65C1'
+    }
 }));
 
 export const TabPanels = ({tabs, ...props}) => {
@@ -49,8 +53,9 @@ export const TabPanels = ({tabs, ...props}) => {
     };
     return (
         <div className={classes.root}>
-            <div className="d-flex flex-row justify-content-between">
+            <div className="d-flex flex-row justify-content-between" style={{background: "#0B65C1", borderRadius: "8px", height: "70px"}}>
                 <StyledTabs
+                style={{justifyContent: "center"}}
                     value={value}
                     indicatorColor="secondary"
                     onChange={handleChange}
