@@ -22,12 +22,11 @@ Branch out from ```development``` , Merge requests shall be to development, no d
 |:---------:|:---------:|
 | usermanagement | 3001 |
 | shipmentmanagement | 3002|
-| alertmanagement ** | 3004 |
+| alertmanagement | 3004 |
 | tracktracemanagement | 3005 |
 | notificationmanagement | 3006 |
 | inventorymanagement | 3007 |
 | blockchainmanagement| 3008 |
-| log_service ** | 3009 |
 | productmanagement | 3010 |
 | rbacmanagement | 3011 |
 | pomanagement | 3012 |
@@ -36,8 +35,6 @@ Branch out from ```development``` , Merge requests shall be to development, no d
 | analyticsmanagement | 3015|
 | AdvancedAnalytics | 3016
 | lastmilemanagement | 3017 |
-
-** -- Services not in Production
 
 # Flow 
 
