@@ -117,7 +117,7 @@ exports.fetchPurchaseOrders = [
       const { skip, limit, poId } = req.query;
       const permission_request = {
             role: role,
-            permissionRequired: 'viewPO',
+            permissionRequired: ['viewPO'],
           };
       checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
@@ -178,7 +178,7 @@ exports.fetchAllPurchaseOrdersBC = [
       const {role} = req.user;
           const permission_request = {
             role: role,
-            permissionRequired: 'receivePO',
+            permissionRequired: ['receivePO'],
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
@@ -204,7 +204,7 @@ exports.fetchPublisherPurchaseOrders = [
       const { address, role } = req.user;
           const permission_request = {
             role: role,
-            permissionRequired: 'viewPO',
+            permissionRequired: ['viewPO'],
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
@@ -239,7 +239,7 @@ exports.fetchPurchaseOrderBC = [
       const { key } = req.query;
           const permission_request = {
             role: role,
-            permissionRequired: 'viewPO',
+            permissionRequired: ['viewPO'],
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
@@ -269,7 +269,7 @@ exports.changePOStatus = [
       const { address , role } = req.user;
           const permission_request = {
             role: role,
-            permissionRequired: 'changePOStatus',
+            permissionRequired: ['viewPO'],
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
@@ -433,7 +433,7 @@ exports.addPOsFromExcel = [
     try {
       // const permission_request = {
       //   role: req.user.role,
-      //   permissionRequired: 'createPO',
+      //   permissionRequired: ['createPO'],
       // };
       // checkPermissions(permission_request, async permissionResult => {
       //   if (permissionResult.success) {
@@ -1048,7 +1048,7 @@ exports.fetchInboundPurchaseOrders = [//inbound po with filter(from, orderId, pr
       const { skip, limit } = req.query;
           const permission_request = {
             role: role,
-            permissionRequired: 'viewInboundOrders',
+            permissionRequired: ['viewInboundOrders'],
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
@@ -1192,7 +1192,7 @@ exports.fetchOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, p
       const { skip, limit } = req.query;
           const permission_request = {
             role: role,
-            permissionRequired: 'viewOutboundOrders',
+            permissionRequired: ['viewOutboundOrders'],
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {

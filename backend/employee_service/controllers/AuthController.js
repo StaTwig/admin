@@ -9,7 +9,6 @@ const ConfigurationModel = require('../models/ConfigurationModel');
 const CounterModel = require('../models/CounterModel');
 const RbacModel = require('../models/RbacModel')
 const { body, validationResult} = require('express-validator');
-const { sanitizeBody } = require('express-validator');
 //helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
 const utility = require('../helpers/utility');
@@ -25,7 +24,6 @@ const client = require('twilio')(accountSid, authToken, {
 });
 const blockchain_service_url = process.env.URL;
 const stream_name = process.env.INV_STREAM;
-const checkToken = require('../middlewares/middleware').checkToken;
 const init = require('../logging/init');
 const logger = init.getLog();
 const EmailContent = require('../components/EmailContent');
@@ -1035,13 +1033,6 @@ exports.getAllUsers = [
 exports.assignProductConsumer = [
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-            'info',
-            '<<<<< InventoryService < InventoryController < getAllInventoryDetails : token verified successfullly, querying data by publisher',
-          );
-          console.log('res', result.data.address);
           var user = new ConsumerModel({
             shipmentId: req.body.consumer.shipmentId,
             name: req.body.consumer.name,
@@ -1058,10 +1049,6 @@ exports.assignProductConsumer = [
             Aadhar: user.aadhar,
             ShipmentId: user.ShipmentId,
           };
-          logger.log(
-            'info',
-            '<<<<< UserService < AuthController < registerConsumer : Successfully saving Consumer',
-          );
 
           let date_ob = new Date();
           let date = ('0' + date_ob.getDate()).slice(-2);
@@ -1078,20 +1065,14 @@ exports.assignProductConsumer = [
               ...{ consumedStatus: 'Y', consumedDate: today },
             },
           };
-          console.log('userData', userData1);
           const response = await axios.post(
             `${blockchain_service_url}/publish`,
             userData1,
           );
           const txnId = response.data.transactionId;
-
           const productQuery = { serialNumber: req.body.vaccine.serialNumber };
           const productFound = await InventoryModel.findOne(productQuery);
           if (productFound) {
-            logger.log(
-              'info',
-              '<<<<< ShipmentService < ShipmentController < createShipment : product found status receive',
-            );
             await InventoryModel.updateOne(productQuery, {
               transactionIds: [...productFound.transactionIds, txnId],
             });
@@ -1101,15 +1082,9 @@ exports.assignProductConsumer = [
             'Registration Success.',
             userData,
           );
-        }
-      });
     } catch (err) {
       console.log('err');
-      logger.log(
-        'error',
-        '<<<<< UserService < AuthController < registerConsumer : Error in catch block',
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1118,24 +1093,20 @@ exports.getUserWarehouses = [
   auth,
   async (req, res) => {
     try {
+      if(!req.user.organisationId){
+        return apiResponse.ErrorResponse(res, 'User Organisation ID not found');
+      }
+      const orgId = req.user.organisationId;
       const users = await WarehouseModel.find({
-        organisationId: req.user.organisationId
+        organisationId: orgId,
       });
-      logger.log(
-        'info',
-        '<<<<< UserService < AuthController < getAllUsers : retrieved users successfully',
-      );
       return apiResponse.successResponseWithData(
         res,
         "User warehouses",
         users,
       );
     } catch (err) {
-      logger.log(
-        'error',
-        '<<<<< UserService < AuthController < getAllUsers : error(catch block)',
-      );
-      return apiResponse.ErrorResponse(res, err);
+      return apiResponse.ErrorResponse(res, err.message);
     }
   },
 ];
@@ -1322,18 +1293,16 @@ exports.updateWarehouseAddress = [
   },
 ];
 
-exports.uploadImage = async function (req, res) {
-  checkToken(req, res, async (result) => {
-    if (result.success) {
-      const {data} = result;
+exports.uploadImage = [
+  auth,
+  async (req, res)=>{
+    try {
+      const {emailId} = req.user;
       const {
         id,
         type,
-        imageSide,
         action
       } = req.query;
-
-      try {
         const Upload = await uploadFile(req.file)
         await unlinkFile(req.file.path)
         if (action == "KYCUPLOAD") {
@@ -1359,7 +1328,7 @@ exports.uploadImage = async function (req, res) {
             }
           }
           const employee = await EmployeeModel.findOneAndUpdate({
-            emailId: data.emailId
+            emailId: emailId
           }, {
             $push: userData
           }, { new: true });
@@ -1376,14 +1345,14 @@ exports.uploadImage = async function (req, res) {
             }
           }
           const employee = await EmployeeModel.findOneAndUpdate({
-            emailId: data.emailId
+            emailId: emailId
           }, {
             $push: userData
           }, { new: true });
           return apiResponse.successResponseWithData(res, "KYC Image Uploaded", employee)
         } else if (action == "PROFILE") {
           const employeeUpdate = await EmployeeModel.findOneAndUpdate({
-            emailId: data.emailId
+            emailId: emailId
           }, {
             $set: { "photoId": `/usermanagement/api/auth/images/${Upload.key}` }
           }, { new: true });
@@ -1394,69 +1363,50 @@ exports.uploadImage = async function (req, res) {
       }
       catch (err) {
         console.log(err);
-        return apiResponse.ErrorResponse(res, err);
+        return apiResponse.ErrorResponse(res, err.message);
       }
-    } else {
-      return apiResponse.ErrorResponse(res, result)
-    }
-  });
-};
+  }
+]
 
-exports.fetchImage = async function (req, res) {
-  checkToken(req, res, async (result) => {
-    if (result.success) {
-      const {
-        data
-      } = result;
-      const {
-        type
-      } = req.query;
-      var imageArray = [];
+exports.fetchImage = [
+  auth,
+  async (req, res)=>{
+    try {
+      const {emailId} = req.user;
+      const {type} = req.query;
       const findRecord = await EmployeeModel.findOne({
         $and: [{
-          "emailId": data.emailId
+          "emailId": emailId
         }, {
           "userDocuments.idType": type
         }]
       });
       if (findRecord != null) {
-
-        const update = await EmployeeModel.findOne({
+        const imageArray = await EmployeeModel.findOne({
           $and: [{
-            "emailId": data.emailId
+            "emailId": emailId
           }, {
             "userDocuments.idType": type
           }]
         }, {
           "userDocuments.$.imageDetails": 1
-        }).then((result) => {
-          imageArray = result.userDocuments[0].imageDetails;
-        }).catch((e) => {
-          console.log("Err", e)
         })
-
         var resArray = [];
         for (i = 0; i < imageArray.length; i++) {
           const s = "/images/" + imageArray[i];
           resArray.push(s)
         }
       } else {
-        return res.send({
-          success: false,
-          data: "Matching ID number and type not found.! STOREID/Aadhar/Passport"
-        })
-
+        return apiResponse.notFoundResponse(res, "Matching ID number and type not found.! STOREID/Aadhar/Passport")
       }
-      return res.send({
-        success: true,
-        data: resArray
-      })
-
-    } else {
-      res.json(result);
-    }
-  });
-};
+      return apiResponse.successResponseWithData(res, "Image Uploaded", resArray);
+  }
+  catch (err) {
+    console.log(err);
+    return apiResponse.ErrorResponse(res, err.message);
+  }
+}
+]
 
 exports.getAllRegisteredUsers = [
   auth,

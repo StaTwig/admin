@@ -1,6 +1,6 @@
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
-const { body, sanitizeBody, oneOf, check } = require('express-validator');
+const { body} = require('express-validator');
 const auth = require("../middlewares/jwt");
 //models
 const utility = require('../helpers/utility');
@@ -48,7 +48,6 @@ exports.getTransactionNotifications = [
 exports.createNewAlert = [
   auth,
   body('user', 'username must not be empty.').isLength({ min: 1 }).trim(),
-  sanitizeBody('*').escape(),
   async function (req, res) {
     try {
       let Alert

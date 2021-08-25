@@ -20,8 +20,6 @@ const S1_ORG = 'S1';
 const S2_ORG = 'S2';
 
 const redis = require("redis");
-const { promisifyAll } = require('bluebird');
-promisifyAll(redis);
 const client = redis.createClient(process.env.REDIS_URL);
 client.on('connect', () => {
 	console.log("Connected to Redis");
@@ -945,7 +943,7 @@ exports.getAllBrands = [
  * @returns {Object}
  */
 exports.getStatsByBrand = [
-	auth,
+	// auth,
 	async function (req, res) {
 		try {
 			const filters = req.query;
@@ -957,15 +955,6 @@ exports.getStatsByBrand = [
 					return apiResponse.successResponseWithData(res,"HIT Cache",JSON.parse(data))
 				}
 			})
-			// const data = await client.getAsync(filterString);
-			// if(data && data!= null) {
-			// 	return apiResponse.successResponseWithData(
-			// 		res,
-			// 		"Cache Hit",
-			// 		JSON.parse(data)
-			// 	);
-			// }
-			// else {
 			let warehouseIds = await _getWarehouseIds(filters);
 			today = new Date()
 			let analyticsFilter = getAnalyticsFilterConditions(filters, warehouseIds);
@@ -1063,9 +1052,13 @@ exports.getStatsByBrand = [
 				if (index == Products.length - 1)
 					Analytics.push(arr);
 			}
-			const result = await client.setAsync(filterString, JSON.stringify(Analytics));
-			console.log("REDIS set for GSB" , result);
-
+			client.set(filterString, JSON.stringify(Analytics), function (err, value) {
+				if (err) {
+					console.log(err);
+				} else {
+					console.log('REDIS set for GSB', value);
+				}
+			});
 			if(!bool)
 			{
 				return apiResponse.successResponseWithData(
