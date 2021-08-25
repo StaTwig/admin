@@ -26,10 +26,10 @@ const excel = require('node-excel-export');
 const blockchain_service_url = process.env.URL;
 const stream_name = process.env.SHIP_STREAM;
 const po_stream_name = process.env.PO_STREAM;
-
+var pdf = require("pdf-creator-node");
 const products = require('../data/products');
 const manufacturers = require('../data/manufacturers');
-
+resolve = require('path').resolve
 const init = require('../logging/init');
 const logger = init.getLog();
 
@@ -1415,8 +1415,6 @@ exports.exportInboundPurchaseOrders = [//inbound po with filter(from, orderId, p
               }
 
           
-
-              console.log("whereQuery ======>", whereQuery);
               try {
                 let inboundPOsCount = await RecordModel.count(whereQuery);
                 RecordModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((inboundPOList) => {
@@ -1487,11 +1485,16 @@ exports.exportInboundPurchaseOrders = [//inbound po with filter(from, orderId, p
                          data.push(rowData)
                       }
                     }
-                    res = buildExcelReport(req,res,data)
-                    return apiResponse.successResponseWithData(
-                      res,
-                      "Inbound PO Records",
-                    );
+                    if(req.query.type=='pdf'){
+                      res = buildPdfReport(req,res,data)
+                      }
+                      else {
+                        res = buildExcelReport(req,res,data)
+                      return apiResponse.successResponseWithData(
+                        res,
+                        "Outbound PO Records",
+                      );
+                      }
                   });
                 });
               } catch (err) {
@@ -1605,7 +1608,6 @@ exports.exportOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, 
                 }
               }
 
-              console.log("whereQuery ======>", whereQuery);
               try {
                 let outboundPOsCount = await RecordModel.count(whereQuery);
                 RecordModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((outboundPOList) => {
@@ -1666,11 +1668,16 @@ exports.exportOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, 
                          data.push(rowData)
                       }
                     }
-                    res = buildExcelReport(req,res,data)
+                    if(req.query.type=='pdf'){
+                    res = buildPdfReport(req,res,data)
+                    }
+                    else {
+                      res = buildExcelReport(req,res,data)
                     return apiResponse.successResponseWithData(
                       res,
                       "Outbound PO Records",
                     );
+                    }
                   });
                 });
               } catch (err) {
@@ -1828,4 +1835,36 @@ function buildExcelReport(req,res,dataForExcel){
    
   res.attachment('report.xlsx'); 
   return res.send(report);
+}
+
+
+function buildPdfReport(req,res,data){
+  let finalPath = resolve("./models/pdftemplate.html")
+    let html = fs.readFileSync(finalPath, "utf8");
+    var options = {
+      format: "A3",
+      orientation: "landscape",
+      border: "10mm",
+      header: {
+          height: "15mm",
+          contents: '<div style="text-align: center;"><h1>Vaccine Ledger<h1></div>'
+      },
+  };
+  var document = {
+    html: html,
+    data: {
+      orders: data,
+    },
+    path: "./output.pdf",
+    type: "",
+  };
+  pdf
+  .create(document, options)
+  .then((result) => {
+    console.log(result);
+    return res.sendFile(result.filename)
+  })
+  .catch((error) => {
+    console.error(error);
+  });
 }
