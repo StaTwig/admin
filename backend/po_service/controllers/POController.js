@@ -1358,7 +1358,7 @@ exports.exportInboundPurchaseOrders = [//inbound po with filter(from, orderId, p
       //     );
           const permission_request = {
             result: result,
-            permissionRequired: 'viewPO',
+            permissionRequired: ['viewPO'],
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
@@ -1551,7 +1551,7 @@ exports.exportOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, 
       //     );
           const permission_request = {
             result: result,
-            permissionRequired: 'viewPO',
+            permissionRequired: ['viewPO'],
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
