@@ -21,13 +21,14 @@ const checkPermissions = require('../middlewares/rbac_middleware')
     .checkPermissions;
 const dotenv = require('dotenv').config();
 const wrapper = require('../models/DBWrapper')
-
+const excel = require('node-excel-export');
 const blockchain_service_url = process.env.URL;
 const stream_name = process.env.SHIP_STREAM;
 const po_stream_name = process.env.PO_STREAM;
-
+var pdf = require("pdf-creator-node");
 const products = require('../data/products');
 const manufacturers = require('../data/manufacturers');
+resolve = require('path').resolve
 const CENTRAL_AUTHORITY_ID = null
 const CENTRAL_AUTHORITY_NAME = null
 const CENTRAL_AUTHORITY_ADDRESS = null
@@ -1344,3 +1345,539 @@ exports.fetchProductIdsCustomerLocationsOrganisations = [
   },
 ]
 
+
+exports.exportInboundPurchaseOrders = [//inbound po with filter(from, orderId, productName, deliveryLocation, date)
+  auth,
+  async (req, res) => {
+    try {
+      // checkToken(req, res, async result => {
+      //   if (result.success) {
+      //     logger.log(
+      //       'info',
+      //       '<<<<< POService < POController < fetchInboundPurchaseOrders : token verified successfully',
+      //     );
+          const permission_request = {
+            result: result,
+            permissionRequired: 'viewPO',
+          };
+          checkPermissions(permission_request, async permissionResult => {
+            if (permissionResult.success) {
+              const { organisationId, role } = req.user;
+              const { skip, limit } = req.query;
+              let currentDate = new Date();
+              let fromDateFilter = 0;
+              let fromCustomer = req.query.from ? req.query.from : undefined;
+              let productName = req.query.productName ? req.query.productName : undefined;
+              let deliveryLocation = req.query.deliveryLocation ? req.query.deliveryLocation : undefined;
+              let orderId = req.query.orderId ? req.query.orderId : undefined;
+              let poStatus=req.query.poStatus ? req.query.poStatus:undefined;
+              switch (req.query.dateFilter) {
+                case "today":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+                  break;
+                case "week":
+                  fromDateFilter = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay())).toUTCString();
+                  break;
+                case "month":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
+                  break;
+                case "threeMonth":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, currentDate.getDate());
+                  break;
+                case "sixMonth":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 6, currentDate.getDate());
+                  break;
+                case "year":
+                  fromDateFilter = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate());
+                  break;
+                default:
+                  fromDateFilter = 0;
+              }
+
+              let whereQuery = {};
+              if (orderId) {
+                whereQuery['id'] = orderId;
+              }
+
+              if (fromDateFilter) {
+                whereQuery['createdAt'] = { $gte: fromDateFilter }
+              }
+
+              if (organisationId) {
+                whereQuery["supplier.supplierOrganisation"] = organisationId
+              }
+
+              if (deliveryLocation) {
+                whereQuery["customer.shippingAddress.shippingAddressId"] = deliveryLocation
+              }
+
+              if (fromCustomer) {
+                  whereQuery["customer.customerOrganisation"] = fromCustomer
+              }
+
+              if(poStatus){
+                whereQuery["poStatus"]=poStatus
+              }
+
+              if (productName) {
+                whereQuery.products = {
+                  $elemMatch: {
+                    productId: productName
+                  }
+                }
+              }
+
+          
+              try {
+                let inboundPOsCount = await RecordModel.count(whereQuery);
+                RecordModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((inboundPOList) => {
+                  let inboundPORes = [];
+                  let findInboundPOData = inboundPOList.map(async (inboundPO) => {
+                    let inboundPOData = JSON.parse(JSON.stringify(inboundPO))
+                    inboundPOData[`productDetails`] = [];
+                    let inboundProductsArray = inboundPOData.products;
+                    let productRes = inboundProductsArray.map(async (product) => {
+                      let productDetails = await ProductModel.findOne(
+                        {
+                          id: product.productId
+                        });
+                      return productDetails;
+                    });
+                    Promise.all(productRes).then(async function (productList) {
+                      inboundPOData[`productDetails`] = await productList;
+                    });
+                    
+                           let creator = await EmployeeModel.findOne(
+                      {
+                        id: inboundPO.createdBy
+                      });
+                           let creatorOrganisation = await OrganisationModel.findOne(
+                      {
+                              id: creator.organisationId
+                      });
+
+                    let supplierOrganisation = await OrganisationModel.findOne(
+                      {
+                        id: inboundPO.supplier.supplierOrganisation
+                      });
+                    let customerOrganisation = await OrganisationModel.findOne(
+                      {
+                        id: inboundPOData.customer.customerOrganisation
+                      });
+                    let customerWareHouse = await WarehouseModel.findOne(
+                      {
+                        organisationId: inboundPOData.customer.customerOrganisation
+                      });
+                    inboundPOData.creatorOrganisation= creatorOrganisation;
+                    inboundPOData.supplier[`organisation`] = supplierOrganisation;
+                    inboundPOData.customer[`organisation`] = customerOrganisation;
+                    inboundPOData.customer[`warehouse`] = customerWareHouse;
+                    inboundPORes.push(inboundPOData);
+                  });
+
+                  Promise.all(findInboundPOData).then(function (results) {
+                    let data = []
+                    let rowData;
+                   for(row of inboundPORes){
+                      for(product of row.products){
+                         rowData ={
+                           id: row.id,
+                           createdBy : row.createdBy,
+                           supplierOrgId: row?.supplier?.organisation?.id,
+                           orderReceiveIncharge: row?.customer?.customerIncharge,
+                           orderReceiverOrg: row?.customer?.customerOrganisation,
+                           productCategory: product.type,
+                           productName: product.name,
+                           manufacturer: product.manufacturer,
+                           productQuantity: product.productQuantity,
+                           productId: product.id,
+                          recieverOrgName: row?.customer?.organisation?.name,
+                          recieverOrgId: row?.customer?.organisation?.id,
+                          recieverOrgLocation: row?.customer.organisation?.postalAddress,
+                          status: row.poStatus}
+                         data.push(rowData)
+                      }
+                    }
+                    if(req.query.type=='pdf'){
+                      res = buildPdfReport(req,res,data)
+                      }
+                      else {
+                        res = buildExcelReport(req,res,data)
+                      return apiResponse.successResponseWithData(
+                        res,
+                        "Outbound PO Records",
+                      );
+                      }
+                  });
+                });
+              } catch (err) {
+                return apiResponse.ErrorResponse(res, err);
+              }
+              logger.log(
+                'info',
+                '<<<<< POService < POController < fetchInboundPurchaseOrders',
+              );
+            } else {
+              res.json('Sorry! User does not have enough Permissions');
+            }
+          });
+      //   } else {
+      //     logger.log(
+      //       'warn',
+      //       '<<<<< POService < POController < fetchInboundPurchaseOrders  : refuted token',
+      //     );
+      //     res.status(403).json(result);
+      //   }
+      // });
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< POService < POController < fetchInboundPurchaseOrders : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+exports.exportOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, productName, deliveryLocation, date)
+  auth,
+  async (req, res) => {
+    try {
+      // checkToken(req, res, async result => {
+      //   if (result.success) {
+      //     logger.log(
+      //       'info',
+      //       '<<<<< POService < POController < fetchOutboundPurchaseOrders : token verified successfully',
+      //     );
+          const permission_request = {
+            result: result,
+            permissionRequired: 'viewPO',
+          };
+          checkPermissions(permission_request, async permissionResult => {
+            if (permissionResult.success) {
+              const { organisationId, role, id } = req.user;
+              const { skip, limit } = req.query;
+              let currentDate = new Date();
+              let fromDateFilter = 0;
+              let toSupplier = req.query.to ? req.query.to : undefined;
+              let productName = req.query.productName ? req.query.productName : undefined;
+              let deliveryLocation = req.query.deliveryLocation ? req.query.deliveryLocation : undefined;
+              let orderId = req.query.orderId ? req.query.orderId : undefined;
+              let poStatus=req.query.poStatus ? req.query.poStatus:undefined;
+              switch (req.query.dateFilter) {
+                case "today":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
+                  break;
+                case "week":
+                  fromDateFilter = new Date(currentDate.setDate(currentDate.getDate() - currentDate.getDay())).toUTCString();
+                  break;
+                case "month":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, currentDate.getDate());
+                  break;
+                case "threeMonth":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 3, currentDate.getDate());
+                  break;
+                case "sixMonth":
+                  fromDateFilter = new Date(currentDate.getFullYear(), currentDate.getMonth() - 6, currentDate.getDate());
+                  break;
+                case "year":
+                  fromDateFilter = new Date(currentDate.getFullYear() - 1, currentDate.getMonth(), currentDate.getDate());
+                  break;
+                default:
+                  fromDateFilter = 0;
+              }
+
+              let whereQuery = {};
+              if (orderId) {
+                whereQuery['id'] = orderId;
+              }
+
+              if (fromDateFilter) {
+                whereQuery['createdAt'] = { $gte: fromDateFilter }
+              }
+
+              if (organisationId) {
+                //whereQuery["customer.customerOrganisation"] = organisationId
+		          whereQuery["$or"] = [{"customer.customerOrganisation":organisationId},{'createdBy': id }]
+              }
+
+              if (deliveryLocation) {
+                whereQuery["customer.shippingAddress.shippingAddressId"] = deliveryLocation
+              }
+
+              if (toSupplier) {
+                  whereQuery["supplier.supplierOrganisation"] = toSupplier;
+              }
+
+              if(poStatus){
+                whereQuery["poStatus"]=poStatus
+              }
+	      
+              if (productName) {
+                whereQuery.products = {
+                  $elemMatch: {
+                    productId: productName
+                  }
+                }
+              }
+
+              try {
+                let outboundPOsCount = await RecordModel.count(whereQuery);
+                RecordModel.find(whereQuery).skip(parseInt(skip)).limit(parseInt(limit)).sort({ createdAt: -1 }).then((outboundPOList) => {
+                  let outboundPORes = [];
+                  let findOutboundPOData = outboundPOList.map(async (outboundPO) => {
+                    let outboundPOData = JSON.parse(JSON.stringify(outboundPO))
+                    outboundPOData[`productDetails`] = [];
+                    let outboundProductsArray = outboundPOData.products;
+                    let productRes = outboundProductsArray.map(async (product) => {
+                      let productDetails = await ProductModel.findOne(
+                        {
+                          id: product.productId
+                        });
+                      return productDetails;
+                    });
+                    Promise.all(productRes).then(async function (productList) {
+                      outboundPOData[`productDetails`] = await productList;
+                    });
+
+                    let supplierOrganisation = await OrganisationModel.findOne(
+                      {
+                        id: outboundPO.supplier.supplierOrganisation
+                      });
+                    let customerOrganisation = await OrganisationModel.findOne(
+                      {
+                        id: outboundPOData.customer.customerOrganisation
+                      });
+                    let customerWareHouse = await WarehouseModel.findOne(
+                      {
+                        organisationId: outboundPOData.customer.customerOrganisation
+                      }); 
+                    outboundPOData.supplier[`organisation`] = supplierOrganisation;
+                    outboundPOData.customer[`organisation`] = customerOrganisation;
+                    outboundPOData.customer[`warehouse`] = customerWareHouse;
+                    outboundPORes.push(outboundPOData);
+                  });
+
+                  Promise.all(findOutboundPOData).then(function (results) {
+                    let data = []
+                    let rowData;
+                   for(row of outboundPORes){
+                      for(product of row.products){
+                         rowData ={
+                           id: row.id,
+                           createdBy : row.createdBy,
+                           supplierOrgId: row?.supplier?.organisation?.id,
+                           orderReceiveIncharge: row?.customer?.customerIncharge,
+                           orderReceiverOrg: row?.customer?.customerOrganisation,
+                           productCategory: product.type,
+                           productName: product.name,
+                           manufacturer: product.manufacturer,
+                           productQuantity: product.productQuantity,
+                           productId: product.id,
+                          recieverOrgName: row?.customer?.organisation?.name,
+                          recieverOrgId: row?.customer?.organisation?.id,
+                          recieverOrgLocation: row?.customer.organisation?.postalAddress,
+                          status: row.poStatus}
+                         data.push(rowData)
+                      }
+                    }
+                    if(req.query.type=='pdf'){
+                    res = buildPdfReport(req,res,data)
+                    }
+                    else {
+                      res = buildExcelReport(req,res,data)
+                    return apiResponse.successResponseWithData(
+                      res,
+                      "Outbound PO Records",
+                    );
+                    }
+                  });
+                });
+              } catch (err) {
+                return apiResponse.ErrorResponse(res, err);
+              }
+              logger.log(
+                'info',
+                '<<<<< POService < POController < fetchOutboundPurchaseOrders',
+              );
+            } else {
+              res.json('Sorry! User does not have enough Permissions');
+            }
+          });
+      //   } else {
+      //     logger.log(
+      //       'warn',
+      //       '<<<<< POService < POController < fetchOutboundPurchaseOrders  : refuted token',
+      //     );
+      //     res.status(403).json(result);
+      //   }
+      // });
+    } catch (err) {
+      logger.log(
+        'error',
+        '<<<<< POService < POController < fetchOutboundPurchaseOrders : error (catch block)',
+      );
+      return apiResponse.ErrorResponse(res, err);
+    }
+  },
+];
+
+function buildExcelReport(req,res,dataForExcel){
+  const styles = {
+    headerDark: {
+      fill: {
+        fgColor: {
+          rgb: 'FF000000'
+        }
+      },
+      font: {
+        color: {
+          rgb: 'FFFFFFFF'
+        },
+        sz: 14,
+        bold: true,
+        underline: true
+      }
+    },
+    cellGreen: {
+      fill: {
+        fgColor: {
+           rgb: 'FF00FF00'
+        }
+      }
+    }
+  };
+   
+  const specification = {
+    id: { 
+      displayName: 'Order ID', 
+      headerStyle: styles.headerDark, 
+      cellStyle: styles.cellGreen,
+      width: 120 
+    },
+    createdBy: {
+      displayName: 'Order Created By',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellGreen,
+      width: '10' 
+    },
+    supplierOrgId: {
+      displayName: 'ORG ID - Creator',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellGreen, 
+      width: 220 
+    },
+    orderReceiveIncharge: {
+      displayName: 'Order Received From',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellGreen, 
+      width: 220 
+    },
+    orderReceiverOrg: {
+      displayName: 'ORG ID - Receiver',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellGreen, 
+      width: 220 
+    },
+    productCategory: {
+      displayName: 'Product Category',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellGreen, 
+      width: 220 
+    },
+    productName: {
+      displayName: 'Product Name',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellGreen, 
+      width: 220 
+    },
+    productId: {
+      displayName: 'Product ID',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellGreen, 
+      width: 220 
+    },
+    productQuantity: {
+      displayName: 'Quantity',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellGreen, 
+      width: 220 
+    },
+    manufacturer: {
+      displayName: 'Manufacturer',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellGreen, 
+      width: 220 
+    },
+    recieverOrgName: {
+      displayName: 'Delivery Organization Name',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellGreen, 
+      width: 220 
+    },
+    recieverOrgId: {
+      displayName: 'Delivery Organization ID',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellGreen, 
+      width: 220 
+    },
+    recieverOrgLocation: {
+      displayName: 'Delivery Organization Location Details',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellGreen, 
+      width: 220 
+    },
+    status: {
+      displayName: 'Status',
+      headerStyle: styles.headerDark,
+      cellStyle: styles.cellGreen, 
+      width: 220 
+    }
+  }
+   
+   
+  const report = excel.buildExport(
+    [ 
+      {
+        name: 'Report Shipment', 
+        specification: specification, 
+        data: dataForExcel 
+      }
+    ]
+  );
+   
+  res.attachment('report.xlsx'); 
+  return res.send(report);
+}
+
+
+function buildPdfReport(req,res,data){
+  let finalPath = resolve("./models/pdftemplate.html")
+    let html = fs.readFileSync(finalPath, "utf8");
+    var options = {
+      format: "A3",
+      orientation: "landscape",
+      border: "10mm",
+      header: {
+          height: "15mm",
+          contents: '<div style="text-align: center;"><h1>Vaccine Ledger<h1></div>'
+      },
+  };
+  var document = {
+    html: html,
+    data: {
+      orders: data,
+    },
+    path: "./output.pdf",
+    type: "",
+  };
+  pdf
+  .create(document, options)
+  .then((result) => {
+    console.log(result);
+    return res.sendFile(result.filename)
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+}

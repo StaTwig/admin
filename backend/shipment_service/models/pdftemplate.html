@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>    
+<mate charest="utf-8" />
+    <title>Shipments Export</title>
+  </head>
+  <body>
+    <h1 class="display-1">Shipments Export</h1>
+    <table class="table table-bordered">
+        <thead class="thead-dark">
+        <tr>
+            <th scope="col">Shipment ID</td>
+            <th scope="col">Reference Order ID</td>
+            <th scope="col">Product Category</td>
+            <th scope="col">Product Name</td>
+            <th scope="col">Product ID</td>
+            <th scope="col">Quantity</td>
+            <th scope="col">Batch Number</td>
+            <th scope="col">Manufacturer</td>
+            <th scope="col">From Organization Name</td>
+            <th scope="col">From Organization ID</td>
+            <th scope="col">From Organization Location Details</td>
+            <th scope="col">Delivery Organization Name</td>
+            <th scope="col">Delivery Organization ID</td>
+            <th scope="col">Delivery Organization Location Details</td>
+            <th scope="col">Transit Number</td>
+            <th scope="col">Label Code</td>
+            <th scope="col">Shipment Date</td>
+            <th scope="col">Shipment Estimate Date</td>
+        </tr>
+    </thead>
+    <tbody>
+        {{#each orders}}
+        <tr>
+            <td>{{this.id}}</td>
+            <td>{{this.poId}}</td>
+            <td>{{this.productCategory}}</td>
+            <td>{{this.productName}}</td>
+            <td>{{this.productID}}</td>
+            <td>{{this.productQuantity}}</td>
+            <td>{{this.batchNumber}}</td>
+            <td>{{this.manufacturer}}</td>
+            <td>{{this.supplierOrgName}}</td>
+            <td>{{this.supplierOrgId}}</td>
+            <td>{{this.supplierOrgLocation}}</td>
+            <td>{{this.recieverOrgName}}</td>
+            <td>{{this.recieverOrgId}}</td>
+            <td>{{this.recieverOrgLocation}}</td>
+            <td>{{this.airWayBillNo}}</td>
+            <td>{{this.label}}</td>
+            <td>{{this.shippingDate}}</td>
+            <td>{{this.expectedDeliveryDate}}</td>
+        </tr>
+    </tbody>
+      {{/each}}
+    </table>
+  </body>
+</html>
