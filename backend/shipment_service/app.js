@@ -1,5 +1,4 @@
 const express = require("express");
-const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
@@ -16,12 +15,11 @@ const app = express();
 
 // DB connection
 const MONGODB_URL = process.env.MONGODB_URL;
-mongoose.connect(MONGODB_URL, { useNewUrlParser: true , useUnifiedTopology: true}).then(() => {
+mongoose.connect(MONGODB_URL, { useNewUrlParser: true , useUnifiedTopology: true , useCreateIndex:true, useFindAndModify:false}).then(() => {
   //don't show the log when it is test
   if(process.env.NODE_ENV !== "test") {
     console.log("Connected to %s", MONGODB_URL);
-    console.log("App is running ... \n");
-    console.log("Press CTRL + C to stop the process. \n");
+    console.log("Shipment Service is running ... \n");
   }
 })
   .catch(err => {
@@ -36,7 +34,6 @@ if(process.env.NODE_ENV !== "test") {
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocumentation));
 
 //To allow cross-origin requests

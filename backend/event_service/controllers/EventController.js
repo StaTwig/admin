@@ -3,7 +3,7 @@ const EventModal = require("../models/EventModal");
 const ProductModel = require('../models/ProductModel');
 const ShipmentModel = require('../models/ShipmentModel');
 
-const { body, validationResult, param } = require("express-validator");
+const { validationResult, param } = require("express-validator");
 const { sanitizeBody } = require("express-validator");
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");

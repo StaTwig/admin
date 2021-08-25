@@ -25,3 +25,12 @@ button#dropdown-split-basic {
 #dropdown-split-basic p {
     margin-bottom: 0;
 }
+.divoc-logo{
+    position:relative;
+    top:-15px;
+}
+.vl-logo{
+    position: relative;
+    top:10px;
+    left:-60px;
+}

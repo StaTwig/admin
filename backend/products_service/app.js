@@ -1,8 +1,6 @@
 var express = require("express");
-var path = require("path");
 var cookieParser = require("cookie-parser");
 var cors = require("cors");
-const fs = require('fs');
 var logger = require("morgan");
 require("dotenv").config();
 const swaggerUi = require('swagger-ui-express');
@@ -10,7 +8,6 @@ const openApiDocumentation = require('./openApiDocumentation');
 var indexRouter = require("./routes/index");
 var apiRouter = require("./routes/api");
 var apiResponse = require("./helpers/apiResponse");
-
 
 // DB connection
 var MONGODB_URL = process.env.MONGODB_URL;
@@ -37,10 +34,7 @@ if(process.env.NODE_ENV !== "test") {
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openApiDocumentation));
-
-app.use('/images', express.static(__dirname+'/uploads/'));
 
 //To allow cross-origin requests
 app.use(cors());
@@ -48,13 +42,10 @@ app.use(cors());
 //Route Prefixes
 app.use("/", indexRouter);
 app.use("/productmanagement/api/", apiRouter);
-const dir = `./images`;
-if (!fs.existsSync(dir)) {
-  fs.mkdirSync(dir);
-}
+
 // throw 404 if URL not found
 app.all("*", function(req, res) {
-	return apiResponse.notFoundResponse(res, "Page not found");
+	return apiResponse.notFoundResponse(res, "API not found");
 });
 
 app.use((err, req, res) => {

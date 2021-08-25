@@ -11,9 +11,11 @@ export const StyledTabs = withStyles({
         backgroundColor: 'transparent',
         color: '#040E28',
         '& > span': {
-            maxWidth: 60,
+            maxWidth: 55,
             width: '100%',
-            backgroundColor: '#5C9EF8',
+            backgroundColor: '#FFAB1D',
+            position:'relative',
+            bottom:'10px',
         },
     },
 })((props) => <Tabs {...props} TabIndicatorProps={{children: <span/>}}/>);
@@ -23,8 +25,11 @@ export const StyledTab = withStyles((theme) => ({
         textTransform: 'none',
         textAlign: 'left',
         fontWeight: 'bold',
-        fontSize: theme.typography.pxToRem(16),
+        fontSize: theme.typography.pxToRem(20),
         marginRight: theme.spacing(1),
+        marginTop: theme.spacing(1.3),
+        color:'#ffffff',
+        
         '&:focus': {
             opacity: 1,
             outline: "none",
@@ -35,9 +40,9 @@ export const StyledTab = withStyles((theme) => ({
 export const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
-        paddingLeft: theme.spacing(4),
-        paddingRight: theme.spacing(4),
-        paddingTop: theme.spacing(3),
+        paddingLeft: theme.spacing(1),
+        paddingRight: theme.spacing(1),
+        paddingTop: theme.spacing(1),
         
     },
     abc: {
@@ -53,9 +58,9 @@ export const TabPanels = ({tabs, ...props}) => {
     };
     return (
         <div className={classes.root}>
-            <div className="d-flex flex-row justify-content-between" style={{background: "#0B65C1", borderRadius: "8px", height: "70px"}}>
+            <div className="d-flex flex-row justify-content-between" style={{background: "#0B65C1", borderRadius: "0px 0px 10px 10px", height: "60px"}}>
                 <StyledTabs
-                style={{justifyContent: "center"}}
+                    style={{justifyContent: "center"}}
                     value={value}
                     indicatorColor="secondary"
                     onChange={handleChange}
@@ -64,7 +69,7 @@ export const TabPanels = ({tabs, ...props}) => {
                     {
                         tabs.map((tab, index) => (
                             <StyledTab 
-                            label={<h4 style={{"fontSize": "18px"}}><b>{tab.title}</b></h4>}/>
+                            label={<h4 style={{"fontSize": "16px"}}><b>{tab.title}</b></h4>}/>
                         ))
                     }
                 </StyledTabs>

@@ -9,8 +9,6 @@ const WarehouseModel = require('../models/WarehouseModel');
 //this helper file to prepare responses.
 const apiResponse = require('../helpers/apiResponse');
 const auth = require('../middlewares/jwt');
-// const checkPermissions = require('../middlewares/rbac_middleware')
-  // .checkPermissions;
 
 exports.getAnalytics = [
   auth,

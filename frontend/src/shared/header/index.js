@@ -363,11 +363,12 @@ const imgs = config().fetchProfileImage;
                       </div>
                     </div>
                   </div>)}
+                  </div>
                 </React.Fragment>
               </div>
             )}
-            </div>  
-          {/* <div className="userName" style={{fontSize: "13px", marginBottom:"0px"}}> 
+            </div>
+            {/* <div className="userName" style={{fontSize: "13px", marginBottom:"0px"}}> 
           <p className="cname1"><b>{activeWarehouses[0]?.title}</b></p>
           <p className="uname"> {activeWarehouses[0]?.warehouseAddress.firstLine}</p>
           </div> */}
