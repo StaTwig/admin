@@ -759,7 +759,7 @@ exports.receiveShipment = [
       const { role } = req.user;
       const permission_request = {
         role: role,
-        permissionRequired: "receiveShipment",
+        permissionRequired: ["receiveShipment"],
       };
       checkPermissions(permission_request, async (permissionResult) => {
         if (permissionResult.success) {
@@ -1542,7 +1542,7 @@ exports.viewShipment = [
       const { role } = req.user;
       const permission_request = {
         role: role,
-        permissionRequired: "viewShipment",
+        permissionRequired: ["viewShipment"],
       };
       checkPermissions(permission_request, async (permissionResult) => {
         if (permissionResult.success) {
@@ -1884,11 +1884,10 @@ exports.chainOfCustody = [
       const { role } = req.user;
       const permission_request = {
         role: role,
-        permissionRequired: "viewShipment",
+        permissionRequired: ["viewShipment"],
       };
       checkPermissions(permission_request, async (permissionResult) => {
-        if (result.success) {
-          var chainOfCustody = [];
+        if (permissionResult.success) {
           var poDetails = "";
           const id = req.query.shipmentId;
           if (id.includes("PO")) {
