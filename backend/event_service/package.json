@@ -3,10 +3,8 @@
   "version": "1.0.1",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www",
-    "dev": "nodemon ./bin/www",
-    "test": "nyc _mocha --timeout 10000 --exit --report lcovonly -- -R spec",
-    "lint": "eslint --fix --config .eslintrc.json \"**/*.js\""
+    "start": "node event_server.js",
+    "dev": "nodemon event_server.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
