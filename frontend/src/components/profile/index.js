@@ -13,7 +13,7 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { Alert, AlertTitle } from '@material-ui/lab';
 import { getImage } from '../../actions/notificationActions';
-import Input from '@material-ui/core/Input';
+import SuccessPopUp from "./successPopup";
 
 const axios = require("axios");
 import {
@@ -130,13 +130,13 @@ class Profile extends React.Component {
       // console.log(wareHouseAddresses,"All warehouses");
       this.setState({
         wareIds: wareHouseIdResult,
-        warehouseLocations: wareHouseAddresses,
+        warehouseLocations: response.data.data.warehouses,
         warehouseLocByOrg:wareHouseAddresses
       });
 
-     this.state.warehouseLocations.map((id)=>{
-        this.state.warehouseLocations= this.state.warehouseLocations.filter((data)=>response.data.data.warehouseId.includes(data.id));
-      })
+    //  this.state.warehouseLocations.map((id)=>{
+    //     this.state.warehouseLocations= this.state.warehouseLocations.filter((data)=>response.data.data.warehouseId.includes(data.id));
+    //   })
       
     }
 
@@ -152,7 +152,7 @@ class Profile extends React.Component {
 
   closeModal() {
     console.log("Closed Model called");
-    this.setState({ openModal: false });
+    this.setState({ openModal: false, message: "" });
     // props.history.push("/Addlocation");
   }
   onCancel() {
@@ -236,7 +236,7 @@ class Profile extends React.Component {
 
   async onSubmit() {
     this.onChange();
-    const {
+    let {
       firstName,
       lastName,
       organisation,
@@ -252,6 +252,7 @@ class Profile extends React.Component {
       title,
       editMode
     } = this.state;
+    phoneNumber  = phoneNumber ? phoneNumber.replaceAll('+', '') : '';
     const data = {
       firstName,
       lastName,
@@ -312,7 +313,7 @@ class Profile extends React.Component {
     return (
       <div className="profile">
         <h1 className="breadcrumb">Profile</h1>
-        <div className="card">
+        <div className="card" style={{border:"none"}}>
           <div className="card-body">
             <div className="d-flex flex-row justify-content-between">
               <div className="col-2">
@@ -435,12 +436,12 @@ class Profile extends React.Component {
                         <div class="addloc1">
                           {editMode && (
                             <button
-                              className="btn btn-orange fontSize20 font-bold pl-10 pr-10"
+                              className="buttonA btn btn-orange font-bold mt-1"
                               onClick={() => {
                                 this.setState({ openModal: true });
                               }}
                             >
-                              <span>+ Add </span>
+                              <span>+ ADD </span>
                             </button>
                           )}
                           <div className="inventorypopup">
@@ -467,35 +468,44 @@ class Profile extends React.Component {
                           <div className="custom-card p-3">
                             <div className="card-header">
                               <div className="d-flex align-items-center justify-content-between">
-                                <h3 className="card-title font-weight-bold">
-                                  {this.state.warehouseLocations[id]['title']}-{this.state.warehouseLocations[id]['id']}
+                                <h3 className="card-title font-weight-bold" style={{fontSize:"18px"}}>
+                                  {this.state.warehouseLocations[id]['title']}
+                                  <div style={{fontSize:"15px", fontWeight:"400"}}>{this.state.warehouseLocations[id]['id']}</div>
                                 </h3>
-                                <Link
-                                  to={{
-                                    pathname: `/editLocation/${this.state.warehouseLocations[id]['id']}`,
-                                    state: {editMode:this.state.editMode},
-                                  }}
-                                >
-                                  <button
-                                    className="btn btn-blue fontSize20 font-bold pl-2 pr-10"
-                                    style={{ height: "35px", width: "100px" }}
+                                {this.state.warehouseLocations[id]['status'] == 'ACTIVE' &&
+                                  <Link
+                                    to={{
+                                      pathname: `/editLocation/${this.state.warehouseLocations[id]['id']}`,
+                                      state: { editMode: this.state.editMode },
+                                    }}
                                   >
-                                    <img
-                                      src={Pen}
-                                      width="15"
-                                      height="15"
-                                      className="mr-2"
-                                    />
-                                    <span>Edit</span>
-                                  </button>
-                                </Link>
+                                    <button
+                                      className="btn btn-blue fontSize20 font-bold pl-2 pr-10"
+                                      style={{ height: "35px", width: "100px" }}
+                                    >
+                                      <img
+                                        src={Pen}
+                                        width="15"
+                                        height="15"
+                                        className="mr-2"
+                                      />
+                                      <span>Edit</span>
+                                    </button>
+                                  </Link>
+                                }
                                 {/* <button
                                 className="btn-primary btn edit-button"
                               >
                                 <img src={Pen} width="15" height="15" className="mr-2" />
                                 <span>EDIT</span>
                               </button> */}
+                              {this.state.warehouseLocations[id]['status'] != 'ACTIVE' &&
+                                <span className="font-weight-bold badge badge-danger">
+                                  Approval Pending
+                                </span>
+                              }
                               </div>
+                              
                             </div>
                             <div className="card-body">
                               <input
@@ -639,14 +649,20 @@ class Profile extends React.Component {
                       {Object.keys(this.state.warehouseLocations).map((id) => {
                         return (
                           <div className="col">
-                            <div className="location-cards">
+                            <div className="location-cards mt-1">
                               <div className="custom-card p-3">
                                 <div className="card-header">
                                   <div className="d-flex align-items-center justify-content-between">
-                                    <h3 className="card-title font-weight-bold">
-                                    {this.state.warehouseLocations[id]['title']}-{this.state.warehouseLocations[id]['id']}
+                                    <h3 className="card-title font-weight-bold" style={{fontSize:"18px"}}>
+                                    {this.state.warehouseLocations[id]['title']}
+                                    <div style={{fontSize:"15px", fontWeight:"400"}}>{this.state.warehouseLocations[id]['id']}</div>
                                     </h3>
-                                  </div>
+                                    {this.state.warehouseLocations[id]['status'] != 'ACTIVE' &&
+                                    <div className="font-weight-bold badge badge-danger ml-3">
+                                      Approval Pending
+                                    </div>
+                                  }
+                                 </div>
                                 </div>
                                 <div className="card-body">
                                   <div className="total">
@@ -710,35 +726,47 @@ class Profile extends React.Component {
               {!editMode ? (
                 // <div>
                 <button
-                  className="btn-primary btn"
+                  className="buttonS btn-primary btn"
                   onClick={() => {
                     this.setState({ editMode: true });
                     this.onOrganisation();
                   }}
                 >
                   <img src={Pen} width="15" height="15" className="mr-2 mb-1" />
-                  <span>Edit</span>
+                  <span>EDIT</span>
                 </button>
               ) : (
                 // </div>
-                <div className="d-flex flex-row justify-content-between">
+                <div className="d-flex flex-row justify-content-between" style={{position:"relative",left: -100 }}>
                   <button
-                    className="btn btn-outline-info mr-2"
+                    className="buttonS btn btn-outline-primary mr-2"
                     onClick={this.onCancel}
                   >
-                    <span>Cancel</span>
+                    <span>CANCEL</span>
                   </button>
-                  <button className="btn-primary btn" onClick={this.onSubmit}>
+                  <button className="buttonS btn-orange btn" onClick={this.onSubmit}>
                   {/* <button className="btn-primary btn" onClick={this.onSubmit(),()=>{this.onChange()}}> */}
-                    <span>Save</span>
+                    <span>SAVE</span>
                   </button>
                 </div>
               )}
+              <div className="">
+                            {this.state.message && (
+                              <Modal
+                                close={() => this.closeModal()}
+                                size="modal-sm" //for other size's use `modal-lg, modal-md, modal-sm`
+                              >
+                                <SuccessPopUp
+                                     onHide={this.closeModal}
+                                />
+                              </Modal>
+                            )}
+                          </div>
             </div>
           </div>
         </div>
-        {message && <div> <Alert severity="success"><AlertTitle>Success</AlertTitle>{message}</Alert></div>
-    }
+        {/* {message && <div> <SuccessPopUp severity="success">{message}</SuccessPopUp></div>
+    } */}
       </div>
     );
   }

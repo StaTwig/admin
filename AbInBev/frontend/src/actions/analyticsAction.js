@@ -102,3 +102,16 @@ export const getAllOrganisationStats = (param = '') => {
     }
   };
 };
+
+export const getAllOrganisationTypeStats = (param = '') => {
+  return async (dispatch) => {
+    try {
+      dispatch(turnOn());
+      const result = await axios.get(config().getStatsBySKUOrgTypeUrl + param);
+      dispatch(turnOff());
+      return result.data;
+    } catch (e) {
+      dispatch(turnOff());
+    }
+  };
+};

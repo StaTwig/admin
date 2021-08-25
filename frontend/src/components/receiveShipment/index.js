@@ -18,6 +18,7 @@ import {fetchairwayBillNumber} from '../../actions/shipmentActions';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { Alert, AlertTitle } from '@material-ui/lab';
+import ModalImage from 'react-modal-image';
 
 const ReceiveShipment = (props) => {
   let shipmentDetails = props.trackData.shipmentDetails;
@@ -38,6 +39,7 @@ const ReceiveShipment = (props) => {
   const [comment, setComment] = useState("");
   const [index, setIndex] = useState(0);
   const [message, setMessage] = useState("");
+  const [image, setImage] = useState('');
   const id = props.match.params.id;
   const [inputValue, setInputValue] = React.useState('');
   const [openUpdatedStatus, setOpenUpdatedStatus] = useState(false);
@@ -144,7 +146,15 @@ const ReceiveShipment = (props) => {
     else
       setIsDisabled(true);
   }
-
+  
+  const getImageURL = async (imageId) => {
+    const r = await getImage(imageId);
+    const reader = new window.FileReader();
+    reader.readAsDataURL(r.data);
+    reader.onload = function () {
+      setImage(reader.result);
+    };
+  };
   const uploadPhoto = async () => {
     const formData = new FormData();
 
@@ -171,11 +181,11 @@ const ReceiveShipment = (props) => {
     <div className="receiveShipment">
       <div className="d-flex flex-column justify-content-between">
         <div className="d-flex flex-row justify-content-between">
-          <h1 className="breadcrumb">RECEIVE SHIPMENT</h1>
+          <h1 className="breadcrumb mt-3">RECEIVE SHIPMENT</h1>
           <div className="d-flex flex-row justify-content-between">
             <div>
               <button
-                className="btn btn-outline-primary mr-4"
+                className="btn btn-outline-primary mr-4 mt-3"
                 onClick={() => props.history.push(`/viewshipment/${id}`)}
               >
                 Cancel
@@ -183,7 +193,7 @@ const ReceiveShipment = (props) => {
             </div>
             <div>
               <button
-                className="btn-primary btn fontSize20 font-bold mr-2 "
+                className="btn-primary btn fontSize20 font-bold mr-2 mt-3"
                 onClick={receiveShipment}
                 disabled={isDisabled}
               >
@@ -302,7 +312,7 @@ const ReceiveShipment = (props) => {
         <div className="col-sm-4">
           <div className="row justify-content-between">
           <h6 className="heading mt-3 ml-4">Upload Image</h6>  
-              <button className="btn btn-primary font-weight-bold mr-4"
+              <button className="btn btn-orange font-weight-bold mr-4"
                    onClick={uploadPhoto} 
                    style={{height:'5vh',width:'6vw'}}>
               {/* <img
@@ -321,23 +331,36 @@ const ReceiveShipment = (props) => {
               <div>
                 <div
                   className="row"
-                  style={{ margin: "auto", display: "table"}}
+                  style={{ margin: "auto", display: "table", cursor:"pointer"}}
                 >
-                  <img onClick={clearImage} width="20" height="20" src={crossIcon} style={{ position:'relative', left:'15vw'}}/>
+                  <img onClick={clearImage} width="20" height="20" src={crossIcon} style={{ position:'relative', left:'25vw'}}/>
                   <img
                     src={photoUrl}
                     name="photo"
-                    width="250"
-                    height="125"
+                    width="450"
+                    height="185"
                     className="mt-1"
                     style={{ margin: "auto", display: "table" }}
                   />
                 </div>
+                <div className="row">
+                                {photoUrl >
+                                  0 && (
+                                  <ModalImage
+                                    small={image}
+                                    className="challanImage"
+                                    large={image}
+                                    showRotate={true}
+                                    hideZoom={false}
+                                    alt="Upload Image"
+                                  />
+                                )}
+                              </div>
               </div>
             ) : (
               <div>
                 <div
-                  className="row"
+                  className="row mt-3"
                   style={{ margin: "auto", display: "table" }}
                 >
                   {/* <label>{photo.name?photo.name:""}</label> */}
@@ -349,13 +372,13 @@ const ReceiveShipment = (props) => {
                     className="mt-1"
                     style={{ margin: "auto", display: "table" }}
                   />
-                  <label>
+                  <label className="mt-3">
                     Drag and drop files here{" "}
                     <input type="file" class="select" onChange={setFile} />{" "}
                   </label>
                 </div>
                 <div
-                  className="row"
+                  className="row mb-3"
                   style={{ margin: "auto", display: "table" }}
                 >
                   OR
@@ -365,13 +388,13 @@ const ReceiveShipment = (props) => {
                   style={{
                     margin: "auto",
                     display: "table",
-                    position: "relative",
-                    top: "3%",
+                    //position: "relative",
+                    //top: "0%",
                   }}
                 >
                   <label
                     class="btn btn-primary"
-                    style={{ margin: 0, height: "5vh" }}
+                    style={{ margin: 0, height: "4.3vh" }}
                   >
                     Browse Files
                     <input type="file" class="select" onChange={setFile} />{" "}

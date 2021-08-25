@@ -1,6 +1,6 @@
 //helper file to prepare responses.
 const apiResponse = require("../helpers/apiResponse");
-const { body, sanitizeBody, oneOf, check } = require('express-validator');
+const { body} = require('express-validator');
 const auth = require("../middlewares/jwt");
 //models
 const utility = require('../helpers/utility');
@@ -24,7 +24,8 @@ exports.getAlertNotifications = [
   auth,
   async function (req, res) {
     try {
-      let notifications = await Notification.find({ user : req.user.id, type : 'ALERT'})
+      // let notifications = await Notification.find({ user : req.user.id, type : 'ALERT'})
+      let notifications = await Notification.find({ user : req.user.id, type : req.query.type})
       return apiResponse.successResponseWithData(res, 'Notifications fetched successfully', notifications)
     } catch (err) {
       return apiResponse.ErrorResponse(res, err)
@@ -150,7 +151,6 @@ exports.createNewAlert = [
 exports.createNewAlert = [
   auth,
   body('user', 'username must not be empty.').isLength({ min: 1 }).trim(),
-  sanitizeBody('*').escape(),
   async function (req, res) {
     try {
       let Alert

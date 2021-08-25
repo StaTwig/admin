@@ -131,7 +131,7 @@ const SpmDashboard = (props) => {
                                   <address>{perf.postalAddress}</address>
                                 </div>
                               </td>
-                              <td>{perf.returnRate ? perf.returnRate : 0}</td>
+                              <td></td>
                               <td>
                                 <div
                                   className="round round-lg"
@@ -167,7 +167,20 @@ const SpmDashboard = (props) => {
                             <tr>
                               <td scope="row">Lead Time</td>
                               <td>
-                                {perf.leadTime?.length ? perf.leadTime[0]?.avgLeadTime > 60 ? Math.round(perf.leadTime[0]?.avgLeadTime/60) + ' H ' + Math.round(perf.leadTime[0]?.avgLeadTime%60) + ' M' : Math.round(perf.leadTime[0]?.avgLeadTime)+" M" : 0}
+                                {perf.leadTime?.length
+                                  ? perf.leadTime[0]?.avgLeadTime > 60
+                                    ? Math.round(
+                                        perf.leadTime[0]?.avgLeadTime / 60,
+                                      ) +
+                                      ' H ' +
+                                      Math.round(
+                                        perf.leadTime[0]?.avgLeadTime % 60,
+                                      ) +
+                                      ' M'
+                                    : Math.round(
+                                        perf.leadTime[0]?.avgLeadTime,
+                                      ) + ' M'
+                                  : 0}
                               </td>
                               <td></td>
                               <td></td>

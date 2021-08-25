@@ -173,12 +173,12 @@ const Inventory = props => {
       <div className="row mb-4">
         <div className="col">
           <Link to="/productcategory">
-            <div className="panel" style={{height:'11.7vh'}}>
+            <div className="panel">
               <div className="picture truck-bg">
                 <img src={TotalInventoryAdded} alt="truck"/>
               </div>
               <div className="d-flex flex-column">
-                <div className="title truck-text">Total Product Category</div>
+                <div className="title truck-text font-weight-bold">Total Product Category</div>
                 
                 <div className="count truck-text">{inventoriesCount} {inventoryAnalytics?.totalProductCategory}</div>
               </div>
@@ -187,12 +187,12 @@ const Inventory = props => {
         </div>
         <div className="col">
           <Link to="/productoutofstock">
-          <div className="panel" style={{height:'11.7vh'}}>
+          <div className="panel">
             <div className="picture sent-bg">
               <img src={currentinventory} alt="truck" />
             </div>
             <div className="d-flex flex-column">
-              <div className="title sent-text">Product Out Of Stock</div>
+              <div className="title sent-text font-weight-bold">Product Out Of Stock</div>
               <div className="sent-text count">{currentInventoriesCount}{inventoryAnalytics?.stockOut}</div>
               </div>
             </div>
@@ -201,12 +201,12 @@ const Inventory = props => {
           
         <div className="col">
           <Link to="/batchnearexpiry/product">
-          <div className="panel" style={{height:'11.7vh'}}>
+          <div className="panel">
             <div className="picture recived-bg">
               <img src={Expiration} alt="truck" />
             </div>
             <div className="d-flex flex-column">
-              <div className="title recived-text">Batch near Expiration</div>
+              <div className="title recived-text font-weight-bold">Batch near Expiration</div>
               {/* <div className="tab-container">
                 <div
                   className="tab-item active"
@@ -274,12 +274,12 @@ const Inventory = props => {
         </div>
         <div className="col">
           <Link to="/batchexpired">
-          <div className="panel" style={{height:'11.7vh'}}>
+          <div className="panel">
             <div className="picture transit-bg">
               <img src={TotalVaccineExpired} alt="truck" />
             </div>
             <div className="d-flex flex-column">
-              <div className="title transit-text">Batch Expired</div>
+              <div className="title transit-text font-weight-bold">Batch Expired</div>
               {/* <div className="tab-container">
                 <div
                   className="tab-item active"

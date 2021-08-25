@@ -43,7 +43,7 @@ const FormLoginPage = (props) => {
             <div className="card">
               <div className="card-body">
                 <div className="login-form mt-2">
-                  <div className="card-title mb-4">Login</div>
+                  <div className="card-title mb-4 mr-2">Login</div>
                   <div className="form-group mb-3 mt-1 ml-5 mr-5 p-1" style={emailFieldDisable ? {pointerEvents: "none", opacity: "0.5"} : {}}>
                   <div style={{position:"absolute", left:"-14px", top:"23px"}}>
                         <img alt="Mail Icon" src={User} height="15px" width="19px" />
@@ -85,11 +85,11 @@ const FormLoginPage = (props) => {
                     <div className="mb-3 ml-5 mr-4"> <Alert variant="filled" severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
                   }
                   <div className="text-center">
-                    <button type="button" className="btn btn-primary" onClick={onSendOtp}>
-                      SEND OTP
+                    <button type="button" className=" buttonS btn btn-primary" onClick={onSendOtp}>
+                      CONTINUE
                     </button>
                   </div>
-                  <div className="signup-link text-center mt-2 ml-1">Don't have an account? <Link to="/signup">Signup</Link></div>
+                  <div className="signup-link text-center mt-4 ml-1">Don't have an account? <Link to="/signup"><b>Signup</b></Link></div>
                 </div>
               </div>
             </div>

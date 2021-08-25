@@ -80,11 +80,11 @@ const EditRow = (props) => {
           <div className={`row ${!addMore ? `col-10` : `col-12`}`}>
             <div className="col-3 theader text-center pro">
               <img src={Package} width="16" height="16" />
-              <span className="pl-1 text-muted required-field">Product Category</span>
+              <span className="pl-1 text-muted">Product Category*</span>
             </div>
             <div className="col-5 theader text-center pro">
               <img src={Package} width="16" height="16" />
-              <span className="pl-1 text-muted required-field">Product</span>
+              <span className="pl-1 text-muted">Product*</span>
             </div>
             <div className="col theader ">
               <img src={mon} width="16" height="16" />
@@ -92,7 +92,7 @@ const EditRow = (props) => {
             </div>
             <div className="col theader text-center pro">
               <img src={qty} width="25" height="16" />
-              <span className="pl-1 text-muted required-field">Quantity</span>
+              <span className="pl-1 text-muted">Quantity*</span>
             </div>
           </div>
         </div>
@@ -184,10 +184,10 @@ const EditRow = (props) => {
                   setAddMore(true);
                   props.setVisible(true);
                 }}
-                className="btn text-white btn-warning "
+                className="btn btn-warning "
               >
-                <i className="fa fa-plus txt pr-2" aria-hidden="true"></i>
-                <span className="txt">Add More Details</span>
+                <i className="txt-inventory" aria-hidden="true"></i>
+                <span className="txt-inventory"> + &nbsp; Add More Details</span>
               </button>
             </div>
           )}

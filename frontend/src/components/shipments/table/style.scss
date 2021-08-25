@@ -23,13 +23,14 @@
     }
 
     .rTableRow {
-      display: flex;
-      background: #fff;
-      justify-content: space-between;
-      margin-bottom: 20px;
-      padding: 5px 10px;
-      border-radius: 10px;
-      box-shadow: 0px 3px 10px #00000029;
+      //display: flex;
+      //background: #fff;
+      //justify-content: space-between;
+      //margin-bottom: 20px;
+      //padding: 5px 10px;
+      margin-top: 5px;
+      border-radius: 15px;
+      box-shadow: 0px 3px 10px #e4e4e4!important;
     }
 
     .rTableRow:hover{
@@ -103,4 +104,24 @@
       }
     }
   }
+}
+.ribbon-space {
+  margin-top: 4rem;
+}
+.txt{
+  font-weight: 600;
+  font-size: small;
+  align-self: center;
+  overflow: hidden;
+}
+.txt1{
+  font-weight: 400;
+  font-size: small;
+  align-self: center;
+  overflow: hidden;
+}
+.round1{
+  border-radius: 15px !important;
+  margin-top: 5px;
+  box-shadow: 0px 3px 10px #e4e4e4!important;
 }

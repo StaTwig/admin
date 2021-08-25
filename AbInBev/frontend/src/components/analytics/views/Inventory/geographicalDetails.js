@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import becks from '../../../../assets/images/becks.png';
 import bottlesIcon from '../../../../assets/becks_330ml.png';
 import {
@@ -15,7 +15,7 @@ import {
   PolarAngleAxis,
   Label,
 } from 'recharts';
-import { getAnalyticsAllStats } from '../../../../actions/analyticsAction';
+import { getAnalyticsAllStats, getAllOrganisationTypeStats } from '../../../../actions/analyticsAction';
 import { useDispatch } from 'react-redux';
 import abbreviate from 'number-abbreviate';
 
@@ -39,10 +39,15 @@ const iGraphicalDetailedView = (props) => {
   const [stateLabel, setStateLabel] = useState('');
   const [shortName, setShortname] = useState(prop.shortName);
   const [image, setImage] = useState(prop.image);
+  const [arrIndex, setArrIndex] = useState(-1);
+  const [subAnalytics, setSubAnalytics] = useState([]);
   const dispatch = useDispatch();
   useEffect(() => {
     (async () => {
       let cond = '';
+      let gb = 'state';
+      console.log(props.params);
+      
       if (props.params) {
         if (props.params.state) cond = '&state=' + props.params.state;
         if (props.params.district) {
@@ -67,7 +72,7 @@ const iGraphicalDetailedView = (props) => {
             props.Otype +
             '&brand=' +
             prop.manufacturer +
-            '&group_by=state&inventory=true' +
+            '&group_by='+gb+'&inventory=true' +
             cond,
         ),
       );
@@ -84,6 +89,7 @@ const iGraphicalDetailedView = (props) => {
         },
       ]);
     })();
+    requestSort('sales');
   }, []);
 
   const openDetailView = async (sku) => {
@@ -168,7 +174,64 @@ const iGraphicalDetailedView = (props) => {
       </div>
     );
   };
-  console.log('states: ', analytics);
+
+  const useSortableData = (items, config = null) => {
+    const [sortConfig, setSortConfig] = useState(config);
+
+    const sortedItems = useMemo(() => {
+      let sortableItems = [...items];
+      if (sortConfig !== null) {
+        sortableItems.sort((a, b) => {
+          if (a[sortConfig.key] < b[sortConfig.key]) {
+            return sortConfig.direction === 'ascending' ? -1 : 1;
+          }
+          if (a[sortConfig.key] > b[sortConfig.key]) {
+            return sortConfig.direction === 'ascending' ? 1 : -1;
+          }
+          return 0;
+        });
+      }
+      return sortableItems;
+    }, [items, sortConfig]);
+
+    const requestSort = (key) => {
+      let direction = 'ascending';
+      if (
+        sortConfig &&
+        sortConfig.key === key &&
+        sortConfig.direction === 'ascending'
+      ) {
+        direction = 'descending';
+      }
+      setSortConfig({ key, direction });
+    };
+
+    return { items: sortedItems, requestSort, sortConfig };
+  };
+
+  const { items, requestSort, sortConfig } = useSortableData(analytics);
+  const getClassNamesFor = (name) => {
+    if (!sortConfig) {
+      return;
+    }
+    return sortConfig.key === name ? sortConfig.direction : undefined;
+  };
+
+
+    const getAnalyticsByType = async (district, i) => {
+      setArrIndex(i);
+      const result = await dispatch(
+        getAllOrganisationTypeStats(
+            '?sku=' +
+              (props.sku ? props.sku : prop.externalId) +
+              '&pid=' +
+              prop.id +
+              '&district=' + district,
+          ),
+      );
+      setSubAnalytics(result.data);
+    };
+  
   return (
     <div className="productDetailedView">
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
@@ -374,24 +437,40 @@ const iGraphicalDetailedView = (props) => {
               <thead>
                 <tr>
                   <th scope="col">{isActive ? 'District' : 'State'}</th>
-                  <th scope="col">Sales</th>
-                  <th scope="col">Total Bottle Pool</th>
+                  <th
+                    scope="col"
+                    onClick={() => requestSort('sales')}
+                    className={getClassNamesFor('sales')}
+                  >
+                    Sales
+                  </th>
+                  <th
+                    scope="col"
+                    onClick={() => requestSort('inventory')}
+                    className={getClassNamesFor('inventory')}
+                  >
+                    Total Bottle Pool
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {analytics.length == 0 ? (
+                {items.length == 0 ? (
                   <tr>
                     <td colSpan="3">No Data found</td>
                   </tr>
                 ) : (
-                  analytics.map((analytic, index) => (
+                    items.map((analytic, index) => (
+                    <>
                     <tr
                       key={index}
                       onClick={() => {
-                        setIsActive((i) => !i);
+                        // setIsActive((i) => !i);
                         openDetailView(analytic.groupedBy);
                         if (!isActive) {
                           setStateLabel(analytic.groupedBy);
+                        }
+                        else {
+                          getAnalyticsByType(analytic.groupedBy,analytic.groupedBy);
                         }
                       }}
                     >
@@ -401,6 +480,17 @@ const iGraphicalDetailedView = (props) => {
                       <td>{analytic.sales.toLocaleString('en-IN')}</td>
                       <td>{analytic.inventory.toLocaleString('en-IN')}</td>
                     </tr>
+                    {arrIndex === analytic.groupedBy &&
+                            subAnalytics?.map((sub, i) => (
+                              <tr key={i}>
+                                <td scope="row"><span className="stateLink">{sub.type}</span></td>
+                                <td scope="row">&nbsp;</td>
+                                <td scope="row">
+                                  {sub.inventory.toLocaleString('en-IN')}
+                                </td>
+                              </tr>
+                            ))}
+                </>
                   ))
                 )}
               </tbody>

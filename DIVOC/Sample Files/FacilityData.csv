@@ -1,0 +1,2 @@
+serialNum,facilityCode,facilityName,contact,email,operatingHourStart,operatingHourEnd,category,type,status,addressLine1,addressLine2,district,state,pincode,geoLocationLat,geoLocationLon,websiteURL,adminName,adminMobile
+121,MOB2325,Facility Test One,8788622519,testone1@facility.com,8,18,GOVT,Fixed location,Active,ABC,GHJ,Delhi,Delhi,100001,28,77,www.facilitone.com  ,fa admin,1111111125

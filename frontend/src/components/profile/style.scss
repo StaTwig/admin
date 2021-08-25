@@ -6,7 +6,7 @@
   top:-22px;
     padding-right: 25px;
     padding-left: 55px;
-    //overflow: hidden;
+    overflow: hidden;
     @media (max-width: $md) {
       padding-right: 10px;
       padding-left: 10px;
@@ -210,34 +210,35 @@ padding-left:100px;
     display: flex;
     flex-direction: column;
     padding-top: 0% !important;
-    margin-top:20px;
-
+    margin-top:5px;
+    height: max-content;    
+    
     .total {
-        font-size: 13px;
+        font-size: 15px;
         font-weight: bold;
         padding-bottom: 2vh;        
     }
     .total-input {
-      font-size: 13px;
+      font-size: 15px;
       font-weight: bold;
       border: 0vh;           
   }    
     .full-address {
-        width: 30vh;
+        width: 45vh;
         font-size: 13px;
         color: #707070;
         padding-bottom: 2vh;
     }  
     .full-address-input {
       width: 30vh;
-      font-size: 13px;
+      font-size: 14px;
       color: #707070;
       border: 0vh;    
   }      
     .pin-code {
       position: relative;
       width: 30vh;
-      font-size: 13px;
+      font-size: 14px;
       color: #707070;
       margin-top: auto;
       padding-bottom: 2vh;
@@ -275,7 +276,7 @@ padding-left:100px;
 
 .location{
   color: #707070;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: bold;
   padding-top: 3vh;
   padding-bottom: 2vh;
@@ -284,9 +285,44 @@ padding-left:100px;
 .addLocationText{
   text-align: center;
   font-size: 30px;
-  margin-top: -20px;
+  margin-top: -30px;
   margin-bottom: 50px;
 }
 .line{
   color:#707070;
+}
+.form-controlAddLoc {
+  ::after{
+    border-radius: 0;
+  }
+  border: none;
+  background: transparent;
+  border-bottom: 2px solid #d6d6d6;
+  border-radius: 0;
+  color: $black;
+  flex-basis: 60%;
+  margin-right: 0px;
+  margin-top: 70px;
+}
+.addLocModal{
+  position: relative;
+  left: -10px;
+  top:30px
+}
+.addLocModalImg{
+  position: relative;
+  left: 0px;
+  top:29px;
+  height: 30px; 
+  width: 16px;
+}
+.buttonA{
+  width:120px;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: 2px;
+}
+.text-red{
+  color: #dc3545;
+  font-size: 12px;
 }

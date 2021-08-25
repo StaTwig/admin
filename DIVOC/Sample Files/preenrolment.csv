@@ -1,0 +1,3 @@
+phone,identity,nationality,dob,gender,name,email,addressLine1,addressLine2,district,state,pincode,doseNumber,enrollmentScopeId
+1111111313,did:PAN:001,India,2006-01-02,Male,Reci One,rec8@gmail.com, addr1, addr2, district, ts, 500001,1,BOM15
+

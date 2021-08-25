@@ -151,18 +151,17 @@ const NewOrder = (props) => {
   };
 
   
-  const onOrggChange = async(v,setFieldValue) =>
+  const onOrggChange = async(v) =>
   {
     console.log("Hi");
     try{
       const selOrg = orgDetails.filter((value) => {
         return value.name==v.label;
     });
-     
+     console.log("SelOrg is :- ", selOrg);
       setFieldValue('toOrgLocName',selOrg[0].postalAddress);
       setFieldValue('toOrgLoc',selOrg[0].warehouses[0]);
-      //console.log(values.toOrgLocName);
-      //console.log(values.toOrgLoc);
+      
     }
     catch(err)
     {
@@ -430,9 +429,11 @@ const NewOrder = (props) => {
             errors.toOrgLocRegion = "Required";
           }
           if (!values.toOrgLocCountry) {
-            errors.toOrgLocCountry = "Required";
+            errors.toOrgLocCountry = "Required"; 
           }
-          
+          if (!values.toOrgLoc) {
+            errors.toOrgLoc = "Required";
+          }          
           if (values.products.length == 0) {
             errors.products = "Required";
           }
@@ -503,7 +504,7 @@ const NewOrder = (props) => {
                 <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="name form-group">
-                        <label className="required-field" htmlFor="organizationName">Organisation Type</label>
+                        <label className="" htmlFor="organizationName">Organisation Type*</label>
                         <div className={`line ${errors.type && touched.type ? "border-danger" : "" }`}>
                           <Select
                           labelId="demo-simple-select-label"
@@ -528,7 +529,7 @@ const NewOrder = (props) => {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
-                      <label className="required-field" htmlFor="organizationName">Organisation Name</label>
+                      <label className="" htmlFor="organizationName">Organisation Name*</label>
                       <div className={`line ${errors.fromOrg && touched.fromOrg ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           isText={true}
@@ -566,7 +567,7 @@ const NewOrder = (props) => {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
-                      <label className="org required-field" htmlFor="orgLocation">Organisation ID</label>
+                      <label className="org" htmlFor="orgLocation">Organisation ID*</label>
                       <div className="orgV border-0">
                         {values.fromOrg}
                       </div>
@@ -586,7 +587,7 @@ const NewOrder = (props) => {
                  <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="name form-group">
-                        <label className="required-field" htmlFor="organizationName">Organisation Type</label>
+                        <label className="" htmlFor="organizationName">Organisation Type*</label>
                         <div className={`line ${errors.rtype && touched.rtype ? "border-danger" : "" }`}>
                           <Select
                             labelId="demo-simple-select-label"
@@ -625,8 +626,8 @@ const NewOrder = (props) => {
                 <div className="row">
                 <div className="col-md-6 com-sm-12">
                   <div className="name form-group">
-                    <label className="required-field" htmlFor="delLocation">Region</label>
-                    <div className={`line ${errors.toOrgLocRegion ? "border-danger" : "" }`}>
+                    <label className="" htmlFor="delLocation">Region*</label>
+                    <div className={`line ${errors.toOrgLocRegion && touched.toOrgLocRegion ? "border-danger" : "" }`}>
     
                         <Select
                         labelId="demo-simple-select-label"
@@ -655,11 +656,10 @@ const NewOrder = (props) => {
                 <div className="row">
                 <div className="col-md-6 com-sm-12">
                   <div className="name form-group">
-                    <label className="required-field" htmlFor="delLocation" >Country</label>
-                    <div className={`line ${errors.toOrgLocCountry ? "border-danger" : "" }`}>
+                    <label className="" htmlFor="delLocation" >Country*</label>
+                    <div className={`line ${errors.toOrgLocCountry && touched.toOrgLocCountry ? "border-danger" : "" }`}>
 
-                        <Select
-                          
+                        <Select                          
                           placeholder={<div className="select-placeholder-text">Select Delivery Location</div>}
                           value={values.toOrgLocCountry==""?"Select Delivery Location":{value: values.toOrgLocCountry, label: values.toOrgCountry}}
                           defaultInputValue={values.toOrgCountry}
@@ -680,21 +680,10 @@ const NewOrder = (props) => {
                   </div>
                 </div>
               </div>
-
-
-          
-
-
-
-
-
-
-
-
-                <div className="row">
+              <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
-                      <label className="required-field" htmlFor="organizationName">Organisation Name</label>
+                      <label className="" htmlFor="organizationName">Organisation Name*</label>
                       <div className={`line ${errors.toOrg && touched.toOrg ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           isText={true}
@@ -726,7 +715,7 @@ const NewOrder = (props) => {
                             // });
                               setFieldValue('toOrg', v.value);
                               setFieldValue('toOrgName', v.label); 
-                              onOrggChange(v,setFieldValue);
+                              onOrgChange(v.value);
                               
                             }}
                             isDisabled={values.rtypeName == ''}
@@ -741,7 +730,7 @@ const NewOrder = (props) => {
 
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
-                      <label className="org required-field" htmlFor="delLocation">Organisation ID</label>
+                      <label className="org" htmlFor="delLocation">Organisation ID*</label>
                       <div className="orgV border-0">
                         {values.toOrg}
                       </div>
@@ -749,11 +738,11 @@ const NewOrder = (props) => {
                   </div>
                 </div>
                 
-                {/*
+                
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="name form-group">
-                      <label className="required-field" htmlFor="delLocation">Delivery Location</label>
+                      <label className="" htmlFor="delLocation">Delivery Location*</label>
                       <div className={`line ${errors.toOrgLoc && touched.toOrgLoc ? "border-danger" : "" }`}>
                         {/* <DropdownButton
                           isText={true}
@@ -767,7 +756,7 @@ const NewOrder = (props) => {
                           }}
                           groups={receiverWarehouses}
                         /> */}
- {/* <Select
+                       {/*<Select
                           styles={customStyles}
                           isDisabled={disabled}
                           placeholder={disabled ? values.toOrgLoc : "Select Delivery Location"}
@@ -776,7 +765,7 @@ const NewOrder = (props) => {
                           }}
                           defaultInputValue={values.toOrgLoc}
                           options={receiverWarehouses}
-                        />
+                        /> */}
 
                           <Select
                             labelId="demo-simple-select-label"
@@ -797,7 +786,7 @@ const NewOrder = (props) => {
                     </div>
                   </div>
                 </div>
-                          */}
+                          
               </div>
             </div>
             <div className="d-flex pt-4 justify-content-between mb-1">

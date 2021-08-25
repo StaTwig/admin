@@ -43,6 +43,7 @@ async function logEvent(data) {
                 var event = new Event({
                     eventID: data.eventID,
                     eventTime: data.eventTime,
+                    transactionId: data.transactionId ? data.transactionId : null,
                     eventTypePrimary: data.eventType.primary,
                     eventTypeDesc: data.eventType.description,
                     actorId: data.actor.actorid,
@@ -59,13 +60,14 @@ async function logEvent(data) {
                     secondaryOrgAddress: data.stackholders.secondorg.address,
                     payloadData: data.payload,
                 })
-                return event.save(function (err) {
-                    if (err) {                        
+                return event.save(async function (err) {
+                    if (err) {      
+                        console.log(err)                  
                         console.log(connection.close());
                         return err;
                     }
                     else {
-                        console.log("data store succesfully");
+                        console.log("data stored succesfully");
                         console.log(connection.close());
                         return true
                     }

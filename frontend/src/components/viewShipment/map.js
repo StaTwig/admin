@@ -2,8 +2,10 @@ import React, {Component} from 'react';
 import {Map, InfoWindow, Marker, GoogleApiWrapper, Polygon} from 'google-maps-react';
 
 const style = {
-    width: '94%',
-    height: '85%'
+    width: '100%',
+    height: '85%',
+    borderRadius:'10px',
+    boxShadow: "0px 3px 10px #00000029"
   }
 
   /*var points = [

@@ -1,8 +1,14 @@
-FROM node:14.16.1
+FROM node:lts-alpine3.13
 
-WORKDIR /src
+WORKDIR /src/utils/event_logger
 
-COPY . /src
+COPY /utils/event_logger .
+
+RUN yarn install
+
+WORKDIR /src/backend/service
+
+COPY /backend/po_service/ .
 
 RUN yarn install
 

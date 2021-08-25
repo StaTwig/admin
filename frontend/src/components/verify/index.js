@@ -14,9 +14,6 @@ const FormVerifyPage = (props) => {
   const fourthInputRef = useRef(null);  
   const formRef = useRef();
   
-  useEffect(() => {
-    setOtpArray(otp.split(""));
-  }, []);
   
   const otpChange = (index, handleChange,) => {
     return (event) => {
@@ -101,7 +98,7 @@ const FormVerifyPage = (props) => {
                       
                     }) => (
                       <form onSubmit={handleSubmit}>
-                      <div className="form-group ml-0 mr-5 flex-row d-flex justify-content-center">
+                      <div className="ml-5 d-flex flex-row justify-content-center">
                         {[
                           firstInputRef,
                           secondInputRef,
@@ -113,14 +110,12 @@ const FormVerifyPage = (props) => {
                             name={"otp" + index}
                             id={"otp" + index}
                             type="text"
+                            style={{border: "none",
+                              borderBottom: "1px solid #d6d6d6",
+                              borderRadius: 0
+                              }}
                             className={`form-control text-center mr-5 ${
-                              errors.otp0 ||
-                              errors.otp1 ||
-                              errors.otp2 ||
-                              errors.otp3
-                                ? "border-danger"
-                                : ""
-                            }`}
+                              errors.otp0 && touched.otp0 ? "border-danger" : "" }`}
                             value={otpArray[index]}
                             onKeyUp={onOtpKeyPress(index)}
                             maxLength={1}
@@ -130,13 +125,13 @@ const FormVerifyPage = (props) => {
                               handleSubmit
                             )}
                             onKeyDown={onkeydown}
-                            onBlur={handleBlur}
+                            //onBlur={handleBlur}
                             autoFocus={index === 0 ? true : undefined}
                             key={index}
                           />
                         ))}
                         </div>
-                        <div className="ml-5 mb-5">
+                        <div className="mb-4 mt-5">
                           {(errors.otp0 ||
                             errors.otp1 ||
                             errors.otp2 ||
@@ -146,16 +141,16 @@ const FormVerifyPage = (props) => {
                               touched.otp2 ||
                               touched.otp3) && (
                               <span className="error-msg text-danger">
-                                Required
+                              
                               </span>
                             )}
                           &nbsp;
                         </div>
-                        <div className="font-weight-bold text-center mb-2">
+                        <div className="font-weight-bold text-center">
                           Didn't receive the OTP?
                         </div>
                         <div
-                          className="text-center mb-5 text-primary resend"
+                          className="text-center mt-2 mb-5 text-primary resend"
                           style={{cursor: "pointer"}}
                           onClick={onResendOtp}
                         >
@@ -165,9 +160,9 @@ const FormVerifyPage = (props) => {
                         {errorMessage && (
                           <div> <Alert severity="error"><AlertTitle>Error</AlertTitle>{errorMessage}</Alert></div>
                         )}
-                        <div className="text-center">
-                          <button type="submit" className="btn btn-primary">
-                            LOGIN
+                        <div className="text-center mt-3 mb-3 ml-1">
+                          <button type="submit" className=" buttonS btn btn-primary">
+                            VERIFY
                           </button>
                         </div>
                       </form>

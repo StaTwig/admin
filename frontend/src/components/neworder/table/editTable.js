@@ -10,10 +10,10 @@ const EditTable = props => {
     <div className="table productTable mb-0 mt-1">
      <div className="d-flex flex-column">
        <div className="row mb-2">
-         <div className="col-4 theader text-center" style={{position:"relative", left:"-40px"}}><img src={Package} width="16" height="16" /><span className="ml-2 text-muted required-field">Product Category</span></div>
-         <div className="col-3 theader text-center" style={{position:"relative", left:"-40px"}}><img src={Package} width="16" height="16" /><span className="ml-2 text-muted required-field">Product</span></div>
+         <div className="col-4 theader text-center" style={{position:"relative", left:"-40px"}}><img src={Package} width="16" height="16" /><span className="ml-2 text-muted">Product Category*</span></div>
+         <div className="col-3 theader text-center" style={{position:"relative", left:"-40px"}}><img src={Package} width="16" height="16" /><span className="ml-2 text-muted">Product*</span></div>
          <div className="col theader text-center ml-2" style={{position:"relative", left:"10px"}}><img src={mon} width="16" height="16" /><span className="ml-2 text-muted">Manufacturer</span></div>
-         <div className="col theader text-center mr-5" style={{position:"relative", left:"0px"}}><img src={quantity} width="25" height="16" /><span className="ml-2 text-muted required-field">Quantity</span></div>
+         <div className="col theader text-center mr-5" style={{position:"relative", left:"0px"}}><img src={quantity} width="25" height="16" /><span className="ml-2 text-muted">Quantity*</span></div>
         </div>
         <div className="">
           {props.product && props.product.map((product, index) => (

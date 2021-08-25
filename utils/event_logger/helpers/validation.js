@@ -1,6 +1,7 @@
 const Joi = require('joi');
 const eventSchema = Joi.object().keys({
   eventID: Joi.string().min(1).max(50).required(),
+  transactionId: Joi.string().min(1).max(50),
   eventTime: Joi.string().required(),
   eventType: Joi.object().keys({
     primary: Joi.string().min(3).max(50).required(),
@@ -8,7 +9,8 @@ const eventSchema = Joi.object().keys({
   }),
   actor: Joi.object().keys({
     actorid: Joi.string().min(1).max(50).required(),
-    actoruserid: Joi.string().email({ tlds: { allow: false } }),
+    actoruserid: Joi.string().min(1).max(50).required(),
+    // actoruserid: Joi.string().email({ tlds: { allow: false } }),
   }),
   stackholders: Joi.object().keys({
     ca: Joi.object().keys({
@@ -30,7 +32,7 @@ const eventSchema = Joi.object().keys({
   payload: Joi.object().keys({
     data: Joi.any().optional()
   }),
-  actorWarehouseId: Joi.string().min(1).max(50).required(),
+  actorWarehouseId: Joi.string().min(1).max(50),
 });
 
 

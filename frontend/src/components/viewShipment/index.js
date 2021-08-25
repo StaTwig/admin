@@ -55,7 +55,7 @@ const Tracing = (props) => {
   return (
     <div className="tracing">
       <div className="row justify-content-between">
-        <h1 className="breadcrumb">VIEW SHIPMENT</h1>
+        <h1 className="breadcrumb mt-3">VIEW SHIPMENT</h1>
         <div className="row">
           <Link to={`/shipments`}>
             <button className="btn btn-outline-primary mr-4 mt-3" >
@@ -79,7 +79,7 @@ const Tracing = (props) => {
         </div>
       </div>
       <div className="row">
-        <div className="col-sm-5">
+        <div className="col-sm-4">
           <h6 className="heading mb-3">SHIPMENT SUMMARY</h6>
           <ShipmentSummary shipments={tracking} />
           <h6 className="heading mt-4 mb-3">SHIPMENT DETAILS</h6>
@@ -100,13 +100,14 @@ const Tracing = (props) => {
             setMenuProduct={setMenuProduct}
           />
         </div>
-        <div className="col-sm-7">
-          <div className="row mb-4 mt-4">
-            <div className="panel col mr-2 geo commonpanle" 
-              style={{ height: '315px' }}>
-              <p className="heading">Geographical Tracking</p> <Map data={shippmentChainOfCustodyData} />{" "}
+        <div className="col-sm-8">
+          <div className="row mb-4 mt-0">
+            <div className="col"// commonpanle 
+              style={{ height: '350px'}}>
+              <p className="heading">Geographical Tracking</p> 
+              <Map data={shippmentChainOfCustodyData} />{" "}
             </div>
-            <div className="panel commonpanle col">
+            {/* <div className="panel commonpanle col">
               {props.iotEnabledStatus ?
                 <div className="d-flex justify-content-between">
                   <div className="row ml-4 mb-2">
@@ -142,8 +143,8 @@ const Tracing = (props) => {
                 props.iotEnabledStatus ?
                   <Chart lastTenIotShipmentData={props.lastTenIotShipmentData} /> : ''
               }
-            </div>
-          </div>
+            </div>*/}
+            </div> 
           <button
             className="btn btn-outline-* fontSize200 enlargeTemperature float-right"
             onClick={() =>
