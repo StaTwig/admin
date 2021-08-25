@@ -3547,18 +3547,10 @@ function buildExcelReport(req,res,dataForExcel){
         underline: true
       }
     },
-    cellPink: {
-      fill: {
-        fgColor: {
-           //rgb: 'FFFFCCFF'
-           rgb: 'FF00FF00'
-        }
-      }
-    },
     cellGreen: {
       fill: {
         fgColor: {
-          rgb: 'FF00FF00'
+           rgb: 'FF00FF00'
         }
       }
     }
@@ -3568,115 +3560,115 @@ function buildExcelReport(req,res,dataForExcel){
     id: { 
       displayName: 'Shipment ID', 
       headerStyle: styles.headerDark, 
-      cellStyle: styles.cellPink,
+      cellStyle: styles.cellGreen,
       width: 120 
     },
     poId: {
       displayName: 'Reference Order ID',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink,
+      cellStyle: styles.cellGreen,
       width: '10' 
     },
     productCategory: {
       displayName: 'Product Category',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, 
+      cellStyle: styles.cellGreen, 
       width: 220 
     },
     productName: {
       displayName: 'Product Name',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, 
+      cellStyle: styles.cellGreen, 
       width: 220 
     },
     productID: {
       displayName: 'Product ID',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, 
+      cellStyle: styles.cellGreen, 
       width: 220 
     },
     productQuantity: {
       displayName: 'Quantity',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, 
+      cellStyle: styles.cellGreen, 
       width: 220 
     },
     batchNumber: {
       displayName: 'Batch Number',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, 
+      cellStyle: styles.cellGreen, 
       width: 220 
     },
     note: {
       displayName: 'Expiry Date',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, 
+      cellStyle: styles.cellGreen, 
       width: 220 
     },
     manufacturer: {
       displayName: 'Manufacturer',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, 
+      cellStyle: styles.cellGreen, 
       width: 220 
     },
     supplierOrgName: {
       displayName: 'From Organization Name',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, 
+      cellStyle: styles.cellGreen, 
       width: 220 
     },
     supplierOrgId: {
       displayName: 'From Organization ID',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, 
+      cellStyle: styles.cellGreen, 
       width: 220 
     },
     supplierOrgLocation: {
       displayName: 'From Organization Location Details',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, 
+      cellStyle: styles.cellGreen, 
       width: 220 
     },
     recieverOrgName: {
       displayName: 'Delivery Organization Name',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, 
+      cellStyle: styles.cellGreen, 
       width: 220 
     },
     recieverOrgId: {
       displayName: 'Delivery Organization ID',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, 
+      cellStyle: styles.cellGreen, 
       width: 220 
     },
     recieverOrgLocation: {
       displayName: 'Delivery Organization Location Details',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, 
+      cellStyle: styles.cellGreen, 
       width: 220 
     },
     airWayBillNo: {
       displayName: 'Transit Number',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, 
+      cellStyle: styles.cellGreen, 
       width: 220 
     },
     label: {
       displayName: 'Label Code',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, 
+      cellStyle: styles.cellGreen, 
       width: 220 
     },
     shippingDate: {
       displayName: 'Shipment Date',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, 
+      cellStyle: styles.cellGreen, 
       width: 220 
     },
     expectedDeliveryDate: {
       displayName: 'Shipment Estimate Date',
       headerStyle: styles.headerDark,
-      cellStyle: styles.cellPink, 
+      cellStyle: styles.cellGreen, 
       width: 220 
     }
   }
