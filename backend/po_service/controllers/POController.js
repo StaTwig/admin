@@ -1350,12 +1350,12 @@ exports.exportInboundPurchaseOrders = [//inbound po with filter(from, orderId, p
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-            'info',
-            '<<<<< POService < POController < fetchInboundPurchaseOrders : token verified successfully',
-          );
+      // checkToken(req, res, async result => {
+      //   if (result.success) {
+      //     logger.log(
+      //       'info',
+      //       '<<<<< POService < POController < fetchInboundPurchaseOrders : token verified successfully',
+      //     );
           const permission_request = {
             result: result,
             permissionRequired: 'viewPO',
@@ -1521,14 +1521,14 @@ exports.exportInboundPurchaseOrders = [//inbound po with filter(from, orderId, p
               res.json('Sorry! User does not have enough Permissions');
             }
           });
-        } else {
-          logger.log(
-            'warn',
-            '<<<<< POService < POController < fetchInboundPurchaseOrders  : refuted token',
-          );
-          res.status(403).json(result);
-        }
-      });
+      //   } else {
+      //     logger.log(
+      //       'warn',
+      //       '<<<<< POService < POController < fetchInboundPurchaseOrders  : refuted token',
+      //     );
+      //     res.status(403).json(result);
+      //   }
+      // });
     } catch (err) {
       logger.log(
         'error',
@@ -1543,12 +1543,12 @@ exports.exportOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, 
   auth,
   async (req, res) => {
     try {
-      checkToken(req, res, async result => {
-        if (result.success) {
-          logger.log(
-            'info',
-            '<<<<< POService < POController < fetchOutboundPurchaseOrders : token verified successfully',
-          );
+      // checkToken(req, res, async result => {
+      //   if (result.success) {
+      //     logger.log(
+      //       'info',
+      //       '<<<<< POService < POController < fetchOutboundPurchaseOrders : token verified successfully',
+      //     );
           const permission_request = {
             result: result,
             permissionRequired: 'viewPO',
@@ -1704,14 +1704,14 @@ exports.exportOutboundPurchaseOrders = [ //outbound po with filter(to, orderId, 
               res.json('Sorry! User does not have enough Permissions');
             }
           });
-        } else {
-          logger.log(
-            'warn',
-            '<<<<< POService < POController < fetchOutboundPurchaseOrders  : refuted token',
-          );
-          res.status(403).json(result);
-        }
-      });
+      //   } else {
+      //     logger.log(
+      //       'warn',
+      //       '<<<<< POService < POController < fetchOutboundPurchaseOrders  : refuted token',
+      //     );
+      //     res.status(403).json(result);
+      //   }
+      // });
     } catch (err) {
       logger.log(
         'error',
