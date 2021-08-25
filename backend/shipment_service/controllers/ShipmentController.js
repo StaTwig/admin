@@ -1878,8 +1878,6 @@ exports.updateTrackingStatus = [
 ];
 
 exports.chainOfCustody = [
-<<<<<<< backend/shipment_service/controllers/ShipmentController.js
-=======
     auth,
     async (req, res) => {
         try {
@@ -2106,7 +2104,6 @@ exports.chainOfCustody = [
 ];
 
 exports.fetchShipmentIds = [
->>>>>>> backend/shipment_service/controllers/ShipmentController.js
   auth,
   async (req, res) => {
     try {
@@ -3231,13 +3228,8 @@ exports.Image = [
   async (req, res) => {
     const FileStream = getFileStream(req.params.key);
     FileStream.pipe(res);
-<<<<<<< backend/shipment_service/controllers/ShipmentController.js
   },
 ];
-=======
-  }
-]
-
 
 exports.exportInboundShipments = [//inbound shipments with filter(shipmentId, from, to, status, date)
   auth,
@@ -3383,10 +3375,6 @@ exports.exportInboundShipments = [//inbound shipments with filter(shipmentId, fr
         }
       });
     } catch (err) {
-      logger.log(
-        "error",
-        "<<<<< ShipmentService < ShipmentController < fetchInboundShipments : error (catch block)"
-      );
       return apiResponse.ErrorResponse(res, err.message);
     }
   },
@@ -3707,4 +3695,4 @@ function buildExcelReport(req,res,dataForExcel){
   res.attachment('report.xlsx'); 
   return res.send(report);
 }
->>>>>>> backend/shipment_service/controllers/ShipmentController.js
+
