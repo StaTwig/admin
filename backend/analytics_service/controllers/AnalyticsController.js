@@ -565,7 +565,7 @@ exports.getInventoryAnalytics = [
                     $lt: nextMonth.toISOString()
                   }
                 }, { $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] } },
-                // {batchNumbers: {$ne: ""}},
+                 {batchNumbers: {$ne: ""}},
                 {"attributeSet.mfgDate": {$ne: ""}},
                 {"attributeSet.expDate": {$ne: ""}}
               ]
@@ -574,7 +574,7 @@ exports.getInventoryAnalytics = [
         {
           $group: {
             _id: "$batchNumbers", 
-            total: {$sum: {size: "$quantity"}}
+            total: {$sum:1}
           }
         }
       ]);
@@ -588,7 +588,7 @@ exports.getInventoryAnalytics = [
                     $lt: today.toISOString()
                   }
                 }, { $expr: { $in: [warehouse.warehouseInventory, "$inventoryIds"] } },
-                // {batchNumbers: {$ne: ""}},
+                {batchNumbers: {$ne: ""}},
                 {"attributeSet.mfgDate": {$ne: ""}},
                 {"attributeSet.expDate": {$ne: ""}}
               ]
@@ -597,7 +597,7 @@ exports.getInventoryAnalytics = [
         {
           $group: {
             _id: "$batchNumbers", 
-            total: {$sum: "$quantity"}
+            total: {$sum: 1}
           }
         }
       ]);
