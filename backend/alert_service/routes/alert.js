@@ -17,14 +17,7 @@ router.get("/getAllAlerts/:username", AlertController.getAllAlerts);
 * @group Alerts - Will Return All the Alerts Created by the User 
 * @param {object} Data.body - Sample: 
 *{ 
-*"transactionId":"tss001",
-*"productId":"prood001",
-*"productName":"COVAXINE",
-*"manufacturer":"BHARATBIOTECH",
-*"eventPrimary" : "UPDATE",
-*"eventSecondary" : "SHIPMENT",
-*"transactionId" : "SH100163",
-*"actorOrgId" : "org002",
+*"eventSecondary" : "SHIPMENT,ORDER,INVENTORY",
 *"alertMobile" : true,
 *"alertEmail" : true,
 *"alertWebPush" : false
