@@ -71,7 +71,7 @@ body {
   color: #ffffff;
   border-style: none;
   margin-top: 2rem;
-  background: transparent linear-gradient(91deg, #2CD889 0%, #4CA07A 100%) 0% 0% no-repeat padding-box;
+  background: transparent linear-gradient(91deg, #0B65C1 0%, #0093E9 100%) 0% 0% no-repeat padding-box;
   border-radius: 4px;
   padding: 1rem;
 }
@@ -140,9 +140,9 @@ body {
   line-height: normal;
   letter-spacing: normal;
   text-align: center;
-  color: #00754a;
+  color: #0093E9;
   border-style: solid;
-  border-color: #00754a;
+  border-color: #0B65C1;
   margin-top: 0px;
   margin-left: 30px;
   margin-bottom: 10px;
