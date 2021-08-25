@@ -16,6 +16,7 @@ export const LOCAL_SERVER_URL_ANALYTICS = 'http://localhost:3015';
 export const LOCAL_SERVER_URL_EOL = 'http://localhost:3017';
 export const LOCAL_SERVER_URL_EVENT = 'http://localhost:3014';
 export const LOCAL_SERVER_URL_PRODUCTS = 'http://localhost:3010';
+export const LOCAL_SERVER_URL_ALERTS = 'http://localhost:3004';
 export const STABLE_SERVER_URL_USER = 'http://54.164.66.73:3001';
 export const STABLE_SERVER_URL_SHIPMENT = 'http://54.164.66.73:3002';
 export const STABLE_SERVER_URL_PO = 'http://54.164.66.73:3012';
@@ -25,7 +26,6 @@ export const STABLE_SERVER_URL_NOTIFICATION = 'http://54.164.66.73:3006';
 export const STABLE_SERVER_URL_PRODUCTS = 'http://54.164.66.73:3010';
 export const STABLE_SERVER_URL_ANALYTICS = 'http://54.164.66.73:3015';
 export const DEV_SERVER_URL = 'http://127.0.0.1:9001';
-
 
 /*Shipping order URL needs to be updated for stable server*/ 
 
@@ -153,7 +153,8 @@ export function config() {
       trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
       searchProduct:`${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10`,
       getSuggestions:`${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getsearchsuggestions`,
-      fetchBatchesOfInventory: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/fetchBatchesOfInventory`
+      fetchBatchesOfInventory: `${LOCAL_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/fetchBatchesOfInventory`,
+      getAlerts: `${LOCAL_SERVER_URL_ALERTS}/alertmanagement/api/alert/getAlertNotifications?type=`
 },
     dev: {
       getOrganizationsUrl: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -273,7 +274,8 @@ export function config() {
       trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
       searchProduct:`${DEV_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10`,
       getSuggestions:`${DEV_SERVER_URL}/inventorymanagement/api/inventory/getsearchsuggestions`,
-      fetchBatchesOfInventory: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/fetchBatchesOfInventory`
+      fetchBatchesOfInventory: `${DEV_SERVER_URL}/inventorymanagement/api/inventory/fetchBatchesOfInventory`,
+      getAlerts: `${DEV_SERVER_URL}/alertmanagement/api/alert/getAlertNotifications?type=`
     },
     stable: {
       getOrganizationsUrl: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -399,7 +401,8 @@ export function config() {
       fetchCitiesByState:`${STABLE_SERVER_URL_PRODUCTS}/productmanagement/api/location?state_id=`,
       searchProduct:`${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10`,
       getSuggestions:`${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/getsearchsuggestions`,
-      fetchBatchesOfInventory: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/fetchBatchesOfInventory`
+      fetchBatchesOfInventory: `${STABLE_SERVER_URL_INVENTORY}/inventorymanagement/api/inventory/fetchBatchesOfInventory`,
+      getAlerts: `${STABLE_SERVER_URL_INVENTORY}/alertmanagement/api/alert/getAlertNotifications?type=`
     },
     test: {
       getOrganizationsUrl: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -526,6 +529,7 @@ export function config() {
       searchProduct:`${TEST_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10`,
       getSuggestions:`${TEST_SERVER_URL}/inventorymanagement/api/inventory/getsearchsuggestions`,
       fetchBatchesOfInventory: `${TEST_SERVER_URL}/inventorymanagement/api/inventory/fetchBatchesOfInventory`,
+      getAlerts: `${TEST_SERVER_URL}/alertmanagement/api/alert/getAlertNotifications?type=`
 },
     demo: {
       getOrganizationsUrl: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -642,7 +646,8 @@ export function config() {
       trackLatestShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/latestiotdataforshipmentid/:shipmentId`,
       trackAllIotShipmentData: `${TEST_SERVER_URL_FOR_ROAMBEE}/integrationmanagement/api/v1/roambee/alliotsamplesforshipmentid/:shipmentId`,
       getSuggestions:`${DEMO_SERVER_URL}/inventorymanagement/api/inventory/getsearchsuggestions`,
-      fetchBatchesOfInventory: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/fetchBatchesOfInventory`,      
+      fetchBatchesOfInventory: `${DEMO_SERVER_URL}/inventorymanagement/api/inventory/fetchBatchesOfInventory`,  
+      getAlerts: `${DEMO_SERVER_URL}/alertmanagement/api/alert/getAlertNotifications?type=`
     },
     prod: {
       getOrganizationsUrl: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/getOrganizations?orgType=`,
@@ -760,6 +765,7 @@ export function config() {
       searchProduct:`${PROD_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10`,
       getSuggestions:`${PROD_SERVER_URL}/inventorymanagement/api/inventory/getsearchsuggestions`,
       fetchBatchesOfInventory: `${PROD_SERVER_URL}/inventorymanagement/api/inventory/fetchBatchesOfInventory`,
+      getAlerts: `${PROD_SERVER_URL}/alertmanagement/api/alert/getAlertNotifications?type=`
     },
     
     uniceftest: {
@@ -885,6 +891,7 @@ export function config() {
       searchProduct:`${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/searchProduct?skip=0&limit=10`,
       getSuggestions:`${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/getsearchsuggestions`,
       fetchBatchesOfInventory: `${UNICEFTEST_SERVER_URL}/inventorymanagement/api/inventory/fetchBatchesOfInventory`,
+      getAlerts: `${UNICEFTEST_SERVER_URL}/alertmanagement/api/alert/getAlertNotifications?type=`
     },
   };
 

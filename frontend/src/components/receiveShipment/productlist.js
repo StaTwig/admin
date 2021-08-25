@@ -85,13 +85,13 @@ const ProductList = (props) => {
                    }
                    <div className="container ml-2">
                         <div className="row">
-                        <div className="col-sm mt-2 productheading" style={{fontSize:'2vh',color:"#0093E9", fontWeight:600}}>
+                        <div className="col mt-2 productheading">
                         {product.productName}
                         </div>
-                        <div className="col-sm mb-2 text-secondary" style={{textAlign:'right'}}>
+                        <div className="col-sm mb-2 " style={{textAlign:'right'}}>
                         {isVisible ? 
                                         <button
-                                            className="btn btn-outline-dark mt-2 mr-1 p-1"
+                                            className="btn btn-outline-warning mt-2 mr-1 p-1"
                                             onClick={() => 
                                                 {
                                                     deliveredProductList.push(deliveredProduct);

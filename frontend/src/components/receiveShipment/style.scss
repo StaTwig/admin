@@ -1,8 +1,9 @@
 @import '../../assets/styles/global.scss';
 .productheading{
-  font-size: 36px;
-  color:$darkBlue; 
-  font-weight:700;
+  font-size: 2.5vh;
+  color:#0093E9; 
+  font-weight:600;
+  margin-left: -8px;
 }
 .breadcrumb{
   margin-left:10px;
@@ -218,5 +219,9 @@ color: #4A4A4A;
 
 
    }
-   
+  .UploadImage{
+    width:200px;
+    height:200px;
+    margin: 10px 0px;
+  }
 

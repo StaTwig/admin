@@ -47,7 +47,7 @@ const Header = props => {
   const [searchString, setSearchString] = useState('');
 
   const [searchType, setSearchType] = useState('');
-
+  const [alertType, setAlertType] = useState('ALERT');
   const [searchtemp, setsearchtemp] = useState('');
   const [invalidSearch, setInvalidSearch] = useState(false);
   const [notifications, setNotifications] = useState([]);
@@ -197,12 +197,19 @@ const ref = useOnclickOutside(() => {
   const profile = useSelector(state => {
     return state.user;
   });
+  async function changeNotifications (value){
+    const response = await axios.get(`${config().getAlerts}${value}`);
+    console.log(response.data.data)
+    setNotifications(response.data.data);
+  }
   // const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUserInfo());
     async function fetchApi() {
-      const response = await getNotifications();
-      setNotifications(response.data);
+      // const response = await getNotifications();
+      const response = await axios.get(`${config().getAlerts}${alertType}`);
+      console.log(response.data.data)
+      setNotifications(response.data.data);
       
       const warehouses = await getActiveWareHouses();
       setActiveWarehouses(warehouses.filter(i => i.status == 'ACTIVE' || i.status == 'PENDING').map(item=>{
@@ -324,7 +331,7 @@ const imgs = config().fetchProfileImage;
         
        <div className="user-info ">
        <div className="notifications">
-                <img src={bellIcon} onClick={() => setShowNotifications(!showNotifications)} alt="notification" /><bellIcon />
+                <img src={bellIcon} onClick={showNotifications} alt="notification" /><bellIcon />
                   
                     <div className="bellicon-wrap" onClick={() => setShowNotifications(!showNotifications)}>
             
@@ -333,9 +340,12 @@ const imgs = config().fetchProfileImage;
             {showNotifications && notifications.length > 0 && (
               <div className="slider-menu">
                 <React.Fragment>
+                  <div className="nheader" style={{backgroundImage: "linear-gradient(to right, #0092e8, #0a6bc6)"}}>
+                    <text style={{color: "white", fontSize: "20px", fontWeight: "bold", padding: "30px"}}>User Notifications</text> 
+                    <text style={{backgroundColor: "#fa7a23", padding: "5px", color: "white", textAlign: 'right', borderRadius: "6px"}}>{notifications.length} new</text> 
                   <div className="section">
-                    <button style={{backgroundColor: "#0B65C1", color: "white"}} onClick={() => setNotifications(/*criteria for alert */)}>Alerts</button>
-                    <button style={{backgroundColor: "#0B65C1", color: "white"}} onClick={() => setNotifications(/*criteria for transaction */)}>Transactions</button>
+                    <button style={{backgroundColor: "#0B65C1", color: "white"}} onClick={() => {setAlertType('ALERT'); changeNotifications('ALERT')}}>Alerts</button>
+                    <button style={{backgroundColor: "#0B65C1", color: "white"}} onClick={() => {setAlertType('TRANSACTION'); changeNotifications('TRANSACTION')}}>Transactions</button>
                   </div>
                   {notifications.map(notification =>  <div className="slider-item">
                     <div className="row justify-content-between align-items-center" onClick={() => clearNotification(notification)}>
@@ -357,10 +367,6 @@ const imgs = config().fetchProfileImage;
               </div>
             )}
             </div>  
-            <div className="divider" />
-           <div className="location">
-              <img src={Location} width="20" height="26" /> 
-           </div>  
           {/* <div className="userName" style={{fontSize: "13px", marginBottom:"0px"}}> 
           <p className="cname1"><b>{activeWarehouses[0]?.title}</b></p>
           <p className="uname"> {activeWarehouses[0]?.warehouseAddress.firstLine}</p>
@@ -402,20 +408,29 @@ const imgs = config().fetchProfileImage;
           <div className="slider-menu" ref={ref}>
             {
               <React.Fragment>
-                <div className="slider-item-text">
+                <div className="slider-item-text p-2">
                   <p>{profile.name}</p>
                   <p>{profile?.organisation?.split('/')[0]}</p>
                 </div>
-                <Link className="slider-item border-top-0" to="/profile">
-                  My Profile
-                </Link>
+                <div 
+                    className="slider-item border-top-0 p-0"
+                    onClick={() => props.history.push('/profile')}
+                >
+                    My Profile
+                </div>
+                <div 
+                    className="slider-item p-0"
+                    onClick={() => props.history.push('/alerts')}
+                >
+                    Settings
+                </div>
                <div
-                  className="slider-item"
+                  className="slider-item p-0"
                   onClick={() => dispatch(logoutUser())}
                 >
                   Logout
                 </div>
-              </React.Fragment>
+             </React.Fragment>
             }
           </div>
         )}

@@ -38,7 +38,7 @@ const Tiles = props => {
             <img src={Received} alt="truck" />
           </div>
           <div className="d-flex flex-column">
-            <div className="title recived-text">Inbound Shipments</div>
+            <div className="title recived-text font-weight-bold">Inbound Shipments</div>
             <div className="recived-text count">{shipmentAnalytics.inboundShipments}</div>
           </div>
         </div>
@@ -49,7 +49,7 @@ const Tiles = props => {
             <img src={Sent} alt="truck" />
           </div>
           <div className="d-flex flex-column">
-            <div className="title sent-text ">Outbound Shipments</div>
+            <div className="title sent-text font-weight-bold">Outbound Shipments</div>
             <div className="sent-text count">{shipmentAnalytics.outboundShipments}</div>
           </div>
         </div>
@@ -61,7 +61,7 @@ const Tiles = props => {
           </div>
 
           <div className="d-flex flex-column">
-            <div className="title inbound-text">Inbound Alert</div>
+            <div className="title inbound-text font-weight-bold">Inbound Alert</div>
             <div className="inbound-text count">{shipmentAnalytics.inboundAlerts}</div>
           </div>
         </div>
@@ -72,7 +72,7 @@ const Tiles = props => {
             <img src={OutboundAlert} alt="truck" />
           </div>
           <div className="d-flex flex-column">
-            <div className="title outbound-text ">Outbound Alert</div>
+            <div className="title outbound-text font-weight-bold">Outbound Alert</div>
             <div className="outbound-text count">{shipmentAnalytics.outboundAlerts}</div>
           </div>
         </div>

@@ -180,7 +180,7 @@ const AddLocation = (props) => {
                 <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                      <label className="required-field col-sm-6" htmlFor="addressTitle">Address Title</label>
+                      <label className="col-sm-6" htmlFor="addressTitle">Address Title*</label>
                       <input
                       style={{flexBasis:"47%"}}
                       className="addlocP"
@@ -205,7 +205,7 @@ const AddLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                        <label className="required-field col-sm-6" htmlFor="region">Region</label>
+                        <label className="col-sm-6" htmlFor="region">Region*</label>
                         <div className="" style={{flexBasis:"47%"}}>
                         <Autocomplete
                           value={region}
@@ -235,7 +235,7 @@ const AddLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                      <label className="required-field col-sm-6" htmlFor="country">Country</label>
+                      <label className="col-sm-6" htmlFor="country">Country*</label>
                       <div className="" style={{flexBasis:"47%"}}>
                           <Autocomplete
                           labelId="demo-simple-select-label"
@@ -266,7 +266,7 @@ const AddLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                      <label className="required-field col-sm-6" htmlFor="state">State</label>
+                      <label className="col-sm-6" htmlFor="state">State*</label>
                       <div className="" style={{flexBasis:"47%"}}>
                           <Autocomplete
                           labelId="demo-simple-select-label"
@@ -296,7 +296,7 @@ const AddLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                      <label className="required-field col-sm-6" htmlFor="city">City</label>
+                      <label className="col-sm-6" htmlFor="city">City*</label>
                       <div className="" style={{flexBasis:"47%"}}>
                       <Autocomplete
                           labelId="demo-simple-select-label"
@@ -334,7 +334,7 @@ const AddLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                        <label className="required-field col-sm-6" htmlFor="addressLine">Address Line</label>
+                        <label className="col-sm-6" htmlFor="addressLine">Address Line*</label>
                         <input
                         style={{flexBasis:"47%"}}
                         id="standard-basic"
@@ -369,7 +369,7 @@ const AddLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-16">
                       <div className="form-group">
-                        <label className="required-field col-sm-6" htmlFor="Select Location">Pincode</label>
+                        <label className="col-sm-6" htmlFor="Select Location">Pincode*</label>
                         <input
                         type="number"
                         style={{flexBasis:"47%"}}
@@ -409,7 +409,7 @@ const AddLocation = (props) => {
                   <div className="d-flex flex-row-reverse">
                     <button
                       class="close"
-                      className="btn btn-yellow btn-lg float-right"
+                      className="btn btn-yellow float-right font-weight-bold"
                       disabled={!((values.country)&&(values.addressTitle)&&(values.city)&&(values.state)&&(values.pincode))}
                       type="submit"
                     >
@@ -417,7 +417,7 @@ const AddLocation = (props) => {
                     </button>
                     <button 
                         type="button"
-                        className="btn btn-white shadow-radius font-bold mr-3" 
+                        className="btn btn-white shadow-radius font-bold mr-3 font-weight-bold" 
                         onClick={() => {props.history.push({pathname:'/profile',state:{editMode:true}})}}
                         >Cancel
                      </button>

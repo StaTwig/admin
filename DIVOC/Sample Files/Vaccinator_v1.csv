@@ -1,0 +1,3 @@
+code,name,nationalIdentifier,mobileNumber,email,status,facilityIds
+EE360,Test Vaccinator Ten,223434289,7897891247,vacc@gmail.com,Active,BOM11
+EE361,Test Vaccinator Eleven,223434290,7897891248,vacc1@gmail.com,Active,BOM11

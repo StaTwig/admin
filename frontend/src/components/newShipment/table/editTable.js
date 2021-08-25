@@ -3,15 +3,14 @@ import EditRow from './editRow';
 import './style.scss';
 
 const EditTable = props => {
-  // console.log(props.product,"Table");
  return (
     <div className="table productTable mt-2">
      <div className="d-flex flex-column">
        <div className="row mb-3">
-       <div className="col theader text-center pro required-field">Product Category</div>
-         <div className="col theader text-center pro required-field">Product Name</div>
+       <div className="col theader text-center pro">Product Category*</div>
+         <div className="col theader text-center pro">Product Name*</div>
          <div className="col theader text-center pro">Manufacturer</div>
-         <div className="col theader text-center pro required-field mr-5">Quantity</div>
+         <div className="col theader text-center pro mr-5">Quantity*</div>
          <div className="col theader text-center pro mr-5" style={{position:'relative',left:"-60px"}}>Batch Number</div>
          {props.enableDelete &&
            <div className=" ml-2 bg-light align-self-center ">&nbsp;</div>

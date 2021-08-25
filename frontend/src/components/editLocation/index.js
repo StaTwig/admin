@@ -206,7 +206,7 @@ const editLocation = (props) => {
                 <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="required-field col-sm-6" htmlFor="addressTitle">Address Title</label>
+                      <label className="col-sm-6" htmlFor="addressTitle">Address Title*</label>
                       
                       {/* <TextField style={{width:"800px"}}
                         id="standard-basic"
@@ -246,7 +246,7 @@ const editLocation = (props) => {
                 <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                        <label className="required-field col-sm-6" htmlFor="region">Region</label>
+                        <label className="col-sm-6" htmlFor="region">Region*</label>
                         <div className="" style={{flexBasis:"47%"}}>
                           <Autocomplete
                           value={values.region}
@@ -277,7 +277,7 @@ const editLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                      <label className="required-field col-sm-6" htmlFor="country">Country</label>
+                      <label className="col-sm-6" htmlFor="country">Country*</label>
                       <div className="" style={{flexBasis:"47%"}}>
                           <Autocomplete
                           value={values.country}
@@ -325,7 +325,7 @@ const editLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                      <label className="required-field col-sm-6" htmlFor="state">State</label>
+                      <label className="col-sm-6" htmlFor="state">State*</label>
                       <div className="" style={{flexBasis:"47%"}}>
                           <Autocomplete
                           labelId="demo-simple-select-label"
@@ -368,7 +368,7 @@ const editLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                      <label className="required-field col-sm-6" htmlFor="city">City</label>
+                      <label className="col-sm-6" htmlFor="city">City*</label>
                       <div className="" style={{flexBasis:"47%"}}>
                           <Autocomplete
                           labelId="demo-simple-select-label"
@@ -405,7 +405,7 @@ const editLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-12">
                       <div className="form-group">
-                        <label className="required-field col-sm-6" htmlFor="addressLine">Address Line</label>
+                        <label className="col-sm-6" htmlFor="addressLine">Address Line*</label>
                         <input
                         style={{flexBasis:"47%"}}
                         id="standard-basic"
@@ -440,7 +440,7 @@ const editLocation = (props) => {
                   <div className="row">
                     <div className="col-md-6 com-sm-16">
                       <div className="form-group">
-                        <label className="required-field col-sm-6" htmlFor="Select Location">Pincode</label>
+                        <label className="col-sm-6" htmlFor="Select Location">Pincode*</label>
                         <input
                           style={{flexBasis:"47%"}}
                           id="standard-basic"
@@ -479,7 +479,7 @@ const editLocation = (props) => {
                 {/* <div className="row">
                   <div className="col-md-6 com-sm-12">
                     <div className="form-group">
-                      <label className="required-field col-sm-6" htmlFor="addressLine">Address Line</label>
+                      <label className="col-sm-6" htmlFor="addressLine">Address Line</label>
                       <input
                         type="text"
                         className="form-control"
@@ -596,7 +596,7 @@ const editLocation = (props) => {
                 <div className="d-flex flex-row-reverse">
                   <button
                     class="close"
-                    className="btn btn-yellow btn-lg float-right"
+                    className="btn btn-yellow float-right font-weight-bold"
                     disabled={!((values.country)&&(values.addressLine)&&(values.addressTitle)&&(values.city)&&(values.state)&&(values.pincode))}
                     type="submit"
                   >
@@ -604,7 +604,7 @@ const editLocation = (props) => {
                   </button>
                   <button 
                     type="button"
-                    className="btn btn-white shadow-radius font-bold mr-3" 
+                    className="btn btn-white shadow-radius font-bold mr-3 font-weight-bold" 
 
                     onClick={() => {
                       props.history.push({
