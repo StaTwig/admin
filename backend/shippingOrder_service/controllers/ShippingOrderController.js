@@ -150,7 +150,7 @@ exports.assignShippingOrder = [
       const { role } = req.user;
           const permission_request = {
             role: role,
-            permissionRequired: 'receiveSO',
+            permissionRequired: ['receiveSO'],
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
@@ -199,7 +199,7 @@ exports.updateShippingOrder = [
       const {role} = req.user;
           const permission_request = {
             role: role,
-            permissionRequired: 'receiveSO',
+            permissionRequired: ['receiveSO'],
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {
@@ -265,7 +265,7 @@ exports.changeSOStatus = [
       const { address,role } = req.user;
           const permission_request = {
             role: role,
-            permissionRequired: 'receiveSO',
+            permissionRequired: ['receiveSO'],
           };
           checkPermissions(permission_request, async permissionResult => {
             if (permissionResult.success) {

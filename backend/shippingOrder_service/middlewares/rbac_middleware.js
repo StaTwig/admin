@@ -9,6 +9,7 @@ client.on('error', err => {
 });
 
 const checkPermissions = async (request, next) => {
+    try {
     let result = false;
     const required_permission = request["permissionRequired"]
     const request_role = request["role"]
@@ -29,6 +30,14 @@ const checkPermissions = async (request, next) => {
     next({
         success: false,
         message: 'Permission Denied'
+    });
+}
+}
+catch(err){
+    console.log(err);
+    next({
+        success: false,
+        message: 'Error'
     });
 }
 }
