@@ -76,5 +76,5 @@
     "mockdate": "^3.0.2",
     "sass": "^1.29.0"
   },
-  "proxy": "https://divoc.xiv.in"
+  "proxy": "http://ec2-65-1-91-208.ap-south-1.compute.amazonaws.com"
 }

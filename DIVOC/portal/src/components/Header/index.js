@@ -12,6 +12,8 @@ import {useSelector} from "react-redux";
 import {NavLink, useHistory} from "react-router-dom";
 import Dropdown from "react-bootstrap/Dropdown";
 import Button from "react-bootstrap/Button";
+import DivocLogo from "../../assets/img/image.png";
+import VaccineLegderLogo from "../../assets/img/VACCINELEDGER.png";
 
 export const Header = (props) => {
     const {keycloak} = useKeycloak();
@@ -47,9 +49,15 @@ export const Header = (props) => {
         <Navbar fixed="top" bg="white">
             <Navbar.Brand>
                 <img
-                    src={logo ? logo : NavbarLogo}
-                    height="34"
-                    className="d-inline-block align-top"
+                    src={logo ? DivocLogo : NavbarLogo}
+                    height="17"
+                    className="divoc-logo"
+                    alt="React Bootstrap logo"
+                />
+                <img
+                    src={VaccineLegderLogo}
+                    height="20"
+                    className="vl-logo"
                     alt="React Bootstrap logo"
                 />
             </Navbar.Brand>

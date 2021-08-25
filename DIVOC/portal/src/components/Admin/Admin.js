@@ -9,9 +9,23 @@ import {Button, Col} from "react-bootstrap";
 import {SampleCSV} from "../../utils/constants";
 import DownloadImg from "../../assets/img/download.svg";
 import "./Admin.module.css"
+import {makeStyles} from '@material-ui/core/styles';
 
+
+export const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+        paddingLeft: theme.spacing(4),
+        paddingRight: theme.spacing(4),
+        paddingTop: theme.spacing(3),
+    },
+    abc: {
+        background: '#0B65C1 !important'
+    }
+}));
 
 export default function Admin() {
+    const classes = useStyles();
 
     function renderDownloadTemplateButton(templateLink) {
         return <Button bsPrefix={"btn-template"} href={templateLink}>
@@ -23,7 +37,9 @@ export default function Admin() {
     }
 
     return (
-        <TabPanels tabs={[
+        <TabPanels
+        className={classes.abc}
+        tabs={[
             {
                 title: 'Facilities',
                 component: <FacilitiesRegistry/>,

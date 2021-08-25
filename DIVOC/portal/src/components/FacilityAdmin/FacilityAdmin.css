@@ -1,16 +1,20 @@
 .btn-template {
-    border-radius: 6px;
+    border-radius: 10px;
     border: none;
     color: #FFFFFF;
-    background: #88C6A9;
+    background: #FFAB1D;
     text-align: center;
-    padding-top: 10px;
+    padding-top: 5px;
+    height: fit-content;
+    justify-content: center;
+    margin-top: 0.65%;
+    margin-right: 3.5%;
 }
 
 .btn-template h6 {
     text-align: center;
     font-weight: bold;
-    font-size: 12px;
+    font-size: 13px;
     margin: 0;
     padding: 5px;
 }
@@ -21,7 +25,7 @@
 }
 
 .btn-template img {
-    width: 25px;
+    width: 22px;
     height: 25px;
-    padding: 4px;
+    padding: 3px;
 }

@@ -1,6 +1,6 @@
 {
   "realm": "divoc",
-  "auth-server-url": "/auth/",
+  "auth-server-url": "http://ec2-65-1-91-208.ap-south-1.compute.amazonaws.com/auth/",
   "ssl-required": "external",
   "resource": "facility-api",
   "public-client": true,
