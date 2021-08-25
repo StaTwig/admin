@@ -9,7 +9,6 @@
     "lint": "eslint --fix --config .eslintrc.json \"**/*.js\""
   },
   "dependencies": {
-    "bluebird": "^3.7.2",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.5",
     "debug": "~4.3.1",
